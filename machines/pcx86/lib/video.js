@@ -1,7 +1,7 @@
 /**
  * @fileoverview Implements the PCx86 Video component
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2022 Jeff Parsons
+ * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -19,7 +19,7 @@ if (typeof module !== "undefined") {
     var MemoryX86   = require("./memory");
     var Messages    = require("./messages");
     var ChipSet     = require("./chipset");
-    var Kbdx86      = require("./keyboard");
+    var KbdX86      = require("./keyboard");
     var Mouse       = require("./mouse");
     var Controller  = require("./bus").Controller;
 }
@@ -8523,9 +8523,9 @@ VideoX86.TOUCH = {
  * more fun to play on an iPad (the space-bar is a commonly required key).
  */
 VideoX86.KEYGRID = [
-    [Kbdx86.SIMCODE.HOME, Kbdx86.SIMCODE.UP,    Kbdx86.SIMCODE.PGUP],
-    [Kbdx86.SIMCODE.LEFT, Kbdx86.SIMCODE.SPACE, Kbdx86.SIMCODE.RIGHT],
-    [Kbdx86.SIMCODE.END,  Kbdx86.SIMCODE.DOWN,  Kbdx86.SIMCODE.PGDN],
+    [KbdX86.SIMCODE.HOME, KbdX86.SIMCODE.UP,    KbdX86.SIMCODE.PGUP],
+    [KbdX86.SIMCODE.LEFT, KbdX86.SIMCODE.SPACE, KbdX86.SIMCODE.RIGHT],
+    [KbdX86.SIMCODE.END,  KbdX86.SIMCODE.DOWN,  KbdX86.SIMCODE.PGDN],
 ];
 
 /*
