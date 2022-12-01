@@ -366,6 +366,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "MINIX 1.1 for PC/ATs",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/unix/minix/1.1/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Software Carousel 2.0.3",
       "type": "chrome",
       "request": "launch",
