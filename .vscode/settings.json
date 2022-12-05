@@ -6,6 +6,13 @@
     ".fseventsd": true,
     ".Trashes": true
   },
+  "files.associations": {
+    "*.s": "masm",
+    "*.asm": "masm",
+    "*.inc": "masm",
+    "*.ASM": "masm",
+    "*.INC": "masm"
+  },
   "editor.wordWrap": "off",
   "editor.rulers": [127],
   "[javascript]": {
@@ -23,6 +30,7 @@
     "files.trimFinalNewlines": true
   },
   "[masm]": {
+    "editor.detectIndentation": false,
     "editor.insertSpaces": false,
     "editor.tabSize": 8,
     "files.eol": "\r\n",

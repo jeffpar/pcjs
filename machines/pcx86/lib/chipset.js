@@ -2309,12 +2309,12 @@ class ChipSet extends Component {
     }
 
     /**
-     * checkDMA(iDMAChannel)
+     * getDMAState(iDMAChannel)
      *
      * @param {number} iDMAChannel
-     * @return {number} (current transfer address; may be used by the FDC for bootstrapping tests)
+     * @return {Array} (current transfer address at [0], current count at [1]; may be used by the FDC for bootstrapping tests)
      */
-    checkDMA(iDMAChannel)
+    getDMAState(iDMAChannel)
     {
         let iDMAC = iDMAChannel >> 2;
         let controller = this.aDMACs[iDMAC];
@@ -2322,7 +2322,7 @@ class ChipSet extends Component {
         let iChannel = iDMAChannel & 0x3;
         let channel = controller.aChannels[iChannel];
 
-        return (channel.bPage << 16) | (channel.addrCurrent[1] << 8) | channel.addrCurrent[0];
+        return [(channel.bPage << 16) | (channel.addrCurrent[1] << 8) | channel.addrCurrent[0], (channel.countCurrent[1] << 8) | channel.countCurrent[0]];
     }
 
     /**

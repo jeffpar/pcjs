@@ -40772,12 +40772,12 @@ class ChipSet extends Component {
     }
 
     /**
-     * checkDMA(iDMAChannel)
+     * getDMAState(iDMAChannel)
      *
      * @param {number} iDMAChannel
-     * @return {number} (current transfer address; may be used by the FDC for bootstrapping tests)
+     * @return {Array} (current transfer address at [0], current count at [1]; may be used by the FDC for bootstrapping tests)
      */
-    checkDMA(iDMAChannel)
+    getDMAState(iDMAChannel)
     {
         let iDMAC = iDMAChannel >> 2;
         let controller = this.aDMACs[iDMAC];
@@ -40785,7 +40785,7 @@ class ChipSet extends Component {
         let iChannel = iDMAChannel & 0x3;
         let channel = controller.aChannels[iChannel];
 
-        return (channel.bPage << 16) | (channel.addrCurrent[1] << 8) | channel.addrCurrent[0];
+        return [(channel.bPage << 16) | (channel.addrCurrent[1] << 8) | channel.addrCurrent[0], (channel.countCurrent[1] << 8) | channel.countCurrent[0]];
     }
 
     /**
@@ -65362,6 +65362,7 @@ class FDC extends Component {
             /*
              * When FDC.REG_OUTPUT.ENABLE transitions from 0 to 1, generate an interrupt (assuming INT_ENABLE is set).
              */
+            this.regOutput = bOut;      // this may look redundant but requestInterrupt() needs to see regOutput set
             this.requestInterrupt();
         }
         /*
@@ -65542,6 +65543,9 @@ class FDC extends Component {
 
     /**
      * inFDCInput(port, addrFrom)
+     *
+     * TODO: We're never actually setting any of the head or drive select bits.  I would guess
+     * that the latter, at least, should mirror the drive select value written to port 0x3F2.
      *
      * @this {FDC}
      * @param {number} port (0x3F7, input only, MODEL_5170 only)
@@ -65854,6 +65858,9 @@ class FDC extends Component {
          *
          * I don't do strict EOT comparisons here or elsewhere, because it allows the controller to work with a wider
          * range of disks (eg, "fake" XDF disk images that contain 23 512-byte sectors/track).
+         *
+         * Original version of this function:
+         * https://github.com/jeffpar/pcjs.v1/commit/6110bb6a9f2eb992acb476707376ef5116afeee5#diff-d97e0120475cfb16e63a3ca1fa0e0c49121a314e80e9039081371730e6f2631b
          */
         let i = 0;
         if (c != drive.bCylinder || h != drive.bHead) {
@@ -65862,6 +65869,7 @@ class FDC extends Component {
         if (bCmd & FDC.REG_DATA.CMD.MT) {
             h ^= i;
             if (!bHead) i = 0;
+            r = drive.bSector;                          // REQUIRED in order for MINIX 1.1 to load ROOT diskette
         }
         c += i;
         this.pushResult(c, FDC.TERMS.C);                // formerly drive.bCylinder
@@ -66078,10 +66086,11 @@ class FDC extends Component {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
         if (drive.disk) {
             if (this.messageEnabled()) {
-                this.printf("%s.doRead(drive=%d,CHS=%d:%d:%d,LBA=%d,bytes=%d,addr=%#X)\n",
+                let a = this.chipset.getDMAState(ChipSet.DMA_FDC);
+                this.printf("%s.doRead(drive=%d,CHS=%d:%d:%d,LBA=%d,addr=%#X,len=%#X)\n",
                             this.idComponent, drive.iDrive, drive.bCylinder, drive.bHead, drive.bSector,
                             (drive.bCylinder * (drive.disk.nHeads * drive.disk.nSectors) + drive.bHead * drive.disk.nSectors + drive.bSector-1),
-                            drive.nBytes, this.chipset.checkDMA(ChipSet.DMA_FDC));
+                            a[0], a[1]+1);
             }
             if (drive.bHead > drive.nHeads - 1) {
                 drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;
@@ -66114,10 +66123,11 @@ class FDC extends Component {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
         if (drive.disk) {
             if (this.messageEnabled()) {
-                this.printf("%s.doWrite(drive=%d,CHS=%d:%d:%d,LBA=%d,bytes=%d,addr=%#X)\n",
+                let a = this.chipset.getDMAState(ChipSet.DMA_FDC);
+                this.printf("%s.doWrite(drive=%d,CHS=%d:%d:%d,LBA=%d,addr=%#X,len=%#X)\n",
                             this.idComponent, drive.iDrive, drive.bCylinder, drive.bHead, drive.bSector,
                             (drive.bCylinder * (drive.disk.nHeads * drive.disk.nSectors) + drive.bHead * drive.disk.nSectors + drive.bSector-1),
-                            drive.nBytes, this.chipset.checkDMA(ChipSet.DMA_FDC));
+                            a[0], a[1]+1);
             }
             if (drive.bHead > drive.nHeads - 1) {
                 drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;
