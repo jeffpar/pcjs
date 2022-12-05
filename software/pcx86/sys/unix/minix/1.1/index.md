@@ -16,7 +16,7 @@ machines:
 ---
 
 The MINIX 1.1 Operating System for the IBM PC was distributed on eight 360K diskettes.  [MINIX 1.1 for the IBM PC AT](pc-at/)
-was released separately on five 1.2M diskettes.
+was also released on five 1.2M diskettes.
 
 After the initial boot screen appears below, load the "MINIX 1.1 (360K Disk 2: Root)" diskette into drive A: and then
 press the "=" key.

@@ -14,7 +14,7 @@ machines:
         name: None
 ---
 
-The MINIX 1.1 Operating System for IBM PC/ATs was distributed on five 1.2M disk images:
+[MINIX 1.1 for the IBM PC](../)  was also released for IBM PC ATs on five 1.2M disk images:
 
  1. BOOT DISKETTE
  2. ROOT FILE SYSTEM
@@ -30,9 +30,8 @@ Every diskette is also labelled with the following information:
 	ISBN: 0-13-583865-7
 	MINIX 1.1
 
-The machine below is configured to boot from the MINIX 1.1 "Boot" diskette (shown below).  Normally, after booting,
-you would be able to load the "Root" diskette and press "=" to start MINIX; however, MINIX is not yet working in PCjs.
-This page will be updated when the [issue](https://github.com/jeffpar/pcjs/issues/57) is resolved.
+The IBM PC AT below is configured to boot from the MINIX 1.1 "Boot" diskette (shown below).  Click the "Run" button
+to start the machine, and after the MINIX boot menu appears, load the "Root" diskette and press "=" to start MINIX.
 
 {% include machine.html id="ibm5170" %}
 
