@@ -14,7 +14,9 @@ machines:
         name: None
 ---
 
-[MINIX 1.1 for the IBM PC](../)  was also released for IBM PC ATs on five 1.2M disk images:
+[MINIX 1.1 for the IBM PC](../) was also released for IBM PC ATs on five 1.2M diskettes.  The MINIX 1.1 software was
+identical in both releases, which meant that the PC version could boot and run equally well on PC ATs, so the only real
+advantage of this five-diskette version was fewer, larger diskettes.  They were labeled as follows:
 
  1. BOOT DISKETTE
  2. ROOT FILE SYSTEM
@@ -22,7 +24,7 @@ machines:
  4. KERNEL, MM, FS, AND H SOURCES
  5. TOOLS AND COMMANDS SOURCES
 
-Every diskette is also labelled with the following information:
+Every diskette label also included the following information:
 
 	MINIX BINARIES AND SOURCES FOR IBM PC/AT's
 	by Andrew S. Tanenbaum

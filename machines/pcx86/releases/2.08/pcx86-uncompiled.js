@@ -65649,7 +65649,7 @@ class FDC extends Component {
             this.popCmd(FDC.TERMS.GPL);                     // GPL (spacing between sectors, excluding VCO Sync Field; 3)
             this.popCmd(FDC.TERMS.DTL);                     // DTL (when N is 0, DTL stands for the data length to read out or write into the sector)
             this.setLED(ledState);
-            if (drive.disk.nCylinders > 40 && this.regControl != FDC.REG_CONTROL.RATE500K) {
+            if (drive.disk.nSectors >= 15 && this.regControl != FDC.REG_CONTROL.RATE500K) {
                 drive.resCode = FDC.REG_DATA.RES.INCOMPLETE;
                 fIRQ = true;
             } else {
