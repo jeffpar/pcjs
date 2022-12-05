@@ -366,10 +366,17 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "MINIX 1.1 for PC/ATs",
+      "name": "MINIX 1.1",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/unix/minix/1.1/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "MINIX 1.1 for the IBM PC AT",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/unix/minix/1.1/pc-at/",
       "webRoot": "${workspaceFolder}"
     },
     {
