@@ -13,7 +13,7 @@ machines:
 
 By Jeff Parsons
 
-Why "HANWOMAN" instead of "HANGMAN"?  Well, why not?  This was one of my earliest BASIC programs, and I
+Why "HANGWOMAN" instead of "HANGMAN"?  Well, why not?  This was one of my earliest BASIC programs, and I
 even went to the trouble of "scrambling" all the words in the DATA statements, so that the game wouldn't be
 spoiled if you watched the program scroll up the screen as it loaded from tape.
 

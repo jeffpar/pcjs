@@ -21,4 +21,7 @@ The MINIX 1.1 Operating System for the IBM PC was distributed on eight 360K disk
 After the initial boot screen appears below, load the "MINIX 1.1 (360K Disk 2: Root)" diskette into drive A: and then
 press the "=" key.
 
+After loading the "Usr" diskette, you can login as **root** with password **Geheim**, or as user **ast** with password
+**Wachtwoord**.
+
 {% include machine.html id="ibm5160" %}

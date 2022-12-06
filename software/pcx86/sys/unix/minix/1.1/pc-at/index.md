@@ -35,6 +35,9 @@ Every diskette label also included the following information:
 The IBM PC AT below is configured to boot from the MINIX 1.1 "Boot" diskette (shown below).  Click the "Run" button
 to start the machine, and after the MINIX boot menu appears, load the "Root" diskette and press "=" to start MINIX.
 
+After loading the "Usr" diskette, you can login as **root** with password **Geheim**, or as user **ast** with password
+**Wachtwoord**.
+
 {% include machine.html id="ibm5170" %}
 
 ![MINIX 1.1 (1.2M Disk 1: Boot)]({{ site.software.diskettes.server }}/pcx86/sys/unix/minix/1.1/MINIX11-1200K-DISK1-BOOT.jpg)
