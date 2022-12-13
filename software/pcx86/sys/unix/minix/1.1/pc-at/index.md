@@ -40,4 +40,77 @@ After loading the "Usr" diskette, you can login as **root** with password **Gehe
 
 {% include machine.html id="ibm5170" %}
 
+### Notes
+
+On December 12, 2022, I re-dumped all my 1.2M MINIX 1.1 diskettes and discovered that the boot disk I had originally
+posted contained a few patches.  Here are the differences:
+
+    1c1
+    < 00000000  b8 c0 07 8e d8 33 f6 b8  e0 2f 8e c0 33 ff b9 00  |.....3.../..3...|
+    ---
+    > 00000000  e9 51 01 8e d8 33 f6 b8  e0 2f 8e c0 33 ff b9 00  |.Q...3.../..3...|
+
+    22,23c22,23
+    < 00000150  2e 20 20 41 75 74 6f 6d  61 74 69 63 20 72 65 62  |.  Automatic reb|
+    < 00000160  6f 6f 74 2e 0d 0a 00 0d  42 6f 6f 74 69 6e 67 20  |oot.....Booting |
+    ---
+    > 00000150  2e 20 20 00 b0 3f e6 70  eb 00 28 c0 e6 71 ba 70  |.  ..?.p..(..q.p|
+    > 00000160  02 ee b8 c0 07 e9 9b fe  42 6f 6f 74 69 6e 67 20  |........Booting |
+
+    1102c1102
+    < 00004520  86 06 00 81 fe 00 00 74  32 f0 90 f3 a5 9d 81 fb  |.......t2.......|
+    ---
+    > 00004520  86 06 00 81 fe 00 00 74  32 90 90 f3 a5 9d 81 fb  |.......t2.......|
+
+The original boot disk's boot sector starts with a "MOV" instruction, whereas the patched boot disk jumps
+to a location inside the disk's boot sector that contains a few additional instructions in place of a string
+("Automatic reboot").  Here are those instructions:
+
+    AX=51E9 BX=7C00 CX=0007 DX=0000 SP=03FA BP=0000 SI=0000 DI=7C02 
+    SS=0000 DS=0000 ES=0000 PS=0A87 V1 D0 I1 T0 S1 Z0 A0 P1 C1 
+    &0000:7C00 E95101           JMP      7D54
+    >> tr
+    AX=51E9 BX=7C00 CX=0007 DX=0000 SP=03FA BP=0000 SI=0000 DI=7C02 
+    SS=0000 DS=0000 ES=0000 PS=0A87 V1 D0 I1 T0 S1 Z0 A0 P1 C1 
+    &0000:7D54 B03F             MOV      AL,3F                    ;cycles=7
+    >> pr
+    AX=513F BX=7C00 CX=0007 DX=0000 SP=03FA BP=0000 SI=0000 DI=7C02 
+    SS=0000 DS=0000 ES=0000 PS=0A87 V1 D0 I1 T0 S1 Z0 A0 P1 C1 
+    &0000:7D56 E670             OUT      70,AL                    ;cycles=2
+    >> pr
+    AX=513F BX=7C00 CX=0007 DX=0000 SP=03FA BP=0000 SI=0000 DI=7C02 
+    SS=0000 DS=0000 ES=0000 PS=0A87 V1 D0 I1 T0 S1 Z0 A0 P1 C1 
+    &0000:7D58 EB00             JMP      7D5A                     ;cycles=5
+    >> pr
+    AX=513F BX=7C00 CX=0007 DX=0000 SP=03FA BP=0000 SI=0000 DI=7C02 
+    SS=0000 DS=0000 ES=0000 PS=0A87 V1 D0 I1 T0 S1 Z0 A0 P1 C1 
+    &0000:7D5A 28C0             SUB      AL,AL                    ;cycles=7
+    >> pr
+    AX=5100 BX=7C00 CX=0007 DX=0000 SP=03FA BP=0000 SI=0000 DI=7C02 
+    SS=0000 DS=0000 ES=0000 PS=0246 V0 D0 I1 T0 S0 Z1 A0 P1 C0 
+    &0000:7D5C E671             OUT      71,AL                    ;cycles=2
+    >> pr
+    AX=5100 BX=7C00 CX=0007 DX=0000 SP=03FA BP=0000 SI=0000 DI=7C02 
+    SS=0000 DS=0000 ES=0000 PS=0246 V0 D0 I1 T0 S0 Z1 A0 P1 C0 
+    &0000:7D5E BA7002           MOV      DX,0270                  ;cycles=5
+    >> pr
+    AX=5100 BX=7C00 CX=0007 DX=0270 SP=03FA BP=0000 SI=0000 DI=7C02 
+    SS=0000 DS=0000 ES=0000 PS=0246 V0 D0 I1 T0 S0 Z1 A0 P1 C0 
+    &0000:7D61 EE               OUT      DX,AL                    ;cycles=2
+    >> pr
+    AX=5100 BX=7C00 CX=0007 DX=0270 SP=03FA BP=0000 SI=0000 DI=7C02 
+    SS=0000 DS=0000 ES=0000 PS=0246 V0 D0 I1 T0 S0 Z1 A0 P1 C0 
+    &0000:7D62 B8C007           MOV      AX,07C0                  ;cycles=5
+    >> pr
+    AX=07C0 BX=7C00 CX=0007 DX=0270 SP=03FA BP=0000 SI=0000 DI=7C02 
+    SS=0000 DS=0000 ES=0000 PS=0246 V0 D0 I1 T0 S0 Z1 A0 P1 C0 
+    &0000:7D65 E99BFE           JMP      7C03                     ;cycles=2
+
+My best guess is that these patches were made to resolve some issue with MINIX 1.1 on a non-IBM AT clone, but that's
+pure speculation, as I have no recollection of making the patches, let alone why.
+
+In any case, I have since restored the MINIX 1.1 1.2M boot disk to its (presumably) original unpatched state.
+This also makes the MINIX boot sector a bit more unusual, insofar as it does *not* start with the usual "JMP" instruction
+that the first sector of all DOS diskettes generally start with.
+
 ![MINIX 1.1 (1.2M Disk 1: Boot)]({{ site.software.diskettes.server }}/pcx86/sys/unix/minix/1.1/MINIX11-1200K-DISK1-BOOT.jpg)
