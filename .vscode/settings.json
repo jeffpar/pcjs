@@ -22,6 +22,12 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true
   },
+  "[json]": {
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "files.trimTrailingWhitespace": true
+  },
   "[markdown]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
@@ -179,6 +185,7 @@
     "CHARCODE",
     "chargen",
     "checkdisk",
+    "CHECKFAULT",
     "CHECKINTS",
     "CHECKLCD",
     "checkpage",
@@ -901,6 +908,7 @@
     "TRACKSECS",
     "Trammell",
     "transpiling",
+    "TRAPFAULT",
     "trapv",
     "Tshirt",
     "TSTAT",

@@ -4083,46 +4083,70 @@
           "@title": "PC Disk Magazine",
           "@media": [
             {
-              "@title": "PC Disk Magazine (Disk 1)",
+              "@title": "PC Disk Magazine (Disk 01)",
               "@diskette": "PCDISKMAG-DISK1.json",
               "@photo": ".jpg",
               "@format": "PC160K"
             },
             {
-              "@title": "PC Disk Magazine (Disk 2)",
+              "@title": "PC Disk Magazine (Disk 02)",
               "@diskette": "PCDISKMAG-DISK2.json",
               "@photo": ".jpg",
               "@format": "PC160K"
             },
             {
-              "@title": "PC Disk Magazine (Disk 3)",
+              "@title": "PC Disk Magazine (Disk 03)",
               "@diskette": "PCDISKMAG-DISK3.json",
               "@photo": ".jpg",
               "@format": "PC160K"
             },
             {
-              "@title": "PC Disk Magazine (Disk 4)",
+              "@title": "PC Disk Magazine (Disk 04)",
               "@diskette": "PCDISKMAG-DISK4.json",
               "@photo": ".jpg",
               "@format": "PC160K"
             },
             {
-              "@title": "PC Disk Magazine (Disk 5)",
+              "@title": "PC Disk Magazine (Disk 05)",
               "@diskette": "PCDISKMAG-DISK5.json",
               "@photo": ".jpg",
               "@format": "PC160K"
             },
             {
-              "@title": "PC Disk Magazine (Disk 6)",
+              "@title": "PC Disk Magazine (Disk 06)",
               "@diskette": "PCDISKMAG-DISK6.json",
               "@photo": ".jpg",
               "@format": "PC160K"
             },
             {
-              "@title": "PC Disk Magazine (Disk 7)",
+              "@title": "PC Disk Magazine (Disk 07)",
               "@diskette": "PCDISKMAG-DISK7.json",
               "@photo": ".jpg",
               "@format": "PC160K"
+            },
+            {
+              "@title": "PC Disk Magazine (Disk 08)",
+              "@diskette": "PCDISKMAG-DISK8.json",
+              "@photo": ".jpg",
+              "@format": "PC160K"
+            },
+            {
+              "@title": "PC Disk Magazine (Disk 08 Demo)",
+              "@diskette": "PCDISKMAG-DISK8-DEMO.json",
+              "@photo": ".jpg",
+              "@format": "PC320K"
+            },
+            {
+              "@title": "PC Disk Magazine (Disk 09)",
+              "@diskette": "PCDISKMAG-DISK9.json",
+              "@photo": ".jpg",
+              "@format": "PC160K"
+            },
+            {
+              "@title": "PC Disk Magazine (Disk 10)",
+              "@diskette": "PCDISKMAG-DISK10.json",
+              "@photo": ".jpg",
+              "@format": "PC320K"
             }
           ]
         },
