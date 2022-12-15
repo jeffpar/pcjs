@@ -16,7 +16,13 @@ machines:
 
 [MINIX 1.1 for the IBM PC](../) was also released for IBM PC ATs on five 1.2M diskettes.  The MINIX 1.1 software was
 identical in both releases, which meant that the PC version could boot and run equally well on PC ATs, so the only real
-advantage of this five-diskette version was fewer, larger diskettes.  They were labeled as follows:
+advantage of this five-diskette release was fewer, larger diskettes.
+
+In fact, there was actually a *disadvantage* to using these diskettes: the MINIX floppy disk driver attempts to
+use 3 different sets of low-density drive parameters before finally settling on the correct high-density settings, and it
+performs multiple retries with each set, resulting in a noticeably longer start-up time.
+
+The five diskettes were labeled as follows:
 
  1. BOOT DISKETTE
  2. ROOT FILE SYSTEM
@@ -42,8 +48,11 @@ After loading the "Usr" diskette, you can login as **root** with password **Gehe
 
 ### Notes
 
-On December 12, 2022, I re-dumped all my 1.2M MINIX 1.1 diskettes and discovered that the boot disk I had originally
-posted contained a few patches.  Here are the differences:
+It's important that the machine use a CGA video adapter rather than a VGA (or EGA), because MINIX 1.1 scrolls text by
+adjusting the CRT controller start address *and* relying on frame buffer wrap-around at the 16K boundary.  VGA frame buffers do
+not wrap at 16K, so MINIX scrolling will periodically fail on VGA-based systems.
+
+Also, on December 12, 2022, I re-read all my 1.2M MINIX 1.1 diskettes and discovered that the boot disk image I had originally posted contained a few patches.  Here are the differences:
 
     1c1
     < 00000000  b8 c0 07 8e d8 33 f6 b8  e0 2f 8e c0 33 ff b9 00  |.....3.../..3...|
@@ -107,10 +116,10 @@ to a location inside the disk's boot sector that contains a few additional instr
     &0000:7D65 E99BFE           JMP      7C03                     ;cycles=2
 
 My best guess is that these patches were made to resolve some issue with MINIX 1.1 on a non-IBM AT clone, but that's
-pure speculation, as I have no recollection of making the patches, let alone why.
+pure speculation, as I have no recollection of making these patches.
 
-In any case, I have since restored the MINIX 1.1 1.2M boot disk to its (presumably) original unpatched state.
+In any case, I have since restored the MINIX 1.2M boot disk to its (presumably) original unpatched state.
 This also makes the MINIX boot sector a bit more unusual, insofar as it does *not* start with the usual "JMP" instruction
-that the first sector of all DOS diskettes generally start with.
+that the first sector of all PC DOS and MS-DOS diskettes generally start with.
 
 ![MINIX 1.1 (1.2M Disk 1: Boot)]({{ site.software.diskettes.server }}/pcx86/sys/unix/minix/1.1/MINIX11-1200K-DISK1-BOOT.jpg)

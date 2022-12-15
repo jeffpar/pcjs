@@ -13,7 +13,7 @@ machines:
       A:
         name: None
       B:
-        name: "PC Disk Magazine (Disk 1)"
+        name: "PC Disk Magazine (Disk 01)"
     autoType: B:\rDIR\r
 ---
 
@@ -21,11 +21,11 @@ machines:
 PC Disk Magazine diskettes are provided below.  Copies of the magazines are available as well,
 both [here](#documents) and in our [Documents](/documents/magazines/pcdm/) section.
 
-You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the machine below.
+You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the machine below.
 
 {% include machine.html id="pcdm" %}
 
-### Directory of PC Disk Magazine (Disk 1)
+### Directory of PC Disk Magazine (Disk 01)
 
      Volume in drive A has no label
      Directory of A:\
@@ -48,9 +48,9 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
            15 file(s)     155460 bytes
                             1024 bytes free
 
-![PC Disk Magazine (Disk 1)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK1.jpg)
+![PC Disk Magazine (Disk 01)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK1.jpg)
 
-### Directory of PC Disk Magazine (Disk 2)
+### Directory of PC Disk Magazine (Disk 02)
 
      Volume in drive A has no label
      Directory of A:\
@@ -69,9 +69,9 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
            11 file(s)     127909 bytes
                            30720 bytes free
 
-![PC Disk Magazine (Disk 2)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK2.jpg)
+![PC Disk Magazine (Disk 02)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK2.jpg)
 
-### Directory of PC Disk Magazine (Disk 3)
+### Directory of PC Disk Magazine (Disk 03)
 
      Volume in drive A has no label
      Directory of A:\
@@ -94,9 +94,9 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
            15 file(s)     156784 bytes
                              512 bytes free
 
-![PC Disk Magazine (Disk 3)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK3.jpg)
+![PC Disk Magazine (Disk 03)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK3.jpg)
 
-### Directory of PC Disk Magazine (Disk 4)
+### Directory of PC Disk Magazine (Disk 04)
 
      Volume in drive A has no label
      Directory of A:\
@@ -118,9 +118,9 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
            14 file(s)     156713 bytes
                              512 bytes free
 
-![PC Disk Magazine (Disk 4)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK4.jpg)
+![PC Disk Magazine (Disk 04)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK4.jpg)
 
-### Directory of PC Disk Magazine (Disk 5)
+### Directory of PC Disk Magazine (Disk 05)
 
      Volume in drive A has no label
      Directory of A:\
@@ -152,9 +152,9 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
            24 file(s)     155859 bytes
                                0 bytes free
 
-![PC Disk Magazine (Disk 5)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK5.jpg)
+![PC Disk Magazine (Disk 05)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK5.jpg)
 
-### Directory of PC Disk Magazine (Disk 6)
+### Directory of PC Disk Magazine (Disk 06)
 
      Volume in drive A has no label
      Directory of A:\
@@ -182,9 +182,9 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
            20 file(s)     155211 bytes
                             1024 bytes free
 
-![PC Disk Magazine (Disk 6)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK6.jpg)
+![PC Disk Magazine (Disk 06)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK6.jpg)
 
-### Directory of PC Disk Magazine (Disk 7)
+### Directory of PC Disk Magazine (Disk 07)
 
      Volume in drive A has no label
      Directory of A:\
@@ -212,6 +212,96 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 1)", in the mac
            20 file(s)     148501 bytes
                             6144 bytes free
 
-![PC Disk Magazine (Disk 7)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK7.jpg)
+![PC Disk Magazine (Disk 07)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK7.jpg)
+
+### Directory of PC Disk Magazine (Disk 08)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    SPREAD   BAS      7707   8-01-84  12:02p
+    DIR      BAS       167   3-01-84   3:50p
+    STEDIT   BAS     20795   8-01-84  12:04p
+    STATLIB1 BAS     18405   8-01-84  12:04p
+    ST       TXT      2432   8-01-84  12:09p
+    STATES   BAS      9482   8-01-84  12:03p
+    BOOT1    BAS     15267   8-01-84  12:03p
+    HOME     BAS     17990   8-01-84  12:03p
+    MAKESCRN BAS     16442   8-01-84  12:00p
+    MAKESCRN TXT      7680   8-01-84  12:01p
+    SCREEN   USE      7843   8-01-84  12:00p
+    SECRET   EXE     30080   6-26-84   3:33p
+        12 file(s)     154290 bytes
+                            3072 bytes free
+
+![PC Disk Magazine (Disk 08)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK8.jpg)
+
+### Directory of PC Disk Magazine (Disk 08 Demo)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    SPECIAL           2025   6-27-84   1:50p
+    CSHOPADS          2654   1-01-80  12:02a
+    CHART    COM     24713   7-11-84  11:43a
+    MC       COD     10822   7-10-84   2:40p
+    MC       PGM    113268   7-10-84   2:50p
+    MC80     DAT     20004   7-11-84  12:00p
+    MC40     DAT     20456   7-10-84   3:07p
+    MC       HLP     69901   7-09-84   4:25p
+    FONTLIST           215   4-27-84  10:47a
+    MFCORP            3089   1-01-80  12:03a
+    PETROCH           4745   6-27-84   1:28p
+    ORDERS84          6381   1-01-80  12:02a
+    F13025   RFT      6945   9-26-83   9:46a
+    PART2             1721  10-06-59  11:03p
+    DEMO              1737   6-27-84   1:52p
+    CHEMICAL          3258   6-27-84   1:39p
+        16 file(s)     291934 bytes
+                        22528 bytes free
+
+![PC Disk Magazine (Disk 08 Demo)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK8-DEMO.jpg)
+
+### Directory of PC Disk Magazine (Disk 09)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    PLANNER  EXE     66816  10-01-84  12:09p
+    NOTEIND  BAS     17009   1-01-80   4:09a
+    STUTOR   BAS     12041  10-01-84  12:06p
+    SHRINKER BAS      4580  10-01-84  12:06p
+    SHRINKR1 BAS      2698  10-01-84  12:06p
+    SHRINKR2 BAS      6235  10-01-84  12:07p
+    POL      BAS     26412  10-01-84  12:04p
+    FLASHCRD BAS     15562  10-01-84  12:01p
+    SAMPLE   FLS      3447  10-01-84  12:09p
+            9 file(s)     154800 bytes
+                            3072 bytes free
+
+![PC Disk Magazine (Disk 09)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK9.jpg)
+
+### Directory of PC Disk Magazine (Disk 10)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    NOTES    BAS     15988  11-10-84   7:18p
+    STATLIB2 BAS     35718  11-10-84   7:23p
+    STEDIT   BAS     34038  11-10-84   7:23p
+    TUTOR3   BAS     20673  11-10-84   7:23p
+    PAINTER  BAS     14913  11-10-84   7:23p
+    VALLEY   BAS     16512   2-07-84   6:26a
+    TTG      BAS     18486  11-10-84   7:23p
+    STOCK    DAT     16260  11-10-84   2:34p
+    BOND     DAT      2560  11-12-84   7:33p
+    SBDAT    BAS     15568  11-12-84   7:40p
+    STOKBOND TXT      2858  11-12-84   8:36p
+    STOKBOND BAS     48790  11-12-84   9:05p
+    STOKBOND OVR      1664   1-01-80  12:04a
+        13 file(s)     244028 bytes
+                        71680 bytes free
+
+![PC Disk Magazine (Disk 10)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK10.jpg)
 
 {% include gallery/documents.html path="/documents/magazines/pcdm/" %}
