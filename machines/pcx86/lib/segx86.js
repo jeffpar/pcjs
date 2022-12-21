@@ -1048,8 +1048,8 @@ class SegX86 {
              * last valid address in segTSS.addrIOPMLimit.
              */
             if (typeTSS == X86.DESC.ACC.TYPE.TSS386) {
-                this.addrIOPM = (base + cpu.getShort(base + X86.TSS386.TASK_IOPM + 2))|0;
-                this.addrIOPMLimit = (base + this.limit)|0;
+                this.addrIOPM = (base + cpu.getShort(base + X86.TSS386.TASK_IOPM + 2)) >>> 0;
+                this.addrIOPMLimit = (base + this.limit) >>> 0;
             }
             break;
 

@@ -367,7 +367,7 @@ class ChipSet extends Component {
         }
 
         /*
-         * PIC (Programmable Interupt Controller) initialization
+         * PIC (Programmable Interrupt Controller) initialization
          */
         this.aPICs = new Array(this.cPICs);
         this.initPIC(ChipSet.PIC0.INDEX, ChipSet.PIC0.PORT_LO);
@@ -2820,6 +2820,15 @@ class ChipSet extends Component {
      */
     setIRR(nIRQ, nDelay)
     {
+        /*
+         * Whenever the Video component needs to signal a vertical retrace interrupt, it specifies ChipSet.IRQ.VID
+         * (aka IRQ 2) and it is blissfully ignorant of whether the machine has one or two PICs; unfortunately, in the
+         * case of two PICs (master and slave), its interrupt is supposed to come through IRQ 9 on the slave, since
+         * IRQ 2 has now been reserved for the slave PIC.  We take care of that here, so that Video can remain blissful.
+         */
+        if (nIRQ == ChipSet.IRQ.SLAVE && this.cPICs == 2) {     // IRQ.SLAVE conflicts with IRQ.VID
+            nIRQ = ChipSet.IRQ.IRQ2;                            // aka IRQ 9
+        }
         let iPIC = nIRQ >> 3;
         let nIRL = nIRQ & 0x7;
         let pic = this.aPICs[iPIC];
