@@ -16347,7 +16347,7 @@ class CPUx86 extends CPULib {
     setLIP(addr)
     {
         this.regLIP = addr;
-        this.regLIPMax = ((this.segCS.base + this.segCS.limit) >>> 0) + 1;
+        this.regLIPMax = (this.segCS.base >>> 0) + (this.segCS.limit >>> 0) + 1;
 
         /*
          * TODO: Verify the proper source for CPL.  Should it come from segCS.cpl or segCS.dpl?
@@ -23117,8 +23117,8 @@ class SegX86 {
              * last valid address in segTSS.addrIOPMLimit.
              */
             if (typeTSS == X86.DESC.ACC.TYPE.TSS386) {
-                this.addrIOPM = (base + cpu.getShort(base + X86.TSS386.TASK_IOPM + 2))|0;
-                this.addrIOPMLimit = (base + this.limit)|0;
+                this.addrIOPM = (base + cpu.getShort(base + X86.TSS386.TASK_IOPM + 2)) >>> 0;
+                this.addrIOPMLimit = (base + this.limit) >>> 0;
             }
             break;
 
@@ -38830,7 +38830,7 @@ class ChipSet extends Component {
         }
 
         /*
-         * PIC (Programmable Interupt Controller) initialization
+         * PIC (Programmable Interrupt Controller) initialization
          */
         this.aPICs = new Array(this.cPICs);
         this.initPIC(ChipSet.PIC0.INDEX, ChipSet.PIC0.PORT_LO);
@@ -41283,6 +41283,15 @@ class ChipSet extends Component {
      */
     setIRR(nIRQ, nDelay)
     {
+        /*
+         * Whenever the Video component needs to signal a vertical retrace interrupt, it specifies ChipSet.IRQ.VID
+         * (aka IRQ 2) and it is blissfully ignorant of whether the machine has one or two PICs; unfortunately, in the
+         * case of two PICs (master and slave), its interrupt is supposed to come through IRQ 9 on the slave, since
+         * IRQ 2 has now been reserved for the slave PIC.  We take care of that here, so that Video can remain blissful.
+         */
+        if (nIRQ == ChipSet.IRQ.SLAVE && this.cPICs == 2) {     // IRQ.SLAVE conflicts with IRQ.VID
+            nIRQ = ChipSet.IRQ.IRQ2;                            // aka IRQ 9
+        }
         let iPIC = nIRQ >> 3;
         let nIRL = nIRQ & 0x7;
         let pic = this.aPICs[iPIC];
