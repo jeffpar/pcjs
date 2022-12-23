@@ -6,7 +6,7 @@ preview: https://diskettes.pcjs.org/pcx86/sys/unix/minix/1.1/MINIX11-1200K-DISK1
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/debugger/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoMount:
       A:
         name: "MINIX 1.1 (1.2M Disk 1: Boot)"
@@ -16,7 +16,8 @@ machines:
 
 [MINIX 1.1 for the IBM PC](../) was also released for IBM PC ATs on five 1.2M diskettes.  The MINIX 1.1 software was
 identical in both releases, which meant that the PC version could boot and run equally well on PC ATs, so the only real
-advantage of this five-diskette release was fewer, larger diskettes.
+advantage of this five-diskette release was fewer, larger diskettes.  I even gave the machine below 384Kb of extended
+memory, but MINIX does not appear to take advantage of it.
 
 In fact, there was actually a *disadvantage* to using these diskettes: the MINIX floppy disk driver attempts to
 use 3 different sets of low-density drive parameters before finally settling on the correct high-density settings, and it
@@ -38,8 +39,8 @@ Every diskette label also included the following information:
 	ISBN: 0-13-583865-7
 	MINIX 1.1
 
-The IBM PC AT below is configured to boot from the MINIX 1.1 "Boot" diskette (shown below).  Click the "Run" button
-to start the machine, and after the MINIX boot menu appears, load the "Root" diskette and press "=" to start MINIX.
+The IBM PC AT below is configured to boot from the MINIX 1.1 "Boot" diskette (shown below).  After the MINIX
+boot menu appears, load the "Root" diskette and press "=" to start MINIX.
 
 After loading the "Usr" diskette, you can login as **root** with password **Geheim**, or as user **ast** with password
 **Wachtwoord**.
@@ -49,8 +50,8 @@ After loading the "Usr" diskette, you can login as **root** with password **Gehe
 ### Notes
 
 It's important that the machine use a CGA video adapter rather than a VGA (or EGA), because MINIX 1.1 scrolls text by
-adjusting the CRT controller start address *and* relying on frame buffer wrap-around at the 16K boundary.  VGA frame buffers do
-not wrap at 16K, so MINIX scrolling will appear erratic on VGA-based systems.
+adjusting the CRT controller start address *and* relying on frame buffer wrap-around at the 16K boundary.  VGA frame buffers
+do not wrap at 16K, so MINIX scrolling will appear erratic on VGA-based systems.
 
 Also, on December 12, 2022, I re-read my original 1.2M MINIX 1.1 diskettes and discovered that the boot disk image I had
 originally posted contained a few patches.  Here are the differences:
