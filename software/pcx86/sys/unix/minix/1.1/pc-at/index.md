@@ -16,8 +16,8 @@ machines:
 
 [MINIX 1.1 for the IBM PC](../) was also released for IBM PC ATs on five 1.2M diskettes.  The MINIX 1.1 software was
 identical in both releases, which meant that the PC version could boot and run equally well on PC ATs, so the only real
-advantage of this five-diskette release was fewer, larger diskettes.  I even gave the machine below 384Kb of extended
-memory, but MINIX does not appear to take advantage of it.
+advantage of this five-diskette release was fewer, larger diskettes.  It still runs in real-mode, so it doesn't take
+advantage of the PC AT's ability to run in protected-mode or use extended memory.
 
 In fact, there was actually a *disadvantage* to using these diskettes: the MINIX floppy disk driver attempts to
 use 3 different sets of low-density drive parameters before finally settling on the correct high-density settings, and it
