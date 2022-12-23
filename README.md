@@ -1,8 +1,8 @@
 # PCjs Machines
 
-[PCjs](https://www.pcjs.org) is the home of [PCx86](/machines/pcx86/), the original IBM PC emulator that runs in your web browser.
+[PCjs](https://www.pcjs.org) is the home of [PCx86](/machines/pcx86/), the original IBM PC emulator that runs in your browser.
 
-It is one of several JavaScript Machines in this project that span a variety of devices:
+PCjs is my homage to a small set of machines that I grew up with.  Those machines include:
 
   - [6502-based Microcomputers](/machines/osi/c1p/)
   - [8080-based Microcomputers](/machines/pcx80/)
@@ -10,7 +10,7 @@ It is one of several JavaScript Machines in this project that span a variety of 
   - [DEC Minicomputers and Terminals](/machines/dec/)
   - [IBM PC and PC Compatibles](/machines/pcx86/)
   - [Texas Instruments Programmable Calculators](/machines/ti/)
-  - [LED Simulations](/machines/led/)
+  - [LED Simulations (Lite-Brite, Game of Life, etc)](/machines/led/)
 
 along with a small collection of software used for archival/demonstration purposes only.
 
