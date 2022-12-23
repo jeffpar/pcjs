@@ -50,9 +50,10 @@ After loading the "Usr" diskette, you can login as **root** with password **Gehe
 
 It's important that the machine use a CGA video adapter rather than a VGA (or EGA), because MINIX 1.1 scrolls text by
 adjusting the CRT controller start address *and* relying on frame buffer wrap-around at the 16K boundary.  VGA frame buffers do
-not wrap at 16K, so MINIX scrolling will periodically fail on VGA-based systems.
+not wrap at 16K, so MINIX scrolling will appear erratic on VGA-based systems.
 
-Also, on December 12, 2022, I re-read all my 1.2M MINIX 1.1 diskettes and discovered that the boot disk image I had originally posted contained a few patches.  Here are the differences:
+Also, on December 12, 2022, I re-read my original 1.2M MINIX 1.1 diskettes and discovered that the boot disk image I had
+originally posted contained a few patches.  Here are the differences:
 
     1c1
     < 00000000  b8 c0 07 8e d8 33 f6 b8  e0 2f 8e c0 33 ff b9 00  |.....3.../..3...|
@@ -117,6 +118,25 @@ to a location inside the disk's boot sector that contains a few additional instr
 
 My best guess is that these patches were made to resolve some issue with MINIX 1.1 on a non-IBM AT clone, but that's
 pure speculation, as I have no recollection of making these patches.
+
+It's also worth noting that the final patch at offset 0x4529 (which corresponds to offset 0x129 in the sector
+at CHS 1:0:5) changes a "LOCK NOP" instruction to "NOP NOP" (ie, it replaces the LOCK prefix with another NOP).
+
+This is actually an important change if you want to run MINIX on an 80386-based PC, because while "LOCK NOP" was harmless
+on the 8086/8088 (and on the 80286, as long as you were running in real mode or with CPL <= IOPL), that instruction will
+trigger a #UD fault on newer processors.  Intel decided to restrict the use of LOCK on the 80386 to a handful of
+memory operations, and NOP wasn't one of them.
+
+However, that patch isn't required if you're running MINIX on an 80386 in PCjs, because PCjs doesn't currently emulate
+that behavior.  It doesn't seem worth the effort, and in fact, I would be surprised if there was *ANY* software in the
+real world that relies on instructions such as "LOCK NOP" generating a #UD fault.  Let's hope Intel didn't expend too many
+transistors in the CPU restricting the use of LOCK, because, really, who cares?
+
+And why does MINIX use "LOCK NOP"?  Well, it has something to do with the behavior of the IBM PC simulator
+that Andrew Tanenbaum was using while writing MINIX.  There isn't a lot of discussion about it, but here's the
+relevant source code, from his 1987 book "Operating Systems: Design and Implementation":
+
+![MINIX Textbook, p.468](minix-textbook-p468.jpg)
 
 In any case, I have since restored the MINIX 1.2M boot disk to its (presumably) original unpatched state.
 This also makes the MINIX boot sector a bit more unusual, insofar as it does *not* start with the usual "JMP" instruction

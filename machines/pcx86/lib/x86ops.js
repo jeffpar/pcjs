@@ -4081,6 +4081,31 @@ X86.opOUTDXw = function()
 /**
  * op=0xF0 (LOCK:)
  *
+ * TODO: For X86.MODEL_80286, we let the 80286 and 80287 Programmers Reference Manual speak for itself:
+ *
+ *      LOCK (Assert Bus Lock) is a 1-byte prefix code that causes the processor to assert
+ *      the bus LOCK signal during execution of the instruction that follows. LOCK does not
+ *      affect any flags. LOCK may be used only when CPL <= IOPL. A protection exception
+ *      [#GP(0)] will occur if LOCK is used when CPL > IOPL.
+ *
+ * TODO: For X86.MODEL_80386, there is no mention of triggering a #GP(0) exception when CPL > IOPL.
+ * Instead, this prefix is now allowed *only* with the following instructions:
+ *
+ *      BT, BTS, BTR, BTC, XCHG, ADD, OR, ADC, SBB, AND, SUB, XOR, NOT, NEG, INC, DEC
+ *
+ * and only when accessing memory.  Any other uses of LOCK are supposed to generate a #UD fault;
+ * that would presumably include any register-only forms of the above instructions, such as "XCHG AX,DX".
+ *
+ * Emulating all (or indeed, any) of those exception cases is an exercise for another day.  One hopes
+ * Intel didn't expend too many transistors on this behavior, because... really, who cares?  I didn't even
+ * personally become aware of this behavior until attempting to run MINIX 1.1 on an actual 80386-based PC
+ * (MINIX executes a "LOCK NOP" instruction, which is harmless on an 8088, but faults on an 80386, because,
+ * you know, asserting LOCK on a NOP would be a horrible thing to do).
+ *
+ * To simulate perfectly how MINIX 1.1 crashes on an 80386, we could add some code to opNOP that checks for
+ * OPFLAG.LOCK and throws X86.EXCEPTION.UD_FAULT, but I'm not sure anyone would thank us for that.  And why
+ * slow down NOP for everyone else?
+ *
  * @this {CPUx86}
  */
 X86.opLOCK = function()
@@ -4131,6 +4156,17 @@ X86.opREPZ = function()
 
 /**
  * op=0xF4 (HLT)
+ *
+ * TODO: For X86.MODEL_80286, we let the 80286 and 80287 Programmers Reference Manual speak for itself:
+ *
+ *      HLT (Halt) causes the processor to suspend processing operations pending an interrupt or a system reset.
+ *      This trusted instruction provides an alternative to an endless software loop in situations where a program
+ *      must wait for an interrupt. The return address saved after the interrupt will point to the instruction
+ *      immediately following HLT.
+ *
+ *      HLT is a privileged instruction. #GP(O) if the current privilege level is not O.
+ *
+ * On the 80386, we now throw GP_FAULT when operating in V86 mode, but we still don't check CPL on an 80286.
  *
  * @this {CPUx86}
  */
