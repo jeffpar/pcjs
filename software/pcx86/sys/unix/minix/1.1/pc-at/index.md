@@ -128,12 +128,7 @@ on the 8086/8088 (and on the 80286, as long as you were running in real-mode or 
 trigger a #UD fault on newer processors.  Intel decided to restrict the use of LOCK on the 80386 to a handful of
 memory operations, and NOP wasn't one of them.
 
-However, that patch isn't required if you're running MINIX on an 80386 in PCjs, because PCjs doesn't currently emulate
-that behavior.  It doesn't seem worth the effort, and in fact, I would be surprised if there was *ANY* software in the
-real world that relies on instructions such as "LOCK NOP" generating a #UD fault.  Let's hope Intel didn't expend too many
-transistors in the CPU restricting the use of LOCK, because, really, who cares?
-
-And why does MINIX use "LOCK NOP"?  Well, it has something to do with the behavior of the IBM PC simulator
+Why does MINIX use "LOCK NOP"?  Well, it has something to do with the behavior of the IBM PC simulator
 that Andrew Tanenbaum was using while writing MINIX.  There isn't a lot of discussion about it, but here's the
 relevant source code, from his 1987 book "Operating Systems: Design and Implementation":
 
@@ -148,7 +143,7 @@ I've seen this error, for example, when attempting to read the second diskette:
 
 While investigating this problem, my [debugger](https://github.com/jeffpar/spy) inadvertently started running
 MINIX with the CPU's trace flag set, which meant that every instruction was being traced, and therefore running much
-slower than normal.  A happy coincidence of this bug in my debugger, however, was that the "disk error" disappeared
+slower than normal.  A happy coincidence of this bug in the debugger, however, was that the "disk error" disappeared
 and MINIX successfully loaded!
 
 ![MINIX on a Pentium](minix-on-a-pentium.jpg)
