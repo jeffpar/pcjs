@@ -151,6 +151,8 @@ MINIX with the CPU's trace flag set, which meant that every instruction was bein
 slower than normal.  A happy coincidence of this bug in my debugger, however, was that the "disk error" disappeared
 and MINIX successfully loaded!
 
+![MINIX on a Pentium](minix-on-a-pentium.jpg)
+
 Anyway, I have since restored the MINIX 1.2M boot disk to its (presumably) original unpatched state.
 This also makes the MINIX boot sector a bit more unusual, insofar as it does *not* start with the usual "JMP" instruction
 that the first sector of all PC DOS and MS-DOS diskettes generally start with.
