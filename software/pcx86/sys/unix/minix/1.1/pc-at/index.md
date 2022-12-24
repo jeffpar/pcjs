@@ -124,7 +124,7 @@ It's also worth noting that the final patch at offset 0x4529 (which corresponds 
 at CHS 1:0:5) changes a "LOCK NOP" instruction to "NOP NOP" (ie, it replaces the LOCK prefix with another NOP).
 
 This is actually an important change if you want to run MINIX on an 80386-based PC, because while "LOCK NOP" was harmless
-on the 8086/8088 (and on the 80286, as long as you were running in real mode or with CPL <= IOPL), that instruction will
+on the 8086/8088 (and on the 80286, as long as you were running in real-mode or with CPL <= IOPL), that instruction will
 trigger a #UD fault on newer processors.  Intel decided to restrict the use of LOCK on the 80386 to a handful of
 memory operations, and NOP wasn't one of them.
 
@@ -139,7 +139,19 @@ relevant source code, from his 1987 book "Operating Systems: Design and Implemen
 
 ![MINIX Textbook, p.468](minix-textbook-p468.jpg)
 
-In any case, I have since restored the MINIX 1.2M boot disk to its (presumably) original unpatched state.
+Finally, a note on attempting to run MINIX 1.1 on a real 80386-based machine, even with the "LOCK NOP" patch: there
+seems to be some code in MINIX, perhaps in the floppy driver, that runs too fast (and fails) on newer hardware. 
+I've seen this error, for example, when attempting to read the second diskette:
+
+    Unrecoverable disk error on device 2/0, block 1  
+    File system panic: Diskette in drive 0 is not root file system
+
+While investigating this problem, my [debugger](https://github.com/jeffpar/spy) inadvertently started running
+MINIX with the CPU's trace flag set, which meant that every instruction was being traced, and therefore running much
+slower than normal.  A happy coincidence of this bug in my debugger, however, was that the "disk error" disappeared
+and MINIX successfully loaded!
+
+Anyway, I have since restored the MINIX 1.2M boot disk to its (presumably) original unpatched state.
 This also makes the MINIX boot sector a bit more unusual, insofar as it does *not* start with the usual "JMP" instruction
 that the first sector of all PC DOS and MS-DOS diskettes generally start with.
 
