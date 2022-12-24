@@ -2315,6 +2315,14 @@ X86.opPOPmw = function()
 X86.opNOP = function()
 {
     this.nStepCycles -= 3;                          // this form of XCHG takes 3 cycles on all CPUs
+    /*
+     * The following exception is not unique to LOCK NOP on the 80386, but it's the only LOCK exception
+     * that seems worth worrying about this point.  See opLOCK() for further discussion.
+     */
+    if (I386 && (this.opFlags & X86.OPFLAG.LOCK) && this.model >= X86.MODEL_80386) {
+        X86.helpFault.call(this, X86.EXCEPTION.UD_FAULT, 0);
+        return;
+    }
 };
 
 /**
@@ -4093,18 +4101,17 @@ X86.opOUTDXw = function()
  *
  *      BT, BTS, BTR, BTC, XCHG, ADD, OR, ADC, SBB, AND, SUB, XOR, NOT, NEG, INC, DEC
  *
- * and only when accessing memory.  Any other uses of LOCK are supposed to generate a #UD fault;
- * that would presumably include any register-only forms of the above instructions, such as "XCHG AX,DX".
+ * and only when accessing memory.  Any other uses of LOCK are supposed to generate a #UD exception;
+ * that includes any register-to-register forms of the above instructions, such as XCHG AX,AX (aka NOP).
  *
- * Emulating all (or indeed, any) of those exception cases is an exercise for another day.  One hopes
- * Intel didn't expend too many transistors on this behavior, because... really, who cares?  I didn't even
- * personally become aware of this behavior until attempting to run MINIX 1.1 on an actual 80386-based PC
- * (MINIX executes a "LOCK NOP" instruction, which is harmless on an 8088, but faults on an 80386, because,
- * you know, asserting LOCK on a NOP would be a horrible thing to do).
+ * Emulating all those exception cases would be a lot of work for little if any benefit.  The only, um,
+ * exception that I'm making is for NOP (see opNOP), since there are apparently some operating systems
+ * that thought relying on LOCK NOP faulting was a clever thing to do.  See https://wiki.osdev.org/System_Calls.
  *
- * To simulate perfectly how MINIX 1.1 crashes on an 80386, we could add some code to opNOP that checks for
- * OPFLAG.LOCK and throws X86.EXCEPTION.UD_FAULT, but I'm not sure anyone would thank us for that.  And why
- * slow down NOP for everyone else?
+ * MINIX 1.1 performs LOCK NOP, but not to generate a fault, because it predates the 80386; instead, it had
+ * something to do with the IBM PC simulator that Andrew Tanenbaum used to test MINIX.  MINIX 1.1 was designed
+ * for PC ATs, so either stick with an 80286 machine, or patch the LOCK instruction with a NOP.
+ * See https://www.pcjs.org/software/pcx86/sys/unix/minix/1.1/pc-at/.
  *
  * @this {CPUx86}
  */
