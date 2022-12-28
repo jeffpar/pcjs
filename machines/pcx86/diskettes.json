@@ -9402,6 +9402,22 @@
           }
         }
       },
+      "spy": {
+        "@title": "SPY",
+        "@versions": {
+          "0.1": {
+            "@title": "SPY 0.1",
+            "@media": [
+              {
+                "@title": "SPY 386 Monitor 0.1",
+                "@diskette": "SPY01.json",
+                "@format": "PC320K",
+                "@archive": "folder"
+              }
+            ]
+          }
+        }
+      },
       "unp": {
         "@title": "UNP",
         "@versions": {
