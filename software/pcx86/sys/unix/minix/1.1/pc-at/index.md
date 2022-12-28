@@ -141,10 +141,10 @@ I've seen this error, for example, when attempting to read the second diskette:
     Unrecoverable disk error on device 2/0, block 1  
     File system panic: Diskette in drive 0 is not root file system
 
-While investigating this problem, my [debugger](https://github.com/jeffpar/spy) inadvertently started running
+While investigating this problem, my [SPY Debugger](https://github.com/jeffpar/spy) inadvertently started running
 MINIX with the CPU's trace flag set, which meant that every instruction was being traced, and therefore running much
 slower than normal.  A happy coincidence of this bug in the debugger, however, was that the "disk error" disappeared
-and MINIX successfully loaded!
+and MINIX successfully loaded.
 
 ![MINIX on a Pentium](minix-on-a-pentium.jpg)
 

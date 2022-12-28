@@ -53,14 +53,16 @@ There's some code in the MINIX kernel that executes a "LOCK NOP" instruction, ap
 simulator that Tanenbaum was using to develop and test MINIX.  On CPUs prior to the 80386, "LOCK NOP" was harmless.  However,
 since the 80386, the use of LOCK with non-memory instructions throws an "undefined opcode" exception.
 
-The solution: run MINIX on PC (8086-based) or PC AT (80286-based) systems, or patch the "LOCK" prefix with another "NOP".
+The solution: run MINIX on PC (8086-based) or PC AT (80286-based) systems, or patch the "LOCK" prefix with another "NOP"
+(see [MINIX 1.1 for the IBM PC AT](/software/pcx86/sys/unix/minix/1.1/pc-at/) for more information).
 
 ### The Video Adapter
 
 MINIX 1.1 assumed you were using either an original IBM Monochrome Adapter (MDA) or IBM Color Graphics Adapter (CGA), and
 therefore that scrolling the screen could be simulated by adjusting the CRT controller's start address, as well as relying
-on frame buffer wrapping (4K on an MDA, 16K on a CGA).  However, most machines newer than the PC AT, as well as most emulators,
-use a VGA, and unfortunately, a VGA doesn't wrap the same way, so scrolling will appear erratic.
+on frame buffer wrapping (4K on an MDA, 16K on a CGA).  This is the same scrolling technique used by a handful of other
+programs, such as [FlickerFree](/blog/2017/07/15/).  Unfortunately, most machines newer than the PC AT, as well as most
+emulators, use a VGA, which doesn't wrap on the same boundary, so scrolling will appear erratic.
 
 The solution: run MINIX with an MDA or CGA, not a VGA.
 
@@ -71,8 +73,10 @@ On newer machines, MINIX may fail to load the root file system, displaying the f
     Unrecoverable disk error on device 2/0, block 1  
     File system panic: Diskette in drive 0 is not root file system
 
-The solution: slow the CPU down.  For example, I was able to use a [debugger](https://github.com/jeffpar/spy) I had
-written over 30 years ago to slow down my 233Mhz Pentium enough so that this error went away.
+The solution: slow the CPU down.  I inadvertently solved this problem on a 233Mhz Pentium, thanks to an unintentional
+bug in my [SPY Debugger](https://github.com/jeffpar/spy): it had incorrectly left CPU's trace flag set, which meant that
+every instruction was being traced, and therefore running much slower than normal.  A happy coincidence of this bug was
+that the "disk error" disappeared and MINIX successfully loaded.
 
 Faster CPUs apparently cause MINIX to perform certain hardware operations too quickly.  I didn't see this problem
 in VirtualBox, presumably because even though its emulated CPU is faster than normal, its emulated hardware responds faster
@@ -85,8 +89,8 @@ So, if you can, run MINIX 1.1 on an [IBM PC AT with CGA](/software/pcx86/sys/uni
 Debugging on old, real hardware can be a challenge, especially if it's an operating system like MINIX, which has its
 own boot loader and takes over the machine.
 
-Fortunately, since MINIX runs entirely in real-mode, and since I remembered writing a tool for debugging
-code on an 80386 using v86-mode, I decided to resurrect it.
+Fortunately, since MINIX runs entirely in real-mode, and since I remembered writing a tool for debugging code on an
+80386 using v86-mode, I decided to resurrect it.
 
 ### Introducing SPY: A Custom v86-mode Debugger for the 80386
 
@@ -152,11 +156,11 @@ code, including asserts, was still in place. Strange.]
 There were a number of other minor problems, like some unexpected padding between code and data sections, failure to preserve
 the initial interrupt mask registers (IMRs), and failure to allocate memory for the VGA save/restore operations.  I call these
 problems "minor", but they all took a while to track down.  Fortunately, the
-[PCjs Debugger](http://www.pcjs.org/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/machine.xml) was a big help.
-I even had to use the VSCode debugger to debug a problem with the PCjs debugger, so as an added bonus, I ended up fixing a few
+[PCjs Debugger](http://www.pcjs.org/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/machine.xml) was a big help,
+although I also had to use the VSCode debugger to debug some problems in PCjs, so as an added bonus, I ended up fixing a few
 [PCjs bugs](https://github.com/jeffpar/pcjs/commit/a2d169129bc8727cd1739f5fa2de50196a1cc587#diff-f6421b18c663fde433cf56c0333dc0961b21e80dc4842aad8d4686452a3f866a) as well.
 
-All these issues made a few things clear: I had probably used an *older* version of **CL3232** than what was archived here
+All these issues made a few things clear: I had probably used an *older* version of **CL3232** than what I originally archived
 (I'll keep looking for it, but I probably don't have it anymore), and I had probably started reworking some of the SPY code
 in 1993 and never finished the changes.
 
