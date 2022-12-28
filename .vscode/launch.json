@@ -427,6 +427,13 @@
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/ext/softlogic/carousel/2.0.3/?debugger=true",
       "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "SPY 386 Monitor 0.1",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/util/other/spy/0.1/?debugger=true",
+      "webRoot": "${workspaceFolder}"
     }
   ]
 }

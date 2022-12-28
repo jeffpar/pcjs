@@ -82,7 +82,8 @@ So, if you can, run MINIX 1.1 on an [IBM PC AT with CGA](/software/pcx86/sys/uni
 
 ## Debugging on Real Hardware
 
-Debugging on old, real hardware can be a challenge, especially if it's an operating system like MINIX, which has its own boot loader and takes over machine.
+Debugging on old, real hardware can be a challenge, especially if it's an operating system like MINIX, which has its
+own boot loader and takes over the machine.
 
 Fortunately, since MINIX runs entirely in real-mode, and since I remembered writing a tool for debugging
 code on an 80386 using v86-mode, I decided to resurrect it.
