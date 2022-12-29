@@ -1182,13 +1182,13 @@
 		<xsl:variable name="componentFile"><xsl:value-of select="$rootDir"/><xsl:value-of select="@ref"/></xsl:variable>
 		<xsl:apply-templates select="document($componentFile)/video">
 			<xsl:with-param name="machine" select="$machine"/>
-			<xsl:with-param name="irq"><xsl:if test="@irq"><xsl:value-of select="@irq"/></xsl:if></xsl:with-param>
+			<xsl:with-param name="virq"><xsl:if test="@irq"><xsl:value-of select="@irq"/></xsl:if></xsl:with-param>
 		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="video[not(@ref)]">
 		<xsl:param name="machine" select="''"/>
-		<xsl:param name="irq" select="''"/>
+		<xsl:param name="virq" select="''"/>
 		<xsl:variable name="model">
 			<xsl:choose>
 				<xsl:when test="@model"><xsl:value-of select="@model"/></xsl:when>
@@ -1381,7 +1381,7 @@
 		</xsl:variable>
 		<xsl:variable name="irq">
 			<xsl:choose>
-				<xsl:when test="$irq != ''"><xsl:value-of select="$irq"/></xsl:when>
+				<xsl:when test="$virq != ''"><xsl:value-of select="$virq"/></xsl:when>
 				<xsl:when test="@irq"><xsl:value-of select="@irq"/></xsl:when>
 				<xsl:otherwise>null</xsl:otherwise>
 			</xsl:choose>
