@@ -56,7 +56,7 @@ since the 80386, the use of LOCK with non-memory instructions throws an "undefin
 The solution: run MINIX on PC (8086-based) or PC AT (80286-based) systems, or patch the "LOCK" prefix with another "NOP"
 (see [MINIX 1.1 for the IBM PC AT](/software/pcx86/sys/unix/minix/1.1/pc-at/) for more information).
 
-### The Video Adapter
+### The Video Adapter, Part 1
 
 MINIX 1.1 assumed you were using either an original IBM Monochrome Adapter (MDA) or IBM Color Graphics Adapter (CGA), and
 therefore that scrolling the screen could be simulated by adjusting the CRT controller's start address, as well as relying
@@ -65,6 +65,16 @@ programs, such as [FlickerFree](/blog/2017/07/15/).  Unfortunately, most machine
 emulators, use a VGA, which doesn't wrap on the same boundary, so scrolling will appear erratic.
 
 The solution: run MINIX with an MDA or CGA, not a VGA.
+
+### The Video Adapter, Part 2
+
+Another problem I saw when attempting to run MINIX on a COMPAQ DeskPro 386 with an IBM VGA is that MINIX apparently unmasks
+all interrupts, and as a result, it may start receiving vertical retrace interrupts from the VGA, which in turn may not be
+EOI'ed properly, which in turn may prevent all further lower-priority interrupts (including the FDC) from being acknowledged.
+
+Obviously this is just another reason why machines with a VGA should be avoided.  However, the DeskPro 386 has some other
+issues with MINIX, too, including an inability to read 1.2M diskettes (it can only read 360K diskettes), so those PCjs machine
+configurations are best avoided until I finish debugging them.
 
 ### The Speed of the CPU
 
