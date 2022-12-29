@@ -56,15 +56,30 @@ since the 80386, the use of LOCK with non-memory instructions throws an "undefin
 The solution: run MINIX on PC (8086-based) or PC AT (80286-based) systems, or patch the "LOCK" prefix with another "NOP"
 (see [MINIX 1.1 for the IBM PC AT](/software/pcx86/sys/unix/minix/1.1/pc-at/) for more information).
 
-### The Video Adapter
+Note: the "LOCK NOP" instruction in MINIX 1.1 is located at 60:4497 when booting from the 360K diskettes and at 60:4329
+when booting from the 1.2M diskettes.
 
-MINIX 1.1 assumed you were using either an original IBM Monochrome Adapter (MDA) or IBM Color Graphics Adapter (CGA), and
-therefore that scrolling the screen could be simulated by adjusting the CRT controller's start address, as well as relying
+### The Video Adapter, Part 1
+
+MINIX 1.1 assumed you were using either an original IBM Monochrome Display Adapter (MDA) or IBM Color Graphics Adapter (CGA),
+and therefore that scrolling the screen could be simulated by adjusting the CRT controller's start address, as well as relying
 on frame buffer wrapping (4K on an MDA, 16K on a CGA).  This is the same scrolling technique used by a handful of other
 programs, such as [FlickerFree](/blog/2017/07/15/).  Unfortunately, most machines newer than the PC AT, as well as most
 emulators, use a VGA, which doesn't wrap on the same boundary, so scrolling will appear erratic.
 
-The solution: run MINIX with an MDA or CGA, not a VGA.
+The solution: run MINIX on a machine with an MDA or CGA, not a VGA.
+
+### The Video Adapter, Part 2
+
+Another problem I saw when attempting to run MINIX (on 360K diskettes) using a COMPAQ DeskPro 386 with an IBM VGA
+(a doubly ill-advised combination) is that MINIX apparently unmasks *all* interrupts (not a good idea), and as a result,
+it starts receiving vertical retrace interrupts from the VGA, which in turn are not "EOI'ed" properly, which in turn prevents
+all further lower-priority interrupts (including the FDC) from being acknowledged.  In fact, the video retrace interrupt
+handler does some truly mystifying things, including REP STOSW to 0:0, so there may be several bugs at play here.
+
+Obviously this is just another reason why machines with a VGA should be avoided.  PCjs DeskPro 386 machines also have some
+limitations that are still being investigated, including an inability to read 1.2M diskettes (at the moment, they can only
+read 360K diskettes), so again, stick with PC or PC AT machines that use an MDA or CGA instead.
 
 ### The Speed of the CPU
 

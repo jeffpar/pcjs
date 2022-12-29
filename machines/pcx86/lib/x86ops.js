@@ -2319,7 +2319,7 @@ X86.opNOP = function()
      * The following exception is not unique to LOCK NOP on the 80386, but it's the only LOCK exception
      * that seems worth worrying about this point.  See opLOCK() for further discussion.
      */
-    if (I386 && (this.opFlags & X86.OPFLAG.LOCK) && this.model >= X86.MODEL_80386) {
+    if (I386 && (this.opPrefixes & X86.OPFLAG.LOCK) && this.model >= X86.MODEL_80386) {
         X86.helpFault.call(this, X86.EXCEPTION.UD_FAULT, 0);
         return;
     }
