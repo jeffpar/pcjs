@@ -2302,7 +2302,7 @@ class ChipSet extends Component {
          * TODO: Remove this DEBUG-only DESKPRO386 code once we're done debugging DeskPro 386 ROMs;
          * it enables logging of all DeskPro 386 ROM checkpoint I/O to port 0x84.
          */
-        if (this.messageEnabled(Messages.DMA + Messages.PORT) || DEBUG && (this.model|0) == ChipSet.MODEL_COMPAQ_DESKPRO386) {
+        if (this.messageEnabled(Messages.DMA + Messages.PORT) /* || DEBUG && (this.model|0) == ChipSet.MODEL_COMPAQ_DESKPRO386 */) {
             this.printMessageIO(port, bOut, addrFrom, "DMA.SPARE" + iSpare + ".PAGE", undefined, true);
         }
         this.abDMAPageSpare[iSpare] = bOut;

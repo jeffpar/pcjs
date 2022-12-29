@@ -40808,7 +40808,7 @@ class ChipSet extends Component {
          * TODO: Remove this DEBUG-only DESKPRO386 code once we're done debugging DeskPro 386 ROMs;
          * it enables logging of all DeskPro 386 ROM checkpoint I/O to port 0x84.
          */
-        if (this.messageEnabled(Messages.DMA + Messages.PORT) || DEBUG && (this.model|0) == ChipSet.MODEL_COMPAQ_DESKPRO386) {
+        if (this.messageEnabled(Messages.DMA + Messages.PORT) /* || DEBUG && (this.model|0) == ChipSet.MODEL_COMPAQ_DESKPRO386 */) {
             this.printMessageIO(port, bOut, addrFrom, "DMA.SPARE" + iSpare + ".PAGE", undefined, true);
         }
         this.abDMAPageSpare[iSpare] = bOut;
@@ -51576,7 +51576,7 @@ class VideoX86 extends Component {
      *      screenWidth: width of the screen canvas, in pixels
      *      screenHeight: height of the screen canvas, in pixels
      *      screenColor: background color of the screen canvas (default is black)
-     *      flicker: 1 enables screen flicker, 0 disables (default is 0)
+     *      flicker: 1 enables screen flicker, 0 disables (default is 0.5)
      *      scale: true for font scaling, false (default) to center the display on the screen
      *      charCols: number of character columns
      *      charRows: number of character rows
@@ -51584,6 +51584,7 @@ class VideoX86 extends Component {
      *      touchScreen: string specifying desired touch-screen support (default is none)
      *      autoLock: true to (attempt to) auto-lock the mouse to the canvas (default is false)
      *      randomize: 1 enables screen randomization, 0 disables (default is 1)
+     *      irq: 0-15 for IRQ, -1 to disable (default is null, implying Chipset.IRQ.VID or 2)
      *
      * An EGA/VGA may specify the following additional properties:
      *
@@ -51637,7 +51638,9 @@ class VideoX86 extends Component {
         let aModelDefaults = VideoX86.MODEL[this.model] || VideoX86.MODEL['mda'];
 
         this.nCard = aModelDefaults[0];
-        this.nIRQ = (this.nCard >= VideoX86.CARD.EGA)? ChipSet.IRQ.VID : undefined;
+        let irq = parmsVideo['irq'];
+        if (irq == undefined) irq = ChipSet.IRQ.VID;
+        this.nIRQ = (this.nCard >= VideoX86.CARD.EGA && irq >= 0 && irq <= 15)? irq : undefined;
 
         this.nCardFont = 0;
         this.nActiveFont = this.nAlternateFont = 0;
