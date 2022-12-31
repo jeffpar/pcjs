@@ -65705,7 +65705,25 @@ class FDC extends Component {
             this.popCmd(FDC.TERMS.DTL);                     // DTL (when N is 0, DTL stands for the data length to read out or write into the sector)
             this.setLED(ledState);
             if (drive.disk && drive.disk.nSectors >= 15 && this.regControl != FDC.REG_CONTROL.RATE500K) {
-                drive.resCode = FDC.REG_DATA.RES.INCOMPLETE;
+                /*
+                 * Originally, I only set RES.INCOMPLETE (which is an ST0 result byte), because that's all that MINIX 1.1
+                 * relied upon to differentiate 1.2M media from 360K media, but the COMPAQ DeskPro 386 ROM has a similar
+                 * dependency AND requires that an error appear in the ST1 result byte as well -- so I added RES.NO_DATA to
+                 * the result code.
+                 *
+                 * The change for the DeskPro had a further impact: after it issues an INT 13h to read the boot sector, it
+                 * probes the diskette to look for any inconsistency between the presumed drive type and the CMOS setting;
+                 * for example, when I booted a 1.2M disk (which has 15 sectors/track) in a "1200" drive, the DeskPro 386 ROM
+                 * would then attempt to read sector 16, which it assumes would only work in "1440" drives, but since I didn't
+                 * return an error (the ROM was using DMA_MODE.TYPE_VERIFY, which doesn't trigger any FDC I/O and consequently
+                 * no error), the ROM decided there was a drive type inconsistency and reported a setup error.
+                 *
+                 * I eliminated the error by changing all DeskPro 386 machine configs to use the "1440" floppy drive type,
+                 * which has the added benefit of allowing any size floppy to work with those machines, but that solution is
+                 * "papering over" the FDC's failure to report an error reading non-existent sectors when the DMA mode is
+                 * TYPE_VERIFY instead of TYPE_READ or TYPE_WRITE.
+                 */
+                drive.resCode = FDC.REG_DATA.RES.INCOMPLETE | FDC.REG_DATA.RES.NO_DATA;
                 fIRQ = true;
             } else {
                 if (bCmdMasked != FDC.REG_DATA.CMD.WRITE_DATA) {

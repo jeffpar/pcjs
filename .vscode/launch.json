@@ -338,6 +338,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "COMPAQ MS-DOS 3.10 (DeskPro 386 w/1986 ROM)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/dos/compaq/3.10/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Dune II (1992)",
       "type": "chrome",
       "request": "launch",

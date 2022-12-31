@@ -6,15 +6,10 @@
     ".fseventsd": true,
     ".Trashes": true
   },
-  "files.associations": {
-    "*.s": "masm",
-    "*.asm": "masm",
-    "*.inc": "masm",
-    "*.ASM": "masm",
-    "*.INC": "masm"
-  },
   "editor.wordWrap": "off",
   "editor.rulers": [127],
+  "editor.tabSize": 8,
+  "editor.insertSpaces": false,
   "[javascript]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
@@ -22,7 +17,7 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true
   },
-  "[json]": {
+  "[json][jsonc]": {
     "editor.detectIndentation": false,
     "editor.insertSpaces": true,
     "editor.tabSize": 2,
@@ -40,6 +35,13 @@
     "editor.insertSpaces": false,
     "editor.tabSize": 8,
     "files.eol": "\r\n",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true
+  },
+  "[xml][xsl]": {
+    "editor.insertSpaces": false,
+    "editor.tabSize": 4,
     "files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true

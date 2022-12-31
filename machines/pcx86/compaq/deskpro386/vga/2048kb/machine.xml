@@ -12,7 +12,7 @@
 	<fdc ref="/machines/pcx86/fdc/library.xml" autoMount='{A: {name: "COMPAQ MS-DOS 3.31 (Disk 2)"}, B: {name: "COMPAQ MS-DOS 3.31 (Disk 3)"}}'/>
 	<hdc ref="/machines/pcx86/hdc/47mb/unformatted-at5.xml"/>
 	<keyboard ref="/machines/pcx86/keyboard/us84-softkeys.xml"/>
-	<chipset id="chipset" model="deskpro386" floppies="[1200,1200]" monitor="vga"/>
+	<chipset id="chipset" model="deskpro386" floppies="[1440,1440]" monitor="vga"/>
 	<serial id="com1" adapter="1"/>
 	<serial id="com2" adapter="2"/>
 	<mouse serial="com1"/>

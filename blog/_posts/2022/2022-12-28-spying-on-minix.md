@@ -44,8 +44,8 @@ would assume its diskette had only 9 sectors/track.
 
 I was able to use VirtualBox and its built-in debugger, as well as the MINIX 1.1
 [floppy.c](https://diskettes.pcjs.org/pcx86/sys/unix/minix/1.1/src/krn_h_in/kernel/floppy.c) source code, to zero in on
-this problem, but I discovered some other issues along the way that still give both modern emulators *and* modern hardware
-grief when attempting to run MINIX.
+these floppy controller bugs, but I discovered some other issues along the way that still give both modern emulators *and*
+modern hardware grief when attempting to run MINIX.
 
 ### The LOCK Prefix
 
@@ -74,8 +74,9 @@ The solution: run MINIX on a machine with an MDA or CGA, not a VGA.
 Another problem I saw when attempting to run MINIX (on 360K diskettes) using a COMPAQ DeskPro 386 with an IBM VGA
 (a doubly ill-advised combination) is that MINIX apparently unmasks *all* interrupts (not a good idea), and as a result,
 it starts receiving vertical retrace interrupts from the VGA, which in turn are not "EOI'ed" properly, which in turn prevents
-all further lower-priority interrupts (including the FDC) from being acknowledged.  In fact, the video retrace interrupt
-handler does some truly mystifying things, including REP STOSW to 0:0, so there may be several bugs at play here.
+all further lower-priority interrupts (including the FDC) from being acknowledged.
+
+In fact, the MINIX vertical retrace interrupt handler can be called *before* it has fully initialized all its memory pointers, in which case it will REP STOSW the value 0x0700 into the IVT at 0:0 instead of video memory -- clearly not what it intended to do.
 
 Obviously this is just another reason why machines with a VGA should be avoided.  PCjs DeskPro 386 machines also have some
 limitations that are still being investigated, including an inability to read 1.2M diskettes (at the moment, they can only

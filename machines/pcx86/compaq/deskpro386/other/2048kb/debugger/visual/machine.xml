@@ -22,7 +22,7 @@
 	<debugger id="debugger" messages="fault|port" commands=""/>
 	<panel ref="/machines/pcx86/panel/visual.xml"/>
 	<hdc ref="/machines/pcx86/hdc/47mb/unformatted-at5.xml"/>
-	<chipset id="chipset" model="deskpro386" floppies="[1200,1200]"/>
+	<chipset id="chipset" model="deskpro386" floppies="[1440,1440]"/>
 	<serial id="com1" adapter="1"/>
 	<serial id="com2" adapter="2" binding="print"/>
 	<mouse serial="com1"/>
