@@ -76,11 +76,13 @@ Another problem I saw when attempting to run MINIX (on 360K diskettes) using a C
 it starts receiving vertical retrace interrupts from the VGA, which in turn are not "EOI'ed" properly, which in turn prevents
 all further lower-priority interrupts (including the FDC) from being acknowledged.
 
-In fact, the MINIX vertical retrace interrupt handler can be called *before* it has fully initialized all its memory pointers, in which case it will REP STOSW the value 0x0700 into the IVT at 0:0 instead of video memory -- clearly not what it intended to do.
+In fact, the MINIX vertical retrace interrupt handler can be called *before* it has fully initialized all its memory pointers,
+in which case it will REP STOSW the value 0x0700 into the IVT at 0:0 instead of video memory -- clearly not what it intended
+to do.
 
-Obviously this is just another reason why machines with a VGA should be avoided.  PCjs DeskPro 386 machines also have some
-limitations that are still being investigated, including an inability to read 1.2M diskettes (at the moment, they can only
-read 360K diskettes), so again, stick with PC or PC AT machines that use an MDA or CGA instead.
+Obviously this is just another reason why machines with a VGA should be avoided.  However, there *is* currently at least one
+PCjs [COMPAQ DeskPro 386](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/uncompiled/) machine with an IBM VGA that has
+been configured with vertical retrace disabled, if you *really* feel the need to test that combination.
 
 ### The Speed of the CPU
 
