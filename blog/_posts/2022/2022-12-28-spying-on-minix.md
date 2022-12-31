@@ -81,8 +81,8 @@ in which case it will REP STOSW the value 0x0700 into the IVT at 0:0 instead of 
 to do.
 
 Obviously this is just another reason why machines with a VGA should be avoided.  However, there *is* currently at least one
-PCjs [COMPAQ DeskPro 386](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/uncompiled/) machine with an IBM VGA that has
-been configured with vertical retrace disabled, if you *really* feel the need to test that combination.
+PCjs [COMPAQ DeskPro 386](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/uncompiled/machine.xml) machine with an IBM VGA
+that has been configured with vertical retrace disabled, if you *really* feel the need to test that combination.
 
 ### The Speed of the CPU
 
