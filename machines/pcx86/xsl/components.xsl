@@ -785,13 +785,13 @@
 		<xsl:variable name="componentFile"><xsl:value-of select="$rootDir"/><xsl:value-of select="@ref"/></xsl:variable>
 		<xsl:apply-templates select="document($componentFile)/device">
 			<xsl:with-param name="machine" select="$machine"/>
-			<xsl:with-param name="mount"><xsl:if test="@autoMount"><xsl:value-of select="@autoMount"/></xsl:if><xsl:if test="@automount"><xsl:value-of select="@automount"/></xsl:if></xsl:with-param>
+			<xsl:with-param name="_autoMount"><xsl:if test="@autoMount"><xsl:value-of select="@autoMount"/></xsl:if><xsl:if test="@automount"><xsl:value-of select="@automount"/></xsl:if></xsl:with-param>
 		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="device[not(@ref)]">
 		<xsl:param name="machine" select="''"/>
-		<xsl:param name="mount" select="''"/>
+		<xsl:param name="_autoMount" select="''"/>
 		<xsl:variable name="type">
 			<xsl:choose>
 				<xsl:when test="@type"><xsl:value-of select="@type"/></xsl:when>
@@ -812,7 +812,7 @@
 		</xsl:variable>
 		<xsl:variable name="autoMount">
 			<xsl:choose>
-				<xsl:when test="$mount != ''"><xsl:value-of select="$mount"/></xsl:when>
+				<xsl:when test="$_autoMount != ''"><xsl:value-of select="$_autoMount"/></xsl:when>
 				<xsl:when test="@automount"><xsl:value-of select="@automount"/></xsl:when>
 				<xsl:otherwise><xsl:value-of select="@autoMount"/></xsl:otherwise>
 			</xsl:choose>
@@ -1009,16 +1009,16 @@
 		<xsl:variable name="componentFile"><xsl:value-of select="$rootDir"/><xsl:value-of select="@ref"/></xsl:variable>
 		<xsl:apply-templates select="document($componentFile)/fdc">
 			<xsl:with-param name="machine" select="$machine"/>
-			<xsl:with-param name="mount"><xsl:if test="@autoMount"><xsl:value-of select="@autoMount"/></xsl:if><xsl:if test="@automount"><xsl:value-of select="@automount"/></xsl:if></xsl:with-param>
+			<xsl:with-param name="_autoMount"><xsl:if test="@autoMount"><xsl:value-of select="@autoMount"/></xsl:if><xsl:if test="@automount"><xsl:value-of select="@automount"/></xsl:if></xsl:with-param>
 		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="fdc[not(@ref)]">
 		<xsl:param name="machine" select="''"/>
-		<xsl:param name="mount" select="''"/>
+		<xsl:param name="_autoMount" select="''"/>
 		<xsl:variable name="autoMount">
 			<xsl:choose>
-				<xsl:when test="$mount != ''"><xsl:value-of select="$mount"/></xsl:when>
+				<xsl:when test="$_autoMount != ''"><xsl:value-of select="$_autoMount"/></xsl:when>
 				<xsl:when test="@automount"><xsl:value-of select="@automount"/></xsl:when>
 				<xsl:otherwise><xsl:value-of select="@autoMount"/></xsl:otherwise>
 			</xsl:choose>
@@ -1182,13 +1182,13 @@
 		<xsl:variable name="componentFile"><xsl:value-of select="$rootDir"/><xsl:value-of select="@ref"/></xsl:variable>
 		<xsl:apply-templates select="document($componentFile)/video">
 			<xsl:with-param name="machine" select="$machine"/>
-			<xsl:with-param name="virq"><xsl:if test="@irq"><xsl:value-of select="@irq"/></xsl:if></xsl:with-param>
+			<xsl:with-param name="_irq"><xsl:if test="@irq"><xsl:value-of select="@irq"/></xsl:if></xsl:with-param>
 		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="video[not(@ref)]">
 		<xsl:param name="machine" select="''"/>
-		<xsl:param name="virq" select="''"/>
+		<xsl:param name="_irq" select="''"/>
 		<xsl:variable name="model">
 			<xsl:choose>
 				<xsl:when test="@model"><xsl:value-of select="@model"/></xsl:when>
@@ -1381,7 +1381,7 @@
 		</xsl:variable>
 		<xsl:variable name="irq">
 			<xsl:choose>
-				<xsl:when test="$virq != ''"><xsl:value-of select="$virq"/></xsl:when>
+				<xsl:when test="$_irq != ''"><xsl:value-of select="$_irq"/></xsl:when>
 				<xsl:when test="@irq"><xsl:value-of select="@irq"/></xsl:when>
 				<xsl:otherwise>null</xsl:otherwise>
 			</xsl:choose>

@@ -8,8 +8,7 @@ redirect_from:
 machines:
   - id: deskpro386
     type: pcx86
-    debugger: true
-    config: /machines/pcx86/compaq/deskpro386/ega/2048kb/debugger/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/ega/2048kb/machine.xml
     autoMount:
       A:
         name: COMPAQ MS-DOS 3.10 (Disk 1)
