@@ -121,12 +121,15 @@ My best guess is that these patches were made to resolve some issue with MINIX 1
 pure speculation, as I have no recollection of making these patches.
 
 It's also worth noting that the final patch at offset 0x4529 (which corresponds to offset 0x129 in the sector
-at CHS 1:0:5) changes a "LOCK NOP" instruction to "NOP NOP" (ie, it replaces the LOCK prefix with another NOP).
+at CHS 1:0:5) changes a "LOCK NOP" instruction to "NOP NOP" (ie, it replaces the LOCK prefix with another NOP).  To
+apply the patch in memory using the [PCjs Debugger](/software/pcx86/sys/unix/minix/1.1/pc-at/?debugger=true),
+type `e 60:4329 90` after the the boot disk has finished loading; the debugger should display
+`changing &0060:4329 from 0xF0 to 0x90`.
 
 This is actually an important change if you want to run MINIX on an 80386-based PC, because while "LOCK NOP" was harmless
 on the 8086/8088 (and on the 80286, as long as you were running in real-mode or with CPL <= IOPL), that instruction will
 trigger a #UD fault on newer processors.  Intel decided to restrict the use of LOCK on the 80386 to a handful of
-memory operations, and NOP wasn't one of them.
+memory operations, and NOP (aka XCHG AX,AX) wasn't one of them.
 
 Why does MINIX use "LOCK NOP"?  Well, it has something to do with the behavior of the IBM PC simulator
 that Andrew Tanenbaum was using while writing MINIX.  There isn't a lot of discussion about it, but here's the
@@ -148,8 +151,7 @@ and MINIX successfully loaded.
 
 ![MINIX on a Pentium](minix-on-a-pentium.jpg)
 
-Anyway, I have since restored the MINIX 1.2M boot disk to its (presumably) original unpatched state.
-This also makes the MINIX boot sector a bit more unusual, insofar as it does *not* start with the usual "JMP" instruction
-that the first sector of all PC DOS and MS-DOS diskettes generally start with.
+Anyway, I have since restored the MINIX 1.2M boot disk to its (presumably) original unpatched state.  It is now largely
+(although not completely) identical to the MINIX 1.1 360K boot disk.
 
 ![MINIX 1.1 (1.2M Disk 1: Boot)]({{ site.software.diskettes.server }}/pcx86/sys/unix/minix/1.1/MINIX11-1200K-DISK1-BOOT.jpg)

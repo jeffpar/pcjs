@@ -92,7 +92,7 @@ On newer machines, MINIX may fail to load the root file system, displaying the f
     File system panic: Diskette in drive 0 is not root file system
 
 The solution: slow the CPU down.  I inadvertently solved this problem on a 233Mhz Pentium, thanks to an unintentional
-bug in my [SPY Debugger](https://github.com/jeffpar/spy): it had incorrectly left CPU's trace flag set, which meant that
+bug in my [SPY Debugger](https://github.com/jeffpar/spy): it had incorrectly left the CPU's trace flag set, which meant that
 every instruction was being traced, and therefore running much slower than normal.  A happy coincidence of this bug was
 that the "disk error" disappeared and MINIX successfully loaded.
 
@@ -100,7 +100,7 @@ Faster CPUs apparently cause MINIX to perform certain hardware operations too qu
 in VirtualBox, presumably because even though its emulated CPU is faster than normal, its emulated hardware responds faster
 as well.
 
-So, if you can, run MINIX 1.1 on an [IBM PC AT with CGA](/software/pcx86/sys/unix/minix/1.1/pc-at).
+So, if you can, run MINIX 1.1 on an [IBM PC AT with CGA](/software/pcx86/sys/unix/minix/1.1/pc-at/).
 
 ## Debugging on Real Hardware
 
