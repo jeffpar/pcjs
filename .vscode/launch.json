@@ -429,6 +429,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "Populous (1989)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/game/other/1989/populous/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Software Carousel 2.0.3",
       "type": "chrome",
       "request": "launch",

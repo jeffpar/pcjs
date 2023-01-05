@@ -1841,6 +1841,22 @@
           "@author": "MECC",
           "@version": "2.1"
         },
+        "1989/populous": {
+          "@title": "Populous (1989)",
+          "@media": [
+            {
+              "@title": "Populous (1989)",
+              "@diskette": "POPULOUS-1989.json",
+              "@archive": ".img",
+              "@format": "PC360K",
+              "@kryoflux": true
+            }
+          ],
+          "@author": [
+            "Bullfrog Productions",
+            "Peter Molyneux"
+          ]
+        },
         "1985/rogue": {
           "@title": "Rogue (1985)",
           "@media": [
