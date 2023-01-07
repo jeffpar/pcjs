@@ -30,15 +30,6 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true
   },
-  "[masm]": {
-    "editor.detectIndentation": false,
-    "editor.insertSpaces": false,
-    "editor.tabSize": 8,
-    "files.eol": "\r\n",
-    "files.trimTrailingWhitespace": true,
-    "files.insertFinalNewline": true,
-    "files.trimFinalNewlines": true
-  },
   "[xml][xsl]": {
     "editor.insertSpaces": false,
     "editor.tabSize": 4,

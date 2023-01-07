@@ -1809,6 +1809,33 @@
           "@author": "DMA Design",
           "@publisher": "Psygnosis"
         },
+        "1990/life_and_death_ii": {
+          "@title": "Life & Death II (1990)",
+          "@media": [
+            {
+              "@title": "Life & Death II (Disk 1)",
+              "@diskette": "LIFE-AND-DEATH-II-1.json",
+              "@archive": ".img",
+              "@format": "PC360K",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Life & Death II (Disk 2)",
+              "@diskette": "LIFE-AND-DEATH-II-2.json",
+              "@archive": ".img",
+              "@format": "PC1200K",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Life & Death II (Disk 3)",
+              "@diskette": "LIFE-AND-DEATH-II-3.json",
+              "@archive": ".img",
+              "@format": "PC1200K",
+              "@kryoflux": true
+            }
+          ],
+          "@author": "The Software Toolworks"
+        },
         "1992/moria": {
           "@title": "Moria (1992)",
           "@media": [
@@ -1840,6 +1867,22 @@
           ],
           "@author": "MECC",
           "@version": "2.1"
+        },
+        "1989/populous": {
+          "@title": "Populous (1989)",
+          "@media": [
+            {
+              "@title": "Populous (1989)",
+              "@diskette": "POPULOUS-1989.json",
+              "@archive": ".img",
+              "@format": "PC360K",
+              "@kryoflux": true
+            }
+          ],
+          "@author": [
+            "Bullfrog Productions",
+            "Peter Molyneux"
+          ]
         },
         "1985/rogue": {
           "@title": "Rogue (1985)",
