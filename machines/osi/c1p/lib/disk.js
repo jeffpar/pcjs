@@ -120,11 +120,11 @@ class C1PDiskController extends Component {
      *      RDY1- Drive 1 Ready             WE  - Write Enable
      *
      * NOTE: The PIA bit assignments above agree with those described, albeit somewhat less clearly,
-     * in http://www.osiweb.org/osiweb/misc/osi-hardware.txt, under "Model 475 Floppy disk system with
+     * in https://osiweb.org/misc/osi-hardware.txt, under "Model 475 Floppy disk system with
      * 470 Controller board".
      *
      * There is apparently significant overlap with another OSI board: the Model 505 CPU Board
-     * used in C4P/MF systems.  According to http://www.osiweb.org/osiweb/misc/osi-hardware.txt, it
+     * used in C4P/MF systems.  According to https://osiweb.org/misc/osi-hardware.txt, it
      * contained:
      *
      *      CPU board w/ ROM, ACIA, Floppy Disk I/O, Real Time Clock
