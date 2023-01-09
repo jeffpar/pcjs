@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  pcjs-docker:
+    container_name: pcjs-docker
+    build: .
+    ports:
+      - '4000:4000'
+    environment:
+      - JEKYLL_UID=1000
+      - JEKYLL_GID=1000
+    restart: always
+    volumes:
+      - '.:/srv/jekyll'
+
