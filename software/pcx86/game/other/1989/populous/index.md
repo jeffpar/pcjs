@@ -21,6 +21,6 @@ machines:
 
 NOTE: Use the Command Summary Card to help with the game's "Deity Verification Check".
 
-[![Populous Manual (1989)]({{ site.software.gamedisks.server }}/pcx86/game/other/1989/populous/Populous-1989.jpg)](https://archive.org/details/populous-manual)
+[![Populous Manual (1989)]({{ site.software.gamedisks.server }}/pcx86/game/other/1989/populous/Populous_Manual-1989.jpg)](https://archive.org/details/populous-manual)
 
 [![Populous Command Summary Card (1989)]({{ site.software.gamedisks.server }}/pcx86/game/other/1989/populous/Populous_Command_Summary_Card-1989.jpg)](https://archive.org/details/popccskuifdhg)

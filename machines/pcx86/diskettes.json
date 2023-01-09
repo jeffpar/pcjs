@@ -1817,7 +1817,8 @@
               "@diskette": "LIFE-AND-DEATH-II-1.json",
               "@archive": ".img",
               "@format": "PC360K",
-              "@kryoflux": true
+              "@kryoflux": true,
+              "@args": "--suppData=/software/pcx86/game/other/1990/life_and_death_ii/index.md"
             },
             {
               "@title": "Life & Death II (Disk 2)",
