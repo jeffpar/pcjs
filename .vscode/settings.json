@@ -1063,6 +1063,7 @@
     "SYMBOLSA",
     "SYMBOLSB",
     "SYMDEB",
+    "SYSBAS",
     "SYSCALL",
     "SYSCLK",
     "SYSCONFIG",

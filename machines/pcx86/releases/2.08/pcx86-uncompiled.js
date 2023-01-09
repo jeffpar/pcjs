@@ -40951,7 +40951,7 @@ class ChipSet extends Component {
                         channel.fnTransfer.call(channel.component, channel.obj, -1, function onTransferDMA(b, fAsync, obj, off) {
                             if (b < 0) {
                                 if (!channel.fWarning) {
-                                    if (DEBUG) chipset.printf(Messages.DMA, "advanceDMA(%d) ran out of data, assuming 0xff\n", iDMAChannel);
+                                    if (DEBUG) chipset.printf(Messages.DMA, "advanceDMAWrite(%d) ran out of data, assuming 0xff\n", iDMAChannel);
                                     channel.fWarning = true;
                                 }
                                 /*
@@ -41002,8 +41002,29 @@ class ChipSet extends Component {
                 }
                 else if (channel.type == ChipSet.DMA_MODE.TYPE_VERIFY) {
                     /*
-                     * Nothing to read or write; just call updateDMA()
+                     * Originally, we did nothing here and just fell into updateDMA(); however, we actually need to probe for
+                     * data even though we're not going to do anything with it, so that any data errors get flagged by the FDC.
+                     *
+                     * This resolves the copy-protection check on "Life & Death II (Disk 1)", and it should also resolve a
+                     * similar problem with COMPAQ DeskPro 386 machines configured with 1.2M drives (where the BIOS would
+                     * attempt to verify sector 16 after reading the boot sector from a 15 sector/track diskette and expect
+                     * an error in order to confirm the CMOS drive type).  This will make disk type/drive type errors more
+                     * common on those machines (eg, loading a 1.44M diskette in a 1.2M drive), but that should just be a more
+                     * accurate reflection of historical reality.
                      */
+                    (function advanceDMAVerify(addrCur) {
+                        channel.fnTransfer.call(channel.component, channel.obj, -1, function onTransferDMA(b, fAsync, obj, off) {
+                            if (b < 0) {
+                                if (!channel.fWarning) {
+                                    if (DEBUG) chipset.printf(Messages.DMA, "advanceDMAVerify(%d) ran out of data\n", iDMAChannel);
+                                    channel.fWarning = true;
+                                }
+                                /*
+                                 * TODO: Determine whether to abort, as we do for DMA_MODE.TYPE_READ.
+                                 */
+                            }
+                        });
+                    }(addr));
                 }
                 else {
                     if (DEBUG) this.printf(Messages.DMA + Messages.WARN, "advanceDMA(%d) unsupported transfer type %#06X\n", iDMAChannel, channel.type);
