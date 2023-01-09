@@ -13,11 +13,13 @@ right_brace: "}"
 encoding: UTF-8
 
 exclude:
+  - Dockerfile
+  - docker-compose.yml
+  - docker-init.sh
   - Gemfile
   - Gemfile.lock
   - gulpfile.js
   - README.md
-  - TODO.md
   - "*.log"
   - tmp
   - "**/archive"
