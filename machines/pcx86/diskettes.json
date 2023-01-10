@@ -1856,6 +1856,26 @@
           ],
           "@version": "5.5"
         },
+        "1985/nine_princes": {
+          "@title": "Nine Princes in Amber (1985)",
+          "@media": [
+            {
+              "@title": "Nine Princes in Amber (Disk A)",
+              "@diskette": "NINE-PRINCES-A.json",
+              "@archive": ".img",
+              "@format": "PC360K",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Nine Princes in Amber (Disk B)",
+              "@diskette": "NINE-PRINCES-B.json",
+              "@archive": ".img",
+              "@format": "PC360K",
+              "@kryoflux": true
+            }
+          ],
+          "@author": "Telarium"
+        },
         "1990/oregon_trail": {
           "@title": "The Oregon Trail (1990)",
           "@media": [
