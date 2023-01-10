@@ -16,26 +16,27 @@ machines:
 machineScripts:
   copyHD: |
     wait Keyboard DOS;
-    type Keyboard "$date\r$time\rC:\rPROMPT $P$G\rMKDIR AMB\rCD AMB\r";
+    type Keyboard "$date\r$time\rC:\rCOPY A:ASSIGN.COM\rPROMPT $P$G\rMKDIR AMB\r";
+    wait Keyboard;
+    sleep 2000;
+    wait Keyboard DOS;
+    select FDC listDrives "A:";
+    select FDC listDisks "Nine Princes in Amber (Disk A)";
+    loadDisk FDC;
+    wait FDC;
+    type Keyboard "CD A:AMB\rCOPY A:*.* C:AMB\r";
     wait Keyboard;
     sleep 2000;
     wait Keyboard DOS;
     select FDC listDrives "B:";
-    select FDC listDisks "Nine Princes in Amber (Disk A)";
-    loadDisk FDC;
-    wait FDC;
-    type Keyboard "CD B:AMB\rCOPY B:*.*\r";
-    wait Keyboard;
-    sleep 2000;
-    wait Keyboard DOS;
     select FDC listDisks "Nine Princes in Amber (Disk B)";
     loadDisk FDC;
     wait FDC;
-    type Keyboard "COPY B:*.*\r";
+    type Keyboard "CD B:AMB\rCOPY B:*.* C:AMB\r";
     wait Keyboard;
     sleep 2000;
     wait Keyboard DOS;
-    type Keyboard "AMB\r";
+    type Keyboard "ASSIGN A=C B=C\rCD AMB\rAMB\r";
 ---
 
 On initial startup (or reset) of the machine below, a PCjs machine script will automatically copy all the files from the two
