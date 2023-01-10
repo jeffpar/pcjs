@@ -577,12 +577,12 @@ class KbdX86 extends Component {
     intDOS(addr)
     {
         let AH = (this.cpu.regEAX >> 8) & 0xff;
+        this.fDOSReady = false;
         if (AH == 0x0A) {
             this.fDOSReady = true;
             if (this.fnDOSReady) {
                 this.fnDOSReady();
                 this.fnDOSReady = null;
-                this.fDOSReady = false;
             } else {
                 this.injectInit(KbdX86.INJECTION.ON_INPUT);
             }

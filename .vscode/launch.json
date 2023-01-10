@@ -4,6 +4,7 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+
     {
       "name": "Node: gulp.js",
       "type": "node",
@@ -373,6 +374,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "IBM TopView 1.01 (With Debugger)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/ext/ibm/topview/1.01/debugger/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Inside the IBM PC (1983)",
       "type": "chrome",
       "request": "launch",
@@ -419,6 +427,13 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/unix/minix/1.1/pc-at/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Nine Princes in Amber (1985)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/game/other/1985/nine_princes/",
       "webRoot": "${workspaceFolder}"
     },
     {
