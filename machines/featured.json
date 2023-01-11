@@ -108,6 +108,12 @@
     "@tags": "home,pcx86"
   },
   {
+    "@title": "Nine Princes in Amber (1985)",
+    "@permalink": "/software/pcx86/game/other/1985/nine_princes/",
+    "@preview": ".png",
+    "@tags": "home,pcx86,game"
+  },
+  {
     "@title": "Rogue (1985)",
     "@permalink": "/software/pcx86/game/other/1985/rogue/",
     "@preview": ".png",
@@ -154,6 +160,12 @@
     "@permalink": "/software/pcx86/sys/windows/3.00/",
     "@preview": ".png",
     "@tags": "home,pcx86,windows,win2x-win95"
+  },
+  {
+    "@title": "Life & Death II: The Brain (1990)",
+    "@permalink": "/software/pcx86/game/other/1990/life_and_death_ii/",
+    "@preview": ".png",
+    "@tags": "home,pcx86,game"
   },
   {
     "@title": "Commander Keen (1991)",

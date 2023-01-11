@@ -2,6 +2,7 @@
 layout: page
 title: "Nine Princes in Amber (1985)"
 permalink: /software/pcx86/game/other/1985/nine_princes/
+preview: images/screenshot.png
 machines:
   - id: ibm-5160-npia
     type: pcx86
