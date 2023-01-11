@@ -2,6 +2,7 @@
 layout: page
 title: "Life & Death II (1990)"
 permalink: /software/pcx86/game/other/1990/life_and_death_ii/
+preview: images/screenshot.png
 machines:
   - id: ibm-5170-ld2
     type: pcx86
