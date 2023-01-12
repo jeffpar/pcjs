@@ -24,3 +24,14 @@ boot a different disk while SPY is loaded.
 The [SPY Repository](https://github.com/jeffpar/spy) has more information about its history and use.
 
 {% include machine.html id="deskpro386" %}
+
+### Directory of SPY 386 Monitor 0.1
+
+     Volume in drive A is ARCHIVE
+     Directory of A:\
+
+    SPY      COM     56416  12-23-22   4:15p
+    SPY      MAP     18799  12-23-22   4:15p
+    SRC      ZIP    106917  12-28-22   9:49a
+            3 file(s)     182132 bytes
+                          138240 bytes free

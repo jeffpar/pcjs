@@ -203,10 +203,10 @@ function getFullPath(sFile)
 function isServerRoot(diskFile)
 {
     /*
-     * In addition to disk server paths, we had to add /configs (for diskette config files) and /software (for Markdown files
+     * In addition to disk server paths, we had to add /machines (for diskette config files) and /software (for Markdown files
      * containing supplementary copy-protection disk data).
      */
-    return !!(diskFile.match(/^\/(configs|software|diskettes|gamedisks|harddisks|decdisks|discs|private)\//));
+    return !!(diskFile.match(/^\/(machines|software|diskettes|gamedisks|harddisks|decdisks|discs|private)\//));
 }
 
 /**

@@ -5,6 +5,7 @@
   "version": "0.2.0",
   "configurations": [
 
+
     {
       "name": "Node: gulp.js",
       "type": "node",
@@ -434,6 +435,13 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1985/nine_princes/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "PathMinder 2.11 (1985)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/util/other/pathminder/2.11/",
       "webRoot": "${workspaceFolder}"
     },
     {
