@@ -9409,6 +9409,21 @@
           }
         }
       },
+      "pathminder": {
+        "@title": "PathMinder",
+        "@versions": {
+          "2.11": {
+            "@title": "PathMinder 2.11",
+            "@media": [
+              {
+                "@title": "PathMinder 2.11",
+                "@diskette": "PATHMINDER-211.json",
+                "@format": "PC180K"
+              }
+            ]
+          }
+        }
+      },
       "pctools": {
         "@title": "PC Tools",
         "@versions": {
