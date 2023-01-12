@@ -34,3 +34,5 @@ machines:
     AUTOEXEC PM        745   8-28-85   2:11p
            12 file(s)     131697 bytes
                            44032 bytes free
+
+[![PathMinder 2.11 (1985)]({{ site.software.diskettes.server }}/pcx86/util/other/pathminder/2.11/PathMinder_V211-1985.jpg)](https://archive.org/details/path-minder-v-211-1985)
