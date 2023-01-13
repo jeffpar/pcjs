@@ -22,7 +22,7 @@ machines:
 
 [![Life & Death II: The Manual (1990)]({{ site.software.gamedisks.server }}/pcx86/game/other/1990/life_and_death_ii/Life_and_Death_II_Manual-1990.jpg)](https://archive.org/details/life-and-death-ii-the-brain-1990)
 
-### Copy-Protection Information
+### Copy-Protection Information (Disk 1)
 
     MFM Sector
     Sector ID:015

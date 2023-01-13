@@ -340,10 +340,10 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "Balance of Power (1987)",
+      "name": "Balance of Power (1985)",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/software/pcx86/game/other/1987/balance_of_power/",
+      "url": "http://localhost:4000/software/pcx86/game/other/1985/balance_of_power/",
       "webRoot": "${workspaceFolder}"
     },
     {
