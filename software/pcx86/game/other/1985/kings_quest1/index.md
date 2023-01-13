@@ -3,7 +3,7 @@ layout: page
 title: "King's Quest (1985)"
 permalink: /software/pcx86/game/other/1985/kings_quest1/
 machines:
-  - id: ibm-5160-cga
+  - id: ibm5160-cga
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/640kb/debugger/machine.xml
     autoMount:
@@ -23,7 +23,7 @@ copy-protection test.
 However, since PCx86 does not yet support the graphics hardware in those machines, you cannot currently play those releases here.  Once that
 support is added, we'll remove the PCjs Debugger from this page and update this notice.
 
-{% include machine.html id="ibm-5160-cga" %}
+{% include machine.html id="ibm5160-cga" %}
 
 ### Copy-Protection
 

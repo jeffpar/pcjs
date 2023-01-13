@@ -4,7 +4,7 @@ title: IBM PC AT (Model 5170) with ATAPI CD-ROM
 permalink: /machines/pcx86/ibm/5170/vga/cdrom/
 redirect_from: /disks/pcx86/drives/cdrom/
 machines:
-  - id: ibm-5170-vga
+  - id: ibm5170-vga
     type: pcx86
     config: /machines/pcx86/ibm/5170/vga/2048kb/cdrom/machine.xml
 ---
@@ -27,6 +27,6 @@ and the ATAPI drive was connected to controller's "secondary" interface.
 
 And in fact, that is exactly how the machine below is configured.  It's also available with the [PCjs Debugger](debugger/).
 
-{% include machine.html id="ibm-5170-vga" %}
+{% include machine.html id="ibm5170-vga" %}
 
 {% include gallery/documents.html width="200" height="280" %}

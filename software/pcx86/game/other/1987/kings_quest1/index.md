@@ -3,7 +3,7 @@ layout: page
 title: "King's Quest (1987)"
 permalink: /software/pcx86/game/other/1987/kings_quest1/
 machines:
-  - id: ibm-5170-kq1
+  - id: ibm5170-kq1
     type: pcx86
     resume: 1
     config: /machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml
@@ -21,7 +21,7 @@ King's Quest were incremental improvements on November 1986 release, which added
 The PCjs disk images preserve the [Copy-Protection](#copy-protection) that the game used, and PCx86 successfully passes the game's
 copy-protection test.  The IBM PC AT below has diskette `King's Quest (1987-05-05 #1)` loaded in drive B:, ready to be installed on drive C:.
 
-{% include machine.html id="ibm-5170-kq1" %}
+{% include machine.html id="ibm5170-kq1" %}
 
 ### Online References
 

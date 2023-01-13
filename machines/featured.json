@@ -133,9 +133,15 @@
   },
   {
     "@title": "Microsoft Windows 1.1 on EGA (1985)",
-    "@permalink": "/software/pcx86/sys/windows/1.01/",
+    "@permalink": "/software/pcx86/sys/windows/1.01/ega/",
     "@preview": ".png",
     "@tags": "home,pcx86,windows"
+  },
+  {
+    "@title": "Balance of Power (1985)",
+    "@permalink": "/software/pcx86/game/other/1985/balance_of_power/",
+    "@preview": ".png",
+    "@tags": "home,pcx86,game,windows"
   },
   {
     "@title": "IBM OS/2 1.0 (1987)",

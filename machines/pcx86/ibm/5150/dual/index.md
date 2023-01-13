@@ -4,7 +4,7 @@ title: IBM PC (Model 5150) with Dual Displays
 permalink: /machines/pcx86/ibm/5150/dual/
 redirect_from: /devices/pcx86/machine/5150/dual/64kb/
 machines:
-  - id: ibm-5150-dual
+  - id: ibm5150-dual
     type: pcx86
     config: /machines/pcx86/ibm/5150/dual/64kb/machine.json
     debugger: available
@@ -29,4 +29,4 @@ support could write to both displays simultaneously, but most text-based applica
 Programs that used color graphics, on the other hand, might use the Color Display whether or not it was currently
 active.
 
-{% include machine.html id="ibm-5150-dual" %}
+{% include machine.html id="ibm5150-dual" %}

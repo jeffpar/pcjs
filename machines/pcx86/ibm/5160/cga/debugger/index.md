@@ -7,9 +7,9 @@ redirect_from:
   - /devices/pcx86/machine/5160/cga/512kb/debugger/
   - /devices/pcx86/machine/5160/cga/640kb/debugger/
 machines:
-  - id: ibm-5160-cga
+  - id: ibm5160-cga
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/debugger/machine.json
 ---
 
-{% include machine.html id="ibm-5160-cga" %}
+{% include machine.html id="ibm5160-cga" %}

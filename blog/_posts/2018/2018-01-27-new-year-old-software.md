@@ -47,8 +47,8 @@ earliest (if not *the* earliest) ROMs commercially available for the DeskPro 386
 
 ### Old Windows on New Windows
 
-One of the problems with running old versions of Microsoft Windows, like [Windows 1.01](/software/pcx86/sys/windows/1.01/) or
-[Windows 95](/software/pcx86/sys/windows/win95/4.00.950/), inside a web browser on top of a modern version of Windows are
+One of the problems with running old versions of Microsoft Windows, like [Windows 1.01](/software/pcx86/sys/windows/1.01/ega/)
+or [Windows 95](/software/pcx86/sys/windows/win95/4.00.950/), inside a web browser on top of a modern version of Windows are
 **key conflicts**.  For example:
 
 - Alt-F (to access the browser's File menu)

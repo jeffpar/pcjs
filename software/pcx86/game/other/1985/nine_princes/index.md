@@ -4,7 +4,7 @@ title: "Nine Princes in Amber (1985)"
 permalink: /software/pcx86/game/other/1985/nine_princes/
 preview: images/screenshot.png
 machines:
-  - id: ibm-5160-npia
+  - id: ibm5160-npia
     type: pcx86
     resume: 1
     config: /machines/pcx86/ibm/5160/cga/640kb/machine.xml
@@ -43,7 +43,7 @@ machineScripts:
 On initial startup (or reset) of the machine below, a PCjs machine script will automatically copy all the files from the two
 "Nine Princes in Amber" IBM PC diskettes to drive **C** and then start the game.
 
-{% include machine.html id="ibm-5160-npia" %}
+{% include machine.html id="ibm5160-npia" %}
 
 ### Game Notes
 
