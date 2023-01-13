@@ -2,6 +2,7 @@
 layout: page
 title: "Balance of Power (1985)"
 permalink: /software/pcx86/game/other/1985/balance_of_power/
+preview: images/screenshot.png
 machines:
   - id: ibm5160-ega-win101
     type: pcx86
@@ -13,6 +14,12 @@ machines:
       A:
         name: "Balance of Power (Setup Disk)"
 ---
+
+Balance of Power (1985) is one of the earliest games produced for Microsoft Windows.
+
+NOTE: For now, the game is not pre-installed, so you must install it first.  Start by loading the "Balance of Power (Setup Disk)"
+in drive A, run `SETUP.EXE`, and follow the prompts; you will be asked to then load the "Build Disk" followed by the "Program Disk".
+The final disk must remain loaded when you run `BOP.EXE` in order for the game to pass its copy-protection check.
 
 {% include machine.html id="ibm5160-ega-win101" %}
 
