@@ -5,12 +5,12 @@ permalink: /machines/pcx86/ibm/5170/cga/
 redirect_from:
   - /devices/pcx86/machine/5170/cga/640kb/rev3/
 machines:
-  - id: ibm-5170-cga
+  - id: ibm5170-cga
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
 ---
 
-{% include machine.html id="ibm-5170-cga" %}
+{% include machine.html id="ibm5170-cga" %}
 
 ### Additional Configurations
 

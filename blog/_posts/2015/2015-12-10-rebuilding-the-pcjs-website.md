@@ -78,7 +78,7 @@ For example, this [IBM PC](/machines/pcx86/ibm/5150/mda/) contains the following
 [page]({{ site.github.pages }}/machines/pcx86/ibm/5150/mda/):
 
     machines:
-      - id: ibm-5150-mda
+      - id: ibm5150-mda
         type: pcx86
         config: /machines/pcx86/ibm/5150/mda/64kb/machine.json
 

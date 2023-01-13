@@ -6,14 +6,14 @@ redirect_from:
   - /devices/pcx86/machine/5150/mda/64kb/
   - /devices/pcx86/machine/5150/mda/
 machines:
-  - id: ibm-5150-mda
+  - id: ibm5150-mda
     type: pcx86
     config: /machines/pcx86/ibm/5150/mda/64kb/machine.json
     debugger: available
     autoType: $date\r
 ---
 
-{% include machine.html id="ibm-5150-mda" %}
+{% include machine.html id="ibm5150-mda" %}
 
 This machine is also available with [Single-Sided Diskette Drives](ssdd/).
 

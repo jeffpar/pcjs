@@ -7,14 +7,14 @@ redirect_from:
   - /devices/pcx86/machine/5160/cga/512kb/
   - /devices/pcx86/machine/5160/cga/640kb/
 machines:
-  - id: ibm-5160-cga
+  - id: ibm5160-cga
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.json
     debugger: available
     autoType: $date\r$time\r
 ---
 
-{% include machine.html id="ibm-5160-cga" %}
+{% include machine.html id="ibm5160-cga" %}
 
 ### Additional CGA Configurations
 

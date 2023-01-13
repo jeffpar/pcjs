@@ -1633,6 +1633,30 @@
           "@author": "Scott A. Harris",
           "@publisher": "IBM"
         },
+        "1987/balance_of_power": {
+          "@title": "Balance of Power (1987)",
+          "@media": [
+            {
+              "@title": "Balance of Power (Build Disk)",
+              "@diskette": "BOP-BUILD.json",
+              "@format": "PC360K",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Balance of Power (Program Disk)",
+              "@diskette": "BOP-PROG.json",
+              "@format": "PC360K",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Balance of Power (Setup Disk)",
+              "@diskette": "BOP-SETUP.json",
+              "@format": "PC360K",
+              "@kryoflux": true
+            }
+          ],
+          "@author": "Chris Crawford"
+        },
         "1985/castle_adventure": {
           "@title": "Castle Adventure (1985)",
           "@media": [

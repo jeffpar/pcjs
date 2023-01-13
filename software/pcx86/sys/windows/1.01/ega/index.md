@@ -1,23 +1,24 @@
 ---
 layout: page
 title: Microsoft Windows 1.01
-permalink: /software/pcx86/sys/windows/1.01/
+permalink: /software/pcx86/sys/windows/1.01/ega/
 redirect_from:
   - /disks/pcx86/windows/1.01/
   - /disks/pc/windows/1.01/
+  - /software/pcx86/sys/windows/1.01/
 preview: images/screenshot.png
 machines:
   - id: ibm5160-ega-win101
     type: pcx86
     resume: 1
-    state: /software/pcx86/sys/windows/1.01/state.json
+    state: /software/pcx86/sys/windows/1.01/ega/state.json
     config: /machines/pcx86/ibm/5160/ega/640kb/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-WIN101-EGA.json"}]'
 ---
 
 Microsoft Windows 1.01, the first public version of Windows, was released on November 20, 1985.
 It is shown here running on an IBM PC XT (Model 5160) with an EGA Display.  You can also run Windows 1.01
-with a [CGA Display](cga/).  Or just for fun, on [four machines](array/) simultaneously.
+with a [CGA Display](../cga/).  Or just for fun, on [four machines](array/) simultaneously.
 
 A demo of an earlier pre-release version, [Windows 1.0 ("Premiere Edition")](../1.00/), is also available.
 

@@ -340,6 +340,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "Balance of Power (1987)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/game/other/1987/balance_of_power/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "COMPAQ MS-DOS 3.10 (DeskPro 386 w/1986 ROM)",
       "type": "chrome",
       "request": "launch",

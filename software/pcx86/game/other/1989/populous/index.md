@@ -3,7 +3,7 @@ layout: page
 title: "Populous (1989)"
 permalink: /software/pcx86/game/other/1989/populous/
 machines:
-  - id: ibm-5170-pop
+  - id: ibm5170-pop
     type: pcx86
     resume: 1
     config: /machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml
@@ -15,7 +15,7 @@ machines:
     autoType: \r\rb:\rinstall\r
 ---
 
-{% include machine.html id="ibm-5170-pop" %}
+{% include machine.html id="ibm5170-pop" %}
 
 ### Online References
 

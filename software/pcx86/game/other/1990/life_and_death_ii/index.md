@@ -4,7 +4,7 @@ title: "Life & Death II (1990)"
 permalink: /software/pcx86/game/other/1990/life_and_death_ii/
 preview: images/screenshot.png
 machines:
-  - id: ibm-5170-ld2
+  - id: ibm5170-ld2
     type: pcx86
     resume: 1
     config: /machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml
@@ -16,7 +16,7 @@ machines:
     autoType: \r\rb:\rinstall\r
 ---
 
-{% include machine.html id="ibm-5170-ld2" %}
+{% include machine.html id="ibm5170-ld2" %}
 
 ### Online References
 
