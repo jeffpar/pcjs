@@ -17,7 +17,7 @@ less interpolation is happening when a machine's screen image is scaled up to fi
 
 The amount of scaling *also* depends on whether the machine allows itself to be stretched to fill the browser window.
 For example, this [machine](/machines/pcx86/ibm/5160/ega/640kb/array/machine.xml) (used by the
-[EGA Machine Array Demo](/software/pcx86/sys/windows/1.01/array/)) is limited to an overall *width* of 680 pixels,
+[EGA Machine Array Demo](/software/pcx86/sys/windows/1.01/ega/array/)) is limited to an overall *width* of 680 pixels,
 no matter how large you make your browser window:
 
 ```xml

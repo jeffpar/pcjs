@@ -30,7 +30,7 @@ features instead, and the system still couldn't make the leap to asynchronous I/
 
 And multitasking was clearly something a lot of people wanted -- even Microsoft.
 By late 1985, they had had some success running multiple DOS applications in other products, such as
-[Microsoft Windows 1.01](https://www.pcjs.org/software/pcx86/sys/windows/1.01/) and
+[Microsoft Windows 1.01](https://www.pcjs.org/software/pcx86/sys/windows/1.01/ega/) and
 [Multitasking MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.0M/).  But they were unable
 (or perhaps unwilling) to add that feature to PC DOS.
 
