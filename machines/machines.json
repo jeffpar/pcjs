@@ -17,7 +17,9 @@
       "",
       "'scripts' is a list of all the JavaScript files that comprise the machine; PCjs 'gulp' tasks will concatenate and",
       "compile the files in the order listed, and if the web server is configured to load uncompiled files, they will",
-      "be loaded on their respective web pages in the order listed."
+      "be loaded on their respective web pages in the order listed.",
+      "",
+      "WARNING: Be sure to update APPVERSION in /machines/pcx86/xsl/machine.xsl whenever changing the pcx86 version below."
     ]
   },
   "pcx86": {
