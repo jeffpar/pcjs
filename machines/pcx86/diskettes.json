@@ -1646,7 +1646,8 @@
               "@title": "Balance of Power (Program Disk)",
               "@diskette": "BOP-PROG.json",
               "@format": "PC360K",
-              "@kryoflux": true
+              "@kryoflux": true,
+              "@args": "--suppData=/software/pcx86/game/other/1985/balance_of_power/index.md"
             },
             {
               "@title": "Balance of Power (Setup Disk)",
