@@ -13,8 +13,23 @@ machines:
         name: "PC DOS 2.00 (Disk 1)"
       B:
         name: "PC DOS 2.00 (Disk 2)"
-    autoScript: copyHD
+    autoScript: runFD
 machineScripts:
+  runFD: |
+    wait Keyboard DOS;
+    type Keyboard "$date\r$time\r";
+    wait Keyboard;
+    sleep 1000;
+    wait Keyboard DOS;
+    select FDC listDrives "A:";
+    select FDC listDisks "Nine Princes in Amber (Disk A)";
+    loadDisk FDC;
+    wait FDC;
+    select FDC listDrives "B:";
+    select FDC listDisks "Nine Princes in Amber (Disk B)";
+    loadDisk FDC;
+    wait FDC;
+    type Keyboard "DIR\rAMBER\r";
   copyHD: |
     wait Keyboard DOS;
     type Keyboard "$date\r$time\rC:\rCOPY A:ASSIGN.COM\rPROMPT $P$G\rMKDIR AMB\r";
@@ -40,15 +55,15 @@ machineScripts:
     type Keyboard "ASSIGN A=C B=C\rCD AMB\rAMB\r";
 ---
 
-On initial startup (or reset) of the machine below, a PCjs machine script will automatically copy all the
-files from the two "Nine Princes in Amber" IBM PC diskettes to drive **C** and then start the game.
+On initial startup (or reset) of the machine below, a PCjs machine script will automatically load
+"Nine Princes in Amber" disks **A** and **B** into floppy drives A: and B: and then start the game.
 
 {% include machine.html id="ibm5160-npia" %}
 
-### Game Notes
+### Preservation Notes
 
-The **A** and **B** diskettes are from my private collection, but shortly after purchasing the game in 1985,
-I had modified their contents.  For starters, I had patched `AMB.EXE` to circumvent its copy-protection check:
+The **A** and **B** diskettes are from my private collection, but shortly after purchasing the game in 1985, I
+modified their contents.  For starters, I had patched `AMB.EXE` on disk **A** to circumvent its copy-protection:
 
     push    cx
     push    ds
@@ -64,12 +79,14 @@ I had modified their contents.  For starters, I had patched `AMB.EXE` to circumv
     pop     ds
     pop     cx
 
-The game's copy-protection check is fairly simple: in addition to the usual 9 sectors on the first track of disk **A**,
-it expects a sector 10 as well.  Unfortunately, it appears that I also reformatted and recopied the game files to the
-diskettes at some point, so the original contents of each diskette are unclear, as are the original contents of sector 10.
+The copy-protection check was fairly simple: in addition to the usual sectors 1-9 on the first track of disk
+**A**, it expected a sector 10 as well, and to obfuscate the sector request, it used a `PUSHF, CALL DWORD PTR DS:[004Ch]`
+instruction sequence instead of `INT 13h`.  In addition to the patch, it appears I also reformatted the diskettes and
+rearranged some of the files, so the original contents of the diskettes, as well as the contents of sector 10, are unknown.
 
-I was able to restore `AMB.EXE` to its unpatched state, and I included a fake sector 10 on the first track of disk **A**,
-so the copy-protection check now passes.
+I was able to restore `AMB.EXE` to its unpatched state, and I've included a fake sector 10 on the first track of disk **A**,
+so the copy-protection check runs and passes.  However, it's still possible that the disk contents may not be quite right,
+so if you run into problems, try running the game from a [hard disk](hdd/).
 
 Need hints? You're in luck, because I also saved the [notes](Nine_Princes_in_Amber-Handwritten_Notes.jpg) I made
 while playing the game back 1985/1986.
