@@ -375,6 +375,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "HomeBase 1.04A",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/ext/other/homebase/1.04A/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "IBM Macro Assembler 1.00",
       "type": "chrome",
       "request": "launch",
