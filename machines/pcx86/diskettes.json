@@ -6879,6 +6879,21 @@
               ]
             }
           }
+        },
+        "homebase": {
+          "@title": "HomeBase",
+          "@versions": {
+            "1.04A": {
+              "@title": "HomeBase 1.04A",
+              "@media": [
+                {
+                  "@title": "HomeBase 1.04A",
+                  "@diskette": "HOMEBASE-104A.json",
+                  "@format": "PC360K"
+                }
+              ]
+            }
+          }
         }
       }
     },
