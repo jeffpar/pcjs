@@ -3,13 +3,13 @@ layout: page
 title: Software Carousel 2.0.3
 permalink: /software/pcx86/sys/ext/softlogic/carousel/2.0.3/
 redirect_from: /disks/pcx86/tools/softlogic/carousel/2.0.3/
-preview: https://diskettes.pcjs.org/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL.jpg
+preview: https://diskettes.pcjs.org/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL-203.jpg
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml
     autoMount:
-      A: "PC DOS 3.00 (Disk 1)"
+      A: "PC DOS 3.30 (Disk 1)"
       B: "Software Carousel 2.0.3"
     autoType: $date\r$time\rB:\rDIR\r
 ---
@@ -19,7 +19,7 @@ of the diskette in our possession (shown below), and it's clear that track 16 ha
 but until we have time to analyze the diskette and software more closely, it will not operate in the PCx86
 emulator as intended.
 
-![SOFTWARE-CAROUSEL-HxC](SOFTWARE-CAROUSEL-HxC.png)
+![SOFTWARE-CAROUSEL-203-HxC](SOFTWARE-CAROUSEL-203-HxC.png)
 
 {% include machine.html id="ibm5170" %}
 
@@ -62,9 +62,51 @@ emulator as intended.
            24 file(s)     195978 bytes
                           155648 bytes free
 
-![Software Carousel Diskette]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL.jpg)
+![Software Carousel Diskette]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL-203.jpg)
 
 ### Copy-Protection Information
+
+    MFM Sector
+    Sector ID:193
+    Track ID:000 - Side ID:000
+    Size:01024 (ID:0x03)
+    DataMark:0x00
+    Head CRC:0xC8F6 (BAD CRC!)
+    Data CRC:0x0000 (Ok)
+    Start Sector cell:97448
+    Start Sector Data cell:97608
+    End Sector cell:97608
+    Number of cells:160
+
+    ---
+
+    MFM Sector
+    Sector ID:209
+    Track ID:000 - Side ID:000
+    Size:02048 (ID:0x04)
+    DataMark:0x00
+    Head CRC:0xBE4E (BAD CRC!)
+    Data CRC:0x0000 (Ok)
+    Start Sector cell:96728
+    Start Sector Data cell:96888
+    End Sector cell:96888
+    Number of cells:160
+
+    ---
+
+    MFM Sector
+    Sector ID:193
+    Track ID:005 - Side ID:000
+    Size:00128 (ID:0x00)
+    DataMark:0x00
+    Head CRC:0xC8F6 (BAD CRC!)
+    Data CRC:0x0000 (Ok)
+    Start Sector cell:97448
+    Start Sector Data cell:97608
+    End Sector cell:97608
+    Number of cells:160
+
+    ---
 
     MFM Sector
     Sector ID:001
@@ -2102,9 +2144,37 @@ emulator as intended.
     03F0| 42 42 42 42 42 42 42 42 | BBBBBBBB
     03F8| 42 42 42 42 42 42 42 42 | BBBBBBBB
 
+    ---
+
+    MFM Sector
+    Sector ID:209
+    Track ID:024 - Side ID:000
+    Size:02048 (ID:0x04)
+    DataMark:0x00
+    Head CRC:0x2090 (BAD CRC!)
+    Data CRC:0x0000 (Ok)
+    Start Sector cell:96733
+    Start Sector Data cell:96893
+    End Sector cell:96893
+    Number of cells:160
+
+    ---
+
+    MFM Sector
+    Sector ID:255
+    Track ID:024 - Side ID:000
+    Size:00512 (ID:0x02)
+    DataMark:0x00
+    Head CRC:0x65ED (BAD CRC!)
+    Data CRC:0x0000 (Ok)
+    Start Sector cell:97454
+    Start Sector Data cell:97614
+    End Sector cell:97614
+    Number of cells:160
+
 The JSON disk image was created with the following command:
 
-    node diskimage.js --disk archive/SOFTWARE-CAROUSEL.img --output SOFTWARE-CAROUSEL.json --suppData /software/pcx86/sys/ext/softlogic/carousel/2.0.3/index.md --overwrite
+    node diskimage.js --disk archive/SOFTWARE-CAROUSEL-203.img --output SOFTWARE-CAROUSEL-203.json --suppData /software/pcx86/sys/ext/softlogic/carousel/2.0.3/index.md --overwrite
 
 However, the disk still does not pass the software's copy-protection checks, because it issues a `READ TRACK` command that the PCx86
 FDC component does not currently emulate.
