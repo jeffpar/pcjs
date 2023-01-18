@@ -910,7 +910,7 @@ class Disk extends Component {
                                          * array gets shortened BEFORE the fetch of the final value.
                                          */
                                         dwPattern = adw[adw.length - 1];
-                                        adw.length--;
+                                        if (adw.length) adw.length--;
                                     }
                                 }
 

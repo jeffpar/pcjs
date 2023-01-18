@@ -62129,7 +62129,7 @@ class Disk extends Component {
                                          * array gets shortened BEFORE the fetch of the final value.
                                          */
                                         dwPattern = adw[adw.length - 1];
-                                        adw.length--;
+                                        if (adw.length) adw.length--;
                                     }
                                 }
 
@@ -65932,6 +65932,7 @@ class FDC extends Component {
     /**
      * pushResults(drive, bCmd, bHead, c, h, r, n)
      *
+     * @this {FDC}
      * @param {Object} drive
      * @param {number} bCmd
      * @param {number} bHead
@@ -65969,6 +65970,9 @@ class FDC extends Component {
             h ^= i;
             if (!bHead) i = 0;
             r = drive.bSector;                          // REQUIRED in order for MINIX 1.1 to load ROOT diskette
+            if (drive.disk && drive.disk.aDiskData && drive.disk.aDiskData[c] && drive.disk.aDiskData[c][h] && drive.disk.aDiskData[c][h][r-1]) {
+                r = drive.disk.aDiskData[c][h][r-1][Disk.SECTOR.ID];
+            }
         }
         c += i;
         this.pushResult(c, FDC.TERMS.C);                // formerly drive.bCylinder

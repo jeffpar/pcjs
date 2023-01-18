@@ -660,8 +660,22 @@ export default class DiskInfo {
                         if (suppObj[iCylinder]) {
                             suppTrack = suppObj[iCylinder][iHead];
                             if (suppTrack) {
-                                suppSector = suppTrack[iSector-1];
-                                nSectorsThisTrack = suppTrack.length;
+                                /*
+                                 * If there is any overlap of the sectors in suppTrack with the standard sector IDs,
+                                 * then we assume that the suppData includes ALL the data for the current track; otherwise,
+                                 * we assume that suppTrack contains *extra* sectors and increase nSectorsThisTrack accordingly.
+                                 */
+                                let j;
+                                for (j = 0; j < suppTrack.length; j++) {
+                                    if (suppTrack[j]['sectorID'] <= nLogicalSectorsPerTrack) break;
+                                }
+                                if (j == suppTrack.length) {
+                                    nSectorsThisTrack = nLogicalSectorsPerTrack + suppTrack.length;
+                                    suppSector = suppTrack[iSector - nLogicalSectorsPerTrack - 1];
+                                } else {
+                                    suppSector = suppTrack[iSector-1];
+                                    nSectorsThisTrack = suppTrack.length;
+                                }
                             }
                         }
 
@@ -1687,7 +1701,9 @@ export default class DiskInfo {
                 let file = this.fileTable[iFile], off = 0;
                 if (file.name == "." || file.name == "..") continue;
                 for (let iSector = 0; iSector < file.aLBA.length; iSector++) {
-                    this.updateSector(iFile, off, file.aLBA[iSector]);
+                    if (!this.updateSector(iFile, off, file.aLBA[iSector])) {
+                        this.printf(Device.MESSAGE.DISK + Device.MESSAGE.ERROR, "%s error: unable to map sector to offset %d\n", file.name, off);
+                    }
                     off += this.cbSector;
                 }
                 file.loadSymbols();
@@ -2870,7 +2886,7 @@ export default class DiskInfo {
 
         let adw = sector[DiskInfo.SECTOR.DATA];
         if (adw) {
-            this.assert(adw.length);
+            // this.assert(adw.length);                 // SOFTWARE-CAROUSEL.json contains fake zero-length sectors
             delete sector[DiskInfo.SECTOR.DATA];
         } else {
             adw = sector['data'];
@@ -2911,7 +2927,7 @@ export default class DiskInfo {
                     dw = dwPattern;
                 } else {
                     dw = adw[adw.length-1];
-                    this.assert(dw != undefined);
+                    // this.assert(dw != undefined);    // SOFTWARE-CAROUSEL.json contains fake zero-length sectors
                 }
                 adw[idw] = dw;
             }

@@ -38,7 +38,7 @@
       ]
     },
     {
-      "name": "Node: diskimage.js",
+      "name": "Node: diskimage.js --all --checkpage --rebuild",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
@@ -46,6 +46,40 @@
         "--all",
         "--checkpage",
         "--rebuild"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskimage.js --disk SOFTWARE-CAROUSEL.img",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "args": [
+        "--disk=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/archive/SOFTWARE-CAROUSEL.img",
+        "--output=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL.json",
+        "--suppData=/software/pcx86/sys/ext/softlogic/carousel/2.0.3/index.md",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskimage.js --disk SOFTWARE-CAROUSEL.json --list",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "args": [
+        "--disk=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL.json",
+        "--list"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -452,7 +486,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "PathMinder 2.11 (1985)",
+      "name": "PathMinder 2.11",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/util/other/pathminder/2.11/",

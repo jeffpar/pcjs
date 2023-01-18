@@ -6805,7 +6805,7 @@
               "@media": [
                 {
                   "@title": "Software Carousel 2.0.3",
-                  "@diskette": "SOFTWARE-CAROUSEL.json",
+                  "@diskette": "SOFTWARE-CAROUSEL-203.json",
                   "@photo": ".jpg",
                   "@format": "PC360K"
                 }
