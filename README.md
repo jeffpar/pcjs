@@ -12,7 +12,7 @@ PCjs is also my homage to a small number of machines that I grew up with.  Those
   - [Texas Instruments Programmable Calculators](/machines/ti/)
   - [LED Simulations (Lite-Brite, Game of Life, etc)](/machines/led/)
 
-along with some hand-selected software -- much of it from my own personal collection -- that is used here for
+along with some hand-selected software, including some from my own personal collection, used here for
 archival/demonstration purposes only.
 
 To learn more about what you can do with the repository, see the [PCjs Wiki](https://github.com/jeffpar/pcjs/wiki),
