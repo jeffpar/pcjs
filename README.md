@@ -2,7 +2,7 @@
 
 [PCjs](https://www.pcjs.org) is the home of [PCx86](/machines/pcx86/), the original IBM PC emulator that runs in your browser.
 
-PCjs is my homage to a small set of machines that I grew up with.  Those machines include:
+PCjs is also my homage to a small number of machines that I grew up with.  Those machines include:
 
   - [6502-based Microcomputers](/machines/osi/c1p/)
   - [8080-based Microcomputers](/machines/pcx80/)
@@ -12,9 +12,11 @@ PCjs is my homage to a small set of machines that I grew up with.  Those machine
   - [Texas Instruments Programmable Calculators](/machines/ti/)
   - [LED Simulations (Lite-Brite, Game of Life, etc)](/machines/led/)
 
-along with a small collection of software used for archival/demonstration purposes only.
+along with some hand-selected software -- much of it from my own personal collection -- that is used here for
+archival/demonstration purposes only.
 
-To learn more about what you can do with the repository, see the [PCjs Wiki](https://github.com/jeffpar/pcjs/wiki), which covers topics such as:
+To learn more about what you can do with the repository, see the [PCjs Wiki](https://github.com/jeffpar/pcjs/wiki),
+which covers topics such as:
 
   - [Running PCjs locally](https://github.com/jeffpar/pcjs/wiki/Running-PCjs-locally)
   - [Compiling PCjs](https://github.com/jeffpar/pcjs/wiki/Compiling-PCjs)
@@ -26,7 +28,8 @@ Topics covered in the repository itself include:
 
 ### License
 
-The [PCjs Project](https://github.com/jeffpar/pcjs) is an open-source project on [GitHub](https://github.com/jeffpar) released under the terms of an [MIT License](/LICENSE.txt).
+The [PCjs Project](https://github.com/jeffpar/pcjs) is an open-source project on [GitHub](https://github.com) released
+under the terms of an [MIT License](/LICENSE.txt).
 
 You are required to include the following links and copyright notice:
 
@@ -36,4 +39,4 @@ in every copy or modified version of this work, and to display that notice on ev
 
 ### Copyright
 
-All PCjs content (including source code, blog posts, and website design) © 2012-2023 [Jeff Parsons](https://jeffpar.com)
+All PCjs content (including source code, blog posts, and website design) © 2012-2023 [Jeff Parsons](https://github.com/jeffpar)
