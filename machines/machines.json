@@ -19,7 +19,7 @@
       "compile the files in the order listed, and if the web server is configured to load uncompiled files, they will",
       "be loaded on their respective web pages in the order listed.",
       "",
-      "WARNING: Be sure to update APPVERSION in /machines/pcx86/xsl/machine.xsl whenever changing the pcx86 version below."
+      "WARNING: Be sure to update APPVERSION in /machines/pcx86/xsl/components.xsl whenever changing the pcx86 version below."
     ]
   },
   "pcx86": {
