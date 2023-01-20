@@ -1754,6 +1754,47 @@
           ],
           "@author": "Armonk Corporation"
         },
+        "1991/eob1": {
+          "@title": "Eye of the Beholder (1991)",
+          "@media": [
+            {
+              "@title": "Eye of the Beholder (Disk 1)",
+              "@diskette": "EOB1-DISK1.json",
+              "@archive": ".img",
+              "@format": "PC360K",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Eye of the Beholder (Disk 2)",
+              "@diskette": "EOB1-DISK2.json",
+              "@archive": ".img",
+              "@format": "PC360K",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Eye of the Beholder (Disk 3)",
+              "@diskette": "EOB1-DISK3.json",
+              "@archive": ".img",
+              "@format": "PC360K",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Eye of the Beholder (Disk 4)",
+              "@diskette": "EOB1-DISK4.json",
+              "@archive": ".img",
+              "@format": "PC360K",
+              "@kryoflux": true
+            },
+            {
+              "@title": "Eye of the Beholder (Disk 5)",
+              "@diskette": "EOB1-DISK5.json",
+              "@archive": ".img",
+              "@format": "PC360K",
+              "@kryoflux": true
+            }
+          ],
+          "@author": "Strategic Simulations, Inc."
+        },
         "2019/invaders": {
           "@title": "Invaders Boot Sector (2019)",
           "@bootable": true,
