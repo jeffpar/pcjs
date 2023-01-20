@@ -14,8 +14,7 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-NOTE: Software Carousel was distributed on a copy-protected diskette that is not fully supported in PCjs.
-See [Issues](#issues) for more information.
+NOTE: Software Carousel was distributed on a copy-protected diskette that still has [issues](#issues) in PCjs.
 
 {% include machine.html id="ibm5170" %}
 
@@ -23,20 +22,19 @@ See [Issues](#issues) for more information.
 
 I have a Kryoflux copy of the diskette that I originally owned (shown below), and at first glance, it was clear that
 track 16 had unusual formatting, but after watching `INSTALL.BAT` run, my attention was drawn to a couple of small
-irregularities on track 0 and track 24.  It turns out that in the small amount of remaining space on those tracks, several
-tiny data-less sectors were also stored.  You can see them in the [HxC Floppy Emulator](https://hxc2001.com) disk
-visualization below.
+irregularities on track 0 and track 24.  It turns out that in the remaining space on those tracks, several tiny empty
+sectors were also present.  You can see them in the [HxC Floppy Emulator](https://hxc2001.com) disk visualization below.
 
 ![SOFTWARE-CAROUSEL-203-HxC](SOFTWARE-CAROUSEL-203-HxC.png)
 
-In addition, the installation process attempts to read a similar sector (with ID 193) from track 5.  I don't see any sign
-of a sector with that ID on track 5, but that may be because the maximum number of hard disk installations (3?) had already
-been reached and the software had removed that sector from the track (presumably by reformatting it).
+The installation process also attempts to read a similar sector (with ID 193) from track 5.  I don't see any sign of
+a sector with that ID on track 5, but that may be because the maximum number of hard disk installations had already been
+reached, and so to prevent further installs, the software may have removed that sector from the track (through reformatting).
 
-So, I added a fake data-less sector with ID 193 to track 5 in the PCjs diskette image, and while the installation process now
-passes the "Verify Product Diskette" test and reports that the "maximum install count is  0003", installation still aborts.
+So I added a fake empty sector with ID 193 to track 5 in the PCjs diskette image, and the installation process now passes
+the "Verify Product Diskette" test and reports that the "maximum install count is  0003".
 
-This copy-protection failure is still under investigation.
+Unfortunately, installation still fails, so this copy-protection scheme is still under investigation.
 
 ### Directory of Software Carousel 2.0.3
 
