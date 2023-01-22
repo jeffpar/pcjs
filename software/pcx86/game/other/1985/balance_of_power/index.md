@@ -23,6 +23,10 @@ The final disk must remain loaded when you run `BOP.EXE` in order for the game t
 
 {% include machine.html id="ibm5160-ega-win101" %}
 
+### Online References
+
+![Balance of Power Instruction Manual (1985)]({{ site.software.gamedisks.server }}/pcx86/game/other/1985/balance_of_power/Balance_of_Power-Front.jpg)
+
 ### Copy-Protection Information (Program Disk)
 
     MFM Sector
