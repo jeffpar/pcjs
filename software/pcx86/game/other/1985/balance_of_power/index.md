@@ -25,7 +25,9 @@ The final disk must remain loaded when you run `BOP.EXE` in order for the game t
 
 ### Online References
 
-![Balance of Power Instruction Manual (1985)]({{ site.software.gamedisks.server }}/pcx86/game/other/1985/balance_of_power/Balance_of_Power-Front.jpg)
+[![Balance of Power Instruction Manual (1985)](images/Balance_of_Power_Instruction_Manual.jpg)](https://archive.org/details/balance-of-power-for-windows)
+
+[![Balance of Power IBM Reference Card (1985)](images/Balance_of_Power_IBM_Reference_Card.jpg)](https://archive.org/details/balance-of-power-ibm-reference-card)
 
 ### Copy-Protection Information (Program Disk)
 
