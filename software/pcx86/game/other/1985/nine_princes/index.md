@@ -88,16 +88,16 @@ I was able to restore `AMB.EXE` to its unpatched state, and I've included a fake
 so the copy-protection check runs and passes.  However, it's still possible that the disk contents may not be quite right,
 so if you run into problems, try running the game from a [hard disk](hdd/).
 
-Need hints? You're in luck, because I also saved the [notes](Nine_Princes_in_Amber-Handwritten_Notes.jpg) I made
+Need hints? You're in luck, because I also saved the [notes](images/Nine_Princes_in_Amber-Handwritten_Notes.jpg) I made
 while playing the game back 1985/1986.
 
-![Nine Princes in Amber Cheat Sheet](Nine_Princes_in_Amber-Handwritten_Notes.jpg)
+![Nine Princes in Amber Cheat Sheet](images/Nine_Princes_in_Amber-Handwritten_Notes.jpg)
 
 ### Online References
 
 I also scanned all the printed materials that came with the game and uploaded the PDF to the Internet Archive.
 
-[![Nine Princes in Amber (1985)]({{ site.software.gamedisks.server }}/pcx86/game/other/1985/nine_princes/Nine_Princes_in_Amber-1985.jpg)](https://archive.org/details/nine-princes-in-amber-ibm-pc-1985)
+[![Nine Princes in Amber (1985)](images/Nine_Princes_in_Amber-1985.jpg)](https://archive.org/details/nine-princes-in-amber-ibm-pc-1985)
 
 ### Copy-Protection Information (Disk A)
 

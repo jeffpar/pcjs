@@ -402,6 +402,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "Eye of the Beholder (1991)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/game/other/1991/eob1/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Game of Life (Color)",
       "type": "chrome",
       "request": "launch",
