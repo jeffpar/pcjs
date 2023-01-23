@@ -5,7 +5,7 @@ permalink: /software/pcx86/util/other/spy/0.1/
 machines:
   - id: deskpro386
     type: pcx86
-    config: /machines/pcx86/compaq/deskpro386/vga/2048kb/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/vga/4096kb/machine.xml
     autoMount:
       A:
         name: COMPAQ MS-DOS 3.31 (Disk 2)

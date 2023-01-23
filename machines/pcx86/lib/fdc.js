@@ -1478,7 +1478,7 @@ class FDC extends Component {
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
              */
             if (!drive.fnCallReady) {
-                this.notice("Mounted diskette \"" + sDiskName + "\" in drive " + String.fromCharCode(0x41 + drive.iDrive), true /* drive.fAutoMount || fAutoMount */);
+                this.notice("Mounted \"" + sDiskName + "\" (format " + (disk.imageInfo && disk.imageInfo.format || "unknown") + ") in drive " + String.fromCharCode(0x41 + drive.iDrive), true /* drive.fAutoMount || fAutoMount */);
             }
 
             /*

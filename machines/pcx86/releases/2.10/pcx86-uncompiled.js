@@ -61959,7 +61959,7 @@ class Disk extends Component {
                 /*
                  * The most likely source of any exception will be here, where we're parsing the disk data.
                  */
-                let aDiskData, aFileDescs;
+                let aDiskData, aFileDescs, imageInfo;
                 if (imageData.substr(0, 1) == "<") {    // if the "data" begins with a "<"...
                     /*
                      * Early server configs reported an error (via the nErrorCode parameter) if a disk URL was invalid,
@@ -61995,6 +61995,7 @@ class Disk extends Component {
                         let image = JSON.parse(imageData);
                         aDiskData = image['diskData'];
                         aFileDescs = image['fileTable'];
+                        imageInfo = image['imageInfo'];
                     } else if (imageData.indexOf("0x") < 0 && imageData.substr(0, 2) != "[\"") {
                         aDiskData = JSON.parse(imageData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
                     } else {
@@ -62151,6 +62152,7 @@ class Disk extends Component {
                     }
                     this.aDiskData = aDiskData;
                     this.dwChecksum = dwChecksum;
+                    this.imageInfo = imageInfo;
                     if (BACKTRACK || SYMBOLS) this.buildFileTable(aFileDescs);
                     disk = this;
                 }
@@ -64903,7 +64905,7 @@ class FDC extends Component {
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
              */
             if (!drive.fnCallReady) {
-                this.notice("Mounted diskette \"" + sDiskName + "\" in drive " + String.fromCharCode(0x41 + drive.iDrive), true /* drive.fAutoMount || fAutoMount */);
+                this.notice("Mounted \"" + sDiskName + "\" (format " + (disk.imageInfo && disk.imageInfo.format || "unknown") + ") in drive " + String.fromCharCode(0x41 + drive.iDrive), true /* drive.fAutoMount || fAutoMount */);
             }
 
             /*
