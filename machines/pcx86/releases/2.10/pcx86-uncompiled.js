@@ -27671,7 +27671,7 @@ X86.helpIRET = function()
 
     this.nStepCycles -= this.cycleCounts.nOpCyclesIRet;
 
-    if ((this.regCR0 & X86.CR0.MSW.PE) && (this.regPS & X86.PS.NT)) {
+    if ((this.regCR0 & X86.CR0.MSW.PE) && (this.regPS & (X86.PS.NT | X86.PS.VM)) == X86.PS.NT) {
         let addrNew = this.segTSS.base;
         /*
          * Fortunately, X86.TSS286.PREV_TSS and X86.TSS386.PREV_TSS refer to the same TSS offset.
@@ -27958,7 +27958,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
         X86.helpINT.call(this, nFault, nError, nCycles);
 
         /*
-         * REP'eated instructions that rewind regLIP to opLIP used to screw up this dispatch,
+         * REPeated instructions that rewind regLIP to opLIP used to screw up this dispatch,
          * so now we slip the new regLIP into opLIP, effectively turning their action into a no-op.
          */
         this.opLIP = this.regLIP;
