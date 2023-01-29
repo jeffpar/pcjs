@@ -24,3 +24,5 @@ NOTE: Use the Command Summary Card to help with the game's "Deity Verification C
 [![Populous Manual (1989)]({{ site.software.gamedisks.server }}/pcx86/game/other/1989/populous/Populous_Manual-1989.jpg)](https://archive.org/details/populous-manual)
 
 [![Populous Command Summary Card (1989)]({{ site.software.gamedisks.server }}/pcx86/game/other/1989/populous/Populous_Command_Summary_Card-1989.jpg)](https://archive.org/details/popccskuifdhg)
+
+![Populous (1989)]({{ site.software.gamedisks.server }}/pcx86/game/other/1989/populous/POPULOUS-1989.jpg)
