@@ -24,6 +24,8 @@ machines:
 
 ### Copy-Protection Information (Disk 1)
 
+![Life & Death II (Disk 1)]({{ site.software.gamedisks.server }}/pcx86/game/other/1990/life_and_death_ii/LIFE-AND-DEATH-II-1.jpg)
+
     MFM Sector
     Sector ID:015
     Track ID:039 - Side ID:000
@@ -1052,3 +1054,7 @@ machines:
     03E8| 00 00 00 00 00 00 00 00 | ........
     03F0| 00 00 28 68 68 7E D3 93 | ..(hh~..
     03F8| 93 93 93 93 93 93 93 93 | ........
+
+![Life & Death II (Disk 2)]({{ site.software.gamedisks.server }}/pcx86/game/other/1990/life_and_death_ii/LIFE-AND-DEATH-II-2.jpg)
+
+![Life & Death II (Disk 3)]({{ site.software.gamedisks.server }}/pcx86/game/other/1990/life_and_death_ii/LIFE-AND-DEATH-II-3.jpg)
