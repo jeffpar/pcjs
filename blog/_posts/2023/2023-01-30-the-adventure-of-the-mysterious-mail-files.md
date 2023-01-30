@@ -58,7 +58,7 @@ then I could move the PST file to my MacBook and open it with **OUTLOOK**.
 
 Well, that may have seemed like the simplest solution, but it was anything but simple....
 
-### Windows 95
+### Running Windows 95
 
 I had upgraded to an M1 (Apple Silicon) MacBook a few months ago, so it turned out that getting Windows 95 to run in a
 virtual machine on my MacBook was harder than I'd expected.  In "the old days", with an Intel MacBook, I could (and did)
@@ -69,15 +69,13 @@ options anymore, because they all require an Intel processor to "virtualize" an 
 > UPDATE: VirtualBox may eventually become a viable solution, because Oracle recently released a V7 beta that supports
 x86 emulation on Apple Silicon; unfortunately, the beta crashes a lot, so I'm holding off until it becomes more stable.
 
-The only more-or-less stable "emulation" option appeared to be [QEMU](https://www.qemu.org), and I chose the version of QEMU bundled with [UTM](https://getutm.app),
-since UTM includes some nice UI enhancements that make it easier to manage QEMU-based VMs.
+The only more-or-less stable "emulation" option appeared to be [QEMU](https://www.qemu.org), and I chose the version of
+QEMU bundled with [UTM](https://getutm.app), since UTM includes some nice UI enhancements that make it easier to manage
+QEMU-based VMs.
 
 Using QEMU, Windows 95 and the "Inbox" (Windows Messaging) application were easy enough to setup, and Windows Messaging
-seemed willing to import my MMF files...
-
-![MMF Adventure](/blog/images/mmf-adventure1.jpg)
-
-But anticipation quickly turned to disappointment when it prompted me for a password. I had vague recollections of some passwords that I *might* have used over 30 years ago, but nothing I tried worked.
+seemed willing to import my MMF files.  But anticipation quickly turned to disappointment when it prompted me for a password.
+I had vague recollections of some passwords that I *might* have used over 30 years ago, but nothing I tried worked.
 
 I knew that Microsoft's post-MMF storage solution -- PST files -- had had weak password protection, because several years
 ago, I had unearthed some password-protected PST files, and it hadn't been hard to find a PST tool online that could
@@ -165,7 +163,7 @@ include room for a terminator, so in the above example, since EDI contained 8, a
 If the lengths didn't match, I would start over with a password guess that was the same length.
 
 Ultimately, I finally found where the MMF's internal password was being extracted, so all I had to do was set a write
-breakpoint on 7f8367e4 ("ba w 1 %7f8367e4").  It would stop on a "REP MOVSD" instruction, and after letting the instruction
+breakpoint on 7f8367e4 ("ba w 1 %7f8367e4").  It would stop on a `REP MOVSD` instruction, and after letting the instruction
 finish, I dumped the memory at 7f8367e4.  For example, here's what the 7-character password for one of my MMF files looked
 like:
 
