@@ -638,7 +638,19 @@ class DebuggerX86 extends DbgLib {
             break;
 
         default:
-            if (DEBUG && this.fWinDbg) {
+            /*
+             * 2023 Update: It's been a while since I've tried doing a clean install of Windows 95,
+             * and this println() was firing incessantly ("INT 0x41: 0x0040"); I looked up 0x0040 and found this:
+             *
+             *      DS_ForcedGO16	equ    40h	; enter the debugger and perform the equivalent
+			 *                                  ; of a GO command to force a stop at the
+			 *                                  ; specified CS:IP
+			 *                                  ; CX is the desired CS
+		     *                                  ; BX is the desired IP
+             *
+             * I've changed this code from DEBUG to MAXDEBUG for now. TODO: Investigate who/what is triggering this later.
+             */
+            if (MAXDEBUG && this.fWinDbg) {
                 this.println("INT 0x41: " + Str.toHexWord(AX));
             }
             break;
