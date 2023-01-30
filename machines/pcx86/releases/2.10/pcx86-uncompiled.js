@@ -6023,7 +6023,7 @@ var Interrupts = {
         LOADSEG32:  0x0150,         // DS_LoadSeg_32 (SI==0 if code, 1 if data; DX:EBX->D386_Device_Params)
         FREESEG32:  0x0152,         // DS_FreeSeg_32 (BX==segment, DX:EDI->module name)
         CONDBP:     0xF001,         // DS_CondBP (break here if WDEB386 was run with /B; ESI -> string to display)
-        ENABLED:    true            // support for WINDBG interrupts can be disabled (but NOT if WINDBGRM is enabled)
+        ENABLED:    false           // support for WINDBG interrupts can be disabled (but NOT if WINDBGRM is enabled)
     },
     WINDBGRM: {                     // Windows Debugger real-mode interface
         VECTOR:     0x68,           // (AH==command)
@@ -6033,7 +6033,7 @@ var Interrupts = {
         FREESEG:    0x48,           // D386_Free_Segment (BX==real-mode segment)
         REMOVESEGS: 0x4F,           // D386_Remove_Segs (remove any undefined segments from the named module at ES:DI)
         LOADSEG:    0x50,           // D386_Load_Segment (AL=segment type, ES:DI->D386_Device_Params)
-        ENABLED:    true            // support for WINDBGRM interrupts can be disabled
+        ENABLED:    false           // support for WINDBGRM interrupts can be disabled
     },
     FUNCS: {}                       // filled in only if DEBUGGER is true
 };
@@ -72733,7 +72733,19 @@ class DebuggerX86 extends DbgLib {
             break;
 
         default:
-            if (DEBUG && this.fWinDbg) {
+            /*
+             * 2023 Update: It's been a while since I've tried doing a clean install of Windows 95,
+             * and this println() was firing incessantly ("INT 0x41: 0x0040"); I looked up 0x0040 and found this:
+             *
+             *      DS_ForcedGO16	equ    40h	; enter the debugger and perform the equivalent
+			 *                                  ; of a GO command to force a stop at the
+			 *                                  ; specified CS:IP
+			 *                                  ; CX is the desired CS
+		     *                                  ; BX is the desired IP
+             *
+             * I've changed this code from DEBUG to MAXDEBUG for now. TODO: Investigate who/what is triggering this later.
+             */
+            if (MAXDEBUG && this.fWinDbg) {
                 this.println("INT 0x41: " + Str.toHexWord(AX));
             }
             break;

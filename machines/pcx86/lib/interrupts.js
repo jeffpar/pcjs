@@ -85,7 +85,7 @@ var Interrupts = {
         LOADSEG32:  0x0150,         // DS_LoadSeg_32 (SI==0 if code, 1 if data; DX:EBX->D386_Device_Params)
         FREESEG32:  0x0152,         // DS_FreeSeg_32 (BX==segment, DX:EDI->module name)
         CONDBP:     0xF001,         // DS_CondBP (break here if WDEB386 was run with /B; ESI -> string to display)
-        ENABLED:    true            // support for WINDBG interrupts can be disabled (but NOT if WINDBGRM is enabled)
+        ENABLED:    false           // support for WINDBG interrupts can be disabled (but NOT if WINDBGRM is enabled)
     },
     WINDBGRM: {                     // Windows Debugger real-mode interface
         VECTOR:     0x68,           // (AH==command)
@@ -95,7 +95,7 @@ var Interrupts = {
         FREESEG:    0x48,           // D386_Free_Segment (BX==real-mode segment)
         REMOVESEGS: 0x4F,           // D386_Remove_Segs (remove any undefined segments from the named module at ES:DI)
         LOADSEG:    0x50,           // D386_Load_Segment (AL=segment type, ES:DI->D386_Device_Params)
-        ENABLED:    true            // support for WINDBGRM interrupts can be disabled
+        ENABLED:    false           // support for WINDBGRM interrupts can be disabled
     },
     FUNCS: {}                       // filled in only if DEBUGGER is true
 };
