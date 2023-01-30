@@ -3,7 +3,7 @@ layout: post
 title: "The Adventure of the Mysterious Mail Files"
 date: 2023-01-30 12:00:00
 permalink: /blog/2023/01/30/
-preview: /software/pcx86/sys/unix/minix/1.1/pc-at/minix-textbook-cover.jpg
+preview: /blog/images/mmf-adventure3.jpg
 ---
 
 I've recently been sifting through many boxes of loose diskettes.  Any disks with personal information are
