@@ -98,7 +98,7 @@ spot in memory where that check was being performed.
 
 The game was afoot!
 
-## Debugging Windows 95
+### Debugging Windows 95
 
 I still find that the easiest way to debug software on Windows 95 is with `WDEB386.EXE`, the beloved kernel debugger that
 I and my co-workers used to debug thousands of issues during the development of Windows 95.  And I still had a small collection
