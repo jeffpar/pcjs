@@ -143,56 +143,56 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "COMPAQ DeskPro 386, 2Mb RAM, IBM VGA with Debugger",
+      "name": "COMPAQ DeskPro 386, 2Mb RAM, IBM VGA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/machine.xml",
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "COMPAQ DeskPro 386, 2Mb RAM, IBM VGA with Debugger (Uncompiled)",
+      "name": "COMPAQ DeskPro 386, 2Mb RAM, IBM VGA [Debugger] (Uncompiled)",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/uncompiled/machine.xml",
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "COMPAQ DeskPro 386, 4Mb RAM, IBM VGA with Debugger",
+      "name": "COMPAQ DeskPro 386, 4Mb RAM, IBM VGA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/vga/4096kb/debugger/machine.xml",
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "COMPAQ DeskPro 386, 4Mb RAM, IBM VGA with Debugger (Uncompiled)",
+      "name": "COMPAQ DeskPro 386, 4Mb RAM, IBM VGA [Debugger] (Uncompiled)",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/vga/4096kb/debugger/uncompiled/machine.xml",
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "DEC PDP-11/20 BASIC with Debugger",
+      "name": "DEC PDP-11/20 BASIC [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1120/basic/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "DEC PDP-11/20 BASIC with Debugger (v3)",
+      "name": "DEC PDP-11/20 BASIC (V3) [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1120/basic/debugger/v3/",
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "DEC PDP-11/20 Bootstrap Loader with Debugger",
+      "name": "DEC PDP-11/20 Bootstrap Loader [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1120/bootstrap/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "DEC PDP-11/70 for XXDP+ with Front Panel and Debugger",
+      "name": "DEC PDP-11/70 for XXDP+ with Front Panel [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1170/panel/debugger/xxdp/",
@@ -206,7 +206,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "IBM PC with CGA and Debugger",
+      "name": "IBM PC with CGA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/debugger/",
@@ -220,14 +220,14 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "IBM PC with MDA and Debugger",
+      "name": "IBM PC with MDA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "IBM PC with MDA and Debugger (v3)",
+      "name": "IBM PC (V3) with MDA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/v3/",
@@ -248,7 +248,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "IBM PC with VGA and Debugger",
+      "name": "IBM PC with VGA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/vga/debugger/",
@@ -262,7 +262,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "IBM PC XT with CGA and Debugger",
+      "name": "IBM PC XT with CGA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/cga/debugger/",
@@ -276,7 +276,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "IBM PC XT with EGA and Debugger",
+      "name": "IBM PC XT with EGA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/ega/debugger/",
@@ -290,7 +290,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "IBM PC XT with MDA and Debugger",
+      "name": "IBM PC XT with MDA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/mda/debugger/",
@@ -304,6 +304,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "IBM PC AT with CGA [Debugger*]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx86/ibm/5170/cga/?debugger=true",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Ohio Scientific Challenger 1P",
       "type": "chrome",
       "request": "launch",
@@ -311,14 +318,14 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "Ohio Scientific Challenger 1P with Debugger",
+      "name": "Ohio Scientific Challenger 1P [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/osi/c1p/debugger/",
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "Ohio Scientific Challenger 1P with Debugger (XML)",
+      "name": "Ohio Scientific Challenger 1P [Debugger XML]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/osi/c1p/xml/c1p8k-debugger.xml",
@@ -353,14 +360,14 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "TI-57 with Original ROM and Debugger",
+      "name": "TI-57 with Original ROM [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/ti/ti57/rev0/",
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "TI-57 with Revised ROM and Debugger",
+      "name": "TI-57 with Revised ROM [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/ti/ti57/rev1/",
@@ -385,6 +392,20 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/dos/compaq/3.10/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "DoubleDOS 2.1 [Debugger*]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/ext/softlogic/doubledos/2.1/?debugger=true",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "DoubleDOS 2.1V [Debugger*]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/ext/softlogic/doubledos/2.1v/?debugger=true",
       "webRoot": "${workspaceFolder}"
     },
     {
@@ -430,7 +451,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "IBM TopView 1.01 (With Debugger)",
+      "name": "IBM TopView 1.01 [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/ext/ibm/topview/1.01/debugger/",
@@ -458,7 +479,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "Microsoft Windows 3.10 (with Debugger)",
+      "name": "Microsoft Windows 3.10 [Debugger*]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/windows/3.10/?debugger=true&resume=1",
@@ -472,7 +493,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "Microsoft Windows 95 (with Debugger)",
+      "name": "Microsoft Windows 95 [Debugger*]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/windows/win95/4.00.950/?debugger=true",
@@ -535,14 +556,21 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "Software Carousel 2.0.3",
+      "name": "Software Carousel 2.0.3 [Debugger*]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/ext/softlogic/carousel/2.0.3/?debugger=true",
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "SPY 386 Monitor 0.1",
+      "name": "Software Carousel 3.0.1",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/ext/softlogic/carousel/3.0.1/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "SPY 386 Monitor 0.1 [Debugger*]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/util/other/spy/0.1/?debugger=true",
