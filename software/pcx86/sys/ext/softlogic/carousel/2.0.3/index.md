@@ -14,7 +14,8 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-NOTE: Software Carousel was distributed on a copy-protected diskette that still has [issues](#issues) in PCjs.
+NOTE: Software Carousel 2.0.3 was distributed on a copy-protected diskette that still has [issues](#issues) in PCjs.
+In the meantime, take a look at [Software Carousel 3.0.1](../3.0.1/).
 
 {% include machine.html id="ibm5170" %}
 

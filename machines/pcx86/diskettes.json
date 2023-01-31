@@ -6851,12 +6851,33 @@
                   "@format": "PC360K"
                 }
               ]
+            },
+            "3.0.1": {
+              "@title": "Software Carousel 3.0.1",
+              "@media": [
+                {
+                  "@title": "Software Carousel 3.0.1",
+                  "@diskette": "SOFTWARE-CAROUSEL-301.json",
+                  "@photo": ".jpg",
+                  "@format": "PC360K"
+                }
+              ]
             }
           }
         },
         "doubledos": {
           "@title": "DoubleDOS",
           "@versions": {
+            "2.1": {
+              "@title": "DoubleDOS 2.1",
+              "@media": [
+                {
+                  "@title": "DoubleDOS 2.1",
+                  "@diskette": "DOUBLEDOS.json",
+                  "@format": "PC360K"
+                }
+              ]
+            },
             "2.1f": {
               "@title": "DoubleDOS 2.1F",
               "@media": [

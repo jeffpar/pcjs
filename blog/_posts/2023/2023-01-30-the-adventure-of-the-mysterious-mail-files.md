@@ -49,7 +49,8 @@ At last it was clear that these files were pieces of Microsoft Mail Files or MMF
 been small enough to fit on a single diskette, all the other MMF files had been chopped up into diskette-sized pieces,
 using some sort of "splitting" utility that I had probably written specifically to make my own email backups.
 
-It was easy enough to recombine the pieces and recreate four presumably complete MMF files, but now the question was how to read them.
+It was easy enough to recombine the pieces and recreate four presumably complete MMF files, but now the question was
+how to read them.
 
 My first thought was **OUTLOOK**, since I already had a copy of it on my MacBook; however, I couldn't find any options
 for importing MMF files.  I gradually came to the conclusion that the simplest solution would be to use the Inbox (Windows
@@ -150,7 +151,7 @@ I also created a disassembled copy of the [MMF Migration Library](/software/pcx8
 to make debugging a bit easier.
 
 After numerous false starts, I eventually got the process down to a few steps.  First, I set an INT3 breakpoint
-on GetDlgItemTextA ("bp %bff61657"), clicked "OK" in the password dialog, and when the breakpoint was hit, set a new
+on *GetDlgItemTextA* ("bp %bff61657"), clicked "OK" in the password dialog, and when the breakpoint was hit, set a new
 INT3 breakpoint in `MMFMIG32.DLL`, inside 7f810181, at 7f8101f3:
 
 	eax=7f8367e4 ebx=7f8367d8 ecx=00000008 edx=00000008 esi=00000000 edi=00000008
@@ -169,19 +170,74 @@ like:
 
     %000000007f8367e4: 56 45 52 54 49 47 4f 00-00 00 00 00 00 00 00 00  VERTIGO.........
 
-The code that actually deciphers the password stored in the MMF is located at %7f8128e1, and one of the inputs is this data:
+The code in `MMFMIG32.DLL` that actually deciphers the password stored in the MMF is located at 7f8128e1.  Here's a listing:
 
-    %0000000000b84a8c: 9d f5 54 33 1d 9d 87 8e-18 f3 05 ed 2c 38 bf fb  ..T3........,8..
-    %0000000000b84a9c: ad f3 2f 12 da 46 6c 24-76 79 d7 5f 67 2d aa 43  ../..Fl$vy._g-.C
+    sub_7F8128E1	proc near
 
-which corresponds to this portion of the MMF:
+            arg_0	= dword	ptr  8
+            arg_4	= dword	ptr  0Ch
+            arg_8	= dword	ptr  10h
+            arg_C	= dword	ptr  14h
+
+    		push	ebp
+    		mov	    ebp, esp
+    		push	ebx
+    		push	esi
+    		push	edi
+    		mov	    edi, [ebp+arg_8]
+    		mov	    eax, edi
+    		dec	    edi
+    		test	eax, eax
+    		jz	    short loc_7F81292D
+    		mov	    eax, [ebp+arg_0]
+    		mov	    esi, [ebp+arg_4]
+    		mov	    edx, [ebp+arg_C]
+
+    loc_7F8128FA:
+    		mov	    cl, [eax]
+    		inc	    eax
+    		add	    cl, dl
+    		movzx	ecx, cl
+    		mov	    bl, byte_7F835AE8[ecx]
+    		mov	    cl, dh
+    		add	    bl, cl
+    		movzx	ebx, bl
+    		mov	    bl, byte_7F835CE8[ebx]
+    		sub	    bl, cl
+    		movzx	ecx, bl
+    		mov	    cl, byte_7F835BE8[ecx]
+    		sub	    cl, dl
+    		inc	    edx
+    		mov	    [esi], cl
+    		inc	    esi
+    		mov	    ecx, edi
+    		dec	    edi
+    		test	ecx, ecx
+    		jnz	    short loc_7F8128FA
+
+    loc_7F81292D:
+    		pop	    edi
+    		pop	    esi
+    		pop	    ebx
+    		pop	    ebp
+    		retn	10h
+    sub_7F8128E1	endp
+
+When it came up with the password `VERTIGO`, one of the inputs was this data:
+
+    %00b84a8c: 9d f5 54 33 1d 9d 87 8e-18 f3 05 ed 2c 38 bf fb  ..T3........,8..
+    %00b84a9c: ad f3 2f 12 da 46 6c 24-76 79 d7 5f 67 2d aa 43  ../..Fl$vy._g-.C
+
+which corresponded to this section of the MMF:
 
     00004200  9d f5 54 33 1d 9d 87 8e  18 f3 05 ed 2c 38 bf fb  |..T3........,8..|
     00004210  ad f3 2f 12 da 46 6c 24  76 79 d7 5f 67 2d aa 43  |../..Fl$vy._g-.C|
 
-However, the code is using multiple inputs, so you can't decipher the original password from that data alone.  In any case, once I had my passwords, I was done debugging.  If anyone else wants to dig into this more and write a general-purpose
-MMF password recovery tool, there's absolutely no doubt it can be done, but I also have absolutely no interest in doing
-that myself.
+However, the code uses multiple inputs, so I don't think you can decipher the original password from that section alone.
+
+In any case, once I had my passwords, I was done debugging.  If anyone else wants to dig into this more and write a
+general-purpose MMF password recovery tool, there's absolutely no doubt it can be done, but I also have absolutely no
+interest in doing that myself.
 
 Besides, I have some old email to catch up on!
 
