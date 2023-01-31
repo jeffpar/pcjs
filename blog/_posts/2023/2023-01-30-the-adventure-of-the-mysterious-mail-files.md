@@ -154,10 +154,10 @@ After numerous false starts, I eventually got the process down to a few steps.  
 on *GetDlgItemTextA* ("bp %bff61657"), clicked "OK" in the password dialog, and when the breakpoint was hit, set a new
 INT3 breakpoint in `MMFMIG32.DLL`, inside 7f810181, at 7f8101f3:
 
-	eax=7f8367e4 ebx=7f8367d8 ecx=00000008 edx=00000008 esi=00000000 edi=00000008
-	eip=7f8101f3 esp=0063f260 ebp=0063f270 iopl=0 rf nv up ei pl nz na pe cy
-	cs=0137 ds=013f es=013f fs=1a8f gs=0000 ss=013f               eflags=00010203
-	0137:7f8101f3 3b cf                   cmp ecx, edi
+    eax=7f8367e4 ebx=7f8367d8 ecx=00000008 edx=00000008 esi=00000000 edi=00000008
+    eip=7f8101f3 esp=0063f260 ebp=0063f270 iopl=0 rf nv up ei pl nz na pe cy
+    cs=0137 ds=013f es=013f fs=1a8f gs=0000 ss=013f               eflags=00010203
+    0137:7f8101f3 3b cf                   cmp ecx, edi
 
 At this point, EDI was the length of the typed password, and ECX was the length of the stored password.  These lengths
 include room for a terminator, so in the above example, since EDI contained 8, a 7-character password was expected. 
@@ -172,56 +172,56 @@ like:
 
 The code in `MMFMIG32.DLL` that actually deciphers the password stored in the MMF is located at 7f8128e1.  Here's a listing:
 
-    sub_7F8128E1	proc near
+    sub_7F8128E1    proc near
 
-            arg_0	= dword	ptr  8
-            arg_4	= dword	ptr  0Ch
-            arg_8	= dword	ptr  10h
-            arg_C	= dword	ptr  14h
+            arg_0   = dword ptr  8
+            arg_4   = dword ptr  0Ch
+            arg_8   = dword ptr  10h
+            arg_C   = dword ptr  14h
 
-    		push	ebp
-    		mov	    ebp, esp
-    		push	ebx
-    		push	esi
-    		push	edi
-    		mov	    edi, [ebp+arg_8]
-    		mov	    eax, edi
-    		dec	    edi
-    		test	eax, eax
-    		jz	    short loc_7F81292D
-    		mov	    eax, [ebp+arg_0]
-    		mov	    esi, [ebp+arg_4]
-    		mov	    edx, [ebp+arg_C]
+            push    ebp
+            mov     ebp, esp
+            push    ebx
+            push    esi
+            push    edi
+            mov     edi, [ebp+arg_8]
+            mov     eax, edi
+            dec     edi
+            test    eax, eax
+            jz      short loc_7F81292D
+            mov     eax, [ebp+arg_0]
+            mov     esi, [ebp+arg_4]
+            mov     edx, [ebp+arg_C]
 
     loc_7F8128FA:
-    		mov	    cl, [eax]
-    		inc	    eax
-    		add	    cl, dl
-    		movzx	ecx, cl
-    		mov	    bl, byte_7F835AE8[ecx]
-    		mov	    cl, dh
-    		add	    bl, cl
-    		movzx	ebx, bl
-    		mov	    bl, byte_7F835CE8[ebx]
-    		sub	    bl, cl
-    		movzx	ecx, bl
-    		mov	    cl, byte_7F835BE8[ecx]
-    		sub	    cl, dl
-    		inc	    edx
-    		mov	    [esi], cl
-    		inc	    esi
-    		mov	    ecx, edi
-    		dec	    edi
-    		test	ecx, ecx
-    		jnz	    short loc_7F8128FA
+            mov     cl, [eax]
+            inc     eax
+            add     cl, dl
+            movzx   ecx, cl
+            mov     bl, byte_7F835AE8[ecx]
+            mov     cl, dh
+            add     bl, cl
+            movzx   ebx, bl
+            mov     bl, byte_7F835CE8[ebx]
+            sub     bl, cl
+            movzx   ecx, bl
+            mov     cl, byte_7F835BE8[ecx]
+            sub     cl, dl
+            inc     edx
+            mov     [esi], cl
+            inc     esi
+            mov     ecx, edi
+            dec     edi
+            test    ecx, ecx
+            jnz     short loc_7F8128FA
 
     loc_7F81292D:
-    		pop	    edi
-    		pop	    esi
-    		pop	    ebx
-    		pop	    ebp
-    		retn	10h
-    sub_7F8128E1	endp
+            pop     edi
+            pop     esi
+            pop     ebx
+            pop     ebp
+            retn    10h
+    sub_7F8128E1    endp
 
 When it came up with the password `VERTIGO`, one of the inputs was this data:
 
