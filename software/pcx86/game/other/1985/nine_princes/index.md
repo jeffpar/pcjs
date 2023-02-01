@@ -101,6 +101,8 @@ I also scanned all the printed materials that came with the game and uploaded th
 
 ### Copy-Protection Information (Disk A)
 
+![Nine Princes in Amber (Disk A)]({{ site.software.gamedisks.server }}/pcx86/game/other/1985/nine_princes/NINE-PRINCES-A.jpg)
+
     MFM Sector
     Sector ID:010
     Track ID:000 - Side ID:000
@@ -125,3 +127,5 @@ I also scanned all the printed materials that came with the game and uploaded th
     0068| F6 F6 F6 F6 F6 F6 F6 F6 | ........
     0070| F6 F6 F6 F6 F6 F6 F6 F6 | ........
     0078| F6 F6 F6 F6 F6 F6 F6 F6 | ........
+
+![Nine Princes in Amber (Disk B)]({{ site.software.gamedisks.server }}/pcx86/game/other/1985/nine_princes/NINE-PRINCES-B.jpg)
