@@ -168,7 +168,7 @@ breakpoint on 7f8367e4 ("ba w 1 %7f8367e4").  It would stop on a `REP MOVSD` ins
 finish, I dumped the memory at 7f8367e4.  For example, here's what the 7-character password for one of my MMF files looked
 like:
 
-    %000000007f8367e4: 56 45 52 54 49 47 4f 00-00 00 00 00 00 00 00 00  VERTIGO.........
+    %7f8367e4: 56 45 52 54 49 47 4f 00-00 00 00 00 00 00 00 00  VERTIGO.........
 
 The code in `MMFMIG32.DLL` that actually deciphers the password stored in the MMF is located at 7f8128e1.  Here's a listing:
 
