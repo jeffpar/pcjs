@@ -500,10 +500,10 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "Microsoft Windows 95 Installation Machine",
+      "name": "Microsoft Windows 95 Installation Machine [Debugger*]",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/software/pcx86/sys/windows/win95/install/",
+      "url": "http://localhost:4000/software/pcx86/sys/windows/win95/install/?debugger=true",
       "webRoot": "${workspaceFolder}"
     },
     {
