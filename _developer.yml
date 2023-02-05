@@ -23,7 +23,6 @@ exclude:
   - "*.log"
   - tmp
   - "**/archive"
-  - "**/private"
   - /package*.json
   - /.history
   - /.vscode
