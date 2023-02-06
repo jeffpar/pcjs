@@ -9,7 +9,6 @@ Gemfile.lock
 package-lock.json
 archive
 private
-private.json
 tmp
 /_site
 /discs

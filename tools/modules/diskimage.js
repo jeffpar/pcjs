@@ -162,7 +162,7 @@ function existsFile(sFile)
 /**
  * getHash(data, type)
  *
- * @param {Array.<number>|DataBuffer} data
+ * @param {Array.<number>|string|DataBuffer} data
  * @param {string} [type] (eg, "md5")
  * @returns {string}
  */
@@ -304,7 +304,7 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     if (!argv['quiet']) {
-        printf("processing %s: %d bytes (checksum %d)\n", di.getName(), di.getSize(), di.getChecksum());
+        printf("processing %s: %d bytes (checksum %d, hash %s)\n", di.getName(), di.getSize(), di.getChecksum(), di.getHash());
     }
 
     let sFindName = argv['file'];
@@ -454,7 +454,7 @@ function processDisk(di, diskFile, argv, diskette)
      */
     if (argv['rewrite']) {
         if (diskFile.endsWith(".json")) {
-            writeDisk(diskFile, di, argv['legacy'], 0, true);
+            writeDisk(diskFile, di, argv['legacy'], 0, true, undefined, undefined, argv['archive'], argv['source']);
         }
     }
 
@@ -480,13 +480,13 @@ function processDisk(di, diskFile, argv, diskette)
             if (diTemp) {
                 let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
                 diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
-                writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false);
+                writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false, undefined, diskette.archive, diskette.source);
                 let warning = false;
                 if (diskette.archive.endsWith(".img")) {
                     let json = diTemp.getJSON();
                     diTemp.buildDiskFromJSON(json);
                     let sTempIMG = sTempJSON.replace(".json",".img");
-                    writeDisk(sTempIMG, diTemp, true, 0, true, false);
+                    writeDisk(sTempIMG, diTemp, true, 0, true, false, undefined, diskette.archive, diskette.source);
                     if (!compareDisks(sTempIMG, diskette.archive)) {
                         printf("warning: %s unsuccessfully rebuilt\n", diskette.archive);
                         warning = true;
@@ -718,7 +718,7 @@ function processDisk(di, diskFile, argv, diskette)
         if (output) {
             if (typeof output == "string") output = [output];
             output.forEach((outputFile) => {
-                writeDisk(outputFile, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], true, argv['writable']);
+                writeDisk(outputFile, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], true, argv['writable'], argv['archive'], argv['source']);
             });
         }
     }
@@ -734,20 +734,25 @@ function processDisk(di, diskFile, argv, diskette)
 function readAll(argv)
 {
     let family = "pcx86";
-    let cConfigs = 0, cDisks = 0;
-    let asFiles = glob.sync(path.join(rootDir, "/machines/" + family + "/*.json"));
-
+    let asServers = ["machines", "private"];
+    let cCollections = 0, cDisks = 0;
+    let asCollections = [];
+    asServers.forEach((server) => {
+        asCollections = asCollections.concat(glob.sync(path.join(rootDir, "/" + server + "/" + family + "/*.json")));
+    });
     let messages;
     if (argv['quiet']) {
         messages = device.setMessages(Device.MESSAGE.WARN + Device.MESSAGE.ERROR, false);
     }
-
     let aDiskNames = {};        // we use this table of disk names to detect non-unique disk names
-    asFiles.forEach(function readAllConfigs(configFile) {
-        if (configFile.indexOf("/pcsig") >= 0) return;
-        configFile = configFile.substr(rootDir.length);
-        if (argv['verbose']) printf("reading %s...\n", configFile);
-        let library = readJSON(configFile);
+    asCollections.forEach(function readAllCollections(collectionFile) {
+        if (collectionFile.indexOf("/pcsig") >= 0) {
+            if (argv['verbose']) printf("skipping collection %s...\n", collectionFile);
+            return;
+        }
+        collectionFile = collectionFile.substr(rootDir.length);
+        if (argv['verbose']) printf("reading collection %s...\n", collectionFile);
+        let library = readJSON(collectionFile);
         if (library) {
             let aDiskettes = [];
             JSONLib.parseDiskettes(aDiskettes, library, "/pcx86", "/diskettes");
@@ -778,7 +783,7 @@ function readAll(argv)
                 if (!di) {
                     di = createDisk(diskFile, diskette, argv);
                     if (di) {
-                        writeDisk(diskFile, di);
+                        writeDisk(diskFile, di, false, 0, undefined, undefined, undefined, diskette.archive, diskette.source);
                     }
                 }
                 if (di) {
@@ -787,10 +792,10 @@ function readAll(argv)
                 }
             });
         }
-        cConfigs++;
+        cCollections++;
     });
 
-    printf("%d config(s), %d disks(s) processed\n\n", cConfigs, cDisks);
+    printf("%d config(s), %d disks(s) processed\n\n", cCollections, cDisks);
     if (messages) device.setMessages(messages, true);
 }
 
@@ -824,7 +829,7 @@ function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
         let aFileData = readDirFiles(sDir, sLabel, fNormalize, 0);
         di = new DiskInfo(device);
         let db = new DataBuffer();
-        if (!di.buildDiskFromFiles(db, diskName, aFileData, kbTarget || 0)) {
+        if (!di.buildDiskFromFiles(db, diskName, aFileData, kbTarget || 0, getHash)) {
             di = null;
         }
     } catch(err) {
@@ -975,11 +980,10 @@ function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
             if (!db) {
                 di = null;
             } else {
-                let hash = getHash(db);
                 if (diskName.endsWith(".psi")) {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {
-                    if (!di.buildDiskFromBuffer(db, hash, forceBPB, sectorIDs, sectorErrors, suppData)) di = null;
+                    if (!di.buildDiskFromBuffer(db, getHash, forceBPB, sectorIDs, sectorErrors, suppData)) di = null;
                 }
             }
         }
@@ -1031,7 +1035,7 @@ function readJSON(sFile)
 }
 
 /**
- * writeDisk(diskFile, di, fLegacy, indent, fOverwrite, fPrint, fWritable)
+ * writeDisk(diskFile, di, fLegacy, indent, fOverwrite, fPrint, fWritable, archive, source)
  *
  * @param {string} diskFile
  * @param {DiskInfo} di
@@ -1040,8 +1044,10 @@ function readJSON(sFile)
  * @param {boolean} [fOverwrite]
  * @param {boolean} [fPrint]
  * @param {boolean} [fWritable]
+ * @param {string} [archive]
+ * @param {string} [source]
  */
-function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fPrint = true, fWritable = false)
+function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fPrint = true, fWritable = false, archive = "", source = "")
 {
     let diskName = path.basename(diskFile);
     try {
@@ -1050,7 +1056,7 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
             let data;
             let diskFileLC = diskFile.toLowerCase();
             if (diskFileLC.endsWith(".json")) {
-                data = di.getJSON(getHash, fLegacy, 0);
+                data = di.getJSON(getHash, fLegacy, 0, archive, source);
             } else {
                 let db = new DataBuffer(di.getSize());
                 if (di.getData(db, fLegacy)) data = db.buffer;
@@ -1159,11 +1165,10 @@ async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
             if (!db) {
                 di = null;
             } else {
-                let hash = getHash(db);
                 if (diskName.endsWith(".psi")) {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {
-                    if (!di.buildDiskFromBuffer(db, hash, forceBPB, sectorIDs, sectorErrors, suppData)) di = null;
+                    if (!di.buildDiskFromBuffer(db, getHash, forceBPB, sectorIDs, sectorErrors, suppData)) di = null;
                 }
             }
         }

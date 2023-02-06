@@ -124,7 +124,7 @@ export default class DiskInfo {
     }
 
     /**
-     * buildDiskFromBuffer(dbDisk, hash, forceBPB, sectorIDs, sectorErrors, suppData)
+     * buildDiskFromBuffer(dbDisk, fnHash, forceBPB, sectorIDs, sectorErrors, suppData)
      *
      * Build a disk image from a DataBuffer.
      *
@@ -158,14 +158,14 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbDisk
-     * @param {string} [hash]
+     * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
      * @param {fForceBPP} [forceBPB]
      * @param {Array|string} [sectorIDs]
      * @param {Array|string} [sectorErrors]
      * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
      * @returns {boolean} true if successful (aDiskData initialized); false otherwise
      */
-    buildDiskFromBuffer(dbDisk, hash, forceBPB, sectorIDs, sectorErrors, suppData)
+    buildDiskFromBuffer(dbDisk, fnHash, forceBPB, sectorIDs, sectorErrors, suppData)
     {
         this.aDiskData = null;
         this.cbDiskData = 0;
@@ -433,7 +433,7 @@ export default class DiskInfo {
                         dbDisk.writeUInt8(DiskInfo.aDefaultBPBs[iBPB][i] || 0, offBootSector + i);
                     }
                     this.printf(Device.MESSAGE.INFO, "BPB has been updated\n");
-                    if (hash) this.fBPBModified = true;
+                    if (fnHash) this.fBPBModified = true;
                 }
                 else if (bByte0 == 0xF6 && bByte1 == 0xF6 && bMediaIDBPB > 0xF8) {
                     /*
@@ -464,7 +464,7 @@ export default class DiskInfo {
             if (dw != 0x50434A53) {
                 dbDisk.write(DiskInfo.PCJS_OEM, DiskInfo.BPB.OEM + offBootSector, DiskInfo.PCJS_OEM.length);
                 this.printf(Device.MESSAGE.INFO, "OEM string has been updated\n");
-                if (hash) this.fBPBModified = true;
+                if (fnHash) this.fBPBModified = true;
             }
         }
 
@@ -524,7 +524,7 @@ export default class DiskInfo {
             cbTrack = nSectorsPerTrack * cbSector;
             let suppObj = this.parseSuppData(suppData);
             this.aDiskData = new Array(nCylinders);
-            if (hash) this.hash = hash;
+            if (fnHash) this.hash = fnHash(dbDisk);
             this.nCylinders = nCylinders;
 
             for (let iCylinder=0; iCylinder < nCylinders; iCylinder++) {
@@ -709,16 +709,17 @@ export default class DiskInfo {
     }
 
     /**
-     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget)
+     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget, fnHash)
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbDisk
      * @param {string} diskName
      * @param {Array.<FileData>} aFileData
      * @param {number} [kbTarget]
+     * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
      * @returns {boolean} true if disk allocation successful, false if not
      */
-    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0)
+    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0, fnHash)
     {
         if (!aFileData || !aFileData.length) {
             return false;
@@ -912,7 +913,7 @@ export default class DiskInfo {
             return false;
         }
 
-        return this.buildDiskFromBuffer(dbDisk);
+        return this.buildDiskFromBuffer(dbDisk, fnHash);
     }
 
     /**
@@ -1379,6 +1380,7 @@ export default class DiskInfo {
         this.fromJSON = false;
         this.abOrigBPB = [];
         this.fBPBModified = false;
+        this.hash = "none";
 
         try {
             imageData = JSON.parse(sData);
@@ -1399,6 +1401,7 @@ export default class DiskInfo {
             if (imageInfo) {
                 let sOrigBPB = imageInfo[DiskInfo.IMAGE.ORIGBPB];
                 if (sOrigBPB) this.abOrigBPB = JSON.parse(sOrigBPB);
+                if (imageInfo.hash) this.hash = imageInfo.hash;
                 if (!this.volTable.length && imageData.volTable) {
                     let volTable = imageData.volTable;
                     for (let iVol = 0; iVol < volTable.length; iVol++) {
@@ -2111,7 +2114,7 @@ export default class DiskInfo {
      * @this {DiskInfo}
      * @param {FileInfo} file
      * @param {boolean} [fComplete] (if not "complete", then the descriptor omits NAME, since PATH includes it, as well as SIZE and VOL when they are zero)
-     * @param {function(Array,string)} [fnHash]
+     * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
      * @returns {Object}
      */
     getFileDesc(file, fComplete, fnHash)
@@ -2203,7 +2206,7 @@ export default class DiskInfo {
      * a HASH property, if the caller provides a hash function.
      *
      * @this {DiskInfo}
-     * @param {function(Array,string)} [fnHash]
+     * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
      * @returns {Array}
      */
     getFileManifest(fnHash)
@@ -3005,7 +3008,7 @@ export default class DiskInfo {
     }
 
     /**
-     * getJSON(fnHash, fLegacy, indent)
+     * getJSON(fnHash, fLegacy, indent, archive, source)
      *
      * If a disk image contains a recognized volume type (eg, FAT12, FAT16), we now prefer to produce an
      * "extended" JSON image, which will include a volume table (of volume descriptors), a file table (of
@@ -3015,12 +3018,14 @@ export default class DiskInfo {
      * To create a "legacy" JSON image, without any "extended" information, set fLegacy to true.
      *
      * @this {DiskInfo}
-     * @param {function(Array,string)} [fnHash]
+     * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
      * @param {boolean} [fLegacy] (must be explicitly set to true to generate a "legacy" JSON disk image)
      * @param {number} [indent] (indentation is not recommended, due to significant bloat)
+     * @param {string} [archive] (archive information, if any)
+     * @param {string} [source] (source information, if any)
      * @returns {string}
      */
-    getJSON(fnHash, fLegacy = false, indent = 0)
+    getJSON(fnHash, fLegacy = false, indent = 0, archive = "", source = "")
     {
         let volTable, fileTable;
         if (!fLegacy) {
@@ -3063,6 +3068,12 @@ export default class DiskInfo {
         };
         if (!this.fBPBModified) {
             delete imageInfo[DiskInfo.IMAGE.ORIGBPB];
+        }
+        if (archive) {
+            imageInfo[DiskInfo.IMAGE.ARCHIVE] = archive;
+        }
+        if (source) {
+            imageInfo[DiskInfo.IMAGE.SOURCE] = source;
         }
         let sImageInfo = JSON.stringify(imageInfo, null, indent + 2);
         let sVolTable, sFileTable;
@@ -3189,6 +3200,17 @@ export default class DiskInfo {
             }
         }
         return sFormat + flags;
+    }
+
+    /**
+     * getHash()
+     *
+     * @this {DiskInfo}
+     * @returns {string}
+     */
+    getHash()
+    {
+        return this.hash;
     }
 
     /**
@@ -3578,7 +3600,9 @@ DiskInfo.IMAGE = {
     ORIGBPB:    'bootSector',
     VERSION:    'version',
     REPOSITORY: 'repository',
-    COMMAND:    'diskdump.js'
+    ARCHIVE:    'archive',          // the type of archive used to create the disk data (eg, .img file, folder, etc)
+    SOURCE:     'source',           // the source of the data (eg, archive.org, pcjs.org, etc)
+    COMMAND:    'diskimage.js'
 };
 
 /*
