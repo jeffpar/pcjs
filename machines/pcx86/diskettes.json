@@ -250,7 +250,7 @@
             "@media": [
               {
                 "@title": "MS Word 1.15 (Program)",
-                "@diskette": "MSWORD-115-PROGRAM.json",
+                "@diskette": "MSWORD-115-PROGRAM-BACKUP.json",
                 "@format": "PC360K",
                 "@kryoflux": true,
                 "@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/index.md"
@@ -6873,7 +6873,9 @@
                   "@title": "Software Carousel 2.0.3",
                   "@diskette": "SOFTWARE-CAROUSEL-203.json",
                   "@photo": ".jpg",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@kryoflux": true,
+                  "@args": "--suppData=/software/pcx86/sys/ext/softlogic/carousel/2.0.3/index.md"
                 }
               ]
             },
@@ -6899,8 +6901,10 @@
                 {
                   "@title": "DoubleDOS 2.1",
                   "@diskette": "DOUBLEDOS.json",
-                  "@format": "PC360K"
-                }
+                  "@format": "PC360K",
+                  "@kryoflux": true,
+                  "@args": "--suppData=/software/pcx86/sys/ext/softlogic/doubledos/2.1/index.md"
+                  }
               ]
             },
             "2.1f": {
@@ -6920,12 +6924,14 @@
                   "@title": "DoubleDOS 2.1V (Disk 1)",
                   "@diskette": "DOUBLEDOS-21V-DISK1.json",
                   "@photo": ".jpg",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@kryoflux": true
                 },
                 {
                   "@title": "DoubleDOS 2.1V (Disk 2)",
                   "@diskette": "DOUBLEDOS-21V-DISK2.json",
-                  "@format": "PC360K"
+                  "@format": "PC360K",
+                  "@kryoflux": true
                 }
               ]
             }

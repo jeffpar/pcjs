@@ -5,7 +5,7 @@
     "A": {"name": "PC DOS 2.00 (Disk 1)"},
     "B": {"name": "PC DOS 2.00 (Disk 2)"}
   },
-  "diskettes": "/machines/pcx86/diskettes.json,/machines/pcx86/private.json,/machines/pcx86/pcsig08a.json,/machines/pcx86/pcsig08b.json",
+  "diskettes": "/machines/pcx86/diskettes.json,/machines/pcx86/pcsig08a.json,/machines/pcx86/pcsig08b.json,/private/pcx86/diskettes.json",
   "server": "/diskettes",
   "style": {
     "float": "left",
