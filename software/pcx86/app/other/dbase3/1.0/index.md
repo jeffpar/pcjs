@@ -321,20 +321,6 @@ so overall, the disks from our private collection may be more authentic.
     01F0| 7E 48 00 70 08 06 18 00 | ~H.p....
     01F8| 18 10 C8 19 E0 CC 83 E3 | ........
 
-    Track RPM : 300 RPM
-
-    Bitrate : VARIABLE
-
-    Track format :
-    ISOIBM_MFM_ENCODING
-
-    Track len : 99613 cells
-    Number of side : 2
-
-    Interface mode:
-    GENERIC_SHUGART_DD_FLOPPYMODE
-    Shugart Interface
-
 The following *diskimage* command was used to reflect the above error in our "dBASE III 1.0 (Disk 1)" disk image:
 
     node diskimage.js --disk=archive/DBIII-100-DISK1-KF.img --output=DBIII-100-DISK1-KF.json --sectorError=39:0:5:272
@@ -409,15 +395,15 @@ So, to simulate failure at just the "write" point, I added the following hard-co
 in [fdc.js](/machines/pcx86/lib/fdc.js):
 
 ```js
-    if (drive.sector['dataError'] && drive.ibSector >= 266) {
+    if (drive.sector['dataError'] && drive.iByte >= 266) {
         break;
     }
 ```
 
-Originally, I didn't allow *any* of the bytes to be written in a sector whose *dataError* property was set, and then I
-decided to let exactly half (256) of the bytes to be written, and neither attempt satisified the copy-protection check.
+Originally, I didn't allow *any* of the bytes to be written in a sector whose *dataError* property was set, and then
+I decided to let exactly half (256) of the bytes to be written, and neither attempt satisfied the copy-protection check.
 It was only after I started debugging the dBASE III code that I discovered I was close, and that by allowing 266 bytes
 to be written, the check would pass.
 
-This hack is now generalized, by setting set the sector's *dataError* property to a number; specifically, the number of
-bytes allowed to be written.
+This hack is now generalized, by allowing a sector's *dataError* property to be set to a number (eg, 266), which is then
+used to limit the number of bytes that can be written to that sector.

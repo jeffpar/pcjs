@@ -3081,7 +3081,7 @@ export default class DiskInfo {
         let sImageInfo = JSON.stringify(imageInfo, null, indent + 2);
         let sVolTable, sFileTable;
         if (volTable) {
-            sVolTable = JSON.stringify(volTable, null, indent + 2);
+            sVolTable = JSON.stringify(volTable, null, indent + 1);
         }
         if (fileTable) {
             sFileTable = '';
@@ -3092,6 +3092,13 @@ export default class DiskInfo {
             sFileTable = '[\n' + sFileTable + '\n]';
         }
         let sDiskData = JSON.stringify(this.aDiskData, null, indent);
+        /*
+         * To make "diskData" slightly more readable/diff-able in the "un-indented" case, I've decided to insert
+         * breaks ("\n  ") in front of every "{".
+         */
+        if (!indent) {
+            sDiskData = sDiskData.replace(/\{/g, "\n  {");
+        }
         let sImageData = "{\n\"" + DiskInfo.DESC.IMAGE + "\": " + sImageInfo + ",\n\"" + (sVolTable? DiskInfo.DESC.VOLUMES + "\": " + sVolTable + ",\n\"" : "") + (sFileTable? DiskInfo.DESC.FILES + "\": " + sFileTable + ",\n\"" : "") + DiskInfo.DESC.DISKDATA + "\":" + sDiskData + "\n}";
         return sImageData;
     }
