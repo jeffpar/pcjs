@@ -206,7 +206,7 @@ function isServerRoot(diskFile)
      * In addition to disk server paths, we had to add /machines (for diskette config files) and /software (for Markdown files
      * containing supplementary copy-protection disk data).
      */
-    return !!(diskFile.match(/^\/(machines|software|diskettes|gamedisks|harddisks|decdisks|discs|private)\//));
+    return !!(diskFile.match(/^\/(machines|software|diskettes|gamedisks|pcsig8a-disks|pcsig8b-disks|harddisks|decdisks|discs|private)\//));
 }
 
 /**
@@ -751,10 +751,10 @@ function readAll(argv)
     }
     let aDiskNames = {};        // we use this table of disk names to detect non-unique disk names
     asCollections.forEach(function readAllCollections(collectionFile) {
-        if (collectionFile.indexOf("/pcsig") >= 0) {
-            if (argv['verbose']) printf("skipping collection %s...\n", collectionFile);
-            return;
-        }
+        // if (collectionFile.indexOf("/pcsig") >= 0) {
+        //     if (argv['verbose']) printf("skipping collection %s...\n", collectionFile);
+        //     return;
+        // }
         collectionFile = collectionFile.substr(rootDir.length);
         if (argv['verbose']) printf("reading collection %s...\n", collectionFile);
         let library = readJSON(collectionFile);
