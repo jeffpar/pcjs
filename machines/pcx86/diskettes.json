@@ -241,7 +241,8 @@
                 "@title": "MS Word 1.10",
                 "@diskette": "MSWORD-110.json",
                 "@format": "PC320K",
-                "@kryoflux": true
+                "@kryoflux": true,
+                "@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/index.md"
               }
             ]
           },
@@ -2760,47 +2761,56 @@
               {
                 "@title": "MS C 5.00 (SETUP)",
                 "@diskette": "MSC500-DISK1-SETUP.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/microsoft-c-c/5x"
               },
               {
                 "@title": "MS C 5.00 (COMPILER)",
                 "@diskette": "MSC500-DISK2-COMPILER.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/microsoft-c-c/5x"
               },
               {
                 "@title": "MS C 5.00 (UTILITY1)",
                 "@diskette": "MSC500-DISK3-UTILITY1.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/microsoft-c-c/5x"
               },
               {
                 "@title": "MS C 5.00 (INCLIBS)",
                 "@diskette": "MSC500-DISK4-INCLIBS.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/microsoft-c-c/5x"
               },
               {
                 "@title": "MS C 5.00 (LIBMC)",
                 "@diskette": "MSC500-DISK5-LIBMC.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/microsoft-c-c/5x"
               },
               {
                 "@title": "MS C 5.00 (LIBL)",
                 "@diskette": "MSC500-DISK6-LIBL.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/microsoft-c-c/5x"
               },
               {
                 "@title": "MS C 5.00 (CODEVIEW)",
                 "@diskette": "MSC500-DISK7-CODEVIEW.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/microsoft-c-c/5x"
               },
               {
                 "@title": "MS C 5.00 (QUICKC)",
                 "@diskette": "MSC500-DISK8-QUICKC.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/microsoft-c-c/5x"
               },
               {
                 "@title": "MS C 5.00 (UTILITY2)",
                 "@diskette": "MSC500-DISK9-UTILITY2.json",
-                "@format": "PC360K"
+                "@format": "PC360K",
+                "@source": "https://winworldpc.com/product/microsoft-c-c/5x"
               }
             ],
             "@documents": [
@@ -2998,42 +3008,36 @@
                 "@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.1-update-1988.pdf"
               }
             ]
-          }
-        },
-        "qcwin": {
-          "@title": "Microsoft QuickC for Windows",
-          "@hidden": true,
-          "@versions": {
-            "1.00": {
-              "@title": "Microsoft QuickC for Windows 1.00",
-              "@media": [
-                {
-                  "@title": "MS QuickC for Windows (1 of 5)",
-                  "@diskette": "MSQCWIN-DISK1.json",
-                  "@format": "PC1200K"
-                },
-                {
-                  "@title": "MS QuickC for Windows (2 of 5)",
-                  "@diskette": "MSQCWIN-DISK2.json",
-                  "@format": "PC1200K"
-                },
-                {
-                  "@title": "MS QuickC for Windows (3 of 5)",
-                  "@diskette": "MSQCWIN-DISK3.json",
-                  "@format": "PC1200K"
-                },
-                {
-                  "@title": "MS QuickC for Windows (4 of 5)",
-                  "@diskette": "MSQCWIN-DISK4.json",
-                  "@format": "PC1200K"
-                },
-                {
-                  "@title": "MS QuickC for Windows (5 of 5)",
-                  "@diskette": "MSQCWIN-DISK5.json",
-                  "@format": "PC1200K"
-                }
-              ]
-            }
+          },
+          "qcwin": {
+            "@title": "Microsoft QuickC for Windows 1.00",
+            "@media": [
+              {
+                "@title": "MS QuickC for Windows (1 of 5)",
+                "@diskette": "MSQCWIN-DISK1.json",
+                "@format": "PC1200K"
+              },
+              {
+                "@title": "MS QuickC for Windows (2 of 5)",
+                "@diskette": "MSQCWIN-DISK2.json",
+                "@format": "PC1200K"
+              },
+              {
+                "@title": "MS QuickC for Windows (3 of 5)",
+                "@diskette": "MSQCWIN-DISK3.json",
+                "@format": "PC1200K"
+              },
+              {
+                "@title": "MS QuickC for Windows (4 of 5)",
+                "@diskette": "MSQCWIN-DISK4.json",
+                "@format": "PC1200K"
+              },
+              {
+                "@title": "MS QuickC for Windows (5 of 5)",
+                "@diskette": "MSQCWIN-DISK5.json",
+                "@format": "PC1200K"
+              }
+            ]
           }
         }
       },
@@ -9717,7 +9721,7 @@
               {
                 "@title": "SPY 386 Monitor 0.1",
                 "@diskette": "SPY01.json",
-                "@format": "PC320K",
+                "@format": "PC1200K",
                 "@archive": "folder"
               }
             ]

@@ -710,6 +710,11 @@ function processDisk(di, diskFile, argv, diskette)
         }
     }
 
+    /*
+     * NOTE: When recreating an IMG file from a JSON file, if the JSON file preserved the original BPB
+     * (which includes the original OEM signature), then you can use --legacy to tell writeDisk() to tell
+     * getData() to restore those BPB bytes as well.  Otherwise, we leave the PCJS_OEM signature, if any, alone.
+     */
     if (!diskette) {
         if (argv['boot']) {
             di.updateBootSector(readFile(argv['boot'], null));
