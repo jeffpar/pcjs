@@ -56,12 +56,12 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --all=nine_princes --checkdisk --rebuild",
+      "name": "Node: diskimage.js --all=[pattern] --checkdisk --rebuild",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all=nine_princes",
+        "--all=MSQCWIN",
         "--checkdisk",
         "--rebuild",
         "--verbose"
