@@ -61,7 +61,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all=MSQCWIN",
+        "--all=pcsig08",
         "--checkdisk",
         "--rebuild",
         "--verbose"
