@@ -38,13 +38,14 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --all --checkdisk",
+      "name": "Node: diskimage.js --all --checkdisk --rebuild",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
         "--all",
         "--checkdisk",
+        "--rebuild",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",

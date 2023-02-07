@@ -1755,7 +1755,7 @@ export default class DiskInfo {
                     if (bpb[DiskInfo.BPB.MEDIA] == idFAT || !bpb[DiskInfo.BPB.MEDIA] && idFAT >= 0xF8) {
                         let cbDiskBPB = (bpb[DiskInfo.BPB.DISKSECS] + (bpb[DiskInfo.BPB.DISKSECS + 1] * 0x100)) * this.cbSector;
                         /*
-                         * With such a heavy reliance on a single byte (idFAT) from the first FAT sector, we're going
+                         * With such a heavy reliance on a single byte (idFAT) from the first FAT sector, we're going to
                          * believe this BPB match only for disks <= 360K.  I would have limited it to 320K (the largest
                          * that DOS 1.x supported), but there's the 360K Microsoft Chart 2.02 disk image (and a few others),
                          * which are a bit "off", so there you go.

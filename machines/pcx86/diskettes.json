@@ -250,7 +250,7 @@
             "@media": [
               {
                 "@title": "MS Word 1.15 (Program)",
-                "@diskette": "MSWORD-115-PROGRAM.json",
+                "@diskette": "MSWORD-115-PROGRAM-BACKUP.json",
                 "@format": "PC360K",
                 "@kryoflux": true,
                 "@args": "--suppData=/software/pcx86/app/microsoft/word/1.15/index.md"
