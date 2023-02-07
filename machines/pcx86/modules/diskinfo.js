@@ -124,7 +124,7 @@ export default class DiskInfo {
     }
 
     /**
-     * buildDiskFromBuffer(dbDisk, fnHash, forceBPB, sectorIDs, sectorErrors, suppData)
+     * buildDiskFromBuffer(dbDisk, forceBPB, fnHash, sectorIDs, sectorErrors, suppData)
      *
      * Build a disk image from a DataBuffer.
      *
@@ -158,14 +158,14 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbDisk
-     * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
      * @param {fForceBPP} [forceBPB]
+     * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
      * @param {Array|string} [sectorIDs]
      * @param {Array|string} [sectorErrors]
      * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
      * @returns {boolean} true if successful (aDiskData initialized); false otherwise
      */
-    buildDiskFromBuffer(dbDisk, fnHash, forceBPB, sectorIDs, sectorErrors, suppData)
+    buildDiskFromBuffer(dbDisk, forceBPB, fnHash, sectorIDs, sectorErrors, suppData)
     {
         this.aDiskData = null;
         this.cbDiskData = 0;
@@ -709,7 +709,7 @@ export default class DiskInfo {
     }
 
     /**
-     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget, fnHash)
+     * buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget, fnHash, sectorIDs, sectorErrors, suppData)
      *
      * @this {DiskInfo}
      * @param {DataBuffer} dbDisk
@@ -717,9 +717,12 @@ export default class DiskInfo {
      * @param {Array.<FileData>} aFileData
      * @param {number} [kbTarget]
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
+     * @param {Array|string} [sectorIDs]
+     * @param {Array|string} [sectorErrors]
+     * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
      * @returns {boolean} true if disk allocation successful, false if not
      */
-    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0, fnHash)
+    buildDiskFromFiles(dbDisk, diskName, aFileData, kbTarget = 0, fnHash, sectorIDs, sectorErrors, suppData)
     {
         if (!aFileData || !aFileData.length) {
             return false;
@@ -913,7 +916,7 @@ export default class DiskInfo {
             return false;
         }
 
-        return this.buildDiskFromBuffer(dbDisk, fnHash);
+        return this.buildDiskFromBuffer(dbDisk, undefined, fnHash, sectorIDs, sectorErrors, suppData);
     }
 
     /**

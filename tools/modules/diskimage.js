@@ -105,7 +105,7 @@ function createDisk(diskFile, diskette, argv)
         diskette.command = "--dir " + name;
         let match = diskette.format && diskette.format.match(/^PC([0-9]+)K/);
         let kbTarget = match && +match[1] || 0;
-        di = readDir(sArchiveFile, diskette.label, diskette.normalize, kbTarget);
+        di = readDir(sArchiveFile, diskette.label, diskette.normalize, kbTarget, undefined, sectorIDs, sectorErrors, suppData);
     } else {
         diskette.command = "--disk " + name;
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
@@ -800,16 +800,19 @@ function readAll(argv)
 }
 
 /**
- * readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
+ * readDir(sDir, sLabel, fNormalize, kbTarget, nMax, sectorIDs, sectorErrors, suppData)
  *
  * @param {string} sDir (directory name)
  * @param {string} [sLabel] (if not set with --label, then basename(sDir) will be used instead)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
+ * @param {Array|string} [sectorIDs]
+ * @param {Array|string} [sectorErrors]
+ * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
  * @returns {DiskInfo|null}
  */
-function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
+function readDir(sDir, sLabel, fNormalize, kbTarget, nMax, sectorIDs, sectorErrors, suppData)
 {
     let di, diskName;
     if (sDir.endsWith('/')) {
@@ -829,7 +832,7 @@ function readDir(sDir, sLabel, fNormalize, kbTarget, nMax)
         let aFileData = readDirFiles(sDir, sLabel, fNormalize, 0);
         di = new DiskInfo(device);
         let db = new DataBuffer();
-        if (!di.buildDiskFromFiles(db, diskName, aFileData, kbTarget || 0, getHash)) {
+        if (!di.buildDiskFromFiles(db, diskName, aFileData, kbTarget || 0, getHash, sectorIDs, sectorErrors, suppData)) {
             di = null;
         }
     } catch(err) {
@@ -983,7 +986,7 @@ function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
                 if (diskName.endsWith(".psi")) {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {
-                    if (!di.buildDiskFromBuffer(db, getHash, forceBPB, sectorIDs, sectorErrors, suppData)) di = null;
+                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
                 }
             }
         }
@@ -1168,7 +1171,7 @@ async function readDiskAsync(diskFile, forceBPB, sectorIDs, sectorErrors, suppDa
                 if (diskName.endsWith(".psi")) {
                     if (!di.buildDiskFromPSI(db)) di = null;
                 } else {
-                    if (!di.buildDiskFromBuffer(db, getHash, forceBPB, sectorIDs, sectorErrors, suppData)) di = null;
+                    if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
                 }
             }
         }
