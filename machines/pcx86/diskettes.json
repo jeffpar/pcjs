@@ -519,7 +519,7 @@
             "@media": [
               {
                 "@title": "dBASE III 1.0 (Disk 1)",
-                "@diskette": "DBIII-100-DISK1.json",
+                "@diskette": "DBIII-100-DISK1-KF.json",
                 "@format": "PC360K",
                 "@args": "--sectorError=39:0:5:272",
                 "@kryoflux": true
@@ -1627,7 +1627,8 @@
               "@title": "Adventures in Math 1.00",
               "@diskette": "ADVENTMATH-100.json",
               "@format": "PC160K",
-              "@source": ""
+              "@label": "ADVEMATH100",
+              "@source": "https://archive.org/details/large_dos_collection_2013_08"
             }
           ],
           "@author": "Scott A. Harris",
