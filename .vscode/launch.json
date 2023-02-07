@@ -56,6 +56,24 @@
       ]
     },
     {
+      "name": "Node: diskimage.js --all=nine_princes --checkdisk --rebuild",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "args": [
+        "--all=nine_princes",
+        "--checkdisk",
+        "--rebuild",
+        "--verbose"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskimage.js --all --checkpage --rebuild",
       "type": "node",
       "request": "launch",
@@ -73,13 +91,13 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --disk SOFTWARE-CAROUSEL.img",
+      "name": "Node: diskimage.js --disk SOFTWARE-CAROUSEL-203.img",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--disk=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/archive/SOFTWARE-CAROUSEL.img",
-        "--output=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL.json",
+        "--disk=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/archive/SOFTWARE-CAROUSEL-203.img",
+        "--output=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL-203.json",
         "--suppData=/software/pcx86/sys/ext/softlogic/carousel/2.0.3/index.md",
         "--overwrite"
       ],
@@ -91,12 +109,12 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --disk SOFTWARE-CAROUSEL.json --list",
+      "name": "Node: diskimage.js --disk SOFTWARE-CAROUSEL-203.json --list",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--disk=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL.json",
+        "--disk=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL-203.json",
         "--list"
       ],
       "cwd": "${workspaceFolder}",

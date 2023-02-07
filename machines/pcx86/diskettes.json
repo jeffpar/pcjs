@@ -1928,14 +1928,17 @@
             {
               "@title": "Nine Princes in Amber (Disk A)",
               "@diskette": "NINE-PRINCES-A.json",
-              "@archive": ".img",
+              "@label": "AMBER-1",
+              "@archive": "folder",
               "@format": "PC360K",
-              "@kryoflux": true
+              "@kryoflux": true,
+              "@args": "--suppData=/software/pcx86/game/other/1985/nine_princes/index.md"
             },
             {
               "@title": "Nine Princes in Amber (Disk B)",
               "@diskette": "NINE-PRINCES-B.json",
-              "@archive": ".img",
+              "@label": "AMBER-2",
+              "@archive": "folder",
               "@format": "PC360K",
               "@kryoflux": true
             }
