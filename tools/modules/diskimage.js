@@ -739,11 +739,11 @@ function processDisk(di, diskFile, argv, diskette)
 function readAll(argv)
 {
     let family = "pcx86";
-    let asServers = ["diskettes", "gamedisks", "private"];
+    let asServers = ["diskettes", "gamedisks", "pcsig8a-disks", "pcsig8b-disks", "private"];
     let cCollections = 0, cDisks = 0;
     let asCollections = [];
     asServers.forEach((server) => {
-        asCollections = asCollections.concat(glob.sync(path.join(rootDir, "/" + server + "/" + family + "/*.json")));
+        asCollections = asCollections.concat(glob.sync(path.join(rootDir, "/" + server + "/" + family + "/diskettes.json")));
     });
     let messages;
     if (argv['quiet']) {
