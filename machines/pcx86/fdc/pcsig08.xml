@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<fdc id="fdcNEC" pos="left" padLeft="8px" padBottom="8px" diskettes="/machines/pcx86/diskettes.json,/private/pcx86/diskettes.json">
+<fdc id="fdcNEC" pos="left" padLeft="8px" padBottom="8px" diskettes="/diskettes/pcx86/diskettes.json,/gamedisks/pcx86/diskettes.json,/private/pcx86/diskettes.json">
 	<control type="list" binding="listDrives"/>
 	<control type="list" binding="listDisks">
 		<disk path="/pcsig8a-disks/pcx86/shareware/pcsig08/DISK0001.json">PCSIG08: DISK0001</disk>

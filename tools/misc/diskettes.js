@@ -180,7 +180,7 @@ function processFolders(sDir)
 {
     let dirParts = sDir.split(path.sep);
     let dirServer = dirParts[0].length? dirParts[0] : dirParts[1];
-    let dirDiskettes = (dirServer == "private"? dirServer : "machines");
+    let dirDiskettes = (dirServer == "private"? dirServer : "diskettes");
     let prefixDir = path.join(rootDir, sDir, "pcx86");
     let asFiles = glob.sync(path.join(prefixDir, "**", "archive", "*.img"));
     let diskettes = JSON.parse(fs.readFileSync(path.join(rootDir, dirDiskettes, "pcx86", "diskettes.json"), {encoding: "utf8"}));
