@@ -21,7 +21,7 @@ let proclib = require("../../machines/shared/lib/proclib");
 let args = proclib.getArgs();
 
 let idAttrs = '@';
-let sRootDir = "../..";
+let moduleDir, rootDir, rootRelative = "../..";
 
 let remappings = {
     "/apps": "/app",
@@ -133,11 +133,11 @@ function processFiles(sDir, diskettes)
                     fileCopy(srcImage, dstImage);
                 }
                 if (i == 0) {
-                    srcPath = path.dirname(srcPath.replace("/disks-demo/", "/disks/")) + "/README.md";
+                    srcPath = path.dirname(srcPath.replace("/disks-demo/", "/disks/")) + "/index.md";
                     let permalink = path.dirname(paths[1].replace(/\/diskettes\//, "/software/")) + "/";
-                    dstPath = "../.." + permalink + "README.md";
+                    dstPath = rootRelative + permalink + "index.md";
                     if (!fileExists(srcPath)) {
-                        printf("warning: no README at %s\n", srcPath);
+                        printf("warning: no index.md at %s\n", srcPath);
                     }
                     else if (!fileExists(dstPath)) {
                         printf("mv %s %s\n", srcPath, dstPath);
@@ -171,12 +171,84 @@ function processFiles(sDir, diskettes)
 }
 
 /**
+ * processFolders(sDir)
+ *
+ * @param {string} sDir
+ * @returns {Object}
+ */
+function processFolders(sDir)
+{
+    let dirParts = sDir.split(path.sep);
+    let dirServer = dirParts[0].length? dirParts[0] : dirParts[1];
+    let dirDiskettes = (dirServer == "private"? dirServer : "machines");
+    let prefixDir = path.join(rootDir, sDir, "pcx86");
+    let asFiles = glob.sync(path.join(prefixDir, "**", "archive", "*.img"));
+    let diskettes = JSON.parse(fs.readFileSync(path.join(rootDir, dirDiskettes, "pcx86", "diskettes.json"), {encoding: "utf8"}));
+    /*
+     * Make sure that every IMG file located directly underneath an "archive" folder is represented in the JSON file.
+     */
+    asFiles.forEach((imgFile) => {
+        let imgPath = imgFile.slice(prefixDir.length + 1);
+        let imgParts = imgPath.split(path.sep);
+        if (imgParts[imgParts.length-2] != "archive") return;
+        /*
+         * Here's an example:
+         *
+         *      util/other/pctools/1.03/archive/PCTOOLS103.img
+         *
+         * So we look for a ['@media'] array at ['util']['other']['pctools']['@versions']['1.03']....
+         */
+        printf("processing %s...\n", imgPath);
+        let i;
+        let diskObj = diskettes;
+        for (i = 0; i < imgParts.length && diskObj; i++) {
+            if (imgParts[i] != "archive") {
+                let obj = diskObj[imgParts[i]];
+                if (!obj) {
+                    obj = diskObj['@versions'] && (diskObj['@versions'][imgParts[i]] || diskObj['@versions']['']);
+                }
+                diskObj = obj;
+            }
+            else {
+                /*
+                 * At this point, we need to look through the current disk object's '@media' array for a mediaItem
+                 * object whose '@diskette' contains the JSON version of the final imgPart (or whose '@archive' matches
+                 * the final imgPart).
+                 */
+                let media = diskObj['@media'];
+                if (!media) {
+                    media = diskObj['@versions'] && diskObj['@versions'][''] && diskObj['@versions']['']['@media'];
+                }
+                diskObj = null;
+                let jsonName = imgParts[++i].replace(".img", ".json");
+                if (media) {
+                    let m;
+                    for (let m = 0; m < media.length; m++) {
+                        if (media[m]['@diskette'] == jsonName) {
+                            diskObj = media[m];
+                            break;
+                        }
+                        if (media[m]['@archive'] == imgParts[i]) {
+                            diskObj = media[m];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (!diskObj) {
+            printf("\tfailed to find %s in diskettes.json\n", imgPath);
+        }
+    });
+}
+
+/**
  * processManifests(sDir, output, fDebug)
  *
  * @param {string} sDir
  * @param {boolean|string} output
  * @param {boolean} [fDebug] (true if --debug is specified on the command-line)
- * @return {Object}
+ * @returns {Object}
  */
 function processManifests(sDir, output, fDebug)
 {
@@ -269,7 +341,7 @@ function processManifests(sDir, output, fDebug)
  * @param {number} iTag
  * @param {function(Error)} done
  * @param {boolean} [fDebug]
- * @return {boolean}
+ * @returns {boolean}
  */
 function readXML(xml, sNode, sFile, aTags, iTag, done, fDebug)
 {
@@ -298,7 +370,7 @@ function readXML(xml, sNode, sFile, aTags, iTag, done, fDebug)
                         if (attrs) {
                             for (let attr in attrs) {
                                 if (attr == "ref") {
-                                    let sFileXML = sRootDir + attrs[attr];
+                                    let sFileXML = rootRelative + attrs[attr];
                                     readXML(xml, sTag, sFileXML, aTagsXML, iTagXML, done, fDebug);
                                 }
                             }
@@ -351,16 +423,44 @@ if (args.argc < 2) {
     printf("usage: node diskettes.js [directory] [options]\n");
 } else {
     let argv = args.argv;
+    let argv0 = argv[0].split(' ');
+    moduleDir = path.dirname(argv0[0]);
+    rootDir = path.join(moduleDir, rootRelative);
     let sDir = argv[1].replace(/^~/, os.homedir());
     let output = argv['output'];
     let fDebug = argv['debug'];
-    let diskettes = processManifests(sDir, output, fDebug);
-    if (processFiles(sDir, diskettes)) {
-        let json = strlib.sprintf("%2j\n", diskettes);
-        if (typeof output == "string") {
-            fs.writeFileSync(output, json);
-        } else {
-            printf(json);
+    /*
+     * The use of "manifest.xml" files to describe collections of diskettes and their contents was an artifact of PCjs v1
+     * (https://github.com/jeffpar/pcjs.v1)
+     *
+     * Here's an example:
+     *
+     *      https://github.com/jeffpar/old-demo-disks/blob/4af827d8f2ba957939bb81a6ceda3946f31287c7/pcx86/apps/ibm/exploring/manifest.xml
+     *
+     * I'm still a fan of XML files, but PCjs v2 was built with the realization that XML files have become "second-class
+     * citizens" when compared to JSON files (in spite of JSON's more primitive and artificially restrictive format) so I
+     * began the migration from XML to JSON.  XML files are still being used in a few areas (eg, "legacy" machine definition
+     * files, where the amount of conversion work outweighs any benefit), but they are no longer used for diskette manifests.
+     *
+     * This tool was originally created to assist with the migration from multiple "manifest.xml" files to a centralized
+     * "diskettes.json" file, and to create corresponding "index.md" files in the "/software" folder of the PCjs v2 repository.
+     * Since that was largely a one-time migration, you now have to specify the "--manifests" option if you really want to
+     * run that code again.
+     *
+     * Now the primary purpose of this tool is to scan folders for diskettes that have not yet been added to "diskettes.json".
+     */
+    if (argv['manifests']) {
+        let diskettes = processManifests(sDir, output, fDebug);
+        if (processFiles(sDir, diskettes)) {
+            let json = strlib.sprintf("%2j\n", diskettes);
+            if (typeof output == "string") {
+                fs.writeFileSync(output, json);
+            } else {
+                printf(json);
+            }
         }
+    }
+    else {
+        let diskettes = processFolders(sDir);
     }
 }
