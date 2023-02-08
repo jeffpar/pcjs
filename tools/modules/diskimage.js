@@ -739,7 +739,7 @@ function processDisk(di, diskFile, argv, diskette)
 function readAll(argv)
 {
     let family = "pcx86";
-    let asServers = ["machines", "private"];
+    let asServers = ["diskettes", "gamedisks", "private"];
     let cCollections = 0, cDisks = 0;
     let asCollections = [];
     asServers.forEach((server) => {

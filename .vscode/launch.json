@@ -20,15 +20,29 @@
       ]
     },
     {
-      "name": "Node: diskdump.js (deprecated)",
+      "name": "Node: diskettes.js /diskettes",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/old/diskdump/bin/diskdump",
+      "program": "${workspaceFolder}/tools/misc/diskettes.js",
       "args": [
-        "--disk=gamedisks/pcx86/game/other/1984/kings_quest1/archive/disk1.psi",
-        "--format=json",
-        "--output=disk1.json",
-        "--overwrite"
+        "/diskettes",
+        "--verbose"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskettes.js /private",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/misc/diskettes.js",
+      "args": [
+        "/private",
+        "--verbose"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -116,6 +130,24 @@
       "args": [
         "--disk=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL-203.json",
         "--list"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskdump.js (deprecated)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/old/diskdump/bin/diskdump",
+      "args": [
+        "--disk=gamedisks/pcx86/game/other/1984/kings_quest1/archive/disk1.psi",
+        "--format=json",
+        "--output=disk1.json",
+        "--overwrite"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
