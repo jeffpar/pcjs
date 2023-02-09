@@ -44,7 +44,7 @@ which translates to these commands (using a 360K PC diskette named "disk1" as an
 
 ## Building PCjs Disk Images from Directories
 
-To build a [VisiCalc diskette](https://diskettes.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
+To build a [VisiCalc diskette](https://miscdisks.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
 from a directory containing VC.COM, specify the name of the directory, including a trailing slash, like so:
 
     node modules/diskimage.js /miscdisks/pcx86/app/other/visicalc/1981/VISICALC-1981/ VISICALC-1981.json
@@ -76,11 +76,12 @@ or with one of PCjs' implicit diskette paths, such as `/diskettes`, which curren
 If you happen to have a local file that exists in the same location as the implicit diskette path, use `--server` to force
 the server mapping.  The list of implicit paths for PC diskettes currently includes:
 
-  - /diskettes
-  - /gamedisks
-  - /harddisks
-  - /pcsig8a-disks
-  - /pcsig8b-disks
+  - [/diskettes](https://github.com/jeffpar/pcjs-diskettes)
+  - [/gamedisks](https://github.com/jeffpar/pcjs-gamedisks)
+  - [/miscdisks](https://github.com/jeffpar/pcjs-miscdisks)
+  - [/pcsig8a-disks](https://github.com/jeffpar/pcjs-pcsig8a-disks)
+  - [/pcsig8b-disks](https://github.com/jeffpar/pcjs-pcsig8b-disks)
+  - [/harddisks](https://github.com/jeffpar/pcjs-harddisks)
 
 ## Commonly Used DiskImage Options
 
