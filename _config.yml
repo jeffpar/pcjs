@@ -30,6 +30,7 @@ exclude:
   - /discs
   - /diskettes
   - /gamedisks
+  - /miscdisks
   - /harddisks
   - /private
   - /node_modules
