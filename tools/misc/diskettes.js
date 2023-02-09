@@ -171,12 +171,13 @@ function processFiles(sDir, diskettes)
 }
 
 /**
- * processFolders(sDir)
+ * processFolders(sDir, argv)
  *
  * @param {string} sDir
+ * @param {Object} argv
  * @returns {Object}
  */
-function processFolders(sDir)
+function processFolders(sDir, argv)
 {
     let dirParts = sDir.split(path.sep);
     let dirServer = dirParts[0].length? dirParts[0] : dirParts[1];
@@ -189,8 +190,12 @@ function processFolders(sDir)
      */
     asFiles.forEach((imgFile) => {
         let imgPath = imgFile.slice(prefixDir.length + 1);
+
+        if (typeof argv['filter'] == "string" && imgPath.indexOf(argv['filter']) < 0) return;
+
         let imgParts = imgPath.split(path.sep);
         if (imgParts[imgParts.length-2] != "archive") return;
+
         /*
          * Here's an example:
          *
@@ -199,9 +204,11 @@ function processFolders(sDir)
          * So we look for a ['@media'] array at ['util']['other']['pctools']['@versions']['1.03']....
          */
         printf("processing %s...\n", imgPath);
+
         let i;
+        let lastObj, lastPart;
         let diskObj = diskettes;
-        for (i = 0; i < imgParts.length && diskObj; i++) {
+        for (i = 0; i < imgParts.length; i++) {
             if (imgParts[i] != "archive") {
                 let obj = diskObj[imgParts[i]];
                 if (!obj) {
@@ -235,6 +242,9 @@ function processFolders(sDir)
                     }
                 }
             }
+            if (!diskObj) break;
+            lastObj = diskObj;
+            lastPart = i;
         }
         if (!diskObj) {
             printf("\tfailed to find %s in diskettes.json\n", imgPath);
@@ -461,6 +471,6 @@ if (args.argc < 2) {
         }
     }
     else {
-        let diskettes = processFolders(sDir);
+        let diskettes = processFolders(sDir, argv);
     }
 }
