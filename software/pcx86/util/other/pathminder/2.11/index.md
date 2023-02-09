@@ -37,4 +37,4 @@ machines:
 
 ### Online References
 
-[![PathMinder 2.11 (1985)]({{ site.software.diskettes.server }}/pcx86/util/other/pathminder/2.11/PathMinder_V211-1985.jpg)](https://archive.org/details/path-minder-v-211-1985)
+[![PathMinder 2.11 (1985)]({{ site.software.miscdisks.server }}/pcx86/util/other/pathminder/2.11/PathMinder_V211-1985.jpg)](https://archive.org/details/path-minder-v-211-1985)

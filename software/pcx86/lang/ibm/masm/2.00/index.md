@@ -51,4 +51,4 @@ Directory listing of the 320Kb distribution diskette is provided below.
            26 file(s)     304445 bytes
                             8192 bytes free
 
-![IBM Macro Assembler 2.00]({{ site.software.diskettes.server }}/pcx86/lang/ibm/masm/2.00/IBM-MASM-200.jpg)
+![IBM Macro Assembler 2.00]({{ site.software.miscdisks.server }}/pcx86/lang/ibm/masm/2.00/IBM-MASM-200.jpg)

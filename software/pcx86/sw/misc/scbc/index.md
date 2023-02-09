@@ -29,4 +29,4 @@ machines:
             6 file(s)     352901 bytes
                             5120 bytes free
 
-![Small Computer Book Club (1990)]({{ site.software.diskettes.server }}/pcx86/sw/misc/scbc/SCBC-1990.jpg)
+![Small Computer Book Club (1990)]({{ site.software.miscdisks.server }}/pcx86/sw/misc/scbc/SCBC-1990.jpg)

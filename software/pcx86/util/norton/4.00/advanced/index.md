@@ -78,10 +78,10 @@ We also have copies of [Version 4.00 (Standard Edition)](../) from both March 1,
 
 ### Diskette Photos
 
-![Norton Utilities 4.00 (Adv 1)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK1.jpg)
+![Norton Utilities 4.00 (Adv 1)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK1.jpg)
 
-![Norton Utilities 4.00 (Adv 2)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK2.jpg)
+![Norton Utilities 4.00 (Adv 2)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK2.jpg)
 
-![Norton Utilities 4.00 (Box Front)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-BOX-FRONT.jpg)
+![Norton Utilities 4.00 (Box Front)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-BOX-FRONT.jpg)
 
-![Norton Utilities 4.00 (Box Back)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-BOX-BACK.jpg)
+![Norton Utilities 4.00 (Box Back)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-BOX-BACK.jpg)

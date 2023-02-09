@@ -38,4 +38,4 @@ For more information about this software, see the [PCjs blog](/blog/2018/04/01/)
            12 file(s)     128236 bytes
                            29696 bytes free
 
-![Exploring the IBM PC (MDA)]({{ site.software.diskettes.server }}/pcx86/demo/ibm/exploring/1.00-MDA/EXPLORING-THE-IBM-PC-100-MDA.jpg)
+![Exploring the IBM PC (MDA)]({{ site.software.miscdisks.server }}/pcx86/demo/ibm/exploring/1.00-MDA/EXPLORING-THE-IBM-PC-100-MDA.jpg)

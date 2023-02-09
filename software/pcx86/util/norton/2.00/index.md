@@ -48,7 +48,7 @@ are provided below.
            13 file(s)     150378 bytes
                             6144 bytes free
 
-![Norton Utilities 2.00 (Side A)]({{ site.software.diskettes.server }}/pcx86/util/norton/2.00/NU200-SIDEA.jpg)
+![Norton Utilities 2.00 (Side A)]({{ site.software.miscdisks.server }}/pcx86/util/norton/2.00/NU200-SIDEA.jpg)
 
 ### Directory of Norton Utilities 2.00 (Side B)
 
@@ -68,4 +68,4 @@ are provided below.
            10 file(s)     140793 bytes
                            17408 bytes free
 
-![Norton Utilities 2.00 (Side B)]({{ site.software.diskettes.server }}/pcx86/util/norton/2.00/NU200-SIDEB.jpg)
+![Norton Utilities 2.00 (Side B)]({{ site.software.miscdisks.server }}/pcx86/util/norton/2.00/NU200-SIDEB.jpg)

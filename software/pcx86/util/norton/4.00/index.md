@@ -126,6 +126,6 @@ We also have a copy of [Version 4.00 (Advanced Edition)](advanced/), which conta
 
 ### Diskette Photos
 
-![Norton Utilities 4.00 (1987-05-15 #1)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/NU400-1987-05-15-DISK1.jpg)
+![Norton Utilities 4.00 (1987-05-15 #1)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/NU400-1987-05-15-DISK1.jpg)
 
-![Norton Utilities 4.00 (1987-05-15 #2)]({{ site.software.diskettes.server }}/pcx86/util/norton/4.00/NU400-1987-05-15-DISK2.jpg)
+![Norton Utilities 4.00 (1987-05-15 #2)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/NU400-1987-05-15-DISK2.jpg)

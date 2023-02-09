@@ -40,4 +40,4 @@ For more information about this software, see the [PCjs blog](/blog/2018/04/01/)
            15 file(s)     136732 bytes
                            20480 bytes free
 
-![Exploring the IBM PC (CGA)]({{ site.software.diskettes.server }}/pcx86/demo/ibm/exploring/1.00-CGA/EXPLORING-THE-IBM-PC-100-CGA.jpg)
+![Exploring the IBM PC (CGA)]({{ site.software.miscdisks.server }}/pcx86/demo/ibm/exploring/1.00-CGA/EXPLORING-THE-IBM-PC-100-CGA.jpg)

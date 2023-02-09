@@ -71,4 +71,4 @@ The following documentation is available online:
            28 file(s)     276056 bytes
                            69632 bytes free
 
-![Borland Turbo Pascal 3.01A]({{ site.software.diskettes.server }}/pcx86/lang/borland/pascal/3.01a/TURBO-PASCAL-301A-8087-BCD.jpg)
+![Borland Turbo Pascal 3.01A]({{ site.software.miscdisks.server }}/pcx86/lang/borland/pascal/3.01a/TURBO-PASCAL-301A-8087-BCD.jpg)

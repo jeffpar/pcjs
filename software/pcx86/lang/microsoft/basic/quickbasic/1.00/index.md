@@ -240,4 +240,4 @@ and a copy of the [README](#readmedoc).
 
 ---
 
-![MS QuickBASIC 1.00]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/basic/quickbasic/1.00/MS-QUICKBASIC-100.jpg)
+![MS QuickBASIC 1.00]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/basic/quickbasic/1.00/MS-QUICKBASIC-100.jpg)

@@ -78,6 +78,6 @@ machines:
            24 file(s)     148486 bytes
                             5632 bytes free
 
-![IBM Multiplan 1.00 (Program)]({{ site.software.diskettes.server }}/pcx86/app/ibm/multiplan/1.00/MULTIPLAN-IBM100-PROGRAM.jpg)
+![IBM Multiplan 1.00 (Program)]({{ site.software.miscdisks.server }}/pcx86/app/ibm/multiplan/1.00/MULTIPLAN-IBM100-PROGRAM.jpg)
 
-![IBM Multiplan 1.00 (Tutorial)]({{ site.software.diskettes.server }}/pcx86/app/ibm/multiplan/1.00/MULTIPLAN-IBM100-TUTORIAL.jpg)
+![IBM Multiplan 1.00 (Tutorial)]({{ site.software.miscdisks.server }}/pcx86/app/ibm/multiplan/1.00/MULTIPLAN-IBM100-TUTORIAL.jpg)

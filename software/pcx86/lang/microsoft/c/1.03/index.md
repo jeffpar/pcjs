@@ -39,7 +39,7 @@ machines:
            14 file(s)     157184 bytes
                                0 bytes free
 
-![MS C 1.03 Beta (Disk 1)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK1.jpg)
+![MS C 1.03 Beta (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK1.jpg)
 
 ### Directory of MS C 1.03 Beta (Disk 2)
 
@@ -56,4 +56,4 @@ machines:
             7 file(s)      69956 bytes
                            89088 bytes free
 
-![MS C 1.03 Beta (Disk 2)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK2.jpg)
+![MS C 1.03 Beta (Disk 2)]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK2.jpg)
