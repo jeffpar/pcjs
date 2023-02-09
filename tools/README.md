@@ -47,7 +47,7 @@ which translates to these commands (using a 360K PC diskette named "disk1" as an
 To build a [VisiCalc diskette](https://diskettes.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
 from a directory containing VC.COM, specify the name of the directory, including a trailing slash, like so:
 
-    node modules/diskimage.js /diskettes/pcx86/app/other/visicalc/1981/VISICALC-1981/ VISICALC-1981.json
+    node modules/diskimage.js /miscdisks/pcx86/app/other/visicalc/1981/VISICALC-1981/ VISICALC-1981.json
 
 By default, the diskette will be given an 11-character volume label derived from the directory name (eg, "VISICALC-19");
 however, you can use `--label` to specify your own label (eg, `--label=VISICALC81`), or use `--label=none` to suppress
