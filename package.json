@@ -39,6 +39,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-foreach": "^0.1.0",
     "gulp-header": "^2.0.9",
+    "gulp-merge-json": "^2.1.2",
     "gulp-newer": "^1.4.0",
     "gulp-replace": "^1.0.0",
     "gulp-sourcemaps": "^2.6.5",

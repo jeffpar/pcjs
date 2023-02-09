@@ -1,23 +1,23 @@
 ## PCjs Disk Images
 
-PCjs 2.0 disk images are JSON objects with the following properties:
+PCjs v2 (version 2.x) disk images are JSON objects with the following properties:
 
   - *imageInfo*: an object describing the type of disk (eg, "CHS") and other characteristics
-  - *volTable*: an Array of VolInfo objects, one for each logical FAT volume on the disk (optional)
-  - *fileTable*: an Array of FileInfo objects, one for each file across all FAT volumes on the disk (optional)
-  - *diskData*: an Array of sector data; for "CHS" disk images, the data is organized as an array of sectors within an array of heads within an array of cylinders
+  - *volTable*: an array of VolInfo objects, one for each logical FAT volume on the disk (optional)
+  - *fileTable*: an array of FileInfo objects, one for each file across all FAT volumes on the disk (optional)
+  - *diskData*: an array of sector data; for CHS disk images, the data is organized as an array of sectors within an array of heads within an array of cylinders
 
 For example, take a look at this [PC DOS 2.00 diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json).
 
-Older (PCjs 1.0) disk images were basically just an Array of sector data (what is now called the *diskData* object), without
-any other information.  Such disk images are still supported, but all the disk images now stored on PCjs disk servers,
-such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to the 2.0 format.
+Older PCjs v1 (version 1.x) disk images were basically just an array of CHS sector data (what is now called the *diskData* object),
+without any other information.  Such disk images are still supported, but all the disk images now stored on PCjs disk servers,
+such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to the v2 format.
 
 ## PCjs DiskImage Utility
 
-[DiskImage](modules/diskimage.js) is a Node command-line application that reads/writes PCjs 2.0 disk images.
-[DiskInfo](../machines/pcx86/modules/diskinfo.js) module for reading and writing PCjs disk images.
-[DiskImage](modules/diskimage.js) supersedes the older PCjs 1.0 [DiskDump](old/diskdump/lib/diskdump.js) utility.
+[DiskImage](modules/diskimage.js) is a Node command-line application that reads/writes PCjs v2 disk images,
+using the [DiskInfo](../machines/pcx86/modules/diskinfo.js) PCx86 machine module to parse the data.
+[DiskImage](modules/diskimage.js) supersedes the older PCjs v1 [DiskDump](old/diskdump/lib/diskdump.js) utility.
 
 ## Building PCjs Disk Images from IMG files
 
@@ -44,10 +44,10 @@ which translates to these commands (using a 360K PC diskette named "disk1" as an
 
 ## Building PCjs Disk Images from Directories
 
-To build a [VisiCalc diskette](https://diskettes.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
+To build a [VisiCalc diskette](https://miscdisks.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
 from a directory containing VC.COM, specify the name of the directory, including a trailing slash, like so:
 
-    node modules/diskimage.js /diskettes/pcx86/app/other/visicalc/1981/VISICALC-1981/ VISICALC-1981.json
+    node modules/diskimage.js /miscdisks/pcx86/app/other/visicalc/1981/VISICALC-1981/ VISICALC-1981.json
 
 By default, the diskette will be given an 11-character volume label derived from the directory name (eg, "VISICALC-19");
 however, you can use `--label` to specify your own label (eg, `--label=VISICALC81`), or use `--label=none` to suppress
@@ -76,11 +76,12 @@ or with one of PCjs' implicit diskette paths, such as `/diskettes`, which curren
 If you happen to have a local file that exists in the same location as the implicit diskette path, use `--server` to force
 the server mapping.  The list of implicit paths for PC diskettes currently includes:
 
-  - /diskettes
-  - /gamedisks
-  - /harddisks
-  - /pcsig8a-disks
-  - /pcsig8b-disks
+  - [/diskettes](https://github.com/jeffpar/pcjs-diskettes)
+  - [/gamedisks](https://github.com/jeffpar/pcjs-gamedisks)
+  - [/miscdisks](https://github.com/jeffpar/pcjs-miscdisks)
+  - [/pcsig8a-disks](https://github.com/jeffpar/pcjs-pcsig8a-disks)
+  - [/pcsig8b-disks](https://github.com/jeffpar/pcjs-pcsig8b-disks)
+  - [/harddisks](https://github.com/jeffpar/pcjs-harddisks)
 
 ## Commonly Used DiskImage Options
 

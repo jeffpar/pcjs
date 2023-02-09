@@ -359,11 +359,11 @@ Here's how you can use [DiskDump]({{ site.github.pages }}/tools/old/diskdump/) t
 required, because BPB modification only happens when converting an IMG file to a JSON file; the second DiskDump command
 converts the modified JSON back into an IMG file.
 
-	diskdump --disk=archive/COMPAQ-DOS110B-ORIG.img --format=json --forceBPB --output=COMPAQ-DOS110B.json
+	node tools/old/diskdump/bin/diskdump.js --disk=archive/COMPAQ-DOS110B-ORIG.img --format=json --forceBPB --output=COMPAQ-DOS110B.json
 	warning: BPB has been updated
 	327680-byte disk image saved to COMPAQ-DOS110B-BPB.json
 	
-	diskdump --disk=COMPAQ-DOS110B.json --format=img --output=archive/COMPAQ-DOS110B.img
+	node tools/old/diskdump/bin/diskdump.js --disk=COMPAQ-DOS110B.json --format=img --output=archive/COMPAQ-DOS110B.img
 	327680-byte disk image saved to COMPAQ-DOS110B-BPB.img
 
 The next series of commands make the image read-only (otherwise, macOS may create hidden files inside the image after

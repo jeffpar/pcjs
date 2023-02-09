@@ -52,14 +52,16 @@ testmon.js uses the same default speed of 2400 baud, which you can explicitly se
 There are currently no `parity`, `databits`, or `stopbits` overrides, so you should always use "N,8,1" with the DOS
 **MODE** command.
 
-To create a disk image containing the INT14 source code, run the following [DiskDump]({{ site.github.pages }}/tools/old/diskdump/lib/) command
-in the [testmon](../) directory:
+To create a disk image containing the INT14 source code, run the following [DiskDump]({{ site.github.pages }}/tools/old/diskdump/lib/) command in the [testmon](../) directory:
 
-    diskdump --path="int14/INT14.ASM;DOWNLOAD.ASM;FAKECTTY.ASM;MK.BAT" --format=img --output=INT14.img --normalize --overwrite
+    node tools/old/diskdump/bin/diskdump.js --path="int14/INT14.ASM;DOWNLOAD.ASM;FAKECTTY.ASM;MK.BAT" --format=img --output=INT14.img --normalize --overwrite
 
 A disk image named "PCjs INT14 Utilities" for use with PCjs machines has been created as follows:
 
-    diskdump --path="int14/INT14.ASM;INT14.COM;DOWNLOAD.ASM;DOWNLOAD.COM;FAKECTTY.ASM;FAKECTTY.COM;MK.BAT" --format=json --output=INT14.json --normalize --overwrite
+    node tools/old/diskdump/bin/diskdump.js --path="int14/INT14.ASM;INT14.COM;DOWNLOAD.ASM;DOWNLOAD.COM;FAKECTTY.ASM;FAKECTTY.COM;MK.BAT" --format=json --output=INT14.json --normalize --overwrite
+
+NOTE: DiskDump has been superseded by the DiskImage utility.
+See [PCjs Tools](https://github.com/jeffpar/pcjs/tree/master/tools) for more information.
 
 ### Additional DOS Utilities
 
