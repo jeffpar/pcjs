@@ -15,8 +15,8 @@ such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to
 
 ## PCjs DiskImage Utility
 
-[DiskImage](modules/diskimage.js) is a Node command-line application that reads/writes PCjs v2 disk images, using the
-[DiskInfo](../machines/pcx86/modules/diskinfo.js) module for reading and writing PCjs disk images.
+[DiskImage](modules/diskimage.js) is a Node command-line application that reads/writes PCjs v2 disk images,
+using the [DiskInfo](../machines/pcx86/modules/diskinfo.js) PCx86 machine module to parse the data.
 [DiskImage](modules/diskimage.js) supersedes the older PCjs v1 [DiskDump](old/diskdump/lib/diskdump.js) utility.
 
 ## Building PCjs Disk Images from IMG files
