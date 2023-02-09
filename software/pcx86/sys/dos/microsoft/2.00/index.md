@@ -224,6 +224,9 @@ For the machine below, a 10Mb hard disk image was created with all the MS-DOS 1.
 
     node tools/old/diskdump/bin/diskdump.js --dir=src --format=json --output=MSDOS-SRC.json --label=MSDOSSRC --size=10000 --normalize --overwrite
 
+NOTE: DiskDump has been superseded by the DiskImage utility.
+See [PCjs Tools](https://github.com/jeffpar/pcjs/tree/master/tools) for more information.
+
 The 2.11 source files were copied from the CHM release, only because they had preserved something *approximating* the
 original timestamps:
 

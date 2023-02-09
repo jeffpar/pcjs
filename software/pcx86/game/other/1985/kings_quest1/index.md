@@ -48,7 +48,7 @@ To quickly recap, here are the basic steps, using tools from [PCE](http://www.ha
  1. From the Kryoflux RAW files, create a PFI ("PCE Flux Image") file
  2. Next, create a PRI ("PCE Raw Image") file, with the flux reversal pulses converted to bits
  3. From the PRI file, create a PSI ("PCE Sector Image") file
- 4. From the PSI file, create a JSON-encoded disk image file, using the PCjs `diskdump` utility
+ 4. From the PSI file, create a JSON-encoded disk image file, using the PCjs [DiskImage](https://github.com/jeffpar/pcjs/tree/master/tools) utility
 
 which translates to these commands:
 
@@ -56,7 +56,7 @@ which translates to these commands:
     pfi disk1.pfi -p double-step -r 600000 -p decode pri disk1.pri
     pri disk1.pri -c 40-99 -p delete disk1.pri
     pri disk1.pri -p decode mfm disk1.psi
-    node tools/old/diskdump/bin/diskdump.js --disk=disk1.psi --format=json --output=disk1.json
+    node tools/modules/diskimage.js disk1.psi disk1.json
 
 NOTE: Prior to running the above PCE utilities, I put all the odd-numbered Kryoflux RAW track files back with the even numbered ones,
 to avoid any confusion.
