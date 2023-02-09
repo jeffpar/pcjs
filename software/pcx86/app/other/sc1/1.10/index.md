@@ -36,6 +36,6 @@ machines:
            12 file(s)      74970 bytes
                            81408 bytes free
 
-![SuperCalc 1.10 Diskette]({{ site.software.diskettes.server }}/pcx86/app/other/sc1/1.10/SC1_V110.png)
+![SuperCalc 1.10 Diskette]({{ site.software.miscdisks.server }}/pcx86/app/other/sc1/1.10/SC1_V110.png)
 
 {% include gallery/documents.html %}

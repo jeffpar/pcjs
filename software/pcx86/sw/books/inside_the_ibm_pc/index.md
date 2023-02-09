@@ -56,7 +56,7 @@ are unfortunately incomplete.
            24 file(s)     153291 bytes
                             1536 bytes free
 
-![Inside the IBM PC (Disk 1)]({{ site.software.diskettes.server }}/pcx86/sw/books/inside_the_ibm_pc/INSIDE-THE-IBM-PC-1A.jpg)
+![Inside the IBM PC (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/sw/books/inside_the_ibm_pc/INSIDE-THE-IBM-PC-1A.jpg)
 
 ### Directory of Inside the IBM PC (Disk 2)
 
@@ -125,6 +125,6 @@ are unfortunately incomplete.
            32 file(s)     127870 bytes
                            24064 bytes free
 
-![Inside the IBM PC (Disk 1)]({{ site.software.diskettes.server }}/pcx86/sw/books/inside_the_ibm_pc/INSIDE-THE-IBM-PC-2A.jpg)
+![Inside the IBM PC (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/sw/books/inside_the_ibm_pc/INSIDE-THE-IBM-PC-2A.jpg)
 
 {% include gallery/documents.html %}

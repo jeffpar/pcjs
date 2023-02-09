@@ -48,7 +48,7 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
            15 file(s)     155460 bytes
                             1024 bytes free
 
-![PC Disk Magazine (Disk 01)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK1.jpg)
+![PC Disk Magazine (Disk 01)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK1.jpg)
 
 ### Directory of PC Disk Magazine (Disk 02)
 
@@ -69,7 +69,7 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
            11 file(s)     127909 bytes
                            30720 bytes free
 
-![PC Disk Magazine (Disk 02)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK2.jpg)
+![PC Disk Magazine (Disk 02)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK2.jpg)
 
 ### Directory of PC Disk Magazine (Disk 03)
 
@@ -94,7 +94,7 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
            15 file(s)     156784 bytes
                              512 bytes free
 
-![PC Disk Magazine (Disk 03)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK3.jpg)
+![PC Disk Magazine (Disk 03)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK3.jpg)
 
 ### Directory of PC Disk Magazine (Disk 04)
 
@@ -118,7 +118,7 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
            14 file(s)     156713 bytes
                              512 bytes free
 
-![PC Disk Magazine (Disk 04)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK4.jpg)
+![PC Disk Magazine (Disk 04)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK4.jpg)
 
 ### Directory of PC Disk Magazine (Disk 05)
 
@@ -152,7 +152,7 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
            24 file(s)     155859 bytes
                                0 bytes free
 
-![PC Disk Magazine (Disk 05)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK5.jpg)
+![PC Disk Magazine (Disk 05)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK5.jpg)
 
 ### Directory of PC Disk Magazine (Disk 06)
 
@@ -182,7 +182,7 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
            20 file(s)     155211 bytes
                             1024 bytes free
 
-![PC Disk Magazine (Disk 06)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK6.jpg)
+![PC Disk Magazine (Disk 06)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK6.jpg)
 
 ### Directory of PC Disk Magazine (Disk 07)
 
@@ -212,7 +212,7 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
            20 file(s)     148501 bytes
                             6144 bytes free
 
-![PC Disk Magazine (Disk 07)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK7.jpg)
+![PC Disk Magazine (Disk 07)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK7.jpg)
 
 ### Directory of PC Disk Magazine (Disk 08)
 
@@ -234,7 +234,7 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
         12 file(s)     154290 bytes
                             3072 bytes free
 
-![PC Disk Magazine (Disk 08)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK8.jpg)
+![PC Disk Magazine (Disk 08)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK8.jpg)
 
 ### Directory of PC Disk Magazine (Disk 08 Demo)
 
@@ -260,7 +260,7 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
         16 file(s)     291934 bytes
                         22528 bytes free
 
-![PC Disk Magazine (Disk 08 Demo)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK8-DEMO.jpg)
+![PC Disk Magazine (Disk 08 Demo)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK8-DEMO.jpg)
 
 ### Directory of PC Disk Magazine (Disk 09)
 
@@ -279,7 +279,7 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
             9 file(s)     154800 bytes
                             3072 bytes free
 
-![PC Disk Magazine (Disk 09)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK9.jpg)
+![PC Disk Magazine (Disk 09)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK9.jpg)
 
 ### Directory of PC Disk Magazine (Disk 10)
 
@@ -302,6 +302,6 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
         13 file(s)     244028 bytes
                         71680 bytes free
 
-![PC Disk Magazine (Disk 10)]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK10.jpg)
+![PC Disk Magazine (Disk 10)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK10.jpg)
 
 {% include gallery/documents.html path="/documents/magazines/pcdm/" %}

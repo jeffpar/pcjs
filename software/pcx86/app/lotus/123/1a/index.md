@@ -168,7 +168,7 @@ original Lotus 1-2-3 files dated `6-07-83` along with a random mixture of PC DOS
 
 The PCjs **Release 1A** System disk does not include any copy-protection.  Instead, the disk contains a patched
 copy of `123.EXE` which bypasses the usual copy-protection tests.  The patch is described in the "unprotect" document
-[LOTUS.TXT]({{ site.software.diskettes.server }}/pcx86/sw/misc/unprot/UNPROT-1/LOTUS.TXT):
+[LOTUS.TXT]({{ site.software.miscdisks.server }}/pcx86/sw/misc/unprot/UNPROT-1/LOTUS.TXT):
 
 	1. Rename 123.EXE 123.XYZ
 	2. DEBUG 123.XYZ

@@ -32,7 +32,7 @@ machines:
             7 file(s)     157440 bytes
                             1536 bytes free
 
-![MS C 1.04 (Disk 1)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/c/1.04/MSC104-DISK1.jpg)
+![MS C 1.04 (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/c/1.04/MSC104-DISK1.jpg)
 
 ### Directory of MS C 1.04 (Disk 2)
 
@@ -58,4 +58,4 @@ machines:
            16 file(s)     155161 bytes
                             2560 bytes free
 
-![MS C 1.04 (Disk 2)]({{ site.software.diskettes.server }}/pcx86/lang/microsoft/c/1.04/MSC104-DISK2.jpg)
+![MS C 1.04 (Disk 2)]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/c/1.04/MSC104-DISK2.jpg)

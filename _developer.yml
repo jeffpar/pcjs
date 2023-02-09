@@ -35,5 +35,7 @@ software:
     server: /diskettes
   gamedisks:
     server: /gamedisks
+  miscdisks:
+    server: /miscdisks
   harddisks:
     server: /harddisks

@@ -61,6 +61,8 @@ software:
     server: https://diskettes.pcjs.org
   gamedisks:
     server: https://gamedisks.pcjs.org
+  miscdisks:
+    server: https://miscdisks.pcjs.org
   harddisks:
     server: https://harddisks.pcjs.org
 

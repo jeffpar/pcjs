@@ -140,6 +140,6 @@ so it seems the file names as they presently exist are correct.
 
 ### Diskette Photos
 
-![Norton Utilities 3.00 (1984-12-07)]({{ site.software.diskettes.server }}/pcx86/util/norton/3.00/NU300-1984-12-07.jpg)
+![Norton Utilities 3.00 (1984-12-07)]({{ site.software.miscdisks.server }}/pcx86/util/norton/3.00/NU300-1984-12-07.jpg)
 
-![Norton Utilities 3.00 Note (1984-12-07)]({{ site.software.diskettes.server }}/pcx86/util/norton/3.00/NU300-1984-12-07-NOTE.jpg)
+![Norton Utilities 3.00 Note (1984-12-07)]({{ site.software.miscdisks.server }}/pcx86/util/norton/3.00/NU300-1984-12-07-NOTE.jpg)

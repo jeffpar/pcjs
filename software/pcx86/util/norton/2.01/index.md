@@ -107,6 +107,6 @@ All files on both sides of that diskette appear to be OK.  Directory listings of
 
 ### Diskette Photos
 
-![Norton Utilities 2.01 (1983-11-03-A)]({{ site.software.diskettes.server }}/pcx86/util/norton/2.01/NU201-1983-11-03-SIDEA.jpg)
+![Norton Utilities 2.01 (1983-11-03-A)]({{ site.software.miscdisks.server }}/pcx86/util/norton/2.01/NU201-1983-11-03-SIDEA.jpg)
 
-![Norton Utilities 2.01 (1983-11-03-B)]({{ site.software.diskettes.server }}/pcx86/util/norton/2.01/NU201-1983-11-03-SIDEA.jpg)
+![Norton Utilities 2.01 (1983-11-03-B)]({{ site.software.miscdisks.server }}/pcx86/util/norton/2.01/NU201-1983-11-03-SIDEA.jpg)

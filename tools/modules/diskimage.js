@@ -206,7 +206,7 @@ function isServerRoot(diskFile)
      * In addition to disk server paths, we had to add /machines (for diskette config files) and /software (for Markdown files
      * containing supplementary copy-protection disk data).
      */
-    return !!(diskFile.match(/^\/(machines|software|diskettes|gamedisks|pcsig8a-disks|pcsig8b-disks|harddisks|decdisks|discs|private)\//));
+    return !!(diskFile.match(/^\/(machines|software|diskettes|gamedisks|miscdisks|pcsig8a-disks|pcsig8b-disks|harddisks|decdisks|discs|private)\//));
 }
 
 /**
@@ -248,7 +248,7 @@ function isTextFile(sFile)
 function mapDiskToServer(diskFile)
 {
     if (useServer || !existsFile(getFullPath(diskFile))) {
-        diskFile = diskFile.replace(/^\/(diskettes|gamedisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/discs\/([^/]*)\//, "https://$1.pcjs.org/");
+        diskFile = diskFile.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/discs\/([^/]*)\//, "https://$1.pcjs.org/");
     }
     return diskFile;
 }
@@ -519,7 +519,7 @@ function processDisk(di, diskFile, argv, diskette)
         if (!sListing) return;
         let sIndex = "", sIndexNew = "", sAction = "";
         let sHeading = "\n### Directory of " + diskette.name + "\n";
-        let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(diskettes|gamedisks|harddisks|pcsig[0-9a-z-]*|private)\//, "/software/")), "index.md");
+        let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(diskettes|gamedisks|miscdisks|harddisks|pcsig[0-9a-z-]*|private)\//, "/software/")), "index.md");
         if (existsFile(sIndexFile)) {
             sIndex = sIndexNew = readFile(sIndexFile);
             sAction = "updated";
@@ -739,11 +739,11 @@ function processDisk(di, diskFile, argv, diskette)
 function readAll(argv)
 {
     let family = "pcx86";
-    let asServers = ["diskettes", "gamedisks", "private"];
+    let asServers = ["diskettes", "gamedisks", "miscdisks", "pcsig8a-disks", "pcsig8b-disks", "private"];
     let cCollections = 0, cDisks = 0;
     let asCollections = [];
     asServers.forEach((server) => {
-        asCollections = asCollections.concat(glob.sync(path.join(rootDir, "/" + server + "/" + family + "/*.json")));
+        asCollections = asCollections.concat(glob.sync(path.join(rootDir, "/" + server + "/" + family + "/diskettes.json")));
     });
     let messages;
     if (argv['quiet']) {

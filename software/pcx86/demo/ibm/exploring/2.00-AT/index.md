@@ -88,4 +88,4 @@ For more information about this software, see the [PCjs blog](/blog/2018/04/01/)
            63 file(s)     273064 bytes
                            54272 bytes free
 
-![Exploring the IBM PC AT 2.00]({{ site.software.diskettes.server }}/pcx86/demo/ibm/exploring/2.00-AT/EXPLORING-THE-IBM-PC-AT-200.jpg)
+![Exploring the IBM PC AT 2.00]({{ site.software.miscdisks.server }}/pcx86/demo/ibm/exploring/2.00-AT/EXPLORING-THE-IBM-PC-AT-200.jpg)

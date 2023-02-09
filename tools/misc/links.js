@@ -179,7 +179,7 @@ function processFiles(sDir, fDebug, fFix)
         if (match) {
             let sFile = match[1];
             if (sFile.indexOf("http") == 0) {
-                sFile = sFile.replace(/https?:\/\/(diskettes|gamedisks|harddisks)\.pcjs\.org/, "../pcjs-$1").replace(/https?:\/\/(cds[0-9]+)\.pcjs\.org/, "../pcjs-cds/pcjs-$1");
+                sFile = sFile.replace(/https?:\/\/(diskettes|gamedisks|miscdisks|harddisks)\.pcjs\.org/, "../pcjs-$1").replace(/https?:\/\/(cds[0-9]+)\.pcjs\.org/, "../pcjs-cds/pcjs-$1");
             }
             else if (sFile[0] == "/") {
                 sFile = "." + sFile;
@@ -232,12 +232,12 @@ function processFiles(sDir, fDebug, fFix)
             if (sLink.indexOf("{{") == 0) {
                 if (sLink.indexOf("site.github") >= 0 || sLink.indexOf("site.url") >= 0) continue;
                 sFile = sLink.replace(/\{\{\s*site\.github\.pages\s*\}\}/, "..");
-                sFile = sFile.replace(/\{\{\s*site\.software\.(diskettes|gamedisks|harddisks)\.server\s*\}\}/, "../pcjs-$1");
+                sFile = sFile.replace(/\{\{\s*site\.software\.(diskettes|gamedisks|miscdisks|harddisks)\.server\s*\}\}/, "../pcjs-$1");
                 sFile = sFile.replace(/\{\{\s*site\.archive\.(ms|kb)\.server\s*\}\}/, "../$1archive");
                 sTargetFile = "README.md";
             }
             else if (sLink.indexOf("http") == 0) {
-                sFile = sLink.replace(/https?:\/\/(diskettes|gamedisks|harddisks)\.pcjs\.org/, "../pcjs-$1").replace(/https?:\/\/(cds[0-9]+)\.pcjs\.org/, "../pcjs-cds/pcjs-$1");
+                sFile = sLink.replace(/https?:\/\/(diskettes|gamedisks|miscdisks|harddisks)\.pcjs\.org/, "../pcjs-$1").replace(/https?:\/\/(cds[0-9]+)\.pcjs\.org/, "../pcjs-cds/pcjs-$1");
                 if (sFile.indexOf("http") == 0) continue;
             }
             else {
