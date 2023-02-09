@@ -143,7 +143,7 @@
       "name": "Node: diskdump.js (deprecated)",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/old/diskdump/bin/diskdump",
+      "program": "${workspaceFolder}/tools/old/diskdump/bin/diskdump.js",
       "args": [
         "--disk=gamedisks/pcx86/game/other/1984/kings_quest1/archive/disk1.psi",
         "--format=json",
@@ -161,7 +161,7 @@
       "name": "Node: filedump.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/old/filedump/bin/filedump",
+      "program": "${workspaceFolder}/tools/old/filedump/bin/filedump.js",
       "args": [
         "--file=machines/palm/pilot/roms/pilot.rom",
         "--format=bytes",

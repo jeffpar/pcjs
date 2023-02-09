@@ -222,7 +222,7 @@ CHM's original archive suffer from similar timestamp alterations is hard to say 
 
 For the machine below, a 10Mb hard disk image was created with all the MS-DOS 1.x and 2.x sources:
 
-    diskdump --dir=src --format=json --output=MSDOS-SRC.json --label=MSDOSSRC --size=10000 --normalize --overwrite
+    node tools/old/diskdump/bin/diskdump.js --dir=src --format=json --output=MSDOS-SRC.json --label=MSDOSSRC --size=10000 --normalize --overwrite
 
 The 2.11 source files were copied from the CHM release, only because they had preserved something *approximating* the
 original timestamps:
