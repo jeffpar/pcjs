@@ -60,6 +60,7 @@
 var gulp = require("gulp");
 var gulpNewer = require("gulp-newer");
 var gulpConcat = require("gulp-concat");
+var gulpMergeJSON = require("gulp-merge-json");
 var gulpForEach = require("gulp-foreach");
 var gulpHeader = require("gulp-header");
 var gulpReplace = require("gulp-replace");
@@ -100,6 +101,13 @@ var argv = args.argv;
 var machines = require("./machines/machines.json");
 var siteHost = "https://www.pcjs.org";
 
+var aSrcDiskCollections = [
+    "./diskettes/pcx86/diskettes.json",
+    "./gamedisks/pcx86/diskettes.json",
+    "./miscdisks/pcx86/diskettes.json"
+];
+var sDstDiskCollection = "./machines/pcx86/diskettes.json";
+
 if (pkg.homepage) {
     let match = pkg.homepage.match(/^(https?:\/\/[^/]*)(.*)/);
     if (match) siteHost = match[1];
@@ -107,7 +115,7 @@ if (pkg.homepage) {
 
 var aMachines = Object.keys(machines);
 var aConcatTasks = [], aCompileTasks = [];
-var aScripts = [];
+var aWatchedFiles = aSrcDiskCollections.slice();
 
 aMachines.forEach(function(machineID) {
     if (machineID[0] == '@' || machineID == "shared") return;
@@ -125,7 +133,7 @@ aMachines.forEach(function(machineID) {
 
     if (Machine.scripts) {
         Machine.scripts.forEach((script) => {
-            if (aScripts.indexOf(script) < 0) aScripts.push(script);
+            if (aWatchedFiles.indexOf(script) < 0) aWatchedFiles.push(script);
         });
     }
 
@@ -269,6 +277,35 @@ aMachines.forEach(function(machineID) {
     });
 });
 
+gulp.task("combine", function() {
+    let baseDir = "./";
+    let mergeOptions = {
+        fileName: sDstDiskCollection,
+        edit: function(collection, file) {
+            /*
+             * Each parsed collection should have a '@server' property at the top level; the combined file
+             * obviously can't have multiple '@server' properties at the top level, so we propagate it to each
+             * of the top level objects and then remove it.
+             */
+            if (collection['@server']) {
+                let keys = Object.keys(collection);
+                for (let k = 0; k < keys.length; k++) {
+                    let key = keys[k];
+                    if (typeof collection[key] == "object") {
+                        collection[key]['@server'] = collection['@server'];
+                    }
+                }
+                delete collection['@server'];
+            }
+            return collection;
+        }
+    };
+    return gulp.src(aSrcDiskCollections)
+        .pipe(gulpNewer(sDstDiskCollection))
+        .pipe(gulpMergeJSON(mergeOptions))
+        .pipe(gulp.dest(baseDir));
+});
+
 gulp.task("concat", gulp.parallel(...aConcatTasks));
 gulp.task("compile", gulp.parallel(...aCompileTasks));
 gulp.task("compile/v2", gulp.parallel(
@@ -306,8 +343,8 @@ gulp.task("copyright", function(done) {
         .pipe(gulp.dest(baseDir));
 });
 
-gulp.task("default", gulp.series("concat", "compile"));
+gulp.task("default", gulp.series("combine", "concat", "compile"));
 
 gulp.task("watch", function() {
-    return gulp.watch(aScripts, gulp.series("default"));
+    return gulp.watch(aWatchedFiles, gulp.series("default"));
 });
