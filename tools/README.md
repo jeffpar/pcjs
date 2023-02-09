@@ -3,13 +3,13 @@
 PCjs v2 (version 2.x) disk images are JSON objects with the following properties:
 
   - *imageInfo*: an object describing the type of disk (eg, "CHS") and other characteristics
-  - *volTable*: an Array of VolInfo objects, one for each logical FAT volume on the disk (optional)
-  - *fileTable*: an Array of FileInfo objects, one for each file across all FAT volumes on the disk (optional)
-  - *diskData*: an Array of sector data; for "CHS" disk images, the data is organized as an array of sectors within an array of heads within an array of cylinders
+  - *volTable*: an array of VolInfo objects, one for each logical FAT volume on the disk (optional)
+  - *fileTable*: an array of FileInfo objects, one for each file across all FAT volumes on the disk (optional)
+  - *diskData*: an array of sector data; for CHS disk images, the data is organized as an array of sectors within an array of heads within an array of cylinders
 
 For example, take a look at this [PC DOS 2.00 diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json).
 
-Older PCjs v1 (version 1.x) disk images were basically just an Array of sector data (what is now called the *diskData* object),
+Older PCjs v1 (version 1.x) disk images were basically just an array of CHS sector data (what is now called the *diskData* object),
 without any other information.  Such disk images are still supported, but all the disk images now stored on PCjs disk servers,
 such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to the v2 format.
 
