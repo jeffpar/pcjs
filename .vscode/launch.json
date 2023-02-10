@@ -505,6 +505,7 @@
       "program": "${workspaceFolder}/tools/misc/diskettes.js",
       "args": [
         "/private",
+        "--filter=group10",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",

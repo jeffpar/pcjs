@@ -751,10 +751,6 @@ function readAll(argv)
     }
     let aDiskNames = {};        // we use this table of disk names to detect non-unique disk names
     asCollections.forEach(function readAllCollections(collectionFile) {
-        // if (collectionFile.indexOf("/pcsig") >= 0) {
-        //     if (argv['verbose']) printf("skipping collection %s...\n", collectionFile);
-        //     return;
-        // }
         collectionFile = collectionFile.substr(rootDir.length);
         if (argv['verbose']) printf("reading collection %s...\n", collectionFile);
         let library = readJSON(collectionFile);

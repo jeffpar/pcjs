@@ -203,7 +203,7 @@ function processFolders(sDir, argv)
         if (typeof argv['filter'] == "string" && imgPath.indexOf(argv['filter']) < 0) return;
 
         let sExt = "";
-        let iExt = imgPath.indexOf(".");
+        let iExt = imgPath.lastIndexOf(".");
         if (iExt == 0) {
             return;
         }
@@ -213,11 +213,17 @@ function processFolders(sDir, argv)
         if (asFiles.indexOf(imgFile + ".img") >= 0) {
             return;     // ignore presumed folder names that match existing ".img" files
         }
-        if (sExt == ".jpg" || sExt == ".jpeg" || sExt == ".png" || sExt == ".txt" || sExt == ".sh") {
+        if (sExt == ".jpg" || sExt == ".jpeg" || sExt == ".png" || sExt == ".pdf") {
+            return;
+        }
+        if (sExt == ".md" || sExt == ".txt" || sExt == ".xml" || sExt == ".sh" || sExt == ".hex" || sExt == ".bad") {
             return;
         }
         let imgParts = imgPath.split(path.sep);
         if (imgParts[imgParts.length-2] != "archive") {
+            return;
+        }
+        if (imgParts[imgParts.length-1].indexOf('_') == 0) {
             return;
         }
 
@@ -260,12 +266,13 @@ function processFolders(sDir, argv)
                 if (media) {
                     mediaName = imgParts[++i];
                     jsonName = mediaName;
-                    iExt = jsonName.indexOf('.');
+                    iExt = jsonName.lastIndexOf('.');
                     if (iExt < 0) {
                         jsonName += ".json";
                         archiveType = "folder";
                     } else {
-                        jsonName = jsonName.slice(0, iExt) + ".json";
+                        mediaName = mediaName.slice(0, iExt);
+                        jsonName = mediaName + ".json";
                         if (sExt != ".img") {
                             archiveType = sExt;
                         }
@@ -318,6 +325,7 @@ function processFolders(sDir, argv)
                 }
                 media.push(diskette);
                 diskettesUpdated = true;
+                printf("warning: added diskette %s\n", jsonName);
             } else {
                 printf("\tfailed to find %s in diskettes.json\n", imgPath);
             }
