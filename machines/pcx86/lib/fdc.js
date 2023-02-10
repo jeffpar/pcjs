@@ -448,7 +448,7 @@ class FDC extends Component {
             fdc.aDiskettes = [];
             for (let i = 0; i < urls.length; i++) {
                 let url = urls[i];
-                if (hostName == "localhost" || url.indexOf("private") < 0 && url.indexOf("pcsig") < 0) {
+                if (hostName == "localhost" || url.indexOf("private") < 0) {
                     cRequested++;
                     let sProgress = "Loading " + url + "...";
                     Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
