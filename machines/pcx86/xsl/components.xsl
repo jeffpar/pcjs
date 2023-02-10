@@ -1010,12 +1010,14 @@
 		<xsl:apply-templates select="document($componentFile)/fdc">
 			<xsl:with-param name="machine" select="$machine"/>
 			<xsl:with-param name="_autoMount"><xsl:if test="@autoMount"><xsl:value-of select="@autoMount"/></xsl:if><xsl:if test="@automount"><xsl:value-of select="@automount"/></xsl:if></xsl:with-param>
+			<xsl:with-param name="_diskettes"><xsl:if test="@diskettes"><xsl:value-of select="@diskettes"/></xsl:if></xsl:with-param>
 		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="fdc[not(@ref)]">
 		<xsl:param name="machine" select="''"/>
 		<xsl:param name="_autoMount" select="''"/>
+		<xsl:param name="_diskettes" select="''"/>
 		<xsl:variable name="autoMount">
 			<xsl:choose>
 				<xsl:when test="$_autoMount != ''"><xsl:value-of select="$_autoMount"/></xsl:when>
@@ -1025,6 +1027,7 @@
 		</xsl:variable>
 		<xsl:variable name="diskettes">
 			<xsl:choose>
+				<xsl:when test="$_diskettes != ''"><xsl:value-of select="$_diskettes"/></xsl:when>
 				<xsl:when test="@diskettes"><xsl:value-of select="@diskettes"/></xsl:when>
 				<xsl:otherwise/>
 			</xsl:choose>
