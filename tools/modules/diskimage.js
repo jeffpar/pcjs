@@ -770,6 +770,12 @@ function readAll(argv)
                     [diskette.argc, diskette.argv] = stdlib.getArgs(diskette.args);
                     diskette.args = " " + diskette.args;
                 }
+                /*
+                 * TODO: I don't think '@local' is being used anymore, so consider removing this support.  The last
+                 * place I saw it used was in the PCSIG08 diskettes.json files, but weblib.getResource() knows how to map
+                 * local folder names (eg, /pcsig8a-disks) to the corresponding server names now, as does this module,
+                 * so there's probably no longer any need for this.
+                 */
                 if (library['@local']) {
                     diskette.path = diskette.path.replace(library['@server'], library['@local']);
                 }

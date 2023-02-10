@@ -444,13 +444,17 @@ if (args.argc < 2) {
      * (https://github.com/jeffpar/pcjs.v1)
      *
      * Here's an example:
-     *
-     *      https://github.com/jeffpar/old-demo-disks/blob/4af827d8f2ba957939bb81a6ceda3946f31287c7/pcx86/apps/ibm/exploring/manifest.xml
+     * https://github.com/jeffpar/old-demo-disks/blob/4af827d8f2ba957939bb81a6ceda3946f31287c7/pcx86/apps/ibm/exploring/manifest.xml
      *
      * I'm still a fan of XML files, but PCjs v2 was built with the realization that XML files have become "second-class
      * citizens" when compared to JSON files (in spite of JSON's more primitive and artificially restrictive format) so I
      * began the migration from XML to JSON.  XML files are still being used in a few areas (eg, "legacy" machine definition
      * files, where the amount of conversion work outweighs any benefit), but they are no longer used for diskette manifests.
+     *
+     * NOTE: Until recently, there was still a caveat with respect to XML diskette collections: /machines/pcx86/fdc/pcsig08.xml.
+     * However, that's simply because I hadn't finished cleaning up the XML file and adding references to the new JSON files.
+     * Go to https://github.com/jeffpar/pcjs/blob/e804442f1df7912e32f3c6d1f668149bb5412394/machines/pcx86/fdc/pcsig08.xml to
+     * see what it looked like prior to conversion.
      *
      * This tool was originally created to assist with the migration from multiple "manifest.xml" files to a centralized
      * "diskettes.json" file, and to create corresponding "index.md" files in the "/software" folder of the PCjs v2 repository.
