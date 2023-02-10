@@ -456,12 +456,13 @@ if (args.argc < 2) {
      * Go to https://github.com/jeffpar/pcjs/blob/e804442f1df7912e32f3c6d1f668149bb5412394/machines/pcx86/fdc/pcsig08.xml to
      * see what it looked like prior to conversion.
      *
-     * This tool was originally created to assist with the migration from multiple "manifest.xml" files to a centralized
-     * "diskettes.json" file, and to create corresponding "index.md" files in the "/software" folder of the PCjs v2 repository.
+     * This tool was originally created to assist with the migration from multiple "manifest.xml" files to centralized
+     * "diskettes.json" files, and to create corresponding "index.md" files in the "/software" folder of the PCjs v2 repository.
      * Since that was largely a one-time migration, you now have to specify the "--manifests" option if you really want to
      * run that code again.
      *
-     * Now the primary purpose of this tool is to scan folders for diskettes that have not yet been added to "diskettes.json".
+     * Now the primary purpose of this tool is to scan folders for diskettes that have not yet been added to a collection's
+     * "diskettes.json".
      */
     if (argv['manifests']) {
         let diskettes = processManifests(sDir, output, fDebug);
