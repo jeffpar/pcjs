@@ -1522,19 +1522,22 @@
 	</xsl:template>
 
 	<xsl:template name="displayAttr">
+		<xsl:param name="_ref"/>
+		<xsl:if test="$_ref != ''"> ref=&quot;<xsl:value-of select="$_ref"/>&quot;</xsl:if>
 		<xsl:for-each select="@*"><xsl:value-of select="concat(' ', name(), '=&quot;', ., '&quot;')"/></xsl:for-each>
 	</xsl:template>
 
 	<xsl:template name="displayXML">
 		<xsl:param name="tag"/>
+		<xsl:param name="_ref" select="''"/>
 		<xsl:param name="indent" select="''"/>
 		<xsl:choose>
 			<xsl:when test="@ref and $tag != 'panel'">
 				<xsl:variable name="refFile"><xsl:value-of select="$rootDir"/><xsl:value-of select="@ref"/></xsl:variable>
-				<xsl:apply-templates mode="display" select="document($refFile)"><xsl:with-param name="indent" select="'&#x9;'"/></xsl:apply-templates>
+				<xsl:apply-templates mode="display" select="document($refFile)"><xsl:with-param name="_ref"><xsl:value-of select="$refFile"/></xsl:with-param><xsl:with-param name="indent" select="'&#x9;'"/></xsl:apply-templates>
 			</xsl:when>
 			<xsl:when test="$tag = 'control' and contains(@class,'soft-keyboard')"><xsl:value-of select="$indent"/>&lt;!-- <xsl:value-of select="@class"/> --&gt;</xsl:when>
-			<xsl:otherwise>&lt;<xsl:value-of select="$tag"/><xsl:call-template name="displayAttr"/>&gt;<xsl:apply-templates mode="display"/><xsl:value-of select="$indent"/>&lt;/<xsl:value-of select="$tag"/>&gt;</xsl:otherwise>
+			<xsl:otherwise>&lt;<xsl:value-of select="$tag"/><xsl:call-template name="displayAttr"><xsl:with-param name="_ref"><xsl:value-of select="$_ref"/></xsl:with-param></xsl:call-template>&gt;<xsl:apply-templates mode="display"><xsl:with-param name="indent" select="''"/></xsl:apply-templates><xsl:value-of select="$indent"/>&lt;/<xsl:value-of select="$tag"/>&gt;</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 
@@ -1542,6 +1545,6 @@
 		<pre>&lt;machine<xsl:call-template name="displayAttr"/>&gt;<xsl:apply-templates mode="display"/>&lt;/machine&gt;</pre>
 	</xsl:template>
 
-	<xsl:template match="*" mode="display"><xsl:param name="indent" select="''"/><xsl:call-template name="displayXML"><xsl:with-param name="tag" select="name(.)"/><xsl:with-param name="indent" select="$indent"/></xsl:call-template></xsl:template>
+	<xsl:template match="*" mode="display"><xsl:param name="_ref" select="''"/><xsl:param name="indent" select="''"/><xsl:call-template name="displayXML"><xsl:with-param name="tag" select="name(.)"/>><xsl:with-param name="_ref" select="$_ref"/><xsl:with-param name="indent" select="$indent"/></xsl:call-template></xsl:template>
 
 </xsl:stylesheet>
