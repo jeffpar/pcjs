@@ -32,7 +32,7 @@ window, which the browser will then scale up or down, unless a specific overall 
 The second required XML element is a &lt;rom&gt; element to load the EGA ROM; eg:
 
 ```xml
-<rom id="romEGA" addr="0xc0000" size="0x4000" file="/machines/pcx86/ibm/video/ega/IBM-EGA.json5" notify="videoEGA"/>
+<rom id="romEGA" addr="0xc0000" size="0x4000" file="/machines/pcx86/ibm/video/ega/1984-09-13/IBM-EGA.json5" notify="videoEGA"/>
 ```
 
 The *notify* attribute must match the *id* of the &lt;video&gt; element, so that the Video component can load

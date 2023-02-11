@@ -8,10 +8,10 @@
 	<ram id="ramCPQ" addr="0xfa0000" size="0x60000" comment="COMPAQ memory at 0xFA0000"/>
 	<ram id="ramExt" addr="0x100000" size="0x100000" comment="Extended memory at 0x100000"/>
 	<rom id="romBIOS" addr="0xf8000" size="0x8000" alias="[0xf0000,0xffff0000,0xffff8000]" file="/machines/pcx86/compaq/deskpro386/rom/1988-01-28/1988-01-28.json"/>
-	<video ref="/machines/pcx86/video/ibm/vga/1986-10-27/ibm-vga-autolockfs.xml"/>
+	<video ref="/machines/pcx86/ibm/video/vga/1986-10-27/ibm-vga-autolockfs.xml"/>
 	<fdc ref="/machines/pcx86/fdc/library.xml" autoMount='{A: {name: "COMPAQ MS-DOS 3.31 (Disk 2)"}, B: {name: "COMPAQ MS-DOS 3.31 (Disk 3)"}}'/>
 	<hdc ref="/machines/pcx86/hdc/47mb/unformatted-at5.xml"/>
-	<keyboard ref="/machines/pcx86/keyboard/us84-softkeys.xml"/>
+	<keyboard ref="/machines/pcx86/ibm/keyboard/us84-softkeys.xml"/>
 	<chipset id="chipset" model="deskpro386" floppies="[1200,1200]" monitor="vga"/>
 	<serial id="com1" adapter="1"/>
 	<serial id="com2" adapter="2"/>
