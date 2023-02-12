@@ -7899,13 +7899,6 @@
 						}
 					],
 					"@documents": [
-						{
-							"@title": "DOS Internals (1994)",
-							"@file": "dos_internals/",
-							"@link": "",
-							"@cover": "",
-							"@source": ""
-						}
 					]
 				},
 				"graphics_for_the_ibm_pc": {
