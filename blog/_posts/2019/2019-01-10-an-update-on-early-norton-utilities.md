@@ -3,7 +3,7 @@ layout: post
 title: An Update on Early Norton Utilities
 date: 2019-01-10 22:00:00
 permalink: /blog/2019/01/10/
-preview: https://diskettes.pcjs.org/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK1.jpg
+preview: https://miscdisks.pcjs.org/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK1.jpg
 ---
 
 As I lamented in my [last blog post](/blog/2018/12/28/), finding copies of the earliest versions
@@ -54,4 +54,4 @@ likely they were built from the same source code used to build his retail produc
 we've come to verifying that early versions of The Norton Utilities were compressed -- with SpaceMaker no less --
 and with a bit more luck, and patience, perhaps we'll get even closer.
 
-[![PC Disk Magazine Diskettes]({{ site.software.diskettes.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK1.jpg)](/software/pcx86/sw/magazines/pcdm/)
+[![PC Disk Magazine Diskettes]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK1.jpg)](/software/pcx86/sw/magazines/pcdm/)

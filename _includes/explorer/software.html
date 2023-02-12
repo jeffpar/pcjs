@@ -94,6 +94,14 @@
                       {%- capture software_path2 -%}/{{ category[0] }}{%- endcapture %}
                         <li id="software-{{ machine_type }}-{{ category[0] }}" class="pcjs-explorer-category pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ category[1]['@title'] | default: category[0] }}
                           <ul>
+                      {%- if subcategories['@server'] %}
+                        {%- assign server_default = subcategories['@server'] %}
+                      {%- else %}
+                        {%- assign server_default = "" %}
+                      {%- endif %}
+                      {%- if site.developer %}
+                          <!-- server_default: {{ server_default }} -->
+                      {%- endif -%}
                       {%- for subcategory in subcategories -%}
                         {%- if site.developer %}
                             <!-- subcategory: {{ subcategory[0] }} -->
@@ -163,8 +171,13 @@
                               {%- endif -%}
                               {%- capture hardware_url -%}{{ release['@hardware']['url'] }}{%- endcapture -%}
                               {%- capture alternate_url -%}{{ release['@permalink'] }}{%- endcapture -%}
-                              {%- if category[0] != "game" -%}{%- assign diskette_default = "/diskettes" -%}{%- else -%}{%- assign diskette_default = "/gamedisks" -%}{%- endif -%}
-                              {%- capture diskette_server -%}{{ release['@server'] | default: diskette_default }}{%- endcapture -%}
+                              {%- if server_default == "" %}
+                                {%- if category[0] != "game" -%}{%- assign server_default = "/diskettes" -%}{%- else -%}{%- assign server_default = "/gamedisks" -%}{%- endif -%}
+                              {%- endif %}
+                              {%- if site.developer %}
+                                        <!-- server_default: {{ server_default }} -->
+                              {%- endif -%}
+                              {%- capture diskette_server -%}{{ release['@server'] | default: server_default }}{%- endcapture -%}
                               {%- capture harddisk_server -%}{{ release['@server'] | default: "/harddisks" }}{%- endcapture -%}
                               {%- capture software_url -%}{{ software_path1 }}{{ software_path2 }}{{ software_path3 }}{{ software_path4 }}{{ software_path5 }}{%- if version[0] != "" and alternate_url == "" -%}/{{ version[0] }}{%- endif -%}{%- endcapture -%}
                               {%- capture software_id -%}software-{{ software_url | remove_first: "/" | replace: "/", "-" }}{%- if alternate_url == "#" -%}-{{ version[0] }}{%- endif -%}{%- endcapture -%}

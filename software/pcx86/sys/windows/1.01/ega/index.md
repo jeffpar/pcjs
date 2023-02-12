@@ -20,7 +20,7 @@ Microsoft Windows 1.01, the first public version of Windows, was released on Nov
 It is shown here running on an IBM PC XT (Model 5160) with an EGA Display.  You can also run Windows 1.01
 with a [CGA Display](../cga/).  Or just for fun, on [four machines](array/) simultaneously.
 
-A demo of an earlier pre-release version, [Windows 1.0 ("Premiere Edition")](../1.00/), is also available.
+A demo of an earlier pre-release version, [Windows 1.0 ("Premiere Edition")](../../1.00/), is also available.
 
 [Directory Listings](#directory-of-windows-101-setup) of the five 360Kb distribution diskettes are provided below.
 

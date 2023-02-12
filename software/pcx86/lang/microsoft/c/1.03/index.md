@@ -2,7 +2,7 @@
 layout: page
 title: Microsoft C Compiler 1.03 (Beta)
 permalink: /software/pcx86/lang/microsoft/c/1.03/
-preview: https://diskettes.pcjs.org/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK1.jpg
+preview: https://miscdisks.pcjs.org/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK1.jpg
 machines:
   - id: ibm5160
     type: pcx86

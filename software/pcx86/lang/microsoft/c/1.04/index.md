@@ -2,7 +2,7 @@
 layout: page
 title: Microsoft C Compiler 1.04
 permalink: /software/pcx86/lang/microsoft/c/1.04/
-preview: https://diskettes.pcjs.org/pcx86/lang/microsoft/c/1.04/MSC104-DISK1.jpg
+preview: https://miscdisks.pcjs.org/pcx86/lang/microsoft/c/1.04/MSC104-DISK1.jpg
 machines:
   - id: ibm5160
     type: pcx86
