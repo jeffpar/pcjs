@@ -101,6 +101,21 @@ var argv = args.argv;
 var machines = require("./machines/machines.json");
 var siteHost = "https://www.pcjs.org";
 
+/*
+ * This is the set of the disk collections (stored as JSON) that the PCx86 floppy disk component (FDC) typically
+ * loads -- although the exact set can vary, and some machines, like PCSIG08, load several additional collections.
+ *
+ * Each collection is stored in a separate repo; eg, /diskettes/pcx86/diskettes.json is stored in the "pcjs-diskettes"
+ * repo, which is then published with all the corresponding diskette images at https://diskettes.pcjs.org.
+ *
+ * Anyway, one problem with this arrangement is that the PCjs website page templates (_includes/explorer/software.html)
+ * need access to ALL the collections, and being spread across multiple repos makes that difficult.  So we solve the
+ * problem by automatically combining all the "src" collections into a single "dst" collection located in the main repo,
+ * at /machines/pcx86/diskettes.json.
+ *
+ * Another advantage of the combined file is the PCx86 FDC can now choose to load the combined file at runtime as well,
+ * instead of using the separate files, and speed up machine page loads slightly.
+ */
 var aSrcDiskCollections = [
     "./diskettes/pcx86/diskettes.json",
     "./gamedisks/pcx86/diskettes.json",
