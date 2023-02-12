@@ -188,25 +188,37 @@ function getFullPath(sFile)
     if (sFile[0] == '~') {
         sFile = os.homedir() + sFile.substr(1);
     }
-    else if (isServerRoot(sFile)) {
+    else if (isServerPath(sFile)) {
         sFile = rootDir + sFile;
     }
     return sFile;
 }
 
 /**
- * isServerRoot(diskFile)
+ * getServerName(diskFile)
  *
  * @param {string} diskFile
- * @returns {boolean}
+ * @returns {string|undefined}
  */
-function isServerRoot(diskFile)
+function getServerName(diskFile)
 {
     /*
      * In addition to disk server paths, we had to add /machines (for diskette config files) and /software (for Markdown files
      * containing supplementary copy-protection disk data).
      */
-    return !!(diskFile.match(/^\/(machines|software|diskettes|gamedisks|miscdisks|pcsig8a-disks|pcsig8b-disks|harddisks|decdisks|discs|private)\//));
+    let match = diskFile.match(/^\/(machines|software|diskettes|gamedisks|miscdisks|pcsig8a-disks|pcsig8b-disks|harddisks|decdisks|discs|private)\//);
+    return match && match[1];
+}
+
+/**
+ * isServerPath(diskFile)
+ *
+ * @param {string} diskFile
+ * @returns {boolean}
+ */
+function isServerPath(diskFile)
+{
+    return !!getServerName(diskFile);
 }
 
 /**
@@ -653,11 +665,24 @@ function processDisk(di, diskFile, argv, diskette)
         }
 
         /*
-         * Step 2: Making sure there's an up-to-date directory listing...
+         * Step 2: Making sure there's an up-to-date directory listing.  The listing can include a picture of
+         * the diskette, if any, and a link to the source of the diskette, if any, so append those to the listing now.
+         *
+         * Picture example:
+         *
+         *      ![MS C 1.03 Beta (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK1.jpg)
          */
+        let sDiskPic = diskette.path.replace(".json", ".jpg");
+        if (existsFile(sDiskPic)) {
+            let sDiskServer = getServerName(sDiskPic);
+            if (sDiskServer) {
+                sListing += "\n![" + diskette.name + "]({{ site.software." + sDiskServer + ".server }}" + sDiskPic.slice(sDiskServer.length + 1) + ")\n";
+            }
+        }
         if (diskette.source && !diskette.source.indexOf("http")) {
             sListing += "\n[Source](" + diskette.source + ")\n";
         }
+
         let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^{[\\s]|$)";
         let matchDirectory = sIndexNew.match(new RegExp(sMatch));
         if (matchDirectory) {
