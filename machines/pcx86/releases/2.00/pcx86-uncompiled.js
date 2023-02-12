@@ -56959,7 +56959,7 @@ class VideoX86 extends Component {
                 }
             }
             if (!canvas || !canvas.getContext) {
-                element.innerHTML = "<br/>Missing &lt;canvas&gt; support. Please try a newer web browser.";
+                element.innerHTML = "<br>Missing &lt;canvas&gt; support. Please try a newer web browser.";
                 return;
             }
 

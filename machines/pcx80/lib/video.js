@@ -1371,7 +1371,7 @@ class VideoX80 extends Component {
              */
             let aCanvas = Component.getElementsByClass(element, "pcjs-canvas");
             if (!aCanvas || !aCanvas.length || !aCanvas[0].getContext) {
-                element.innerHTML = "<br/>Missing &lt;canvas&gt; support. Please try a newer web browser.";
+                element.innerHTML = "<br>Missing &lt;canvas&gt; support. Please try a newer web browser.";
                 return;
             }
             let canvas = aCanvas[0];

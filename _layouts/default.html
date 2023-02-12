@@ -27,7 +27,7 @@
           <li><a href="{{ site.github.repository_url }}">Repository</a></li>
         </ul>
         {%- if site.logo %}
-        <a href="{{ '/software/pcx86/' | absolute_url }}"><img src="{{ site.logo | relative_url }}" alt="Logo" /></a>
+        <a href="{{ '/software/pcx86/' | absolute_url }}"><img src="{{ site.logo | relative_url }}" alt="Logo"></a>
         {%- endif %}
         {%- comment -%}
         {%- if site.github.is_project_page %}
@@ -50,7 +50,7 @@
       </section>
       <footer>
 {% include_cached explorer.html %}
-        <p><a href="#pcjs-machines">{{ site.domain }}</a> © 2012-{{ site.time | date: '%Y' }} <a rel="me" href="https://github.com/jeffpar">Jeff Parsons</a><br/>
+        <p><a href="#pcjs-machines">{{ site.domain }}</a> © 2012-{{ site.time | date: '%Y' }} <a rel="me" href="https://github.com/jeffpar">Jeff Parsons</a><br>
         <a href="{{ site.github.repository_url }}">PCjs</a> is released under an <a href="{{ absolute_url }}/LICENSE.txt">MIT License</a></p>
       </footer>
     </div>

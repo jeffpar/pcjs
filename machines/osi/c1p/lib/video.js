@@ -582,7 +582,7 @@ class C1PVideo extends Component {
                 }
             }
             if (!eCanvas || !eCanvas.getContext) {
-                eVideo.innerHTML = "<br/>Missing &lt;canvas&gt; support. Please try a newer web browser.";
+                eVideo.innerHTML = "<br>Missing &lt;canvas&gt; support. Please try a newer web browser.";
                 return;
             }
             eCanvas.setAttribute("contenteditable", "true");

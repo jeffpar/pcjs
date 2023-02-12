@@ -35,7 +35,7 @@ hand-written notes (which I may still have somewhere).
 
 Here it is, many decades later, for your amusement.
 
-[<img src="covers/OSI_Assembler-Disassembler_Listing.jpg" width="200" height="260" alt="6502 Disassembler Listing (by Jeff Parsons, June 1980)"/>](https://1drv.ms/b/s!ArcO_mFRe1Z9gpM3XnzS74DR-GIgTA)
+[<img src="covers/OSI_Assembler-Disassembler_Listing.jpg" width="200" height="260" alt="6502 Disassembler Listing (by Jeff Parsons, June 1980)">](https://1drv.ms/b/s!ArcO_mFRe1Z9gpM3XnzS74DR-GIgTA)
 
 NOTE: Even though the "source code" listing was based on the 8K version, it more closely resembles the
 [4K version](ASSEMBLER-4K.json), because the [8K version](ASSEMBLER-8K.json) I originally located appears to be
