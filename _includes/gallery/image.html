@@ -8,9 +8,7 @@
     <div class="pcjs-gallery-image">
   {%- if include.link -%}
     {%- capture image_link %}href="{{ site.baseurl }}{{ include.link }}"{%- if include.external %} target="_blank"{%- endif -%}{%- endcapture %}
-      <a {{ image_link }}>
-        <img src="{{ image_src }}"{{ image_width }}{{ image_height }} alt="{{ include.title }}">
-      </a>
+      <a {{ image_link }}><img src="{{ image_src }}"{{ image_width }}{{ image_height }} alt="{{ include.title }}"></a>
   {%- else %}
       <img src="{{ image_src }}"{{ image_width }}{{ image_height }} alt="{{ include.title }}">
   {%- endif %}
