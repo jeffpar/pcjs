@@ -182,9 +182,18 @@ function processFolders(sDir, argv)
     let dirParts = sDir.split(path.sep);
     let dirServer = dirParts[0].length? dirParts[0] : dirParts[1];
     let dirDiskettes = (dirServer == "private"? dirServer : "diskettes");
+    let diskettesFile = path.join(rootDir, dirDiskettes, "pcx86", "diskettes.json");
+
+    let diskettesUpdated = false;
+    printf("reading %s...\n", diskettesFile.slice(rootDir.length));
+    let diskettes = JSON.parse(fs.readFileSync(diskettesFile, {encoding: "utf8"}));
+
     let prefixDir = path.join(rootDir, sDir, "pcx86");
-    let asFiles = glob.sync(path.join(prefixDir, "**", "archive", "*.img"));
-    let diskettes = JSON.parse(fs.readFileSync(path.join(rootDir, dirDiskettes, "pcx86", "diskettes.json"), {encoding: "utf8"}));
+    let diskettesPath = path.join(prefixDir, "**", "archive", "*");
+
+    printf("scanning %s...\n", diskettesPath.slice(rootDir.length));
+    let asFiles = glob.sync(diskettesPath);
+
     /*
      * Make sure that every IMG file located directly underneath an "archive" folder is represented in the JSON file.
      */
@@ -193,8 +202,30 @@ function processFolders(sDir, argv)
 
         if (typeof argv['filter'] == "string" && imgPath.indexOf(argv['filter']) < 0) return;
 
+        let sExt = "";
+        let iExt = imgPath.lastIndexOf(".");
+        if (iExt == 0) {
+            return;
+        }
+        if (iExt > 0) {
+            sExt = imgPath.slice(iExt).toLowerCase();
+        }
+        if (asFiles.indexOf(imgFile + ".img") >= 0) {
+            return;     // ignore presumed folder names that match existing ".img" files
+        }
+        if (sExt == ".jpg" || sExt == ".jpeg" || sExt == ".png" || sExt == ".pdf") {
+            return;
+        }
+        if (sExt == ".md" || sExt == ".txt" || sExt == ".xml" || sExt == ".sh" || sExt == ".hex" || sExt == ".bad") {
+            return;
+        }
         let imgParts = imgPath.split(path.sep);
-        if (imgParts[imgParts.length-2] != "archive") return;
+        if (imgParts[imgParts.length-2] != "archive") {
+            return;
+        }
+        if (imgParts[imgParts.length-1].indexOf('_') == 0) {
+            return;
+        }
 
         /*
          * Here's an example:
@@ -208,6 +239,7 @@ function processFolders(sDir, argv)
         let i;
         let lastObj, lastPart;
         let diskObj = diskettes;
+        let media, mediaName, jsonName = "", archiveType = "";
         for (i = 0; i < imgParts.length; i++) {
             if (imgParts[i] != "archive") {
                 let obj = diskObj[imgParts[i]];
@@ -222,14 +254,29 @@ function processFolders(sDir, argv)
                  * object whose '@diskette' contains the JSON version of the final imgPart (or whose '@archive' matches
                  * the final imgPart).
                  */
-                let media = diskObj['@media'];
+                media = diskObj['@media'];
                 if (!media) {
-                    media = diskObj['@versions'] && diskObj['@versions'][''] && diskObj['@versions']['']['@media'];
+                    media = diskObj['@versions'];
+                    if (media) {
+                        media = media[''] || media['disks'];
+                        if (media) media = media['@media'];
+                    }
                 }
                 diskObj = null;
-                let jsonName = imgParts[++i].replace(".img", ".json");
                 if (media) {
-                    let m;
+                    mediaName = imgParts[++i];
+                    jsonName = mediaName;
+                    iExt = jsonName.lastIndexOf('.');
+                    if (iExt < 0) {
+                        jsonName += ".json";
+                        archiveType = "folder";
+                    } else {
+                        mediaName = mediaName.slice(0, iExt);
+                        jsonName = mediaName + ".json";
+                        if (sExt != ".img") {
+                            archiveType = sExt;
+                        }
+                    }
                     for (let m = 0; m < media.length; m++) {
                         if (media[m]['@diskette'] == jsonName) {
                             diskObj = media[m];
@@ -240,6 +287,17 @@ function processFolders(sDir, argv)
                             break;
                         }
                     }
+                    if (diskObj) {
+                        if (archiveType) {
+                            if (!diskObj['@archive']) {
+                                diskObj['@archive'] = archiveType;
+                                printf("warning: @archive should be set to '%s'\n", diskObj['@archive'], archiveType);
+                                diskettesUpdated = true;
+                            } else if (diskObj['@archive'] != archiveType) {
+                                printf("warning: @archive '%s' should possibly be '%s' instead\n", diskObj['@archive'], archiveType);
+                            }
+                        }
+                    }
                 }
             }
             if (!diskObj) break;
@@ -247,9 +305,40 @@ function processFolders(sDir, argv)
             lastPart = i;
         }
         if (!diskObj) {
-            printf("\tfailed to find %s in diskettes.json\n", imgPath);
+            /*
+             * Add a new entry...
+             */
+            let groupName;
+            let i = imgPath.indexOf('-');
+            if (i < 0) {
+                groupName = imgParts[0].toUpperCase();
+            } else {
+                groupName = imgPath.slice(0, i).toUpperCase();
+            }
+            if (media) {
+                let diskette = {
+                    '@title': groupName + ' ' + mediaName,
+                    '@diskette': jsonName
+                };
+                if (archiveType) {
+                    diskette['@archive'] = archiveType;
+                }
+                media.push(diskette);
+                diskettesUpdated = true;
+                printf("warning: added diskette %s\n", jsonName);
+            } else {
+                printf("\tfailed to find %s in diskettes.json\n", imgPath);
+            }
         }
     });
+    if (diskettesUpdated) {
+        if (!argv['overwrite']) {
+            printf("use --overwrite to update %s\n", diskettesFile.slice(rootDir.length));
+        } else {
+            printf("updating %s...\n", diskettesFile.slice(rootDir.length));
+            fs.writeFileSync(diskettesFile, JSON.stringify(diskettes, null, 2));
+        }
+    }
 }
 
 /**

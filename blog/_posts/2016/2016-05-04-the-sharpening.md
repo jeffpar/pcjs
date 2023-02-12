@@ -8,7 +8,7 @@ permalink: /blog/2016/05/04/
 This was the week of The Sharpening.
 
 A while back, I updated most of the machines to use higher-resolution "screens".  For example, a typical
-[EGA video configuration](/machines/pcx86/video/ibm/ega/1984-09-13/ibm-ega-5154-128k-autolockfs.xml) now
+[EGA video configuration](/machines/pcx86/ibm/video/ega/1984-09-13/ibm-ega-5154-128k-autolockfs.xml) now
 specifies a *screenWidth* of 1280 and *screenHeight* of 700, dimensions which are exactly twice the standard EGA resolution.
 
 That change had no effect on the machine's operation, but it did improve the machine's appearance, because

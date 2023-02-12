@@ -8,10 +8,10 @@
 	<rom id="romHDC" addr="0xc8000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/hdc/IBM-XEBEC-1982.json5"/>
 	<rom id="romBASIC" addr="0xf6000" size="0x8000" file="/machines/pcx86/ibm/5160/rom/basic/BASIC110.json5"/>
 	<rom id="romBIOS" addr="0xfe000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/bios/1982-11-08/XTBIOS-REV1.json5"/>
-	<video ref="/machines/pcx86/video/ibm/ega/1984-09-13/ibm-ega-5153-256k.xml"/>
+	<video ref="/machines/pcx86/ibm/video/ega/1984-09-13/ibm-ega-5153-256k.xml"/>
 	<fdc ref="/machines/pcx86/fdc/library.xml"/>
 	<hdc id="hdcXT" drives='[{name:"10Mb Hard Disk",type:3}]'/>
-	<keyboard ref="/machines/pcx86/keyboard/us83-softkeys.xml"/>
+	<keyboard ref="/machines/pcx86/ibm/keyboard/us83-softkeys.xml"/>
 	<chipset id="chipset" model="5160" sw1="01001101"/>
 	<serial id="com1" adapter="1"/>
 	<serial id="com2" adapter="2"/>

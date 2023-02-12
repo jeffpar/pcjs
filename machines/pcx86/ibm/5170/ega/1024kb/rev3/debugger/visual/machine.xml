@@ -7,10 +7,10 @@
 	<ram id="ramLow" addr="0x00000" size="0xa0000" test="true" comment="ROM BIOS memory test has been ENABLED"/>
 	<ram id="ramExt" addr="0x100000" size="0x60000" comment=""/>
 	<rom id="romBIOS" addr="0xf0000" size="0x10000" alias="0xff0000" file="/machines/pcx86/ibm/5170/rom/bios/1985-11-15/ATBIOS-REV3.json5"/>
-	<video ref="/machines/pcx86/video/ibm/ega/1984-09-13/ibm-ega-5154-128k-autolockfs.xml"/>
+	<video ref="/machines/pcx86/ibm/video/ega/1984-09-13/ibm-ega-5154-128k-autolockfs.xml"/>
 	<fdc ref="/machines/pcx86/fdc/library.xml" autoMount='{A: {name: "PC DOS 3.20 (Disk 1)"}, B: {name: "PC DOS 3.20 (Disk 2)"}}'/>
 	<hdc ref="/machines/pcx86/hdc/20mb/pcdos330-empty-at2.xml"/>
-	<keyboard ref="/machines/pcx86/keyboard/us84-softkeys.xml"/>
+	<keyboard ref="/machines/pcx86/ibm/keyboard/us84-softkeys.xml"/>
 	<debugger id="debugger" messages="fault" commands=""/>
 	<panel ref="/machines/pcx86/panel/visual.xml"/>
 	<chipset id="chipset" model="5170" floppies="[1440,1200]" monitor="ega"/>

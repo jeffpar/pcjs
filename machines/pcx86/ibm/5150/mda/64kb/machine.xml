@@ -6,14 +6,14 @@
 	<ram id="ramLow" addr="0x00000"/>
 	<rom id="romBASIC" addr="0xf6000" size="0x8000" file="/machines/pcx86/ibm/5150/rom/basic/BASIC100.json5"/>
 	<rom id="romBIOS" addr="0xfe000" size="0x2000" file="/machines/pcx86/ibm/5150/rom/bios/1981-04-24/PCBIOS-REV1.json5"/>
-	<video ref="/machines/pcx86/video/ibm/mda/ibm-mda.xml"/>
+	<video ref="/machines/pcx86/ibm/video/mda/ibm-mda.xml"/>
 	<fdc ref="/machines/pcx86/fdc/library.xml"/>
 	<cpu id="cpu8088" model="8088" pos="left" padLeft="8px" padBottom="8px">
 		<control type="button" binding="run">Run</control>
 		<control type="button" binding="reset">Reset</control>
 		<control type="button" binding="setSpeed">Speed</control>
 	</cpu>
-	<keyboard ref="/machines/pcx86/keyboard/us83-softkeys.xml"/>
+	<keyboard ref="/machines/pcx86/ibm/keyboard/us83-softkeys.xml"/>
 	<chipset id="chipset" model="5150" sw1="01000001" sw2="11111000"/>
 	<serial id="com1" adapter="1"/>
 	<parallel id="lpt1" adapter="2"/>
