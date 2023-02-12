@@ -9,7 +9,7 @@ Yesterday, I fired up [Windows 3.1](/software/pcx86/sys/windows/3.10/) and playe
 [Windows Solitaire](https://en.wikipedia.org/wiki/Microsoft_Solitaire) on my iPad.  It was a bit, um, touchy,
 but it worked.
 
-{% comment %}[<img src="/blog/images/ipad-solitaire-small.jpg" alt="Windows Solitaire on iPad"/>](/blog/images/ipad-solitaire.jpg){% endcomment %}
+{% comment %}[<img src="/blog/images/ipad-solitaire-small.jpg" alt="Windows Solitaire on iPad">](/blog/images/ipad-solitaire.jpg){% endcomment %}
 {% include gallery/image.html src="/blog/images/ipad-solitaire-small.jpg" title="iPad running Solitaire on Windows 3.10" link="/blog/images/ipad-solitaire.jpg" %}
 
 The basic touch events are:

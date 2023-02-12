@@ -6,10 +6,10 @@
 {%- if include.link -%}
   {%- capture picture_link -%}href="{{ site.baseurl }}{{ include.link }}"{%- if include.external %} target="_blank"{%- endif -%}{%- endcapture %}
     <a {{ picture_link }}>
-      <img src="{{ picture_image }}"{{ picture_width }}{{ picture_height }} alt="{{ include.caption }}"/>
+      <img src="{{ picture_image }}"{{ picture_width }}{{ picture_height }} alt="{{ include.caption }}">
     </a>
 {%- else %}
-    <img src="{{ picture_image }}"{{ picture_width }}{{ picture_height }} alt="{{ include.caption }}"/>
+    <img src="{{ picture_image }}"{{ picture_width }}{{ picture_height }} alt="{{ include.caption }}">
 {%- endif -%}
 {%- if include.credit %}
     <div class="pcjs-picture-credit">{{ include.credit }}</div>

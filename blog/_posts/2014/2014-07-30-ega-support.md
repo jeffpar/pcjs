@@ -10,7 +10,7 @@ PCjs v1.14.0 now includes basic EGA support.  It emulates the EGA hardware well 
 diagnostics and run [Windows 1.01](/software/pcx86/sys/windows/1.01/ega/) in color.  Check out our
 [Windows 1.01 "Server Array"](/software/pcx86/sys/windows/1.01/ega/array/) demo.
 
-[<img src="/blog/images/win101-array-demo-small.jpg" alt='Windows 1.01 "Server Array" Demo'/>](/blog/images/win101-array-demo.jpg)
+[<img src="/blog/images/win101-array-demo-small.jpg" alt='Windows 1.01 "Server Array" Demo'>](/blog/images/win101-array-demo.jpg)
 
 EGA support is added to a **machine.xml** file using two XML elements; eg:
 

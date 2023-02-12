@@ -474,6 +474,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "Unprotect Collection [Software/IBM PC/Shareware/Miscellaneous/]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sw/misc/unprot/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Node: gulp.js",
       "type": "node",
       "request": "launch",

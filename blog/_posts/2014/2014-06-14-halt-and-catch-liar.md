@@ -27,7 +27,7 @@ And centerpiece of this whole conceit -- the cloning of the IBM PC ROM BIOS.  Wh
 scene from Episode 2, where Brilliant Engineer looks at Hot Programmer's whiteboard in awe.  Apparently, he
 is easily awed, because he did the same thing when Sales Guy wrote "2x fast, 1/2 price" on an earlier whiteboard.
 
-[<img src="/blog/images/halt-and-catch-liar-small.jpg" alt='"Halt and Catch Fire" Scene from Episode 2'/>](/blog/images/halt-and-catch-liar.jpg)
+[<img src="/blog/images/halt-and-catch-liar-small.jpg" alt='"Halt and Catch Fire" Scene from Episode 2'>](/blog/images/halt-and-catch-liar.jpg)
 
 So if you deconstruct the code on this whiteboard, you quickly notice that while it IS assembly language, it is
 NOT the sort of assembly language you would find in a ROM BIOS, let alone ANYTHING that would leave you in awe.
