@@ -9,6 +9,7 @@ author: Jeff Parsons
 logo: /assets/img/logo-home.png
 data_dir: machines
 google_ga4: G-LDVG8LST9P
+google_analytics: UA-49658648-1
 left_brace: "{"
 right_brace: "}"
 encoding: UTF-8
