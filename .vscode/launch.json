@@ -362,6 +362,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "Microsoft QuickC for Windows 1.00",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/lang/microsoft/c/qcwin/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Microsoft Windows 3.10 [Debugger*]",
       "type": "chrome",
       "request": "launch",
@@ -557,7 +564,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all",
+        "--all=qcwin",
         "--checkpage",
         "--rebuild"
       ],
