@@ -17,7 +17,7 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true
   },
-  "[json][jsonc]": {
+  "[html][json][jsonc]": {
     "editor.detectIndentation": false,
     "editor.insertSpaces": true,
     "editor.tabSize": 2,
