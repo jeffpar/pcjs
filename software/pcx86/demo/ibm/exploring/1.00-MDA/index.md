@@ -3,7 +3,9 @@ layout: page
 title: Exploring the IBM PC (MDA)
 permalink: /software/pcx86/demo/ibm/exploring/1.00-MDA/
 preview: /software/pcx86/demo/ibm/exploring/1.00-MDA/images/screenshot.png
-redirect_from: /disks/pcx86/apps/ibm/exploring/5150/mda/
+redirect_from:
+  - /disks/pcx86/apps/ibm/exploring/5150/mda/
+  - /software/pcx86/demo/ibm/exploring/
 machines:
   - id: ibm5150
     type: pcx86

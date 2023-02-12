@@ -2,7 +2,7 @@
 layout: page
 title: SuperCalc 1.10
 permalink: /software/pcx86/app/other/sc1/1.10/
-preview: https://diskettes.pcjs.org/pcx86/app/other/sc1/1.10/SC1_V110.png
+preview: https://miscdisks.pcjs.org/pcx86/app/other/sc1/1.10/SC1_V110.png
 machines:
   - id: ibm5150
     type: pcx86

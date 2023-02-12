@@ -50,7 +50,7 @@ instead of:
 ## Unused Modules
 
 The [Int36](int36.js) class was an early attempt to build a general-purpose 36-bit integer Math class in JavaScript,
-with the thought that it would become a building block for the [PDP-10](../../pdp10/) emulation.  A Node test harness
-([int36](../bin/int36)) was written as well.  There was nothing wrong with the idea, but ultimately, it was simply more
-expedient to build the required functionality directly into the PDP-10's [opcode handlers](../../pdp10/lib/cpuops.js).
+with the thought that it would become a building block for the [PDP-10](../../dec/pdp10/) emulation.  A Node test harness
+([int36](../bin/int36.js)) was written as well.  There was nothing wrong with the idea, but ultimately, it was simply more
+expedient to build the required functionality directly into the PDP-10's [opcode handlers](../../dec/pdp10/lib/cpuops.js).
 That decision may be worth revisiting someday.

@@ -6,7 +6,6 @@ redirect_from: /apps/pcx86/1981/basic/
 machines:
   - id: ibm5150
     type: pcx86
-    debugger: true
     config: /machines/pcx86/ibm/5150/cga/64kb/debugger/machine.json
     autoMount:
       A:
