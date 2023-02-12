@@ -18,10 +18,10 @@
               element.classList.remove("pcjs-explorer-closed");
             }
           }
-          function pcjsExplorerExpand(path, altpath, prefix) {
+          function pcjsExplorerExpand(path, altPath, prefix) {
             var expansions = 0;
-            if (!path && altpath) {
-              path = altpath.replace(/^\/[^/]*\/([^/]*)\/.*$/, "/$1/");
+            if (!path && altPath) {
+              path = altPath.replace(/^\/[^/]*\/([^/]*)\/.*$/, "/$1/");
             }
             if (path) {
               var element;
@@ -85,7 +85,7 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'site.google_ga4');
+        gtag('config', '{{ site.google_ga4 }}');
         </script>
 {%- endif %}
 {%- if site.google_analytics %}
