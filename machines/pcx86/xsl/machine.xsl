@@ -56,6 +56,17 @@
 						</xsl:choose>
 					</xsl:with-param>
 				</xsl:call-template>
+				<xsl:text disable-output-escaping="yes">
+				<![CDATA[
+				<script async src="https://www.googletagmanager.com/gtag/js?id=G-LDVG8LST9P"></script>
+				<script>
+					window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
+					gtag('config', 'G-LDVG8LST9P');
+				</script>
+				]]>
+				</xsl:text>
 			</body>
 		</html>
 	</xsl:template>
