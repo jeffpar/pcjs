@@ -9,7 +9,7 @@
 	<rom id="romBASIC" addr="0xf6000" size="0x8000" file="/machines/pcx86/ibm/5160/rom/basic/BASIC110.json5"/>
 	<rom id="romBIOS" addr="0xfe000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/bios/1982-11-08/XTBIOS-REV1.json5"/>
 	<video ref="/machines/pcx86/ibm/video/ega/1984-09-13/ibm-ega-5154-128k-autolockfs.xml"/>
-	<fdc ref="/machines/pcx86/fdc/pcsig08.xml"/>
+	<fdc ref="/machines/pcx86/ibm/fdc/pcsig08.xml"/>
 	<keyboard ref="/machines/pcx86/ibm/keyboard/us83-softkeys.xml"/>
 	<debugger id="debugger"/>
 	<panel ref="/machines/pcx86/panel/wide.xml"/>
@@ -17,7 +17,7 @@
 		<control type="switches" label="SW1" binding="sw1" left="0px"/>
 		<control type="description" binding="swdesc" left="0px"/>
 	</chipset>
-	<hdc ref="/machines/pcx86/hdc/10mb/msdos320-c400-xt3.xml"/>
+	<hdc ref="/machines/pcx86/ibm/hdc/10mb/msdos320-c400-xt3.xml"/>
 	<serial id="com1" adapter="1" binding="print"/>
 	<serial id="com2" adapter="2"/>
 	<mouse serial="com2"/>

@@ -10,8 +10,8 @@
 	<rom id="romBASIC" addr="0xf6000" size="0x8000" file="/machines/pcx86/ibm/5160/rom/basic/BASIC110.json5"/>
 	<rom id="romBIOS" addr="0xfe000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/bios/1982-11-08/XTBIOS-REV1.json5"/>
 	<video ref="/machines/pcx86/ibm/video/cga/ibm-cga-lock.xml"/>
-	<fdc ref="/machines/pcx86/fdc/library.xml"/>
-	<hdc ref="/machines/pcx86/hdc/10mb/pcdos200-empty2-xt3.xml"/>
+	<fdc ref="/machines/pcx86/ibm/fdc/library.xml"/>
+	<hdc ref="/machines/pcx86/ibm/hdc/10mb/pcdos200-empty2-xt3.xml"/>
 	<keyboard ref="/machines/pcx86/ibm/keyboard/us83-softkeys.xml"/>
 	<debugger id="debugger"/>
 	<panel ref="/machines/pcx86/panel/default.xml"/>

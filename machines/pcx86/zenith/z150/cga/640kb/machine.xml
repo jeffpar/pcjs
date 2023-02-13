@@ -7,7 +7,7 @@
 	<ram id="ramBIOS" addr="0xf0000" size="0x4000" comment="16Kb of scratchpad RAM"/>
 	<rom ref="/machines/pcx86/zenith/z150/rom/bios-z150-1988.xml"/>
 	<video ref="/machines/pcx86/ibm/video/cga/ibm-cga.xml"/>
-	<fdc ref="/machines/pcx86/fdc/library.xml"/>
+	<fdc ref="/machines/pcx86/ibm/fdc/library.xml"/>
 	<cpu id="cpu8088" model="8088" autostart="true" pos="left" padLeft="8px" padBottom="8px">
 		<control type="button" binding="run">Run</control>
 		<control type="button" binding="reset">Reset</control>

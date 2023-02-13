@@ -36,6 +36,7 @@
     "google-closure-compiler": "^20221102.0.1",
     "got": "^11.8.1",
     "gulp": "^4.0.2",
+    "gulp-chmod": "^3.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-foreach": "^0.1.0",
     "gulp-header": "^2.0.9",

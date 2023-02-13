@@ -7898,8 +7898,7 @@
 							"@format": "PC1200K"
 						}
 					],
-					"@documents": [
-					]
+					"@documents": []
 				},
 				"graphics_for_the_ibm_pc": {
 					"@title": "Graphics for the IBM PC",

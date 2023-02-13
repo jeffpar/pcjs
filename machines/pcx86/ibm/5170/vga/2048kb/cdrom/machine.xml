@@ -8,10 +8,10 @@
 	<ram id="ramExt" addr="0x100000" size="0x360000" comment=""/>
 	<rom id="romBIOS" addr="0xf0000" size="0x10000" alias="0xff0000" file="/machines/pcx86/ibm/5170/rom/bios/1985-11-15/ATBIOS-REV3.json5"/>
 	<video ref="/machines/pcx86/ibm/video/vga/1986-10-27/ibm-vga-autolockfs.xml"/>
-	<fdc ref="/machines/pcx86/fdc/library.xml" autoMount='{A:{name:"None"}, B:{name:"None"}}'/>
+	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A:{name:"None"}, B:{name:"None"}}'/>
 	<keyboard ref="/machines/pcx86/ibm/keyboard/us84-softkeys.xml"/>
-	<hdc ref="/machines/pcx86/hdc/20mb/pcdos330-win310-vga-at2.xml"/>
-	<hdc ref="/machines/pcx86/hdc/cdrom/library-atapi.xml"/>
+	<hdc ref="/machines/pcx86/ibm/hdc/20mb/pcdos330-win310-vga-at2.xml"/>
+	<hdc ref="/machines/pcx86/ibm/hdc/cdrom/library-atapi.xml"/>
 	<chipset id="chipset" model="5170" floppies="[1440,1200]"/>
 	<serial id="com1" adapter="1"/>
 	<serial id="com2" adapter="2" binding="print"/>

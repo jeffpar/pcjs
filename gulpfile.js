@@ -59,6 +59,7 @@
 
 var gulp = require("gulp");
 var gulpNewer = require("gulp-newer");
+var gulpChmod = require("gulp-chmod");
 var gulpConcat = require("gulp-concat");
 var gulpMergeJSON = require("gulp-merge-json");
 var gulpForEach = require("gulp-foreach");
@@ -315,10 +316,11 @@ gulp.task("combine", function() {
             return collection;
         }
     };
+    fs.chmodSync(sDstDiskCollection, 0o644);
     return gulp.src(aSrcDiskCollections)
         .pipe(gulpNewer(sDstDiskCollection))
         .pipe(gulpMergeJSON(mergeOptions))
-        .pipe(gulp.dest(baseDir));
+        .pipe(gulp.dest(baseDir, {'mode': 0o444}));
 });
 
 gulp.task("concat", gulp.parallel(...aConcatTasks));

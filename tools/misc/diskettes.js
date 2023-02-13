@@ -540,7 +540,7 @@ if (args.argc < 2) {
      * began the migration from XML to JSON.  XML files are still being used in a few areas (eg, "legacy" machine definition
      * files, where the amount of conversion work outweighs any benefit), but they are no longer used for diskette manifests.
      *
-     * NOTE: Until recently, there was still a caveat with respect to XML diskette collections: /machines/pcx86/fdc/pcsig08.xml.
+     * NOTE: Until recently, there was still a caveat with respect to XML diskette collections: /machines/pcx86/ibm/fdc/pcsig08.xml.
      * However, that's simply because I hadn't finished cleaning up the XML file and adding references to the new JSON files.
      * Go to https://github.com/jeffpar/pcjs/blob/e804442f1df7912e32f3c6d1f668149bb5412394/machines/pcx86/fdc/pcsig08.xml to
      * see what it looked like prior to conversion.

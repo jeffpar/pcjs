@@ -1,10 +1,11 @@
 ---
 layout: page
 title: PC 47Mb Hard Drives
-permalink: /machines/pcx86/hdc/47mb/
+permalink: /machines/pcx86/ibm/hdc/47mb/
 redirect_from:
   - /disks/pcx86/drives/47mb/
   - /configs/pcx86/hdc/47mb/
+  - /machines/pcx86/hdc/47mb/
 ---
 
 PCjs includes unformatted 47Mb Type 5 drives in selected IBM PC AT and COMPAQ DeskPro machines,
