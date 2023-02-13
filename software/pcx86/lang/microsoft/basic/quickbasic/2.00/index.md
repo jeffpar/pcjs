@@ -45,6 +45,8 @@ contains an identical `QB.EXE` and presumably a corresponding `BCOM20.LIB`.
            12 file(s)     263011 bytes
                            91136 bytes free
 
+![MS QuickBASIC 2.00 (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/basic/quickbasic/2.00/MS-QUICKBASIC-200-DISK1.jpg)
+
 ### Directory of MS QuickBASIC 2.00 (Personal)
 
      Volume in drive A is QUICKBAS2JP
@@ -474,7 +476,3 @@ contains an identical `QB.EXE` and presumably a corresponding `BCOM20.LIB`.
         The input editor supplied with QuickBASIC is a line editor only. This 
         means you can move and edit only horizontally. Attempts to use the 
         UP, DOWN, PGUP and PGDN cursor keys produce a beep.
-
----
-
-![MS QuickBASIC 2.00 (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/basic/quickbasic/2.00/MS-QUICKBASIC-200-DISK1.jpg)

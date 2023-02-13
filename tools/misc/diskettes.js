@@ -108,6 +108,22 @@ function fileExists(sFile)
 }
 
 /**
+ * getFileSize(sFile)
+ *
+ * @param {string} sFile
+ * @returns {number} (-1 if file not found)
+ */
+function getFileSize(sFile)
+{
+    let size;
+    try {
+        let stats = fs.statSync(sFile);
+        size = stats.size;
+    } catch(err) {}
+    return size || -1;
+}
+
+/**
  * processFiles(sDir, diskettes)
  *
  * @param {string} sDir
@@ -236,6 +252,25 @@ function processFolders(sDir, argv)
          */
         printf("processing %s...\n", imgPath);
 
+        let formatType;
+        if (imgFile.indexOf(".img") > 0) {
+            let sizeFile = getFileSize(imgFile);
+            if (sizeFile > 0) {
+                sizeFile = (sizeFile / 1024)|0;
+                formatType = "PC" + sizeFile + "K";
+            }
+        }
+
+        let photoType = ".jpg";
+        let photoFile = imgFile.replace(".img", "") + photoType;
+        if (!fileExists(photoFile)) {
+            photoType = ".png";
+            photoFile = imgFile.replace(".img", "") + photoType;
+            if (!fileExists(photoFile)) {
+                photoType = undefined;
+            }
+        }
+
         let i;
         let lastObj, lastPart;
         let diskObj = diskettes;
@@ -288,6 +323,24 @@ function processFolders(sDir, argv)
                         }
                     }
                     if (diskObj) {
+                        if (formatType && diskObj['@format'] != formatType) {
+                            printf("warning: @format should be %s\n", formatType);
+                            if (formatType) {
+                                diskObj['@format'] = formatType;
+                            } else {
+                                delete diskObj['@format'];
+                            }
+                            diskettesUpdated = true;
+                        }
+                        if (diskObj['@photo'] != photoType) {
+                            printf("warning: @photo should be %s\n", photoType);
+                            if (photoType) {
+                                diskObj['@photo'] = photoType;
+                            } else {
+                                delete diskObj['@photo'];
+                            }
+                            diskettesUpdated = true;
+                        }
                         if (archiveType) {
                             if (!diskObj['@archive']) {
                                 diskObj['@archive'] = archiveType;
@@ -320,6 +373,12 @@ function processFolders(sDir, argv)
                     '@title': groupName + ' ' + mediaName,
                     '@diskette': jsonName
                 };
+                if (formatType) {
+                    diskette['@format'] = formatType;
+                }
+                if (photoType) {
+                    diskette['@photo'] = photoType;
+                }
                 if (archiveType) {
                     diskette['@archive'] = archiveType;
                 }

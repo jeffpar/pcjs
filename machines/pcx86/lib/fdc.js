@@ -2778,7 +2778,7 @@ class FDC extends Component {
             drive.resCode = FDC.REG_DATA.RES.NONE;
             if (this.chipset) {
                 if (!drive.bCylinder && !drive.bHead && drive.bSector == 1) {
-                    if (!drive.fBootable && this.chipset.checkDMA(ChipSet.DMA_FDC) == 0x7C00) {
+                    if (!drive.fBootable && this.chipset.getDMAState(ChipSet.DMA_FDC)[0] == 0x7C00) {
                         return false;
                     }
                 }

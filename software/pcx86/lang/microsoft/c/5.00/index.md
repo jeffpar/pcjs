@@ -6,16 +6,14 @@ redirect_from: /disks/pcx86/tools/microsoft/c/5.00/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "MS C 5.00 (SETUP)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-[Documentation](#documents) and directory listings of the four 360Kb distribution diskettes are provided below.
-
-NOTE: This appears to be an *incomplete* set.
+[Documentation](#documents) and directory listings of the 360Kb distribution diskettes are provided below.
 
 {% include machine.html id="ibm5170" %}
 
@@ -40,6 +38,8 @@ NOTE: This appears to be an *incomplete* set.
     SETUP    DOC      6112  10-15-87   5:00a
            14 file(s)     346545 bytes
                             9216 bytes free
+
+[Source](https://winworldpc.com/product/microsoft-c-c/5x)
 
 ### Directory of MS C 5.00 (COMPILER)
 
@@ -67,6 +67,8 @@ NOTE: This appears to be an *incomplete* set.
     Total files listed:
            12 file(s)     335875 bytes
                            20480 bytes free
+
+[Source](https://winworldpc.com/product/microsoft-c-c/5x)
 
 ### Directory of MS C 5.00 (UTILITY1)
 
@@ -154,6 +156,8 @@ NOTE: This appears to be an *incomplete* set.
            55 file(s)     331207 bytes
                             5120 bytes free
 
+[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+
 ### Directory of MS C 5.00 (UTILITY2)
 
      Volume in drive A has no label
@@ -182,6 +186,188 @@ NOTE: This appears to be an *incomplete* set.
     Total files listed:
            14 file(s)     295633 bytes
                            61440 bytes free
+
+[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+
+### Directory of MS C 5.00 (INCLIBS)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    INCLUDE      <DIR>      10-18-87  12:49p
+    LIB          <DIR>      10-18-87  12:49p
+    SLIBC    LIB    129473  10-15-87   5:00a
+    SLIBFP   LIB     37795  10-15-87   5:00a
+    SVARSTCK OBJ       508  10-15-87   5:00a
+    FORTRAN      <DIR>      10-18-87  12:50p
+            6 file(s)     167776 bytes
+
+     Directory of A:\INCLUDE
+
+    .            <DIR>      10-18-87  12:49p
+    ..           <DIR>      10-18-87  12:49p
+    SYS          <DIR>      10-18-87  12:49p
+    ASSERT   H         670  10-15-87   5:00a
+    BIOS     H        4857  10-15-87   5:00a
+    CONIO    H         950  10-15-87   5:00a
+    CTYPE    H        2469  10-15-87   5:00a
+    DIRECT   H         690  10-15-87   5:00a
+    DOS      H        5917  10-15-87   5:00a
+    ERRNO    H        1283  10-15-87   5:00a
+    FCNTL    H        1255  10-15-87   5:00a
+    FLOAT    H        6011  10-15-87   5:00a
+    GRAPH    H        7294  10-15-87   5:00a
+    IO       H        1296  10-15-87   5:00a
+    LIMITS   H        1553  10-15-87   5:00a
+    MALLOC   H        3099  10-15-87   5:00a
+    MATH     H        3308  10-15-87   5:00a
+    MEMORY   H        1065  10-15-87   5:00a
+    PROCESS  H        1799  10-15-87   5:00a
+    SEARCH   H        1024  10-15-87   5:00a
+    SETJMP   H         905  10-15-87   5:00a
+    SHARE    H         554  10-15-87   5:00a
+    SIGNAL   H        1531  10-15-87   5:00a
+    STDARG   H         613  10-15-87   5:00a
+    STDDEF   H        1098  10-15-87   5:00a
+    STDIO    H        4470  10-15-87   5:00a
+    STDLIB   H        4690  10-15-87   5:00a
+    STRING   H        2209  10-15-87   5:00a
+    TIME     H        2342  10-15-87   5:00a
+    VARARGS  H         641  10-15-87   5:00a
+           30 file(s)      63593 bytes
+
+     Directory of A:\INCLUDE\SYS
+
+    .            <DIR>      10-18-87  12:49p
+    ..           <DIR>      10-18-87  12:49p
+    LOCKING  H         573  10-15-87   5:00a
+    STAT     H        1497  10-15-87   5:00a
+    TIMEB    H         846  10-15-87   5:00a
+    TYPES    H         849  10-15-87   5:00a
+    UTIME    H        1061  10-15-87   5:00a
+            7 file(s)       4826 bytes
+
+     Directory of A:\LIB
+
+    .            <DIR>      10-18-87  12:49p
+    ..           <DIR>      10-18-87  12:49p
+    EM       LIB     16409  10-15-87   5:00a
+    87       LIB      4121  10-15-87   5:00a
+    LIBH     LIB     13689  10-15-87   5:00a
+    GRAPHICS LIB     57289  10-15-87   5:00a
+    SETARGV  OBJ       132  10-15-87   5:00a
+    BINMODE  OBJ       122  10-15-87   5:00a
+            8 file(s)      91762 bytes
+
+     Directory of A:\FORTRAN
+
+    .            <DIR>      10-18-87  12:50p
+    ..           <DIR>      10-18-87  12:50p
+    LDBGMSG  OBJ       542  10-15-87   5:00a
+    MDBGMSG  OBJ       538  10-15-87   5:00a
+    F4COMPAT BAT      3022  10-15-87   5:00a
+            5 file(s)       4102 bytes
+
+    Total files listed:
+           56 file(s)     332059 bytes
+                            3072 bytes free
+
+[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+
+### Directory of MS C 5.00 (LIBMC)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    SLIBFA   LIB     46601  10-15-87   5:00a
+    MLIBC    LIB    131009  10-15-87   5:00a
+    MLIBFP   LIB     38307  10-15-87   5:00a
+    MLIBFA   LIB     47625  10-15-87   5:00a
+    CLIBFA   LIB     47625  10-15-87   5:00a
+    LLIBFA   LIB     48649  10-15-87   5:00a
+            6 file(s)     359816 bytes
+                               0 bytes free
+
+[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+
+### Directory of MS C 5.00 (LIBL)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    CLIBC    LIB    139237  10-15-87   5:00a
+    CLIBFP   LIB     38309  10-15-87   5:00a
+    LLIBC    LIB    140773  10-15-87   5:00a
+    LLIBFP   LIB     39845  10-15-87   5:00a
+    LVARSTCK OBJ       476  10-15-87   5:00a
+    MVARSTCK OBJ       508  10-15-87   5:00a
+    CVARSTCK OBJ       476  10-15-87   5:00a
+            7 file(s)     359624 bytes
+                               0 bytes free
+
+[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+
+### Directory of MS C 5.00 (CODEVIEW)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    CV       EXE    220066  10-15-87   5:00a
+    CV       HLP     18348  10-15-87   5:00a
+    SAMPLE       <DIR>      10-18-87  12:55p
+            3 file(s)     238414 bytes
+
+     Directory of A:\SAMPLE
+
+    .            <DIR>      10-18-87  12:55p
+    ..           <DIR>      10-18-87  12:55p
+    ADAPT    BAT       133  10-15-87   5:00a
+    DEMOB    BAT       254  10-15-87   5:00a
+    LIFEB    BAT       336  10-15-87   5:00a
+    LIFEEB   BAT       402  10-15-87   5:00a
+    MENU     BAT       550  10-15-87   5:00a
+    SAMPLE   BAT      1059  10-15-87   5:00a
+    LIFE     C       14713  10-15-87   5:00a
+    LIFE     EXE     33237  10-15-87   5:00a
+    LIFE     R        5282  10-15-87   5:00a
+    C_AUTO   CV       3571  10-15-87   5:00a
+    E_AUTO   CV       6788  10-15-87   5:00a
+    L_AUTO   CV      13272  10-15-87   5:00a
+    M_AUTO   CV        733  10-15-87   5:00a
+    Q_AUTO   CV         15  10-15-87   5:00a
+    S_AUTO   CV       9091  10-15-87   5:00a
+    RESPOND  COM       124  10-15-87   5:00a
+    S1       @@@       230  10-15-87   5:00a
+    S12      @@@       926  10-15-87   5:00a
+    S13      @@@       368  10-15-87   5:00a
+    S14      @@@       520  10-15-87   5:00a
+    S2       @@@       752  10-15-87   5:00a
+    S3       @@@       276  10-15-87   5:00a
+    S4       @@@       354  10-15-87   5:00a
+    S5       @@@       554  10-15-87   5:00a
+    S6       @@@       432  10-15-87   5:00a
+    S7       @@@       427  10-15-87   5:00a
+    S8       @@@       479  10-15-87   5:00a
+    S9       @@@       865  10-15-87   5:00a
+           30 file(s)      95743 bytes
+
+    Total files listed:
+           33 file(s)     334157 bytes
+                           11264 bytes free
+
+[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+
+### Directory of MS C 5.00 (QUICKC)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    QC       EXE    327472  10-15-87   5:00a
+    README   QC      22462  10-15-87   5:00a
+            2 file(s)     349934 bytes
+                           12288 bytes free
+
+[Source](https://winworldpc.com/product/microsoft-c-c/5x)
 
 <!-- Documentation -->
 

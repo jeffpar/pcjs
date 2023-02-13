@@ -51,6 +51,8 @@ and a copy of the [README](#readmedoc).
            21 file(s)     341740 bytes
                             8192 bytes free
 
+![MS QuickBASIC 1.00]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/basic/quickbasic/1.00/MS-QUICKBASIC-100.jpg)
+
 ### README.DOC
 
     MICROSOFT
@@ -237,7 +239,3 @@ and a copy of the [README](#readmedoc).
             FOO                   BC_VARS
 
     where "FOO" is the name of the COMMON.
-
----
-
-![MS QuickBASIC 1.00]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/basic/quickbasic/1.00/MS-QUICKBASIC-100.jpg)
