@@ -1,6 +1,6 @@
 ---
 layout: page
-title: PC 47Mb Hard Drives
+title: IBM PC 47Mb Hard Drives
 permalink: /machines/pcx86/ibm/hdc/47mb/
 redirect_from:
   - /disks/pcx86/drives/47mb/

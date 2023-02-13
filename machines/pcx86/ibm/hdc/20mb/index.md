@@ -1,6 +1,6 @@
 ---
 layout: page
-title: PC 20Mb Hard Drives
+title: IBM PC 20Mb Hard Drives
 permalink: /machines/pcx86/ibm/hdc/20mb/
 redirect_from:
   - /disks/pcx86/drives/20mb/
