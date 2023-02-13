@@ -80,7 +80,7 @@
           pcjsExplorerInit();
         </script>
 {%- if site.google_ga4 %}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-LDVG8LST9P"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_ga4 }}"></script>
         <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
