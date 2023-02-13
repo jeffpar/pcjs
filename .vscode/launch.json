@@ -362,6 +362,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "Microsoft C Compiler 5.0",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/lang/microsoft/c/5.00/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Microsoft QuickC for Windows 1.00",
       "type": "chrome",
       "request": "launch",
@@ -519,7 +526,7 @@
       "program": "${workspaceFolder}/tools/misc/diskettes.js",
       "args": [
         "/private",
-        "--filter=group10",
+        "--filter=group04",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",
@@ -572,8 +579,7 @@
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
         "--all=qcwin",
-        "--checkpage",
-        "--rebuild"
+        "--checkpage"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,

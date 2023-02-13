@@ -683,7 +683,7 @@ function processDisk(di, diskFile, argv, diskette)
             sListing += "\n[Source](" + diskette.source + ")\n";
         }
 
-        let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^{[\\s]|$)";
+        let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^!{[\\s]|$)";
         let matchDirectory = sIndexNew.match(new RegExp(sMatch));
         if (matchDirectory) {
             if (matchDirectory[1].length != 3) {
