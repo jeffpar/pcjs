@@ -8051,6 +8051,517 @@
 		"magazines": {
 			"@title": "Magazines",
 			"@versions": {
+				"bbd": {
+					"@title": "Big Blue Disk",
+					"@media": [
+						{
+							"@title": "Big Blue Disk #1",
+							"@diskette": "BBD01.json",
+							"@photo": ".jpg",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd01_201608"
+						},
+						{
+							"@title": "Big Blue Disk #2",
+							"@diskette": "BBD02.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/msdos_bbd02"
+						},
+						{
+							"@title": "Big Blue Disk #3",
+							"@diskette": "BBD03.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd03_201608"
+						},
+						{
+							"@title": "Big Blue Disk #4",
+							"@diskette": "BBD04.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd04"
+						},
+						{
+							"@title": "Big Blue Disk #5",
+							"@diskette": "BBD05.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd05"
+						},
+						{
+							"@title": "Big Blue Disk #8",
+							"@diskette": "BBD08.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd08"
+						},
+						{
+							"@title": "Big Blue Disk #10",
+							"@diskette": "BBD10.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd10"
+						},
+						{
+							"@title": "Big Blue Disk #11",
+							"@diskette": "BBD11.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd11"
+						},
+						{
+							"@title": "Big Blue Disk #15",
+							"@diskette": "BBD15.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd15"
+						},
+						{
+							"@title": "Big Blue Disk #16",
+							"@diskette": "BBD16.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd16"
+						},
+						{
+							"@title": "Big Blue Disk #17",
+							"@diskette": "BBD17.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd17"
+						},
+						{
+							"@title": "Big Blue Disk #18",
+							"@diskette": "BBD18.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd18"
+						},
+						{
+							"@title": "Big Blue Disk #19",
+							"@diskette": "BBD19.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd19"
+						},
+						{
+							"@title": "Big Blue Disk #20",
+							"@diskette": "BBD20.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd20"
+						},
+						{
+							"@title": "Big Blue Disk #21",
+							"@diskette": "BBD21.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd21"
+						},
+						{
+							"@title": "Big Blue Disk #22",
+							"@diskette": "BBD22.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd22"
+						},
+						{
+							"@title": "Big Blue Disk #23",
+							"@diskette": "BBD23.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd23"
+						},
+						{
+							"@title": "Big Blue Disk #24",
+							"@diskette": "BBD24.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd24"
+						},
+						{
+							"@title": "Big Blue Disk #25",
+							"@diskette": "BBD25.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd25"
+						},
+						{
+							"@title": "Big Blue Disk #26",
+							"@diskette": "BBD26.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd26"
+						},
+						{
+							"@title": "Big Blue Disk #27",
+							"@diskette": "BBD27.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd27"
+						},
+						{
+							"@title": "Big Blue Disk #28",
+							"@diskette": "BBD28.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd28"
+						},
+						{
+							"@title": "Big Blue Disk #29",
+							"@diskette": "BBD29.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd29"
+						},
+						{
+							"@title": "Big Blue Disk #30",
+							"@diskette": "BBD30.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd30"
+						},
+						{
+							"@title": "Big Blue Disk #31",
+							"@diskette": "BBD31.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd31new"
+						},
+						{
+							"@title": "Big Blue Disk #32",
+							"@diskette": "BBD32.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd32"
+						},
+						{
+							"@title": "Big Blue Disk #33",
+							"@diskette": "BBD33.json",
+							"@photo": ".jpg",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd33"
+						},
+						{
+							"@title": "Big Blue Disk #34",
+							"@diskette": "BBD34.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd34"
+						},
+						{
+							"@title": "Big Blue Disk #35",
+							"@diskette": "BBD35.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd35"
+						},
+						{
+							"@title": "Big Blue Disk #36",
+							"@diskette": "BBD36.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd36"
+						},
+						{
+							"@title": "Big Blue Disk #37",
+							"@diskette": "BBD37.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd37"
+						},
+						{
+							"@title": "Big Blue Disk #38",
+							"@diskette": "BBD38.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd38"
+						},
+						{
+							"@title": "Big Blue Disk #39",
+							"@diskette": "BBD39.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd39"
+						},
+						{
+							"@title": "Big Blue Disk #40",
+							"@diskette": "BBD40.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd40"
+						},
+						{
+							"@title": "Big Blue Disk #41",
+							"@diskette": "BBD41.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd41"
+						},
+						{
+							"@title": "Big Blue Disk #42",
+							"@diskette": "BBD42.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd42"
+						},
+						{
+							"@title": "Big Blue Disk #43",
+							"@diskette": "BBD43.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd43"
+						},
+						{
+							"@title": "Big Blue Disk #44",
+							"@diskette": "BBD44.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd44"
+						},
+						{
+							"@title": "Big Blue Disk #45",
+							"@diskette": "BBD45.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd45"
+						},
+						{
+							"@title": "Big Blue Disk #46",
+							"@diskette": "BBD46.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd46"
+						},
+						{
+							"@title": "Big Blue Disk #47",
+							"@diskette": "BBD47.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd47"
+						},
+						{
+							"@title": "Big Blue Disk #48",
+							"@diskette": "BBD48.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd48"
+						},
+						{
+							"@title": "Big Blue Disk #49",
+							"@diskette": "BBD49.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd49"
+						},
+						{
+							"@title": "Big Blue Disk #50",
+							"@diskette": "BBD50.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd50"
+						},
+						{
+							"@title": "Big Blue Disk #51",
+							"@diskette": "BBD51.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd51"
+						},
+						{
+							"@title": "Big Blue Disk #52",
+							"@diskette": "BBD52.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd52"
+						},
+						{
+							"@title": "Big Blue Disk #53",
+							"@diskette": "BBD53.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd53"
+						},
+						{
+							"@title": "Big Blue Disk #54",
+							"@diskette": "BBD54.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd54"
+						},
+						{
+							"@title": "Big Blue Disk #55",
+							"@diskette": "BBD55.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd55"
+						},
+						{
+							"@title": "Big Blue Disk #56",
+							"@diskette": "BBD56.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd56"
+						},
+						{
+							"@title": "Big Blue Disk #57",
+							"@diskette": "BBD57.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/bbd57"
+						},
+						{
+							"@title": "Big Blue Disk #58",
+							"@diskette": "ODM58.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm58"
+						},
+						{
+							"@title": "Big Blue Disk #59",
+							"@diskette": "ODM59.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm59"
+						},
+						{
+							"@title": "Big Blue Disk #60",
+							"@diskette": "ODM60.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm60"
+						},
+						{
+							"@title": "Big Blue Disk #61",
+							"@diskette": "ODM61.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm61"
+						},
+						{
+							"@title": "Big Blue Disk #62",
+							"@diskette": "ODM62.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm62"
+						},
+						{
+							"@title": "Big Blue Disk #63",
+							"@diskette": "ODM63.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm63"
+						},
+						{
+							"@title": "Big Blue Disk #64",
+							"@diskette": "ODM64.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm64"
+						},
+						{
+							"@title": "Big Blue Disk #65",
+							"@diskette": "ODM65.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm65"
+						},
+						{
+							"@title": "Big Blue Disk #66",
+							"@diskette": "ODM66.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm66"
+						},
+						{
+							"@title": "Big Blue Disk #67",
+							"@diskette": "ODM67.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm67"
+						},
+						{
+							"@title": "Big Blue Disk #68",
+							"@diskette": "ODM68.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm68"
+						},
+						{
+							"@title": "Big Blue Disk #69",
+							"@diskette": "ODM69.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm69"
+						},
+						{
+							"@title": "Big Blue Disk #70",
+							"@diskette": "ODM70.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm70"
+						},
+						{
+							"@title": "Big Blue Disk #71",
+							"@diskette": "ODM71.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm71"
+						},
+						{
+							"@title": "Big Blue Disk #72",
+							"@diskette": "ODM72.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm72"
+						},
+						{
+							"@title": "Big Blue Disk #73",
+							"@diskette": "ODM73.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm73"
+						},
+						{
+							"@title": "Big Blue Disk #74",
+							"@diskette": "ODM74.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm74"
+						},
+						{
+							"@title": "Big Blue Disk #75",
+							"@diskette": "ODM75.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm75"
+						},
+						{
+							"@title": "Big Blue Disk #76",
+							"@diskette": "ODM76.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm76"
+						},
+						{
+							"@title": "Big Blue Disk #77",
+							"@diskette": "ODM77.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm77"
+						},
+						{
+							"@title": "Big Blue Disk #78",
+							"@diskette": "ODM78.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm78"
+						},
+						{
+							"@title": "Big Blue Disk #79",
+							"@diskette": "ODM79.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm79"
+						},
+						{
+							"@title": "Big Blue Disk #80",
+							"@diskette": "ODM80.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm80"
+						},
+						{
+							"@title": "Big Blue Disk #81",
+							"@diskette": "ODM81.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm81"
+						},
+						{
+							"@title": "Big Blue Disk #82",
+							"@diskette": "ODM82.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm82"
+						},
+						{
+							"@title": "Big Blue Disk #83",
+							"@diskette": "ODM83.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm83"
+						},
+						{
+							"@title": "Big Blue Disk #84",
+							"@diskette": "ODM84.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm84"
+						},
+						{
+							"@title": "Big Blue Disk #85",
+							"@diskette": "ODM85.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm85"
+						},
+						{
+							"@title": "Big Blue Disk #86",
+							"@diskette": "ODM86.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm86"
+						},
+						{
+							"@title": "Big Blue Disk #87",
+							"@diskette": "ODM87.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm87"
+						},
+						{
+							"@title": "Big Blue Disk #88",
+							"@diskette": "ODM88.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm88"
+						},
+						{
+							"@title": "Big Blue Disk #89",
+							"@diskette": "ODM89.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm89"
+						},
+						{
+							"@title": "Big Blue Disk #90",
+							"@diskette": "ODM90.json",
+							"@archive": "folder",
+							"@source": "https://archive.org/details/odm90"
+						}
+					]
+				},
 				"pcdm": {
 					"@title": "PC Disk Magazine",
 					"@media": [
