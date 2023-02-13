@@ -197,8 +197,7 @@ function processFolders(sDir, argv)
 {
     let dirParts = sDir.split(path.sep);
     let dirServer = dirParts[0].length? dirParts[0] : dirParts[1];
-    let dirDiskettes = (dirServer == "private"? dirServer : "diskettes");
-    let diskettesFile = path.join(rootDir, dirDiskettes, "pcx86", "diskettes.json");
+    let diskettesFile = path.join(rootDir, dirServer, "pcx86", "diskettes.json");
 
     let diskettesUpdated = false;
     printf("reading %s...\n", diskettesFile.slice(rootDir.length));
@@ -242,6 +241,9 @@ function processFolders(sDir, argv)
         if (imgParts[imgParts.length-1].indexOf('_') == 0) {
             return;
         }
+        if (imgParts[imgParts.length-1] == "kryoflux") {
+            return;
+        }
 
         /*
          * Here's an example:
@@ -274,7 +276,7 @@ function processFolders(sDir, argv)
         let i;
         let lastObj, lastPart;
         let diskObj = diskettes;
-        let media, mediaName, jsonName = "", archiveType = "";
+        let media, mediaName, title = "", jsonName = "", archiveType = "";
         for (i = 0; i < imgParts.length; i++) {
             if (imgParts[i] != "archive") {
                 let obj = diskObj[imgParts[i]];
@@ -282,6 +284,7 @@ function processFolders(sDir, argv)
                     obj = diskObj['@versions'] && (diskObj['@versions'][imgParts[i]] || diskObj['@versions']['']);
                 }
                 diskObj = obj;
+                if (diskObj['@title']) title = diskObj['@title'];
             }
             else {
                 /*
@@ -369,8 +372,16 @@ function processFolders(sDir, argv)
                 groupName = imgPath.slice(0, i).toUpperCase();
             }
             if (media) {
+                if (!title) {
+                    title = groupName + ' ' + mediaName;
+                } else {
+                    let matchDigits = mediaName.match(/([0-9]+)$/);
+                    if (matchDigits) {
+                        title += " #" + (+matchDigits[1]);
+                    }
+                }
                 let diskette = {
-                    '@title': groupName + ' ' + mediaName,
+                    '@title': title,
                     '@diskette': jsonName
                 };
                 if (formatType) {
@@ -395,7 +406,7 @@ function processFolders(sDir, argv)
             printf("use --overwrite to update %s\n", diskettesFile.slice(rootDir.length));
         } else {
             printf("updating %s...\n", diskettesFile.slice(rootDir.length));
-            fs.writeFileSync(diskettesFile, JSON.stringify(diskettes, null, 2));
+            fs.writeFileSync(diskettesFile, JSON.stringify(diskettes, null, 2) + "\n");
         }
     }
 }
