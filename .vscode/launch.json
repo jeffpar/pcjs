@@ -559,24 +559,6 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all",
-        "--checkdisk",
-        "--rebuild",
-        "--verbose"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
-      "name": "Node: diskimage.js --all=[pattern] --checkdisk --rebuild",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
-      "args": [
         "--all=pcsig08",
         "--checkdisk",
         "--rebuild",
@@ -595,7 +577,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all=qcwin",
+        "--all=bbd",
         "--checkpage"
       ],
       "cwd": "${workspaceFolder}",
