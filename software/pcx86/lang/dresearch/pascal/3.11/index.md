@@ -99,4 +99,6 @@ machines:
             9 file(s)     150195 bytes
                             7680 bytes free
 
+<!-- Documentation -->
+
 {% include gallery/documents.html width="200" height="260" %}

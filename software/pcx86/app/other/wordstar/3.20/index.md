@@ -47,7 +47,7 @@ You can browse all of the [Additional Materials](#additional-materials) below.
             6 file(s)     113920 bytes
                            45568 bytes free
 
-![WordStar 3.20 Disk 1]({{ site.software.miscdisks.server }}/pcx86/app/other/wordstar/3.20/WS320-ORIG.png)
+![WordStar 3.20 (Original)]({{ site.software.miscdisks.server }}/pcx86/app/other/wordstar/3.20/WS320-ORIG.png)
 
 ### Directory of WordStar 3.20 (MailMerge)
 
@@ -58,7 +58,7 @@ You can browse all of the [Additional Materials](#additional-materials) below.
             1 file(s)      11520 bytes
                           148480 bytes free
 
-![WordStar 3.20 Disk 2]({{ site.software.miscdisks.server }}/pcx86/app/other/wordstar/3.20/MM320-ORIG.png)
+![WordStar 3.20 (MailMerge)]({{ site.software.miscdisks.server }}/pcx86/app/other/wordstar/3.20/MM320-ORIG.png)
 
 ### Directory of WordStar 3.20 (Backup)
 

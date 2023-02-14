@@ -127,4 +127,6 @@ are unfortunately incomplete.
 
 ![Inside the IBM PC (Disk 3)]({{ site.software.miscdisks.server }}/pcx86/sw/books/inside_the_ibm_pc/INSIDE-THE-IBM-PC-2A.jpg)
 
+<!-- Documentation -->
+
 {% include gallery/documents.html %}

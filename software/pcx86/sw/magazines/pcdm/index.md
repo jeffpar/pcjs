@@ -304,4 +304,6 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
 
 ![PC Disk Magazine (Disk 10)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK10.jpg)
 
+<!-- Documentation -->
+
 {% include gallery/documents.html path="/documents/magazines/pcdm/" %}
