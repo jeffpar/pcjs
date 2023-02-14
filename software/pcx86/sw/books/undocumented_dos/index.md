@@ -6,7 +6,7 @@ redirect_from: /pubs/pc/programming/Undocumented_DOS/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "Undocumented DOS (Disk 1)"
@@ -362,31 +362,31 @@ by Schulman, Brown, Maxey, Michels, Kyle
      Volume in drive A is BIN
      Directory of A:\
 
-    CHAP1        <DIR>       1-24-18   2:26a
-    CHAP10       <DIR>       1-24-18   2:24a
-    CHAP2        <DIR>       1-24-18   2:26a
-    CHAP3        <DIR>       1-24-18   2:25a
-    CHAP4        <DIR>       1-24-18   2:25a
-    CHAP5        <DIR>       1-24-18   2:25a
-    CHAP6        <DIR>       1-24-18   2:25a
-    CHAP7        <DIR>       1-24-18   2:25a
-    CHAP8        <DIR>       1-24-18   2:24a
-    CHAP9        <DIR>       1-24-18   2:24a
-    INTRLIST     <DIR>       1-24-18   2:24a
+    CHAP1        <DIR>       5-26-22   2:47a
+    CHAP10       <DIR>       5-26-22   2:47a
+    CHAP2        <DIR>       5-26-22   2:47a
+    CHAP3        <DIR>       5-26-22   2:47a
+    CHAP4        <DIR>       5-26-22   2:47a
+    CHAP5        <DIR>       5-26-22   2:47a
+    CHAP6        <DIR>       5-26-22   2:47a
+    CHAP7        <DIR>       5-26-22   2:47a
+    CHAP8        <DIR>       5-26-22   2:47a
+    CHAP9        <DIR>       5-26-22   2:47a
+    INTRLIST     <DIR>       5-26-22   2:47a
            11 file(s)          0 bytes
 
      Directory of A:\CHAP1
 
-    .            <DIR>       1-24-18   2:26a
-    ..           <DIR>       1-24-18   2:26a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     MSDETECT EXE      8909   1-24-18   2:26a
     NODOSMGR EXE     10715   1-24-18   2:26a
             4 file(s)      19624 bytes
 
      Directory of A:\CHAP10
 
-    .            <DIR>       1-24-18   2:24a
-    ..           <DIR>       1-24-18   2:24a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     ENVEDT   EXE     11429   1-24-18   2:24a
     EPTEST   EXE      7377   1-24-18   2:24a
     F3TEST   EXE       894   1-24-18   2:24a
@@ -400,8 +400,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP2
 
-    .            <DIR>       1-24-18   2:26a
-    ..           <DIR>       1-24-18   2:26a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     DOSVER   EXE     11115   1-24-18   2:26a
     FUNC0E32 EXE      9705   1-24-18   2:26a
     LASTDRV  EXE       561   1-24-18   2:26a
@@ -412,8 +412,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP3
 
-    .            <DIR>       1-24-18   2:25a
-    ..           <DIR>       1-24-18   2:25a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     CURRDRIV EXE      6006   1-24-18   2:26a
     DENUMDRV EXE     12755   1-24-18   2:26a
     DEV      EXE      7682   1-24-18   2:26a
@@ -448,24 +448,24 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP4
 
-    .            <DIR>       1-24-18   2:25a
-    ..           <DIR>       1-24-18   2:25a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     IS_DRDOS EXE      7647   1-24-18   2:25a
     PSPTEST  EXE      6807   1-24-18   2:25a
             4 file(s)      14454 bytes
 
      Directory of A:\CHAP5
 
-    .            <DIR>       1-24-18   2:25a
-    ..           <DIR>       1-24-18   2:25a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     CMDSPY   EXE     69708   1-24-18   2:25a
     INTRSPY  EXE      5956   1-24-18   2:25a
             4 file(s)      75664 bytes
 
      Directory of A:\CHAP6
 
-    .            <DIR>       1-24-18   2:25a
-    ..           <DIR>       1-24-18   2:25a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     DEV_FUNC EXE      7195   1-24-18   2:25a
     FTAB     EXE     11125   1-24-18   2:25a
     INTCHAIN EXE     14389   1-24-18   2:25a
@@ -476,8 +476,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP7
 
-    .            <DIR>       1-24-18   2:25a
-    ..           <DIR>       1-24-18   2:25a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     DEV      EXE       625   1-24-18   2:25a
     DEVLOD   COM      2849   1-24-18   2:25a
     FIRSTHI  EXE      6898   1-24-18   2:25a
@@ -488,8 +488,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP8
 
-    .            <DIR>       1-24-18   2:24a
-    ..           <DIR>       1-24-18   2:24a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     BUFFERS  EXE      8659   1-24-18   2:25a
     CLUSTNAM EXE     11043   1-24-18   2:25a
     DPBTEST  EXE      9529   1-24-18   2:25a
@@ -517,8 +517,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP9
 
-    .            <DIR>       1-24-18   2:24a
-    ..           <DIR>       1-24-18   2:24a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     CRITSECT EXE      8247   1-24-18   2:24a
     MULTI    EXE      8665   1-24-18   2:24a
     STSR2E   EXE     15069   1-24-18   2:24a
@@ -531,8 +531,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\INTRLIST
 
-    .            <DIR>       1-24-18   2:24a
-    ..           <DIR>       1-24-18   2:24a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     INTERVUE EXE     16480   1-24-18   2:24a
             3 file(s)      16480 bytes
 
@@ -546,13 +546,13 @@ by Schulman, Brown, Maxey, Michels, Kyle
      Directory of A:\
 
     CHAP1        <DIR>       5-02-20  10:13a
-    CHAP10       <DIR>       5-02-20  10:13a
-    CHAP2        <DIR>       5-02-20  10:13a
-    CHAP3        <DIR>       5-02-20  10:13a
-    CHAP4        <DIR>       5-02-20  10:13a
-    CHAP6        <DIR>       5-02-20  10:13a
-    CHAP7        <DIR>       5-02-20  10:13a
-    CHAP8        <DIR>       5-02-20  10:13a
+    CHAP10       <DIR>       5-26-22   2:47a
+    CHAP2        <DIR>       5-26-22   2:47a
+    CHAP3        <DIR>       5-26-22   2:47a
+    CHAP4        <DIR>       5-26-22   2:47a
+    CHAP6        <DIR>       5-26-22   2:47a
+    CHAP7        <DIR>       5-26-22   2:47a
+    CHAP8        <DIR>       5-26-22   2:47a
     CHAP9        <DIR>       5-02-20  10:13a
             9 file(s)          0 bytes
 
@@ -566,8 +566,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP10
 
-    .            <DIR>       5-02-20  10:13a
-    ..           <DIR>       5-02-20  10:13a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     DO2E     ASM       820   8-10-93   4:12p
     EEA      ASM      1994   4-10-93   9:12p
     ENVEDT   C       14111   4-10-93   9:27p
@@ -591,8 +591,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP2
 
-    .            <DIR>       5-02-20  10:13a
-    ..           <DIR>       5-02-20  10:13a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     DOSVER   C        3331   9-16-93   7:21a
     FUNC0E32 C        1642   9-15-93   1:45p
     LASTDRV  ASM      1272   8-09-93   8:59a
@@ -612,8 +612,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP3
 
-    .            <DIR>       5-02-20  10:13a
-    ..           <DIR>       5-02-20  10:13a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     CTRL_C   ASM       238   8-14-93   1:06p
     CURRDRIV C        1331   9-15-93   2:09p
     DESQVIEW C         696   9-15-93   3:27p
@@ -653,8 +653,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP4
 
-    .            <DIR>       5-02-20  10:13a
-    ..           <DIR>       5-02-20  10:13a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     GEN_UMB  PAS      2066   8-09-93   3:19p
     GEO_FULK ASM      1480   8-09-93   3:20p
     IS_DRDOS C        3435   7-28-98   4:51p
@@ -663,8 +663,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP6
 
-    .            <DIR>       5-02-20  10:13a
-    ..           <DIR>       5-02-20  10:13a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     DEV_FUNC C        1656   9-07-93  12:10p
     FTAB     C        1778   8-09-93   3:58p
     INTCHAIN C        5277   1-29-98   9:48a
@@ -674,8 +674,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP7
 
-    .            <DIR>       5-02-20  10:13a
-    ..           <DIR>       5-02-20  10:13a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     C0       ASM      6491   3-13-93   1:17p
     DEV      ASM      2326   8-10-93  12:12p
     DEVLOD   C       22201   8-19-93  10:11a
@@ -690,8 +690,8 @@ by Schulman, Brown, Maxey, Michels, Kyle
 
      Directory of A:\CHAP8
 
-    .            <DIR>       5-02-20  10:13a
-    ..           <DIR>       5-02-20  10:13a
+    .            <DIR>       5-26-22   2:47a
+    ..           <DIR>       5-26-22   2:47a
     BUFFERS  C        5824   9-15-93   9:53a
     CLUSTNAM C        6170   9-15-93   9:41a
     CURRDIR  C        2076   8-09-93   5:01p

@@ -673,6 +673,9 @@ function processDisk(di, diskFile, argv, diskette)
          *      ![MS C 1.03 Beta (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK1.jpg)
          */
         let sDiskPic = diskette.path.replace(".json", ".jpg");
+        if (!existsFile(sDiskPic)) {
+            sDiskPic = diskette.path.replace(".json", ".png");
+        }
         if (existsFile(sDiskPic)) {
             let sDiskServer = getServerName(sDiskPic);
             if (sDiskServer) {
@@ -690,7 +693,14 @@ function processDisk(di, diskFile, argv, diskette)
                 printf("warning: directory heading level '%s' should really be '###'\n", matchDirectory[1]);
             }
             let matchInclude = matchDirectory[2].match(/\n\{%.*?%}\n/);
-            sIndexNew = sIndexNew.replace(matchDirectory[0], sHeading + (matchInclude? matchInclude[0] : "") + sListing + matchDirectory[3]);
+            /*
+             * Work around JavaScript's handling of '$' in the replacement string ('$' is interpreted as a back-reference
+             * indicator, with '$$' interpreted as '$', even when the search string is NOT a regular expression) by first
+             * replacing every '$' with '$$' in sListing (the only portion where we're likely encounter '$' characters).
+             *
+             * Note that the work-around itself is subject to the interpretation of '$$' as '$', therefore it must use '$$$$'.
+             */
+            sIndexNew = sIndexNew.replace(matchDirectory[0], sHeading + (matchInclude? matchInclude[0] : "") + sListing.replace(/\$/g, "$$$$") + matchDirectory[3]);
         } else {
             /*
              * Look for the last "Directory of ..." entry and insert this directory listing after it (and if there's none, append it).

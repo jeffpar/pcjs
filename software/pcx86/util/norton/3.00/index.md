@@ -85,6 +85,8 @@ so it seems the file names as they presently exist are correct.
            22 file(s)     124425 bytes
                            31232 bytes free
 
+![Norton Utilities 3.00 (1984-12-07)]({{ site.software.miscdisks.server }}/pcx86/util/norton/3.00/NU300-1984-12-07.jpg)
+
 ### Directory of Norton Utilities 3.00 (1985-01-14)
 
      Volume in drive A is NU30-850114
@@ -138,8 +140,6 @@ so it seems the file names as they presently exist are correct.
            20 file(s)     126070 bytes
                           229376 bytes free
 
-### Diskette Photos
-
-![Norton Utilities 3.00 (1984-12-07)]({{ site.software.miscdisks.server }}/pcx86/util/norton/3.00/NU300-1984-12-07.jpg)
+<!-- Documentation -->
 
 ![Norton Utilities 3.00 Note (1984-12-07)]({{ site.software.miscdisks.server }}/pcx86/util/norton/3.00/NU300-1984-12-07-NOTE.jpg)

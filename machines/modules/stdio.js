@@ -450,7 +450,6 @@ export default class StdIO extends NumIO {
                 arg = hash? date.getUTCFullYear() : date.getFullYear();
                 if (precision > 0) {
                     arg = arg % (Math.pow(10, precision));
-                    precision = -1;
                 }
                 type = 'd';
                 break;

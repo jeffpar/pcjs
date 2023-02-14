@@ -5,7 +5,7 @@ permalink: /software/pcx86/lang/microsoft/masm/5.10x/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "MS MASM 5.10 (Feb 1988 Disk 1)"

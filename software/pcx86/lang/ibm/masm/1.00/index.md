@@ -26,9 +26,9 @@ machines:
     EXMP2S   ASM      1861   9-16-81  12:00a
     EXMP1S   ASM      5621  11-09-81  12:00a
     $EDMASM  BAT       614  10-29-81  12:00a
-    $EDMASM BAT       140   9-25-81  12:00a
+    $$EDMASM BAT       140   9-25-81  12:00a
     $EDASM   BAT       614  10-29-81  12:00a
-    $EDASM  BAT       137   9-25-81  12:00a
+    $$EDASM  BAT       137   9-25-81  12:00a
     $MASML   BAT       615  10-29-81  12:00a
     $ASML    BAT       622  10-29-81  12:00a
     $LINK    ARF        23   9-25-81  12:00a

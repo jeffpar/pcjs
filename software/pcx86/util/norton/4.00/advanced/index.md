@@ -31,7 +31,7 @@ We also have copies of [Version 4.00 (Standard Edition)](../) from both March 1,
      Volume in drive A is NU Adv Ed 1
      Directory of A:\
 
-    READ     ME *     1222   3-01-7   4:00p
+    READ     ME *     1222   3-01-07   4:00p
     ASK      EXE*     1184   3-01-87   4:00p
     BEEP     EXE*     5324   3-01-87   4:00p
     DS       EXE*    25618   3-01-87   4:00p
@@ -58,9 +58,11 @@ We also have copies of [Version 4.00 (Standard Edition)](../) from both March 1,
     FILEINFO FI       2601   3-01-87   4:00p
     NUDEMO   BAT*     4912   3-01-87   4:00p
     FILE1    BAT*    11305   3-01-87   4:00p
-    MARY               618   3-01-7   4:00p
+    MARY               618   3-01-07   4:00p
            28 file(s)     316798 bytes
                            27648 bytes free
+
+![Norton Utilities 4.00 (Adv 1)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK1.jpg)
 
 ### Directory of Norton Utilities 4.00 (Adv 2)
 
@@ -76,11 +78,9 @@ We also have copies of [Version 4.00 (Standard Edition)](../) from both March 1,
             6 file(s)     236192 bytes
                           123904 bytes free
 
-### Diskette Photos
-
-![Norton Utilities 4.00 (Adv 1)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK1.jpg)
-
 ![Norton Utilities 4.00 (Adv 2)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK2.jpg)
+
+<!-- Documentation -->
 
 ![Norton Utilities 4.00 (Box Front)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-BOX-FRONT.jpg)
 

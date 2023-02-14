@@ -231,7 +231,7 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
     MAKESCRN TXT      7680   8-01-84  12:01p
     SCREEN   USE      7843   8-01-84  12:00p
     SECRET   EXE     30080   6-26-84   3:33p
-        12 file(s)     154290 bytes
+           12 file(s)     154290 bytes
                             3072 bytes free
 
 ![PC Disk Magazine (Disk 08)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK8.jpg)
@@ -257,8 +257,8 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
     PART2             1721  10-06-59  11:03p
     DEMO              1737   6-27-84   1:52p
     CHEMICAL          3258   6-27-84   1:39p
-        16 file(s)     291934 bytes
-                        22528 bytes free
+           16 file(s)     291934 bytes
+                           22528 bytes free
 
 ![PC Disk Magazine (Disk 08 Demo)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK8-DEMO.jpg)
 
@@ -299,9 +299,11 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
     STOKBOND TXT      2858  11-12-84   8:36p
     STOKBOND BAS     48790  11-12-84   9:05p
     STOKBOND OVR      1664   1-01-80  12:04a
-        13 file(s)     244028 bytes
-                        71680 bytes free
+           13 file(s)     244028 bytes
+                           71680 bytes free
 
 ![PC Disk Magazine (Disk 10)]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK10.jpg)
+
+<!-- Documentation -->
 
 {% include gallery/documents.html path="/documents/magazines/pcdm/" %}

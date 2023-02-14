@@ -125,6 +125,8 @@ are unfortunately incomplete.
            32 file(s)     127870 bytes
                            24064 bytes free
 
-![Inside the IBM PC (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/sw/books/inside_the_ibm_pc/INSIDE-THE-IBM-PC-2A.jpg)
+![Inside the IBM PC (Disk 3)]({{ site.software.miscdisks.server }}/pcx86/sw/books/inside_the_ibm_pc/INSIDE-THE-IBM-PC-2A.jpg)
+
+<!-- Documentation -->
 
 {% include gallery/documents.html %}

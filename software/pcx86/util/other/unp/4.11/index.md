@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/other/unp/4.11/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "UNP (Executable Unpacker) 4.11"
@@ -34,10 +34,10 @@ UNP 4.11 is an EXE unpacking utility created by [Ben Castricum](http://unp.benca
      Volume in drive A is UNP411_SRC
      Directory of A:\
 
-    COM          <DIR>      12-26-98   2:36p
+    COM          <DIR>       5-26-22   3:03a
     COMPILER H        1633   3-15-95   4:35p
     DIET     EXE     26370   5-28-96   6:17p
-    EXE          <DIR>      12-26-98   2:36p
+    EXE          <DIR>       5-26-22   3:03a
     FICTION  EXE      9654   6-01-94   1:41a
     FILE_ID  DIZ       326   7-22-96   9:07p
     FIND     ASM      4547  10-05-94   4:16p
@@ -76,8 +76,8 @@ UNP 4.11 is an EXE unpacking utility created by [Ben Castricum](http://unp.benca
 
      Directory of A:\COM
 
-    .            <DIR>      12-26-98   2:36p
-    ..           <DIR>      12-26-98   2:36p
+    .            <DIR>       5-26-22   3:03a
+    ..           <DIR>       5-26-22   3:03a
     CBWFP    ASM      1665   4-19-94  11:30p
     CC2CR    ASM       782   5-02-94  12:55p
     CCMPK    ASM      1101   4-07-94   8:09a
@@ -115,8 +115,8 @@ UNP 4.11 is an EXE unpacking utility created by [Ben Castricum](http://unp.benca
 
      Directory of A:\EXE
 
-    .            <DIR>      12-26-98   2:36p
-    ..           <DIR>      12-26-98   2:36p
+    .            <DIR>       5-26-22   3:03a
+    ..           <DIR>       5-26-22   3:03a
     EAINX    ASM      1103  12-29-94  12:09p
     ECMPK    ASM      1778  12-29-94   2:48p
     ECMPR    ASM      1530   1-01-95   2:26p

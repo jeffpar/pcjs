@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/shareware/unprot/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "Unprotect Files (UNPROT 1 & 2)"
@@ -259,17 +259,17 @@ which can be loaded in any IBM PC AT-compatible machine.
 
 ### Directory of Unprotect Files (UNPROT 1 & 2)
 
-     Volume in drive A is UNPROT
+     Volume in drive A is UNPROT-1-2
      Directory of A:\
 
-    UNPROT-1     <DIR>       7-05-17   7:32p
-    UNPROT-2     <DIR>       5-06-18   5:13p
+    UNPROT-1     <DIR>       2-07-23   1:26p
+    UNPROT-2     <DIR>       2-07-23   1:26p
             2 file(s)          0 bytes
 
      Directory of A:\UNPROT-1
 
-    .            <DIR>       7-05-17   7:32p
-    ..           <DIR>       7-05-17   7:32p
+    .            <DIR>       2-07-23   1:26p
+    ..           <DIR>       2-07-23   1:26p
     123      UNP       706   7-11-83   8:35a
     123A     UNP       520   7-12-83   8:17a
     123REL2  UNP       896   1-11-86   5:51a
@@ -405,8 +405,8 @@ which can be loaded in any IBM PC AT-compatible machine.
 
      Directory of A:\UNPROT-2
 
-    .            <DIR>       5-06-18   5:13p
-    ..           <DIR>       5-06-18   5:13p
+    .            <DIR>       2-07-23   1:26p
+    ..           <DIR>       2-07-23   1:26p
     NE       UNP       512   4-24-86   7:48p
     NEW123   UNP       640   3-20-85   6:03p
     NEW123UN V1A      1024   3-20-85   6:03p

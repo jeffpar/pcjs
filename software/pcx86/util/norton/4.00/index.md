@@ -110,6 +110,8 @@ We also have a copy of [Version 4.00 (Advanced Edition)](advanced/), which conta
            26 file(s)     289265 bytes
                            60416 bytes free
 
+![Norton Utilities 4.00 (1987-05-15 #1)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/NU400-1987-05-15-DISK1.jpg)
+
 ### Directory of Norton Utilities 4.00 (1987-05-15 #2)
 
      Volume in drive A is NU v4.00 #2
@@ -123,9 +125,5 @@ We also have a copy of [Version 4.00 (Advanced Edition)](advanced/), which conta
     TUTORIAL NTS       914   5-15-87   4:00p
             6 file(s)     218837 bytes
                           141312 bytes free
-
-### Diskette Photos
-
-![Norton Utilities 4.00 (1987-05-15 #1)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/NU400-1987-05-15-DISK1.jpg)
 
 ![Norton Utilities 4.00 (1987-05-15 #2)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/NU400-1987-05-15-DISK2.jpg)
