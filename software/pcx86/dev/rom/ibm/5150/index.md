@@ -23,8 +23,8 @@ PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their con
 
 ### Directory of IBM PC BIOS Sources (V1)
 
-     Volume in drive B is 5150V1
-     Directory of B:\
+     Volume in drive A is 5150V1
+     Directory of A:\
 
     5150     TXT      4087   3-27-20   3:00p
     5150V1   ASM    179480   3-27-20   3:00p
@@ -35,8 +35,8 @@ PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their con
 
 ### Directory of IBM PC BIOS Sources (V2)
 
-     Volume in drive B is 5150V2
-     Directory of B:\
+     Volume in drive A is 5150V2
+     Directory of A:\
 
     5150     TXT      4087   3-27-20   3:00p
     5150V2   ASM    179424   3-27-20   3:00p
@@ -47,8 +47,8 @@ PCjs has created and archived a collection IBM PC ROM BIOS diskettes.  Their con
 
 ### Directory of IBM PC BIOS Sources (V3)
 
-     Volume in drive B is 5150V3
-     Directory of B:\
+     Volume in drive A is 5150V3
+     Directory of A:\
 
     5150     TXT      4087   3-27-20   3:00p
     5150V3   ASM    193439   3-27-20   3:00p

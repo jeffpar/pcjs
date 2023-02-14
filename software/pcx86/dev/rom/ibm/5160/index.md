@@ -21,10 +21,10 @@ PCjs has created and archived a collection IBM PC XT ROM BIOS diskettes.  Their 
 
 {% include machine.html id="ibm5160-msdos320" %}
 
-### Directory of IBM PC XT BIOS Source (V1)
+### Directory of IBM PC XT BIOS Sources (V1)
 
-     Volume in drive B is 5160V1
-     Directory of B:\
+     Volume in drive A is 5160V1
+     Directory of A:\
 
     5160V1   TXT       980   3-27-20   3:00p
     README   TXT      3460   3-27-20   3:00p
@@ -33,10 +33,10 @@ PCjs has created and archived a collection IBM PC XT ROM BIOS diskettes.  Their 
             4 file(s)     197556 bytes
                           122880 bytes free
 
-### Directory of IBM PC XT BIOS Source (V2)
+### Directory of IBM PC XT BIOS Sources (V2)
 
-     Volume in drive B is 5160V2
-     Directory of B:\
+     Volume in drive A is 5160V2
+     Directory of A:\
 
     5160V2   TXT       542   3-27-20   3:00p
     BIOS1    ASM      9426   3-27-20   3:00p
@@ -57,10 +57,10 @@ PCjs has created and archived a collection IBM PC XT ROM BIOS diskettes.  Their 
            16 file(s)     328219 bytes
                            24576 bytes free
 
-### Directory of IBM PC XT BIOS Source (V3)
+### Directory of IBM PC XT BIOS Sources (V3)
 
-     Volume in drive B is 5160V3
-     Directory of B:\
+     Volume in drive A is 5160V3
+     Directory of A:\
 
     5160V3   TXT       563   3-27-20   3:00p
     BIOS1    ASM      9426   3-27-20   3:00p

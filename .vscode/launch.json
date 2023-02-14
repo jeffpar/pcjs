@@ -577,7 +577,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all=bbd",
+        "--all=diskettes",
         "--checkpage"
       ],
       "cwd": "${workspaceFolder}",

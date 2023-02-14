@@ -71,7 +71,7 @@ We also have copies of the original [COMPAQ MS-DOS 1.10 Documentation](#document
            27 file(s)     252514 bytes
                            56320 bytes free
 
-![COMPAQ MS-DOS 1.10B Diskette]({{ site.software.diskettes.server }}/pcx86/sys/dos/compaq/1.10/COMPAQ-DOS110B.jpg)
+![COMPAQ MS-DOS 1.10 Rev B]({{ site.software.diskettes.server }}/pcx86/sys/dos/compaq/1.10/COMPAQ-DOS110B.jpg)
 
 One curiosity regarding this disk are the BASIC files.  **BASIC.COM** and **BASICA.COM** are nothing more than
 tiny programs to load **BASICA.EXE**, a stand-alone version of BASIC that doesn't require any BASIC ROMs.  And
@@ -410,3 +410,5 @@ mounting it), mount the image as `/Volumes/Untitled`, and then copy the contents
     INTEREST BAS       384   5-13-83  12:00p
            28 file(s)     256320 bytes
                            53248 bytes free
+
+![COMPAQ MS-DOS 1.10 Rev E]({{ site.software.diskettes.server }}/pcx86/sys/dos/compaq/1.10/COMPAQ-DOS110E.jpg)

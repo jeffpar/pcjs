@@ -31,4 +31,4 @@ machines:
             8 file(s)      75848 bytes
                           281600 bytes free
 
-![QEMM-386 v4.10]({{ site.software.diskettes.server }}/pcx86/sys/ext/quarterdeck/qemm386/4.10/QEMM386-410.jpg)
+![QEMM-386 4.10]({{ site.software.diskettes.server }}/pcx86/sys/ext/quarterdeck/qemm386/4.10/QEMM386-410.jpg)

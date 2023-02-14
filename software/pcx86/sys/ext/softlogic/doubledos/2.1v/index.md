@@ -7,7 +7,7 @@ preview: https://diskettes.pcjs.org/pcx86/sys/ext/softlogic/doubledos/2.1v/DOUBL
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "DoubleDOS 2.1V (Disk 1)"
@@ -133,6 +133,8 @@ emulator as intended.
            95 file(s)     308703 bytes
                             4096 bytes free
 
+![DoubleDOS 2.1V (Disk 1)]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/doubledos/2.1v/DOUBLEDOS-21V-DISK1.jpg)
+
 ### Directory of DoubleDOS 2.1V (Disk 2)
 
      Volume in drive A has no label
@@ -160,5 +162,3 @@ emulator as intended.
     UNLOCK   EXE      3443   2-06-86  10:24a
            20 file(s)     159605 bytes
                           191488 bytes free
-
-![DoubleDOS Diskette]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/doubledos/2.1v/DOUBLEDOS-21V-DISK1.jpg)

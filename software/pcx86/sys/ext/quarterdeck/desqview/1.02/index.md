@@ -83,4 +83,6 @@ A directory listing of the 360Kb diskette is provided [below](#directory-of-desq
 
 ![DESQview 1.02]({{ site.software.diskettes.server }}/pcx86/sys/ext/quarterdeck/desqview/1.02/DESQVIEW-102.jpg)
 
+<!-- Documentation -->
+
 {% include gallery/documents.html width="200" height="260" %}

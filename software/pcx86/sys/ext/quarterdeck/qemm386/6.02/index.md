@@ -25,4 +25,4 @@ machines:
             2 file(s)     328856 bytes
                            32768 bytes free
 
-![QEMM-386 v6.02]({{ site.software.diskettes.server }}/pcx86/sys/ext/quarterdeck/qemm386/6.02/QEMM386-602.jpg)
+![QEMM-386 6.02]({{ site.software.diskettes.server }}/pcx86/sys/ext/quarterdeck/qemm386/6.02/QEMM386-602.jpg)

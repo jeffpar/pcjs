@@ -41,4 +41,4 @@ is provided below.  The disk image was obtained from [WinWorld](https://winworld
            25 file(s)     215806 bytes
                            93184 bytes free
 
-![MS Mouse 2.00 Diskette]({{ site.software.diskettes.server }}/pcx86/dev/mouse/microsoft/2.00/MSMOUSE-200--1983-12-31.jpg)
+![MS Mouse 2.00]({{ site.software.diskettes.server }}/pcx86/dev/mouse/microsoft/2.00/MSMOUSE-200--1983-12-31.jpg)

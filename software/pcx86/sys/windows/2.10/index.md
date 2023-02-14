@@ -221,7 +221,7 @@ are provided below.
     DOTHIS   TXT       493   7-01-88  12:00a
     NOTEPAD  EXE     19072   7-01-88  12:00a
     PAINT    EXE     93280   7-01-88  12:00a
-    PIF          <DIR>       7-21-3  10:32a
+    PIF          <DIR>       7-21-03  10:32a
     PIFEDIT  EXE     26480   7-01-88  12:00a
     PRACTICE WRI      2944   7-01-88  12:00a
     README   TXT     13959   7-01-88  12:00a
@@ -235,8 +235,8 @@ are provided below.
 
      Directory of A:\PIF
 
-    .            <DIR>       7-21-3  10:32a
-    ..           <DIR>       7-21-3  10:32a
+    .            <DIR>       7-21-03  10:32a
+    ..           <DIR>       7-21-03  10:32a
     123      PIF       369   7-01-88  12:00a
     ACCESS   PIF       369   7-01-88  12:00a
     BASIC    PIF       369   7-01-88  12:00a

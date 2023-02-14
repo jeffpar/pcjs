@@ -59,4 +59,4 @@ NOTE: Software Carousel 3.0.1 appears to have abandoned the complex copy-protect
            26 file(s)     299318 bytes
                            50176 bytes free
 
-![Software Carousel Diskette]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/carousel/3.0.1/SOFTWARE-CAROUSEL-301.jpg)
+![Software Carousel 3.0.1]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/carousel/3.0.1/SOFTWARE-CAROUSEL-301.jpg)

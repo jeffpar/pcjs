@@ -43,6 +43,8 @@ an original disk image, the difference in timestamps is not meaningful. All file
            23 file(s)     158872 bytes
                           150528 bytes free
 
+![MS Mouse 2.50 (Bus)]({{ site.software.diskettes.server }}/pcx86/dev/mouse/microsoft/2.50/MSMOUSE-250.jpg)
+
 ### Directory of MS Mouse 2.50 (Serial)
 
      Volume in drive A is SERIAL
@@ -52,5 +54,3 @@ an original disk image, the difference in timestamps is not meaningful. All file
     MOUSE    SYS      4386   9-13-84  10:00a
             2 file(s)       8524 bytes
                           151040 bytes free
-
-![MS Mouse 2.50 Diskette]({{ site.software.diskettes.server }}/pcx86/dev/mouse/microsoft/2.50/MSMOUSE-250.jpg)

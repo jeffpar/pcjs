@@ -22,9 +22,91 @@ machines:
 
 [![Life & Death II: The Manual (1990)]({{ site.software.gamedisks.server }}/pcx86/game/other/1990/life_and_death_ii/Life_and_Death_II_Manual-1990.jpg)](https://archive.org/details/life-and-death-ii-the-brain-1990)
 
-### Copy-Protection Information (Disk 1)
+
+### Directory of Life & Death II (Disk 1)
+
+     Volume in drive A is L&DII v1.1
+     Directory of A:\
+
+    CP           <DIR>      12-02-90  10:17a
+    INSTALL  EXE*    63778  12-02-90  12:00a
+    MIKE_DUF FY *     4608   2-12-55  12:00a
+    LD2_1    TZF*   105305  12-02-90  12:00a
+    DI1      QPZ*        4  12-02-90  12:00a
+            5 file(s)     173695 bytes
+
+     Directory of A:\CP
+
+    .            <DIR>      12-02-90  10:17a
+    ..           <DIR>      12-02-90  10:17a
+    HOSPITAL RSC*   129800  12-02-90  12:00a
+            3 file(s)     129800 bytes
+
+    Total files listed:
+            8 file(s)     303495 bytes
+                           55296 bytes free
 
 ![Life & Death II (Disk 1)]({{ site.software.gamedisks.server }}/pcx86/game/other/1990/life_and_death_ii/LIFE-AND-DEATH-II-1.jpg)
+
+### Directory of Life & Death II (Disk 2)
+
+     Volume in drive A is L&DII v1.1
+     Directory of A:\
+
+    CP           <DIR>      11-29-90   3:28p
+    DI2      QPZ*        0  11-29-90  12:00a
+            2 file(s)          0 bytes
+
+     Directory of A:\CP
+
+    .            <DIR>      11-29-90   3:28p
+    ..           <DIR>      11-29-90   3:28p
+    HIMAGES  EGA*   189727  11-29-90  12:00a
+    HIMAGES  VGA*   352635  11-29-90  12:00a
+    DIMAGES  EGA*   196333  11-29-90  12:00a
+    DIMAGES  VGA*   342761  11-29-90  12:00a
+    CLASS    EGA*    20078  11-29-90  12:00a
+    CLASS    VGA*    25618  11-29-90  12:00a
+    MC       EGA*      230  11-29-90  12:00a
+    MC       VGA*      232  11-29-90  12:00a
+    TITLE    EGA*    13014  11-29-90  12:00a
+    TITLE    VGA*    20286  11-29-90  12:00a
+           12 file(s)    1160914 bytes
+
+    Total files listed:
+           14 file(s)    1160914 bytes
+                           49664 bytes free
+
+![Life & Death II (Disk 2)]({{ site.software.gamedisks.server }}/pcx86/game/other/1990/life_and_death_ii/LIFE-AND-DEATH-II-2.jpg)
+
+### Directory of Life & Death II (Disk 3)
+
+     Volume in drive A is L&DII v1.1
+     Directory of A:\
+
+    CP           <DIR>      11-29-90   3:31p
+    LD2_2    TZF*    86154  11-29-90  12:00a
+    DI3      QPZ*        0  11-29-90  12:00a
+            3 file(s)      86154 bytes
+
+     Directory of A:\CP
+
+    .            <DIR>      11-29-90   3:31p
+    ..           <DIR>      11-29-90   3:31p
+    ANIM     EGA*    85450  11-29-90  12:00a
+    ANIM     VGA*   136645  11-29-90  12:00a
+    OP_SOUND RES*    59382  11-29-90  12:00a
+    OP_IMAGE EGA*   224661  11-29-90  12:00a
+    OP_IMAGE VGA*   348079  11-29-90  12:00a
+            7 file(s)     854217 bytes
+
+    Total files listed:
+           10 file(s)     940371 bytes
+                          272384 bytes free
+
+![Life & Death II (Disk 3)]({{ site.software.gamedisks.server }}/pcx86/game/other/1990/life_and_death_ii/LIFE-AND-DEATH-II-3.jpg)
+
+### Copy-Protection Information (Disk 1)
 
     MFM Sector
     Sector ID:015
@@ -1054,7 +1136,3 @@ machines:
     03E8| 00 00 00 00 00 00 00 00 | ........
     03F0| 00 00 28 68 68 7E D3 93 | ..(hh~..
     03F8| 93 93 93 93 93 93 93 93 | ........
-
-![Life & Death II (Disk 2)]({{ site.software.gamedisks.server }}/pcx86/game/other/1990/life_and_death_ii/LIFE-AND-DEATH-II-2.jpg)
-
-![Life & Death II (Disk 3)]({{ site.software.gamedisks.server }}/pcx86/game/other/1990/life_and_death_ii/LIFE-AND-DEATH-II-3.jpg)

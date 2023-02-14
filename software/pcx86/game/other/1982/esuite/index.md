@@ -23,7 +23,7 @@ machines:
      Volume in drive A is ESUITE
      Directory of A:\
 
-    ESUITE   COM       384   2-29-0   8:04a
-    GAME     DAT    163840   2-29-0   6:57a
+    ESUITE   COM       384   2-29-00   8:04a
+    GAME     DAT    163840   2-29-00   6:57a
             2 file(s)     164224 bytes
                           157696 bytes free

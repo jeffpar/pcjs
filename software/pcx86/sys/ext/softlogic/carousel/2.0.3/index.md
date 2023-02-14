@@ -76,7 +76,7 @@ Unfortunately, installation still fails, so this copy-protection scheme is still
            24 file(s)     195978 bytes
                           155648 bytes free
 
-![Software Carousel Diskette]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL-203.jpg)
+![Software Carousel 2.0.3]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL-203.jpg)
 
 ### Copy-Protection Information
 

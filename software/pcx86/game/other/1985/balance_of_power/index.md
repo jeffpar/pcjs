@@ -29,6 +29,79 @@ The final disk must remain loaded when you run `BOP.EXE` in order for the game t
 
 [![Balance of Power IBM Reference Card (1985)](images/Balance_of_Power_IBM_Reference_Card.jpg)](https://archive.org/details/balance-of-power-ibm-reference-card)
 
+### Directory of Balance of Power (Build Disk)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    BUILD    LBL         7  11-15-85   1:27p
+    GDI      EXE     94254  11-13-85   4:10p
+    USER     EXE    122400  11-14-85   1:00p
+    WIN      CNF      1936  11-12-85   1:09p
+    WIN      INI       193   6-17-86   1:59p
+    EGALORES LGO         9   6-27-85  12:29p
+    EGAHIRES LGO         9   6-27-85  12:29p
+    EGAHIBW  LGO         9   6-27-85  12:29p
+    EGAMONO  LGO      2930  11-07-85   5:23p
+    HERCULES LGO      3054  11-07-85   5:22p
+    CGA      LGO      2931  11-07-85   5:21p
+    HELVA    FON      8032  10-24-85   4:48p
+    HELVB    FON     10480  10-24-85   4:49p
+           13 file(s)     246244 bytes
+                          108544 bytes free
+
+### Directory of Balance of Power (Program Disk)
+
+     Volume in drive A is BOP 1.10
+     Directory of A:\
+
+    BOP      EXE    298032   6-11-87  12:57p
+    FIXIN    EXE     11398   6-09-87  12:13p
+    SAVEGAME         38144   3-26-88   8:00p
+            3 file(s)     347574 bytes
+                           11264 bytes free
+
+### Directory of Balance of Power (Setup Disk)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    SETUP    LBL         7  11-15-85   1:19p
+    SETUP    EXE     36794   5-15-87  12:03p
+    KERNEL   EXE     33343  11-12-85   5:42p
+    SYSTEM   DRV      2594  10-23-85   2:44p
+    SETUP    DAT        79   6-18-86   9:19a
+    KEYBUS   DRV      3335  10-23-85   2:45p
+    KEYBUK   DRV      3337  10-23-85   2:47p
+    KEYBFR   DRV      3967  10-23-85   2:49p
+    KEYBGR   DRV      3943  10-23-85   2:50p
+    KEYBSP   DRV      3941  10-23-85   2:51p
+    KEYBIT   DRV      3349  10-23-85   2:48p
+    KEYBSW   DRV      3985  10-23-85   2:53p
+    KEYBNW   DRV      3985  10-23-85   2:54p
+    KEYBDN   DRV      3985  10-23-85   2:54p
+    NOMOUSE  DRV      1592  10-23-85   2:51p
+    MOUSE    DRV      3239  10-23-85   2:49p
+    MSMOUSE1 DRV      1966  10-23-85   2:59p
+    MSMOUSE2 DRV      1966  10-23-85   2:59p
+    LMOUSE   DRV      2484  10-23-85   3:53p
+    LPC      DRV      2438  11-14-85  12:32a
+    FTG      DRV      1961  11-14-85  12:01a
+    JOYMOUSE DRV      2114  10-23-85   3:46p
+    CGA      DRV     13008  10-24-85   1:22p
+    HERCULES DRV     15776  10-24-85   1:22p
+    EGAMONO  DRV     13952  10-24-85   1:21p
+    EGAHIBW  DRV     13952  10-24-85   1:21p
+    EGALORES DRV     15648  10-24-85   1:23p
+    EGAHIRES DRV     17536  10-24-85   1:23p
+    SOUND    DRV      5853  10-23-85   3:04p
+    COMM     DRV      4860  11-12-85   4:55p
+    LOFONTS  FON      5552  10-25-85  12:27p
+    HIFONTS  FON      7472  10-25-85  12:28p
+    TANMOUSE DRV      3075   1-28-87   1:00p
+           33 file(s)     241088 bytes
+                          105472 bytes free
+
 ### Copy-Protection Information (Program Disk)
 
     MFM Sector

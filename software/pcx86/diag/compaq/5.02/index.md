@@ -38,6 +38,8 @@ machines:
            16 file(s)     293427 bytes
                            41984 bytes free
 
+![COMPAQ Diagnostics 5.02]({{ site.software.diskettes.server }}/pcx86/diag/compaq/5.02/COMPAQ-DIAGS-502-051987-REVC.jpg)
+
 ### Directory of COMPAQ User Programs 5.02
 
      Volume in drive A is USER 052087
@@ -86,3 +88,5 @@ machines:
     VDISK    SCR       567   5-20-87  12:00p
            41 file(s)     231028 bytes
                           109568 bytes free
+
+![COMPAQ User Programs 5.02]({{ site.software.diskettes.server }}/pcx86/diag/compaq/5.02/COMPAQ-UTILS-502-052087-REVC.jpg)

@@ -251,7 +251,7 @@ machines:
            74 file(s)    1160149 bytes
                            33792 bytes free
 
-![DR DOS 6.00 Disk 1]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-STARTUP.jpg)
+![DR DOS 6.00 (1.2M StartUp)]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-STARTUP.jpg)
 
 ### Directory of DR DOS 6.00 (1.2M ViewMAX)
 
@@ -314,7 +314,7 @@ machines:
            46 file(s)    1128145 bytes
                            74240 bytes free
 
-![DR DOS 6.00 Disk 2]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-VIEWMAX.jpg)
+![DR DOS 6.00 (1.2M ViewMAX)]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-VIEWMAX.jpg)
 
 ### Directory of DR DOS 6.00 (1991 Update 1)
 
@@ -356,7 +356,7 @@ machines:
            21 file(s)     335542 bytes
                            17408 bytes free
 
-![DR DOS 6.00 1991 Update Disk 1]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-UPDATE-1991-12-DISK1.jpg)
+![DR DOS 6.00 (1991 Update 1)]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-UPDATE-1991-12-DISK1.jpg)
 
 ### Directory of DR DOS 6.00 (1991 Update 2)
 
@@ -452,7 +452,7 @@ machines:
            51 file(s)     248271 bytes
                            93184 bytes free
 
-![DR DOS 6.00 1991 Update Disk 2]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-UPDATE-1991-12-DISK2.jpg)
+![DR DOS 6.00 (1991 Update 2)]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-UPDATE-1991-12-DISK2.jpg)
 
 ### Directory of DR DOS 6.00 (1992 Update 1)
 
@@ -494,7 +494,7 @@ machines:
            21 file(s)     337196 bytes
                            16384 bytes free
 
-![DR DOS 6.00 1992 Update Disk 1]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-UPDATE-1992-04-DISK1.jpg)
+![DR DOS 6.00 (1992 Update 1)]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-UPDATE-1992-04-DISK1.jpg)
 
 ### Directory of DR DOS 6.00 (1992 Update 2)
 
@@ -591,4 +591,4 @@ machines:
            52 file(s)     292309 bytes
                            48128 bytes free
 
-![DR DOS 6.00 1992 Update Disk 2]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-UPDATE-1992-04-DISK2.jpg)
+![DR DOS 6.00 (1992 Update 2)]({{ site.software.diskettes.server }}/pcx86/sys/dos/dresearch/6.00/DRDOS600-UPDATE-1992-04-DISK2.jpg)
