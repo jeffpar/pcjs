@@ -35,6 +35,8 @@ machines:
            10 file(s)     155264 bytes
                             3584 bytes free
 
+![DR Pascal/MT+ 3.11 (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/lang/dresearch/pascal/3.11/PASCALMT311-DISK1.jpg)
+
 ### Directory of DR Pascal/MT+ 3.11 (Disk 2)
 
      Volume in drive A has no label
@@ -96,7 +98,5 @@ machines:
     OVLMGRPC I86     19251  10-28-83   9:50a
             9 file(s)     150195 bytes
                             7680 bytes free
-
-![DR Pascal/MT+ 3.11 (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/lang/dresearch/pascal/3.11/PASCALMT311-DISK1.jpg)
 
 {% include gallery/documents.html width="200" height="260" %}

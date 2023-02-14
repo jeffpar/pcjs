@@ -46,6 +46,8 @@ machines:
            20 file(s)     136972 bytes
                            16896 bytes free
 
+![IBM Multiplan 1.00 (Program)]({{ site.software.miscdisks.server }}/pcx86/app/ibm/multiplan/1.00/MULTIPLAN-IBM100-PROGRAM.jpg)
+
 ### Directory of IBM Multiplan 1.00 (Tutorial)
 
      Volume in drive A has no label
@@ -77,7 +79,5 @@ machines:
     ROOTS    COL      2678  11-05-82  12:00p
            24 file(s)     148486 bytes
                             5632 bytes free
-
-![IBM Multiplan 1.00 (Program)]({{ site.software.miscdisks.server }}/pcx86/app/ibm/multiplan/1.00/MULTIPLAN-IBM100-PROGRAM.jpg)
 
 ![IBM Multiplan 1.00 (Tutorial)]({{ site.software.miscdisks.server }}/pcx86/app/ibm/multiplan/1.00/MULTIPLAN-IBM100-TUTORIAL.jpg)

@@ -362,13 +362,13 @@ over time.  [Let us know](mailto:Jeff@pcjs.org) if you find more.  Thanks.
 
     ASKSYS   ASM      4348   9-15-88   1:46p
     ASKSYS   COM      1316   7-15-88   1:37p
-    OS2LINK      <DIR>       7-08-17   3:53p
+    OS2LINK      <DIR>       5-26-22   2:40a
             3 file(s)       5664 bytes
 
      Directory of A:\OS2LINK
 
-    .            <DIR>       7-08-17   3:53p
-    ..           <DIR>       7-08-17   3:53p
+    .            <DIR>       5-26-22   2:40a
+    ..           <DIR>       5-26-22   2:40a
     DLLENTRY ASM       469   7-13-88   9:49a
     DYNOTE   C         835   7-19-88   4:07p
     DYNOTE   DEF       422   7-06-88   4:15p
@@ -497,7 +497,7 @@ over time.  [Let us know](mailto:Jeff@pcjs.org) if you find more.  Thanks.
     EPSON    COM       281  11-05-87  10:40a
     FIXCURS  COM        29  11-02-87   9:24a
     GRAPHICS EXE      7066   6-30-87  12:48p
-    HPMETRIC     <DIR>       7-08-17   3:17p
+    HPMETRIC     <DIR>       5-26-22   2:39a
     KEYBECHO COM     11154   5-01-87   1:34p
     KEYBINFO COM      2449   5-01-87   1:41p
     MACHINE  COM       200  11-02-87  10:50a
@@ -517,7 +517,7 @@ over time.  [Let us know](mailto:Jeff@pcjs.org) if you find more.  Thanks.
     TAD      COM       104  10-01-84  10:10a
     TECHLINE           615  12-02-87   5:05p
     UNDRLN   COM       132  11-09-87  10:58a
-    UTILITY      <DIR>       7-08-17   3:13p
+    UTILITY      <DIR>       5-26-22   2:39a
     VDEL     COM       404  11-05-87  11:04a
     WARRANTY          1404   5-26-89   4:49p
     WHERE    EXE      7552   1-01-80  12:24a
@@ -526,8 +526,8 @@ over time.  [Let us know](mailto:Jeff@pcjs.org) if you find more.  Thanks.
 
      Directory of A:\HPMETRIC
 
-    .            <DIR>       7-08-17   3:17p
-    ..           <DIR>       7-08-17   3:17p
+    .            <DIR>       5-26-22   2:39a
+    ..           <DIR>       5-26-22   2:39a
     COMPLEX  EXE      7066   6-30-87  12:47p
     CONTENTS HP        851  12-02-87   3:33p
     DOWNLD   EXE      8000   6-30-87  12:48p
@@ -540,8 +540,8 @@ over time.  [Let us know](mailto:Jeff@pcjs.org) if you find more.  Thanks.
 
      Directory of A:\UTILITY
 
-    .            <DIR>       7-08-17   3:13p
-    ..           <DIR>       7-08-17   3:13p
+    .            <DIR>       5-26-22   2:39a
+    ..           <DIR>       5-26-22   2:39a
     ASKDEMO  BAT       466  11-02-87   9:47a
     ASKKEY   COM        39  11-02-87   9:35a
     ATBIOS   COM     13947  11-06-86   6:06p

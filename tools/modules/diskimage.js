@@ -673,6 +673,9 @@ function processDisk(di, diskFile, argv, diskette)
          *      ![MS C 1.03 Beta (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/lang/microsoft/c/1.03/MSC103-BETA-DISK1.jpg)
          */
         let sDiskPic = diskette.path.replace(".json", ".jpg");
+        if (!existsFile(sDiskPic)) {
+            sDiskPic = diskette.path.replace(".json", ".png");
+        }
         if (existsFile(sDiskPic)) {
             let sDiskServer = getServerName(sDiskPic);
             if (sDiskServer) {

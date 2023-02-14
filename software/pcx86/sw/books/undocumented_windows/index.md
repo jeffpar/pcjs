@@ -6,7 +6,7 @@ redirect_from: /pubs/pc/programming/Undocumented_Windows/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "Undocumented Windows"

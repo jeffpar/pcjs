@@ -6,7 +6,7 @@ redirect_from: /disks/pcx86/tools/microsoft/pascal/compiler/4.00/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "MS Pascal 4.00 (Disk 1)"
@@ -188,14 +188,14 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
     CHKSUM   ASM      3524   2-09-88  11:09p
     CMACROS  INC     12066   2-09-88  11:08p
     CRT0FP   ASM      2223   2-09-88  11:09p
-    DOS          <DIR>       8-26-2   6:40p
+    DOS          <DIR>       5-26-22   3:11a
     FMSGHDR  ASM      2429   2-09-88  11:09p
     MAKEFILE          4148   2-21-88   7:50p
     MSDOS    H        6849   2-09-88  11:10p
     MSDOS    INC      6181   2-21-88   7:53p
     NULBODY  C          13   2-09-88  11:10p
-    OS2          <DIR>       8-26-2   6:40p
-    PATCH32      <DIR>       9-13-17   1:04p
+    OS2          <DIR>       5-26-22   3:11a
+    PATCH32      <DIR>       5-26-22   3:11a
     README   DOC     48065   4-29-88  11:30a
     REGISTER H         922   2-09-88  11:10p
     SETARGV  ASM       971   2-09-88  11:09p
@@ -206,8 +206,8 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
 
      Directory of A:\DOS
 
-    .            <DIR>       8-26-2   6:40p
-    ..           <DIR>       8-26-2   6:40p
+    .            <DIR>       5-26-22   3:11a
+    ..           <DIR>       5-26-22   3:11a
     CRT0     ASM      7612   2-09-88  11:09p
     CRT0DAT  ASM     14175   2-09-88  11:09p
     CRT0MSG  ASM      2840   2-09-88  11:09p
@@ -221,8 +221,8 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
 
      Directory of A:\OS2
 
-    .            <DIR>       8-26-2   6:40p
-    ..           <DIR>       8-26-2   6:40p
+    .            <DIR>       5-26-22   3:11a
+    ..           <DIR>       5-26-22   3:11a
     CRT0     ASM     10312   2-21-88   7:54p
     CRT0DAT  ASM     10496   2-09-88  11:09p
     CRT0MSG  ASM      2891   2-09-88  11:09p
@@ -236,8 +236,8 @@ PATCH directory of the COMPILER1 disk from the [Microsoft C Compiler 5.10 for DO
 
      Directory of A:\PATCH32
 
-    .            <DIR>       9-13-17   1:04p
-    ..           <DIR>       9-13-17   1:04p
+    .            <DIR>       5-26-22   3:11a
+    ..           <DIR>       5-26-22   3:11a
     OS2PATCH DOC      1401   3-07-88   4:10a
     OS2PATCH EXE      1069   3-07-88   4:10a
     PATCH320 DOC      2169   3-07-88   4:10a

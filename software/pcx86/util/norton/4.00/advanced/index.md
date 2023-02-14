@@ -62,6 +62,8 @@ We also have copies of [Version 4.00 (Standard Edition)](../) from both March 1,
            28 file(s)     316798 bytes
                            27648 bytes free
 
+![Norton Utilities 4.00 (Adv 1)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK1.jpg)
+
 ### Directory of Norton Utilities 4.00 (Adv 2)
 
      Volume in drive A is NU Adv Ed 2
@@ -75,10 +77,6 @@ We also have copies of [Version 4.00 (Standard Edition)](../) from both March 1,
     _FILE_0  DBD*    48712   3-01-87   4:00p
             6 file(s)     236192 bytes
                           123904 bytes free
-
-### Diskette Photos
-
-![Norton Utilities 4.00 (Adv 1)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK1.jpg)
 
 ![Norton Utilities 4.00 (Adv 2)]({{ site.software.miscdisks.server }}/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK2.jpg)
 

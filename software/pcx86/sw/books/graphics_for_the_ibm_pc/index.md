@@ -99,11 +99,11 @@ From Page 58:
 
 ### Directory of Graphics for the IBM PC
 
-     Volume in drive A is PROGRAMS
+     Volume in drive A is GRAPHICS
      Directory of A:\
 
     02-03    BAS       733  12-07-15   1:09p
     04-01    BAS       784  12-07-15   1:09p
     README   TXT       112  12-07-15   1:09p
             3 file(s)       1629 bytes
-                          359424 bytes free
+                          157696 bytes free

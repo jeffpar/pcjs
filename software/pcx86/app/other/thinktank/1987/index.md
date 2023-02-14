@@ -23,13 +23,13 @@ machines:
     TANK     EXE    140952  11-20-12   3:29p
     TANKCLIP BRD       512  11-20-12   3:29p
     TANKOPTS DAT      4608  11-20-12   3:29p
-    TMPLATES     <DIR>      11-21-12   9:56a
+    TMPLATES     <DIR>       5-26-22   2:59a
             7 file(s)     154782 bytes
 
      Directory of A:\TMPLATES
 
-    .            <DIR>      11-21-12   9:56a
-    ..           <DIR>      11-21-12   9:56a
+    .            <DIR>       5-26-22   2:59a
+    ..           <DIR>       5-26-22   2:59a
     123FNCTN TXT      3584  11-20-12   3:32p
     ADDRESS  TXT       512  11-20-12   3:32p
     AREACODE TXT     10240  11-20-12   3:32p
@@ -75,7 +75,7 @@ machines:
      Directory of A:\
 
     AUTOEXEC BAT         6  11-20-12   3:29p
-    OS2          <DIR>      11-21-12   9:56a
+    OS2          <DIR>       5-26-22   2:59a
     OS2INST  BAT      3239  11-20-12   3:29p
     OS2INST  CMD      3239  11-20-12   3:29p
     READ_ME  DB       8192  11-20-12   3:29p
@@ -88,8 +88,8 @@ machines:
 
      Directory of A:\OS2
 
-    .            <DIR>      11-21-12   9:56a
-    ..           <DIR>      11-21-12   9:56a
+    .            <DIR>       5-26-22   2:59a
+    ..           <DIR>       5-26-22   2:59a
     READ_ME  DB      12288  11-20-12   3:30p
     READ_ME  SAV       512  11-20-12   3:30p
     TANK     EXE    194312  11-20-12   3:30p

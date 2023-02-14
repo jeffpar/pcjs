@@ -136,6 +136,8 @@ would write "Fantasy Land II"!
            16 file(s)     333582 bytes
                            25600 bytes free
 
+![IBM EGA Fantasy Land Demo]({{ site.software.miscdisks.server }}/pcx86/demo/ibm/ega/EGA-FLAND.jpg)
+
 ### Directory of IBM EGA Utilities
 
      Volume in drive A is EGA-UTILS
