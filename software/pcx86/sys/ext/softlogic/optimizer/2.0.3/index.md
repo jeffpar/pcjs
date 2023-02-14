@@ -7,7 +7,7 @@ preview: https://diskettes.pcjs.org/pcx86/sys/ext/softlogic/optimizer/2.0.3/DISK
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoGen: true
     autoMount:
       B: "Disk Optimizer 2.0.3"
@@ -47,4 +47,4 @@ emulator as intended.
            16 file(s)     143015 bytes
                           211968 bytes free
 
-![Disk Optimizer Diskette]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/optimizer/2.0.3/DISK-OPTIMIZER.jpg)
+![Disk Optimizer 2.0.3]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/optimizer/2.0.3/DISK-OPTIMIZER.jpg)

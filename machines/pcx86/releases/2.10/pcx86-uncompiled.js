@@ -70784,6 +70784,7 @@ class JSONLib {
                             let bootable = release['@bootable'];
                             let autoType = release['@autoType'];
                             let hardware = release['@hardware'];
+                            let demos = release['@demos'];
                             let source = item['@source'];
                             if (title) diskette['title'] = title;                       // the software title (as opposed to the diskette name)
                             if (format) diskette['format'] = format;                    // eg, "PC360K"
@@ -70796,6 +70797,7 @@ class JSONLib {
                             if (bootable) diskette['bootable'] = true;                  // true if diskette marked bootable
                             if (autoType) diskette['autoType'] = autoType;              // optional custom autoType string
                             if (hardware) diskette['hardware'] = hardware;              // hardware configuration
+                            if (demos) diskette['demos'] = demos;                       // names, if any, of pages created to demo the disk(s)
                             if (source) diskette['source'] = source;                    // source (eg, URL) of our copy of the media
                         }
                         if (!item['@localonly'] || hostName == "localhost") {

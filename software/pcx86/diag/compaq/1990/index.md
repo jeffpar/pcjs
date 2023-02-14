@@ -301,6 +301,8 @@ machines:
           272 file(s)    1059567 bytes
                           322560 bytes free
 
+![SystemPro Configuration Files 1.03]({{ site.software.diskettes.server }}/pcx86/diag/compaq/1990/COMPAQ-CONFLIB-1.03-071090.jpg)
+
 ### Directory of SystemPro Diagnostics 7.08
 
      Volume in drive A is DIAGS
@@ -325,6 +327,8 @@ machines:
            16 file(s)     694090 bytes
                            28672 bytes free
 
+![SystemPro Diagnostics 7.08]({{ site.software.diskettes.server }}/pcx86/diag/compaq/1990/COMPAQ-DIAGS-708-092590.jpg)
+
 ### Directory of SystemPro Owner Registration 3.05
 
      Volume in drive A is US 100890
@@ -338,6 +342,8 @@ machines:
     CNTRL    ORD*    10961  10-08-90  12:00p
             6 file(s)     283291 bytes
                           443392 bytes free
+
+![SystemPro Owner Registration 3.05]({{ site.software.diskettes.server }}/pcx86/diag/compaq/1990/COMPAQ-OWNREG-3.05-100890.jpg)
 
 ### Directory of SystemPro EISA Configuration 1.15
 
@@ -380,6 +386,8 @@ machines:
     HIMEM    EXE*    13335   8-27-90  12:00p
            34 file(s)     850974 bytes
                           597504 bytes free
+
+![SystemPro EISA Configuration 1.15]({{ site.software.diskettes.server }}/pcx86/diag/compaq/1990/COMPAQ-SYSCONFIG-1.15-082790.jpg)
 
 ### Directory of SystemPro User Programs 7.05 (Disk 1)
 
@@ -511,6 +519,8 @@ machines:
            79 file(s)     915912 bytes
                           525312 bytes free
 
+![SystemPro User Programs 7.05 (Disk 1)]({{ site.software.diskettes.server }}/pcx86/diag/compaq/1990/COMPAQ-USER_1-7.05-092890.jpg)
+
 ### Directory of SystemPro User Programs 7.05 (Disk 2)
 
      Volume in drive A is USR2 092890
@@ -582,3 +592,5 @@ machines:
     Total files listed:
            45 file(s)     619595 bytes
                           827904 bytes free
+
+![SystemPro User Programs 7.05 (Disk 2)]({{ site.software.diskettes.server }}/pcx86/diag/compaq/1990/COMPAQ-USER_2-7.05-092890.jpg)

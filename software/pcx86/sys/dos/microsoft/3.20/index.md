@@ -116,6 +116,8 @@ MSDOS.SYS and COMMAND.COM.
             1 file(s)     357451 bytes
                             4096 bytes free
 
+![MS-DOS 3.20 (ProgRef 1)]({{ site.software.diskettes.server }}/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK3-PROGREF1.jpg)
+
 ### Directory of MS-DOS 3.20 (ProgRef 2)
 
      Volume in drive A is MS320DOC04

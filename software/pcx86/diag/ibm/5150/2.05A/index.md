@@ -66,3 +66,5 @@ This disk displays the following startup messages:
     VENDOR-# DO1*        0   7-04-83  12:00a
            26 file(s)      80423 bytes
                            92672 bytes free
+
+![IBM PC Diagnostics 2.05 (Adv)]({{ site.software.diskettes.server }}/pcx86/diag/ibm/5150/2.05A/5150-DIAG-205A.jpg)

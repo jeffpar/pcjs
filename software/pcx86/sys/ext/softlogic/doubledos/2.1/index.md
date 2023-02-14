@@ -28,7 +28,7 @@ emulator as intended.
 
      Volume in drive A has no label
      Directory of A:\
-    
+
     DOUBLEDO EXE*    18432  10-21-85   2:08p
     DOUBLED2 PGM     45056   1-25-86  11:43p
     SWITCH   ASM     14069  10-21-85   2:07p
@@ -55,9 +55,9 @@ emulator as intended.
     DOUBLEDO COM      2016   4-18-85  10:01a
     INSTAL   BAK        99   1-01-80  12:18a
            25 file(s)     224977 bytes
-    
+
      Directory of A:\PATCHES
-    
+
     .            <DIR>      10-21-85   2:12p
     ..           <DIR>      10-21-85   2:12p
     DBLDM32B BAT       415   5-21-85   1:52p
@@ -120,12 +120,12 @@ emulator as intended.
     DBLDVW12 DEB      1208   7-31-85   5:44p
     PATCHES  DOC      2688   9-19-85  11:10a
            61 file(s)      69940 bytes
-    
+
     Total files listed:
            86 file(s)     294917 bytes
                            23552 bytes free
 
-![DoubleDOS Diskette]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/doubledos/2.1/DOUBLEDOS.jpg)
+![DoubleDOS 2.1]({{ site.software.diskettes.server }}/pcx86/sys/ext/softlogic/doubledos/2.1/DOUBLEDOS.jpg)
 
 ### Copy-Protection Information
 

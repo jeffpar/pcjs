@@ -23,8 +23,8 @@ archived here on diskette.
 
 ### Directory of IBM EGA BIOS Source (V1)
 
-     Volume in drive B is EGAV1
-     Directory of B:\
+     Volume in drive A is EGAV1
+     Directory of A:\
 
     EGABIG   ASM    176717   2-23-22   3:56p
     MK       BAT       178   2-23-22   4:23p

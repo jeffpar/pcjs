@@ -525,7 +525,7 @@ function processDisk(di, diskFile, argv, diskette)
      *
      * You must ALSO specify --rebuild if you want the index.md updated (or created) as well.
      */
-    if (argv['checkpage'] && diskette && !diskette.hidden) {
+    if (argv['checkpage'] && diskette && !diskette.hidden && !diskette.demos) {
         if (diskFile.indexOf("/private") >= 0) return;
         let sListing = di.getFileListing(0, 4);
         if (!sListing) return;
