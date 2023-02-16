@@ -559,10 +559,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all=pcsig08",
+        "--all",
         "--checkdisk",
-        "--rebuild",
-        "--verbose"
+        "--rebuild"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -577,8 +576,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all=diskettes",
-        "--checkpage"
+        "--all",
+        "--checkpage",
+        "--rebuild"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,

@@ -11,6 +11,7 @@ archive
 private
 tmp
 /_site
+/lcm
 /discs
 /decdisks
 /diskettes

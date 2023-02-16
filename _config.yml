@@ -69,6 +69,8 @@ software:
     server: https://harddisks.pcjs.org
 
 archive:
+  lcm:
+    server: https://lcm.pcjs.org
   ms:
     server: https://msarchive.pcjs.org
   kb:

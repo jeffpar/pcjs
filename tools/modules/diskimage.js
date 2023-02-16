@@ -526,7 +526,17 @@ function processDisk(di, diskFile, argv, diskette)
      * You must ALSO specify --rebuild if you want the index.md updated (or created) as well.
      */
     if (argv['checkpage'] && diskette && !diskette.hidden && !diskette.demos) {
-        if (diskFile.indexOf("/private") >= 0) return;
+        /*
+         * We don't need/want any software pages checked/built for private diskette collections.
+         *
+         * The PCSIG software pages were hand-built, so it would take some extra effort to automatically rebuild those;
+         * besides, when the pages were moved from /software/pcx86/shareware/pcsig08 to /software/pcx86/sw/misc/pcsig08,
+         * the diskettes on /pcsig8a-disks and /pcsig8b-disks remained at /pcx86/shareware/pcsig08, so those paths would
+         * have to be changed, too.  The diskettes.json on each of those servers are what control where the named diskettes
+         * are loaded from, so the difference in paths doesn't affect the current pages; it's just something to be aware of
+         * if we ever try to automatically rebuild the PCSIG software pages, too.
+         */
+        if (diskFile.indexOf("/private") >= 0 || diskFile.indexOf("/pcsig") >= 0) return;
         let sListing = di.getFileListing(0, 4);
         if (!sListing) return;
         let sIndex = "", sIndexNew = "", sAction = "";
