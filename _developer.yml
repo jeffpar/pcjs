@@ -39,3 +39,11 @@ software:
     server: /miscdisks
   harddisks:
     server: /harddisks
+
+archive:
+  lcm:
+    server: /lcm
+  ms:
+    server: https://msarchive.pcjs.org
+  kb:
+    server: https://jeffpar.github.io/kbarchive
