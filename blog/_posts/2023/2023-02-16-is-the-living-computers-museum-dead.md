@@ -6,7 +6,7 @@ permalink: /blog/2023/02/16/
 preview: https://lcm.pcjs.org/photos/2013/LCM-2013-10-03_At_Night.jpg
 ---
 
-I first visited Paul Allen's Living Computer Museum in [October 2013](https://web.archive.org/web/20131002203946/http://www.livingcomputermuseum.com/).  It offered a unique museum experience, combining traditional displays and plaques with interactive exhibits and vintage computers that allowed you to run a variety of old software--and even write your own.
+I first visited Paul Allen's [Living Computer Museum](https://web.archive.org/web/20131002203946/http://www.livingcomputermuseum.com/) in October 2013.  It offered a unique museum experience, combining traditional displays and plaques with interactive exhibits and vintage computers that allowed you to run a variety of old software--and even write your own.
 
 ![LCM 2013 Interactive]({{ site.archive.lcm.server }}/photos/2013/LCM-2013-10-03_Interactive.jpg)
 
