@@ -24,10 +24,9 @@ Sadly, Paul Allen had died a few weeks earlier, on October 15, and his passing b
 
 I did not participate in those meetings, but the atmosphere in the building suggested that the overriding concern was how to make the museum more self-sufficient -- or at least less reliant financially on Vulcan.  One big cost-cutting move involved transferring the museum's off-site inventory from a storage location in SeaTac to cheaper facilities in Arlington.
 
-Of course, the easiest way to cut costs is to eliminate staff, and on October 3, 2019, Vulcan did that, too.  I think there were only around 25 LCM employees at that point, but they laid off another 4 or 5.  Layoffs didn't stop at LCM either; the details were never discussed, but employees across all Vulcan businesses were laid off that day as well.
+Of course, the easiest way to cut costs is to eliminate staff, and on October 3, 2019, Vulcan did that, too.  I think there were only around 25 LCM employees at that point, but they laid off another 4 or 5.  Layoffs didn't stop at LCM either; employees all across Vulcan were laid off that day as well.
 
-A Vulcan Human Resources Manager sent a note the following day, saying that "yesterday was a hard day" for
-the entire company.  Here's what the Chair of Vulcan was doing on that "hard day":
+Here's what the Chair of Vulcan was doing on that somber day:
 
 ![LCM 2019-10-03 Jody Allen]({{ site.archive.lcm.server }}/photos/2019/LCM-2019-10-03_Jody_Allen.jpg)
 
@@ -39,11 +38,9 @@ LCM staff rose to the challenge, learned how to work together using Microsoft Te
 
 On Tuesday, May 26, 2020, the final blow came, when Vulcan announced widespread layoffs, including the entire LCM staff.  Vulcan promised to re-evaluate the museum's prospects in 12-18 months, but the reality of losing everyone with the experience required to operate the museum meant that it was extremely unlikely it would ever re-open.
 
-A few days after the May 26 announcement, Vulcan CEO Bill Hilf had a Zoom meeting with LCM staff and took a few questions, but primarily it was an effort to change the narrative about the museum's future.  Here's one key point that the CEO made repeatedly:
+At the time, Vulcan CEO Bill Hilf framed the closure both as an unavoidable consequence of COVID-19 and as a difficult decision that was actually in keeping with Paul Allen's wishes -- that how Paul wanted his money to be spent after he was gone was very different from when he was alive.
 
-> What Paul wanted to do and where he wanted to spend his money and time when he was alive is very different in how he wanted his money to be spent after he was gone.
-
-It's almost impossible to square the idea that Paul Allen, after investing so much time, energy, and money into the Living Computer Museum and its people -- not to mention his *express hope* that efforts like his would not be "lost to time" -- would have also left "instructions" that could somehow be interpreted as a justification for closing LCM after his death.
+Yet it's almost impossible to square the idea that Paul Allen, after investing so much time, energy, and money in the Living Computer Museum and its people -- not to mention his *express hope* that efforts like his would not be "lost to time" -- would have also left "instructions" that could somehow be interpreted as a justification for closing LCM after his death.
 
 It makes sense for some of Paul Allen's acquisitions, like his recently auctioned [art collection](https://www.christies.com/en/events/visionary-the-paul-g-allen-collection/overview), to find their way into new hands after he's gone.  Items like artwork are always changing hands.
 
