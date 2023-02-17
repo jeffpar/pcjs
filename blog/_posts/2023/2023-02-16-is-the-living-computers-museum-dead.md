@@ -36,21 +36,21 @@ In early 2020, the rapid rise in COVID-19 infections led to closure of the museu
 
 LCM staff rose to the challenge, learned how to work together using Microsoft Teams, and began developing educational and other materials that could be used online.  I continued to help as well, updating LCM Collections records in their cataloging system.  It was an especially challenging time for the hardware engineers, since for the most part, they were not allowed to enter the building or access any of the physical equipment, but they were able to do some remote systems management, as well as work on documentation, emulators, patents, etc.
 
-On Tuesday, May 26, 2020, the final blow came, when Vulcan announced widespread layoffs, including the entire LCM staff.  Vulcan promised to re-evaluate the museum's prospects in 12-18 months, but the reality of losing everyone with the experience required to operate the museum meant that it was extremely unlikely it would ever re-open.
+On Tuesday, May 26, 2020, the final blow came, when Vulcan announced widespread layoffs, including the entire LCM staff.  Vulcan promised to re-evaluate the museum's prospects in 12-18 months, but the reality of losing everyone with the experience required to operate the museum meant that it would become extremely difficult to re-open.
 
 At the time, Vulcan CEO Bill Hilf framed the closure both as an unavoidable consequence of COVID-19 and as a difficult decision that was actually in keeping with Paul Allen's wishes -- that how Paul wanted his money to be spent after he was gone was very different from when he was alive.
 
-Yet it's almost impossible to square the idea that Paul Allen, after investing so much time, energy, and money in the Living Computer Museum and its people -- not to mention his *express hope* that efforts like his would not be "lost to time" -- would have also left instructions that could somehow be interpreted as a justification for closing LCM after his death.
+Yet it's almost impossible to square the idea that Paul Allen, after investing so much time, energy, and money in the Living Computer Museum and its people -- not to mention his *express hope* that efforts like his would not be "lost to time" -- would have also left instructions that could somehow be interpreted to justify completely shutting down LCM after his death.
 
 It makes sense for some of Paul Allen's acquisitions, like his recently auctioned [art collection](https://www.christies.com/en/events/visionary-the-paul-g-allen-collection/overview), to find their way into new hands after he's gone.  Items like artwork are always changing hands.
 
-But LCM was something fundamentally different.  It also involved a lot of acquisitions, but as the Living Computer Museum, it became something greater than the sum of its parts.  It was Paul Allen's personal creation, and a reflection not only of the legacy of the entire computer industry, but also of his own legacy.
+But LCM was fundamentally different.  It also involved a lot of acquisitions, but as the Living Computer Museum, it became something greater than the sum of its parts.  It was Paul Allen's personal creation, and a reflection not only of the legacy of the entire computer industry, but also of his own legacy.
 
 With all due respect to the people in charge of Paul Allen's estate, moth-balling his creation and leaving its future in limbo is a strange way to honor that legacy.
 
 ![LCM 2013-10-03 Paul and Bill]({{ site.archive.lcm.server }}/photos/2013/LCM-2013-10-03_Paul_and_Bill.jpg)
 
-The LCM website hasn't changed much over the last 3 years, and it continues to say the museum "is closed for now," with no indication of what, if anything, Vulcan decided to do when the first 18 months came and went.  And we are now fast approaching the end of *another* 18 months since the museum closed.
+The LCM [website](https://www.livingcomputers.org) hasn't changed much over the last 3 years, and it continues to say the museum "is closed for now," with no indication of what, if anything, Vulcan decided to do when the first 18 months came and went.  And we are now fast approaching the end of *another* 18 months since the museum closed.
 
 When will someone turn the lights back on at LCM?
 
