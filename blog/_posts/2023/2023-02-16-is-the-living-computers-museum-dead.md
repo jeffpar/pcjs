@@ -59,3 +59,45 @@ When will someone turn the lights back on at LCM?
 P.S. I took hundreds of photos at the Living Computer Museum during my visits over the years, and future posts will feature some of those photos, focusing on all the good work the museum used to do.
 
 Also, I encourage you to leaf through LCM's [Engineering Blog](https://engblg.livingcomputers.org/index.php/2017/03/19/hello-world/), before someone decides to power that down as well.
+
+---
+
+UPDATE: Several people have noted -- and I should have mentioned -- that there is still remote access to a number of systems at LCM.  In fact, after more than two years of total silence, LCM sent this email to its members in October 2022:
+
+    Hello,
+
+    Several years ago we modified how the Remote Systems are accessed via 
+    the INTERNET.  Connections originally were done directly via TELNET
+    and some of the systems lived wildly on the wild INTERNET.
+
+    Currently all Remote Systems are accessible via a Secure Shell (ssh)
+    pass-through server know as 'tty.livingcomputers.org'. 
+
+    Examples of ssh clients are:
+
+    * Windows:      putty
+    * MacOS X:      ssh in Terminal.app
+    * Linux/BSD:    ssh 
+    * Web Browser:  https://ssh.livingcomputers.org
+
+    To reach the Remote Systems, you can use 'ssh menu@tty.livingcomputers.org'
+    This will present you with a menu system which lists all available hosts and
+    what they are running.  Currently there are 17 Remote Systems online with 
+    the majority running on real vintage hardware while 4 are operated as hybrid 
+    or full emulation.
+
+    When you make a selection in the menu interface information regarding direct
+    access to that host, as well as guest login access, will be displayed.  If you
+    have a login on that particular host, you can log on or use the guest account.
+    Note, if you've forgotten your login/password, please reply to get it reset.
+
+    A user contributed WIKI can be found at https://wiki.livingcomputers.org 
+    Here you'll find Remote Systems pictures, details, manuals, survival guides
+    and coding examples.  If you have some coding examples or additions to the
+    survival guides, please let us know.
+
+    Thank you for continuing to use the Remote Systems at Living Computers!
+
+    Stephen Jones
+
+The focus of my post was the entire museum and all the in-person interactive programs that it used to offer, but it is nice to know that there are still some beating hearts and spinning disks in the bowels of the building, so perhaps all hope is not lost.
