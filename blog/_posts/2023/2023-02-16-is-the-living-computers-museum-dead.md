@@ -40,7 +40,7 @@ On Tuesday, May 26, 2020, the final blow came, when Vulcan announced widespread 
 
 At the time, Vulcan CEO Bill Hilf framed the closure both as an unavoidable consequence of COVID-19 and as a difficult decision that was actually in keeping with Paul Allen's wishes -- that how Paul wanted his money to be spent after he was gone was very different from when he was alive.
 
-Yet it's almost impossible to square the idea that Paul Allen, after investing so much time, energy, and money in the Living Computer Museum and its people -- not to mention his *express hope* that efforts like his would not be "lost to time" -- would have also left "instructions" that could somehow be interpreted as a justification for closing LCM after his death.
+Yet it's almost impossible to square the idea that Paul Allen, after investing so much time, energy, and money in the Living Computer Museum and its people -- not to mention his *express hope* that efforts like his would not be "lost to time" -- would have also left instructions that could somehow be interpreted as a justification for closing LCM after his death.
 
 It makes sense for some of Paul Allen's acquisitions, like his recently auctioned [art collection](https://www.christies.com/en/events/visionary-the-paul-g-allen-collection/overview), to find their way into new hands after he's gone.  Items like artwork are always changing hands.
 
@@ -60,9 +60,9 @@ P.S. I took hundreds of photos at the Living Computer Museum during my visits ov
 
 Also, I encourage you to leaf through LCM's [Engineering Blog](https://engblg.livingcomputers.org/index.php/2017/03/19/hello-world/), before someone decides to power that down as well.
 
----
+### Update (February 17, 2023)
 
-UPDATE: Several people have noted -- and I should have mentioned -- that there is still remote access to a number of systems at LCM.  In fact, after more than two years of total silence, LCM sent this email to its members in October 2022:
+Several people noted -- and I should have mentioned -- that there is still remote access to a number of systems at LCM.  In fact, after more than two years of total silence, LCM sent this email to former remote systems users in October 2022:
 
     Hello,
 
