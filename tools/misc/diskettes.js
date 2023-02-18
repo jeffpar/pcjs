@@ -264,12 +264,18 @@ function processFolders(sDir, argv)
         }
 
         let photoType = ".jpg";
-        let photoFile = imgFile.replace(".img", "") + photoType;
+        let photoFile = imgFile.replace("/archive/", "/").replace(".img", "") + photoType;
         if (!fileExists(photoFile)) {
-            photoType = ".png";
             photoFile = imgFile.replace(".img", "") + photoType;
             if (!fileExists(photoFile)) {
-                photoType = undefined;
+                photoType = ".png";
+                photoFile = imgFile.replace(".img", "") + photoType;
+                if (!fileExists(photoFile)) {
+                    photoType = undefined;
+                }
+            }
+            if (photoType) {
+                printf("warning: photo exists in archive folder but not public folder\n");
             }
         }
 
@@ -284,7 +290,7 @@ function processFolders(sDir, argv)
                     obj = diskObj['@versions'] && (diskObj['@versions'][imgParts[i]] || diskObj['@versions']['']);
                 }
                 diskObj = obj;
-                if (diskObj['@title']) title = diskObj['@title'];
+                if (diskObj && diskObj['@title']) title = diskObj['@title'];
             }
             else {
                 /*
@@ -322,6 +328,7 @@ function processFolders(sDir, argv)
                         }
                         if (media[m]['@archive'] == imgParts[i]) {
                             diskObj = media[m];
+                            photoType = null;       // TODO: fix the photo-checking logic in this case instead of disabling it
                             break;
                         }
                     }
@@ -335,7 +342,7 @@ function processFolders(sDir, argv)
                             }
                             diskettesUpdated = true;
                         }
-                        if (diskObj['@photo'] != photoType) {
+                        if (photoType !== null && diskObj['@photo'] != photoType) {
                             printf("warning: @photo should be %s\n", photoType);
                             if (photoType) {
                                 diskObj['@photo'] = photoType;
