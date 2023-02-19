@@ -60,6 +60,8 @@ machines:
            37 file(s)     329705 bytes
                            13312 bytes free
 
+![MS Mouse 4.00 (SYSTEM)]({{ site.software.diskettes.server }}/pcx86/dev/mouse/microsoft/4.00/MSMOUSE-039599-400-DISK1-SYSTEM.jpg)
+
 ### Directory of MS Mouse 4.00 (PROGRAM)
 
      Volume in drive A has no label
@@ -98,3 +100,5 @@ machines:
     SCRIPT   FNT      6578   5-01-85  12:00p
            31 file(s)     278954 bytes
                            66560 bytes free
+
+![MS Mouse 4.00 (PROGRAM)]({{ site.software.diskettes.server }}/pcx86/dev/mouse/microsoft/4.00/MSMOUSE-039599-400-DISK2-PROGRAM.jpg)
