@@ -263,20 +263,11 @@ function processFolders(sDir, argv)
             }
         }
 
-        let photoType = ".jpg";
-        let photoFile = imgFile.replace(".img", "") + photoType;
-        if (!fileExists(photoFile)) {
-            photoType = ".png";
-            photoFile = imgFile.replace(".img", "") + photoType;
-            if (!fileExists(photoFile)) {
-                photoType = undefined;
-            }
-        }
-
         let i;
         let lastObj, lastPart;
         let diskObj = diskettes;
-        let media, mediaName, title = "", jsonName = "", archiveType = "";
+        let title = "", jsonName = "";
+        let media, mediaName, archiveType, photoType;
         for (i = 0; i < imgParts.length; i++) {
             if (imgParts[i] != "archive") {
                 let obj = diskObj[imgParts[i]];
@@ -284,7 +275,7 @@ function processFolders(sDir, argv)
                     obj = diskObj['@versions'] && (diskObj['@versions'][imgParts[i]] || diskObj['@versions']['']);
                 }
                 diskObj = obj;
-                if (diskObj['@title']) title = diskObj['@title'];
+                if (diskObj && diskObj['@title']) title = diskObj['@title'];
             }
             else {
                 /*
@@ -304,12 +295,15 @@ function processFolders(sDir, argv)
                 if (media) {
                     mediaName = imgParts[++i];
                     jsonName = mediaName;
+                    let photoName = mediaName;
                     iExt = jsonName.lastIndexOf('.');
                     if (iExt < 0) {
                         jsonName += ".json";
+                        photoName += ".jpg";
                         archiveType = "folder";
                     } else {
                         mediaName = mediaName.slice(0, iExt);
+                        photoName = mediaName + ".jpg";
                         jsonName = mediaName + ".json";
                         if (sExt != ".img") {
                             archiveType = sExt;
@@ -322,6 +316,8 @@ function processFolders(sDir, argv)
                         }
                         if (media[m]['@archive'] == imgParts[i]) {
                             diskObj = media[m];
+                            jsonName = diskObj['@diskette'];
+                            photoName = jsonName.replace(".json", ".jpg");
                             break;
                         }
                     }
@@ -335,6 +331,23 @@ function processFolders(sDir, argv)
                             }
                             diskettesUpdated = true;
                         }
+
+                        photoType = ".jpg";
+                        let photoFile = imgFile.replace("/archive/", "/").replace(imgParts[i], photoName);
+                        if (!fileExists(photoFile)) {
+                            let photoFile = imgFile.replace(imgParts[i], photoName);
+                            if (!fileExists(photoFile)) {
+                                photoType = ".png";
+                                photoFile = photoFile.replace(".jpg", photoType);
+                                if (!fileExists(photoFile)) {
+                                    photoType = undefined;
+                                }
+                            }
+                            if (photoType) {
+                                printf("warning: photo exists in archive folder but not public folder\n");
+                            }
+                        }
+
                         if (diskObj['@photo'] != photoType) {
                             printf("warning: @photo should be %s\n", photoType);
                             if (photoType) {
@@ -344,6 +357,7 @@ function processFolders(sDir, argv)
                             }
                             diskettesUpdated = true;
                         }
+
                         if (archiveType) {
                             if (!diskObj['@archive']) {
                                 diskObj['@archive'] = archiveType;

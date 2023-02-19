@@ -509,7 +509,7 @@
       "program": "${workspaceFolder}/tools/misc/diskettes.js",
       "args": [
         "/diskettes",
-        "--filter=WIN31SDK",
+        "--filter=MSMOUSE",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",

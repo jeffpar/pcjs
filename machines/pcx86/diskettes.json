@@ -100,7 +100,8 @@
 								"@title": "MS Mouse 2.50 (Bus)",
 								"@diskette": "MSMOUSE-250.json",
 								"@photo": ".jpg",
-								"@format": "PC320K"
+								"@format": "PC320K",
+								"@archive": "MSMOUSE-250-MOUNTABLE.img"
 							},
 							{
 								"@title": "MS Mouse 2.50 (Serial)",
@@ -108,7 +109,9 @@
 								"@format": "PC160K",
 								"@archive": "folder"
 							}
-						]
+						],
+						"@source": "https://winworldpc.com/product/microsoft-mouse/2x",
+						"@note": "Microsoft Mouse 2.50 (Word Bundle)"
 					},
 					"4.00": {
 						"@title": "MS Mouse 4.00",
@@ -126,7 +129,8 @@
 								"@diskette": "MSMOUSE-000099-400-DISK2-PROGRAM.json",
 								"@format": "PC360K"
 							}
-						]
+						],
+						"@source": "https://winworldpc.com/product/microsoft-mouse/4x"
 					},
 					"5.00": {
 						"@title": "MS Mouse 5.00",
@@ -143,6 +147,38 @@
 								"@title": "MS Mouse 5.00 (PROGRAM)",
 								"@diskette": "MSMOUSE-000199-500-DISK2-PROGRAM.json",
 								"@format": "PC360K"
+							}
+						]
+					},
+					"5.03": {
+						"@title": "MS Mouse 5.03",
+						"@hardware": {
+							"options": "mouse"
+						},
+						"@media": [
+							{
+								"@title": "MS Mouse 5.03 (Disk 1)",
+								"@diskette": "MSMOUSE-503-DISK1.json",
+								"@format": "PC360K",
+								"@source": "https://winworldpc.com/product/microsoft-mouse/5x"
+							},
+							{
+								"@title": "MS Mouse 5.03 (Disk 1 Revised)",
+								"@diskette": "MSMOUSE-503-DISK1-REVISED.json",
+								"@format": "PC360K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Mouse 5.03 (Disk 2)",
+								"@diskette": "MSMOUSE-503-DISK2.json",
+								"@format": "PC360K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Mouse 5.03 (Disk 3)",
+								"@diskette": "MSMOUSE-503-DISK3.json",
+								"@format": "PC360K",
+								"@photo": ".jpg"
 							}
 						]
 					},
