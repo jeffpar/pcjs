@@ -121,16 +121,17 @@
 						"@media": [
 							{
 								"@title": "MS Mouse 4.00 (SYSTEM)",
-								"@diskette": "MSMOUSE-000099-400-DISK1-SYSTEM.json",
-								"@format": "PC360K"
+								"@diskette": "MSMOUSE-039599-400-DISK1-SYSTEM.json",
+								"@format": "PC360K",
+								"@photo": ".jpg"
 							},
 							{
 								"@title": "MS Mouse 4.00 (PROGRAM)",
-								"@diskette": "MSMOUSE-000099-400-DISK2-PROGRAM.json",
-								"@format": "PC360K"
+								"@diskette": "MSMOUSE-039599-400-DISK2-PROGRAM.json",
+								"@format": "PC360K",
+								"@photo": ".jpg"
 							}
-						],
-						"@source": "https://winworldpc.com/product/microsoft-mouse/4x"
+						]
 					},
 					"5.00": {
 						"@title": "MS Mouse 5.00",
