@@ -30,6 +30,8 @@ Some disks from this collection include:
   - [Microsoft C Compiler 1.03 (Beta)](/software/pcx86/lang/microsoft/c/1.03/)
   - [Microsoft C Compiler 1.04](/software/pcx86/lang/microsoft/c/1.04/)
   - [Microsoft Macro Assembler 5.10 (Feb 1988)](/software/pcx86/lang/microsoft/masm/5.10x/)
+  - [Microsoft Windows 95 (Build 121)](/software/pcx86/sys/windows/win95/4.00.121/)
+  - [Microsoft Windows 95 (Build 499)](/software/pcx86/sys/windows/win95/4.00.499/)
   - [Microsoft Word 1.10 (for DOS)](/software/pcx86/app/microsoft/word/1.10/)
   - [The Norton Utilities 2.00](/software/pcx86/util/norton/2.00/)
   - [The Norton Utilities 2.01 (1983-11-03)](/software/pcx86/util/norton/2.01/)
