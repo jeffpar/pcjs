@@ -272,7 +272,17 @@ function processFolders(sDir, argv)
             if (imgParts[i] != "archive") {
                 let obj = diskObj[imgParts[i]];
                 if (!obj) {
-                    obj = diskObj['@versions'] && (diskObj['@versions'][imgParts[i]] || diskObj['@versions']['']);
+                    let versions = diskObj['@versions'];
+                    if (versions) {
+                        obj = versions[imgParts[i]] || versions[''];
+                        if (!obj) {
+                            obj = versions[imgParts[i] + '/' + imgParts[i+1]];
+                            if (obj) i++;
+                        }
+                    } else {
+                        obj = diskObj[imgParts[i] + '/' + imgParts[i+1]];
+                        if (obj) i++;
+                    }
                 }
                 diskObj = obj;
                 if (diskObj && diskObj['@title']) title = diskObj['@title'];

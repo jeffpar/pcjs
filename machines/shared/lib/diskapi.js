@@ -132,6 +132,14 @@ DiskAPI.BPB = {
  * If the 4th value is omitted, the sector size is assumed to be 512.  The order of these "geometric" values mirrors
  * the structure of our JSON-encoded disk images, which consist of an array of cylinders, each of which is an array of
  * heads, each of which is an array of sector objects.
+ *
+ * NOTES
+ *
+ *      1720320 is used by Microsoft "DMF" diskettes (eg, OEM signature "MSDMF3.2"); see Windows 95.
+ *
+ *      1884160 is used by IBM "XDF" diskettes (eg, OEM signature "IBM 20.0") which effectively have 23 512-byte
+ *      sectors per track, but whose tracks (beyond track 0) are actually formatted with one 8Kb sector, one 2Kb sector,
+ *      one 1Kb sector, and one 512-byte sector; see PC DOS 7.0.  Unsure why IBM chose media ID 0xF9.
  */
 DiskAPI.GEOMETRIES = {
     163840:  [40,1,8,,0xFE],    // media ID 0xFE: 40 cylinders, 1 head (single-sided),   8 sectors/track, ( 320 total sectors x 512 bytes/sector ==  163840)
@@ -141,6 +149,8 @@ DiskAPI.GEOMETRIES = {
     737280:  [80,2,9,,0xF9],    // media ID 0xF9: 80 cylinders, 2 heads (double-sided),  9 sectors/track, (1440 total sectors x 512 bytes/sector ==  737280)
     1228800: [80,2,15,,0xF9],   // media ID 0xF9: 80 cylinders, 2 heads (double-sided), 15 sectors/track, (2400 total sectors x 512 bytes/sector == 1228800)
     1474560: [80,2,18,,0xF0],   // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 18 sectors/track, (2880 total sectors x 512 bytes/sector == 1474560)
+    1720320: [80,2,21,,0xF0],   // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 21 sectors/track, (3360 total sectors x 512 bytes/sector == 1720320)
+    1884160: [80,2,23,,0xF9],   // media ID 0xF9: 80 cylinders, 2 heads (double-sided), 23 sectors/track, (3680 total sectors x 512 bytes/sector == 1884160)
     2949120: [80,2,36,,0xF0],   // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 36 sectors/track, (5760 total sectors x 512 bytes/sector == 2949120)
     /*
      * The following are some common disk sizes and their CHS values, since missing or bogus MBR and/or BPB values
