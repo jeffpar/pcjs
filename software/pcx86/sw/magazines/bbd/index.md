@@ -93,7 +93,7 @@ machines:
 
 ![Big Blue Disk #1]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/bbd/BBD01.jpg)
 
-[Source](https://archive.org/details/bbd01_201608)
+[[Source](https://archive.org/details/bbd01_201608)]
 
 ### Directory of Big Blue Disk #2
 
@@ -159,7 +159,7 @@ machines:
            56 file(s)     335799 bytes
                                0 bytes free
 
-[Source](https://archive.org/details/msdos_bbd02)
+[[Source](https://archive.org/details/msdos_bbd02)]
 
 ### Directory of Big Blue Disk #3
 
@@ -279,7 +279,7 @@ machines:
           110 file(s)     597320 bytes
                           596992 bytes free
 
-[Source](https://archive.org/details/bbd03_201608)
+[[Source](https://archive.org/details/bbd03_201608)]
 
 ### Directory of Big Blue Disk #4
 
@@ -364,7 +364,7 @@ machines:
            75 file(s)     343042 bytes
                           859136 bytes free
 
-[Source](https://archive.org/details/bbd04)
+[[Source](https://archive.org/details/bbd04)]
 
 ### Directory of Big Blue Disk #5
 
@@ -451,7 +451,7 @@ machines:
            77 file(s)     559170 bytes
                           634880 bytes free
 
-[Source](https://archive.org/details/bbd05)
+[[Source](https://archive.org/details/bbd05)]
 
 ### Directory of Big Blue Disk #8
 
@@ -560,7 +560,7 @@ machines:
            99 file(s)     633534 bytes
                           561664 bytes free
 
-[Source](https://archive.org/details/bbd08)
+[[Source](https://archive.org/details/bbd08)]
 
 ### Directory of Big Blue Disk #10
 
@@ -665,7 +665,7 @@ machines:
            95 file(s)     658000 bytes
                           538112 bytes free
 
-[Source](https://archive.org/details/bbd10)
+[[Source](https://archive.org/details/bbd10)]
 
 ### Directory of Big Blue Disk #11
 
@@ -763,7 +763,7 @@ machines:
            88 file(s)     695381 bytes
                           503296 bytes free
 
-[Source](https://archive.org/details/bbd11)
+[[Source](https://archive.org/details/bbd11)]
 
 ### Directory of Big Blue Disk #15
 
@@ -864,7 +864,7 @@ machines:
            91 file(s)     685635 bytes
                           512512 bytes free
 
-[Source](https://archive.org/details/bbd15)
+[[Source](https://archive.org/details/bbd15)]
 
 ### Directory of Big Blue Disk #16
 
@@ -955,7 +955,7 @@ machines:
            81 file(s)     658216 bytes
                           543232 bytes free
 
-[Source](https://archive.org/details/bbd16)
+[[Source](https://archive.org/details/bbd16)]
 
 ### Directory of Big Blue Disk #17
 
@@ -1059,7 +1059,7 @@ machines:
            94 file(s)     585925 bytes
                           611840 bytes free
 
-[Source](https://archive.org/details/bbd17)
+[[Source](https://archive.org/details/bbd17)]
 
 ### Directory of Big Blue Disk #18
 
@@ -1162,7 +1162,7 @@ machines:
            93 file(s)     613991 bytes
                           583168 bytes free
 
-[Source](https://archive.org/details/bbd18)
+[[Source](https://archive.org/details/bbd18)]
 
 ### Directory of Big Blue Disk #19
 
@@ -1238,7 +1238,7 @@ machines:
            66 file(s)     666831 bytes
                           537088 bytes free
 
-[Source](https://archive.org/details/bbd19)
+[[Source](https://archive.org/details/bbd19)]
 
 ### Directory of Big Blue Disk #20
 
@@ -1351,7 +1351,7 @@ machines:
           103 file(s)     665981 bytes
                           527872 bytes free
 
-[Source](https://archive.org/details/bbd20)
+[[Source](https://archive.org/details/bbd20)]
 
 ### Directory of Big Blue Disk #21
 
@@ -1451,7 +1451,7 @@ machines:
            90 file(s)     695474 bytes
                           504320 bytes free
 
-[Source](https://archive.org/details/bbd21)
+[[Source](https://archive.org/details/bbd21)]
 
 ### Directory of Big Blue Disk #22
 
@@ -1534,7 +1534,7 @@ machines:
            73 file(s)     589727 bytes
                           612352 bytes free
 
-[Source](https://archive.org/details/bbd22)
+[[Source](https://archive.org/details/bbd22)]
 
 ### Directory of Big Blue Disk #23
 
@@ -1631,7 +1631,7 @@ machines:
            87 file(s)     626556 bytes
                           572928 bytes free
 
-[Source](https://archive.org/details/bbd23)
+[[Source](https://archive.org/details/bbd23)]
 
 ### Directory of Big Blue Disk #24
 
@@ -1717,7 +1717,7 @@ machines:
            76 file(s)     634719 bytes
                           567808 bytes free
 
-[Source](https://archive.org/details/bbd24)
+[[Source](https://archive.org/details/bbd24)]
 
 ### Directory of Big Blue Disk #25
 
@@ -1807,7 +1807,7 @@ machines:
            80 file(s)     627348 bytes
                           573440 bytes free
 
-[Source](https://archive.org/details/bbd25)
+[[Source](https://archive.org/details/bbd25)]
 
 ### Directory of Big Blue Disk #26
 
@@ -1885,7 +1885,7 @@ machines:
            68 file(s)     587076 bytes
                           616960 bytes free
 
-[Source](https://archive.org/details/bbd26)
+[[Source](https://archive.org/details/bbd26)]
 
 ### Directory of Big Blue Disk #27
 
@@ -2010,7 +2010,7 @@ machines:
           115 file(s)     580536 bytes
                           608768 bytes free
 
-[Source](https://archive.org/details/bbd27)
+[[Source](https://archive.org/details/bbd27)]
 
 ### Directory of Big Blue Disk #28
 
@@ -2111,7 +2111,7 @@ machines:
            91 file(s)     573922 bytes
                           622592 bytes free
 
-[Source](https://archive.org/details/bbd28)
+[[Source](https://archive.org/details/bbd28)]
 
 ### Directory of Big Blue Disk #29
 
@@ -2230,7 +2230,7 @@ machines:
           109 file(s)     760620 bytes
                           432128 bytes free
 
-[Source](https://archive.org/details/bbd29)
+[[Source](https://archive.org/details/bbd29)]
 
 ### Directory of Big Blue Disk #30
 
@@ -2312,7 +2312,7 @@ machines:
            72 file(s)     576948 bytes
                           626688 bytes free
 
-[Source](https://archive.org/details/bbd30)
+[[Source](https://archive.org/details/bbd30)]
 
 ### Directory of Big Blue Disk #31
 
@@ -2424,7 +2424,7 @@ machines:
           102 file(s)     637779 bytes
                           555520 bytes free
 
-[Source](https://archive.org/details/bbd31new)
+[[Source](https://archive.org/details/bbd31new)]
 
 ### Directory of Big Blue Disk #32
 
@@ -2514,7 +2514,7 @@ machines:
            80 file(s)     572899 bytes
                           629248 bytes free
 
-[Source](https://archive.org/details/bbd32)
+[[Source](https://archive.org/details/bbd32)]
 
 ### Directory of Big Blue Disk #33
 
@@ -2596,7 +2596,7 @@ machines:
            72 file(s)     553540 bytes
                           649216 bytes free
 
-[Source](https://archive.org/details/bbd33)
+[[Source](https://archive.org/details/bbd33)]
 
 ### Directory of Big Blue Disk #34
 
@@ -2679,7 +2679,7 @@ machines:
            73 file(s)     633478 bytes
                           569344 bytes free
 
-[Source](https://archive.org/details/bbd34)
+[[Source](https://archive.org/details/bbd34)]
 
 ### Directory of Big Blue Disk #35
 
@@ -2764,7 +2764,7 @@ machines:
            75 file(s)     604694 bytes
                           596480 bytes free
 
-[Source](https://archive.org/details/bbd35)
+[[Source](https://archive.org/details/bbd35)]
 
 ### Directory of Big Blue Disk #36
 
@@ -2842,7 +2842,7 @@ machines:
            68 file(s)     557397 bytes
                           646144 bytes free
 
-[Source](https://archive.org/details/bbd36)
+[[Source](https://archive.org/details/bbd36)]
 
 ### Directory of Big Blue Disk #37
 
@@ -2931,7 +2931,7 @@ machines:
            79 file(s)     571982 bytes
                           628736 bytes free
 
-[Source](https://archive.org/details/bbd37)
+[[Source](https://archive.org/details/bbd37)]
 
 ### Directory of Big Blue Disk #38
 
@@ -3014,7 +3014,7 @@ machines:
            73 file(s)     696771 bytes
                           504320 bytes free
 
-[Source](https://archive.org/details/bbd38)
+[[Source](https://archive.org/details/bbd38)]
 
 ### Directory of Big Blue Disk #39
 
@@ -3093,7 +3093,7 @@ machines:
            69 file(s)     583062 bytes
                           618496 bytes free
 
-[Source](https://archive.org/details/bbd39)
+[[Source](https://archive.org/details/bbd39)]
 
 ### Directory of Big Blue Disk #40
 
@@ -3182,7 +3182,7 @@ machines:
            79 file(s)     625466 bytes
                           574976 bytes free
 
-[Source](https://archive.org/details/bbd40)
+[[Source](https://archive.org/details/bbd40)]
 
 ### Directory of Big Blue Disk #41
 
@@ -3263,7 +3263,7 @@ machines:
            71 file(s)     610711 bytes
                           589824 bytes free
 
-[Source](https://archive.org/details/bbd41)
+[[Source](https://archive.org/details/bbd41)]
 
 ### Directory of Big Blue Disk #42
 
@@ -3339,7 +3339,7 @@ machines:
            66 file(s)     695410 bytes
                           505856 bytes free
 
-[Source](https://archive.org/details/bbd42)
+[[Source](https://archive.org/details/bbd42)]
 
 ### Directory of Big Blue Disk #43
 
@@ -3479,7 +3479,7 @@ machines:
           130 file(s)     984904 bytes
                           201216 bytes free
 
-[Source](https://archive.org/details/bbd43)
+[[Source](https://archive.org/details/bbd43)]
 
 ### Directory of Big Blue Disk #44
 
@@ -3605,7 +3605,7 @@ machines:
           116 file(s)     593854 bytes
                           602112 bytes free
 
-[Source](https://archive.org/details/bbd44)
+[[Source](https://archive.org/details/bbd44)]
 
 ### Directory of Big Blue Disk #45
 
@@ -3682,7 +3682,7 @@ machines:
            67 file(s)     612460 bytes
                           589312 bytes free
 
-[Source](https://archive.org/details/bbd45)
+[[Source](https://archive.org/details/bbd45)]
 
 ### Directory of Big Blue Disk #46
 
@@ -3758,7 +3758,7 @@ machines:
            66 file(s)     570512 bytes
                           631808 bytes free
 
-[Source](https://archive.org/details/bbd46)
+[[Source](https://archive.org/details/bbd46)]
 
 ### Directory of Big Blue Disk #47
 
@@ -3852,7 +3852,7 @@ machines:
            84 file(s)     597880 bytes
                           600576 bytes free
 
-[Source](https://archive.org/details/bbd47)
+[[Source](https://archive.org/details/bbd47)]
 
 ### Directory of Big Blue Disk #48
 
@@ -3933,7 +3933,7 @@ machines:
            71 file(s)     618840 bytes
                           582144 bytes free
 
-[Source](https://archive.org/details/bbd48)
+[[Source](https://archive.org/details/bbd48)]
 
 ### Directory of Big Blue Disk #49
 
@@ -4041,7 +4041,7 @@ machines:
            98 file(s)     508066 bytes
                           688640 bytes free
 
-[Source](https://archive.org/details/bbd49)
+[[Source](https://archive.org/details/bbd49)]
 
 ### Directory of Big Blue Disk #50
 
@@ -4159,7 +4159,7 @@ machines:
           108 file(s)     608663 bytes
                           586240 bytes free
 
-[Source](https://archive.org/details/bbd50)
+[[Source](https://archive.org/details/bbd50)]
 
 ### Directory of Big Blue Disk #51
 
@@ -4243,7 +4243,7 @@ machines:
            74 file(s)     532211 bytes
                           668672 bytes free
 
-[Source](https://archive.org/details/bbd51)
+[[Source](https://archive.org/details/bbd51)]
 
 ### Directory of Big Blue Disk #52
 
@@ -4320,7 +4320,7 @@ machines:
            67 file(s)     608257 bytes
                           594432 bytes free
 
-[Source](https://archive.org/details/bbd52)
+[[Source](https://archive.org/details/bbd52)]
 
 ### Directory of Big Blue Disk #53
 
@@ -4387,7 +4387,7 @@ machines:
            57 file(s)     567002 bytes
                           638464 bytes free
 
-[Source](https://archive.org/details/bbd53)
+[[Source](https://archive.org/details/bbd53)]
 
 ### Directory of Big Blue Disk #54
 
@@ -4489,7 +4489,7 @@ machines:
            92 file(s)     633694 bytes
                           560128 bytes free
 
-[Source](https://archive.org/details/bbd54)
+[[Source](https://archive.org/details/bbd54)]
 
 ### Directory of Big Blue Disk #55
 
@@ -4581,7 +4581,7 @@ machines:
            82 file(s)     589594 bytes
                           608256 bytes free
 
-[Source](https://archive.org/details/bbd55)
+[[Source](https://archive.org/details/bbd55)]
 
 ### Directory of Big Blue Disk #56
 
@@ -4663,7 +4663,7 @@ machines:
            72 file(s)     547445 bytes
                           654336 bytes free
 
-[Source](https://archive.org/details/bbd56)
+[[Source](https://archive.org/details/bbd56)]
 
 ### Directory of Big Blue Disk #57
 
@@ -4751,7 +4751,7 @@ machines:
            78 file(s)     526534 bytes
                           672768 bytes free
 
-[Source](https://archive.org/details/bbd57)
+[[Source](https://archive.org/details/bbd57)]
 
 ### Directory of Big Blue Disk #58
 
@@ -4846,7 +4846,7 @@ machines:
            85 file(s)     612476 bytes
                           590336 bytes free
 
-[Source](https://archive.org/details/odm58)
+[[Source](https://archive.org/details/odm58)]
 
 ### Directory of Big Blue Disk #59
 
@@ -4942,7 +4942,7 @@ machines:
            86 file(s)     552545 bytes
                           644608 bytes free
 
-[Source](https://archive.org/details/odm59)
+[[Source](https://archive.org/details/odm59)]
 
 ### Directory of Big Blue Disk #60
 
@@ -5031,7 +5031,7 @@ machines:
            79 file(s)     579896 bytes
                           618496 bytes free
 
-[Source](https://archive.org/details/odm60)
+[[Source](https://archive.org/details/odm60)]
 
 ### Directory of Big Blue Disk #61
 
@@ -5098,7 +5098,7 @@ machines:
            57 file(s)     513688 bytes
                           686592 bytes free
 
-[Source](https://archive.org/details/odm61)
+[[Source](https://archive.org/details/odm61)]
 
 ### Directory of Big Blue Disk #62
 
@@ -5168,7 +5168,7 @@ machines:
            60 file(s)     652328 bytes
                           546816 bytes free
 
-[Source](https://archive.org/details/odm62)
+[[Source](https://archive.org/details/odm62)]
 
 ### Directory of Big Blue Disk #63
 
@@ -5242,7 +5242,7 @@ machines:
            64 file(s)     684308 bytes
                           514560 bytes free
 
-[Source](https://archive.org/details/odm63)
+[[Source](https://archive.org/details/odm63)]
 
 ### Directory of Big Blue Disk #64
 
@@ -5309,7 +5309,7 @@ machines:
            57 file(s)     678860 bytes
                           523776 bytes free
 
-[Source](https://archive.org/details/odm64)
+[[Source](https://archive.org/details/odm64)]
 
 ### Directory of Big Blue Disk #65
 
@@ -5363,7 +5363,7 @@ machines:
            44 file(s)     647602 bytes
                           556032 bytes free
 
-[Source](https://archive.org/details/odm65)
+[[Source](https://archive.org/details/odm65)]
 
 ### Directory of Big Blue Disk #66
 
@@ -5427,7 +5427,7 @@ machines:
            54 file(s)     647122 bytes
                           555008 bytes free
 
-[Source](https://archive.org/details/odm66)
+[[Source](https://archive.org/details/odm66)]
 
 ### Directory of Big Blue Disk #67
 
@@ -5485,7 +5485,7 @@ machines:
            48 file(s)     636538 bytes
                           566784 bytes free
 
-[Source](https://archive.org/details/odm67)
+[[Source](https://archive.org/details/odm67)]
 
 ### Directory of Big Blue Disk #68
 
@@ -5544,7 +5544,7 @@ machines:
            49 file(s)     564890 bytes
                           639488 bytes free
 
-[Source](https://archive.org/details/odm68)
+[[Source](https://archive.org/details/odm68)]
 
 ### Directory of Big Blue Disk #69
 
@@ -5601,7 +5601,7 @@ machines:
            47 file(s)     690313 bytes
                           514560 bytes free
 
-[Source](https://archive.org/details/odm69)
+[[Source](https://archive.org/details/odm69)]
 
 ### Directory of Big Blue Disk #70
 
@@ -5659,7 +5659,7 @@ machines:
            48 file(s)     697168 bytes
                           507904 bytes free
 
-[Source](https://archive.org/details/odm70)
+[[Source](https://archive.org/details/odm70)]
 
 ### Directory of Big Blue Disk #71
 
@@ -5710,7 +5710,7 @@ machines:
            41 file(s)     710085 bytes
                           495104 bytes free
 
-[Source](https://archive.org/details/odm71)
+[[Source](https://archive.org/details/odm71)]
 
 ### Directory of Big Blue Disk #72
 
@@ -5768,7 +5768,7 @@ machines:
            48 file(s)     696766 bytes
                           506880 bytes free
 
-[Source](https://archive.org/details/odm72)
+[[Source](https://archive.org/details/odm72)]
 
 ### Directory of Big Blue Disk #73
 
@@ -5837,7 +5837,7 @@ machines:
            59 file(s)     688283 bytes
                           513536 bytes free
 
-[Source](https://archive.org/details/odm73)
+[[Source](https://archive.org/details/odm73)]
 
 ### Directory of Big Blue Disk #74
 
@@ -5903,7 +5903,7 @@ machines:
            56 file(s)     590901 bytes
                           610304 bytes free
 
-[Source](https://archive.org/details/odm74)
+[[Source](https://archive.org/details/odm74)]
 
 ### Directory of Big Blue Disk #75
 
@@ -5965,7 +5965,7 @@ machines:
            52 file(s)     651719 bytes
                           550400 bytes free
 
-[Source](https://archive.org/details/odm75)
+[[Source](https://archive.org/details/odm75)]
 
 ### Directory of Big Blue Disk #76
 
@@ -6022,7 +6022,7 @@ machines:
            47 file(s)     602421 bytes
                           602624 bytes free
 
-[Source](https://archive.org/details/odm76)
+[[Source](https://archive.org/details/odm76)]
 
 ### Directory of Big Blue Disk #77
 
@@ -6086,7 +6086,7 @@ machines:
            54 file(s)     698676 bytes
                           502784 bytes free
 
-[Source](https://archive.org/details/odm77)
+[[Source](https://archive.org/details/odm77)]
 
 ### Directory of Big Blue Disk #78
 
@@ -6149,7 +6149,7 @@ machines:
            53 file(s)     689085 bytes
                           513536 bytes free
 
-[Source](https://archive.org/details/odm78)
+[[Source](https://archive.org/details/odm78)]
 
 ### Directory of Big Blue Disk #79
 
@@ -6211,7 +6211,7 @@ machines:
            52 file(s)     687981 bytes
                           513024 bytes free
 
-[Source](https://archive.org/details/odm79)
+[[Source](https://archive.org/details/odm79)]
 
 ### Directory of Big Blue Disk #80
 
@@ -6273,7 +6273,7 @@ machines:
            52 file(s)     696554 bytes
                           505856 bytes free
 
-[Source](https://archive.org/details/odm80)
+[[Source](https://archive.org/details/odm80)]
 
 ### Directory of Big Blue Disk #81
 
@@ -6329,7 +6329,7 @@ machines:
            46 file(s)     679401 bytes
                           524800 bytes free
 
-[Source](https://archive.org/details/odm81)
+[[Source](https://archive.org/details/odm81)]
 
 ### Directory of Big Blue Disk #82
 
@@ -6399,7 +6399,7 @@ machines:
            60 file(s)     684707 bytes
                           514560 bytes free
 
-[Source](https://archive.org/details/odm82)
+[[Source](https://archive.org/details/odm82)]
 
 ### Directory of Big Blue Disk #83
 
@@ -6484,7 +6484,7 @@ machines:
            75 file(s)    1197633 bytes
                           243200 bytes free
 
-[Source](https://archive.org/details/odm83)
+[[Source](https://archive.org/details/odm83)]
 
 ### Directory of Big Blue Disk #84
 
@@ -6573,7 +6573,7 @@ machines:
            72 file(s)    1086489 bytes
                           111616 bytes free
 
-[Source](https://archive.org/details/odm84)
+[[Source](https://archive.org/details/odm84)]
 
 ### Directory of Big Blue Disk #85
 
@@ -6672,7 +6672,7 @@ machines:
            89 file(s)    1190306 bytes
                             2560 bytes free
 
-[Source](https://archive.org/details/odm85)
+[[Source](https://archive.org/details/odm85)]
 
 ### Directory of Big Blue Disk #86
 
@@ -6773,7 +6773,7 @@ machines:
            91 file(s)    1156242 bytes
                            34304 bytes free
 
-[Source](https://archive.org/details/odm86)
+[[Source](https://archive.org/details/odm86)]
 
 ### Directory of Big Blue Disk #87
 
@@ -6881,7 +6881,7 @@ machines:
            98 file(s)    1187189 bytes
                             4608 bytes free
 
-[Source](https://archive.org/details/odm87)
+[[Source](https://archive.org/details/odm87)]
 
 ### Directory of Big Blue Disk #88
 
@@ -6982,7 +6982,7 @@ machines:
            91 file(s)    1188354 bytes
                             5632 bytes free
 
-[Source](https://archive.org/details/odm88)
+[[Source](https://archive.org/details/odm88)]
 
 ### Directory of Big Blue Disk #89
 
@@ -7056,7 +7056,7 @@ machines:
            64 file(s)    1170368 bytes
                            28160 bytes free
 
-[Source](https://archive.org/details/odm89)
+[[Source](https://archive.org/details/odm89)]
 
 ### Directory of Big Blue Disk #90
 
@@ -7156,4 +7156,4 @@ machines:
            90 file(s)    1192510 bytes
                             1024 bytes free
 
-[Source](https://archive.org/details/odm90)
+[[Source](https://archive.org/details/odm90)]

@@ -29,4 +29,4 @@ Directory listing of the 160Kb diskette ([Source](https://winworldpc.com/product
             2 file(s)     109056 bytes
                            50688 bytes free
 
-[Source](https://winworldpc.com/product/macro-assembler/1x)
+[[Source](https://winworldpc.com/product/macro-assembler/1x)]

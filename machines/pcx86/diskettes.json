@@ -5625,6 +5625,10 @@
 					},
 					"3.00": {
 						"@title": "Microsoft Multiplan 3.00",
+						"@hardware": {
+							"config": "/machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml",
+							"autoType": "\\r\\rSYS C:\\rCOPY COMMAND.COM C:\\rB:\\rDIR\\r"
+						},
 						"@media": [
 							{
 								"@title": "MS Multiplan 3.00 (PROGRAM)",
@@ -5652,6 +5656,10 @@
 					},
 					"4.00": {
 						"@title": "Microsoft Multiplan 4.00",
+						"@hardware": {
+							"config": "/machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml",
+							"autoType": "\\r\\rSYS C:\\rCOPY COMMAND.COM C:\\rB:\\rDIR\\r"
+						},
 						"@media": [
 							{
 								"@title": "MS Multiplan 4.00 (SETUP)",
@@ -5689,6 +5697,10 @@
 					},
 					"4.01": {
 						"@title": "Microsoft Multiplan 4.01",
+						"@hardware": {
+							"config": "/machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml",
+							"autoType": "\\r\\rSYS C:\\rCOPY COMMAND.COM C:\\rB:\\rDIR\\r"
+						},
 						"@media": [
 							{
 								"@title": "MS Multiplan 4.01 (SETUP)",
@@ -5718,6 +5730,10 @@
 					},
 					"4.20": {
 						"@title": "Microsoft Multiplan 4.20",
+						"@hardware": {
+							"config": "/machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml",
+							"autoType": "\\r\\rSYS C:\\rCOPY COMMAND.COM C:\\rB:\\rDIR\\r"
+						},
 						"@media": [
 							{
 								"@title": "MS Multiplan 4.20 (SETUP)",

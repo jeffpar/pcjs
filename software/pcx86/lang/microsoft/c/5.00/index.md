@@ -39,7 +39,7 @@ machines:
            14 file(s)     346545 bytes
                             9216 bytes free
 
-[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+[[Source](https://winworldpc.com/product/microsoft-c-c/5x)]
 
 ### Directory of MS C 5.00 (COMPILER)
 
@@ -68,7 +68,7 @@ machines:
            12 file(s)     335875 bytes
                            20480 bytes free
 
-[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+[[Source](https://winworldpc.com/product/microsoft-c-c/5x)]
 
 ### Directory of MS C 5.00 (UTILITY1)
 
@@ -156,7 +156,7 @@ machines:
            55 file(s)     331207 bytes
                             5120 bytes free
 
-[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+[[Source](https://winworldpc.com/product/microsoft-c-c/5x)]
 
 ### Directory of MS C 5.00 (UTILITY2)
 
@@ -187,7 +187,7 @@ machines:
            14 file(s)     295633 bytes
                            61440 bytes free
 
-[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+[[Source](https://winworldpc.com/product/microsoft-c-c/5x)]
 
 ### Directory of MS C 5.00 (INCLIBS)
 
@@ -272,7 +272,7 @@ machines:
            56 file(s)     332059 bytes
                             3072 bytes free
 
-[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+[[Source](https://winworldpc.com/product/microsoft-c-c/5x)]
 
 ### Directory of MS C 5.00 (LIBMC)
 
@@ -288,7 +288,7 @@ machines:
             6 file(s)     359816 bytes
                                0 bytes free
 
-[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+[[Source](https://winworldpc.com/product/microsoft-c-c/5x)]
 
 ### Directory of MS C 5.00 (LIBL)
 
@@ -305,7 +305,7 @@ machines:
             7 file(s)     359624 bytes
                                0 bytes free
 
-[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+[[Source](https://winworldpc.com/product/microsoft-c-c/5x)]
 
 ### Directory of MS C 5.00 (CODEVIEW)
 
@@ -355,7 +355,7 @@ machines:
            33 file(s)     334157 bytes
                            11264 bytes free
 
-[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+[[Source](https://winworldpc.com/product/microsoft-c-c/5x)]
 
 ### Directory of MS C 5.00 (QUICKC)
 
@@ -367,7 +367,7 @@ machines:
             2 file(s)     349934 bytes
                            12288 bytes free
 
-[Source](https://winworldpc.com/product/microsoft-c-c/5x)
+[[Source](https://winworldpc.com/product/microsoft-c-c/5x)]
 
 <!-- Documentation -->
 

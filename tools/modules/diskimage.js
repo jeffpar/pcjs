@@ -654,7 +654,7 @@ function processDisk(di, diskFile, argv, diskette)
                     let sMachineID = (model.length <= 4? manufacturer : "") + model;
                     let sMachine = "  - id: " + sMachineID + "\n    type: pcx86\n    config: " + configFile + "\n";
                     for (let prop in hardware) {
-                        if (prop == "config" || prop == "machine" || prop == "options" || prop == "url" || prop[0] == '@') continue;
+                        if (prop == "autoType" || prop == "config" || prop == "machine" || prop == "options" || prop == "url" || prop[0] == '@') continue;
                         let chQuote = "";
                         if (prop == "drives" || prop == "floppyDrives") {
                             chQuote = "'";

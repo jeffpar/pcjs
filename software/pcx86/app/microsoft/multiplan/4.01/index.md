@@ -150,4 +150,4 @@ machines:
 
 ![MS Multiplan 4.01 (UTILITIES)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/multiplan/4.01/MULTIPLAN401-DISK3.jpg)
 
-[Source](https://winworldpc.com/product/multiplan/40)
+[[Source](https://winworldpc.com/product/multiplan/40)]

@@ -8,7 +8,6 @@ machines:
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
     drives: '[{name:"PC-DOS 2.00 w/Tools (10Mb)",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-C400.json"}]'
-    autoType: $date\r$time\r
     autoGen: true
     autoMount:
       A: "None"

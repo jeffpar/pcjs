@@ -144,4 +144,4 @@ machines:
 
 ![MS Multiplan 4.00 (UTILITIES)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/multiplan/4.00/MULTIPLAN400-DISK4.jpg)
 
-[Source](https://winworldpc.com/product/multiplan/40)
+[[Source](https://winworldpc.com/product/multiplan/40)]
