@@ -516,7 +516,7 @@
       "program": "${workspaceFolder}/tools/misc/diskettes.js",
       "args": [
         "/diskettes",
-        "--filter=MSMOUSE",
+        "--filter=WIN95-B950",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",
