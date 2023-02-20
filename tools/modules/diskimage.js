@@ -693,7 +693,7 @@ function processDisk(di, diskFile, argv, diskette)
             }
         }
         if (diskette.source && !diskette.source.indexOf("http")) {
-            sListing += "\n[Source](" + diskette.source + ")\n";
+            sListing += "\n[[Source](" + diskette.source + ")]\n";
         }
 
         let sMatch = "\n(##+)\\s+Directory of " + diskette.name.replace("(","\\(").replace(")","\\)").replace("*","\\*").replace("+","\\+") + " *\n([\\s\\S]*?)(\n[^!{[\\s]|$)";
