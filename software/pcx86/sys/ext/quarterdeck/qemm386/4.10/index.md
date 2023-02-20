@@ -7,7 +7,6 @@ machines:
   - id: deskpro386
     type: pcx86
     config: /machines/pcx86/compaq/deskpro386/cga/640kb/machine.xml
-    autoType: 
     autoGen: true
     autoMount:
       B: "QEMM-386 4.10"

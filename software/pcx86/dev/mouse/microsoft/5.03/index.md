@@ -49,7 +49,7 @@ machines:
            27 file(s)     279693 bytes
                            67584 bytes free
 
-[Source](https://winworldpc.com/product/microsoft-mouse/5x)
+[[Source](https://winworldpc.com/product/microsoft-mouse/5x)]
 
 ### Directory of MS Mouse 5.03 (Disk 1 Revised)
 

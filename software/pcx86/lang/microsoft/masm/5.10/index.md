@@ -59,7 +59,7 @@ We don't have any documents from this release, but you can browse the
            22 file(s)     240979 bytes
                           107520 bytes free
 
-[Source](https://winworldpc.com/product/macro-assembler/5x)
+[[Source](https://winworldpc.com/product/macro-assembler/5x)]
 
 ### Directory of MS Macro Assembler 5.10 (Disk 2)
 
@@ -79,7 +79,7 @@ We don't have any documents from this release, but you can browse the
            10 file(s)     303193 bytes
                            53248 bytes free
 
-[Source](https://winworldpc.com/product/macro-assembler/5x)
+[[Source](https://winworldpc.com/product/macro-assembler/5x)]
 
 ### Directory of MS Macro Assembler 5.10 (Disk 3)
 
@@ -104,7 +104,7 @@ We don't have any documents from this release, but you can browse the
            15 file(s)     351344 bytes
                             2048 bytes free
 
-[Source](https://winworldpc.com/product/macro-assembler/5x)
+[[Source](https://winworldpc.com/product/macro-assembler/5x)]
 
 ### Directory of MS Macro Assembler 5.10 (Disk 4)
 
@@ -151,7 +151,7 @@ We don't have any documents from this release, but you can browse the
            26 file(s)     307295 bytes
                            41984 bytes free
 
-[Source](https://winworldpc.com/product/macro-assembler/5x)
+[[Source](https://winworldpc.com/product/macro-assembler/5x)]
 
 ### Directory of MS Macro Assembler 5.10 (Disk 5)
 
@@ -188,7 +188,7 @@ We don't have any documents from this release, but you can browse the
            27 file(s)     966076 bytes
                           241152 bytes free
 
-[Source](https://winworldpc.com/product/macro-assembler/5x)
+[[Source](https://winworldpc.com/product/macro-assembler/5x)]
 
 ### Directory of MS Macro Assembler 5.10 (Update)
 
@@ -229,4 +229,4 @@ We don't have any documents from this release, but you can browse the
            20 file(s)     293634 bytes
                            61440 bytes free
 
-[Source](https://winworldpc.com/product/macro-assembler/5x)
+[[Source](https://winworldpc.com/product/macro-assembler/5x)]

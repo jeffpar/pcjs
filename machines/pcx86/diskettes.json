@@ -5622,6 +5622,142 @@
 								"@label": "MP201PROG"
 							}
 						]
+					},
+					"3.00": {
+						"@title": "Microsoft Multiplan 3.00",
+						"@hardware": {
+							"config": "/machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml",
+							"autoType": "\\r\\rSYS C:\\rCOPY COMMAND.COM C:\\rB:\\rDIR\\r"
+						},
+						"@media": [
+							{
+								"@title": "MS Multiplan 3.00 (PROGRAM)",
+								"@diskette": "MULTIPLAN300-DISK1.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@kryoflux": true
+							},
+							{
+								"@title": "MS Multiplan 3.00 (INSTALL)",
+								"@diskette": "MULTIPLAN300-DISK2.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@kryoflux": true
+							},
+							{
+								"@title": "MS Multiplan 3.00 (TEMPLATE)",
+								"@diskette": "MULTIPLAN300-DISK3.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@kryoflux": true
+							}
+						],
+						"@source": "PCjs"
+					},
+					"4.00": {
+						"@title": "Microsoft Multiplan 4.00",
+						"@hardware": {
+							"config": "/machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml",
+							"autoType": "\\r\\rSYS C:\\rCOPY COMMAND.COM C:\\rB:\\rDIR\\r"
+						},
+						"@media": [
+							{
+								"@title": "MS Multiplan 4.00 (SETUP)",
+								"@diskette": "MULTIPLAN400-DISK1.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@source": "PCjs",
+								"@kryoflux": true
+							},
+							{
+								"@title": "MS Multiplan 4.00 (PROGRAM1)",
+								"@diskette": "MULTIPLAN400-DISK2.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@source": "PCjs",
+								"@kryoflux": true
+							},
+							{
+								"@title": "MS Multiplan 4.00 (PROGRAM2)",
+								"@diskette": "MULTIPLAN400-DISK3.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@source": "PCjs",
+								"@kryoflux": true
+							},
+							{
+								"@title": "MS Multiplan 4.00 (UTILITIES)",
+								"@diskette": "MULTIPLAN400-DISK4.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@kryoflux": true,
+								"@source": "https://winworldpc.com/product/multiplan/40"
+							}
+						]
+					},
+					"4.01": {
+						"@title": "Microsoft Multiplan 4.01",
+						"@hardware": {
+							"config": "/machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml",
+							"autoType": "\\r\\rSYS C:\\rCOPY COMMAND.COM C:\\rB:\\rDIR\\r"
+						},
+						"@media": [
+							{
+								"@title": "MS Multiplan 4.01 (SETUP)",
+								"@diskette": "MULTIPLAN401-DISK1.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@source": "PCjs",
+								"@kryoflux": true
+							},
+							{
+								"@title": "MS Multiplan 4.01 (PROGRAM1)",
+								"@diskette": "MULTIPLAN401-DISK2.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@source": "PCjs",
+								"@kryoflux": true
+							},
+							{
+								"@title": "MS Multiplan 4.01 (UTILITIES)",
+								"@diskette": "MULTIPLAN401-DISK3.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@kryoflux": true,
+								"@source": "https://winworldpc.com/product/multiplan/40"
+							}
+						]
+					},
+					"4.20": {
+						"@title": "Microsoft Multiplan 4.20",
+						"@hardware": {
+							"config": "/machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml",
+							"autoType": "\\r\\rSYS C:\\rCOPY COMMAND.COM C:\\rB:\\rDIR\\r"
+						},
+						"@media": [
+							{
+								"@title": "MS Multiplan 4.20 (SETUP)",
+								"@diskette": "MULTIPLAN420-DISK1.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@kryoflux": true
+							},
+							{
+								"@title": "MS Multiplan 4.20 (PROGRAM)",
+								"@diskette": "MULTIPLAN420-DISK2.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@kryoflux": true
+							},
+							{
+								"@title": "MS Multiplan 4.20 (UTILITIES)",
+								"@diskette": "MULTIPLAN420-DISK3.json",
+								"@format": "PC360K",
+								"@photo": ".jpg",
+								"@kryoflux": true
+							}
+						],
+						"@source": "PCjs"
 					}
 				}
 			},

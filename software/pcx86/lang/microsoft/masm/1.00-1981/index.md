@@ -29,4 +29,4 @@ Directory listing of a recreated 160Kb diskette ([Source](http://www.os2museum.c
             4 file(s)     154624 bytes
                             5120 bytes free
 
-[Source](http://www.os2museum.com)
+[[Source](http://www.os2museum.com)]
