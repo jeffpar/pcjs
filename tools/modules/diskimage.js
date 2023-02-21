@@ -449,7 +449,7 @@ function processDisk(di, diskFile, argv, diskette)
                     }
                 } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
                     printf("extracting: %s\n", name);
-                    fSuccess = writeFile(sPath, db, true, argv['overwrite']);
+                    fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY));
                 }
                 if (fSuccess) fs.utimesSync(sPath, date, date);
             }
@@ -1147,15 +1147,16 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
 }
 
 /**
- * writeFile(sFile, data, fCreateDir, fOverwrite)
+ * writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly)
  *
  * @param {string} sFile
  * @param {DataBuffer|string} data
  * @param {boolean} [fCreateDir]
  * @param {boolean} [fOverwrite]
+ * @param {boolean} [fReadOnly]
  * @returns {boolean}
  */
-function writeFile(sFile, data, fCreateDir, fOverwrite)
+function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly)
 {
     if (sFile) {
         try {
@@ -1168,6 +1169,7 @@ function writeFile(sFile, data, fCreateDir, fOverwrite)
             }
             if (!existsFile(sFile) || fOverwrite) {
                 fs.writeFileSync(sFile, data);
+                if (fReadOnly) fs.chmodSync(sFile, 0o444);
                 return true;
             }
             printf("%s exists, use --overwrite to replace\n", sFile);
