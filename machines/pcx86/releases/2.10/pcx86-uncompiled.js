@@ -70796,6 +70796,7 @@ class JSONLib {
                             let hardware = release['@hardware'];
                             let demos = release['@demos'];
                             let source = item['@source'];
+                            let documents = release['@documents'];
                             if (title) diskette['title'] = title;                       // the software title (as opposed to the diskette name)
                             if (format) diskette['format'] = format;                    // eg, "PC360K"
                             if (archive) diskette['archive'] = archive;                 // eg, "folder", or the name of a specific ".img" file, etc
@@ -70809,6 +70810,7 @@ class JSONLib {
                             if (hardware) diskette['hardware'] = hardware;              // hardware configuration
                             if (demos) diskette['demos'] = demos;                       // names, if any, of pages created to demo the disk(s)
                             if (source) diskette['source'] = source;                    // source (eg, URL) of our copy of the media
+                            if (documents) diskette['documents'] = documents;
                         }
                         if (!item['@localonly'] || hostName == "localhost") {
                             aDiskettes.push(diskette);

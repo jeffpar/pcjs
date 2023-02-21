@@ -741,6 +741,16 @@ function processDisk(di, diskFile, argv, diskette)
             }
         }
 
+        /*
+         * Step 4: Add a document gallery section if there are any documents associated with this software.
+         */
+        if (diskette.documents) {
+            let sGallery = "\n<!-- Documentation -->\n\n{% include gallery/documents.html width=\"200\" height=\"260\" %}\n";
+            if (sIndexNew && sIndexNew.indexOf(sGallery) < 0) {
+                sIndexNew += sGallery;
+            }
+        }
+
         if (!sIndexNew) {
             printf("\tmissing index for \"%s\": %s\n", diskette.title, sIndexFile);
         }
