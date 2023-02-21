@@ -153,3 +153,7 @@ machines:
                                0 bytes free
 
 ![MS Multiplan 4.20 (UTILITIES)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/multiplan/4.20/MULTIPLAN420-DISK3.jpg)
+
+<!-- Documentation -->
+
+{% include gallery/documents.html width="200" height="260" %}
