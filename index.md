@@ -4,6 +4,7 @@ heading: Welcome to PCjs
 permalink: /
 redirect_from:
   - /devices/
+  - /machines/
 ---
 
 PCjs uses JavaScript to emulate a small collection of hardware and software that I grew up with in the 1970s and 1980s,
