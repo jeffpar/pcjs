@@ -2,7 +2,11 @@
 layout: page
 title: Microsoft Windows 1.01 with CGA Display
 permalink: /software/pcx86/sys/windows/1.01/cga/
-redirect_from: /disks/pcx86/windows/1.01/cga/
+redirect_from:
+  - /configs/pc/machines/5160/cga/256kb/win101/
+  - /devices/pc/machine/5160/cga/256kb/win101/
+  - /devices/pcx86/machine/5160/cga/256kb/win101/
+  - /disks/pcx86/windows/1.01/cga/
 preview: images/screenshot.png
 machines:
   - id: ibm5160-cga-win101
