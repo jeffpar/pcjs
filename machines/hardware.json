@@ -201,18 +201,6 @@
     },
     "ibm": {
       "@title": "IBM",
-      "4860": {
-        "@title": "PCJr (Model 4860)",
-        "@documents": [
-          {
-            "@title": "IBM 4860 Technical Reference (Nov 1983)",
-            "@file": "IBM_4860_Technical_Reference_6322971_1983-11.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heE3ehC5BWxiIhMbUQ?e=pymkiO",
-            "@cover": ".jpg",
-            "@source": "http://bitsavers.trailing-edge.com/pdf/ibm/pc/pc_jr/PCjr_Technical_Reference_Nov83.pdf"
-          }
-        ]
-      },
       "5150": {
         "@title": "PC (Model 5150)",
         "cga": {
@@ -402,6 +390,18 @@
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lJBRb36NH-gIM2kw?e=F4361P",
             "@cover": ".jpg",
             "@source": "PCjs"
+          }
+        ]
+      },
+      "4860": {
+        "@title": "PCJr (Model 4860)",
+        "@documents": [
+          {
+            "@title": "IBM 4860 Technical Reference (Nov 1983)",
+            "@file": "IBM_4860_Technical_Reference_6322971_1983-11.pdf",
+            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heE3ehC5BWxiIhMbUQ?e=pymkiO",
+            "@cover": ".jpg",
+            "@source": "http://bitsavers.trailing-edge.com/pdf/ibm/pc/pc_jr/PCjr_Technical_Reference_Nov83.pdf"
           }
         ]
       },
@@ -645,7 +645,7 @@
           "@title": "PDP-11/70 with VT100",
           "@redirect_from": "/devices/pdp11/machine/1170/vt100/"
         },
-        "": {
+        "@documents": {
           "@title": "Documentation"
         }
       },
@@ -958,7 +958,7 @@
     "vt100": {
       "@title": "VT100",
       "@instances": {
-        "": {
+        "demo": {
           "@title": "VT100 Terminal",
           "@redirect_from": "/devices/pc8080/machine/vt100/new/",
           "@documents": [
@@ -1115,7 +1115,7 @@
     "ti42": {
       "@title": "TI-42 Calculator",
       "@instances": {
-        "": {
+        "demo": {
           "@title": "TI-42",
           "@redirect_from": ["/devices/ti42/", "/devices/ti42/machine"]
         },
@@ -1128,7 +1128,7 @@
     "ti55": {
       "@title": "TI-55 Calculator",
       "@instances": {
-        "": {
+        "demo": {
           "@title": "TI-55",
           "@redirect_from": ["/devices/ti55/", "/devices/ti55/machine"]
         },
@@ -1141,7 +1141,7 @@
     "ti57": {
       "@title": "TI-57 Calculator",
       "@instances": {
-        "": {
+        "demo": {
           "@title": "TI-57",
           "@redirect_from": ["/devices/ti57/", "/devices/ti57/machine", "/machines/ti/ti57/docs/"],
           "@documents": [

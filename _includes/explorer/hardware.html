@@ -9,7 +9,7 @@
                     {%- continue -%}
                   {%- endif -%}
                 {%- endunless -%}
-                <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ machine[1]['@title'] }}
+                <li id="machines-{{ machine_type }}" class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ machine[1]['@title'] }}
                   <ul>
                   {%- for category in machine[1] -%}
                     {%- if site.developer %}
@@ -28,7 +28,7 @@
                     {%- else -%}
                       {%- assign subcategories = category[1] %}
                       {%- capture hardware_path2 -%}/{{ category[0] }}{%- endcapture %}
-                    <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ category[1]['@title'] }}
+                    <li id="machines-{{ machine_type }}-{{ category[0] }}" class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ category[1]['@title'] }}
                       <ul>
                     {%- endif -%}
                     {%- for subcategory in subcategories -%}
@@ -46,7 +46,7 @@
                         {%- continue -%}
                       {%- else -%}
                         {%- capture hardware_path3 -%}/{{ subcategory[0] }}{%- endcapture %}
-                        <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ subcategory[1]['@title'] }}
+                        <li id="machines-{{ machine_type }}-{{ category[0] }}-{{ subcategory[0] }}" class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ subcategory[1]['@title'] }}
                           <ul>
                       {%- endif -%}
                       {%- for instance in subcategory[1] -%}

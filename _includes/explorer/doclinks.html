@@ -2,4 +2,4 @@
 
 {%- endcomment -%}
 {% capture document_id -%}{{ include.link | append: "@" | remove_first: "/" | replace: "/", "-" | replace: "-@", "" }}{%- endcapture %}
-<li id="{{ document_id }}" class="pcjs-explorer-item" onclick="pcjsExplorerClick(this, event)"><a href="{{ include.link }}">Documentation</a></li>
+<li id="{{ document_id }}-documents" class="pcjs-explorer-item" onclick="pcjsExplorerClick(this, event)"><a href="{{ include.link }}">Documentation</a></li>

@@ -2,7 +2,9 @@
 layout: page
 title: DEC VT100 Terminal
 permalink: /machines/dec/vt100/
-redirect_from: /devices/pc8080/machine/vt100/
+redirect_from:
+  - /devices/pc8080/machine/vt100/
+  - /machines/dec/vt100/demo/
 machines:
   - id: vt100
     type: vt100
