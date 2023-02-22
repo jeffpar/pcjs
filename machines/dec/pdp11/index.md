@@ -2,7 +2,9 @@
 layout: page
 title: DEC PDP-11
 permalink: /machines/dec/pdp11/
-redirect_from: /devices/pdp11/machine/
+redirect_from:
+  - /devices/pdp11/
+  - /devices/pdp11/machine/
 ---
 
 {% include gallery/documents.html title="PDP-11 Hardware" width="200" height="260" tag="hardware" %}
