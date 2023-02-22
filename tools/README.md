@@ -26,8 +26,8 @@ simpler as well.
 
 Unusual sectors, like those used in copy-protection schemes, may have non-standard sector IDs or additional properties that
 simulate special behavior; for example, sectors with a *dataError* property can trigger a read or write failure at a certain
-point within the sector.  Descriptions of some of these special sector properties have been discussed in assorted
-[blog posts](https://www.pcjs.org/blog/2019/05/05/) and will be detailed in a separate document at a later date.
+point within the sector.  Some of these properties have been discussed in PCjs [blog posts](https://www.pcjs.org/blog/2019/05/05/)
+and may be documented more fully at a later date.
 
 Older PCjs v1 (version 1.x) disk images were basically just an array of CHS sector data (what is now called the *diskData* object),
 without any other information.  Such disk images are still supported, but all the disk images now stored on PCjs disk servers,
