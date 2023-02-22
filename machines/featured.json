@@ -162,6 +162,12 @@
     "@tags": "home,pcx86,sys,windows,win2x-win95"
   },
   {
+    "@title": "Microsoft QuickPascal 1.00 (1989)",
+    "@permalink": "/software/pcx86/lang/microsoft/pascal/quickpascal/1.00/",
+    "@preview": ".png",
+    "@tags": "home,pcx86,lang"
+  },
+  {
     "@title": "Microsoft Windows 3.0 (1990)",
     "@permalink": "/software/pcx86/sys/windows/3.00/",
     "@preview": ".png",

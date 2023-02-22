@@ -3,6 +3,7 @@ layout: page
 title: Microsoft QuickPascal 1.00
 permalink: /software/pcx86/lang/microsoft/pascal/quickpascal/1.00/
 redirect_from: /disks/pcx86/tools/microsoft/pascal/quickpascal/1.00/
+preview: images/screenshot.png
 machines:
   - id: ibm5170-msdos320
     type: pcx86

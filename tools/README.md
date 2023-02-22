@@ -7,7 +7,7 @@ PCjs v2 (version 2.x) disk images are JSON objects with the following properties
   - *fileTable*: an array of FileInfo objects, one for each file across all FAT volumes on the disk (optional)
   - *diskData*: arrays of sector data; for CHS disk images, the data is organized as an array of sector objects within an array of heads within an array of cylinders
 
-Sectors objects contain the raw sector data, using 32-bit signed decimal values, and for sectors that contain data from
+Sector objects contain the raw sector data, using 32-bit signed decimal values, and for sectors that contain data from
 a file in *fileTable*, the object will also contain an index into *fileTable*, along with the data's offset within the file.
 
 For example, look at the [PC DOS 2.00 diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json) and examine the following sector object:
@@ -18,7 +18,7 @@ The *f* property is a zero-based index into *fileTable* that refers to the follo
 
     {"hash":"f0314c0d450f343fdc6d1778be088ffc","path":"/COMMAND.COM","attr":"0x20","date":"1983-03-08 12:00:00","size":17664}
 
-and the *o* property indicates that sector's byte offset (1024) within **COMMAND.COM**.  Having all this information
+and the *o* property indicates that sector's byte offset (1024) within COMMAND.COM.  Having all this information
 about the FAT file system encoded in the disk image makes it easy to observe low-level I/O and immediately know which portions
 of which files are being accessed.  Other tasks, such as cataloging the contents of disk images, locating identical files,
 finding files older or newer than a certain date, or extracting other information about the disks or their files, become much
@@ -26,7 +26,8 @@ simpler as well.
 
 Unusual sectors, like those used in copy-protection schemes, may have non-standard sector IDs or additional properties that
 simulate special behavior; for example, sectors with a *dataError* property can trigger a read or write failure at a certain
-point within the sector.  Descriptions of non-standard disk properties will be detailed in a separate document at a later date.
+point within the sector.  Some of these properties have been discussed in PCjs [blog posts](https://www.pcjs.org/blog/2019/05/05/)
+and may be documented more fully at a later date.
 
 Older PCjs v1 (version 1.x) disk images were basically just an array of CHS sector data (what is now called the *diskData* object),
 without any other information.  Such disk images are still supported, but all the disk images now stored on PCjs disk servers,
