@@ -10,10 +10,8 @@ machines:
     config: /machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml
     drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/PCDOS320-WIN300-EGA.json"}]'
     autoMount:
-      A:
-        name: None
-      B:
-        name: None
+      A: "None"
+      B: "None"
 ---
 
 The PCjs machine below starts Microsoft Windows 3.00, using an IBM PC AT running PC DOS 3.20.

@@ -10,10 +10,10 @@ preview: images/screenshot.png
 machines:
   - id: ibm5160-ega-win101
     type: pcx86
-    resume: 1
-    state: /software/pcx86/sys/windows/1.01/ega/state.json
     config: /machines/pcx86/ibm/5160/ega/640kb/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/PCDOS200-WIN101-EGA.json"}]'
+    state: /software/pcx86/sys/windows/1.01/ega/state.json
+    resume: 1
 ---
 
 Microsoft Windows 1.01, the first public version of Windows, was released on November 20, 1985.

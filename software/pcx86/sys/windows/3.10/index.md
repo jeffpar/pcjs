@@ -12,10 +12,8 @@ machines:
     config: /machines/pcx86/ibm/5170/vga/2048kb/machine.xml
     drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json"}]'
     autoMount:
-      A:
-        name: None
-      B:
-        name: None
+      A: "None"
+      B: "None"
 ---
 
 The PCjs machine below starts Microsoft Windows 3.10, using an IBM PC AT running PC DOS 3.30.

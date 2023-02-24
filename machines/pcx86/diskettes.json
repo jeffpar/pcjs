@@ -5580,6 +5580,150 @@
 					}
 				}
 			},
+			"excel": {
+				"@title": "Microsoft Excel",
+				"@versions": {
+					"2.0": {
+						"@title": "Microsoft Excel 2.0",
+						"@hardware": {
+							"config": "/machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml"
+						},
+						"@media": [
+							{
+								"@title": "MS Excel 2.0 (1200K Disk 1)",
+								"@diskette": "EXCEL20-1200K-DISK1-SETUP.json",
+								"@format": "PC1200K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 2.0 (1200K Disk 2)",
+								"@diskette": "EXCEL20-1200K-DISK2-DOC.json",
+								"@format": "PC1200K"
+							},
+							{
+								"@title": "MS Excel 2.0 (1200K Disk 3)",
+								"@diskette": "EXCEL20-1200K-DISK3-LIBRARY.json",
+								"@format": "PC1200K"
+							},
+							{
+								"@title": "MS Excel 2.0 (1200K Disk 4)",
+								"@diskette": "EXCEL20-1200K-DISK4-FONTS.json",
+								"@format": "PC1200K"
+							},
+							{
+								"@title": "MS Excel 2.0 (1200K Disk 5)",
+								"@diskette": "EXCEL20-1200K-DISK5-UTILITIES.json",
+								"@format": "PC1200K"
+							},
+							{
+								"@title": "MS Excel 2.0 (720K Disk 1)",
+								"@diskette": "EXCEL20-720K-DISK1.json",
+								"@format": "PC720K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 2.0 (720K Disk 2)",
+								"@diskette": "EXCEL20-720K-DISK2.json",
+								"@format": "PC720K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 2.0 (720K Disk 3)",
+								"@diskette": "EXCEL20-720K-DISK3.json",
+								"@format": "PC720K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 2.0 (720K Disk 4)",
+								"@diskette": "EXCEL20-720K-DISK4.json",
+								"@format": "PC720K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 2.0 (720K Disk 5)",
+								"@diskette": "EXCEL20-720K-DISK5.json",
+								"@format": "PC720K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 2.0 (720K Disk 6)",
+								"@diskette": "EXCEL20-720K-DISK6.json",
+								"@format": "PC720K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 2.0 (720K Disk 7)",
+								"@diskette": "EXCEL20-720K-DISK7.json",
+								"@format": "PC720K",
+								"@photo": ".jpg"
+							}
+						]
+					},
+					"5.0a": {
+						"@title": "Microsoft Excel 5.0a",
+						"@hardware": {
+							"config": "/machines/pcx86/ibm/5170/vga/2048kb/machine.xml",
+							"drives": "[{name:\"20Mb Hard Disk\",type:2,path:\"/harddisks/pcx86/20mb/PCDOS330-WIN310-VGA.json\"}]"
+						},
+						"@media": [
+							{
+								"@title": "MS Excel 5.0a (Disk 1)",
+								"@diskette": "EXCEL50A-DISK1.json",
+								"@format": "PC1440K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 5.0a (Disk 2)",
+								"@diskette": "EXCEL50A-DISK2.json",
+								"@format": "PC1440K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 5.0a (Disk 3)",
+								"@diskette": "EXCEL50A-DISK3.json",
+								"@format": "PC1440K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 5.0a (Disk 4)",
+								"@diskette": "EXCEL50A-DISK4.json",
+								"@format": "PC1440K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 5.0a (Disk 5)",
+								"@diskette": "EXCEL50A-DISK5.json",
+								"@format": "PC1440K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 5.0a (Disk 6)",
+								"@diskette": "EXCEL50A-DISK6.json",
+								"@format": "PC1440K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 5.0a (Disk 7)",
+								"@diskette": "EXCEL50A-DISK7.json",
+								"@format": "PC1440K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 5.0a (Disk 8)",
+								"@diskette": "EXCEL50A-DISK8.json",
+								"@format": "PC1440K",
+								"@photo": ".jpg"
+							},
+							{
+								"@title": "MS Excel 5.0a (Disk 9)",
+								"@diskette": "EXCEL50A-DISK9.json",
+								"@format": "PC1440K",
+								"@photo": ".jpg"
+							}
+						]
+					}
+				}
+			},
 			"multiplan": {
 				"@title": "Microsoft Multiplan",
 				"@versions": {
