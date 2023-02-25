@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Macro Assembler 1.06
+title: Microsoft Macro Assembler 1.06
 permalink: /software/pcx86/lang/microsoft/masm/1.06/
 machines:
   - id: ibm5150

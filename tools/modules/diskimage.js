@@ -745,8 +745,9 @@ function processDisk(di, diskFile, argv, diskette)
          * Step 4: Add a document gallery section if there are any documents associated with this software.
          */
         if (diskette.documents) {
-            let sGallery = "\n<!-- Documentation -->\n\n{% include gallery/documents.html width=\"200\" height=\"260\" %}\n";
-            if (sIndexNew && sIndexNew.indexOf(sGallery) < 0) {
+            let sHeader = "\n<!-- Documentation -->\n";
+            let sGallery = sHeader + "\n{% include gallery/documents.html width=\"200\" height=\"260\" %}\n";
+            if (sIndexNew && sIndexNew.indexOf(sHeader) < 0) {
                 sIndexNew += sGallery;
             }
         }
@@ -775,10 +776,17 @@ function processDisk(di, diskFile, argv, diskette)
             di.updateBootSector(readFile(argv['boot'], null));
         }
         let output = argv['output'] || argv[1];
+        let archive = argv['archive'];
+        /*
+         * TODO: When writeDisk() is called as part of a checkdisk/rebuild operation, the archive parameter is
+         * set to the path of the archive; here, it's only set if the user explicity passed an --archive parameter.
+         * If the user didn't do that, perhaps we should set a default.  We could set it to diskFile, but that's
+         * already recorded in the imageInfo 'name' property; we're more interested in the full path of diskFile.
+         */
         if (output) {
             if (typeof output == "string") output = [output];
             output.forEach((outputFile) => {
-                writeDisk(outputFile, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], true, argv['writable'], argv['archive'], argv['source']);
+                writeDisk(outputFile, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], true, argv['writable'], archive, argv['source']);
             });
         }
     }
