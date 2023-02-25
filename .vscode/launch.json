@@ -383,6 +383,20 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "Microsoft FORTRAN Compiler 5.00",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/lang/microsoft/fortran/compiler/5.00/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Microsoft FORTRAN PowerStation 1.00",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/lang/microsoft/fortran/powerstation/1.00/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Microsoft QuickC for Windows 1.00",
       "type": "chrome",
       "request": "launch",

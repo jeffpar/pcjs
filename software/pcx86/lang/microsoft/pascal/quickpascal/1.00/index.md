@@ -225,3 +225,7 @@ Directory listings of the diskettes are provided [below](#directory-of-ms-quickp
     TMSRB    FON     45936  11-12-87   1:27p
            13 file(s)     317968 bytes
                           406528 bytes free
+
+<!-- Documentation -->
+
+{% include gallery/documents.html width="200" height="260" %}

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: IBM COBOL 1.00
+title: IBM COBOL Compiler 1.00
 permalink: /software/pcx86/lang/ibm/cobol/1.00/
 machines:
   - id: ibm5150
