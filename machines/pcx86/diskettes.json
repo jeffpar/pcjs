@@ -999,118 +999,173 @@
 				},
 				"3.00": {
 					"@title": "Windows SDK 3.00",
-					"@hidden": true,
 					"@media": [
 						{
-							"@title": "Windows SDK 3.00 (Disk 01)",
-							"@diskette": "WIN30SDK-DISK01.json",
-							"@format": "PC720K"
+							"@title": "Windows SDK 3.00 (1200K Disk 1)",
+							"@diskette": "WIN30SDK-1200K-DEVTOOLS.json",
+							"@format": "PC1200K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (Disk 02)",
-							"@diskette": "WIN30SDK-DISK02.json",
-							"@format": "PC720K"
+							"@title": "Windows SDK 3.00 (1200K Disk 2)",
+							"@diskette": "WIN30SDK-1200K-LIBRARIES.json",
+							"@format": "PC1200K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (Disk 03)",
-							"@diskette": "WIN30SDK-DISK03.json",
-							"@format": "PC720K"
+							"@title": "Windows SDK 3.00 (1200K Disk 3)",
+							"@diskette": "WIN30SDK-1200K-DBGTOOLS.json",
+							"@format": "PC1200K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (Disk 04)",
-							"@diskette": "WIN30SDK-DISK04.json",
-							"@format": "PC720K"
+							"@title": "Windows SDK 3.00 (1200K Disk 4)",
+							"@diskette": "WIN30SDK-1200K-DEVFILES.json",
+							"@format": "PC1200K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (Disk 05)",
-							"@diskette": "WIN30SDK-DISK05.json",
-							"@format": "PC720K"
+							"@title": "Windows SDK 3.00 (1200K Disk 5)",
+							"@diskette": "WIN30SDK-1200K-SAMPLES1.json",
+							"@format": "PC1200K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (Disk 06)",
-							"@diskette": "WIN30SDK-DISK06.json",
-							"@format": "PC720K"
+							"@title": "Windows SDK 3.00 (1200K Disk 6)",
+							"@diskette": "WIN30SDK-1200K-SAMPLES2.json",
+							"@format": "PC1200K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (Disk 07)",
-							"@diskette": "WIN30SDK-DISK07.json",
-							"@format": "PC720K"
+							"@title": "Windows SDK 3.00 (720K Disk 1)",
+							"@diskette": "WIN30SDK-720K-DISK01.json",
+							"@format": "PC720K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (Disk 08)",
-							"@diskette": "WIN30SDK-DISK08.json",
-							"@format": "PC720K"
+							"@title": "Windows SDK 3.00 (720K Disk 2)",
+							"@diskette": "WIN30SDK-720K-DISK02.json",
+							"@format": "PC720K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (Disk 09)",
-							"@diskette": "WIN30SDK-DISK09.json",
-							"@format": "PC720K"
+							"@title": "Windows SDK 3.00 (720K Disk 3)",
+							"@diskette": "WIN30SDK-720K-DISK03.json",
+							"@format": "PC720K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (Disk 10)",
-							"@diskette": "WIN30SDK-DISK10.json",
-							"@format": "PC720K"
+							"@title": "Windows SDK 3.00 (720K Disk 4)",
+							"@diskette": "WIN30SDK-720K-DISK04.json",
+							"@format": "PC720K",
+							"@photo": ".jpg"
+						},
+						{
+							"@title": "Windows SDK 3.00 (720K Disk 5)",
+							"@diskette": "WIN30SDK-720K-DISK05.json",
+							"@format": "PC720K",
+							"@photo": ".jpg"
+						},
+						{
+							"@title": "Windows SDK 3.00 (720K Disk 6)",
+							"@diskette": "WIN30SDK-720K-DISK06.json",
+							"@format": "PC720K",
+							"@photo": ".jpg"
+						},
+						{
+							"@title": "Windows SDK 3.00 (720K Disk 7)",
+							"@diskette": "WIN30SDK-720K-DISK07.json",
+							"@format": "PC720K",
+							"@photo": ".jpg"
+						},
+						{
+							"@title": "Windows SDK 3.00 (720K Disk 8)",
+							"@diskette": "WIN30SDK-720K-DISK08.json",
+							"@format": "PC720K",
+							"@photo": ".jpg"
+						},
+						{
+							"@title": "Windows SDK 3.00 (720K Disk 9)",
+							"@diskette": "WIN30SDK-720K-DISK09.json",
+							"@format": "PC720K",
+							"@photo": ".jpg"
+						},
+						{
+							"@title": "Windows SDK 3.00 (720K Disk 10)",
+							"@diskette": "WIN30SDK-720K-DISK10.json",
+							"@format": "PC720K",
+							"@photo": ".jpg"
 						}
 					]
 				},
 				"3.10": {
 					"@title": "Windows SDK 3.10",
-					"@hidden": true,
 					"@media": [
 						{
-							"@title": "Windows SDK 3.10 (Disk 01)",
+							"@title": "Windows SDK 3.10 (Disk 1)",
 							"@diskette": "WIN31SDK-DISK01.json",
-							"@format": "PC1440K"
+							"@format": "PC1440K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 02)",
+							"@title": "Windows SDK 3.10 (Disk 2)",
 							"@diskette": "WIN31SDK-DISK02.json",
-							"@format": "PC1440K"
+							"@format": "PC1440K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 03)",
+							"@title": "Windows SDK 3.10 (Disk 3)",
 							"@diskette": "WIN31SDK-DISK03.json",
-							"@format": "PC1440K"
+							"@format": "PC1440K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 04)",
+							"@title": "Windows SDK 3.10 (Disk 4)",
 							"@diskette": "WIN31SDK-DISK04.json",
-							"@format": "PC1440K"
+							"@format": "PC1440K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 05)",
+							"@title": "Windows SDK 3.10 (Disk 5)",
 							"@diskette": "WIN31SDK-DISK05.json",
-							"@format": "PC1440K"
+							"@format": "PC1440K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 06)",
+							"@title": "Windows SDK 3.10 (Disk 6)",
 							"@diskette": "WIN31SDK-DISK06.json",
-							"@format": "PC1440K"
+							"@format": "PC1440K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 07)",
+							"@title": "Windows SDK 3.10 (Disk 7)",
 							"@diskette": "WIN31SDK-DISK07.json",
-							"@format": "PC1440K"
+							"@format": "PC1440K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 08)",
+							"@title": "Windows SDK 3.10 (Disk 8)",
 							"@diskette": "WIN31SDK-DISK08.json",
-							"@format": "PC1440K"
+							"@format": "PC1440K",
+							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.10 (Disk 09)",
+							"@title": "Windows SDK 3.10 (Disk 9)",
 							"@diskette": "WIN31SDK-DISK09.json",
-							"@format": "PC1440K"
+							"@format": "PC1440K",
+							"@photo": ".jpg"
 						},
 						{
 							"@title": "Windows SDK 3.10 (Disk 10)",
 							"@diskette": "WIN31SDK-DISK10.json",
-							"@format": "PC1440K"
+							"@format": "PC1440K",
+							"@photo": ".jpg"
 						},
 						{
 							"@title": "Windows SDK 3.10 (Disk 11)",
 							"@diskette": "WIN31SDK-DISK11.json",
-							"@format": "PC1440K"
+							"@format": "PC1440K",
+							"@photo": ".jpg"
 						}
 					]
 				}
@@ -8124,7 +8179,7 @@
 					"@title": "Compiler",
 					"@versions": {
 						"3.31": {
-							"@title": "Pascal Compiler 3.31",
+							"@title": "Microsoft Pascal Compiler 3.31",
 							"@media": [
 								{
 									"@title": "MS Pascal 3.31 (Disk 1)",
@@ -8139,7 +8194,7 @@
 							]
 						},
 						"4.00": {
-							"@title": "Pascal Compiler 4.00",
+							"@title": "Microsoft Pascal Compiler 4.00",
 							"@media": [
 								{
 									"@title": "MS Pascal 4.00 (Disk 1)",
