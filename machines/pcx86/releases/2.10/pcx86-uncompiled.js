@@ -70785,6 +70785,9 @@ class JSONLib {
                          */
                         if (!COMPILED) {
                             let title = release['@title'] || group['@title'];
+                            if (library['@title'] && title.indexOf(library['@title']) < 0) {
+                                title = library['@title'] + ' ' + title;
+                            }
                             let archive = item['@archive'];
                             let label = item['@label'];
                             let args = item['@args'];

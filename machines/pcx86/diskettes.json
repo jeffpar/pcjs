@@ -6845,6 +6845,43 @@
 					}
 				}
 			},
+			"masm": {
+				"@title": "Assembler",
+				"@versions": {
+					"1.00": {
+						"@title": "IBM Macro Assembler 1.00",
+						"@media": [
+							{
+								"@title": "IBM Macro Assembler 1.00",
+								"@diskette": "IBM-MASM-100.json",
+								"@format": "PC160K",
+								"@source": "https://winworldpc.com/product/ibm-macro-assembler/100"
+							}
+						],
+						"@documents": [
+							{
+								"@title": "IBM Macro Assembler 1.00",
+								"@file": "IBM_Macro_Assembler_100.pdf",
+								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heM9R4ZXrrB1ZRzjwA?e=IMhky8",
+								"@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194653&authkey=AI7jcPAR_KQyyK0&em=2",
+								"@cover": ".jpg",
+								"@source": "https://winworldpc.com/product/ibm-macro-assembler/100"
+							}
+						]
+					},
+					"2.00": {
+						"@title": "IBM Macro Assembler 2.00",
+						"@media": [
+							{
+								"@title": "IBM Macro Assembler 2.00",
+								"@diskette": "IBM-MASM-200.json",
+								"@photo": ".jpg",
+								"@format": "PC320K"
+							}
+						]
+					}
+				}
+			},
 			"basic": {
 				"@title": "BASIC",
 				"compiler": {
@@ -6928,43 +6965,6 @@
 								"@title": "IBM FORTRAN Compiler 1.00 (Disk 3)",
 								"@diskette": "IBM-FORTRAN-V100-DISK3.json",
 								"@format": "PC160K"
-							}
-						]
-					}
-				}
-			},
-			"masm": {
-				"@title": "Macro Assembler",
-				"@versions": {
-					"1.00": {
-						"@title": "IBM Macro Assembler 1.00",
-						"@media": [
-							{
-								"@title": "IBM Macro Assembler 1.00",
-								"@diskette": "IBM-MASM-100.json",
-								"@format": "PC160K",
-								"@source": "https://winworldpc.com/product/ibm-macro-assembler/100"
-							}
-						],
-						"@documents": [
-							{
-								"@title": "IBM Macro Assembler 1.00",
-								"@file": "IBM_Macro_Assembler_100.pdf",
-								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heM9R4ZXrrB1ZRzjwA?e=IMhky8",
-								"@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194653&authkey=AI7jcPAR_KQyyK0&em=2",
-								"@cover": ".jpg",
-								"@source": "https://winworldpc.com/product/ibm-macro-assembler/100"
-							}
-						]
-					},
-					"2.00": {
-						"@title": "IBM Macro Assembler 2.00",
-						"@media": [
-							{
-								"@title": "IBM Macro Assembler 2.00",
-								"@diskette": "IBM-MASM-200.json",
-								"@photo": ".jpg",
-								"@format": "PC320K"
 							}
 						]
 					}
@@ -7062,13 +7062,358 @@
 		},
 		"microsoft": {
 			"@title": "Microsoft",
+			"masm": {
+				"@title": "Assembler",
+				"@versions": {
+					"1.00-1981": {
+						"@title": "Macro Assembler 1.00-1981",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 1.00 (1981)",
+								"@diskette": "MASM100-1981.json",
+								"@format": "PC160K",
+								"@archive": "folder",
+								"@label": "MASM100",
+								"@source": "http://www.os2museum.com"
+							}
+						]
+					},
+					"1.00": {
+						"@title": "Macro Assembler 1.00",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 1.00 (1982)",
+								"@diskette": "MASM100.json",
+								"@format": "PC160K",
+								"@source": "https://winworldpc.com/product/macro-assembler/1x"
+							}
+						]
+					},
+					"1.06": {
+						"@title": "Macro Assembler 1.06",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 1.06",
+								"@diskette": "MASM106.json",
+								"@format": "PC160K",
+								"@source": "https://winworldpc.com/product/macro-assembler/1x"
+							}
+						]
+					},
+					"1.10": {
+						"@title": "Macro Assembler 1.10",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 1.10",
+								"@diskette": "MASM110.json",
+								"@format": "PC320K",
+								"@archive": "folder"
+							}
+						]
+					},
+					"1.12": {
+						"@title": "Macro Assembler 1.12",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 1.12",
+								"@diskette": "MASM112.json",
+								"@format": "PC320K",
+								"@archive": "folder"
+							}
+						]
+					},
+					"1.25": {
+						"@title": "Macro Assembler 1.25",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 1.25",
+								"@diskette": "MASM125.json",
+								"@format": "PC320K",
+								"@archive": "folder"
+							}
+						]
+					},
+					"2.04": {
+						"@title": "Macro Assembler 2.04",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 2.04",
+								"@diskette": "MASM204.json",
+								"@format": "PC160K",
+								"@archive": "folder"
+							}
+						]
+					},
+					"3.00": {
+						"@title": "Macro Assembler 3.00",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 3.00",
+								"@diskette": "MASM-016014-300.json",
+								"@format": "PC360K"
+							}
+						],
+						"@documents": [
+							{
+								"@title": "MS Macro Assembler Reference Manual (1984)",
+								"@file": "MASM30_Reference_Manual-1984.pdf",
+								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gt4TMtBw579j2buNcw?e=MF2hsa",
+								"@cover": ".jpg",
+								"@source": "https://winworldpc.com/product/macro-assembler/3x"
+							},
+							{
+								"@title": "MS Macro Assembler User's Guide (1984)",
+								"@file": "MASM30_Users_Guide-1984.pdf",
+								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heM-dT-jTCe_z5Ld6A?e=IVcl3W",
+								"@cover": ".jpg",
+								"@source": "https://winworldpc.com/product/macro-assembler/3x"
+							}
+						]
+					},
+					"3.01": {
+						"@title": "Macro Assembler 3.01",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 3.01",
+								"@diskette": "MASM-016014-301.json",
+								"@format": "PC360K"
+							}
+						]
+					},
+					"4.00": {
+						"@title": "Macro Assembler 4.00",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 4.00",
+								"@diskette": "MASM-016014-400.json",
+								"@format": "PC360K"
+							}
+						]
+					},
+					"5.00": {
+						"@title": "Macro Assembler 5.00",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 5.00 (Disk 1)",
+								"@diskette": "MASM500-DISK1.json",
+								"@format": "PC360K"
+							},
+							{
+								"@title": "MS Macro Assembler 5.00 (Disk 2)",
+								"@diskette": "MASM500-DISK2.json",
+								"@format": "PC360K"
+							}
+						],
+						"@documents": [
+							{
+								"@title": "MASM 5.00 Reference",
+								"@file": "MASM50-POCKETREF.pdf",
+								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFkTtanp1C-Mq0Yug?e=BRbCsV",
+								"@cover": ".jpg",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "MASM 5.00 Programmer's Guide",
+								"@file": "MASM50-PROGGUIDE.pdf",
+								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBnDrC9pXwVwxYw1A?e=OZkNow",
+								"@cover": ".jpg",
+								"@source": "http://www.os2museum.com/files/docs/os210sdk/masm-5.0-pg-1987.pdf"
+							},
+							{
+								"@title": "MASM 5.00 Mixed-Language Programming Guide",
+								"@file": "MASM50-MLPROGGUIDE.pdf",
+								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFtJNuM0Uh1XIG9zw?e=OH72cR",
+								"@cover": ".jpg",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "MASM 5.00 CodeView and Utilities Guide",
+								"@file": "MASM50-UTILGUIDE.pdf",
+								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqIKJ6ua82VVg6_sbA?e=eibMfp",
+								"@cover": ".jpg",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "MASM 5.00 Box",
+								"@file": "MASM50-BOX.pdf",
+								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFd2ImZBX2LOqqivw?e=fxpie0",
+								"@cover": ".jpg",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "MASM 5.00 Brochure",
+								"@file": "MASM50-BROCHURE.pdf",
+								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFc87PWpzo9W45Huw?e=h5XatC",
+								"@cover": ".jpg",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "MASM 5.00 READ THIS FIRST",
+								"@file": "MASM50-READTHISFIRST.pdf",
+								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFitllWejDc8P374g?e=z67BRs",
+								"@cover": ".jpg",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "MASM 5.10 Letters",
+								"@file": "MASM51-LETTERS.pdf",
+								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFmfQPP91sz4S6MDQ?e=AkicZR",
+								"@cover": ".jpg",
+								"@source": "PCjs"
+							}
+						]
+					},
+					"5.10": {
+						"@title": "Macro Assembler 5.10",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 5.10 (Disk 1)",
+								"@diskette": "MASM51-01510-DISK1.json",
+								"@format": "PC360K",
+								"@source": "https://winworldpc.com/product/macro-assembler/5x"
+							},
+							{
+								"@title": "MS Macro Assembler 5.10 (Disk 2)",
+								"@diskette": "MASM51-01511-DISK2.json",
+								"@format": "PC360K",
+								"@source": "https://winworldpc.com/product/macro-assembler/5x"
+							},
+							{
+								"@title": "MS Macro Assembler 5.10 (Disk 3)",
+								"@diskette": "MASM51-01512-DISK3.json",
+								"@format": "PC360K",
+								"@source": "https://winworldpc.com/product/macro-assembler/5x"
+							},
+							{
+								"@title": "MS Macro Assembler 5.10 (Disk 4)",
+								"@diskette": "MASM51-01514-DISK4.json",
+								"@format": "PC360K",
+								"@source": "https://winworldpc.com/product/macro-assembler/5x"
+							},
+							{
+								"@title": "MS Macro Assembler 5.10 (Disk 5)",
+								"@diskette": "MASM51-03159-DISK5.json",
+								"@format": "PC1200K",
+								"@source": "https://winworldpc.com/product/macro-assembler/5x"
+							},
+							{
+								"@title": "MS Macro Assembler 5.10 (Update)",
+								"@diskette": "MASM51-UPDATE.json",
+								"@format": "PC360K",
+								"@source": "https://winworldpc.com/product/macro-assembler/5x"
+							}
+						]
+					},
+					"5.10x": {
+						"@title": "Macro Assembler 5.10 (Feb 1988)",
+						"@media": [
+							{
+								"@title": "MS MASM 5.10 (Feb 1988 Disk 1)",
+								"@diskette": "MASM51X-01510-DISK1.json",
+								"@format": "PC360K",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "MS MASM 5.10 (Feb 1988 Disk 2)",
+								"@diskette": "MASM51X-01511-DISK2.json",
+								"@format": "PC360K",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "MS MASM 5.10 (Feb 1988 Disk 3)",
+								"@diskette": "MASM51X-01512-DISK3.json",
+								"@format": "PC360K",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "MS MASM 5.10 (Feb 1988 Disk 4)",
+								"@diskette": "MASM51X-01514-DISK4.json",
+								"@format": "PC360K",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "MS MASM 5.10 (Feb 1988 Disk 5)",
+								"@diskette": "MASM51X-03159-DISK5.json",
+								"@format": "PC1200K",
+								"@source": "PCjs"
+							},
+							{
+								"@title": "MS Macro Assembler 5.10A (Update)",
+								"@diskette": "MASM51A-UPDATE.json",
+								"@format": "PC360K",
+								"@source": "PCjs"
+							}
+						]
+					},
+					"6.00": {
+						"@title": "Macro Assembler 6.00",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 6.00 (Disk 1)",
+								"@diskette": "MASM600-DISK1.json",
+								"@format": "PC1440K"
+							},
+							{
+								"@title": "MS Macro Assembler 6.00 (Disk 2)",
+								"@diskette": "MASM600-DISK2.json",
+								"@format": "PC1440K"
+							},
+							{
+								"@title": "MS Macro Assembler 6.00 (Disk 3)",
+								"@diskette": "MASM600-DISK3.json",
+								"@format": "PC1440K"
+							},
+							{
+								"@title": "MS Macro Assembler 6.00 (Disk 4)",
+								"@diskette": "MASM600-DISK4.json",
+								"@format": "PC1440K"
+							},
+							{
+								"@title": "MS Macro Assembler 6.00 (Disk 5)",
+								"@diskette": "MASM600-DISK5.json",
+								"@format": "PC1440K"
+							}
+						]
+					},
+					"6.11": {
+						"@title": "Macro Assembler 6.11",
+						"@media": [
+							{
+								"@title": "MS Macro Assembler 6.11 (Disk 1)",
+								"@diskette": "MASM611-DISK1.json",
+								"@format": "PC1440K"
+							},
+							{
+								"@title": "MS Macro Assembler 6.11 (Disk 2)",
+								"@diskette": "MASM611-DISK2.json",
+								"@format": "PC1440K"
+							},
+							{
+								"@title": "MS Macro Assembler 6.11 (Disk 3)",
+								"@diskette": "MASM611-DISK3.json",
+								"@format": "PC1440K"
+							},
+							{
+								"@title": "MS Macro Assembler 6.11 (Disk 4)",
+								"@diskette": "MASM611-DISK4.json",
+								"@format": "PC1440K"
+							},
+							{
+								"@title": "MS Macro Assembler 6.11 (Disk 5)",
+								"@diskette": "MASM611-DISK5.json",
+								"@format": "PC1440K"
+							}
+						]
+					}
+				}
+			},
 			"basic": {
 				"@title": "BASIC",
 				"compiler": {
 					"@title": "Compiler",
 					"@versions": {
 						"5.36": {
-							"@title": "BASIC Compiler 5.36",
+							"@title": "Microsoft BASIC Compiler 5.36",
 							"@media": [
 								{
 									"@title": "MS BASIC Compiler 5.36",
@@ -7224,7 +7569,7 @@
 				}
 			},
 			"c": {
-				"@title": "C Compiler",
+				"@title": "C",
 				"@versions": {
 					"1.03": {
 						"@title": "Microsoft C Compiler 1.03",
@@ -7671,7 +8016,7 @@
 				}
 			},
 			"cobol": {
-				"@title": "COBOL Compiler",
+				"@title": "COBOL",
 				"@versions": {
 					"1.12": {
 						"@title": "Microsoft COBOL Compiler 1.12",
@@ -7693,7 +8038,7 @@
 			"fortran": {
 				"@title": "FORTRAN",
 				"compiler": {
-					"@title": "FORTRAN Compiler",
+					"@title": "Compiler",
 					"@versions": {
 						"5.00": {
 							"@title": "Microsoft FORTRAN Compiler 5.00",
@@ -7743,7 +8088,7 @@
 					}
 				},
 				"powerstation": {
-					"@title": "FORTRAN PowerStation",
+					"@title": "PowerStation",
 					"@versions": {
 						"1.00": {
 							"@title": "Microsoft FORTRAN PowerStation 1.00",
@@ -7773,355 +8118,10 @@
 					}
 				}
 			},
-			"masm": {
-				"@title": "Macro Assembler",
-				"@versions": {
-					"1.00-1981": {
-						"@title": "Macro Assembler 1.00-1981",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 1.00 (1981)",
-								"@diskette": "MASM100-1981.json",
-								"@format": "PC160K",
-								"@archive": "folder",
-								"@label": "MASM100",
-								"@source": "http://www.os2museum.com"
-							}
-						]
-					},
-					"1.00": {
-						"@title": "Macro Assembler 1.00",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 1.00 (1982)",
-								"@diskette": "MASM100.json",
-								"@format": "PC160K",
-								"@source": "https://winworldpc.com/product/macro-assembler/1x"
-							}
-						]
-					},
-					"1.06": {
-						"@title": "Macro Assembler 1.06",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 1.06",
-								"@diskette": "MASM106.json",
-								"@format": "PC160K",
-								"@source": "https://winworldpc.com/product/macro-assembler/1x"
-							}
-						]
-					},
-					"1.10": {
-						"@title": "Macro Assembler 1.10",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 1.10",
-								"@diskette": "MASM110.json",
-								"@format": "PC320K",
-								"@archive": "folder"
-							}
-						]
-					},
-					"1.12": {
-						"@title": "Macro Assembler 1.12",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 1.12",
-								"@diskette": "MASM112.json",
-								"@format": "PC320K",
-								"@archive": "folder"
-							}
-						]
-					},
-					"1.25": {
-						"@title": "Macro Assembler 1.25",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 1.25",
-								"@diskette": "MASM125.json",
-								"@format": "PC320K",
-								"@archive": "folder"
-							}
-						]
-					},
-					"2.04": {
-						"@title": "Macro Assembler 2.04",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 2.04",
-								"@diskette": "MASM204.json",
-								"@format": "PC160K",
-								"@archive": "folder"
-							}
-						]
-					},
-					"3.00": {
-						"@title": "Macro Assembler 3.00",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 3.00",
-								"@diskette": "MASM-016014-300.json",
-								"@format": "PC360K"
-							}
-						],
-						"@documents": [
-							{
-								"@title": "MS Macro Assembler Reference Manual (1984)",
-								"@file": "MASM30_Reference_Manual-1984.pdf",
-								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gt4TMtBw579j2buNcw?e=MF2hsa",
-								"@cover": ".jpg",
-								"@source": "https://winworldpc.com/product/macro-assembler/3x"
-							},
-							{
-								"@title": "MS Macro Assembler User's Guide (1984)",
-								"@file": "MASM30_Users_Guide-1984.pdf",
-								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heM-dT-jTCe_z5Ld6A?e=IVcl3W",
-								"@cover": ".jpg",
-								"@source": "https://winworldpc.com/product/macro-assembler/3x"
-							}
-						]
-					},
-					"3.01": {
-						"@title": "Macro Assembler 3.01",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 3.01",
-								"@diskette": "MASM-016014-301.json",
-								"@format": "PC360K"
-							}
-						]
-					},
-					"4.00": {
-						"@title": "Macro Assembler 4.00",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 4.00",
-								"@diskette": "MASM-016014-400.json",
-								"@format": "PC360K"
-							}
-						]
-					},
-					"5.00": {
-						"@title": "Macro Assembler 5.00",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 5.00 (Disk 1)",
-								"@diskette": "MASM500-DISK1.json",
-								"@format": "PC360K"
-							},
-							{
-								"@title": "MS Macro Assembler 5.00 (Disk 2)",
-								"@diskette": "MASM500-DISK2.json",
-								"@format": "PC360K"
-							}
-						],
-						"@documents": [
-							{
-								"@title": "MASM 5.00 Reference",
-								"@file": "MASM50-POCKETREF.pdf",
-								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFkTtanp1C-Mq0Yug?e=BRbCsV",
-								"@cover": ".jpg",
-								"@source": "PCjs"
-							},
-							{
-								"@title": "MASM 5.00 Programmer's Guide",
-								"@file": "MASM50-PROGGUIDE.pdf",
-								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBnDrC9pXwVwxYw1A?e=OZkNow",
-								"@cover": ".jpg",
-								"@source": "http://www.os2museum.com/files/docs/os210sdk/masm-5.0-pg-1987.pdf"
-							},
-							{
-								"@title": "MASM 5.00 Mixed-Language Programming Guide",
-								"@file": "MASM50-MLPROGGUIDE.pdf",
-								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFtJNuM0Uh1XIG9zw?e=OH72cR",
-								"@cover": ".jpg",
-								"@source": "PCjs"
-							},
-							{
-								"@title": "MASM 5.00 CodeView and Utilities Guide",
-								"@file": "MASM50-UTILGUIDE.pdf",
-								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqIKJ6ua82VVg6_sbA?e=eibMfp",
-								"@cover": ".jpg",
-								"@source": "PCjs"
-							},
-							{
-								"@title": "MASM 5.00 Box",
-								"@file": "MASM50-BOX.pdf",
-								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFd2ImZBX2LOqqivw?e=fxpie0",
-								"@cover": ".jpg",
-								"@source": "PCjs"
-							},
-							{
-								"@title": "MASM 5.00 Brochure",
-								"@file": "MASM50-BROCHURE.pdf",
-								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFc87PWpzo9W45Huw?e=h5XatC",
-								"@cover": ".jpg",
-								"@source": "PCjs"
-							},
-							{
-								"@title": "MASM 5.00 READ THIS FIRST",
-								"@file": "MASM50-READTHISFIRST.pdf",
-								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFitllWejDc8P374g?e=z67BRs",
-								"@cover": ".jpg",
-								"@source": "PCjs"
-							},
-							{
-								"@title": "MASM 5.10 Letters",
-								"@file": "MASM51-LETTERS.pdf",
-								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFmfQPP91sz4S6MDQ?e=AkicZR",
-								"@cover": ".jpg",
-								"@source": "PCjs"
-							}
-						]
-					},
-					"5.10": {
-						"@title": "Macro Assembler 5.10",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 5.10 (Disk 1)",
-								"@diskette": "MASM51-01510-DISK1.json",
-								"@format": "PC360K",
-								"@source": "https://winworldpc.com/product/macro-assembler/5x"
-							},
-							{
-								"@title": "MS Macro Assembler 5.10 (Disk 2)",
-								"@diskette": "MASM51-01511-DISK2.json",
-								"@format": "PC360K",
-								"@source": "https://winworldpc.com/product/macro-assembler/5x"
-							},
-							{
-								"@title": "MS Macro Assembler 5.10 (Disk 3)",
-								"@diskette": "MASM51-01512-DISK3.json",
-								"@format": "PC360K",
-								"@source": "https://winworldpc.com/product/macro-assembler/5x"
-							},
-							{
-								"@title": "MS Macro Assembler 5.10 (Disk 4)",
-								"@diskette": "MASM51-01514-DISK4.json",
-								"@format": "PC360K",
-								"@source": "https://winworldpc.com/product/macro-assembler/5x"
-							},
-							{
-								"@title": "MS Macro Assembler 5.10 (Disk 5)",
-								"@diskette": "MASM51-03159-DISK5.json",
-								"@format": "PC1200K",
-								"@source": "https://winworldpc.com/product/macro-assembler/5x"
-							},
-							{
-								"@title": "MS Macro Assembler 5.10 (Update)",
-								"@diskette": "MASM51-UPDATE.json",
-								"@format": "PC360K",
-								"@source": "https://winworldpc.com/product/macro-assembler/5x"
-							}
-						]
-					},
-					"5.10x": {
-						"@title": "Macro Assembler 5.10 (Feb 1988)",
-						"@media": [
-							{
-								"@title": "MS MASM 5.10 (Feb 1988 Disk 1)",
-								"@diskette": "MASM51X-01510-DISK1.json",
-								"@format": "PC360K",
-								"@source": "PCjs"
-							},
-							{
-								"@title": "MS MASM 5.10 (Feb 1988 Disk 2)",
-								"@diskette": "MASM51X-01511-DISK2.json",
-								"@format": "PC360K",
-								"@source": "PCjs"
-							},
-							{
-								"@title": "MS MASM 5.10 (Feb 1988 Disk 3)",
-								"@diskette": "MASM51X-01512-DISK3.json",
-								"@format": "PC360K",
-								"@source": "PCjs"
-							},
-							{
-								"@title": "MS MASM 5.10 (Feb 1988 Disk 4)",
-								"@diskette": "MASM51X-01514-DISK4.json",
-								"@format": "PC360K",
-								"@source": "PCjs"
-							},
-							{
-								"@title": "MS MASM 5.10 (Feb 1988 Disk 5)",
-								"@diskette": "MASM51X-03159-DISK5.json",
-								"@format": "PC1200K",
-								"@source": "PCjs"
-							},
-							{
-								"@title": "MS Macro Assembler 5.10A (Update)",
-								"@diskette": "MASM51A-UPDATE.json",
-								"@format": "PC360K",
-								"@source": "PCjs"
-							}
-						]
-					},
-					"6.00": {
-						"@title": "Macro Assembler 6.00",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 6.00 (Disk 1)",
-								"@diskette": "MASM600-DISK1.json",
-								"@format": "PC1440K"
-							},
-							{
-								"@title": "MS Macro Assembler 6.00 (Disk 2)",
-								"@diskette": "MASM600-DISK2.json",
-								"@format": "PC1440K"
-							},
-							{
-								"@title": "MS Macro Assembler 6.00 (Disk 3)",
-								"@diskette": "MASM600-DISK3.json",
-								"@format": "PC1440K"
-							},
-							{
-								"@title": "MS Macro Assembler 6.00 (Disk 4)",
-								"@diskette": "MASM600-DISK4.json",
-								"@format": "PC1440K"
-							},
-							{
-								"@title": "MS Macro Assembler 6.00 (Disk 5)",
-								"@diskette": "MASM600-DISK5.json",
-								"@format": "PC1440K"
-							}
-						]
-					},
-					"6.11": {
-						"@title": "Macro Assembler 6.11",
-						"@media": [
-							{
-								"@title": "MS Macro Assembler 6.11 (Disk 1)",
-								"@diskette": "MASM611-DISK1.json",
-								"@format": "PC1440K"
-							},
-							{
-								"@title": "MS Macro Assembler 6.11 (Disk 2)",
-								"@diskette": "MASM611-DISK2.json",
-								"@format": "PC1440K"
-							},
-							{
-								"@title": "MS Macro Assembler 6.11 (Disk 3)",
-								"@diskette": "MASM611-DISK3.json",
-								"@format": "PC1440K"
-							},
-							{
-								"@title": "MS Macro Assembler 6.11 (Disk 4)",
-								"@diskette": "MASM611-DISK4.json",
-								"@format": "PC1440K"
-							},
-							{
-								"@title": "MS Macro Assembler 6.11 (Disk 5)",
-								"@diskette": "MASM611-DISK5.json",
-								"@format": "PC1440K"
-							}
-						]
-					}
-				}
-			},
 			"pascal": {
 				"@title": "Pascal",
 				"compiler": {
-					"@title": "Pascal Compiler",
+					"@title": "Compiler",
 					"@versions": {
 						"3.31": {
 							"@title": "Pascal Compiler 3.31",
