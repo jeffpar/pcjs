@@ -6848,7 +6848,7 @@
 			"basic": {
 				"@title": "BASIC",
 				"compiler": {
-					"@title": "BASIC Compiler",
+					"@title": "Compiler",
 					"@versions": {
 						"1.00": {
 							"@title": "IBM BASIC Compiler 1.00",
@@ -6882,7 +6882,7 @@
 				"@title": "COBOL",
 				"@versions": {
 					"1.00": {
-						"@title": "IBM COBOL 1.00",
+						"@title": "IBM COBOL Compiler 1.00",
 						"@media": [
 							{
 								"@title": "IBM COBOL 1.00 (Disk 1)",
@@ -6903,6 +6903,31 @@
 								"@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194688&authkey=ANqaZ9JL50ssPKw&em=2",
 								"@cover": ".jpg",
 								"@source": "https://winworldpc.com/product/ibm-cobol-compiler/1x"
+							}
+						]
+					}
+				}
+			},
+			"fortran": {
+				"@title": "FORTRAN",
+				"@versions": {
+					"1.00": {
+						"@title": "IBM FORTRAN Compiler 1.00",
+						"@media": [
+							{
+								"@title": "IBM FORTRAN Compiler 1.00 (Disk 1)",
+								"@diskette": "IBM-FORTRAN-V100-DISK1.json",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "IBM FORTRAN Compiler 1.00 (Disk 2)",
+								"@diskette": "IBM-FORTRAN-V100-DISK2.json",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "IBM FORTRAN Compiler 1.00 (Disk 3)",
+								"@diskette": "IBM-FORTRAN-V100-DISK3.json",
+								"@format": "PC160K"
 							}
 						]
 					}
@@ -7040,12 +7065,13 @@
 			"basic": {
 				"@title": "BASIC",
 				"compiler": {
-					"@title": "BASIC Compiler",
+					"@title": "Compiler",
 					"@versions": {
 						"5.36": {
-							"@title": "MS BASIC Compiler 5.36",
+							"@title": "BASIC Compiler 5.36",
 							"@media": [
 								{
+									"@title": "MS BASIC Compiler 5.36",
 									"@diskette": "BASCOM536.json",
 									"@format": "PC360K"
 								}
@@ -7057,9 +7083,10 @@
 					"@title": "QBasic",
 					"@versions": {
 						"1.10": {
-							"@title": "MS QBasic 1.10",
+							"@title": "QBasic 1.10",
 							"@media": [
 								{
+									"@title": "MS QBasic 1.10",
 									"@diskette": "QBASIC110.json",
 									"@format": "PC360K",
 									"@archive": "folder"
@@ -7072,9 +7099,10 @@
 					"@title": "QuickBASIC",
 					"@versions": {
 						"1.00": {
-							"@title": "MS QuickBASIC 1.00",
+							"@title": "QuickBASIC 1.00",
 							"@media": [
 								{
+									"@title": "MS QuickBASIC 1.00",
 									"@diskette": "MS-QUICKBASIC-100.json",
 									"@photo": ".jpg",
 									"@format": "PC360K"
@@ -7082,7 +7110,7 @@
 							]
 						},
 						"2.00": {
-							"@title": "MS QuickBASIC 2.00",
+							"@title": "QuickBASIC 2.00",
 							"@media": [
 								{
 									"@title": "MS QuickBASIC 2.00 (Disk 1)",
@@ -7098,7 +7126,7 @@
 							]
 						},
 						"2.01": {
-							"@title": "MS QuickBASIC 2.01",
+							"@title": "QuickBASIC 2.01",
 							"@media": [
 								{
 									"@title": "MS QuickBASIC 2.01 (Disk 1)",
@@ -7113,7 +7141,7 @@
 							]
 						},
 						"3.00": {
-							"@title": "MS QuickBASIC 3.00",
+							"@title": "QuickBASIC 3.00",
 							"@media": [
 								{
 									"@title": "MS QuickBASIC 3.00 (Disk 1)",
@@ -7138,7 +7166,7 @@
 							]
 						},
 						"4.00": {
-							"@title": "MS QuickBASIC 4.00",
+							"@title": "QuickBASIC 4.00",
 							"@media": [
 								{
 									"@title": "MS QuickBASIC 4.00 (Disk 1)",
@@ -7153,7 +7181,7 @@
 							]
 						},
 						"4.50": {
-							"@title": "MS QuickBASIC 4.50",
+							"@title": "QuickBASIC 4.50",
 							"@media": [
 								{
 									"@title": "MS QuickBASIC 4.50 (Disk 1)",
@@ -7173,7 +7201,7 @@
 					"@title": "Visual Basic",
 					"@versions": {
 						"1.00": {
-							"@title": "MS Visual Basic 1.00",
+							"@title": "Visual Basic 1.00",
 							"@media": [
 								{
 									"@title": "MS Visual Basic 1.00 (Disk 1)",
@@ -7643,10 +7671,10 @@
 				}
 			},
 			"cobol": {
-				"@title": "COBOL",
+				"@title": "COBOL Compiler",
 				"@versions": {
 					"1.12": {
-						"@title": "MS COBOL 1.12",
+						"@title": "Microsoft COBOL Compiler 1.12",
 						"@media": [
 							{
 								"@title": "MS COBOL 1.12 (Disk 1)",
@@ -7659,6 +7687,89 @@
 								"@format": "PC360K"
 							}
 						]
+					}
+				}
+			},
+			"fortran": {
+				"@title": "FORTRAN",
+				"compiler": {
+					"@title": "FORTRAN Compiler",
+					"@versions": {
+						"5.00": {
+							"@title": "Microsoft FORTRAN Compiler 5.00",
+							"@media": [
+								{
+									"@title": "MS FORTRAN Compiler 5.00 (Disk 1)",
+									"@diskette": "FORTRAN-V500-DISK1-06576.json",
+									"@format": "PC720K"
+								},
+								{
+									"@title": "MS FORTRAN Compiler 5.00 (Disk 2)",
+									"@diskette": "FORTRAN-V500-DISK2-06577.json",
+									"@format": "PC720K"
+								},
+								{
+									"@title": "MS FORTRAN Compiler 5.00 (Disk 3)",
+									"@diskette": "FORTRAN-V500-DISK3-06578.json",
+									"@format": "PC720K"
+								},
+								{
+									"@title": "MS FORTRAN Compiler 5.00 (Disk 4)",
+									"@diskette": "FORTRAN-V500-DISK4-06579.json",
+									"@format": "PC720K"
+								},
+								{
+									"@title": "MS FORTRAN Compiler 5.00 (Disk 5)",
+									"@diskette": "FORTRAN-V500-DISK5-06580.json",
+									"@format": "PC720K"
+								},
+								{
+									"@title": "MS FORTRAN Compiler 5.00 (Disk 6)",
+									"@diskette": "FORTRAN-V500-DISK6-06581.json",
+									"@format": "PC720K"
+								},
+								{
+									"@title": "MS FORTRAN Compiler 5.00 (Disk 7)",
+									"@diskette": "FORTRAN-V500-DISK7-06582.json",
+									"@format": "PC720K"
+								},
+								{
+									"@title": "MS FORTRAN Compiler 5.00 (Disk 8)",
+									"@diskette": "FORTRAN-V500-DISK8-07069.json",
+									"@format": "PC720K"
+								}
+							]
+						}
+					}
+				},
+				"powerstation": {
+					"@title": "FORTRAN PowerStation",
+					"@versions": {
+						"1.00": {
+							"@title": "Microsoft FORTRAN PowerStation 1.00",
+							"@media": [
+								{
+									"@title": "MS FORTRAN PowerStation 1.00 (Disk 1)",
+									"@diskette": "FORTRAN-PS100-DISK1.json",
+									"@format": "PC1440K"
+								},
+								{
+									"@title": "MS FORTRAN PowerStation 1.00 (Disk 2)",
+									"@diskette": "FORTRAN-PS100-DISK2.json",
+									"@format": "PC1440K"
+								},
+								{
+									"@title": "MS FORTRAN PowerStation 1.00 (Disk 3)",
+									"@diskette": "FORTRAN-PS100-DISK3.json",
+									"@format": "PC1440K"
+								},
+								{
+									"@title": "MS FORTRAN PowerStation 1.00 (Disk 4)",
+									"@diskette": "FORTRAN-PS100-DISK4.json",
+									"@format": "PC720K"
+								}
+							]
+						}
 					}
 				}
 			},
@@ -8010,10 +8121,10 @@
 			"pascal": {
 				"@title": "Pascal",
 				"compiler": {
-					"@title": "MS Pascal",
+					"@title": "Pascal Compiler",
 					"@versions": {
 						"3.31": {
-							"@title": "MS Pascal 3.31",
+							"@title": "Pascal Compiler 3.31",
 							"@media": [
 								{
 									"@title": "MS Pascal 3.31 (Disk 1)",
@@ -8028,7 +8139,7 @@
 							]
 						},
 						"4.00": {
-							"@title": "MS Pascal 4.00",
+							"@title": "Pascal Compiler 4.00",
 							"@media": [
 								{
 									"@title": "MS Pascal 4.00 (Disk 1)",
@@ -8089,10 +8200,10 @@
 					}
 				},
 				"quickpascal": {
-					"@title": "MS QuickPascal",
+					"@title": "QuickPascal",
 					"@versions": {
 						"1.00": {
-							"@title": "MS QuickPascal 1.00",
+							"@title": "QuickPascal 1.00",
 							"@media": [
 								{
 									"@title": "MS QuickPascal 1.00 (360K Disk 1)",

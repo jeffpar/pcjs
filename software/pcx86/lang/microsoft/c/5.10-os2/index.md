@@ -949,4 +949,6 @@ and some [Documentation](#documents) are provided below.
 	EXAMPLE\SNAP.C          Protected-mode screen capture demonstration program
 	EXAMPLE\MAKESNAP.CMD    Batch file for building SNAP demonstration program
 
+<!-- Documentation -->
+
 {% include gallery/documents.html width="200" height="260" %}
