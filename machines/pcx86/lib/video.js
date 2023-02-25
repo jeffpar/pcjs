@@ -8006,8 +8006,17 @@ class VideoX86 extends Component {
              *
              * NOTE: Not sure if this is still necessary, but changing the code (and then doing a bunch of testing)
              * doesn't sound very appealing right now.
+             *
+             * UPDATE: Instead of hard-coding the textarea overlay font size to "16px", we now scale it dynamically,
+             * so that when the overlay is visible (eg, for machine startup messages), the size of the text is
+             * proportional to the overall size of the virtual display.
              */
-            textarea.style.fontSize = "16px";
+            // textarea.style.fontSize = "16px";
+            let onResizeTextArea = function() {
+                textarea.style.fontSize = ((textarea.clientWidth * 0.01875)|0) + "px";
+            };
+            onResizeTextArea();
+            Web.onPageEvent('onresize', onResizeTextArea);
 
             /*
              * See if there are any "diagnostic" elements we should pass along, too.
