@@ -1008,19 +1008,19 @@
 						},
 						{
 							"@title": "Windows SDK 3.00 (1200K Disk 2)",
-							"@diskette": "WIN30SDK-1200K-LIBRARIES.json",
-							"@format": "PC1200K",
-							"@photo": ".jpg"
-						},
-						{
-							"@title": "Windows SDK 3.00 (1200K Disk 3)",
 							"@diskette": "WIN30SDK-1200K-DBGTOOLS.json",
 							"@format": "PC1200K",
 							"@photo": ".jpg"
 						},
 						{
-							"@title": "Windows SDK 3.00 (1200K Disk 4)",
+							"@title": "Windows SDK 3.00 (1200K Disk 3)",
 							"@diskette": "WIN30SDK-1200K-DEVFILES.json",
+							"@format": "PC1200K",
+							"@photo": ".jpg"
+						},
+						{
+							"@title": "Windows SDK 3.00 (1200K Disk 4)",
+							"@diskette": "WIN30SDK-1200K-LIBRARIES.json",
 							"@format": "PC1200K",
 							"@photo": ".jpg"
 						},
