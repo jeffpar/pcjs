@@ -42,7 +42,7 @@ The first **Word for Windows 2.0c** diskette has been loaded into Drive B in the
     SPELL    DL$     75634  11-18-92  12:00p
     SP_AM    LE$    191831  11-18-92  12:00p
     TEMPLATE DO$      5785  11-18-92  12:00p
-    WWORD20  INF     48700  12-22-93   2:21p
+    WWORD20  INF     48700   3-17-93   7:32p
            20 file(s)     720830 bytes
 
      Directory of A:\DLL
@@ -79,6 +79,8 @@ The first **Word for Windows 2.0c** diskette has been loaded into Drive B in the
            38 file(s)    1432308 bytes
                            16384 bytes free
 
+![Word for Windows 2.0c (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/winword/2.0c/WINWORD20-DISK1.jpg)
+
 ### Directory of Word for Windows 2.0c (Disk 2)
 
      Volume in drive A is WW20CUS144
@@ -99,6 +101,8 @@ The first **Word for Windows 2.0c** diskette has been loaded into Drive B in the
     Total files listed:
             6 file(s)    1405627 bytes
                            50688 bytes free
+
+![Word for Windows 2.0c (Disk 2)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/winword/2.0c/WINWORD20-DISK2.jpg)
 
 ### Directory of Word for Windows 2.0c (Disk 3)
 
@@ -259,6 +263,8 @@ The first **Word for Windows 2.0c** diskette has been loaded into Drive B in the
           136 file(s)    1372695 bytes
                            52736 bytes free
 
+![Word for Windows 2.0c (Disk 3)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/winword/2.0c/WINWORD20-DISK3.jpg)
+
 ### Directory of Word for Windows 2.0c (Disk 4)
 
      Volume in drive A is WW20BUS144
@@ -282,6 +288,8 @@ The first **Word for Windows 2.0c** diskette has been loaded into Drive B in the
     Total files listed:
             9 file(s)    1422231 bytes
                            33280 bytes free
+
+![Word for Windows 2.0c (Disk 4)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/winword/2.0c/WINWORD20-DISK4.jpg)
 
 ### Directory of Word for Windows 2.0c (Disk 5)
 
@@ -364,6 +372,8 @@ The first **Word for Windows 2.0c** diskette has been loaded into Drive B in the
            62 file(s)    1334501 bytes
                           108032 bytes free
 
+![Word for Windows 2.0c (Disk 5)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/winword/2.0c/WINWORD20-DISK5.jpg)
+
 ### Directory of Word for Windows 2.0c (Disk 6)
 
      Volume in drive A is WW20BUS144
@@ -399,3 +409,5 @@ The first **Word for Windows 2.0c** diskette has been loaded into Drive B in the
     Total files listed:
            21 file(s)    1392630 bytes
                            59392 bytes free
+
+![Word for Windows 2.0c (Disk 6)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/winword/2.0c/WINWORD20-DISK6.jpg)
