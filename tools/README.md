@@ -1,3 +1,15 @@
+---
+layout: page
+title: PCjs Tools
+permalink: /tools/
+---
+
+## DiskImage
+
+[DiskImage](modules/diskimage.js) is a Node command-line application that reads/writes PCjs v2 disk images,
+using the [DiskInfo](../machines/pcx86/modules/diskinfo.js) PCx86 machine module to parse the data.
+[DiskImage](modules/diskimage.js) supersedes the older PCjs v1 [DiskDump](old/diskdump/lib/diskdump.js) utility.
+
 ## PCjs Disk Images
 
 PCjs v2 (version 2.x) disk images are JSON objects with the following properties:
@@ -32,12 +44,6 @@ and may be documented more fully at a later date.
 Older PCjs v1 (version 1.x) disk images were basically just an array of CHS sector data (what is now called the *diskData* object),
 without any other information.  Such disk images are still supported, but all the disk images now stored on PCjs disk servers,
 such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to the v2 format.
-
-## PCjs DiskImage Utility
-
-[DiskImage](modules/diskimage.js) is a Node command-line application that reads/writes PCjs v2 disk images,
-using the [DiskInfo](../machines/pcx86/modules/diskinfo.js) PCx86 machine module to parse the data.
-[DiskImage](modules/diskimage.js) supersedes the older PCjs v1 [DiskDump](old/diskdump/lib/diskdump.js) utility.
 
 ## Building PCjs Disk Images from IMG files
 
