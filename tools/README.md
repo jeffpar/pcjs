@@ -4,13 +4,13 @@ title: PCjs Tools
 permalink: /tools/
 ---
 
-## DiskImage
+### DiskImage
 
 [DiskImage](modules/diskimage.js) is a Node command-line application that reads/writes PCjs v2 disk images,
 using the [DiskInfo](../machines/pcx86/modules/diskinfo.js) PCx86 machine module to parse the data.
 [DiskImage](modules/diskimage.js) supersedes the older PCjs v1 [DiskDump](old/diskdump/lib/diskdump.js) utility.
 
-## PCjs Disk Images
+### PCjs Disk Images
 
 PCjs v2 (version 2.x) disk images are JSON objects with the following properties:
 
@@ -45,7 +45,7 @@ Older PCjs v1 (version 1.x) disk images were basically just an array of CHS sect
 without any other information.  Such disk images are still supported, but all the disk images now stored on PCjs disk servers,
 such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to the v2 format.
 
-## Building PCjs Disk Images from IMG files
+### Building PCjs Disk Images from IMG files
 
 To build a PCjs disk image, such as this [PC DOS 2.00 diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json),
 from an IMG file:
@@ -68,7 +68,7 @@ which translates to these commands (using a 360K PC diskette named "disk1" as an
     pri disk1.pri -p decode mfm disk1.psi
     node modules/diskimage.js disk1.psi disk1.json
 
-## Building PCjs Disk Images from Directories
+### Building PCjs Disk Images from Directories
 
 To build a [VisiCalc diskette](https://miscdisks.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
 from a directory containing VC.COM, specify the name of the directory, including a trailing slash, like so:
@@ -88,7 +88,7 @@ a recognized text file is any file ending with one of these extensions (.md, .me
 AND which contains only 7-bit ASCII characters -- since some files, like .bas files, can contain either ASCII or non-ASCII
 data.  The list of recognized text file extensions is likely to grow over time.
 
-## Examining PCjs Disk Images
+### Examining PCjs Disk Images
 
 Both local and remote diskette images can be examined.  To examine a remote image, you *must* use the `--disk` option,
 with either an explicit URL, as in:
@@ -109,7 +109,7 @@ the server mapping.  The list of implicit paths for PC diskettes currently inclu
   - [/pcsig8b-disks](https://github.com/jeffpar/pcjs-pcsig8b-disks)
   - [/harddisks](https://github.com/jeffpar/pcjs-harddisks)
 
-## Commonly Used DiskImage Options
+### Commonly Used DiskImage Options
 
 To get a DOS-compatible directory listing of a disk image:
 
