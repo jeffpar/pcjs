@@ -1,7 +1,15 @@
 <div style="text-align:center">
+  {%- if include.src contains "archive.org" %}
+  <iframe src="{{ include.src }}" width="{{ include.width | default: '100%' }}" height="{{ include.height | default: '850' }}" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+  {%- else %}
   <iframe src="{{ include.src }}" width="{{ include.width | default: '650' }}" height="{{ include.height | default: '850' }}" scrolling="no"></iframe>
+  {%- endif %}
   {%- if include.title %}
+    {%- unless include.link %}
   <span class="pcjs-gallery-label">{{ include.title }}</span>
+    {%- else %}
+  <a href="{{ include.link }}"><span class="pcjs-gallery-label">{{ include.title }}</span></a>
+    {%- endunless %}
   <br>
   {%- endif %}
   {%- if include.source and include.source != "" and include.source != "PCjs" %}

@@ -5960,6 +5960,7 @@
 							{
 								"@title": "Microsoft Multiplan v4.20 Quick Reference Guide (1989)",
 								"@file": "Microsoft_Multiplan_v420_Quick_Reference_Guide-1989.pdf",
+								"@embed": "https://archive.org/embed/microsoft-multiplan-v-420-quick-reference-guide-1989",
 								"@link": "https://archive.org/details/microsoft-multiplan-v-420-quick-reference-guide-1989",
 								"@cover": ".jpg",
 								"@source": "PCjs"
@@ -5967,6 +5968,7 @@
 							{
 								"@title": "Microsoft Multiplan v4.20 User's Guide (1989)",
 								"@file": "Microsoft_Multiplan_v420_Users_Guide-1989.pdf",
+								"@embed": "https://archive.org/embed/microsoft-multiplan-v-420-users-guide-1989",
 								"@link": "https://archive.org/details/microsoft-multiplan-v-420-users-guide-1989",
 								"@cover": ".jpg",
 								"@source": "PCjs"

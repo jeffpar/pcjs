@@ -5,8 +5,7 @@ permalink: /documents/manuals/intel/80286/early_errata/
 redirect_from: /pubs/pc/reference/intel/80286/early_errata/
 ---
 
-[The following information is from an undated 15-page Intel document titled "Undocumented iAPX 286 Test Instruction",
-p. 15]
+[The following information is from an undated 15-page Intel document titled "[Undocumented iAPX 286 Test Instruction](/documents/manuals/intel/80286/files/80286--LOADALL.pdf#page=15)", p. 15]
 
 Early versions of the 80286 have several errata items which may effect the implementation of software to emulate an
 8086/8088 on a protected mode 80286 or expansion of the address space in real mode. These errata are in the A1 and B1
