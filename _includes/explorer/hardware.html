@@ -53,17 +53,18 @@
                         {%- if site.developer %}
                             <!-- hardware instance: {{ instance[0] }} -->
                         {%- endif -%}
+                        {%- capture hardware_url -%}{{ hardware_path1 }}{{ hardware_path2 }}{{ hardware_path3 }}{%- endcapture %}
                         {%- if instance[0] == "@documents" -%}
                           {%- assign documents = instance[1] %}
-                          {%- capture documents_link -%}{{ hardware_path1 }}{{ hardware_path2 }}{{ hardware_path3 }}/{%- endcapture %}
+                          {%- capture documents_link -%}{{ hardware_url }}/{%- endcapture %}
                             {% include explorer/doclinks.html docs=documents link=documents_link -%}
                           {%- continue -%}
                         {%- endif -%}
                         {%- if instance[0] contains '@' -%}{%- continue -%}{%- endif -%}
-                        {%- capture hardware_path4 -%}{%- endcapture %}
-                        {%- if instance[0] != "" -%}{%- capture hardware_path4 -%}/{{ instance[0] }}{%- endcapture %}{%- endif -%}
-                        {%- capture hardware_url -%}{{ hardware_path1 }}{{ hardware_path2 }}{{ hardware_path3 }}{{ hardware_path4 }}{%- endcapture %}
-                        {%- capture hardware_id -%}machines-{{ hardware_url | remove_first: "/machines" | remove_first: "/" | replace: "/", "-" }}{%- endcapture -%}
+                        {%- capture hardware_id -%}machines-{{ hardware_url | remove_first: "/machines" | remove_first: "/" | replace: "/", "-" }}-{{ instance[0] }}{%- endcapture -%}
+                        {%- if instance[0] != "" -%}
+                          {%- capture hardware_url -%}{{ hardware_url }}/{{ instance[0] }}{%- endcapture %}
+                        {%- endif %}
                         {%- capture hardware_link -%}{% if instance[1]['@permalink'] %}{{ instance[1]['@permalink'] }}{% else %}{{ hardware_url }}/{% endif %}{%- endcapture %}
                             <li id="{{ hardware_id }}" class="pcjs-explorer-item" onclick="pcjsExplorerClick(this, event)"><a href="{{ hardware_link }}">{{ instance[1]['@title'] }}</a></li>
                       {%- endfor -%}
