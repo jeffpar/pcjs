@@ -58,5 +58,4 @@ in every copy or modified version of this work, and to display that notice on ev
 
 ### More Information
 
-If you have questions or run into any problems, feel free to [tweet](https://twitter.com/jeffpar) or
-[email](mailto:Jeff@pcjs.org).
+If you have questions or run into any problems, feel free to send [email](mailto:Jeff@pcjs.org).
