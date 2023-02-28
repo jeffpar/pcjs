@@ -72,9 +72,8 @@
         "@documents": [
           {
             "@title": "COMPAQ Portable Operations Guide (Nov 1982)",
-            "@file": "COMPAQ_Operations_Guide_1982-11.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEafO5tOghjO67McQ?e=QsXzCl",
-            "@cover": ".jpg",
+            "@link": "https://archive.org/details/compaq-operations-guide-1982-11",
+            "@cover": "COMPAQ_Operations_Guide_1982-11.jpg",
             "@source": "PCjs"
           }
         ]
@@ -84,16 +83,12 @@
         "@documents": [
           {
             "@title": "COMPAQ Enhanced Color Graphics Board COMPAQ Color Monitor Technical Reference Guide (Dec 1986)",
-            "@file": "COMPAQ_Enhanced_Color_Graphics_Board_1986_12.jpg",
-            "@link": "https://archive.org/embed/trg-enhanced-color-graphics-board-1986-12",
-            "@cover": ".jpg",
+            "@cover": "COMPAQ_Enhanced_Color_Graphics_Board_1986_12.jpg",
             "@source": "https://archive.org/embed/trg-enhanced-color-graphics-board-1986-12"
           },
           {
             "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)",
-            "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol1_1987-05.jpg",
-            "@link": "https://archive.org/embed/trg-80286-vol-1-1987-05",
-            "@cover": ".jpg",
+            "@cover": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol1_1987-05.jpg",
             "@source": "https://archive.org/embed/trg-80286-vol-1-1987-05"
           },
           {
@@ -152,16 +147,12 @@
           },
           {
             "@title": "COMPAQ DeskPro 386/20 Technical Reference Guide (Volume 1, Oct 1987)",
-            "@file": "COMPAQ_DeskPro_386-20_Technical_Reference_Guide_Vol1_1987-10.jpg",
-            "@link": "https://archive.org/embed/trg-deskpro-386-20-vol-1-1987-10",
-            "@cover": ".jpg",
+            "@cover": "COMPAQ_DeskPro_386-20_Technical_Reference_Guide_Vol1_1987-10.jpg",
             "@source": "https://archive.org/embed/trg-deskpro-386-20-vol-1-1987-10"
           },
           {
             "@title": "COMPAQ DeskPro 386/20 Technical Reference Guide (Volume 2, Oct 1987)",
-            "@file": "COMPAQ_DeskPro_386-20_Technical_Reference_Guide_Vol2_1987-10.jpg",
-            "@link": "https://archive.org/embed/trg-deskpro-386-20-vol-2-1987-10",
-            "@cover": ".jpg",
+            "@cover": "COMPAQ_DeskPro_386-20_Technical_Reference_Guide_Vol2_1987-10.jpg",
             "@source": "https://archive.org/embed/trg-deskpro-386-20-vol-2-1987-10"
           },
           {
@@ -173,9 +164,7 @@
           },
           {
             "@title": "COMPAQ DeskPro 386/25 Technical Reference Guide (Volume II, Aug 1988)",
-            "@file": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol2_1988-08.jpg",
-            "@link": "https://archive.org/embed/trg-lte-deskpro-386-25-1988-08",
-            "@cover": ".jpg",
+            "@cover": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol2_1988-08.jpg",
             "@source": "https://archive.org/embed/trg-lte-deskpro-386-25-1988-08"
           }
         ]
@@ -185,9 +174,7 @@
         "@documents": [
           {
             "@title": "Technical Reference Guide COMPAQ LTE Personal Computer COMPAQ LTE/286 Personal Computer (Mar 1990)",
-            "@file": "COMPAQ_LTE_LTE286_Technical_Reference_Guide_1990_03.jpg",
-            "@link": "https://archive.org/embed/trg-lte-lte-286-1990-03",
-            "@cover": ".jpg",
+            "@cover": "COMPAQ_LTE_LTE286_Technical_Reference_Guide_1990_03.jpg",
             "@source": "https://archive.org/embed/trg-lte-lte-286-1990-03"
           }
         ]
@@ -215,39 +202,28 @@
         "@documents": [
           {
             "@title": "IBM 5150 Guide to Operations (Aug 1981)",
-            "@file": "IBM_5150_Guide_to_Operations_6025000_1981-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEHlreeAL-NbpxGVg?e=zyjiew",
-            "@cover": ".jpg",
+            "@cover": "IBM_5150_Guide_to_Operations_6025000_1981-08.jpg",
             "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Guide_to_Operations_6025000_AUG81.pdf"
           },
           {
             "@title": "IBM 5150 Guide to Operations (Apr 1984)",
-            "@file": "IBM_5150_Guide_to_Operations_6322510_1984-04.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEIEyguxuImec_aLA?e=C91ffv",
-            "@cover": ".jpg",
+            "@cover": "IBM_5150_Guide_to_Operations_6322510_1984-04.jpg",
             "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Guide_to_Operations_6322510_APR84.pdf"
           },
           {
             "@title": "IBM 5150 Technical Reference (Aug 1981)",
-            "@file": "IBM_5150_Technical_Reference_6025005_1981-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqELFEzc8B_rRcEPrA?e=2TJqcJ",
-            "@embedSkip": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2137003&authkey=AN_bx8xT3-kuJ2w&em=2",
-            "@cover": ".jpg",
+            "@cover": "IBM_5150_Technical_Reference_6025005_1981-08.jpg",
             "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Technical_Reference_6025005_AUG81.pdf",
             "@altsource": "http://bitsavers.org/pdf/ibm/pc/pc/6025008_PC_Technical_Reference_Aug81.pdf"
           },
           {
             "@title": "IBM 5150 Technical Reference (Apr 1983)",
-            "@file": "IBM_5150_Technical_Reference_1502234_1983-04.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEJiwNxqCk17DLlxw?e=CaTFg4",
-            "@cover": ".jpg",
+            "@cover": "IBM_5150_Technical_Reference_1502234_1983-04.jpg",
             "@source": "http://bitsavers.org/pdf/ibm/pc/pc/1502234_PC_Technical_Reference_Apr83.pdf"
           },
           {
             "@title": "IBM 5150 Technical Reference (Apr 1984)",
-            "@file": "IBM_5150_Technical_Reference_6322507_1984-04.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEKmmBoHcZHx06phA?e=cwe8cT",
-            "@cover": ".jpg",
+            "@cover": "IBM_5150_Technical_Reference_6322507_1984-04.jpg",
             "@source": "http://www.minuszerodegrees.net/manuals/IBM_5150_Technical_Reference_6322507_APR84.pdf"
           }
         ]
@@ -269,17 +245,13 @@
         "@documents": [
           {
             "@title": "IBM 5160 Guide to Operations (Apr 1984)",
-            "@file": "IBM_5160_Guide_to_Operations_6322511_1984-04.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEGQjCUU_ObE_XCmA?e=grxl9S",
-            "@cover": ".jpg",
-            "@source": ""
+            "@cover": "IBM_5160_Guide_to_Operations_6322511_1984-04.jpg",
+            "@source": "https://minuszerodegrees.net/manuals/IBM_5160_Guide_to_Operations_6322511_APR84.pdf"
           },
           {
-            "@title": "IBM 5160 Technical Reference (April 1983)",
-            "@file": "IBM_5160_Technical_Reference_1983-04.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEF_79DWDCuHOZmWQ?e=UmJotY",
-            "@cover": ".jpg",
-            "@source": "http://retroarchive.org/dos/docs/ibm5160techref.pdf"
+            "@title": "IBM 5160 Technical Reference (Apr 1983)",
+            "@cover": "IBM_5160_Technical_Reference_1983-04.jpg",
+            "@source": "https://minuszerodegrees.net/manuals/IBM_5160_Technical_Reference_APR83.pdf"
           }
         ]
       },
@@ -295,94 +267,76 @@
         },
         "@documents": [
           {
-            "@title": "IBM 5170 Installation and Setup, March 1984",
-            "@file": "IBM_5170_Installation_and_Setup_1502491_1984-03.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEMJzq91y_eQIV6PQ?e=mE0RSQ",
-            "@cover": ".jpg",
-            "@source": ""
+            "@title": "IBM 5170 Installation and Setup (Mar 1984)",
+            "@cover": "IBM_5170_Installation_and_Setup_1502491_1984-03.jpg",
+            "@source": "https://www.minuszerodegrees.net/manuals/IBM_5170_Installation_and_Setup_1502491_MAR84.pdf"
           },
           {
-            "@title": "IBM 5170 Technical Reference, March 1984",
-            "@file": "IBM_5170_Technical_Reference_1502243_1984-03.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEPV82VBi1so8Tt-A?e=KXNZcv",
-            "@cover": ".jpg",
-            "@source": ""
+            "@title": "IBM 5170 Technical Reference (Mar 1984)",
+            "@cover": "IBM_5170_Technical_Reference_1502243_1984-03.jpg",
+            "@source": "https://minuszerodegrees.net/manuals/IBM_5170_Technical_Reference_1502243_MAR84.pdf"
           },
           {
-            "@title": "IBM 5170 (Model 239) Technical Reference, September 1985",
-            "@file": "IBM_5170_Technical_Reference_6280070_1985-09.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEQEDH43qL0Jl9nsQ?e=iwEViI",
-            "@cover": ".jpg",
-            "@source": ""
+            "@title": "IBM 5170 (Model 239) Technical Reference (Sep 1985)",
+            "@cover": "IBM_5170_Technical_Reference_6280070_1985-09.jpg",
+            "@source": "https://minuszerodegrees.net/manuals/IBM_5170_Technical_Reference_6280070_SEP85.pdf"
           },
           {
-            "@title": "IBM 5170 (Models 319 and 339) Technical Reference, March 1986",
-            "@file": "IBM_5170_Technical_Reference_6183355_1986-03.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqERdutb7IYT0pcugQ?e=DiQ35K",
-            "@cover": ".jpg",
-            "@source": ""
+            "@title": "IBM 5170 (Models 319 and 339) Technical Reference (Mar 1986)",
+            "@cover": "IBM_5170_Technical_Reference_6183355_1986-03.jpg",
+            "@source": "https://bitsavers.org/pdf/ibm/pc/at/6183355_PC_AT_Technical_Reference_Mar86.pdf"
           },
           {
             "@title": "IBM 5170 Double-Sided Diskette Drive",
-            "@file": "IBM_5170_Double-Sided_Diskette_Drive.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lFyUh1iagIHOfKaw?e=6AFXdb",
-            "@cover": ".jpg",
+            "@cover": "IBM_5170_Double-Sided_Diskette_Drive.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "IBM 5170 High-Capacity Diskette Drive",
-            "@file": "IBM_5170_High-Capacity_Diskette_Drive.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lIr9Grzhroy7j0FA?e=Xzh9jl",
-            "@cover": ".jpg",
+            "@cover": "IBM_5170_High-Capacity_Diskette_Drive.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "IBM 5170 Serial/Parallel Adapter",
-            "@file": "IBM_5170_Serial_Parallel.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lLZxGYvTR7JzvGWA?e=DGHRuL",
-            "@cover": ".jpg",
+            "@cover": "IBM_5170_Serial_Parallel.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "IBM 5170 Serial/Parallel Adapter (Aug 1984)",
-            "@file": "IBM_5170_Serial_Parallel_1984-08-31.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heE_I_9IbmmltKFy9w?e=e8SzvS",
-            "@cover": ".jpg",
+            "@cover": "IBM_5170_Serial_Parallel_1984-08-31.jpg",
             "@source": "http://minuszerodegrees.net/oa/OA%20-%20IBM%20PC%20AT%20Serial_Parallel%20Adapter.pdf"
           },
           {
             "@title": "IBM 5170 128KB Memory Expansion",
-            "@file": "IBM_5170_128KB_Memory_Expansion.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lDQ8FEh981ypkHQA?e=oTnvCs",
-            "@cover": ".jpg",
+            "@cover": "IBM_5170_128KB_Memory_Expansion.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "IBM 5170 512KB Memory Expansion",
-            "@file": "IBM_5170_512KB_Memory_Expansion.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lE52hJ4Iu3MX1ZqQ?e=1U30d6",
-            "@cover": ".jpg",
+            "@cover": "IBM_5170_512KB_Memory_Expansion.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "IBM 5170 Communications Cable",
-            "@file": "IBM_5170_Communications_Cable.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lGrU3VcVL_rpUNfw?e=93UCNC",
-            "@cover": ".jpg",
+            "@cover": "IBM_5170_Communications_Cable.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "IBM 5170 Prototype Adapter",
-            "@file": "IBM_5170_Prototype_Adapter.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lKotCHFGpTk0VgwQ?e=lNJo62",
-            "@cover": ".jpg",
+            "@cover": "IBM_5170_Prototype_Adapter.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "IBM 5170 Updates",
-            "@file": "IBM_5170_Updates.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lJBRb36NH-gIM2kw?e=F4361P",
-            "@cover": ".jpg",
+            "@cover": "IBM_5170_Updates.jpg",
             "@source": "PCjs"
           }
         ]
@@ -392,9 +346,7 @@
         "@documents": [
           {
             "@title": "IBM 4860 Technical Reference (Nov 1983)",
-            "@file": "IBM_4860_Technical_Reference_6322971_1983-11.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heE3ehC5BWxiIhMbUQ?e=pymkiO",
-            "@cover": ".jpg",
+            "@cover": "IBM_4860_Technical_Reference_6322971_1983-11.jpg",
             "@source": "http://bitsavers.trailing-edge.com/pdf/ibm/pc/pc_jr/PCjr_Technical_Reference_Nov83.pdf"
           }
         ]
@@ -403,24 +355,19 @@
         "@title": "PC Hard Drives",
         "@documents": [
           {
-            "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter, August 1984",
-            "@file": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1984-08.pdf",
+            "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter (Aug 1984)",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqENe6VOosR1hAu0Qg?e=rn4aJb",
-            "@cover": ".jpg",
-            "@source": ""
+            "@cover": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1984-08.jpg",
           },
           {
-            "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter, August 1986",
-            "@file": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1986-08.pdf",
+            "@title": "IBM 5170 Fixed Disk and Diskette Drive Adapter (Aug 1986)",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEON8qBHJZmbQ5fGw?e=6iAC5s",
-            "@cover": ".jpg",
-            "@source": ""
+            "@cover": "IBM_5170_Fixed_Disk_and_Diskette_Drive_Adapter_1986-08.jpg",
           },
           {
             "@title": "IBM 5170 20MB Fixed Disk Drive",
-            "@file": "IBM_5170_20MB_Fixed_Disk_Drive.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-lHGhPhb9qr8O7ilA?e=82OOXR",
-            "@cover": ".jpg",
+            "@cover": "IBM_5170_20MB_Fixed_Disk_Drive.jpg",
             "@source": "PCjs"
           }
         ]
@@ -430,37 +377,28 @@
         "@documents": [
           {
             "@title": "IBM Monochrome Display and Printer Adapter",
-            "@file": "IBM_MDA.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFPxcuda7FDcNW7BA?e=kOj1AO",
-            "@cover": ".jpg",
-            "@source": ""
+            "@cover": "IBM_MDA.jpg",
+            "@source": "https://minuszerodegrees.net/oa/OA%20-%20IBM%20Monochrome%20Display%20and%20Printer%20Adapter.pdf"
           },
           {
             "@title": "IBM Color/Graphics Monitor Adapter",
-            "@file": "IBM_CGA.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFOOxc92qIsgXiyYw?e=MlkUfH",
-            "@cover": ".jpg",
-            "@source": ""
+            "@cover": "IBM_CGA.jpg",
+            "@source": "https://minuszerodegrees.net/oa/OA%20-%20IBM%20Color%20Graphics%20Monitor%20Adapter%20(CGA).pdf"
           },
           {
             "@title": "IBM Enhanced Graphics Adapter",
-            "@file": "IBM_EGA_1984-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqETcfH-OJbF8XjjQA?e=9iPpJa",
-            "@cover": ".jpg",
-            "@source": ""
+            "@cover": "IBM_EGA_1984-08.jpg",
+            "@source": "https://minuszerodegrees.net/oa/OA%20-%20IBM%20Enhanced%20Graphics%20Adapter.pdf"
           },
           {
             "@title": "IBM EGA Installation Instructions",
-            "@file": "IBM_EGA_Installation_Instructions_1984-08.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqESv2LrxGsMlNweRA?e=3ABlJl",
-            "@cover": ".jpg",
-            "@source": ""
+            "@cover": "IBM_EGA_Installation_Instructions_1984-08.jpg",
+            "@source": "https://www.minuszerodegrees.net/ibm_ega/IBM%20EGA%20-%20Installation%20Instructions.pdf"
           },
           {
             "@title": "IBM VGA Technical Reference (Excerpt)",
-            "@file": "IBM_VGA_Technical_Reference-Excerpt.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFQgmvof3IQdrHQKQ?e=y8QOzc",
-            "@cover": ".jpg",
+            "@cover": "IBM_VGA_Technical_Reference-Excerpt.jpg",
             "@source": "PCjs"
           }
         ]

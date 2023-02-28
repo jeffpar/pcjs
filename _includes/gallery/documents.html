@@ -1,7 +1,7 @@
 {% assign title = include.title | default: "Documents" %}
 {% assign group = include.group | default: "@documents" %}
 {% assign group_link = include.link %}
-{% assign group_id = title | slugify %}
+{% assign group_id = group_link | slugify | prepend: "gallery-" %}
 {% assign cover_width = include.width | default: "200" %}
 {% assign cover_height = include.height | default: "" %}
 {% assign path = include.path | default: include.target | default: page.permalink %}
@@ -86,13 +86,22 @@
           {%- if doc_title and doc_title != "" and doc_tags contains doc_tag -%}
             {%- assign doc_file = doc['@file'] -%}
             {%- assign doc_id = doc_file | default: doc_title | slugify -%}
-            {%- assign doc_source = doc['@source'] -%}{%- if doc_source contains "PCjs" or doc_source contains "pcjs" -%}{%- assign doc_source = "" -%}{%- endif -%}
+            {%- assign doc_note = "" %}
+            {%- assign doc_source = doc['@source'] -%}
+            {%- if doc_source contains "PCjs" or doc_source contains "pcjs" -%}
+              {%- assign doc_source = "" -%}
+              {%- assign doc_note = "From the PCjs Archives" -%}
+            {%- endif -%}
             {%- capture doc_path -%}{{ cur_path }}/{{ doc_file }}{%- endcapture -%}
             {%- assign doc_link = doc['@link'] | default: doc_source | default: doc_path -%}
             {%- if doc_link == doc_source %}
               {%- assign doc_source = "" %}
             {%- endif %}
             {%- assign doc_cover = doc['@cover'] | default: "/documents/covers/default.jpg" -%}
+            {%- if doc_cover == "gif" or doc_cover == "jpg" or doc_cover == "jpeg" or doc_cover == "png" -%}
+              {%- assign doc_cover = "." | append: doc_cover -%}
+            {%- endif %}
+            {%- assign doc_cover0 = doc_cover | slice: 0 %}
             {%- if doc_link contains "http" -%}{%- assign doc_external = true -%}{%- else -%}{%- assign doc_external = false -%}{%- endif -%}
             {%- comment -%}
               For now, we only embed the first document so marked, to keep things simple.
@@ -106,10 +115,14 @@
             {%- endif -%}
             {%- assign doc_width = doc['@width'] | default: cover_width -%}
             {%- assign doc_height = doc['@height'] | default: cover_height -%}
-            {%- if doc_cover == ".jpg" or doc_cover == ".png" -%}
+            {%- if doc_cover0 == "." -%}
               {%- capture doc_cover -%}{{ cur_path }}/covers/{{ doc_file | replace: ".pdf",doc_cover | replace: ".png",doc_cover }}{%- endcapture -%}
+            {%- else %}
+              {%- unless doc_cover contains "/" %}
+                {%- capture doc_cover -%}{{ cur_path }}/covers/{{ doc_cover }}{%- endcapture -%}
+              {%- endunless %}
             {%- endif -%}
-            {%- include gallery/image.html id=doc_id image=doc_cover file=doc_file link=doc_link title=doc_title width=doc_width height=doc_height source=doc_source external=doc_external -%}
+            {%- include gallery/image.html id=doc_id image=doc_cover file=doc_file link=doc_link title=doc_title width=doc_width height=doc_height note=doc_note source=doc_source external=doc_external -%}
           {%- endif -%}
         {%- endfor -%}
         {%- include gallery/end.html -%}
