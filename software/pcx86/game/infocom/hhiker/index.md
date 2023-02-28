@@ -38,6 +38,6 @@ References
 
 [MobyGames](https://www.mobygames.com/game/hitchhikers-guide-to-the-galaxy)
 
-![Front Cover](https://www.mobygames.com/images/covers/l/25-the-hitchhiker-s-guide-to-the-galaxy-dos-front-cover.jpg)
+![Box Front Cover]({{ site.software.gamedisks.server }}/pcx86/game/infocom/hhiker/HHIKER-BOX1.jpg)
 
-![Back Cover](https://www.mobygames.com/images/covers/l/77-the-hitchhiker-s-guide-to-the-galaxy-dos-back-cover.jpg)
+![Box Back Cover]({{ site.software.gamedisks.server }}/pcx86/game/infocom/hhiker/HHIKER-BOX2.jpg)

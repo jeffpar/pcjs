@@ -35,6 +35,10 @@ References
 
 [MobyGames](https://www.mobygames.com/game/dos/leather-goddesses-of-phobos)
 
+![Box Front Cover]({{ site.software.gamedisks.server }}/pcx86/game/infocom/phobos/PHOBOS-BOX1.jpg)
+
+![Box Back Cover]({{ site.software.gamedisks.server }}/pcx86/game/infocom/phobos/PHOBOS-BOX2.jpg)
+
 [Internet Archive: Leather Goddesses of Phobos: Manual](https://archive.org/download/Leather_Goddesses_of_Phobos/Leather_Goddesses_of_Phobos.pdf)
 
 [Internet Archive: Leather Goddesses of Phobos: Internal Documents](https://archive.org/download/InfocomCabinetLeatherGoddessesOfPhobos/Infocom_Cabinet_Leather_Goddesses_of_Phobos.pdf)

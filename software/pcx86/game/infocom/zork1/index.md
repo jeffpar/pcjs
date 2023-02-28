@@ -46,6 +46,6 @@ feature works only with standard non-copy-protected disk formats.
 
 [MobyGames](https://www.mobygames.com/game/zork-the-great-underground-empire)
 
-![Front Cover](https://www.mobygames.com/images/covers/l/2934-zork-the-great-underground-empire-dos-front-cover.jpg)
+![Box Front Cover]({{ site.software.gamedisks.server }}/pcx86/game/infocom/zork1/ZORK1-BOX1.jpg)
 
-![Back Cover](https://www.mobygames.com/images/covers/l/1742-zork-the-great-underground-empire-dos-back-cover.jpg)
+![Box Back Cover]({{ site.software.gamedisks.server }}/pcx86/game/infocom/zork1/ZORK1-BOX2.jpg)
