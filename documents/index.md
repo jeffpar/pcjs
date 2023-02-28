@@ -33,12 +33,12 @@ piece of hardware or software featured here) is filed under an appropriate categ
 
 There are a few gray areas.  For example, there are programming books that also came with supplemental software, and in a
 few cases, we have archived that software supplement as well.  So, because this is primarily a software-driven site, and to
-keep related materials together as much as possible, such a book will generally be filed with its **Software**, with a reference
-to the book within **Documents**.
+keep related materials together as much as possible, such a book will generally be filed with its **Software**, with a
+reference to the book within **Documents**.
 
 For example, see [Graphics for the IBM PC](/software/pcx86/sw/books/graphics_for_the_ibm_pc/), which is filed under
-**Software** / **IBM PC** / **Shareware** / **Books**.  However, you will also find the book referenced under
-**Documents** / **Books** / **Programming**, in the section titled "[Books with Software](/documents/books/programming/#books-with-software)".
+**Software** / **IBM PC** / **Shareware** / **Books**.  However, you will also find the book referenced under **Documents** /
+**Books** / **Programming**, in the section titled "[Books with Software](/documents/books/programming/#books-with-software)".
 
 {% include gallery/alldocs.html title="All Hardware Documents" root="hardware" %}
 
