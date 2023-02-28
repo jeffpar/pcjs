@@ -13,35 +13,30 @@
           {
             "@title": "AT&T 6300 GWBASIC Programmer's Guide (1985)",
             "@file": "ATT_PC_6300_Programmers_Guide_GWBASIC_1985.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFLW1snGb1Z-lrMhw?e=j71u9Z",
             "@cover": ".jpg",
             "@source": "http://bitsavers.org/pdf/att/6300/999-802-000IS_Programmers_Guide_PC6300_GWBASIC_by_Microsoft_1985.pdf"
           },
           {
             "@title": "AT&T 6300 PLUS ROM-BIOS Listing (1986)",
             "@file": "ATT_PC_6300_Plus_ROM-BIOS_Listing_1986.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFInlKWgh8AL81igA?e=M654eo",
             "@cover": ".jpg",
             "@source": "http://bitsavers.org/pdf/att/6300/ATT_Personal_Computer_6300_Plus_-_ROM-BIOS_Listing_-_Rel_2.05_Issue_1_-_1986.pdf"
           },
           {
             "@title": "AT&T 6300 System Programmer's Guide (1985)",
             "@file": "ATT_PC_6300_System_Programmers_Guide_1985.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFNtVfFVzNzMvJhpw?e=hM1Yg2",
             "@cover": ".jpg",
             "@source": "http://bitsavers.org/pdf/att/6300/999-802-200IS_System_Programmers_Guide_PC6300_1985.pdf"
           },
           {
             "@title": "AT&T 6300 Service Manual",
             "@file": "ATT_PC_6300_Service_Manual.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFMs31Uchp2WucCxw?e=Jj2rR2",
             "@cover": ".jpg",
             "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Service_Manual.pdf"
           },
           {
             "@title": "AT&T 6300 User's Guide",
             "@file": "ATT_PC_6300_Users_Guide.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heFJ8XlR3Snxd9EnBQ?e=qixCcK",
             "@cover": ".jpg",
             "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Users_Guide.pdf"
           }
@@ -60,7 +55,6 @@
           {
             "@title": "Columbia Data Products MP Operations Guide (1983)",
             "@file": "Columbia_Data_Products_MPC_1600-Operations_Guide.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMScGXgEVN-4-XyfA?e=2iQVlh",
             "@cover": ".jpg",
             "@source": "http://www.minuszerodegrees.net/manuals/Columbia%20Data%20Products/Columbia%20Data%20Products%20MPC%201600%20-%20Operations%20Guide.pdf"
           }
@@ -958,7 +952,7 @@
     "vt100": {
       "@title": "VT100",
       "@instances": {
-        "demo": {
+        "": {
           "@title": "VT100 Terminal",
           "@redirect_from": "/devices/pc8080/machine/vt100/new/",
           "@documents": [
@@ -1141,7 +1135,7 @@
     "ti57": {
       "@title": "TI-57 Calculator",
       "@instances": {
-        "demo": {
+        "": {
           "@title": "TI-57",
           "@redirect_from": ["/devices/ti57/", "/devices/ti57/machine", "/machines/ti/ti57/docs/"],
           "@documents": [
