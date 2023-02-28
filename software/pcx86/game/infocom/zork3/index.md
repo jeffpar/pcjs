@@ -44,6 +44,6 @@ References
 
 [MobyGames](https://www.mobygames.com/game/zork-iii-the-dungeon-master)
 
-![Front Cover](https://www.mobygames.com/images/covers/l/2879-zork-iii-the-dungeon-master-dos-front-cover.jpg)
+![Box Front Cover]({{ site.software.gamedisks.server }}/pcx86/game/infocom/zork3/ZORK3-BOX1.jpg)
 
-![Back Cover](https://www.mobygames.com/images/covers/l/2880-zork-iii-the-dungeon-master-dos-back-cover.jpg)
+![Box Back Cover]({{ site.software.gamedisks.server }}/pcx86/game/infocom/zork3/ZORK3-BOX2.jpg)

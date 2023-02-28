@@ -44,6 +44,6 @@ References
 
 [MobyGames](https://www.mobygames.com/game/zork-ii-the-wizard-of-frobozz)
 
-![Front Cover](https://www.mobygames.com/images/covers/l/2877-zork-ii-the-wizard-of-frobozz-dos-front-cover.jpg)
+![Box Front Cover]({{ site.software.gamedisks.server }}/pcx86/game/infocom/zork2/ZORK2-BOX1.jpg)
 
-![Back Cover](https://www.mobygames.com/images/covers/l/2878-zork-ii-the-wizard-of-frobozz-dos-back-cover.jpg)
+![Box Back Cover]({{ site.software.gamedisks.server }}/pcx86/game/infocom/zork2/ZORK2-BOX2.jpg)

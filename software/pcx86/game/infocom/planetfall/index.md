@@ -39,6 +39,6 @@ References
 
 [MobyGames](https://www.mobygames.com/game/planetfall)
 
-![Front Cover](https://www.mobygames.com/images/covers/l/1657-planetfall-dos-front-cover.jpg)
+![Box Front Cover]({{ site.software.gamedisks.server }}/pcx86/game/infocom/planetfall/PLANETFALL-BOX1.jpg)
 
-![Back Cover](https://www.mobygames.com/images/covers/l/1658-planetfall-dos-back-cover.jpg)
+![Box Back Cover]({{ site.software.gamedisks.server }}/pcx86/game/infocom/planetfall/PLANETFALL-BOX2.jpg)
