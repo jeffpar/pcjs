@@ -9,10 +9,8 @@ machines:
     config: /machines/pcx86/ibm/5170/ega/640kb/rev3/machine.xml
     drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     autoMount:
-      A:
-        name: None
-      B:
-        name: Jeff's MS-DOS 3.20 Tools
+      A: "None"
+      B: "Jeff's MS-DOS 3.20 Tools"
 ---
 
 Much like the [PCjs Document Archive](/documents/pcjs/), this collection is an assortment of
@@ -24,6 +22,7 @@ Some disks from this collection include:
   - [COMPAQ DeskPro 386 (1986)](/software/pcx86/diag/compaq/1986/)
   - [COMPAQ MS-DOS 3.10 (12-17-85)](/software/pcx86/sys/dos/compaq/3.10/#compaq-ms-dos-310-12-17-85)
   - [COMPAQ MS-DOS 3.31 (1987)](/software/pcx86/sys/dos/compaq/3.31/#directory-of-compaq-ms-dos-331-1987)
+  - [dBASE III 1.0](/software/pcx86/app/other/dbase3/1.0/)
   - [DoubleDOS 2.1F](/software/pcx86/sys/ext/softlogic/doubledos/2.1f/)
   - [Inside the IBM PC (1983)](/software/pcx86/sw/books/inside_the_ibm_pc/)
   - [Multitasking MS-DOS 4.00](/software/pcx86/sys/dos/microsoft/4.0M/)
@@ -41,7 +40,7 @@ Some disks from this collection include:
   - [Early OS/2 Prototypes](/software/pcx86/sys/os2/misc/) (eg, CP-DOS and FOOTBALL)
 
 You can probably find most or all of these disks on other software sites now, just as software from
-many other sites has found its way here, thanks to the Brownian motion of bits on the Internet.
+many other sites has found its way here, thanks to the continuous motion of bits on the Internet.
 
 Any other disks you see [below](#directory-listings) are primarily ones that don't neatly fit into another PCjs category,
 usually either because the disks contain a mixture of random/personal/unique content.
@@ -74,4 +73,4 @@ usually either because the disks contain a mixture of random/personal/unique con
 personal use.  Presumably to make more room on the disk, I had moved off a few MS-DOS 3.20 files (BACKUP.EXE,
 RESTORE.EXE, SHARE.EXE, TREE.EXE, and XCOPY.EXE), updated DEBUG.EXE, added MASM.EXE (v4.00), and then included
 a few files of my own (eg, PCPAL.EXE and HDISK.ASM).  FYI, this particular copy of PCPAL.EXE was saved with **Alt-Esc**
-configured as the activation key sequence. *--[@jeffpar](https://jeffpar.com)*
+configured as the activation key sequence. *--[{{ site.author }}]({{ site.author_url }})*

@@ -61,6 +61,6 @@ Finally, another shout-out to Paul Nankervis, who not only generously gave permi
 to use code from his JavaScript [PDP-11/70 Emulator (v1.4)](http://skn.noip.me/pdp11/pdp11.html), but has also patiently
 answered all my questions.
 
-I'm [@jeffpar](https://jeffpar.com) and I approve this blog post.
+I'm [{{ site.author }}]({{ site.author_url }}) and I approve this blog post.
 
 {% include machine.html id="test1170" %}

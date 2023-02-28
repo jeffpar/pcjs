@@ -11,7 +11,7 @@ machines:
 
 ## [LIFE.BAS](#listing)
 
-By Jeff Parsons
+By {{ site.author }}
 
 [Possibly adapted from a listing in one of those David Ahl books of "BASIC Games" -- I don't remember.]
 

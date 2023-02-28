@@ -45,9 +45,9 @@
 		<div class="common-bottom">
 			<p class="common-reference"></p>
 			<p class="common-copyright">
-				<span class="common-copyright"><a href="https://www.pcjs.org/">pcjs.org</a> © 2012-2023 by <a href="https://jeffpar.com">@jeffpar</a></span><br/>
+				<span class="common-copyright"><a href="https://www.pcjs.org/">pcjs.org</a> © 2012-2023 by <a href="https://github.com/jeffpar">Jeff Parsons</a></span><br/>
 				<span class="common-copyright"><a href="https://github.com/jeffpar/pcjs">PCjs</a> is released under <a href="https://www.pcjs.org/LICENSE.txt">MIT License</a></span><br/>
-				<span>Powered by <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a>, <a href="http://vanilla-js.com/" target="_blank">Vanilla JS</a>, and <a href="https://github.com/jeffpar" target="_blank">GitHub</a></span>
+				<span>Powered by <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a>, <a href="http://vanilla-js.com" target="_blank">Vanilla JS</a>, and <a href="https://github.com" target="_blank">GitHub</a></span>
 			</p>
 		</div>
 	</xsl:template>

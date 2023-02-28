@@ -11,7 +11,7 @@ machines:
 
 ## [CHECKERS.BAS](#listing)
 
-By Jeff Parsons
+By {{ site.author }}
 
 This was one of my first attempts at "game logic" and probably not a very good attempt, given my limited
 programming experience at the time, as well as the memory constraints (8K of RAM).
