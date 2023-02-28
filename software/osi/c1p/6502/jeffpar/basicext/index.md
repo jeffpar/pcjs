@@ -8,7 +8,7 @@ machines:
     type: c1p
 ---
 
-By Jeff Parsons
+By {{ site.author }}
 
 NOTE: I suspect the dump of the tape containing this machine-language program is either damaged or incomplete, which is unfortunate,
 because these were a nice set of [Enhancements and Patches](#handwritten-notes-on-osi-basic-enhancements) that I had created around 1980-1981

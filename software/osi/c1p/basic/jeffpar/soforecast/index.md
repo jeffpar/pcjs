@@ -11,7 +11,7 @@ machines:
 
 ## [SOFORECAST.BAS](#listing)
 
-By Jeff Parsons
+By {{ site.author }}
 
 This was a small program that my dad "commissioned" me to write in the late 70's.  He worked for many years at the
 Roseville Telephone Company in California, and the 1970's were probably challenging and exciting times for the company,
