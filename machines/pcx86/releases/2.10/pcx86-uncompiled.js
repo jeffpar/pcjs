@@ -80436,16 +80436,10 @@ class Computer extends Component {
      * disableDiagnostics()
      *
      * @this {Computer}
-     * @return {boolean} (true if diagnostics were, or already are, disabled; false if they remain enabled)
      */
     disableDiagnostics()
     {
         if (this.cDiagnosticScreens) {
-            if (this.nDiagnostics == 2) {
-                this.nDiagnostics++;
-                this.println("Press any key to continue...");
-                return false;
-            }
             for (let i = 0; i < this.aVideo.length; i++) {
                 let video = this.aVideo[i];
                 if (video) {
@@ -80473,6 +80467,55 @@ class Computer extends Component {
             this.cDiagnosticScreens = 0;
         }
         this.nDiagnostics = 0;
+    }
+
+    /**
+     * doneDiagnostics(aParms)
+     *
+     * Examines nDiagnostics state and reacts accordingly.  The states are:
+     *
+     *      0: diagnostics disabled
+     *      1: diagnostics enabled with timeout
+     *      2: diagnostics enabled with key prompt
+     *      3: diagnostics prompt issued, waiting for timeout
+     *      4: diagnostics prompt issues, waiting for key
+     *      5: diagnostics output complete (eg, timeout fired or key received)
+     *
+     * @this {Computer}
+     * @param {Array} aParms (array of parameters to pass to donePowerOn)
+     * @return {boolean} (true if diagnostics have been turned off, false if they remain enabled)
+     */
+    doneDiagnostics(aParms)
+    {
+        if (this.cDiagnosticScreens) {
+            if (this.nDiagnostics == 1) {
+                /*
+                 * If non-prompting diagnostic output is enabled, immediately advance the
+                 * state to completion and wait briefly before continuing with donePowerOn();
+                 * this allows the user to pause the machine (by tapping a shift key) if desired.
+                 */
+                this.nDiagnostics += 2;
+                setTimeout(function(cmp) {
+                    return function onDiagnosticTimeout() {
+                        cmp.notifyKbdEvent();
+                    };
+                }(this), 2000);
+                this.println("Initialization complete");
+            }
+            if (this.nDiagnostics == 2) {
+                this.nDiagnostics += 2;
+                this.println("Initialization complete, press a key to continue...");
+            }
+            if (this.nDiagnostics == 3 || this.nDiagnostics == 4) {
+                /*
+                 * When notifyKbdEvent() is called, it will call setReady(true), ending the wait().
+                 */
+                this.setReady(false);
+                this.wait(this.donePowerOn, aParms);
+                return false;
+            }
+            this.disableDiagnostics();
+        }
         return true;
     }
 
@@ -80506,7 +80549,8 @@ class Computer extends Component {
      * notifyKbdEvent(event, fDown)
      *
      * This is called by the Keyboard component for all key presses, and it is effectively a no-op except
-     * in the one special case where disableDiagnostics() has delayed powerOn until a key is pressed.
+     * in the one special case where disableDiagnostics() has delayed powerOn until a key is pressed.  This is
+     * also called without an event if we're waiting for a timeout to fire.
      *
      * @this {Computer}
      * @param {Object} [event]
@@ -80516,9 +80560,14 @@ class Computer extends Component {
     notifyKbdEvent(event, fDown)
     {
         let nDiagnostics = this.nDiagnostics;
-        if (this.nDiagnostics == 3) {
-            this.nDiagnostics++;
-            this.setReady();    // this may trigger a call to disableDiagnostics(), which is why we snapshot nDiagnostics
+        if (event && event.keyCode == 16 && this.nDiagnostics == 3) {
+            this.nDiagnostics++;        // if we're waiting for a timeout and a shift key was pressed, wait for another key
+            this.println("Machine paused, press another key to continue...");
+            event = null;
+        }
+        if (!event && this.nDiagnostics == 3 || event && fDown && this.nDiagnostics == 4) {
+            this.nDiagnostics = 5;
+            this.setReady();            // this may trigger a call to disableDiagnostics(), which is why we snapshot nDiagnostics
         }
         return !nDiagnostics;
     }
@@ -81023,16 +81072,12 @@ class Computer extends Component {
      * This is nothing more than a continuation of powerOn(), giving us the option of calling wait() one more time.
      *
      * @this {Computer}
-     * @param {Array} aParms containing [stateComputer, resume, fRestore]
+     * @param {Array} aParms ([stateComputer, resume, fRestore])
      */
     donePowerOn(aParms)
     {
         if (!this.flags.initDone) {
-            if (!this.disableDiagnostics()) {
-                this.setReady(false);
-                this.wait(this.donePowerOn, aParms);
-                return;
-            }
+            if (!this.doneDiagnostics(aParms)) return;
             this.flags.initDone = true;
         }
 
@@ -81487,7 +81532,7 @@ class Computer extends Component {
      *
      * @this {Computer}
      * @param {boolean} [fPrompt]
-     * @returns {string|null|undefined}
+     * @return {string|null|undefined}
      */
     queryUserID(fPrompt)
     {

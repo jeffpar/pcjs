@@ -5,7 +5,7 @@ permalink: /documents/manuals/intel/80286/extra_prefixes/
 redirect_from: /pubs/pc/reference/intel/80286/extra_prefixes/
 ---
 
-[The following information is from an Intel document titled "80286 ARPL and Overlength Instructions, 15 October 1984"]
+[The following information is from an Intel document titled "[80286 ARPL and Overlength Instructions, 15 October 1984](/documents/manuals/intel/80286/files/80286--ARPL--1984-10-15.pdf)"]
 
 ### Instructions Longer than 10 Bytes
 

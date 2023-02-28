@@ -5,8 +5,7 @@ permalink: /documents/manuals/intel/80286/real_mode/
 redirect_from: /pubs/pc/reference/intel/80286/real_mode/
 ---
 
-[The following information is from an undated 15-page Intel document titled "Undocumented iAPX 286 Test Instruction",
-pp. 4-12]
+[The following information is from an undated 15-page Intel document titled "[Undocumented iAPX 286 Test Instruction](/documents/manuals/intel/80286/files/80286--LOADALL.pdf#page=4)", pp. 4-12]
 
 ### Executing Real Mode Programs in Protected Mode
 

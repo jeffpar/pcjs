@@ -1170,35 +1170,42 @@
           {
             "@title": "80286 LOADALL Instruction",
             "@link": "/documents/manuals/intel/80286/loadall/",
-            "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%219674&authkey=ACh5u1RonNCbNm8&em=2",
-            "@file": "80286--LOADALL.pdf",
+            "@embedSkip": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%219674&authkey=ACh5u1RonNCbNm8&em=2",
+            "@file": "/documents/manuals/intel/80286/files/80286--LOADALL.pdf",
             "@cover": "/documents/manuals/intel/80286/covers/80286--LOADALL.jpg",
-            "@source": "",
-            "@tags": "80286,correspondence"
+            "@source": "PCjs",
+            "@tags": "80286,loadall"
           },
           {
             "@title": "80286 ARPL and Overlength Instructions (Oct 15, 1984)",
             "@link": "/documents/manuals/intel/80286/arpl/",
-            "@file": "80286--ARPL--1984-10-15.pdf",
+            "@file": "/documents/manuals/intel/80286/files/80286--ARPL--1984-10-15.pdf",
             "@cover": "/documents/manuals/intel/80286/covers/80286--ARPL--1984-10-15.jpg",
-            "@source": "",
-            "@tags": "80286,errata"
+            "@source": "PCjs",
+            "@tags": "80286,arpl,errata"
           },
           {
             "@title": "80286 REP MOVS and REP INS Restartability (Oct 15, 1984)",
             "@link": "/documents/manuals/intel/80286/rep_restart/",
-            "@file": "80286-B2-B3--REP--1984-10-15.pdf",
+            "@file": "/documents/manuals/intel/80286/files/80286-B2-B3--REP--1984-10-15.pdf",
             "@cover": "/documents/manuals/intel/80286/covers/80286-B2-B3--REP--1984-10-15.jpg",
-            "@source": "",
-            "@tags": "80286,errata"
+            "@source": "PCjs",
+            "@tags": "80286,rep,errata"
           },
           {
             "@title": "80286 B-2/B-3 Errata (Nov 21, 1984)",
             "@link": "/documents/manuals/intel/80286/b2_b3_info/",
-            "@file": "80286-B2-B3--Errata--1984-11-21.pdf",
+            "@file": "/documents/manuals/intel/80286/files/80286-B2-B3--Errata--1984-11-21.pdf",
             "@cover": "/documents/manuals/intel/80286/covers/80286-B2-B3--Errata--1984-11-21.jpg",
-            "@source": "",
-            "@tags": "80286,errata"
+            "@source": "PCjs",
+            "@tags": "80286,b-2,errata"
+          },
+          {
+            "@title": "80286 C-2 Errata (Nov 21, 1984)",
+            "@link": "/documents/manuals/intel/80286/files/80286-B2-B3--Errata--1984-11-21.pdf",
+            "@cover": "/documents/manuals/intel/80286/covers/80286-B2-B3--Errata--1984-11-21.jpg",
+            "@source": "PCjs",
+            "@tags": "80286,c-2,errata"
           },
           {
             "@title": "80286/80287 Programmer Reference (1987)",
