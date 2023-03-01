@@ -6021,32 +6021,38 @@
 							{
 								"@title": "MS Word 3.00 (Disk 1)",
 								"@diskette": "WORD30-DISK1-PROGRAM.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 3.00 (Disk 2)",
 								"@diskette": "WORD30-DISK2-SPELL.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 3.00 (Disk 3)",
 								"@diskette": "WORD30-DISK3-UTILITIES.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 3.00 (Disk 4)",
 								"@diskette": "WORD30-DISK4-PRINTER.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 3.00 (Disk 5)",
 								"@diskette": "WORD30-DISK5-LEARNMOU.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 3.00 (Disk 6)",
 								"@diskette": "WORD30-DISK6-LEARNKBD.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							}
 						]
 					},
@@ -6056,7 +6062,8 @@
 							{
 								"@title": "MS Word 3.10 (Disk 1)",
 								"@diskette": "WORD31-DISK1-PROGRAM.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 3.10 (Disk 2)",
