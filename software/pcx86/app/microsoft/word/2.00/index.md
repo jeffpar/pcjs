@@ -170,6 +170,23 @@ machines:
 
 [[Source](https://winworldpc.com/product/microsoft-word/2x-dos)]
 
+### Directory of MS Word 2.00 (Disk 4)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    LESSONS  CTX    188066   1-18-85   1:43a
+    LEARN    COM     26252   1-29-85  12:18p
+    LW       COD     20894   1-30-85   9:35a
+    LW       DAT     15928   1-30-85   9:35a
+    LESSONS  SCN     48891   1-18-85   1:43a
+    LESSONS  SOB     47190   1-18-85   1:43a
+    LESSONS  CHK       104   4-20-86   3:28p
+            7 file(s)     347325 bytes
+                           11264 bytes free
+
+![MS Word 2.00 (Disk 4)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/2.00/WORD20-DISK4.jpg)
+
 ### Copy-Protection Information
 
     MFM Sector
@@ -860,20 +877,3 @@ machines:
     0068| 00 8E 01 00 00 00 00 00 | ........
     0070| 00 00 00 00 00 00 00 00 | ........
     0078| 00 00 00 00 00 00 00 00 | ........
-
-### Directory of MS Word 2.00 (Disk 4)
-
-     Volume in drive A has no label
-     Directory of A:\
-
-    LESSONS  CTX    188066   1-18-85   1:43a
-    LEARN    COM     26252   1-29-85  12:18p
-    LW       COD     20894   1-30-85   9:35a
-    LW       DAT     15928   1-30-85   9:35a
-    LESSONS  SCN     48891   1-18-85   1:43a
-    LESSONS  SOB     47190   1-18-85   1:43a
-    LESSONS  CHK       104   4-20-86   3:28p
-            7 file(s)     347325 bytes
-                           11264 bytes free
-
-![MS Word 2.00 (Disk 4)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/2.00/WORD20-DISK4.jpg)
