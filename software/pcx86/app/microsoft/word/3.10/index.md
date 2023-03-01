@@ -29,6 +29,8 @@ machines:
             6 file(s)     355104 bytes
                             5120 bytes free
 
+![MS Word 3.10 (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/3.10/WORD31-DISK1-PROGRAM.jpg)
+
 ### Directory of MS Word 3.10 (Disk 2)
 
      Volume in drive A is SPELL DISK

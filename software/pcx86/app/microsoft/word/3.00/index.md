@@ -30,6 +30,8 @@ machines:
             5 file(s)     328378 bytes
                            31744 bytes free
 
+![MS Word 3.00 (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/3.00/WORD30-DISK1-PROGRAM.jpg)
+
 ### Directory of MS Word 3.00 (Disk 2)
 
      Volume in drive A is SPELL DISK
@@ -50,6 +52,8 @@ machines:
     MARKFIX  COM      6932   3-24-86  12:00p
            13 file(s)     315836 bytes
                            39936 bytes free
+
+![MS Word 3.00 (Disk 2)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/3.00/WORD30-DISK2-SPELL.jpg)
 
 ### Directory of MS Word 3.00 (Disk 3)
 
@@ -81,6 +85,8 @@ machines:
     WORD     PIF       369   4-04-86  12:00p
            23 file(s)     348215 bytes
                             3072 bytes free
+
+![MS Word 3.00 (Disk 3)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/3.00/WORD30-DISK3-UTILITIES.jpg)
 
 ### Directory of MS Word 3.00 (Disk 4)
 
@@ -197,6 +203,8 @@ machines:
           107 file(s)     308076 bytes
                                0 bytes free
 
+![MS Word 3.00 (Disk 4)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/3.00/WORD30-DISK4-PRINTER.jpg)
+
 ### Directory of MS Word 3.00 (Disk 5)
 
      Volume in drive A is LEARN MOUSE
@@ -211,6 +219,8 @@ machines:
             6 file(s)     357798 bytes
                             2048 bytes free
 
+![MS Word 3.00 (Disk 5)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/3.00/WORD30-DISK5-LEARNMOU.jpg)
+
 ### Directory of MS Word 3.00 (Disk 6)
 
      Volume in drive A is LEARN KEYBD
@@ -224,3 +234,5 @@ machines:
     LEARN    PIF       369   4-04-86  12:00p
             6 file(s)     357681 bytes
                             2048 bytes free
+
+![MS Word 3.00 (Disk 6)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/3.00/WORD30-DISK6-LEARNKBD.jpg)
