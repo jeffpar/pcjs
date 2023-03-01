@@ -6015,6 +6015,42 @@
 							}
 						]
 					},
+					"2.00": {
+						"@title": "Microsoft Word 2.00",
+						"@media": [
+							{
+								"@title": "MS Word 2.00 (Disk 1)",
+								"@diskette": "WORD20-DISK1.json",
+								"@format": "PC360K",
+								"@kryoflux": true,
+								"@args": "--suppData=/software/pcx86/app/microsoft/word/2.00/index.md",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 2.00 (Disk 1 Backup)",
+								"@diskette": "WORD20-DISK1-BACKUP.json",
+								"@format": "PC360K",
+								"@kryoflux": true,
+								"@args": "--suppData=/software/pcx86/app/microsoft/word/2.00/index.md",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 2.00 (Disk 2)",
+								"@diskette": "WORD20-DISK2.json",
+								"@format": "PC360K",
+								"@kryoflux": true,
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 2.00 (Disk 3)",
+								"@diskette": "WORD20-DISK3.json",
+								"@format": "PC360K",
+								"@kryoflux": true,
+								"@photo": "jpg"
+							}
+						],
+						"@source": "https://winworldpc.com/product/microsoft-word/2x-dos"
+					},
 					"3.00": {
 						"@title": "Microsoft Word 3.00",
 						"@media": [
@@ -6283,32 +6319,38 @@
 							{
 								"@title": "Word for Windows 2.0c (Disk 1)",
 								"@diskette": "WINWORD20-DISK1.json",
-								"@format": "PC1440K"
+								"@format": "PC1440K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "Word for Windows 2.0c (Disk 2)",
 								"@diskette": "WINWORD20-DISK2.json",
-								"@format": "PC1440K"
+								"@format": "PC1440K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "Word for Windows 2.0c (Disk 3)",
 								"@diskette": "WINWORD20-DISK3.json",
-								"@format": "PC1440K"
+								"@format": "PC1440K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "Word for Windows 2.0c (Disk 4)",
 								"@diskette": "WINWORD20-DISK4.json",
-								"@format": "PC1440K"
+								"@format": "PC1440K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "Word for Windows 2.0c (Disk 5)",
 								"@diskette": "WINWORD20-DISK5.json",
-								"@format": "PC1440K"
+								"@format": "PC1440K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "Word for Windows 2.0c (Disk 6)",
 								"@diskette": "WINWORD20-DISK6.json",
-								"@format": "PC1440K"
+								"@format": "PC1440K",
+								"@photo": "jpg"
 							}
 						]
 					}
