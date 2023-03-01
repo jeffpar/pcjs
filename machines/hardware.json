@@ -13,31 +13,31 @@
           {
             "@title": "AT&T 6300 GWBASIC Programmer's Guide (1985)",
             "@file": "ATT_PC_6300_Programmers_Guide_GWBASIC_1985.pdf",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://bitsavers.org/pdf/att/6300/999-802-000IS_Programmers_Guide_PC6300_GWBASIC_by_Microsoft_1985.pdf"
           },
           {
             "@title": "AT&T 6300 PLUS ROM-BIOS Listing (1986)",
             "@file": "ATT_PC_6300_Plus_ROM-BIOS_Listing_1986.pdf",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://bitsavers.org/pdf/att/6300/ATT_Personal_Computer_6300_Plus_-_ROM-BIOS_Listing_-_Rel_2.05_Issue_1_-_1986.pdf"
           },
           {
             "@title": "AT&T 6300 System Programmer's Guide (1985)",
             "@file": "ATT_PC_6300_System_Programmers_Guide_1985.pdf",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://bitsavers.org/pdf/att/6300/999-802-200IS_System_Programmers_Guide_PC6300_1985.pdf"
           },
           {
             "@title": "AT&T 6300 Service Manual",
             "@file": "ATT_PC_6300_Service_Manual.pdf",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Service_Manual.pdf"
           },
           {
             "@title": "AT&T 6300 User's Guide",
             "@file": "ATT_PC_6300_Users_Guide.pdf",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://bitsavers.org/pdf/att/6300/ATT_PC_6300_Users_Guide.pdf"
           }
         ]
@@ -55,7 +55,7 @@
           {
             "@title": "Columbia Data Products MP Operations Guide (1983)",
             "@file": "Columbia_Data_Products_MPC_1600-Operations_Guide.pdf",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://www.minuszerodegrees.net/manuals/Columbia%20Data%20Products/Columbia%20Data%20Products%20MPC%201600%20-%20Operations%20Guide.pdf"
           }
         ]
@@ -95,35 +95,35 @@
             "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, May 1987)",
             "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol2_1987-05.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq463rsLHiJe9AY7FQ?e=Xxtt3j",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "PCjs"
           },
           {
             "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, Dec 1987)",
             "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol1_1987-12.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvAnh2ZAxwmv7UMrSw?e=nQPirJ",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "PCjs"
           },
           {
             "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, Dec 1987)",
             "@file": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol2_1987-12.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gvAok6a1GZWGWEvr-g?e=EToJaL",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "PCjs"
           },
           {
             "@title": "COMPAQ DeskPro 286 Operations Guide (Feb 1987)",
             "@file": "COMPAQ_DeskPro_286_Operations_Guide_1987-02.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq1_tSCFGeiC6Yghpw?e=wI7uEo",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "PCjs"
           },
           {
             "@title": "COMPAQ DeskPro 286 Operations Guide - READ THIS FIRST (Sep 1987)",
             "@file": "COMPAQ_DeskPro_286_Operations_Guide_READ_THIS_FIRST_1987-09.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq4Cb6j-SlhNicPrCg?e=cGbEsS",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "PCjs"
           }
         ]
@@ -135,14 +135,14 @@
             "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume I, Sep 1986)",
             "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol1_1986-09.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kRDehAMRp7BDfn0A?e=MNNw9w",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "PCjs"
           },
           {
             "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume II, Sep 1986)",
             "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol2_1986-09.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kS9Xp8xd_kHMKCqg?e=fWqJ0F",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "PCjs"
           },
           {
@@ -159,7 +159,7 @@
             "@title": "COMPAQ DeskPro 386/25 Technical Reference Guide (Volume I, Aug 1988)",
             "@file": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol1_1988-08.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq5BThwmEpfyp0EBdA?e=53SAyY",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "PCjs"
           },
           {
@@ -417,28 +417,28 @@
             "@title": "Programmer's Reference Manual (Z-100 Series)",
             "@file": "Z-100_Programmers_Reference_Manual-OCR.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMO1vgXSvBjIOkc3Q?e=qgpTCc",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://planemo.org/retro/downloads/z100/manuals/Z-100%20Programmers%20Reference%20Manual-OCR.pdf"
           },
           {
             "@title": "Z-150 User's Guide",
             "@file": "Zenith_Z-150_PC_Users_and_Operations_Manual_Guide.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMPDkwuMejqkVxIlw?e=VsZFfo",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://bitsavers.org/pdf/zenith/z150/Zenith_Z-150_PC_Users_and_Operations_Manual_Guide.pdf"
           },
           {
             "@title": "Z-150 Service Manuals",
             "@file": "Zenith_Z-150_PC_Service_Manuals.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMRQSy0MqaRkMLS1g?e=7jb8nH",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://www.minuszerodegrees.net/manuals/Zenith%20Data%20Systems/Zenith%20Z-150%20PC%20-%20Service%20Manual.pdf"
           },
           {
             "@title": "Z-150 Brochure",
             "@file": "ZDS-Z150.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heMTIvsHMytwFM_6wg?e=rpMsYK",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "https://computerarchive.org/files/comp/ad/zenith/ZDS-Z150.pdf"
           }
         ]
@@ -469,7 +469,7 @@
             "@title": "PDP-10 System Reference Manual (May 1968)",
             "@file": "DEC-10-HGAA-D_PDP-10_System_Reference_Manual_May1968.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp1fP3wKOXBGsZETkQ",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://bitsavers.org/pdf/dec/pdp10/KA10/DEC-10-HGAA-D_PDP-10_System_Reference_Manual_May1968.pdf",
             "@tags": "hardware"
           }
@@ -482,7 +482,7 @@
             "@title": "DECSYSTEM-10/DECSYSTEM-20 Processor Reference Manual (Jun 1982)",
             "@file": "AA-H391A-TK_DECsystem-10_DECSYSTEM-20_Processor_Reference_Jun1982.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp1jncpU_jALLLkWbQ",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://bitsavers.org/pdf/dec/pdp10/TOPS10_softwareNotebooks/vol05/AA-H391A-TK_DECsystem-10_DECSYSTEM-20_Processor_Reference_Jun1982.pdf",
             "@tags": "hardware"
           }
@@ -493,7 +493,7 @@
           "@title": "MACRO-10 Assembler Programmer's Reference Manual (Jun 1972)",
           "@file": "Macro_Assembler_Reference_Manual-Jun72.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp1i3qATlvub3JxoDQ",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp10/TOPS10/1973_Assembly_Language_Handbook/02_1973AsmRef_macro.pdf",
           "@tags": "software,macro10"
         },
@@ -501,7 +501,7 @@
           "@title": "MACRO-10 Assembler Programmer's Reference Manual (Apr 1978)",
           "@file": "Macro_Assembler_Reference_Manual-Apr78.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp1hxEi9aXmTStmyhA",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://www.livingcomputers.org/Discover/Online-Systems/User-Documentation/Tops-10-v7-04/4_Macro_Assembler_Reference_Manual.aspx",
           "@tags": "software,macro10"
         }
@@ -586,7 +586,7 @@
           "@title": "PDP-11/20 Handbook (1969)",
           "@file": "PDP1120_Handbook_1969.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4H3X0WfHlTGsvvLQ",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://research.microsoft.com/en-us/um/people/gbell/Digital/PDP%2011%20Handbook%201969.pdf",
           "@tags": "hardware,1120"
         },
@@ -594,7 +594,7 @@
           "@title": "PDP-11/20 Handbook (1971)",
           "@file": "PDP1120_Handbook_1971.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5O19e4cBRGbdaWgw",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/handbooks/PDP1120_Handbook_1972.pdf",
           "@tags": "hardware,1120"
         },
@@ -602,7 +602,7 @@
           "@title": "PDP-11/40 Handbook (1972)",
           "@file": "PDP1140_Handbook_1972.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4s5icyHXp3hgMqrg",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/handbooks/PDP-11_40_Processor_Handbook_1972.pdf",
           "@tags": "hardware,1140"
         },
@@ -610,7 +610,7 @@
           "@title": "PDP-11/45 Handbook (1973)",
           "@file": "PDP1145_Handbook_1973.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4s5icyHXp3hgMqrg",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/handbooks/PDP1145_Handbook_1973.pdf",
           "@tags": "hardware,1145"
         },
@@ -618,7 +618,7 @@
           "@title": "PDP-11/70 Handbook (1976)",
           "@file": "PDP1170_Handbook_1976.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5IB50VEytKiQFzWw",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/1170/PDP-11_70_Handbook_1977-78.pdf",
           "@tags": "hardware,1170"
         },
@@ -626,7 +626,7 @@
           "@title": "PDP-11/70 Handbook (1979)",
           "@file": "PDP1170_Handbook_1979.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5Qp06CeNiHG8RfCQ",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/handbooks/PDP11_Handbook1979.pdf",
           "@tags": "hardware,1170"
         },
@@ -634,7 +634,7 @@
           "@title": "PDP-11 Peripherals Handbook (1976)",
           "@file": "PDP11_Peripherals_Handbook_1976.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5KhoASjxuqs-WIMg",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "",
           "@tags": "hardware"
         },
@@ -642,7 +642,7 @@
           "@title": "KW11 Line Time Clock Manual (Apr 1973)",
           "@file": "KW11L_Apr73.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4vNKPjaYOst79MPQ",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/unibus/DEC-11-HKWB-D_KW11L_Apr73.pdf",
           "@tags": "hardware,kw11"
         },
@@ -650,7 +650,7 @@
           "@title": "KW11 Line Time Clock Manual (Jul 1974)",
           "@file": "KW11L_Jul74.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4xgYqGE7zUjzxDcA",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/1140/EK-KW11L_TM-002_KW11-L_Line_Time_Clock_Manual_Jul74.pdf",
           "@tags": "hardware,kw11"
         },
@@ -658,7 +658,7 @@
           "@title": "M9312 Bootstrap/Terminator Module Technical Manual (Oct 1979)",
           "@file": "M9312_Bootstrap_Terminator_Module_Technical_Manual.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5DO8zjR5aGaVQLfQ",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "",
           "@tags": "hardware,m9312"
         },
@@ -666,7 +666,7 @@
           "@title": "RK11 Moving Head Disk Drive Controller Manual (Feb 1975)",
           "@file": "EK-RK11D-MM-002.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4yGNCFfdg1i5imxQ",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "",
           "@tags": "hardware,rk11"
         },
@@ -674,7 +674,7 @@
           "@title": "RL11 User Guide (Sep 1981)",
           "@file": "EK-RL012-UG-005_Sep81.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5Jet0sMW2IMFFz7g",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "",
           "@tags": "hardware,rl11"
         },
@@ -682,7 +682,7 @@
           "@title": "RX11 floppy disk system user's manual (Nov 1976)",
           "@file": "EK-RX01-OP-001_RX11UM_Nov76.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5P8P3dVVsTbpw-IA",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "",
           "@tags": "hardware,rx11"
         },
@@ -690,7 +690,7 @@
           "@title": "MAINDEC-11-DZQAB MAINDEC USER REFERENCE MANUAL (Oct 1973)",
           "@file": "MAINDEC-11-DZQAB-B-D_User_Reference_Manual_Oct73.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4RIs4XFo4GvOtA6Q",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/xxdp/MAINDEC-11-DZQAB-B-D_MAINDEC_User_Reference_Manual_Oct73.pdf",
           "@tags": "diagnostic"
         },
@@ -698,7 +698,7 @@
           "@title": "MAINDEC-11-DCQKC 11/40 and 11/45 INSTRUCTION EXERCISER (Sep 1974)",
           "@file": "MAINDEC-11-DCQKC-D-D_1140_1145_INSTRUCTION_EXERCISER_Sep74.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4ebuUvYWlXBLnWCw",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/xxdp/diag_listings/1140_45/028_MAINDEC-11-DCQKC-D_D_1140_1145_INSTRUCTION_EXERCISER_Sep74.pdf",
           "@tags": "diagnostic,1140"
         },
@@ -706,7 +706,7 @@
           "@title": "MAINDEC-11-DZQXA XXDP USER MANUAL (Jul 1976)",
           "@file": "MAINDEC-11-DZQXA-I-D_XXDP_User_Manual_Jul76.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4Q8sZkmtVBwVQ_CA",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/xxdp/MAINDEC-11-DZQXA-I-D_XXDP_User_Manual_Jul76.pdf",
           "@tags": "diagnostic"
         },
@@ -714,7 +714,7 @@
           "@title": "CEKBAD0 11/70 CPU #1 (May 1980)",
           "@file": "AC-7962D-MC_CEKBAD0_1170_CPU_1_May80.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp46rtFNcs5qr4fnXw",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/AH-7963D-MC__PDP-11-70__11-70_CPU_%231__CEKBAD0__%28C%2975-80.pdf",
           "@tags": "diagnostic,1170"
         },
@@ -722,7 +722,7 @@
           "@title": "CEKBBF0 11/70 CPU #2 (May 1980)",
           "@file": "AC-7966F-MC_CEKBBF0_1170_CPU_2_May80.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4-Dzi21kgl138RAQ",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/AH-7968F-MC__PDP11-70__11-70_CPU_%232__CEKBBF0__%28C%2975,80.pdf",
           "@tags": "diagnostic,1170"
         },
@@ -730,7 +730,7 @@
           "@title": "CEKBCD0 11/70 CACHE #1 (May 1980)",
           "@file": "AC-0009D-MC_CEKBCD0_1170_CACHE_1_May80.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp48PagrfjrEdgHdgw",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/AH-0010D-MC__PDP11-70-74__11-70_CACHE_%231__CEKBCD0__%28C%2975,80.pdf",
           "@tags": "diagnostic,1170"
         },
@@ -738,7 +738,7 @@
           "@title": "CEKBDE0 11/70 CACHE #2 (May 1980)",
           "@file": "AC-7971E-MC_CEKBDE0_1170_CACHE_2_May80.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5F5Ij6QDClnIpJaQ",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/AH-7972E-MC__PDP11-70-74__11-70_CACHE_%232__CEKBDE0__%28C%2975,80.pdf",
           "@tags": "diagnostic,1170"
         },
@@ -746,7 +746,7 @@
           "@title": "CEKBEE0 11/70 MEM MGMT (May 1980)",
           "@file": "AC-7975E-MC_CEKBEE0_1170_MEM_MGMT_May80.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5Sc2Uv0TMEj2GOHQ",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/AH-7976E-MC__PDP-11-70__11-70_MEM_MGMT__CEKBEE0__%28C%2975,80.pdf",
           "@tags": "diagnostic,1170"
         },
@@ -754,7 +754,7 @@
           "@title": "CEKBFD0 11/70 UNIBUS MAP (May 1980)",
           "@file": "AC-7979D-MC_CEKBFD0_1170_UNIBUS_MAP_May80.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4fSquKY34o_Mm2Ew",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/AH-7980D-MC__11-70-11-74__11-70_UNIBUS_MAP__CEKBFD0__%28C%2975-80.pdf",
           "@tags": "diagnostic,1170"
         },
@@ -762,7 +762,7 @@
           "@title": "CEMJAD0 11/70 MEM TST (Feb 1979)",
           "@file": "AC-7990D-MC_CEMJAD0_1170_MEM_TST_Feb79.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4PO8xQXcJWsELPZw",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/AH-7991D-MC__MJ11__11-70_MEM_TST__CEMJAD0__%28C%2973-79.pdf",
           "@tags": "diagnostic,1170"
         },
@@ -770,7 +770,7 @@
           "@title": "CEQKCE0 11/70 INSTRUCTION EXERCISER (May 1980)",
           "@file": "AC-7994E-MC_CEQKCE0_1170_INSTRUCTION_EXERCISER_May80.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp47nXKy7moL1Rj5mA",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/microfiche/ftp.j-hoppe.de/bw/gh/AH-7996E-MC__PDP11-70-74__11-70_INST_EXR__CEQKCE0__%28C%2975,80.pdf",
           "@tags": "diagnostic,1170"
         },
@@ -778,7 +778,7 @@
           "@title": "CFKAAC0 11/34 BASIC INSTRUCTION TEST (Oct 1978)",
           "@file": "AC-8041C-MC_CFKAAC0_1134_BSC_INST_TST_Oct78.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4_Ea0YfE41H7d_vg",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/xxdp/diag_listings/1134/AC-8041C-MC_CFKAAC0-1134-Bsc-Inst-Tst_Oct78.pdf",
           "@tags": "diagnostic"
         },
@@ -786,7 +786,7 @@
           "@title": "CXCPAG0 INSTRUCTION TEST (Sep 1978)",
           "@file": "AC-E664G-MC_CXCPAG0_PROCESSOR_TEST_Sep78.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp45A6BVDlWfveNGYg",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "http://bitsavers.org/pdf/dec/pdp11/xxdp/x11_listings/AC-E664G-MC_CXCPAG0-Processor-test_Sep78.pdf",
           "@tags": "diagnostic"
         },
@@ -794,7 +794,7 @@
           "@title": "CXRKAG0 DEC/X11 RK11 MODULE (Sep 1978)",
           "@file": "AC-E676G-MC_CXRKAG0-RK11_Sep78.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4ruGrDhlUHnmSuZw",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "",
           "@tags": "diagnostic,rk11"
         },
@@ -802,7 +802,7 @@
           "@title": "CZQMCF0 0-124K MEM EXER 16K (Feb 1978)",
           "@file": "AC-9045F-MC_CZQMCFO_MEM_EXER_16K_Feb78.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp49VqkiYkHIFs_VGA",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "",
           "@tags": "diagnostic"
         },
@@ -810,7 +810,7 @@
           "@title": "PDP-11 DIAGNOSTIC HANDBOOK (1988)",
           "@file": "PDP11_DiagnosticHandbook_1988.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4d3zhflWyJp07i9g",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@width": 200,
           "@height": 280,
           "@source": "",
@@ -820,7 +820,7 @@
           "@title": "Notes for XXDP+ and XXDP V2 Operating Systems (Feb 1993)",
           "@file": "XXDP_Notes_Feb93.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp44WqXmlZ5RtCpM4g",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@width": 200,
           "@height": 280,
           "@source": "",
@@ -830,7 +830,7 @@
           "@title": "PDP-11 BASIC Programming Manual (1970)",
           "@file": "BASIC_Programming_Manual_Dec70.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4hZ_ESc_wYWccLhg",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "",
           "@tags": "software,basic"
         },
@@ -838,7 +838,7 @@
           "@title": "LISTING OF BASIC/PTS (Mar 1977)",
           "@file": "BASIC_PTS_Listing_Mar77.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5MAsiyvxS9IriR_w",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "",
           "@tags": "software,basic"
         },
@@ -846,7 +846,7 @@
           "@title": "MACRO-11 Reference Manual (Dec 1975)",
           "@file": "MACRO11_Dec75.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5BykoT7bUv3vhPBQ",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "",
           "@tags": "software,macro11"
         },
@@ -854,7 +854,7 @@
           "@title": "MACRO-11 Language Reference Manual (Mar 1983)",
           "@file": "MACRO11_Mar83.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5AQl1Z2VzEl8KvrA",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "",
           "@tags": "software,macro11"
         },
@@ -862,7 +862,7 @@
           "@title": "RT-11 Installation and System Generation Guide (Mar 1980)",
           "@file": "AA-H376A-TC_RT-11_V4.0_Installation_Manual_Mar81.pdf",
           "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp4H3X0WfHlTGsvvLQ",
-          "@cover": ".jpg",
+          "@cover": "jpg",
           "@source": "",
           "@tags": "software,rt11"
         }
@@ -898,7 +898,7 @@
               "@title": "VT100 Technical Manual (Sep 1980)",
               "@file": "EK-VT100-TM-002_VT100_Technical_Manual_Sep80.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5U8q29hbjyEHn4Dg?e=wrC7ga",
-              "@cover": ".jpg",
+              "@cover": "jpg",
               "@source": "http://www.vt100.net/docs/vt100-tm/ek-vt100-tm-002.pdf",
               "@tags": "manual"
             },
@@ -906,7 +906,7 @@
               "@title": "VT100 Technical Manual (Jul 1982)",
               "@file": "EK-VT100-TM-003_VT100_Technical_Manual_Jul82.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5X1XlYE16Lak_DUw?e=n2zpbT",
-              "@cover": ".jpg",
+              "@cover": "jpg",
               "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/EK-VT100-TM-003_VT100_Technical_Manual_Jul82.pdf",
               "@tags": "manual"
             },
@@ -914,7 +914,7 @@
               "@title": "VT100 User Guide (Aug 1978)",
               "@file": "EK-VT100-UG-001_VT100_User_Guide_Aug78.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5cwh5j_ZxFq0E5SQ?e=j2hEBh",
-              "@cover": ".jpg",
+              "@cover": "jpg",
               "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/EK-VT100-UG-001_VT100_User_Guide_Aug78.pdf",
               "@tags": "manual"
             },
@@ -922,7 +922,7 @@
               "@title": "VT100 User Guide (Jan 1979)",
               "@file": "EK-VT100-UG-002_VT100_User_Guide_Jan79.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5b0Zrk_lq6O7DuLA?e=S5iFqn",
-              "@cover": ".jpg",
+              "@cover": "jpg",
               "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/EK-VT100-UG-002_VT100_User_Guide_Jan79.pdf",
               "@tags": "manual"
             },
@@ -930,7 +930,7 @@
               "@title": "Field Maintenance Guide (Mar 1980)",
               "@file": "MP00633_VT100_Mar80.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5fOS06wOd2QECmEg?e=PmmwPX",
-              "@cover": ".jpg",
+              "@cover": "jpg",
               "@width": 280,
               "@height": 200,
               "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/MP00633_VT100_Mar80.pdf",
@@ -940,7 +940,7 @@
               "@title": "Field Maintenance Guide (Feb 1982)",
               "@file": "MP00633_VT100_Schematic_Feb82.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp5YdXHBhh5cLBSAxg?e=Ecpv4o",
-              "@cover": ".jpg",
+              "@cover": "jpg",
               "@width": 280,
               "@height": 200,
               "@source": "http://bitsavers.org/pdf/dec/terminal/vt100/MP00633_VT100_Schematic_Feb82.pdf",
@@ -995,21 +995,21 @@
             "@title": "OSI BASIC-IN-ROM Manual",
             "@file": "OSI_BASIC-IN-ROM_Reference_Manual.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gt4LfVeqHp1eNX_xsA?e=ochWkV",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "PCjs"
           },
           {
             "@title": "OSI C1P Graphics Manual",
             "@file": "OSI_C1P_Character_Graphics_Reference_Manual.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gt4M_mo_3EnvSCoo_Q?e=Ft2NMa",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": ""
           },
           {
             "@title": "OSI C1P Users Manual",
             "@file": "OSI_C1P_Users_Manual.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gt4N9BbxGdyef1BQWQ?e=6bbg4c",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": ""
           }
         ],
@@ -1081,7 +1081,7 @@
               "@title": "Train-ing With Your EC-4000 Programmable Calculator",
               "@file": "Train-ing_With_Your_EC-4000_Programmable_Calculator.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9yia_fdpsnBaOeEXc?e=uCJpdM",
-              "@cover": ".jpg",
+              "@cover": "jpg",
               "@source": "PCjs",
               "@tags": "manual"
             },
@@ -1089,7 +1089,7 @@
               "@title": "EC-4000 Reference Card",
               "@file": "EC-4000_Reference_Card.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9yihm64HQPkW9LnL_?e=1v7Iex",
-              "@cover": ".jpg",
+              "@cover": "jpg",
               "@source": "PCjs",
               "@tags": "manual"
             },
@@ -1097,7 +1097,7 @@
               "@title": "EC-4000 Programs By Jeff Parsons (1978-1979)",
               "@file": "EC-4000_Programs_1978-1979_By_Jeff_Parsons.pdf",
               "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9yifU2u9RCXFKPWKK?e=c6cjos",
-              "@cover": ".jpg",
+              "@cover": "jpg",
               "@source": "PCjs",
               "@tags": "program"
             }

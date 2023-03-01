@@ -73,7 +73,7 @@
             "@title": "MACRO-10 (Jun 1972)",
             "@file": "Macro_Assembler_Reference_Manual-Jun72.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp1i3qATlvub3JxoDQ",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://bitsavers.org/pdf/dec/pdp10/TOPS10/1973_Assembly_Language_Handbook/02_1973AsmRef_macro.pdf",
             "@tags": ""
           },
@@ -81,7 +81,7 @@
             "@title": "MACRO-10 (Apr 1972)",
             "@file": "Macro_Assembler_Reference_Manual-Apr78.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gp1hxEi9aXmTStmyhA",
-            "@cover": ".jpg",
+            "@cover": "jpg",
             "@source": "http://www.livingcomputers.org/Discover/Online-Systems/User-Documentation/Tops-10-v7-04/4_Macro_Assembler_Reference_Manual.aspx",
             "@tags": ""
           }

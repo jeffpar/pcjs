@@ -31,6 +31,8 @@ machines:
             8 file(s)     329275 bytes
                            29696 bytes free
 
+![MS Word 5.00 (Program 1)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-PROGRAM1.jpg)
+
 ### Directory of MS Word 5.00 (Program 2)
 
      Volume in drive A is PROG2_V50
@@ -39,6 +41,8 @@ machines:
     WORD     OVL    354105   4-26-89   2:52p
             1 file(s)     354105 bytes
                             8192 bytes free
+
+![MS Word 5.00 (Program 2)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-PROGRAM2.jpg)
 
 ### Directory of MS Word 5.00 (Spell)
 
@@ -55,6 +59,8 @@ machines:
             7 file(s)     353179 bytes
                             6144 bytes free
 
+![MS Word 5.00 (Spell)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-SPELL.jpg)
+
 ### Directory of MS Word 5.00 (Thesaurus)
 
      Volume in drive A is THESAUR_V50
@@ -63,6 +69,8 @@ machines:
     WFBG     SYN    326976   4-21-89   5:49p
             1 file(s)     326976 bytes
                            34816 bytes free
+
+![MS Word 5.00 (Thesaurus)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-THESAURUS.jpg)
 
 ### Directory of MS Word 5.00 (Utilities 1)
 
@@ -79,6 +87,8 @@ machines:
     OS2_NOTE DOC      2487   4-25-89  10:01a
             8 file(s)     352538 bytes
                             4096 bytes free
+
+![MS Word 5.00 (Utilities 1)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-UTILITIES1.jpg)
 
 ### Directory of MS Word 5.00 (Utilities 2)
 
@@ -138,6 +148,8 @@ machines:
            50 file(s)     339258 bytes
                             3072 bytes free
 
+![MS Word 5.00 (Utilities 2)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-UTILITIES2.jpg)
+
 ### Directory of MS Word 5.00 (Utilities 3)
 
      Volume in drive A is UTIL3_V50
@@ -154,6 +166,8 @@ machines:
     CONFIG   DOC      9021   4-26-89   9:00a
             9 file(s)     357462 bytes
                                0 bytes free
+
+![MS Word 5.00 (Utilities 3)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-UTILITIES3.jpg)
 
 ### Directory of MS Word 5.00 (Utilities/Print)
 
@@ -198,6 +212,8 @@ machines:
     X4045    PRD     21455   4-14-89   8:27a
            36 file(s)     342374 bytes
                             1024 bytes free
+
+![MS Word 5.00 (Utilities/Print)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-UTILPRINT.jpg)
 
 ### Directory of MS Word 5.00 (Printers 1)
 
@@ -262,6 +278,8 @@ machines:
     PRINTERS DOC      4092   4-11-89  11:48a
            56 file(s)     335504 bytes
                             1024 bytes free
+
+![MS Word 5.00 (Printers 1)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-PRINTERS1.jpg)
 
 ### Directory of MS Word 5.00 (Printers 2)
 
@@ -330,6 +348,8 @@ machines:
            59 file(s)     332245 bytes
                                0 bytes free
 
+![MS Word 5.00 (Printers 2)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-PRINTERS2.jpg)
+
 ### Directory of MS Word 5.00 (Learning Kbd)
 
      Volume in drive A is LRNKBD_V50
@@ -342,6 +362,8 @@ machines:
     KEYONE   SOB*    40425   4-21-89   6:02p
             5 file(s)     317079 bytes
                            43008 bytes free
+
+![MS Word 5.00 (Learning Kbd)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-LEARNKBD.jpg)
 
 ### Directory of MS Word 5.00 (Learning Mouse)
 
@@ -356,6 +378,8 @@ machines:
             5 file(s)     316604 bytes
                            44032 bytes free
 
+![MS Word 5.00 (Learning Mouse)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-LEARNMOU.jpg)
+
 ### Directory of MS Word 5.00 (Learning Adv)
 
      Volume in drive A is LRNADV_V50
@@ -369,3 +393,5 @@ machines:
     MOUSETWO SOB*    37365   4-21-89   6:09p
             6 file(s)     354079 bytes
                             6144 bytes free
+
+![MS Word 5.00 (Learning Adv)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/5.00/WORD50-LEARNADV.jpg)
