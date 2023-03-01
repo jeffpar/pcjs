@@ -84,7 +84,7 @@
 							{
 								"@title": "MS Mouse 2.00",
 								"@diskette": "MSMOUSE-200--1983-12-31.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC320K"
 							}
 						]
@@ -99,7 +99,7 @@
 							{
 								"@title": "MS Mouse 2.50 (Bus)",
 								"@diskette": "MSMOUSE-250.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC320K",
 								"@archive": "MSMOUSE-250-MOUNTABLE.img"
 							},
@@ -123,13 +123,13 @@
 								"@title": "MS Mouse 4.00 (SYSTEM)",
 								"@diskette": "MSMOUSE-039599-400-DISK1-SYSTEM.json",
 								"@format": "PC360K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Mouse 4.00 (PROGRAM)",
 								"@diskette": "MSMOUSE-039599-400-DISK2-PROGRAM.json",
 								"@format": "PC360K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							}
 						]
 					},
@@ -167,19 +167,19 @@
 								"@title": "MS Mouse 5.03 (Disk 1 Revised)",
 								"@diskette": "MSMOUSE-503-DISK1-REVISED.json",
 								"@format": "PC360K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Mouse 5.03 (Disk 2)",
 								"@diskette": "MSMOUSE-503-DISK2.json",
 								"@format": "PC360K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Mouse 5.03 (Disk 3)",
 								"@diskette": "MSMOUSE-503-DISK3.json",
 								"@format": "PC360K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							}
 						]
 					},
@@ -357,7 +357,7 @@
 					"@media": [
 						{
 							"@diskette": "COMPAQ-UTILS-506-110387-REVG.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC360K"
 						}
 					]
@@ -384,37 +384,37 @@
 						{
 							"@title": "SystemPro Configuration Files 1.03",
 							"@diskette": "COMPAQ-CONFLIB-1.03-071090.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC1440K"
 						},
 						{
 							"@title": "SystemPro Diagnostics 7.08",
 							"@diskette": "COMPAQ-DIAGS-708-092590.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC720K"
 						},
 						{
 							"@title": "SystemPro Owner Registration 3.05",
 							"@diskette": "COMPAQ-OWNREG-3.05-100890.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC720K"
 						},
 						{
 							"@title": "SystemPro EISA Configuration 1.15",
 							"@diskette": "COMPAQ-SYSCONFIG-1.15-082790.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC1440K"
 						},
 						{
 							"@title": "SystemPro User Programs 7.05 (Disk 1)",
 							"@diskette": "COMPAQ-USER_1-7.05-092890.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC1440K"
 						},
 						{
 							"@title": "SystemPro User Programs 7.05 (Disk 2)",
 							"@diskette": "COMPAQ-USER_2-7.05-092890.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC1440K"
 						}
 					]
@@ -428,13 +428,13 @@
 						{
 							"@title": "COMPAQ Diagnostics 5.02",
 							"@diskette": "COMPAQ-DIAGS-502-051987-REVC.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC360K"
 						},
 						{
 							"@title": "COMPAQ User Programs 5.02",
 							"@diskette": "COMPAQ-UTILS-502-052087-REVC.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC360K"
 						}
 					]
@@ -448,7 +448,7 @@
 					"@media": [
 						{
 							"@diskette": "COMPAQ-DIAGS-508-012988-REVK.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC360K"
 						}
 					]
@@ -515,7 +515,7 @@
 						"@media": [
 							{
 								"@diskette": "5150-DIAG-205.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC180K"
 							}
 						]
@@ -526,7 +526,7 @@
 						"@media": [
 							{
 								"@diskette": "5150-DIAG-205A.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC180K"
 							}
 						]
@@ -562,7 +562,7 @@
 						"@media": [
 							{
 								"@diskette": "5170-DIAG-101A.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							}
 						]
@@ -694,133 +694,133 @@
 								"@title": "MS OS/2 Programmer's Guide (1987 PRE)",
 								"@file": "MSOS2-1X-PROG-GUIDE-PRE-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heByLK4yD3LMUrUZeg?e=ZDS8vx",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/prog-guide-pre-1987.pdf"
 							},
 							{
 								"@title": "MS OS/2 Programmer's Reference (1987 PRE)",
 								"@file": "MSOS2-1X-PROG-REF-PRE-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBkzN9GkH4pGKLGUQ?e=fnCCp0",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/prog-ref-pre-1987.pdf"
 							},
 							{
 								"@title": "MS OS/2 Programmer's Reference (1987 UPD)",
 								"@file": "MSOS2-1X-PROG-REF-UPD-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB4uBFyjS8qbAlE4Q?e=1FeQKt",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/prog-ref-upd-1987.pdf"
 							},
 							{
 								"@title": "Mixed-Language Programming Guide (1987)",
 								"@file": "MSOS2-1X-MIXED-LANG-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB-zQ8KvVCz72fa5A?e=ghjkZ9",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-rtl-os2-upd-1987.pdf"
 							},
 							{
 								"@title": "MS OS/2 SDK Utilities (1987 PRE)",
 								"@file": "MSOS2-1X-SDK-UTILS-PRE-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBxzQFYAMgKkv0mAw?e=3DlK1z",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/codeview-tools-pre-1987.pdf"
 							},
 							{
 								"@title": "MS OS/2 SDK Utilities (1987 PRE UPD)",
 								"@file": "MSOS2-1X-SDK-UTILS-PRE-UPD-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB84U7oa6yvxEPDtA?e=0cdxuL",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/sdk-utils-pre-upd-1987.pdf"
 							},
 							{
 								"@title": "MS OS/2 SDK Utilities (1987)",
 								"@file": "MSOS2-1X-SDK-UTILS-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBoqwgG7GICG1lOhQ?e=OTpGqS",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/codeview-tools-1987.pdf"
 							},
 							{
 								"@title": "MS OS/2 SDK Utilities (1987 UPD)",
 								"@file": "MSOS2-1X-SDK-UTILS-UPD-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBq44aXH4eNRAsPng?e=Vacg3z",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/sdk-utils-upd-1987.pdf"
 							},
 							{
 								"@title": "MS OS/2 SDK Utilities (1988 UPD)",
 								"@file": "MSOS2-1X-SDK-UTILS-UPD-1988.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBp1qtO5yK6MkUiYA?e=Tq2D9J",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/sdk-utils-upd-1988.pdf"
 							},
 							{
 								"@title": "MS OS/2 SDK Editor (1987 PRE)",
 								"@file": "MSOS2-1X-SDKED-PRE-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBrl3fCpQI7o_CQwg?e=xHCqkn",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/sdked-pre-1987.pdf"
 							},
 							{
 								"@title": "MS OS/2 SDK Editor (1987)",
 								"@file": "MSOS2-1X-SDKED-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBhiFg-xpbBxixJ5g?e=S2x5pU",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/sdked-1987.pdf"
 							},
 							{
 								"@title": "MS OS/2 SDK Editor User's Guide (1988)",
 								"@file": "MSOS2-1X-MSED-UGUIDE-1988.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBwZpUd3NsdaT-o0A?e=cUh5tH",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/msed-ug-1988.pdf"
 							},
 							{
 								"@title": "MS OS/2 Toolkit Welcome (1988)",
 								"@file": "MSOS2-1X-TOOLKIT-WELCOME-1988.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBhiFg-xpbBxixJ5g?e=hSG6kG",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210ptk/os2-1.0-ptk-welcome-1988.pdf"
 							},
 							{
 								"@title": "MS OS/2 Toolkit Tools (1988)",
 								"@file": "MSOS2-1X-TOOLKIT-TOOLS-1988.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBc72s8FJGmaDswYA?e=Jdf7O6",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210ptk/os2-1.0-ptk-tools-1988.pdf"
 							},
 							{
 								"@title": "MS OS/2 Toolkit Learning Guide (1988)",
 								"@file": "MSOS2-1X-TOOLKIT-LGUIDE-1988.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBbjwpQwUBA27h4Yg?e=TuJ18b",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210ptk/os2-1.0-ptk-lguide-1988.pdf"
 							},
 							{
 								"@title": "MS OS/2 Toolkit Reference (1988)",
 								"@file": "MSOS2-1X-TOOLKIT-PRGREF-1988.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBdhrbD40X4SFWKAw?e=UB7mdb",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210ptk/os2-1.0-ptk-prgref-1988.pdf"
 							},
 							{
 								"@title": "MS OS/2 Device Drivers Guide (1987 PRE)",
 								"@file": "MSOS2-1X-DDK-GUIDE-PRE-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB_E2rigeNegTPjAw?e=c3S8RL",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/os2-1.0-ddk-pre-1987.pdf"
 							},
 							{
 								"@title": "MS OS/2 Device Drivers Guide (1987)",
 								"@file": "MSOS2-1X-DDK-GUIDE-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBed0ezBU5eN2z2jg?e=6lqfrD",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/os2-1.0-ddk-guide-1987.pdf"
 							},
 							{
 								"@title": "MS OS/2 Device Drivers Guide (1987 UPD)",
 								"@file": "MSOS2-1X-DDK-GUIDE-UPD-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBmG1h1dzstiTa0GA?e=KUf0UQ",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/os2-1.0-ddk-upd-1987.pdf"
 							}
 						]
@@ -1004,97 +1004,97 @@
 							"@title": "Windows SDK 3.00 (1200K Disk 1)",
 							"@diskette": "WIN30SDK-1200K-DEVTOOLS.json",
 							"@format": "PC1200K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (1200K Disk 2)",
 							"@diskette": "WIN30SDK-1200K-DBGTOOLS.json",
 							"@format": "PC1200K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (1200K Disk 3)",
 							"@diskette": "WIN30SDK-1200K-DEVFILES.json",
 							"@format": "PC1200K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (1200K Disk 4)",
 							"@diskette": "WIN30SDK-1200K-LIBRARIES.json",
 							"@format": "PC1200K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (1200K Disk 5)",
 							"@diskette": "WIN30SDK-1200K-SAMPLES1.json",
 							"@format": "PC1200K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (1200K Disk 6)",
 							"@diskette": "WIN30SDK-1200K-SAMPLES2.json",
 							"@format": "PC1200K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (720K Disk 1)",
 							"@diskette": "WIN30SDK-720K-DISK01.json",
 							"@format": "PC720K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (720K Disk 2)",
 							"@diskette": "WIN30SDK-720K-DISK02.json",
 							"@format": "PC720K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (720K Disk 3)",
 							"@diskette": "WIN30SDK-720K-DISK03.json",
 							"@format": "PC720K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (720K Disk 4)",
 							"@diskette": "WIN30SDK-720K-DISK04.json",
 							"@format": "PC720K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (720K Disk 5)",
 							"@diskette": "WIN30SDK-720K-DISK05.json",
 							"@format": "PC720K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (720K Disk 6)",
 							"@diskette": "WIN30SDK-720K-DISK06.json",
 							"@format": "PC720K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (720K Disk 7)",
 							"@diskette": "WIN30SDK-720K-DISK07.json",
 							"@format": "PC720K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (720K Disk 8)",
 							"@diskette": "WIN30SDK-720K-DISK08.json",
 							"@format": "PC720K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (720K Disk 9)",
 							"@diskette": "WIN30SDK-720K-DISK09.json",
 							"@format": "PC720K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.00 (720K Disk 10)",
 							"@diskette": "WIN30SDK-720K-DISK10.json",
 							"@format": "PC720K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						}
 					]
 				},
@@ -1105,67 +1105,67 @@
 							"@title": "Windows SDK 3.10 (Disk 1)",
 							"@diskette": "WIN31SDK-DISK01.json",
 							"@format": "PC1440K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.10 (Disk 2)",
 							"@diskette": "WIN31SDK-DISK02.json",
 							"@format": "PC1440K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.10 (Disk 3)",
 							"@diskette": "WIN31SDK-DISK03.json",
 							"@format": "PC1440K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.10 (Disk 4)",
 							"@diskette": "WIN31SDK-DISK04.json",
 							"@format": "PC1440K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.10 (Disk 5)",
 							"@diskette": "WIN31SDK-DISK05.json",
 							"@format": "PC1440K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.10 (Disk 6)",
 							"@diskette": "WIN31SDK-DISK06.json",
 							"@format": "PC1440K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.10 (Disk 7)",
 							"@diskette": "WIN31SDK-DISK07.json",
 							"@format": "PC1440K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.10 (Disk 8)",
 							"@diskette": "WIN31SDK-DISK08.json",
 							"@format": "PC1440K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.10 (Disk 9)",
 							"@diskette": "WIN31SDK-DISK09.json",
 							"@format": "PC1440K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.10 (Disk 10)",
 							"@diskette": "WIN31SDK-DISK10.json",
 							"@format": "PC1440K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						},
 						{
 							"@title": "Windows SDK 3.10 (Disk 11)",
 							"@diskette": "WIN31SDK-DISK11.json",
 							"@format": "PC1440K",
-							"@photo": ".jpg"
+							"@photo": "jpg"
 						}
 					]
 				}
@@ -1229,13 +1229,13 @@
 							{
 								"@title": "COMPAQ MS-DOS 1.10 Rev B",
 								"@diskette": "COMPAQ-DOS110B.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC320K"
 							},
 							{
 								"@title": "COMPAQ MS-DOS 1.10 Rev E",
 								"@diskette": "COMPAQ-DOS110E.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC320K"
 							}
 						],
@@ -1244,14 +1244,14 @@
 								"@title": "COMPAQ MS-DOS Reference Guide (Dec 1982)",
 								"@file": "COMPAQ_MS-DOS_Reference_Guide_1982-12.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEYeGrszUBthjRnkg",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "COMPAQ BASIC Reference Guide (Dec 1982)",
 								"@file": "COMPAQ_BASIC_Reference_Guide_1982-12.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEZTO1wyEcsBJ1Njg",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							}
 						]
@@ -1293,21 +1293,21 @@
 								"@title": "COMPAQ MS-DOS Version 2 Reference Guide (Oct 1984)",
 								"@file": "COMPAQ_MS-DOS_Version_2_Reference_Guide_1984-10.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEdqkIuA2P-Pu5H3Q",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "COMPAQ BASIC Version 2 Reference Guide (Oct 1984)",
 								"@file": "COMPAQ_BASIC_Version_2_Reference_Guide_1984-10.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEf6q02GrNLZPiW9A",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "COMPAQ Operations Guide (Oct 1984)",
 								"@file": "COMPAQ_Operations_Guide_1984-10.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEh-kj32tUiZmeiug",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							}
 						]
@@ -1608,7 +1608,7 @@
 								"@title": "IBM PC Disk Operating System 1.00",
 								"@file": "IBM_PC_DOS_100_6172220_1982-01.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEi84GkvjPy-tDSwQ?e=xnTObo",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": ""
 							}
 						]
@@ -1627,14 +1627,14 @@
 								"@title": "IBM PC Disk Operating System 1.10",
 								"@file": "IBM_PC_DOS_110_1982-05.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEj1CyrhetlatOblw?e=Typ1Pm",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "IBM Personal Computer BASIC 1.10",
 								"@file": "IBM_PC_BASIC_110_1982-05.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqEkirObzIHz6seCgw?e=g83PKw",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							}
 						]
@@ -1663,7 +1663,7 @@
 								"@title": "IBM PC Disk Operating System 2.00",
 								"@file": "IBM_PC_DOS_200_1983-01.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heM4flDGLNdR1f_90w?e=0WbXAb",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://bitsavers.org/pdf/ibm/pc/dos/6936752_DOS_2.00_Jan83.pdf"
 							}
 						]
@@ -2012,7 +2012,7 @@
 							{
 								"@title": "MS-DOS 3.20 (ProgRef 1)",
 								"@diskette": "MSDOS320-DISK3-PROGREF1.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							},
 							{
@@ -2443,7 +2443,7 @@
 								{
 									"@title": "DESQview 1.02",
 									"@diskette": "DESQVIEW-102.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								}
 							],
@@ -2452,7 +2452,7 @@
 									"@title": "DESQview 1.02 (AST Edition)",
 									"@file": "DESQVIEW-102-AST.pdf",
 									"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqF0lnH5iJKNMTatvA?e=QD3Sxl",
-									"@cover": ".jpg",
+									"@cover": "jpg",
 									"@source": "OS/2 Museum"
 								}
 							]
@@ -2472,7 +2472,7 @@
 								{
 									"@title": "QEMM-386 4.10",
 									"@diskette": "QEMM386-410.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								}
 							]
@@ -2487,7 +2487,7 @@
 								{
 									"@title": "QEMM-386 4.23",
 									"@diskette": "QEMM386-423.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								}
 							]
@@ -2516,7 +2516,7 @@
 								{
 									"@title": "QEMM-386 6.02",
 									"@diskette": "QEMM386-602.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								}
 							]
@@ -2535,7 +2535,7 @@
 								{
 									"@title": "Software Carousel 2.0.3",
 									"@diskette": "SOFTWARE-CAROUSEL-203.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K",
 									"@kryoflux": true,
 									"@args": "--suppData=/software/pcx86/sys/ext/softlogic/carousel/2.0.3/index.md"
@@ -2548,7 +2548,7 @@
 								{
 									"@title": "Software Carousel 3.0.1",
 									"@diskette": "SOFTWARE-CAROUSEL-301.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								}
 							]
@@ -2586,7 +2586,7 @@
 								{
 									"@title": "DoubleDOS 2.1V (Disk 1)",
 									"@diskette": "DOUBLEDOS-21V-DISK1.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K",
 									"@kryoflux": true
 								},
@@ -2609,7 +2609,7 @@
 								{
 									"@title": "Disk Optimizer 2.0.3",
 									"@diskette": "DISK-OPTIMIZER.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								}
 							]
@@ -3237,13 +3237,13 @@
 								{
 									"@title": "IBM XENIX 1.0 (EXT1)",
 									"@diskette": "IBM-XENIX-100-EXT1.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC1200K"
 								},
 								{
 									"@title": "IBM XENIX 1.0 (EXT2)",
 									"@diskette": "IBM-XENIX-100-EXT2.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC1200K"
 								}
 							]
@@ -3254,43 +3254,43 @@
 								{
 									"@title": "IBM XENIX 2.0 (INSTALL)",
 									"@diskette": "IBM-XENIX-200-INSTALL.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC1200K"
 								},
 								{
 									"@title": "IBM XENIX 2.0 (DISK1)",
 									"@diskette": "IBM-XENIX-200-DISK1.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC1200K"
 								},
 								{
 									"@title": "IBM XENIX 2.0 (DISK2)",
 									"@diskette": "IBM-XENIX-200-DISK2.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC1200K"
 								},
 								{
 									"@title": "IBM XENIX 2.0 (DISK3)",
 									"@diskette": "IBM-XENIX-200-DISK3.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC1200K"
 								},
 								{
 									"@title": "IBM XENIX 2.0 (SDK1)",
 									"@diskette": "IBM-XENIX-200-SDK1.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC1200K"
 								},
 								{
 									"@title": "IBM XENIX 2.0 (SDK2)",
 									"@diskette": "IBM-XENIX-200-SDK2.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC1200K"
 								},
 								{
 									"@title": "IBM XENIX 2.0 (SDK3)",
 									"@diskette": "IBM-XENIX-200-SDK3.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC1200K"
 								}
 							]
@@ -3395,7 +3395,7 @@
 							{
 								"@title": "MINIX 1.1 (1.2M Disk 1: Boot)",
 								"@diskette": "MINIX11-1200K-DISK1-BOOT.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC1200K"
 							},
 							{
@@ -5048,7 +5048,7 @@
 							"@title": "Microsoft Adventure Manual",
 							"@file": "Adventure_Manual.pdf",
 							"@link": "https://gamedisks.pcjs.org/pcx86/game/microsoft/adventure/Adventure_Manual.pdf",
-							"@cover": ".jpg",
+							"@cover": "jpg",
 							"@source": ""
 						}
 					]
@@ -5200,7 +5200,7 @@
 							"@file": "DUNE2.pdf",
 							"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9iNsbYL9bFfNgR8LHhQ?e=QI1BTd",
 							"@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%21142747&authkey=AHsHrNq23yynffI&em=2",
-							"@cover": ".jpg",
+							"@cover": "jpg",
 							"@source": ""
 						}
 					]
@@ -5538,7 +5538,7 @@
 							{
 								"@title": "IBM Multiplan 1.00 (Program)",
 								"@diskette": "MULTIPLAN-IBM100-PROGRAM.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC160K",
 								"@args": "--sectorID=11:0:8:61",
 								"@kryoflux": true,
@@ -5547,7 +5547,7 @@
 							{
 								"@title": "IBM Multiplan 1.00 (Tutorial)",
 								"@diskette": "MULTIPLAN-IBM100-TUTORIAL.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC160K"
 							}
 						]
@@ -5648,7 +5648,7 @@
 								"@title": "MS Excel 2.0 (1200K Disk 1)",
 								"@diskette": "EXCEL20-1200K-DISK1-SETUP.json",
 								"@format": "PC1200K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 2.0 (1200K Disk 2)",
@@ -5674,43 +5674,43 @@
 								"@title": "MS Excel 2.0 (720K Disk 1)",
 								"@diskette": "EXCEL20-720K-DISK1.json",
 								"@format": "PC720K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 2.0 (720K Disk 2)",
 								"@diskette": "EXCEL20-720K-DISK2.json",
 								"@format": "PC720K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 2.0 (720K Disk 3)",
 								"@diskette": "EXCEL20-720K-DISK3.json",
 								"@format": "PC720K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 2.0 (720K Disk 4)",
 								"@diskette": "EXCEL20-720K-DISK4.json",
 								"@format": "PC720K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 2.0 (720K Disk 5)",
 								"@diskette": "EXCEL20-720K-DISK5.json",
 								"@format": "PC720K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 2.0 (720K Disk 6)",
 								"@diskette": "EXCEL20-720K-DISK6.json",
 								"@format": "PC720K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 2.0 (720K Disk 7)",
 								"@diskette": "EXCEL20-720K-DISK7.json",
 								"@format": "PC720K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							}
 						]
 					},
@@ -5725,55 +5725,55 @@
 								"@title": "MS Excel 5.0a (Disk 1)",
 								"@diskette": "EXCEL50A-DISK1.json",
 								"@format": "PC1440K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 5.0a (Disk 2)",
 								"@diskette": "EXCEL50A-DISK2.json",
 								"@format": "PC1440K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 5.0a (Disk 3)",
 								"@diskette": "EXCEL50A-DISK3.json",
 								"@format": "PC1440K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 5.0a (Disk 4)",
 								"@diskette": "EXCEL50A-DISK4.json",
 								"@format": "PC1440K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 5.0a (Disk 5)",
 								"@diskette": "EXCEL50A-DISK5.json",
 								"@format": "PC1440K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 5.0a (Disk 6)",
 								"@diskette": "EXCEL50A-DISK6.json",
 								"@format": "PC1440K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 5.0a (Disk 7)",
 								"@diskette": "EXCEL50A-DISK7.json",
 								"@format": "PC1440K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 5.0a (Disk 8)",
 								"@diskette": "EXCEL50A-DISK8.json",
 								"@format": "PC1440K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Excel 5.0a (Disk 9)",
 								"@diskette": "EXCEL50A-DISK9.json",
 								"@format": "PC1440K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							}
 						]
 					}
@@ -5833,21 +5833,21 @@
 								"@title": "MS Multiplan 3.00 (PROGRAM)",
 								"@diskette": "MULTIPLAN300-DISK1.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@kryoflux": true
 							},
 							{
 								"@title": "MS Multiplan 3.00 (INSTALL)",
 								"@diskette": "MULTIPLAN300-DISK2.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@kryoflux": true
 							},
 							{
 								"@title": "MS Multiplan 3.00 (TEMPLATE)",
 								"@diskette": "MULTIPLAN300-DISK3.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@kryoflux": true
 							}
 						],
@@ -5864,7 +5864,7 @@
 								"@title": "MS Multiplan 4.00 (SETUP)",
 								"@diskette": "MULTIPLAN400-DISK1.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@source": "PCjs",
 								"@kryoflux": true
 							},
@@ -5872,7 +5872,7 @@
 								"@title": "MS Multiplan 4.00 (PROGRAM1)",
 								"@diskette": "MULTIPLAN400-DISK2.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@source": "PCjs",
 								"@kryoflux": true
 							},
@@ -5880,7 +5880,7 @@
 								"@title": "MS Multiplan 4.00 (PROGRAM2)",
 								"@diskette": "MULTIPLAN400-DISK3.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@source": "PCjs",
 								"@kryoflux": true
 							},
@@ -5888,7 +5888,7 @@
 								"@title": "MS Multiplan 4.00 (UTILITIES)",
 								"@diskette": "MULTIPLAN400-DISK4.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@kryoflux": true,
 								"@source": "https://winworldpc.com/product/multiplan/40"
 							}
@@ -5905,7 +5905,7 @@
 								"@title": "MS Multiplan 4.01 (SETUP)",
 								"@diskette": "MULTIPLAN401-DISK1.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@source": "PCjs",
 								"@kryoflux": true
 							},
@@ -5913,7 +5913,7 @@
 								"@title": "MS Multiplan 4.01 (PROGRAM1)",
 								"@diskette": "MULTIPLAN401-DISK2.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@source": "PCjs",
 								"@kryoflux": true
 							},
@@ -5921,7 +5921,7 @@
 								"@title": "MS Multiplan 4.01 (UTILITIES)",
 								"@diskette": "MULTIPLAN401-DISK3.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@kryoflux": true,
 								"@source": "https://winworldpc.com/product/multiplan/40"
 							}
@@ -5938,21 +5938,21 @@
 								"@title": "MS Multiplan 4.20 (SETUP)",
 								"@diskette": "MULTIPLAN420-DISK1.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@kryoflux": true
 							},
 							{
 								"@title": "MS Multiplan 4.20 (PROGRAM)",
 								"@diskette": "MULTIPLAN420-DISK2.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@kryoflux": true
 							},
 							{
 								"@title": "MS Multiplan 4.20 (UTILITIES)",
 								"@diskette": "MULTIPLAN420-DISK3.json",
 								"@format": "PC360K",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@kryoflux": true
 							}
 						],
@@ -5962,7 +5962,7 @@
 								"@file": "Microsoft_Multiplan_v420_Quick_Reference_Guide-1989.pdf",
 								"@embed": "https://archive.org/embed/microsoft-multiplan-v-420-quick-reference-guide-1989",
 								"@link": "https://archive.org/details/microsoft-multiplan-v-420-quick-reference-guide-1989",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
@@ -5970,7 +5970,7 @@
 								"@file": "Microsoft_Multiplan_v420_Users_Guide-1989.pdf",
 								"@embed": "https://archive.org/embed/microsoft-multiplan-v-420-users-guide-1989",
 								"@link": "https://archive.org/details/microsoft-multiplan-v-420-users-guide-1989",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							}
 						],
@@ -6101,67 +6101,163 @@
 							{
 								"@title": "MS Word 5.00 (Program 1)",
 								"@diskette": "WORD50-PROGRAM1.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 5.00 (Program 2)",
 								"@diskette": "WORD50-PROGRAM2.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 5.00 (Spell)",
 								"@diskette": "WORD50-SPELL.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 5.00 (Thesaurus)",
 								"@diskette": "WORD50-THESAURUS.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 5.00 (Utilities 1)",
 								"@diskette": "WORD50-UTILITIES1.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 5.00 (Utilities 2)",
 								"@diskette": "WORD50-UTILITIES2.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 5.00 (Utilities 3)",
 								"@diskette": "WORD50-UTILITIES3.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 5.00 (Utilities/Print)",
 								"@diskette": "WORD50-UTILPRINT.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 5.00 (Printers 1)",
 								"@diskette": "WORD50-PRINTERS1.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 5.00 (Printers 2)",
 								"@diskette": "WORD50-PRINTERS2.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 5.00 (Learning Kbd)",
 								"@diskette": "WORD50-LEARNKBD.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 5.00 (Learning Mouse)",
 								"@diskette": "WORD50-LEARNMOU.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 5.00 (Learning Adv)",
 								"@diskette": "WORD50-LEARNADV.json",
-								"@format": "PC360K"
+								"@format": "PC360K",
+								"@photo": "jpg"
+							}
+						]
+					},
+					"5.0A": {
+						"@title": "Microsoft Word 5.0A",
+						"@media": [
+							{
+								"@title": "MS Word 5.0A (Program 1)",
+								"@diskette": "WORD50A-PROGRAM1.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 5.0A (Program 2)",
+								"@diskette": "WORD50A-PROGRAM2.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 5.0A (Spell)",
+								"@diskette": "WORD50A-SPELL.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 5.0A (Thesaurus)",
+								"@diskette": "WORD50A-THESAURUS.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 5.0A (Utilities 1)",
+								"@diskette": "WORD50A-UTILITIES1.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 5.0A (Utilities 2)",
+								"@diskette": "WORD50A-UTILITIES2.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 5.0A (Utilities 3)",
+								"@diskette": "WORD50A-UTILITIES3.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 5.0A (Utilities/Print)",
+								"@diskette": "WORD50A-UTILPRINT.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 5.0A (Printers 1)",
+								"@diskette": "WORD50A-PRINTERS1.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 5.0A (Printers 2)",
+								"@diskette": "WORD50A-PRINTERS2.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 5.0A (Learning Kbd)",
+								"@diskette": "WORD50A-LEARNKBD.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 5.0A (Learning Mouse)",
+								"@diskette": "WORD50A-LEARNMOU.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
+							},
+							{
+								"@title": "MS Word 5.0A (Learning Adv)",
+								"@diskette": "WORD50A-LEARNADV.json",
+								"@format": "PC360K",
+								"@photo": "jpg"
 							}
 						]
 					}
@@ -6312,7 +6408,7 @@
 								"@diskette": "SC1_V110.json",
 								"@format": "PC160K",
 								"@kryoflux": true,
-								"@photo": ".png"
+								"@photo": "png"
 							}
 						],
 						"@documents": [
@@ -6320,14 +6416,14 @@
 								"@title": "SuperCalc 1.10 Manual",
 								"@file": "SuperCalc-1981.png",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9iMMVOsUIxq7s1s6Mog?e=0Nyc1a",
-								"@cover": ".png",
+								"@cover": "png",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "SuperCalc 1.10 Addendum",
 								"@file": "SuperCalc-Addendum.png",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9iMMWJlszoT0Y5LL21g?e=fgkSWn",
-								"@cover": ".png",
+								"@cover": "png",
 								"@source": "PCjs"
 							}
 						]
@@ -6426,13 +6522,13 @@
 							{
 								"@title": "WordStar 3.20 (Original)",
 								"@diskette": "WS320-ORIG.json",
-								"@photo": ".png",
+								"@photo": "png",
 								"@format": "PC160K"
 							},
 							{
 								"@title": "WordStar 3.20 (MailMerge)",
 								"@diskette": "MM320-ORIG.json",
-								"@photo": ".png",
+								"@photo": "png",
 								"@format": "PC160K"
 							},
 							{
@@ -6451,42 +6547,42 @@
 								"@title": "WordStar Binder",
 								"@file": "WordStar_3.2_Binder.png",
 								"@link": "https://1drv.ms/u/s!ArcO_mFRe1Z9gqlTMVtF-s8OxtSNpA",
-								"@cover": ".png",
+								"@cover": "png",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "WordStar 3.0 Training Guide",
 								"@file": "WordStar_3.0_Training_Guide.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqlYINZ_GQ3Y6NVSUA?e=cUZyft",
-								"@cover": ".png",
+								"@cover": "png",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "WordStar 3.2 General Information",
 								"@file": "WordStar_3.2_General_Information.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqkVkrQ_SzATTmls_Q?e=D3kVDU",
-								"@cover": ".png",
+								"@cover": "png",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "WordStar 3.2 Reference Manual",
 								"@file": "WordStar_3.2_Reference_Manual.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqkWhsTCHW7gkQ2W7A?e=VLlYyf",
-								"@cover": ".png",
+								"@cover": "png",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "WordStar 3.2 Technical Information",
 								"@file": "WordStar_3.2_Technical_Information.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqkUQdVG_FL8aYm3fg?e=yffrXl",
-								"@cover": ".png",
+								"@cover": "png",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "WordStar 3.0 Reference Card",
 								"@file": "WordStar_3.0_Reference_Card.png",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqkTDr8PVob3Mpvnxg?e=XPFAEC",
-								"@cover": ".png",
+								"@cover": "png",
 								"@source": "PCjs"
 							}
 						]
@@ -6609,7 +6705,7 @@
 							{
 								"@diskette": "EXPLORING-THE-IBM-PC-100-CGA.json",
 								"@format": "PC160K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							}
 						]
 					},
@@ -6624,7 +6720,7 @@
 							{
 								"@diskette": "EXPLORING-THE-IBM-PC-100-MDA.json",
 								"@format": "PC160K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							}
 						]
 					},
@@ -6639,7 +6735,7 @@
 							{
 								"@diskette": "EXPLORING-THE-IBM-PC-AT-100.json",
 								"@format": "PC360K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							}
 						]
 					},
@@ -6654,7 +6750,7 @@
 							{
 								"@diskette": "EXPLORING-THE-IBM-PC-AT-200.json",
 								"@format": "PC360K",
-								"@photo": ".jpg"
+								"@photo": "jpg"
 							}
 						]
 					}
@@ -6669,7 +6765,7 @@
 							{
 								"@title": "IBM EGA Fantasy Land Demo",
 								"@diskette": "EGA-FLAND.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							},
 							{
@@ -6717,7 +6813,7 @@
 							{
 								"@title": "Borland Turbo Pascal 3.01A",
 								"@diskette": "TURBO-PASCAL-301A-8087-BCD.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC360K"
 							}
 						]
@@ -6839,7 +6935,7 @@
 							{
 								"@title": "DR Pascal/MT+ 3.11 (Disk 1)",
 								"@diskette": "PASCALMT311-DISK1.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC160K"
 							},
 							{
@@ -6863,21 +6959,21 @@
 								"@title": "Pascal/MT+ Notices",
 								"@file": "PASCALMT-311-NOTICES.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFwfKz6L5KLLFOXnA?e=AZ6rJu",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "Pascal/MT+ Programmer's Guide",
 								"@file": "PASCALMT-311-PROGRAMMERS-GUIDE.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFzf2rfPk25Wvnkbg?e=YaU25Z",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "Pascal/MT+ Reference Manual",
 								"@file": "PASCALMT-311-REFERENCE-MANUAL.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFywvuwHRIOLy9fgA?e=6JWrqA",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							}
 						]
@@ -6921,7 +7017,7 @@
 								"@file": "IBM_Macro_Assembler_100.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heM9R4ZXrrB1ZRzjwA?e=IMhky8",
 								"@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194653&authkey=AI7jcPAR_KQyyK0&em=2",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "https://winworldpc.com/product/ibm-macro-assembler/100"
 							}
 						]
@@ -6932,7 +7028,7 @@
 							{
 								"@title": "IBM Macro Assembler 2.00",
 								"@diskette": "IBM-MASM-200.json",
-								"@photo": ".jpg",
+								"@photo": "jpg",
 								"@format": "PC320K"
 							}
 						]
@@ -6995,7 +7091,7 @@
 								"@file": "IBM_COBOL_Compiler_V1_1982-03.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heNgckNGawAfsQxs-w?e=P9m6LU",
 								"@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194688&authkey=ANqaZ9JL50ssPKw&em=2",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "https://winworldpc.com/product/ibm-cobol-compiler/1x"
 							}
 						]
@@ -7215,14 +7311,14 @@
 								"@title": "MS Macro Assembler Reference Manual (1984)",
 								"@file": "MASM30_Reference_Manual-1984.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gt4TMtBw579j2buNcw?e=MF2hsa",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "https://winworldpc.com/product/macro-assembler/3x"
 							},
 							{
 								"@title": "MS Macro Assembler User's Guide (1984)",
 								"@file": "MASM30_Users_Guide-1984.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heM-dT-jTCe_z5Ld6A?e=IVcl3W",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "https://winworldpc.com/product/macro-assembler/3x"
 							}
 						]
@@ -7266,56 +7362,56 @@
 								"@title": "MASM 5.00 Reference",
 								"@file": "MASM50-POCKETREF.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFkTtanp1C-Mq0Yug?e=BRbCsV",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "MASM 5.00 Programmer's Guide",
 								"@file": "MASM50-PROGGUIDE.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBnDrC9pXwVwxYw1A?e=OZkNow",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/masm-5.0-pg-1987.pdf"
 							},
 							{
 								"@title": "MASM 5.00 Mixed-Language Programming Guide",
 								"@file": "MASM50-MLPROGGUIDE.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFtJNuM0Uh1XIG9zw?e=OH72cR",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "MASM 5.00 CodeView and Utilities Guide",
 								"@file": "MASM50-UTILGUIDE.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqIKJ6ua82VVg6_sbA?e=eibMfp",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "MASM 5.00 Box",
 								"@file": "MASM50-BOX.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFd2ImZBX2LOqqivw?e=fxpie0",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "MASM 5.00 Brochure",
 								"@file": "MASM50-BROCHURE.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFc87PWpzo9W45Huw?e=h5XatC",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "MASM 5.00 READ THIS FIRST",
 								"@file": "MASM50-READTHISFIRST.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFitllWejDc8P374g?e=z67BRs",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							},
 							{
 								"@title": "MASM 5.10 Letters",
 								"@file": "MASM51-LETTERS.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFmfQPP91sz4S6MDQ?e=AkicZR",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "PCjs"
 							}
 						]
@@ -7506,7 +7602,7 @@
 								{
 									"@title": "MS QuickBASIC 1.00",
 									"@diskette": "MS-QUICKBASIC-100.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								}
 							]
@@ -7517,7 +7613,7 @@
 								{
 									"@title": "MS QuickBASIC 2.00 (Disk 1)",
 									"@diskette": "MS-QUICKBASIC-200-DISK1.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								},
 								{
@@ -7749,35 +7845,35 @@
 								"@title": "About Leaflet",
 								"@file": "MSC400-1986-ABOUT.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFP5vwCuIxIAxJoRQ?e=4n7LG8",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/msc40/ms-c-4.0-about-1986.pdf"
 							},
 							{
 								"@title": "C Compiler User's Guide",
 								"@file": "MSC400-1986-UGUIDE.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFWpIc8MH4i6ZF_rQ?e=sI7bfC",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/msc40/ms-c-4.0-uguide-1986.pdf"
 							},
 							{
 								"@title": "CodeView Debugger",
 								"@file": "MSC400-1986-CODEVIEW.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFR869lAzrhBEyvqA?e=R8GTis",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/msc40/ms-c-4.0-codeview-1986.pdf"
 							},
 							{
 								"@title": "C Language Reference",
 								"@file": "MSC400-1986-CLR.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFQQtXhdBT9dmTdWg?e=ApXnCC",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": ""
 							},
 							{
 								"@title": "Run-Time Library Reference",
 								"@file": "MSC400-1986-RTLREF.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFTv-HXbZG3BMdQMQ?e=DbCWgk",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/msc40/ms-c-4.0-rtlref-1986.pdf"
 							}
 						]
@@ -7845,49 +7941,49 @@
 								"@title": "MS C 5.0 User's Guide (1987 PRE)",
 								"@file": "MSC50-USERGUIDE-PRE-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBfaLiJ-xzV75I_qw?e=QohYIb",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-ug-pre-1987.pdf"
 							},
 							{
 								"@title": "MS C 5.0 User's Guide (1987 PRE UPD)",
 								"@file": "MSC50-UG-LR-PRE-UPD-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB0GJAPrVz_cZ7CAA?e=n2c3hG",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-ug-lr-pre-upd-1987.pdf"
 							},
 							{
 								"@title": "MS C 5.0 User's Guide (1987)",
 								"@file": "MSC50-USERGUIDE-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB5iaYUjobUab38cg?e=wIMD34",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-ug-1987.pdf"
 							},
 							{
 								"@title": "MS C 5.0 Language Reference (1987 PRE)",
 								"@file": "MSC50-LANGREF-PRE-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heB1ZSfSgAzKkJE44w?e=DXAADz",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-lr-pre-1987.pdf"
 							},
 							{
 								"@title": "MS C 5.0 Run-Time Library Reference (1987 PRE)",
 								"@file": "MSC50-RTL-PRE-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBgLW-dwbFUOrnmvg?e=CkwBGO",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-rtl-pre-1987.pdf"
 							},
 							{
 								"@title": "MS C 5.0 Run-Time Library Reference (1987 PRE UPD)",
 								"@file": "MSC50-RTL-PRE-UPD-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBvuqj2ATEdvqx9IQ?e=krdcbO",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-rtl-pre-upd-1987.pdf"
 							},
 							{
 								"@title": "MS C 5.0 Run-Time Library Reference for OS/2 (1987 UPD)",
 								"@file": "MSC50-RTL-OS2-UPD-1987.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBz9FKds8vVT21KEw?e=yTBRjV",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.0-rtl-os2-upd-1987.pdf"
 							}
 						]
@@ -8031,7 +8127,7 @@
 								"@title": "MS C 5.1 Update for MS OS/2 and MS-DOS (1988)",
 								"@file": "MSC51-UPDATE-1988.pdf",
 								"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9heBuypY9jGc9RdsSRg?e=0QxeVw",
-								"@cover": ".jpg",
+								"@cover": "jpg",
 								"@source": "http://www.os2museum.com/files/docs/os210sdk/ms-c-5.1-update-1988.pdf"
 							}
 						]
@@ -8266,35 +8362,35 @@
 									"@title": "MS QuickPascal 1.00 (360K Disk 1)",
 									"@subtitle": "Setup/Utilities",
 									"@diskette": "QUICKPASCAL-100-DISK1.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								},
 								{
 									"@title": "MS QuickPascal 1.00 (360K Disk 2)",
 									"@subtitle": "Libraries",
 									"@diskette": "QUICKPASCAL-100-DISK2.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								},
 								{
 									"@title": "MS QuickPascal 1.00 (360K Disk 3)",
 									"@subtitle": "Program",
 									"@diskette": "QUICKPASCAL-100-DISK3.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								},
 								{
 									"@title": "MS QuickPascal 1.00 (360K Disk 4)",
 									"@subtitle": "Microsoft QuickPascal Express",
 									"@diskette": "QUICKPASCAL-100-DISK4.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								},
 								{
 									"@title": "MS QuickPascal 1.00 (360K Disk 5)",
 									"@subtitle": "Microsoft QuickPascal Advisor",
 									"@diskette": "QUICKPASCAL-100-DISK5.json",
-									"@photo": ".jpg",
+									"@photo": "jpg",
 									"@format": "PC360K"
 								},
 								{
@@ -8321,14 +8417,14 @@
 									"@title": "Microsoft QuickPascal: Pascal By Example",
 									"@file": "MS_QuickPascal_100_Pascal_by_Example.pdf",
 									"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFVsisy9Gka2J_GxA?e=rNYD3n",
-									"@cover": ".jpg",
+									"@cover": "jpg",
 									"@source": "PCjs"
 								},
 								{
 									"@title": "Microsoft QuickPascal: Up and Running",
 									"@file": "MS_QuickPascal_100_Up_and_Running.pdf",
 									"@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqFOML1HOTUKRFZLEQ?e=f3fHKv",
-									"@cover": ".jpg",
+									"@cover": "jpg",
 									"@source": "PCjs"
 								}
 							]
@@ -8558,7 +8654,7 @@
 						{
 							"@title": "Big Blue Disk #1",
 							"@diskette": "BBD01.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@archive": "folder",
 							"@source": "https://archive.org/details/bbd01_201608"
 						},
@@ -8715,7 +8811,7 @@
 						{
 							"@title": "Big Blue Disk #33",
 							"@diskette": "BBD33.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@archive": "folder",
 							"@source": "https://archive.org/details/bbd33"
 						},
@@ -9069,67 +9165,67 @@
 						{
 							"@title": "PC Disk Magazine (Disk 01)",
 							"@diskette": "PCDISKMAG-DISK1.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						},
 						{
 							"@title": "PC Disk Magazine (Disk 02)",
 							"@diskette": "PCDISKMAG-DISK2.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						},
 						{
 							"@title": "PC Disk Magazine (Disk 03)",
 							"@diskette": "PCDISKMAG-DISK3.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						},
 						{
 							"@title": "PC Disk Magazine (Disk 04)",
 							"@diskette": "PCDISKMAG-DISK4.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						},
 						{
 							"@title": "PC Disk Magazine (Disk 05)",
 							"@diskette": "PCDISKMAG-DISK5.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						},
 						{
 							"@title": "PC Disk Magazine (Disk 06)",
 							"@diskette": "PCDISKMAG-DISK6.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						},
 						{
 							"@title": "PC Disk Magazine (Disk 07)",
 							"@diskette": "PCDISKMAG-DISK7.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						},
 						{
 							"@title": "PC Disk Magazine (Disk 08)",
 							"@diskette": "PCDISKMAG-DISK8.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						},
 						{
 							"@title": "PC Disk Magazine (Disk 08 Demo)",
 							"@diskette": "PCDISKMAG-DISK8-DEMO.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC320K"
 						},
 						{
 							"@title": "PC Disk Magazine (Disk 09)",
 							"@diskette": "PCDISKMAG-DISK9.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						},
 						{
 							"@title": "PC Disk Magazine (Disk 10)",
 							"@diskette": "PCDISKMAG-DISK10.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC320K"
 						}
 					]
@@ -10320,7 +10416,7 @@
 						{
 							"@title": "Small Computer Book Club (1990)",
 							"@diskette": "SCBC-1990.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC360K"
 						}
 					]
@@ -10444,13 +10540,13 @@
 						{
 							"@title": "Norton Utilities 2.00 (Side A)",
 							"@diskette": "NU200-SIDEA.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						},
 						{
 							"@title": "Norton Utilities 2.00 (Side B)",
 							"@diskette": "NU200-SIDEB.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						}
 					]
@@ -10471,13 +10567,13 @@
 						{
 							"@title": "Norton Utilities 2.01 (1983-11-03-A)",
 							"@diskette": "NU201-1983-11-03-SIDEA.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						},
 						{
 							"@title": "Norton Utilities 2.01 (1983-11-03-B)",
 							"@diskette": "NU201-1983-11-03-SIDEB.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						}
 					]
@@ -10488,7 +10584,7 @@
 						{
 							"@title": "Norton Utilities 3.00 (1984-12-07)",
 							"@diskette": "NU300-1984-12-07.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC160K"
 						},
 						{
@@ -10535,13 +10631,13 @@
 						{
 							"@title": "Norton Utilities 4.00 (1987-05-15 #1)",
 							"@diskette": "NU400-1987-05-15-DISK1.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC360K"
 						},
 						{
 							"@title": "Norton Utilities 4.00 (1987-05-15 #2)",
 							"@diskette": "NU400-1987-05-15-DISK2.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC360K"
 						}
 					]
@@ -10552,13 +10648,13 @@
 						{
 							"@title": "Norton Utilities 4.00 (Adv 1)",
 							"@diskette": "NU400-ADV-DISK1.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC360K"
 						},
 						{
 							"@title": "Norton Utilities 4.00 (Adv 2)",
 							"@diskette": "NU400-ADV-DISK2.json",
-							"@photo": ".jpg",
+							"@photo": "jpg",
 							"@format": "PC360K"
 						}
 					]
