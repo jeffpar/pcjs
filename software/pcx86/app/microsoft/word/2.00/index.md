@@ -33,6 +33,8 @@ machines:
            11 file(s)     305999 bytes
                            47104 bytes free
 
+![MS Word 2.00 (Disk 1)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/2.00/WORD20-DISK1.jpg)
+
 ### Directory of MS Word 2.00 (Disk 1 Backup)
 
      Volume in drive A has no label
@@ -51,6 +53,8 @@ machines:
     TTY      PRD       820   2-08-85  12:00p
            11 file(s)     305999 bytes
                            47104 bytes free
+
+![MS Word 2.00 (Disk 1 Backup)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/2.00/WORD20-DISK1-BACKUP.jpg)
 
 ### Directory of MS Word 2.00 (Disk 2)
 
@@ -134,6 +138,8 @@ machines:
            74 file(s)     318295 bytes
                             6144 bytes free
 
+![MS Word 2.00 (Disk 2)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/2.00/WORD20-DISK2.jpg)
+
 ### Directory of MS Word 2.00 (Disk 3)
 
      Volume in drive A has no label
@@ -153,6 +159,8 @@ machines:
     WORDFREQ COM      4352   2-04-85  12:00p
            12 file(s)     277264 bytes
                            78848 bytes free
+
+![MS Word 2.00 (Disk 3)]({{ site.software.miscdisks.server }}/pcx86/app/microsoft/word/2.00/WORD20-DISK3.jpg)
 
 ### Copy-Protection Information
 

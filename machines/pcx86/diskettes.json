@@ -6021,28 +6021,32 @@
 							{
 								"@title": "MS Word 2.00 (Disk 1)",
 								"@diskette": "WORD20-DISK1.json",
-								"@format": "PC359K",
+								"@format": "PC360K",
 								"@kryoflux": true,
-								"@args": "--suppData=/software/pcx86/app/microsoft/word/2.00/index.md"
+								"@args": "--suppData=/software/pcx86/app/microsoft/word/2.00/index.md",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 2.00 (Disk 1 Backup)",
 								"@diskette": "WORD20-DISK1-BACKUP.json",
-								"@format": "PC359K",
+								"@format": "PC360K",
 								"@kryoflux": true,
-								"@args": "--suppData=/software/pcx86/app/microsoft/word/2.00/index.md"
+								"@args": "--suppData=/software/pcx86/app/microsoft/word/2.00/index.md",
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 2.00 (Disk 2)",
 								"@diskette": "WORD20-DISK2.json",
 								"@format": "PC360K",
-								"@kryoflux": true
+								"@kryoflux": true,
+								"@photo": "jpg"
 							},
 							{
 								"@title": "MS Word 2.00 (Disk 3)",
 								"@diskette": "WORD20-DISK3.json",
 								"@format": "PC360K",
-								"@kryoflux": true
+								"@kryoflux": true,
+								"@photo": "jpg"
 							}
 						],
 						"@source": "https://winworldpc.com/product/microsoft-word/2x-dos"
