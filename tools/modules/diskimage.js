@@ -469,9 +469,16 @@ function processDisk(di, diskFile, argv, diskette)
                 if (subDir) sPath = path.join(subDir, sPath);
                 let extractDir = "";
                 if (argv['all']) {
-                    extractDir = getFullPath(path.join(path.dirname(diskFile), "archive"));
+                    if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
+                        extractDir = getFullPath(path.dirname(diskFile).replace("/disks", "/archive"));
+                    } else {
+                        extractDir = getFullPath(path.join(path.dirname(diskFile), "archive"));
+                    }
                     sPath = path.join(extractDir, sPath);
                 }
+                // if (attr & DiskInfo.ATTR.HIDDEN) {
+                    if (sPath.endsWith("~1.TRA") || sPath.endsWith("TRASHE~1") || sPath.indexOf("FSEVEN~1") >= 0) return;
+                // }
                 let dir = path.dirname(sPath);
                 if (!existsFile(dir)) {
                     fs.mkdirSync(dir, {recursive: true});

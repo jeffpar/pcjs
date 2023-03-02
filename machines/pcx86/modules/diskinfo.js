@@ -1100,7 +1100,9 @@ export default class DiskInfo {
             do {
                 name = this.buildShortName(file.name, !!(file.attr & DiskInfo.ATTR.VOLUME), uniqueID++);
             } while (names.indexOf(name) >= 0);
-            names.push(name);
+            if (file.attr != DiskInfo.ATTR.VOLUME) {
+                names.push(name);       // volume labels are not considered a potential name conflict
+            }
             offDir += this.buildDirEntry(abDir, offDir, name, file.size, file.attr, file.date, file.cluster);
             cEntries++;
         }
@@ -1342,7 +1344,7 @@ export default class DiskInfo {
             let suffix = "~" + uniqueID;
             sName = sName.substr(0, 8 - suffix.length) + suffix;
         }
-        sExt = sExt.substr(0, 3).trim();
+        sExt = sExt.substr(0, 3).trimEnd();
         let iPeriod = -1;
         if (sExt) {
             iPeriod = sName.length;
@@ -1356,7 +1358,7 @@ export default class DiskInfo {
             for (let i = 0; i < sName.length; i++) {
                 if (i == iPeriod) continue;
                 let ch = sName.charAt(i);
-                if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()-@^_`{}~".indexOf(ch) < 0) {
+                if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()-@^_`{}~ ".indexOf(ch) < 0) {
                     sName = sName.substr(0, i) + '_' + sName.substr(i + 1);
                 }
             }
@@ -2452,7 +2454,7 @@ export default class DiskInfo {
                 dir.name = (dir.name + ext).trim();
             } else {
                 dir.name = dir.name.trim();
-                ext = ext.trim();
+                ext = ext.trimEnd();
                 if (ext.length) dir.name += '.' + ext;
             }
             dir.modDate = this.getSectorData(vol.sectorDirCache, off + DiskInfo.DIRENT.MODDATE, 2);
