@@ -143,18 +143,45 @@ function dumpSector(di, sector, offset = 0, limit = -1)
 }
 
 /**
- * existsFile(sFile)
+ * checkArchive(sPath, fExt)
+ *
+ * @param {string} sPath
+ * @param {boolean} fExt (true to check path for archive extension only)
+ * @returns {string|undefined}
+ */
+function checkArchive(sPath, fExt)
+{
+    let sArchive;
+    for (let sExt of [".zip", ".ZIP", ".arc", ".ARC"]) {
+        if (fExt) {
+            if (sPath.endsWith(sExt)) {
+                sArchive = sPath.slice(0, -sExt.length);
+                break;
+            }
+        }
+        let sFile = sPath + sExt;
+        if (existsFile(sFile)) {
+            sArchive = sFile;
+            break;
+        }
+    }
+    return sArchive;
+}
+
+/**
+ * existsFile(sFile, fError)
  *
  * @param {string} sFile
+ * @param {boolean} [fError]
  * @returns {boolean}
  */
-function existsFile(sFile)
+function existsFile(sFile, fError = true)
 {
     try {
         sFile = getFullPath(sFile);
         return fs.existsSync(sFile);
     } catch(err) {
-        printError(err);
+        if (fError) printError(err);
     }
     return false;
 }
@@ -440,16 +467,34 @@ function processDisk(di, diskFile, argv, diskette)
             if (subDir || name == argv['extract']) {
                 let fSuccess = false;
                 if (subDir) sPath = path.join(subDir, sPath);
+                let extractDir = "";
+                if (argv['all']) {
+                    extractDir = getFullPath(path.join(path.dirname(diskFile), "archive"));
+                    sPath = path.join(extractDir, sPath);
+                }
                 let dir = path.dirname(sPath);
-                if (!existsFile(dir)) fs.mkdirSync(dir, {recursive: true});
+                if (!existsFile(dir)) {
+                    fs.mkdirSync(dir, {recursive: true});
+                }
                 if (attr & DiskInfo.ATTR.SUBDIR) {
                     if (!existsFile(sPath)) {
                         fs.mkdirSync(sPath);
                         fSuccess = true;
                     }
                 } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
-                    printf("extracting: %s\n", name);
-                    fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY));
+                    if (!argv['all']) {
+                        printf("extracting: %s\n", name);
+                    } else {
+                        if (existsFile(sPath)) return;
+                        printf("extracting: %s (%s)\n", name, sPath);
+                        let sArchive = checkArchive(sPath, true);
+                        if (sArchive) {
+                            if (!existsFile(sArchive)) {
+                                printf("unar -o %s -d %s\n", path.dirname(sArchive), sPath);
+                            }
+                        }
+                    }
+                    fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
                 }
                 if (fSuccess) fs.utimesSync(sPath, date, date);
             }
@@ -984,10 +1029,21 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
         let sPath = asFiles[iFile];
         let sName = path.basename(sPath);
         if (sName.charAt(0) == '.') continue;
+        let sArchive = checkArchive(sPath, true);
+        if (sArchive) {
+            if (!existsFile(sArchive)) {
+                // printf("unar -o %s -d %s\n", path.dirname(sArchive), sPath);
+            }
+        }
         let file = {path: sPath, name: sName};
         let stats = fs.statSync(sPath);
         file.date = stats.mtime;
         if (stats.isDirectory()) {
+            let sArchive = checkArchive(sPath, false);
+            if (sArchive) {
+                // printf("warning: skipping directory matching archive: %s\n", sArchive);
+                continue;
+            }
             file.attr = DiskInfo.ATTR.SUBDIR;
             file.size = -1;
             file.data = new DataBuffer();
@@ -1155,16 +1211,17 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
 }
 
 /**
- * writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly)
+ * writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
  *
  * @param {string} sFile
  * @param {DataBuffer|string} data
  * @param {boolean} [fCreateDir]
  * @param {boolean} [fOverwrite]
  * @param {boolean} [fReadOnly]
+ * @param {boolean} [fQuiet]
  * @returns {boolean}
  */
-function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly)
+function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
 {
     if (sFile) {
         try {
@@ -1180,7 +1237,7 @@ function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly)
                 if (fReadOnly) fs.chmodSync(sFile, 0o444);
                 return true;
             }
-            printf("%s exists, use --overwrite to replace\n", sFile);
+            if (!fQuiet) printf("%s exists, use --overwrite to replace\n", sFile);
         } catch(err) {
             printError(err);
         }
@@ -1303,7 +1360,9 @@ function main(argc, argv)
     rootDir = path.join(moduleDir, "../..");
     useServer = !!argv['server'];
 
-    printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s", options) : ""));
+    if (!argv['quiet']) {
+        printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s", options) : ""));
+    }
 
     if (Device.DEBUG) {
         device.setMessages(Device.MESSAGE.FILE, true);

@@ -589,14 +589,13 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --all --checkdisk --rebuild",
+      "name": "Node: diskimage.js --all --checkdisk",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all",
-        "--checkdisk",
-        "--rebuild"
+        "--all=WORD20-DISK2",
+        "--checkdisk"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -606,14 +605,29 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --all --checkpage --rebuild",
+      "name": "Node: diskimage.js --all --checkpage",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
         "--all",
-        "--checkpage",
-        "--rebuild"
+        "--checkpage"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskimage.js --all=diskettes --extract",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "args": [
+        "--all=diskettes",
+        "--extract"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
