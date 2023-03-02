@@ -578,7 +578,7 @@
       "program": "${workspaceFolder}/tools/misc/diskettes.js",
       "args": [
         "/private",
-        "--filter=group04",
+        "--filter=group12",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",

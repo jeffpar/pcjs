@@ -298,7 +298,10 @@ function processFolders(sDir, argv)
                     media = diskObj['@versions'];
                     if (media) {
                         media = media[''] || media['disks'];
-                        if (media) media = media['@media'];
+                        if (media) {
+                            if (media['@title']) title = media['@title'];
+                            media = media['@media'];
+                        }
                     }
                 }
                 diskObj = null;
@@ -396,7 +399,7 @@ function processFolders(sDir, argv)
                 groupName = imgPath.slice(0, i).toUpperCase();
             }
             if (media) {
-                if (!title) {
+                if (!title || title == groupName) {
                     title = groupName + ' ' + mediaName;
                 } else {
                     let matchDigits = mediaName.match(/([0-9]+)$/);
