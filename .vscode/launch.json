@@ -621,12 +621,12 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --all=private --extract",
+      "name": "Node: diskimage.js --all --extract",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all=private",
+        "--all",
         "--extract"
       ],
       "cwd": "${workspaceFolder}",

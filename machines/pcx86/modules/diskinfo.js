@@ -1339,7 +1339,7 @@ export default class DiskInfo {
         } else if (fLabel && sName.length > 8) {
             sExt = sName.substr(8);
         }
-        sName = sName.substr(0, 8).trim();
+        sName = sName.substr(0, 8).trimEnd();
         if (uniqueID) {
             let suffix = "~" + uniqueID;
             sName = sName.substr(0, 8 - suffix.length) + suffix;
@@ -2453,7 +2453,7 @@ export default class DiskInfo {
             if (dir.attr & DiskInfo.ATTR.VOLUME) {
                 dir.name = (dir.name + ext).trim();
             } else {
-                dir.name = dir.name.trim();
+                dir.name = dir.name.trimEnd();
                 ext = ext.trimEnd();
                 if (ext.length) dir.name += '.' + ext;
             }
