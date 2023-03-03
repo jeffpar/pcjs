@@ -466,16 +466,13 @@ function processDisk(di, diskFile, argv, diskette)
             let subDir = typeof argv['extract'] != "string"? di.getName() : "";
             if (subDir || name == argv['extract']) {
                 let fSuccess = false;
-                if (subDir) sPath = path.join(subDir, sPath);
-                let extractDir = "";
                 if (argv['all']) {
+                    subDir = getFullPath(path.join(path.dirname(diskFile), "archive", subDir));
                     if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
-                        extractDir = getFullPath(path.dirname(diskFile).replace("/disks", "/archive"));
-                    } else {
-                        extractDir = getFullPath(path.join(path.dirname(diskFile), "archive"));
+                        subDir = subDir.replace("/disks/archive", "/archive");
                     }
-                    sPath = path.join(extractDir, sPath);
                 }
+                sPath = path.join(subDir, sPath);
                 // if (attr & DiskInfo.ATTR.HIDDEN) {
                     if (sPath.endsWith("~1.TRA") || sPath.endsWith("TRASHE~1") || sPath.indexOf("FSEVEN~1") >= 0) return;
                 // }
@@ -489,16 +486,41 @@ function processDisk(di, diskFile, argv, diskette)
                         fSuccess = true;
                     }
                 } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
+                    let sFile = sPath.substr(subDir.length + 1);
                     if (!argv['all']) {
-                        printf("extracting: %s\n", name);
+                        printf("extracting: %s\n", sFile);
                     } else {
-                        if (existsFile(sPath)) return;
-                        printf("extracting: %s (%s)\n", name, sPath);
+                        let fPrinted = false;
                         let sArchive = checkArchive(sPath, true);
                         if (sArchive) {
-                            if (!existsFile(sArchive)) {
-                                printf("unar -o %s -d %s\n", path.dirname(sArchive), sPath);
+                            let fExtracted;
+                            if (existsFile(sPath)) {
+                                printf("extracted: %s\n", sFile);
+                                fPrinted = true;
                             }
+                            if (!existsFile(sArchive)) {
+                                fExtracted = false;
+                            } else {
+                                let aArchiveFiles = glob.sync(path.join(sArchive, "**"));
+                                if (!aArchiveFiles.length) {
+                                    fExtracted = false;
+                                    printf("warning: empty archive folder: %s\n", sArchive);
+                                } else {
+                                    aArchiveFiles.forEach((sArchiveFile) => {
+                                        printf("expanded:  %s\n", sArchiveFile.substr(subDir.length));
+                                    });
+                                }
+                            }
+                            if (fExtracted === false) {
+                                printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
+                            }
+                        }
+                        if (existsFile(sPath)) {
+                            if (!fPrinted) printf("extracted: %s\n", sFile);
+                            return;
+                        }
+                        if (!argv['quiet']) {
+                            printf("extracting: %s\n", sFile);
                         }
                     }
                     fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
@@ -538,7 +560,11 @@ function processDisk(di, diskFile, argv, diskette)
                 }
             }
         }
-        if (diskFile.endsWith(".json")) {
+        /*
+         * If a JSON disk image was originally built from kryoflux data AND included special args (eg, for copy-protection),
+         * then don't bother with the rebuild, because those disks can't be saved as IMG disk images.
+         */
+        if (diskFile.endsWith(".json") && !(diskette.kryoflux && diskette.args)) {
             if (typeof argv['checkdisk'] == "string" && diskFile.indexOf(argv['checkdisk']) < 0) return;
             let diTemp = createDisk(diskFile, diskette, argv);
             if (diTemp) {
@@ -1039,7 +1065,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
         let sArchive = checkArchive(sPath, true);
         if (sArchive) {
             if (!existsFile(sArchive)) {
-                // printf("unar -o %s -d %s\n", path.dirname(sArchive), sPath);
+                // printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
             }
         }
         let file = {path: sPath, name: sName};

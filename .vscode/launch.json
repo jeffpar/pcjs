@@ -594,8 +594,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all=WORD20-DISK2",
-        "--checkdisk"
+        "--all",
+        "--checkdisk",
+        "--quiet"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -637,41 +638,7 @@
       ]
     },
     {
-      "name": "Node: diskimage.js SOFTWARE-CAROUSEL-203.img",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
-      "args": [
-        "--disk=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/archive/SOFTWARE-CAROUSEL-203.img",
-        "--output=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL-203.json",
-        "--suppData=/software/pcx86/sys/ext/softlogic/carousel/2.0.3/index.md",
-        "--overwrite"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
-      "name": "Node: diskimage.js SOFTWARE-CAROUSEL-203.json --list",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
-      "args": [
-        "/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL-203.json",
-        "--list"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
-      "name": "Node: diskimage.js OREGON_TRAIL-210.json --list",
+      "name": "Node: diskimage.js --list",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
