@@ -473,6 +473,15 @@ function processDisk(di, diskFile, argv, diskette)
                     }
                 }
                 sPath = path.join(subDir, sPath);
+                /*
+                 * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
+                 * it mounts, so if we see any of those remnants (which are normally hidden, but we do not assume that they
+                 * always will be), then we ignore them.
+                 *
+                 * This is why I make all my IMG files read-only and also write-protect physical diskettes before inserting
+                 * them into a drive.  Other operating systems pose similar threats.  For example, Windows 9x likes to modify
+                 * the 8-byte OEM signature field of a diskette's boot sector with unique volume-tracking identifiers.
+                 */
                 // if (attr & DiskInfo.ATTR.HIDDEN) {
                     if (sPath.endsWith("~1.TRA") || sPath.endsWith("TRASHE~1") || sPath.indexOf("FSEVEN~1") >= 0) return;
                 // }
@@ -486,17 +495,20 @@ function processDisk(di, diskFile, argv, diskette)
                         fSuccess = true;
                     }
                 } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
+                    let fPrinted = false;
+                    let fQuiet = argv['quiet'];
                     let sFile = sPath.substr(subDir.length + 1);
                     if (!argv['all']) {
-                        printf("extracting: %s\n", sFile);
+                        if (!fQuiet) printf("extracting: %s\n", sFile);
                     } else {
-                        let fPrinted = false;
                         let sArchive = checkArchive(sPath, true);
                         if (sArchive) {
                             let fExtracted;
                             if (existsFile(sPath)) {
-                                printf("extracted: %s\n", sFile);
-                                fPrinted = true;
+                                if (!fQuiet) {
+                                    printf("extracted: %s\n", sFile);
+                                    fPrinted = true;
+                                }
                             }
                             if (!existsFile(sArchive)) {
                                 fExtracted = false;
@@ -505,23 +517,21 @@ function processDisk(di, diskFile, argv, diskette)
                                 if (!aArchiveFiles.length) {
                                     fExtracted = false;
                                     printf("warning: empty archive folder: %s\n", sArchive);
-                                } else {
+                                } else if (!fQuiet) {
                                     aArchiveFiles.forEach((sArchiveFile) => {
                                         printf("expanded:  %s\n", sArchiveFile.substr(subDir.length));
                                     });
                                 }
                             }
                             if (fExtracted === false) {
-                                printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
+                                // printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
                             }
                         }
                         if (existsFile(sPath)) {
-                            if (!fPrinted) printf("extracted: %s\n", sFile);
+                            if (!fPrinted && !fQuiet) printf("extracted: %s\n", sFile);
                             return;
                         }
-                        if (!argv['quiet']) {
-                            printf("extracting: %s\n", sFile);
-                        }
+                        printf("extracting: %s\n", sFile);
                     }
                     fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
                 }

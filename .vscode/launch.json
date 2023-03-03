@@ -628,7 +628,8 @@
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
         "--all",
-        "--extract"
+        "--extract",
+        "--quiet"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
