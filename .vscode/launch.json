@@ -538,47 +538,13 @@
       ]
     },
     {
-      "name": "Node: diskettes.js /diskettes",
+      "name": "Node: diskettes.js",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/misc/diskettes.js",
       "args": [
         "/diskettes",
         "--filter=WIN95-B950",
-        "--verbose"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
-      "name": "Node: diskettes.js /miscdisks",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/diskettes.js",
-      "args": [
-        "/miscdisks",
-        "--filter=bbd",
-        "--verbose"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
-      "name": "Node: diskettes.js /private",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/diskettes.js",
-      "args": [
-        "/private",
-        "--filter=group12",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",
