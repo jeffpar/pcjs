@@ -7,7 +7,7 @@
 /**
  * @define {string}
  */
-var APPVERSION = "2.10";                // this @define is overridden by the Closure Compiler with the version in machines.json
+var APPVERSION = "2.11";                // this @define is overridden by the Closure Compiler with the version in machines.json
 
 var COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
 
