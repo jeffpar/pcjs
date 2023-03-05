@@ -444,8 +444,8 @@ class Computer extends Component {
                 this.wait(this.donePowerOn, aParms);
                 return false;
             }
-            this.disableDiagnostics();
         }
+        this.disableDiagnostics();
         return true;
     }
 

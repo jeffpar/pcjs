@@ -143,18 +143,45 @@ function dumpSector(di, sector, offset = 0, limit = -1)
 }
 
 /**
- * existsFile(sFile)
+ * checkArchive(sPath, fExt)
+ *
+ * @param {string} sPath
+ * @param {boolean} fExt (true to check path for archive extension only)
+ * @returns {string|undefined}
+ */
+function checkArchive(sPath, fExt)
+{
+    let sArchive;
+    for (let sExt of [".zip", ".ZIP", ".arc", ".ARC"]) {
+        if (fExt) {
+            if (sPath.endsWith(sExt)) {
+                sArchive = sPath.slice(0, -sExt.length);
+                break;
+            }
+        }
+        let sFile = sPath + sExt;
+        if (existsFile(sFile)) {
+            sArchive = sFile;
+            break;
+        }
+    }
+    return sArchive;
+}
+
+/**
+ * existsFile(sFile, fError)
  *
  * @param {string} sFile
+ * @param {boolean} [fError]
  * @returns {boolean}
  */
-function existsFile(sFile)
+function existsFile(sFile, fError = true)
 {
     try {
         sFile = getFullPath(sFile);
         return fs.existsSync(sFile);
     } catch(err) {
-        printError(err);
+        if (fError) printError(err);
     }
     return false;
 }
@@ -439,17 +466,74 @@ function processDisk(di, diskFile, argv, diskette)
             let subDir = typeof argv['extract'] != "string"? di.getName() : "";
             if (subDir || name == argv['extract']) {
                 let fSuccess = false;
-                if (subDir) sPath = path.join(subDir, sPath);
+                if (argv['all']) {
+                    subDir = getFullPath(path.join(path.dirname(diskFile), "archive", subDir));
+                    if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
+                        subDir = subDir.replace("/disks/archive", "/archive");
+                    }
+                }
+                sPath = path.join(subDir, sPath);
+                /*
+                 * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
+                 * it mounts, so if we see any of those remnants (which are normally hidden, but we do not assume that they
+                 * always will be), then we ignore them.
+                 *
+                 * This is why I make all my IMG files read-only and also write-protect physical diskettes before inserting
+                 * them into a drive.  Other operating systems pose similar threats.  For example, Windows 9x likes to modify
+                 * the 8-byte OEM signature field of a diskette's boot sector with unique volume-tracking identifiers.
+                 */
+                // if (attr & DiskInfo.ATTR.HIDDEN) {
+                    if (sPath.endsWith("~1.TRA") || sPath.endsWith("TRASHE~1") || sPath.indexOf("FSEVEN~1") >= 0) return;
+                // }
                 let dir = path.dirname(sPath);
-                if (!existsFile(dir)) fs.mkdirSync(dir, {recursive: true});
+                if (!existsFile(dir)) {
+                    fs.mkdirSync(dir, {recursive: true});
+                }
                 if (attr & DiskInfo.ATTR.SUBDIR) {
                     if (!existsFile(sPath)) {
                         fs.mkdirSync(sPath);
                         fSuccess = true;
                     }
                 } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
-                    printf("extracting: %s\n", name);
-                    fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY));
+                    let fPrinted = false;
+                    let fQuiet = argv['quiet'];
+                    let sFile = sPath.substr(subDir.length + 1);
+                    if (!argv['all']) {
+                        if (!fQuiet) printf("extracting: %s\n", sFile);
+                    } else {
+                        let sArchive = checkArchive(sPath, true);
+                        if (sArchive) {
+                            let fExtracted;
+                            if (existsFile(sPath)) {
+                                if (!fQuiet) {
+                                    printf("extracted: %s\n", sFile);
+                                    fPrinted = true;
+                                }
+                            }
+                            if (!existsFile(sArchive)) {
+                                fExtracted = false;
+                            } else {
+                                let aArchiveFiles = glob.sync(path.join(sArchive, "**"));
+                                if (!aArchiveFiles.length) {
+                                    fExtracted = false;
+                                    printf("warning: empty archive folder: %s\n", sArchive);
+                                } else if (!fQuiet) {
+                                    aArchiveFiles.forEach((sArchiveFile) => {
+                                        printf("expanded:  %s\n", sArchiveFile.substr(subDir.length));
+                                    });
+                                }
+                            }
+                            if (fExtracted === false) {
+                                // printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
+                            }
+                        }
+                        if (existsFile(sPath)) {
+                            if (!fPrinted && !fQuiet) printf("extracted: %s\n", sFile);
+                            return;
+                        }
+                        printf("extracting: %s\n", sFile);
+                    }
+                    fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
                 }
                 if (fSuccess) fs.utimesSync(sPath, date, date);
             }
@@ -486,7 +570,11 @@ function processDisk(di, diskFile, argv, diskette)
                 }
             }
         }
-        if (diskFile.endsWith(".json")) {
+        /*
+         * If a JSON disk image was originally built from kryoflux data AND included special args (eg, for copy-protection),
+         * then don't bother with the rebuild, because those disks can't be saved as IMG disk images.
+         */
+        if (diskFile.endsWith(".json") && !(diskette.kryoflux && diskette.args)) {
             if (typeof argv['checkdisk'] == "string" && diskFile.indexOf(argv['checkdisk']) < 0) return;
             let diTemp = createDisk(diskFile, diskette, argv);
             if (diTemp) {
@@ -984,10 +1072,21 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
         let sPath = asFiles[iFile];
         let sName = path.basename(sPath);
         if (sName.charAt(0) == '.') continue;
+        let sArchive = checkArchive(sPath, true);
+        if (sArchive) {
+            if (!existsFile(sArchive)) {
+                // printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
+            }
+        }
         let file = {path: sPath, name: sName};
         let stats = fs.statSync(sPath);
         file.date = stats.mtime;
         if (stats.isDirectory()) {
+            let sArchive = checkArchive(sPath, false);
+            if (sArchive) {
+                // printf("warning: skipping directory matching archive: %s\n", sArchive);
+                continue;
+            }
             file.attr = DiskInfo.ATTR.SUBDIR;
             file.size = -1;
             file.data = new DataBuffer();
@@ -1155,16 +1254,17 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
 }
 
 /**
- * writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly)
+ * writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
  *
  * @param {string} sFile
  * @param {DataBuffer|string} data
  * @param {boolean} [fCreateDir]
  * @param {boolean} [fOverwrite]
  * @param {boolean} [fReadOnly]
+ * @param {boolean} [fQuiet]
  * @returns {boolean}
  */
-function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly)
+function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
 {
     if (sFile) {
         try {
@@ -1180,7 +1280,7 @@ function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly)
                 if (fReadOnly) fs.chmodSync(sFile, 0o444);
                 return true;
             }
-            printf("%s exists, use --overwrite to replace\n", sFile);
+            if (!fQuiet) printf("%s exists, use --overwrite to replace\n", sFile);
         } catch(err) {
             printError(err);
         }
@@ -1303,7 +1403,9 @@ function main(argc, argv)
     rootDir = path.join(moduleDir, "../..");
     useServer = !!argv['server'];
 
-    printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s", options) : ""));
+    if (!argv['quiet']) {
+        printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s", options) : ""));
+    }
 
     if (Device.DEBUG) {
         device.setMessages(Device.MESSAGE.FILE, true);

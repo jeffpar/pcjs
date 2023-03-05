@@ -538,7 +538,7 @@
       ]
     },
     {
-      "name": "Node: diskettes.js /diskettes",
+      "name": "Node: diskettes.js",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/misc/diskettes.js",
@@ -555,48 +555,14 @@
       ]
     },
     {
-      "name": "Node: diskettes.js /miscdisks",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/diskettes.js",
-      "args": [
-        "/miscdisks",
-        "--filter=bbd",
-        "--verbose"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
-      "name": "Node: diskettes.js /private",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/diskettes.js",
-      "args": [
-        "/private",
-        "--filter=group04",
-        "--verbose"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
-      "name": "Node: diskimage.js --all --checkdisk --rebuild",
+      "name": "Node: diskimage.js --all --checkdisk",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
         "--all",
         "--checkdisk",
-        "--rebuild"
+        "--quiet"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -606,14 +572,13 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --all --checkpage --rebuild",
+      "name": "Node: diskimage.js --all --checkpage",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
         "--all",
-        "--checkpage",
-        "--rebuild"
+        "--checkpage"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -623,15 +588,14 @@
       ]
     },
     {
-      "name": "Node: diskimage.js SOFTWARE-CAROUSEL-203.img",
+      "name": "Node: diskimage.js --all --extract",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--disk=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/archive/SOFTWARE-CAROUSEL-203.img",
-        "--output=/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL-203.json",
-        "--suppData=/software/pcx86/sys/ext/softlogic/carousel/2.0.3/index.md",
-        "--overwrite"
+        "--all",
+        "--extract",
+        "--quiet"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -641,23 +605,7 @@
       ]
     },
     {
-      "name": "Node: diskimage.js SOFTWARE-CAROUSEL-203.json --list",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
-      "args": [
-        "/diskettes/pcx86/sys/ext/softlogic/carousel/2.0.3/SOFTWARE-CAROUSEL-203.json",
-        "--list"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
-      "name": "Node: diskimage.js OREGON_TRAIL-210.json --list",
+      "name": "Node: diskimage.js --list",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
