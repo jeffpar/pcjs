@@ -1,6 +1,7 @@
 {
   "id": "keyboard",
   "class": "keyboard",
+  "make": "ibm",
   "model": "us83",
   "controls": [
     {

@@ -1,5 +1,7 @@
 {
   "name": "IBM PC XT, 256Kb RAM, 10Mb Hard Disk, CGA, Debugger",
+  "make": "ibm",
+  "model": "5160",
   "defaults": {
     "ram": "256K",
     "fpu": "None",

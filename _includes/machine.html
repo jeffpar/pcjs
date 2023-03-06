@@ -109,6 +109,11 @@
     {%- endif -%}
     {%- assign component_id = machine_component.id | default: component.id %}
     {%- assign component_config = "" %}
+    {%- assign component_make = component.make | default: machine.make %}
+    {%- assign component_model = component.model | default: machine.model %}
+    {%- if site.developer %}
+      <!-- component {{ component_id }} make: '{{ component_make }}', model: '{{ component_model }}' -->
+    {%- endif %}
     {%- assign component_title = "" %}
     {%- assign component_class = "" %}
     {%- assign component_style = "" %}
@@ -179,6 +184,8 @@
           {%- for control in machine_controls -%}
             {%- assign control_class = "" -%}
             {%- assign control_style = "" -%}
+            {%- assign control_make = control.make | default: component_make %}
+            {%- assign control_model = control.model | default: component_model %}
             {%- if control.class -%}
               {%- capture control_class %} {{ control.class }}{%- endcapture -%}
             {%- endif -%}
@@ -214,7 +221,11 @@
               </fieldset>
             </form>
             {%- elsif control.type == "keyboard" %}
-              {%- for key in site.data[machine_type].keyboard[control.model] %}
+              {%- assign keyboard_layout = site.data[machine_type][control_make].keyboard[control_model] %}
+              {%- if site.developer %}
+            <!-- control {{ control.id }} make: '{{ control_make }}', model: '{{ control_model }} -->
+              {%- endif %}
+              {%- for key in keyboard_layout %}
                 {%- assign key_style = "" -%}{%- if key[1].height -%}{%- capture key_style %} style="height:{{ key[1].height }};"{%- endcapture -%}{%- endif %}
             <div class="{{ machine_type }}-control" style="position:relative;left:{{ key[1].left }};top:{{ key[1].top }};width:{{ key[1].width }};">
               <div class="{{ machine_type }}-binding pcjs-soft-key"{{ key_style}} data-value="{type:'key',binding:'{{ key[0] }}'}">{{ key[1].label }}</div>
