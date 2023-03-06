@@ -31,14 +31,20 @@ exclude:
   - /software/pcx86/sys/dos/microsoft/2.11/src
 
 software:
+  decdisks:
+    server: /decdisks
   diskettes:
     server: /diskettes
   gamedisks:
     server: /gamedisks
-  miscdisks:
-    server: /miscdisks
   harddisks:
     server: /harddisks
+  miscdisks:
+    server: /miscdisks
+  pcsig8a-disks:
+    server: /pcsig8a-disks
+  pcsig8b-disks:
+    server: /pcsig8b-disks
 
 archive:
   lcm:

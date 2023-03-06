@@ -1,5 +1,7 @@
 {
   "name": "IBM PC, 64Kb RAM, Dual Floppy Drives, VGA",
+  "make": "ibm",
+  "model": "5150",
   "defaults": {
     "ram": "64K",
     "fpu": "None",
