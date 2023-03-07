@@ -1,0 +1,366 @@
+---
+layout: post
+title: Decompression Depression
+date: 2023-03-07 10:00:00
+permalink: /blog/2023/03/07/
+preview: /blog/images/pkarc-1988-04.jpg
+---
+
+File compression became quite popular in the 1980s.  People who used dial-up "BBS" bulletin board systems could transfer compressed data in less time, and people like me could squeeze more data onto 360K diskettes.
+
+For IBM PC users, a popular compression solution was a "shareware" program named **ARC** written by [Thom Henderson](http://www.esva.net/thom.html) in 1985 and sold by his company, System Enhancement Associates ("SEA").  **ARC** was written entirely in C, using the Computer Innovations [C86 Compiler](http://www.clipshop.ca/c86/compilers.htm), and the [source code](https://usenet.trashworldnews.com/?thread=115167) was available on request (note that the source code was copyrighted with "all rights reserved"; more on that later).
+
+We take easy-to-use compression utilities for granted these days, but **ARC** was something of a novelty at the time.  I probably used **ARC** version 5.12 to produce many of my early `.ARC` files:
+
+	ARC - Archive utility, Version 5.12, created on 02/05/86 at 22:22:01
+	(C) COPYRIGHT 1985,86 by System Enhancement Associates; ALL RIGHTS RESERVED
+
+	Please refer all inquiries to:
+
+	       System Enhancement Associates
+	       21 New Street, Wayne NJ 07470
+
+	You may copy and distribute this program freely, provided that:
+	    1)   No fee is charged for such copying and distribution, and
+	    2)   It is distributed ONLY in its original, unmodified state.
+
+	If you like this program, and find it of use, then your contribution will
+	be appreciated.  You may not use this product in a commercial environment
+	or a governmental organization without paying a license fee of $35.  Site
+	licenses and commercial distribution licenses are available.  A program
+	disk and printed documentation are available for $50.
+
+	If you fail to abide by the terms of this license,  then your conscience
+	will haunt you for the rest of your life.
+
+	Usage: ARC {amufdxerplvtc}[bswn][g<password>] <archive> [<filename> . . .]
+	Where:   a   = add files to archive
+	         m   = move files to archive
+	         u   = update files in archive
+	         f   = freshen files in archive
+	         d   = delete files from archive
+	         x,e = extract files from archive
+	         r   = run files from archive
+	         p   = copy files from archive to standard output
+	         l   = list files in archive
+	         v   = verbose listing of files in archive
+	         t   = test archive integrity
+	         c   = convert entry to new packing method
+	         b   = retain backup copy of archive
+	         s   = suppress compression (store only)
+	         w   = suppress warning messages
+	         n   = suppress notes and comments
+	         g   = Encrypt/decrypt archive entry
+
+	Please refer to the program documentation for complete instructions.
+
+Here's how you would use it to, for example, archive your entire MS-DOS 3.20 directory:
+
+	C:\> ARC A DOS.ARC C:\DOS\*.*
+	Creating new archive: DOS.ARC
+	Adding file:   ANSI.SYS       analyzing, packing, done.
+	Adding file:   APPEND.COM     analyzing, crunching, done.
+	Adding file:   ASSIGN.COM     analyzing, crunching, done.
+	Adding file:   ATTRIB.EXE     analyzing, crunching, done.
+	Adding file:   BACKUP.EXE     analyzing, crunching, done.
+	Adding file:   CHKDSK.EXE     analyzing, crunching, done.
+	Adding file:   COMMAND.COM    analyzing, squeezing, done.
+	Adding file:   DEBUG.EXE      analyzing, squeezing, done.
+	Adding file:   DISKCOMP.EXE   analyzing, crunching, done.
+	Adding file:   DISKCOPY.EXE   analyzing, crunching, done.
+	Adding file:   DRIVER.SYS     analyzing, crunching, done.
+	Adding file:   EDLIN.EXE      analyzing, crunching, done.
+	Adding file:   EXE2BIN.EXE    analyzing, crunching, done.
+	Adding file:   FC.EXE         analyzing, crunching, done.
+	Adding file:   FDISK.EXE      analyzing, crunching, done.
+	Adding file:   FIND.EXE       analyzing, crunching, done.
+	Adding file:   FORMAT.EXE     analyzing, crunching, done.
+	Adding file:   GRAFTABL.EXE   analyzing, crunching, done.
+	Adding file:   GRAPHICS.EXE   analyzing, crunching, done.
+	Adding file:   GWBASIC.EXE    analyzing, squeezing, done.
+	Adding file:   JOIN.EXE       analyzing, crunching, done.
+	Adding file:   KEYBDV.EXE     analyzing, crunching, done.
+	Adding file:   KEYBFR.EXE     analyzing, crunching, done.
+	Adding file:   KEYBGR.EXE     analyzing, crunching, done.
+	Adding file:   KEYBIT.EXE     analyzing, crunching, done.
+	Adding file:   KEYBSP.EXE     analyzing, crunching, done.
+	Adding file:   KEYBUK.EXE     analyzing, crunching, done.
+	Adding file:   LABEL.EXE      analyzing, crunching, done.
+	Adding file:   LINK.EXE       analyzing, crunching, done.
+	Adding file:   MODE.EXE       analyzing, crunching, done.
+	Adding file:   MORE.COM       analyzing, crunching, done.
+	Adding file:   PRINT.EXE      analyzing, crunching, done.
+	Adding file:   RAMDRIVE.SYS   analyzing, crunching, done.
+	Adding file:   RECOVER.EXE    analyzing, crunching, done.
+	Adding file:   REPLACE.EXE    analyzing, crunching, done.
+	Adding file:   RESTORE.EXE    analyzing, crunching, done.
+	Adding file:   SHARE.EXE      analyzing, crunching, done.
+	Adding file:   SORT.EXE       analyzing, packing, done.
+	Adding file:   SUBST.EXE      analyzing, crunching, done.
+	Adding file:   SYS.COM        analyzing, crunching, done.
+	Adding file:   TREE.EXE       analyzing, crunching, done.
+	Adding file:   XCOPY.EXE      analyzing, crunching, done.
+
+    C:\>DIR DOS.ARC
+
+	 Volume in drive C is PCJS ORG   
+	 Directory of  C:\
+
+	DOS      ARC   338459   7-07-86  12:00p
+
+Listing the contents of `DOS.ARC` shows that the original total size of all the files was 426387, so the archive reduced that total by over 20% -- not bad for a bunch of binary files.  In 1986, that is.
+
+    C:\> ARC L DOS.ARC
+	Name          Length    Date     
+	============  ========  =========
+	ANSI.SYS          1651   7 Jul 86
+	APPEND.COM        1725   7 Jul 86
+	ASSIGN.COM        1523   7 Jul 86
+	ATTRIB.EXE        8234   7 Jul 86
+	BACKUP.EXE       23404   7 Jul 86
+	CHKDSK.EXE        9680   7 Jul 86
+	COMMAND.COM      23612   7 Jul 86
+	DEBUG.EXE        15647   7 Jul 86
+	DISKCOMP.EXE      3808   7 Jul 86
+	DISKCOPY.EXE      4096   7 Jul 86
+	DRIVER.SYS        1102   7 Jul 86
+	EDLIN.EXE         7356   7 Jul 86
+	EXE2BIN.EXE       3050   7 Jul 86
+	FC.EXE           14558   7 Jul 86
+	FDISK.EXE        16830   7 Jul 86
+	FIND.EXE          6403   7 Jul 86
+	FORMAT.EXE       11005   7 Jul 86
+	GRAFTABL.EXE      8210   7 Jul 86
+	GRAPHICS.EXE     13170   7 Jul 86
+	GWBASIC.EXE      78864   7 Jul 86
+	JOIN.EXE          9012   7 Jul 86
+	KEYBDV.EXE        2886   7 Jul 86
+	KEYBFR.EXE        2948   7 Jul 86
+	KEYBGR.EXE        2940   7 Jul 86
+	KEYBIT.EXE        2892   7 Jul 86
+	KEYBSP.EXE        2983   7 Jul 86
+	KEYBUK.EXE        2886   7 Jul 86
+	LABEL.EXE         2750   7 Jul 86
+	LINK.EXE         43988   7 Jul 86
+	MODE.EXE         13928   7 Jul 86
+	MORE.COM           282   7 Jul 86
+	PRINT.EXE         8824   7 Jul 86
+	RAMDRIVE.SYS      6462   7 Jul 86
+	RECOVER.EXE       4145   7 Jul 86
+	REPLACE.EXE       4852   7 Jul 86
+	RESTORE.EXE      21750   7 Jul 86
+	SHARE.EXE         8544   7 Jul 86
+	SORT.EXE          1898   7 Jul 86
+	SUBST.EXE         9898   7 Jul 86
+	SYS.COM           4607   7 Jul 86
+	TREE.EXE          8588   7 Jul 86
+	XCOPY.EXE         5396   7 Jul 86
+	        ====  ========
+	Total     42    426387  
+
+Fast forward 35 years later.  After reading thousands of old diskettes in storage and collecting all their contents onto my laptop, I noticed there were a lot of `.ARC` files (and even more `.ZIP` files), and since disk space was no longer a premium, I decided to expand them all.
+
+Fortunately, the archive utility I use on my MacBook ("[The Unarchiver](https://theunarchiver.com)") has a command-line utility, `unar`, that knows how to deal with both `.ARC` and `.ZIP` files.
+
+I wasn't expecting the hundreds of old `.ARC` and `.ZIP` archives to decompress without issues, especially because a few of them had come from diskettes with unrecoverable read errors, but there were *far* more problems than I had expected.
+
+The most common problem was actually with `.ZIP` files, and whenever `unar` ran into a problem, it wasn't very helpful.  For example:
+
+    unar -o BOXES3 PCMAG-VOL07N15/BOXES3.ZIP
+    BOXES3  (384 B)... OK.
+    BOXES3.C  (10496 B)... Failed! (File is not fully supported)
+    BOXES3.DEF  (384 B)... OK.
+    BOXES3.EXE  (5552 B)... Failed! (File is not fully supported)
+    BOXES3.H  (384 B)... OK.
+    BOXES3.RC  (3868 B)... Failed! (File is not fully supported)
+
+The problem became clearer after running a vintage copy of `PKUNZIP` on the archives:
+
+	C:\TMP>PKUNZIP -V BOXES3.ZIP
+
+	PKUNZIP (tm)    FAST!    Extract Utility    Version 1.02    10-01-89
+	Copyright 1989 PKWARE Inc.  All Rights Reserved.  PKUNZIP/h for help
+
+	Searching ZIP: BOXES3.ZIP
+
+	 Length  Method   Size  Ratio   Date    Time   CRC-32  Attr  Name
+	 ------  ------   ----- -----   ----    ----   ------  ----  ----
+	    384  Shrunk     189  51%  05-13-88  16:27  301e262c --w  BOXES3
+	  10496  Reduce4   3019  72%  05-15-88  01:43  746c8158 --w  BOXES3.C
+	    384  Shrunk     247  36%  05-13-88  16:27  cd620860 --w  BOXES3.DEF
+	   5552  Reduce4   3827  32%  05-16-88  14:55  7dd8923c --w  BOXES3.EXE
+	    384  Shrunk     207  47%  05-13-88  16:24  84b5ba7c --w  BOXES3.H
+	   3868  Reduce4   1307  67%  08-01-88  04:49  b1f16a7f --w  BOXES3.RC
+	 ------          ------  ---                                 -------
+	  21068            8796  59%                                       6
+
+Apparently, the *Reduce4* compression method was short-lived, and as a result, almost no modern archive utilities support it.  See this [excellent write-up](https://www.hanshq.net/zip2.html) on legacy ZIP compression methods like *Reduce* for more details.
+
+There were also number of `.ARC` files that had more mysterious problems.  For example, I had *three* different `.ARC` backups of an old OS/2 utility I had written in early 1988 named "CUE".  It was a handy program that saved ("queued") your OS/2 command-line history for quick recall and editing.  Unfortunately, *none* of the three `CUE.ARC` archives could be completely decompressed.  Here is what `unar` reported:
+
+    unar -o CUE -d CUE.ARC
+    CUE  (2151 B)... OK.
+    CUE.C  (20157 B)... Failed! (Error on decrunching)
+    CUE.DEF  (35 B)... Failed! (Wrong checksum)
+    CUE.DOC  (12913 B)... Failed! (Error on decrunching)
+    CUE.EXE  (16463 B)... Failed! (Data is corrupted)
+    CUE.H  (11829 B)... OK.
+    CUE.MAP  (13942 B)... Failed! (Error on decrunching)
+    CUE.OBJ  (8456 B)... Failed! (Data is corrupted)
+    CUE.SYM  (2228 B)... Failed! (Data is corrupted)
+    CUE.SYS  (1405 B)... Failed! (Data is corrupted)
+    CUECOMM.C  (5961 B)... OK.
+    CUECOMM.OBJ  (1710 B)... OK.
+    CUEFIND.C  (10264 B)... Failed! (Data is corrupted)
+    CUEFIND.OBJ  (3133 B)... Failed! (Data is corrupted)
+    CUEHIST.C  (7435 B)... Failed! (Data is corrupted)
+    CUEHIST.OBJ  (2379 B)... Failed! (Data is corrupted)
+    CUEKBD.C  (2958 B)... Failed! (Data is corrupted)
+    CUEKBD.OBJ  (911 B)... Failed! (Data is corrupted)
+    CUEKREG.C  (15653 B)... Failed! (Error on decrunching)
+    CUEKREG.OBJ  (4108 B)... Failed! (Data is corrupted)
+    CUEKSUP.C  (5623 B)... Failed! (Data is corrupted)
+    CUEKSUP.OBJ  (2010 B)... Failed! (Data is corrupted)
+    CUEMSE.C  (2404 B)... Failed! (Data is corrupted)
+    CUEMSE.OBJ  (672 B)... Failed! (Data is corrupted)
+    CUEPOP.C  (19345 B)... Failed! (Error on decrunching)
+    CUEPOP.OBJ  (5421 B)... Failed! (Data is corrupted)
+    CUEPROC.C  (8774 B)... Failed! (Data is corrupted)
+    CUEPROC.OBJ  (2675 B)... Failed! (Data is corrupted)
+    CUEREG.C  (14679 B)... Failed! (Error on decrunching)
+    CUEREG.OBJ  (3655 B)... Failed! (Data is corrupted)
+    CUESUBS.C  (10744 B)... Failed! (Data is corrupted)
+    CUESUBS.DEF  (1452 B)... Failed! (Data is corrupted)
+    CUESUBS.DLL  (33077 B)... OK.
+    CUESUBS.H  (12841 B)... OK.
+    CUESUBS.LIB  (3584 B)... Failed! (Data is corrupted)
+    CUESUBS.LRF  (170 B)... Failed! (Data is corrupted)
+    CUESUBS.MAP  (19524 B)... OK.
+    CUESUBS.OBJ  (3481 B)... Failed! (Data is corrupted)
+    CUESUBS.SYM  (2516 B)... OK.
+    CUESUP.ASM  (49248 B)... Failed! (Error on decrunching)
+    CUESUP.OBJ  (5357 B)... Failed! (Data is corrupted)
+    CUESYS.ASM  (8003 B)... Failed! (Data is corrupted)
+    CUESYS.DEF  (28 B)... Failed! (Wrong checksum)
+    CUESYS.INC  (18064 B)... Failed! (Error on decrunching)
+    CUESYS.MAP  (916 B)... Failed! (Data is corrupted)
+    CUESYS.OBJ  (882 B)... Failed! (Data is corrupted)
+    CUESYS.SYM  (244 B)... Failed! (Data is corrupted)
+    CUESYS.SYS  (1405 B)... Failed! (Data is corrupted)
+    CUETTY.C  (1967 B)... OK.
+    CUETTY.OBJ  (573 B)... OK.
+    CUEUTIL.C  (2624 B)... Failed! (Data is corrupted)
+    CUEUTIL.OBJ  (696 B)... Failed! (Data is corrupted)
+    CUEVIO.C  (7116 B)... Failed! (Data is corrupted)
+    CUEVIO.OBJ  (2226 B)... Failed! (Data is corrupted)
+    CUEVREG.C  (20393 B)... OK.
+    CUEVREG.OBJ  (4055 B)... OK.
+    DEBUG.ASM  (342 B)... Failed! (Data is corrupted)
+    DEBUG.OBJ  (84 B)... Failed! (Wrong checksum)
+    READ.ME  (11148 B)... Failed! (Data is corrupted)
+    TOOLS.INI  (9754 B)... Failed! (Data is corrupted)
+
+So I switched back to an IBM PC and asked the `ARC` utility to list the archive's contents:
+
+	C:\TMP>ARC L CUE
+	Name          Length    Date     
+	============  ========  =========
+	CUE               2151  27 Feb 89
+	I don't know how to handle file CUE.C in archive CUE.ARC
+	I think you need a newer version of ARC.
+
+Well, there were newer versions of `ARC`, but no, that was not the problem.
+
+### The Sad History of ARC Files
+
+In 1986, Phil Katz ("PK") was a software developer who saw an opportunity to make a faster version of `ARC`, apparently by taking the original source code and rewriting key portions in assembly language.  He formed the company **PKware** and released his version as two separate programs: `PKARC` to create and update archives, and `PKXARC` to extract files from them.
+
+And he didn't stop there.  You may have noticed in my MS-DOS 3.20 example that `ARC` chose from a variety of storage methods, such as "packing", "crunching", and "squeezing".  `ARC` would choose whichever method was appropriate for a particular file.  Katz went a step farther, and with the introduction of `PKXARC` version 3.4 (dated 12-15-86), added "squashing".
+
+Unfortunately, "squashing" created a lot of confusion, because it meant any `.ARC` archive that contained "squashed" files was unusable by *any* version of `ARC`, as well as earlier versions of `PKARC` and `PKXARC`.  And even if there was precedent for this (if, for example, either of `ARC`'s "crunching" or "squeezing" methods had been added after `ARC`'s initial release), the large number of `.ARC` files in circulation at the time made this change *much* more problematic.
+
+Compounding matters were questions of whether PKware had violated SEA's copyrights or trademarks, including the use of SEA's source code without permission.  PKware also started running ads, like the April 1988 PC Tech Journal ad shown below, which reportedly infuriated SEA.  A [lawsuit](http://www.bbsdocumentary.com/library/CONTROVERSY/LAWSUITS/SEA/) ensued, and while a settlement was ultimately reached, PKware simply pivoted to a different to a new archive format (`.ZIP`) and a new set of utilities (`PKZIP` and `PKUNZIP`).  The ZIP era was born, and the ARC era gradually came to an end.
+
+![PC Tech Journal April 1988 "ARC" Ads](/blog/images/pkarc-1988-04.jpg)
+
+There's a good segment on YouTube from [BBS The Documentary](https://www.youtube.com/watch?v=uNXCd2EATSo) by Jason Scott that was filmed around 15 years after the controversy, if you want to learn more about it.
+
+### Returning to the ARC of My Story
+
+Getting back to those `CUE.ARC` archives that I couldn't decompress, I wondered if I was simply using an incorrect version of `ARC` or `PKXARC`.  But `PKXARC` version 3.5 recognized all the compression methods being used, including the infamous "squash" method:
+
+	C:\TMP>PKXARC -V CUE
+
+	PKXARC    FAST!    Archive Extract Utility    Version 3.5    04-27-87
+	Copyright (c) 1986,1987 PKWARE Inc. All Rights Reserved. PKXARC/h for help
+
+	Searching: CUE.ARC
+
+	Filename        Length   Method     Size   Ratio    Date      Time    CRC
+	--------        ------   ------    ------  -----    ----      ----    ---
+	CUE               2151  Crunched     1071   51%   02-27-89  22:19:02  F48B
+	CUE.C            20157  Squashed     9802   52%   02-26-89  11:23:30  CFBE
+	CUE.DEF             35   Stored        35    0%   08-29-88  23:50:22  5050
+	CUE.DOC          12913  Squashed     6673   49%   04-17-88  01:02:50  814E
+	CUE.EXE          16463  Crunched    12327   26%   02-26-89  12:10:58  A164
+	CUE.H            11829  Crunched     5480   54%   02-28-89  21:31:00  9178
+	CUE.MAP          13942  Squashed     4769   66%   02-26-89  12:10:58  2437
+	CUE.OBJ           8456  Crunched     6780   20%   02-26-89  12:10:52  2EF3
+	CUE.SYM           2228  Crunched     1959   13%   02-26-89  12:11:42  895B
+	CUE.SYS           1405  Crunched      576   60%   01-24-89  12:02:18  F11C
+	CUECOMM.C         5961  Crunched     3171   47%   02-28-89  10:03:42  F8F4
+	CUECOMM.OBJ       1710  Crunched     1457   15%   02-28-89  10:04:34  2E67
+	CUEFIND.C        10264  Crunched     4526   56%   10-27-88  02:05:44  CA6D
+	CUEFIND.OBJ       3133  Crunched     2561   19%   01-24-89  11:51:14  4BF7
+	CUEHIST.C         7435  Crunched     3698   51%   10-27-88  00:06:36  F442
+	CUEHIST.OBJ       2379  Crunched     2054   14%   01-24-89  11:53:58  2760
+	CUEKBD.C          2958  Crunched     1650   45%   10-25-88  00:02:50  9B67
+	CUEKBD.OBJ         911  Crunched      774   16%   01-24-89  11:51:30  52D4
+	CUEKREG.C        15653  Squashed     7305   54%   02-19-89  11:35:06  916C
+	CUEKREG.OBJ       4108  Crunched     3359   19%   02-19-89  11:54:02  4A91
+	CUEKSUP.C         5623  Crunched     2529   56%   09-25-88  23:50:28  EFEC
+	CUEKSUP.OBJ       2010  Crunched     1621   20%   01-24-89  11:53:42  B135
+	CUEMSE.C          2404  Crunched     1424   41%   09-30-88  13:02:00  8338
+	CUEMSE.OBJ         672  Crunched      572   15%   01-24-89  11:53:28  7D07
+	CUEPOP.C         19345  Squashed     8142   58%   10-30-88  12:34:18  1903
+	CUEPOP.OBJ        5421  Crunched     4229   22%   01-24-89  11:50:48  0F92
+	CUEPROC.C         8774  Crunched     4574   48%   09-30-88  13:47:30  0662
+	CUEPROC.OBJ       2675  Crunched     2249   16%   01-24-89  11:54:18  A980
+	CUEREG.C         14679  Squashed     7116   52%   02-19-89  12:44:28  A1AD
+	CUEREG.OBJ        3655  Crunched     3010   18%   02-19-89  12:46:06  89D8
+	CUESUBS.C        10744  Crunched     5235   52%   02-19-89  11:14:36  AABF
+	CUESUBS.DEF       1452  Crunched      863   41%   02-18-89  04:38:10  4FC1
+	CUESUBS.DLL      33077  Crunched    24885   25%   02-28-89  22:52:32  84A7
+	CUESUBS.H        12841  Squashed     6232   52%   02-28-89  22:22:02  8C23
+	CUESUBS.LIB       3584  Crunched     1294   64%   09-29-88  22:13:40  7338
+	CUESUBS.LRF        170  Crunched      123   28%   02-18-89  03:51:42  89E8
+	CUESUBS.MAP      19524  Squashed     6474   67%   02-28-89  22:52:30  F1AC
+	CUESUBS.OBJ       3481  Crunched     2770   21%   02-19-89  11:16:08  582A
+	CUESUBS.SYM       2516  Crunched     2256   11%   02-28-89  22:52:36  F010
+	CUESUP.ASM       49248  Squashed    20230   59%   02-26-89  11:24:02  113F
+	CUESUP.OBJ        5357  Crunched     4004   26%   02-26-89  12:11:02  8264
+	CUESYS.ASM        8003  Crunched     4209   48%   10-24-88  22:41:00  4071
+	CUESYS.DEF          28   Stored        28    0%   08-07-88  02:20:28  85B4
+	CUESYS.INC       18064  Squashed     9382   49%   08-19-88  18:14:04  3363
+	CUESYS.MAP         916  Crunched      441   52%   01-24-89  12:02:18  1852
+	CUESYS.OBJ         882  Crunched      771   13%   01-24-89  12:02:14  1C38
+	CUESYS.SYM         244  Crunched      186   24%   01-24-89  12:02:20  5A34
+	CUESYS.SYS        1405  Crunched      576   60%   01-24-89  12:02:18  F11C
+	CUETTY.C          1967  Crunched     1068   46%   02-28-89  21:27:00  65DD
+	CUETTY.OBJ         573  Crunched      469   19%   02-28-89  21:46:04  EC7A
+	CUEUTIL.C         2624  Crunched     1504   43%   10-27-88  02:18:58  022A
+	CUEUTIL.OBJ        696  Crunched      606   13%   01-24-89  11:54:44  476A
+	CUEVIO.C          7116  Crunched     3699   49%   10-27-88  15:15:54  2D88
+	CUEVIO.OBJ        2226  Crunched     1772   21%   01-24-89  11:51:46  4FBF
+	CUEVREG.C        20393  Squashed     8842   57%   02-28-89  22:51:14  473A
+	CUEVREG.OBJ       4055  Crunched     3097   24%   02-28-89  22:52:18  1572
+	DEBUG.ASM          342  Crunched      270   22%   10-25-88  00:16:26  E534
+	DEBUG.OBJ           84   Stored        84    0%   01-24-89  11:48:44  9440
+	READ.ME          11148  Crunched     5951   47%   01-24-89  17:09:06  BA31
+	TOOLS.INI         9754  Crunched     4356   56%   02-25-89  11:36:32  E566
+	-----           ------             ------  -----
+	0060            441863             237170   47%
+
+I could chalk up the errors in *one* `CUE.ARC` file to possible disk corruption, but I had *three* different `CUE.ARC` archives, made at different times, and stored on *three* different diskettes.  Why would they *all* be plagued by similar decompression errors?
+
+At this point, I don't really know, because resolving this problem is going to require some debugging.  But there's an important lesson here to my 1980s' self: don't archive files you care about without also testing the integrity of that archive!
