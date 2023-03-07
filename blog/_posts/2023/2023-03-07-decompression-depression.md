@@ -275,9 +275,9 @@ Well, there were newer versions of `ARC`, but no, that was not the problem.
 
 In 1986, Phil Katz ("PK") was a software developer who saw an opportunity to make a faster version of `ARC`, apparently by taking the original source code and rewriting key portions in assembly language.  He formed the company **PKware** and released his version as two separate programs: `PKARC` to create and update archives, and `PKXARC` to extract files from them.
 
-And he didn't stop there.  You may have noticed in my MS-DOS 3.20 example that `ARC` chose from a variety of storage methods, such as "packing", "crunching", and "squeezing".  `ARC` would choose whichever method was appropriate for a particular file.  Katz went a step farther, and with the introduction of `PKXARC` version 3.4 (dated 12-15-86), added "squashing".
+And he didn't stop there.  You may have noticed in my MS-DOS 3.20 example that `ARC` chose from a variety of storage methods, such as "packing", "crunching", and "squeezing".  `ARC` would choose whichever method was appropriate for a particular file.  Katz went a step farther, and with the release of `PKARC` version 2.0 and `PKXARC` version 3.4 (both dated 12-15-86), added "squashing".
 
-Unfortunately, "squashing" created a lot of confusion, because it meant any `.ARC` archive that contained "squashed" files was unusable by *any* version of `ARC`, as well as earlier versions of `PKARC` and `PKXARC`.  And even if there was precedent for this (if, for example, either of `ARC`'s "crunching" or "squeezing" methods had been added after `ARC`'s initial release), the large number of `.ARC` files in circulation at the time made this change *much* more problematic.
+Unfortunately, "squashing" created a lot of confusion, because it meant any `.ARC` archive that contained "squashed" files was unusable by *any* version of `ARC`, as well as earlier versions of `PKARC` and `PKXARC`.  And even if there was precedent for this (if, for example, either of `ARC`'s "crunching" or "squeezing" methods had been added after `ARC`'s initial release), the large number of `.ARC` files being circulated at the time made this change *much* more problematic.
 
 Compounding matters were questions of whether PKware had violated SEA's copyrights or trademarks, including the use of SEA's source code without permission.  PKware also started running ads, like the April 1988 PC Tech Journal ad shown below, which reportedly infuriated SEA.  A [lawsuit](http://www.bbsdocumentary.com/library/CONTROVERSY/LAWSUITS/SEA/) ensued, and while a settlement was ultimately reached, PKware simply pivoted to a different to a new archive format (`.ZIP`) and a new set of utilities (`PKZIP` and `PKUNZIP`).  The ZIP era was born, and the ARC era gradually came to an end.
 
@@ -287,7 +287,7 @@ There's a good segment on YouTube from [BBS The Documentary](https://www.youtube
 
 ### Returning to the ARC of My Story
 
-Getting back to those `CUE.ARC` archives that I couldn't decompress, I wondered if I was simply using an incorrect version of `ARC` or `PKXARC`.  But `PKXARC` version 3.5 recognized all the compression methods being used, including the infamous "squash" method:
+Getting back to those `CUE.ARC` archives that I couldn't decompress, `PKXARC` version 3.5 recognized all the compression methods being used, including the infamous "squash" method:
 
 	C:\TMP>PKXARC -V CUE
 
@@ -360,6 +360,75 @@ Getting back to those `CUE.ARC` archives that I couldn't decompress, I wondered 
 	TOOLS.INI         9754  Crunched     4356   56%   02-25-89  11:36:32  E566
 	-----           ------             ------  -----
 	0060            441863             237170   47%
+
+However, neither `PKXARC` 3.5 nor any other version I've tried so far is able to extract all the files; an "archive integrity" test using `-t` reports the same failures, and it doesn't seem to matter if the files were "squashed", "crunched", or just "stored":
+
+	C:\TMP>PKXARC -T CUE
+
+	PKXARC    FAST!    Archive Extract Utility    Version 3.5    04-27-87
+	Copyright (c) 1986,1987 PKWARE Inc. All Rights Reserved. PKXARC/h for help
+
+	Searching: CUE.ARC
+	Testing: CUE           Ok
+	Testing: CUE.C         Warning!  file CUE.C fails CRC check.
+	Testing: CUE.DEF       Warning!  file CUE.DEF fails CRC check.
+	Testing: CUE.DOC       Warning!  file CUE.DOC fails CRC check.
+	Testing: CUE.EXE       Warning!  file CUE.EXE fails CRC check.
+	Testing: CUE.H         Ok
+	Testing: CUE.MAP       Warning!  file CUE.MAP fails CRC check.
+	Testing: CUE.OBJ       Warning!  file CUE.OBJ fails CRC check.
+	Testing: CUE.SYM       Warning!  file CUE.SYM fails CRC check.
+	Testing: CUE.SYS       Warning!  file CUE.SYS fails CRC check.
+	Testing: CUECOMM.C     Ok
+	Testing: CUECOMM.OBJ   Ok
+	Testing: CUEFIND.C     Warning!  file CUEFIND.C fails CRC check.
+	Testing: CUEFIND.OBJ   Warning!  file CUEFIND.OBJ fails CRC check.
+	Testing: CUEHIST.C     Warning!  file CUEHIST.C fails CRC check.
+	Testing: CUEHIST.OBJ   Warning!  file CUEHIST.OBJ fails CRC check.
+	Testing: CUEKBD.C      Warning!  file CUEKBD.C fails CRC check.
+	Testing: CUEKBD.OBJ    Warning!  file CUEKBD.OBJ fails CRC check.
+	Testing: CUEKREG.C     Warning!  file CUEKREG.C fails CRC check.
+	Testing: CUEKREG.OBJ   Warning!  file CUEKREG.OBJ fails CRC check.
+	Testing: CUEKSUP.C     Warning!  file CUEKSUP.C fails CRC check.
+	Testing: CUEKSUP.OBJ   Warning!  file CUEKSUP.OBJ fails CRC check.
+	Testing: CUEMSE.C      Warning!  file CUEMSE.C fails CRC check.
+	Testing: CUEMSE.OBJ    Warning!  file CUEMSE.OBJ fails CRC check.
+	Testing: CUEPOP.C      Warning!  file CUEPOP.C fails CRC check.
+	Testing: CUEPOP.OBJ    Warning!  file CUEPOP.OBJ fails CRC check.
+	Testing: CUEPROC.C     Warning!  file CUEPROC.C fails CRC check.
+	Testing: CUEPROC.OBJ   Warning!  file CUEPROC.OBJ fails CRC check.
+	Testing: CUEREG.C      Warning!  file CUEREG.C fails CRC check.
+	Testing: CUEREG.OBJ    Warning!  file CUEREG.OBJ fails CRC check.
+	Testing: CUESUBS.C     Warning!  file CUESUBS.C fails CRC check.
+	Testing: CUESUBS.DEF   Warning!  file CUESUBS.DEF fails CRC check.
+	Testing: CUESUBS.DLL   Ok
+	Testing: CUESUBS.H     Ok
+	Testing: CUESUBS.LIB   Warning!  file CUESUBS.LIB fails CRC check.
+	Testing: CUESUBS.LRF   Warning!  file CUESUBS.LRF fails CRC check.
+	Testing: CUESUBS.MAP   Ok
+	Testing: CUESUBS.OBJ   Warning!  file CUESUBS.OBJ fails CRC check.
+	Testing: CUESUBS.SYM   Ok
+	Testing: CUESUP.ASM    Warning!  file CUESUP.ASM fails CRC check.
+	Testing: CUESUP.OBJ    Warning!  file CUESUP.OBJ fails CRC check.
+	Testing: CUESYS.ASM    Warning!  file CUESYS.ASM fails CRC check.
+	Testing: CUESYS.DEF    Warning!  file CUESYS.DEF fails CRC check.
+	Testing: CUESYS.INC    Warning!  file CUESYS.INC fails CRC check.
+	Testing: CUESYS.MAP    Warning!  file CUESYS.MAP fails CRC check.
+	Testing: CUESYS.OBJ    Warning!  file CUESYS.OBJ fails CRC check.
+	Testing: CUESYS.SYM    Warning!  file CUESYS.SYM fails CRC check.
+	Testing: CUESYS.SYS    Warning!  file CUESYS.SYS fails CRC check.
+	Testing: CUETTY.C      Ok
+	Testing: CUETTY.OBJ    Ok
+	Testing: CUEUTIL.C     Warning!  file CUEUTIL.C fails CRC check.
+	Testing: CUEUTIL.OBJ   Warning!  file CUEUTIL.OBJ fails CRC check.
+	Testing: CUEVIO.C      Warning!  file CUEVIO.C fails CRC check.
+	Testing: CUEVIO.OBJ    Warning!  file CUEVIO.OBJ fails CRC check.
+	Testing: CUEVREG.C     Ok
+	Testing: CUEVREG.OBJ   Ok
+	Testing: DEBUG.ASM     Warning!  file DEBUG.ASM fails CRC check.
+	Testing: DEBUG.OBJ     Warning!  file DEBUG.OBJ fails CRC check.
+	Testing: READ.ME       Warning!  file READ.ME fails CRC check.
+	Testing: TOOLS.INI     Warning!  file TOOLS.INI fails CRC check.
 
 I could chalk up the errors in *one* `CUE.ARC` file to possible disk corruption, but I had *three* different `CUE.ARC` archives, made at different times, and stored on *three* different diskettes.  Why would they *all* be plagued by similar decompression errors?
 
