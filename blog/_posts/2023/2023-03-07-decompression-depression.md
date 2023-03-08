@@ -433,3 +433,89 @@ However, neither `PKXARC` 3.5 nor any other version I've tried so far is able to
 I could chalk up the errors in *one* `CUE.ARC` file to possible disk corruption, but I had *three* different `CUE.ARC` archives, made at different times, and stored on *three* different diskettes.  Why would they *all* be plagued by similar decompression errors?
 
 At this point, I don't really know, because resolving this problem is going to require some debugging.  But there's an important lesson here to my 1980s' self: don't archive files you care about without also testing the integrity of that archive!
+
+### UPDATE (March 8, 2023)
+
+Issue resolved!  Here's what happened.
+
+After more digging, I found a set of *unarchived* files that had timestamps similar to those in the "corrupted" archive, and when I looked at the first two files in the archive:
+
+	Testing: CUE           Ok
+	Testing: CUE.C         Warning!  file CUE.C fails CRC check.
+
+the unarchived copy of `CUE` was identical to the archived copy, and the unarchived copy of `CUE.C` was exactly the same size, so it was probably also identical.  So I found and tweaked a [UNIX version of ARC](https://github.com/jeffpar/arc), and then I used that to create a "good" `.ARC` with just those two files.
+
+Then I ran `ARC` and watched it decode.
+
+Here's the section containing the header for `CUE.C` in the "good" archive:
+
+    00000440  47 87 23 04 5c 9d 2e 18  c1 2a 2a 00 1a 09 43 55  |G.#.\....**...CU|
+    00000450  45 2e 43 00 25 25 25 25  25 25 25 4a 26 00 00 9c  |E.C.%%%%%%%J&...|
+    00000460  12 ec 5a be cf bd 4e 00  00 2f 54 80 00 31 a4 4a  |..Z...N../T..1.J|
+
+The file header began at 0x44C with marker byte 0x1A, followed by "squashed" compression type 0x09; the name of the file ("CUE.C"); the compressed file size (0x264A); date, time, and CRC words; the uncompressed file size (0x4EBD); and finally the compressed data stream at offset 0x469:
+
+    2f 54 80 00 31 a4 4a ...
+
+which corresponded to the first few byte of `CUE.C`:
+
+    00000000  2f 2a 20 20 43 55 45 2e  43 0d 0a 20 2a 20 20 42  |/*  CUE.C.. *  B|
+    00000010  79 20 4a 65 66 66 20 50  61 72 73 6f 6e 73 20 20  |y Jeff Parsons  |
+
+Now here's the same section from the "corrupted" archive:
+
+    00000440  47 87 23 04 5c 9d 2e 18  c1 2a 2a 00 1a 09 43 55  |G.#.\....**...CU|
+    00000450  45 2e 43 00 25 25 25 25  25 25 00 4a 26 00 00 5a  |E.C.%%%%%%.J&..Z|
+    00000460  12 ef 5a be cf bd 4e 00  00 78                    |..Z...N..x      |
+
+The date and time words were different, but both the compressed and uncompressed sizes were the same, and even the CRC values (0xCFBE) were identical.  And yet, the compressed data streams were completely different; the "good" stream began with 0x2F, but the "corrupted" stream began with 0x78.
+
+At this point, I stopped debugging and thought for a minute.  I had just watched `ARC` read the compressed data using this function:
+
+```c
+    getb_unp(f)
+    FILE *f;
+    {
+        register u_int len;
+
+        if (stdlen) {
+                len = (stdlen < MYBUF) ? stdlen : MYBUF;
+
+                len = fread(pinbuf, 1, len, f);
+
+                if (password)
+                        codebuf(pinbuf, len);
+        
+                stdlen -= len;
+        } else
+                len = 0;
+        
+        return (len);
+    }
+```
+
+and then it hit me: what if I had used a *password* on *some* of the files in the archive?  That might explain why none of the compressed bytes looked the same.  So I took a quick look at *codebuf()*:
+
+```c
+    VOID
+    codebuf(buf, len)               /* encrypt a buffer */
+    reg char       *buf;
+    u_int           len;
+    {
+            reg u_int       i;
+            reg char       *pasptr = p;
+
+            for (i = 0; i < len; i++) {
+                    if (!*pasptr)
+                            pasptr = password;
+                    *buf++ ^= *pasptr++;
+            }
+            p = pasptr;
+    }
+```
+
+and all it did was sequentially XOR every byte in the buffer with bytes from the password.  So I took the first two bytes from each compressed stream again (0x2F and 0x78), XOR'ed them, and got 0x54, or capital "W".  I repeated the process until the letters began repeating, and now I had the complete 6-letter password.  Every file that had originally reported a CRC error could now be successfully extracted with that password.
+
+I'm still not sure why I would have bothered password-protecting *any* of the files in the archive, let alone only *some* of them.  `ARC` will clearly let you do that, but the result is a mess, because any unprotected files will appear corrupt if you supply *any* password, and any password-protected files will appear corrupt if you don't supply the *right* password.  And there's no hint in either case that you should -- or should not -- supply a password.
+
+In retrospect, `ARC` probably should have had an "encrypted" indicator in each file header, so that it could simply bypass any encrypted files when no password was provided, as well as a mechanism (eg, a checksum) to verify a compressed stream after unencrypting it.  `ARC` would usually halt and report a cryptic error when decoding an invalid data stream, but the error would be unpredictable -- not a very user-friendly result.
