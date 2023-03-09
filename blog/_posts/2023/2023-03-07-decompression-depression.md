@@ -196,7 +196,7 @@ The problem became clearer after running a vintage copy of `PKUNZIP` on the arch
 
 Apparently, the *Reduce4* compression method was short-lived, and as a result, almost no modern archive utilities support it.  See this [excellent write-up](https://www.hanshq.net/zip2.html) on legacy ZIP compression methods like *Reduce* for more details.
 
-There were also number of `.ARC` files that had more mysterious problems.  For example, I had *three* different `.ARC` backups of an old OS/2 utility I had written in early 1988 named "CUE".  It was a handy program that saved ("queued") your OS/2 command-line history for quick recall and editing.  Unfortunately, *none* of the three `CUE.ARC` archives could be completely decompressed.  Here is what `unar` reported:
+There were also number of `.ARC` files that had more mysterious problems.  For example, I had *three* different `.ARC` backups of an old OS/2 utility I had written in early 1988 named "Cue".  It was a handy program that saved ("queued") your OS/2 command-line history for quick recall and editing.  Unfortunately, *none* of the three `CUE.ARC` archives could be completely decompressed.  Here is what `unar` reported:
 
     unar -o CUE -d CUE.ARC
     CUE  (2151 B)... OK.
@@ -514,8 +514,10 @@ and then it hit me: what if I had used a *password* on *some* of the files in th
     }
 ```
 
-and all it did was sequentially XOR every byte in the buffer with bytes from the password.  So I took the first two bytes from each compressed stream again (0x2F and 0x78), XOR'ed them, and got 0x54, or capital "W".  I repeated the process until the letters began repeating, and now I had the complete 6-letter password.  Every file that had originally reported a CRC error could now be successfully extracted with that password.
+and all it did was sequentially XOR every byte in the buffer with bytes from the password.  So I took the first byte from each compressed stream again (0x2F and 0x78), XOR'ed them, and got 0x54, or capital "W".  I repeated the process until the letters began repeating, and now I had the complete 6-letter password.  Every file that had originally reported a CRC error could now be successfully extracted with that password.
 
 I'm still not sure why I would have bothered password-protecting *any* of the files in the archive, let alone only *some* of them.  `ARC` will clearly let you do that, but the result is a mess, because any unprotected files will appear corrupt if you supply *any* password, and any password-protected files will appear corrupt if you don't supply the *right* password.  And there's no hint in either case that you should -- or should not -- supply a password.
 
 In retrospect, `ARC` probably should have had an "encrypted" indicator in each file header, so that it could simply bypass any encrypted files when no password was provided, as well as a mechanism (eg, a checksum) to verify a compressed stream after unencrypting it.  `ARC` would usually halt and report a cryptic error when decoding an invalid data stream, but the error would be unpredictable -- not a very user-friendly result.
+
+Anyway, to celebrate, I've added the entire contents of that weird `CUE.ARC` to a new [Cue](https://github.com/jeffpar/cue) repository, so that everyone can enjoy all that crusty, now-useless code from 1988.  **Cue** was a popular in-house OS/2 utility back in the day, but like so many other tools we used to use at Microsoft (**Z**, **WZMAIL**, etc), it's faded into oblivion.
