@@ -96,16 +96,18 @@ function createDisk(diskFile, diskette, argv)
          */
         sArchiveFile = sArchiveFile.replace(".img", path.sep);
     }
-    let sectorIDs = argv['sectorID'] || diskette.argv['sectorID'];
-    let sectorErrors = argv['sectorError'] || diskette.argv['sectorError'];
-    let suppData = argv['suppData'] || diskette.argv['suppData'];
-    if (suppData) suppData = readFile(suppData);
     let name = path.basename(sArchiveFile);
+    let sectorIDs = diskette.argv['sectorID'] || argv['sectorID'];
+    let sectorErrors = diskette.argv['sectorError'] || argv['sectorError'];
+    let suppData = diskette.argv['suppData'] || argv['suppData'];
+    if (suppData) suppData = readFile(suppData);
     if (sArchiveFile.endsWith(path.sep)) {
         diskette.command = "--dir " + name;
+        let label = diskette.label || argv['label'];
+        let normalize = diskette.normalize || argv['normalize'];
         let match = diskette.format && diskette.format.match(/^PC([0-9]+)K/);
-        let kbTarget = match && +match[1] || 0;
-        di = readDir(sArchiveFile, diskette.label, diskette.normalize, kbTarget, undefined, sectorIDs, sectorErrors, suppData);
+        let target = match && +match[1] || +argv['target'];
+        di = readDir(sArchiveFile, label, normalize, target, undefined, sectorIDs, sectorErrors, suppData);
     } else {
         diskette.command = "--disk " + name;
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
@@ -550,7 +552,7 @@ function processDisk(di, diskFile, argv, diskette)
      */
     if (argv['rewrite']) {
         if (diskFile.endsWith(".json")) {
-            writeDisk(diskFile, di, argv['legacy'], 0, true, undefined, undefined, argv['archive'], argv['source']);
+            writeDisk(diskFile, di, argv['legacy'], 0, true, undefined, undefined, argv['source']);
         }
     }
 
@@ -580,13 +582,13 @@ function processDisk(di, diskFile, argv, diskette)
             if (diTemp) {
                 let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
                 diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
-                writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false, undefined, diskette.archive, diskette.source);
+                writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false, undefined, diskette.source);
                 let warning = false;
                 if (diskette.archive.endsWith(".img")) {
                     let json = diTemp.getJSON();
                     diTemp.buildDiskFromJSON(json);
                     let sTempIMG = sTempJSON.replace(".json",".img");
-                    writeDisk(sTempIMG, diTemp, true, 0, true, false, undefined, diskette.archive, diskette.source);
+                    writeDisk(sTempIMG, diTemp, true, 0, true, false, undefined, diskette.source);
                     if (!compareDisks(sTempIMG, diskette.archive)) {
                         printf("warning: %s unsuccessfully rebuilt\n", diskette.archive);
                         warning = true;
@@ -864,17 +866,10 @@ function processDisk(di, diskFile, argv, diskette)
             di.updateBootSector(readFile(argv['boot'], null));
         }
         let output = argv['output'] || argv[1];
-        let archive = argv['archive'];
-        /*
-         * TODO: When writeDisk() is called as part of a checkdisk/rebuild operation, the archive parameter is
-         * set to the path of the archive; here, it's only set if the user explicity passed an --archive parameter.
-         * If the user didn't do that, perhaps we should set a default.  We could set it to diskFile, but that's
-         * already recorded in the imageInfo 'name' property; we're more interested in the full path of diskFile.
-         */
         if (output) {
             if (typeof output == "string") output = [output];
             output.forEach((outputFile) => {
-                writeDisk(outputFile, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], true, argv['writable'], archive, argv['source']);
+                writeDisk(outputFile, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], true, argv['writable'], argv['source']);
             });
         }
     }
@@ -941,7 +936,7 @@ function readAll(argv)
                 if (!di) {
                     di = createDisk(diskFile, diskette, argv);
                     if (di) {
-                        writeDisk(diskFile, di, false, 0, undefined, undefined, undefined, diskette.archive, diskette.source);
+                        writeDisk(diskFile, di, false, 0, undefined, undefined, undefined, diskette.source);
                     }
                 }
                 if (di) {
@@ -1207,7 +1202,7 @@ function readJSON(sFile)
 }
 
 /**
- * writeDisk(diskFile, di, fLegacy, indent, fOverwrite, fPrint, fWritable, archive, source)
+ * writeDisk(diskFile, di, fLegacy, indent, fOverwrite, fPrint, fWritable, source)
  *
  * @param {string} diskFile
  * @param {DiskInfo} di
@@ -1216,10 +1211,9 @@ function readJSON(sFile)
  * @param {boolean} [fOverwrite]
  * @param {boolean} [fPrint]
  * @param {boolean} [fWritable]
- * @param {string} [archive]
  * @param {string} [source]
  */
-function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fPrint = true, fWritable = false, archive = "", source = "")
+function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fPrint = true, fWritable = false, source = "")
 {
     let diskName = path.basename(diskFile);
     try {
@@ -1228,7 +1222,7 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
             let data;
             let diskFileLC = diskFile.toLowerCase();
             if (diskFileLC.endsWith(".json")) {
-                data = di.getJSON(getHash, fLegacy, 0, archive, source);
+                data = di.getJSON(getHash, fLegacy, 0, source);
             } else {
                 let db = new DataBuffer(di.getSize());
                 if (di.getData(db, fLegacy)) data = db.buffer;
@@ -1434,8 +1428,8 @@ function main(argc, argv)
         if (!input.endsWith('/')) input += '/';
     } else {
         input = argv['files'];
-        if (input) {
-            fDirectory = true;      // files must be a comma-separated list of files (and NO trailing slash)
+        if (input) {                // if you use --files to provide a list of files
+            fDirectory = true;      // then the filenames must be separated by commas, with NO trailing slash
         } else {
             input = argv[1];
             argv.splice(1, 1);
@@ -1445,6 +1439,11 @@ function main(argc, argv)
 
     let di;
     if (input) {
+        /*
+         * TODO: Consider converting this block into a createDisk() call, to eliminate some redundancy.   The
+         * main obstacles are that createDisk() expects the caller to provide a diskette object (from diskettes.json),
+         * which we don't have here, and this code supports features like --files, -forceBPB, --maxfiles, etc.
+         */
         if (fDirectory) {
             /*
              * readDir() takes care of both directories and files, distinguishing between them on the basis of a trailing slash.

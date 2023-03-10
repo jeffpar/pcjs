@@ -3013,7 +3013,7 @@ export default class DiskInfo {
     }
 
     /**
-     * getJSON(fnHash, fLegacy, indent, archive, source)
+     * getJSON(fnHash, fLegacy, indent, source)
      *
      * If a disk image contains a recognized volume type (eg, FAT12, FAT16), we now prefer to produce an
      * "extended" JSON image, which will include a volume table (of volume descriptors), a file table (of
@@ -3026,11 +3026,10 @@ export default class DiskInfo {
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
      * @param {boolean} [fLegacy] (must be explicitly set to true to generate a "legacy" JSON disk image)
      * @param {number} [indent] (indentation is not recommended, due to significant bloat)
-     * @param {string} [archive] (archive information, if any)
      * @param {string} [source] (source information, if any)
      * @returns {string}
      */
-    getJSON(fnHash, fLegacy = false, indent = 0, archive = "", source = "")
+    getJSON(fnHash, fLegacy = false, indent = 0, source = "")
     {
         let volTable, fileTable;
         if (!fLegacy) {
@@ -3073,9 +3072,6 @@ export default class DiskInfo {
         };
         if (!this.fBPBModified) {
             delete imageInfo[DiskInfo.IMAGE.ORIGBPB];
-        }
-        if (archive) {
-            imageInfo[DiskInfo.IMAGE.ARCHIVE] = archive;
         }
         if (source) {
             imageInfo[DiskInfo.IMAGE.SOURCE] = source;
@@ -3612,7 +3608,6 @@ DiskInfo.IMAGE = {
     ORIGBPB:    'bootSector',
     VERSION:    'version',
     REPOSITORY: 'repository',
-    ARCHIVE:    'archive',          // the type of archive used to create the disk data (eg, .img file, folder, etc)
     SOURCE:     'source',           // the source of the data (eg, archive.org, pcjs.org, etc)
     COMMAND:    'diskimage.js'
 };

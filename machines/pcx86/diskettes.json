@@ -101,7 +101,7 @@
 								"@diskette": "MSMOUSE-250.json",
 								"@photo": "jpg",
 								"@format": "PC320K",
-								"@archive": "MSMOUSE-250-MOUNTABLE.img"
+								"@args": "--forceBPB"
 							},
 							{
 								"@title": "MS Mouse 2.50 (Serial)",
