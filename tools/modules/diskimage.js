@@ -96,16 +96,18 @@ function createDisk(diskFile, diskette, argv)
          */
         sArchiveFile = sArchiveFile.replace(".img", path.sep);
     }
-    let sectorIDs = argv['sectorID'] || diskette.argv['sectorID'];
-    let sectorErrors = argv['sectorError'] || diskette.argv['sectorError'];
-    let suppData = argv['suppData'] || diskette.argv['suppData'];
-    if (suppData) suppData = readFile(suppData);
     let name = path.basename(sArchiveFile);
+    let sectorIDs = diskette.argv['sectorID'] || argv['sectorID'];
+    let sectorErrors = diskette.argv['sectorError'] || argv['sectorError'];
+    let suppData = diskette.argv['suppData'] || argv['suppData'];
+    if (suppData) suppData = readFile(suppData);
     if (sArchiveFile.endsWith(path.sep)) {
         diskette.command = "--dir " + name;
+        let label = diskette.label || argv['label'];
+        let normalize = diskette.normalize || argv['normalize'];
         let match = diskette.format && diskette.format.match(/^PC([0-9]+)K/);
-        let kbTarget = match && +match[1] || 0;
-        di = readDir(sArchiveFile, diskette.label, diskette.normalize, kbTarget, undefined, sectorIDs, sectorErrors, suppData);
+        let target = match && +match[1] || +argv['target'];
+        di = readDir(sArchiveFile, label, normalize, target, undefined, sectorIDs, sectorErrors, suppData);
     } else {
         diskette.command = "--disk " + name;
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
@@ -1426,8 +1428,8 @@ function main(argc, argv)
         if (!input.endsWith('/')) input += '/';
     } else {
         input = argv['files'];
-        if (input) {
-            fDirectory = true;      // files must be a comma-separated list of files (and NO trailing slash)
+        if (input) {                // if you use --files to provide a list of files
+            fDirectory = true;      // then the filenames must be separated by commas, with NO trailing slash
         } else {
             input = argv[1];
             argv.splice(1, 1);
@@ -1437,6 +1439,11 @@ function main(argc, argv)
 
     let di;
     if (input) {
+        /*
+         * TODO: Consider converting this block into a createDisk() call, to eliminate some redundancy.   The
+         * main obstacles are that createDisk() expects the caller to provide a diskette object (from diskettes.json),
+         * which we don't have here, and this code supports features like --files, -forceBPB, --maxfiles, etc.
+         */
         if (fDirectory) {
             /*
              * readDir() takes care of both directories and files, distinguishing between them on the basis of a trailing slash.
