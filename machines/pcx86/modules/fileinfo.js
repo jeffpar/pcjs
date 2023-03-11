@@ -160,7 +160,7 @@ export default class FileInfo {
             if (offSegment) {
                 let lenSegment = this.loadValue(offEntries + 2) || 0x10000;       // 0 means 64K
                 if (Device.DEBUG) {
-                    this.device.printf(Device.MESSSAGE.FILE, "segment %d: offStart=%#0lx offEnd=%#0lx\n" + iSegment, offSegment, offSegment + lenSegment);
+                    this.device.printf(Device.MESSAGE.FILE, "segment %d: offStart=%#0lx offEnd=%#0lx\n" + iSegment, offSegment, offSegment + lenSegment);
                 }
                 this.segments[iSegment++] = {offStart: offSegment, offEnd: offSegment + lenSegment - 1};
             }
