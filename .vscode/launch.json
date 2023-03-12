@@ -577,9 +577,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all",
+        "--all=OS2STUFF-DISK1",
         "--checkdisk",
-        "--quiet"
+        "--rebuild"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,

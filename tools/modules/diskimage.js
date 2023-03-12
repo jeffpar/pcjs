@@ -154,7 +154,7 @@ function dumpSector(di, sector, offset = 0, limit = -1)
 function checkArchive(sPath, fExt)
 {
     let sArchive;
-    for (let sExt of [".zip", ".ZIP", ".arc", ".ARC"]) {
+    for (let sExt of [".ZIP", ".zip", ".ARC", ".arc"]) {
         if (fExt) {
             if (sPath.endsWith(sExt)) {
                 sArchive = sPath.slice(0, -sExt.length);
@@ -876,6 +876,43 @@ function processDisk(di, diskFile, argv, diskette)
 }
 
 /**
+ * addMetaData(di, sDir, sPath)
+ *
+ * @param {DiskInfo} di
+ * @param {string} sDir
+ * @param {string} sPath
+ */
+function addMetaData(di, sDir, sPath)
+{
+    let sArchiveDir = checkArchive(sPath, true);
+    if (sArchiveDir) {
+        let sArchiveFile = checkArchive(sArchiveDir);
+        if (sArchiveFile) {
+            let aArchiveData = [];
+            let aArchiveFiles = glob.sync(path.join(sArchiveDir, "**"));
+            for (let j = 0; j < aArchiveFiles.length; j++) {
+                let sPath = aArchiveFiles[j];
+                let sName = path.basename(sPath);
+                let stats = fs.statSync(sPath);
+                if (!stats.isDirectory()) {
+                    let data = readFile(sPath, null);
+                    if (!data) continue;
+                    let file = {
+                        hash: getHash(data),
+                        path: path.join(sArchiveFile, sPath.slice(sArchiveDir.length)).slice(sDir.length - 1),
+                        attr: DiskInfo.ATTR.ARCHIVE,
+                        date: stats.mtime,
+                        size: data.length
+                    };
+                    aArchiveData.push(file);
+                }
+            }
+            di.addMetaData(aArchiveData);
+        }
+    }
+}
+
+/**
  * readAll(argv)
  *
  * If "--all=[string]" then the set of disks is limited to those where pathname contains [string].
@@ -985,7 +1022,14 @@ function readDir(sDir, sLabel, fNormalize, kbTarget, nMax, sectorIDs, sectorErro
         let aFileData = readDirFiles(sDir, sLabel, fNormalize, 0);
         di = new DiskInfo(device);
         let db = new DataBuffer();
-        if (!di.buildDiskFromFiles(db, diskName, aFileData, kbTarget || 0, getHash, sectorIDs, sectorErrors, suppData)) {
+        if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget || 0, getHash, sectorIDs, sectorErrors, suppData)) {
+            /*
+             * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
+             */
+            for (let i = 0; i < aFileData.length; i++) {
+                addMetaData(di, sDir, aFileData[i].path);
+            }
+        } else {
             di = null;
         }
     } catch(err) {
@@ -1152,6 +1196,13 @@ function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
                 } else {
                     if (!di.buildDiskFromBuffer(db, forceBPB, getHash, sectorIDs, sectorErrors, suppData)) di = null;
                 }
+            }
+        }
+        if (di) {
+            let sDir = getFullPath(diskFile.replace(/\.[a-z]+$/, "/"));
+            let aDiskFiles = glob.sync(path.join(sDir, "**"));
+            for (let i = 0; i < aDiskFiles.length; i++) {
+                addMetaData(di, sDir, aDiskFiles[i]);
             }
         }
     } catch(err) {

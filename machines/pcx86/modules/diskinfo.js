@@ -3015,6 +3015,17 @@ export default class DiskInfo {
     }
 
     /**
+     * addMetaData(aFileData)
+     *
+     * @this {DiskInfo}
+     * @param {Array.<FileData>} aFileData
+     */
+    addMetaData(aFileData)
+    {
+        this.aMetaData = aFileData;
+    }
+
+    /**
      * getJSON(fnHash, fLegacy, indent, source)
      *
      * If a disk image contains a recognized volume type (eg, FAT12, FAT16), we now prefer to produce an
@@ -3089,6 +3100,13 @@ export default class DiskInfo {
                 if (sFileTable) sFileTable += ',\n';
                 sFileTable += '  ' + desc;
             });
+            if (this.aMetaData) {
+                this.aMetaData.forEach((file) => {
+                    if (sFileTable) sFileTable += ',\n';
+                    let desc = this.getFileDesc(file, false);
+                    sFileTable += '  ' + JSON.stringify(desc, null, 0);
+                });
+            }
             sFileTable = '[\n' + sFileTable + '\n]';
         }
         let sDiskData = JSON.stringify(this.aDiskData, null, indent);
