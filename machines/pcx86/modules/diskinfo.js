@@ -8,6 +8,7 @@
  */
 
 import CPUx86 from "./cpux86.js";
+import CharSet from "./charset.js";
 import Device from "../../modules/device.js";
 import FileInfo from "./fileinfo.js";
 
@@ -2366,7 +2367,8 @@ export default class DiskInfo {
                 }
                 if (dir.name == null) continue;
                 if (dir.attr == DiskInfo.ATTR.LFN) continue;
-                let path = dir.path + dir.name;
+                let name = CharSet.fromCP437(dir.name);
+                let path = CharSet.fromCP437(dir.path) + name;
                 let dateMod = this.getDate(
                     (dir.modDate >> 9) + 1980,
                     ((dir.modDate >> 5) & 0xf) - 1,
@@ -2376,7 +2378,7 @@ export default class DiskInfo {
                     (dir.modTime & 0x1f) << 1,
                     this.diskName + ":" + path
                 );
-                file = new FileInfo(this, vol.iVolume, path, dir.name, dir.attr, dateMod, dir.size, dir.cluster, dir.aLBA);
+                file = new FileInfo(this, vol.iVolume, path, name, dir.attr, dateMod, dir.size, dir.cluster, dir.aLBA);
                 file.index = this.fileTable.length;
                 this.fileTable.push(file);
             }

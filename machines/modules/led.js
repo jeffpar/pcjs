@@ -247,8 +247,8 @@ export default class LED extends Device {
 
         let led = this;
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.time.addAnimation(function ledAnimate(t) {
-            led.drawBuffer(false, t);
+        this.time.addAnimation(function ledAnimate(t, nFramesPerSecond) {
+            led.drawBuffer(false, t, nFramesPerSecond);
         });
 
         led.clearBuffer(true);
@@ -303,7 +303,7 @@ export default class LED extends Device {
     }
 
     /**
-     * drawBuffer(fForced, t)
+     * drawBuffer(fForced, msFrame, nFramesPerSecond)
      *
      * This is our periodic (60Hz) redraw function; however, it can also be called synchronously
      * (eg, see clearBuffer()).  The other important periodic side-effect of this function is clearing
@@ -314,9 +314,10 @@ export default class LED extends Device {
      *
      * @this {LED}
      * @param {boolean} [fForced] (if not set, this is a normal refresh call)
-     * @param {number} [t] (time value, if available, from the requestAnimationFrame() callback)
+     * @param {number} [msFrame] (timestamp of this frame, in milliseconds, from the requestAnimationFrame() callback)
+     * @param {number} [nFramesPerSecond] (normally 60, but it can be lower *or* higher; eg, high refresh-rate displays)
      */
-    drawBuffer(fForced = false, t = 0)
+    drawBuffer(fForced = false, msFrame = 0, nFramesPerSecond = 60)
     {
         if (this.fBufferModified || fForced) {
             if (this.type < LED.TYPE.DIGIT) {
@@ -333,12 +334,12 @@ export default class LED extends Device {
             this.iBufferRecent = -1;
         }
         else if (!this.fPersistent && !this.fBufferTickled) {
-            if (!t || !this.msLastDraw || (t - this.msLastDraw) >= ((1000 / 60)|0)) {
+            if (!msFrame || !this.msLastDraw || (msFrame - this.msLastDraw) >= ((1000 / nFramesPerSecond)|0)) {
                 this.clearBuffer(true);
             }
         }
         this.fBufferTickled = false;
-        if (t) this.msLastDraw = t;
+        if (msFrame) this.msLastDraw = msFrame;
     }
 
     /**

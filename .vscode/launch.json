@@ -555,6 +555,23 @@
       ]
     },
     {
+      "name": "Node: diskimage.js --disk",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "args": [
+        "--disk=/pcsig8a-disks/pcx86/shareware/pcsig08/archive/DISK0798.img",
+        "--output=/pcsig8a-disks/pcx86/shareware/pcsig08/DISK0798.json",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskimage.js --all --checkdisk",
       "type": "node",
       "request": "launch",
