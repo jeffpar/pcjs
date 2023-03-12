@@ -175,3 +175,7 @@ Courtesy of [PC DOS Retro](https://pcdosretro.github.io/doshist.txt):
 Notes:
 
   - Directory entries for system files IBMBIO.COM, IBMDOS.COM, and BADTRACK are not listed, even if present.
+
+<!-- Documentation -->
+
+{% include gallery/documents.html width="200" height="260" %}

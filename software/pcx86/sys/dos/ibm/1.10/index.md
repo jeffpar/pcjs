@@ -269,3 +269,7 @@ to gain a more detailed understanding of the new and
 enhanced functions. If you are not a former user, then
 read the book anyway; it will help you get started more
 quickly.
+
+<!-- Documentation -->
+
+{% include gallery/documents.html width="200" height="260" %}

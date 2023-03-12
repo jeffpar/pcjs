@@ -121,6 +121,7 @@ export default class DiskInfo {
         this.fWritable = fWritable;
         this.volTable = [];
         this.fileTable = [];
+        this.aMetaData = [];
         this.tablesBuilt = false;
     }
 
@@ -3022,7 +3023,9 @@ export default class DiskInfo {
      */
     addMetaData(aFileData)
     {
-        this.aMetaData = aFileData;
+        if (aFileData) {
+            this.aMetaData = this.aMetaData.concat(aFileData);
+        }
     }
 
     /**
@@ -4131,5 +4134,6 @@ DiskInfo.ATTR = {
     VOLUME:         0x08,       // PC DOS 2.0 and up
     LFN:            0x0f,       // combination used by Windows 95 (MS-DOS 7.0) and up, indicating a long filename (LFN) DIRENT
     SUBDIR:         0x10,       // PC DOS 2.0 and up
-    ARCHIVE:        0x20        // PC DOS 2.0 and up
+    ARCHIVE:        0x20,       // PC DOS 2.0 and up
+    METADATA:       0x40        // for internal use only
 };

@@ -160,6 +160,7 @@ function checkArchive(sPath, fExt)
                 sArchive = sPath.slice(0, -sExt.length);
                 break;
             }
+            continue;
         }
         let sFile = sPath + sExt;
         if (existsFile(sFile)) {
@@ -900,7 +901,7 @@ function addMetaData(di, sDir, sPath)
                     let file = {
                         hash: getHash(data),
                         path: path.join(sArchiveFile, sPath.slice(sArchiveDir.length)).slice(sDir.length - 1),
-                        attr: DiskInfo.ATTR.ARCHIVE,
+                        attr: DiskInfo.ATTR.METADATA,
                         date: stats.mtime,
                         size: data.length
                     };

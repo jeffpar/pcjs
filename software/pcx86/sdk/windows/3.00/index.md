@@ -67,75 +67,6 @@ machines:
 
 ### Directory of Windows SDK 3.00 (1200K Disk 2)
 
-     Volume in drive A is WIN30SDK04
-     Directory of A:\
-
-    CLIB         <DIR>       6-01-90   2:56p
-    WINMEM32     <DIR>       6-01-90   2:58p
-    WLIB         <DIR>       6-01-90   2:58p
-            3 file(s)          0 bytes
-
-     Directory of A:\CLIB
-
-    .            <DIR>       6-01-90   2:56p
-    ..           <DIR>       6-01-90   2:56p
-    CDLLCW0  LIB     13457   6-01-90   3:00a
-    CLIBCW   LIB    100935   6-01-90   3:00a
-    CLIBFAW  LIB     60061   6-01-90   3:00a
-    CLIBFPW  LIB     73637   6-01-90   3:00a
-    DLLCW    BAT       541   6-01-90   3:00a
-    LDLLCW0  LIB     13457   6-01-90   3:00a
-    LIBCW    BAT       373   6-01-90   3:00a
-    LIBH     LIB     21033   6-01-90   3:00a
-    LLIBCW   LIB    102983   6-01-90   3:00a
-    LLIBFAW  LIB     62621   6-01-90   3:00a
-    LLIBFPW  LIB     77221   6-01-90   3:00a
-    MDLLCW0  LIB     12945   6-01-90   3:00a
-    MLIBCW   LIB     97851   6-01-90   3:00a
-    MLIBFAW  LIB     61597   6-01-90   3:00a
-    MLIBFPW  LIB     75173   6-01-90   3:00a
-    SDLLCW0  LIB     12945   6-01-90   3:00a
-    SLIBCW   LIB     95803   6-01-90   3:00a
-    SLIBFAW  LIB     59549   6-01-90   3:00a
-    SLIBFPW  LIB     72613   6-01-90   3:00a
-    WINCDLL  BLD       639   6-01-90   3:00a
-           22 file(s)    1015434 bytes
-
-     Directory of A:\WINMEM32
-
-    .            <DIR>       6-01-90   2:58p
-    ..           <DIR>       6-01-90   2:58p
-    WINMEM32 DLL      4672   6-01-90   3:00a
-    WINMEM32 H         837   6-01-90   3:00a
-    WINMEM32 LIB      1536   6-01-90   3:00a
-            5 file(s)       7045 bytes
-
-     Directory of A:\WLIB
-
-    .            <DIR>       6-01-90   2:58p
-    ..           <DIR>       6-01-90   2:58p
-    CNOCRT   LIB      2071   6-01-90   3:00a
-    CNOCRTD  LIB      1559   6-01-90   3:00a
-    LIBENTRY ASM      2454   6-01-90   3:00a
-    LIBENTRY OBJ       240   6-01-90   3:00a
-    LIBW     LIB     89601   6-01-90   3:00a
-    LNOCRT   LIB      2071   6-01-90   3:00a
-    LNOCRTD  LIB      1559   6-01-90   3:00a
-    MNOCRT   LIB      2071   6-01-90   3:00a
-    MNOCRTD  LIB      1559   6-01-90   3:00a
-    SNOCRT   LIB      2071   6-01-90   3:00a
-    SNOCRTD  LIB      1559   6-01-90   3:00a
-    WIN87EM  LIB      1577   6-01-90   3:00a
-           14 file(s)     108392 bytes
-
-    Total files listed:
-           44 file(s)    1130871 bytes
-                           68608 bytes free
-
-![Windows SDK 3.00 (1200K Disk 2)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-1200K-LIBRARIES.jpg)
-
-### Directory of Windows SDK 3.00 (1200K Disk 3)
-
      Volume in drive A is WIN30SDK02
      Directory of A:\
 
@@ -177,9 +108,9 @@ machines:
            24 file(s)     934094 bytes
                           274432 bytes free
 
-![Windows SDK 3.00 (1200K Disk 3)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-1200K-DBGTOOLS.jpg)
+![Windows SDK 3.00 (1200K Disk 2)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-1200K-DBGTOOLS.jpg)
 
-### Directory of Windows SDK 3.00 (1200K Disk 4)
+### Directory of Windows SDK 3.00 (1200K Disk 3)
 
      Volume in drive A is WIN30SDK03
      Directory of A:\
@@ -296,7 +227,76 @@ machines:
            78 file(s)    1153134 bytes
                            41984 bytes free
 
-![Windows SDK 3.00 (1200K Disk 4)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-1200K-DEVFILES.jpg)
+![Windows SDK 3.00 (1200K Disk 3)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-1200K-DEVFILES.jpg)
+
+### Directory of Windows SDK 3.00 (1200K Disk 4)
+
+     Volume in drive A is WIN30SDK04
+     Directory of A:\
+
+    CLIB         <DIR>       6-01-90   2:56p
+    WINMEM32     <DIR>       6-01-90   2:58p
+    WLIB         <DIR>       6-01-90   2:58p
+            3 file(s)          0 bytes
+
+     Directory of A:\CLIB
+
+    .            <DIR>       6-01-90   2:56p
+    ..           <DIR>       6-01-90   2:56p
+    CDLLCW0  LIB     13457   6-01-90   3:00a
+    CLIBCW   LIB    100935   6-01-90   3:00a
+    CLIBFAW  LIB     60061   6-01-90   3:00a
+    CLIBFPW  LIB     73637   6-01-90   3:00a
+    DLLCW    BAT       541   6-01-90   3:00a
+    LDLLCW0  LIB     13457   6-01-90   3:00a
+    LIBCW    BAT       373   6-01-90   3:00a
+    LIBH     LIB     21033   6-01-90   3:00a
+    LLIBCW   LIB    102983   6-01-90   3:00a
+    LLIBFAW  LIB     62621   6-01-90   3:00a
+    LLIBFPW  LIB     77221   6-01-90   3:00a
+    MDLLCW0  LIB     12945   6-01-90   3:00a
+    MLIBCW   LIB     97851   6-01-90   3:00a
+    MLIBFAW  LIB     61597   6-01-90   3:00a
+    MLIBFPW  LIB     75173   6-01-90   3:00a
+    SDLLCW0  LIB     12945   6-01-90   3:00a
+    SLIBCW   LIB     95803   6-01-90   3:00a
+    SLIBFAW  LIB     59549   6-01-90   3:00a
+    SLIBFPW  LIB     72613   6-01-90   3:00a
+    WINCDLL  BLD       639   6-01-90   3:00a
+           22 file(s)    1015434 bytes
+
+     Directory of A:\WINMEM32
+
+    .            <DIR>       6-01-90   2:58p
+    ..           <DIR>       6-01-90   2:58p
+    WINMEM32 DLL      4672   6-01-90   3:00a
+    WINMEM32 H         837   6-01-90   3:00a
+    WINMEM32 LIB      1536   6-01-90   3:00a
+            5 file(s)       7045 bytes
+
+     Directory of A:\WLIB
+
+    .            <DIR>       6-01-90   2:58p
+    ..           <DIR>       6-01-90   2:58p
+    CNOCRT   LIB      2071   6-01-90   3:00a
+    CNOCRTD  LIB      1559   6-01-90   3:00a
+    LIBENTRY ASM      2454   6-01-90   3:00a
+    LIBENTRY OBJ       240   6-01-90   3:00a
+    LIBW     LIB     89601   6-01-90   3:00a
+    LNOCRT   LIB      2071   6-01-90   3:00a
+    LNOCRTD  LIB      1559   6-01-90   3:00a
+    MNOCRT   LIB      2071   6-01-90   3:00a
+    MNOCRTD  LIB      1559   6-01-90   3:00a
+    SNOCRT   LIB      2071   6-01-90   3:00a
+    SNOCRTD  LIB      1559   6-01-90   3:00a
+    WIN87EM  LIB      1577   6-01-90   3:00a
+           14 file(s)     108392 bytes
+
+    Total files listed:
+           44 file(s)    1130871 bytes
+                           68608 bytes free
+
+![Windows SDK 3.00 (1200K Disk 4)]({{ site.software.diskettes.server }}/pcx86/sdk/windows/3.00/WIN30SDK-1200K-LIBRARIES.jpg)
 
 ### Directory of Windows SDK 3.00 (1200K Disk 5)
 
