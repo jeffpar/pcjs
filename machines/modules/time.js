@@ -110,6 +110,7 @@ export default class Time extends Device {
         this.nCyclesMaximum = this.getDefaultNumber('cyclesMaximum', 1000000000);
         this.nCyclesPerSecond = this.getBounded(this.getDefaultNumber('cyclesPerSecond', 1000000), this.nCyclesMinimum, this.nCyclesMaximum);
         this.nFramesPerSecond = 60;
+        this.msFrame = 0;
         this.msFrameDefault = 1000 / this.nFramesPerSecond;
         this.nUpdatesPerSecond = this.getDefaultNumber('updatesPerSecond', 2) || 2;
         this.msUpdate = 1000 / this.nUpdatesPerSecond;
@@ -181,7 +182,7 @@ export default class Time extends Device {
      * addAnimation(callBack)
      *
      * @this {Time}
-     * @param {function(number)} callBack
+     * @param {function(number, number)} callBack
      */
     addAnimation(callBack)
     {
@@ -323,7 +324,7 @@ export default class Time extends Device {
                 if (this.nTargetMultiplier > 1) {
                     /**
                      * Alternatively, we could call setSpeed(this.nTargetMultiplier >> 1) at this point, but the
-                     * advantages of quietly reduing the target multiplier here are: 1) it will still slow us down,
+                     * advantages of quietly reducing the target multiplier here are: 1) it will still slow us down,
                      * and 2) allow the next attempt to increase speed via setSpeed() to detect that we didn't
                      * reach 90% of our original target and revert back to the base multiplier.
                      */
@@ -349,6 +350,9 @@ export default class Time extends Device {
          *
          * Note that if the machine's default speed has not been altered, the target multiplier will 1, and the divisor
          * will effectively be the current multiplier.
+         *
+         * NOTE: As the constructor mentions, the "0.00000001" is a tiny bit of "interest" that we want to add to each
+         * deposit.  See that function for more details.
          */
         let nDivisor = this.nCurrentMultiplier / this.nTargetMultiplier;
         this.nCyclesDepositPerFrame = (nCyclesPerSecond / nDivisor / this.nFramesPerSecond) + 0.00000001;
@@ -749,11 +753,15 @@ export default class Time extends Device {
     {
         this.idAnimationTimeout = 0;
         if (this.fRunning) {
-            this.runStart(t);
+            if (this.msFrame) {
+                this.nFramesPerSecond = 1000 / (t - this.msFrame);
+            }
+            this.msFrame = t;
+            this.runStart();
             this.runCycles();
             this.runStop();
             for (let i = 0; i < this.aAnimations.length; i++) {
-                this.aAnimations[i](t);
+                this.aAnimations[i](this.msFrame, this.nFramesPerSecond);
             }
             this.idAnimationTimeout = this.requestAnimationTimeout();
         }
@@ -782,12 +790,11 @@ export default class Time extends Device {
     }
 
     /**
-     * runStart(t)
+     * runStart()
      *
      * @this {Time}
-     * @param {number} t (relative time in milliseconds)
      */
-    runStart(t)
+    runStart()
     {
         let msStartThisRun = Date.now();
         /**

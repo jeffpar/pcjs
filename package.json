@@ -30,11 +30,11 @@
   },
   "homepage": "https://www.pcjs.org/",
   "dependencies": {
-    "editorconfig": "^0.15.3",
-    "eslint": "^6.8.0",
-    "glob": "^7.1.6",
-    "google-closure-compiler": "^20221102.0.1",
-    "got": "^11.8.1",
+    "editorconfig": "^1.0.2",
+    "eslint": "^8.36.0",
+    "glob": "^9.2.1",
+    "google-closure-compiler": "^20230206.0.0",
+    "got": "^12.6.0",
     "gulp": "^4.0.2",
     "gulp-chmod": "^3.0.0",
     "gulp-concat": "^2.6.1",
@@ -42,13 +42,13 @@
     "gulp-header": "^2.0.9",
     "gulp-merge-json": "^2.1.2",
     "gulp-newer": "^1.4.0",
-    "gulp-replace": "^1.0.0",
-    "gulp-sourcemaps": "^2.6.5",
-    "mkdirp": "^1.0.4",
+    "gulp-replace": "^1.1.4",
+    "gulp-sourcemaps": "^3.0.0",
+    "mkdirp": "^2.1.5",
     "path": "^0.12.7",
     "pdf-parse": "^1.1.1",
-    "replace": "^1.2.0",
+    "replace": "^1.2.2",
     "xml2js": "^0.4.23",
-    "yargs-parser": "^20.2.4"
+    "yargs-parser": "^21.1.1"
   }
 }
