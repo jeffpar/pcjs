@@ -7925,29 +7925,32 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
 {% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK0798"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK0798
-     Directory of  A:\
+     Directory of A:\
     
-    %A6                 0   1-01-80  12:00a
-    %A6E%A6T            0   1-01-80  12:00a
-    %A6P%A6             0   1-01-80  12:00a
-    %A6T%A6G            0   1-01-80  12:00a
-    %A6Y%A6O            0   1-01-80  12:00a
-    _-----_             0   1-01-80  12:00a
-    BRUN40   EXE    76816  10-08-87   5:57p
-    DEMO     BAT      114   5-02-87  11:44a
-    DEMO     HLP     8562   5-05-87  12:16p
-    DEMO     MEN     5115   5-02-87  12:36p
-    FILES798 TXT     2178   8-25-88   2:09p
-    GO       BAT       38   7-02-87  11:29a
-    GO       TXT      463   7-02-87  11:29a
-    M        MEN     1371   7-30-88  12:55p
-    MENGEN   EXE    67847   8-01-88  10:32a
-    MG-C     EXE     6723   8-01-88  10:34a
-    MG-M     EXE     5261   8-01-88  10:35a
-    MGHLP    EXE    26805   8-01-88  10:37a
-    PLIC     EXE     4791   8-01-88  10:38a
-    PMENU    DOC    25407   8-01-88  11:28a
-    PMENU    EXE    21215   7-30-88   4:57p
+    DEMO     BAT       114   5-02-87  11:44a
+    PMENU    DOC     25407   8-01-88  11:28a
+    BRUN40   EXE     76816  10-08-87   5:57p
+    MENGEN   EXE     67847   8-01-88  10:32a
+    MG-C     EXE      6723   8-01-88  10:34a
+    MG-M     EXE      5261   8-01-88  10:35a
+    MGHLP    EXE     26805   8-01-88  10:37a
+    PLIC     EXE      4791   8-01-88  10:38a
+    PMENU    EXE     21215   7-30-88   4:57p
+    DEMO     HLP      8562   5-05-87  12:16p
+    DEMO     MEN      5115   5-02-87  12:36p
+    M        MEN      1371   7-30-88  12:55p
+    FILES798 TXT      2178   8-25-88   2:09p
+    GO       BAT        38   7-02-87  11:29a
+    GO       TXT       463   7-02-87  11:29a
+    ┌─┬─┬─┐              0   1-01-80  12:00a
+    │T│G│S│              0   1-01-80  12:00a
+    │Y│O│T│              0   1-01-80  12:00a
+    │P│                  0   1-01-80  12:00a
+    │E│T│R│              0   1-01-80  12:00a
+    │                    0   1-01-80  12:00a
+    └─┴─┴─┘              0   1-01-80  12:00a
+           22 file(s)     252706 bytes
+                          100352 bytes free
 
 ### Directory of PCSIG08: DISK0799
 
