@@ -436,7 +436,7 @@ function processDisk(di, diskFile, argv, diskette)
             }
             if (!sLines) sLines = "no unused data space on disk";
         } else {
-            sLines = di.getFileListing(iVolume) || "\tno listing available\n";
+            sLines = di.getFileListing(iVolume, 0, argv['metadata']) || "\tno listing available\n";
         }
         printf("%s\n", sLines);
     }
@@ -544,7 +544,7 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     if (argv['manifest']) {
-        let manifest = di.getFileManifest(getHash);
+        let manifest = di.getFileManifest(getHash, argv['metadata']);
         printManifest(diskFile, di.getName(), manifest);
     }
 
