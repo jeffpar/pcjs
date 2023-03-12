@@ -121,6 +121,7 @@ export default class DiskInfo {
         this.fWritable = fWritable;
         this.volTable = [];
         this.fileTable = [];
+        this.aMetaData = [];
         this.tablesBuilt = false;
     }
 
@@ -3015,6 +3016,19 @@ export default class DiskInfo {
     }
 
     /**
+     * addMetaData(aFileData)
+     *
+     * @this {DiskInfo}
+     * @param {Array.<FileData>} aFileData
+     */
+    addMetaData(aFileData)
+    {
+        if (aFileData) {
+            this.aMetaData = this.aMetaData.concat(aFileData);
+        }
+    }
+
+    /**
      * getJSON(fnHash, fLegacy, indent, source)
      *
      * If a disk image contains a recognized volume type (eg, FAT12, FAT16), we now prefer to produce an
@@ -3089,6 +3103,13 @@ export default class DiskInfo {
                 if (sFileTable) sFileTable += ',\n';
                 sFileTable += '  ' + desc;
             });
+            if (this.aMetaData) {
+                this.aMetaData.forEach((file) => {
+                    if (sFileTable) sFileTable += ',\n';
+                    let desc = this.getFileDesc(file, false);
+                    sFileTable += '  ' + JSON.stringify(desc, null, 0);
+                });
+            }
             sFileTable = '[\n' + sFileTable + '\n]';
         }
         let sDiskData = JSON.stringify(this.aDiskData, null, indent);
@@ -4113,5 +4134,6 @@ DiskInfo.ATTR = {
     VOLUME:         0x08,       // PC DOS 2.0 and up
     LFN:            0x0f,       // combination used by Windows 95 (MS-DOS 7.0) and up, indicating a long filename (LFN) DIRENT
     SUBDIR:         0x10,       // PC DOS 2.0 and up
-    ARCHIVE:        0x20        // PC DOS 2.0 and up
+    ARCHIVE:        0x20,       // PC DOS 2.0 and up
+    METADATA:       0x40        // for internal use only
 };

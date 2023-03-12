@@ -412,3 +412,7 @@ mounting it), mount the image as `/Volumes/Untitled`, and then copy the contents
                            53248 bytes free
 
 ![COMPAQ MS-DOS 1.10 Rev E]({{ site.software.diskettes.server }}/pcx86/sys/dos/compaq/1.10/COMPAQ-DOS110E.jpg)
+
+<!-- Documentation -->
+
+{% include gallery/documents.html width="200" height="260" %}

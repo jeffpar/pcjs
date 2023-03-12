@@ -3309,3 +3309,7 @@ included below.
 
 
                                        - 26 -
+
+<!-- Documentation -->
+
+{% include gallery/documents.html width="200" height="260" %}
