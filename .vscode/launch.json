@@ -229,6 +229,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "Pro 386, 2Mb RAM, IBM EGA [Debugger]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx86/progressive/pro386/ega/2048kb/debugger/machine.xml",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Space Invaders",
       "type": "chrome",
       "request": "launch",
