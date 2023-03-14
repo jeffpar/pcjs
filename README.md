@@ -24,7 +24,8 @@ which covers topics such as:
 
 Topics covered in the repository itself include:
 
-  - [PCjs Disk Images](/tools/)
+  - [PCjs Disk Images](/tools/#diskimage)
+  - [PCjs File Images](/tools/#fileimage)
 
 ### License
 
