@@ -20,26 +20,25 @@ machines:
 
 ### Directory of Oregon Trail 2.1 (1990)
 
-     Volume in drive A is OREGON21
+     Volume in drive A is Oregon v2.1
      Directory of A:\
 
-    BIT8X8   GFT      2646   8-18-07   4:10a
-    CGA      BGI      6253   8-18-07   4:10a
-    DIALOGS  REC     14586   8-18-07   4:10a
-    HISCORES REC       180   8-18-07   4:10a
-    INSTALL  EXE     21264   8-18-07   4:10a
-    JOYCAL   REC         9   8-18-07   4:10a
-    LOGO     004      1562   8-18-07   4:10a
-    LOGO     256      2117   8-18-07   4:10a
-    OREGON   EXE     81896   8-18-07   4:10a
-    OTCGA    PCL    189831   8-18-07   4:10a
-    OTMCGA   PCL    321139   8-18-07   4:10a
-    PAL      256       906   8-18-07   4:10a
-    PRODUCT  PF        350   8-18-07   4:10a
-    README            1177   8-18-07   4:10a
-    SONGS    TXT      2867   8-18-07   4:10a
-    TOMB     REC       110   8-18-07   5:43a
-    VGA256   BGI      3289   8-18-07   4:10a
-    ZOP12    GAM       144   8-18-07   4:10a
-           18 file(s)     650326 bytes
-                          558080 bytes free
+    OREGON   EXE     81896   5-01-91   6:10p
+    INSTALL  EXE     21264   5-01-91   6:10p
+    README            1177   5-01-91   6:10p
+    LOGO     004      1562   4-26-91  11:31a
+    LOGO     256      2117   4-26-91  11:28a
+    PAL      256       906   5-01-91   6:10p
+    CGA      BGI      6253   8-29-88   5:00a
+    VGA256   BGI      3289   5-31-89   1:00a
+    BIT8X8   GFT      2646   7-31-89   1:00a
+    OTCGA    PCL    189831   5-01-91   6:10p
+    OTMCGA   PCL    321139   5-01-91   6:10p
+    TOMB     REC       110   3-02-94   5:57p
+    HISCORES REC       180   3-02-94   6:46p
+    JOYCAL   REC         9   5-01-91   6:10p
+    SONGS    TXT      2867   5-01-91   6:10p
+    DIALOGS  REC     14586   5-01-91   6:10p
+    PRODUCT  PF        350   6-20-91  11:03a
+           17 file(s)     650182 bytes
+                           69632 bytes free
