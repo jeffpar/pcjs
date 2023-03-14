@@ -144,25 +144,37 @@ To dump multiple (C:H:S) sectors from a disk image track, follow the C:H:S value
 
 ## FileImage
 
-[FileImage](modules/fileimage.js) is a Node command-line application that reads/writes PCjs file images, producing JSON-encoded
-versions of binary files (eg, ROM images).  It supersedes the older PCjs [FileDump](old/filedump/lib/filedump.js) utility.
+[FileImage](modules/fileimage.js) is a Node command-line application that reads/writes PCjs file images, producing JSON-encoded versions of binary files (eg, ROM images).  It supersedes the older PCjs [FileDump](old/filedump/lib/filedump.js) utility.
 
 ### ROM Files
 
-Some early examples of PCjs image files include the Ohio Scientific [System ROM](../machines/osi/c1p/rom/system.json5)
-and IBM PC [ROM BIOS](../machines/pcx86/ibm/5150/rom/bios/1981-04-24/PCBIOS-REV1.json5).
+Some early ("v0") examples of PCjs ROM image files include the Ohio Scientific [System ROM](../machines/osi/c1p/rom/system.hex), which were little more than text files with 2-digit hex byte values separated by whitespace.
 
-Strictly speaking, these weren't -- and still aren't -- JSON-compliant files, which is why they now use *.json5* file
-extensions.  PCjs parses such files using the JavaScript `eval()` function inside a `try/catch` block, since `JSON.parse()`
-complains about hexadecimal constants, comments, and other features that I personally like to use in JavaScript Object
-Notation files.  The JSON specification was, in my view, unnecessarily strict, so I'm glad to see the world finally embracing
-the much more sensible and flexible [JSON5](https://json5.org).
+However, ROM image files were soon changed to a JSON-like format ("v1").  Examples include the updated Ohio Scientific [System ROM](../machines/osi/c1p/rom/system.json5) and PCx86 ROMs like the IBM PC [ROM BIOS](../machines/pcx86/ibm/5150/rom/bios/1981-04-24/PCBIOS-REV1.json5).
+
+Strictly speaking, those files weren't -- and still aren't -- JSON-compliant, which is why they now use *.json5* file extensions.  PCjs parses them using the JavaScript `eval()` function inside a `try/catch` block, since `JSON.parse()` complains about hexadecimal constants, comments, and other perfectly acceptable JavaScript constructs.  The JSON specification was unnecessarily strict, so I'm glad to see the world finally embracing [JSON5](https://json5.org).
+
+PCjs v2 ROM image files will be more formalized.  They contain a 'width' value (eg, 8, 16, 32) and a 'values' array, along with other properties as needed to specify endianness, default load address, and so on.  Here's an example from the TI-57 emulation:
+
+```json
+{
+  "addr": 0,
+  "size": 2048,
+  "width": 13,
+  "littleEndian": false,
+  "file": "ti57be.bin",
+  "source": "http://seanriddle.com/ti57.bin",
+  "values": [
+    4623,4386,5106,7051,3246,6152,5813,5628,5805,7051,4386,3246,7911,5132,1822,6798,
+    ...
+  ]
+}
+```
+
+The files will be JSON-compliant by default, unless you use non-default options, such as octal constants, comments, etc.
 
 ### To Be Continued...
 
-More information about using [FileImage](modules/fileimage.js) and how the various image file formats used by PCjs have
-evolved over time will hopefully appear here at some point.
+More information about using [FileImage](modules/fileimage.js) and the "v2" ROM image file format will be added here as the utility and the file format specification evolves.
 
-In the meantime, just, um, explore.
-
-¯\\_(ツ)_/¯
+In the meantime, check out the 'Usage" comments for the *main()* function in [FileImage](modules/fileimage.js).

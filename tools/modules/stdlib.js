@@ -63,6 +63,9 @@ export default class StdLib {
      * In addition, when the initial i >= 1, then argv[0] is set to the concatenation of all args, starting
      * with args[i], and the first non-switch argument begins at argv[1].
      *
+     * Finally, since argv is an Array, it has a built-in 'length' property, so if you also need to specify
+     * a "--length" argument, we must precede the key with a '#' (ie, '#length') to avoid a conflict.
+     *
      * @this {StdLib}
      * @param {Array.<string>} [args]
      * @param {number} [i] (default is 1, because if you're passing process.argv, process.argv[0] is useless)
@@ -90,15 +93,15 @@ export default class StdLib {
                 }
                 if (!argv.hasOwnProperty(sArg)) {
                     argv[sArg] = sValue;
+                    continue;
                 }
-                else if (typeof argv[sArg] == "number") {
-                    argv[sArg] = +sValue;
-                } else {
-                    if (!Array.isArray(argv[sArg])) {
-                        argv[sArg] = [argv[sArg]];
-                    }
-                    argv[sArg].push(sValue);
+                if (typeof argv[sArg] == "number") {
+                    sArg = '#' + sArg;      // avoid conflict with the built-in 'length' property
                 }
+                if (!Array.isArray(argv[sArg])) {
+                    argv[sArg] = [argv[sArg]];
+                }
+                argv[sArg].push(sValue);
                 continue;
             }
             if (!sArg.indexOf("-")) {
