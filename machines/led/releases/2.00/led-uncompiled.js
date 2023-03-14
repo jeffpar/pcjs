@@ -9062,7 +9062,14 @@ class Time extends Device {
         this.idAnimationTimeout = 0;
         if (this.fRunning) {
             if (this.msFrame) {
-                this.nFramesPerSecond = 1000 / (t - this.msFrame);
+                /*
+                 * Make ABSOLUTELY certain that nFramesPerSecond can never become a ridiculous value, which means
+                 * making sure msDelta is never zero (or even close to it).  If that ever happens, then we choose a
+                 * delta (16.67ms) that will revert us to a conventional 60 frames/second.
+                 */
+                let msDelta = t - this.msFrame;
+                if (msDelta < 1) msDelta = 16.67;
+                this.nFramesPerSecond = 1000 / msDelta;
             }
             this.msFrame = t;
             this.runStart();

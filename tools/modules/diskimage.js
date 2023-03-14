@@ -23,8 +23,9 @@ let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
 let stdlib = new StdLib();
-let nMaxDefault = 512, nMaxInit, nMaxCount;
-let moduleDir, rootDir, sFileIndex, useServer;
+let moduleDir, rootDir;
+
+let nMaxDefault = 512, nMaxInit, nMaxCount, sFileIndex, useServer;
 
 function printError(err)
 {

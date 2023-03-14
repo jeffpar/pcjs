@@ -195,11 +195,10 @@ class ROMx86 extends Component {
                 /*
                  * The most likely source of any exception will be here: parsing the JSON-encoded ROM data.
                  */
-                let ab, adw;
                 let rom = eval("(" + sROMData + ")");
 
                 /*
-                 * PCjs v2 ROM images contain, at a minimum, a 'width' value and a 'values' array, along with
+                 * PCjs v3 ROM images contain, at a minimum, a 'width' value and a 'values' array, along with
                  * other optional properties, like default load address ('addr'), endianness ('littleEndian'), etc.
                  *
                  * So we'll start with that and fall back to 8-bit 'bytes' or 32-bit 'longs' (or worst-case, 'data',

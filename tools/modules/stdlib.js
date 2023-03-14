@@ -91,7 +91,9 @@ export default class StdLib {
                 if (!argv.hasOwnProperty(sArg)) {
                     argv[sArg] = sValue;
                 }
-                else {
+                else if (typeof argv[sArg] == "number") {
+                    argv[sArg] = +sValue;
+                } else {
                     if (!Array.isArray(argv[sArg])) {
                         argv[sArg] = [argv[sArg]];
                     }
