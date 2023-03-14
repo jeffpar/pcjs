@@ -416,6 +416,7 @@
     "endcapture",
     "endcomment",
     "ENDEX",
+    "endianness",
     "endp",
     "endraw",
     "endunless",

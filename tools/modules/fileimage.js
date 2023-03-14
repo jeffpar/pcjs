@@ -759,6 +759,8 @@ FileImage.FORMAT = {
  *      --comments
  *      --decimal
  *      --offset=[number]
+ *      --length=[number]
+ *      --symbols
  *      --width=[number]
  *      --load=[number]
  *      --exec=[number]
@@ -803,7 +805,15 @@ FileImage.FORMAT = {
  *
  * Details:
  *
- *      Using the PCjs 2.0 ROM files as an example, the new "v3" FileImage format should look like this:
+ *      PCjs v0 ROM image files were usually little more than text files containing a series of 2-digit hex
+ *      byte values.
+ *
+ *      PCjs v1 ROM image files were either JSON-like files containing arrays of hexadecimal values, comments,
+ *      etc, or genuine JSON files containing little more than arrays of "bytes", "longs" or "data" decimal values.
+ *
+ *      PCjs v2 ROM image files will be more formalized.  They will contain a 'width' value (eg, 8, 16, 32)
+ *      and a 'values' array, along with other properties as needed to specify endianness, default load address,
+ *      and so on (a complete list is still TBD).  Here's an example from the TI-57 emulation:
  *
  *      {
  *        "addr": 0,
@@ -886,7 +896,7 @@ function main(argc, argv)
         }
 
         let sMergeFile, asMergeFiles = [];
-        let file = new FileImage(sFormat, argv['comments'], argv['decimal'], argv['offset'], argv['len'], argv['width'], argv['symbols']);
+        let file = new FileImage(sFormat, argv['comments'], argv['decimal'], argv['offset'], argv['#length'], argv['width'], argv['symbols']);
         if (argv['merge']) {
             if (typeof argv['merge'] == "string") {
                 asMergeFiles.push(argv['merge']);
