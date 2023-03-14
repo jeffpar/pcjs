@@ -73,4 +73,4 @@ usually either because the disks contain a mixture of random/personal/unique con
 personal use.  Presumably to make more room on the disk, I had moved off a few MS-DOS 3.20 files (BACKUP.EXE,
 RESTORE.EXE, SHARE.EXE, TREE.EXE, and XCOPY.EXE), updated DEBUG.EXE, added MASM.EXE (v4.00), and then included
 a few files of my own (eg, PCPAL.EXE and HDISK.ASM).  FYI, this particular copy of PCPAL.EXE was saved with **Alt-Esc**
-configured as the activation key sequence. *--[{{ site.author }}]({{ site.author_url }})*
+configured as the activation key sequence. *--[Jeff]({{ site.author_url }})*
