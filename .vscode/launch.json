@@ -229,6 +229,20 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "Pro 386, 2Mb RAM, IBM EGA",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx86/progressive/pro386/ega/2048kb/machine.xml",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Pro 386, 2Mb RAM, IBM EGA [Debugger]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx86/progressive/pro386/ega/2048kb/debugger/machine.xml",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "Space Invaders",
       "type": "chrome",
       "request": "launch",
@@ -572,6 +586,22 @@
       ]
     },
     {
+      "name": "Node: diskimage.js --extract",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "args": [
+        "/pcsig8a-disks/pcx86/shareware/pcsig08/DISK0798.json",
+        "--extract"
+      ],
+      "cwd": "${workspaceFolder}/tmp",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskimage.js --all --checkdisk",
       "type": "node",
       "request": "launch",
@@ -638,6 +668,24 @@
       ]
     },
     {
+      "name": "Node: fileimage.js --file",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/modules/fileimage.js",
+      "args": [
+        "--file=/machines/pcx86/progressive/pro386/rom/1986-04-25/archive/PRO386.ROM",
+        "--output=/machines/pcx86/progressive/pro386/rom/1986-04-25/PRO386.json",
+        "--length=200",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskdump.js (deprecated)",
       "type": "node",
       "request": "launch",
@@ -656,7 +704,7 @@
       ]
     },
     {
-      "name": "Node: filedump.js",
+      "name": "Node: filedump.js (deprecated)",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/old/filedump/bin/filedump.js",

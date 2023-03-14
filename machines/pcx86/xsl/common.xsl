@@ -31,11 +31,11 @@
 	<xsl:template name="commonTop">
 		<div class="common-top">
 			<div class="common-top-left">
-				<h2><a href="https://www.pcjs.org">PCjs Machines</a></h2>
+				<h2><a href="/">PCjs Machines</a></h2>
 			</div>
 			<div class="common-top-right">
 				<ul>
-					<li><a href="https://www.pcjs.org/about/">About</a></li>
+					<li><a href="/about/">About</a></li>
 					<li><a href="https://www.pcjs.org/blog/">Blog</a></li>
 					<li><a href="https://github.com/jeffpar/pcjs">Repository</a></li>
 				</ul>

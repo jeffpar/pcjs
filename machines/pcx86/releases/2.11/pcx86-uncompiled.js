@@ -44982,32 +44982,59 @@ class ROMx86 extends Component {
 
         Component.addMachineResource(this.idMachine, sURL, sROMData);
 
+        /*
+         * Check for JSON formats first.
+         */
         if (sROMData.charAt(0) == "[" || sROMData.charAt(0) == "{") {
             try {
                 /*
                  * The most likely source of any exception will be here: parsing the JSON-encoded ROM data.
                  */
                 let rom = eval("(" + sROMData + ")");
-                let ab = rom['bytes'];
-                /*
-                 * Resource 'longs' should always be 32-bit DWORD values, whereas 'data' bit lengths
-                 * will vary according to the machine architecture for which the resource was designed.
-                 */
-                let adw = rom['longs'] || rom['data'];
 
-                if (ab) {
-                    this.abROM = ab;
+                /*
+                 * PCjs v3 ROM images contain, at a minimum, a 'width' value and a 'values' array, along with
+                 * other optional properties, like default load address ('addr'), endianness ('littleEndian'), etc.
+                 *
+                 * So we'll start with that and fall back to 8-bit 'bytes' or 32-bit 'longs' (or worst-case, 'data',
+                 * but the length of 'data' values varied according to the machine architecture, so the introduction
+                 * of 'data' was a "bit" ill-advised).
+                 */
+                let width = rom['width'];
+                let values = rom['values'];
+                let littleEndian = (rom['littleEndian'] !== false);
+                if (!width) {
+                    if ((values = rom['bytes'])) {
+                        width = 8;
+                    }
+                    else if ((values = rom['longs'] || rom['data'])) {
+                        width = 32;
+                    }
                 }
-                else if (adw) {
-                    /*
-                     * Convert all the DWORDs into BYTEs, so that subsequent code only has to deal with abROM.
-                     */
-                    this.abROM = new Array(adw.length * 4);
-                    for (let idw = 0, ib = 0; idw < adw.length; idw++) {
-                        this.abROM[ib++] = adw[idw] & 0xff;
-                        this.abROM[ib++] = (adw[idw] >> 8) & 0xff;
-                        this.abROM[ib++] = (adw[idw] >> 16) & 0xff;
-                        this.abROM[ib++] = (adw[idw] >> 24) & 0xff;
+                /*
+                 * Convert all values to bytes, so that subsequent code has a simple and consistent data format: abROM.
+                 */
+                if (width) {
+                    if (width == 8) {
+                        this.abROM = values;
+                    } else {
+                        let bpv = width >>> 3;
+                        this.abROM = new Array(values.length * bpv);
+                        for (let i = 0, ib = 0; i < values.length; i++) {
+                            let v = values[i];
+                            if (littleEndian) {
+                                for (let b = 0; b < bpv; b++) {
+                                    this.abROM[ib + b] = v & 0xff;
+                                    v >>>= 8;
+                                }
+                            } else {
+                                for (let b = bpv - 1; b >= 0; b--) {
+                                    this.abROM[ib + b] = v & 0xff;
+                                    v >>>= 8;
+                                }
+                            }
+                            ib += bpv;
+                        }
                     }
                 }
                 else {

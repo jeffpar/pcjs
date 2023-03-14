@@ -1998,14 +1998,15 @@ export default class DiskInfo {
     }
 
     /**
-     * getFileListing(iVolume, indent)
+     * getFileListing(iVolume, indent, fMetaData)
      *
      * @this {DiskInfo}
      * @param {number} [iVolume] (-1 to list contents of ALL volumes in image)
      * @param {number} [indent]
+     * @param {boolean} [fMetaData] (true to include a list of all compressed archive contents, if any)
      * @returns {string}
      */
-    getFileListing(iVolume = -1, indent = 0)
+    getFileListing(iVolume = -1, indent = 0, fMetaData = false)
     {
         let sListing = "";
         if (this.buildTables() > 0) {
@@ -2049,6 +2050,7 @@ export default class DiskInfo {
                     let file = this.fileTable[i];
                     if (file.iVolume != iVolume) continue;
                     if (file.attr & DiskInfo.ATTR.VOLUME) continue;
+                    if ((file.attr & DiskInfo.ATTR.METADATA) && !fMetaData) continue;
                     if (curVol != file.iVolume) {
                         let vol = this.volTable[file.iVolume];
                         sDrive = String.fromCharCode(vol.iPartition < 0? 0x41 : 0x43 + vol.iPartition);
@@ -2136,7 +2138,7 @@ export default class DiskInfo {
             [DiskInfo.FILEDESC.SIZE]: file.size,
             [DiskInfo.FILEDESC.VOL]:  file.iVolume
         };
-        if (file.size && (fComplete || fnHash)) {
+        if (file.size && !(file.attr & DiskInfo.ATTR.METADATA) && (fComplete || fnHash)) {
             this.assert(file.name[0] != '.');   // make sure we're not hashing "." and ".." DIRENTs
             ab = new Array(file.size);
             this.readSectorArray(file, ab);
@@ -2160,7 +2162,11 @@ export default class DiskInfo {
             }
         }
         if (fnHash && ab) {
-            desc[DiskInfo.FILEDESC.HASH] = fnHash(ab);
+            let hash = fnHash(ab);
+            if (desc[DiskInfo.FILEDESC.HASH] && hash != desc[DiskInfo.FILEDESC.HASH]) {
+                this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: original hash (%s) does not match current hash (%s)\n", desc[DiskInfo.FILEDESC.PATH], desc[DiskInfo.FILEDESC.HASH], hash);
+            }
+            desc[DiskInfo.FILEDESC.HASH] = hash;
         } else {
             if (!desc[DiskInfo.FILEDESC.HASH]) delete desc[DiskInfo.FILEDESC.HASH];
         }
@@ -2205,7 +2211,7 @@ export default class DiskInfo {
     }
 
     /**
-     * getFileManifest(fnHash)
+     * getFileManifest(fnHash, fMetaData)
      *
      * Returns an array of FILEDESC (file descriptors).  Each object is largely a clone
      * of the FileInfo object, with the exception of cluster and aLBA properties (which aren't
@@ -2214,15 +2220,17 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
+     * @param {boolean} [fMetaData]
      * @returns {Array}
      */
-    getFileManifest(fnHash)
+    getFileManifest(fnHash, fMetaData)
     {
         let aFiles = [];
         if (this.buildTables() > 0) {
             for (let i = 0; i < this.fileTable.length; i++) {
                 let file = this.fileTable[i];
                 if (file.name == "." || file.name == "..") continue;
+                if ((file.attr & DiskInfo.ATTR.METADATA) && !fMetaData) continue;
                 aFiles.push(this.getFileDesc(file, true, fnHash));
             }
         }
@@ -4135,5 +4143,5 @@ DiskInfo.ATTR = {
     LFN:            0x0f,       // combination used by Windows 95 (MS-DOS 7.0) and up, indicating a long filename (LFN) DIRENT
     SUBDIR:         0x10,       // PC DOS 2.0 and up
     ARCHIVE:        0x20,       // PC DOS 2.0 and up
-    METADATA:       0x40        // for internal use only
+    METADATA:       0x40        // for internal use only (used to mark "pseudo" file table entries that list compressed archive contents)
 };
