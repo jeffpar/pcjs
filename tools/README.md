@@ -144,12 +144,12 @@ To dump multiple (C:H:S) sectors from a disk image track, follow the C:H:S value
 
 ## FileImage
 
-[FileImage](modules/fileimage.js) is a Node command-line application that reads/writes PCjs file images (JSON-encoded
-versions of binary files, such as ROM images).  It supersedes the older PCjs [FileDump](old/filedump/lib/filedump.js) utility.
+[FileImage](modules/fileimage.js) is a Node command-line application that reads/writes PCjs file images, producing JSON-encoded
+versions of binary files (eg, ROM images).  It supersedes the older PCjs [FileDump](old/filedump/lib/filedump.js) utility.
 
 ### ROM Files
 
-Some early examples of PCjs image files include this Ohio Scientific [System ROM](../machines/osi/c1p/rom/system.json5)
+Some early examples of PCjs image files include the Ohio Scientific [System ROM](../machines/osi/c1p/rom/system.json5)
 and IBM PC [ROM BIOS](../machines/pcx86/ibm/5150/rom/bios/1981-04-24/PCBIOS-REV1.json5).
 
 Strictly speaking, these weren't -- and still aren't -- JSON-compliant files, which is why they now use *.json5* file
@@ -160,9 +160,9 @@ the much more sensible and flexible [JSON5](https://json5.org).
 
 ### To Be Continued...
 
-More information about using [[FileImage](modules/fileimage.js) and how the various image file formats used by PCjs have
+More information about using [FileImage](modules/fileimage.js) and how the various image file formats used by PCjs have
 evolved over time will hopefully appear here at some point.
 
 In the meantime, just, um, explore.
 
-¯\_(ツ)_/¯
+¯\\_(ツ)_/¯
