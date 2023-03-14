@@ -4,11 +4,16 @@ title: PCjs Tools
 permalink: /tools/
 ---
 
-### DiskImage
+## DiskImage
 
 [DiskImage](modules/diskimage.js) is a Node command-line application that reads/writes PCjs v2 disk images,
-using the [DiskInfo](../machines/pcx86/modules/diskinfo.js) PCx86 machine module to parse the data.
-[DiskImage](modules/diskimage.js) supersedes the older PCjs v1 [DiskDump](old/diskdump/lib/diskdump.js) utility.
+using the [DiskInfo](../machines/pcx86/modules/diskinfo.js) PCx86 machine module to parse the data, and it supersedes
+the older PCjs v1 [DiskDump](old/diskdump/lib/diskdump.js) utility.
+
+## FileImage
+
+[FileImage](modules/fileimage.js) is a Node command-line application that reads/writes PCjs file images (e.g., ROM dumps).
+It supersedes the older PCjs [FileDump](old/filedump/lib/filedump.js) utility.
 
 ### PCjs Disk Images
 
