@@ -1128,12 +1128,18 @@ export default class DiskInfo {
      */
     buildDirEntry(ab, off, sName, cbFile, bAttr, dateMod, iCluster)
     {
+        let i;
         let sExt = "";
         let offDir = off;
-        let i = sName.indexOf('.');
-        if (i > 0) {
-            sExt = sName.substr(i+1);
-            sName = sName.substr(0, i);
+        if (bAttr == DiskInfo.ATTR.VOLUME) {
+            sExt = sName.substr(8, 3);
+            sName = sName.substr(0, 8);
+        } else {
+            i = sName.indexOf('.');
+            if (i > 0) {
+                sExt = sName.substr(i+1);
+                sName = sName.substr(0, i);
+            }
         }
         for (i = 0; i < 8; i++) {
             ab[off++] = (i < sName.length? sName.charCodeAt(i) : 0x20);
@@ -1333,30 +1339,32 @@ export default class DiskInfo {
     buildShortName(sFile, fLabel=false, uniqueID=0)
     {
         let sName = sFile.toUpperCase();
-        let iExt = sName.lastIndexOf('.');
-        let sExt = "";
-        if (iExt >= 0) {
-            sExt = sName.substr(iExt+1);
-            sName = sName.substr(0, iExt);
-        } else if (fLabel && sName.length > 8) {
-            sExt = sName.substr(8);
-        }
-        sName = sName.substr(0, 8).trimEnd();
-        if (uniqueID) {
-            let suffix = "~" + uniqueID;
-            sName = sName.substr(0, 8 - suffix.length) + suffix;
-        }
-        sExt = sExt.substr(0, 3).trimEnd();
-        let iPeriod = -1;
-        if (sExt) {
-            iPeriod = sName.length;
-            sName += '.' + sExt;
-        }
-        /*
-         * Character validation is disabled for labels; I'm not sure what the limitations are on label characters,
-         * if any, but they definitely allow for things like extra periods and lower-case letters.
-         */
-        if (!fLabel) {
+        if (fLabel) {
+            /*
+             * Character validation is disabled for labels; I'm not sure what the limitations are on label characters,
+             * if any, but they definitely allow for things like extra periods and lower-case letters.
+             */
+            sName = sName.substr(0, 11).trimEnd();
+        } else {
+            let iExt = sName.lastIndexOf('.');
+            let sExt = "";
+                if (iExt >= 0) {
+                sExt = sName.substr(iExt+1);
+                sName = sName.substr(0, iExt);
+            } else if (fLabel && sName.length > 8) {
+                sExt = sName.substr(8);
+            }
+            sName = sName.substr(0, 8).trimEnd();
+            if (uniqueID) {
+                let suffix = "~" + uniqueID;
+                sName = sName.substr(0, 8 - suffix.length) + suffix;
+            }
+            sExt = sExt.substr(0, 3).trimEnd();
+            let iPeriod = -1;
+            if (sExt) {
+                iPeriod = sName.length;
+                sName += '.' + sExt;
+            }
             for (let i = 0; i < sName.length; i++) {
                 if (i == iPeriod) continue;
                 let ch = sName.charAt(i);
