@@ -13,9 +13,9 @@ import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
 import got        from "got";
-import zipStream  from "node-stream-zip";
 import DataBuffer from "./nodebuffer.js";
 import StdLib     from "./stdlib.js";
+import ZipStream  from "../misc/zipstream.js";
 import Device     from "../../machines/modules/device.js";
 import JSONLib    from "../../machines/modules/jsonlib.js";
 import DiskInfo   from "../../machines/pcx86/modules/diskinfo.js";
@@ -107,8 +107,7 @@ function createDisk(diskFile, diskette, argv)
         diskette.command = "--dir " + name;
         let label = diskette.label || argv['label'];
         let normalize = diskette.normalize || argv['normalize'];
-        let match = diskette.format && diskette.format.match(/^PC([0-9]+)K/);
-        let target = match && +match[1] || +argv['target'];
+        let target = getTarget(diskette.format);
         di = readDir(sArchiveFile, false, label, normalize, target, undefined, undefined, sectorIDs, sectorErrors, suppData);
     } else {
         diskette.command = "--disk " + name;
@@ -240,6 +239,27 @@ function getServerName(diskFile)
      */
     let match = diskFile.match(/^\/(machines|software|diskettes|gamedisks|miscdisks|pcsig8a-disks|pcsig8b-disks|harddisks|decdisks|discs|private)\//);
     return match && match[1];
+}
+
+/**
+ * getTarget(sTarget)
+ *
+ * @param {string} sTarget
+ * @returns {number} (target Kb for disk image, 0 if no target)
+ */
+function getTarget(sTarget)
+{
+    let target = 0;
+    if (sTarget) {
+        let match = sTarget.match(/^(PC|)([0-9]+)([KM]*)/i);
+        if (match) {
+            target = +match[2];
+            if (match[3].toUpperCase() == 'M') {
+                target *= 1024;
+            }
+        }
+    }
+    return target;
 }
 
 /**
@@ -1025,7 +1045,7 @@ function readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, done, sectorIDs
     let readDone = function(aFileData) {
         let db = new DataBuffer();
         let di = new DiskInfo(device);
-        if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget || 0, getHash, sectorIDs, sectorErrors, suppData)) {
+        if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, getHash, sectorIDs, sectorErrors, suppData)) {
             if (done) {
                 done(di);
                 return null;
@@ -1181,7 +1201,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
  */
 function readZIPFiles(sZIP, sLabel, done)
 {
-    let zip = new zipStream({
+    let zip = new ZipStream({
         file: sZIP,
         storeEntries: true
     });
@@ -1587,7 +1607,12 @@ function main(argc, argv)
     };
 
     if (fDirectory || fZIP) {
-        readDir(input, fZIP, argv['label'], argv['normalize'], +argv['target'], +argv['maxfiles'], done);
+        /*
+         * Target is normally a number in Kb (eg, 360 for a 360K diskette); you can also add a suffix (eg, K or M).
+         * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
+         * equivalent to 10240K).
+         */
+        readDir(input, fZIP, argv['label'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'], done);
         return;
     }
 

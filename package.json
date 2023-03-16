@@ -45,7 +45,6 @@
     "gulp-replace": "^1.1.4",
     "gulp-sourcemaps": "^3.0.0",
     "mkdirp": "^2.1.5",
-    "node-stream-zip": "^1.15.0",
     "path": "^0.12.7",
     "pdf-parse": "^1.1.1",
     "replace": "^1.2.2",

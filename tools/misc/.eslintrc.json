@@ -1,0 +1,10 @@
+{
+  "ecmaFeatures": {
+    "impliedStrict": true
+  },
+  "parserOptions": {
+  },
+  "rules": {
+    "sort-imports": "off"
+  }
+}
