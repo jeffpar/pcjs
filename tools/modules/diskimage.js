@@ -13,6 +13,7 @@ import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
 import got        from "got";
+import zipStream  from "node-stream-zip";
 import DataBuffer from "./nodebuffer.js";
 import StdLib     from "./stdlib.js";
 import Device     from "../../machines/modules/device.js";
@@ -108,7 +109,7 @@ function createDisk(diskFile, diskette, argv)
         let normalize = diskette.normalize || argv['normalize'];
         let match = diskette.format && diskette.format.match(/^PC([0-9]+)K/);
         let target = match && +match[1] || +argv['target'];
-        di = readDir(sArchiveFile, label, normalize, target, undefined, sectorIDs, sectorErrors, suppData);
+        di = readDir(sArchiveFile, false, label, normalize, target, undefined, undefined, sectorIDs, sectorErrors, suppData);
     } else {
         diskette.command = "--disk " + name;
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
@@ -501,7 +502,7 @@ function processDisk(di, diskFile, argv, diskette)
                 } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
                     let fPrinted = false;
                     let fQuiet = argv['quiet'];
-                    let sFile = sPath.substr(subDir.length + 1);
+                    let sFile = sPath.substr(subDir.length? subDir.length + 1 : 0);
                     if (!argv['all']) {
                         if (!fQuiet) printf("extracting: %s\n", sFile);
                     } else {
@@ -992,25 +993,27 @@ function readAll(argv)
 }
 
 /**
- * readDir(sDir, sLabel, fNormalize, kbTarget, nMax, sectorIDs, sectorErrors, suppData)
+ * readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, done, sectorIDs, sectorErrors, suppData)
  *
  * @param {string} sDir (directory name)
+ * @param {boolean} [fZIP] (true if ZIP file instead of directory)
  * @param {string} [sLabel] (if not set with --label, then basename(sDir) will be used instead)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
+ * @param {function()} [done] (optional function to call on completion)
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
  * @returns {DiskInfo|null}
  */
-function readDir(sDir, sLabel, fNormalize, kbTarget, nMax, sectorIDs, sectorErrors, suppData)
+function readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, done, sectorIDs, sectorErrors, suppData)
 {
     let di, diskName;
-    if (sDir.endsWith('/')) {
-        diskName = path.basename(sDir);
+    if (fZIP || sDir.endsWith('/')) {
+        diskName = path.parse(sDir).name;
         if (!sLabel) {
-            sLabel = path.basename(sDir).replace(/^.*-([^0-9][^-]+)$/, "$1");
+            sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
         }
     } else {
         diskName = path.basename(path.dirname(sDir));
@@ -1019,20 +1022,30 @@ function readDir(sDir, sLabel, fNormalize, kbTarget, nMax, sectorIDs, sectorErro
          */
     }
     sDir = getFullPath(sDir);
-    try {
-        nMaxInit = nMaxCount = nMax || nMaxDefault;
-        let aFileData = readDirFiles(sDir, sLabel, fNormalize, 0);
-        di = new DiskInfo(device);
+    let readDone = function(aFileData) {
         let db = new DataBuffer();
+        let di = new DiskInfo(device);
         if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget || 0, getHash, sectorIDs, sectorErrors, suppData)) {
+            if (done) {
+                done(di);
+                return null;
+            }
             /*
              * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
              */
             for (let i = 0; i < aFileData.length; i++) {
                 addMetaData(di, sDir, aFileData[i].path);
             }
-        } else {
+        }
+        return di;
+    };
+    try {
+        nMaxInit = nMaxCount = nMax || nMaxDefault;
+        if (fZIP) {
+            readZIPFiles(sDir, sLabel, readDone);
             di = null;
+        } else {
+            di = readDone(readDirFiles(sDir, sLabel, fNormalize, 0));
         }
     } catch(err) {
         printError(err);
@@ -1159,6 +1172,59 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
         printf("warning: %d file limit reached, use --maxfiles # to increase\n", nMaxInit);
     }
     return aFileData;
+}
+
+/**
+ * readZIPFiles(sZIP, sLabel, done)
+ *
+ * @param {string} sZIP (ZIP filename)
+ * @param {boolean|null} sLabel (optional volume label)
+ * @param {function(Array.<FileData>)} done
+ */
+function readZIPFiles(sZIP, sLabel, done)
+{
+    let zip = new zipStream({
+        file: sZIP,
+        storeEntries: true
+    });
+    zip.on('ready', () => {
+        let aFileData = [];
+        let aDirectories = [];
+        for (let entry of Object.values(zip.entries())) {
+            let file = {path: entry.name, name: path.basename(entry.name)};
+            let date = new Date(entry.time);
+            file.date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+            if (entry.isDirectory) {
+                file.attr = DiskInfo.ATTR.SUBDIR;
+                file.size = -1;
+                file.data = new DataBuffer();
+                file.files = [];
+                aDirectories.push(file);
+            } else {
+                let data = zip.entryDataSync(entry.name);
+                data = new DataBuffer(data);
+                file.attr = DiskInfo.ATTR.ARCHIVE;
+                file.size = data.length;
+                file.data = data;
+            }
+            let d, sDir = path.dirname(file.path) + path.sep;
+            for (d = 0; d < aDirectories.length; d++) {
+                let dir = aDirectories[d];
+                if (dir.path == sDir) {
+                    dir.files.push(file);
+                    break;
+                }
+            }
+            if (d == aDirectories.length) {
+                aFileData.push(file);
+            }
+        }
+        zip.close()
+        done(aFileData);
+    });
+    zip.on('error', (err) => {
+        printError(err);
+    });
 }
 
 /**
@@ -1474,7 +1540,8 @@ function main(argc, argv)
         return;
     }
 
-    let fDirectory = false
+    let fDirectory = false, fZIP = false;
+
     input = argv['dir'];
     if (input) {
         fDirectory = true;          // directories should end with a trailing slash, but we'll make sure
@@ -1484,40 +1551,46 @@ function main(argc, argv)
         if (input) {                // if you use --files to provide a list of files
             fDirectory = true;      // then the filenames must be separated by commas, with NO trailing slash
         } else {
-            input = argv[1];
-            argv.splice(1, 1);
-            fDirectory = !!(input && input.endsWith('/'));
-        }
-    }
-
-    let di;
-    if (input) {
-        /*
-         * TODO: Consider converting this block into a createDisk() call, to eliminate some redundancy.   The
-         * main obstacles are that createDisk() expects the caller to provide a diskette object (from diskettes.json),
-         * which we don't have here, and this code supports features like --files, -forceBPB, --maxfiles, etc.
-         */
-        if (fDirectory) {
-            /*
-             * readDir() takes care of both directories and files, distinguishing between them on the basis of a trailing slash.
-             */
-            di = readDir(input, argv['label'], argv['normalize'], +argv['target'], +argv['maxfiles']);
-            if (di) {
-                let name = argv['output'] || argv[1];
-                if (name) {
-                    if (typeof name != "string") name = name[0];
-                    di.setName(path.basename(name));
+            input = argv['zip'];
+            if (input) {
+                fZIP = true;
+            } else {
+                input = argv[1];
+                argv.splice(1, 1);
+                if (input) {
+                    if (input.endsWith('/')) {
+                        fDirectory = true;
+                    }
+                    else if (path.extname(input).toLowerCase() == ".zip") {
+                        fZIP = true;
+                    }
                 }
             }
-        } else {
-            di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));
         }
     }
-    if (di === null) return;
 
-    if (di) {
-        processDisk(di, input, argv);
+    let done = function(di) {
+        if (di) {
+            let name = argv['output'] || argv[1];
+            if (name) {
+                if (typeof name != "string") name = name[0];
+                di.setName(path.basename(name));
+            }
+            processDisk(di, input, argv);
+        }
+    };
+
+    if (fDirectory || fZIP) {
+        readDir(input, fZIP, argv['label'], argv['normalize'], +argv['target'], +argv['maxfiles'], done);
         return;
+    }
+
+    if (input) {
+        let di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));
+        if (di) {
+            processDisk(di, input, argv);
+            return;
+        }
     }
 
     printf("nothing to do\n");

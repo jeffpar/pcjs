@@ -439,6 +439,17 @@ function processFolders(sDir, argv)
 }
 
 /**
+ * processZIPs(sDir, argv)
+ *
+ * @param {string} sDir
+ * @param {Object} argv
+ * @returns {Object}
+ */
+function processZIPs(sDir, argv)
+{
+}
+
+/**
  * processManifests(sDir, output, fDebug)
  *
  * @param {string} sDir
@@ -661,7 +672,11 @@ if (args.argc < 2) {
             }
         }
     }
-    else {
-        let diskettes = processFolders(sDir, argv);
+    else if (argv['folders']) {
+        processFolders(sDir, argv);
+    } else if (argv['zips']) {
+        processZIPs(argv['zips'], argv);
+    } else {
+        printf("nothing to do");
     }
 }
