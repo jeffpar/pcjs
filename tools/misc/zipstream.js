@@ -585,9 +585,7 @@ const StreamZip = function (config) {
                     }
                     if (relPath && !allDirs[relPath] && relPath !== '.') {
                         allDirs[relPath] = true;
-                        let parts = relPath.split('/').filter((f) => {
-                            return f;
-                        });
+                        let parts = relPath.split('/').filter((f) => f);
                         if (parts.length) {
                             dirs.push(parts);
                         }
@@ -603,9 +601,7 @@ const StreamZip = function (config) {
                     }
                 }
             }
-            dirs.sort((x, y) => {
-                return x.length - y.length;
-            });
+            dirs.sort((x, y) => x.length - y.length);
             if (dirs.length) {
                 createDirectories(outPath, dirs, (err) => {
                     if (err) {
@@ -894,7 +890,7 @@ class ZipEntry {
     }
 
     validateName() {
-        if (/\\|^\w+:|^\/|(^|\/)\.\.(\/|$)/.test(this.name)) {
+        if ((/\\|^\w+:|^\/|(^|\/)\.\.(\/|$)/).test(this.name)) {
             throw new Error('Malicious entry: ' + this.name);
         }
     }

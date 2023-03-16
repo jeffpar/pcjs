@@ -8,8 +8,6 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
 let fs = require("fs");
 let glob = require("glob");
 let mkdirp = require("mkdirp");

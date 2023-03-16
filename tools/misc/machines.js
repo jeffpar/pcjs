@@ -8,8 +8,6 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
 var fs = require("fs");
 var glob = require("glob");
 var path = require("path");
