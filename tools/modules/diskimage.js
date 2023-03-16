@@ -1043,13 +1043,11 @@ function readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, done, sectorIDs
         nMaxInit = nMaxCount = nMax || nMaxDefault;
         if (fZIP) {
             readZIPFiles(sDir, sLabel, readDone);
-            di = null;
         } else {
             di = readDone(readDirFiles(sDir, sLabel, fNormalize, 0));
         }
     } catch(err) {
         printError(err);
-        di = null;
     }
     return di;
 }
@@ -1540,16 +1538,16 @@ function main(argc, argv)
         return;
     }
 
-    let fDirectory = false, fZIP = false;
+    let fDirectory = false, fFiles = false, fZIP = false;
 
     input = argv['dir'];
     if (input) {
-        fDirectory = true;          // directories should end with a trailing slash, but we'll make sure
+        fDirectory = true;          // if --dir, the directory should end with a trailing slash (but we'll make sure)
         if (!input.endsWith('/')) input += '/';
     } else {
         input = argv['files'];
-        if (input) {                // if you use --files to provide a list of files
-            fDirectory = true;      // then the filenames must be separated by commas, with NO trailing slash
+        if (input) {                // if --files, the list of files should be separated with commas (and NO trailing slash)
+            fDirectory = fFiles = true;
         } else {
             input = argv['zip'];
             if (input) {
@@ -1571,10 +1569,18 @@ function main(argc, argv)
 
     let done = function(di) {
         if (di) {
-            let name = argv['output'] || argv[1];
-            if (name) {
-                if (typeof name != "string") name = name[0];
-                di.setName(path.basename(name));
+            if (fFiles) {
+                /*
+                 * When a disk is created from a list of files, the default name isn't very meaningful;
+                 * the basename of the output file isn't much more helpful, but it's better than nothing.
+                 *
+                 * This only affects the 'name' property in 'imageInfo', which is of limited interest anyway.
+                 */
+                let name = argv['output'] || argv[1];
+                if (name) {
+                    if (typeof name != "string") name = name[0];
+                    di.setName(path.basename(name));
+                }
             }
             processDisk(di, input, argv);
         }
@@ -1586,11 +1592,8 @@ function main(argc, argv)
     }
 
     if (input) {
-        let di = readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData']));
-        if (di) {
-            processDisk(di, input, argv);
-            return;
-        }
+        done(readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData'])));
+        return;
     }
 
     printf("nothing to do\n");
