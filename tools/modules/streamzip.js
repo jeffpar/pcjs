@@ -11,9 +11,22 @@ import zlib from 'zlib';
 import stream from 'stream';
 
 /**
+ * @typedef {Object} Config
+ * @property {boolean} storeEntries
+ * @property {boolean} skipEntryNameValidation
+ * @property {string} nameEncoding
+ * @property {string} file (file name; undocumented)
+ * @property {number} fd (file descriptor; undocumented)
+ * @property {number} chunkSize (undocumented)
+ */
+
+/**
  * @class StreamZip
  */
 export default class StreamZip {
+    /*
+     * Public class fields
+     */
 
     /* The local file header */
     static LOCHDR = 30;                 // LOC header size
@@ -134,16 +147,30 @@ export default class StreamZip {
     static EF_ZIP64_OR_32   = 0xffffffff;
     static EF_ZIP64_OR_16   = 0xffff;
 
+    /*
+     * Private instance fields
+     *
+     * NOTE: Most of the StreamZip instance data is private, but instead of prefixing everything with '#',
+     * private fields will be limited to those that conflict with public methods.
+     */
+    #entries;
+
+    /*
+     * Most of the instance methods are private as well, but again, in the interest of simplicity, we'll just
+     * explicitly mark each public method in its comment header (wouldn't it be nice if all methods and properties
+     * in JavaScript classes could default to private unless explicitly declared public?)
+     */
+
     /**
      * @this {StreamZip}
-     * @param {Object} config
+     * @param {Config} config
      */
     constructor(config)
     {
         this.config = config;
         this.opened = false;
         this.ready = false;
-        this._entries = config.storeEntries !== false? {} : null,
+        this.#entries = config.storeEntries !== false? {} : null,
         this.fileName = config.file,
         this.textDecoder = config.nameEncoding? new TextDecoder(config.nameEncoding) : null;
         this.open();
@@ -413,8 +440,8 @@ export default class StreamZip {
                 if (!this.config.skipEntryNameValidation) {
                     entry.validateName();
                 }
-                if (this._entries) {
-                    this._entries[entry.name] = entry;
+                if (this.#entries) {
+                    this.#entries[entry.name] = entry;
                 }
                 this.emit('entry', entry);
                 this.op.entry = entry = null;
@@ -435,7 +462,7 @@ export default class StreamZip {
      */
     checkEntriesExist()
     {
-        if (!this._entries) {
+        if (!this.#entries) {
             throw new Error('storeEntries disabled');
         }
     }
@@ -443,28 +470,31 @@ export default class StreamZip {
     /**
      * entry(name)
      *
+     * @public
      * @this {StreamZip}
      */
     entry(name)
     {
         this.checkEntriesExist();
-        return this._entries[name];
+        return this.#entries[name];
     }
 
     /**
      * entries()
      *
+     * @public
      * @this {StreamZip}
      */
     entries()
     {
         this.checkEntriesExist();
-        return this._entries;
+        return this.#entries;
     }
 
     /**
      * stream()
      *
+     * @public
      * @this {StreamZip}
      */
     stream(entry, callback)
@@ -498,6 +528,7 @@ export default class StreamZip {
     /**
      * entryDataSync()
      *
+     * @public
      * @this {StreamZip}
      */
     entryDataSync(entry)
@@ -547,7 +578,7 @@ export default class StreamZip {
     {
         if (typeof entry === 'string') {
             this.checkEntriesExist();
-            entry = this._entries[entry];
+            entry = this.#entries[entry];
             if (!entry) {
                 return callback(new Error('Entry not found'));
             }
@@ -684,6 +715,7 @@ export default class StreamZip {
     /**
      * extract()
      *
+     * @public
      * @this {StreamZip}
      */
     extract(entry, outPath, callback)
@@ -703,13 +735,13 @@ export default class StreamZip {
             const files = [],
                 dirs = [],
                 allDirs = {};
-            for (const e in this._entries) {
+            for (const e in this.#entries) {
                 if (
-                    Object.prototype.hasOwnProperty.call(this._entries, e) &&
+                    Object.prototype.hasOwnProperty.call(this.#entries, e) &&
                     e.lastIndexOf(entryName, 0) === 0
                 ) {
                     let relPath = e.replace(entryName, '');
-                    const childEntry = this._entries[e];
+                    const childEntry = this.#entries[e];
                     if (childEntry.isFile) {
                         files.push(childEntry);
                         relPath = path.dirname(relPath);
@@ -758,6 +790,7 @@ export default class StreamZip {
     /**
      * close()
      *
+     * @public
      * @this {StreamZip}
      */
     close(callback)
@@ -840,7 +873,7 @@ StreamZip.async = class StreamZipAsync extends events.EventEmitter
     async entries()
     {
         const zip = await this[propZip];
-        return zip._entries();
+        return zip.entries();
     }
 
     async stream(entry)
