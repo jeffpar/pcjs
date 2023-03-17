@@ -258,7 +258,7 @@ export default class StreamZip {
         if (pos <= minPos) {
             return this.emit('error', new Error('Bad archive'));
         }
-        const expandLength = Math.min(op.chunkSize, pos - minPos);
+        const expandLength = Math.min(this.op.chunkSize, pos - minPos);
         this.op.win.expandLeft(expandLength, this.readUntilFoundCallback.bind(this));
     }
 
@@ -309,7 +309,7 @@ export default class StreamZip {
             this.entriesCount = this.centralDirectory.volumeEntries;
             if ((this.centralDirectory.volumeEntries === StreamZip.EF_ZIP64_OR_16 && this.centralDirectory.totalEntries === StreamZip.EF_ZIP64_OR_16) ||
                 this.centralDirectory.size === StreamZip.EF_ZIP64_OR_32 || this.centralDirectory.offset === StreamZip.EF_ZIP64_OR_32) {
-                readZip64CentralDirectoryLocator();
+                this.readZip64CentralDirectoryLocator();
             } else {
                 this.op = {};
                 this.readEntries();
@@ -605,7 +605,7 @@ export default class StreamZip {
             }
             callback(readEx, entry);
         }).read(sync);
-    };
+    }
 
     /**
      * dataOffset()
@@ -785,7 +785,7 @@ export default class StreamZip {
                 }
             });
         }
-    };
+    }
 
     /**
      * close()
@@ -819,9 +819,12 @@ export default class StreamZip {
     }
 }
 
-StreamZip.setFs = function(customFs) {
-    fs = customFs;
-};
+//
+// TODO: Figure out if this is still necessary, because it's currently broken (fs is read-only)
+//
+// StreamZip.setFs = function(customFs) {
+//     fs = customFs;
+// };
 
 StreamZip.debugLog = (...args) => {
     if (StreamZip.debug) {
