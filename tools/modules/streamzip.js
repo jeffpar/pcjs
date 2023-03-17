@@ -1,6 +1,7 @@
 /**
  * @license node-stream-zip | (c) 2020 Antelle | https://github.com/antelle/node-stream-zip/blob/master/LICENSE
  * Portions copyright https://github.com/cthackers/adm-zip | https://raw.githubusercontent.com/cthackers/adm-zip/master/LICENSE
+ * Updated for PCjs with ES13 (ES2022) features and support for assorted "legacy" archive/compressed data formats
  */
 
 import fs from 'fs';
@@ -9,6 +10,7 @@ import path from 'path';
 import events from 'events';
 import zlib from 'zlib';
 import stream from 'stream';
+import unarchive from './unarchive.js';
 
 /**
  * @typedef {Object} Config
@@ -150,7 +152,7 @@ export default class StreamZip {
     /*
      * Private instance fields
      *
-     * NOTE: Most of the StreamZip instance data is private, but instead of prefixing everything with '#',
+     * Most of the StreamZip instance data is private, but instead of prefixing everything with '#', explicitly
      * private fields will be limited to those that conflict with public methods.
      */
     #entries;
@@ -554,6 +556,8 @@ export default class StreamZip {
         }
         if (entry.method === StreamZip.STORED) {
             // nothing to do
+        } else if (entry.method === StreamZip.IMPLODED) {
+            data = unarchive.explodeSync(data);
         } else if (entry.method === StreamZip.DEFLATED || entry.method === StreamZip.ENHANCED_DEFLATED) {
             data = zlib.inflateRawSync(data);
         } else {

@@ -591,8 +591,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--zip=pcsig8a-disks/pcx86/shareware/pcsig08/archive/cdrom/0701_0800/DISK0798/DISK0798.ZIP",
-        "--output=tmp/DISK0798.json",
+        "--zip=/Volumes/PC_SIG_4_90/1401_500/DISK1488/DISK1488.ZIP",
+        "--output=tmp/DISK1488.json",
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}",
