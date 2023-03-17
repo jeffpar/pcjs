@@ -15,7 +15,7 @@ import path       from "path";
 import got        from "got";
 import DataBuffer from "./nodebuffer.js";
 import StdLib     from "./stdlib.js";
-import ZipStream  from "../misc/zipstream.js";
+import StreamZip  from "./streamzip.js";
 import Device     from "../../machines/modules/device.js";
 import JSONLib    from "../../machines/modules/jsonlib.js";
 import DiskInfo   from "../../machines/pcx86/modules/diskinfo.js";
@@ -1201,7 +1201,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
  */
 function readZIPFiles(sZIP, sLabel, done)
 {
-    let zip = new ZipStream({
+    let zip = new StreamZip({
         file: sZIP,
         storeEntries: true
     });
