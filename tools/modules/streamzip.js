@@ -37,7 +37,7 @@ export default class StreamZip {
     static LOCFLG = 6;                  // general purpose bit flag
     static LOCHOW = 8;                  // compression method
     static LOCTIM = 10;                 // modification time (2 bytes time, 2 bytes date)
-    static LOCCRC = 14;                 // uncompressed file crc-32 value
+    static LOCCRC = 14;                 // uncompressed file CRC-32 value
     static LOCSIZ = 18;                 // compressed size
     static LOCLEN = 22;                 // uncompressed size
     static LOCNAM = 26;                 // filename length
@@ -46,7 +46,7 @@ export default class StreamZip {
     /* The Data descriptor */
     static EXTSIG = 0x08074b50;         // "PK\007\008"
     static EXTHDR = 16;                 // EXT header size
-    static EXTCRC = 4;                  // uncompressed file crc-32 value
+    static EXTCRC = 4;                  // uncompressed file CRC-32 value
     static EXTSIZ = 8;                  // compressed size
     static EXTLEN = 12;                 // uncompressed size
 
@@ -58,7 +58,7 @@ export default class StreamZip {
     static CENFLG = 8;                  // encrypt, decrypt flags
     static CENHOW = 10;                 // compression method
     static CENTIM = 12;                 // modification time (2 bytes time, 2 bytes date)
-    static CENCRC = 16;                 // uncompressed file crc-32 value
+    static CENCRC = 16;                 // uncompressed file CRC-32 value
     static CENSIZ = 20;                 // compressed size
     static CENLEN = 24;                 // uncompressed size
     static CENNAM = 28;                 // filename length
@@ -96,16 +96,16 @@ export default class StreamZip {
     static END64OFF = 48;
 
     /* Compression methods */
-    static STORED = 0;                  // no compression
-    static SHRUNK = 1;                  // shrunk
-    static REDUCED1 = 2;                // reduced with compression factor 1
-    static REDUCED2 = 3;                // reduced with compression factor 2
-    static REDUCED3 = 4;                // reduced with compression factor 3
-    static REDUCED4 = 5;                // reduced with compression factor 4
-    static IMPLODED = 6;                // imploded
-    static DEFLATED = 8;                // deflated
-    static ENHANCED_DEFLATED = 9;       // deflate64
-    static PKWARE = 10;                 // PKWare DCL imploded
+    static STORE = 0;                   // no compression
+    static SHRINK = 1;                  // shrink
+    static REDUCE1 = 2;                 // reduce with compression factor 1
+    static REDUCE2 = 3;                 // reduce with compression factor 2
+    static REDUCE3 = 4;                 // reduce with compression factor 3
+    static REDUCE4 = 5;                 // reduce with compression factor 4
+    static IMPLODE = 6;                 // implode
+    static DEFLATE = 8;                 // deflate
+    static DEFLATE64 = 9;               // deflate64
+    static IMPLODE_DCL = 10;            // PKWare DCL implode
     static BZIP2 = 12;                  // compressed using BZIP2
     static LZMA = 14;                   // LZMA
     static IBM_TERSE = 18;              // compressed using IBM TERSE
@@ -509,16 +509,16 @@ export default class StreamZip {
                 }
                 const offset = this.dataOffset(entry);
                 let entryStream = new EntryDataReaderStream(this.fd, offset, entry.compressedSize);
-                if (entry.method === StreamZip.STORED) {
+                if (entry.method === StreamZip.STORE) {
                     // nothing to do
-                } else if (entry.method === StreamZip.DEFLATED) {
+                } else if (entry.method === StreamZip.DEFLATE) {
                     entryStream = entryStream.pipe(zlib.createInflateRaw());
                 } else {
                     return callback(new Error('Unknown compression method: ' + entry.method));
                 }
-                if (this.canVerifyCrc(entry)) {
+                if (this.canVerifyCRC(entry)) {
                     entryStream = entryStream.pipe(
-                        new EntryVerifyStream(entryStream, entry.crc, entry.size)
+                        new EntryVerifyStream(entryStream, entry)
                     );
                 }
                 callback(null, entryStream);
@@ -554,21 +554,36 @@ export default class StreamZip {
         if (err) {
             throw err;
         }
-        if (entry.method === StreamZip.STORED) {
+        let verify = true;
+        if (entry.method == StreamZip.STORE) {
             // nothing to do
-        } else if (entry.method === StreamZip.IMPLODED) {
-            data = unarchive.explodeSync(data);
-        } else if (entry.method === StreamZip.DEFLATED || entry.method === StreamZip.ENHANCED_DEFLATED) {
+        } else if (entry.method == StreamZip.SHRINK) {
+            data = unarchive.passThruSync(data);
+            verify = false;
+        } else if (entry.method >= StreamZip.REDUCE1 && entry.method <= StreamZip.REDUCE4) {
+            data = unarchive.passThruSync(data);
+            verify = false;
+        } else if (entry.method == StreamZip.IMPLODE) {
+            data = unarchive.passThruSync(data);
+            verify = false;
+        } else if (entry.method == StreamZip.IMPLODE_DCL) {
+            // let test = Buffer.from([0x00, 0x04, 0x82, 0x24, 0x25, 0x8f, 0x80, 0x7f]);
+            // data = unarchive.blastSync(test);
+            // verify = false;
+            data = unarchive.blastSync(data);
+        } else if (entry.method == StreamZip.DEFLATE || entry.method == StreamZip.DEFLATE64) {
             data = zlib.inflateRawSync(data);
         } else {
-            throw new Error('Unknown compression method: ' + entry.method);
+            throw new Error(entry.name + ": unsupported compression method " + entry.method);
         }
-        if (data.length !== entry.size) {
-            throw new Error('Invalid size');
-        }
-        if (this.canVerifyCrc(entry)) {
-            const verify = new CrcVerify(entry.crc, entry.size);
-            verify.data(data);
+        if (verify) {
+            if (data.length !== entry.size) {
+                throw new Error(entry.name + ": expected " + entry.size + " bytes, got " + data.length + " (method " + entry.method + ")");
+            }
+            if (this.canVerifyCRC(entry)) {
+                const verify = new CRCVerify(entry);
+                verify.data(data);
+            }
         }
         return data;
     }
@@ -622,11 +637,11 @@ export default class StreamZip {
     }
 
     /**
-     * canVerifyCrc()
+     * canVerifyCRC()
      *
      * @this {StreamZip}
      */
-    canVerifyCrc(entry)
+    canVerifyCRC(entry)
     {
         // if bit 3 (0x08) of the general-purpose flags field is set, then the CRC-32 and file sizes are not known when the header is written
         return (entry.flags & 0x8) !== 0x8;
@@ -1051,7 +1066,7 @@ class ZipEntry
         const datebytes = data.readUInt16LE(StreamZip.LOCTIM + 2);
         this.time = ZipEntry.parseZipTime(timebytes, datebytes);
 
-        // uncompressed file crc-32 value
+        // uncompressed file CRC-32 value
         this.crc = data.readUInt32LE(StreamZip.LOCCRC) || this.crc;
         // compressed size
         const compressedSize = data.readUInt32LE(StreamZip.LOCSIZ);
@@ -1345,10 +1360,10 @@ class EntryDataReaderStream extends stream.Readable
 
 class EntryVerifyStream extends stream.Transform
 {
-    constructor(baseStm, crc, size)
+    constructor(baseStm, entry)
     {
         super();
-        this.verify = new CrcVerify(crc, size);
+        this.verify = new CRCVerify(entry);
         baseStm.on('error', (e) => {
             this.emit('error', e);
         });
@@ -1366,12 +1381,11 @@ class EntryVerifyStream extends stream.Transform
     }
 }
 
-class CrcVerify
+class CRCVerify
 {
-    constructor(crc, size)
+    constructor(entry)
     {
-        this.crc = crc;
-        this.size = size;
+        this.entry = entry;
         this.state = {
             crc: ~0,
             size: 0,
@@ -1380,7 +1394,7 @@ class CrcVerify
 
     data(data)
     {
-        const crcTable = this.getCrcTable();
+        const crcTable = this.getCRCTable();
         let crc = this.state.crc;
         let off = 0;
         let len = data.length;
@@ -1389,24 +1403,24 @@ class CrcVerify
         }
         this.state.crc = crc;
         this.state.size += data.length;
-        if (this.state.size >= this.size) {
+        if (this.state.size >= this.entry.size) {
             const buf = Buffer.alloc(4);
             buf.writeInt32LE(~this.state.crc & 0xffffffff, 0);
             crc = buf.readUInt32LE(0);
-            if (crc !== this.crc) {
-                throw new Error('Invalid CRC');
+            if (crc !== this.entry.crc) {
+                throw new Error(this.entry.name + ": expected CRC 0x" + this.entry.crc.toString(16) + ", got 0x" + crc.toString(16));
             }
-            if (this.state.size !== this.size) {
-                throw new Error('Invalid size');
+            if (this.state.size !== this.entry.size) {
+                throw new Error(this.entry.name + ": expected size " + this.entry.size + ", got " + this.state.size);
             }
         }
     }
 
-    getCrcTable()
+    getCRCTable()
     {
-        let crcTable = CrcVerify.crcTable;
+        let crcTable = CRCVerify.crcTable;
         if (!crcTable) {
-            CrcVerify.crcTable = crcTable = [];
+            CRCVerify.crcTable = crcTable = [];
             const b = Buffer.alloc(4);
             for (let n = 0; n < 256; n++) {
                 let c = n;
