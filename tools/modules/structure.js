@@ -185,7 +185,7 @@ export default class Structure {
      *
      * @this {Structure}
      * @param {Object} object
-     * @param {string|Array.<string} name
+     * @param {string|Array.<string>} name (or array of names)
      * @param {string} [encoding] (default is "utf8")
      */
     assignField(object, name, encoding)

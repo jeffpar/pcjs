@@ -1,5 +1,5 @@
 /**
- * @fileoverview Library for "unarchiving" compressed data in various legacy archive formats
+ * @fileoverview Library for decompressing various "legacy" ZIP formats
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -18,9 +18,9 @@ import { Buffer } from 'node:buffer';
 const DEBUG = true;
 
 /**
- * @class Unarchive
+ * @class LegacyZip
  */
-export default class Unarchive
+export default class LegacyZip
 {
     /**
      * stretchSync(data)
@@ -205,7 +205,6 @@ class HuffmanDecoder
  * Stretch is used to decompress SHRINK streams.
  *
  * NOTE: Stretch is what most other implementations call "unshrink", which isn't very imaginative.
- * Then again, I suppose "unarchive" is not very imaginative either, but at least it's accurate. -JP
  */
 class Stretch
 {

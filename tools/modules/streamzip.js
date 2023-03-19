@@ -11,7 +11,7 @@ import events from 'events';
 import zlib from 'zlib';
 import stream from 'stream';
 import Structure from './structure.js';
-import Unarchive from './unarchive.js';
+import LegacyZip from './legacyzip.js';
 
 /**
  * @typedef {Object} Config
@@ -120,16 +120,14 @@ export default class StreamZip {
     static IBM_TERSE    = 18;           // compressed using IBM TERSE
     static IBM_LZ77     = 19;           // IBM LZ77
 
-    /* General purpose bit flag */
-    static FLG_ENC      = 0;            // encrypted file
-    static FLG_COMP1    = 1;            // compression option
-    static FLG_COMP2    = 2;            // compression option
-    static FLG_DESC     = 4;            // data descriptor
-    static FLG_ENH      = 8;            // enhanced deflation
-    static FLG_STR      = 16;           // strong encryption
-    static FLG_LNG      = 1024;         // language encoding
-    static FLG_MSK      = 4096;         // mask header values
-    static FLG_ENTRY_ENC = 1;
+    /* General purpose bit flags */
+    static FLG_ENC      = 0x0001;       // encrypted file
+    static FLG_COMP1    = 0x0002;       // compression option
+    static FLG_COMP2    = 0x0004;       // compression option
+    static FLG_DESC     = 0x0008;       // data descriptor
+    static FLG_ENH      = 0x0010;       // enhanced deflation
+    static FLG_STR      = 0x0040;       // strong encryption
+    static FLG_LNG      = 0x0400;       // UNICODE encoding
 
     /* 4.5 Extensible data fields */
     static EF_ID        = 0;
@@ -434,7 +432,7 @@ export default class StreamZip {
             while (this.op.entriesLeft > 0) {
                 if (!entry) {
                     entry = new ZipEntry();
-                    entry.readHeader(buffer, bufferPos);
+                    entry.readCentralHeader(buffer, bufferPos);
                     entry.headerOffset = this.op.win.position + bufferPos;
                     this.op.entry = entry;
                     this.op.pos += StreamZip.CentralHeader.getSize();
@@ -541,6 +539,7 @@ export default class StreamZip {
      *
      * @public
      * @this {StreamZip}
+     * @param {ZipEntry} entry
      */
     entryDataSync(entry)
     {
@@ -567,19 +566,19 @@ export default class StreamZip {
         if (entry.method == StreamZip.STORE) {
             // nothing to do
         } else if (entry.method == StreamZip.SHRINK) {
-            data = Unarchive.stretchSync(data);
+            data = LegacyZip.stretchSync(data);
             verify = false;
         } else if (entry.method >= StreamZip.REDUCE1 && entry.method <= StreamZip.REDUCE4) {
-            data = Unarchive.expandSync(data);
+            data = LegacyZip.expandSync(data);
             verify = false;
         } else if (entry.method == StreamZip.IMPLODE) {
-            data = Unarchive.explodeSync(data);
+            data = LegacyZip.explodeSync(data);
             verify = false;
         } else if (entry.method == StreamZip.IMPLODE_DCL) {
             // let test = Buffer.from([0x00, 0x04, 0x82, 0x24, 0x25, 0x8f, 0x80, 0x7f]);
-            // data = Unarchive.blastSync(test);
+            // data = LegacyZip.blastSync(test);
             // verify = false;
-            data = Unarchive.blastSync(data);
+            data = LegacyZip.blastSync(data);
         } else if (entry.method == StreamZip.DEFLATE || entry.method == StreamZip.DEFLATE64) {
             data = zlib.inflateRawSync(data);
         } else {
@@ -624,7 +623,7 @@ export default class StreamZip {
             }
             let readEx;
             try {
-                entry.readDataHeader(buffer);
+                entry.readLocalHeader(buffer);
                 if (entry.encrypted) {
                     readEx = new Error('Entry encrypted');
                 }
@@ -997,18 +996,7 @@ class CentralDirectoryZip64Header
 
 class ZipEntry
 {
-    readHeader(data, offset)
-    {
-        StreamZip.CentralHeader.setData(data, offset);
-        StreamZip.CentralHeader.verifyField("signature", "CENSIG");
-        StreamZip.CentralHeader.assignField(this, ["verMade", "version", "flags", "method"]);
-        const timebytes = StreamZip.CentralHeader.getField("time");
-        const datebytes = StreamZip.CentralHeader.getField("date");
-        this.time = ZipEntry.parseZipTime(timebytes, datebytes);
-        StreamZip.CentralHeader.assignField(this, ["crc", "compressedSize", "size", "fnameLen", "extraLen", "comLen", "diskStart", "intAttr", "attr", "offset"]);
-    }
-
-    readDataHeader(data)
+    readLocalHeader(data)
     {
         StreamZip.LocalHeader.setData(data);
         StreamZip.LocalHeader.verifyField("signature", "LOCSIG");
@@ -1026,6 +1014,17 @@ class ZipEntry
             this.size = size;
         }
         StreamZip.LocalHeader.assignField(this, ["fnameLen", "extraLen"]);
+    }
+
+    readCentralHeader(data, offset)
+    {
+        StreamZip.CentralHeader.setData(data, offset);
+        StreamZip.CentralHeader.verifyField("signature", "CENSIG");
+        StreamZip.CentralHeader.assignField(this, ["verMade", "version", "flags", "method"]);
+        const timebytes = StreamZip.CentralHeader.getField("time");
+        const datebytes = StreamZip.CentralHeader.getField("date");
+        this.time = ZipEntry.parseZipTime(timebytes, datebytes);
+        StreamZip.CentralHeader.assignField(this, ["crc", "compressedSize", "size", "fnameLen", "extraLen", "comLen", "diskStart", "intAttr", "attr", "offset"]);
     }
 
     read(data, offset, textDecoder)
@@ -1092,7 +1091,7 @@ class ZipEntry
 
     get encrypted()
     {
-        return (this.flags & StreamZip.FLG_ENTRY_ENC) === StreamZip.FLG_ENTRY_ENC;
+        return (this.flags & StreamZip.FLG_ENC) === StreamZip.FLG_ENC;
     }
 
     get isFile()
