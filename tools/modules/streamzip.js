@@ -10,7 +10,8 @@ import path from 'path';
 import events from 'events';
 import zlib from 'zlib';
 import stream from 'stream';
-import unarchive from './unarchive.js';
+import Structure from './structure.js';
+import Unarchive from './unarchive.js';
 
 /**
  * @typedef {Object} Config
@@ -29,102 +30,110 @@ export default class StreamZip {
     /*
      * Public class fields
      */
+    static LocalHeader = new Structure("LocalHeader")
+        .field('signature',     Structure.UINT32, {'LOCSIG': 0x04034b50})   // "PK\003\004"
+        .field('version',       Structure.UINT16)                           // version needed to extract
+        .field('flags',         Structure.UINT16)                           // general purpose bit flag
+        .field('method',        Structure.UINT16)                           // compression method
+        .field('time',          Structure.UINT16)                           // modification time (2 bytes time, 2 bytes date)
+        .field('date',          Structure.UINT16)
+        .field('crc',           Structure.UINT32)                           // uncompressed file CRC-32 value
+        .field('compressedSize',Structure.UINT32)                           // compressed size
+        .field('size',          Structure.UINT32)                           // uncompressed size
+        .field('fnameLen',      Structure.UINT16)                           // filename length
+        .field('extraLen',      Structure.UINT16)                           // extra field length
+        .verifySize(30);
 
-    /* The local file header */
-    static LOCHDR = 30;                 // LOC header size
-    static LOCSIG = 0x04034b50;         // "PK\003\004"
-    static LOCVER = 4;                  // version needed to extract
-    static LOCFLG = 6;                  // general purpose bit flag
-    static LOCHOW = 8;                  // compression method
-    static LOCTIM = 10;                 // modification time (2 bytes time, 2 bytes date)
-    static LOCCRC = 14;                 // uncompressed file CRC-32 value
-    static LOCSIZ = 18;                 // compressed size
-    static LOCLEN = 22;                 // uncompressed size
-    static LOCNAM = 26;                 // filename length
-    static LOCEXT = 28;                 // extra field length
+    static ExtHeader = new Structure("ExtHeader")
+        .field('signature',     Structure.UINT32, {'EXTSIG': 0x08074b50})   // "PK\007\008"
+        .field('crc',           Structure.UINT32)                           // uncompressed file CRC-32 value
+        .field('compressedSize',Structure.UINT32)                           // compressed size
+        .field('size',          Structure.UINT32)                           // uncompressed size
+        .verifySize(16);
 
-    /* The Data descriptor */
-    static EXTSIG = 0x08074b50;         // "PK\007\008"
-    static EXTHDR = 16;                 // EXT header size
-    static EXTCRC = 4;                  // uncompressed file CRC-32 value
-    static EXTSIZ = 8;                  // compressed size
-    static EXTLEN = 12;                 // uncompressed size
+    static CentralHeader = new Structure("CentralHeader")
+        .field('signature',     Structure.UINT32, {'CENSIG': 0x02014b50})   // "PK\001\002"
+        .field('verMade',       Structure.UINT16)                           // version made by
+        .field('version',       Structure.UINT16)                           // version needed to extract
+        .field('flags',         Structure.UINT16)                           // general purpose bit flag
+        .field('method',        Structure.UINT16)                           // compression method
+        .field('time',          Structure.UINT16)                           // modification time (2 bytes time, 2 bytes date)
+        .field('date',          Structure.UINT16)
+        .field('crc',           Structure.UINT32)                           // uncompressed file CRC-32 value
+        .field('compressedSize',Structure.UINT32)                           // compressed size
+        .field('size',          Structure.UINT32)                           // uncompressed size
+        .field('fnameLen',      Structure.UINT16)                           // filename length
+        .field('extraLen',      Structure.UINT16)                           // extra field length
+        .field('comLen',        Structure.UINT16)                           // file comment length
+        .field('diskStart',     Structure.UINT16)                           // disk number start
+        .field('intAttr',       Structure.UINT16)                           // internal file attributes
+        .field('attr',          Structure.UINT32)                           // external file attributes (host system dependent)
+        .field('offset',        Structure.UINT32)                           // relative offset of local header
+        .verifySize(46);
 
-    /* The central directory file header */
-    static CENHDR = 46;                 // CEN header size
-    static CENSIG = 0x02014b50;         // "PK\001\002"
-    static CENVEM = 4;                  // version made by
-    static CENVER = 6;                  // version needed to extract
-    static CENFLG = 8;                  // encrypt, decrypt flags
-    static CENHOW = 10;                 // compression method
-    static CENTIM = 12;                 // modification time (2 bytes time, 2 bytes date)
-    static CENCRC = 16;                 // uncompressed file CRC-32 value
-    static CENSIZ = 20;                 // compressed size
-    static CENLEN = 24;                 // uncompressed size
-    static CENNAM = 28;                 // filename length
-    static CENEXT = 30;                 // extra field length
-    static CENCOM = 32;                 // file comment length
-    static CENDSK = 34;                 // volume number start
-    static CENATT = 36;                 // internal file attributes
-    static CENATX = 38;                 // external file attributes (host system dependent)
-    static CENOFF = 42;                 // LOC header offset
+    static CentralEndHeader = new Structure("CentralEndHeader")
+        .field('signature',     Structure.UINT32, {'ENDSIG': 0x06054b50})   // "PK\005\006"
+        .field('diskNum',       Structure.UINT16)                           // number of this disk
+        .field('diskStart',     Structure.UINT16)                           // disk where central directory starts
+        .field('volumeEntries', Structure.UINT16)                           // number of entries on this disk
+        .field('totalEntries',  Structure.UINT16)                           // total number of entries
+        .field('size',          Structure.UINT32)                           // central directory size in bytes
+        .field('offset',        Structure.UINT32)                           // offset of first CEN header
+        .field('commentLength', Structure.UINT16)                           // zip file comment length
+        .verifySize(22);
 
-    /* The entries in the end of central directory */
-    static ENDHDR = 22;                 // END header size
-    static ENDSIG = 0x06054b50;         // "PK\005\006"
-    static ENDSIGFIRST = 0x50;
-    static ENDSUB = 8;                  // number of entries on this disk
-    static ENDTOT = 10;                 // total number of entries
-    static ENDSIZ = 12;                 // central directory size in bytes
-    static ENDOFF = 16;                 // offset of first CEN header
-    static ENDCOM = 20;                 // zip file comment length
     static MAXFILECOMMENT = 0xffff;
 
-    /* The entries in the end of ZIP64 central directory locator */
-    static ENDL64HDR = 20;              // ZIP64 end of central directory locator header size
-    static ENDL64SIG = 0x07064b50;      // ZIP64 end of central directory locator signature
-    static ENDL64SIGFIRST = 0x50;
-    static ENDL64OFS = 8;               // ZIP64 end of central directory offset
+    static Central64LocHeader = new Structure("Central64LocHeader")
+        .field('signature',     Structure.UINT32,{'ENDL64SIG': 0x07064b50}) // "PK\006\007"
+        .field('diskNum',       Structure.UINT32)                           // number of this disk
+        .field('headerOffset',  Structure.UINT64)                           // offset of the ZIP64 end of central directory record
+        .field('disks',         Structure.UINT32)                           // total number of disks
+        .verifySize(20);
 
-    /* The entries in the end of ZIP64 central directory */
-    static END64HDR = 56;               // ZIP64 end of central directory header size
-    static END64SIG = 0x06064b50;       // ZIP64 end of central directory signature
-    static END64SIGFIRST = 0x50;
-    static END64SUB = 24;               // number of entries on this disk
-    static END64TOT = 32;               // total number of entries
-    static END64SIZ = 40;
-    static END64OFF = 48;
+    static Central64EndHeader = new Structure("Central64EndHeader")
+        .field('signature',     Structure.UINT32, {'END64SIG': 0x06064b50}) // "PK\006\006"
+        .field('sizeEOCD',      Structure.UINT64)                           // size of zip64 end of central directory record
+        .field('verMade',       Structure.UINT16)                           // version made by
+        .field('version',       Structure.UINT16)                           // version needed to extract
+        .field('diskNum',       Structure.UINT32)                           // number of this disk
+        .field('diskStart',     Structure.UINT32)                           // disk where central directory starts
+        .field('volumeEntries', Structure.UINT64)                           // number of entries on this disk
+        .field('totalEntries',  Structure.UINT64)                           // total number of entries
+        .field('size',          Structure.UINT64)                           // central directory size in bytes
+        .field('offset',        Structure.UINT64)                           // offset of first CEN header
+        .verifySize(56);
 
     /* Compression methods */
-    static STORE = 0;                   // no compression
-    static SHRINK = 1;                  // shrink
-    static REDUCE1 = 2;                 // reduce with compression factor 1
-    static REDUCE2 = 3;                 // reduce with compression factor 2
-    static REDUCE3 = 4;                 // reduce with compression factor 3
-    static REDUCE4 = 5;                 // reduce with compression factor 4
-    static IMPLODE = 6;                 // implode
-    static DEFLATE = 8;                 // deflate
-    static DEFLATE64 = 9;               // deflate64
-    static IMPLODE_DCL = 10;            // PKWare DCL implode
-    static BZIP2 = 12;                  // compressed using BZIP2
-    static LZMA = 14;                   // LZMA
-    static IBM_TERSE = 18;              // compressed using IBM TERSE
-    static IBM_LZ77 = 19;               // IBM LZ77
+    static STORE        = 0;            // no compression
+    static SHRINK       = 1;            // shrink
+    static REDUCE1      = 2;            // reduce with compression factor 1
+    static REDUCE2      = 3;            // reduce with compression factor 2
+    static REDUCE3      = 4;            // reduce with compression factor 3
+    static REDUCE4      = 5;            // reduce with compression factor 4
+    static IMPLODE      = 6;            // implode
+    static DEFLATE      = 8;            // deflate
+    static DEFLATE64    = 9;            // deflate64
+    static IMPLODE_DCL  = 10;           // PKWare DCL implode
+    static BZIP2        = 12;           // compressed using BZIP2
+    static LZMA         = 14;           // LZMA
+    static IBM_TERSE    = 18;           // compressed using IBM TERSE
+    static IBM_LZ77     = 19;           // IBM LZ77
 
     /* General purpose bit flag */
-    static FLG_ENC = 0;                 // encrypted file
-    static FLG_COMP1 = 1;               // compression option
-    static FLG_COMP2 = 2;               // compression option
-    static FLG_DESC = 4;                // data descriptor
-    static FLG_ENH = 8;                 // enhanced deflation
-    static FLG_STR = 16;                // strong encryption
-    static FLG_LNG = 1024;              // language encoding
-    static FLG_MSK = 4096;              // mask header values
+    static FLG_ENC      = 0;            // encrypted file
+    static FLG_COMP1    = 1;            // compression option
+    static FLG_COMP2    = 2;            // compression option
+    static FLG_DESC     = 4;            // data descriptor
+    static FLG_ENH      = 8;            // enhanced deflation
+    static FLG_STR      = 16;           // strong encryption
+    static FLG_LNG      = 1024;         // language encoding
+    static FLG_MSK      = 4096;         // mask header values
     static FLG_ENTRY_ENC = 1;
 
     /* 4.5 Extensible data fields */
-    static EF_ID = 0;
-    static EF_SIZE = 2;
+    static EF_ID        = 0;
+    static EF_SIZE      = 2;
 
     /* Header IDs */
     static ID_ZIP64         = 0x0001;
@@ -271,15 +280,15 @@ export default class StreamZip {
      */
     readCentralDirectory()
     {
-        const totalReadLength = Math.min(StreamZip.ENDHDR + StreamZip.MAXFILECOMMENT, this.fileSize);
+        const totalReadLength = Math.min(StreamZip.CentralEndHeader.getSize() + StreamZip.MAXFILECOMMENT, this.fileSize);
         this.op = {
             win: new FileWindowBuffer(this.fd),
             totalReadLength,
             minPos: this.fileSize - totalReadLength,
             lastPos: this.fileSize,
             chunkSize: Math.min(1024, this.chunkSize),
-            firstByte: StreamZip.ENDSIGFIRST,
-            sig: StreamZip.ENDSIG,
+            firstByte: StreamZip.CentralEndHeader.signature.ENDSIG & 0xff,
+            sig: StreamZip.CentralEndHeader.signature.ENDSIG,
             complete: this.readCentralDirectoryComplete.bind(this),
         };
         this.op.win.read(this.fileSize - this.op.chunkSize, this.op.chunkSize, this.readUntilFoundCallback.bind(this));
@@ -296,13 +305,13 @@ export default class StreamZip {
         const pos = this.op.lastBufferPosition;
         try {
             this.centralDirectory = new CentralDirectoryHeader();
-            this.centralDirectory.read(buffer.slice(pos, pos + StreamZip.ENDHDR));
+            this.centralDirectory.read(buffer.slice(pos, pos + StreamZip.CentralEndHeader.getSize()));
             this.centralDirectory.headerOffset = this.op.win.position + pos;
             if (this.centralDirectory.commentLength) {
                 this.comment = buffer
                     .slice(
-                        pos + StreamZip.ENDHDR,
-                        pos + StreamZip.ENDHDR + this.centralDirectory.commentLength
+                        pos + StreamZip.CentralEndHeader.getSize(),
+                        pos + StreamZip.CentralEndHeader.getSize() + this.centralDirectory.commentLength
                     )
                     .toString();
             } else {
@@ -328,7 +337,7 @@ export default class StreamZip {
      */
     readZip64CentralDirectoryLocator()
     {
-        const length = StreamZip.ENDL64HDR;
+        const length = StreamZip.Central64LocHeader.getSize();
         if (this.op.lastBufferPosition > length) {
             this.op.lastBufferPosition -= length;
             this.readZip64CentralDirectoryLocatorComplete();
@@ -357,7 +366,7 @@ export default class StreamZip {
         const buffer = this.op.win.buffer;
         const locHeader = new CentralDirectoryLoc64Header();
         locHeader.read(
-            buffer.slice(this.op.lastBufferPosition, this.op.lastBufferPosition + StreamZip.ENDL64HDR)
+            buffer.slice(this.op.lastBufferPosition, this.op.lastBufferPosition + StreamZip.Central64LocHeader.getSize())
         );
         const readLength = this.fileSize - locHeader.headerOffset;
         this.op = {
@@ -366,8 +375,8 @@ export default class StreamZip {
             minPos: locHeader.headerOffset,
             lastPos: this.op.lastPos,
             chunkSize: this.op.chunkSize,
-            firstByte: StreamZip.END64SIGFIRST,
-            sig: StreamZip.END64SIG,
+            firstByte: StreamZip.Central64EndHeader.signature.END64SIG & 0xff,
+            sig: StreamZip.Central64EndHeader.signature.END64SIG,
             complete: this.readZip64CentralDirectoryComplete.bind(this),
         };
         this.op.win.read(this.fileSize - this.op.chunkSize, this.op.chunkSize, this.readUntilFoundCallback.bind(this));
@@ -382,7 +391,7 @@ export default class StreamZip {
     {
         const buffer = this.op.win.buffer;
         const zip64cd = new CentralDirectoryZip64Header();
-        zip64cd.read(buffer.slice(this.op.lastBufferPosition, this.op.lastBufferPosition + StreamZip.END64HDR));
+        zip64cd.read(buffer.slice(this.op.lastBufferPosition, this.op.lastBufferPosition + StreamZip.Central64EndHeader.getSize()));
         this.centralDirectory.volumeEntries = zip64cd.volumeEntries;
         this.centralDirectory.totalEntries = zip64cd.totalEntries;
         this.centralDirectory.size = zip64cd.size;
@@ -428,11 +437,11 @@ export default class StreamZip {
                     entry.readHeader(buffer, bufferPos);
                     entry.headerOffset = this.op.win.position + bufferPos;
                     this.op.entry = entry;
-                    this.op.pos += StreamZip.CENHDR;
-                    bufferPos += StreamZip.CENHDR;
+                    this.op.pos += StreamZip.CentralHeader.getSize();
+                    bufferPos += StreamZip.CentralHeader.getSize();
                 }
                 const entryHeaderSize = entry.fnameLen + entry.extraLen + entry.comLen;
-                const advanceBytes = entryHeaderSize + (this.op.entriesLeft > 1 ? StreamZip.CENHDR : 0);
+                const advanceBytes = entryHeaderSize + (this.op.entriesLeft > 1 ? StreamZip.CentralHeader.getSize() : 0);
                 if (bufferLength - bufferPos < advanceBytes) {
                     this.op.win.moveRight(this.chunkSize, this.readEntriesCallback.bind(this), bufferPos);
                     this.op.move = true;
@@ -558,27 +567,27 @@ export default class StreamZip {
         if (entry.method == StreamZip.STORE) {
             // nothing to do
         } else if (entry.method == StreamZip.SHRINK) {
-            data = unarchive.passThruSync(data);
+            data = Unarchive.stretchSync(data);
             verify = false;
         } else if (entry.method >= StreamZip.REDUCE1 && entry.method <= StreamZip.REDUCE4) {
-            data = unarchive.passThruSync(data);
+            data = Unarchive.expandSync(data);
             verify = false;
         } else if (entry.method == StreamZip.IMPLODE) {
-            data = unarchive.passThruSync(data);
+            data = Unarchive.explodeSync(data);
             verify = false;
         } else if (entry.method == StreamZip.IMPLODE_DCL) {
             // let test = Buffer.from([0x00, 0x04, 0x82, 0x24, 0x25, 0x8f, 0x80, 0x7f]);
-            // data = unarchive.blastSync(test);
+            // data = Unarchive.blastSync(test);
             // verify = false;
-            data = unarchive.blastSync(data);
+            data = Unarchive.blastSync(data);
         } else if (entry.method == StreamZip.DEFLATE || entry.method == StreamZip.DEFLATE64) {
             data = zlib.inflateRawSync(data);
         } else {
-            throw new Error(entry.name + ": unsupported compression method " + entry.method);
+            throw new Error(entry.name + ": unsupported compression method (" + entry.method + ")");
         }
         if (verify) {
             if (data.length !== entry.size) {
-                throw new Error(entry.name + ": expected " + entry.size + " bytes, got " + data.length + " (method " + entry.method + ")");
+                throw new Error(entry.name + ": expected " + entry.size + " bytes, received " + data.length + " (method " + entry.method + ")");
             }
             if (this.canVerifyCRC(entry)) {
                 const verify = new CRCVerify(entry);
@@ -608,7 +617,7 @@ export default class StreamZip {
         if (!this.fd) {
             return callback(new Error('Archive closed'));
         }
-        const buffer = Buffer.alloc(StreamZip.LOCHDR);
+        const buffer = Buffer.alloc(StreamZip.LocalHeader.getSize());
         new FsRead(this.fd, buffer, 0, buffer.length, entry.offset, (err) => {
             if (err) {
                 return callback(err);
@@ -633,7 +642,7 @@ export default class StreamZip {
      */
     dataOffset(entry)
     {
-        return entry.offset + StreamZip.LOCHDR + entry.fnameLen + entry.extraLen;
+        return entry.offset + StreamZip.LocalHeader.getSize() + entry.fnameLen + entry.extraLen;
     }
 
     /**
@@ -960,19 +969,9 @@ StreamZip.async = class StreamZipAsync extends events.EventEmitter
 class CentralDirectoryHeader
 {
     read(data) {
-        if (data.length !== StreamZip.ENDHDR || data.readUInt32LE(0) !== StreamZip.ENDSIG) {
-            throw new Error('Invalid central directory');
-        }
-        // number of entries on this volume
-        this.volumeEntries = data.readUInt16LE(StreamZip.ENDSUB);
-        // total number of entries
-        this.totalEntries = data.readUInt16LE(StreamZip.ENDTOT);
-        // central directory size in bytes
-        this.size = data.readUInt32LE(StreamZip.ENDSIZ);
-        // offset of first CEN header
-        this.offset = data.readUInt32LE(StreamZip.ENDOFF);
-        // zip file comment length
-        this.commentLength = data.readUInt16LE(StreamZip.ENDCOM);
+        StreamZip.CentralEndHeader.setData(data);
+        StreamZip.CentralEndHeader.verifyField('signature', 'ENDSIG');
+        StreamZip.CentralEndHeader.assignField(this, ['volumeEntries', 'totalEntries', 'size', 'offset', 'commentLength']);
     }
 }
 
@@ -980,11 +979,9 @@ class CentralDirectoryLoc64Header
 {
     read(data)
     {
-        if (data.length !== StreamZip.ENDL64HDR || data.readUInt32LE(0) !== StreamZip.ENDL64SIG) {
-            throw new Error('Invalid zip64 central directory locator');
-        }
-        // ZIP64 EOCD header offset
-        this.headerOffset = ZipEntry.readUInt64LE(data, StreamZip.ENDSUB);
+        StreamZip.CentralEndLocator64.setData(data);
+        StreamZip.CentralEndLocator64.verifyField('signature', 'ENDL64SIG');
+        StreamZip.CentralEndLocator64.assignField(this, 'headerOffset');
     }
 }
 
@@ -992,17 +989,9 @@ class CentralDirectoryZip64Header
 {
     read(data)
     {
-        if (data.length !== StreamZip.END64HDR || data.readUInt32LE(0) !== StreamZip.END64SIG) {
-            throw new Error('Invalid central directory');
-        }
-        // number of entries on this volume
-        this.volumeEntries = ZipEntry.readUInt64LE(data, StreamZip.END64SUB);
-        // total number of entries
-        this.totalEntries = ZipEntry.readUInt64LE(data, StreamZip.END64TOT);
-        // central directory size in bytes
-        this.size = ZipEntry.readUInt64LE(data, StreamZip.END64SIZ);
-        // offset of first CEN header
-        this.offset = ZipEntry.readUInt64LE(data, StreamZip.END64OFF);
+        StreamZip.Central64EndHeader.setData(data);
+        StreamZip.Central64EndHeader.verifyField('signature', 'END64SIG');
+        StreamZip.Central64EndHeader.assignField(this, ['volumeEntries', 'totalEntries', 'size', 'offset']);
     }
 }
 
@@ -1010,78 +999,33 @@ class ZipEntry
 {
     readHeader(data, offset)
     {
-        // data should be 46 bytes and start with "PK 01 02"
-        if (data.length < offset + StreamZip.CENHDR || data.readUInt32LE(offset) !== StreamZip.CENSIG) {
-            throw new Error('Invalid entry header');
-        }
-        // version made by
-        this.verMade = data.readUInt16LE(offset + StreamZip.CENVEM);
-        // version needed to extract
-        this.version = data.readUInt16LE(offset + StreamZip.CENVER);
-        // encrypt, decrypt flags
-        this.flags = data.readUInt16LE(offset + StreamZip.CENFLG);
-        // compression method
-        this.method = data.readUInt16LE(offset + StreamZip.CENHOW);
-        // modification time (2 bytes time, 2 bytes date)
-        const timebytes = data.readUInt16LE(offset + StreamZip.CENTIM);
-        const datebytes = data.readUInt16LE(offset + StreamZip.CENTIM + 2);
+        StreamZip.CentralHeader.setData(data, offset);
+        StreamZip.CentralHeader.verifyField("signature", "CENSIG");
+        StreamZip.CentralHeader.assignField(this, ["verMade", "version", "flags", "method"]);
+        const timebytes = StreamZip.CentralHeader.getField("time");
+        const datebytes = StreamZip.CentralHeader.getField("date");
         this.time = ZipEntry.parseZipTime(timebytes, datebytes);
-
-        // uncompressed file crc-32 value
-        this.crc = data.readUInt32LE(offset + StreamZip.CENCRC);
-        // compressed size
-        this.compressedSize = data.readUInt32LE(offset + StreamZip.CENSIZ);
-        // uncompressed size
-        this.size = data.readUInt32LE(offset + StreamZip.CENLEN);
-        // filename length
-        this.fnameLen = data.readUInt16LE(offset + StreamZip.CENNAM);
-        // extra field length
-        this.extraLen = data.readUInt16LE(offset + StreamZip.CENEXT);
-        // file comment length
-        this.comLen = data.readUInt16LE(offset + StreamZip.CENCOM);
-        // volume number start
-        this.diskStart = data.readUInt16LE(offset + StreamZip.CENDSK);
-        // internal file attributes
-        this.inattr = data.readUInt16LE(offset + StreamZip.CENATT);
-        // external file attributes
-        this.attr = data.readUInt32LE(offset + StreamZip.CENATX);
-        // LOC header offset
-        this.offset = data.readUInt32LE(offset + StreamZip.CENOFF);
+        StreamZip.CentralHeader.assignField(this, ["crc", "compressedSize", "size", "fnameLen", "extraLen", "comLen", "diskStart", "intAttr", "attr", "offset"]);
     }
 
     readDataHeader(data)
     {
-        // 30 bytes and should start with "PK\003\004"
-        if (data.readUInt32LE(0) !== StreamZip.LOCSIG) {
-            throw new Error('Invalid local header');
-        }
-        // version needed to extract
-        this.version = data.readUInt16LE(StreamZip.LOCVER);
-        // general purpose bit flag
-        this.flags = data.readUInt16LE(StreamZip.LOCFLG);
-        // compression method
-        this.method = data.readUInt16LE(StreamZip.LOCHOW);
-        // modification time (2 bytes time ; 2 bytes date)
-        const timebytes = data.readUInt16LE(StreamZip.LOCTIM);
-        const datebytes = data.readUInt16LE(StreamZip.LOCTIM + 2);
+        StreamZip.LocalHeader.setData(data);
+        StreamZip.LocalHeader.verifyField("signature", "LOCSIG");
+        StreamZip.LocalHeader.assignField(this, ["version", "flags", "method"]);
+        const timebytes = StreamZip.LocalHeader.getField("time");
+        const datebytes = StreamZip.LocalHeader.getField("date");
         this.time = ZipEntry.parseZipTime(timebytes, datebytes);
-
-        // uncompressed file CRC-32 value
-        this.crc = data.readUInt32LE(StreamZip.LOCCRC) || this.crc;
-        // compressed size
-        const compressedSize = data.readUInt32LE(StreamZip.LOCSIZ);
+        this.crc = StreamZip.LocalHeader.getField("crc") || this.crc;
+        const compressedSize = StreamZip.LocalHeader.getField("compressedSize");
         if (compressedSize && compressedSize !== StreamZip.EF_ZIP64_OR_32) {
             this.compressedSize = compressedSize;
         }
-        // uncompressed size
-        const size = data.readUInt32LE(StreamZip.LOCLEN);
+        const size = StreamZip.LocalHeader.getField("size");
         if (size && size !== StreamZip.EF_ZIP64_OR_32) {
             this.size = size;
         }
-        // filename length
-        this.fnameLen = data.readUInt16LE(StreamZip.LOCNAM);
-        // extra field length
-        this.extraLen = data.readUInt16LE(StreamZip.LOCEXT);
+        StreamZip.LocalHeader.assignField(this, ["fnameLen", "extraLen"]);
     }
 
     read(data, offset, textDecoder)
@@ -1408,10 +1352,10 @@ class CRCVerify
             buf.writeInt32LE(~this.state.crc & 0xffffffff, 0);
             crc = buf.readUInt32LE(0);
             if (crc !== this.entry.crc) {
-                throw new Error(this.entry.name + ": expected CRC 0x" + this.entry.crc.toString(16) + ", got 0x" + crc.toString(16));
+                throw new Error(this.entry.name + ": expected CRC 0x" + this.entry.crc.toString(16) + ", received 0x" + crc.toString(16));
             }
             if (this.state.size !== this.entry.size) {
-                throw new Error(this.entry.name + ": expected size " + this.entry.size + ", got " + this.state.size);
+                throw new Error(this.entry.name + ": expected size " + this.entry.size + ", received " + this.state.size);
             }
         }
     }

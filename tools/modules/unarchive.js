@@ -6,16 +6,61 @@
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  *
+ * Stretch(), Expand(), and Explode() functionality adapted from https://www.hanshq.net/files/hwzip/hwzip-2.1.zip
+ * Released into the public domain by Hans Wennborg; see https://www.hanshq.net/zip2.html for more details.
+ *
  * Blast() functionality adapted from https://github.com/madler/zlib/tree/master/contrib/blast
  * Copyright (C) 2003, 2012, 2013 Mark Adler
  */
 
 import { Buffer } from 'node:buffer';
 
+const DEBUG = true;
+
 /**
  * @class Unarchive
  */
-export default class Unarchive {
+export default class Unarchive
+{
+    /**
+     * stretchSync(data)
+     *
+     * @param {Buffer} input (SHRINK data)
+     * @returns {Buffer}
+     */
+    static stretchSync(input)
+    {
+        let stretch = new Stretch(input);
+        stretch.decomp();
+        return stretch.outbuf;
+    }
+
+    /**
+     * expandSync(data)
+     *
+     * @param {Buffer} input (REDUCE data)
+     * @returns {Buffer}
+     */
+    static expandSync(input)
+    {
+        let expand = new Expand(input);
+        expand.decomp();
+        return expand.outbuf;
+    }
+
+    /**
+     * explodeSync(data)
+     *
+     * @param {Buffer} input (IMPLODE data)
+     * @returns {Buffer}
+     */
+    static explodeSync(input)
+    {
+        let explode = new Explode(input);
+        explode.decomp();
+        return explode.outbuf;
+    }
+
     /**
      * blastSync(data)
      *
@@ -28,25 +73,231 @@ export default class Unarchive {
         blast.decomp();
         return blast.outbuf;
     }
+}
+
+/**
+ * @typedef {Object} HuffmanLookup
+ * @p
+ * @class HuffmanDecoder
+ * @property {Array.<HuffmanLookup>} table
+ */
+class HuffmanDecoder
+{
+    static MAX_HUFFMAN_SYMBOLS = 288;           // Deflate uses max 288 symbols
+    static MAX_HUFFMAN_BITS = 16;               // Implode uses max 16-bit codewords
+    static HUFFMAN_LOOKUP_TABLE_BITS = 8;       // Seems a good trade-off
+
+    constructor()
+    {
+        /*
+         * In the original implementation, table was an array of 16-bit values,
+         * split into two bit-fields:
+         *
+         *      sym: 9 bits (wide enough to fit the max symbol nbr)
+         *      len: 8 bits (0 means no symbol)
+         *
+         * In this implementation, each entry is an object with sym and len properties.
+         */
+        this.table = new Array(1 << HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
+        this.sentinel_bits = new Array(HuffmanDecoder.MAX_HUFFMAN_BITS + 1);
+        this.offset_first_sym_idx = new Array(HuffmanDecoder.MAX_HUFFMAN_BITS + 1);
+        this.syms = new Array(HuffmanDecoder.MAX_HUFFMAN_SYMBOLS);
+        this.num_syms = 0;                      // for debugging only
+    }
 
     /**
-     * passThruSync(data)
+     * init(lengths, n)
      *
-     * @param {Buffer} input (compressed data)
-     * @returns {Buffer}
+     * @param {Array.<number>} lengths
+     * @param {number} n
+     * @returns {boolean}
      */
-    static passThruSync(input)
+    init(lengths, n)
     {
-        return input;
+        let /* uint16_t */ count = new Array(HuffmanDecoder.MAX_HUFFMAN_BITS + 1);
+        let /* uint16_t */ code = new Array(HuffmanDecoder.MAX_HUFFMAN_BITS + 1);
+        let /* uint16_t */ sym_idx = new Array(HuffmanDecoder.MAX_HUFFMAN_BITS + 1);
+
+        assert(n <= HuffmanDecoder.MAX_HUFFMAN_SYMBOLS);
+        this.num_syms = n;
+
+        /* Zero-initialize the lookup table */
+        for (let i = 0; i < this.table.length; i++) {
+            this.table[i] = {
+                sym: 0,
+                len: 0
+            }
+        }
+
+        /* Count the number of codewords of each length */
+        for (let i = 0; i < n; i++) {
+            assert(lengths[i] <= HuffmanDecoder.MAX_HUFFMAN_BITS);
+            count[lengths[i]]++;
+        }
+        count[0] = 0;  /* Ignore zero-length codewords */
+
+        /* Compute sentinel_bits and offset_first_sym_idx for each length */
+        code[0] = 0;
+        sym_idx[0] = 0;
+        for (let l = 1; l <= HuffmanDecoder.MAX_HUFFMAN_BITS; l++) {
+
+            /* First canonical codeword of this length */
+            code[l] = ((code[l - 1] + count[l - 1]) << 1) & 0xffff;
+
+            if (count[l] != 0 && code[l] + count[l] - 1 > (1 << l) - 1) {
+                /* The last codeword is longer than l bits */
+                return false;
+            }
+
+            let s = ((code[l] + count[l]) << (HuffmanDecoder.MAX_HUFFMAN_BITS - l)) & 0xffffffff;
+            this.sentinel_bits[l] = s;
+            assert(this.sentinel_bits[l] >= code[l], "overflow");
+
+            sym_idx[l] = sym_idx[l - 1] + count[l - 1];
+            this.offset_first_sym_idx[l] = sym_idx[l] - code[l];
+        }
+
+        /* Build mapping from index to symbol and populate the lookup table */
+        for (let i = 0; i < n; i++) {
+            let l = lengths[i];
+            if (l == 0) continue;
+
+            this.syms[sym_idx[l]] = i & 0xffff;
+            sym_idx[l]++;
+
+            if (l <= HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS) {
+                this.table_insert(i, l, code[l]);
+                code[l]++;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * table_insert(sym, len, codeword)
+     *
+     * @param {number} sym
+     * @param {number} len
+     * @param {number} codeword
+     */
+    table_insert(/* size_t */ sym, /* int */ len, /* uint16_t */ codeword)
+    {
+        assert(len <= HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
+
+        codeword = reverse16(codeword, len);    // Make it LSB-first
+        let pad_len = HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS - len;
+
+        /* Pad the pad_len upper bits with all bit combinations */
+        for (let padding = 0; padding < (1 << pad_len); padding++) {
+                let index = (codeword | (padding << len)) & 0xffff;
+                this.table[index].sym = sym & 0xffff;
+                this.table[index].len = len & 0xffff;
+                assert(this.table[index].sym == sym && this.table[index].len == len, "bitfield overflow");
+        }
     }
 }
 
 /**
- * Blast functions for decompressing DCL_IMPLODE streams.
+ * @class Stretch
+ * @property {Buffer} inbuf
+ * @property {Buffer} outbuf
  *
- * Sadly, DCL_IMPLODE streams differ from the IMPLODE streams found in PKZIP files,
- * so this was a bit of a waste for my purposes, but perhaps someone else will find it useful. -JP
+ * Stretch is used to decompress SHRINK streams.
+ *
+ * NOTE: Stretch is what most other implementations call "unshrink", which isn't very imaginative.
+ * Then again, I suppose "unarchive" is not very imaginative either, but at least it's accurate. -JP
  */
+class Stretch
+{
+    /**
+     * constructor(input)
+     *
+     * @this {Stretch}
+     * @param {Buffer} input
+     */
+    constructor(input)
+    {
+        this.inbuf = input;
+        this.outbuf = this.inbuf;
+    }
+
+    /**
+     * decomp()
+     *
+     * @this {Stretch}
+     * @returns {number}
+     */
+   decomp()
+   {
+        return 0;
+   }
+}
+
+/**
+ * @class Expand
+ * @property {Buffer} inbuf
+ * @property {Buffer} outbuf
+ *
+ * Expand is used to decompress REDUCE streams.
+ */
+class Expand
+{
+    /**
+     * constructor(input)
+     *
+     * @this {Expand}
+     * @param {Buffer} input
+     */
+    constructor(input)
+    {
+        this.inbuf = input;
+        this.outbuf = this.inbuf;
+    }
+
+    /**
+     * decomp()
+     *
+     * @this {Expand}
+     * @returns {number}
+     */
+   decomp()
+   {
+        return 0;
+   }
+}
+
+/**
+ * @class Explode
+ * @property {Buffer} inbuf
+ * @property {Buffer} outbuf
+ *
+ * Explode is used to decompress IMPLODE streams.
+ */
+class Explode
+{
+    /**
+     * constructor(input)
+     *
+     * @this {Explode}
+     * @param {Buffer} input
+     */
+    constructor(input)
+    {
+        this.inbuf = input;
+        this.outbuf = this.inbuf;
+    }
+
+    /**
+     * decomp()
+     *
+     * @this {Explode}
+     * @returns {number}
+     */
+   decomp()
+   {
+        return 0;
+   }
+}
 
 /**
  * @class Blast
@@ -59,8 +310,14 @@ export default class Unarchive {
  * @property {number} next      // index of next write location in out[]
  * @property {boolean} first    // true to check distances (for first 4K)
  * @property {Uint8Array} out   // output array and sliding window
+ *
+ * Blast is used to decompress DCL_IMPLODE streams.
+ *
+ * Sadly, DCL_IMPLODE streams differ from the IMPLODE streams found in PKZIP files,
+ * so this was a bit of a waste for my purposes, but perhaps someone else will find it useful. -JP
  */
-class Blast {
+class Blast
+{
     static MAXBITS  = 13;       // maximum code length
     static MAXWIN   = 4096;     // maximum window size
 
@@ -453,3 +710,303 @@ class Blast {
         return huffman;
     }
 }
+
+/**
+ * assert(exp, msg)
+ *
+ * @param {*} exp
+ * @param {string} [msg]
+ */
+function assert(exp, msg)
+{
+    if (DEBUG) {
+        if (!exp) {
+            throw new Error("assertion failure" + (msg? ": " + msg : ""));
+        }
+    }
+}
+
+/**
+ * reverse16(x, n)
+ *
+ * Reverse the n least significant bits of x.
+ * The (16 - n) most significant bits of the result will be zero.
+ *
+ * @param {number} x
+ * @param {number} n
+ * @returns {number}
+ */
+function reverse16(/* uint16_t */ x, /* int */ n)
+{
+    let /* uint16_t */ lo, hi;
+    let /* uint16_t */ reversed;
+
+    assert(n > 0);
+    assert(n <= 16);
+
+    lo = x & 0xff;
+    hi = x >> 8;
+
+    reversed = ((reverse8_tbl[lo] << 8) | reverse8_tbl[hi]) & 0xffff;
+
+    return reversed >> (16 - n);
+}
+
+const /* uint8_t */ reverse8_tbl = [
+    /* 0x00 */ 0x00,
+    /* 0x01 */ 0x80,
+    /* 0x02 */ 0x40,
+    /* 0x03 */ 0xc0,
+    /* 0x04 */ 0x20,
+    /* 0x05 */ 0xa0,
+    /* 0x06 */ 0x60,
+    /* 0x07 */ 0xe0,
+    /* 0x08 */ 0x10,
+    /* 0x09 */ 0x90,
+    /* 0x0a */ 0x50,
+    /* 0x0b */ 0xd0,
+    /* 0x0c */ 0x30,
+    /* 0x0d */ 0xb0,
+    /* 0x0e */ 0x70,
+    /* 0x0f */ 0xf0,
+    /* 0x10 */ 0x08,
+    /* 0x11 */ 0x88,
+    /* 0x12 */ 0x48,
+    /* 0x13 */ 0xc8,
+    /* 0x14 */ 0x28,
+    /* 0x15 */ 0xa8,
+    /* 0x16 */ 0x68,
+    /* 0x17 */ 0xe8,
+    /* 0x18 */ 0x18,
+    /* 0x19 */ 0x98,
+    /* 0x1a */ 0x58,
+    /* 0x1b */ 0xd8,
+    /* 0x1c */ 0x38,
+    /* 0x1d */ 0xb8,
+    /* 0x1e */ 0x78,
+    /* 0x1f */ 0xf8,
+    /* 0x20 */ 0x04,
+    /* 0x21 */ 0x84,
+    /* 0x22 */ 0x44,
+    /* 0x23 */ 0xc4,
+    /* 0x24 */ 0x24,
+    /* 0x25 */ 0xa4,
+    /* 0x26 */ 0x64,
+    /* 0x27 */ 0xe4,
+    /* 0x28 */ 0x14,
+    /* 0x29 */ 0x94,
+    /* 0x2a */ 0x54,
+    /* 0x2b */ 0xd4,
+    /* 0x2c */ 0x34,
+    /* 0x2d */ 0xb4,
+    /* 0x2e */ 0x74,
+    /* 0x2f */ 0xf4,
+    /* 0x30 */ 0x0c,
+    /* 0x31 */ 0x8c,
+    /* 0x32 */ 0x4c,
+    /* 0x33 */ 0xcc,
+    /* 0x34 */ 0x2c,
+    /* 0x35 */ 0xac,
+    /* 0x36 */ 0x6c,
+    /* 0x37 */ 0xec,
+    /* 0x38 */ 0x1c,
+    /* 0x39 */ 0x9c,
+    /* 0x3a */ 0x5c,
+    /* 0x3b */ 0xdc,
+    /* 0x3c */ 0x3c,
+    /* 0x3d */ 0xbc,
+    /* 0x3e */ 0x7c,
+    /* 0x3f */ 0xfc,
+    /* 0x40 */ 0x02,
+    /* 0x41 */ 0x82,
+    /* 0x42 */ 0x42,
+    /* 0x43 */ 0xc2,
+    /* 0x44 */ 0x22,
+    /* 0x45 */ 0xa2,
+    /* 0x46 */ 0x62,
+    /* 0x47 */ 0xe2,
+    /* 0x48 */ 0x12,
+    /* 0x49 */ 0x92,
+    /* 0x4a */ 0x52,
+    /* 0x4b */ 0xd2,
+    /* 0x4c */ 0x32,
+    /* 0x4d */ 0xb2,
+    /* 0x4e */ 0x72,
+    /* 0x4f */ 0xf2,
+    /* 0x50 */ 0x0a,
+    /* 0x51 */ 0x8a,
+    /* 0x52 */ 0x4a,
+    /* 0x53 */ 0xca,
+    /* 0x54 */ 0x2a,
+    /* 0x55 */ 0xaa,
+    /* 0x56 */ 0x6a,
+    /* 0x57 */ 0xea,
+    /* 0x58 */ 0x1a,
+    /* 0x59 */ 0x9a,
+    /* 0x5a */ 0x5a,
+    /* 0x5b */ 0xda,
+    /* 0x5c */ 0x3a,
+    /* 0x5d */ 0xba,
+    /* 0x5e */ 0x7a,
+    /* 0x5f */ 0xfa,
+    /* 0x60 */ 0x06,
+    /* 0x61 */ 0x86,
+    /* 0x62 */ 0x46,
+    /* 0x63 */ 0xc6,
+    /* 0x64 */ 0x26,
+    /* 0x65 */ 0xa6,
+    /* 0x66 */ 0x66,
+    /* 0x67 */ 0xe6,
+    /* 0x68 */ 0x16,
+    /* 0x69 */ 0x96,
+    /* 0x6a */ 0x56,
+    /* 0x6b */ 0xd6,
+    /* 0x6c */ 0x36,
+    /* 0x6d */ 0xb6,
+    /* 0x6e */ 0x76,
+    /* 0x6f */ 0xf6,
+    /* 0x70 */ 0x0e,
+    /* 0x71 */ 0x8e,
+    /* 0x72 */ 0x4e,
+    /* 0x73 */ 0xce,
+    /* 0x74 */ 0x2e,
+    /* 0x75 */ 0xae,
+    /* 0x76 */ 0x6e,
+    /* 0x77 */ 0xee,
+    /* 0x78 */ 0x1e,
+    /* 0x79 */ 0x9e,
+    /* 0x7a */ 0x5e,
+    /* 0x7b */ 0xde,
+    /* 0x7c */ 0x3e,
+    /* 0x7d */ 0xbe,
+    /* 0x7e */ 0x7e,
+    /* 0x7f */ 0xfe,
+    /* 0x80 */ 0x01,
+    /* 0x81 */ 0x81,
+    /* 0x82 */ 0x41,
+    /* 0x83 */ 0xc1,
+    /* 0x84 */ 0x21,
+    /* 0x85 */ 0xa1,
+    /* 0x86 */ 0x61,
+    /* 0x87 */ 0xe1,
+    /* 0x88 */ 0x11,
+    /* 0x89 */ 0x91,
+    /* 0x8a */ 0x51,
+    /* 0x8b */ 0xd1,
+    /* 0x8c */ 0x31,
+    /* 0x8d */ 0xb1,
+    /* 0x8e */ 0x71,
+    /* 0x8f */ 0xf1,
+    /* 0x90 */ 0x09,
+    /* 0x91 */ 0x89,
+    /* 0x92 */ 0x49,
+    /* 0x93 */ 0xc9,
+    /* 0x94 */ 0x29,
+    /* 0x95 */ 0xa9,
+    /* 0x96 */ 0x69,
+    /* 0x97 */ 0xe9,
+    /* 0x98 */ 0x19,
+    /* 0x99 */ 0x99,
+    /* 0x9a */ 0x59,
+    /* 0x9b */ 0xd9,
+    /* 0x9c */ 0x39,
+    /* 0x9d */ 0xb9,
+    /* 0x9e */ 0x79,
+    /* 0x9f */ 0xf9,
+    /* 0xa0 */ 0x05,
+    /* 0xa1 */ 0x85,
+    /* 0xa2 */ 0x45,
+    /* 0xa3 */ 0xc5,
+    /* 0xa4 */ 0x25,
+    /* 0xa5 */ 0xa5,
+    /* 0xa6 */ 0x65,
+    /* 0xa7 */ 0xe5,
+    /* 0xa8 */ 0x15,
+    /* 0xa9 */ 0x95,
+    /* 0xaa */ 0x55,
+    /* 0xab */ 0xd5,
+    /* 0xac */ 0x35,
+    /* 0xad */ 0xb5,
+    /* 0xae */ 0x75,
+    /* 0xaf */ 0xf5,
+    /* 0xb0 */ 0x0d,
+    /* 0xb1 */ 0x8d,
+    /* 0xb2 */ 0x4d,
+    /* 0xb3 */ 0xcd,
+    /* 0xb4 */ 0x2d,
+    /* 0xb5 */ 0xad,
+    /* 0xb6 */ 0x6d,
+    /* 0xb7 */ 0xed,
+    /* 0xb8 */ 0x1d,
+    /* 0xb9 */ 0x9d,
+    /* 0xba */ 0x5d,
+    /* 0xbb */ 0xdd,
+    /* 0xbc */ 0x3d,
+    /* 0xbd */ 0xbd,
+    /* 0xbe */ 0x7d,
+    /* 0xbf */ 0xfd,
+    /* 0xc0 */ 0x03,
+    /* 0xc1 */ 0x83,
+    /* 0xc2 */ 0x43,
+    /* 0xc3 */ 0xc3,
+    /* 0xc4 */ 0x23,
+    /* 0xc5 */ 0xa3,
+    /* 0xc6 */ 0x63,
+    /* 0xc7 */ 0xe3,
+    /* 0xc8 */ 0x13,
+    /* 0xc9 */ 0x93,
+    /* 0xca */ 0x53,
+    /* 0xcb */ 0xd3,
+    /* 0xcc */ 0x33,
+    /* 0xcd */ 0xb3,
+    /* 0xce */ 0x73,
+    /* 0xcf */ 0xf3,
+    /* 0xd0 */ 0x0b,
+    /* 0xd1 */ 0x8b,
+    /* 0xd2 */ 0x4b,
+    /* 0xd3 */ 0xcb,
+    /* 0xd4 */ 0x2b,
+    /* 0xd5 */ 0xab,
+    /* 0xd6 */ 0x6b,
+    /* 0xd7 */ 0xeb,
+    /* 0xd8 */ 0x1b,
+    /* 0xd9 */ 0x9b,
+    /* 0xda */ 0x5b,
+    /* 0xdb */ 0xdb,
+    /* 0xdc */ 0x3b,
+    /* 0xdd */ 0xbb,
+    /* 0xde */ 0x7b,
+    /* 0xdf */ 0xfb,
+    /* 0xe0 */ 0x07,
+    /* 0xe1 */ 0x87,
+    /* 0xe2 */ 0x47,
+    /* 0xe3 */ 0xc7,
+    /* 0xe4 */ 0x27,
+    /* 0xe5 */ 0xa7,
+    /* 0xe6 */ 0x67,
+    /* 0xe7 */ 0xe7,
+    /* 0xe8 */ 0x17,
+    /* 0xe9 */ 0x97,
+    /* 0xea */ 0x57,
+    /* 0xeb */ 0xd7,
+    /* 0xec */ 0x37,
+    /* 0xed */ 0xb7,
+    /* 0xee */ 0x77,
+    /* 0xef */ 0xf7,
+    /* 0xf0 */ 0x0f,
+    /* 0xf1 */ 0x8f,
+    /* 0xf2 */ 0x4f,
+    /* 0xf3 */ 0xcf,
+    /* 0xf4 */ 0x2f,
+    /* 0xf5 */ 0xaf,
+    /* 0xf6 */ 0x6f,
+    /* 0xf7 */ 0xef,
+    /* 0xf8 */ 0x1f,
+    /* 0xf9 */ 0x9f,
+    /* 0xfa */ 0x5f,
+    /* 0xfb */ 0xdf,
+    /* 0xfc */ 0x3f,
+    /* 0xfd */ 0xbf,
+    /* 0xfe */ 0x7f,
+    /* 0xff */ 0xff
+];
