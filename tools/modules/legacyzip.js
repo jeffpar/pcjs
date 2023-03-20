@@ -23,55 +23,67 @@ const DEBUG = true;
 export default class LegacyZip
 {
     /**
-     * stretchSync(data)
+     * stretchSync(src)
      *
-     * @param {Buffer} input (SHRINK data)
-     * @returns {Buffer}
+     * @param {Buffer} src (SHRINK data)
+     * @returns {Stretch}
      */
-    static stretchSync(input)
+    static stretchSync(src)
     {
-        let stretch = new Stretch(input);
+        let stretch = new Stretch(src);
         stretch.decomp();
-        return stretch.outbuf;
+        return stretch;
     }
 
     /**
-     * expandSync(data)
+     * expandSync(src)
      *
-     * @param {Buffer} input (REDUCE data)
-     * @returns {Buffer}
+     * @param {Buffer} src (REDUCE data)
+     * @returns {Expand}
      */
-    static expandSync(input)
+    static expandSync(src)
     {
-        let expand = new Expand(input);
+        let expand = new Expand(src);
         expand.decomp();
-        return expand.outbuf;
+        return expand;
     }
 
     /**
-     * explodeSync(data)
+     * explodeSync(src, uncomp_len, large_wnd, lit_tree)
      *
-     * @param {Buffer} input (IMPLODE data)
-     * @returns {Buffer}
+     * Decompress (explode) the data in src. The uncompressed data is uncomp_len
+     * bytes long. large_wnd is true if a large window was used for compression,
+     * and lit_tree is true if literals were Huffman coded.
+     *
+     * Returns an Explode object with src_used set to the number of src bytes used
+     * and dst contains the output.
+     *
+     * @param {Buffer} src (IMPLODE data)
+     * @param {number} uncomp_len
+     * @param {boolean} large_wnd
+     * @param {boolean} lit_tree
+     * @returns {Explode}
      */
-    static explodeSync(input)
+    static explodeSync(src, uncomp_len, large_wnd, lit_tree)
     {
-        let explode = new Explode(input);
-        explode.decomp();
-        return explode.outbuf;
+        let explode = new Explode(src, uncomp_len, large_wnd, lit_tree);
+        if (!explode.decomp(false) || explode.src_used !== src.length) {
+            explode.decomp(true);
+        }
+        return explode;
     }
 
     /**
-     * blastSync(data)
+     * blastSync(src)
      *
-     * @param {Buffer} input (IMPLODE_DCL data)
-     * @returns {Buffer}
+     * @param {Buffer} src (IMPLODE_DCL data)
+     * @returns {Blast}
      */
-    static blastSync(input)
+    static blastSync(src)
     {
-        let blast = new Blast(input);
+        let blast = new Blast(src);
         blast.decomp();
-        return blast.outbuf;
+        return blast;
     }
 }
 
@@ -96,7 +108,7 @@ class HuffmanDecoder
          *      sym: 9 bits (wide enough to fit the max symbol nbr)
          *      len: 8 bits (0 means no symbol)
          *
-         * In this implementation, each entry is an object with sym and len properties.
+         * In this implementation, each entry is simply an object with 'sym' and 'len' properties.
          */
         this.table = new Array(1 << HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
         this.sentinel_bits = new Array(HuffmanDecoder.MAX_HUFFMAN_BITS + 1);
@@ -199,8 +211,8 @@ class HuffmanDecoder
 
 /**
  * @class Stretch
- * @property {Buffer} inbuf
- * @property {Buffer} outbuf
+ * @property {Buffer} src
+ * @property {Buffer} dst
  *
  * Stretch is used to decompress SHRINK streams.
  *
@@ -212,12 +224,12 @@ class Stretch
      * constructor(input)
      *
      * @this {Stretch}
-     * @param {Buffer} input
+     * @param {Buffer} src
      */
-    constructor(input)
+    constructor(src)
     {
-        this.inbuf = input;
-        this.outbuf = this.inbuf;
+        this.src = src;
+        this.dst = src;    // for now
     }
 
     /**
@@ -234,8 +246,8 @@ class Stretch
 
 /**
  * @class Expand
- * @property {Buffer} inbuf
- * @property {Buffer} outbuf
+ * @property {Buffer} src
+ * @property {Buffer} dst
  *
  * Expand is used to decompress REDUCE streams.
  */
@@ -245,12 +257,12 @@ class Expand
      * constructor(input)
      *
      * @this {Expand}
-     * @param {Buffer} input
+     * @param {Buffer} src
      */
-    constructor(input)
+    constructor(src)
     {
-        this.inbuf = input;
-        this.outbuf = this.inbuf;
+        this.src = src;
+        this.dst = src;    // for now
     }
 
     /**
@@ -267,32 +279,38 @@ class Expand
 
 /**
  * @class Explode
- * @property {Buffer} inbuf
- * @property {Buffer} outbuf
+ * @property {Buffer} src
+ * @property {Buffer} dst
  *
  * Explode is used to decompress IMPLODE streams.
  */
 class Explode
 {
     /**
-     * constructor(input)
+     * constructor(src, uncomp_len, large_wnd, lit_tree)
      *
      * @this {Explode}
-     * @param {Buffer} input
+     * @param {Buffer} src
+     * @param {number} uncomp_len
+     * @param {boolean} large_wnd
+     * @param {boolean} lit_tree
      */
-    constructor(input)
+    constructor(src, uncomp_len, large_wnd, lit_tree)
     {
-        this.inbuf = input;
-        this.outbuf = this.inbuf;
+        this.src = src;
+        this.src_used = 0;
+        this.uncomp_len = uncomp_len;
+        this.dst = src;   // for now
     }
 
     /**
-     * decomp()
+     * decomp(pk101_bug_compat)
      *
      * @this {Explode}
+     * @param {boolean} pk101_bug_compat (true to emulate PKZIP 1.01 bug)
      * @returns {number}
      */
-   decomp()
+   decomp(pk101_bug_compat)
    {
         return 0;
    }
@@ -300,12 +318,12 @@ class Explode
 
 /**
  * @class Blast
- * @property {Buffer} inbuf     // (replaces infun and inhow)
+ * @property {Buffer} src       // (replaces infun and inhow)
  * @property {number} in        // next input location
  * @property {number} left      // available input at in
  * @property {number} bitbuf    // bit buffer
  * @property {number} bitcnt    // number of bits in bit buffer
- * @property {Buffer} outbuf    // (replaces outfun and outhow)
+ * @property {Buffer} dst       // (replaces outfun and outhow)
  * @property {number} next      // index of next write location in out[]
  * @property {boolean} first    // true to check distances (for first 4K)
  * @property {Uint8Array} out   // output array and sliding window
@@ -345,17 +363,17 @@ class Blast
     static /* const char */ extra = [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8];           // extra bits for length codes
 
     /**
-     * constructor(input)
+     * constructor(src)
      *
      * @this {Blast}
-     * @param {Buffer} input
+     * @param {Buffer} src
      */
-    constructor(input)
+    constructor(src)
     {
-        this.inbuf = input;
-        this.left = input.length;
+        this.src = src;
+        this.left = src.length;
         this.in = this.bitbuf = this.bitcnt = 0;
-        this.outbuf = Buffer.alloc(0);
+        this.dst = Buffer.alloc(0);
         this.next = 0;
         this.first = true;
         this.out = new Uint8Array(Blast.MAXWIN);
@@ -398,7 +416,7 @@ class Blast
                 throw new Error("Blast.bits(): out of input");
             }
             /* load eight more bits */
-            val |= this.inbuf[this.in++] << this.bitcnt;
+            val |= this.src[this.in++] << this.bitcnt;
             this.left--;
             this.bitcnt += 8;
         }
@@ -586,7 +604,7 @@ class Blast
             if (this.left == 0) {
                 throw new Error("Blast.decode(): out of input");
             }
-            bitbuf = this.inbuf[this.in++];
+            bitbuf = this.src[this.in++];
             this.left--;
             if (left > 8) left = 8;
         }
@@ -608,7 +626,7 @@ class Blast
         if (length < a.length) {
             a = a.slice(0, length);
         }
-        this.outbuf = Buffer.concat([this.outbuf, a]);
+        this.dst = Buffer.concat([this.dst, a]);
         return true;
     }
 

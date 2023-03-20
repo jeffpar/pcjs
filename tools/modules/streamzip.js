@@ -555,45 +555,51 @@ export default class StreamZip {
         if (err) {
             throw err;
         }
-        let data = Buffer.alloc(entry.compressedSize);
-        new FsRead(this.fd, data, 0, entry.compressedSize, this.dataOffset(entry), (e) => {
+        let src = Buffer.alloc(entry.compressedSize);
+        new FsRead(this.fd, src, 0, entry.compressedSize, this.dataOffset(entry), (e) => {
             err = e;
         }).read(true);
         if (err) {
             throw err;
         }
+        let dst;
         let verify = true;
         if (entry.method == StreamZip.STORE) {
-            // nothing to do
+            dst = src;
         } else if (entry.method == StreamZip.SHRINK) {
-            data = LegacyZip.stretchSync(data);
+            let stretch = LegacyZip.stretchSync(src);
+            dst = stretch.dst;
             verify = false;
         } else if (entry.method >= StreamZip.REDUCE1 && entry.method <= StreamZip.REDUCE4) {
-            data = LegacyZip.expandSync(data);
+            let expand = LegacyZip.expandSync(src);
+            dst = expand.dst;
             verify = false;
         } else if (entry.method == StreamZip.IMPLODE) {
-            data = LegacyZip.explodeSync(data);
+            let largeWindow = !!(entry.flags & StreamZip.FLG_COMP1);
+            let literalTree = !!(entry.flags & StreamZip.FLG_COMP2);
+            let explode = LegacyZip.explodeSync(src, entry.size, largeWindow, literalTree);
+            dst = explode.dst;
             verify = false;
         } else if (entry.method == StreamZip.IMPLODE_DCL) {
             // let test = Buffer.from([0x00, 0x04, 0x82, 0x24, 0x25, 0x8f, 0x80, 0x7f]);
-            // data = LegacyZip.blastSync(test);
+            // dst = LegacyZip.blastSync(test).dst;
             // verify = false;
-            data = LegacyZip.blastSync(data);
+            dst = LegacyZip.blastSync(src).dst
         } else if (entry.method == StreamZip.DEFLATE || entry.method == StreamZip.DEFLATE64) {
-            data = zlib.inflateRawSync(data);
+            dst = zlib.inflateRawSync(src);
         } else {
             throw new Error(entry.name + ": unsupported compression method (" + entry.method + ")");
         }
         if (verify) {
-            if (data.length !== entry.size) {
-                throw new Error(entry.name + ": expected " + entry.size + " bytes, received " + data.length + " (method " + entry.method + ")");
+            if (dst.length !== entry.size) {
+                throw new Error(entry.name + ": expected " + entry.size + " bytes, received " + dst.length + " (method " + entry.method + ")");
             }
             if (this.canVerifyCRC(entry)) {
                 const verify = new CRCVerify(entry);
-                verify.data(data);
+                verify.data(dst);
             }
         }
-        return data;
+        return dst;
     }
 
     /**
@@ -648,11 +654,12 @@ export default class StreamZip {
      * canVerifyCRC()
      *
      * @this {StreamZip}
+     * @return {boolean}
      */
     canVerifyCRC(entry)
     {
-        // if bit 3 (0x08) of the general-purpose flags field is set, then the CRC-32 and file sizes are not known when the header is written
-        return (entry.flags & 0x8) !== 0x8;
+        // If bit 3 (0x08) of the general-purpose flags field is set, then the CRC-32 and file sizes are not known when the header is written
+        return !(entry.flags & StreamZip.FLG_DESC);
     }
 
     /**
