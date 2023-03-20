@@ -15,9 +15,9 @@ import LegacyZip from './legacyzip.js';
 
 /**
  * @typedef {Object} Config
- * @property {boolean} storeEntries
- * @property {boolean} skipEntryNameValidation
- * @property {string} nameEncoding
+ * @property {boolean} storeEntries (default is true; ie, always store entries)
+ * @property {boolean} skipEntryNameValidation (default is false (ie, always validate entry names))
+ * @property {string} nameEncoding (default is no TextDecoder; undocumented)
  * @property {string} file (file name; undocumented)
  * @property {number} fd (file descriptor; undocumented)
  * @property {number} chunkSize (undocumented)
@@ -31,103 +31,123 @@ export default class StreamZip {
      * Public class fields
      */
     static LocalHeader = new Structure("LocalHeader")
-        .field('signature',     Structure.UINT32, {'LOCSIG': 0x04034b50})   // "PK\003\004"
-        .field('version',       Structure.UINT16)                           // version needed to extract
-        .field('flags',         Structure.UINT16)                           // general purpose bit flag
-        .field('method',        Structure.UINT16)                           // compression method
-        .field('time',          Structure.UINT16)                           // modification time (2 bytes time, 2 bytes date)
-        .field('date',          Structure.UINT16)
-        .field('crc',           Structure.UINT32)                           // uncompressed file CRC-32 value
-        .field('compressedSize',Structure.UINT32)                           // compressed size
-        .field('size',          Structure.UINT32)                           // uncompressed size
-        .field('fnameLen',      Structure.UINT16)                           // filename length
-        .field('extraLen',      Structure.UINT16)                           // extra field length
+        .field('signature',     Structure.UINT32, {
+            'LOCSIG': 0x04034b50                        // "PK\003\004" (local file header signature)
+        })
+        .field('version',       Structure.UINT16)       // version needed to extract
+        .field('flags',         Structure.UINT16, {     // general purpose bit flag
+            ENC:        0x0001,                         // encrypted file
+            COMP1:      0x0002,                         // compression option
+            COMP2:      0x0004,                         // compression option
+            DESC:       0x0008,                         // data descriptor
+            ENH:        0x0010,                         // enhanced deflation
+            STR:        0x0040,                         // strong encryption
+            LNG:        0x0400                          // UNICODE encoding
+        })
+        .field('method',        Structure.UINT16)       // compression method
+        .field('time',          Structure.UINT16)       // modification time
+        .field('date',          Structure.UINT16)       // modification date
+        .field('crc',           Structure.UINT32)       // uncompressed file CRC-32 value
+        .field('compressedSize',Structure.UINT32)       // compressed size
+        .field('size',          Structure.UINT32)       // uncompressed size
+        .field('fnameLen',      Structure.UINT16)       // filename length
+        .field('extraLen',      Structure.UINT16)       // extra field length
         .verifySize(30);
 
     static ExtHeader = new Structure("ExtHeader")
-        .field('signature',     Structure.UINT32, {'EXTSIG': 0x08074b50})   // "PK\007\008"
-        .field('crc',           Structure.UINT32)                           // uncompressed file CRC-32 value
-        .field('compressedSize',Structure.UINT32)                           // compressed size
-        .field('size',          Structure.UINT32)                           // uncompressed size
+        .field('signature',     Structure.UINT32, {
+            'EXTSIG': 0x08074b50                        // "PK\007\008" (data descriptor signature)
+        })
+        .field('crc',           Structure.UINT32)       // uncompressed file CRC-32 value
+        .field('compressedSize',Structure.UINT32)       // compressed size
+        .field('size',          Structure.UINT32)       // uncompressed size
         .verifySize(16);
 
     static CentralHeader = new Structure("CentralHeader")
-        .field('signature',     Structure.UINT32, {'CENSIG': 0x02014b50})   // "PK\001\002"
-        .field('verMade',       Structure.UINT16)                           // version made by
-        .field('version',       Structure.UINT16)                           // version needed to extract
-        .field('flags',         Structure.UINT16)                           // general purpose bit flag
-        .field('method',        Structure.UINT16)                           // compression method
-        .field('time',          Structure.UINT16)                           // modification time (2 bytes time, 2 bytes date)
-        .field('date',          Structure.UINT16)
-        .field('crc',           Structure.UINT32)                           // uncompressed file CRC-32 value
-        .field('compressedSize',Structure.UINT32)                           // compressed size
-        .field('size',          Structure.UINT32)                           // uncompressed size
-        .field('fnameLen',      Structure.UINT16)                           // filename length
-        .field('extraLen',      Structure.UINT16)                           // extra field length
-        .field('comLen',        Structure.UINT16)                           // file comment length
-        .field('diskStart',     Structure.UINT16)                           // disk number start
-        .field('intAttr',       Structure.UINT16)                           // internal file attributes
-        .field('attr',          Structure.UINT32)                           // external file attributes (host system dependent)
-        .field('offset',        Structure.UINT32)                           // relative offset of local header
+        .field('signature',     Structure.UINT32, {
+            'CENSIG': 0x02014b50                        // "PK\001\002" (central file header signature)
+        })
+        .field('verMade',       Structure.UINT16)       // version made by
+        .field('version',       Structure.UINT16)       // version needed to extract
+        .field('flags',         Structure.UINT16)       // general purpose bit flag
+        .field('method',        Structure.UINT16)       // compression method
+        .field('time',          Structure.UINT16)       // modification time
+        .field('date',          Structure.UINT16)       // modification date
+        .field('crc',           Structure.UINT32)       // uncompressed file CRC-32 value
+        .field('compressedSize',Structure.UINT32)       // compressed size
+        .field('size',          Structure.UINT32)       // uncompressed size
+        .field('fnameLen',      Structure.UINT16)       // filename length
+        .field('extraLen',      Structure.UINT16)       // extra field length
+        .field('comLen',        Structure.UINT16)       // file comment length
+        .field('diskStart',     Structure.UINT16)       // disk number start
+        .field('intAttr',       Structure.UINT16)       // internal file attributes
+        .field('attr',          Structure.UINT32)       // external file attributes (host system dependent)
+        .field('offset',        Structure.UINT32)       // relative offset of local header
         .verifySize(46);
 
     static CentralEndHeader = new Structure("CentralEndHeader")
-        .field('signature',     Structure.UINT32, {'ENDSIG': 0x06054b50})   // "PK\005\006"
-        .field('diskNum',       Structure.UINT16)                           // number of this disk
-        .field('diskStart',     Structure.UINT16)                           // disk where central directory starts
-        .field('volumeEntries', Structure.UINT16)                           // number of entries on this disk
-        .field('totalEntries',  Structure.UINT16)                           // total number of entries
-        .field('size',          Structure.UINT32)                           // central directory size in bytes
-        .field('offset',        Structure.UINT32)                           // offset of first CEN header
-        .field('commentLength', Structure.UINT16)                           // zip file comment length
+        .field('signature',     Structure.UINT32, {
+            'ENDSIG': 0x06054b50                        // "PK\005\006" (end of central dir signature)
+        })
+        .field('diskNum',       Structure.UINT16)       // number of this disk
+        .field('diskStart',     Structure.UINT16)       // disk where central directory starts
+        .field('volumeEntries', Structure.UINT16)       // number of entries on this disk
+        .field('totalEntries',  Structure.UINT16)       // total number of entries
+        .field('size',          Structure.UINT32)       // central directory size in bytes
+        .field('offset',        Structure.UINT32)       // offset of first CEN header
+        .field('commentLength', Structure.UINT16)       // zip file comment length
         .verifySize(22);
 
     static MAXFILECOMMENT = 0xffff;
 
     static Central64LocHeader = new Structure("Central64LocHeader")
-        .field('signature',     Structure.UINT32,{'ENDL64SIG': 0x07064b50}) // "PK\006\007"
-        .field('diskNum',       Structure.UINT32)                           // number of this disk
-        .field('headerOffset',  Structure.UINT64)                           // offset of the ZIP64 end of central directory record
-        .field('disks',         Structure.UINT32)                           // total number of disks
+        .field('signature',     Structure.UINT32,{
+            'ENDL64SIG': 0x07064b50                     // "PK\006\007" (ZIP64 end of central directory locator)
+        })
+        .field('diskNum',       Structure.UINT32)       // number of this disk
+        .field('headerOffset',  Structure.UINT64)       // offset of the ZIP64 end of central directory record
+        .field('disks',         Structure.UINT32)       // total number of disks
         .verifySize(20);
 
     static Central64EndHeader = new Structure("Central64EndHeader")
-        .field('signature',     Structure.UINT32, {'END64SIG': 0x06064b50}) // "PK\006\006"
-        .field('sizeEOCD',      Structure.UINT64)                           // size of zip64 end of central directory record
-        .field('verMade',       Structure.UINT16)                           // version made by
-        .field('version',       Structure.UINT16)                           // version needed to extract
-        .field('diskNum',       Structure.UINT32)                           // number of this disk
-        .field('diskStart',     Structure.UINT32)                           // disk where central directory starts
-        .field('volumeEntries', Structure.UINT64)                           // number of entries on this disk
-        .field('totalEntries',  Structure.UINT64)                           // total number of entries
-        .field('size',          Structure.UINT64)                           // central directory size in bytes
-        .field('offset',        Structure.UINT64)                           // offset of first CEN header
+        .field('signature',     Structure.UINT32, {
+            'END64SIG': 0x06064b50                      // "PK\006\006" (ZIP64 end of central directory record)
+        })
+        .field('sizeEOCD',      Structure.UINT64)       // size of zip64 end of central directory record
+        .field('verMade',       Structure.UINT16)       // version made by
+        .field('version',       Structure.UINT16)       // version needed to extract
+        .field('diskNum',       Structure.UINT32)       // number of this disk
+        .field('diskStart',     Structure.UINT32)       // disk where central directory starts
+        .field('volumeEntries', Structure.UINT64)       // number of entries on this disk
+        .field('totalEntries',  Structure.UINT64)       // total number of entries
+        .field('size',          Structure.UINT64)       // central directory size in bytes
+        .field('offset',        Structure.UINT64)       // offset of first CEN header
         .verifySize(56);
 
     /* Compression methods */
-    static STORE        = 0;            // no compression
-    static SHRINK       = 1;            // shrink
-    static REDUCE1      = 2;            // reduce with compression factor 1
-    static REDUCE2      = 3;            // reduce with compression factor 2
-    static REDUCE3      = 4;            // reduce with compression factor 3
-    static REDUCE4      = 5;            // reduce with compression factor 4
-    static IMPLODE      = 6;            // implode
-    static DEFLATE      = 8;            // deflate
-    static DEFLATE64    = 9;            // deflate64
-    static IMPLODE_DCL  = 10;           // PKWare DCL implode
-    static BZIP2        = 12;           // compressed using BZIP2
-    static LZMA         = 14;           // LZMA
-    static IBM_TERSE    = 18;           // compressed using IBM TERSE
-    static IBM_LZ77     = 19;           // IBM LZ77
+    static STORE        = 0;                            // no compression
+    static SHRINK       = 1;                            // shrink
+    static REDUCE1      = 2;                            // reduce with compression factor 1
+    static REDUCE2      = 3;                            // reduce with compression factor 2
+    static REDUCE3      = 4;                            // reduce with compression factor 3
+    static REDUCE4      = 5;                            // reduce with compression factor 4
+    static IMPLODE      = 6;                            // implode
+    static DEFLATE      = 8;                            // deflate
+    static DEFLATE64    = 9;                            // deflate64
+    static IMPLODE_DCL  = 10;                           // PKWare DCL implode
+    static BZIP2        = 12;                           // compressed using BZIP2
+    static LZMA         = 14;                           // LZMA
+    static IBM_TERSE    = 18;                           // compressed using IBM TERSE
+    static IBM_LZ77     = 19;                           // IBM LZ77
 
     /* General purpose bit flags */
-    static FLG_ENC      = 0x0001;       // encrypted file
-    static FLG_COMP1    = 0x0002;       // compression option
-    static FLG_COMP2    = 0x0004;       // compression option
-    static FLG_DESC     = 0x0008;       // data descriptor
-    static FLG_ENH      = 0x0010;       // enhanced deflation
-    static FLG_STR      = 0x0040;       // strong encryption
-    static FLG_LNG      = 0x0400;       // UNICODE encoding
+    static FLG_ENC      = 0x0001;                       // encrypted file
+    static FLG_COMP1    = 0x0002;                       // compression option
+    static FLG_COMP2    = 0x0004;                       // compression option
+    static FLG_DESC     = 0x0008;                       // data descriptor
+    static FLG_ENH      = 0x0010;                       // enhanced deflation
+    static FLG_STR      = 0x0040;                       // strong encryption
+    static FLG_LNG      = 0x0400;                       // UNICODE encoding
 
     /* 4.5 Extensible data fields */
     static EF_ID        = 0;
@@ -172,12 +192,12 @@ export default class StreamZip {
 
     /**
      * @this {StreamZip}
-     * @param {Config} config
+     * @param {Config} [config]
      */
     constructor(config)
     {
-        this.config = config;
-        this.opened = false;
+        this.config = config || {}; // allow config to be optional
+        this.opened = false;        // true if WE opened the file (as opposed to the caller)
         this.ready = false;
         this.#entries = config.storeEntries !== false? {} : null,
         this.fileName = config.file,
@@ -188,7 +208,6 @@ export default class StreamZip {
                 return this.ready;
             },
         });
-        this.originalEmit = events.EventEmitter.prototype.emit;
     }
 
     /**
@@ -491,13 +510,15 @@ export default class StreamZip {
     /**
      * entries()
      *
+     * Callers deserve an array of entries that they can safely iterate over, so we call Object.values() for them.
+     *
      * @public
      * @this {StreamZip}
      */
     entries()
     {
         this.checkEntriesExist();
-        return this.#entries;
+        return Object.values(this.#entries);
     }
 
     /**
@@ -844,13 +865,6 @@ export default class StreamZip {
             });
         }
     }
-
-    emit(...args)
-    {
-        if (this.opened) {
-            return this.originalEmit.call(this, ...args);
-        }
-    }
 }
 
 //
@@ -1037,9 +1051,7 @@ class ZipEntry
     read(data, offset, textDecoder)
     {
         const nameData = data.slice(offset, (offset += this.fnameLen));
-        this.name = textDecoder
-            ? textDecoder.decode(new Uint8Array(nameData))
-            : nameData.toString('utf8');
+        this.name = textDecoder? textDecoder.decode(new Uint8Array(nameData)) : nameData.toString('utf8');
         const lastChar = data[offset - 1];
         this.isDirectory = lastChar === 47 || lastChar === 92;
 

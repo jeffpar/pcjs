@@ -1208,7 +1208,7 @@ function readZIPFiles(sZIP, sLabel, done)
     zip.on('ready', () => {
         let aFileData = [];
         let aDirectories = [];
-        for (let entry of Object.values(zip.entries())) {
+        for (let entry of zip.entries()) {
             let file = {path: entry.name, name: path.basename(entry.name)};
             let date = new Date(entry.time);
             file.date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
@@ -1219,7 +1219,13 @@ function readZIPFiles(sZIP, sLabel, done)
                 file.files = [];
                 aDirectories.push(file);
             } else {
-                let data = zip.entryDataSync(entry.name);
+                let data;
+                try {
+                    data = zip.entryDataSync(entry.name);
+                } catch(err) {
+                    printError(err);
+                    break;
+                }
                 data = new DataBuffer(data);
                 file.attr = DiskInfo.ATTR.ARCHIVE;
                 file.size = data.length;

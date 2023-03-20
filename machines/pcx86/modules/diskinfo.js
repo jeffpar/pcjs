@@ -3100,6 +3100,7 @@ export default class DiskInfo {
             [DiskInfo.IMAGE.ORIGBPB]: JSON.stringify(this.abOrigBPB),
             [DiskInfo.IMAGE.VERSION]: Device.VERSION,
             [DiskInfo.IMAGE.REPOSITORY]: Device.REPOSITORY,
+            [DiskInfo.IMAGE.GENERATED]: this.device.parseDate()
             // [DiskInfo.IMAGE.COMMAND]: this.args,
         };
         if (!this.fBPBModified) {
@@ -3647,6 +3648,7 @@ DiskInfo.IMAGE = {
     ORIGBPB:    'bootSector',
     VERSION:    'version',
     REPOSITORY: 'repository',
+    GENERATED:  'generated',
     SOURCE:     'source',           // the source of the data (eg, archive.org, pcjs.org, etc)
     COMMAND:    'diskimage.js'
 };

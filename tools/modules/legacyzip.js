@@ -66,9 +66,9 @@ export default class LegacyZip
      */
     static explodeSync(src, uncomp_len, large_wnd, lit_tree)
     {
-        let explode = new Explode(src, uncomp_len, large_wnd, lit_tree);
-        if (!explode.decomp(false) || explode.src_used !== src.length) {
-            explode.decomp(true);
+        let explode = new Explode();
+        if (!explode.decomp(src, uncomp_len, large_wnd, lit_tree, false) || explode.src_used !== src.length) {
+            explode.decomp(src, uncomp_len, large_wnd, lit_tree, true);
         }
         return explode;
     }
@@ -81,8 +81,8 @@ export default class LegacyZip
      */
     static blastSync(src)
     {
-        let blast = new Blast(src);
-        blast.decomp();
+        let blast = new Blast();
+        blast.decomp(src);
         return blast;
     }
 }
@@ -221,27 +221,28 @@ class HuffmanDecoder
 class Stretch
 {
     /**
-     * constructor(input)
+     * constructor()
      *
      * @this {Stretch}
-     * @param {Buffer} src
      */
-    constructor(src)
+    constructor()
     {
-        this.src = src;
-        this.dst = src;    // for now
+        this.src = this.dst = null;
     }
 
     /**
-     * decomp()
+     * decomp(src)
      *
      * @this {Stretch}
+     * @param {Buffer} src
      * @returns {number}
      */
-   decomp()
-   {
+    decomp(src)
+    {
+        this.src = src;
+        this.dst = src;    // for now
         return 0;
-   }
+    }
 }
 
 /**
@@ -254,27 +255,28 @@ class Stretch
 class Expand
 {
     /**
-     * constructor(input)
+     * constructor()
      *
      * @this {Expand}
-     * @param {Buffer} src
      */
-    constructor(src)
+    constructor()
     {
-        this.src = src;
-        this.dst = src;    // for now
+        this.src = this.dst = null;
     }
 
     /**
      * decomp()
      *
      * @this {Expand}
+     * @param {Buffer} src
      * @returns {number}
      */
-   decomp()
-   {
+    decomp(src)
+    {
+        this.src = src;
+        this.dst = src;    // for now
         return 0;
-   }
+    }
 }
 
 /**
@@ -287,33 +289,34 @@ class Expand
 class Explode
 {
     /**
-     * constructor(src, uncomp_len, large_wnd, lit_tree)
+     * constructor()
+     *
+     * @this {Explode}
+     */
+    constructor()
+    {
+        this.src = this.dst = null;
+    }
+
+    /**
+     * decomp(src, uncomp_len, large_wnd, lit_tree, pk101_bug_compat)
      *
      * @this {Explode}
      * @param {Buffer} src
      * @param {number} uncomp_len
      * @param {boolean} large_wnd
      * @param {boolean} lit_tree
+     * @param {boolean} pk101_bug_compat (true to emulate PKZIP 1.01 bug)
+     * @returns {number}
      */
-    constructor(src, uncomp_len, large_wnd, lit_tree)
+    decomp(src, uncomp_len, large_wnd, lit_tree, pk101_bug_compat)
     {
         this.src = src;
         this.src_used = 0;
         this.uncomp_len = uncomp_len;
         this.dst = src;   // for now
-    }
-
-    /**
-     * decomp(pk101_bug_compat)
-     *
-     * @this {Explode}
-     * @param {boolean} pk101_bug_compat (true to emulate PKZIP 1.01 bug)
-     * @returns {number}
-     */
-   decomp(pk101_bug_compat)
-   {
         return 0;
-   }
+    }
 }
 
 /**
@@ -363,20 +366,12 @@ class Blast
     static /* const char */ extra = [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8];           // extra bits for length codes
 
     /**
-     * constructor(src)
+     * constructor()
      *
      * @this {Blast}
-     * @param {Buffer} src
      */
-    constructor(src)
+    constructor()
     {
-        this.src = src;
-        this.left = src.length;
-        this.in = this.bitbuf = this.bitcnt = 0;
-        this.dst = Buffer.alloc(0);
-        this.next = 0;
-        this.first = true;
-        this.out = new Uint8Array(Blast.MAXWIN);
         if (!Blast.litcode) {
             Blast.litcode = Blast.constructHuffman(Blast.MAXBITS, 256,
                 [11, 124, 8, 7, 28, 7, 188, 13, 76, 4, 10, 8, 12, 10, 12, 10, 8, 23, 8,
@@ -388,45 +383,7 @@ class Blast
              Blast.lencode = Blast.constructHuffman(Blast.MAXBITS, 16, [2, 35, 36, 53, 38, 23]);
              Blast.distcode = Blast.constructHuffman(Blast.MAXBITS, 64, [2, 20, 53, 230, 247, 151, 248]);
         }
-    }
-
-    /**
-     * bits(need)
-     *
-     * Return need bits from the input stream.  This always leaves less than
-     * eight bits in the buffer.  bits() works properly for need == 0.
-     *
-     * Bits are stored in bytes from the least significant bit to the most
-     * significant bit.  Therefore bits are dropped from the bottom of the bit
-     * buffer, using shift right, and new bytes are appended to the top of the
-     * bit buffer, using shift left.
-     *
-     * @this {Blast}
-     * @param {number} need
-     * @returns {number}
-     */
-    bits(need)
-    {
-        let /* int */ val;          // bit accumulator
-
-        /* load at least need bits into val */
-        val = this.bitbuf;
-        while (this.bitcnt < need) {
-            if (this.left == 0) {
-                throw new Error("Blast.bits(): out of input");
-            }
-            /* load eight more bits */
-            val |= this.src[this.in++] << this.bitcnt;
-            this.left--;
-            this.bitcnt += 8;
-        }
-
-        /* drop need bits and update buffer, always zero to seven bits left */
-        this.bitbuf = val >> need;
-        this.bitcnt -= need;
-
-        /* return need bits, zeroing the bits above that */
-        return val & ((1 << need) - 1);
+        this.out = new Uint8Array(Blast.MAXWIN);
     }
 
     /**
@@ -467,9 +424,10 @@ class Blast
      * this correctly.
      *
      * @this {Blast}
+     * @param {Buffer} src
      * @returns {number}
      */
-    decomp()
+    decomp(src)
     {
         let /* int */ lit;              // true if literals are coded
         let /* int */ dict;             // log2(dictionary size) - 6
@@ -478,6 +436,13 @@ class Blast
         let /* unsigned */ dist;        // distance for copy
         let /* int */ copy;             // copy counter
         let /* byte * */ from, to;      // copy pointers (indexes)
+
+        this.src = src;
+        this.left = src.length;
+        this.in = this.bitbuf = this.bitcnt = 0;
+        this.dst = Buffer.alloc(0);
+        this.next = 0;
+        this.first = true;
 
         /* read header */
         lit = this.bits(8);
@@ -628,6 +593,45 @@ class Blast
         }
         this.dst = Buffer.concat([this.dst, a]);
         return true;
+    }
+
+    /**
+     * bits(need)
+     *
+     * Return need bits from the input stream.  This always leaves less than
+     * eight bits in the buffer.  bits() works properly for need == 0.
+     *
+     * Bits are stored in bytes from the least significant bit to the most
+     * significant bit.  Therefore bits are dropped from the bottom of the bit
+     * buffer, using shift right, and new bytes are appended to the top of the
+     * bit buffer, using shift left.
+     *
+     * @this {Blast}
+     * @param {number} need
+     * @returns {number}
+     */
+    bits(need)
+    {
+        let /* int */ val;          // bit accumulator
+
+        /* load at least need bits into val */
+        val = this.bitbuf;
+        while (this.bitcnt < need) {
+            if (this.left == 0) {
+                throw new Error("Blast.bits(): out of input");
+            }
+            /* load eight more bits */
+            val |= this.src[this.in++] << this.bitcnt;
+            this.left--;
+            this.bitcnt += 8;
+        }
+
+        /* drop need bits and update buffer, always zero to seven bits left */
+        this.bitbuf = val >> need;
+        this.bitcnt -= need;
+
+        /* return need bits, zeroing the bits above that */
+        return val & ((1 << need) - 1);
     }
 
     /**
