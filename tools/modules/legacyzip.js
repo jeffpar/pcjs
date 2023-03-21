@@ -26,12 +26,13 @@ export default class LegacyZip
      * stretchSync(src)
      *
      * @param {Buffer} src (SHRINK data)
+     * @param {number} dst_len
      * @returns {Stretch}
      */
-    static stretchSync(src)
+    static stretchSync(src, dst_len)
     {
-        let stretch = new Stretch(src);
-        stretch.decomp();
+        let stretch = new Stretch();
+        stretch.decomp(src, dst_len);
         return stretch;
     }
 
@@ -43,8 +44,8 @@ export default class LegacyZip
      */
     static expandSync(src)
     {
-        let expand = new Expand(src);
-        expand.decomp();
+        let expand = new Expand();
+        expand.decomp(src);
         return expand;
     }
 
@@ -149,7 +150,7 @@ class BitStream
         let next = (this.bit_pos >> 3);
         let bit_off = this.bit_pos % 8;
 
-        assert(next < this.end, "bits() reading past end of stream");
+        assert(next <= this.end, "bits() reading past end of stream");
 
         let bytesAvail = this.end - next;
         if (bytesAvail >= 4) {
@@ -239,12 +240,12 @@ class BitStream
 }
 
 /**
- * @typedef {Object} HuffmanLookup
+ * @typedef {Object} Lookup
  * @property {number} sym
  * @property {number} len
  *
  * @class HuffmanDecoder
- * @property {Array.<HuffmanLookup>} table
+ * @property {Array.<Lookup>} table
  */
 class HuffmanDecoder
 {
@@ -417,6 +418,34 @@ class HuffmanDecoder
  */
 class Stretch
 {
+    static OK = true;                   // decompression successful
+    static FULL = false;                // not enough room in the output buffer
+    static ERR = null;                  // error in the input data
+
+    static CHAR_BIT = 8;
+    static MIN_CODE_SIZE = 9;
+    static MAX_CODE_SIZE = 13;
+    static MAX_CODE = ((1 << Stretch.MAX_CODE_SIZE) - 1);
+    static INVALID_CODE = 0xffff;
+    static CONTROL_CODE = 256;
+    static INC_CODE_SIZE = 1;
+    static PARTIAL_CLEAR = 2;
+    static UNKNOWN_LEN = 0xffff;
+
+    /**
+     * @typedef {Object} Code
+     * @property {number} prefix_code   // (uint16_t) INVALID_CODE means the entry is invalid
+     * @property {number} ext_byte      // (uint8_t)
+     * @property {number} len           // (uint16_t)
+     * @property {number} last_dst_pos  // (size_t)
+     *
+     * @typedef {Array.<Code>} CodeTab
+     *
+     * @typedef {Object} CodeQueue
+     * @property {number} next_idx      // (uint16_t)
+     * @property {Array}  codes         // (uint16_t)
+     */
+
     /**
      * constructor()
      *
@@ -424,23 +453,28 @@ class Stretch
      */
     constructor()
     {
-        this.src = this.dst = null;
     }
 
     /**
-     * init(src, dst_len)
+     * init(src, dst_cap)
      *
      * Initialize buffers.
      *
      * @this {Stretch}
      * @param {Buffer} src
-     * @param {number} dst_len
+     * @param {number} dst_cap
      */
-    init(src, dst_len)
+    init(src, dst_cap)
     {
         this.bs = new BitStream(src);
-        this.dst = Buffer.alloc(dst_len);
+        this.dst = Buffer.alloc(dst_cap);
         this.dst_pos = 0;
+        this.codetab = this.allocCodeTab();
+        this.codequeue = this.allocCodeQueue();
+        this.code_size = 0;             // updated by readCode()
+        this.curr_code = 0;             // updated by readCode()
+        this.first_byte = 0;            // updated by outputCode()
+        this.len = 0;                   // updated by outputCode()
     }
 
     /**
@@ -470,15 +504,410 @@ class Stretch
     }
 
     /**
-     * decomp(src)
+     * readByte(off)
+     *
+     * Reads a byte from the output buffer.
+     *
+     * @this {Stretch}
+     * @param {number} off
+     * @returns {number}
+     */
+    readByte(off)
+    {
+        return this.dst.readUInt8(off);
+    }
+
+    /**
+     * copyBytes(to, from, len)
+     *
+     * Copies len bytes to/from the output buffer.
+     *
+     * @this {Stretch}
+     * @param {number} to
+     * @param {number} from
+     * @param {number} len
+     */
+    copyBytes(to, from, len)
+    {
+        assert(len > 0 && to + len <= this.dst.length && from + len < this.dst.length);
+
+        for (let i = 0; i < len; i++) {
+            this.writeByte(this.readByte(from + i), to + i);
+        }
+    }
+
+    /**
+     * writeByte(b, off)
+     *
+     * Writes a byte to the output buffer at the specified offset.
+     *
+     * @this {Stretch}
+     * @param {number} b
+     * @param {number} [off]
+     */
+    writeByte(b, off)
+    {
+        assert(off < this.dst.length);
+        this.dst.writeUInt8(b, off);
+    }
+
+    /**
+     * writeOutput(b, fAdvance)
+     *
+     * Appends to the output buffer.
+     *
+     * @this {Stretch}
+     * @param {number} b
+     * @param {boolean} [fAdvance]
+     */
+    writeOutput(b, fAdvance = true)
+    {
+        assert(this.dst_pos < this.dst.length);
+        this.dst.writeUInt8(b, this.dst_pos);
+        if (fAdvance) this.dst_pos++;
+    }
+
+    /**
+     * truncateOutput()
+     *
+     * @this {Stretch}
+     */
+    truncateOutput()
+    {
+        assert(this.dst_pos <= this.dst.length);
+        if (this.dst_pos < this.dst.length) {
+            this.dst = this.dst.slice(0, this.dst_pos);
+        }
+    }
+
+    /**
+     * allocCodeTab()
+     *
+     * @this {Stretch}
+     * @returns {Array.<Code>}
+     */
+    allocCodeTab()
+    {
+        let codetab = /** @type {Array.<Code>} */ new Array(Stretch.MAX_CODE + 1);
+        /*
+         * Codes for literal bytes.  Set a phony prefix_code so they're valid.
+         */
+        let i;
+        for (i = 0; i <= 0xff; i++) {
+            let prefix_code = i;
+            let ext_byte = i, len = 1;
+            codetab[i] = {prefix_code, ext_byte, len}
+        }
+        for (; i < codetab.length; i++) {
+            let prefix_code = Stretch.INVALID_CODE;
+            let ext_byte, len;      // undefined
+            codetab[i] = {prefix_code, ext_byte, len};
+        }
+        return codetab;
+    }
+
+    /**
+     * updateCodeTab(i, prev_code)
+     *
+     * @this {Stretch}
+     * @param {number} i
+     * @param {number} prev_code
+     */
+    updateCodeTab(i, prev_code)
+    {
+        this.codetab[i].prefix_code = prev_code;
+        this.codetab[i].ext_byte = this.first_byte;
+        this.codetab[i].len = this.codetab[prev_code].len + 1;
+        this.codetab[i].last_dst_pos = this.codetab[prev_code].last_dst_pos;
+    }
+
+    /**
+     * allocCodeQueue()
+     *
+     * @this {Stretch}
+     * @returns {CodeQueue}
+     */
+    allocCodeQueue()
+    {
+        let queue = {
+            next_idx: 0,
+            codes: new Array(Stretch.MAX_CODE - Stretch.CONTROL_CODE + 1)
+        };
+        let code_queue_size = 0;
+        for (let code = Stretch.CONTROL_CODE + 1; code <= Stretch.MAX_CODE; code++) {
+            queue.codes[code_queue_size++] = code;
+        }
+        assert(code_queue_size < queue.codes.length);
+        /*
+         * Add an end-of-queue marker
+         */
+        queue.codes[code_queue_size] = Stretch.INVALID_CODE;
+        return queue;
+    }
+
+    /**
+     * getCodeQueueNext()
+     *
+     * Returns the next code in the queue, or INVALID_CODE if the queue is empty.
+     *
+     * @this {Stretch}
+     * @returns {number}
+     */
+    getCodeQueueNext()
+    {
+        assert(this.codequeue.next_idx < this.codequeue.codes.length);
+        return this.codequeue.codes[this.codequeue.next_idx];
+    }
+
+    /**
+     * removeCodeQueueNext()
+     *
+     * Returns and removes the next code from the queue, or returns INVALID_CODE if the queue is empty.
+     *
+     * @this {Stretch}
+     * @returns {number}
+     */
+    removeCodeQueueNext()
+    {
+        let /* uint16_t */ code = this.getCodeQueueNext();
+        if (code != Stretch.INVALID_CODE) {
+            this.codequeue.next_idx++;
+        }
+        return code;
+    }
+
+    /**
+     * readCode()
+     *
+     * @this {Stretch}
+     * @returns {boolean}
+     */
+    readCode()
+    {
+        assert(/* sizeof(code) */ 2 * Stretch.CHAR_BIT >= this.code_size);
+
+        let /* uint16_t */ code = this.bs.bits(this.code_size);
+        if (!this.bs.advance(this.code_size)) {
+            return false;
+        }
+        /*
+         * Handle regular codes (the common case)
+         */
+        if (code != Stretch.CONTROL_CODE) {
+            this.curr_code = code;
+            return true;
+        }
+        /*
+         * Handle control codes
+         */
+        let /* uint16_t */ control_code = this.bs.bits(this.code_size);
+        if (!this.bs.advance(this.code_size)) {
+            this.curr_code = Stretch.INVALID_CODE;
+            return true;
+        }
+
+        if (control_code == Stretch.INC_CODE_SIZE && this.code_size < Stretch.MAX_CODE_SIZE) {
+            this.code_size++;
+            return this.readCode();
+        }
+
+        if (control_code == Stretch.PARTIAL_CLEAR) {
+            this.unshrink_partial_clear();
+            return this.readCode();
+        }
+
+        this.curr_code = Stretch.INVALID_CODE;
+        return true;
+    }
+
+    /**
+     * outputCode(code)
+     *
+     * Output the string represented by a code into dst at dst_pos.
+     * Returns OK on success, and also updates first_byte and len with the
+     * first byte and length of the output string, respectively.
+     *
+     * @this {Stretch}
+     * @param {number} prev_code
+     * @returns {boolean}
+     */
+    outputCode(prev_code)
+    {
+        let code = this.curr_code;
+        assert(code <= Stretch.MAX_CODE && code != Stretch.CONTROL_CODE);
+        assert(this.dst_pos < this.dst.length);
+
+        if (code <= 0xff) {
+            /*
+             * Output literal byte
+             */
+            assert(code >= 0);
+            this.first_byte = code;
+            this.len = 1;
+            this.writeOutput(code, false);
+            return Stretch.OK;
+        }
+        if (this.codetab[code].prefix_code == Stretch.INVALID_CODE || this.codetab[code].prefix_code == code) {
+            /*
+             * Reject invalid codes. Self-referential codes may exist in the table but cannot be used.
+             */
+            return Stretch.ERR;
+        }
+        if (this.codetab[code].len != Stretch.UNKNOWN_LEN) {
+            /*
+             * Output string with known length (the common case).
+             */
+            if (this.dst.length - this.dst_pos < this.codetab[code].len) {
+                return Stretch.FULL;
+            }
+            this.copyBytes(this.dst_pos, this.codetab[code].last_dst_pos, this.codetab[code].len);
+            this.first_byte = this.dst[this.dst_pos];
+            this.len = this.codetab[code].len;
+            return Stretch.OK;
+        }
+        /*
+         * Output a string of unknown length. This happens when the prefix was invalid
+         * (due to partial clearing) when the code was inserted into the table. The prefix
+         * can then become valid when it's added to the table at a later point.
+         */
+        assert(this.codetab[code].len == Stretch.UNKNOWN_LEN);
+        let /* uint16_t */ prefix_code = this.codetab[code].prefix_code;
+        assert(prefix_code > Stretch.CONTROL_CODE);
+
+        if (prefix_code == this.getCodeQueueNext()) {
+            /*
+             * The prefix code hasn't been added yet, but we were just about to: the KwKwK case.
+             * Add the previous string extended with its first byte.
+             */
+            assert(this.codetab[prev_code].prefix_code != Stretch.INVALID_CODE);
+            this.updateCodeTab(prefix_code, prev_code);
+            this.writeOutput(this.first_byte, false);
+        }
+        else if (this.codetab[prefix_code].prefix_code == Stretch.INVALID_CODE) {
+            /*
+             * The prefix code is still invalid.
+             */
+            return Stretch.ERR;
+        }
+        /*
+         * Output the prefix string, then the extension byte.
+         */
+        this.len = this.codetab[prefix_code].len + 1;
+        if (this.dst.length - this.dst_pos < this.len) {
+            return Stretch.FULL;
+        }
+        this.copyBytes(this.dst_pos, this.codetab[prefix_code].last_dst_pos, this.codetab[prefix_code].len);
+        this.writeByte(this.codetab[code].ext_byte, this.dst_pos + this.len - 1);
+        this.first_byte = this.readByte(this.dst_pos);
+        /*
+         * Update the code table now that the string has a length and pos.
+         */
+        assert(prev_code != code);
+        this.codetab[code].len = this.len & 0xffff;
+        this.codetab[code].last_dst_pos = this.dst_pos;
+
+        return Stretch.OK;
+    }
+
+    /**
+     * decomp(src, dst_cap)
+     *
+     * Decompresses a SHRINK stream.
      *
      * @this {Stretch}
      * @param {Buffer} src
-     * @returns {number}
+     * @param {number} dst_cap
+     * @returns {boolean|null}
      */
-    decomp(src)
+    decomp(src, dst_cap)
     {
-        return 0;
+        this.init(src, dst_cap);
+        this.code_size = Stretch.MIN_CODE_SIZE;
+        /*
+         * Handle the first code separately since there is no previous code.
+         */
+        if (!this.readCode()) {
+            return Stretch.OK;
+        }
+        assert(this.curr_code != Stretch.CONTROL_CODE);
+        if (this.curr_code > 0xff) {
+            return Stretch.ERR;                 // the first code must be a literal
+        }
+        if (this.dst_pos == /* dst_cap */ this.dst.length) {
+            return Stretch.FULL;
+        }
+        this.first_byte = this.curr_code & 0xff;
+        this.codetab[this.curr_code].last_dst_pos = this.dst_pos;
+        this.writeOutput(this.first_byte);
+
+        let prev_code = this.curr_code;
+        while (this.readCode()) {
+            if (this.curr_code == Stretch.INVALID_CODE) {
+                return Stretch.ERR;
+            }
+            if (this.dst_pos == /* dst_cap */ this.dst.length) {
+                return Stretch.FULL;
+            }
+            /*
+             * Handle KwKwK: next code used before being added.
+             */
+            if (this.curr_code == this.getCodeQueueNext()) {
+                if (this.codetab[prev_code].prefix_code == Stretch.INVALID_CODE) {
+                    /*
+                     * The previous code is no longer valid.
+                     */
+                    return Stretch.ERR;
+                }
+                /*
+                 * Extend the previous code with its first byte.
+                 */
+                assert(this.curr_code != prev_code);
+                this.updateCodeTab(this.curr_code, prev_code);
+                assert(this.dst_pos < /* dst_cap */ this.dst.length);
+                this.writeOutput(this.first_byte, false);
+            }
+            /*
+             * Output the string represented by the current code.
+             */
+            let s = this.outputCode(prev_code);
+            if (s !== Stretch.OK) {
+                return s;
+            }
+            /*
+             * Verify that the output matches walking the prefixes.
+             */
+            let c = this.curr_code;
+            for (let i = 0; i < this.len; i++) {
+                assert(this.codetab[c].len == this.len - i);
+                assert(this.codetab[c].ext_byte == this.dst[this.dst_pos + this.len - i - 1]);
+                c = this.codetab[c].prefix_code;
+            }
+            /*
+             * Add a new code to the string table if there's room.  The string is the
+             * previous code's string extended with the first byte of the current code's string.
+             */
+            let new_code = this.removeCodeQueueNext();
+            if (new_code != Stretch.INVALID_CODE) {
+                assert(this.codetab[prev_code].last_dst_pos < this.dst_pos);
+                this.updateCodeTab(new_code, prev_code);
+                if (this.codetab[prev_code].prefix_code == Stretch.INVALID_CODE) {
+                    /*
+                     * prev_code was invalidated in a partial clearing.  Until that code is re-used,
+                     * the string represented by new_code is indeterminate.
+                     */
+                    this.codetab[new_code].len = Stretch.UNKNOWN_LEN;
+                }
+                /*
+                 * If prev_code was invalidated in a partial clearing, it's possible that new_code == prev_code,
+                 * in which case it will never be used or cleared.
+                 */
+            }
+            this.codetab[this.curr_code].last_dst_pos = this.dst_pos;
+            this.dst_pos += this.len;
+            prev_code = this.curr_code;
+        }
+        this.truncateOutput();
+        return Stretch.OK;
     }
 }
 
@@ -617,15 +1046,15 @@ class Explode
     }
 
     /**
-     * readOutput(off)
+     * readByte(off)
      *
-     * Reads from the output buffer.
+     * Reads a byte from the output buffer.
      *
      * @this {Explode}
      * @param {number} off
      * @returns {number}
      */
-    readOutput(off)
+    readByte(off)
     {
         return this.dst.readUInt8(off);
     }
@@ -646,6 +1075,8 @@ class Explode
     /**
      * decomp(src, dst_len, large_wnd, lit_tree, pk101_bug_compat)
      *
+     * Decompresses an IMPLODE stream.
+     *
      * @this {Explode}
      * @param {Buffer} src
      * @param {number} dst_len
@@ -659,11 +1090,11 @@ class Explode
         this.init(src, dst_len);
 
         if (lit_tree) {
-            if (!this.read_huffman_code(256, this.lit_decoder)) {
+            if (!this.readHuffmanCode(256, this.lit_decoder)) {
                 return null;
             }
         }
-        if (!this.read_huffman_code(64, this.len_decoder) || !this.read_huffman_code(64, this.dist_decoder)) {
+        if (!this.readHuffmanCode(64, this.len_decoder) || !this.readHuffmanCode(64, this.dist_decoder)) {
             return null;
         }
 
@@ -671,10 +1102,10 @@ class Explode
         let min_len = (pk101_bug_compat? (large_wnd? 3 : 2) : (lit_tree? 3 : 2));
 
         while (this.dst_pos < dst_len) {
-
             let bits = this.bs.bits();
-
-            /* Literal */
+            /*
+             * Literal
+             */
             if (BitStream.lsb(bits, 1) == 0x1) {
                 bits >>>= 1;
                 if (lit_tree) {
@@ -693,13 +1124,15 @@ class Explode
                 this.writeOutput(sym);
                 continue;
             }
-
-            /* Backref */
+            /*
+             * Backref
+             */
             assert(BitStream.lsb(bits, 1) == 0x0);
             bits >>>= 1;
             let used_tot = 1;
-
-            /* Read the low dist bits */
+            /*
+             * Read the low dist bits
+             */
             if (large_wnd) {
                 dist = BitStream.lsb(bits, 7);
                 bits >>>= 7;
@@ -709,52 +1142,54 @@ class Explode
                 bits >>>= 6;
                 used_tot += 6;
             }
-
-            /* Read the Huffman-encoded high dist bits */
+            /*
+             * Read the Huffman-encoded high dist bits
+             */
             ({ sym, used } = this.dist_decoder.decode(~bits));
             assert(sym >= 0, `huffman dist decode unsuccessful (${sym})`);
             used_tot += used;
             bits >>>= used;
             dist |= sym << (large_wnd ? 7 : 6);
             dist += 1;
-
-            /* Read the Huffman-encoded len */
+            /*
+             * Read the Huffman-encoded len
+             */
             ({ sym, used } = this.len_decoder.decode(~bits));
             assert(sym >= 0, `huffman len decode unsuccessful (${sym})`);
             used_tot += used;
             bits >>>= used;
             len = (sym + min_len);
-
+            /*
+             * Read an extra len byte?
+             */
             if (sym == 63) {
-                /* Read an extra len byte */
                 len += BitStream.lsb(bits, 8);
                 used_tot += 8;
                 bits >>>= 8;                    // TODO: unnecessary?
             }
-
             assert(used_tot <= BitStream.MIN_BITS);
             if (!this.bs.advance(used_tot)) {
                 return null;
             }
-
             if (len > dst_len - this.dst_pos) {
                 return null;                    // not enough room
             }
-
-            /* Copy, handling overlap and implicit zeros */
+            /*
+             * Copy, handling overlap and implicit zeros
+             */
             for (let i = 0; i < len; i++) {
                 if (dist > this.dst_pos) {
                     this.writeOutput(0);
                     continue;
                 }
-                this.writeOutput(this.readOutput(this.dst_pos - dist));
+                this.writeOutput(this.readByte(this.dst_pos - dist));
             }
         }
         return this.dst;
     }
 
     /**
-     * read_huffman_code(num_lens, decoder)
+     * readHuffmanCode(num_lens, decoder)
      *
      * Initialize Huffman decoder with num_lens codeword lengths.
      * Returns false if the input is invalid.
@@ -763,13 +1198,14 @@ class Explode
      * @param {number} num_lens
      * @param {HuffmanDecoder} decoder
      */
-    read_huffman_code(num_lens, decoder)
+    readHuffmanCode(num_lens, decoder)
     {
         let lens = new Array(256);
         let len_count = new Array(17).fill(0);
         assert(num_lens <= lens.length);
-
-        /* Number of bytes representing the Huffman code */
+        /*
+         * Number of bytes representing the Huffman code
+         */
         let byte = this.bs.bits(8, true);
         let num_bytes = byte + 1;
 
@@ -792,13 +1228,13 @@ class Explode
                 lens[codeword_idx++] = codeword_len;
             }
         }
-
         assert(codeword_idx <= num_lens);
         if (codeword_idx < num_lens) {
             return false;                               // too few codeword lengths
         }
-
-        /* Check that the Huffman tree is full */
+        /*
+         * Check that the Huffman tree is full
+         */
         let avail_codewords = 1;
         for (let i = 1; i <= 16; i++) {
             assert(avail_codewords >= 0);
@@ -811,7 +1247,6 @@ class Explode
         if (avail_codewords != 0) {
             return false;                               // not all codewords were used
         }
-
         let ok = decoder.init(lens, num_lens);
         assert(ok);
         return true;
@@ -968,23 +1403,29 @@ class Blast
         let /* byte * */ from, to;      // copy pointers (indexes)
 
         this.init(src);
-
-        /* read header */
+        /*
+         * Read header
+         */
         lit = this.bits(8);
         if (lit > 1) return -1;
         dict = this.bits(8);
         if (dict < 4 || dict > 6) return -2;
-
-        /* decode literals and length/distance pairs */
+        /*
+         * Decode literals and length/distance pairs
+         */
         do {
             if (this.bits(1)) {
-                /* get length */
+                /*
+                 * Get length
+                 */
                 symbol = this.decode(Blast.lencode);
                 len = Blast.base[symbol] + this.bits(Blast.extra[symbol]);
                 if (len == 519) {
                     break;              // end code
                 }
-                /* get distance */
+                /*
+                 * Get distance
+                 */
                 symbol = len == 2? 2 : dict;
                 dist = this.decode(Blast.distcode) << symbol;
                 dist += this.bits(symbol);
@@ -992,7 +1433,9 @@ class Blast
                 if (this.first && dist > this.next) {
                     return -3;          // distance too far back
                 }
-                /* copy length bytes from distance bytes back */
+                /*
+                 * Copy length bytes from distance bytes back
+                 */
                 do {
                     to = this.next;
                     from = to - dist;
@@ -1015,7 +1458,9 @@ class Blast
                 } while (len != 0);
             }
             else {
-                /* get literal and write it */
+                /*
+                 * Get literal and write it
+                 */
                 symbol = lit? this.decode(Blast.litcode) : this.bits(8);
                 this.out[this.next++] = symbol;
                 if (this.next == Blast.MAXWIN) {
@@ -1024,8 +1469,9 @@ class Blast
                 }
             }
         } while (true);
-
-        /* write any leftover output */
+        /*
+         * Write any leftover output
+         */
         if (this.next) {
             this.flush(this.next);
         }
@@ -1139,23 +1585,31 @@ class Blast
     {
         let /* int */ val;          // bit accumulator
 
-        /* load at least need bits into val */
+        /*
+         * Load at least need bits into val
+         */
         val = this.bitbuf;
         while (this.bitcnt < need) {
             if (this.left == 0) {
                 throw new Error("Blast.bits(): out of input");
             }
-            /* load eight more bits */
+            /*
+             * Load eight more bits
+             */
             val |= this.src[this.in++] << this.bitcnt;
             this.left--;
             this.bitcnt += 8;
         }
 
-        /* drop need bits and update buffer, always zero to seven bits left */
+        /*
+         * Drop need bits and update buffer, always zero to seven bits left
+         */
         this.bitbuf = val >> need;
         this.bitcnt -= need;
 
-        /* return need bits, zeroing the bits above that */
+        /*
+         * Return need bits, zeroing the bits above that
+         */
         return val & ((1 << need) - 1);
     }
 
@@ -1203,8 +1657,9 @@ class Blast
             symbol: new Int16Array(nSymbols),
             left: 0                             // number of possible codes left
         };
-
-        /* convert compact repeat counts into symbol bit length list */
+        /*
+         * Convert compact repeat counts into symbol bit length list
+         */
         symbol = 0;
         for (let i = 0; i < rep.length; i++) {
             len = rep[i];
@@ -1215,8 +1670,9 @@ class Blast
             } while (--huffman.left);
         }
         let n = symbol;
-
-        /* count number of codes of each length */
+        /*
+         * Count number of codes of each length
+         */
         for (len = 0; len <= nCounts; len++) {
             huffman.count[len] = 0;
         }
@@ -1226,8 +1682,9 @@ class Blast
         if (huffman.count[0] == n) {            // no codes!
             return huffman;                     // complete, but decode() will fail
         }
-
-        /* check for an over-subscribed or incomplete set of lengths */
+        /*
+         * Check for an over-subscribed or incomplete set of lengths
+         */
         huffman.left = 1;                       // one possible code of zero length
         for (len = 1; len <= nCounts; len++) {
             huffman.left <<= 1;                 // one more bit, double codes left
@@ -1236,23 +1693,24 @@ class Blast
                 return huffman;                 // over-subscribed (left > 0 means incomplete)
             }
         }
-
-        /* generate offsets into symbol table for each length for sorting */
+        /*
+         * Generate offsets into symbol table for each length for sorting
+         */
         offs[1] = 0;
         for (len = 1; len < nCounts; len++) {
             offs[len + 1] = offs[len] + huffman.count[len];
         }
-
         /*
-        * put symbols in table sorted by length, by symbol order within each length
-        */
+         * Put symbols in table sorted by length, by symbol order within each length
+         */
         for (symbol = 0; symbol < n; symbol++) {
             if (length[symbol] != 0) {
                 huffman.symbol[offs[length[symbol]]++] = symbol;
             }
         }
-
-        /* left is zero for complete set, positive for incomplete set */
+        /*
+         * Left is zero for complete set, positive for incomplete set
+         */
         return huffman;
     }
 }

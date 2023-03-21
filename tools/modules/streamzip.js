@@ -588,8 +588,7 @@ export default class StreamZip {
         if (entry.method == StreamZip.STORE) {
             dst = src;
         } else if (entry.method == StreamZip.SHRINK) {
-            dst = LegacyZip.stretchSync(src).getOutput();
-            verify = false;
+            dst = LegacyZip.stretchSync(src, entry.size).getOutput();
         } else if (entry.method >= StreamZip.REDUCE1 && entry.method <= StreamZip.REDUCE4) {
             dst = LegacyZip.expandSync(src).getOutput();
             verify = false;
