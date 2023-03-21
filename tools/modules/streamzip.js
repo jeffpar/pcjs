@@ -588,24 +588,17 @@ export default class StreamZip {
         if (entry.method == StreamZip.STORE) {
             dst = src;
         } else if (entry.method == StreamZip.SHRINK) {
-            let stretch = LegacyZip.stretchSync(src);
-            dst = stretch.dst;
+            dst = LegacyZip.stretchSync(src).getOutput();
             verify = false;
         } else if (entry.method >= StreamZip.REDUCE1 && entry.method <= StreamZip.REDUCE4) {
-            let expand = LegacyZip.expandSync(src);
-            dst = expand.dst;
+            dst = LegacyZip.expandSync(src).getOutput();
             verify = false;
         } else if (entry.method == StreamZip.IMPLODE) {
             let largeWindow = !!(entry.flags & StreamZip.FLG_COMP1);
             let literalTree = !!(entry.flags & StreamZip.FLG_COMP2);
-            let explode = LegacyZip.explodeSync(src, entry.size, largeWindow, literalTree);
-            dst = explode.dst;
-            verify = false;
+            dst = LegacyZip.explodeSync(src, entry.size, largeWindow, literalTree).getOutput();
         } else if (entry.method == StreamZip.IMPLODE_DCL) {
-            // let test = Buffer.from([0x00, 0x04, 0x82, 0x24, 0x25, 0x8f, 0x80, 0x7f]);
-            // dst = LegacyZip.blastSync(test).dst;
-            // verify = false;
-            dst = LegacyZip.blastSync(src).dst
+            dst = LegacyZip.blastSync(src).getOutput();
         } else if (entry.method == StreamZip.DEFLATE || entry.method == StreamZip.DEFLATE64) {
             dst = zlib.inflateRawSync(src);
         } else {
@@ -1025,6 +1018,7 @@ class ZipEntry
         const timebytes = StreamZip.LocalHeader.getField("time");
         const datebytes = StreamZip.LocalHeader.getField("date");
         this.time = ZipEntry.parseZipTime(timebytes, datebytes);
+        this.date = ZipEntry.parseZipTime(timebytes, datebytes, true);
         this.crc = StreamZip.LocalHeader.getField("crc") || this.crc;
         const compressedSize = StreamZip.LocalHeader.getField("compressedSize");
         if (compressedSize && compressedSize !== StreamZip.EF_ZIP64_OR_32) {
@@ -1045,6 +1039,7 @@ class ZipEntry
         const timebytes = StreamZip.CentralHeader.getField("time");
         const datebytes = StreamZip.CentralHeader.getField("date");
         this.time = ZipEntry.parseZipTime(timebytes, datebytes);
+        this.date = ZipEntry.parseZipTime(timebytes, datebytes, true);
         StreamZip.CentralHeader.assignField(this, ["crc", "compressedSize", "size", "fnameLen", "extraLen", "comLen", "diskStart", "intAttr", "attr", "offset"]);
     }
 
@@ -1118,7 +1113,24 @@ class ZipEntry
         return !this.isDirectory;
     }
 
-    static parseZipTime(timebytes, datebytes)
+    /**
+     * parseZipTime(timebytes, datebytes, fLocal)
+     *
+     * ZIP archives contain local times, but this function treated them as UTC/GMT times,
+     * forcing callers to jump through hoops (eg, getTimezoneOffset()) to get the original time.
+     *
+     * To avoid compatibility issues, we're leaving the entry 'time' property alone and calling
+     * this a second time (with fLocal set) to return a Date object with the correct local time.
+     *
+     * This is done for consistency with other file system APIs, such as fs.stat(), which returns
+     * a file's modification time as a Date in local time.
+     *
+     * @param {number} timebytes
+     * @param {number} datebytes
+     * @param {boolean} fLocal
+     * @returns {number|Date} (milliseconds since the UNIX epoch, or a Date object if fLocal)
+     */
+    static parseZipTime(timebytes, datebytes, fLocal = false)
     {
         const timebits = ZipEntry.toBits(timebytes, 16);
         const datebits = ZipEntry.toBits(datebytes, 16);
@@ -1130,8 +1142,9 @@ class ZipEntry
             M: parseInt(datebits.slice(7, 11).join(''), 2),
             D: parseInt(datebits.slice(11, 16).join(''), 2),
         };
-        const dt_str = [mt.Y, mt.M, mt.D].join('-') + ' ' + [mt.h, mt.m, mt.s].join(':') + ' GMT+0';
-        return new Date(dt_str).getTime();
+        const dt_str = [mt.Y, mt.M, mt.D].join('-') + ' ' + [mt.h, mt.m, mt.s].join(':') + (fLocal? '' : ' GMT+0');
+        const date = new Date(dt_str);
+        return fLocal? date : date.getTime();
     }
 
     static toBits(dec, size)

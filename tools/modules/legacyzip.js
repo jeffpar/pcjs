@@ -49,26 +49,26 @@ export default class LegacyZip
     }
 
     /**
-     * explodeSync(src, uncomp_len, large_wnd, lit_tree)
+     * explodeSync(src, dst_len, large_wnd, lit_tree)
      *
-     * Decompress (explode) the data in src. The uncompressed data is uncomp_len
+     * Decompress (explode) the data in src. The uncompressed data is dst_len
      * bytes long. large_wnd is true if a large window was used for compression,
      * and lit_tree is true if literals were Huffman coded.
      *
-     * Returns an Explode object with src_used set to the number of src bytes used
-     * and dst contains the output.
+     * Returns an Explode object.  Call getRead() to get the number of source
+     * bytes read, and getOutput() to the destination data.
      *
      * @param {Buffer} src (IMPLODE data)
-     * @param {number} uncomp_len
+     * @param {number} dst_len
      * @param {boolean} large_wnd
      * @param {boolean} lit_tree
      * @returns {Explode}
      */
-    static explodeSync(src, uncomp_len, large_wnd, lit_tree)
+    static explodeSync(src, dst_len, large_wnd, lit_tree)
     {
         let explode = new Explode();
-        if (!explode.decomp(src, uncomp_len, large_wnd, lit_tree, false) || explode.src_used !== src.length) {
-            explode.decomp(src, uncomp_len, large_wnd, lit_tree, true);
+        if (!explode.decomp(src, dst_len, large_wnd, lit_tree, false) || explode.getRead() !== src.length) {
+            explode.decomp(src, dst_len, large_wnd, lit_tree, true);
         }
         return explode;
     }
@@ -82,14 +82,167 @@ export default class LegacyZip
     static blastSync(src)
     {
         let blast = new Blast();
+
+        // let test = Buffer.from([0x00, 0x04, 0x82, 0x24, 0x25, 0x8f, 0x80, 0x7f]);
+        // blast.decomp(test);
+        // dst = blast.getOutput();
+
         blast.decomp(src);
         return blast;
     }
 }
 
 /**
+ * @class BitStream
+ * @property {Buffer} src               // Source bytes
+ * @property {number} bitpos            // Bit position of the next bit to read
+ * @property {number} bitend            // Bit position of the past-the-end bit
+ */
+class BitStream
+{
+    /*
+     * The original code set MIN_BITS to (64 - 7), because it read 64 bits at a time,
+     * and if bitpos wasn't on a byte boundary, it would shift 1-7 zeros into the top
+     * of the result, and the caller would simply assert that it never used more MIN_BITS.
+     *
+     * Well, this version reads 32 bits at a time, because while there is now BigInt
+     * support in JavaScript, it's faster sticking with 32-bit values.  Unfortunately,
+     * setting MIN_BITS to (32 - 7) triggered assertions that the caller was using more
+     * than 25 bits from a single bits() call, which was risky.
+     *
+     * So now we set MIN_BITS to 32, and at the same time, whenever bitpos isn't on a
+     * byte boundary, we pad the result with more bits from stream instead of zeros;
+     * it may often be unnecessary, but since we can't predict the caller's needs,
+     * we have no choice.
+     */
+    static MIN_BITS = 32;
+
+    /**
+     * constructor(src)
+     *
+     * @this {BitStream}
+     * @param {Buffer} src
+     */
+    constructor(src)
+    {
+        this.src = src;
+        this.end = src.length;
+        this.bitpos = 0;
+        this.bitend = this.end * 8;
+    }
+
+    /**
+     * bits(lsb, fAdvance)
+     *
+     * Gets the next bits from the input stream. The number of bits returned is
+     * between MIN_BITS and 32, depending on the position in the stream, or fewer
+     * if the end of stream is reached. The upper bits are zero-padded.
+     *
+     * Calling bits(n, true) is equivalent to lsb(bits(), n) followed by advance(n).
+     *
+     * @this {BitStream}
+     * @param {number} [lsb] (optional number of least significant bits)
+     * @param {boolean} [fAdvance] (true to advance the bit position by lsb bits)
+     */
+    bits(lsb = 0, fAdvance = false)
+    {
+        let bits;
+        let next = (this.bitpos >> 3);
+        let bitoff = this.bitpos % 8;
+
+        assert(next < this.end, "bits() reading past end of stream");
+
+        let bytesAvail = this.end - next;
+        if (bytesAvail >= 4) {
+            bits = this.src.readUInt32LE(next);
+            next += 4;
+        } else {
+            bits = 0;
+            for (let i = 0; i < bytesAvail; i++) {
+                bits |= this.src.readUInt8(next++) << (i * 8);
+            }
+        }
+        if (bitoff) {
+            bits >>>= bitoff;
+            if (BitStream.MIN_BITS == 32 && next < this.end) {
+                let b = this.src.readUInt8(next) << (32 - bitoff);
+                bits |= b;
+            }
+        }
+        if (lsb) {
+            bits &= (1 << lsb) - 1;
+            if (fAdvance) this.advance(lsb);
+        }
+        return bits;
+    }
+
+    /**
+     * advance(n)
+     *
+     * Advances n bits in the BitStream.
+     *
+     * @this {BitStream}
+     * @param {number} n
+     * @returns {boolean} (true if successful, false if that many bits are not available in the stream)
+     */
+    advance(n)
+    {
+        assert(this.bitpos <= this.bitend);
+        if (this.bitend - this.bitpos < n) {
+            return false;
+        }
+        this.bitpos += n;
+        return true;
+    }
+
+    /**
+     * getRead()
+     *
+     * Returns the number of bytes read from the input stream.
+     *
+     * @this {BitStream}
+     * @returns {number}
+     */
+    getRead()
+    {
+        return BitStream.roundUp(this.bitpos, 8) >> 3;
+    }
+
+    /**
+     * lsb(bits, n)
+     *
+     * Returns the n least significant bits of bits.
+     *
+     * @param {number} bits
+     * @param {number} n
+     * @returns {number}
+     */
+    static lsb(bits, n)
+    {
+        return bits & ((1 << n) - 1);
+    }
+
+    /**
+     * roundUp(x, m)
+     *
+     * Rounds x up to the next multiple of m, which must be a power of 2.
+     *
+     * @param {number} x
+     * @param {number} m
+     * @returns {number}
+     */
+    static roundUp(x, m)
+    {
+        assert((m & (m - 1)) == 0, `${m} must be a power of two`);
+        return (x + m - 1) & (-m);              // Hacker's Delight (2nd), 3-1.
+    }
+}
+
+/**
  * @typedef {Object} HuffmanLookup
- * @p
+ * @property {number} sym
+ * @property {number} len
+ *
  * @class HuffmanDecoder
  * @property {Array.<HuffmanLookup>} table
  */
@@ -99,6 +252,11 @@ class HuffmanDecoder
     static MAX_HUFFMAN_BITS = 16;               // Implode uses max 16-bit codewords
     static HUFFMAN_LOOKUP_TABLE_BITS = 8;       // Seems a good trade-off
 
+    /**
+     * constructor()
+     *
+     * @this {HuffmanDecoder}
+     */
     constructor()
     {
         /*
@@ -120,13 +278,14 @@ class HuffmanDecoder
     /**
      * init(lengths, n)
      *
+     * @this {HuffmanDecoder}
      * @param {Array.<number>} lengths
      * @param {number} n
      * @returns {boolean}
      */
     init(lengths, n)
     {
-        let /* uint16_t */ count = new Array(HuffmanDecoder.MAX_HUFFMAN_BITS + 1);
+        let /* uint16_t */ count = new Array(HuffmanDecoder.MAX_HUFFMAN_BITS + 1).fill(0);
         let /* uint16_t */ code = new Array(HuffmanDecoder.MAX_HUFFMAN_BITS + 1);
         let /* uint16_t */ sym_idx = new Array(HuffmanDecoder.MAX_HUFFMAN_BITS + 1);
 
@@ -146,7 +305,7 @@ class HuffmanDecoder
             assert(lengths[i] <= HuffmanDecoder.MAX_HUFFMAN_BITS);
             count[lengths[i]]++;
         }
-        count[0] = 0;  /* Ignore zero-length codewords */
+        count[0] = 0;           // ignore zero-length codewords
 
         /* Compute sentinel_bits and offset_first_sym_idx for each length */
         code[0] = 0;
@@ -166,7 +325,7 @@ class HuffmanDecoder
             assert(this.sentinel_bits[l] >= code[l], "overflow");
 
             sym_idx[l] = sym_idx[l - 1] + count[l - 1];
-            this.offset_first_sym_idx[l] = sym_idx[l] - code[l];
+            this.offset_first_sym_idx[l] = (sym_idx[l] - code[l]) & 0xffff;
         }
 
         /* Build mapping from index to symbol and populate the lookup table */
@@ -178,7 +337,7 @@ class HuffmanDecoder
             sym_idx[l]++;
 
             if (l <= HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS) {
-                this.table_insert(i, l, code[l]);
+                this.insert(i, l, code[l]);
                 code[l]++;
             }
         }
@@ -186,13 +345,14 @@ class HuffmanDecoder
     }
 
     /**
-     * table_insert(sym, len, codeword)
+     * insert(sym, len, codeword)
      *
+     * @this {HuffmanDecoder}
      * @param {number} sym
      * @param {number} len
      * @param {number} codeword
      */
-    table_insert(/* size_t */ sym, /* int */ len, /* uint16_t */ codeword)
+    insert(/* size_t */ sym, /* int */ len, /* uint16_t */ codeword)
     {
         assert(len <= HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
 
@@ -201,11 +361,48 @@ class HuffmanDecoder
 
         /* Pad the pad_len upper bits with all bit combinations */
         for (let padding = 0; padding < (1 << pad_len); padding++) {
-                let index = (codeword | (padding << len)) & 0xffff;
-                this.table[index].sym = sym & 0xffff;
-                this.table[index].len = len & 0xffff;
-                assert(this.table[index].sym == sym && this.table[index].len == len, "bitfield overflow");
+            let index = (codeword | (padding << len)) & 0xffff;
+            this.table[index].sym = sym & 0xffff;
+            this.table[index].len = len & 0xffff;
+            assert(this.table[index].sym == sym && this.table[index].len == len, "bitfield overflow");
         }
+    }
+
+    /**
+     * decode(bits)
+     *
+     * Decode a symbol from the LSB-first zero-padded bits.
+     *
+     * Returns {sym, used}, where sym is the decoded symbol number or -1 if no
+     * symbol could be decoded, and used is the number of bits used to decode the
+     * symbol, or zero if no symbol could be decoded.
+     *
+     * @this {HuffmanDecoder}
+     * @param {number} bits
+     * @returns {Object} ({sym, used})
+     */
+    decode(bits)
+    {
+        bits &= 0xffff;
+        /* First try the lookup table */
+        let lookup_bits = BitStream.lsb(bits, HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
+        assert(lookup_bits < this.table.length);
+        if (this.table[lookup_bits].len) {
+            assert(this.table[lookup_bits].len <= HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
+            assert(this.table[lookup_bits].sym < this.num_syms);
+            return {sym: this.table[lookup_bits].sym, used: this.table[lookup_bits].len};
+        }
+        /* Then do canonical decoding with the bits in MSB-first order */
+        bits = reverse16(bits, HuffmanDecoder.MAX_HUFFMAN_BITS);
+        for (let l = HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS + 1; l <= HuffmanDecoder.MAX_HUFFMAN_BITS; l++) {
+            if (bits < this.sentinel_bits[l]) {
+                bits >>= HuffmanDecoder.MAX_HUFFMAN_BITS - l;
+                let sym_idx = (this.offset_first_sym_idx[l] + bits) & 0xffff;
+                assert(sym_idx < this.num_syms);
+                return {sym: this.syms[sym_idx], used: l};
+            }
+        }
+        return {sym: -1, used: 0};
     }
 }
 
@@ -231,6 +428,46 @@ class Stretch
     }
 
     /**
+     * init(src, dst_len)
+     *
+     * Initialize buffers.
+     *
+     * @this {Stretch}
+     * @param {Buffer} src
+     * @param {number} dst_len
+     */
+    init(src, dst_len)
+    {
+        this.bs = new BitStream(src);
+        this.dst = Buffer.alloc(dst_len);
+        this.dst_pos = 0;
+    }
+
+    /**
+     * getRead()
+     *
+     * @this {Stretch}
+     * @returns {number}
+     */
+    getRead()
+    {
+        return this.bs.getRead();
+    }
+
+    /**
+     * getOutput()
+     *
+     * Get the output buffer.
+     *
+     * @this {Stretch}
+     * @returns {Buffer}
+     */
+    getOutput()
+    {
+        return this.dst;
+    }
+
+    /**
      * decomp(src)
      *
      * @this {Stretch}
@@ -239,8 +476,6 @@ class Stretch
      */
     decomp(src)
     {
-        this.src = src;
-        this.dst = src;    // for now
         return 0;
     }
 }
@@ -261,7 +496,46 @@ class Expand
      */
     constructor()
     {
-        this.src = this.dst = null;
+    }
+
+    /**
+     * init(src, dst_len)
+     *
+     * Initialize buffers.
+     *
+     * @this {Expand}
+     * @param {Buffer} src
+     * @param {number} dst_len
+     */
+    init(src, dst_len)
+    {
+        this.bs = new BitStream(src);
+        this.dst = Buffer.alloc(dst_len);
+        this.dst_pos = 0;
+    }
+
+    /**
+     * getRead()
+     *
+     * @this {Expand}
+     * @returns {number}
+     */
+    getRead()
+    {
+        return this.bs.getRead();
+    }
+
+    /**
+     * getOutput()
+     *
+     * Get the output buffer.
+     *
+     * @this {Expand}
+     * @returns {Buffer}
+     */
+    getOutput()
+    {
+        return this.dst;
     }
 
     /**
@@ -273,21 +547,21 @@ class Expand
      */
     decomp(src)
     {
-        this.src = src;
-        this.dst = src;    // for now
         return 0;
     }
 }
 
 /**
  * @class Explode
- * @property {Buffer} src
- * @property {Buffer} dst
  *
  * Explode is used to decompress IMPLODE streams.
  */
 class Explode
 {
+    static OK = true;
+    static ERR = false;
+    static OUTBUF = 4096;
+
     /**
      * constructor()
      *
@@ -295,27 +569,250 @@ class Explode
      */
     constructor()
     {
-        this.src = this.dst = null;
     }
 
     /**
-     * decomp(src, uncomp_len, large_wnd, lit_tree, pk101_bug_compat)
+     * init(src, dst_len)
+     *
+     * Initialize buffers and allocate the Huffman decoders.
      *
      * @this {Explode}
      * @param {Buffer} src
-     * @param {number} uncomp_len
+     * @param {number} dst_len
+     */
+    init(src, dst_len)
+    {
+        this.bs = new BitStream(src);
+        this.dst = Buffer.alloc(dst_len);
+        this.dst_pos = 0;
+        this.lit_decoder = new HuffmanDecoder();
+        this.len_decoder = new HuffmanDecoder();
+        this.dist_decoder = new HuffmanDecoder();
+    }
+
+    /**
+     * getRead()
+     *
+     * @this {Explode}
+     * @returns {number}
+     */
+    getRead()
+    {
+        return this.bs.getRead();
+    }
+
+    /**
+     * getOutput()
+     *
+     * Get the output buffer.
+     *
+     * @this {Explode}
+     * @returns {Buffer}
+     */
+    getOutput()
+    {
+        return this.dst;
+    }
+
+    /**
+     * readOutput(off)
+     *
+     * Read from the output buffer.
+     *
+     * @this {Explode}
+     * @param {number} off
+     * @returns {number}
+     */
+    readOutput(off)
+    {
+        return this.dst.readUInt8(off);
+    }
+
+    /**
+     * writeOutput(b)
+     *
+     * Append to the output buffer.
+     *
+     * @this {Explode}
+     * @param {number} b
+     */
+    writeOutput(b)
+    {
+        this.dst.writeUInt8(b, this.dst_pos++);
+    }
+
+    /**
+     * decomp(src, dst_len, large_wnd, lit_tree, pk101_bug_compat)
+     *
+     * @this {Explode}
+     * @param {Buffer} src
+     * @param {number} dst_len
      * @param {boolean} large_wnd
      * @param {boolean} lit_tree
      * @param {boolean} pk101_bug_compat (true to emulate PKZIP 1.01 bug)
-     * @returns {number}
+     * @returns {Buffer}
      */
-    decomp(src, uncomp_len, large_wnd, lit_tree, pk101_bug_compat)
+    decomp(src, dst_len, large_wnd, lit_tree, pk101_bug_compat)
     {
-        this.src = src;
-        this.src_used = 0;
-        this.uncomp_len = uncomp_len;
-        this.dst = src;   // for now
-        return 0;
+        this.init(src, dst_len);
+
+        if (lit_tree) {
+            if (!this.read_huffman_code(256, this.lit_decoder)) {
+                return null;
+            }
+        }
+        if (!this.read_huffman_code(64, this.len_decoder) || !this.read_huffman_code(64, this.dist_decoder)) {
+            return null;
+        }
+
+        let sym, used, dist, len;
+        let min_len = (pk101_bug_compat? (large_wnd? 3 : 2) : (lit_tree? 3 : 2));
+
+        while (this.dst_pos < dst_len) {
+
+            let bits = this.bs.bits();
+
+            /* Literal */
+            if (BitStream.lsb(bits, 1) == 0x1) {
+                bits >>>= 1;
+                if (lit_tree) {
+                    ({ sym, used } = this.lit_decoder.decode(~bits));
+                    assert(sym >= 0, `huffman lit decode unsuccessful (${sym})`);
+                    if (!this.bs.advance(1 + used)) {
+                        return null;
+                    }
+                } else {
+                    sym = BitStream.lsb(bits, 8);
+                    if (!this.bs.advance(1 + 8)) {
+                        return null;
+                    }
+                }
+                assert(sym >= 0 && sym <= 0xff);
+                this.writeOutput(sym);
+                continue;
+            }
+
+            /* Backref */
+            assert(BitStream.lsb(bits, 1) == 0x0);
+            bits >>>= 1;
+            let used_tot = 1;
+
+            /* Read the low dist bits */
+            if (large_wnd) {
+                dist = BitStream.lsb(bits, 7);
+                bits >>>= 7;
+                used_tot += 7;
+            } else {
+                dist = BitStream.lsb(bits, 6);
+                bits >>>= 6;
+                used_tot += 6;
+            }
+
+            /* Read the Huffman-encoded high dist bits */
+            ({ sym, used } = this.dist_decoder.decode(~bits));
+            assert(sym >= 0, `huffman dist decode unsuccessful (${sym})`);
+            used_tot += used;
+            bits >>>= used;
+            dist |= sym << (large_wnd ? 7 : 6);
+            dist += 1;
+
+            /* Read the Huffman-encoded len */
+            ({ sym, used } = this.len_decoder.decode(~bits));
+            assert(sym >= 0, `huffman len decode unsuccessful (${sym})`);
+            used_tot += used;
+            bits >>>= used;
+            len = (sym + min_len);
+
+            if (sym == 63) {
+                /* Read an extra len byte */
+                len += BitStream.lsb(bits, 8);
+                used_tot += 8;
+                bits >>>= 8;                    // TODO: unnecessary?
+            }
+
+            assert(used_tot <= BitStream.MIN_BITS);
+            if (!this.bs.advance(used_tot)) {
+                return null;
+            }
+
+            if (len > dst_len - this.dst_pos) {
+                return null;                    // not enough room
+            }
+
+            /* Copy, handling overlap and implicit zeros */
+            for (let i = 0; i < len; i++) {
+                if (dist > this.dst_pos) {
+                    this.writeOutput(0);
+                    continue;
+                }
+                this.writeOutput(this.readOutput(this.dst_pos - dist));
+            }
+        }
+        return this.dst;
+    }
+
+    /**
+     * read_huffman_code(num_lens, decoder)
+     *
+     * Initialize Huffman decoder with num_lens codeword lengths.
+     * Returns false if the input is invalid.
+     *
+     * @this {Explode}
+     * @param {number} num_lens
+     * @param {HuffmanDecoder} decoder
+     */
+    read_huffman_code(num_lens, decoder)
+    {
+        let lens = new Array(256);
+        let len_count = new Array(17).fill(0);
+        assert(num_lens <= lens.length);
+
+        /* Number of bytes representing the Huffman code */
+        let byte = this.bs.bits(8, true);
+        let num_bytes = byte + 1;
+
+        let codeword_idx = 0;
+        for (let byte_idx = 0; byte_idx < num_bytes; byte_idx++) {
+            byte = this.bs.bits(8, true);
+
+            let codeword_len = (byte & 0xf) + 1;        // low four bits plus one
+            let run_length   = (byte >> 4)  + 1;        // high four bits plus one
+
+            assert(codeword_len >= 1 && codeword_len <= 16);
+            assert(codeword_len < len_count.length);
+            len_count[codeword_len] += run_length;
+
+            if (codeword_idx + run_length > num_lens) {
+                return false;                           // too many codeword lengths
+            }
+            for (let i = 0; i < run_length; i++) {
+                assert(codeword_idx < num_lens);
+                lens[codeword_idx++] = codeword_len;
+            }
+        }
+
+        assert(codeword_idx <= num_lens);
+        if (codeword_idx < num_lens) {
+            return false;                               // too few codeword lengths
+        }
+
+        /* Check that the Huffman tree is full */
+        let avail_codewords = 1;
+        for (let i = 1; i <= 16; i++) {
+            assert(avail_codewords >= 0);
+            avail_codewords *= 2;
+            avail_codewords -= len_count[i];
+            if (avail_codewords < 0) {
+                return false;                           // higher count than available codewords
+            }
+        }
+        if (avail_codewords != 0) {
+            return false;                               // not all codewords were used
+        }
+
+        let ok = decoder.init(lens, num_lens);
+        assert(ok);
+        return true;
     }
 }
 
@@ -387,6 +884,37 @@ class Blast
     }
 
     /**
+     * init(src)
+     *
+     * Initialize buffers.
+     *
+     * @this {Explode}
+     * @param {Buffer} src
+     */
+    init(src)
+    {
+        this.src = src;
+        this.left = src.length;
+        this.in = this.bitbuf = this.bitcnt = 0;
+        this.dst = Buffer.alloc(0);
+        this.next = 0;
+        this.first = true;
+    }
+
+    /**
+     * getOutput()
+     *
+     * Get the output buffer.
+     *
+     * @this {Blast}
+     * @returns {Buffer}
+     */
+    getOutput()
+    {
+        return this.dst;
+    }
+
+    /**
      * decomp()
      *
      * Decode "implode" compression stream
@@ -437,12 +965,7 @@ class Blast
         let /* int */ copy;             // copy counter
         let /* byte * */ from, to;      // copy pointers (indexes)
 
-        this.src = src;
-        this.left = src.length;
-        this.in = this.bitbuf = this.bitcnt = 0;
-        this.dst = Buffer.alloc(0);
-        this.next = 0;
-        this.first = true;
+        this.init(src);
 
         /* read header */
         lit = this.bits(8);
@@ -579,7 +1102,7 @@ class Blast
     /**
      * flush(length)
      *
-     * Flush the output array (up to length bytes) to the output buffer.
+     * Flush the output buffer (up to length bytes) to the destination buffer.
      *
      * @this {Blast}
      * @param {number} length

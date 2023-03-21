@@ -574,8 +574,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--dir=tmp/test",
-        "--output=tmp/test.json",
+        "--dir=tmp/posts",
+        "--output=tmp/posts.json",
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}",

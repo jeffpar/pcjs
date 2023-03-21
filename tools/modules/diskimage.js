@@ -1210,8 +1210,19 @@ function readZIPFiles(sZIP, sLabel, done)
         let aDirectories = [];
         for (let entry of zip.entries()) {
             let file = {path: entry.name, name: path.basename(entry.name)};
-            let date = new Date(entry.time);
-            file.date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+            //
+            // The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
+            // because file times stored in a ZIP file are *local* times.
+            //
+            // So I've updated StreamZip to include the file's local time as a Date object
+            // ('date') in the entry object.  If it's not available (eg, we're using an older
+            // version of StreamZip), then we'll fall back to our 'time' field work-around.
+            //
+            file.date = entry.date;
+            if (!file.date) {
+                let date = new Date(entry.time);
+                file.date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+            }
             if (entry.isDirectory) {
                 file.attr = DiskInfo.ATTR.SUBDIR;
                 file.size = -1;
@@ -1226,7 +1237,7 @@ function readZIPFiles(sZIP, sLabel, done)
                     printError(err);
                     break;
                 }
-                data = new DataBuffer(data);
+                data = new DataBuffer(data || 0);
                 file.attr = DiskInfo.ATTR.ARCHIVE;
                 file.size = data.length;
                 file.data = data;
