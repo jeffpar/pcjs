@@ -55,7 +55,7 @@ export default class LegacyZip
      * bytes long. large_wnd is true if a large window was used for compression,
      * and lit_tree is true if literals were Huffman coded.
      *
-     * Returns an Explode object.  Call getRead() to get the number of source
+     * Returns an Explode object.  Call getBytesRead() to get the number of source
      * bytes read, and getOutput() to the destination data.
      *
      * @param {Buffer} src (IMPLODE data)
@@ -67,7 +67,7 @@ export default class LegacyZip
     static explodeSync(src, dst_len, large_wnd, lit_tree)
     {
         let explode = new Explode();
-        if (!explode.decomp(src, dst_len, large_wnd, lit_tree, false) || explode.getRead() !== src.length) {
+        if (!explode.decomp(src, dst_len, large_wnd, lit_tree, false) || explode.getBytesRead() !== src.length) {
             explode.decomp(src, dst_len, large_wnd, lit_tree, true);
         }
         return explode;
@@ -85,7 +85,6 @@ export default class LegacyZip
 
         // let test = Buffer.from([0x00, 0x04, 0x82, 0x24, 0x25, 0x8f, 0x80, 0x7f]);
         // blast.decomp(test);
-        // dst = blast.getOutput();
 
         blast.decomp(src);
         return blast;
@@ -95,14 +94,14 @@ export default class LegacyZip
 /**
  * @class BitStream
  * @property {Buffer} src               // Source bytes
- * @property {number} bitpos            // Bit position of the next bit to read
- * @property {number} bitend            // Bit position of the past-the-end bit
+ * @property {number} bit_pos           // Bit position of the next bit to read
+ * @property {number} bit_end           // Bit position of the past-the-end bit
  */
 class BitStream
 {
     /*
      * The original code set MIN_BITS to (64 - 7), because it read 64 bits at a time,
-     * and if bitpos wasn't on a byte boundary, it would shift 1-7 zeros into the top
+     * and if bit_pos wasn't on a byte boundary, it would shift 1-7 zeros into the top
      * of the result, and the caller would simply assert that it never used more MIN_BITS.
      *
      * Well, this version reads 32 bits at a time, because while there is now BigInt
@@ -110,7 +109,7 @@ class BitStream
      * setting MIN_BITS to (32 - 7) triggered assertions that the caller was using more
      * than 25 bits from a single bits() call, which was risky.
      *
-     * So now we set MIN_BITS to 32, and at the same time, whenever bitpos isn't on a
+     * So now we set MIN_BITS to 32, and at the same time, whenever bit_pos isn't on a
      * byte boundary, we pad the result with more bits from stream instead of zeros;
      * it may often be unnecessary, but since we can't predict the caller's needs,
      * we have no choice.
@@ -127,8 +126,8 @@ class BitStream
     {
         this.src = src;
         this.end = src.length;
-        this.bitpos = 0;
-        this.bitend = this.end * 8;
+        this.bit_pos = 0;
+        this.bit_end = this.end * 8;
     }
 
     /**
@@ -147,8 +146,8 @@ class BitStream
     bits(lsb = 0, fAdvance = false)
     {
         let bits;
-        let next = (this.bitpos >> 3);
-        let bitoff = this.bitpos % 8;
+        let next = (this.bit_pos >> 3);
+        let bit_off = this.bit_pos % 8;
 
         assert(next < this.end, "bits() reading past end of stream");
 
@@ -162,10 +161,10 @@ class BitStream
                 bits |= this.src.readUInt8(next++) << (i * 8);
             }
         }
-        if (bitoff) {
-            bits >>>= bitoff;
+        if (bit_off) {
+            bits >>>= bit_off;
             if (BitStream.MIN_BITS == 32 && next < this.end) {
-                let b = this.src.readUInt8(next) << (32 - bitoff);
+                let b = this.src.readUInt8(next) << (32 - bit_off);
                 bits |= b;
             }
         }
@@ -187,25 +186,26 @@ class BitStream
      */
     advance(n)
     {
-        assert(this.bitpos <= this.bitend);
-        if (this.bitend - this.bitpos < n) {
+        assert(this.bit_pos <= this.bit_end);
+        if (this.bit_end - this.bit_pos < n) {
             return false;
         }
-        this.bitpos += n;
+        this.bit_pos += n;
         return true;
     }
 
     /**
-     * getRead()
+     * getRead(nBits)
      *
-     * Returns the number of bytes read from the input stream.
+     * Returns the number of nBits read.
      *
      * @this {BitStream}
+     * @param {number} [nBits]
      * @returns {number}
      */
-    getRead()
+    getRead(nBits = 1)
     {
-        return BitStream.roundUp(this.bitpos, 8) >> 3;
+        return (BitStream.roundUp(this.bit_pos, nBits) / nBits);
     }
 
     /**
@@ -444,14 +444,16 @@ class Stretch
     }
 
     /**
-     * getRead()
+     * getBytesRead()
+     *
+     * Returns the number of bytes read from the BitStream.
      *
      * @this {Stretch}
      * @returns {number}
      */
-    getRead()
+    getBytesRead()
     {
-        return this.bs.getRead();
+        return this.bs.getRead(8);
     }
 
     /**
@@ -515,14 +517,16 @@ class Expand
     }
 
     /**
-     * getRead()
+     * getBytesRead()
+     *
+     * Returns the number of bytes read from the BitStream.
      *
      * @this {Expand}
      * @returns {number}
      */
-    getRead()
+    getBytesRead()
     {
-        return this.bs.getRead();
+        return this.bs.getRead(8);
     }
 
     /**
@@ -558,10 +562,6 @@ class Expand
  */
 class Explode
 {
-    static OK = true;
-    static ERR = false;
-    static OUTBUF = 4096;
-
     /**
      * constructor()
      *
@@ -574,7 +574,7 @@ class Explode
     /**
      * init(src, dst_len)
      *
-     * Initialize buffers and allocate the Huffman decoders.
+     * Initializes buffers and allocates the Huffman decoders.
      *
      * @this {Explode}
      * @param {Buffer} src
@@ -591,20 +591,22 @@ class Explode
     }
 
     /**
-     * getRead()
+     * getBytesRead()
+     *
+     * Returns the number of bytes read from the BitStream.
      *
      * @this {Explode}
      * @returns {number}
      */
-    getRead()
+    getBytesRead()
     {
-        return this.bs.getRead();
+        return this.bs.getRead(8);
     }
 
     /**
      * getOutput()
      *
-     * Get the output buffer.
+     * Gets the output buffer.
      *
      * @this {Explode}
      * @returns {Buffer}
@@ -617,7 +619,7 @@ class Explode
     /**
      * readOutput(off)
      *
-     * Read from the output buffer.
+     * Reads from the output buffer.
      *
      * @this {Explode}
      * @param {number} off
@@ -631,7 +633,7 @@ class Explode
     /**
      * writeOutput(b)
      *
-     * Append to the output buffer.
+     * Appends to the output buffer.
      *
      * @this {Explode}
      * @param {number} b
