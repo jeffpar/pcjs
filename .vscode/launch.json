@@ -608,8 +608,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--zip=/Volumes/PC_SIG_4_90/1401_500/DISK1488/DISK1488.ZIP",
-        "--output=tmp/DISK1488.json",
+        "--zip=/miscdisks/pcx86/sw/magazines/pcm/archive/PCMAG-VOL07N15/BOXES3.ZIP",
+        "--output=tmp/BOXES3.json",
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}",

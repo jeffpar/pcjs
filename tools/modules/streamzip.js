@@ -15,12 +15,13 @@ import LegacyZip from './legacyzip.js';
 
 /**
  * @typedef {Object} Config
+ * @property {string} file (file name)
  * @property {boolean} storeEntries (default is true; ie, always store entries)
  * @property {boolean} skipEntryNameValidation (default is false (ie, always validate entry names))
- * @property {string} nameEncoding (default is no TextDecoder; undocumented)
- * @property {string} file (file name; undocumented)
+ * @property {string} nameEncoding (default is "utf8" with no TextDecoder; undocumented)
  * @property {number} fd (file descriptor; undocumented)
  * @property {number} chunkSize (undocumented)
+ * @property {boolean} ignoreZipErrors (added for LegacyZip support)
  */
 
 /**
@@ -45,8 +46,7 @@ export default class StreamZip {
             LNG:        0x0400                          // UNICODE encoding
         })
         .field('method',        Structure.UINT16)       // compression method
-        .field('time',          Structure.UINT16)       // modification time
-        .field('date',          Structure.UINT16)       // modification date
+        .field('modDateTime',   Structure.UINT32)       // modification time (low) and date (high)
         .field('crc',           Structure.UINT32)       // uncompressed file CRC-32 value
         .field('compressedSize',Structure.UINT32)       // compressed size
         .field('size',          Structure.UINT32)       // uncompressed size
@@ -71,8 +71,7 @@ export default class StreamZip {
         .field('version',       Structure.UINT16)       // version needed to extract
         .field('flags',         Structure.UINT16)       // general purpose bit flag
         .field('method',        Structure.UINT16)       // compression method
-        .field('time',          Structure.UINT16)       // modification time
-        .field('date',          Structure.UINT16)       // modification date
+        .field('modDateTime',   Structure.UINT32)       // modification time (low) and date (high)
         .field('crc',           Structure.UINT32)       // uncompressed file CRC-32 value
         .field('compressedSize',Structure.UINT32)       // compressed size
         .field('size',          Structure.UINT32)       // uncompressed size
@@ -450,7 +449,7 @@ export default class StreamZip {
         try {
             while (this.op.entriesLeft > 0) {
                 if (!entry) {
-                    entry = new ZipEntry();
+                    entry = new ZipEntry(this.config.ignoreZipErrors);
                     entry.readCentralHeader(buffer, bufferPos);
                     entry.headerOffset = this.op.win.position + bufferPos;
                     this.op.entry = entry;
@@ -584,14 +583,12 @@ export default class StreamZip {
             throw err;
         }
         let dst;
-        let verify = true;
         if (entry.method == StreamZip.STORE) {
             dst = src;
         } else if (entry.method == StreamZip.SHRINK) {
             dst = LegacyZip.stretchSync(src, entry.size).getOutput();
         } else if (entry.method >= StreamZip.REDUCE1 && entry.method <= StreamZip.REDUCE4) {
             dst = LegacyZip.expandSync(src).getOutput();
-            verify = false;
         } else if (entry.method == StreamZip.IMPLODE) {
             let largeWindow = !!(entry.flags & StreamZip.FLG_COMP1);
             let literalTree = !!(entry.flags & StreamZip.FLG_COMP2);
@@ -601,11 +598,13 @@ export default class StreamZip {
         } else if (entry.method == StreamZip.DEFLATE || entry.method == StreamZip.DEFLATE64) {
             dst = zlib.inflateRawSync(src);
         } else {
-            throw new Error(entry.name + ": unsupported compression method (" + entry.method + ")");
+            entry.error("unsupported compression method (" + entry.method + ")");
         }
-        if (verify) {
+        if (!dst) {
+            entry.error("decompression failure (" + entry.method + ")");
+        } else {
             if (dst.length !== entry.size) {
-                throw new Error(entry.name + ": expected " + entry.size + " bytes, received " + dst.length + " (method " + entry.method + ")");
+                entry.error("expected " + entry.size + " bytes, received " + dst.length + " (method " + entry.method + ")");
             }
             if (this.canVerifyCRC(entry)) {
                 const verify = new CRCVerify(entry);
@@ -1009,15 +1008,31 @@ class CentralDirectoryZip64Header
 
 class ZipEntry
 {
+    constructor(ignoreZipErrors)
+    {
+        this.ignoreZipErrors = ignoreZipErrors;
+        this.errors = [];
+    }
+
+    error(msg)
+    {
+        if (this.name) msg = this.name + ': ' + msg;
+        if (!this.ignoreZipErrors) {
+            throw new Error(msg);
+        }
+        if (this.name) {
+            this.errors.push(msg);
+        }
+    }
+
     readLocalHeader(data)
     {
         StreamZip.LocalHeader.setData(data);
         StreamZip.LocalHeader.verifyField("signature", "LOCSIG");
         StreamZip.LocalHeader.assignField(this, ["version", "flags", "method"]);
-        const timebytes = StreamZip.LocalHeader.getField("time");
-        const datebytes = StreamZip.LocalHeader.getField("date");
-        this.time = ZipEntry.parseZipTime(timebytes, datebytes);
-        this.date = ZipEntry.parseZipTime(timebytes, datebytes, true);
+        const modDateTime = StreamZip.LocalHeader.getField("modDateTime");
+        this.time = this.parseZipTime(modDateTime);
+        this.date = this.parseZipTime(modDateTime, true);
         this.crc = StreamZip.LocalHeader.getField("crc") || this.crc;
         const compressedSize = StreamZip.LocalHeader.getField("compressedSize");
         if (compressedSize && compressedSize !== StreamZip.EF_ZIP64_OR_32) {
@@ -1035,10 +1050,9 @@ class ZipEntry
         StreamZip.CentralHeader.setData(data, offset);
         StreamZip.CentralHeader.verifyField("signature", "CENSIG");
         StreamZip.CentralHeader.assignField(this, ["verMade", "version", "flags", "method"]);
-        const timebytes = StreamZip.CentralHeader.getField("time");
-        const datebytes = StreamZip.CentralHeader.getField("date");
-        this.time = ZipEntry.parseZipTime(timebytes, datebytes);
-        this.date = ZipEntry.parseZipTime(timebytes, datebytes, true);
+        const modDateTime = StreamZip.CentralHeader.getField("modDateTime");
+        this.time = this.parseZipTime(modDateTime);
+        this.date = this.parseZipTime(modDateTime, true);
         StreamZip.CentralHeader.assignField(this, ["crc", "compressedSize", "size", "fnameLen", "extraLen", "comLen", "diskStart", "intAttr", "attr", "offset"]);
     }
 
@@ -1053,13 +1067,13 @@ class ZipEntry
             this.readExtra(data, offset);
             offset += this.extraLen;
         }
-        this.comment = this.comLen ? data.slice(offset, offset + this.comLen).toString() : null;
+        this.comment = this.comLen? data.slice(offset, offset + this.comLen).toString() : null;
     }
 
     validateName()
     {
         if ((/\\|^\w+:|^\/|(^|\/)\.\.(\/|$)/).test(this.name)) {
-            throw new Error('Malicious entry: ' + this.name);
+            this.error("invalid filename");
         }
     }
 
@@ -1113,48 +1127,88 @@ class ZipEntry
     }
 
     /**
-     * parseZipTime(timebytes, datebytes, fLocal)
+     * parseZipTime(modDateTime, fLocal)
      *
      * ZIP archives contain local times, but this function treated them as UTC/GMT times,
      * forcing callers to jump through hoops (eg, getTimezoneOffset()) to get the original time.
      *
-     * To avoid compatibility issues, we're leaving the entry 'time' property alone and calling
-     * this a second time (with fLocal set) to return a Date object with the correct local time.
+     * To avoid compatibility issues, we're leaving the 'time' entry property alone and calling
+     * this a second time (with fLocal set) to return a Date object with the correct local time;
+     * this will be stored in the entry as 'date'.
      *
-     * This is done for consistency with other file system APIs, such as fs.stat(), which returns
-     * a file's modification time as a Date in local time.
+     * Using a Date object makes this consistent with other file system APIs, such as fs.stat(),
+     * which returns a file's modification time as a Date, in local time.
      *
-     * @param {number} timebytes
-     * @param {number} datebytes
-     * @param {boolean} fLocal
+     * @this {ZipEntry}
+     * @param {number} modDateTime (low 16 bits contain time bits, high 16 bits contain date bits)
+     * @param {boolean} [fLocal]
      * @returns {number|Date} (milliseconds since the UNIX epoch, or a Date object if fLocal)
      */
-    static parseZipTime(timebytes, datebytes, fLocal = false)
+    parseZipTime(modDateTime, fLocal = false)
     {
-        const timebits = ZipEntry.toBits(timebytes, 16);
-        const datebits = ZipEntry.toBits(datebytes, 16);
-        const mt = {
-            h: parseInt(timebits.slice(0, 5).join(''), 2),
-            m: parseInt(timebits.slice(5, 11).join(''), 2),
-            s: parseInt(timebits.slice(11, 16).join(''), 2) * 2,
-            Y: parseInt(datebits.slice(0, 7).join(''), 2) + 1980,
-            M: parseInt(datebits.slice(7, 11).join(''), 2),
-            D: parseInt(datebits.slice(11, 16).join(''), 2),
+        let modDate = modDateTime >>> 16;
+        let modTime = modDateTime & 0xffff;
+        let monthDays = [31,28,31,30,31,30,31,31,30,31,30,31];
+        let d = {
+            y: (modDate >> 9) + 1980,
+            m: ((modDate >> 5) & 0xf) - 1,
+            d: (modDate & 0x1f),
+            h: (modTime >> 11),
+            n: (modTime >> 5) & 0x3f,
+            s: (modTime & 0x1f) << 1
         };
-        const dt_str = [mt.Y, mt.M, mt.D].join('-') + ' ' + [mt.h, mt.m, mt.s].join(':') + (fLocal? '' : ' GMT+0');
-        const date = new Date(dt_str);
-        return fLocal? date : date.getTime();
-    }
-
-    static toBits(dec, size)
-    {
-        let b = (dec >>> 0).toString(2);
-        while (b.length < size) {
-            b = '0' + b;
+        /*
+         * modDateTime validation follows (although each part of the date/time is stored
+         * in a limited number of bits, those bits can still contain out-of-bounds values).
+         */
+        let errors = 0;
+        let orig = { ...d };
+        if (d.m < 0) {
+            d.m = 0;
         }
-        return b.split('');
+        if (d.m > 11) {
+            d.m = 11;
+            errors++;
+        }
+        if (d.d < 1) {
+            d.d = 1;
+        }
+        if (d.d > 31) {
+            d.d = monthDays[d.m];
+            if (d.y % 4 == 0) d.d++;        // adequate for the time-frame of dates we're dealing with
+            errors++;
+        }
+        if (d.h > 23) {
+            d.h = 23;
+            errors++;
+        }
+        if (d.n > 59) {
+            d.n = 59;
+            errors++;
+        }
+        if (d.s > 59) {
+            d.s = 59;
+            errors++;
+        }
+        if (errors && fLocal) {
+            this.error("invalid date/time " + JSON.stringify(orig));
+        }
+        if (fLocal) {
+            return new Date(d.y, d.m, d.d, d.h, d.n, d.s);
+        }
+        return Date.UTC(d.y, d.m, d.d, d.h, d.n, d.s);
     }
 
+    /**
+     * readUInt64LE(buffer, offset)
+     *
+     * TODO: Should Zip64 support be using BigInts?  Because what this function is currently
+     * doing cannot accurately handle integer values larger than 2^53 (Number.MAX_SAFE_INTEGER).
+     *
+     * @param {Buffer} buffer
+     * @param {number} offset
+     * @returns {number}
+     */
     static readUInt64LE(buffer, offset)
     {
         return buffer.readUInt32LE(offset + 4) * 0x0000000100000000 + buffer.readUInt32LE(offset);
@@ -1382,10 +1436,10 @@ class CRCVerify
             buf.writeInt32LE(~this.state.crc & 0xffffffff, 0);
             crc = buf.readUInt32LE(0);
             if (crc !== this.entry.crc) {
-                throw new Error(this.entry.name + ": expected CRC 0x" + this.entry.crc.toString(16) + ", received 0x" + crc.toString(16));
+                this.entry.error("expected CRC 0x" + this.entry.crc.toString(16) + ", received 0x" + crc.toString(16));
             }
             if (this.state.size !== this.entry.size) {
-                throw new Error(this.entry.name + ": expected size " + this.entry.size + ", received " + this.state.size);
+                this.entry.error("expected size " + this.entry.size + ", received " + this.state.size);
             }
         }
     }

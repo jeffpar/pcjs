@@ -1040,13 +1040,13 @@ function readAll(argv)
  */
 function readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, done, sectorIDs, sectorErrors, suppData)
 {
-    let di, diskName;
-    if (fZIP || sDir.endsWith('/')) {
-        diskName = path.parse(sDir).name;
+    let di;
+    let diskName = path.basename(sDir);
+    if (sDir.endsWith('/')) {
         if (!sLabel) {
             sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
         }
-    } else {
+    } else if (!fZIP) {
         diskName = path.basename(path.dirname(sDir));
         /*
          * When we're given a list of files, we don't pick a default label; use --label if you want one.
@@ -1216,7 +1216,7 @@ function readZIPFiles(sZIP, sLabel, done)
         file: sZIP,
         storeEntries: true,
         nameEncoding: "ascii",
-        skipEntryNameValidation: true
+        ignoreZipErrors: true
     });
     zip.on('ready', () => {
         let aFileData = [];
@@ -1254,6 +1254,9 @@ function readZIPFiles(sZIP, sLabel, done)
                 file.attr = DiskInfo.ATTR.ARCHIVE;
                 file.size = data.length;
                 file.data = data;
+            }
+            for (let error of entry.errors) {
+                printf("error: %s\n", error);
             }
             let d, sDir = path.dirname(file.path) + path.sep;
             for (d = 0; d < aDirectories.length; d++) {
