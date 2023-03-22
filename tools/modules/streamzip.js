@@ -588,7 +588,7 @@ export default class StreamZip {
         } else if (entry.method == StreamZip.SHRINK) {
             dst = LegacyZip.stretchSync(src, entry.size).getOutput();
         } else if (entry.method >= StreamZip.REDUCE1 && entry.method <= StreamZip.REDUCE4) {
-            dst = LegacyZip.expandSync(src).getOutput();
+            dst = LegacyZip.expandSync(src, entry.size, entry.method - StreamZip.REDUCE1 + 1).getOutput();
         } else if (entry.method == StreamZip.IMPLODE) {
             let largeWindow = !!(entry.flags & StreamZip.FLG_COMP1);
             let literalTree = !!(entry.flags & StreamZip.FLG_COMP2);

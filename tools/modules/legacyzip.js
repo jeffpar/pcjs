@@ -23,7 +23,7 @@ const DEBUG = true;
 export default class LegacyZip
 {
     /**
-     * stretchSync(src)
+     * stretchSync(src, dst_len)
      *
      * @param {Buffer} src (SHRINK data)
      * @param {number} dst_len
@@ -37,15 +37,17 @@ export default class LegacyZip
     }
 
     /**
-     * expandSync(src)
+     * expandSync(src, dst_len, comp_factor)
      *
      * @param {Buffer} src (REDUCE data)
+     * @param {number} dst_len
+     * @param {number} comp_factor
      * @returns {Expand}
      */
-    static expandSync(src)
+    static expandSync(src, dst_len, comp_factor)
     {
         let expand = new Expand();
-        expand.decomp(src);
+        expand.decomp(src, dst_len, comp_factor);
         return expand;
     }
 
@@ -103,15 +105,15 @@ class BitStream
     /*
      * The original code set MIN_BITS to (64 - 7), because it read 64 bits at a time,
      * and if bit_pos wasn't on a byte boundary, it would shift 1-7 zeros into the top
-     * of the result, and the caller would simply assert that it never used more MIN_BITS.
+     * of the result, and the caller would assert that it never used more than MIN_BITS.
      *
      * Well, this version reads 32 bits at a time, because while there is now BigInt
      * support in JavaScript, it's faster sticking with 32-bit values.  Unfortunately,
-     * setting MIN_BITS to (32 - 7) triggered assertions that the caller was using more
-     * than 25 bits from a single bits() call, which was risky.
+     * setting MIN_BITS to (32 - 7) triggered assertions that the caller (Explode.decomp())
+     * was using more than 25 bits from a single bits() call, which was risky.
      *
      * So now we set MIN_BITS to 32, and at the same time, whenever bit_pos isn't on a
-     * byte boundary, we pad the result with more bits from stream instead of zeros;
+     * byte boundary, we pad the result with more bits from the stream instead of zeros;
      * it may often be unnecessary, but since we can't predict the caller's needs,
      * we have no choice.
      */
@@ -249,9 +251,9 @@ class BitStream
  */
 class HuffmanDecoder
 {
-    static MAX_HUFFMAN_SYMBOLS = 288;           // Deflate uses max 288 symbols
-    static MAX_HUFFMAN_BITS = 16;               // Implode uses max 16-bit codewords
-    static HUFFMAN_LOOKUP_TABLE_BITS = 8;       // Seems a good trade-off
+    static MAX_HUFFMAN_SYMBOLS = 288;           // deflate uses max 288 symbols
+    static MAX_HUFFMAN_BITS = 16;               // implode uses max 16-bit codewords
+    static HUFFMAN_LOOKUP_TABLE_BITS = 8;       // seems a good trade-off
 
     /**
      * constructor()
@@ -292,32 +294,38 @@ class HuffmanDecoder
 
         assert(n <= HuffmanDecoder.MAX_HUFFMAN_SYMBOLS);
         this.num_syms = n;
-
-        /* Zero-initialize the lookup table */
+        /*
+         * Zero-initialize the lookup table
+         */
         for (let i = 0; i < this.table.length; i++) {
             this.table[i] = {
                 sym: 0,
                 len: 0
             }
         }
-
-        /* Count the number of codewords of each length */
+        /*
+         * Count the number of codewords of each length
+         */
         for (let i = 0; i < n; i++) {
             assert(lengths[i] <= HuffmanDecoder.MAX_HUFFMAN_BITS);
             count[lengths[i]]++;
         }
         count[0] = 0;           // ignore zero-length codewords
-
-        /* Compute sentinel_bits and offset_first_sym_idx for each length */
+        /*
+         * Compute sentinel_bits and offset_first_sym_idx for each length
+         */
         code[0] = 0;
         sym_idx[0] = 0;
         for (let l = 1; l <= HuffmanDecoder.MAX_HUFFMAN_BITS; l++) {
-
-            /* First canonical codeword of this length */
+            /*
+             * First canonical codeword of this length
+             */
             code[l] = ((code[l - 1] + count[l - 1]) << 1) & 0xffff;
 
             if (count[l] != 0 && code[l] + count[l] - 1 > (1 << l) - 1) {
-                /* The last codeword is longer than l bits */
+                /*
+                 * The last codeword is longer than l bits
+                 */
                 return false;
             }
 
@@ -328,8 +336,9 @@ class HuffmanDecoder
             sym_idx[l] = sym_idx[l - 1] + count[l - 1];
             this.offset_first_sym_idx[l] = (sym_idx[l] - code[l]) & 0xffff;
         }
-
-        /* Build mapping from index to symbol and populate the lookup table */
+        /*
+         * Build mapping from index to symbol and populate the lookup table
+         */
         for (let i = 0; i < n; i++) {
             let l = lengths[i];
             if (l == 0) continue;
@@ -359,8 +368,9 @@ class HuffmanDecoder
 
         codeword = reverse16(codeword, len);    // Make it LSB-first
         let pad_len = HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS - len;
-
-        /* Pad the pad_len upper bits with all bit combinations */
+        /*
+         * Pad the pad_len upper bits with all bit combinations
+         */
         for (let padding = 0; padding < (1 << pad_len); padding++) {
             let index = (codeword | (padding << len)) & 0xffff;
             this.table[index].sym = sym & 0xffff;
@@ -382,10 +392,12 @@ class HuffmanDecoder
      * @param {number} bits
      * @returns {Object} ({sym, used})
      */
-    decode(bits)
+    decode(/* uint16_t */ bits)
     {
         bits &= 0xffff;
-        /* First try the lookup table */
+        /*
+         * First try the lookup table
+         */
         let lookup_bits = BitStream.lsb(bits, HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
         assert(lookup_bits < this.table.length);
         if (this.table[lookup_bits].len) {
@@ -393,7 +405,9 @@ class HuffmanDecoder
             assert(this.table[lookup_bits].sym < this.num_syms);
             return {sym: this.table[lookup_bits].sym, used: this.table[lookup_bits].len};
         }
-        /* Then do canonical decoding with the bits in MSB-first order */
+        /*
+         * Then do canonical decoding with the bits in MSB-first order
+         */
         bits = reverse16(bits, HuffmanDecoder.MAX_HUFFMAN_BITS);
         for (let l = HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS + 1; l <= HuffmanDecoder.MAX_HUFFMAN_BITS; l++) {
             if (bits < this.sentinel_bits[l]) {
@@ -408,15 +422,151 @@ class HuffmanDecoder
 }
 
 /**
- * @class Stretch
- * @property {Buffer} src
+ * @class Decompress
+ * @property {BitStream} bs
  * @property {Buffer} dst
+ *
+ * Decompress is the base class for Stretch, Expand, and Explode classes.
+ */
+class Decompress
+{
+    /**
+     * constructor()
+     *
+     * @this {Decompress}
+     */
+    constructor()
+    {
+    }
+
+    /**
+     * init(src, dst_len)
+     *
+     * Initialize buffers and decompression state.
+     *
+     * @this {Decompress}
+     * @param {Buffer} src
+     * @param {number} dst_len
+     */
+    init(src, dst_len)
+    {
+        this.bs = new BitStream(src);
+        this.dst = Buffer.alloc(dst_len);
+        this.dst_pos = 0;
+    }
+
+    /**
+     * getBytesRead()
+     *
+     * Returns the number of bytes read from the source BitStream.
+     *
+     * @this {Decompress}
+     * @returns {number}
+     */
+    getBytesRead()
+    {
+        return this.bs.getRead(8);
+    }
+
+    /**
+     * getOutput()
+     *
+     * Get the output buffer.
+     *
+     * @this {Decompress}
+     * @returns {Buffer}
+     */
+    getOutput()
+    {
+        return this.dst;
+    }
+
+    /**
+     * readByte(off)
+     *
+     * Reads a byte from the output buffer.
+     *
+     * @this {Decompress}
+     * @param {number} off
+     * @returns {number}
+     */
+    readByte(off)
+    {
+        return this.dst.readUInt8(off);
+    }
+
+    /**
+     * copyBytes(to, from, len)
+     *
+     * Copies len bytes to/from the output buffer.
+     *
+     * @this {Decompress}
+     * @param {number} to
+     * @param {number} from
+     * @param {number} len
+     */
+    copyBytes(to, from, len)
+    {
+        assert(len > 0 && to + len <= this.dst.length && from + len < this.dst.length);
+
+        for (let i = 0; i < len; i++) {
+            this.writeByte(this.readByte(from + i), to + i);
+        }
+    }
+
+    /**
+     * writeByte(b, off)
+     *
+     * Writes a byte to the output buffer at the specified offset.
+     *
+     * @this {Decompress}
+     * @param {number} b
+     * @param {number} [off]
+     */
+    writeByte(b, off)
+    {
+        assert(off < this.dst.length);
+        this.dst.writeUInt8(b, off);
+    }
+
+    /**
+     * writeOutput(b, fAdvance)
+     *
+     * Appends to the output buffer.
+     *
+     * @this {Decompress}
+     * @param {number} b
+     * @param {boolean} [fAdvance]
+     */
+    writeOutput(b, fAdvance = true)
+    {
+        assert(this.dst_pos < this.dst.length);
+        this.dst.writeUInt8(b, this.dst_pos);
+        if (fAdvance) this.dst_pos++;
+    }
+
+    /**
+     * truncateOutput()
+     *
+     * @this {Decompress}
+     */
+    truncateOutput()
+    {
+        assert(this.dst_pos <= this.dst.length);
+        if (this.dst_pos < this.dst.length) {
+            this.dst = this.dst.slice(0, this.dst_pos);
+        }
+    }
+}
+
+/**
+ * @class Stretch
  *
  * Stretch is used to decompress SHRINK streams.
  *
  * NOTE: Stretch is what most other implementations call "unshrink", which isn't very imaginative.
  */
-class Stretch
+class Stretch extends Decompress
 {
     static OK = true;                   // decompression successful
     static FULL = false;                // not enough room in the output buffer
@@ -447,137 +597,23 @@ class Stretch
      */
 
     /**
-     * constructor()
+     * init(src, dst_len)
      *
-     * @this {Stretch}
-     */
-    constructor()
-    {
-    }
-
-    /**
-     * init(src, dst_cap)
-     *
-     * Initialize buffers.
+     * Initialize buffers and decompression state.
      *
      * @this {Stretch}
      * @param {Buffer} src
-     * @param {number} dst_cap
+     * @param {number} dst_len
      */
-    init(src, dst_cap)
+    init(src, dst_len)
     {
-        this.bs = new BitStream(src);
-        this.dst = Buffer.alloc(dst_cap);
-        this.dst_pos = 0;
+        super.init(src, dst_len);
         this.codetab = this.allocCodeTab();
         this.codequeue = this.allocCodeQueue();
         this.code_size = 0;             // updated by readCode()
         this.curr_code = 0;             // updated by readCode()
         this.first_byte = 0;            // updated by outputCode()
         this.len = 0;                   // updated by outputCode()
-    }
-
-    /**
-     * getBytesRead()
-     *
-     * Returns the number of bytes read from the BitStream.
-     *
-     * @this {Stretch}
-     * @returns {number}
-     */
-    getBytesRead()
-    {
-        return this.bs.getRead(8);
-    }
-
-    /**
-     * getOutput()
-     *
-     * Get the output buffer.
-     *
-     * @this {Stretch}
-     * @returns {Buffer}
-     */
-    getOutput()
-    {
-        return this.dst;
-    }
-
-    /**
-     * readByte(off)
-     *
-     * Reads a byte from the output buffer.
-     *
-     * @this {Stretch}
-     * @param {number} off
-     * @returns {number}
-     */
-    readByte(off)
-    {
-        return this.dst.readUInt8(off);
-    }
-
-    /**
-     * copyBytes(to, from, len)
-     *
-     * Copies len bytes to/from the output buffer.
-     *
-     * @this {Stretch}
-     * @param {number} to
-     * @param {number} from
-     * @param {number} len
-     */
-    copyBytes(to, from, len)
-    {
-        assert(len > 0 && to + len <= this.dst.length && from + len < this.dst.length);
-
-        for (let i = 0; i < len; i++) {
-            this.writeByte(this.readByte(from + i), to + i);
-        }
-    }
-
-    /**
-     * writeByte(b, off)
-     *
-     * Writes a byte to the output buffer at the specified offset.
-     *
-     * @this {Stretch}
-     * @param {number} b
-     * @param {number} [off]
-     */
-    writeByte(b, off)
-    {
-        assert(off < this.dst.length);
-        this.dst.writeUInt8(b, off);
-    }
-
-    /**
-     * writeOutput(b, fAdvance)
-     *
-     * Appends to the output buffer.
-     *
-     * @this {Stretch}
-     * @param {number} b
-     * @param {boolean} [fAdvance]
-     */
-    writeOutput(b, fAdvance = true)
-    {
-        assert(this.dst_pos < this.dst.length);
-        this.dst.writeUInt8(b, this.dst_pos);
-        if (fAdvance) this.dst_pos++;
-    }
-
-    /**
-     * truncateOutput()
-     *
-     * @this {Stretch}
-     */
-    truncateOutput()
-    {
-        assert(this.dst_pos <= this.dst.length);
-        if (this.dst_pos < this.dst.length) {
-            this.dst = this.dst.slice(0, this.dst_pos);
-        }
     }
 
     /**
@@ -810,18 +846,18 @@ class Stretch
     }
 
     /**
-     * decomp(src, dst_cap)
+     * decomp(src, dst_len)
      *
      * Decompresses a SHRINK stream.
      *
      * @this {Stretch}
      * @param {Buffer} src
-     * @param {number} dst_cap
+     * @param {number} dst_len
      * @returns {boolean|null}
      */
-    decomp(src, dst_cap)
+    decomp(src, dst_len)
     {
-        this.init(src, dst_cap);
+        this.init(src, dst_len);
         this.code_size = Stretch.MIN_CODE_SIZE;
         /*
          * Handle the first code separately since there is no previous code.
@@ -833,7 +869,7 @@ class Stretch
         if (this.curr_code > 0xff) {
             return Stretch.ERR;                 // the first code must be a literal
         }
-        if (this.dst_pos == /* dst_cap */ this.dst.length) {
+        if (this.dst_pos == /* dst_len */ this.dst.length) {
             return Stretch.FULL;
         }
         this.first_byte = this.curr_code & 0xff;
@@ -845,7 +881,7 @@ class Stretch
             if (this.curr_code == Stretch.INVALID_CODE) {
                 return Stretch.ERR;
             }
-            if (this.dst_pos == /* dst_cap */ this.dst.length) {
+            if (this.dst_pos == /* dst_len */ this.dst.length) {
                 return Stretch.FULL;
             }
             /*
@@ -863,7 +899,7 @@ class Stretch
                  */
                 assert(this.curr_code != prev_code);
                 this.updateCodeTab(this.curr_code, prev_code);
-                assert(this.dst_pos < /* dst_cap */ this.dst.length);
+                assert(this.dst_pos < /* dst_len */ this.dst.length);
                 this.writeOutput(this.first_byte, false);
             }
             /*
@@ -918,69 +954,258 @@ class Stretch
  *
  * Expand is used to decompress REDUCE streams.
  */
-class Expand
+class Expand extends Decompress
 {
-    /**
-     * constructor()
-     *
-     * @this {Expand}
-     */
-    constructor()
-    {
-    }
+    static DLE_BYTE = 0x90;                         // "distance-length encoding" marker
+    static FOLLOWER_SETS = 256;
+    static FOLLOWERS_PER_SET = 32;                  // maximum followers per set
 
     /**
-     * init(src, dst_len)
+     * @typedef {Object} FollowerSet
+     * @property {number} size                      // (uint8_t)
+     * @property {number} idx_bw                    // (uint8_t) index bit width
+     * @property {Array.<number>} followers         // (uint8_t * 32)
+     *
+     * @typedef {Array.<FollowerSet>} FollowerSets  // (FollowerSet * 256)
+     */
+
+    /**
+     * init(src, dst_len, comp_factor)
      *
      * Initialize buffers.
      *
      * @this {Expand}
      * @param {Buffer} src
      * @param {number} dst_len
+     * @param {number} comp_factor
      */
-    init(src, dst_len)
+    init(src, dst_len, comp_factor)
     {
-        this.bs = new BitStream(src);
-        this.dst = Buffer.alloc(dst_len);
-        this.dst_pos = 0;
+        super.init(src, dst_len);
+        assert(comp_factor >= 1 && comp_factor <= 4);
+        this.comp_factor = comp_factor;
     }
 
     /**
-     * getBytesRead()
+     * readFollowerSets(nSets, nFollowers)
      *
-     * Returns the number of bytes read from the BitStream.
+     * Allocates memory for n follower sets and then reads that number of sets from the input stream.
      *
      * @this {Expand}
+     * @param {number} nSets
+     * @param {number} nFollowers
+     * @returns {boolean}
+     */
+    readFollowerSets(nSets, nFollowers)
+    {
+        this.fsets = new Array(nSets);
+        for (let i = nSets - 1; i >= 0; i--) {
+            let size = this.bs.bits(6);
+            if (size > nFollowers || !this.bs.advance(6)) {
+                return false;
+            }
+            let followers = new Array(size);
+            this.fsets[i] = {
+                size,
+                idx_bw: Expand.getBitWidth(size),
+                followers
+            };
+            for (let j = 0; j < size; j++) {
+                followers[j] = this.bs.bits(8);
+                if (!this.bs.advance(8)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * getBitWidth(n)
+     *
+     * Returns the number of bits (bit width) used to represent indices in a follower set of size n.
+     *
+     * @param {number} n
      * @returns {number}
      */
-    getBytesRead()
+    static getBitWidth(n)
     {
-        return this.bs.getRead(8);
-    }
-
-    /**
-     * getOutput()
-     *
-     * Get the output buffer.
-     *
-     * @this {Expand}
-     * @returns {Buffer}
-     */
-    getOutput()
-    {
-        return this.dst;
-    }
-
-    /**
-     * decomp()
-     *
-     * @this {Expand}
-     * @param {Buffer} src
-     * @returns {number}
-     */
-    decomp(src)
-    {
+        assert(n <= 32);
+        if (n > 16) { return 5; }
+        if (n > 8)  { return 4; }
+        if (n > 4)  { return 3; }
+        if (n > 2)  { return 2; }
+        if (n > 0)  { return 1; }
         return 0;
+    }
+
+    /**
+     * getMaxLen()
+     *
+     * @this {Expand}
+     * @returns {number}
+     */
+    getMaxLen()
+    {
+        let v_len_bits = (8 - this.comp_factor);
+        /*
+         * Bits in V + extra len byte + implicit 3.
+         */
+        return ((1 << v_len_bits) - 1) + 255 + 3;
+    }
+
+    /**
+     * getMaxDist()
+     *
+     * @this {Expand}
+     * @returns {number}
+     */
+    getMaxDist()
+    {
+        let v_dist_bits = this.comp_factor;
+        /*
+         * Bits in V * 256 + W byte + implicit 1.
+         */
+        return ((1 << v_dist_bits) - 1) * 256 + 255 + 1;
+    }
+
+    /**
+     * readNextByte()
+     *
+     * Read the next byte from the bitstream, based on the existing value of
+     * curr_byte and the follower sets.  curr_byte is updated with the next byte.
+     *
+     * Returns true on success and false on bad data or end of input.
+     *
+     * @this {Expand}
+     * @returns {boolean}
+     */
+    readNextByte()
+    {
+        let bits = this.bs.bits();
+        let prev_byte = this.curr_byte;
+
+        if (this.fsets[prev_byte].size == 0) {
+            /*
+             * No followers; read a literal byte.
+             */
+            this.curr_byte = bits & 0xff;
+            return this.bs.advance(8);
+        }
+        if (BitStream.lsb(bits, 1) == 1) {
+            /*
+             * Don't use the follower set; read a literal byte.
+             */
+            this.curr_byte = (bits >> 1) & 0xff;
+            return this.bs.advance(1 + 8);
+        }
+        /*
+         * The bits represent the index of a follower byte.
+         */
+        let idx_bw = this.fsets[prev_byte].idx_bw;
+        let follower_idx = BitStream.lsb(bits >> 1, idx_bw);
+        if (follower_idx >= this.fsets[prev_byte].size) {
+            return false;
+        }
+        this.curr_byte = this.fsets[prev_byte].followers[follower_idx];
+        return this.bs.advance(1 + idx_bw);
+    }
+
+    /**
+     * decomp(src, dst_len, comp_factor)
+     *
+     * @this {Expand}
+     * @param {number} dst_len
+     * @param {number} comp_factor (1-4)
+     * @returns {boolean}
+     */
+    decomp(src, dst_len, comp_factor)
+    {
+        this.init(src, dst_len, comp_factor);
+
+        if (!this.readFollowerSets(Expand.FOLLOWER_SETS, Expand.FOLLOWERS_PER_SET)) {
+            return false;
+        }
+
+        /*
+         * Number of bits in V used for backref length
+         */
+        let v_len_bits = (8 - comp_factor);
+
+        /*
+         * The first "previous byte" is implicitly zero
+         */
+        this.curr_byte = 0;
+
+        while (this.dst_pos < dst_len) {
+            /*
+             * Read a literal byte or DLE marker.
+             */
+            if (!this.readNextByte()) {
+                return false;
+            }
+            if (this.curr_byte != Expand.DLE_BYTE) {
+                /*
+                 * Output a literal byte.
+                 */
+                this.writeOutput(this.curr_byte);
+                continue;
+            }
+            /*
+             * Read the V byte which determines the length.
+             */
+            if (!this.readNextByte()) {
+                return false;
+            }
+            if (this.curr_byte == 0) {
+                /*
+                 * Output a literal DLE byte.
+                 */
+                this.writeOutput(Expand.DLE_BYTE)
+                continue;
+            }
+            let v = this.curr_byte;
+            let len = BitStream.lsb(v, v_len_bits);
+            if (len == (1 << v_len_bits) - 1) {
+                /*
+                 * Read an extra length byte.
+                 */
+                if (!this.readNextByte()) {
+                    return false;
+                }
+                len += this.curr_byte;
+            }
+            len += 3;
+            /*
+             * Read the W byte, which together with V gives the distance.
+             */
+            if (!this.readNextByte()) {
+                return false;
+            }
+            let dist = (v >> v_len_bits) * 256 + this.curr_byte + 1;
+            assert(len <= this.getMaxLen());
+            assert(dist <= this.getMaxDist());
+            /*
+             * Output the back reference.
+             */
+            if (len > dst_len - this.dst_pos) {
+                /*
+                 * Not enough room.
+                 */
+                return false;
+            }
+            /*
+             * Copy, handling overlap and implicit zeros.
+             */
+            for (let i = 0; i < len; i++) {
+                if (dist > this.dst_pos) {
+                    this.writeOutput(0);
+                    continue;
+                }
+                this.writeOutput(this.readByte(this.dst_pos - dist));
+            }
+        }
+        return true;
     }
 }
 
@@ -989,17 +1214,8 @@ class Expand
  *
  * Explode is used to decompress IMPLODE streams.
  */
-class Explode
+class Explode extends Decompress
 {
-    /**
-     * constructor()
-     *
-     * @this {Explode}
-     */
-    constructor()
-    {
-    }
-
     /**
      * init(src, dst_len)
      *
@@ -1011,65 +1227,10 @@ class Explode
      */
     init(src, dst_len)
     {
-        this.bs = new BitStream(src);
-        this.dst = Buffer.alloc(dst_len);
-        this.dst_pos = 0;
+        super.init(src, dst_len);
         this.lit_decoder = new HuffmanDecoder();
         this.len_decoder = new HuffmanDecoder();
         this.dist_decoder = new HuffmanDecoder();
-    }
-
-    /**
-     * getBytesRead()
-     *
-     * Returns the number of bytes read from the BitStream.
-     *
-     * @this {Explode}
-     * @returns {number}
-     */
-    getBytesRead()
-    {
-        return this.bs.getRead(8);
-    }
-
-    /**
-     * getOutput()
-     *
-     * Gets the output buffer.
-     *
-     * @this {Explode}
-     * @returns {Buffer}
-     */
-    getOutput()
-    {
-        return this.dst;
-    }
-
-    /**
-     * readByte(off)
-     *
-     * Reads a byte from the output buffer.
-     *
-     * @this {Explode}
-     * @param {number} off
-     * @returns {number}
-     */
-    readByte(off)
-    {
-        return this.dst.readUInt8(off);
-    }
-
-    /**
-     * writeOutput(b)
-     *
-     * Appends to the output buffer.
-     *
-     * @this {Explode}
-     * @param {number} b
-     */
-    writeOutput(b)
-    {
-        this.dst.writeUInt8(b, this.dst_pos++);
     }
 
     /**
@@ -1083,7 +1244,7 @@ class Explode
      * @param {boolean} large_wnd
      * @param {boolean} lit_tree
      * @param {boolean} pk101_bug_compat (true to emulate PKZIP 1.01 bug)
-     * @returns {Buffer}
+     * @returns {boolean}
      */
     decomp(src, dst_len, large_wnd, lit_tree, pk101_bug_compat)
     {
@@ -1091,11 +1252,11 @@ class Explode
 
         if (lit_tree) {
             if (!this.readHuffmanCode(256, this.lit_decoder)) {
-                return null;
+                return false;
             }
         }
         if (!this.readHuffmanCode(64, this.len_decoder) || !this.readHuffmanCode(64, this.dist_decoder)) {
-            return null;
+            return false;
         }
 
         let sym, used, dist, len;
@@ -1112,12 +1273,12 @@ class Explode
                     ({ sym, used } = this.lit_decoder.decode(~bits));
                     assert(sym >= 0, `huffman lit decode unsuccessful (${sym})`);
                     if (!this.bs.advance(1 + used)) {
-                        return null;
+                        return false;
                     }
                 } else {
                     sym = BitStream.lsb(bits, 8);
                     if (!this.bs.advance(1 + 8)) {
-                        return null;
+                        return false;
                     }
                 }
                 assert(sym >= 0 && sym <= 0xff);
@@ -1166,7 +1327,7 @@ class Explode
              */
             assert(used_tot <= BitStream.MIN_BITS);
             if (!this.bs.advance(used_tot)) {
-                return null;
+                return false;
             }
             /*
              * Read an extra len byte if necessary
@@ -1175,7 +1336,7 @@ class Explode
                 len += this.bs.bits(8, true);   // auto-advance
             }
             if (len > dst_len - this.dst_pos) {
-                return null;                    // not enough room
+                return false;                   // not enough room
             }
             /*
              * Copy, handling overlap and implicit zeros
@@ -1188,7 +1349,7 @@ class Explode
                 this.writeOutput(this.readByte(this.dst_pos - dist));
             }
         }
-        return this.dst;
+        return true;
     }
 
     /**
@@ -1328,7 +1489,7 @@ class Blast
      *
      * Initialize buffers.
      *
-     * @this {Explode}
+     * @this {Blast}
      * @param {Buffer} src
      */
     init(src)
@@ -1547,7 +1708,7 @@ class Blast
             this.left--;
             if (left > 8) left = 8;
         }
-        return -9;                          /* ran out of codes */
+        return -9;                          // ran out of codes
     }
 
     /**
