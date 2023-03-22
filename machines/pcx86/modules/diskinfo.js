@@ -1100,7 +1100,7 @@ export default class DiskInfo {
             }
             let name, uniqueID = 0;
             do {
-                name = this.buildShortName(file.name, !!(file.attr & DiskInfo.ATTR.VOLUME), uniqueID++);
+                name = this.buildShortName(file.name, !!(file.attr & DiskInfo.ATTR.VOLUME), uniqueID++, file.nameEncoding);
             } while (names.indexOf(name) >= 0);
             if (file.attr != DiskInfo.ATTR.VOLUME) {
                 names.push(name);       // volume labels are not considered a potential name conflict
@@ -1328,15 +1328,16 @@ export default class DiskInfo {
     }
 
     /**
-     * buildShortName(sFile, fLabel, uniqueID)
+     * buildShortName(sFile, fLabel, uniqueID, encoding)
      *
      * @this {DiskInfo}
      * @param {string} sFile is the basename of a file
      * @param {boolean} [fLabel]
      * @param {number} [uniqueID]
+     * @param {string} [encoding] (eg, "utf8", "cp437", "ascii")
      * @return {string} containing a corresponding filename in FAT "8.3" format
      */
-    buildShortName(sFile, fLabel=false, uniqueID=0)
+    buildShortName(sFile, fLabel=false, uniqueID=0, encoding="utf8")
     {
         let sName = sFile.toUpperCase();
         if (fLabel) {
@@ -1368,7 +1369,17 @@ export default class DiskInfo {
             for (let i = 0; i < sName.length; i++) {
                 if (i == iPeriod) continue;
                 let ch = sName.charAt(i);
-                if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()-@^_`{}~ ".indexOf(ch) < 0) {
+                /*
+                 * If the filename encoding is "cp437", there's nothing to do, because that's the
+                 * encoding we assume for PC disk images.  Ditto for "ascii", which is our fallback
+                 * when dealing with modules (eg, StreamZip) that have no idea what "cp437" is/was.
+                 * And finally, if the encoding is unknown, we again simply hope for the best.
+                 *
+                 * Only if the encoding has been explicitly set to "utf8" will we strip any non-standard
+                 * FAT filename characters, because now we're dealing with a potentially huge set of
+                 * characters, most of which have no meaning in the 8-bit world of early PCs.
+                 */
+                if (encoding == "utf8" && "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()-@^_`{}~ ".indexOf(ch) < 0) {
                     sName = sName.substr(0, i) + '_' + sName.substr(i + 1);
                 }
             }

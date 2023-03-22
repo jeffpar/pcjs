@@ -60,14 +60,15 @@ function compareDisks(sDisk1, sDisk2)
 }
 
 /**
- * createDisk(diskFile, diskette, argv)
+ * createDisk(diskFile, diskette, argv, done)
  *
  * @param {string} diskFile
  * @param {Object} diskette
  * @param {Array} argv
+ * @param {function(DiskInfo)} [done]
  * @returns {DiskInfo|null}
  */
-function createDisk(diskFile, diskette, argv)
+function createDisk(diskFile, diskette, argv, done)
 {
     let di;
     let sArchiveFolder = "archive/";
@@ -103,17 +104,28 @@ function createDisk(diskFile, diskette, argv)
     let sectorErrors = diskette.argv['sectorError'] || argv['sectorError'];
     let suppData = diskette.argv['suppData'] || argv['suppData'];
     if (suppData) suppData = readFile(suppData);
+    let fDirectory = false, fZIP = false;
     if (sArchiveFile.endsWith(path.sep)) {
+        fDirectory = true;
         diskette.command = "--dir " + name;
+    }
+    else if (sArchiveFile.toUpperCase().endsWith(".ZIP")) {
+        fZIP = true;
+        diskette.command = "--zip " + name;
+    }
+    else {
+        diskette.command = "--disk " + name;
+    }
+    diskette.archive = sArchiveFile;
+    printf("checking archive: %s\n", sArchiveFile);
+    if (fDirectory || fZIP) {
         let label = diskette.label || argv['label'];
         let normalize = diskette.normalize || argv['normalize'];
         let target = getTarget(diskette.format);
-        di = readDir(sArchiveFile, false, label, normalize, target, undefined, undefined, sectorIDs, sectorErrors, suppData);
+        di = readDir(sArchiveFile, fZIP, label, normalize, target, undefined, done, sectorIDs, sectorErrors, suppData);
     } else {
-        diskette.command = "--disk " + name;
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
     }
-    diskette.archive = sArchiveFile;
     return di;
 }
 
@@ -601,8 +613,7 @@ function processDisk(di, diskFile, argv, diskette)
          */
         if (diskFile.endsWith(".json") && !(diskette.kryoflux && diskette.args)) {
             if (typeof argv['checkdisk'] == "string" && diskFile.indexOf(argv['checkdisk']) < 0) return;
-            let diTemp = createDisk(diskFile, diskette, argv);
-            if (diTemp) {
+            createDisk(diskFile, diskette, argv, function(diTemp) {
                 let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
                 diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
                 writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false, undefined, diskette.source);
@@ -627,7 +638,7 @@ function processDisk(di, diskFile, argv, diskette)
                         fs.unlinkSync(sTempJSON);
                     }
                 }
-            }
+            });
         }
     }
 
@@ -1021,7 +1032,7 @@ function readAll(argv)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
- * @param {function()} [done] (optional function to call on completion)
+ * @param {function(DiskInfo)} [done] (optional function to call on completion)
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
@@ -1150,7 +1161,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
                 // printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
             }
         }
-        let file = {path: sPath, name: sName};
+        let file = {path: sPath, name: sName, nameEncoding: "utf8"};
         let stats = fs.statSync(sPath);
         file.date = stats.mtime;
         if (stats.isDirectory()) {
@@ -1203,13 +1214,15 @@ function readZIPFiles(sZIP, sLabel, done)
 {
     let zip = new StreamZip({
         file: sZIP,
-        storeEntries: true
+        storeEntries: true,
+        nameEncoding: "ascii",
+        skipEntryNameValidation: true
     });
     zip.on('ready', () => {
         let aFileData = [];
         let aDirectories = [];
         for (let entry of zip.entries()) {
-            let file = {path: entry.name, name: path.basename(entry.name)};
+            let file = {path: entry.name, name: path.basename(entry.name), nameEncoding: "cp437"};
             //
             // The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
             // because file times stored in a ZIP file are *local* times.

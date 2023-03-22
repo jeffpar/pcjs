@@ -1157,19 +1157,22 @@ class Explode
             ({ sym, used } = this.len_decoder.decode(~bits));
             assert(sym >= 0, `huffman len decode unsuccessful (${sym})`);
             used_tot += used;
-            bits >>>= used;
             len = (sym + min_len);
             /*
-             * Read an extra len byte?
+             * Before we (possibly) read an extra len byte, let's advance our
+             * position within the BitStream now, so that we don't run the risk of
+             * exhausting our 32-bit 'bits' buffer.  This also eliminates the
+             * need for a final 'bits >>>= used'.
              */
-            if (sym == 63) {
-                len += BitStream.lsb(bits, 8);
-                used_tot += 8;
-                bits >>>= 8;                    // TODO: unnecessary?
-            }
             assert(used_tot <= BitStream.MIN_BITS);
             if (!this.bs.advance(used_tot)) {
                 return null;
+            }
+            /*
+             * Read an extra len byte if necessary
+             */
+            if (sym == 63) {
+                len += this.bs.bits(8, true);   // auto-advance
             }
             if (len > dst_len - this.dst_pos) {
                 return null;                    // not enough room

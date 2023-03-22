@@ -658,7 +658,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all=OS2STUFF-DISK1",
+        "--all=DISK0798",
         "--checkdisk",
         "--rebuild"
       ],
