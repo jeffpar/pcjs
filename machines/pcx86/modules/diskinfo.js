@@ -1653,7 +1653,11 @@ export default class DiskInfo {
                 let name = this.device.getBaseName(desc[DiskInfo.FILEDESC.PATH], false, true);
                 let path = desc[DiskInfo.FILEDESC.PATH].replace(/\//g, '\\');
                 let attr = +desc[DiskInfo.FILEDESC.ATTR];
-                let date = this.device.parseDate(desc[DiskInfo.FILEDESC.DATE]);
+                /*
+                 * parseDate() *must* return local time (the second parameter must be true), because we've changed
+                 * everything else to use local time (eg, getFileListing()).
+                 */
+                let date = this.device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
                 let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
                 let file = new FileInfo(this, iVolume, path, name, attr, date, size);
                 file.index = i;
@@ -3123,10 +3127,10 @@ export default class DiskInfo {
             [DiskInfo.IMAGE.SECTORDEF]: this.cbSector,
             [DiskInfo.IMAGE.DISKSIZE]: this.cbDiskData,
             [DiskInfo.IMAGE.ORIGBPB]: JSON.stringify(this.abOrigBPB),
-            [DiskInfo.IMAGE.VERSION]: Device.VERSION,
-            [DiskInfo.IMAGE.REPOSITORY]: Device.REPOSITORY,
-            [DiskInfo.IMAGE.GENERATED]: this.device.parseDate()
-            // [DiskInfo.IMAGE.COMMAND]: this.args,
+            [DiskInfo.IMAGE.VERSION]: "2.10",   // Device.VERSION,
+            [DiskInfo.IMAGE.REPOSITORY]: Device.REPOSITORY
+            // [DiskInfo.IMAGE.GENERATED]: this.device.parseDate(),
+            // [DiskInfo.IMAGE.COMMAND]: this.args
         };
         if (!this.fBPBModified) {
             delete imageInfo[DiskInfo.IMAGE.ORIGBPB];

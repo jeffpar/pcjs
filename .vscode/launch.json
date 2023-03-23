@@ -576,7 +576,6 @@
       "args": [
         "--all='/Volumes/PCSIG_13B/**/*.ZIP'",
         "--output=tmp",
-        "--max=5000",
         "--overwrite",
         "--verbose"
       ],
@@ -716,7 +715,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--catalog=DISK0798",
+        "--catalog=diskettes",
         "--checkdisk",
         "--rebuild"
       ],
@@ -733,8 +732,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--catalog",
-        "--checkpage"
+        "--catalog=diskettes",
+        "--checkpage",
+        "--rebuild"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
