@@ -88,6 +88,62 @@ a recognized text file is any file ending with one of these extensions (.md, .me
 AND which contains only 7-bit ASCII characters -- since some files, like .bas files, can contain either ASCII or non-ASCII
 data.  The list of recognized text file extensions is likely to grow over time.
 
+### Building PCjs Disk Images from ZIP files
+
+There are many large software collections where the diskette contents have been archived as ZIP files rather than as disk images, and in theory, it's trivial to `unzip` them into separate folders and then use `DiskImage` to build new images from those folders (see above).
+
+For example, I originally recreated all the [PC-SIG Library](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/) diskette images from the "PC-SIG Library Eighth Edition" CD-ROM files stored at [cd.textfiles.com](http://cd.textfiles.com/pcsig08/), and some of the diskettes on the CD-ROM had been completely "archived as single ZIP files -- probably because the diskettes contained filenames that were not allowed on CD-ROM -- so I used `unzip` on macOS to extract those ZIP files to per-disk folders, and then recreated disk images from those folders.
+
+However, this process doesn't always work well.  [DISK0798](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/0501/#directory-of-pcsig08-disk0798) highlights a few issues that have already been [discussed](https://github.com/jeffpar/pcjs/commit/17e0a2f9e46140fce42f11de8f5fa678b2a3bfe5) on GitHub.
+
+First, the original order of the filenames was not preserved.  Modern operating systems (eg, macOS) list files alphabetically, and as a result, the files on the recreated diskettes were sorted alphabetically as well.
+
+Second, while the ZIP archives appeared to more-or-less preserve non-ASCII filenames, `unzip` did not.  IBM PCs used a character set now known as [Code Page 437](https://en.wikipedia.org/wiki/Code_page_437) (*CP437*), which included a variety of line-drawing characters and other symbols that `unzip` failed to translate to their modern (*UTF-8*) counterparts.
+
+To resolve all these issues, I decided to update `DiskImage` with an option (`--zip`) to read ZIP archives directly.  I started with an NPM package called [node-stream-zip](https://www.npmjs.com/package/node-stream-zip), which is essentially a module that understands the ZIP file format, identifies all the compressed files inside the ZIP file, and uses Node's built-in *zlib* functionality to decompress them.
+
+However, I quickly discovered that *zlib* could not decompress the contents of many old ZIP files, because instead of the popular *Deflate* compression algorithm, older ZIP files used compression methods such as *Shrink*, *Reduce*, and *Implode*.  So I imported *node-stream-zip* into PCjs as [StreamZip](modules/streamzip.js), modernized it, and then extended it with a new decompression module named [LegacyZip](modules/legacyzip.js), which I wrote by hand-translating the excellent C code at [hanshq.net](https://www.hanshq.net/zip2.html) into JavaScript.
+
+Here's an example of `--zip` in action:
+
+    node modules/diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
+
+    DiskImage v2.11
+    Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
+    options: --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
+
+    /Volumes/PCSIG_13B/BBS/DISK0042.ZIP
+    Filename        Length   Method      Size  Ratio   Date       Time       CRC
+    --------        ------   ------      ----  -----   ----       ----       ---
+    MSVIBM.EXE      131392   Implode    73651    44%   1990-02-19 19:30:30   ac9163ba
+    MSR300.UPD       20338   Implode     8627    58%   1990-02-19 19:35:12   61372fc6
+    MSKERM.HLP       35263   Implode    13799    61%   1990-02-19 19:39:16   1c61d95c
+    MSKERM.BWR       27985   Implode    12132    57%   1990-02-19 19:42:28   353a76ed
+    MSKERMIT.INI      4760   Implode     2309    51%   1990-02-19 20:07:20   00e884a5
+    GO.BAT              40   Shrink        38     5%   1980-01-01 06:00:08   75d72756
+    FILE0042.TXT      3870   Implode      896    77%   1990-11-12 01:46:16   3a817bda
+    GO.TXT            1002   Implode      307    69%   1990-11-09 06:21:54   e64455e9
+    processing DISK0042: 327680 bytes (checksum -1217186896, hash bba045788185bc8284f5e4cde0929b70)
+    writing DISK0042.json...
+
+The `--verbose` option generates the `PKZIP`-style file listing, displaying the individual file names, compressed and uncompressed file sizes, compression ratio, etc.
+
+In fact, creating a disk image is entirely optional; you can use `DiskImage` to simply examine the contents of `zip` file:
+
+    node modules/diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --verbose
+
+To simplify dealing with a large collection of files, I also added an `--all` option:
+
+    node modules/diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --verbose
+
+which will locate *all* matching `zip` files and automatically display their contents.  `--all` also supports file extensions `json` and `img`; the `--zip` option is implied for any file ending with a `zip` extension.
+
+If you want to create a disk image for every `zip` file:
+
+    node modules/diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --output=tmp --type=img
+
+`--output` specifies an output folder, `--type` can be either `img` or `json`, and each output file will have the same basename as the `zip` file, with either an `.img` or `.json` extension.
+
 ### Examining PCjs Disk Images
 
 Both local and remote diskette images can be examined.  To examine a remote image, you *must* use the `--disk` option,
