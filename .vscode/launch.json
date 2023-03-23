@@ -575,6 +575,9 @@
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
         "--all=/Volumes/PCSIG_13B/**/*.ZIP",
+        "--output=tmp",
+        "--max=10",
+        "--overwrite",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",

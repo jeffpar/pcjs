@@ -1424,7 +1424,7 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
                 printf("%s not written, no data\n", diskName);
             }
         } else {
-            printf("%s exists, use --overwrite to replace\n", diskName);
+            printf("%s exists, use --overwrite to replace\n", diskFile);
         }
     }
     catch(err) {
@@ -1551,15 +1551,46 @@ function readFileAsync(sFile, encoding = "utf8")
 }
 
 /**
- * processFile(args, argv)
+ * processAll(all, argv)
+ *
+ * @param {string} all
+ * @param {Array} argv
+ */
+function processAll(all, argv)
+{
+    if (all && typeof all == "string") {
+        let max = +argv['max'] || 0;
+        let asFiles = glob.sync(all);
+        if (asFiles.length) {
+            let outdir = argv['output'];        // if specified, --output is assumed to be a directory
+            let type =  argv['type'] || "json"; // if specified, --type should be a known file extension
+            if (type[0] != '.') type = '.' + type;
+            for (let sFile of asFiles) {
+                let args = [argv[0], sFile];
+                if (outdir) args['output'] = path.join(outdir, path.parse(sFile).name + type);
+                for (let arg of ['overwrite', 'verbose']) {
+                    if (argv[arg] !== undefined) args[arg] = argv[arg];
+                }
+                processFile(args);
+                if (!--max) break;
+            }
+        } else {
+            printf("no files matched \"%s\"\n", all);
+        }
+        return true;
+    }
+    return false;
+}
+
+/**
+ * processFile(argv)
  *
  * Formerly part of main(), but factored out so that it can also be called for a list of files ("--all").
  *
- * @param {Array} args
- * @param {Array} argv (subset of parent args to use, if any)
+ * @param {Array} argv
  * @returns {boolean} true if something was processed, false if not
  */
-function processFile(args, argv = {})
+function processFile(argv)
 {
     let fDirectory = false, fFiles = false, fZIP = false;
 
@@ -1573,31 +1604,31 @@ function processFile(args, argv = {})
                 *
                 * This only affects the 'name' property in 'imageInfo', which is of limited interest anyway.
                 */
-                let name = args['output'] || args[1];
+                let name = argv['output'] || argv[1];
                 if (name) {
                     if (typeof name != "string") name = name[0];
                     di.setName(path.basename(name));
                 }
             }
-            processDisk(di, input, args);
+            processDisk(di, input, argv);
         }
     };
 
-    let input = args['dir'];
+    let input = argv['dir'];
     if (input) {
         fDirectory = true;          // if --dir, the directory should end with a trailing slash (but we'll make sure)
         if (!input.endsWith(path.sep)) input += path.sep;
     } else {
-        input = args['files'];
+        input = argv['files'];
         if (input) {                // if --files, the list of files should be separated with commas (and NO trailing slash)
             fDirectory = fFiles = true;
         } else {
-            input = args['zip'];
+            input = argv['zip'];
             if (input) {
                 fZIP = true;
             } else {
-                input = args[1];
-                args.splice(1, 1);
+                input = argv[1];
+                argv.splice(1, 1);
                 if (input) {
                     if (input.endsWith(path.sep)) {
                         fDirectory = true;
@@ -1616,11 +1647,11 @@ function processFile(args, argv = {})
          * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
          * equivalent to 10240K).
          */
-        readDir(input, fZIP, args['label'], args['normalize'], getTarget(args['target']), +args['maxfiles'] || 0, args['verbose'] || argv['verbose'], done);
+        readDir(input, fZIP, argv['label'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
         return true;
     }
     if (input) {
-        done(readDisk(input, args['forceBPB'], args['sectorID'], args['sectorError'], readFile(args['suppData'])));
+        done(readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData'])));
         return true;
     }
     return false;
@@ -1682,19 +1713,7 @@ function main(argc, argv)
         return;
     }
 
-    let all = argv['all'];
-    if (all) {
-        let max = 3;
-        let asFiles = glob.sync(all)
-        let verbose = argv['verbose'];
-        for (let sFile of asFiles) {
-            processFile([argv[0], sFile], {verbose});
-            if (!--max) break;
-        }
-        return;
-    }
-
-    if (processFile(argv)) {
+    if (processAll(argv['all'], argv) || processFile(argv)) {
         return;
     }
 

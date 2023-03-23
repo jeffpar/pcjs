@@ -1002,6 +1002,7 @@
     "ORIGBPB",
     "outbuf",
     "OUTD",
+    "outdir",
     "outfun",
     "outhow",
     "OUTSB",
