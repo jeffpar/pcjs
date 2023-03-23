@@ -363,7 +363,7 @@ function printManifest(diskFile, diskName, manifest)
  * @param {DiskInfo} di
  * @param {string} diskFile
  * @param {Array} argv
- * @param {Object} [diskette] (if present, then we were invoked by readAll(), so any --output option should be ignored)
+ * @param {Object} [diskette] (if present, then we were invoked by readCatalog(), so any --output option should be ignored)
  */
 function processDisk(di, diskFile, argv, diskette)
 {
@@ -505,7 +505,7 @@ function processDisk(di, diskFile, argv, diskette)
             let subDir = typeof argv['extract'] != "string"? di.getName() : "";
             if (subDir || name == argv['extract']) {
                 let fSuccess = false;
-                if (argv['all']) {
+                if (argv['catalog']) {
                     subDir = getFullPath(path.join(path.dirname(diskFile), "archive", subDir));
                     if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
                         subDir = subDir.replace("/disks/archive", "/archive");
@@ -537,7 +537,7 @@ function processDisk(di, diskFile, argv, diskette)
                     let fPrinted = false;
                     let fQuiet = argv['quiet'];
                     let sFile = sPath.substr(subDir.length? subDir.length + 1 : 0);
-                    if (!argv['all']) {
+                    if (!argv['catalog']) {
                         if (!fQuiet) printf("extracting: %s\n", sFile);
                     } else {
                         let sArchive = checkArchive(sPath, true);
@@ -949,13 +949,13 @@ function addMetaData(di, sDir, sPath)
 }
 
 /**
- * readAll(argv)
+ * readCatalog(argv)
  *
- * If "--all=[string]" then the set of disks is limited to those where pathname contains [string].
+ * If "--catalog=[string]" then the set of disks is limited to those where pathname contains [string].
  *
  * @param {Array} argv
  */
-function readAll(argv)
+function readCatalog(argv)
 {
     let family = "pcx86";
     let asServers = ["diskettes", "gamedisks", "miscdisks", "pcsig8a-disks", "pcsig8b-disks", "private"];
@@ -995,9 +995,9 @@ function readAll(argv)
                     diskette.path = diskette.path.replace(library['@server'], library['@local']);
                 }
                 let diskFile = diskette.path;
-                if (typeof argv['all'] == "string") {
-                    if (argv['verbose']) printf("checking %s for '%s'...\n", diskFile, argv['all']);
-                    if (diskFile.indexOf(argv['all']) < 0) return;
+                if (typeof argv['catalog'] == "string") {
+                    if (argv['verbose']) printf("checking %s for '%s'...\n", diskFile, argv['catalog']);
+                    if (diskFile.indexOf(argv['catalog']) < 0) return;
                 }
                 let sName = path.basename(diskFile);
                 if (aDiskNames[sName]) {
@@ -1564,9 +1564,9 @@ function readFileAsync(sFile, encoding = "utf8")
  * To add files to a disk in a specific order, use --files=[comma-separated list of files].  And if you
  * want a particular boot sector, use --boot=[sector image file].
  *
- * Use --all to process all catalogued disks with the specified options, or --all=[subset] to process only
- * disks whose path or name contains [subset]; any input/output disk/directory names are ignored when
- * using --all.
+ * Use --catalog to process all catalogued disks with the specified options, or --catalog=[subset]
+ * to process only disks whose path or name contains [subset]; any input/output disk/directory names are
+ * ignored when using --catalog.
  *
  * @param {number} argc
  * @param {Array} argv
@@ -1591,8 +1591,8 @@ function main(argc, argv)
 
     device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
 
-    if (argv['all']) {
-        readAll(argv);
+    if (argv['catalog']) {
+        readCatalog(argv);
         return;
     }
 
