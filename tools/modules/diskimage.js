@@ -1281,7 +1281,7 @@ function readZIPFiles(sZIP, sLabel, fVerbose, done)
                     "Stored", "Shrunk", "Reduced1", "Reduced2", "Reduced3", "Reduced4", "Imploded", undefined, "Deflated", "Deflated64", "DCLImploded"
                 ];
                 printf("%-14s %7d   %-8s %7d   %3d%%   %T   %08x\n",
-                    CharSet.fromCP437(file.name), file.size, methods[entry.method], entry.compressedSize, Math.round(100 * entry.compressedSize / file.size) || 100, file.date, entry.crc);
+                    CharSet.fromCP437(file.name), file.size, methods[entry.method], entry.compressedSize, Math.round(100 * (file.size - entry.compressedSize) / file.size) || 0, file.date, entry.crc);
             }
         }
         zip.close()
