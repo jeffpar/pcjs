@@ -569,6 +569,22 @@
       ]
     },
     {
+      "name": "Node: diskimage.js --all",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "args": [
+        "--all=/Volumes/PCSIG_13B/**/*.ZIP",
+        "--verbose"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskimage.js --dir",
       "type": "node",
       "request": "launch",
@@ -689,12 +705,12 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --all --checkdisk",
+      "name": "Node: diskimage.js --catalog --checkdisk",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all=DISK0798",
+        "--catalog=DISK0798",
         "--checkdisk",
         "--rebuild"
       ],
@@ -706,12 +722,12 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --all --checkpage",
+      "name": "Node: diskimage.js --catalog --checkpage",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all",
+        "--catalog",
         "--checkpage"
       ],
       "cwd": "${workspaceFolder}",
@@ -722,12 +738,12 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --all --extract",
+      "name": "Node: diskimage.js --catalog --extract",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all",
+        "--catalog",
         "--extract",
         "--quiet"
       ],

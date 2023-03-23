@@ -86,7 +86,7 @@ function createDisk(diskFile, diskette, argv, done)
          *  3) Anything else is more or less used as-is (and unless it contains a period, we add a trailing slash)
          */
         if (diskette.archive[0] == '/') {
-            sArchiveFile = diskette.archive;
+            sArchiveFile = path.sep + diskette.archive.slice(1);
         } else if (diskette.archive[0] == '.') {
             sArchiveFile = sArchiveFile.replace(".img", diskette.archive);
         } else if (diskette.archive == "folder") {
@@ -487,7 +487,7 @@ function processDisk(di, diskFile, argv, diskette)
              * which calls getFileDesc(true), which returns a complete file descriptor that includes CONTENTS.
              */
             let sPath = desc[DiskInfo.FILEDESC.PATH];
-            if (sPath[0] == '/') sPath = sPath.substr(1);       // PATH should ALWAYS start with a slash, but let's be safe
+            if (sPath[0] == path.sep) sPath = sPath.substr(1);      // PATH should ALWAYS start with a slash, but let's be safe
             let name = path.basename(sPath);
             let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
             let attr = +desc[DiskInfo.FILEDESC.ATTR];
@@ -962,7 +962,7 @@ function readCatalog(argv)
     let cCollections = 0, cDisks = 0;
     let asCollections = [];
     asServers.forEach((server) => {
-        asCollections = asCollections.concat(glob.sync(path.join(rootDir, "/" + server + "/" + family + "/diskettes.json")));
+        asCollections = asCollections.concat(glob.sync(path.join(rootDir, path.sep + server + path + family + path.sep + "diskettes.json")));
     });
     let messages;
     if (argv['quiet']) {
@@ -1045,7 +1045,7 @@ function readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, fVerbose, done,
 {
     let di;
     let diskName = path.basename(sDir);
-    if (sDir.endsWith('/')) {
+    if (sDir.endsWith(path.sep)) {
         if (!sLabel) {
             sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
         }
@@ -1100,7 +1100,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
     let aFileData = [];
 
     let asFiles;
-    if (sDir.endsWith('/')) {
+    if (sDir.endsWith(path.sep)) {
         asFiles = fs.readdirSync(sDir);
         for (let i = 0; i < asFiles.length; i++) {
             asFiles[i] = path.join(sDir, asFiles[i]);
@@ -1176,7 +1176,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
             file.attr = DiskInfo.ATTR.SUBDIR;
             file.size = -1;
             file.data = new DataBuffer();
-            file.files = readDirFiles(sPath + '/', null, fNormalize, iLevel + 1);
+            file.files = readDirFiles(sPath + path.sep, null, fNormalize, iLevel + 1);
         } else {
             let fText = fNormalize && isTextFile(sName);
             let data = readFile(sPath, fText? "utf8" : null);
@@ -1226,6 +1226,7 @@ function readZIPFiles(sZIP, sLabel, fVerbose, done)
         let aFileData = [];
         let aDirectories = [];
         if (fVerbose) {
+            printf("\n%s\n", sZIP);
             printf("Filename        Length   Method      Size  Ratio   Date       Time       CRC\n");
             printf("--------        ------   ------      ----  -----   ----       ----       ---\n");
         }
@@ -1332,7 +1333,7 @@ function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
             }
         }
         if (di) {
-            let sDir = getFullPath(diskFile.replace(/\.[a-z]+$/, "/"));
+            let sDir = getFullPath(diskFile.replace(/\.[a-z]+$/, path.sep));
             let aDiskFiles = glob.sync(path.join(sDir, "**"));
             for (let i = 0; i < aDiskFiles.length; i++) {
                 addMetaData(di, sDir, aDiskFiles[i]);
@@ -1550,6 +1551,82 @@ function readFileAsync(sFile, encoding = "utf8")
 }
 
 /**
+ * processFile(args, argv)
+ *
+ * Formerly part of main(), but factored out so that it can also be called for a list of files ("--all").
+ *
+ * @param {Array} args
+ * @param {Array} argv (subset of parent args to use, if any)
+ * @returns {boolean} true if something was processed, false if not
+ */
+function processFile(args, argv = {})
+{
+    let fDirectory = false, fFiles = false, fZIP = false;
+
+    let done = function(di)
+    {
+        if (di) {
+            if (fFiles) {
+                /*
+                * When a disk is created from a list of files, the default name isn't very meaningful;
+                * the basename of the output file isn't much more helpful, but it's better than nothing.
+                *
+                * This only affects the 'name' property in 'imageInfo', which is of limited interest anyway.
+                */
+                let name = args['output'] || args[1];
+                if (name) {
+                    if (typeof name != "string") name = name[0];
+                    di.setName(path.basename(name));
+                }
+            }
+            processDisk(di, input, args);
+        }
+    };
+
+    let input = args['dir'];
+    if (input) {
+        fDirectory = true;          // if --dir, the directory should end with a trailing slash (but we'll make sure)
+        if (!input.endsWith(path.sep)) input += path.sep;
+    } else {
+        input = args['files'];
+        if (input) {                // if --files, the list of files should be separated with commas (and NO trailing slash)
+            fDirectory = fFiles = true;
+        } else {
+            input = args['zip'];
+            if (input) {
+                fZIP = true;
+            } else {
+                input = args[1];
+                args.splice(1, 1);
+                if (input) {
+                    if (input.endsWith(path.sep)) {
+                        fDirectory = true;
+                    }
+                    else if (path.extname(input).toLowerCase() == ".zip") {
+                        fZIP = true;
+                    }
+                }
+            }
+        }
+    }
+
+    if (fDirectory || fZIP) {
+        /*
+         * Target is normally a number in Kb (eg, 360 for a 360K diskette); you can also add a suffix (eg, K or M).
+         * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
+         * equivalent to 10240K).
+         */
+        readDir(input, fZIP, args['label'], args['normalize'], getTarget(args['target']), +args['maxfiles'] || 0, args['verbose'] || argv['verbose'], done);
+        return true;
+    }
+    if (input) {
+        done(readDisk(input, args['forceBPB'], args['sectorID'], args['sectorError'], readFile(args['suppData'])));
+        return true;
+    }
+    return false;
+}
+
+/**
  * main(argc, argv)
  *
  * Usage:
@@ -1557,7 +1634,7 @@ function readFileAsync(sFile, encoding = "utf8")
  *      node diskimage.js [input disk image or directory] [output disk image] [options]
  *
  * You can use --disk and --dir to explicitly specify an input disk or directory, or you can implicitly
- * specify one as the first non-option argument (a directory is indicated by a trailing '/'); similarly,
+ * specify one as the first non-option argument (a directory is indicated by a trailing slash); similarly,
  * you can use --output to explicitly specify an output disk image, or you can implicitly specify one as
  * the second non-option argument.
  *
@@ -1605,66 +1682,19 @@ function main(argc, argv)
         return;
     }
 
-    let fDirectory = false, fFiles = false, fZIP = false;
-
-    input = argv['dir'];
-    if (input) {
-        fDirectory = true;          // if --dir, the directory should end with a trailing slash (but we'll make sure)
-        if (!input.endsWith('/')) input += '/';
-    } else {
-        input = argv['files'];
-        if (input) {                // if --files, the list of files should be separated with commas (and NO trailing slash)
-            fDirectory = fFiles = true;
-        } else {
-            input = argv['zip'];
-            if (input) {
-                fZIP = true;
-            } else {
-                input = argv[1];
-                argv.splice(1, 1);
-                if (input) {
-                    if (input.endsWith('/')) {
-                        fDirectory = true;
-                    }
-                    else if (path.extname(input).toLowerCase() == ".zip") {
-                        fZIP = true;
-                    }
-                }
-            }
+    let all = argv['all'];
+    if (all) {
+        let max = 3;
+        let asFiles = glob.sync(all)
+        let verbose = argv['verbose'];
+        for (let sFile of asFiles) {
+            processFile([argv[0], sFile], {verbose});
+            if (!--max) break;
         }
-    }
-
-    let done = function(di) {
-        if (di) {
-            if (fFiles) {
-                /*
-                 * When a disk is created from a list of files, the default name isn't very meaningful;
-                 * the basename of the output file isn't much more helpful, but it's better than nothing.
-                 *
-                 * This only affects the 'name' property in 'imageInfo', which is of limited interest anyway.
-                 */
-                let name = argv['output'] || argv[1];
-                if (name) {
-                    if (typeof name != "string") name = name[0];
-                    di.setName(path.basename(name));
-                }
-            }
-            processDisk(di, input, argv);
-        }
-    };
-
-    if (fDirectory || fZIP) {
-        /*
-         * Target is normally a number in Kb (eg, 360 for a 360K diskette); you can also add a suffix (eg, K or M).
-         * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
-         * equivalent to 10240K).
-         */
-        readDir(input, fZIP, argv['label'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'], argv['verbose'], done);
         return;
     }
 
-    if (input) {
-        done(readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData'])));
+    if (processFile(argv)) {
         return;
     }
 
