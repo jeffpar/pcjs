@@ -19,6 +19,7 @@ import StreamZip  from "./streamzip.js";
 import Device     from "../../machines/modules/device.js";
 import JSONLib    from "../../machines/modules/jsonlib.js";
 import DiskInfo   from "../../machines/pcx86/modules/diskinfo.js";
+import CharSet    from "../../machines/pcx86/modules/charset.js";
 
 let device = new Device("node");
 let printf = device.printf.bind(device);
@@ -122,7 +123,8 @@ function createDisk(diskFile, diskette, argv, done)
         let label = diskette.label || argv['label'];
         let normalize = diskette.normalize || argv['normalize'];
         let target = getTarget(diskette.format);
-        di = readDir(sArchiveFile, fZIP, label, normalize, target, undefined, done, sectorIDs, sectorErrors, suppData);
+        let verbose = argv['verbose'];
+        di = readDir(sArchiveFile, fZIP, label, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
     } else {
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
     }
@@ -1024,7 +1026,7 @@ function readAll(argv)
 }
 
 /**
- * readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, done, sectorIDs, sectorErrors, suppData)
+ * readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
  *
  * @param {string} sDir (directory name)
  * @param {boolean} [fZIP] (true if ZIP file instead of directory)
@@ -1032,13 +1034,14 @@ function readAll(argv)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
+ * @param {boolean} [fVerbose] (true for verbose output)
  * @param {function(DiskInfo)} [done] (optional function to call on completion)
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
  * @returns {DiskInfo|null}
  */
-function readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, done, sectorIDs, sectorErrors, suppData)
+function readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
 {
     let di;
     let diskName = path.basename(sDir);
@@ -1073,7 +1076,7 @@ function readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, done, sectorIDs
     try {
         nMaxInit = nMaxCount = nMax || nMaxDefault;
         if (fZIP) {
-            readZIPFiles(sDir, sLabel, readDone);
+            readZIPFiles(sDir, sLabel, fVerbose, readDone);
         } else {
             di = readDone(readDirFiles(sDir, sLabel, fNormalize, 0));
         }
@@ -1147,7 +1150,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
     let iFile;
     for (iFile = 0; iFile < asFiles.length && nMaxCount > 0; iFile++, nMaxCount--) {
         /*
-         * fs.readdir() already excludes "." and ".." but there are also a wide variety of hidden
+         * fs.readdirSync() already excludes "." and ".." but there are also a variety of hidden
          * files on *nix systems that begin with a period, which in general we should ignore, too.
          *
          * TODO: Consider an override option that will allow hidden file(s) to be included as well.
@@ -1204,13 +1207,14 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
 }
 
 /**
- * readZIPFiles(sZIP, sLabel, done)
+ * readZIPFiles(sZIP, sLabel, fVerbose, done)
  *
  * @param {string} sZIP (ZIP filename)
  * @param {boolean|null} sLabel (optional volume label)
+ * @param {boolean} fVerbose (true to display verbose output, false to display minimal output)
  * @param {function(Array.<FileData>)} done
  */
-function readZIPFiles(sZIP, sLabel, done)
+function readZIPFiles(sZIP, sLabel, fVerbose, done)
 {
     let zip = new StreamZip({
         file: sZIP,
@@ -1221,6 +1225,10 @@ function readZIPFiles(sZIP, sLabel, done)
     zip.on('ready', () => {
         let aFileData = [];
         let aDirectories = [];
+        if (fVerbose) {
+            printf("Filename        Length   Method      Size  Ratio   Date       Time       CRC\n");
+            printf("--------        ------   ------      ----  -----   ----       ----       ---\n");
+        }
         for (let entry of zip.entries()) {
             let file = {path: entry.name, name: path.basename(entry.name), nameEncoding: "cp437"};
             //
@@ -1248,7 +1256,6 @@ function readZIPFiles(sZIP, sLabel, done)
                     data = zip.entryDataSync(entry.name);
                 } catch(err) {
                     printError(err);
-                    break;
                 }
                 data = new DataBuffer(data || 0);
                 file.attr = DiskInfo.ATTR.ARCHIVE;
@@ -1268,6 +1275,13 @@ function readZIPFiles(sZIP, sLabel, done)
             }
             if (d == aDirectories.length) {
                 aFileData.push(file);
+            }
+            if (fVerbose) {
+                let methods = [
+                    "Stored", "Shrunk", "Reduced1", "Reduced2", "Reduced3", "Reduced4", "Imploded", undefined, "Deflated", "Deflated64", "DCLImploded"
+                ];
+                printf("%-14s %7d   %-8s %7d   %3d%%   %T   %08x\n",
+                    CharSet.fromCP437(file.name), file.size, methods[entry.method], entry.compressedSize, Math.round(100 * entry.compressedSize / file.size) || 100, file.date, entry.crc);
             }
         }
         zip.close()
@@ -1645,7 +1659,7 @@ function main(argc, argv)
          * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
          * equivalent to 10240K).
          */
-        readDir(input, fZIP, argv['label'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'], done);
+        readDir(input, fZIP, argv['label'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'], argv['verbose'], done);
         return;
     }
 
