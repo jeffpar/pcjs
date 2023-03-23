@@ -576,7 +576,7 @@
       "args": [
         "--all='/Volumes/PCSIG_13B/**/*.ZIP'",
         "--output=tmp",
-        "--max=10",
+        "--max=1000",
         "--overwrite",
         "--verbose"
       ],
@@ -628,7 +628,7 @@
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
         "--zip=/pcsig8a-disks/pcx86/shareware/pcsig08/archive/cdrom/701_800/DISK0798/DISK0798.ZIP",
-        "--output=tmp/DISK0798.json",
+        "--output=/pcsig8a-disks/pcx86/shareware/pcsig08/DISK0798.json",
         "--list",
         "--overwrite",
         "--verbose"
@@ -648,7 +648,8 @@
       "args": [
         "--zip=/miscdisks/pcx86/sw/magazines/pcm/archive/PCMAG-VOL07N15/BOXES3.ZIP",
         "--output=tmp/BOXES3.json",
-        "--overwrite"
+        "--overwrite",
+        "--verbose"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -665,7 +666,8 @@
       "args": [
         "--zip=/Volumes/PC_SIG_4_90/1401_500/DISK1488/DISK1488.ZIP",
         "--output=tmp/DISK1488.json",
-        "--overwrite"
+        "--overwrite",
+        "--verbose"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -675,13 +677,14 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --disk",
+      "name": "Node: diskimage.js --disk --list",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
         "--disk=/pcsig8a-disks/pcx86/shareware/pcsig08/archive/DISK0798.img",
-        "--output=/pcsig8a-disks/pcx86/shareware/pcsig08/DISK0798.json",
+        "--output=tmp/DISK0798.json",
+        "--list",
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}",

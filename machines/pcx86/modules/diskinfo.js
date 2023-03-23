@@ -1045,22 +1045,23 @@ export default class DiskInfo {
     /**
      * buildDateTime(dateMod)
      *
+     * NOTE: We now check for dates where getFullYear() is less than 1980, which can happen when
+     * a dateMod entry was left uninitialized (ie, zero); in those cases, we return zero, so that
+     * the directory entry can be recreated in a similar state.
+     *
      * @this {DiskInfo}
      * @param {Date} dateMod contains the modification time of a file
      * @returns {number} the time (bits 0-15) and date (bits 16-31) in FAT format
      */
     buildDateTime(dateMod)
     {
+        if (!dateMod) return 0;
         let year = dateMod.getFullYear();
+        if (year < 1980) return 0;
         let month = dateMod.getMonth() + 1;
         let day = dateMod.getDate();
         let time = ((dateMod.getHours() & 0x1F) << 11) | ((dateMod.getMinutes() & 0x3F) << 5) | ((dateMod.getSeconds() >> 1) & 0x1F);
-        /*
-         * NOTE: If validateTime() is doing its job, then we should never have to do this.  This is simple paranoia.
-         */
-        if (year < 1980) {
-            year = 1980; month = 1; day = 1; time = 1;
-        } else if (year > 2099) {
+        if (year > 2099) {      // technically, the year can go as high as 2107, but allowing that is probably a bad idea
             year = 2099; month = 12; day = 31; time = 1;
         }
         let date = (((year - 1980) & 0x7F) << 9) | (month << 5) | day;
@@ -1158,16 +1159,12 @@ export default class DiskInfo {
          * Skip 10 bytes, bringing us to offset 0x16: 2 bytes for modification time, plus 2 bytes for modification date.
          */
         off += 10;
-        if (dateMod) {
-            let dateTime = this.buildDateTime(dateMod);
-            ab[off++] = dateTime & 0xff;
-            ab[off++] = (dateTime >> 8) & 0xff;
-            dateTime >>= 16;
-            ab[off++] = dateTime & 0xff;
-            ab[off++] = (dateTime >> 8) & 0xff;
-        } else {
-            for (i = 0; i < 4; i++) ab[off++] = 0;
-        }
+        let dateTime = this.buildDateTime(dateMod);
+        ab[off++] = dateTime & 0xff;
+        ab[off++] = (dateTime >> 8) & 0xff;
+        dateTime >>>= 16;
+        ab[off++] = dateTime & 0xff;
+        ab[off++] = (dateTime >> 8) & 0xff;
 
         /*
          * Now we're at offset 0x1A, where the starting cluster (2 bytes) and file size (4 bytes) are stored,
@@ -2108,7 +2105,7 @@ export default class DiskInfo {
                         cbDir += file.size;
                         cbTotal += file.size;
                     }
-                    sListing += this.device.sprintf("%s%-8s %-3s%s%s  %#2M-%#02D-%#0.2Y  %#2G:%#02N%#.1A\n", sIndent, name, ext, (file.attr & (DiskInfo.ATTR.READONLY | DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
+                    sListing += this.device.sprintf("%s%-8s %-3s%s%s  %2M-%02D-%0.2Y  %2G:%02N%.1A\n", sIndent, name, ext, (file.attr & (DiskInfo.ATTR.READONLY | DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
                     nTotal++;
                     /*
                      * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
@@ -2153,7 +2150,7 @@ export default class DiskInfo {
             [DiskInfo.FILEDESC.PATH]: file.path.replace(/\\/g, '/'),
             [DiskInfo.FILEDESC.NAME]: file.name,
             [DiskInfo.FILEDESC.ATTR]: this.device.sprintf("%#0bx", file.attr),
-            [DiskInfo.FILEDESC.DATE]: this.device.sprintf("%#T", file.date),
+            [DiskInfo.FILEDESC.DATE]: this.device.sprintf("%T", file.date),
             [DiskInfo.FILEDESC.SIZE]: file.size,
             [DiskInfo.FILEDESC.VOL]:  file.iVolume
         };
@@ -2321,6 +2318,13 @@ export default class DiskInfo {
     /**
      * getDate(year, month, day, hour, minute, second, sFile)
      *
+     * If modDate wasn't set (ie, 0x00000000), then m will be -1 and d will be 0,
+     * resulting in a Date where getFullYear() < 1980.  There are cases where we allow
+     * that, in order to recreate uninitialized directory entries; however, in THIS
+     * function, we do not, because we're building a file table for the disk image,
+     * which is used to generate our own directory listings (see getFileListing()) and
+     * we don't want out-of-bounds values showing up there.
+     *
      * @this {DiskInfo}
      * @param {number} year
      * @param {number} month
@@ -2329,7 +2333,7 @@ export default class DiskInfo {
      * @param {number} minute
      * @param {number} second
      * @param {number} sFile
-     * @returns {Date} (UTC date corresponding to the given date/time parameters)
+     * @returns {Date} (local date corresponding to the given date/time parameters)
      */
     getDate(year, month, day, hour, minute, second, sFile)
     {
@@ -2364,7 +2368,21 @@ export default class DiskInfo {
         if (errors) {
             this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: invalid timestamp: %04d-%02d-%02d %02d:%02d:%02d\n", sFile, year, month, day, hour, minute, second);
         }
-        return this.device.parseDate(y, m, d, h, n, s);
+        /*
+         * Previously, I used device.parseDate() to create a UTC date and then used "%#T" in getFileDesc() and
+         * assorted "%#" specifiers in getFileListing() to display the UTC date; since file dates are time-zone
+         * agnostic, standardizing on UTC was fine as long as I was consistent.  Unfortunately, I was not.
+         *
+         * For example, when diskimage.js reads a set of files from a local directory, it obtains dates in local
+         * time, not UTC time.  Since I can't change how fs.stat() works (it always returns local times), and
+         * since time-zone conversions can be tricky (especially thanks to Daylight Savings Time), I now use local
+         * times everywhere.
+         *
+         * At least, I hope so.
+         *
+         *      return this.device.parseDate(y, m, d, h, n, s);
+         */
+        return new Date(y, m, d, h, n, s);
     }
 
     /**

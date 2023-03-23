@@ -1160,19 +1160,19 @@ class ZipEntry
         /*
          * modDateTime validation follows (although each part of the date/time is stored
          * in a limited number of bits, those bits can still contain out-of-bounds values).
+         *
+         * If modDateTime wasn't set (ie, 0x00000000), then m will be -1 and d will be 0,
+         * resulting in a Date where getFullYear() < 1980.  We allow that, so that the caller
+         * can detect that case and act accordingly.
          */
         let errors = 0;
         let orig = { ...d };
-        if (d.m < 0) {
-            d.m = 0;
-        }
+        // if (d.m < 0) d.m = 0;            // we let this slide (see above)
         if (d.m > 11) {
             d.m = 11;
             errors++;
         }
-        if (d.d < 1) {
-            d.d = 1;
-        }
+        // if (d.d < 1) d.d = 1;            // we let this slide (see above)
         if (d.d > 31) {
             d.d = monthDays[d.m];
             if (d.y % 4 == 0) d.d++;        // adequate for the time-frame of dates we're dealing with
