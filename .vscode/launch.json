@@ -576,7 +576,7 @@
       "args": [
         "--all='/Volumes/PCSIG_13B/**/*.ZIP'",
         "--output=tmp",
-        "--max=1000",
+        "--max=5000",
         "--overwrite",
         "--verbose"
       ],
@@ -664,8 +664,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--zip=/Volumes/PC_SIG_4_90/1401_500/DISK1488/DISK1488.ZIP",
-        "--output=tmp/DISK1488.json",
+        "--zip=/Volumes/PCSIG_13B/GRA/DISK1645.ZIP",
+        "--output=tmp/DISK1645.json",
         "--overwrite",
         "--verbose"
       ],

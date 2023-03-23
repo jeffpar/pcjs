@@ -1279,7 +1279,7 @@ function readZIPFiles(sZIP, sLabel, fVerbose, done)
             }
             if (fVerbose) {
                 let methods = [
-                    "Stored", "Shrunk", "Reduced1", "Reduced2", "Reduced3", "Reduced4", "Imploded", undefined, "Deflated", "Deflated64", "DCLImploded"
+                    "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "DCLImplode"
                 ];
                 printf("%-14s %7d   %-8s %7d   %3d%%   %T   %08x\n",
                     CharSet.fromCP437(file.name), file.size, methods[entry.method], entry.compressedSize, Math.round(100 * (file.size - entry.compressedSize) / file.size) || 0, file.date, entry.crc);

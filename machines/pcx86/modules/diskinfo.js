@@ -2316,9 +2316,9 @@ export default class DiskInfo {
     }
 
     /**
-     * getDate(year, month, day, hour, minute, second, sFile)
+     * getDate(modDate, modTime, sFile)
      *
-     * If modDate wasn't set (ie, 0x00000000), then m will be -1 and d will be 0,
+     * If modDate wasn't set (ie, 0x0000), then m will be -1 and d will be 0,
      * resulting in a Date where getFullYear() < 1980.  There are cases where we allow
      * that, in order to recreate uninitialized directory entries; however, in THIS
      * function, we do not, because we're building a file table for the disk image,
@@ -2326,21 +2326,24 @@ export default class DiskInfo {
      * we don't want out-of-bounds values showing up there.
      *
      * @this {DiskInfo}
-     * @param {number} year
-     * @param {number} month
-     * @param {number} day
-     * @param {number} hour
-     * @param {number} minute
-     * @param {number} second
+     * @param {number} modDate
+     * @param {number} modTime
      * @param {number} sFile
      * @returns {Date} (local date corresponding to the given date/time parameters)
      */
-    getDate(year, month, day, hour, minute, second, sFile)
+    getDate(modDate, modTime, sFile)
     {
         let errors = 0;
+        let year = (modDate >> 9) + 1980;
+        let month = ((modDate >> 5) & 0xf) - 1;
+        let day = (modDate & 0x1f);
+        let hour = (modTime >> 11);
+        let minute = (modTime >> 5) & 0x3f;
+        let second = (modTime & 0x1f) << 1;
         let y = year, m = month, d = day, h = hour, n = minute, s = second;
         if (m < 0) {
             m = 0;
+            if (modDate || modTime) errors++;
         }
         if (m > 11) {
             m = 11;
@@ -2348,6 +2351,7 @@ export default class DiskInfo {
         }
         if (d < 1) {
             d = 1;
+            if (modDate || modTime) errors++;
         }
         if (d > 31) {
             d = 31;
@@ -2415,15 +2419,7 @@ export default class DiskInfo {
                 if (dir.attr == DiskInfo.ATTR.LFN) continue;
                 let name = CharSet.fromCP437(dir.name);
                 let path = CharSet.fromCP437(dir.path) + name;
-                let dateMod = this.getDate(
-                    (dir.modDate >> 9) + 1980,
-                    ((dir.modDate >> 5) & 0xf) - 1,
-                    (dir.modDate & 0x1f),
-                    (dir.modTime >> 11),
-                    (dir.modTime >> 5) & 0x3f,
-                    (dir.modTime & 0x1f) << 1,
-                    this.diskName + ":" + path
-                );
+                let dateMod = this.getDate(dir.modDate, dir.modTime, this.diskName + ":" + path);
                 file = new FileInfo(this, vol.iVolume, path, name, dir.attr, dateMod, dir.size, dir.cluster, dir.aLBA);
                 file.index = this.fileTable.length;
                 this.fileTable.push(file);

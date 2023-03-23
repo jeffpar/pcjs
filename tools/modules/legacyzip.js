@@ -589,7 +589,7 @@ class Stretch extends Decompress
      * @property {number} len           // (uint16_t)
      * @property {number} last_dst_pos  // (size_t)
      *
-     * @typedef {Array.<Code>} CodeTab
+     * @typedef {Array.<Code>} CodeTable
      *
      * @typedef {Object} CodeQueue
      * @property {number} next_idx      // (uint16_t)
@@ -608,7 +608,7 @@ class Stretch extends Decompress
     init(src, dst_len)
     {
         super.init(src, dst_len);
-        this.codetab = this.allocCodeTab();
+        this.codetable = this.allocCodeTable();
         this.codequeue = this.allocCodeQueue();
         this.code_size = 0;             // updated by readCode()
         this.curr_code = 0;             // updated by readCode()
@@ -617,14 +617,14 @@ class Stretch extends Decompress
     }
 
     /**
-     * allocCodeTab()
+     * allocCodeTable()
      *
      * @this {Stretch}
-     * @returns {Array.<Code>}
+     * @returns {CodeTable}
      */
-    allocCodeTab()
+    allocCodeTable()
     {
-        let codetab = /** @type {Array.<Code>} */ new Array(Stretch.MAX_CODE + 1);
+        let table = /** @type {Array.<Code>} */ new Array(Stretch.MAX_CODE + 1);
         /*
          * Codes for literal bytes.  Set a phony prefix_code so they're valid.
          */
@@ -632,29 +632,29 @@ class Stretch extends Decompress
         for (i = 0; i <= 0xff; i++) {
             let prefix_code = i;
             let ext_byte = i, len = 1;
-            codetab[i] = {prefix_code, ext_byte, len}
+            table[i] = {prefix_code, ext_byte, len}
         }
-        for (; i < codetab.length; i++) {
+        for (; i < table.length; i++) {
             let prefix_code = Stretch.INVALID_CODE;
             let ext_byte, len;      // undefined
-            codetab[i] = {prefix_code, ext_byte, len};
+            table[i] = {prefix_code, ext_byte, len};
         }
-        return codetab;
+        return table;
     }
 
     /**
-     * updateCodeTab(i, prev_code)
+     * updateCodeTable(i, prev_code)
      *
      * @this {Stretch}
      * @param {number} i
      * @param {number} prev_code
      */
-    updateCodeTab(i, prev_code)
+    updateCodeTable(i, prev_code)
     {
-        this.codetab[i].prefix_code = prev_code;
-        this.codetab[i].ext_byte = this.first_byte;
-        this.codetab[i].len = this.codetab[prev_code].len + 1;
-        this.codetab[i].last_dst_pos = this.codetab[prev_code].last_dst_pos;
+        this.codetable[i].prefix_code = prev_code;
+        this.codetable[i].ext_byte = this.first_byte;
+        this.codetable[i].len = this.codetable[prev_code].len + 1;
+        this.codetable[i].last_dst_pos = this.codetable[prev_code].last_dst_pos;
     }
 
     /**
@@ -748,12 +748,44 @@ class Stretch extends Decompress
         }
 
         if (control_code == Stretch.PARTIAL_CLEAR) {
-            this.unshrink_partial_clear();
+            this.clearPartial();
             return this.readCode();
         }
 
         this.curr_code = Stretch.INVALID_CODE;
         return true;
+    }
+
+    /**
+     * clearPartial()
+     *
+     * @this {Stretch}
+     */
+    clearPartial()
+    {
+        let is_prefix = new Array(Stretch.MAX_CODE + 1).fill(false);
+
+        /*
+         * Scan for codes that have been used as a prefix.
+         */
+        for (let i = Stretch.CONTROL_CODE + 1; i <= Stretch.MAX_CODE; i++) {
+            if (this.codetable[i].prefix_code != Stretch.INVALID_CODE) {
+                is_prefix[this.codetable[i].prefix_code] = true;
+            }
+        }
+
+        /*
+         * Clear "non-prefix" codes in the table; populate the code queue.
+         */
+        let code_queue_size = 0;
+        for (let i = Stretch.CONTROL_CODE + 1; i <= Stretch.MAX_CODE; i++) {
+            if (!is_prefix[i]) {
+                this.codetable[i].prefix_code = Stretch.INVALID_CODE;
+                    this.codequeue.codes[code_queue_size++] = i;
+            }
+        }
+        this.codequeue.codes[code_queue_size] = Stretch.INVALID_CODE;   // end-of-queue marker
+        this.codequeue.next_idx = 0;
     }
 
     /**
@@ -783,22 +815,22 @@ class Stretch extends Decompress
             this.writeOutput(code, false);
             return Stretch.OK;
         }
-        if (this.codetab[code].prefix_code == Stretch.INVALID_CODE || this.codetab[code].prefix_code == code) {
+        if (this.codetable[code].prefix_code == Stretch.INVALID_CODE || this.codetable[code].prefix_code == code) {
             /*
              * Reject invalid codes. Self-referential codes may exist in the table but cannot be used.
              */
             return Stretch.ERR;
         }
-        if (this.codetab[code].len != Stretch.UNKNOWN_LEN) {
+        if (this.codetable[code].len != Stretch.UNKNOWN_LEN) {
             /*
              * Output string with known length (the common case).
              */
-            if (this.dst.length - this.dst_pos < this.codetab[code].len) {
+            if (this.dst.length - this.dst_pos < this.codetable[code].len) {
                 return Stretch.FULL;
             }
-            this.copyBytes(this.dst_pos, this.codetab[code].last_dst_pos, this.codetab[code].len);
+            this.copyBytes(this.dst_pos, this.codetable[code].last_dst_pos, this.codetable[code].len);
             this.first_byte = this.dst[this.dst_pos];
-            this.len = this.codetab[code].len;
+            this.len = this.codetable[code].len;
             return Stretch.OK;
         }
         /*
@@ -806,8 +838,8 @@ class Stretch extends Decompress
          * (due to partial clearing) when the code was inserted into the table. The prefix
          * can then become valid when it's added to the table at a later point.
          */
-        assert(this.codetab[code].len == Stretch.UNKNOWN_LEN);
-        let /* uint16_t */ prefix_code = this.codetab[code].prefix_code;
+        assert(this.codetable[code].len == Stretch.UNKNOWN_LEN);
+        let /* uint16_t */ prefix_code = this.codetable[code].prefix_code;
         assert(prefix_code > Stretch.CONTROL_CODE);
 
         if (prefix_code == this.getCodeQueueNext()) {
@@ -815,11 +847,11 @@ class Stretch extends Decompress
              * The prefix code hasn't been added yet, but we were just about to: the KwKwK case.
              * Add the previous string extended with its first byte.
              */
-            assert(this.codetab[prev_code].prefix_code != Stretch.INVALID_CODE);
-            this.updateCodeTab(prefix_code, prev_code);
+            assert(this.codetable[prev_code].prefix_code != Stretch.INVALID_CODE);
+            this.updateCodeTable(prefix_code, prev_code);
             this.writeOutput(this.first_byte, false);
         }
-        else if (this.codetab[prefix_code].prefix_code == Stretch.INVALID_CODE) {
+        else if (this.codetable[prefix_code].prefix_code == Stretch.INVALID_CODE) {
             /*
              * The prefix code is still invalid.
              */
@@ -828,19 +860,19 @@ class Stretch extends Decompress
         /*
          * Output the prefix string, then the extension byte.
          */
-        this.len = this.codetab[prefix_code].len + 1;
+        this.len = this.codetable[prefix_code].len + 1;
         if (this.dst.length - this.dst_pos < this.len) {
             return Stretch.FULL;
         }
-        this.copyBytes(this.dst_pos, this.codetab[prefix_code].last_dst_pos, this.codetab[prefix_code].len);
-        this.writeByte(this.codetab[code].ext_byte, this.dst_pos + this.len - 1);
+        this.copyBytes(this.dst_pos, this.codetable[prefix_code].last_dst_pos, this.codetable[prefix_code].len);
+        this.writeByte(this.codetable[code].ext_byte, this.dst_pos + this.len - 1);
         this.first_byte = this.readByte(this.dst_pos);
         /*
          * Update the code table now that the string has a length and pos.
          */
         assert(prev_code != code);
-        this.codetab[code].len = this.len & 0xffff;
-        this.codetab[code].last_dst_pos = this.dst_pos;
+        this.codetable[code].len = this.len & 0xffff;
+        this.codetable[code].last_dst_pos = this.dst_pos;
 
         return Stretch.OK;
     }
@@ -873,7 +905,7 @@ class Stretch extends Decompress
             return Stretch.FULL;
         }
         this.first_byte = this.curr_code & 0xff;
-        this.codetab[this.curr_code].last_dst_pos = this.dst_pos;
+        this.codetable[this.curr_code].last_dst_pos = this.dst_pos;
         this.writeOutput(this.first_byte);
 
         let prev_code = this.curr_code;
@@ -888,7 +920,7 @@ class Stretch extends Decompress
              * Handle KwKwK: next code used before being added.
              */
             if (this.curr_code == this.getCodeQueueNext()) {
-                if (this.codetab[prev_code].prefix_code == Stretch.INVALID_CODE) {
+                if (this.codetable[prev_code].prefix_code == Stretch.INVALID_CODE) {
                     /*
                      * The previous code is no longer valid.
                      */
@@ -898,7 +930,7 @@ class Stretch extends Decompress
                  * Extend the previous code with its first byte.
                  */
                 assert(this.curr_code != prev_code);
-                this.updateCodeTab(this.curr_code, prev_code);
+                this.updateCodeTable(this.curr_code, prev_code);
                 assert(this.dst_pos < /* dst_len */ this.dst.length);
                 this.writeOutput(this.first_byte, false);
             }
@@ -914,9 +946,9 @@ class Stretch extends Decompress
              */
             let c = this.curr_code;
             for (let i = 0; i < this.len; i++) {
-                assert(this.codetab[c].len == this.len - i);
-                assert(this.codetab[c].ext_byte == this.dst[this.dst_pos + this.len - i - 1]);
-                c = this.codetab[c].prefix_code;
+                assert(this.codetable[c].len == this.len - i);
+                assert(this.codetable[c].ext_byte == this.dst[this.dst_pos + this.len - i - 1]);
+                c = this.codetable[c].prefix_code;
             }
             /*
              * Add a new code to the string table if there's room.  The string is the
@@ -924,21 +956,21 @@ class Stretch extends Decompress
              */
             let new_code = this.removeCodeQueueNext();
             if (new_code != Stretch.INVALID_CODE) {
-                assert(this.codetab[prev_code].last_dst_pos < this.dst_pos);
-                this.updateCodeTab(new_code, prev_code);
-                if (this.codetab[prev_code].prefix_code == Stretch.INVALID_CODE) {
+                assert(this.codetable[prev_code].last_dst_pos < this.dst_pos);
+                this.updateCodeTable(new_code, prev_code);
+                if (this.codetable[prev_code].prefix_code == Stretch.INVALID_CODE) {
                     /*
                      * prev_code was invalidated in a partial clearing.  Until that code is re-used,
                      * the string represented by new_code is indeterminate.
                      */
-                    this.codetab[new_code].len = Stretch.UNKNOWN_LEN;
+                    this.codetable[new_code].len = Stretch.UNKNOWN_LEN;
                 }
                 /*
                  * If prev_code was invalidated in a partial clearing, it's possible that new_code == prev_code,
                  * in which case it will never be used or cleared.
                  */
             }
-            this.codetab[this.curr_code].last_dst_pos = this.dst_pos;
+            this.codetable[this.curr_code].last_dst_pos = this.dst_pos;
             this.dst_pos += this.len;
             prev_code = this.curr_code;
         }
