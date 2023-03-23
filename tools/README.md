@@ -58,7 +58,7 @@ turn be built from Kryoflux RAW files.  Here are the basic steps, using tools fr
  1. From the Kryoflux RAW files, create a PFI ("PCE Flux Image") file
  2. Next, create a PRI ("PCE Raw Image") file, with the flux reversal pulses converted to bits
  3. From the PRI file, create a PSI ("PCE Sector Image") file
- 4. From the PSI file, create a JSON-encoded disk image file, using the PCjs `DiskImage` utility
+ 4. From the PSI file, create a JSON-encoded disk image file, using the PCjs **DiskImage** utility
 
 which translates to these commands (using a 360K PC diskette named "disk1" as an example):
 
@@ -90,19 +90,19 @@ data.  The list of recognized text file extensions is likely to grow over time.
 
 ### Building PCjs Disk Images from ZIP files
 
-There are many large software collections where the diskette contents have been archived as ZIP files rather than as disk images, and in theory, it's trivial to `unzip` them into separate folders and then use `DiskImage` to build new images from those folders (see above).
+There are many large software collections where the diskette contents have been archived as ZIP files rather than as disk images, and in theory, it's trivial to `unzip` them into separate folders and then use **DiskImage** to build new images from those folders (see above).
 
-For example, I originally recreated all the [PC-SIG Library](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/) diskette images from the "PC-SIG Library Eighth Edition" CD-ROM files stored at [cd.textfiles.com](http://cd.textfiles.com/pcsig08/), and some of the diskettes on the CD-ROM had been completely "archived as single ZIP files -- probably because the diskettes contained filenames that were not allowed on CD-ROM -- so I used `unzip` on macOS to extract those ZIP files to per-disk folders, and then recreated disk images from those folders.
+For example, I originally recreated all the [PC-SIG Library](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/) diskette images from the "PC-SIG Library Eighth Edition" CD-ROM files stored at [cd.textfiles.com](http://cd.textfiles.com/pcsig08/).  Some of the diskettes on the CD-ROM had been completely archived as single ZIP files -- probably because the diskettes contained filenames that were not allowed on CD-ROM -- so I used `unzip` on macOS to extract those ZIP files to folders, and then recreated disk images from those folders.
 
-However, this process doesn't always work well.  [DISK0798](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/0501/#directory-of-pcsig08-disk0798) highlights a few issues that have already been [discussed](https://github.com/jeffpar/pcjs/commit/17e0a2f9e46140fce42f11de8f5fa678b2a3bfe5) on GitHub.
+However, this process didn't always work well.  [DISK0798](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/0501/#directory-of-pcsig08-disk0798) highlights a few issues that have already been [discussed](https://github.com/jeffpar/pcjs/commit/17e0a2f9e46140fce42f11de8f5fa678b2a3bfe5) on GitHub.
 
 First, the original order of the filenames was not preserved.  Modern operating systems (eg, macOS) list files alphabetically, and as a result, the files on the recreated diskettes were sorted alphabetically as well.
 
 Second, while the ZIP archives appeared to more-or-less preserve non-ASCII filenames, `unzip` did not.  IBM PCs used a character set now known as [Code Page 437](https://en.wikipedia.org/wiki/Code_page_437) (*CP437*), which included a variety of line-drawing characters and other symbols that `unzip` failed to translate to their modern (*UTF-8*) counterparts.
 
-To resolve all these issues, I decided to update `DiskImage` with an option (`--zip`) to read ZIP archives directly.  I started with an NPM package called [node-stream-zip](https://www.npmjs.com/package/node-stream-zip), which is essentially a module that understands the ZIP file format, identifies all the compressed files inside the ZIP file, and uses Node's built-in *zlib* functionality to decompress them.
+To resolve all these issues, I decided to update **DiskImage** with an option (`--zip`) to read ZIP archives directly.  I started with an NPM package called [node-stream-zip](https://www.npmjs.com/package/node-stream-zip), which is essentially a module that understands the ZIP file format, identifies all the compressed files inside the ZIP file, and uses Node's built-in *zlib* functionality to decompress them.
 
-However, I quickly discovered that *zlib* could not decompress the contents of many old ZIP files, because instead of the popular *Deflate* compression algorithm, older ZIP files used compression methods such as *Shrink*, *Reduce*, and *Implode*.  So I imported *node-stream-zip* into PCjs as [StreamZip](modules/streamzip.js), modernized it, and then extended it with a new decompression module named [LegacyZip](modules/legacyzip.js), which I wrote by hand-translating the excellent C code at [hanshq.net](https://www.hanshq.net/zip2.html) into JavaScript.
+Unfortunately, I quickly discovered that *zlib* could not decompress the contents of many old ZIP files, because instead of the now-popular *Deflate* compression algorithm, older ZIP files used compression methods such as *Shrink*, *Reduce*, and *Implode*.  So I imported *node-stream-zip* into PCjs as [StreamZip](modules/streamzip.js), modernized it, and then extended it with a new decompression module named [LegacyZip](modules/legacyzip.js), which I wrote by hand-translating the excellent C code at [hanshq.net](https://www.hanshq.net/zip2.html) into JavaScript.
 
 Here's an example of `--zip` in action:
 
@@ -128,21 +128,21 @@ Here's an example of `--zip` in action:
 
 The `--verbose` option generates the `PKZIP`-style file listing, displaying the individual file names, compressed and uncompressed file sizes, compression ratio, etc.
 
-In fact, creating a disk image is entirely optional; you can use `DiskImage` to simply examine the contents of `zip` file:
+In fact, creating a disk image is entirely optional; you can use **DiskImage** to simply examine the contents of `zip` file:
 
     node modules/diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --verbose
 
-To simplify dealing with a large collection of files, I also added an `--all` option:
+To simplify dealing with large collections of files, I also added an `--all` option:
 
     node modules/diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --verbose
 
-which will locate *all* matching `zip` files and automatically display their contents.  `--all` also supports file extensions `json` and `img`; the `--zip` option is implied for any file ending with a `zip` extension.
+That command will locate *all* matching `zip` files and automatically display their contents.  `--all` also supports file extensions `JSON` and `IMG`; the `--zip` option is implied for any file ending with a `ZIP` extension.
 
-If you want to create a disk image for every `zip` file:
+If you want to create a disk image for every `ZIP` file:
 
     node modules/diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --output=tmp --type=img
 
-`--output` specifies an output folder, `--type` can be either `img` or `json`, and each output file will have the same basename as the `zip` file, with either an `.img` or `.json` extension.
+`--output` specifies the output folder and `--type` specifies the output file type (either `img` or `json`).  Each output file will have the same basename as the `zip` file.
 
 ### Examining PCjs Disk Images
 
