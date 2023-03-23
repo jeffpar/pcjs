@@ -92,9 +92,9 @@ export default class StdLib {
                     sValue = args[i++];
                 }
                 if (typeof sValue == "string") {
-                    let quoteMatch = sValue.match(/^"(.*)"$/);
+                    let quoteMatch = sValue.match(/^(["'])(.*)\1$/);
                     if (quoteMatch) {
-                        sValue = quoteMatch[1];
+                        sValue = quoteMatch[2];
                     }
                 }
                 if (!argv.hasOwnProperty(sArg)) {

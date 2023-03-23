@@ -623,6 +623,7 @@
     "GETSYMBOL",
     "Glinert",
     "globalalloc",
+    "globbed",
     "GOSUB",
     "Grabiner",
     "GRAFTABL",
@@ -1577,6 +1578,7 @@
     "Zachmann",
     "Zachmann’s",
     "Zbikowski's",
+    "zipfile",
     "zipstream",
     "Zork",
     "zzznnn"
