@@ -587,6 +587,23 @@
       ]
     },
     {
+      "name": "Node: diskimage.js --all --filter",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "args": [
+        "--all='/Volumes/PCSIG_13B/**/*.ZIP'",
+        "--filter='00[0-9][0-9]'",
+        "--verbose"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskimage.js --dir",
       "type": "node",
       "request": "launch",

@@ -1565,7 +1565,10 @@ function processAll(all, argv)
             let outdir = argv['output'];        // if specified, --output is assumed to be a directory
             let type =  argv['type'] || "json"; // if specified, --type should be a known file extension
             if (type[0] != '.') type = '.' + type;
+            let filter = argv['filter'];
+            filter = (typeof filter == "string")? new RegExp(filter) : null;
             for (let sFile of asFiles) {
+                if (filter && !filter.test(sFile)) continue;
                 let args = [argv[0], sFile];
                 if (outdir) args['output'] = path.join(outdir, path.parse(sFile).name + type);
                 for (let arg of ['overwrite', 'verbose']) {
