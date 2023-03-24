@@ -10,15 +10,15 @@
 import StdIO from "../../machines/modules/stdio.js";
 
 /**
- * @class StdLib
+ * @class PCJSLib
  * @property {number} argc
  * @property {Array.<string>} argv
  */
-export default class StdLib {
+export default class PCJSLib {
     /**
-     * StdLib()
+     * PCJSLib()
      *
-     * @this {StdLib}
+     * @this {PCJSLib}
      */
     constructor()
     {
@@ -29,7 +29,7 @@ export default class StdLib {
     /**
      * getArgs(s)
      *
-     * @this {StdLib}
+     * @this {PCJSLib}
      * @param {string} [s]
      * @returns {Array} [argc, argv]
      */
@@ -66,7 +66,7 @@ export default class StdLib {
      * Finally, since argv is an Array, it has a built-in 'length' property, so if you also need to specify
      * a "--length" argument, we must precede the key with a '#' (ie, '#length') to avoid a conflict.
      *
-     * @this {StdLib}
+     * @this {PCJSLib}
      * @param {Array.<string>} [args]
      * @param {number} [i] (default is 1, because if you're passing process.argv, process.argv[0] is useless)
      * @returns {Array} [argc, argv]
@@ -88,9 +88,9 @@ export default class StdLib {
                     sArg = sArg.substr(0, j);
                     sValue = (sValue == "true") ? true : ((sValue == "false") ? false : sValue);
                 }
-                else if (i < args.length && args[i][0] != '-') {
-                    sValue = args[i++];
-                }
+                // else if (i < args.length && args[i][0] != '-') {
+                //     sValue = args[i++];      // we no longer automatically consume the next argument; you must use "="
+                // }
                 if (typeof sValue == "string") {
                     let quoteMatch = sValue.match(/^(["'])(.*)\1$/);
                     if (quoteMatch) {
@@ -128,7 +128,7 @@ export default class StdLib {
     /**
      * printf(format, ...args)
      *
-     * @this {StdLib}
+     * @this {PCJSLib}
      * @param {string} format
      * @param {...} args
      */

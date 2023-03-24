@@ -149,11 +149,11 @@ If you want to create a disk image for every `ZIP` file:
 Both local and remote diskette images can be examined.  To examine a remote image, you *must* use the `--disk` option,
 with either an explicit URL, as in:
 
-    node modules/diskimage.js --disk https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+    node modules/diskimage.js --disk=https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
 
 or with one of PCjs' implicit diskette paths, such as `/diskettes`, which currently maps to disk server `https://diskettes.pcjs.org`:
 
-    node modules/diskimage.js --disk /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+    node modules/diskimage.js --disk=/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
 
 If you happen to have a local file that exists in the same location as the implicit diskette path, use `--server` to force
 the server mapping.  The list of implicit paths for PC diskettes currently includes:

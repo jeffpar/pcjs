@@ -10,14 +10,14 @@
 import fs         from "fs";
 import os         from "os";
 import path       from "path";
-import StdLib     from "./stdlib.js";
+import PCJSLib    from "./pcjslib.js";
 import Device     from "../../machines/modules/device.js";
 import str        from "../../machines/shared/lib/strlib.js"
 
 let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
-let stdlib = new StdLib();
+let pcjslib = new PCJSLib();
 let moduleDir, rootDir;
 
 function printError(err)
@@ -937,4 +937,4 @@ function main(argc, argv)
     printf("nothing to do\n");
 }
 
-main(...stdlib.getArgs());
+main(...pcjslib.getArgs());

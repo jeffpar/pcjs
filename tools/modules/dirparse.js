@@ -9,13 +9,13 @@
  */
 
 import fs         from "fs";
-import StdLib     from "./stdlib.js";
+import PCJSLib    from "./pcjslib.js";
 import Device     from "../../machines/modules/device.js";
 
 let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
-let stdlib = new StdLib();
+let pcjslib = new PCJSLib();
 
 function parseListing(listing, inventory, filter, exclude, target)
 {
@@ -99,4 +99,4 @@ function main(argc, argv)
     }
 }
 
-main(...stdlib.getArgs());
+main(...pcjslib.getArgs());

@@ -14,7 +14,7 @@ import glob       from "glob";
 import path       from "path";
 import got        from "got";
 import DataBuffer from "./nodebuffer.js";
-import StdLib     from "./stdlib.js";
+import PCJSLib    from "./pcjslib.js";
 import StreamZip  from "./streamzip.js";
 import Device     from "../../machines/modules/device.js";
 import JSONLib    from "../../machines/modules/jsonlib.js";
@@ -24,7 +24,7 @@ import CharSet    from "../../machines/pcx86/modules/charset.js";
 let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
-let stdlib = new StdLib();
+let pcjslib = new PCJSLib();
 let moduleDir, rootDir;
 
 let nMaxDefault = 512, nMaxInit, nMaxCount, sFileIndex, useServer;
@@ -982,7 +982,7 @@ function readCatalog(argv)
                 if (!diskette.args) {
                     diskette.args = "";
                 } else {
-                    [diskette.argc, diskette.argv] = stdlib.getArgs(diskette.args);
+                    [diskette.argc, diskette.argv] = pcjslib.getArgs(diskette.args);
                     diskette.args = " " + diskette.args;
                 }
                 /*
@@ -1281,8 +1281,17 @@ function readZIPFiles(sZIP, sLabel, fVerbose, done)
                 let methods = [
                     "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "DCLImplode"
                 ];
+                let filename = CharSet.fromCP437(file.name);
+                if (filename.length > 14) {
+                    filename = "..." + filename.slice(filename.length - 11);
+                }
+                let filesize = file.size;
+                if (filesize < 0) {
+                    filesize = 0;
+                    filename += "/";
+                }
                 printf("%-14s %7d   %-8s %7d   %3d%%   %T   %08x\n",
-                    CharSet.fromCP437(file.name), file.size, methods[entry.method], entry.compressedSize, Math.round(100 * (file.size - entry.compressedSize) / file.size) || 0, file.date, entry.crc);
+                    filename, filesize, methods[entry.method], entry.compressedSize, Math.round(100 * (file.size - entry.compressedSize) / file.size) || 0, file.date, entry.crc);
             }
         }
         zip.close()
@@ -1730,4 +1739,4 @@ function main(argc, argv)
     printf("nothing to do\n");
 }
 
-main(...stdlib.getArgs());
+main(...pcjslib.getArgs());
