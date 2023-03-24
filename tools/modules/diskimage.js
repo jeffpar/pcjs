@@ -1291,7 +1291,7 @@ function readZIPFiles(sZIP, sLabel, fVerbose, done)
                     filename += "/";
                 }
                 printf("%-14s %7d   %-8s %7d   %3d%%   %T   %08x\n",
-                    filename, filesize, methods[entry.method], entry.compressedSize, Math.round(100 * (file.size - entry.compressedSize) / file.size) || 0, file.date, entry.crc);
+                    filename, filesize, methods[entry.method], entry.compressedSize, Math.round(100 * (filesize - entry.compressedSize) / filesize) || 0, file.date, entry.crc);
             }
         }
         zip.close()
