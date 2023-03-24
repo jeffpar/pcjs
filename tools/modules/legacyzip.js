@@ -198,31 +198,31 @@ class BitStream
     }
 
     /**
-     * getRead(nBits)
+     * getRead(n)
      *
-     * Returns the number of nBits read.
+     * Returns the number of n-bit units read (ie, number of bits if n is 1, number of bytes if n is 8, etc)
      *
      * @this {BitStream}
-     * @param {number} [nBits]
+     * @param {number} [n]
      * @returns {number}
      */
-    getRead(nBits = 1)
+    getRead(n = 1)
     {
-        return (BitStream.roundUp(this.bit_pos, nBits) / nBits);
+        return (BitStream.roundUp(this.bit_pos, n) / n);
     }
 
     /**
-     * lsb(bits, n)
+     * lsb(v, n)
      *
-     * Returns the n least significant bits of bits.
+     * Returns the bottom n bits ("least significant bits") of v.
      *
-     * @param {number} bits
+     * @param {number} v
      * @param {number} n
      * @returns {number}
      */
-    static lsb(bits, n)
+    static lsb(v, n)
     {
-        return bits & ((1 << n) - 1);
+        return v & ((1 << n) - 1);
     }
 
     /**
