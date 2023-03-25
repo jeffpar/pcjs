@@ -569,14 +569,12 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --all",
+      "name": "Node: diskimage.js --all --zip",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all='/Volumes/PCSIG_13B/**/*.ZIP'",
-        "--output=tmp",
-        "--overwrite",
+        "--all='/Volumes/PC_SIG_12_90/**/*.ZIP'",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",
@@ -587,7 +585,7 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --all --filter",
+      "name": "Node: diskimage.js --all --zip --filter",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
@@ -621,14 +619,30 @@
       ]
     },
     {
+      "name": "Node: diskimage.js --arc",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "args": [
+        "--arc=tmp/CHASM.ARC",
+        "--output=tmp/CHASM.json",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskimage.js --zip",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--zip=tmp/posts.zip",
-        "--output=tmp/posts.json",
-        "--overwrite"
+        "--zip=/Volumes/PC_SIG_12_90/401_500/DISK0411/DISK0411.ZIP",
+        "--verbose"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,

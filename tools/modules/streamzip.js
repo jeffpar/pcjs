@@ -16,6 +16,7 @@ import LegacyZip from './legacyzip.js';
 /**
  * @typedef {Object} Config
  * @property {string} file (file name)
+ * @property {boolean} arcType (ARC file if 1, ZIP file if 2 or undefined)
  * @property {boolean} storeEntries (default is true; ie, always store entries)
  * @property {boolean} skipEntryNameValidation (default is false (ie, always validate entry names))
  * @property {string} nameEncoding (default is "utf8" with no TextDecoder; undocumented)
@@ -31,6 +32,8 @@ export default class StreamZip {
     /*
      * Public class fields
      */
+    static TYPE_ARC = 1;
+    static TYPE_ZIP = 2;
     static LocalHeader = new Structure("LocalHeader")
         .field('signature',     Structure.UINT32, {
             'LOCSIG': 0x04034b50                        // "PK\003\004" (local file header signature)
@@ -46,7 +49,8 @@ export default class StreamZip {
             LNG:        0x0400                          // UNICODE encoding
         })
         .field('method',        Structure.UINT16)       // compression method
-        .field('modDateTime',   Structure.UINT32)       // modification time (low) and date (high)
+        .field('time',          Structure.UINT16)       // modification time
+        .field('date',          Structure.UINT16)       // modification date
         .field('crc',           Structure.UINT32)       // uncompressed file CRC-32 value
         .field('compressedSize',Structure.UINT32)       // compressed size
         .field('size',          Structure.UINT32)       // uncompressed size
@@ -71,7 +75,8 @@ export default class StreamZip {
         .field('version',       Structure.UINT16)       // version needed to extract
         .field('flags',         Structure.UINT16)       // general purpose bit flag
         .field('method',        Structure.UINT16)       // compression method
-        .field('modDateTime',   Structure.UINT32)       // modification time (low) and date (high)
+        .field('time',          Structure.UINT16)       // modification time
+        .field('date',          Structure.UINT16)       // modification date
         .field('crc',           Structure.UINT32)       // uncompressed file CRC-32 value
         .field('compressedSize',Structure.UINT32)       // compressed size
         .field('size',          Structure.UINT32)       // uncompressed size
@@ -123,57 +128,81 @@ export default class StreamZip {
         .field('offset',        Structure.UINT64)       // offset of first CEN header
         .verifySize(56);
 
-    /* Compression methods */
-    static STORE        = 0;                            // no compression
-    static SHRINK       = 1;                            // shrink
-    static REDUCE1      = 2;                            // reduce with compression factor 1
-    static REDUCE2      = 3;                            // reduce with compression factor 2
-    static REDUCE3      = 4;                            // reduce with compression factor 3
-    static REDUCE4      = 5;                            // reduce with compression factor 4
-    static IMPLODE      = 6;                            // implode
-    static DEFLATE      = 8;                            // deflate
-    static DEFLATE64    = 9;                            // deflate64
-    static IMPLODE_DCL  = 10;                           // PKWare DCL implode
-    static BZIP2        = 12;                           // compressed using BZIP2
-    static LZMA         = 14;                           // LZMA
-    static IBM_TERSE    = 18;                           // compressed using IBM TERSE
-    static IBM_LZ77     = 19;                           // IBM LZ77
+    static ArcHeader = new Structure("ArcHeader")
+        .field('signature',     Structure.UINT8, {
+            'ARC_SIG':  0x1a                            // EOF
+        })
+        .field('type',          Structure.UINT8, {      // header type
+            'ARC_END':  0x00,                           // end of archive
+            'ARC_OLD':  0x01,                           // old archive header (unpacked, no 'size' field)
+            'ARC_UNP':  0x02,                           // new archive header (unpacked, 'size' == 'compressedSize')
+            'ARC_NR':   0x03,                           // non-repeat packing
+            'ARC_HS':   0x04,                           // Huffman squeezing
+            'ARC_LZ':   0x05,                           // LZ compression
+            'ARC_LZNR': 0x06,                           // LZ non-repeat compression
+            'ARC_LZH':  0x07,                           // LZ with new hash
+            'ARC_LZD':  0x08,                           // LZ dynamic
+            'ARC_SQSH': 0x09                            // "squashing"
+        })
+        .field('name',          13)                     // file name (null terminated)
+        .field('compressedSize',Structure.UINT32)       // compressed size
+        .field('date',          Structure.UINT16)       // modification date
+        .field('time',          Structure.UINT16)       // modification time (date and time order is reversed from ZIP files)
+        .field('crc',           Structure.UINT16)       // CRC value
+        .field('size',          Structure.UINT32)       // uncompressed size (not present if type == ARC_OLD)
+        .verifySize(29);
 
-    /* General purpose bit flags */
-    static FLG_ENC      = 0x0001;                       // encrypted file
-    static FLG_COMP1    = 0x0002;                       // compression option
-    static FLG_COMP2    = 0x0004;                       // compression option
-    static FLG_DESC     = 0x0008;                       // data descriptor
-    static FLG_ENH      = 0x0010;                       // enhanced deflation
-    static FLG_STR      = 0x0040;                       // strong encryption
-    static FLG_LNG      = 0x0400;                       // UNICODE encoding
+    /* Compression methods */
+    static ARC_UNP              = -2;                   // unpacked (no compression)
+    static ARC_NR               = -3;                   // non-repeat packing
+    static ARC_HS               = -4;                   // Huffman squeezing
+    static ARC_LZ               = -5;                   // LZ compression
+    static ARC_LZNR             = -6;                   // LZ non-repeat compression
+    static ARC_LZH              = -7;                   // LZ with new hash
+    static ARC_LZD              = -8;                   // LZ dynamic
+    static ARC_SQSH             = -9;                   // "squashing"
+
+    static ZIP_STORE            = 0;                    // no compression
+    static ZIP_SHRINK           = 1;                    // shrink
+    static ZIP_REDUCE1          = 2;                    // reduce with compression factor 1
+    static ZIP_REDUCE2          = 3;                    // reduce with compression factor 2
+    static ZIP_REDUCE3          = 4;                    // reduce with compression factor 3
+    static ZIP_REDUCE4          = 5;                    // reduce with compression factor 4
+    static ZIP_IMPLODE          = 6;                    // implode
+    static ZIP_DEFLATE          = 8;                    // deflate
+    static ZIP_DEFLATE64        = 9;                    // deflate64
+    static ZIP_IMPLODE_DCL      = 10;                   // PKWare DCL implode
+    static ZIP_BZIP2            = 12;                   // compressed using BZIP2
+    static ZIP_LZMA             = 14;                   // LZMA
+    static ZIP_IBM_TERSE        = 18;                   // compressed using IBM TERSE
+    static ZIP_IBM_LZ77         = 19;                   // IBM LZ77
 
     /* 4.5 Extensible data fields */
-    static EF_ID        = 0;
-    static EF_SIZE      = 2;
+    static EF_ID                = 0;
+    static EF_SIZE              = 2;
 
     /* Header IDs */
-    static ID_ZIP64         = 0x0001;
-    static ID_AVINFO        = 0x0007;
-    static ID_PFS           = 0x0008;
-    static ID_OS2           = 0x0009;
-    static ID_NTFS          = 0x000a;
-    static ID_OPENVMS       = 0x000c;
-    static ID_UNIX          = 0x000d;
-    static ID_FORK          = 0x000e;
-    static ID_PATCH         = 0x000f;
-    static ID_X509_PKCS7    = 0x0014;
-    static ID_X509_CERTID_F = 0x0015;
-    static ID_X509_CERTID_C = 0x0016;
-    static ID_STRONGENC     = 0x0017;
-    static ID_RECORD_MGT    = 0x0018;
-    static ID_X509_PKCS7_RL = 0x0019;
-    static ID_IBM1          = 0x0065;
-    static ID_IBM2          = 0x0066;
-    static ID_POSZIP        = 0x4690;
+    static ID_ZIP64             = 0x0001;
+    static ID_AVINFO            = 0x0007;
+    static ID_PFS               = 0x0008;
+    static ID_OS2               = 0x0009;
+    static ID_NTFS              = 0x000a;
+    static ID_OPENVMS           = 0x000c;
+    static ID_UNIX              = 0x000d;
+    static ID_FORK              = 0x000e;
+    static ID_PATCH             = 0x000f;
+    static ID_X509_PKCS7        = 0x0014;
+    static ID_X509_CERTID_F     = 0x0015;
+    static ID_X509_CERTID_C     = 0x0016;
+    static ID_STRONGENC         = 0x0017;
+    static ID_RECORD_MGT        = 0x0018;
+    static ID_X509_PKCS7_RL     = 0x0019;
+    static ID_IBM1              = 0x0065;
+    static ID_IBM2              = 0x0066;
+    static ID_POSZIP            = 0x4690;
 
-    static EF_ZIP64_OR_32   = 0xffffffff;
-    static EF_ZIP64_OR_16   = 0xffff;
+    static EF_ZIP64_OR_32       = 0xffffffff;
+    static EF_ZIP64_OR_16       = 0xffff;
 
     /*
      * Private instance fields
@@ -200,6 +229,7 @@ export default class StreamZip {
         this.ready = false;
         this.#entries = config.storeEntries !== false? {} : null,
         this.fileName = config.file,
+        this.arcType = config.arcType || StreamZip.TYPE_ZIP;
         this.textDecoder = config.nameEncoding? new TextDecoder(config.nameEncoding) : null;
         this.open();
         Object.defineProperty(this, 'ready', {
@@ -248,7 +278,11 @@ export default class StreamZip {
                 Math.min(this.chunkSize, Math.min(128 * 1024, this.fileSize)),
                 Math.min(1024, this.fileSize)
             );
-            this.readCentralDirectory();
+            if (this.arcType == StreamZip.TYPE_ARC) {
+                this.readArcEntries()
+            } else {
+                this.readCentralDirectory();
+            }
         });
     }
 
@@ -418,6 +452,64 @@ export default class StreamZip {
     }
 
     /**
+     * readArcEntries()
+     *
+     * @this {StreamZip}
+     */
+    readArcEntries() {
+        this.op = {
+            win: new FileWindowBuffer(this.fd),
+            pos: 0,
+            chunkSize: this.chunkSize, // StreamZip.ArcHeader.getSize(),
+            entriesLeft: -1
+        };
+        this.op.win.read(this.op.pos, Math.min(this.op.chunkSize, this.fileSize - this.op.pos), this.readArcEntriesCallback.bind(this));
+    }
+
+    /**
+     * readArcEntriesCallback()
+     *
+     * @this {StreamZip}
+     */
+    readArcEntriesCallback(err, bytesRead)
+    {
+        if (err) {
+            return this.emit('error', err);
+        }
+        const buffer = this.op.win.buffer;
+        let bufferPos = this.op.pos - this.op.win.position;
+        let bufferAvail = Math.min(bytesRead, buffer.length - bufferPos);
+        try {
+            while (this.op.entriesLeft != 0) {
+                let entry = new ArcEntry(this.config.ignoreZipErrors);
+                const headerLen = StreamZip.ArcHeader.getSize();
+                if (!entry.readArcHeader(buffer, bufferPos, bufferPos + bufferAvail)) {
+                    break;
+                }
+                entry.offset = this.op.win.position + bufferPos;
+                if (!this.config.skipEntryNameValidation) {
+                    entry.validateName();
+                }
+                if (this.#entries) {
+                    this.#entries[entry.name] = entry;
+                }
+                this.emit('entry', entry);
+                if (!--this.op.entriesLeft) break;
+                this.op.pos += headerLen + entry.compressedSize;
+                bufferPos += headerLen + entry.compressedSize;
+                if (bufferPos + headerLen > buffer.length) {
+                    this.op.win.moveRight(bufferPos, this.readArcEntriesCallback.bind(this));
+                    this.op.move = true;
+                    return;
+                }
+            }
+            this.emit('ready');
+        } catch (err) {
+            this.emit('error', err);
+        }
+    }
+
+    /**
      * readEntries()
      *
      * @this {StreamZip}
@@ -440,7 +532,7 @@ export default class StreamZip {
     readEntriesCallback(err, bytesRead)
     {
         if (err || !bytesRead) {
-            return this.emit('error', err || new Error('Entries read error'));
+            return this.emit('error', err || new Error('ZIP entries read error'));
         }
         let bufferPos = this.op.pos - this.op.win.position;
         let entry = this.op.entry;
@@ -457,9 +549,9 @@ export default class StreamZip {
                     bufferPos += StreamZip.CentralHeader.getSize();
                 }
                 const entryHeaderSize = entry.fnameLen + entry.extraLen + entry.comLen;
-                const advanceBytes = entryHeaderSize + (this.op.entriesLeft > 1 ? StreamZip.CentralHeader.getSize() : 0);
+                const advanceBytes = entryHeaderSize + (this.op.entriesLeft > 1? StreamZip.CentralHeader.getSize() : 0);
                 if (bufferLength - bufferPos < advanceBytes) {
-                    this.op.win.moveRight(this.chunkSize, this.readEntriesCallback.bind(this), bufferPos);
+                    this.op.win.moveRight(bufferPos, this.readEntriesCallback.bind(this));
                     this.op.move = true;
                     return;
                 }
@@ -536,12 +628,12 @@ export default class StreamZip {
                 }
                 const offset = this.dataOffset(entry);
                 let entryStream = new EntryDataReaderStream(this.fd, offset, entry.compressedSize);
-                if (entry.method === StreamZip.STORE) {
+                if (entry.method === StreamZip.ZIP_STORE) {
                     // nothing to do
-                } else if (entry.method === StreamZip.DEFLATE) {
+                } else if (entry.method === StreamZip.ZIP_DEFLATE) {
                     entryStream = entryStream.pipe(zlib.createInflateRaw());
                 } else {
-                    return callback(new Error('Unknown compression method: ' + entry.method));
+                    return callback(new Error("unsupported compression method (" + entry.method + ")"));
                 }
                 if (this.canVerifyCRC(entry)) {
                     entryStream = entryStream.pipe(
@@ -583,26 +675,39 @@ export default class StreamZip {
             throw err;
         }
         let dst;
-        if (entry.method == StreamZip.STORE) {
+        let largeWindow, literalTree;
+        switch(entry.method) {
+        case StreamZip.ARC_UNP:
+        case StreamZip.ZIP_STORE:
             dst = src;
-        } else if (entry.method == StreamZip.SHRINK) {
+            break;
+        case StreamZip.ZIP_SHRINK:
             dst = LegacyZip.stretchSync(src, entry.size).getOutput();
-        } else if (entry.method >= StreamZip.REDUCE1 && entry.method <= StreamZip.REDUCE4) {
-            dst = LegacyZip.expandSync(src, entry.size, entry.method - StreamZip.REDUCE1 + 1).getOutput();
-        } else if (entry.method == StreamZip.IMPLODE) {
-            let largeWindow = !!(entry.flags & StreamZip.FLG_COMP1);
-            let literalTree = !!(entry.flags & StreamZip.FLG_COMP2);
+            break;
+        case StreamZip.ZIP_REDUCE1:
+        case StreamZip.ZIP_REDUCE2:
+        case StreamZip.ZIP_REDUCE3:
+        case StreamZip.ZIP_REDUCE4:
+            dst = LegacyZip.expandSync(src, entry.size, entry.method - StreamZip.ZIP_REDUCE1 + 1).getOutput();
+            break;
+        case StreamZip.ZIP_IMPLODE:
+            largeWindow = !!(entry.flags & StreamZip.LocalHeader.flags.COMP1);
+            literalTree = !!(entry.flags & StreamZip.LocalHeader.flags.COMP2);
             dst = LegacyZip.explodeSync(src, entry.size, largeWindow, literalTree).getOutput();
-        } else if (entry.method == StreamZip.IMPLODE_DCL) {
+            break;
+        case StreamZip.ZIP_IMPLODE_DCL:
             dst = LegacyZip.blastSync(src).getOutput();
-        } else if (entry.method == StreamZip.DEFLATE || entry.method == StreamZip.DEFLATE64) {
+            break;
+        case StreamZip.ZIP_DEFLATE:
+        case StreamZip.ZIP_DEFLATE64:
             dst = zlib.inflateRawSync(src);
-        } else {
+            break;
+        default:
             entry.error("unsupported compression method (" + entry.method + ")");
+            dst = null;
+            break;
         }
-        if (!dst) {
-            entry.error("decompression failure (" + entry.method + ")");
-        } else {
+        if (dst) {
             if (dst.length !== entry.size) {
                 entry.error("expected " + entry.size + " bytes, received " + dst.length + " (method " + entry.method + ")");
             }
@@ -610,6 +715,8 @@ export default class StreamZip {
                 const verify = new CRCVerify(entry);
                 verify.data(dst);
             }
+        } else if (dst === undefined) {
+            entry.error("decompression failure (" + entry.method + ")");
         }
         return dst;
     }
@@ -634,22 +741,35 @@ export default class StreamZip {
         if (!this.fd) {
             return callback(new Error('Archive closed'));
         }
-        const buffer = Buffer.alloc(StreamZip.LocalHeader.getSize());
-        new FsRead(this.fd, buffer, 0, buffer.length, entry.offset, (err) => {
-            if (err) {
-                return callback(err);
-            }
-            let readEx;
-            try {
-                entry.readLocalHeader(buffer);
-                if (entry.encrypted) {
-                    readEx = new Error('Entry encrypted');
+        if (this.arcType == StreamZip.TYPE_ARC) {
+            /*
+             * ARC files contain only one set of file headers, which we have already
+             * read, so all we have to do is return the entry.
+             */
+            callback(null, entry);
+        }
+        else {
+            /*
+             * ZIP files have both central directory entries (which were used to
+             * create the list of entries) and local directory entries, which is what
+             * we read now.
+             */
+            const buffer = Buffer.alloc(StreamZip.LocalHeader.getSize());
+            new FsRead(this.fd, buffer, 0, buffer.length, entry.offset, (err) => {
+                if (err) {
+                    return callback(err);
                 }
-            } catch (ex) {
-                readEx = ex;
-            }
-            callback(readEx, entry);
-        }).read(sync);
+                try {
+                    entry.readLocalHeader(buffer);
+                    if (entry.encrypted) {
+                        err = new Error('Entry encrypted');
+                    }
+                } catch (e) {
+                    err = e;
+                }
+                callback(err, entry);
+            }).read(sync);
+        }
     }
 
     /**
@@ -671,7 +791,7 @@ export default class StreamZip {
     canVerifyCRC(entry)
     {
         // If bit 3 (0x08) of the general-purpose flags field is set, then the CRC-32 and file sizes are not known when the header is written
-        return !(entry.flags & StreamZip.FLG_DESC);
+        return !(entry.flags & StreamZip.LocalHeader.flags.DESC);
     }
 
     /**
@@ -856,6 +976,85 @@ export default class StreamZip {
             });
         }
     }
+
+    /**
+     * parseDateTime(date, time, fLocal, entry)
+     *
+     * ZIP archives contain local times, but this function treated them as UTC/GMT times,
+     * forcing callers to jump through hoops (eg, getTimezoneOffset()) to get the original time.
+     *
+     * To avoid compatibility issues, we're leaving the 'time' entry property alone and calling
+     * this a second time (with fLocal set) to return a Date object with the correct local time;
+     * this will be stored in the entry as 'date'.
+     *
+     * Using a Date object makes this consistent with other file system APIs, such as fs.stat(),
+     * which returns a file's modification time as a Date, in local time.
+     *
+     * @param {number} date (16 bits)
+     * @param {number} time (16 bits)
+     * @param {boolean} [fLocal]
+     * @param {ZipEntry|ArcEntry} [entry]
+     * @returns {number|Date} (milliseconds since the UNIX epoch, or a Date object if fLocal)
+     */
+    static parseDateTime(date, time, fLocal = false, entry = null)
+    {
+        let monthDays = [31,28,31,30,31,30,31,31,30,31,30,31];
+        let d = {
+            y: (date >> 9) + 1980,
+            m: ((date >> 5) & 0xf) - 1,
+            d: (date & 0x1f),
+            h: (time >> 11),
+            n: (time >> 5) & 0x3f,
+            s: (time & 0x1f) << 1
+        };
+        /*
+         * date/time validation follows (although each part of the date/time is stored
+         * in a limited number of bits, those bits can still contain out-of-bounds values).
+         *
+         * If date/time wasn't set (ie, 0x00000000), then m will be -1 and d will be 0,
+         * resulting in a Date where getFullYear() < 1980.  We allow that, so that the caller
+         * can detect that case and act accordingly; however, if date/time WAS set, then
+         * we do NOT allow those values.
+         */
+        let errors = 0;
+        let orig = { ...d };
+        if ((date || time) && d.m < 0) {
+            d.m = 0;
+            errors++;
+        }
+        if (d.m > 11) {
+            d.m = 11;
+            errors++;
+        }
+        if ((date || time) && d.d < 1) {
+            d.d = 1;
+            errors++;
+        }
+        if (d.d > 31) {
+            d.d = monthDays[d.m];
+            if (d.y % 4 == 0) d.d++;        // adequate for the time-frame of dates we're dealing with
+            errors++;
+        }
+        if (d.h > 23) {
+            d.h = 23;
+            errors++;
+        }
+        if (d.n > 59) {
+            d.n = 59;
+            errors++;
+        }
+        if (d.s > 59) {
+            d.s = 59;
+            errors++;
+        }
+        if (errors && entry) {
+            entry.error("invalid date/time " + JSON.stringify(orig));
+        }
+        if (fLocal) {
+            return new Date(d.y, d.m, d.d, d.h, d.n, d.s);
+        }
+        return Date.UTC(d.y, d.m, d.d, d.h, d.n, d.s);
+    }
 }
 
 //
@@ -1006,18 +1205,18 @@ class CentralDirectoryZip64Header
     }
 }
 
-class ZipEntry
+class Entry
 {
-    constructor(ignoreZipErrors)
+    constructor(ignoreErrors)
     {
-        this.ignoreZipErrors = ignoreZipErrors;
+        this.ignoreErrors = ignoreErrors;
         this.errors = [];
     }
 
     error(msg)
     {
         if (this.name) msg = this.name + ': ' + msg;
-        if (!this.ignoreZipErrors) {
+        if (!this.ignoreErrors) {
             throw new Error(msg);
         }
         if (this.name) {
@@ -1025,14 +1224,72 @@ class ZipEntry
         }
     }
 
+    validateName()
+    {
+        if ((/\\|^\w+:|^\/|(^|\/)\.\.(\/|$)/).test(this.name)) {
+            this.error("invalid filename");
+        }
+    }
+
+    get encrypted()
+    {
+        return (this.flags & StreamZip.LocalHeader.flags.ENC) === StreamZip.LocalHeader.flags.ENC;
+    }
+
+    get isFile()
+    {
+        return !this.isDirectory;
+    }
+}
+
+class ArcEntry extends Entry
+{
+    readArcHeader(data, offset, length)
+    {
+        StreamZip.ArcHeader.setData(data, offset, length);
+        /*
+         * verifyField() will throw an exception if 1) 'signature' does not match the specified
+         * value in the field definition, or 2) 'type' does not match *any* of the values listed
+         * in the field definition.
+         */
+        StreamZip.ArcHeader.verifyField("signature", "ARC_SIG");
+        this.type = StreamZip.ArcHeader.verifyField("type");
+        /*
+         * Since we can't know ahead of time how many headers are present in an ARC file, we rely on this
+         * function returning false as soon as it encounters an ARC_END header.
+         */
+        if (StreamZip.ArcHeader.assignField(this, "type") === StreamZip.ArcHeader.type.ARC_END) {
+            return false;
+        }
+        StreamZip.ArcHeader.assignField(this, ["name", "compressedSize", "size", "crc"]);
+        const date = StreamZip.ArcHeader.getField("date");
+        const time = StreamZip.ArcHeader.getField("time");
+        this.time = StreamZip.parseDateTime(date, time);
+        this.date = StreamZip.parseDateTime(date, time, true, this);
+        this.method = -this.type;           // convert type to ARC method (signed to avoid conflict with ZIP methods)
+        if (this.type == StreamZip.ArcHeader.type.ARC_OLD) {
+            this.size = this.compressedSize;
+            this.method = StreamZip.ARC_UNP;
+        }
+        if (this.type == StreamZip.ArcHeader.type.ARC_UNP && this.size != this.compressedSize) {
+            throw new Error("invalid ARC header");
+        }
+        this.fnameLen = this.extraLen = 0;  // not present in ARC headers
+        return true;
+    }
+}
+
+class ZipEntry extends Entry
+{
     readLocalHeader(data)
     {
         StreamZip.LocalHeader.setData(data);
         StreamZip.LocalHeader.verifyField("signature", "LOCSIG");
         StreamZip.LocalHeader.assignField(this, ["version", "flags", "method"]);
-        const modDateTime = StreamZip.LocalHeader.getField("modDateTime");
-        this.time = this.parseZipTime(modDateTime);
-        this.date = this.parseZipTime(modDateTime, true);
+        const time = StreamZip.LocalHeader.getField("time");
+        const date = StreamZip.LocalHeader.getField("date");
+        this.time = StreamZip.parseDateTime(date, time);
+        this.date = StreamZip.parseDateTime(date, time, true, this);
         this.crc = StreamZip.LocalHeader.getField("crc") || this.crc;
         const compressedSize = StreamZip.LocalHeader.getField("compressedSize");
         if (compressedSize && compressedSize !== StreamZip.EF_ZIP64_OR_32) {
@@ -1050,9 +1307,10 @@ class ZipEntry
         StreamZip.CentralHeader.setData(data, offset);
         StreamZip.CentralHeader.verifyField("signature", "CENSIG");
         StreamZip.CentralHeader.assignField(this, ["verMade", "version", "flags", "method"]);
-        const modDateTime = StreamZip.CentralHeader.getField("modDateTime");
-        this.time = this.parseZipTime(modDateTime);
-        this.date = this.parseZipTime(modDateTime, true);
+        const time = StreamZip.CentralHeader.getField("time");
+        const date = StreamZip.CentralHeader.getField("date");
+        this.time = StreamZip.parseDateTime(date, time);
+        this.date = StreamZip.parseDateTime(date, time, true, this);
         StreamZip.CentralHeader.assignField(this, ["crc", "compressedSize", "size", "fnameLen", "extraLen", "comLen", "diskStart", "intAttr", "attr", "offset"]);
     }
 
@@ -1068,13 +1326,6 @@ class ZipEntry
             offset += this.extraLen;
         }
         this.comment = this.comLen? data.slice(offset, offset + this.comLen).toString() : null;
-    }
-
-    validateName()
-    {
-        if ((/\\|^\w+:|^\/|(^|\/)\.\.(\/|$)/).test(this.name)) {
-            this.error("invalid filename");
-        }
     }
 
     readExtra(data, offset)
@@ -1114,96 +1365,6 @@ class ZipEntry
             this.diskStart = data.readUInt32LE(offset);
             // offset += 4; length -= 4;
         }
-    }
-
-    get encrypted()
-    {
-        return (this.flags & StreamZip.FLG_ENC) === StreamZip.FLG_ENC;
-    }
-
-    get isFile()
-    {
-        return !this.isDirectory;
-    }
-
-    /**
-     * parseZipTime(modDateTime, fLocal)
-     *
-     * ZIP archives contain local times, but this function treated them as UTC/GMT times,
-     * forcing callers to jump through hoops (eg, getTimezoneOffset()) to get the original time.
-     *
-     * To avoid compatibility issues, we're leaving the 'time' entry property alone and calling
-     * this a second time (with fLocal set) to return a Date object with the correct local time;
-     * this will be stored in the entry as 'date'.
-     *
-     * Using a Date object makes this consistent with other file system APIs, such as fs.stat(),
-     * which returns a file's modification time as a Date, in local time.
-     *
-     * @this {ZipEntry}
-     * @param {number} modDateTime (low 16 bits contain time bits, high 16 bits contain date bits)
-     * @param {boolean} [fLocal]
-     * @returns {number|Date} (milliseconds since the UNIX epoch, or a Date object if fLocal)
-     */
-    parseZipTime(modDateTime, fLocal = false)
-    {
-        let modDate = modDateTime >>> 16;
-        let modTime = modDateTime & 0xffff;
-        let monthDays = [31,28,31,30,31,30,31,31,30,31,30,31];
-        let d = {
-            y: (modDate >> 9) + 1980,
-            m: ((modDate >> 5) & 0xf) - 1,
-            d: (modDate & 0x1f),
-            h: (modTime >> 11),
-            n: (modTime >> 5) & 0x3f,
-            s: (modTime & 0x1f) << 1
-        };
-        /*
-         * modDateTime validation follows (although each part of the date/time is stored
-         * in a limited number of bits, those bits can still contain out-of-bounds values).
-         *
-         * If modDateTime wasn't set (ie, 0x00000000), then m will be -1 and d will be 0,
-         * resulting in a Date where getFullYear() < 1980.  We allow that, so that the caller
-         * can detect that case and act accordingly; however, if modDateTime WAS set, then
-         * we do NOT allow those values.
-         */
-        let errors = 0;
-        let orig = { ...d };
-        if (modDateTime && d.m < 0) {
-            d.m = 0;
-            errors++;
-        }
-        if (d.m > 11) {
-            d.m = 11;
-            errors++;
-        }
-        if (modDateTime && d.d < 1) {
-            d.d = 1;
-            errors++;
-        }
-        if (d.d > 31) {
-            d.d = monthDays[d.m];
-            if (d.y % 4 == 0) d.d++;        // adequate for the time-frame of dates we're dealing with
-            errors++;
-        }
-        if (d.h > 23) {
-            d.h = 23;
-            errors++;
-        }
-        if (d.n > 59) {
-            d.n = 59;
-            errors++;
-        }
-        if (d.s > 59) {
-            d.s = 59;
-            errors++;
-        }
-        if (errors && fLocal) {
-            this.error("invalid date/time " + JSON.stringify(orig));
-        }
-        if (fLocal) {
-            return new Date(d.y, d.m, d.d, d.h, d.n, d.s);
-        }
-        return Date.UTC(d.y, d.m, d.d, d.h, d.n, d.s);
     }
 
     /**
@@ -1334,15 +1495,20 @@ class FileWindowBuffer
         ).read();
     }
 
-    moveRight(length, callback, shift)
+    moveRight(shift, callback)
     {
         this.checkOp();
-        if (shift) {
-            this.buffer.copy(this.buffer, 0, shift);
-        } else {
-            shift = 0;
+        let nCopied;
+        if (shift && shift < this.buffer.length) {
+            /*
+             * Copy all the bytes in this.buffer from shift onward to this.buffer at offset 0.
+             */
+            nCopied = this.buffer.copy(this.buffer, 0, shift);
         }
         this.position += shift;
+        if (shift > this.buffer.length) {
+            shift = this.buffer.length;
+        }
         this.fsOp = new FsRead(
             this.fd,
             this.buffer,

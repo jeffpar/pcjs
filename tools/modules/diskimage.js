@@ -29,9 +29,11 @@ let moduleDir, rootDir;
 
 let nMaxDefault = 512, nMaxInit, nMaxCount, sFileIndex, useServer;
 
-function printError(err)
+function printError(err, filename)
 {
-    printf("%s\n", err.message);
+    let msg = err.message;
+    if (filename) msg = filename + ": " + msg;
+    printf("%s\n", msg);
 }
 
 /*
@@ -105,26 +107,30 @@ function createDisk(diskFile, diskette, argv, done)
     let sectorErrors = diskette.argv['sectorError'] || argv['sectorError'];
     let suppData = diskette.argv['suppData'] || argv['suppData'];
     if (suppData) suppData = readFile(suppData);
-    let fDirectory = false, fZIP = false;
+    let fDir = false, arcType = 0, sExt = path.parse(sArchiveFile).ext.toLowerCase();
     if (sArchiveFile.endsWith(path.sep)) {
-        fDirectory = true;
-        diskette.command = "--dir " + name;
+        fDir = true;
+        diskette.command = "--dir=" + name;
     }
-    else if (sArchiveFile.toUpperCase().endsWith(".ZIP")) {
-        fZIP = true;
-        diskette.command = "--zip " + name;
+    else if (sExt == ".arc") {
+        arcType = 1;
+        diskette.command = "--arc=" + name;
+    }
+    else if (sExt == ".zip") {
+        arcType = 2;
+        diskette.command = "--zip=" + name;
     }
     else {
-        diskette.command = "--disk " + name;
+        diskette.command = "--disk=" + name;
     }
     diskette.archive = sArchiveFile;
     printf("checking archive: %s\n", sArchiveFile);
-    if (fDirectory || fZIP) {
+    if (fDir || arcType) {
         let label = diskette.label || argv['label'];
         let normalize = diskette.normalize || argv['normalize'];
         let target = getTarget(diskette.format);
         let verbose = argv['verbose'];
-        di = readDir(sArchiveFile, fZIP, label, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
+        di = readDir(sArchiveFile, arcType, label, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
     } else {
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
     }
@@ -1026,10 +1032,10 @@ function readCatalog(argv)
 }
 
 /**
- * readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
+ * readDir(sDir, arcType, sLabel, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
  *
  * @param {string} sDir (directory name)
- * @param {boolean} [fZIP] (true if ZIP file instead of directory)
+ * @param {number} [arcType] (1 if ARC file, 2 if ZIP file, otherwise 0)
  * @param {string} [sLabel] (if not set with --label, then basename(sDir) will be used instead)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
@@ -1041,7 +1047,7 @@ function readCatalog(argv)
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
  * @returns {DiskInfo|null}
  */
-function readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
+function readDir(sDir, arcType, sLabel, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
 {
     let di;
     let diskName = path.basename(sDir);
@@ -1049,7 +1055,7 @@ function readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, fVerbose, done,
         if (!sLabel) {
             sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
         }
-    } else if (!fZIP) {
+    } else if (!arcType) {
         diskName = path.basename(path.dirname(sDir));
         /*
          * When we're given a list of files, we don't pick a default label; use --label if you want one.
@@ -1075,8 +1081,8 @@ function readDir(sDir, fZIP, sLabel, fNormalize, kbTarget, nMax, fVerbose, done,
     };
     try {
         nMaxInit = nMaxCount = nMax || nMaxDefault;
-        if (fZIP) {
-            readZIPFiles(sDir, sLabel, fVerbose, readDone);
+        if (arcType) {
+            readARCFiles(sDir, arcType, sLabel, fVerbose, readDone);
         } else {
             di = readDone(readDirFiles(sDir, sLabel, fNormalize, 0));
         }
@@ -1207,17 +1213,19 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
 }
 
 /**
- * readZIPFiles(sZIP, sLabel, fVerbose, done)
+ * readARCFiles(sARC, arcType, sLabel, fVerbose, done)
  *
- * @param {string} sZIP (ZIP filename)
+ * @param {string} sARC (ARC/ZIP filename)
+ * @param {number} arcType (1 for ARC, 2 for ZIP)
  * @param {boolean|null} sLabel (optional volume label)
  * @param {boolean} fVerbose (true to display verbose output, false to display minimal output)
  * @param {function(Array.<FileData>)} done
  */
-function readZIPFiles(sZIP, sLabel, fVerbose, done)
+function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
 {
     let zip = new StreamZip({
-        file: sZIP,
+        file: sARC,
+        arcType: arcType,
         storeEntries: true,
         nameEncoding: "ascii",
         ignoreZipErrors: true
@@ -1226,9 +1234,9 @@ function readZIPFiles(sZIP, sLabel, fVerbose, done)
         let aFileData = [];
         let aDirectories = [];
         if (fVerbose) {
-            printf("\n%s\n", sZIP);
-            printf("Filename        Length   Method      Size  Ratio   Date       Time       CRC\n");
-            printf("--------        ------   ------      ----  -----   ----       ----       ---\n");
+            printf("\n%s\n", sARC);
+            printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
+            printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
         }
         for (let entry of zip.entries()) {
             let file = {path: entry.name, name: path.basename(entry.name), nameEncoding: "cp437"};
@@ -1278,8 +1286,11 @@ function readZIPFiles(sZIP, sLabel, fVerbose, done)
                 aFileData.push(file);
             }
             if (fVerbose) {
-                let methods = [
-                    "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "DCLImplode"
+                let methodsARC = [
+                    "Unpacked"
+                ];
+                let methodsZIP = [
+                    "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
                 ];
                 let filename = CharSet.fromCP437(file.name);
                 if (filename.length > 14) {
@@ -1290,15 +1301,17 @@ function readZIPFiles(sZIP, sLabel, fVerbose, done)
                     filesize = 0;
                     filename += "/";
                 }
-                printf("%-14s %7d   %-8s %7d   %3d%%   %T   %08x\n",
-                    filename, filesize, methods[entry.method], entry.compressedSize, Math.round(100 * (filesize - entry.compressedSize) / filesize) || 0, file.date, entry.crc);
+                let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
+                let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
+                printf("%-14s %7d   %-9s %7d   %3d%%   %T   %08x\n",
+                    filename, filesize, method, entry.compressedSize, ratio, file.date, entry.crc);
             }
         }
         zip.close()
         done(aFileData);
     });
     zip.on('error', (err) => {
-        printError(err);
+        printError(err, sARC);
     });
 }
 
@@ -1604,7 +1617,7 @@ function processAll(all, argv)
  */
 function processFile(argv)
 {
-    let fDirectory = false, fFiles = false, fZIP = false;
+    let fDir = false, fFiles = false, arcType = 0;
 
     let done = function(di)
     {
@@ -1628,38 +1641,47 @@ function processFile(argv)
 
     let input = argv['dir'];
     if (input) {
-        fDirectory = true;          // if --dir, the directory should end with a trailing slash (but we'll make sure)
+        fDir = true;                // if --dir, the directory should end with a trailing slash (but we'll make sure)
         if (!input.endsWith(path.sep)) input += path.sep;
     } else {
         input = argv['files'];
         if (input) {                // if --files, the list of files should be separated with commas (and NO trailing slash)
-            fDirectory = fFiles = true;
+            fDir = fFiles = true;
         } else {
-            input = argv['zip'];
+            input = argv['arc'];
             if (input) {
-                fZIP = true;
+                arcType = 1;
             } else {
-                input = argv[1];
-                argv.splice(1, 1);
+                input = argv['zip'];
                 if (input) {
-                    if (input.endsWith(path.sep)) {
-                        fDirectory = true;
-                    }
-                    else if (path.extname(input).toLowerCase() == ".zip") {
-                        fZIP = true;
+                    arcType = 2;
+                } else {
+                    input = argv[1];
+                    argv.splice(1, 1);
+                    if (input) {
+                        if (input.endsWith(path.sep)) {
+                            fDir = true;
+                        } else {
+                            let ext = path.extname(input).toLowerCase();
+                            if (ext == ".arc") {
+                                arcType = 1;
+                            } else if (ext == ".zip") {
+                                arcType = 2;
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
-    if (fDirectory || fZIP) {
+    if (fDir || arcType) {
         /*
          * Target is normally a number in Kb (eg, 360 for a 360K diskette); you can also add a suffix (eg, K or M).
          * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
          * equivalent to 10240K).
          */
-        readDir(input, fZIP, argv['label'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
+        readDir(input, arcType, argv['label'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
         return true;
     }
     if (input) {

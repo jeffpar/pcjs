@@ -111,19 +111,26 @@ export default class Structure {
     }
 
     /**
-     * setData(buf, offset)
+     * setData(buf, offset, maxOffset)
      *
      * @this {Structure}
      * @param {Buffer} buf
      * @param {number} [offset]
+     * @param {number} [maxOffset]
      */
-    setData(buf, offset = 0)
+    setData(buf, offset = 0, maxOffset = buf.length)
     {
         this._buf = buf;
         this._bufOffset = offset;
-        if (this._buf.length < this._bufOffset + this._off) {
-            throw new Error("buffer too small (" + this._buf.length + " < " + (this._bufOffset + this._off) + ")");
-        }
+        this._maxOffset = maxOffset;
+        /*
+         * The buffer may be partially valid, and the caller may only access those fields that are valid,
+         * so we perform a similar bounds check in getField() instead.
+         *
+         *      if (this._buf.length < this._bufOffset + this._off) {
+         *          throw new Error("buffer too small (" + this._buf.length + " < " + (this._bufOffset + this._off) + ")");
+         *      }
+         */
     }
 
     /**
@@ -142,6 +149,9 @@ export default class Structure {
         if (!f) throw new Error("field " + name + " not found in " + this._name);
         let off = f._off + this._bufOffset;
         let len = f._len;
+        if (off + len > this._maxOffset) {
+            throw new Error("field " + name + " exceeds buffer size (" + (off + len) + " > " + this._maxOffset + ")");
+        }
         switch(f._type) {
         case Structure.INT8:
             v = this._buf.readInt8(off);
@@ -172,7 +182,13 @@ export default class Structure {
                 (this._buf.readUInt32BE(off) * 0x0000000100000000 + this._buf.readUInt32BE(off + 4));
             break;
         case Structure.STRING:
-            v = this._buf.toString(encoding, off, len);
+            v = this._buf.toString(encoding, off, off + len);
+            for (let i = 0; i < len; i++) {
+                if (v.charCodeAt(i) == 0) {
+                    v = v.substr(0, i);
+                    break;
+                }
+            }
             break;
         default:
             throw new Error("field " + name + " unsupported (" + this._type + ") in " + this._name);
@@ -187,6 +203,7 @@ export default class Structure {
      * @param {Object} object
      * @param {string|Array.<string>} name (or array of names)
      * @param {string} [encoding] (default is "utf8")
+     * @return {number|string}
      */
     assignField(object, name, encoding)
     {
@@ -196,7 +213,7 @@ export default class Structure {
             }
             return;
         }
-        object[name] = this.getField(name, encoding);
+        return (object[name] = this.getField(name, encoding));
     }
 
     /**
@@ -204,17 +221,23 @@ export default class Structure {
      *
      * @this {Structure}
      * @param {string} name
-     * @param {number|string} value
+     * @param {number|string} [value]
      * @param {string} [encoding] (default is "utf8")
-     * @return {boolean}
+     * @return {number|string}
      */
     verifyField(name, value, encoding)
     {
+        let expected;
         let v = this.getField(name, encoding);
-        let expected = this[name][value];
-        if (v != expected) {
-            throw new Error("field " + name + " (" + v + ") does not match " + value + " (" + expected + ")");
+        if (value === undefined) {
+            for (expected in this[name]) {
+                if (expected[0] == '_') continue;
+                if (v == this[name][expected]) return v;
+            }
+        } else {
+            expected = this[name][value];
+            if (v == expected) return v;
         }
-        return true;
+        throw new Error("field " + name + " (" + v + ") does not match " + (value === undefined? "any defined values" : (value + " (" + expected + ")")));
     }
 }

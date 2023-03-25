@@ -11,6 +11,18 @@
  *
  * Blast() functionality adapted from https://github.com/madler/zlib/tree/master/contrib/blast
  * Copyright (C) 2003, 2012, 2013 Mark Adler
+ *
+ * Testing Notes
+ *
+ *   1. An example of a "imploded" file that triggers the "pk101_bug_compat" can be found in
+ *      "/Volumes/PC_SIG_12_90/1301_400/DISK1322/DISK1322.ZIP" (the file also fails the CRC check:
+ *      "NCRISK.BRD: expected CRC 0xc19fd5a, received 0x162fb993").
+ *
+ *   2. For some reason, on the same CD-ROM, there are several zero-length ZIP files; nothing bad happens,
+ *      but perhaps the error can be more helpful/less scary.  The files are:
+ *
+ *          /Volumes/PC_SIG_12_90/401_500/DISK0411/DISK0411.ZIP: Archive read error
+ *          /Volumes/PC_SIG_12_90/901_1000/DISK0941/DISK0941.ZIP: Archive read error
  */
 
 import { Buffer } from 'node:buffer';
