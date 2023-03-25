@@ -14,12 +14,16 @@
  *
  * Testing Notes
  *
- *   1. An example of a "imploded" file that triggers the "pk101_bug_compat" can be found in
- *      "/Volumes/PC_SIG_12_90/1301_400/DISK1322/DISK1322.ZIP" (the file also fails the CRC check:
- *      "NCRISK.BRD: expected CRC 0xc19fd5a, received 0x162fb993").
+ *   1. Two examples of suspicious or damaged ZIP files are "/Volumes/PC_SIG_12_90/401_500/DISK0442/DISK0442.ZIP"
+ *      (see "SPAWN.DOC", "PWARN.PAS") and "/Volumes/PC_SIG_12_90/1301_400/DISK1322/DISK1322.ZIP" (see "NCRISK.BRD").
+ *      They both have bad implode data, and in particular, "SPAWN.DOC" seems to have impossibly small compressed data
+ *      (1525 bytes) relative to the uncompressed data (140719 bytes) for a 99% compression ratio?  I don't think so.
  *
- *   2. For some reason, on the same CD-ROM, there are several zero-length ZIP files; nothing bad happens,
- *      but perhaps the error can be more helpful/less scary.  The files are:
+ *      Originally, I thought these might be examples of the PKZIP 1.01/1.02 "implode" bug, but it now appears not.
+ *      I'm still looking for one of those.
+ *
+ *   2. For some reason, on the same CD-ROM, there are several zero-length ZIP files; nothing bad happens, but perhaps
+ *      the error could be more helpful/less scary.  The files are:
  *
  *          /Volumes/PC_SIG_12_90/401_500/DISK0411/DISK0411.ZIP: Archive read error
  *          /Volumes/PC_SIG_12_90/901_1000/DISK0941/DISK0941.ZIP: Archive read error
@@ -82,8 +86,12 @@ export default class LegacyZip
     static explodeSync(src, dst_len, large_wnd, lit_tree)
     {
         let explode = new Explode();
-        if (!explode.decomp(src, dst_len, large_wnd, lit_tree, false) || explode.getBytesRead() !== src.length) {
-            explode.decomp(src, dst_len, large_wnd, lit_tree, true);
+        if (!explode.decomp(src, dst_len, large_wnd, lit_tree, false) || explode.getBytesRead() != src.length) {
+            if (!explode.decomp(src, dst_len, large_wnd, lit_tree, true) || explode.getBytesRead() != src.length) {
+                assert(false, "explodeSync() failed");      // something else besides a "PKZIP 1.01/1.02" bug is going on
+            } else {
+                assert(false, "explodeSync() recovered");   // would just like to catch one of those "PKZIP 1.01/1.02" bug cases
+            }
         }
         return explode;
     }
@@ -490,6 +498,10 @@ class Decompress
      */
     getOutput()
     {
+        assert(this.dst_pos == this.dst.length);
+        if (this.dst_pos < this.dst.length) {
+            this.dst = this.dst.slice(0, this.dst_pos);
+        }
         return this.dst;
     }
 
@@ -553,21 +565,8 @@ class Decompress
     writeOutput(b, fAdvance = true)
     {
         assert(this.dst_pos < this.dst.length);
-        this.dst.writeUInt8(b, this.dst_pos);
+        this.writeByte(b, this.dst_pos);
         if (fAdvance) this.dst_pos++;
-    }
-
-    /**
-     * truncateOutput()
-     *
-     * @this {Decompress}
-     */
-    truncateOutput()
-    {
-        assert(this.dst_pos <= this.dst.length);
-        if (this.dst_pos < this.dst.length) {
-            this.dst = this.dst.slice(0, this.dst_pos);
-        }
     }
 }
 
@@ -986,7 +985,6 @@ class Stretch extends Decompress
             this.dst_pos += this.len;
             prev_code = this.curr_code;
         }
-        this.truncateOutput();
         return Stretch.OK;
     }
 }

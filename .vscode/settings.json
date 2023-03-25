@@ -1152,6 +1152,7 @@
     "PUSHSI",
     "PUSHSP",
     "PUSHSS",
+    "PWARN",
     "qbasic",
     "QBASIC",
     "qblang",

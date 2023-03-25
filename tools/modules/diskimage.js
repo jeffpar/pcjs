@@ -1261,12 +1261,20 @@ function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
                 aDirectories.push(file);
             } else {
                 let data;
-                try {
-                    data = zip.entryDataSync(entry.name);
-                } catch(err) {
-                    printError(err);
+                if (fVerbose == "nodata") {
+                    /*
+                     * HACK to skip decompression (--verbose=nodata)
+                     */
+                    data = new DataBuffer(entry.size);
                 }
-                data = new DataBuffer(data || 0);
+                else {
+                    try {
+                        data = zip.entryDataSync(entry.name);
+                    } catch(err) {
+                        printError(err);
+                    }
+                    data = new DataBuffer(data || 0);
+                }
                 file.attr = DiskInfo.ATTR.ARCHIVE;
                 file.size = data.length;
                 file.data = data;
