@@ -22,7 +22,7 @@ import LegacyZip from './legacyzip.js';
  * @property {string} nameEncoding (default is "utf8" with no TextDecoder; undocumented)
  * @property {number} fd (file descriptor; undocumented)
  * @property {number} chunkSize (undocumented)
- * @property {boolean} ignoreZipErrors (added for LegacyZip support)
+ * @property {boolean} logErrors (log errors instead of throwing them; added for LegacyZip support)
  */
 
 /**
@@ -481,7 +481,7 @@ export default class StreamZip {
         let bufferAvail = Math.min(bytesRead, buffer.length - bufferPos);
         try {
             while (this.op.entriesLeft != 0) {
-                let entry = new ArcEntry(this.config.ignoreZipErrors);
+                let entry = new ArcEntry(this.config.logErrors);
                 const headerLen = StreamZip.ArcHeader.getSize();
                 if (!entry.readArcHeader(buffer, bufferPos, bufferPos + bufferAvail)) {
                     break;
@@ -541,7 +541,7 @@ export default class StreamZip {
         try {
             while (this.op.entriesLeft > 0) {
                 if (!entry) {
-                    entry = new ZipEntry(this.config.ignoreZipErrors);
+                    entry = new ZipEntry(this.config.logErrors);
                     entry.readCentralHeader(buffer, bufferPos);
                     entry.headerOffset = this.op.win.position + bufferPos;
                     this.op.entry = entry;
@@ -1048,7 +1048,7 @@ export default class StreamZip {
             errors++;
         }
         if (errors && entry) {
-            entry.error("invalid date/time " + JSON.stringify(orig));
+            entry.warning("invalid date/time " + JSON.stringify(orig));
         }
         if (fLocal) {
             return new Date(d.y, d.m, d.d, d.h, d.n, d.s);
@@ -1207,21 +1207,26 @@ class CentralDirectoryZip64Header
 
 class Entry
 {
-    constructor(ignoreErrors)
+    constructor(logErrors)
     {
-        this.ignoreErrors = ignoreErrors;
+        this.logErrors = logErrors;
         this.errors = [];
     }
 
-    error(msg)
+    error(msg, type = "error")
     {
-        if (this.name) msg = this.name + ': ' + msg;
-        if (!this.ignoreErrors) {
+        msg = type + ": " + (this.name? this.name + ": " : "")  + msg;
+        if (!this.logErrors) {
             throw new Error(msg);
         }
         if (this.name) {
             this.errors.push(msg);
         }
+    }
+
+    warning(msg)
+    {
+        this.error(msg, "warning");
     }
 
     validateName()

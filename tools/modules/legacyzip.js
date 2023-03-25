@@ -14,10 +14,13 @@
  *
  * Testing Notes
  *
- *   1. Two examples of suspicious or damaged ZIP files are "/Volumes/PC_SIG_12_90/401_500/DISK0442/DISK0442.ZIP"
+ *   1. Some examples of bad "implode" data can be found in "/Volumes/PC_SIG_12_90/401_500/DISK0442/DISK0442.ZIP"
  *      (see "SPAWN.DOC", "PWARN.PAS") and "/Volumes/PC_SIG_12_90/1301_400/DISK1322/DISK1322.ZIP" (see "NCRISK.BRD").
- *      They both have bad implode data, and in particular, "SPAWN.DOC" seems to have impossibly small compressed data
- *      (1525 bytes) relative to the uncompressed data (140719 bytes) for a 99% compression ratio?  I don't think so.
+ *
+ *      I suspect this is a boring example of ZIP corruption, because "SPAWN.DOC" seems to have impossibly small
+ *      compressed data (1525 bytes) relative to the uncompressed file size (140719 bytes), yielding 99% compression.
+ *      There's an older uncompressed version of "SPAWN.DOC" in "/Volumes/PC_SIG_4_90/401_500/DISK0442/", and `zip`
+ *      can only compress it by 68%.
  *
  *      Originally, I thought these might be examples of the PKZIP 1.01/1.02 "implode" bug, but it now appears not.
  *      I'm still looking for one of those.
@@ -48,7 +51,9 @@ export default class LegacyZip
     static stretchSync(src, dst_len)
     {
         let stretch = new Stretch();
-        stretch.decomp(src, dst_len);
+        if (!stretch.decomp(src, dst_len)) {
+            delete stretch.dst;
+        }
         return stretch;
     }
 
@@ -63,7 +68,9 @@ export default class LegacyZip
     static expandSync(src, dst_len, comp_factor)
     {
         let expand = new Expand();
-        expand.decomp(src, dst_len, comp_factor);
+        if (!expand.decomp(src, dst_len, comp_factor)) {
+            delete expand.dst;
+        }
         return expand;
     }
 
@@ -88,9 +95,9 @@ export default class LegacyZip
         let explode = new Explode();
         if (!explode.decomp(src, dst_len, large_wnd, lit_tree, false) || explode.getBytesRead() != src.length) {
             if (!explode.decomp(src, dst_len, large_wnd, lit_tree, true) || explode.getBytesRead() != src.length) {
-                assert(false, "explodeSync() failed");      // something else besides a "PKZIP 1.01/1.02" bug is going on
+                delete explode.dst;
             } else {
-                assert(false, "explodeSync() recovered");   // would just like to catch one of those "PKZIP 1.01/1.02" bug cases
+                assert(false, "explodeSync() recovered");   // would like to catch just one example of that "PKZIP 1.01/1.02" bug
             }
         }
         return explode;
@@ -498,9 +505,11 @@ class Decompress
      */
     getOutput()
     {
-        assert(this.dst_pos == this.dst.length);
-        if (this.dst_pos < this.dst.length) {
-            this.dst = this.dst.slice(0, this.dst_pos);
+        if (this.dst) {
+            assert(this.dst_pos == this.dst.length);
+            if (this.dst_pos < this.dst.length) {
+                this.dst = this.dst.slice(0, this.dst_pos);
+            }
         }
         return this.dst;
     }
@@ -1931,7 +1940,7 @@ function assert(exp, msg)
 {
     if (DEBUG) {
         if (!exp) {
-            throw new Error("assertion failure" + (msg? ": " + msg : ""));
+            throw new Error(msg || "assertion failure");
         }
     }
 }

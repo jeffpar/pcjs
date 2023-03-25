@@ -1228,7 +1228,7 @@ function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
         arcType: arcType,
         storeEntries: true,
         nameEncoding: "ascii",
-        ignoreZipErrors: true
+        logErrors: true
     });
     zip.on('ready', () => {
         let aFileData = [];
@@ -1271,7 +1271,7 @@ function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
                     try {
                         data = zip.entryDataSync(entry.name);
                     } catch(err) {
-                        printError(err);
+                        entry.error(err.message);
                     }
                     data = new DataBuffer(data || 0);
                 }
@@ -1280,7 +1280,7 @@ function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
                 file.data = data;
             }
             for (let error of entry.errors) {
-                printf("error: %s\n", error);
+                printf("%s\n", error);
             }
             let d, sDir = path.dirname(file.path) + path.sep;
             for (d = 0; d < aDirectories.length; d++) {
