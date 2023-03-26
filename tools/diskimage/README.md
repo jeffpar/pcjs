@@ -50,7 +50,7 @@ such as [diskettes.pcjs.org](https://diskettes.pcjs.org), have been converted to
 To build a PCjs disk image, such as this [PC DOS 2.00 diskette](https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json),
 from an IMG file:
 
-    node modules/diskimage.js /diskettes/pcx86/sys/dos/2.00/PCDOS200-DISK1.img PCDOS200-DISK1.json
+    node diskimage.js /diskettes/pcx86/sys/dos/2.00/PCDOS200-DISK1.img PCDOS200-DISK1.json
 
 In addition to IMG files, DiskImage also includes (experimental) support for PSI (PCE Sector Image) files, which can in
 turn be built from Kryoflux RAW files.  Here are the basic steps, using tools from [PCE](http://www.hampa.ch/pce/):
@@ -66,14 +66,14 @@ which translates to these commands (using a 360K PC diskette named "disk1" as an
     pfi disk1.pfi -p double-step -r 600000 -p decode pri disk1.pri
     pri disk1.pri -c 40-99 -p delete disk1.pri
     pri disk1.pri -p decode mfm disk1.psi
-    node modules/diskimage.js disk1.psi disk1.json
+    node diskimage.js disk1.psi disk1.json
 
 ### Building PCjs Disk Images from Directories
 
 To build a [VisiCalc diskette](https://miscdisks.pcjs.org/pcx86/app/other/visicalc/1981/VISICALC-1981.json)
 from a directory containing VC.COM, specify the name of the directory, including a trailing slash, like so:
 
-    node modules/diskimage.js /miscdisks/pcx86/app/other/visicalc/1981/VISICALC-1981/ VISICALC-1981.json
+    node diskimage.js /miscdisks/pcx86/app/other/visicalc/1981/VISICALC-1981/ VISICALC-1981.json
 
 By default, the diskette will be given an 11-character volume label derived from the directory name (eg, "VISICALC-19");
 however, you can use `--label` to specify your own label (eg, `--label=VISICALC81`), or use `--label=none` to suppress
@@ -106,7 +106,7 @@ Unfortunately, I quickly discovered that *zlib* could not decompress the content
 
 Here's an example of `--zip` in action:
 
-    node modules/diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
+    node diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
 
     DiskImage v2.11
     Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
@@ -130,17 +130,17 @@ The `--verbose` option generates the `PKZIP`-style file listing, displaying the 
 
 In fact, creating a disk image is entirely optional; you can use **DiskImage** to simply examine the contents of `zip` file:
 
-    node modules/diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --verbose
+    node diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --verbose
 
 To simplify dealing with large collections of files, I also added an `--all` option:
 
-    node modules/diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --verbose
+    node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --verbose
 
 That command will locate *all* matching `zip` files and automatically display their contents.  `--all` also supports file extensions `JSON` and `IMG`; the `--zip` option is implied for any file ending with a `ZIP` extension.
 
 If you want to create a disk image for every `ZIP` file:
 
-    node modules/diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --output=tmp --type=img
+    node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --output=tmp --type=img
 
 `--output` specifies the output folder and `--type` specifies the output file type (either `img` or `json`).  Each output file will have the same basename as the `zip` file.
 
@@ -149,11 +149,11 @@ If you want to create a disk image for every `ZIP` file:
 Both local and remote diskette images can be examined.  To examine a remote image, you *must* use the `--disk` option,
 with either an explicit URL, as in:
 
-    node modules/diskimage.js --disk=https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+    node diskimage.js --disk=https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
 
 or with one of PCjs' implicit diskette paths, such as `/diskettes`, which currently maps to disk server `https://diskettes.pcjs.org`:
 
-    node modules/diskimage.js --disk=/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
+    node diskimage.js --disk=/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
 
 If you happen to have a local file that exists in the same location as the implicit diskette path, use `--server` to force
 the server mapping.  The list of implicit paths for PC diskettes currently includes:
@@ -169,11 +169,11 @@ the server mapping.  The list of implicit paths for PC diskettes currently inclu
 
 To get a DOS-compatible directory listing of a disk image:
 
-    node modules/diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list
+    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list
 
 To display all the unused bytes of a disk image:
 
-    node modules/diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list=unused
+    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list=unused
 
 NOTE: Unused bytes are a superset of free bytes.  Free bytes are always measured in terms of unused clusters,
 multiplied by the cluster size, whereas unused bytes are the combination of all completely unused cluster space *plus* any partially
@@ -184,16 +184,16 @@ TODO: Update the unused byte report to include unused bytes, if any, in all FAT 
 
 To extract all the files from a disk image:
 
-    node modules/diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract
+    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract
 
 To extract a specific file from a disk image:
 
-    node modules/diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract=COMMAND.COM
+    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract=COMMAND.COM
 
 To dump a specific (C:H:S) sector from a disk image:
 
-    node modules/diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1
+    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1
 
 To dump multiple (C:H:S) sectors from a disk image track, follow the C:H:S values with a sector count; eg:
 
-    node modules/diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1:4
+    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1:4
