@@ -16,6 +16,7 @@ import got        from "got";
 import DataBuffer from "./nodebuffer.js";
 import PCJSLib    from "./pcjslib.js";
 import StreamZip  from "./streamzip.js";
+// import StreamZip  from "node-stream-zip";
 import Device     from "../../machines/modules/device.js";
 import JSONLib    from "../../machines/modules/jsonlib.js";
 import DiskInfo   from "../../machines/pcx86/modules/diskinfo.js";
@@ -1228,6 +1229,7 @@ function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
         arcType: arcType,
         storeEntries: true,
         nameEncoding: "ascii",
+        // printfDebug: printf,
         logErrors: true
     });
     zip.on('ready', () => {
@@ -1238,7 +1240,8 @@ function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
             printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
             printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
         }
-        for (let entry of zip.entries()) {
+        let entries = Object.values(zip.entries());
+        for (let entry of entries) {
             let file = {path: entry.name, name: path.basename(entry.name), nameEncoding: "cp437"};
             //
             // The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
@@ -1271,7 +1274,11 @@ function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
                     try {
                         data = zip.entryDataSync(entry.name);
                     } catch(err) {
-                        entry.error(err.message);
+                        if (entry.error) {
+                            entry.error(err.message);
+                        } else {
+                            printError(err);
+                        }
                     }
                     data = new DataBuffer(data || 0);
                 }
@@ -1279,8 +1286,10 @@ function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
                 file.size = data.length;
                 file.data = data;
             }
-            for (let error of entry.errors) {
-                printf("%s\n", error);
+            if (entry.errors) {
+                for (let error of entry.errors) {
+                    printf("%s\n", error);
+                }
             }
             let d, sDir = path.dirname(file.path) + path.sep;
             for (d = 0; d < aDirectories.length; d++) {
@@ -1592,8 +1601,8 @@ function processAll(all, argv)
         let max = +argv['max'] || 0;
         let asFiles = glob.sync(all);
         if (asFiles.length) {
-            let outdir = argv['output'];        // if specified, --output is assumed to be a directory
-            let type =  argv['type'] || "json"; // if specified, --type should be a known file extension
+            let outdir = argv['output'] || argv[1];     // if specified, --output is assumed to be a directory
+            let type =  argv['type'] || "json";         // if specified, --type should be a known file extension
             if (type[0] != '.') type = '.' + type;
             let filter = argv['filter'];
             filter = (typeof filter == "string")? new RegExp(filter) : null;

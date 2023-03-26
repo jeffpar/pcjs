@@ -569,13 +569,29 @@
       ]
     },
     {
+      "name": "Node: diskimage.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "args": [
+        "posts.img",
+        "posts.json"
+      ],
+      "cwd": "${workspaceFolder}/tmp",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskimage.js --all --zip",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--all='/Volumes/PC_SIG_12_90/**/*.ZIP'",
-        "--verbose"
+        "--all='/Volumes/PCSIG_13B/**/*.ZIP'",
+        "PCSIG_13B"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -641,7 +657,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/modules/diskimage.js",
       "args": [
-        "--zip=/Volumes/PC_SIG_12_90/401_500/DISK0411/DISK0411.ZIP",
+        "--zip=/Volumes/PCSIG_13B/BBS/DISK2253.ZIP",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",
