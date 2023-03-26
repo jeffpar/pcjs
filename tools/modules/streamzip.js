@@ -16,13 +16,14 @@ import LegacyZip from './legacyzip.js';
 /**
  * @typedef {Object} Config
  * @property {string} file (file name)
- * @property {boolean} arcType (ARC file if 1, ZIP file if 2 or undefined)
+ * @property {boolean} arcType (ARC file if 1, ZIP file if 2 or undefined; added for PCjs)
  * @property {boolean} storeEntries (default is true; ie, always store entries)
  * @property {boolean} skipEntryNameValidation (default is false (ie, always validate entry names))
  * @property {string} nameEncoding (default is "utf8" with no TextDecoder; undocumented)
- * @property {number} fd (file descriptor; undocumented)
+ * @property {number} fd (file descriptor; undocumented as normally this opens its own file descriptor)
  * @property {number} chunkSize (undocumented)
- * @property {boolean} logErrors (log errors instead of throwing them; added for LegacyZip support)
+ * @property {boolean} logErrors (log errors instead of throwing them; added for PCjs and LegacyZip support)
+ * @property {function()} printfDebug (optional debug logging function; added for PCjs)
  */
 
 /**
@@ -231,6 +232,7 @@ export default class StreamZip {
         this.fileName = config.file,
         this.arcType = config.arcType || StreamZip.TYPE_ZIP;
         this.textDecoder = config.nameEncoding? new TextDecoder(config.nameEncoding) : null;
+        this.printfDebug = config.printfDebug || function() {};
         this.open();
         Object.defineProperty(this, 'ready', {
             get() {
@@ -332,7 +334,7 @@ export default class StreamZip {
     {
         const totalReadLength = Math.min(StreamZip.CentralEndHeader.getSize() + StreamZip.MAXFILECOMMENT, this.fileSize);
         this.op = {
-            win: new FileWindowBuffer(this.fd),
+            win: new FileWindowBuffer(this, "CentralDirectory"),
             totalReadLength,
             minPos: this.fileSize - totalReadLength,
             lastPos: this.fileSize,
@@ -458,7 +460,7 @@ export default class StreamZip {
      */
     readArcEntries() {
         this.op = {
-            win: new FileWindowBuffer(this.fd),
+            win: new FileWindowBuffer(this, "readArcEntries"),
             pos: 0,
             chunkSize: this.chunkSize, // StreamZip.ArcHeader.getSize(),
             entriesLeft: -1
@@ -516,7 +518,7 @@ export default class StreamZip {
      */
     readEntries() {
         this.op = {
-            win: new FileWindowBuffer(this.fd),
+            win: new FileWindowBuffer(this, "readEntries"),
             pos: this.centralDirectory.offset,
             chunkSize: this.chunkSize,
             entriesLeft: this.centralDirectory.volumeEntries,
@@ -601,15 +603,13 @@ export default class StreamZip {
     /**
      * entries()
      *
-     * Callers deserve an array of entries that they can safely iterate over, so we call Object.values() for them.
-     *
      * @public
      * @this {StreamZip}
      */
     entries()
     {
         this.checkEntriesExist();
-        return Object.values(this.#entries);
+        return this.#entries;
     }
 
     /**
@@ -627,7 +627,7 @@ export default class StreamZip {
                     return callback(err);
                 }
                 const offset = this.dataOffset(entry);
-                let entryStream = new EntryDataReaderStream(this.fd, offset, entry.compressedSize);
+                let entryStream = new EntryDataReaderStream(this, "stream", offset, entry.compressedSize);
                 if (entry.method === StreamZip.ZIP_STORE) {
                     // nothing to do
                 } else if (entry.method === StreamZip.ZIP_DEFLATE) {
@@ -668,7 +668,7 @@ export default class StreamZip {
             throw err;
         }
         let src = Buffer.alloc(entry.compressedSize);
-        new FsRead(this.fd, src, 0, entry.compressedSize, this.dataOffset(entry), (e) => {
+        new FsRead(this, "entryDataSync", src, 0, entry.compressedSize, this.dataOffset(entry), (e) => {
             err = e;
         }).read(true);
         if (err) {
@@ -755,7 +755,7 @@ export default class StreamZip {
              * we read now.
              */
             const buffer = Buffer.alloc(StreamZip.LocalHeader.getSize());
-            new FsRead(this.fd, buffer, 0, buffer.length, entry.offset, (err) => {
+            new FsRead(this, "openEntry", buffer, 0, buffer.length, entry.offset, (err) => {
                 if (err) {
                     return callback(err);
                 }
@@ -1063,13 +1063,6 @@ export default class StreamZip {
 // StreamZip.setFs = function(customFs) {
 //     fs = customFs;
 // };
-
-StreamZip.debugLog = (...args) => {
-    if (StreamZip.debug) {
-        // eslint-disable-next-line no-console
-        console.log(...args);
-    }
-};
 
 util.inherits(StreamZip, events.EventEmitter);
 
@@ -1390,9 +1383,11 @@ class ZipEntry extends Entry
 
 class FsRead
 {
-    constructor(fd, buffer, offset, length, position, callback)
+    constructor(streamZip, descriptor, buffer, offset, length, position, callback)
     {
-        this.fd = fd;
+        this.streamZip = streamZip;
+        this.descriptor = descriptor;
+        this.fd = streamZip.fd;
         this.buffer = buffer;
         this.offset = offset;
         this.length = length;
@@ -1404,7 +1399,7 @@ class FsRead
 
     read(sync)
     {
-        StreamZip.debugLog('read', this.position, this.bytesRead, this.length, this.offset);
+        this.streamZip.printfDebug('read("%s", len=%#x, pos=%#x, bytesRead=%#x)\n', this.descriptor, this.length - this.bytesRead, this.position + this.bytesRead, this.bytesRead);
         this.waiting = true;
         let err;
         if (sync) {
@@ -1449,12 +1444,15 @@ class FsRead
 
 class FileWindowBuffer
 {
-    constructor(fd)
+    constructor(streamZip, descriptor)
     {
+        this.streamZip = streamZip;
+        this.descriptor = descriptor;
+        this.fd = streamZip.fd;
         this.position = 0;
         this.buffer = Buffer.alloc(0);
-        this.fd = fd;
         this.fsOp = null;
+        this.debug = true;
     }
 
     checkOp()
@@ -1471,7 +1469,15 @@ class FileWindowBuffer
             this.buffer = Buffer.alloc(length);
         }
         this.position = pos;
-        this.fsOp = new FsRead(this.fd, this.buffer, 0, length, this.position, callback).read();
+        this.fsOp = new FsRead(
+            this.streamZip,
+            this.descriptor + ":read",
+            this.buffer,
+            0,
+            length,
+            this.position,
+            callback
+        ).read();
     }
 
     expandLeft(length, callback)
@@ -1482,7 +1488,15 @@ class FileWindowBuffer
         if (this.position < 0) {
             this.position = 0;
         }
-        this.fsOp = new FsRead(this.fd, this.buffer, 0, length, this.position, callback).read();
+        this.fsOp = new FsRead(
+            this.streamZip,
+            this.descriptor + ":expandLeft",
+            this.buffer,
+            0,
+            length,
+            this.position,
+            callback
+        ).read();
     }
 
     expandRight(length, callback)
@@ -1491,7 +1505,8 @@ class FileWindowBuffer
         const offset = this.buffer.length;
         this.buffer = Buffer.concat([this.buffer, Buffer.alloc(length)]);
         this.fsOp = new FsRead(
-            this.fd,
+            this.streamZip,
+            this.descriptor + ":expandRight",
             this.buffer,
             offset,
             length,
@@ -1515,7 +1530,8 @@ class FileWindowBuffer
             shift = this.buffer.length;
         }
         this.fsOp = new FsRead(
-            this.fd,
+            this.streamZip,
+            this.descriptor + ":moveRight",
             this.buffer,
             this.buffer.length - shift,
             shift,
@@ -1527,10 +1543,12 @@ class FileWindowBuffer
 
 class EntryDataReaderStream extends stream.Readable
 {
-    constructor(fd, offset, length)
+    constructor(streamZip, descriptor, offset, length)
     {
         super();
-        this.fd = fd;
+        this.streamZip = streamZip;
+        this.descriptor = descriptor;
+        this.fd = streamZip.fd;
         this.offset = offset;
         this.length = length;
         this.pos = 0;
@@ -1541,6 +1559,7 @@ class EntryDataReaderStream extends stream.Readable
     {
         const buffer = Buffer.alloc(Math.min(n, this.length - this.pos));
         if (buffer.length) {
+            this.streamZip.printfDebug('_read("%s", len=%#x, pos=%#x)\n', this.descriptor, buffer.length, this.offset + this.pos);
             fs.read(this.fd, buffer, 0, buffer.length, this.offset + this.pos, this.readCallback);
         } else {
             this.push(null);
