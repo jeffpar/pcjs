@@ -9,7 +9,7 @@
  */
 
 import fs         from "fs";
-import PCJSLib    from "./pcjslib.js";
+import PCJSLib    from "../modules/pcjslib.js";
 import Device     from "../../machines/modules/device.js";
 
 let device = new Device("node");

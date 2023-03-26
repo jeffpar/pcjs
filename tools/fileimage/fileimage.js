@@ -10,7 +10,7 @@
 import fs         from "fs";
 import os         from "os";
 import path       from "path";
-import PCJSLib    from "./pcjslib.js";
+import PCJSLib    from "../modules/pcjslib.js";
 import Device     from "../../machines/modules/device.js";
 import str        from "../../machines/shared/lib/strlib.js"
 

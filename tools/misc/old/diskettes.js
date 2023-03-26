@@ -8,14 +8,16 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+"use strict"
+
 let fs = require("fs");
 let glob = require("glob");
 let mkdirp = require("mkdirp");
 let os = require("os");
 let path = require("path");
 let xml2js = require("xml2js");
-let strlib = require("../../machines/shared/lib/strlib");
-let proclib = require("../../machines/shared/lib/proclib");
+let strlib = require("../../../machines/shared/lib/strlib");
+let proclib = require("../../../machines/shared/lib/proclib");
 let args = proclib.getArgs();
 
 let idAttrs = '@';

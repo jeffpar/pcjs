@@ -12,8 +12,8 @@
 
 const fs = require("fs");
 const pdf = require("pdf-parse");
-const strlib = require("../../../../machines/shared/lib/strlib");
-const proclib = require("../../../../machines/shared/lib/proclib");
+const strlib = require("../../../../../machines/shared/lib/strlib");
+const proclib = require("../../../../../machines/shared/lib/proclib");
 const args = proclib.getArgs();
 
 let dataBuffer;

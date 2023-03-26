@@ -506,8 +506,8 @@ export default class StreamZip {
                 }
             }
             this.emit('ready');
-        } catch (err) {
-            this.emit('error', err);
+        } catch (e) {
+            this.emit('error', e);
         }
     }
 
@@ -571,8 +571,8 @@ export default class StreamZip {
                 bufferPos += entryHeaderSize;
             }
             this.emit('ready');
-        } catch (err) {
-            this.emit('error', err);
+        } catch (e) {
+            this.emit('error', e);
         }
     }
 

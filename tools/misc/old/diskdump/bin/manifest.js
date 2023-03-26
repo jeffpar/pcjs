@@ -11,9 +11,9 @@
 "use strict";
 
 var fs = require("fs");
-var defines = require("../../../../machines/shared/lib/defines");
-var Str = require("../../../../machines/shared/lib/strlib");
-var Proc = require("../../../../machines/shared/lib/proclib");
+var defines = require("../../../../../machines/shared/lib/defines");
+var Str = require("../../../../../machines/shared/lib/strlib");
+var Proc = require("../../../../../machines/shared/lib/proclib");
 var args = Proc.getArgs();
 
 /**

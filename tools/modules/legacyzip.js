@@ -458,15 +458,6 @@ class HuffmanDecoder
 class Decompress
 {
     /**
-     * constructor()
-     *
-     * @this {Decompress}
-     */
-    constructor()
-    {
-    }
-
-    /**
      * init(src, dst_len)
      *
      * Initialize buffers and decompression state.

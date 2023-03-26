@@ -12,10 +12,10 @@
 var fs      = require("fs");
 var path    = require("path");
 var mkdirp  = require("mkdirp");
-var defines = require("../../../../machines/shared/lib/defines");
-var net     = require("../../../../machines/shared/lib/netlib");
-var proc    = require("../../../../machines/shared/lib/proclib");
-var str     = require("../../../../machines/shared/lib/strlib");
+var defines = require("../../../../../machines/shared/lib/defines");
+var net     = require("../../../../../machines/shared/lib/netlib");
+var proc    = require("../../../../../machines/shared/lib/proclib");
+var str     = require("../../../../../machines/shared/lib/strlib");
 
 /**
  * TextOut()
