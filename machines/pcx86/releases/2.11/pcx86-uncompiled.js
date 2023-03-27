@@ -49339,6 +49339,25 @@ Web.onInit(KbdX86.init);
  */
 
 
+const CP437 = [     // TODO: Import this table from ../modules/charset.js when we start using ES6 modules
+    " ",    "☺",    "☻",    "♥",    "♦",    "♣",    "♠",    "•",    "◘",    "○",    "◙",    "♂",    "♀",    "♪",    "♫",    "☼",
+    "►",    "◄",    "↕",    "‼",    "¶",    "§",    "▬",    "↨",    "↑",    "↓",    "→",    "←",    "∟",    "↔",    "▲",    "▼",
+    " ",    "!",    "\"",   "#",    "$",    "%",    "&",    "'",    "(",    ")",    "*",    "+",    ",",    "-",    ".",    "/",
+    "0",    "1",    "2",    "3",    "4",    "5",    "6",    "7",    "8",    "9",    ":",    ";",    "<",    "=",    ">",    "?",
+    "@",    "A",    "B",    "C",    "D",    "E",    "F",    "G",    "H",    "I",    "J",    "K",    "L",    "M",    "N",    "O",
+    "P",    "Q",    "R",    "S",    "T",    "U",    "V",    "W",    "X",    "Y",    "Z",    "[",    "\\",   "]",    "^",    "_",
+    "`",    "a",    "b",    "c",    "d",    "e",    "f",    "g",    "h",    "i",    "j",    "k",    "l",    "m",    "n",    "o",
+    "p",    "q",    "r",    "s",    "t",    "u",    "v",    "w",    "x",    "y",    "z",    "{",    "|",    "}",    "~",    "⌂",
+    "Ç",    "ü",    "é",    "â",    "ä",    "à",    "å",    "ç",    "ê",    "ë",    "è",    "ï",    "î",    "ì",    "Ä",    "Å",
+    "É",    "æ",    "Æ",    "ô",    "ö",    "ò",    "û",    "ù",    "ÿ",    "Ö",    "Ü",    "¢",    "£",    "¥",    "₧",    "ƒ",
+    "á",    "í",    "ó",    "ú",    "ñ",    "Ñ",    "ª",    "º",    "¿",    "⌐",    "¬",    "½",    "¼",    "¡",    "«",    "»",
+    "░",    "▒",    "▓",    "│",    "┤",    "╡",    "╢",    "╖",    "╕",    "╣",    "║",    "╗",    "╝",    "╜",    "╛",    "┐",
+    "└",    "┴",    "┬",    "├",    "─",    "┼",    "╞",    "╟",    "╚",    "╔",    "╩",    "╦",    "╠",    "═",    "╬",    "╧",
+    "╨",    "╤",    "╥",    "╙",    "╘",    "╒",    "╓",    "╫",    "╪",    "┘",    "┌",    "█",    "▄",    "▌",    "▐",    "▀",
+    "α",    "ß",    "Γ",    "π",    "Σ",    "σ",    "µ",    "τ",    "Φ",    "Θ",    "Ω",    "δ",    "∞",    "φ",    "ε",    "∩",
+    "≡",    "±",    "≥",    "≤",    "⌠",    "⌡",    "÷",    "≈",    "°",    "•",    "·",    "√",    "ⁿ",    "²",    "■",    " "
+];
+
 /*
  * MDA/CGA Support
  * ---------------
@@ -52195,7 +52214,8 @@ class VideoX86 extends Component {
     /**
      * getTextData()
      *
-     * This is an interface used by the Keyboard component, to obtain a plain-text copy of any currently visible text.
+     * This is an interface used by the Keyboard component, to obtain a plain-text copy of any currently visible text,
+     * usually for the purpose of copying it to the clipboard.
      *
      * To keep the function simple and relieve ourselves of some tedious calculations, such as the current visible start
      * address within the frame buffer, we rely on the cell cache, which conveniently mirrors all visible cells as of the
@@ -52212,7 +52232,10 @@ class VideoX86 extends Component {
             for (let row = 0; row < this.nRows; row++) {
                 let line = "";
                 for (let col = 0; col < this.nColsBuffer; col++) {
-                    if (col < this.nCols) line += String.fromCharCode(this.aCellCache[i] & 0xff);
+                    if (col < this.nCols) {
+                        let code = this.aCellCache[i] & 0xff;
+                        line += CP437[code];    // String.fromCharCode(code);
+                    }
                     i++;
                 }
                 s += line.replace(/\s*$/, "\n");

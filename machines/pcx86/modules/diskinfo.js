@@ -1051,7 +1051,7 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {Date} dateMod contains the modification time of a file
-     * @returns {number} the time (bits 0-15) and date (bits 16-31) in FAT format
+     * @returns {number} the time (bits 0-15) and date (bits 16-31) in FAT format (aka modDateTime)
      */
     buildDateTime(dateMod)
     {
@@ -1159,12 +1159,12 @@ export default class DiskInfo {
          * Skip 10 bytes, bringing us to offset 0x16: 2 bytes for modification time, plus 2 bytes for modification date.
          */
         off += 10;
-        let dateTime = this.buildDateTime(dateMod);
-        ab[off++] = dateTime & 0xff;
-        ab[off++] = (dateTime >> 8) & 0xff;
-        dateTime >>>= 16;
-        ab[off++] = dateTime & 0xff;
-        ab[off++] = (dateTime >> 8) & 0xff;
+        let modDateTime = this.buildDateTime(dateMod);
+        ab[off++] = modDateTime & 0xff;
+        ab[off++] = (modDateTime >> 8) & 0xff;
+        modDateTime >>>= 16;
+        ab[off++] = modDateTime & 0xff;
+        ab[off++] = (modDateTime >> 8) & 0xff;
 
         /*
          * Now we're at offset 0x1A, where the starting cluster (2 bytes) and file size (4 bytes) are stored,
@@ -2109,7 +2109,17 @@ export default class DiskInfo {
                         cbDir += file.size;
                         cbTotal += file.size;
                     }
-                    sListing += this.device.sprintf("%s%-8s %-3s%s%s  %2M-%02D-%0.2Y  %2G:%02N%.1A\n", sIndent, name, ext, (file.attr & (DiskInfo.ATTR.READONLY | DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
+                    let sDate = "";
+                    if (file.date.getFullYear() >= 1980) {
+                        sDate = this.device.sprintf("%2M-%02D-%0.2Y  %2G:%02N%.1A", file.date);
+                    }
+                    sListing += this.device.sprintf(
+                        "%s%-8s %-3s%s%s  %s\n",
+                        sIndent, name, ext,
+                        (file.attr & (DiskInfo.ATTR.READONLY | DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM))? "*" : " ",
+                        sSize,
+                        sDate
+                    );
                     nTotal++;
                     /*
                      * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
@@ -2323,11 +2333,9 @@ export default class DiskInfo {
      * getDate(modDate, modTime, sFile)
      *
      * If modDate wasn't set (ie, 0x0000), then m will be -1 and d will be 0,
-     * resulting in a Date where getFullYear() < 1980.  There are cases where we allow
-     * that, in order to recreate uninitialized directory entries; however, in THIS
-     * function, we do not, because we're building a file table for the disk image,
-     * which is used to generate our own directory listings (see getFileListing()) and
-     * we don't want out-of-bounds values showing up there.
+     * resulting in a Date of "1979-11-30 00:00:00".  We allow those particular
+     * "errors" because that's how we detect uninitialized directory entries
+     * (see getFileListing()).
      *
      * @this {DiskInfo}
      * @param {number} modDate
@@ -2345,17 +2353,17 @@ export default class DiskInfo {
         let minute = (modTime >> 5) & 0x3f;
         let second = (modTime & 0x1f) << 1;
         let y = year, m = month, d = day, h = hour, n = minute, s = second;
-        if (m < 0) {
+        if ((modDate || modTime) && m < 0) {
             m = 0;
-            if (modDate || modTime) errors++;
+            errors++;
         }
         if (m > 11) {
             m = 11;
             errors++;
         }
-        if (d < 1) {
+        if ((modDate || modTime) && d < 1) {
             d = 1;
-            if (modDate || modTime) errors++;
+            errors++;
         }
         if (d > 31) {
             d = 31;

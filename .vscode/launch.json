@@ -555,7 +555,7 @@
       "name": "Node: diskettes.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/diskettes.js",
+      "program": "${workspaceFolder}/tools/misc/old/diskettes.js",
       "args": [
         "/diskettes",
         "--filter=WIN95-B950",
@@ -572,7 +572,7 @@
       "name": "Node: diskimage.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "posts.img",
         "posts.json"
@@ -588,7 +588,7 @@
       "name": "Node: diskimage.js --all --zip",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--all='/Volumes/PCSIG_13B/**/*.ZIP'",
         "PCSIG_13B"
@@ -604,7 +604,7 @@
       "name": "Node: diskimage.js --all --zip --filter",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--all='/Volumes/PCSIG_13B/**/*.ZIP'",
         "--filter='00[0-9][0-9]'",
@@ -621,7 +621,7 @@
       "name": "Node: diskimage.js --dir",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--dir=tmp/posts",
         "--output=tmp/posts.json",
@@ -638,7 +638,7 @@
       "name": "Node: diskimage.js --arc",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--arc=tmp/CHASM.ARC",
         "--output=tmp/CHASM.json",
@@ -655,9 +655,11 @@
       "name": "Node: diskimage.js --zip",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--zip=/Volumes/PCSIG_13B/BBS/DISK2253.ZIP",
+        "--zip=/Volumes/PC_SIG_12_90/701_800/DISK0798/DISK0798.ZIP",
+        "--output=tmp/DISK0798.json",
+        "--overwrite",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",
@@ -671,7 +673,7 @@
       "name": "Node: diskimage.js --zip --list",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--verbose",
         "tmp/posts.zip"
@@ -687,7 +689,7 @@
       "name": "Node: diskimage.js --zip implode",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--zip=/Volumes/PC_SIG_12_90/401_500/DISK0442/DISK0442.ZIP",
         "--verbose"
@@ -703,7 +705,7 @@
       "name": "Node: diskimage.js --zip reduce",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--zip=/miscdisks/pcx86/sw/magazines/pcm/archive/PCMAG-VOL07N15/BOXES3.ZIP",
         "--output=tmp/BOXES3.json",
@@ -721,7 +723,7 @@
       "name": "Node: diskimage.js --zip shrink",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--zip=/Volumes/PCSIG_13B/GRA/DISK1645.ZIP",
         "--output=tmp/DISK1645.json",
@@ -739,7 +741,7 @@
       "name": "Node: diskimage.js --disk --list",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--disk=/pcsig8a-disks/pcx86/shareware/pcsig08/archive/DISK0798.img",
         "--output=tmp/DISK0798.json",
@@ -757,7 +759,7 @@
       "name": "Node: diskimage.js --extract",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "/pcsig8a-disks/pcx86/shareware/pcsig08/DISK0798.json",
         "--extract"
@@ -773,7 +775,7 @@
       "name": "Node: diskimage.js --catalog --checkdisk",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--catalog=diskettes",
         "--checkdisk",
@@ -790,7 +792,7 @@
       "name": "Node: diskimage.js --catalog --checkpage",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--catalog=diskettes",
         "--checkpage",
@@ -807,7 +809,7 @@
       "name": "Node: diskimage.js --catalog --extract",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--catalog",
         "--extract",
@@ -824,7 +826,7 @@
       "name": "Node: diskimage.js --list",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/diskimage.js",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "/gamedisks/pcx86/game/other/1990/oregon_trail/OREGON_TRAIL-210.json",
         "--list"
@@ -840,7 +842,7 @@
       "name": "Node: fileimage.js --file",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/modules/fileimage.js",
+      "program": "${workspaceFolder}/tools/fileimage/fileimage.js",
       "args": [
         "--file=/machines/pcx86/progressive/pro386/rom/1986-04-25/archive/PRO386.ROM",
         "--output=/machines/pcx86/progressive/pro386/rom/1986-04-25/PRO386.json",
@@ -858,7 +860,7 @@
       "name": "Node: diskdump.js (deprecated)",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/old/diskdump/bin/diskdump.js",
+      "program": "${workspaceFolder}/tools/misc/old/diskdump/bin/diskdump.js",
       "args": [
         "--disk=gamedisks/pcx86/game/other/1984/kings_quest1/archive/disk1.psi",
         "--format=json",
@@ -876,7 +878,7 @@
       "name": "Node: filedump.js (deprecated)",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/old/filedump/bin/filedump.js",
+      "program": "${workspaceFolder}/tools/misc/old/filedump/bin/filedump.js",
       "args": [
         "--file=machines/palm/pilot/roms/pilot.rom",
         "--format=bytes",
@@ -893,12 +895,12 @@
       "name": "Node: pdfparse.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/old/textout/lib/pdfparse.js",
+      "program": "${workspaceFolder}/tools/misc/old/textout/lib/pdfparse.js",
       "args": [
         "archive/Whats_In_Print_1984-OCR.pdf",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/tools/old/textout",
+      "cwd": "${workspaceFolder}/tools/misc/old/textout",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
