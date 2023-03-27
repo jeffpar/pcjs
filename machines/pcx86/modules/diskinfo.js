@@ -2018,15 +2018,15 @@ export default class DiskInfo {
     }
 
     /**
-     * getFileListing(iVolume, indent, fMetaData)
+     * getFileListing(iVolume, indent, options)
      *
      * @this {DiskInfo}
      * @param {number} [iVolume] (-1 to list contents of ALL volumes in image)
      * @param {number} [indent]
-     * @param {boolean} [fMetaData] (true to include a list of all compressed archive contents, if any)
+     * @param {boolean|string} [options]
      * @returns {string}
      */
-    getFileListing(iVolume = -1, indent = 0, fMetaData = false)
+    getFileListing(iVolume = -1, indent = 0, options)
     {
         let sListing = "";
         if (this.buildTables() > 0) {
@@ -2047,12 +2047,23 @@ export default class DiskInfo {
                     return this.device.sprintf("%s %8d file(s)   %8d bytes\n", sIndent, nFiles, cbDir);
                 }.bind(this);
                 let i, sLabel = "", sDrive = "?";
+                let fileTable = this.fileTable;
+                if (options == "sorted") {
+                    fileTable = this.fileTable.slice(0);
+                    fileTable.sort(function(a, b) {
+                        /*
+                         * We can't use "a.path.localeCompare(b.path)", because we want to do a traditional
+                         * ASCII sort, not a Unicode sort.
+                         */
+                        return a.path < b.path? -1 : (a.path > b.path? 1 : 0); //
+                    });
+                }
                 /*
                  * Do a preliminary scan for a volume label, and don't look beyond root directory entries;
                  * since those are all at the beginning of the file table, we can stop as soon as we see a SUBDIR.
                  */
-                for (i = 0; i < this.fileTable.length; i++) {
-                    let file = this.fileTable[i];
+                for (i = 0; i < fileTable.length; i++) {
+                    let file = fileTable[i];
                     if (file.iVolume > iVolume) break;
                     if (file.iVolume != iVolume) continue;
                     if (file.path.lastIndexOf('\\') > 0) break;
@@ -2066,11 +2077,11 @@ export default class DiskInfo {
                         break;
                     }
                 }
-                for (i = 0; i < this.fileTable.length; i++) {
-                    let file = this.fileTable[i];
+                for (i = 0; i < fileTable.length; i++) {
+                    let file = fileTable[i];
                     if (file.iVolume != iVolume) continue;
                     if (file.attr & DiskInfo.ATTR.VOLUME) continue;
-                    if ((file.attr & DiskInfo.ATTR.METADATA) && !fMetaData) continue;
+                    if ((file.attr & DiskInfo.ATTR.METADATA) && options != "metadata") continue;
                     if (curVol != file.iVolume) {
                         let vol = this.volTable[file.iVolume];
                         sDrive = String.fromCharCode(vol.iPartition < 0? 0x41 : 0x43 + vol.iPartition);

@@ -660,6 +660,7 @@
         "--zip=/Volumes/PC_SIG_12_90/701_800/DISK0798/DISK0798.ZIP",
         "--output=tmp/DISK0798.json",
         "--overwrite",
+        "--list=sorted",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",

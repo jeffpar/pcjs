@@ -479,7 +479,10 @@ function processDisk(di, diskFile, argv, diskette)
             }
             if (!sLines) sLines = "no unused data space on disk";
         } else {
-            sLines = di.getFileListing(iVolume, 0, argv['metadata']) || "\tno listing available\n";
+            /*
+             * Other --list options include: "metadata", "sorted"
+             */
+            sLines = di.getFileListing(iVolume, 0, argv['list']) || "\tno listing available\n";
         }
         printf("%s\n", sLines);
     }
