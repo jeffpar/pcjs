@@ -187,81 +187,100 @@ function processFiles(sDir, diskettes)
 }
 
 /**
- * getDiskInfo(info)
+ * getDiskDB(info)
  *
- * If we're parsing a ".UPP" file, then we'll return an object containing "DISKnnnn" properties, where
+ * If we're parsing a ".UPP" file, then we'll return a DB object containing "DISKnnnn" properties, where
  * each "DISKnnnn" will contain a 'diskSummary' property with an array of lines containing that disk's raw information.
  *
  * @param {Object} info
  * @returns {Object|null}
  */
-function getDiskInfo(info)
+function getDiskDB(info)
 {
-    let diskInfo = null;
+    let diskDB = null;
+    let appendLine = function(lines, line) {
+        if (line) {
+            lines.push(line);
+            return;
+        }
+        if (lines.length && lines[lines.length - 1]) {
+            lines.push(line);
+        }
+    };
+    let trimLines = function(lines) {
+        if (lines.length && !lines[lines.length - 1].length) {
+            lines.pop();
+        }
+    };
     for (let volume in info) {
         try {
             let sFile = path.join("/Volumes", volume, info[volume]);
             let text = fs.readFileSync(sFile, {encoding: "ascii"});
             let ext = path.parse(sFile).ext;
             if (ext == ".UPP") {
-                diskInfo = {};
+                diskDB = {};
                 let prevDisk = "";
                 let lines = text.split("\r\n");
                 for (let line of lines) {
                     if (!line) continue;
-                    let match = line.match(/^([0-9][0-9][0-9][0-9]) ?(.*)$/);
-                    if (match) {
-                        let disk = "DISK" + match[1];
-                        if (!diskInfo[disk]) diskInfo[disk] = {diskSummary: []};
-                        let data = diskInfo[disk];
-                        let keywords = match[2].trim();
-                        if (!data.diskSummary.length) {
-                            if (!keywords) continue;
-                            let matchKeywords = keywords.match(/(DISK-NUMBER|DISK-TITLE|PC-SIG VERSION|PROGRAM|AUTHOR VERSION): ?(.*)/);
-                            if (matchKeywords) {
-                                let value = matchKeywords[2].trim();
-                                switch(matchKeywords[1]) {
-                                case "DISK-NUMBER":
-                                    data.diskIndex = value;
-                                    continue;
-                                case "DISK-TITLE":
-                                    data.diskTitle = value;
-                                    continue;
-                                case "PC-SIG VERSION":
-                                    data.diskVersion = value;
-                                    continue;
-                                case "PROGRAM":
-                                    data.diskProgram = value;
-                                    continue;
-                                case "AUTHOR VERSION":
-                                    data.authorVersion = value;
-                                    continue;
-                                default:
-                                    break;
+                    let matchLine = line.match(/^([0-9][0-9][0-9][0-9]) ?(.*)$/);
+                    if (matchLine) {
+                        let disk = "DISK" + matchLine[1];
+                        if (!diskDB[disk]) diskDB[disk] = {diskSummary: []};
+                        let data = diskDB[disk];
+                        line = matchLine[2].trim();
+                        let matchField = line.match(/(DISK-NUMBER|DISK-TITLE|PC-SIG VERSION|PROGRAM|AUTHOR VERSION): ?(.*)/);
+                        if (matchField) {
+                            let prop = "";
+                            let value = matchField[2].trim();
+                            switch(matchField[1]) {
+                            case "DISK-NUMBER":
+                                prop = 'diskIndex';
+                                break;
+                            case "DISK-TITLE":
+                                prop = 'diskTitle';
+                                break;
+                            case "PC-SIG VERSION":
+                                prop = 'diskVersion';
+                                break;
+                            case "PROGRAM":
+                                prop = 'diskProgram';
+                                break;
+                            case "AUTHOR VERSION":
+                                prop = 'authorVersion';
+                                break;
+                            default:
+                                break;
+                            }
+                            if (prop) {
+                                if (!data[prop]) {
+                                    data[prop] = value;
+                                } else {
+                                    data[prop] += " / " + value;
                                 }
+                                /*
+                                 * If this field appeared in the middle of a disk's summary, then emit a blank line.
+                                 */
+                                if (data.diskSummary.length) {
+                                    appendLine(data.diskSummary, "");
+                                }
+                                continue;
                             }
                         }
                         if (prevDisk && disk != prevDisk) {
-                            let n = diskInfo[prevDisk].diskSummary.length;
-                            if (n && diskInfo[prevDisk].diskSummary[n-1].length == 0) {
-                                diskInfo[prevDisk].diskSummary.pop();
-                            }
+                            trimLines(diskDB[prevDisk].diskSummary);
                         }
-                        data.diskSummary.push(keywords);
+                        appendLine(data.diskSummary, line);
                         prevDisk = disk;
                     }
                 }
                 if (prevDisk) {
-                    let n = diskInfo[prevDisk].diskSummary.length;
-                    if (n && diskInfo[prevDisk].diskSummary[n-1].length == 0) {
-                        diskInfo[prevDisk].diskSummary.pop();
-                    }
+                    trimLines(diskDB[prevDisk].diskSummary);
                 }
             }
-        } catch(err) {
-        }
+        } catch(err) {}
     }
-    return diskInfo;
+    return diskDB;
 }
 
 /**
@@ -346,7 +365,7 @@ function processFolders(sDir, argv)
             }
         }
 
-        let i, diskInfo;
+        let i, diskDB;
         let lastObj, lastPart;
         let diskObj = diskettes;
         let title = "", jsonName = "";
@@ -371,8 +390,8 @@ function processFolders(sDir, argv)
                 diskObj = obj;
                 if (diskObj) {
                     if (diskObj['@title']) title = diskObj['@title'];
-                    if (diskObj['@diskInfo']) {
-                        diskInfo = getDiskInfo(diskObj['@diskInfo']);
+                    if (diskObj['@diskDB']) {
+                        diskDB = getDiskDB(diskObj['@diskDB']);
                     }
                 }
             }
@@ -469,8 +488,9 @@ function processFolders(sDir, argv)
                                 printf("warning: @archive '%s' should possibly be '%s' instead\n", diskObj['@archive'], archiveType);
                             }
                         }
-                        if (diskInfo && diskInfo[mediaName]) {
-                            diskObj['@diskInfo'] = diskInfo[mediaName];
+
+                        if (diskDB && diskDB[mediaName]) {
+                            diskObj['@diskInfo'] = diskDB[mediaName];
                             diskettesUpdated = true;
                         }
                     }
