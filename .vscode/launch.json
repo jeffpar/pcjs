@@ -768,7 +768,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "/pcsig8a-disks/pcx86/shareware/pcsig08/DISK0798.json",
+        "/disks/pcsig8a-disks/pcx86/shareware/pcsig08/DISK0798.json",
         "--extract"
       ],
       "cwd": "${workspaceFolder}/tmp",
@@ -835,7 +835,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "/gamedisks/pcx86/game/other/1990/oregon_trail/OREGON_TRAIL-210.json",
+        "/disks/gamedisks/pcx86/game/other/1990/oregon_trail/OREGON_TRAIL-210.json",
         "--list"
       ],
       "cwd": "${workspaceFolder}",

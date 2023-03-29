@@ -82691,7 +82691,7 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
         done(sXMLFile, sXML, xmlDoc);
     };
     if (sXML) {
-        if (PRIVATE) sXML = sXML.replace(/\/library.xml/, "/private/library.xml");
+        if (PRIVATE) sXML = sXML.replace(/\/library.xml/, "/disks/private/library.xml");
         if (fResolve) {
             resolveXML(sXMLFile, sXML, display, buildXML);
             return;
