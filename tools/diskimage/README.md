@@ -156,13 +156,16 @@ or with one of PCjs' implicit diskette paths, such as `/diskettes`, which curren
     node diskimage.js --disk=/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json
 
 If you happen to have a local file that exists in the same location as the implicit diskette path, use `--server` to force
-the server mapping.  The list of implicit paths for PC diskettes currently includes:
+the server mapping.  The list of implicit paths for PC disks currently includes (but is not limited to):
 
-  - [/diskettes](https://github.com/jeffpar/pcjs-diskettes)
-  - [/gamedisks](https://github.com/jeffpar/pcjs-gamedisks)
-  - [/miscdisks](https://github.com/jeffpar/pcjs-miscdisks)
-  - [/pcsigdisks[0-9]](https://github.com/jeffpar/pcjs-pcsigdisks[0-9])
-  - [/harddisks](https://github.com/jeffpar/pcjs-harddisks)
+  - [/disks/diskettes](https://diskettes.pcjs.org)
+  - [/disks/gamedisks](https://gamedisks.pcjs.org)
+  - [/disks/miscdisks](https://miscdisks.pcjs.org)
+  - [/disks/pcsig0](https://pcsig0.pcjs.org)
+  - [/disks/harddisks](https://harddisks.pcjs.org)
+  - [/disks/cdroms/cds001](https://cds001.pcjs.org)
+
+NOTE: Implicit disk paths should normally begin with `/disks`, because when [running PCjs locally](https://github.com/jeffpar/pcjs/wiki/Running-PCjs-locally), that's where any local copies of PCjs disk repositories are assumed to exist; however, PCjs and DiskImage will allow you to omit that portion, for convenience (and backward compatibility).  In other words, `/diskettes` will be automatically mapped to `/disks/diskettes` for local access and `https://diskettes.pcjs.org` for remote access.
 
 ### Commonly Used DiskImage Options
 
