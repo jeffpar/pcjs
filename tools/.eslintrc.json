@@ -1,13 +1,10 @@
 {
-  "globals": {
-    "Buffer": true,
-    "COPYRIGHT": true,
-    "process": true
+  "parserOptions": {
+    "ecmaVersion": 13,
+    "sourceType": "module"
   },
   "rules": {
-    "no-useless-constructor": "off",
-    "no-confusing-arrow": "off",
-    "no-var": 0,
-    "no-catch-shadow": "off"
+    "sort-imports": "off",
+    "lines-between-class-members": "off"
   }
 }

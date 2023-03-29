@@ -1,0 +1,42 @@
+---
+layout: page
+title: "PC-SIG Library Disk #995"
+permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0995/
+machines:
+  - id: ibm5170
+    type: pcx86
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    autoGen: true
+    autoMount:
+      B: "PC-SIG Library Disk #995"
+    autoType: $date\r$time\rB:\rDIR\r
+---
+
+{% include machine.html id="ibm5170" %}
+
+### Directory of PC-SIG Library Disk #995
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    APR                320  12-03-87   5:32p
+    AUG                320  12-03-87   5:33p
+    CAL      EXE    120774   2-10-89   6:07p
+    CAL87    EXE    120774   2-13-89   9:51a
+    DEC                320  12-03-87   5:36p
+    FEB                320  12-03-87   5:31p
+    FILES995 TXT      1434   3-02-89   4:01p
+    GO       BAT        38   1-27-88   8:46a
+    GO       TXT       540   2-27-89   3:42p
+    JAN                320   4-22-88  10:49p
+    JUL                320  12-03-87   5:33p
+    JUN                320   4-22-88  11:01p
+    MAR                320  12-03-87   5:32p
+    MAY                320   4-22-88   9:12p
+    NOV                320  12-06-87  12:49a
+    OCT                320  12-03-87   5:34p
+    README   BAT       597   1-27-89   4:54p
+    SEP                320   4-22-88   9:51p
+           18 file(s)     247997 bytes
+                           63488 bytes free

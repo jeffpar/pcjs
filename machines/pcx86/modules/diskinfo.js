@@ -1045,22 +1045,23 @@ export default class DiskInfo {
     /**
      * buildDateTime(dateMod)
      *
+     * NOTE: We now check for dates where getFullYear() is less than 1980, which can happen when
+     * a dateMod entry was left uninitialized (ie, zero); in those cases, we return zero, so that
+     * the directory entry can be recreated in a similar state.
+     *
      * @this {DiskInfo}
      * @param {Date} dateMod contains the modification time of a file
-     * @returns {number} the time (bits 0-15) and date (bits 16-31) in FAT format
+     * @returns {number} the time (bits 0-15) and date (bits 16-31) in FAT format (aka modDateTime)
      */
     buildDateTime(dateMod)
     {
+        if (!dateMod) return 0;
         let year = dateMod.getFullYear();
+        if (year < 1980) return 0;
         let month = dateMod.getMonth() + 1;
         let day = dateMod.getDate();
         let time = ((dateMod.getHours() & 0x1F) << 11) | ((dateMod.getMinutes() & 0x3F) << 5) | ((dateMod.getSeconds() >> 1) & 0x1F);
-        /*
-         * NOTE: If validateTime() is doing its job, then we should never have to do this.  This is simple paranoia.
-         */
-        if (year < 1980) {
-            year = 1980; month = 1; day = 1; time = 1;
-        } else if (year > 2099) {
+        if (year > 2099) {      // technically, the year can go as high as 2107, but allowing that is probably a bad idea
             year = 2099; month = 12; day = 31; time = 1;
         }
         let date = (((year - 1980) & 0x7F) << 9) | (month << 5) | day;
@@ -1100,7 +1101,7 @@ export default class DiskInfo {
             }
             let name, uniqueID = 0;
             do {
-                name = this.buildShortName(file.name, !!(file.attr & DiskInfo.ATTR.VOLUME), uniqueID++);
+                name = this.buildShortName(file.name, !!(file.attr & DiskInfo.ATTR.VOLUME), uniqueID++, file.nameEncoding);
             } while (names.indexOf(name) >= 0);
             if (file.attr != DiskInfo.ATTR.VOLUME) {
                 names.push(name);       // volume labels are not considered a potential name conflict
@@ -1128,12 +1129,18 @@ export default class DiskInfo {
      */
     buildDirEntry(ab, off, sName, cbFile, bAttr, dateMod, iCluster)
     {
+        let i;
         let sExt = "";
         let offDir = off;
-        let i = sName.indexOf('.');
-        if (i > 0) {
-            sExt = sName.substr(i+1);
-            sName = sName.substr(0, i);
+        if (bAttr == DiskInfo.ATTR.VOLUME) {
+            sExt = sName.substr(8, 3);
+            sName = sName.substr(0, 8);
+        } else {
+            i = sName.indexOf('.');
+            if (i > 0) {
+                sExt = sName.substr(i+1);
+                sName = sName.substr(0, i);
+            }
         }
         for (i = 0; i < 8; i++) {
             ab[off++] = (i < sName.length? sName.charCodeAt(i) : 0x20);
@@ -1152,16 +1159,12 @@ export default class DiskInfo {
          * Skip 10 bytes, bringing us to offset 0x16: 2 bytes for modification time, plus 2 bytes for modification date.
          */
         off += 10;
-        if (dateMod) {
-            let dateTime = this.buildDateTime(dateMod);
-            ab[off++] = dateTime & 0xff;
-            ab[off++] = (dateTime >> 8) & 0xff;
-            dateTime >>= 16;
-            ab[off++] = dateTime & 0xff;
-            ab[off++] = (dateTime >> 8) & 0xff;
-        } else {
-            for (i = 0; i < 4; i++) ab[off++] = 0;
-        }
+        let modDateTime = this.buildDateTime(dateMod);
+        ab[off++] = modDateTime & 0xff;
+        ab[off++] = (modDateTime >> 8) & 0xff;
+        modDateTime >>>= 16;
+        ab[off++] = modDateTime & 0xff;
+        ab[off++] = (modDateTime >> 8) & 0xff;
 
         /*
          * Now we're at offset 0x1A, where the starting cluster (2 bytes) and file size (4 bytes) are stored,
@@ -1322,45 +1325,58 @@ export default class DiskInfo {
     }
 
     /**
-     * buildShortName(sFile, fLabel, uniqueID)
+     * buildShortName(sFile, fLabel, uniqueID, encoding)
      *
      * @this {DiskInfo}
      * @param {string} sFile is the basename of a file
      * @param {boolean} [fLabel]
      * @param {number} [uniqueID]
+     * @param {string} [encoding] (eg, "utf8", "cp437", "ascii")
      * @return {string} containing a corresponding filename in FAT "8.3" format
      */
-    buildShortName(sFile, fLabel=false, uniqueID=0)
+    buildShortName(sFile, fLabel=false, uniqueID=0, encoding="utf8")
     {
         let sName = sFile.toUpperCase();
-        let iExt = sName.lastIndexOf('.');
-        let sExt = "";
-        if (iExt >= 0) {
-            sExt = sName.substr(iExt+1);
-            sName = sName.substr(0, iExt);
-        } else if (fLabel && sName.length > 8) {
-            sExt = sName.substr(8);
-        }
-        sName = sName.substr(0, 8).trimEnd();
-        if (uniqueID) {
-            let suffix = "~" + uniqueID;
-            sName = sName.substr(0, 8 - suffix.length) + suffix;
-        }
-        sExt = sExt.substr(0, 3).trimEnd();
-        let iPeriod = -1;
-        if (sExt) {
-            iPeriod = sName.length;
-            sName += '.' + sExt;
-        }
-        /*
-         * Character validation is disabled for labels; I'm not sure what the limitations are on label characters,
-         * if any, but they definitely allow for things like extra periods and lower-case letters.
-         */
-        if (!fLabel) {
+        if (fLabel) {
+            /*
+             * Character validation is disabled for labels; I'm not sure what the limitations are on label characters,
+             * if any, but they definitely allow for things like extra periods and lower-case letters.
+             */
+            sName = sName.substr(0, 11).trimEnd();
+        } else {
+            let iExt = sName.lastIndexOf('.');
+            let sExt = "";
+                if (iExt >= 0) {
+                sExt = sName.substr(iExt+1);
+                sName = sName.substr(0, iExt);
+            } else if (fLabel && sName.length > 8) {
+                sExt = sName.substr(8);
+            }
+            sName = sName.substr(0, 8).trimEnd();
+            if (uniqueID) {
+                let suffix = "~" + uniqueID;
+                sName = sName.substr(0, 8 - suffix.length) + suffix;
+            }
+            sExt = sExt.substr(0, 3).trimEnd();
+            let iPeriod = -1;
+            if (sExt) {
+                iPeriod = sName.length;
+                sName += '.' + sExt;
+            }
             for (let i = 0; i < sName.length; i++) {
                 if (i == iPeriod) continue;
                 let ch = sName.charAt(i);
-                if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()-@^_`{}~ ".indexOf(ch) < 0) {
+                /*
+                 * If the filename encoding is "cp437", there's nothing to do, because that's the
+                 * encoding we assume for PC disk images.  Ditto for "ascii", which is our fallback
+                 * when dealing with modules (eg, StreamZip) that have no idea what "cp437" is/was.
+                 * And finally, if the encoding is unknown, we again simply hope for the best.
+                 *
+                 * Only if the encoding has been explicitly set to "utf8" will we strip any non-standard
+                 * FAT filename characters, because now we're dealing with a potentially huge set of
+                 * characters, most of which have no meaning in the 8-bit world of early PCs.
+                 */
+                if (encoding == "utf8" && "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()-@^_`{}~ ".indexOf(ch) < 0) {
                     sName = sName.substr(0, i) + '_' + sName.substr(i + 1);
                 }
             }
@@ -1637,7 +1653,11 @@ export default class DiskInfo {
                 let name = this.device.getBaseName(desc[DiskInfo.FILEDESC.PATH], false, true);
                 let path = desc[DiskInfo.FILEDESC.PATH].replace(/\//g, '\\');
                 let attr = +desc[DiskInfo.FILEDESC.ATTR];
-                let date = this.device.parseDate(desc[DiskInfo.FILEDESC.DATE]);
+                /*
+                 * parseDate() *must* return local time (the second parameter must be true), because we've changed
+                 * everything else to use local time (eg, getFileListing()).
+                 */
+                let date = this.device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
                 let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
                 let file = new FileInfo(this, iVolume, path, name, attr, date, size);
                 file.index = i;
@@ -1998,15 +2018,15 @@ export default class DiskInfo {
     }
 
     /**
-     * getFileListing(iVolume, indent, fMetaData)
+     * getFileListing(iVolume, indent, options)
      *
      * @this {DiskInfo}
      * @param {number} [iVolume] (-1 to list contents of ALL volumes in image)
      * @param {number} [indent]
-     * @param {boolean} [fMetaData] (true to include a list of all compressed archive contents, if any)
+     * @param {boolean|string} [options]
      * @returns {string}
      */
-    getFileListing(iVolume = -1, indent = 0, fMetaData = false)
+    getFileListing(iVolume = -1, indent = 0, options)
     {
         let sListing = "";
         if (this.buildTables() > 0) {
@@ -2027,12 +2047,23 @@ export default class DiskInfo {
                     return this.device.sprintf("%s %8d file(s)   %8d bytes\n", sIndent, nFiles, cbDir);
                 }.bind(this);
                 let i, sLabel = "", sDrive = "?";
+                let fileTable = this.fileTable;
+                if (options == "sorted") {
+                    fileTable = this.fileTable.slice(0);
+                    fileTable.sort(function(a, b) {
+                        /*
+                         * We can't use "a.path.localeCompare(b.path)", because we want to do a traditional
+                         * ASCII sort, not a Unicode sort.
+                         */
+                        return a.path < b.path? -1 : (a.path > b.path? 1 : 0); //
+                    });
+                }
                 /*
                  * Do a preliminary scan for a volume label, and don't look beyond root directory entries;
                  * since those are all at the beginning of the file table, we can stop as soon as we see a SUBDIR.
                  */
-                for (i = 0; i < this.fileTable.length; i++) {
-                    let file = this.fileTable[i];
+                for (i = 0; i < fileTable.length; i++) {
+                    let file = fileTable[i];
                     if (file.iVolume > iVolume) break;
                     if (file.iVolume != iVolume) continue;
                     if (file.path.lastIndexOf('\\') > 0) break;
@@ -2046,11 +2077,11 @@ export default class DiskInfo {
                         break;
                     }
                 }
-                for (i = 0; i < this.fileTable.length; i++) {
-                    let file = this.fileTable[i];
+                for (i = 0; i < fileTable.length; i++) {
+                    let file = fileTable[i];
                     if (file.iVolume != iVolume) continue;
                     if (file.attr & DiskInfo.ATTR.VOLUME) continue;
-                    if ((file.attr & DiskInfo.ATTR.METADATA) && !fMetaData) continue;
+                    if ((file.attr & DiskInfo.ATTR.METADATA) && options != "metadata") continue;
                     if (curVol != file.iVolume) {
                         let vol = this.volTable[file.iVolume];
                         sDrive = String.fromCharCode(vol.iPartition < 0? 0x41 : 0x43 + vol.iPartition);
@@ -2089,7 +2120,19 @@ export default class DiskInfo {
                         cbDir += file.size;
                         cbTotal += file.size;
                     }
-                    sListing += this.device.sprintf("%s%-8s %-3s%s%s  %#2M-%#02D-%#0.2Y  %#2G:%#02N%#.1A\n", sIndent, name, ext, (file.attr & (DiskInfo.ATTR.READONLY | DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM))? "*" : " ", sSize, file.date);
+                    let sDate = "", sTime = "";
+                    if (file.date.getFullYear() >= 1980) {
+                        sDate = this.device.sprintf("  %2M-%02D-%0.2Y", file.date);
+                        if (file.date.getHours() || file.date.getMinutes() || file.date.getSeconds()) {
+                            sTime = this.device.sprintf("  %2G:%02N%.1A", file.date);
+                        }
+                    }
+                    sListing += this.device.sprintf(
+                        "%s%-8s %-3s%s%s%s%s\n",
+                        sIndent, name, ext,
+                        (file.attr & (DiskInfo.ATTR.READONLY | DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM))? "*" : " ",
+                        sSize, sDate, sTime
+                    );
                     nTotal++;
                     /*
                      * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
@@ -2134,7 +2177,7 @@ export default class DiskInfo {
             [DiskInfo.FILEDESC.PATH]: file.path.replace(/\\/g, '/'),
             [DiskInfo.FILEDESC.NAME]: file.name,
             [DiskInfo.FILEDESC.ATTR]: this.device.sprintf("%#0bx", file.attr),
-            [DiskInfo.FILEDESC.DATE]: this.device.sprintf("%#T", file.date),
+            [DiskInfo.FILEDESC.DATE]: this.device.sprintf("%T", file.date),
             [DiskInfo.FILEDESC.SIZE]: file.size,
             [DiskInfo.FILEDESC.VOL]:  file.iVolume
         };
@@ -2300,31 +2343,40 @@ export default class DiskInfo {
     }
 
     /**
-     * getDate(year, month, day, hour, minute, second, sFile)
+     * getDate(modDate, modTime, sFile)
+     *
+     * If modDate wasn't set (ie, 0x0000), then m will be -1 and d will be 0,
+     * resulting in a Date of "1979-11-30 00:00:00".  We allow those particular
+     * "errors" because that's how we detect uninitialized directory entries
+     * (see getFileListing()).
      *
      * @this {DiskInfo}
-     * @param {number} year
-     * @param {number} month
-     * @param {number} day
-     * @param {number} hour
-     * @param {number} minute
-     * @param {number} second
+     * @param {number} modDate
+     * @param {number} modTime
      * @param {number} sFile
-     * @returns {Date} (UTC date corresponding to the given date/time parameters)
+     * @returns {Date} (local date corresponding to the given date/time parameters)
      */
-    getDate(year, month, day, hour, minute, second, sFile)
+    getDate(modDate, modTime, sFile)
     {
         let errors = 0;
+        let year = (modDate >> 9) + 1980;
+        let month = ((modDate >> 5) & 0xf) - 1;
+        let day = (modDate & 0x1f);
+        let hour = (modTime >> 11);
+        let minute = (modTime >> 5) & 0x3f;
+        let second = (modTime & 0x1f) << 1;
         let y = year, m = month, d = day, h = hour, n = minute, s = second;
-        if (m < 0) {
+        if ((modDate || modTime) && m < 0) {
             m = 0;
+            errors++;
         }
         if (m > 11) {
             m = 11;
             errors++;
         }
-        if (d < 1) {
+        if ((modDate || modTime) && d < 1) {
             d = 1;
+            errors++;
         }
         if (d > 31) {
             d = 31;
@@ -2345,7 +2397,21 @@ export default class DiskInfo {
         if (errors) {
             this.printf(Device.MESSAGE.DISK + Device.MESSAGE.WARN, "%s warning: invalid timestamp: %04d-%02d-%02d %02d:%02d:%02d\n", sFile, year, month, day, hour, minute, second);
         }
-        return this.device.parseDate(y, m, d, h, n, s);
+        /*
+         * Previously, I used device.parseDate() to create a UTC date and then used "%#T" in getFileDesc() and
+         * assorted "%#" specifiers in getFileListing() to display the UTC date; since file dates are time-zone
+         * agnostic, standardizing on UTC was fine as long as I was consistent.  Unfortunately, I was not.
+         *
+         * For example, when diskimage.js reads a set of files from a local directory, it obtains dates in local
+         * time, not UTC time.  Since I can't change how fs.stat() works (it always returns local times), and
+         * since time-zone conversions can be tricky (especially thanks to Daylight Savings Time), I now use local
+         * times everywhere.
+         *
+         * At least, I hope so.
+         *
+         *      return this.device.parseDate(y, m, d, h, n, s);
+         */
+        return new Date(y, m, d, h, n, s);
     }
 
     /**
@@ -2378,15 +2444,7 @@ export default class DiskInfo {
                 if (dir.attr == DiskInfo.ATTR.LFN) continue;
                 let name = CharSet.fromCP437(dir.name);
                 let path = CharSet.fromCP437(dir.path) + name;
-                let dateMod = this.getDate(
-                    (dir.modDate >> 9) + 1980,
-                    ((dir.modDate >> 5) & 0xf) - 1,
-                    (dir.modDate & 0x1f),
-                    (dir.modTime >> 11),
-                    (dir.modTime >> 5) & 0x3f,
-                    (dir.modTime & 0x1f) << 1,
-                    this.diskName + ":" + path
-                );
+                let dateMod = this.getDate(dir.modDate, dir.modTime, this.diskName + ":" + path);
                 file = new FileInfo(this, vol.iVolume, path, name, dir.attr, dateMod, dir.size, dir.cluster, dir.aLBA);
                 file.index = this.fileTable.length;
                 this.fileTable.push(file);
@@ -3090,9 +3148,10 @@ export default class DiskInfo {
             [DiskInfo.IMAGE.SECTORDEF]: this.cbSector,
             [DiskInfo.IMAGE.DISKSIZE]: this.cbDiskData,
             [DiskInfo.IMAGE.ORIGBPB]: JSON.stringify(this.abOrigBPB),
-            [DiskInfo.IMAGE.VERSION]: Device.VERSION,
-            [DiskInfo.IMAGE.REPOSITORY]: Device.REPOSITORY,
-            // [DiskInfo.IMAGE.COMMAND]: this.args,
+            [DiskInfo.IMAGE.VERSION]: "2.10",   // Device.VERSION,
+            [DiskInfo.IMAGE.REPOSITORY]: Device.REPOSITORY
+            // [DiskInfo.IMAGE.GENERATED]: this.device.parseDate(),
+            // [DiskInfo.IMAGE.COMMAND]: this.args
         };
         if (!this.fBPBModified) {
             delete imageInfo[DiskInfo.IMAGE.ORIGBPB];
@@ -3639,6 +3698,7 @@ DiskInfo.IMAGE = {
     ORIGBPB:    'bootSector',
     VERSION:    'version',
     REPOSITORY: 'repository',
+    GENERATED:  'generated',
     SOURCE:     'source',           // the source of the data (eg, archive.org, pcjs.org, etc)
     COMMAND:    'diskimage.js'
 };

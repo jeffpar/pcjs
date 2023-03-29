@@ -439,6 +439,13 @@ class FDC extends Component {
         bus.addPortInputTable(this, FDC.aPortInput);
         bus.addPortOutputTable(this, FDC.aPortOutput);
 
+        /*
+         * We now allow the FDC's 'diskettes' parameter to be overridden with a machine parameter; fortunately, that's not a problem,
+         * since we weren't doing anything with the parameter until this point (initBus()) anyway.  It's nothing more than a comma-delimited
+         * list of diskettes.json files (the default one being /machines/pcx86/diskettes.json).
+         */
+        this.aDiskettes = this.cmp.getMachineParm('diskettes') || this.aDiskettes;
+
         if (this.aDiskettes && typeof this.aDiskettes == "string") {
             let fdc = this;
             let hostName = Web.getHostName();

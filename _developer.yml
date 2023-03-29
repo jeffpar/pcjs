@@ -32,19 +32,29 @@ exclude:
 
 software:
   decdisks:
-    server: /decdisks
+    server: /disks/decdisks
   diskettes:
-    server: /diskettes
+    server: /disks/diskettes
   gamedisks:
-    server: /gamedisks
+    server: /disks/gamedisks
   harddisks:
-    server: /harddisks
+    server: /disks/harddisks
   miscdisks:
-    server: /miscdisks
+    server: /disks/miscdisks
+  pcsig0:
+    server: /disks/pcsig0
+  pcsig1:
+    server: /disks/pcsig1
+  pcsig2:
+    server: /disks/pcsig2
+  pcsig3:
+    server: /disks/pcsig3
+  pcsig4:
+    server: /disks/pcsig4
   pcsig8a-disks:
-    server: /pcsig8a-disks
+    server: /disks/pcsig8a-disks
   pcsig8b-disks:
-    server: /pcsig8b-disks
+    server: /disks/pcsig8b-disks
 
 archive:
   lcm:

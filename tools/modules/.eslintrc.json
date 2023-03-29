@@ -1,9 +1,0 @@
-{
-  "parserOptions": {
-    "ecmaVersion": 2023,
-    "sourceType": "module"
-  },
-  "rules": {
-    "sort-imports": "off"
-  }
-}
