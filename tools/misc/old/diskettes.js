@@ -250,11 +250,11 @@ function getDiskInfo(info)
                         data.diskSummary.push(keywords);
                         prevDisk = disk;
                     }
-                    if (prevDisk) {
-                        let n = diskInfo[prevDisk].diskSummary.length;
-                        if (n && diskInfo[prevDisk].diskSummary[n-1].length == 0) {
-                            diskInfo[prevDisk].diskSummary.pop();
-                        }
+                }
+                if (prevDisk) {
+                    let n = diskInfo[prevDisk].diskSummary.length;
+                    if (n && diskInfo[prevDisk].diskSummary[n-1].length == 0) {
+                        diskInfo[prevDisk].diskSummary.pop();
                     }
                 }
             }
