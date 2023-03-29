@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<fdc id="fdcNEC" autoMount='{A:{name:"PC DOS 2.00 (Disk 1)"}, B:{name:"PC DOS 2.00 (Disk 2)"}}' diskettes="/machines/pcx86/diskettes.json,/disks/private/pcx86/diskettes.json" server="/diskettes" sortBy="name" pos="left" padLeft="8px" padBottom="8px">
+<fdc id="fdcNEC" autoMount='{A:{name:"PC DOS 2.00 (Disk 1)"}, B:{name:"PC DOS 2.00 (Disk 2)"}}' diskettes="/machines/pcx86/diskettes.json,/disks/private/pcx86/diskettes.json" server="/disks/diskettes" sortBy="name" pos="left" padLeft="8px" padBottom="8px">
 	<control type="list" binding="listDrives"/>
 	<control type="list" binding="listDisks">
 	</control>
