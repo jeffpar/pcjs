@@ -1,0 +1,47 @@
+---
+layout: page
+title: "PC-SIG Library Disk #239"
+permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0239/
+machines:
+  - id: ibm5150
+    type: pcx86
+    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    autoGen: true
+    autoMount:
+      B: "PC-SIG Library Disk #239"
+    autoType: $date\r$time\rB:\rDIR\r
+---
+
+{% include machine.html id="ibm5150" %}
+
+### Directory of PC-SIG Library Disk #239
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    1004-B   BAS     18048  11-28-84   9:52p
+    1005-A   BAS      4352  11-28-84   9:53p
+    1009-A   BAS     19456  11-28-84   9:53p
+    3002-A   BAS      5632  11-28-84   9:53p
+    3003-A   BAS      5760  11-28-84   9:53p
+    3006-A   BAS      2944  11-28-84   9:53p
+    3012-A   BAS     11136  11-28-84   9:53p
+    3014-A   BAS     12672  11-28-84   9:53p
+    CURVE    BAS      8560  10-30-85   3:47p
+    CURVE    ABS      1484   1-19-87  10:47a
+    CURVE    NFO     14265   1-19-87  10:15a
+    4028-A   BAS      6912  11-28-84   9:54p
+    5006-A   BAS      3328  11-28-84   9:54p
+    7013-A   BAS      6528  11-28-84   9:54p
+    LOGMENU  LOG      2942  11-28-84   9:55p
+    LOGON    LOG      1024  11-28-84   9:55p
+    LOGREV   LOG     10368  11-28-84   9:55p
+    LOGOFF   LOG      5248  11-28-84   9:55p
+    7037-A   BAS      2304  11-28-84   9:55p
+    7042-A   BAS     13952  11-28-84   9:55p
+    CRC      TXT      1522  12-17-84   3:57p
+    CRCK4    COM      1536  10-21-82   5:50p
+    FILES239 TXT      1530   1-04-80   8:22p
+           23 file(s)     161503 bytes
+                          150528 bytes free

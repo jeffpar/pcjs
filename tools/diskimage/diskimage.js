@@ -33,8 +33,8 @@ let nMaxDefault = 512, nMaxInit, nMaxCount, sFileIndex, useServer;
 function printError(err, filename)
 {
     let msg = err.message;
-    if (filename) msg = filename + ": " + msg;
-    printf("%s\n", msg);
+    if (filename) msg = path.basename(filename) + ": " + msg;
+    printf("error: %s\n", msg);
 }
 
 /*
@@ -91,7 +91,7 @@ function createDisk(diskFile, diskette, argv, done)
         if (diskette.archive[0] == '/') {
             sArchiveFile = path.sep + diskette.archive.slice(1);
         } else if (diskette.archive[0] == '.') {
-            sArchiveFile = sArchiveFile.replace(".img", diskette.archive);
+            sArchiveFile = sArchiveFile.replace(".img", diskette.archive.toUpperCase());
         } else if (diskette.archive == "folder") {
             sArchiveFile = sArchiveFile.replace(".img", path.sep);
         } else {
@@ -240,26 +240,41 @@ function getFullPath(sFile)
     if (sFile[0] == '~') {
         sFile = os.homedir() + sFile.substr(1);
     }
-    else if (isServerPath(sFile)) {
-        sFile = rootDir + sFile;
+    else {
+        sFile = getServerPath(sFile);
     }
     return sFile;
 }
 
 /**
- * getServerName(diskFile)
+ * getDiskServer(diskFile)
  *
  * @param {string} diskFile
  * @returns {string|undefined}
  */
-function getServerName(diskFile)
+function getDiskServer(diskFile)
+{
+    let match = diskFile.match(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|pcsig[0-9]|pcsig[0-9]*[a-z]*-disks|harddisks|decdisks|cdroms|private)\//);
+    return match && (match[1] + match[2]);
+}
+
+/**
+ * getServerPath(sFile)
+ *
+ * @param {string} sFile
+ * @returns {string}
+ */
+function getServerPath(sFile)
 {
     /*
      * In addition to disk server paths, we had to add /machines (for diskette config files) and /software (for Markdown files
      * containing supplementary copy-protection disk data).
      */
-    let match = diskFile.match(/^\/(machines|software|diskettes|gamedisks|miscdisks|pcsig8a-disks|pcsig8b-disks|harddisks|decdisks|discs|private)\//);
-    return match && match[1];
+    let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|pcsig[0-9]|pcsig[0-9]*[a-z]*-disks|harddisks|decdisks|cdroms|private)(\/.*)$/);
+    if (match) {
+        sFile = path.join(rootDir, (match[2] == "machines" || match[2] == "software"? "" : "disks"), match[2], match[3]);
+    }
+    return sFile;
 }
 
 /**
@@ -281,17 +296,6 @@ function getTarget(sTarget)
         }
     }
     return target;
-}
-
-/**
- * isServerPath(diskFile)
- *
- * @param {string} diskFile
- * @returns {boolean}
- */
-function isServerPath(diskFile)
-{
-    return !!getServerName(diskFile);
 }
 
 /**
@@ -333,7 +337,7 @@ function isTextFile(sFile)
 function mapDiskToServer(diskFile)
 {
     if (useServer || !existsFile(getFullPath(diskFile))) {
-        diskFile = diskFile.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/discs\/([^/]*)\//, "https://$1.pcjs.org/");
+        diskFile = diskFile.replace(/^\/disks\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsig[0-9]|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$1.pcjs.org/");
     }
     return diskFile;
 }
@@ -370,7 +374,7 @@ function printManifest(diskFile, diskName, manifest)
  * @param {DiskInfo} di
  * @param {string} diskFile
  * @param {Array} argv
- * @param {Object} [diskette] (if present, then we were invoked by readCatalog(), so any --output option should be ignored)
+ * @param {Object} [diskette] (if present, then we were invoked by readCollection(), so any --output option should be ignored)
  */
 function processDisk(di, diskFile, argv, diskette)
 {
@@ -515,7 +519,7 @@ function processDisk(di, diskFile, argv, diskette)
             let subDir = typeof argv['extract'] != "string"? di.getName() : "";
             if (subDir || name == argv['extract']) {
                 let fSuccess = false;
-                if (argv['catalog']) {
+                if (argv['collection']) {
                     subDir = getFullPath(path.join(path.dirname(diskFile), "archive", subDir));
                     if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
                         subDir = subDir.replace("/disks/archive", "/archive");
@@ -547,7 +551,7 @@ function processDisk(di, diskFile, argv, diskette)
                     let fPrinted = false;
                     let fQuiet = argv['quiet'];
                     let sFile = sPath.substr(subDir.length? subDir.length + 1 : 0);
-                    if (!argv['catalog']) {
+                    if (!argv['collection']) {
                         if (!fQuiet) printf("extracting: %s\n", sFile);
                     } else {
                         let sArchive = checkArchive(sPath, true);
@@ -599,7 +603,7 @@ function processDisk(di, diskFile, argv, diskette)
      */
     if (argv['rewrite']) {
         if (diskFile.endsWith(".json")) {
-            writeDisk(diskFile, di, argv['legacy'], 0, true, undefined, undefined, argv['source']);
+            writeDisk(diskFile, di, argv['legacy'], 0, true, argv['quiet'], undefined, argv['source']);
         }
     }
 
@@ -665,26 +669,30 @@ function processDisk(di, diskFile, argv, diskette)
         /*
          * We don't need/want any software pages checked/built for private diskette collections.
          *
-         * The PCSIG software pages were hand-built, so it would take some extra effort to automatically rebuild those;
+         * The PCSIG08 software pages were hand-built, so it would take some extra effort to automatically rebuild those;
          * besides, when the pages were moved from /software/pcx86/shareware/pcsig08 to /software/pcx86/sw/misc/pcsig08,
          * the diskettes on /pcsig8a-disks and /pcsig8b-disks remained at /pcx86/shareware/pcsig08, so those paths would
          * have to be changed, too.  The diskettes.json on each of those servers are what control where the named diskettes
          * are loaded from, so the difference in paths doesn't affect the current pages; it's just something to be aware of
          * if we ever try to automatically rebuild the PCSIG software pages, too.
          */
-        if (diskFile.indexOf("/private") >= 0 || diskFile.indexOf("/pcsig") >= 0) return;
+        if (diskFile.indexOf("/private") >= 0 || diskFile.indexOf("/pcsig8") >= 0) return;
         let sListing = di.getFileListing(0, 4);
         if (!sListing) return;
         let sIndex = "", sIndexNew = "", sAction = "";
         let sHeading = "\n### Directory of " + diskette.name + "\n";
-        let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(diskettes|gamedisks|miscdisks|harddisks|pcsig[0-9a-z-]*|private)\//, "/software/")), "index.md");
+        let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|pcsig[0-9]|pcsig[0-9a-z-]*-disks|private)\//, "/software/")), "index.md");
         if (existsFile(sIndexFile)) {
             sIndex = sIndexNew = readFile(sIndexFile);
             sAction = "updated";
         } else {
             if (diskette.title) {
-                let permalink = path.dirname(diskette.path.replace(/^\/[^/]+/, "/software")) + path.sep;
-                sIndexNew = "---\nlayout: page\ntitle: " + diskette.title + "\npermalink: " + permalink + "\n---\n";
+                let sTitle = diskette.title;
+                if (sTitle.match(/[#:[\]{}]/)) {
+                    sTitle = '"' + sTitle + '"';
+                }
+                let permalink = path.dirname(diskette.path.replace(/^\/(disks\/|)[^/]+/, "/software")) + path.sep;
+                sIndexNew = "---\nlayout: page\ntitle: " + sTitle + "\npermalink: " + permalink + "\n---\n";
                 sIndexNew += sHeading + sListing;
                 sAction = "created";
             }
@@ -781,6 +789,11 @@ function processDisk(di, diskFile, argv, diskette)
                 if (configFile) {
                     let bootDisk = findOption(["", "DOS"]);
                     let demoDisk = diskette.name;
+                    let sDiskettes = "";
+                    let diskMatch = diskFile.match(/\/pcsig\/([0-9])[0-9]+-/);
+                    if (diskMatch) {
+                        sDiskettes = "    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig" + diskMatch[1] + "/pcx86/diskettes.json\n";
+                    }
                     if (diskette.bootable) {
                         bootDisk = demoDisk;
                         demoDisk = "";
@@ -803,7 +816,7 @@ function processDisk(di, diskFile, argv, diskette)
                     if (demoDisk) demoDisk = "      B: \"" + demoDisk + "\"\n";
                     let sAutoMount = "    autoMount:\n" + bootDisk + demoDisk;
                     if (sAutoType) sAutoType = "    autoType: " + sAutoType + "\n";
-                    sFrontMatter += "machines:\n" + sMachine + sAutoGen + sAutoMount + (sAutoType || "");
+                    sFrontMatter += "machines:\n" + sMachine + sDiskettes + sAutoGen + sAutoMount + (sAutoType || "");
                     sIndexNew = sIndexNew.replace(matchFrontMatter[1], sFrontMatter);
                     sMachineEmbed = "\n{% include machine.html id=\"" + sMachineID + "\" %}\n";
                 }
@@ -823,9 +836,9 @@ function processDisk(di, diskFile, argv, diskette)
             sDiskPic = diskette.path.replace(".json", ".png");
         }
         if (existsFile(sDiskPic)) {
-            let sDiskServer = getServerName(sDiskPic);
+            let sDiskServer = getDiskServer(sDiskPic);
             if (sDiskServer) {
-                sListing += "\n![" + diskette.name + "]({{ site.software." + sDiskServer + ".server }}" + sDiskPic.slice(sDiskServer.length + 1) + ")\n";
+                sListing += "\n![" + diskette.name + "]({{ site.software." + sDiskServer.replace("disks/", "") + ".server }}" + sDiskPic.slice(sDiskServer.length + 1) + ")\n";
             }
         }
         if (diskette.source && !diskette.source.indexOf("http")) {
@@ -897,7 +910,7 @@ function processDisk(di, diskFile, argv, diskette)
                     printf("\t%s index for \"%s\": %s\n", sAction, diskette.title, sIndexFile);
                 }
             } else {
-                printf("\tindex for \"%s\" should be %s; use --rebuild\n", diskette.title, sAction);
+                printf("\tindex for \"%s\" should be %s (%s); use --rebuild\n", diskette.title, sAction, sIndexFile);
             }
         }
     }
@@ -915,7 +928,7 @@ function processDisk(di, diskFile, argv, diskette)
         if (output) {
             if (typeof output == "string") output = [output];
             output.forEach((outputFile) => {
-                writeDisk(outputFile, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], true, argv['writable'], argv['source']);
+                writeDisk(outputFile, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], argv['quiet'], argv['writable'], argv['source']);
             });
         }
     }
@@ -959,20 +972,20 @@ function addMetaData(di, sDir, sPath)
 }
 
 /**
- * readCatalog(argv)
+ * readCollection(argv)
  *
- * If "--catalog=[string]" then the set of disks is limited to those where pathname contains [string].
+ * If "--collection=[string]" then the set of disks is limited to those where pathname contains [string].
  *
  * @param {Array} argv
  */
-function readCatalog(argv)
+function readCollection(argv)
 {
     let family = "pcx86";
-    let asServers = ["diskettes", "gamedisks", "miscdisks", "pcsig8a-disks", "pcsig8b-disks", "private"];
+    let asServers = ["diskettes", "gamedisks", "miscdisks", "pcsig0", "pcsig8a-disks", "pcsig8b-disks", "private"];
     let cCollections = 0, cDisks = 0;
     let asCollections = [];
     asServers.forEach((server) => {
-        asCollections = asCollections.concat(glob.sync(path.join(rootDir, path.sep + server + path.sep + family + path.sep + "diskettes.json")));
+        asCollections = asCollections.concat(glob.sync(path.join(rootDir, "disks" + path.sep + server + path.sep + family + path.sep + "diskettes.json")));
     });
     let messages;
     if (argv['quiet']) {
@@ -1005,9 +1018,9 @@ function readCatalog(argv)
                     diskette.path = diskette.path.replace(library['@server'], library['@local']);
                 }
                 let diskFile = diskette.path;
-                if (typeof argv['catalog'] == "string") {
-                    if (argv['verbose']) printf("checking %s for '%s'...\n", diskFile, argv['catalog']);
-                    if (diskFile.indexOf(argv['catalog']) < 0) return;
+                if (typeof argv['collection'] == "string") {
+                    if (argv['verbose']) printf("checking %s for '%s'...\n", diskFile, argv['collection']);
+                    if (diskFile.indexOf(argv['collection']) < 0) return;
                 }
                 let sName = path.basename(diskFile);
                 if (aDiskNames[sName]) {
@@ -1429,18 +1442,18 @@ function readJSON(sFile)
 }
 
 /**
- * writeDisk(diskFile, di, fLegacy, indent, fOverwrite, fPrint, fWritable, source)
+ * writeDisk(diskFile, di, fLegacy, indent, fOverwrite, fQuiet, fWritable, source)
  *
  * @param {string} diskFile
  * @param {DiskInfo} di
  * @param {boolean} [fLegacy]
  * @param {number} [indent]
  * @param {boolean} [fOverwrite]
- * @param {boolean} [fPrint]
+ * @param {boolean} [fQuiet]
  * @param {boolean} [fWritable]
  * @param {string} [source]
  */
-function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fPrint = true, fWritable = false, source = "")
+function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false, fQuiet = false, fWritable = false, source = "")
 {
     let diskName = path.basename(diskFile);
     try {
@@ -1455,7 +1468,7 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
                 if (di.getData(db, fLegacy)) data = db.buffer;
             }
             if (data) {
-                if (fPrint) printf("writing %s...\n", diskFile);
+                if (!fQuiet) printf("writing %s...\n", diskFile);
                 diskFile = getFullPath(diskFile);
                 let sDir = path.dirname(diskFile);
                 if (!existsFile(sDir)) fs.mkdirSync(sDir, {recursive: true});
@@ -1466,7 +1479,7 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
                 printf("%s not written, no data\n", diskName);
             }
         } else {
-            printf("%s exists, use --overwrite to replace\n", diskFile);
+            if (!fQuiet) printf("%s exists, use --overwrite to replace\n", diskFile);
         }
     }
     catch(err) {
@@ -1613,7 +1626,7 @@ function processAll(all, argv)
                 if (filter && !filter.test(sFile)) continue;
                 let args = [argv[0], sFile];
                 if (outdir) args['output'] = path.join(outdir, path.parse(sFile).name + type);
-                for (let arg of ['overwrite', 'verbose']) {
+                for (let arg of ['list', 'extract', 'overwrite', 'quiet', 'verbose']) {
                     if (argv[arg] !== undefined) args[arg] = argv[arg];
                 }
                 processFile(args);
@@ -1733,9 +1746,9 @@ function processFile(argv)
  * when using --all, --output can be used to specify an output directory, and --type can be used to specify
  * the output file extension (default is "json").
  *
- * Use --catalog to process all catalogued disks with the specified options, or --catalog=[subset]
+ * Use --collection to process all disk collections with the specified options, or --collection=[subset]
  * to process only disks whose path or name contains [subset]; any input/output disk/directory names are
- * ignored when using --catalog.
+ * ignored when using --collection.
  *
  * @param {number} argc
  * @param {Array} argv
@@ -1760,8 +1773,8 @@ function main(argc, argv)
 
     device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
 
-    if (argv['catalog']) {
-        readCatalog(argv);
+    if (argv['collection']) {
+        readCollection(argv);
         return;
     }
 

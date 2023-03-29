@@ -129,7 +129,7 @@ export default class JSONLib {
                          */
                         if (!COMPILED) {
                             let title = release['@title'] || group['@title'];
-                            if (library['@title'] && title.indexOf(library['@title']) < 0) {
+                            if (library['@title'] && title.indexOf(library['@title']) < 0 && library['@title'].indexOf("Misc") < 0) {
                                 title = library['@title'] + ' ' + title;
                             }
                             let archive = item['@archive'];

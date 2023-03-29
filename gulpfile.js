@@ -118,9 +118,9 @@ var siteHost = "https://www.pcjs.org";
  * instead of using the separate files, and speed up machine page loads slightly.
  */
 var aSrcDiskCollections = [
-    "./diskettes/pcx86/diskettes.json",
-    "./gamedisks/pcx86/diskettes.json",
-    "./miscdisks/pcx86/diskettes.json"
+    "./disks/diskettes/pcx86/diskettes.json",
+    "./disks/gamedisks/pcx86/diskettes.json",
+    "./disks/miscdisks/pcx86/diskettes.json"
 ];
 var sDstDiskCollection = "./machines/pcx86/diskettes.json";
 

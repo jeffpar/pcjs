@@ -1,0 +1,42 @@
+---
+layout: page
+title: "PC-SIG Library Disk #568"
+permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0568/
+machines:
+  - id: ibm5160
+    type: pcx86
+    config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    autoGen: true
+    autoMount:
+      B: "PC-SIG Library Disk #568"
+    autoType: $date\r$time\rB:\rDIR\r
+---
+
+{% include machine.html id="ibm5160" %}
+
+### Directory of PC-SIG Library Disk #568
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    123DOC   ARC     28124   4-03-85   9:23p
+    123EGA   ARC      9021  10-20-85   9:12a
+    123PREP  ARC     36752   4-11-85   7:32p
+    123RANGE EXE     25088   6-08-84   4:02p
+    ARC      EXE     29824   8-22-85  12:50a
+    CLRJET   ARC     39510   8-18-85   3:46p
+    FEDTAX85 DOC      2739  10-06-85   8:20a
+    FEDTAX85 WKS     82048  10-06-85   7:42a
+    NEWCOLOR DOC      1152   5-17-85   7:37p
+    NEWCOLOR IN        256   5-17-85   7:38p
+    OPTIONZ  WKS     21376   7-29-84   8:55a
+    TRYVM123 COM     23229  10-16-85   9:38a
+    TRYVM123 DOC     10250  12-11-85   4:36p
+    UNARC    TXT       363   6-20-86   1:08p
+    WKS-FRMT TXT     36830  10-29-85   4:05p
+    GO       BAT      1131   6-20-86   1:12p
+    NOTES568 TXT      1280   6-20-86   1:08p
+    FILES568 TXT      1701   6-20-86   1:08p
+           18 file(s)     350674 bytes
+                            2048 bytes free

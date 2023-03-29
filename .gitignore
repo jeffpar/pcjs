@@ -12,13 +12,5 @@ private
 tmp
 /_site
 /lcm
-/discs
-/decdisks
-/diskettes
-/gamedisks
-/miscdisks
-/harddisks
-/pcsigdisks
-/pcsig8a-disks
-/pcsig8b-disks
+/disks
 /node_modules

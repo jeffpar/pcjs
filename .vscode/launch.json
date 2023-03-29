@@ -495,6 +495,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "PC-SIG Library Disk #1",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sw/misc/pcsig/0001-0999/DISK0001/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "PC-SIG Library 8th Edition CD-ROM (April 1990)",
       "type": "chrome",
       "request": "launch",
@@ -557,9 +564,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/misc/old/diskettes.js",
       "args": [
-        "/diskettes",
-        "--filter=WIN95-B950",
-        "--verbose"
+        "/disks/pcsig0",
+        "--folders"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -773,12 +779,12 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --catalog --checkdisk",
+      "name": "Node: diskimage.js --collection --checkdisk",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--catalog=diskettes",
+        "--collection=0001-0999/DISK0798",
         "--checkdisk",
         "--rebuild"
       ],
@@ -790,12 +796,12 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --catalog --checkpage",
+      "name": "Node: diskimage.js --collection --checkpage",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--catalog=diskettes",
+        "--collection=disks/pcsig0",
         "--checkpage",
         "--rebuild"
       ],
@@ -807,12 +813,12 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --catalog --extract",
+      "name": "Node: diskimage.js --collection --extract",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--catalog",
+        "--collection",
         "--extract",
         "--quiet"
       ],

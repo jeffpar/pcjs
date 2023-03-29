@@ -2344,7 +2344,9 @@ class Web {
         }
 
         if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/discs\/([^/]*)\//, "https://$1.pcjs.org/");
+            sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsig[0-9]|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
+        } else {
+            sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsig[0-9]|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
         }
 
 
@@ -63935,6 +63937,13 @@ class FDC extends Component {
         bus.addPortInputTable(this, FDC.aPortInput);
         bus.addPortOutputTable(this, FDC.aPortOutput);
 
+        /*
+         * We now allow the FDC's 'diskettes' parameter to be overridden with a machine parameter; fortunately, that's not a problem,
+         * since we weren't doing anything with the parameter until this point (initBus()) anyway.  It's nothing more than a comma-delimited
+         * list of diskettes.json files (the default one being /machines/pcx86/diskettes.json).
+         */
+        this.aDiskettes = this.cmp.getMachineParm('diskettes') || this.aDiskettes;
+
         if (this.aDiskettes && typeof this.aDiskettes == "string") {
             let fdc = this;
             let hostName = Web.getHostName();
@@ -70844,7 +70853,7 @@ class JSONLib {
                          */
                         if (!COMPILED) {
                             let title = release['@title'] || group['@title'];
-                            if (library['@title'] && title.indexOf(library['@title']) < 0) {
+                            if (library['@title'] && title.indexOf(library['@title']) < 0 && library['@title'].indexOf("Misc") < 0) {
                                 title = library['@title'] + ' ' + title;
                             }
                             let archive = item['@archive'];

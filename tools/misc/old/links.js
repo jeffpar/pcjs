@@ -18,7 +18,7 @@ let strlib = require("../../../machines/shared/lib/strlib");
 let proclib = require("../../../machines/shared/lib/proclib");
 let args = proclib.getArgs();
 
-let sRootDir = "../..";
+let sRootDir = "../../..";
 
 let remappings = {
     "/tests/pcx86/testmon": "/software/pcx86/test/testmon"

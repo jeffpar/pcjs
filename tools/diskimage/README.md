@@ -161,8 +161,7 @@ the server mapping.  The list of implicit paths for PC diskettes currently inclu
   - [/diskettes](https://github.com/jeffpar/pcjs-diskettes)
   - [/gamedisks](https://github.com/jeffpar/pcjs-gamedisks)
   - [/miscdisks](https://github.com/jeffpar/pcjs-miscdisks)
-  - [/pcsig8a-disks](https://github.com/jeffpar/pcjs-pcsig8a-disks)
-  - [/pcsig8b-disks](https://github.com/jeffpar/pcjs-pcsig8b-disks)
+  - [/pcsigdisks[0-9]](https://github.com/jeffpar/pcjs-pcsigdisks[0-9])
   - [/harddisks](https://github.com/jeffpar/pcjs-harddisks)
 
 ### Commonly Used DiskImage Options

@@ -2120,16 +2120,18 @@ export default class DiskInfo {
                         cbDir += file.size;
                         cbTotal += file.size;
                     }
-                    let sDate = "";
+                    let sDate = "", sTime = "";
                     if (file.date.getFullYear() >= 1980) {
-                        sDate = this.device.sprintf("%2M-%02D-%0.2Y  %2G:%02N%.1A", file.date);
+                        sDate = this.device.sprintf("  %2M-%02D-%0.2Y", file.date);
+                        if (file.date.getHours() || file.date.getMinutes() || file.date.getSeconds()) {
+                            sTime = this.device.sprintf("  %2G:%02N%.1A", file.date);
+                        }
                     }
                     sListing += this.device.sprintf(
-                        "%s%-8s %-3s%s%s  %s\n",
+                        "%s%-8s %-3s%s%s%s%s\n",
                         sIndent, name, ext,
                         (file.attr & (DiskInfo.ATTR.READONLY | DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM))? "*" : " ",
-                        sSize,
-                        sDate
+                        sSize, sDate, sTime
                     );
                     nTotal++;
                     /*

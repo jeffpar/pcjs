@@ -296,7 +296,7 @@ export default class StreamZip {
     readUntilFoundCallback(err, bytesRead)
     {
         if (err || !bytesRead) {
-            return this.emit('error', err || new Error('Archive read error'));
+            return this.emit('error', err || new Error('Archive read failed'));
         }
         let pos = this.op.lastPos;
         let bufferPosition = pos - this.op.win.position;
@@ -483,7 +483,7 @@ export default class StreamZip {
         let bufferAvail = Math.min(bytesRead, buffer.length - bufferPos);
         try {
             while (this.op.entriesLeft != 0) {
-                let entry = new ArcEntry(this.config.logErrors);
+                let entry = new ArcEntry(this, this.config.logErrors);
                 const headerLen = StreamZip.ArcHeader.getSize();
                 if (!entry.readArcHeader(buffer, bufferPos, bufferPos + bufferAvail)) {
                     break;
@@ -534,7 +534,7 @@ export default class StreamZip {
     readEntriesCallback(err, bytesRead)
     {
         if (err || !bytesRead) {
-            return this.emit('error', err || new Error('ZIP entries read error'));
+            return this.emit('error', err || new Error('ZIP entries read failure'));
         }
         let bufferPos = this.op.pos - this.op.win.position;
         let entry = this.op.entry;
@@ -543,7 +543,7 @@ export default class StreamZip {
         try {
             while (this.op.entriesLeft > 0) {
                 if (!entry) {
-                    entry = new ZipEntry(this.config.logErrors);
+                    entry = new ZipEntry(this, this.config.logErrors);
                     entry.readCentralHeader(buffer, bufferPos);
                     entry.headerOffset = this.op.win.position + bufferPos;
                     this.op.entry = entry;
@@ -1200,15 +1200,16 @@ class CentralDirectoryZip64Header
 
 class Entry
 {
-    constructor(logErrors)
+    constructor(streamZip, logErrors)
     {
-        this.logErrors = logErrors;
         this.errors = [];
+        this.logErrors = logErrors;
+        this.streamZip = streamZip;
     }
 
     error(msg, type = "error")
     {
-        msg = type + ": " + (this.name? this.name + ": " : "")  + msg;
+        msg = type + ": " + path.basename(this.streamZip.fileName) + "/" + (this.name? this.name + ": " : "")  + msg;
         if (!this.logErrors) {
             throw new Error(msg);
         }

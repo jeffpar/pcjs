@@ -28,12 +28,7 @@ exclude:
   - /package*.json
   - /.history
   - /.vscode
-  - /discs
-  - /diskettes
-  - /gamedisks
-  - /miscdisks
-  - /harddisks
-  - /private
+  - /disks
   - /node_modules
   - /software/pcx86/sys/dos/microsoft/1.25/src
   - /software/pcx86/sys/dos/microsoft/2.11/src
@@ -68,6 +63,16 @@ software:
     server: https://harddisks.pcjs.org
   miscdisks:
     server: https://miscdisks.pcjs.org
+  pcsig0:
+    server: https://pcsig0.pcjs.org
+  pcsig1:
+    server: https://pcsig1.pcjs.org
+  pcsig2:
+    server: https://pcsig2.pcjs.org
+  pcsig3:
+    server: https://pcsig3.pcjs.org
+  pcsig4:
+    server: https://pcsig4.pcjs.org
   pcsig8a-disks:
     server: https://pcsig8a-disks.pcjs.org
   pcsig8b-disks:

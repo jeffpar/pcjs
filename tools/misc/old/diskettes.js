@@ -21,7 +21,7 @@ let proclib = require("../../../machines/shared/lib/proclib");
 let args = proclib.getArgs();
 
 let idAttrs = '@';
-let moduleDir, rootDir, rootRelative = "../..";
+let moduleDir, rootDir, rootRelative = "../../..";
 
 let remappings = {
     "/apps": "/app",
@@ -195,16 +195,21 @@ function processFiles(sDir, diskettes)
  */
 function processFolders(sDir, argv)
 {
+    let i = 0, dirServer = "";
     let dirParts = sDir.split(path.sep);
-    let dirServer = dirParts[0].length? dirParts[0] : dirParts[1];
+    if (!dirParts[i].length) i++;
+    dirServer += dirParts[i++];
+    if (dirServer == "disks") dirServer += path.sep + dirParts[i++];
     let diskettesFile = path.join(rootDir, dirServer, "pcx86", "diskettes.json");
 
     let diskettesUpdated = false;
     printf("reading %s...\n", diskettesFile.slice(rootDir.length));
     let diskettes = JSON.parse(fs.readFileSync(diskettesFile, {encoding: "utf8"}));
 
-    let prefixDir = path.join(rootDir, sDir, "pcx86");
-    let diskettesPath = path.join(prefixDir, "**", "archive", "*");
+    if (sDir.indexOf("pcx86") < 0) sDir = path.join(sDir, "pcx86", "**");
+
+    let diskettesPath = path.join(rootDir, sDir, "archive", "*.{IMG,ZIP,img,zip}");
+    let prefixDir = diskettesPath.slice(0, diskettesPath.indexOf("pcx86") + 6);
 
     printf("scanning %s...\n", diskettesPath.slice(rootDir.length));
     let asFiles = glob.sync(diskettesPath);
@@ -213,17 +218,17 @@ function processFolders(sDir, argv)
      * Make sure that every IMG file located directly underneath an "archive" folder is represented in the JSON file.
      */
     asFiles.forEach((imgFile) => {
-        let imgPath = imgFile.slice(prefixDir.length + 1);
+        let imgPath = imgFile.slice(prefixDir.length);
 
         if (typeof argv['filter'] == "string" && imgPath.indexOf(argv['filter']) < 0) return;
 
-        let sExt = "";
+        let sExt = "", sExtOrig = "";
         let iExt = imgPath.lastIndexOf(".");
         if (iExt == 0) {
             return;
         }
         if (iExt > 0) {
-            sExt = imgPath.slice(iExt).toLowerCase();
+            sExt = (sExtOrig = imgPath.slice(iExt)).toLowerCase();
         }
         if (asFiles.indexOf(imgFile + ".img") >= 0) {
             return;     // ignore presumed folder names that match existing ".img" files
@@ -404,6 +409,10 @@ function processFolders(sDir, argv)
                 } else {
                     let matchDigits = mediaName.match(/([0-9]+)$/);
                     if (matchDigits) {
+                        let j = title.indexOf("Disks");
+                        if (j >= 0) {
+                            title = title.slice(0, j) + "Disk";
+                        }
                         title += " #" + (+matchDigits[1]);
                     }
                 }
@@ -424,7 +433,33 @@ function processFolders(sDir, argv)
                 diskettesUpdated = true;
                 printf("warning: added diskette %s\n", jsonName);
             } else {
-                printf("\tfailed to find %s in diskettes.json\n", imgPath);
+                let itemName = imgParts[3];
+                let disketteUpdated = false;
+                if (lastObj && imgParts[4] == "archive") {
+                    let versions = lastObj['@versions'];
+                    if (versions) {
+                        let matchDigits = itemName.match(/([0-9]+)$/);
+                        if (matchDigits) {
+                            title += " Disk #" + +matchDigits[1];
+                        }
+                        versions[itemName] = {
+                            '@title': title,
+                            '@media': [
+                                {'@diskette': imgParts[5].replace(sExtOrig, ".json")}
+                            ]
+                        };
+                        if (sExt != ".img") {
+                            versions[itemName]['@media'][0]['@archive'] = sExt;
+                        }
+                        disketteUpdated = true;
+                    }
+                }
+                if (disketteUpdated) {
+                    diskettesUpdated = true;
+                    printf("warning: added item %s\n", itemName);
+                } else {
+                    printf("\tfailed to find %s in diskettes.json\n", imgPath);
+                }
             }
         }
     });
@@ -439,13 +474,13 @@ function processFolders(sDir, argv)
 }
 
 /**
- * processZIPs(sDir, argv)
+ * processPCSIG(sDir, argv)
  *
  * @param {string} sDir
  * @param {Object} argv
  * @returns {Object}
  */
-function processZIPs(sDir, argv)
+function processPCSIG(sDir, argv)
 {
 }
 
@@ -674,9 +709,9 @@ if (args.argc < 2) {
     }
     else if (argv['folders']) {
         processFolders(sDir, argv);
-    } else if (argv['zips']) {
-        processZIPs(argv['zips'], argv);
+    } else if (argv['pcsig']) {
+        processPCSIG(argv['pcsig'], argv);
     } else {
-        printf("nothing to do");
+        printf("nothing to do\n");
     }
 }

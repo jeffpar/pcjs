@@ -43,7 +43,7 @@
 				]
 			}
 		},
-		"@server": "/diskettes"
+		"@server": "/disks/diskettes"
 	},
 	"dev": {
 		"@title": "Devices",
@@ -328,7 +328,7 @@
 				}
 			}
 		},
-		"@server": "/diskettes"
+		"@server": "/disks/diskettes"
 	},
 	"diag": {
 		"@title": "Diagnostics",
@@ -601,7 +601,7 @@
 			},
 			"@title": "IBM Diagnostics"
 		},
-		"@server": "/diskettes"
+		"@server": "/disks/diskettes"
 	},
 	"sdk": {
 		"@title": "SDKs",
@@ -1171,7 +1171,7 @@
 				}
 			}
 		},
-		"@server": "/diskettes"
+		"@server": "/disks/diskettes"
 	},
 	"sys": {
 		"@title": "Systems",
@@ -4872,7 +4872,7 @@
 				}
 			}
 		},
-		"@server": "/diskettes"
+		"@server": "/disks/diskettes"
 	},
 	"test": {
 		"@title": "Tests",
@@ -4915,7 +4915,7 @@
 				]
 			}
 		},
-		"@server": "/diskettes"
+		"@server": "/disks/diskettes"
 	},
 	"game": {
 		"@title": "Games",
@@ -5490,7 +5490,7 @@
 				}
 			}
 		},
-		"@server": "/gamedisks"
+		"@server": "/disks/gamedisks"
 	},
 	"app": {
 		"@title": "Applications",
@@ -6743,7 +6743,7 @@
 				}
 			}
 		},
-		"@server": "/miscdisks"
+		"@server": "/disks/miscdisks"
 	},
 	"demo": {
 		"@title": "Demos",
@@ -6836,7 +6836,7 @@
 				}
 			}
 		},
-		"@server": "/miscdisks"
+		"@server": "/disks/miscdisks"
 	},
 	"lang": {
 		"@title": "Languages",
@@ -8515,7 +8515,7 @@
 				}
 			}
 		},
-		"@server": "/miscdisks"
+		"@server": "/disks/miscdisks"
 	},
 	"pcjs": {
 		"@title": "PCjs Archives",
@@ -8538,7 +8538,7 @@
 				]
 			}
 		},
-		"@server": "/miscdisks"
+		"@server": "/disks/miscdisks"
 	},
 	"sw": {
 		"@title": "Shareware",
@@ -10492,7 +10492,7 @@
 				}
 			}
 		},
-		"@server": "/miscdisks"
+		"@server": "/disks/miscdisks"
 	},
 	"util": {
 		"@title": "Utilities",
@@ -10985,6 +10985,6 @@
 				}
 			}
 		},
-		"@server": "/miscdisks"
+		"@server": "/disks/miscdisks"
 	}
 }
