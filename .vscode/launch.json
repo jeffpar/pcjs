@@ -559,13 +559,14 @@
       ]
     },
     {
-      "name": "Node: diskettes.js",
+      "name": "Node: diskettes.js pcsig0",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/misc/old/diskettes.js",
       "args": [
         "/disks/pcsig0",
-        "--folders"
+        "--folders",
+        "--ovwrwrite"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
