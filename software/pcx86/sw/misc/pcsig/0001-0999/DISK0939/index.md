@@ -9,13 +9,37 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #939"
+      B: "PC-SIG Library Disk 0939"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #939
+## Information about "FLIGHT PLANNING (ALSO 1476 )"
+
+    FLIGHT is a flight-planning program for private pilots.
+    
+    Enter up to 20 waypoints by name and the estimated airspeed of the
+    plane. The program matches the waypoints against data files, retrieves
+    the latitude, longitude and magnetic variation for each point, and then
+    calculates the magnetic course, the distance between the waypoints, and
+    the estimated time between each set of waypoints.
+    
+    The results are printed on the screen, together with the total distance
+    and the total estimated flight time. You can then have a flight log
+    printed. The files containing the waypoints for FLIGHT can be edited
+    from within the program or with an ASCII wordprocessor.
+    
+    MORSE is a workable code-practice program for anyone who wants to learn
+    Morse Code for their Amateur Radio Operator's license.
+    
+    The program creates random-text groups of five characters each, then
+    sends them in Morse code with the cursor underlining each word as it is
+    sent.  MORSE also sends individual random letters well spaced in time
+    and reads text files prepared by your wordprocessor in capitals, then
+    sends the text line-by-line.
+
+### Directory of PC-SIG Library Disk 0939
 
      Volume in drive A has no label
      Directory of A:\

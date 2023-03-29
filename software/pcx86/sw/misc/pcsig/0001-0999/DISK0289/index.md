@@ -9,13 +9,53 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #289"
+      B: "PC-SIG Library Disk 0289"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #289
+## Information about "POWER WORKSHEETS"
+
+    Power-Worksheets is a user-supported program which relieves you of the
+    need to set up (or program) and test 1-2-3 worksheets.  A collection
+    of financial calculators, the worksheets are easy to use,
+    sophisticated and well graphed.  Also included is a phone databes and
+    Desktop-like appointment calendar.  Over 70 pages of documentation is
+    included with this disk, which is actually one of two disks available.
+    Disk #2, which contains additional graph-supported worksheets, is
+    available for $49 from the author.
+    
+    System Requirements:  265K, two disk drives, LOTUS 1-2-3 v2.0
+    
+    How to Start:  Access through LOTUS 1-2-3
+    
+    Suggested Registration: $49 (includes printed manual and second disk)
+    or $5 per worksheet.
+    
+    File Descriptions:
+    
+    AUTO123  WKS  Lotus autostart file
+    README   1ST  Descriptions of worksheets on this disk
+    AGENDA   WKS  Allows you to go from one worksheet to another.
+    BSTAT    WKS  Accepts data and performs two major analytical tasks.
+    ROR      WKS  Another calculation program.
+    PROFIT   WKS  Analysis worksheet.
+    NPV      WKS  Calculation program.
+    DEPREC   WKS  A comprehensive worksheet.
+    SREGR    DOC  Part of documentation (33K)
+    ROR      DOC  Part of documentation (27K)
+    PROFIT   DOC  Part of documentation (44K)
+    NPV      DOC  Part of documentation (20K)
+    DEPREC   DOC  Part of documentation (24K)
+    BSTAT    DOC  Part of documentation (18K)
+    INTRO    DOC  Introduction ( 6K)
+    PRINTDOC BAT  Prints 72 pages of documentation
+    SREGR    WKS  Linear Regression program
+    TV       WKS  Part of Power Worksheet
+    TEST     WKS  Test worksheet
+
+### Directory of PC-SIG Library Disk 0289
 
      Volume in drive A has no label
      Directory of A:\

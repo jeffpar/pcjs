@@ -9,13 +9,27 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #695"
+      B: "PC-SIG Library Disk 0695"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #695
+## Information about "EZ-SPREADSHEETS"
+
+    You too can become a spreadsheet pro in 20 minutes or less!
+    EZ-SPREADSHEET won't confuse you, try your patience, or force you to
+    learn 457 commands to get started. What you get is a spreadsheet that
+    will produce 64 columns by 512 rows; more than enough for 99% of users'
+    needs.  For Epson type printers, a sideways printing program is
+    supplied.  Includes printed manual/tutorial plus 5 sample spreadsheets.
+    
+    Construct your own spreadsheet or use one of the templates included.
+    The applications provided range from budget worksheets and loan
+    calculators to savings plans and financial statements.  A good tool for
+    home and business.
+
+### Directory of PC-SIG Library Disk 0695
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,54 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #563"
+      B: "PC-SIG Library Disk 0563"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #563
+## Information about "MAX - EMACS EDITOR"
+
+    MAX is a freeware text editor that is a downsized version of the
+    popular EMACS editor.  Down in size but not much in power!  It is
+    quite fast and has some very powerful text-editing features.  If
+    you have used the mainframe version, you'll feel right at home.
+    The program is distributed in versions for both color and
+    monochrome systems, and the source code is provided for the
+    curious programmers among you.  However, for those not it that
+    league, there is included an optional menu-driven interface for
+    novices.
+    
+    Features:
+    
+    ~ Move by word, or globally
+    ~ Search for text
+    ~ Search and replace text by other text
+    ~ Switch buffers
+    ~ Multiple buffers and windows
+    ~ Incremental search
+    ~ Use windows or split screens (limited to 64K)
+    ~ Give arguments to functions
+    ~ Insert Control-Characters
+    ~ Kill and yank back lines, words or regions
+    ~ Format paragraphs
+    ~ Define and invoke macro commands
+    
+    System Requirements: 128K, one disk drive and monochrome display
+    
+    How to Start:  NOTE: the Documentation, Color version and the Source
+    code are all in separate subdirectories with their appropriate
+    documentation files.  To run it, enter MAX and go for it!
+    
+    Suggested Registration:  $20.00 for individuals; $25.00 per copy for
+    commercial and governmental sites.
+    
+    File Descriptions:
+    
+    ???           Various information files
+    AUTOEXEC BAT  Special program to configure system at bootup
+
+### Directory of PC-SIG Library Disk 0563
 
      Volume in drive A has no label
      Directory of A:\

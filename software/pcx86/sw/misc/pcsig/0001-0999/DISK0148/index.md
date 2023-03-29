@@ -9,13 +9,24 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #148"
+      B: "PC-SIG Library Disk 0148"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #148
+## Information about "XLISP"
+
+    XLISP is an experimental programming language combining some features of
+    LISP with an object-oriented extension capability. It is written in C
+    and is easily extended with user-written functions and classes. It
+    assumes some knowledge of LISP and object-oriented programming. This
+    version has both MS-DOS and PC-DOS specific code.
+    
+    This package represents an inexpensive opportunity to begin to tackle
+    programming in the field of artificial intelligence.
+
+### Directory of PC-SIG Library Disk 0148
 
      Volume in drive A has no label
      Directory of A:\

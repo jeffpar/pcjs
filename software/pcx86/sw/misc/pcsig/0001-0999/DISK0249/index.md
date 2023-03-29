@@ -9,13 +9,85 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #249"
+      B: "PC-SIG Library Disk 0249"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #249
+## Information about "EQUATOR AND PC-TOUCH"
+
+    EQUATOR's purpose is to help you learn the function, use, and
+    application of various general purpose formulas used in the fields of
+    finance, math and science.  It consists of 63 equations divided equally
+    among the three subjects.  Each equation appears on its own menu-driven
+    screen or worksheet.  EQUATOR is designed to let you experiment with
+    each equation as much as you like.  The more you work with an equation,
+    the easier it is for you to understand it, remember it, and use it at
+    home or at school.
+    
+    The following are some of the equations in the math menu of EQUATOR:
+    
+    ~ Area of a square, rectangle, circle, and triangle
+    
+    ~ Hypotenuse of a right triangle
+    
+    ~ Circumference of a circle
+    
+    ~ Volume and surface area of a cylinder
+    
+    ~ Volume and surface area of a cone
+    
+    ~ Volume and surface area of a sphere
+    
+    ~ Distance between two points
+    
+    The following are some of the equations in the finance menu of EQUATOR:
+    
+    ~ Simple and compound interest
+    
+    ~ Years to 2X investment and return needed to keep up with inflation
+    
+    ~ Equivalent taxable return of a non-taxed investment
+    
+    ~ Monthly mortgage payments and annual simple interest rate on loans
+    
+    ~ Payoff balance on a loan
+    
+    ~ Gross and net profit margins
+    
+    ~ Earnings per share
+    
+    ~ Price/earnings ratio
+    
+    The following are some of the equations in the science menu of EQUATOR:
+    
+    ~ Celsius to Fahrenheit; Fahrenheit to Celsius
+    
+    ~ Density ratio
+    
+    ~ Average velocity
+    
+    ~ Metric to English; English to metric
+    
+    ~ Acceleration
+    
+    ~ Force
+    
+    ~ Work
+    
+    ~ Power
+    
+    ~ Pressure
+    
+    PC-TOUCH is a typing tutor with varying levels of difficulty ranging
+    from the very easy, for the beginner, to the difficult, for the expert
+    who wants to brush up his or her typing skills. The program gives you
+    the line to type into the system, and all your statistics -- typing
+    speed, errors, and test-adjusted scores -- are maintained along the
+    bottom of the screen.
+
+### Directory of PC-SIG Library Disk 0249
 
      Volume in drive A has no label
      Directory of A:\

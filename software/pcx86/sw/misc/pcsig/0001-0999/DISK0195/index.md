@@ -9,13 +9,64 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #195"
+      B: "PC-SIG Library Disk 0195"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #195
+## Information about "PC-GRAF"
+
+    A BASIC program to plot line drawing graphs of data sets.  Three
+    different versions of the program are provided (PC-GRAF2, 3, 4,) to
+    allow the user to choose the number of features and degree of IBM PC
+    compatablilty required.  Data entry is from the keyboard or read in
+    from data files.  Additional programs include computer use log, screen
+    color control, and keyboard redefinition.
+    
+    System Requirements:  Some programs require color, BASIC
+    
+    How to Start:   To run BASIC programs consult the directions in GETTING
+    STARTED for your configuration.  Consult the .DOC files for additional
+    program information.
+    
+    Suggested Registration:  $20.00
+    
+    File Descriptions:
+    
+    PC-GRAF  DOC  PC-GRAF documentation - to view use "Type pc-graf.doc"
+    INSTALL  BAT  Installs DOS system and BASICA on PC-GRAF disk
+    DEMOSUB  BAS  Demo program...How to call SUBGRAF from your own program
+    PC-GRAF2 BAS  Fastest version of PC-GRAF with the least features
+    LOGPRINT BAS  Program to print the computer use log.
+    PC-GRAF4 BAS  PC-GRAF with color and B&W plots and plotter output
+    SUBGRAF3 BAS  Plotting subroutine from PC-GRAF3
+    SUBGRAF2 BAS  Plotting subroutine from PC-GRAF2
+    SUBGRAF4 BAS  Plotting subroutine from PC-GRAF4
+    SIMPLEX  BAS  Simplex function fitting algorithm
+    PC-GRAF3 BAS  PC-GRAF with color and B&W plots... no plotter support
+    LOGOFF   BAS  Logs end of session in log file. Gives total time
+    LOGOFF   BAT  Batch file to run LOGOFF program
+    LOGON    BAT  Batch file to run LOGON program
+    README   BAK  Backup of disk description
+    README   DOC  Disk description - to view use "type readme.doc"
+    LOGON    BAS  Program to log start of computer session in log file
+    SORT     EXE  Program to sort graph data
+    CONVERT  BAS  Convert old GRAPH2 program files to PC-GRAF format
+    LOGPRINT BAT  Batch file to run LOGPRINT
+    CONFIG   SYS  System file required to install ANSI.SYS screen driver
+    AUTOEXEC BAT  Batch file for PC-GRAF disk
+    TESTPLOT DTA  Demonstration plot for use with PC-GRAF
+    KEYDEF   BAT  Batch file to run KEYDEF
+    KEYDEF   BAS  Program to allow redefinition of keyboard keys in DOS
+    KEYDEF        File containing key redefinition commands.  Type to run
+    COLOR    BAT  Runs COLOR program and activate color change
+    COLOR    SCR  File that contains screen color commands. Type to run
+    COLOR    BAS  Program to set screen foreground and background colors
+    PRINTQUE DOC  Documentation for Printque
+    PRINTQUE BAS  BASIC language printque for ASCII files
+
+### Directory of PC-SIG Library Disk 0195
 
      Volume in drive A has no label
      Directory of A:\

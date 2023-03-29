@@ -9,13 +9,48 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #718"
+      B: "PC-SIG Library Disk 0718"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #718
+## Information about "LQ PRINTER UTILITY"
+
+    So you want letter quality, but you're stuck with that old nine-pin dot
+    matrix printer?  Don't just resign, join the club; discover LQ PRINTER
+    UTILITY!  It is an impressive printer utility program that lets you use
+    your inexpensive dot matrix printer to print a variety of fonts in
+    near-letter quality.  It can be loaded as a memory-resident program to
+    filter the data from your wordprocessor or other programs, or it can be
+    used alone to process individual files.  But if you have the 80K or so
+    of RAM, the memory-resident mode is the most convenient way to use this
+    program.
+    
+    LQ PRINTER UTILITY includes pre-defined fonts of Courier, Greek,
+    Helvetica, Roman, and many others (italics for each font are included).
+    A character editor is also provided to let you modify or create your
+    own font sets.  Each font character is 10 by 24 dots so there is enough
+    resolution to make some fairly decent fonts.
+    
+    Like all programs of this sort, LQ PRINTER UTILITY uses a graphics mode
+    for your beautiful new fonts and printing takes longer -- but it's worth
+    the wait.  It also provides a print spooler, and this optimizes graphics
+    printing.
+    
+    Included is the program BIGPRINT, which lets you print large-
+    letter banners (using any of the same fonts that LQ uses).  If your
+    printer is an Epson (or compatible), the banner letters are made using
+    the block graphics characters; otherwise, they are created with
+    asterisks.  (Just make sure you don't have LQ loaded when you run
+    BIGPRINT, or your printer will be running forever.)
+    
+    A new feature of LQ is a program that lets you create and edit your own
+    letterheads.  LETHEAD is a graphics editor that works with LQ to
+    produce high-resolution letterheads consisting of 1" x 1" pictures and
+    up to four lines of accompanying text.
+
+### Directory of PC-SIG Library Disk 0718
 
      Volume in drive A has no label
      Directory of A:\

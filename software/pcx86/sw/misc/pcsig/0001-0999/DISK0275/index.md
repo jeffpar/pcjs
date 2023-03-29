@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #275"
+      B: "PC-SIG Library Disk 0275"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #275
+## Information about "PC-CHECK"
+
+    A menu-driven financial system for a small business or professional
+    office, as well as for personal use. Why hire a bookkeeper when you can
+    do it yourself?
+    
+    PC-CHECK provides maintenance, with check-writing capabilities. It can
+    handle multiple checkbooks and assign up to 78 payees and 100 ledger
+    accounts. Sort data files, find payees, print checks, track income tax
+    deductions, list data by month, quarter, payee or ledger account.
+    Automatically assign the ledger account number when an assigned payee is
+    selected.
+    
+    Let PC-CHECK take the mystery and drudgery out of financial control and
+    put you back in charge -- where you belong!
+
+### Directory of PC-SIG Library Disk 0275
 
      Volume in drive A has no label
      Directory of A:\

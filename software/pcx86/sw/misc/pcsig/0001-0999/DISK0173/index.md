@@ -9,13 +9,37 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #173"
+      B: "PC-SIG Library Disk 0173"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #173
+## Information about "ESP"
+
+    The main program on this disk is a program which tests your ESP
+    quotient.  It makes for an interesting time as you test yourself and
+    your friends.  The disk also contains a couple of versions of the game
+    PAC-MAN, for both monochrome and color systems.  See if your ESP will
+    tell you which way the ghosts will go!
+    
+    System Requirements:  Some programs require color, BASIC
+    
+    How to Start: To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  To run an EXE program, just type its name and press <ENTER>.
+    For instructions on running BASIC programs, please refer to the
+    GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    CPOKEMAN EXE  Good monochrome Pacman-type game
+    ESP      EXE  Extra Sensory Perception testing
+    ESP      DOC  Documentation
+    SELLERS       Part of ESP
+    PACMANGL EXE  Slow Pacman-type game - good color  (color graphics)
+    PCMAN    BAS  Fair monochrome Pacman-type game
+
+### Directory of PC-SIG Library Disk 0173
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,47 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #530"
+      B: "PC-SIG Library Disk 0530"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #530
+## Information about "FREEWORD"
+
+    FreeWord is a powerful and easy to use, menu-driven word processor.  It
+    is capable of right and left text justification; moving the cursor
+    either by character, word, line, screen or page; searching a document
+    for a word or phrase; and moving and copying blocks of text.  FreeWord
+    even permits printing in the background mode so that you can proceed
+    with other work!
+    
+    Features:
+    
+    ~ Cursor movement by character, word, line, screen, page
+    
+    ~ Move, copy, delete boxes
+    
+    ~ Automatic formatting
+    
+    ~ Forced page breaks supported
+    
+    ~ Typewriter mode
+    
+    ~ Search and replace
+    
+    ~ Page breaks displayed on-screen
+    File Descriptions:
+    
+    FW       HLP  Help text file.
+    FW       EXE  Actual FREEWORD program.
+    NO-COLOR FIL  Monochrome monitor configuration file.
+    COLOR    EXE  Configuration file for color monitors.
+    DEMO2         Demonstration file.
+    FW       DOC  Documentation on FREEWORD.
+    READ     ME   Notes on program.
+
+### Directory of PC-SIG Library Disk 0530
 
      Volume in drive A has no label
      Directory of A:\

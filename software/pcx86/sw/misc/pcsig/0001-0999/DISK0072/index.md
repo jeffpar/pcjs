@@ -9,13 +9,39 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #72"
+      B: "PC-SIG Library Disk 0072"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #72
+## Information about "GAME SERIES NO 11"
+
+    A mind-boggling collection of programs.  If you're confused, you can
+    discuss your problems with Eliza or the Doctor.  If you like puzzles,
+    enter the world of the atom and try the Black Box.  And, if games of
+    chance are your field, how about a game of Blackjack?  It's guaranteed
+    to be safer for your wallet than a trip to Reno.
+    
+    System Requirements:  BASIC.
+    
+    How to start:  Consult your DOS manual for starting BASIC programs.
+    
+    File Descriptions:
+    
+    DOCTOR   BAS  IPCO Talk your problems out with the doctor
+    TICTACTO BAS  IPCO Tic-tac-toe
+    ROADRALY BAS  IPCO Roadrally - Q&A type game
+    BLACKBOX BAS  IPCO Discover position of atoms by projecting rays
+    BLCKJACK BAS  IPCO Blackjack - no color
+    FIFTEEN  BAS  IPCO Puzzle game
+    ELIZA    BAS  The psychoanalyst
+    SPELLER  BAS  BASIC game
+    MEMORY   BAS  BASIC game
+    RUBIK    BAS  BASIC game
+    OTHELLO  BAS  Othello game
+
+### Directory of PC-SIG Library Disk 0072
 
      Volume in drive A has no label
      Directory of A:\

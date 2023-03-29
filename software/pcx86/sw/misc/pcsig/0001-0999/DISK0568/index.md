@@ -9,13 +9,49 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #568"
+      B: "PC-SIG Library Disk 0568"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #568
+## Information about "LOTUS UTILITIES"
+
+    Lotus Utilities (not affiliated with LOTUS Corp.) is a mixed-bag
+    selection of worksheets and utilities.  OPTIONZ.WKS is a useful
+    stock option program, with tables for calculating profit by option,
+    buying/selling long or short, and more.  NEWCOLOR.IN is a utility
+    to enhance the color performance of LOTUS 1-2-3.  Also included
+    are utilities for archiving and unarchiving 1-2-3 worksheets, a
+    program that sets up a 640k RAM disk, and a program for adding
+    text to numeric cells.  Another utility (123DOC.WKS) prints out
+    worksheets with readable formulas.  Finally, there is a 1985 Federal
+    Tax template, complete with documentation.
+    
+    System Requirements:  256K, two disk drives, monochrome display,
+    LOTUS 1-2-3 v2.0
+    
+    How to Start:   Access through LOTUS 1-2-3
+    
+    File Descriptions:
+    
+    123DOC   ARC  Archived file - Documentation Utility
+    ARC      EXE  Archive Utility Program
+    123RANGE EXE  Spreadssheet file print Utility Program
+    123PREP  ARC  Archived file - Text file to Lotus Prep Utility
+    123EGA   ARC  Archived file - Extended Graphics Adapter Utility
+    TRYVM123 COM  Virtual memory system for 1-2-3 Release 2.0
+    UNARC    TXT  Directions on expanding archived files on disk
+    OPTIONZ  WKS  LOTUS worksheet - Stock Options
+    NEWCOLOR IN   Program to change display colors for LOTUS 1-2-3
+    NEWCOLOR DOC  Text file - Documentation for NEWCOLOR.IN
+    FEDTAX85 WKS  LOTUS worksheet - Federal Income Tax for 1985
+    FEDTAX85 DOC  Text file - Documentation for FEDTAX85.WKS
+    CLRJET   ARC  Archived file - IBM Color Jet Printer Drivers
+    TRYVM123 DOC  Documentation for  TRYVM123
+    WKS-FRMT TXT  Worksheet files format
+
+### Directory of PC-SIG Library Disk 0568
 
      Volume in drive A has no label
      Directory of A:\

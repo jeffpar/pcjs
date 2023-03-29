@@ -9,13 +9,43 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #500"
+      B: "PC-SIG Library Disk 0500"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #500
+## Information about "SOFT-TOUCH"
+
+    Soft-touch is a program that allows keys to be programmed with
+    keystrokes.  It operates as a sort of computer shorthand, allowing you
+    to speed through often-repeated commands or entries.  It has an
+    excellent built-in tutorial.  Soft-touch is a memory-resident program
+    that may be activated any time through it's escape sequence.  For the
+    adventurous, the source code in assembly language is included.
+    
+    Usage:  Intermediate-Advanced user or programmer.
+    
+    System Requirements: 64K, one disk drive, monochrome display
+    
+    How to Start: Check the READ.ME and then the SOFTCH.DOC files for
+    documentation and instructions.  To run, enter SOFTCH and press
+    <ENTER>.
+    
+    Suggested Registration:  $25.00
+    
+    File Descriptions:
+    
+    SOFTCH   COM  Main Program.
+    LIST     COM  Program to list the tutorial screens.
+    TUTOR    DOC  Text information for the tutorial.
+    TUTOR    BAT  A batch file to execute the tutorial.
+    SOFTCH   DOC  The operations manual text file.
+    MCRO     KEY  Tutorial and example micros.
+    README        An introductory text file.
+    MANUAL   BAT  A batch file to print out the operations manual.
+
+### Directory of PC-SIG Library Disk 0500
 
      Volume in drive A has no label
      Directory of A:\

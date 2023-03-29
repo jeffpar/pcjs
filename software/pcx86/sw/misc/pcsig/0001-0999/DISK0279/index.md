@@ -9,13 +9,32 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #279"
+      B: "PC-SIG Library Disk 0279"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #279
+## Information about "PIANOMAN & PLAYER PIANO"
+
+    Play your computer keyboard as if it were an electronic piano!  More
+    than just a simple note-playing routine, PIANOMAN can help you
+    shape a true musical composition.
+    
+    Playing music is simple.  You'll see a picture of the keyboard on your
+    monitor, with the notes written on the keytops.  When you press a key,
+    it lights up on the screen and sounds a tone for as long as the key is
+    held down.  You can record and edit music, insert and delete notes,
+    adjust pitch and length, make global changes, and save/retrieve files.
+    The maximum number of notes PIANOMAN can keep in memory is 63,488 if you
+    have over 450K of RAM. Three octaves are available at a time and you can
+    shift those octaves up or down.
+    
+    Create lovely music with this versatile composition tool.  Record your
+    songs on disk and send music to your friends.  They'll smile when you
+    sit down at the computer!
+
+### Directory of PC-SIG Library Disk 0279
 
      Volume in drive A has no label
      Directory of A:\

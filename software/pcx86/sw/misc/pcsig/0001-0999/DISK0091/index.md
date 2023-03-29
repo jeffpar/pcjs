@@ -9,13 +9,37 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #91"
+      B: "PC-SIG Library Disk 0091"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #91
+## Information about "PC-SIG SAMPLER #4"
+
+    Another fine collection of different kinds of entertaining games.  The
+    text adventure will keep you busy for quite a while, and the arcade
+    games will test your skills.  There is even chess!  Your move!
+    
+    System Requirements:  Some programs require color; BASIC
+    
+    How to Start:  To run BASIC programs consult the directions in GETTING
+    STARTED for your configuration.
+    
+    ADVENT   DOC  Documentation for adventure game compiler
+    BASCOM   PAT  Patches for IBM BASIC compiler
+    BOGGLE   BAS  Find as many words as you can
+    CHESS    BAS  New version of the old game
+    COMPIL   BAS  Adventure system Database compiler
+    DKSPAT   TXT  DISKCOPY and DISKCOMP patches for large (320K+) machines
+    DRIVER   BAS  Driver for adventure system
+    GLOBE    BAS+ Creates rotation globe on graphics screen
+    GLOBE    DAT  Data file for GLOBE.BAS
+    GOLF2    BAS  Golf game.
+    HIQUE2   BAS  Puzzle game (uses lightpen if you have one)
+    MUGGER   DAT  Sample adventure definition
+
+### Directory of PC-SIG Library Disk 0091
 
      Volume in drive A has no label
      Directory of A:\

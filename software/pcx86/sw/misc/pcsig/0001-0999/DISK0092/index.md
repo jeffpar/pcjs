@@ -9,13 +9,48 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #92"
+      B: "PC-SIG Library Disk 0092"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #92
+## Information about "MUSIC"
+
+    MUSIC provides some easy keyboard access to the built-in IBM PC's PLAY
+    command.  MUSIC allows you to enter one note at a time and lets you
+    select the note on a regular music-sheet type display.  The rest of
+    the disk contains two excellent BASIC games, SQUARE (a version of
+    Rubic's cube) and SW-PEG, a strategy board game, and miscellaneous
+    files worth checking out.
+    
+    System Requirements:  Some programs require color; BASIC
+    
+    How to Start:  To read DOC or TXT files, enter TYPE filename.ext and
+    press <ENTER>. For instructions on running BASIC programs, please refer
+    the GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    SW-PEG   BAS  Game - move the pegs to the other side of the board
+    STLOUIS  BBS  Information on using St. Louis bulletin board and others
+    VCCOM    DOC  How to make VISICALC load as a .COM file
+    UPVC     DOC  Instructions on how to make backups of VISICALC disks
+    RUBIC3   BAS  BASIC program
+    SOUNDEMO BAS  Generates several sounds selected from menu
+    PATTERNS BAS  Creates patterns on graphics display
+    NAMCNV   TXT  Naming convention suggestions for public domain software
+    MUSIC    DAT  Data file for MUSIC.BAS
+    MUSIC    BAS  Music scoring system
+    TWINKLE  BAS  Generates twinkling stars on screen  (Use BASICA)
+    QDCOPY   DOC  Diskcopy modification - eliminates prompts
+    SCHROE   DER  Image of Schroeder in characters - may be printed
+    RACE     BAS  Game
+    SQUARE   BAS  Rubic cube type game
+    SQUARE   DOC  Documentation for SQUARE.BAS
+    SQUARE   SUM  Part of SQUARE.BAS
+
+### Directory of PC-SIG Library Disk 0092
 
      Volume in drive A has no label
      Directory of A:\

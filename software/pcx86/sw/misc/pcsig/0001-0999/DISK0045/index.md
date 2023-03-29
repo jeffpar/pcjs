@@ -9,13 +9,59 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #45"
+      B: "PC-SIG Library Disk 0045"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #45
+## Information about "GAME SERIES NO 8"
+
+    A wide ranging example of ``games that were.''  If you're interested in
+    BASIC programming, this could be an interesting set of programs to
+    analyze.  You might want to find out how to do a certain procedure, or
+    adapt a given procedure to your own BASIC project.  You'll find ample
+    and diverse examples of game procedures in this package.
+    
+    There are several educational games on this disk, plus a couple that
+    will still keep you guessing.  However, the games on this list are
+    essentially out of date now, and, given the advances in programming over
+    the years, there are many more up-to-date variations on the themes
+    available in the PC-SIG library.
+    File Descriptions:
+    
+    MINIMATH BAS  BASIC math program.
+    BACCRRT  BAS  BASIC card program.
+    ANTONYMS BAS  Learn your antonyms.
+    AWARI    BAS  Classic African sticks and stones.
+    BACCRRT  BAS  Card game.
+    SYNONYMS BAS  Learn your synonyms.
+    TAXMAN   BAS  Beat the taxman.
+    WEATHER  BAS  Predict the weather.
+    TRADE    BAS  Intergalactic trading game.
+    GALAXY   BAS  Behold the stars.
+    FOOTBALL BAS  Football simulation.
+    BASEBALL BAS  Baseball game.
+    IQUEEN   BAS  Problem solving with chess pieces.
+    HIDESEEK BAS  Search for hidden objects.
+    GREEKRTS BAS  Match Greek words with their meaning.
+    GALAXY2  BAS  Behold the stars and be inspired.
+    DRAGRACE BAS  Race the circuit.
+    DOTS     BAS  Connect the dots and make a picture.
+    CLOUD-9  BAS  Educational game.
+    BIO      BAS  Biorythms for printer.
+    CLIMATES BAS  Educational game.
+    CIVILWAR BAS  The blue against grey.
+    BOMB     BAS  Find the bomb.
+    BIRTHDAY BAS  Find the day of the week you were born.
+    MEMBRAIN BAS  Keep cells alive.
+    SHOP     BAS  Go shopping.
+    REVERSE  BAS  Arrange the numbers correctly.
+    SNOOPY   BAS  Print Snoopy on printer.
+    SQUARE   BAS  Competitive square building.
+    SWARMS   BAS  You are attacked by bees.
+
+### Directory of PC-SIG Library Disk 0045
 
      Volume in drive A has no label
      Directory of A:\

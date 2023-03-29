@@ -9,13 +9,32 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #102"
+      B: "PC-SIG Library Disk 0102"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #102
+## Information about "DBASE II AD AGENCY"
+
+    Usage:  dBASE II Ad Agency.
+    
+    Special Requirements:  dBase II.
+    
+    How to Start:  Type GO (press enter).
+    
+    File Descriptions:
+    
+    ACCTG    PRG  To run, key "do acctg" at the Dbase II prompt
+    ??????   PRG  Dbase II program file (36)
+    ??????   DBF  Database files (12)
+    ??????   FRM  Format files (3)
+    ??????   NDX  Index files (6)
+    CONSTANT MEM  Memory constants
+    TEST     SUB  Part of ad agency accounting package
+    README        Text file.
+
+### Directory of PC-SIG Library Disk 0102
 
      Volume in drive A has no label
      Directory of A:\

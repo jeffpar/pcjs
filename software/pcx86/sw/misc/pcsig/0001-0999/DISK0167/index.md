@@ -9,13 +9,41 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #167"
+      B: "PC-SIG Library Disk 0167"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #167
+## Information about "BASIC AIDS NO 1"
+
+    This disk contains many useful routines for the BASIC programmer.
+    Routines include a BASIC to FORTRAN converter, a BASIC program
+    squisher, and a REMark remover.
+    
+    Special Requirements:  A version of BASIC.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  None.
+    
+    File Descriptions:
+    
+    ADVANCED BAS  Checks to see if a program requires BASICA or not.
+    ADVANCED DOC  Documentation.
+    ANIMATE  BAS  Demonstrates how to use several BASICA graphics commands.
+    BASKEYS  BAS  Sets up BASIC programming function keys.
+    BASTODOS BAS  Several callable Assembler routines for BASIC programs.
+    BASTOFOR BAS  Converts BASIC to Fortran.
+    BASTOFOR DOC  Documentation.
+    CHARDISP BAS  Displays ASCII character set.
+    PSQUISH  BAS  BASIC program squisher.
+    REMREM   BAS  Removes REMarks from BASIC programs.
+    STOPGAP  BAS  Screen text editor for BASIC programming.
+    TRANDUMP BAS  HEX file display program.
+    TRS2PC   BAS  Converts TRS80 BASIC partways to IBM PC BASIC.
+
+### Directory of PC-SIG Library Disk 0167
 
      Volume in drive A has no label
      Directory of A:\

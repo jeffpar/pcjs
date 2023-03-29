@@ -9,13 +9,60 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #277"
+      B: "PC-SIG Library Disk 0277"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #277
+## Information about "FINDFILE"
+
+    FINDFILE is a utility which no hard-disk user should be without.
+    Menu- driven, it searches through subdirectories to find a file you
+    may have lost.  It includes a host of support routines to help you
+    manage your files.  Besides this support, it provides improved TREE
+    display, single or multiple file operations.
+    
+    Features:
+    
+    ~ Menu driven
+    ~ Improved TREE display
+    ~ Single or multiple file operations.
+    
+    System Requirements:  Hard disk, ASCII printer, BASIC
+    
+    How to Start:  Enter TYPE TYPE.ME for installation instructions.
+    
+    Suggested Registration:  FINDFILE $5.00
+    
+    File Descriptions:
+    
+    TYPE     ME   Tells you to LISTER file COVER
+    BUG           Bug report form, send to author
+    COVER         A letter to the user about installation
+    LISTER   EXE  Used to print BUG, COVER, DOC and ORDER
+    ORDER         Order form for On-Disk Software
+    DSKLABEL      A correct disk label
+    DOC           The documentaion
+    MOVEXE   BAT  Moves FindFile to disk - EXE version
+    MOVBAS   BAT  Moves FindFile to disk - BAS version
+    MENU     BAT  Executes the menu program
+    MOVLIB   BAT  Moves FindFile to disk - for people with BASRUN.EXE
+    $DOEXBA BAT  Setup batch file
+    FINDFILE BAT  Finds a file
+    FFILE    BAS  Finds any file or group of files
+    COMSEP   BAS  Makes $TREE into $TREE.CSV for other programs to use
+    $MENU   BAS  Gives you the menu of options
+    $NEWTRE BAT  Setup batch file
+    FFILEBIG BAS  Use FFILE except on more than about 1,000 files
+    MAPTREE  BAS  Converts TREE output to something useful
+    SAMECHK  BAS  Checks for duplicate files
+    *        LIB  Compiled version to be used with BASRUN.EXE (6 files)
+    SETDRV   BAS  Resets the drive FindFile is using
+    FFILEMEN DAT  The data which defines your menu
+    *        EXE  Faster compiled versions of BASIC programs (6 files)
+
+### Directory of PC-SIG Library Disk 0277
 
      Volume in drive A has no label
      Directory of A:\

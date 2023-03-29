@@ -9,13 +9,22 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #263"
+      B: "PC-SIG Library Disk 0263"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #263
+## Information about "FORTH 1 OF 2 (ALSO 264)"
+
+    A Forth Language system from Henry Laxon and Mike Perry.  A compiler,
+    L&P FORTH is portable and convenient, and especially good for novice
+    programmers.  This is a well-structured introduction to the Forth
+    language and includes an introductory text file for beginners.
+    Documentation is brief and recommended reading is ``Starting FORTH'', by
+    Leo Brodie.
+
+### Directory of PC-SIG Library Disk 0263
 
      Volume in drive A has no label
      Directory of A:\

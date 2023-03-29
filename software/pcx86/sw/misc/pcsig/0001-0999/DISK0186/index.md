@@ -9,13 +9,28 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #186"
+      B: "PC-SIG Library Disk 0186"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #186
+## Information about "SCREEN AND PRINTER"
+
+    The printer utilities in this package are for Epson and compatible
+    printers.  Control your printer from the keyboard.  Specify a variety
+    of print modes and fonts such as compressed, italics, emphasized,
+    underline, and more -- from within other applications.
+    
+    SP is a print spooler used to hold data intended for the printer.
+    It works like the buffers that can be installed in the printer but the
+    data is stored in RAM storage instead of in the printer.  The buffer
+    is unloaded to the printer at the printer's speed while DOS proceeds
+    at its speed.  You can specify the the size of the buffer from 1k to
+    62K, the number of copies desired, and also which printer port you want
+    to use.
+
+### Directory of PC-SIG Library Disk 0186
 
      Volume in drive A has no label
      Directory of A:\

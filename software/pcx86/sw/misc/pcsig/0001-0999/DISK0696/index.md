@@ -9,13 +9,24 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #696"
+      B: "PC-SIG Library Disk 0696"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #696
+## Information about "UPDATED ALL FILES ON #2321"
+
+    QUBECALC is a spreadsheet with many advanced features.  However, the
+    special power of this package is in its being a TRUE three-dimensional
+    spreadsheet.  It can be thought of as a large cube, with 64 rows, 64
+    columns and 64 pages.  Formulas can reference any cell on any page, or
+    even ranges of cells which span multiple pages.  Plus, QUBECALC'S 3D
+    worksheet can be rotated to allow you to view, enter, or manipulate your
+    data from any of its six faces.  PC Magazine made it an Editor's Choice
+    among low cost spreadsheets.
+
+### Directory of PC-SIG Library Disk 0696
 
      Volume in drive A has no label
      Directory of A:\

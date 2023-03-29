@@ -9,13 +9,59 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #183"
+      B: "PC-SIG Library Disk 0183"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #183
+## Information about "DOS UTILITIES NO 8"
+
+    An assortment of the old and the new reside on this disk.  For those
+    with older PC's, MEM640 patches to allow you to get 640k in your
+    machine, RESCMD lets you have a memory-resident command processor.  Of
+    more general appeal, MOVE combines the functionality of both COPY and
+    DELETE into one easy package.  VTYPE is an improved TYPE command.  And
+    COMSPEC4 lets you run COMMAND.COM from subdirectories.  Many more
+    programs of interest are also included.
+    
+    System Requirements:  Some programs require BASIC
+    
+    How to Start: To run an EXE or COM program simply type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.  To read DOC
+    files simply enter TYPE filename.ext and press <ENTER>.
+    
+    File Descriptions:
+    
+    MEM640   DOC  Documentation
+    MY-DATE  BAT  Part of COPYROM.EXE utility
+    MEM640   ZAP  DOS patch lets older BIOS PC's use 544KB-640KB memory
+    ROMREAD  BAS  Reads & displays ROM BIOS dates, type IBM PC  (Tom Allen)
+    RESCMD   DOC  Documentation
+    RESCMD   BAS  DOS 1.1 patch to make COMMAND.COM memory resident
+    OLD-NEW  BAT  Part of COMPROM.EXE utility
+    ROMREAD  DOC  Documentation
+    VTYPE    EXE  Improved TYPE command  (Vincent Bly)
+    VTYPE    DOC  Documentation
+    MOVE     DOC  Documentation for MOVE.COM
+    MOVE     COM  Utility - COPY command which prompts at each file
+    BOARD    TST  Check for famous QUADRAM parity error design defect
+    CHECKOUT BAS  Diagnostics on all ports
+    CMD99    COM  Command processor
+    COMSPEC4 ASM  Assembler source
+    COMPROM  EXE  Compares two ROM programs from diskettes
+    COMSPEC4 DOC  Documentation
+    COMSPEC4 COM  DOS patch to activate COMMAND.COM in subdirectories
+    COPYROM  EXE  Copies ROM programs onto diskette for later use
+    CONFIG   EXE  Displays your PC's configuration
+    CRS      COM  Compiled version
+    CRS      BAS  Change cursor shape & size  (John Herzfeld)
+    CRL      COM  Compiled version
+    CRL      BAS  Change cursor shape & size  (John Herzfeld)
+    INFO1    BAT  Documentation for COPYROM.EXE & COMPROM.EXE
+
+### Directory of PC-SIG Library Disk 0183
 
      Volume in drive A has no label
      Directory of A:\

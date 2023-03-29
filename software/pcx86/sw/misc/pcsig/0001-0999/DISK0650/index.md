@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #650"
+      B: "PC-SIG Library Disk 0650"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #650
+## Information about "FANSI-CONSOLE 2 OF 2 (ALSO 356)"
+
+    A sophisticated memory-resident program which replaces the standard IBM
+    PC console drivers.
+    
+    Full support is provided for:  IBM PS/2 product line for both video and
+    keyboard;  VGA and Super-EGA, including 132 column and 60 row display
+    drivers; enhanced 101/102 key keyboards, including foreign and ``Brand
+    X'' keyboards.
+    
+    FANSI-CONSOLE extends and speeds up the ROM BIOS and processes ANSI
+    X3.64 control sequences.  Keyboard macros are supported -- program
+    specific keys to perform complex series of keystokes.  Reconfigure your
+    keyboard however you wish -- even a Dvorak layout.  Experiment with
+    different drivers.
+
+### Directory of PC-SIG Library Disk 0650
 
      Volume in drive A has no label
      Directory of A:\

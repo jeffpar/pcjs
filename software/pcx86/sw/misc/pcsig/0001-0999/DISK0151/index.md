@@ -9,13 +9,39 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #151"
+      B: "PC-SIG Library Disk 0151"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #151
+## Information about "FINANCE MANAGER II"
+
+    Finance Manager II is an extremely flexible and comprehensive
+    accounting package for the non-professional accountant. It's an easy-
+    to-use and very cost-efficient package for the small to medium
+    businessperson.
+    
+    Outstanding features of Finance Manager II include:
+    
+    ~ Maintaining up to 1999 accounts
+    
+    ~ Recording up to 32,000 transactions per year (3,800 on floppies)
+    ~ Providing a listing of all transactions in a specified period of time
+    
+    ~ Tracing account activity against Chart of Account numbers
+    
+    ~ Displaying net income (or net loss) for specific period requested
+    ~ Showing balance sheet for assets, liabilities, and equity accounts
+    ~ Providing cumulative or trended source/use-of-funds statement
+    
+    ~ Showing budget variance on expenditures
+    
+    ~ Listing a current Chart of Accounts to be run after changes
+    
+    ~ Listing of budgeted income or expense accounts
+
+### Directory of PC-SIG Library Disk 0151
 
      Volume in drive A has no label
      Directory of A:\

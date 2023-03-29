@@ -9,13 +9,28 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #262"
+      B: "PC-SIG Library Disk 0262"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #262
+## Information about "PC-GOLF"
+
+    PC-GOLF is a score analysis program for all levels of golfers and golf
+    instructors.  Don't throw your clubs in the water hazard!  Analyze your
+    failings and fix your game.
+    
+    Enter your game scores and course ratings for the courses you play to
+    find the problem areas in your game.  Keep track of how you do by course
+    and by hole.  Record practice games and handicaps.  Compute gross and
+    adjusted scores and average strokes for each player for each hole.  Nine
+    tables and graphs illustrate areas needing improvement.
+    
+    Improved player performance is the focus so let your PC do the analysis
+    while you concentrate on your game.  And keep your head down!
+
+### Directory of PC-SIG Library Disk 0262
 
      Volume in drive A has no label
      Directory of A:\

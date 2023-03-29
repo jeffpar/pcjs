@@ -9,13 +9,34 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #878"
+      B: "PC-SIG Library Disk 0878"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #878
+## Information about "TEACHER'S DATABASE FOR THE CLASSROOM"
+
+    TEACHER'S DATABASE is designed particularly for teachers to organize
+    information on their students.  The database can track up to 500
+    students, each student having as many as 80 individual items of data in
+    his record.
+    
+    Store names and addresses, alphabetize or reorder records based on their
+    contents, sort by homerooms or subjects, and print individual student
+    progress reports, class gradebook sheets, and student seating charts.
+    
+    Student test scores may be weighted, averaged, statistically analyzed,
+    changed to a percentage or a letter grade.  Graphs of student test
+    results may be created using the computer's high-resolution graphic
+    screen.  Grade distribution can be displayed numerically or as a
+    histogram.  A spreadsheet-style editor makes data entry and editing a
+    snap.
+    
+    Let the computer do the paperwork while you focus on teaching.  After
+    all, that's why you became a teacher.
+
+### Directory of PC-SIG Library Disk 0878
 
      Volume in drive A has no label
      Directory of A:\

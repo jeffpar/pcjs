@@ -9,13 +9,25 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #916"
+      B: "PC-SIG Library Disk 0916"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #916
+## Information about "PLAY 'N' LEARN"
+
+    PLAY 'N' LEARN is a delightful collection of six simple educational
+    games for young children, ages 1-1/2 to 4. They help children acquire
+    skills in letter recognition, simple counting, and computer usage.
+    
+    AMANDA'S LETTER LOTTO teaches both upper- and lower-case alphabets;
+    ZACK-A-DOODLE is a paint/draw game; COLOR SCREEN and COLOR MATCH help
+    children to recognize colors; WORD WHIRL and NEXT NUMBER are perfect
+    for learning words and simple counting from 1 to 9. PLAY 'N' LEARN
+    also includes a game that helps a child learn shapes.
+
+### Directory of PC-SIG Library Disk 0916
 
      Volume in drive A has no label
      Directory of A:\

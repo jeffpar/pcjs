@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #642"
+      B: "PC-SIG Library Disk 0642"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #642
+## Information about "MENU-MASTER"
+
+    MENU-MASTER is a general-purpose menu utility designed to allow easy
+    access to up to 12 applications and DOS functions on a fixed disk.
+    Commonly used applications may be defined in terms that are meaningful
+    to the user.  Date changes and directory viewing are supported from
+    within the menu system, which is designed to be loaded automatically
+    through an Autoexed file.
+    
+    MENU-MASTER is configured through a menu selection which defines an
+    English language application name and a corresponding DOS path and
+    program name combination.  The configuration program features a
+    context sensitive HELP Function, and the configuration page may be
+    password protected to avoid unauthorized changes.  The menu name
+    itself is user-defined, as is the sub-function menu.
+
+### Directory of PC-SIG Library Disk 0642
 
      Volume in drive A has no label
      Directory of A:\

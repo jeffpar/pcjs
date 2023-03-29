@@ -9,13 +9,26 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #403"
+      B: "PC-SIG Library Disk 0403"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #403
+## Information about "COMPUTER TUTORIAL"
+
+    Did they laugh when you sat down at the keyboard? No more!  TUTOR.COM
+    is a collection of self-paced tutorials that cover the basics of a
+    first course on computer usage and PC-DOS, the disk operating system.
+    
+    Learn the basics of PC computing from the general information and
+    historical aspect to the nuts and bolts, so to speak, of running and
+    organizing a hard disk. Explore the twists and turns of DOS and learn
+    how to write batch files. Do all of this at your own speed, in the
+    privacy of your own computer, and without an instructor breathing down
+    your neck.
+
+### Directory of PC-SIG Library Disk 0403
 
      Volume in drive A has no label
      Directory of A:\

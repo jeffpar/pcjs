@@ -9,13 +9,47 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #908"
+      B: "PC-SIG Library Disk 0908"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #908
+## Information about "DIREDIT, TEST DRIVE, AND D&T"
+
+    For those of you who do not have a clock card in your computer, here's a
+    utility that quickly lets you enter the date and time during a
+    computing session. The BASIC source code is provided.
+    
+    TEST DRIVE is a floppy disk drive diagnostic utility for 5-1/4" 360K
+    disk drives with many tests to ensure that your disk drive is in
+    working order.  This can help to alleviate data loss or damage to your
+    diskettes.
+    
+    As the drive is tested, important operating parameters are displayed on
+    the screen.  A spindle speed test and read/write test of the disk drive
+    can be done with just this disk.  The alignment, hysteresis, head
+    azimuth and hub centering of your disk drive can be tested but these
+    tests require a precision alignment disk that is available upon
+    registration.
+    
+    TEST DRIVE can indicate when your disk drives need cleaning and has a
+    utility for use with a standard cleaning disk.  It can perform
+    continuous tests for certain adjustments on your drives and can test the
+    general performance of the drive before and after any changes are made.
+    
+    Edit your DOS directories. DIREDIT helps you to sort your directories
+    in various ways -- by filename, extension, size, etc. Specify arbitrary
+    order and move individual directory entries. Display each directory in
+    a very compact manner with up to eighty filenames visible on the screen
+    at once. Need more information? You can see the full file description
+    for any entry simply by moving the cursor to the name.
+    
+    Use DIREDIT to arrange your directories on disk for more efficient
+    access. Resort them temporarily on the screen while searching for a
+    file, all without disturbing the directory structures on disk.
+
+### Directory of PC-SIG Library Disk 0908
 
      Volume in drive A has no label
      Directory of A:\

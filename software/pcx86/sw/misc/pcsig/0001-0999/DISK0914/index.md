@@ -9,13 +9,25 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #914"
+      B: "PC-SIG Library Disk 0914"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #914
+## Information about "PC-DEMO GRAPHICS PRESENTATION PACKAGE"
+
+    PC-DEMO is a graphics package that lets you create demonstrations
+    featuring graphics animation, program interface capabilities, and slide
+    shows.
+    
+    Use the full range of characters and colors on your computer.  Choose
+    between big or small characters.  Fill in a box, move it, copy it, and
+    even rotate it.  Use the cursor keys to draw your picture without the
+    need for a mouse or pad.  Slides can be organized into an interactive
+    demo which accepts input from users.
+
+### Directory of PC-SIG Library Disk 0914
 
      Volume in drive A has no label
      Directory of A:\

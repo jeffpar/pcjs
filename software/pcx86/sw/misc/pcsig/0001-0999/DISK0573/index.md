@@ -9,13 +9,43 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #573"
+      B: "PC-SIG Library Disk 0573"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #573
+## Information about "XASM CROSSASSEMBLER"
+
+    XASM is a cross-assembler that allows the use of a PC as a development
+    station for several target CPUs.  Among those supported are the Zilog
+    Z80 family, the Intel 8048 and 8041 series, and many more.  The
+    assembler uses a text macro to specify the target machine, making the
+    assembler user-configurable for a specific target machine.  Also on
+    this disk are demo versions of four APL language workspaces.
+    
+    System Requirements:  64K, one disk drive and monochrome display and
+    NOTE: The APL workspaces require STSC's APL*PLUS(tm), version 3.0+, and
+    at least 192K.
+    
+    How to Start:  With the disk in the driver, type GO. Information on
+    starting XASM is given in XASM.DOC.
+    
+    Suggested Registration:  $50.00
+    
+    File Descriptions:
+    
+    ZPLEX    AWS  APL file - Complex number mathematical functions.
+    QDOC     AWS  APL file - Make neatly paged workspace documentation.
+    QSCAN    AWS  APL file - Scan/clean/edit functions and variables.
+    ALL6805  ASM  Sample source file for XASM
+    6805MACS ASM  Sample XASM macro file
+    XASM     DOC  XASM cross-assembler documentation.
+    XASM     EXE  Macro configured Cross-assembler.
+    README   1ST  Information on APL workspace files.
+    APLDEMO  AWS  APL workspace file - 115 public domain utility functions.
+
+### Directory of PC-SIG Library Disk 0573
 
      Volume in drive A has no label
      Directory of A:\

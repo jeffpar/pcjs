@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #934"
+      B: "PC-SIG Library Disk 0934"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #934
+## Information about "TICKLEX - TICKLER PROGRAM"
+
+    TICKLEX is the ultimate scheduler/calendar.  There is no more powerful
+    or feature-laden program available.  Equally at home on single PC's or
+    LAN's, TICKLEX may be invoked as either a stand-alone program or as a
+    pop-up.  The program sports a multitude of screen displays, reports, and
+    features, and it's capable of handling the scheduling needs of one
+    person or a whole office.
+    
+    TICKLEX handles appointments, deadlines, expectations, reminders and
+    timetables, with each item having up to four reminders linked to it.
+    Linking reminders to appointment deadlines or expectations is helpful
+    when you need to change the original date.  When a change is made, all
+    the linked reminders are automatically changed.  Among the handy
+    features -- find the day of the week for any date in the next half
+    century, set up to 20 alarms for any day, and drag unmet deadlines (to-
+    do's) forward from one day to the next.
+
+### Directory of PC-SIG Library Disk 0934
 
      Volume in drive A has no label
      Directory of A:\

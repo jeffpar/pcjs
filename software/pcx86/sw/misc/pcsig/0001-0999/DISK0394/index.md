@@ -9,13 +9,34 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #394"
+      B: "PC-SIG Library Disk 0394"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #394
+## Information about "MATH PAK III"
+
+    MATH PAK III is a set of tutorials to help improve your problem-solving
+    skills plus mathematical conversion routines to speed up some math
+    operations.
+    
+    It contains a range of tutorials -- from the very basic arithmetic
+    functions of addition, subtraction, multiplication and division to
+    solving quadratic equations, computing geometries and understanding trig
+    functions.  MATH PAK III will also read your own data files to solve
+    quadratic equations, derivatives, linear equations, DEC-BIN-HEX-OCT
+    conversions, trig functions, determinants and more.
+    
+    It offers 80x87 math coprocessor support, context-sensitive help
+    screens, fast execution and printing of trig tables and sample problems
+    to solve.  Registration includes a 50 page manual with examples and
+    solved problems.
+    
+    This set of programs can be used as an educational program to help
+    expand your knowledge and appreciation of mathematics.
+
+### Directory of PC-SIG Library Disk 0394
 
      Volume in drive A has no label
      Directory of A:\

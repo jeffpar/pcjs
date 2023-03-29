@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #890"
+      B: "PC-SIG Library Disk 0890"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #890
+## Information about "THE BRIDGE GAME"
+
+    TURBO-BRIDGE is a bridge game that lets you practice playing against
+    yourself or the computer.  Not only can this program be used for fun,
+    but it can help you practice the strategies of the game.
+    
+    You can have all four hands in play displayed on the table, allowing you
+    to play the hands of as many of the players as you wish or, after
+    bidding, the computer can play out the game.  You may or may not want
+    the computer to see your hand.  Not only are the cards in your hand (and
+    optionally others) displayed, but the played cards are listed.
+    File Descriptions:
+    
+    BRIDGE   PAS  Pascal source code.
+    BRIDGE   COM  Main program.
+    BRIDGE        Script file.
+    BID      BR   Data file.
+
+### Directory of PC-SIG Library Disk 0890
 
      Volume in drive A has no label
      Directory of A:\

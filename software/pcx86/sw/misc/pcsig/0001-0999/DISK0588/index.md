@@ -9,13 +9,70 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #588"
+      B: "PC-SIG Library Disk 0588"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #588
+## Information about "SYMPHONY BANK"
+
+    This disk contains Symphony sample files that illustrate how Symphony
+    can be used in banking, medical and insurance applications.  Business
+    professionals can use some of the sample files directly in their
+    applications with simple modification.  Financial analysis worksheets
+    are quite sophisticated and can be used for developing ratios, creating
+    forecasts, tracking performance.  BUDGET.WRK is useful in calculating
+    the financial prospects of medical practice.  Medical practitioners can
+    track and graph patient data and generate reports from the findings.
+    Homeowners can calculate the appropriate amount of home owner's
+    insurance.  Small businesses can manage and track their inventory
+    throurgh INVENTORY.WRK.
+    
+    System Requirements:  512K, two disk drives, monochrome display and
+    Lotus SYMPHONY
+    
+    How to Start:  Access through Lotus SYMPHONY
+    
+    File Descriptions:
+    
+    ASSET    WRK  Assists in asset-liability management.
+    AUTODEMO WRK  Autorun Demo
+    2_APPLIC WRK  Example file for APPLIC worksheet
+    2_BOND   WRK  Example file for BOND worksheet
+    2_ASSET  WRK  Example file for ASSET worksheet
+    2_MORTGA WRK  Example file for MORTGAGE worksheet
+    2_HUMANR WRK  Example file for HUMANRES worksheet
+    2_EXCHAN WRK  Example file for EXCHANGE worksheet
+    2_CASH   WRK  Example file for CASH worksheet
+    IVENTORY WRK  Maintain, stock and order inventory items.
+    FORECAST WRK  Calculates historical growth figures for insurance product
+    CLIENT   WRK  Manage client information. Make follow-up sales call sched
+    AUDIT    WRK  Calculate the appropriate amount of home owner insuranc e.
+    1_LIFE   WRK  Example file for LIFE worksheet
+    1_IVENTO WRK  Example file for IVENTORY worksheet
+    1_FORECA WRK  Example file for FORECAST worksheet
+    1_CLIENT WRK  Example file for CLIENT worksheet
+    1_AUDIT  WRK  Example file for AUDIT worksheet
+    1_APPLIC WRK  Example file for APPLIC worksheet
+    MORTGAGE WRK  Determines if customer qualifies for mortgage loan
+    BOND     WRK  Calculates a bond market price.
+    HUMANRES WRK  Organizes employee information.
+    EXCHANGE WRK  Effects of exchange rates on loan payments.
+    DEMO     PIC  Graphics file for demo.
+    CASH     WRK  Forecasts cash flow.
+    LIFE     WRK  Estimate appropriate life insurance coverage for client.
+    1_BUDGET WRK  Example file for BUDGET worksheet
+    SCHEDULE WRK  Schedule patient appointments.
+    RESEARCH WRK  Track and graph patient data. Generate reports from findin
+    DEMI     PIC  Graphics file for demo
+    CAPEQPT  WRK  Determine investment quality of potential purchases.
+    BUDGET   WRK  Forecast the financial prospects of a medical practice.
+    1_SCHEDL WRK  Example file for SCHEDULE worksheet
+    1_RESEAR WRK  Example file for RESEARCH worksheet
+    1_CAPEQP WRK  Example file for CAPEQPT worksheet
+
+### Directory of PC-SIG Library Disk 0588
 
      Volume in drive A has no label
      Directory of A:\

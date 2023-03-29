@@ -9,13 +9,62 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #321"
+      B: "PC-SIG Library Disk 0321"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #321
+## Information about "HOME APPLICATIONS"
+
+    HOME APPLICATIONS has such a wide range of programs that almost
+    everyone will find something of interest.  You can track everything
+    from your biorhythm to hurricanes.  For gambling fans, there is a
+    lottery number-generating program as well as an NFL point spread
+    calculator.  Of special interest is the HOME APPLICATIONS program which
+    lets you keep a record of all your possessions.  This can be very useful
+    for insurance purposes.
+    
+    File Descriptions:
+    
+    $_EXCHNG BAS  International currency exchange program.
+    AC       C    Source code for area code finder program.
+    AC       EXE  Area code finder program.
+    ALARM    BAS  Program to set alarm clock on pc.
+    AVEGRATE BAS  Stock growth, rate and projections program.
+    BIORYTHM BAS  Program to determine biorythms.
+    BUZZWORD TXT  Data processing definitions.
+    CALENDAR BAS  Prints monthly calendars from 1583 to 4046.
+    CALL     BAS  Program to evaluate stock calls.
+    CAS-REEL BAS  Provides timing information for reel to cassette.
+    DEBBIE        Data for hurricane tracking program.
+    DECIDE   BAS  Decision making program.
+    DECISION BAS  Another decision making program.
+    FUNDANAL BAS  Fundamental analysis program.
+    GUITAR   BAS  Guitar tuning program.
+    HAIKU    BAS  Generates random haiku's.
+    HEATCALC BAS  Performs sense building energy load modeling.
+    HOME-INV BAS  Program for home inventory tracking.
+    HOME-INV DEBT  Data for HOME-INV.
+    HOME-INV DOC  Documentation for HOME-INV.
+    HURRICAN BAS  Hurricane tracking program.
+    INSAT    BAS  Calculates aiming angles for satellites.
+    IRA-CALC BAS  Individual retirement account calculation program.
+    JOBJAR   BAS  Job tasking program.
+    LAYAWAY  BAS  Layaway account management program.
+    LIFETIME BAS  Life expectancy determination program.
+    LOTTERY2 BAS  Lottery number choosing program.
+    NFL-PIX  BAS  NFL point spread calculation program.
+    OPTION   BAS  Option analysis program.
+    SOUNDEFF BAS  Sound effects generation program.
+    STAR     DEBT  Data for STAR.
+    STAR     BAS  Astronomical calendar program.
+    STARFIND BAS  Astrologic and astronomical calculator.
+    TEMPER   BAS  Temperature conversion program.
+    WNDCHIL  BAS  Wind chill calculation program.
+    ZELLER   BAS  Determines day of week from Zeller's Congruence.
+
+### Directory of PC-SIG Library Disk 0321
 
      Volume in drive A has no label
      Directory of A:\

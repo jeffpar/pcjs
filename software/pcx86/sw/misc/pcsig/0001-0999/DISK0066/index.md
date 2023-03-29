@@ -9,13 +9,91 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #66"
+      B: "PC-SIG Library Disk 0066"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #66
+## Information about "GINACO PROGRAMS"
+
+    This is a very popular group of utilities and games. Included are two
+    word processors, a printer control program, label and notepad routines,
+    and many other handy tools for getting those little detail jobs done
+    while we're at the computer.  All of the programs can be accessed from
+    the main menu.
+    
+    Everything here is written in BASIC, which really doesn't enhance its
+    speed, but it does provide fertile ground for the burgeoning BASIC
+    programmer to analyze and blossom.
+    
+    System Requirements:  Some programs require color graphics; BASIC.
+    
+    How to Start:  For instructions on running BASIC programs, please refer
+    to the GETTING STARTED section in this catalog. To read DOC files simply
+    enter TYPE filename.ext and press <ENTER>.
+    
+    File Descriptions:
+    
+    ALPHAHEX BAS  Alpha to hex reference display
+    BLUEBERY DOC  Documentation for BLUEBERY.BAS
+    BLUEBERY BAS  Label creator, filer, record system - like LABELPRO.BAS
+    BOXINPUT BAS  Disables all input keys except those needed by program
+    BOXINBOX BAS  Displays border boxes on CRT - can be used as subrouti ne
+    BLUEMENU BAS  Menu for running programs on this disk
+    BLUEBRY2 DOC  Documentation for BLUEBRY2.BAS
+    BUSCHECK BAS  Checking or cash account reconciliation aid
+    CHEKFORM BAS  Check ledger & statement reconciliation form sheet
+    CALULATE BAS  Simple calculator
+    CHR$PRNT BAS  Prints you printers character set
+    CIRCLE   GRA  Hypnotic circle
+    COLORSEE CLR  Displays full-color range
+    D&CFORM  BAS  Debit/credit worksheet
+    COMPOUND BAS  Annual compounded value of a sum at end of each year
+    EASYWORD BAS  Simple text editor with no file storage
+    EASYRITE BAS  Word processor
+    ESCKEY   BAS  Converts ESC key to Continue key
+    EPSONSET BAS  Epson printer control and tester
+    HEXPRINT BAS  Hex/decimal display printout
+    HEADCLN  BAS  Diskette drive head cleaning utility
+    GASFORM  BAS  Mileage and trip log form
+    FILEDATE BAS  Date and time stamp on PC files
+    HEXSAY   BAS  Converts hex to decimal
+    IBMLABEL BAS  Label print routine
+    LABLFILE BAS  Label creator, notebook, record keeper, file system
+    KEYSET   BAS  BASIC function key settings
+    MENUPRNT BAS  Graphics print routine
+    LPT12SET BAS  Toggles between LPT1 and LPT2 if you have 2 printers
+    LISTSKIP 17P  17.5 pitch program listing
+    LISTSKIP 10P  10 pitch program listing
+    ZIPCLEAR BAS  Clears designated screen area
+    YOURMENU BAS  Menu subroutine
+    YESORNO  BAS  Yes/no response subroutine
+    WEIGHTFM BAS  Daily health record form
+    TIMESHOW BAS  Display, retains elapsed time
+    TESTWRIT DOC  Documentation for TESTWRIT.BAS
+    TASKLIST BAS  Daily phone call and to-do list
+    STARTUP  CLR  Example of menu display
+    STARTUP  BAS  Example of menu display
+    SIXBOXES BAS  Program example - 6 nested boxes
+    SHOWBOX  BAS  BASIC subroutine - border
+    PC-COLOR BAS  Color monitor test
+    NICELIST BAS  Print an ASCII file with page skip and header
+    SAVINGS  BAS  Display & print savings or checking account information
+    SAMPLE   TWD  Data for TESTWRIT.BAS
+    RANDSEED BAS  Random number generator
+    PCADD    GRA  Graphics print routine
+    QUICKBOX CLR  Part of showbox
+    PROGHEAD BAS  BASIC program heading
+    PRNTCALL BAS  Subroutine for printer control
+    PEEKPRNT BAS  Alpha to hex reference display
+    GENLEGER BAS  General Ledger program
+    DISKNAME      Used by BLUEMENU.BAS
+    README        Intro to GINACO Utilities
+    GLEGER   DAT  Test data for general ledger program
+    TESTWRIT BAS  Test making program for teachers
+
+### Directory of PC-SIG Library Disk 0066
 
      Volume in drive A has no label
      Directory of A:\

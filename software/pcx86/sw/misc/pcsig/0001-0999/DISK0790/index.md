@@ -9,13 +9,27 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #790"
+      B: "PC-SIG Library Disk 0790"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #790
+## Information about "MINISTER'S SERMON INDEXER"
+
+    MINISTER'S SERMON INDEXER is a simple database designed with the
+    pastor in mind. Keep track of previous sermons as well as the date and
+    location they were given. Store the title, subject, and scriptural
+    references. A field is provided for a five-digit reference number, so
+    you can refer to the text file where the actual sermon is stored.
+    
+    The MINISTER'S SERMON INDEXER does not do anything that cannot be done
+    with most available databases; however, it does have an excellent user
+    interface. Also featured are pull-down menus accessed by your cursor
+    control keys. The documentation is very good, although the program is
+    so easy to use it is hardly needed.
+
+### Directory of PC-SIG Library Disk 0790
 
      Volume in drive A has no label
      Directory of A:\

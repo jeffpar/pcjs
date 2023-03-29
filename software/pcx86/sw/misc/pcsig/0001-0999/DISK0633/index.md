@@ -9,13 +9,28 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #633"
+      B: "PC-SIG Library Disk 0633"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #633
+## Information about "DRAWPLUS AND SECRET QUEST"
+
+    SECRET QUEST 2010 is a graphic/text mystery that takes place aboard a
+    starship in orbit around the Earth.  You and a friend have been on a
+    trip through space and are, just now, returning home.  You wake up on
+    the morning of your return and find that your friend is missing! You
+    start searching the ship and begin to discover things in the process.
+    Be careful!  There are many traps for the unwary.
+    
+    A Graphics/Drawing program written especially for the PC and PCjr.
+    
+    Pull-down menus and a joystick control the various functions which
+    include: Line, Circle, Paint, View, Cut-and-Paste/Delete, Fatbrush and
+    Airbrush with varying color-width-density.  Source code is included.
+
+### Directory of PC-SIG Library Disk 0633
 
      Volume in drive A has no label
      Directory of A:\

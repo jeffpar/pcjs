@@ -9,13 +9,59 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #365"
+      B: "PC-SIG Library Disk 0365"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #365
+## Information about "TURBO PASCAL SET #5"
+
+    Collection of routines written in Turbo Pascal for the IBM-PC.
+    BLIST.PAS and GETDIR.PAS were written for CP/M-80.  Programs include
+    asynchronous communications routines, an excellent disk cataloging
+    program, and window management routines.
+    
+    System Requirements:  Turbo Pascal
+    
+    How to Start: To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  For instructions on PAS listings, refer to your Pascal
+    language manual.  To run a COM program, simply type its name and press
+    <ENTER>.
+    
+    File Descriptions:
+    
+    ASYNC    PAS  Asynchronous communication routines
+    TURBO    DOC  Various routines -- date/time, hex math, registers
+    SETCURSR PAS  Set cursor size for monochrome monitor
+    RDIBMKBD INC  Procedure to read IBM keyboard -- all keys
+    PTOOLWIN PAS  Demo/driver
+    PTOOLWIN DOC  Documentation
+    PTOOLWIN INC  Pascal TOOLs for WINdow management
+    PTOOL1   BOX  Combination of PTOOLDAT, PTOOLENT, and PTOOLSCR
+    PTOOLSCR PAS  Demonstration
+    PTOOLENT PAS  Demonstration
+    PTOOLENT DOC  Documentation
+    PTOOLSCR INC  Associated file
+    PTOOLENT INC  Pascal TOOls for record-oriented data ENTry
+    PTOOLDAT PAS  Demonstration
+    PTOOLDAT INC  Pascal TOOLs for DATe manipulation -- very complete
+    BYTES    PAS  Associated program
+    PC-DISK  COM  Compiled version
+    PC-DISK  PAS  Disk Catalog program -- full-featured
+    PARAMS   PAS  Demonstrates getting command line parameters
+    MODEM    PAS  Telecommunications program
+    HEXCALC  PAS  Hexadecimal calculations
+    BLIST    DOC  Brief documentation
+    BLIST    PAS  TURBO program lister and begin/end counter for CP/M-80
+    BLIST    COM
+    GETDIR   PAS  Get 8-sector, DSDD disk directory -- not TURBO
+    CRFONTS  PAS  Character font creation and editing
+    DATETIME INC  Date and time functions
+    CRFONTS  DOC  Documentation
+    BLIST    COM  Complied version of BLIST.PAS
+
+### Directory of PC-SIG Library Disk 0365
 
      Volume in drive A has no label
      Directory of A:\

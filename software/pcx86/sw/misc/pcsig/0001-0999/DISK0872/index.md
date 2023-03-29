@@ -9,13 +9,36 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #872"
+      B: "PC-SIG Library Disk 0872"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #872
+## Information about "AMPLE NOTICE APPOINTMENT CALANDER"
+
+    AMPLE NOTICE is a calendar and alarm clock program that helps organize
+    your schedule of appointments.  Appointments and notes are entered into
+    a standard text file in any of a variety of simple formats.  Each day,
+    you view a calendar of commitments taken from this file.  This text file
+    can be edited from within the program or from an ASCII wordprocessor.
+    
+    You can specify that a birthday occurs each July 17, or that you have a
+    meeting every other Tuesday at 4:00 for five meetings, or that Father's
+    Day is the third Sunday in June.
+    
+    Appointments that include a time can automatically set a pop-up alarm
+    clock to notify you at a given advance interval.  Print a specified
+    range of dates to keep track of your appointments while away from your
+    computer.  These can be in a variety of print styles including a
+    ``tiny'' option of very compressed listings for your wallet or purse.
+    You can also print a calendar for any range of months for a particular
+    year.  The sorting and archiving options let you keep track of past
+    activities for business purposes.  Searching for a given appointment
+    (future or past) is fast and easy.  Also included is a program for
+    addressing envelopes sideways from data on the screen or from a file.
+
+### Directory of PC-SIG Library Disk 0872
 
      Volume in drive A has no label
      Directory of A:\

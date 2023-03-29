@@ -9,13 +9,48 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #24"
+      B: "PC-SIG Library Disk 0024"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #24
+## Information about "GAME SERIES NO 4"
+
+    For children of all ages, PACKMAN (Sound familiar?) is a game in which
+    the player moves a little computer character -- genus: Compchar;
+    species: Packman -- through a maze of walls which the player is looking
+    down on, and consumes the dots cluttering the hallways. While Packman
+    is merrily gobbling along, he is being chased by a series of monsters
+    giving all they have to gobble him up. His only defense is to eat one
+    of four special power dots, which imbue him with the stuff to gobble
+    his prospective gobblers. Anytime you gobble the gobblers, it's a good
+    game.
+    
+    How to Start:  For instructions on running BASIC programs, please refer
+    to the GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    WUMPUS   BAS  Hunt the Wumpus in its cave
+    EVRONWRD BAS  Ever Onward
+    RANGERD  BAS  The William Tell Overture (Lone Ranger Theme)
+    PUFF     BAS  Puff the Magic Dragon
+    LITUPLIF BAS  You Light Up My Life
+    JAMMER   BAS  "Head On" Variation
+    RACJAM   SCO  Data for JAMMER game, scoring categories
+    GOBBLE   BAS  PAC MAN variation
+    TICTACTO BAS  Tic-Tac-Toe
+    NEWTREK  BAS  Another version of StarTrek
+    MOON     BAS  Survival on the MOON
+    PACKMAN  DOC  Documentation for PACKMAN.EXE
+    PACKMAN  EXE  Excellent graphics version of PacMan
+    OPERATOR BAS  Simulates S/370 VM Operator Console
+    NEWTREK  HOW  Documentation for NEWTREK.BAS
+    SONGS    BAS  Choose from several on "menu"
+    YESTER   BAS  Yesterday
+
+### Directory of PC-SIG Library Disk 0024
 
      Volume in drive A has no label
      Directory of A:\

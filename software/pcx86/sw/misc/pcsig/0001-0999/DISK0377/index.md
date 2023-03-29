@@ -9,13 +9,84 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #377"
+      B: "PC-SIG Library Disk 0377"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #377
+## Information about "PRINTER UTILITIES #6"
+
+    While this disk is packed with an amazing variety of printer utilities
+    for printers from Gemini to Prowriter to NEC to LaserJets, the
+    outstanding program is the PRINTER.COM, a program which allows you to
+    use special print functions with ease on ANY make of printer.
+    PRINTER.COM sets up your printer to make use of its special print
+    functions (compressed print, double strike print, italics print, etc.).
+    Whatever your printer has the capability to do, you can easily do it
+    with PRINTER.COM.
+    
+    But don't overlook BANNERIFIC!  BANNERIFIC is a program which lets you
+    produce large banners on your computer printer.  All IBM PC keyboard
+    characters may be used.  The size of the characters produced on the
+    printer is variable, and may be as large as the width of your computer
+    paper.
+    
+    System Requirements: Printer
+    
+    How to Start: Consult the .TXT and .DOC files for directions and
+    documentation; also, look for READ.ME files.  To run the BASIC
+    programs, consult the directions in GETTING STARTED for your
+    configuration.  To run any file marked .EXE or .COM, type its filename
+    and press <ENTER>.
+    
+    Suggested Registration:  $15.00
+    
+    File Descriptions:
+    
+    BANNERIF EXE  Print any size characters on your printer
+    BANNERIF DOC  Documentation for BANNERIF.EXE
+    DIABLO   EXE  Support a serial printer with ETX/ACK handshaking
+    DIABLO   DOC  Documentation for DIABLO.EXE
+    COVER_TB COM  Doesn't work
+    CITOHSET BAS  Sample file
+    GEMSET   EXE  Set up program for Gemini printer
+    GEMINI   EXE  Configuration program for Gemini printer
+    GDUMP    EXE  Executable file of GDUMP.EXE
+    GDUMP    BAS  Medium resolution graphic dump of C.ITOH 8510 & NEC 8023
+    EW-PROWR TXT  Sample print file
+    EW-PROWR EWF  Use Prowriter or NEC 8023 printer with Easy Writer 1.1
+    EPSN-OKI DOC  Documentation for EPSN-OKI.COM
+    EPSN-OKI COM  Convert "print" file from IBM/Epson format to Oki format
+    OKIDATA  EXE  Executable version of OK84ASSET.BAS
+    OK84ASET BAS  Okidata 82A configuration program
+    NECSET   DOC  Documentation for NECSET.COM
+    NECSET   COM  Set the C Itoh 8510A or NEC 8023A-C printer parameters
+    NECSCRN  DOC  Documentation for NECSCRN.COM
+    NECSCRN  COM  Graphics and text screen dump for NEC 8023A printer
+    NECPRTSC DOC  Documentation for NECPRTSC.COM
+    NECPRTSC COM  Driver for NEC 8023 for Shft-PrtSc screen print sequence
+    NECPRINT TXT  Sample file for NECPRINT.BAS
+    NECPRINT BAS  Text editor for NEC PC-8023A
+    NECPLOT7 BAS  Demo plot for NEC 8023 printer
+    NECGRAF  COM  Graphic screen dump for NEC printer
+    LASERJET EXE  Configuration for Laserjet printer
+    IDSPRISM BAS  Initialize IDS Prism Color Printer
+    HP7470A  BAS  Example of function for generating HP7470A plots
+    GRCITOH  COM  Graphics dump for C.ITOH printer
+    OKIDUMP  COM  Allow graphic screens to be printed on the line printer
+    OKIGRAF  COM  Graphic dump program for Okidata printers
+    OKIDUMP  DOC  Documentation for OKIDUMP.COM
+    PRINTER  DAT  Part of PRINTER.COM
+    PRINTER  COM  Allows use of special print functions on any make printer
+    OKISET   DOC  Documentation for OKISET.COM
+    OKISET   COM  Send control characters to OkiData Microline 92 connected
+    SETOKI   COM  Set up program for Okidata printers
+    PROWRTER DOC  Switch settings for Prowriter/NEC 8023 printer
+    PROWRITE EXE  Configuration set up for Prowriter printers
+    PRINTER  DOC  Documentation for PRINTER.COM
+
+### Directory of PC-SIG Library Disk 0377
 
      Volume in drive A has no label
      Directory of A:\

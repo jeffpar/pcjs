@@ -9,13 +9,60 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #415"
+      B: "PC-SIG Library Disk 0415"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #415
+## Information about "W-ED AND WORD PROCESSING PREVIEWER"
+
+    Dash off a letter, work on your poetry, or revise your Christmas list
+    with this friendly program.  W-ED is a small, fast, and intuitive
+    editor and wordprocessor.
+    
+    Simplicity of use was a major design criteria.  The program is based
+    on the premise that sequences of often-used functions are more
+    productive than many obscure hard-to-remember and arbitrary commands.
+    The commands are easy to remember.  Create an ASCII file that can be
+    printed or re-edited.
+    File Descriptions:
+    
+    WED      BGN  Screens describing each section of W-ED.
+    INSTALL  EXE  Changes the W-ED default options.
+    WED      PGM  Describes the programmable version of W-ED.
+    WED      EXE  The W-ED Word-processing EDitor (executable program).
+    ORDER    WED  WyndhamWare order form for W-ED.
+    WED      DEF  Documentation for W-ED (10 pp).
+    WED      SAL  Sales information to obtain W-ED.
+    DEMO     EXE  Demonstration of W-ED, including a tutorial.
+    TSTBRD   EXE  Demonstrates the programmer's version (for DEMO only).
+    WED      TUT  Screens for W-ED tutorial.
+    WEREAD   ME   Short description of W-ED (2 pages).
+    WED-DESC ILN  One-line description of W-ED files.
+    
+    See what your page layout looks like before you print your document.
+    Experiment with different formatting options without printing a single
+    page!
+    
+    The WORD PROCESSING PREVIEWING SYSTEM (WPPS) gives you a picture of
+    page layouts from any ASCII wordprocessor file.  WPPS draws from one to
+    18 rectangular ``pages'' on your color display and then fills them with
+    output to show you exactly how your document will look when printed.
+    Repeating the operation, up to 18 pages at a time, is an invaluable
+    tool for saving time and paper!
+    
+    The previewer is especially useful when dealing with documents of
+    100 or more pages, and can quickly pay for itself in paper saved.
+    File Descriptions:
+    
+    &        EXE  Word processing previewing system (executable program).
+    &        CUE  Configuration file for WPPS.
+    &        DOC  Documentation for WPPS (33 pp).
+    &PCW     CUE  Configuration file for PC-WRITE users.
+    &READ    ME   Short description of WPPS (1 pg).
+
+### Directory of PC-SIG Library Disk 0415
 
      Volume in drive A has no label
      Directory of A:\

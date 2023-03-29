@@ -9,13 +9,21 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #244"
+      B: "PC-SIG Library Disk 0244"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #244
+## Information about "SLIDE GENERATION"
+
+    This program produces medium-quality slides and overhead transparencies.
+    Images can be created, edited, saved, displayed, and printed using this
+    program.  Overhead transparencies are produced by photocopying the
+    printed output onto transparent material.  Photographic slides are
+    produced by photographing the display or printed output.
+
+### Directory of PC-SIG Library Disk 0244
 
      Volume in drive A has no label
      Directory of A:\

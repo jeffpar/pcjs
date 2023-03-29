@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #470"
+      B: "PC-SIG Library Disk 0470"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #470
+## Information about "MR. BILL 2 OF 2 (ALSO 469)"
+
+    Money in the bank -- a lovely phrase. Money owed to your company could
+    be money in YOUR bank -- if you collect it. MR. BILL does almost
+    everything needed for your small to medium-sized firm to bird dog bills
+    and increase collections with a minimum of labor and losses.
+    
+    Highly flexible, MR. BILL handles taxes and charges of every sort. It
+    automatically updates and sends client bills out monthly, prints your
+    letterhead, and up to a 30-line message. You can charge different
+    customers different rates for the same thing. Each file can have 16,000
+    entries. Get the client's name, address, phone number, and current
+    balance from the operating system in less than four seconds.
+    
+    Prepare itemized invoices/bills and generate a bevy of summary and in-
+    depth reports including account aging and an excellent audit trail. The
+    28-page manual is adequate for experienced clerks.
+
+### Directory of PC-SIG Library Disk 0470
 
      Volume in drive A has no label
      Directory of A:\

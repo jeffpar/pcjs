@@ -9,13 +9,54 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #89"
+      B: "PC-SIG Library Disk 0089"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #89
+## Information about "PC-SIG SAMPLER #3"
+
+    Some interesting programs reside on this disk.  MINICALC is a small
+    (11 x 22) spreadsheet, with graphing capabilities, and is useful for
+    quick jobs.  MSPOOL is a quite flexible print spooler which allows you
+    to print on three printers simultaneously. There are also programs to
+    blank your monitor to prevent phosphor burn, a text-tool package that
+    lets you catalog disks, generate mail- list mailings, and generate
+    multi-column lists from single-column data.
+    
+    System Requirements:  BASIC
+    
+    How to Start: To run an EXE or COM program simply type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.  To read DOC
+    files simply enter TYPE filename.ext and press <ENTER>.
+    
+    Suggested Registration:  TEXTTOOL: $25
+    
+    File Descriptions:
+    
+    MONBLNK1 COM  Blanks monochrome display after 5 minutes
+    MINICALC EXE  Single screen spreadsheet calculator - 11 columns, 22 rows
+    MINICALC DOC  Documentation for MINICALC.EXE
+    COLBLNK1 COM  Blanks color display after 5 minutes
+    PC-LIB   BAS  Disk file library program
+    MSPOOL   DOC  Documentation for SPOOL.COM
+    MSPOOL   COM  Flexible spooler program
+    MONBLNK1 DOC  Documentation for MONBLNK1.COM and COLBLNK.COM
+    VOLSER   COM  Create/alter volume labels
+    PC-LIB   DOC  Documentation for PC-LIB
+    -------- ---  Text Tools programs
+    VOLSER   DOC  Documentation for use of VOLSER.COM
+    XUP      BAS  Prints textfiles in columnar tables
+    PRNT2    BAS  Wild card print program
+    MAIL     BAS  Mailmerge program
+    MAIL     TXT  Sample input file for MAIL.BAS with instructions for use
+    PR1      LET  Sample letter for MAIL.BAS
+    TEXTTOOL DOC  Documentation for printer utilities
+    PRNT3    BAS  Prints text files using wildcards
+
+### Directory of PC-SIG Library Disk 0089
 
      Volume in drive A has no label
      Directory of A:\

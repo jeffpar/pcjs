@@ -9,13 +9,67 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #556"
+      B: "PC-SIG Library Disk 0556"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #556
+## Information about "FORTRAN AND ASSEMBLY"
+
+    This is a mixed collection of games, usable programs, and utilities
+    that can be called from FORTRAN programs.  Included is PLTSPEC which is
+    useful in analyzing spectra with broad asymmetric peaks on a sloping
+    background.  DIR_ASM.ASM is a routine which lists to the console the
+    names of the files in the current directory.  There are also some .PIC
+    files which are ASCII files to copy to a printer.  They contain
+    drawings of various figures.
+    
+    System Requirements:  64K, one disk drive and monochrome display.
+    
+    How to Start:  To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  To run an EXE program, just type its name and press <ENTER>.
+    For instructions on ASM or FOR listings, refer to your Assembler or
+    FORTRAN language manual.
+    
+    File Descriptions:
+    
+    README        Description and documentation for the files on this disk
+    DIR_FOR  EXE  Compiled and linked version of above
+    DIR_FOR  FOR  Example FORTRAN program using DIR_ASM
+    DIR_ASM  OBJ  Assembled version of DIR_ASM
+    DIR_ASM  ASM  A disk directory from FORTRAN
+    KYBD_EX  FOR  Example program using DOSFUNC and DOSFN
+    DOSFUNC  FOR  FORTRAN routines for use with DOSFN
+    DOSFN    OBJ  Assembled version of DOSFN
+    DOSFN    ASM  Gives access to DOS functions from an MS-FORTRAN program
+    CHESS    FOR  Chess source code
+    CHESS    DOC  Chess documentation
+    CALENDAR FOR  Calendar source code
+    CALENDAR CPM  Calendar source code - CP/M
+    -------- ---
+    EXAMPLE  DAT  Example data set for
+    EFFIXSP  FOR  Detector efficiency correction of gamma-ray spectra
+    PLOT2    FOR  Dump routines for PLTSPEC
+    PLOT1    FOR  IDS Micro Prism printer
+    EDITS    FOR  Part of PLTSPEC;           MULTI-HALO graphics library
+    DAT-TIME OBJ  Assembled version of DAT-TIME
+    DAT-TIME ASM  Routines for getting the date and time in FORTRAN
+    MANSPT   FOR  Part of PLTSPEC;           requires MS-FORTRAN and
+    PLTSPEC  FOR  Interactive processing of gamma-ray pulse height spectra
+    TIME2    EXE  Compiled and linked version of above
+    TIME2    FOR  Example FORTRAN routines using DAT-TIME
+    EDITM    FOR  Edit program source code
+    MAZE     CPM  Maze generator source code - CP/M
+    LINUS    PIC  Linus portrait
+    PINUP?   PIC  Pinup portraits
+    OTHELLO  DOC  Othello program documentation
+    OTHELLO  FOR  Othello program source code
+    MAZE     FOR  Maze generator source code
+    SSPLIB   FOR  Linear least squares program source code
+    RND      FOR  Random numbers generator source code
+
+### Directory of PC-SIG Library Disk 0556
 
      Volume in drive A has no label
      Directory of A:\

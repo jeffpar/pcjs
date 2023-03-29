@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #392"
+      B: "PC-SIG Library Disk 0392"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #392
+## Information about "COMPILED PASCAL"
+
+    File Descriptions:
+    
+    ???????? LIB  Pascal library file (33 files).
+    ???????? PAS  Pascal source file (35 files).
+    ???????? DAT  Data file (4 files).
+    FILENAME TYP  Type declaration command.
+    LESSRAM  COM  Resets memory to specified size.
+    NUMDISKS COM  Resets number of disk drives on system.
+    PARAMETR COM  Lists parameters of the command line in pascal.
+    README   ###  Information file.
+    READTHIS NOW  Information file.
+    REGPACK  TYP  Type command for pascal.
+    SCREENS  TYP  Type command for pascal.
+    SUCCESS  DOC  Documentation for SUCCESS.
+
+### Directory of PC-SIG Library Disk 0392
 
      Volume in drive A has no label
      Directory of A:\

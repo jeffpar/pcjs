@@ -9,13 +9,56 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #338"
+      B: "PC-SIG Library Disk 0338"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #338
+## Information about "SYSCOMM"
+
+    This is an excellent menu-driven communications package.  It comes in
+    three parts:
+    
+    SYSCOMM is a general purpose comunications package.  It can comunicate
+    with other computers, transfer files, and act as your window to the
+    world when connected to one of the information networks.  Several
+    features of SYSCOMM make it easy to connect with other systems,
+    including auto-dialing and auto-logon.
+    
+    ABSCOMM is a special purpose program used for un-attended file transfer.
+    Jobs are submitted to ABSCOMM to place calls at certain times of the
+    day and to send a list of files to the remote computer. The times can
+    be selected to take advantage of the lower phone rates. ABSCOMM is also
+    the un-attended answering software used when another system running
+    SYSCOMM or ABSCOMM wants to send you a file.
+    
+    EDCOMM is a supplemental program.  SYSCOMM and ABSCOMM have data files
+    that contain initializa- tion parameters and phone directories. EDCOMM
+    allows the user to alter the initialization parameters and manage the
+    phone directories.  An additional feature is used to create auto-logon
+    sequences for SYSCOMM.
+    
+    How to Start:  From DOS, enter EXPAND for a hard copy of the
+    documentation.  All the programs (marked .EXE) run from DOS.
+    
+    Suggested Registration: $70.00 gets you telephone support, a printed
+    manual, and free updates for two years
+    
+    File Descriptions:
+    
+    ABSCOMM  EXE  Allows unattended file transfer between systems
+    ABSCOMM  DAT  ABSCOMM parameters and phone directory file
+    EXPAND   BAT  Batch file to expand the manual files
+    EDCOMM   EXE  Alters parameters and phone directories
+    SYSCOMM? BAT  Batch file to copy SYSCOMM files to drive B: (3 files)
+    SYSCOMM  EXE  General purpose communications program
+    SYSCOMM  DAT  SYSCOMM parameters and phone directory file
+    MLREAD   ME   How to expand the manual files using EXPAND.BAT
+    MANUAL?  !!!  Manual part 1 compressed (3 files)
+    MAKEMAN  COM  Expands compressed manual files
+
+### Directory of PC-SIG Library Disk 0338
 
      Volume in drive A has no label
      Directory of A:\

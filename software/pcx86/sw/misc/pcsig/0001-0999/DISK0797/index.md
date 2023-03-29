@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #797"
+      B: "PC-SIG Library Disk 0797"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #797
+## Information about "TEST AND TRAIN"
+
+    Whether you're a teacher wanting to give tests on the computer, or a
+    student who needs to drill for tests or courses, or a manager who needs
+    to administer training drills to your employees, TEST and TRAIN can
+    help you do the job.
+    
+    You enter the questions and TEST AND TRAIN displays them on the screen.
+    The program offers slightly different scoring options for testing and
+    training.  In both cases, the program accepts valid answers and rejects
+    inappropriate ones, showing the correct answer with an optional comment
+    when the answer is incorrect.  You can put incorrectly answered
+    questions on hold, and view them again until the correct answer is
+    given.  TEST keeps score of points associated with correct answers, and
+    counts the number of incorrect answers entered.  At the end of the test
+    the program displays an optional evaluation, and stores the results in a
+    permanent file on your disk.
+
+### Directory of PC-SIG Library Disk 0797
 
      Volume in drive A has no label
      Directory of A:\

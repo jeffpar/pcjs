@@ -9,13 +9,43 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #685"
+      B: "PC-SIG Library Disk 0685"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #685
+## Information about "NEW FIG FORTH"
+
+    For fans of FORTH, here is the latest version of this unusual
+    programming language.  This version of FIG-FORTH incorporates a number
+    of significant changes to the FIG version.  The Following is a partial
+    list:
+    
+    ~  Written for Microsoft's MACRO-86 assembler
+    ~  Full MS-DOS file interaction, as well as usual FORTH disk access
+    ~  All I/O is vectored and may be re-directed within FORTH
+    ~  Command line interpretation
+    
+    The accompanying documentation includes a user's guide, a technical
+    reference manual, and a FORTH glossary (a list and explanation of each
+    FORTH word which has been changed or added to this version).
+    
+    Special Requirements:  2 disk drives and a printer is optional.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  None.
+    
+    File Descriptions:
+    
+    ARC      EXE  Archive utility
+    CONTENTS      Text file listing contest of FORTH.ARC
+    FORTH    ARC  Archived file
+    README        Introductory text file
+    UNPACK   BAT  Batch file to unpcak FORTH.ARC
+
+### Directory of PC-SIG Library Disk 0685
 
      Volume in drive A has no label
      Directory of A:\

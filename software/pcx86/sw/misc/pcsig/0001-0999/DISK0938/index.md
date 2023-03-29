@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #938"
+      B: "PC-SIG Library Disk 0938"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #938
+## Information about "CHEMICAL MOLECULAR MODELING"
+
+    CHEMICAL -- a molecular-modeling program for 3-D representations of
+    chemical elements.
+    
+    Select atoms from the Periodic Table and the program retrieves the
+    electron orbital information. The atoms can be bonded into molecules,
+    and the molecules bonded with other molecules to make large chemical
+    structures. The chemical is displayed as it is constructed, and when
+    formed, can be rotated and viewed. The Hybrid and Ionize commands can
+    be used to alter the orbitals before bonding. Read, write and view a
+    chemical data file from the disk. CHEMICAL also has a help function
+    and a tutorial.
+    
+    Included is CHEMVIEW (an EGA-only function), a companion program that
+    shows three-dimensional animation of the models made with CHEMICAL.
+
+### Directory of PC-SIG Library Disk 0938
 
      Volume in drive A has no label
      Directory of A:\

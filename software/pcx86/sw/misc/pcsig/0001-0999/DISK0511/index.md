@@ -9,13 +9,65 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #511"
+      B: "PC-SIG Library Disk 0511"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #511
+## Information about "TURBO SPRITES"
+
+    Turbo Sprites and Animation is a series of utilities, library files
+    and demo programs to create, maintain and animate sprites (user-
+    defined graphics images) in the Turbo Pascal environment.  Both
+    multi-page animation and xor animation are supported.  Three main
+    parts:
+    
+    DESIGNER.COM is a sprite-designing utility which has an editor-like
+    environment for creating sprites.  It also allows you to store them in
+    tables of up to 24 sprites.  The utility will also generate code
+    allowing you to incorporate sprites in your programs as typed
+    constants.
+    
+    COMPOSER.COM is a screen and animation composing utility that will
+    help in positioning the sprites for display.
+    
+    SPRITES.LIB is a library of display routines for sprites.  A number of
+    demo programs have been included to be sure you understand how to use
+    the sprite files.  Along with the demo programs, there are a number of
+    sprite tables that have already been created.
+    
+    System Requirements: 256K, one disk drive and monochrome/graphics
+    display; Turbo Pascal compiler.
+    
+    How to Start:  From the DOS prompt enter TYPE READTHIS.NOW and
+    follow directions.
+    
+    Suggested Registration:  $20.00
+    
+    File Descriptions:
+    
+    DESIGNER COM  Sprite design utility
+    DEMO?    TAB  Sprite table for DEMO.PAS programs (5 Files)
+    DEMO?    PAS  Turbo Pascal source code of demo program (8 Files)
+    SPRITES  LIB  Sprite definitions and driver routines
+    COMPOSER DOC  Documentation for COMPOSER.COM  (formatted for printer)
+    COMPOSER COM  Programming utility to load screen file and sprite tables
+    DESIGNER DOC  Documentation for DESIGNER.COM  (formatted for printer)
+    DESIGNER __2  Screen file for DESIGNER.COM
+    DESIGNER __1  Screen file for DESIGNER.COM
+    SAVESCRN COM  Utility to import PC Paint screens to Turbo Pascal program
+    DRAGON   INC  Individual sprite converted to typed constant array
+    SANTA    INC  Individual sprite converted to typed constant array
+    ??????   SPR  Individual sprite for demo programs
+    READTHIS NOW  Program overview
+    SAVESCRN LIB  Library routines to save and load Turbo Pascal screens
+    DESIGNER __0  Screen file for DESIGNER.COM
+    DEMO?    COM  Compiled version of DEMO programs
+    ANIMALS  TAB  Data file
+    ADENDA   DOC  Notes on DESIGNER.COM
+
+### Directory of PC-SIG Library Disk 0511
 
      Volume in drive A has no label
      Directory of A:\

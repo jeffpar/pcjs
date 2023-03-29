@@ -9,13 +9,53 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #176"
+      B: "PC-SIG Library Disk 0176"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #176
+## Information about "SPACE INVADERS"
+
+    A fine collection programs which demonstrate the graphic capabilities
+    of the IBM computer.  With these routines, you can draw different
+    shapes using your choice of coordinates and colors.  You may also
+    enjoy some random-pattern generation, or for something a bit less
+    restful, a very good public domain version of the classic Space
+    Invaders.
+    
+    System Requirements:  Some programs require color, BASIC
+    
+    How to Start: To read DOC or ASC files, enter TYPE filename.ext and
+    press <ENTER>.  To run an EXE program, just type its name and press
+    <ENTER>.  For instructions on running BASIC programs, please refer to
+    the GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    CURVE2   BAS  Draws curve to your selection of coordinates and color
+    CIRCLOOP BAS  Circle patterns
+    CURVE    BAS  Sine wave
+    CIRCLOOP ASC  Documentation
+    CIRCLE   BAS  Circle patterns
+    CURVE3   BAS  Draws circle, ellipse to your coordinates and color
+    DOWN     BAS  Pattern by Robbie Khedouri
+    NEWYEAR  DOC  Documentation
+    JAIME    BAS  Moving line pattern
+    NYTEST   BAT  Part of NEWYEAR.EXE - test execution
+    NUDE     BAS  Excellent female nude in color by G. Wesley & Dave Moon
+    NEWYEAR  PAS  Pascal source code
+    NEWYEAR  EXE  Main program - welcome in the New Year with your PC
+    WALLS    BAS  Pattern by Robbie Khedouri
+    TRIANGLE BAS  Draws triangle to your selection of coordinates
+    SWIRL    BAS  Pattern by Robbie Khedouri
+    SQUARE   BAS  Square pattern
+    SPACEVAD EXE  Space Invaders game - excellent public domain version
+    ROUNDER? BAS  Curve plot to your selection of coordinates (5 files)
+    NYTEST1  BAT  Part of NEWYEAR.EXE - test execution
+    CURVE    BAS  BASIC program to draw a curve
+
+### Directory of PC-SIG Library Disk 0176
 
      Volume in drive A has no label
      Directory of A:\

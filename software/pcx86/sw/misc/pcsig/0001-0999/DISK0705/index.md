@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #705"
+      B: "PC-SIG Library Disk 0705"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #705
+## Information about "KIDGAMES"
+
+    KIDGAMES is a blast! This collection of games is specifically geared
+    to KIDS, ages 2-10 years, and has a straight forward commitment to make
+    learning fun. It also has excellent graphics and is a great program for
+    introducing your kids to your home computer.
+    
+    For education, HANGMAN in one of the best on this disk. It teaches
+    basic spelling and allows you to expand the dictionary as the child's
+    vocabulary increases. For pure fun, MOSAIC teaches pattern matching
+    and encourages pattern building. Also on this disk are:
+    
+    ~ ALPHABET, which teaches the alphabet and alphabetic sequence
+    
+    ~ ANIMALS, which teaches simple preschool math
+    
+    ~ CLOCKGAME, which teaches how to read an analog clock
+
+### Directory of PC-SIG Library Disk 0705
 
      Volume in drive A has no label
      Directory of A:\

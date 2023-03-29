@@ -9,13 +9,33 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #618"
+      B: "PC-SIG Library Disk 0618"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #618
+## Information about "MAKEMYDAY"
+
+    A quartet of time-management systems for today's super-busy people.
+    Beat Father Time at his own game.
+    
+    APPOINTMENT CALENDAR lets you keep track of all of your
+    appointments.  Never forget another meeting or dinner engagement.
+    
+    JOB SCHEDULER maintains your ``to-do'' list, in categories you define.
+    Print a work-in-progress report the next time the boss asks, ``Where are
+    we on the Wombat project?''
+    
+    EXPENSE ACCOUNT MANAGER monitors your expenses and provides the detailed
+    account information necessary in the categories you specify.
+    
+    TIME LOG tracks the billable time you spend on each client or project
+    and provides the necessary documentation when you need it.  Attorneys,
+    accountants, consultants and other service professionals will appreciate
+    it.
+
+### Directory of PC-SIG Library Disk 0618
 
      Volume in drive A has no label
      Directory of A:\

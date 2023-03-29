@@ -9,13 +9,40 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #491"
+      B: "PC-SIG Library Disk 0491"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #491
+## Information about "CRYPTANALYSIS HELPER"
+
+    This program is designed to aid in the decoding of simple substitution
+    aristocrat ciphers; it suggests translations based on a comparison of
+    letter frequencies, with the frequency of the first letters of words,
+    all letters, last letters and one letter words in your secret message.
+    It matches words with some letters decoded in its dictionaries
+    which are written in 'C'.
+    
+    System Requirements:  64K RAM, one disk drive and a monchrome display
+    
+    How to Start:  Read CRYPTAID.DOC thoroughly before using this
+    program. To run, enter CRYPTAID and hit <ENTER>.
+    
+    Suggested Registration:  $10.00
+    
+    File Descriptions:
+    
+    CRYPTAID DOC  Documentation-4 pages
+    CRYPTAID EXE  Main program in Microsoft's "C" Ver 3.00
+    SORTDCT  EXE  Sorts a dictionary
+    AUTOADD  EXE  Adds words to dictionaries
+    ADDTODCT EXE  Adds words to dictionaries
+    ??       DCT  Dictionary of ?? letter words
+    SAMPLE   CIP  Sample message that needs decoding
+    SORTALL  BAT  Sorts all the dictionaries
+
+### Directory of PC-SIG Library Disk 0491
 
      Volume in drive A has no label
      Directory of A:\

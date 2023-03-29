@@ -9,13 +9,42 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #791"
+      B: "PC-SIG Library Disk 0791"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #791
+## Information about "POKER & ULTIMA21"
+
+    Play draw poker head-to-head with the computer.  POKER has
+    a sophisticated style of playing and betting, and is intended to
+    challenge the serious poker player.
+    
+    It's honest.  The computer does not know what is in your hand
+    unless there is a showdown.
+    
+    It's smart.  The game has different patterns of betting and can observe
+    your style of betting and modify its own behavior accordingly.
+    
+    It's cagey.  POKER can bluff in several ways and sometimes makes large
+    bets with bad hands or no bets with good hands.  Every action it takes
+    has at least two possible interpretations.  The randomness of the
+    shuffling has been tested in simulations involving over half a million
+    hands and the results mirror those expected in normal poker playing.
+    
+    Ante up and deal 'em.
+    
+    Play Blackjack as it's played in the casinos with the computer as the
+    dealer.  ULTIMA21 keeps track of the hands played and who won each hand.
+    It also shows your longest winning (and losing) streaks.  In addition,
+    you can set up your own options -- resplit aces, double-down on any
+    number of cards, make the dealer stand on 17, turn the sound on during
+    play, and other things to keep it interesting.
+    
+    Hit me!
+
+### Directory of PC-SIG Library Disk 0791
 
      Volume in drive A has no label
      Directory of A:\

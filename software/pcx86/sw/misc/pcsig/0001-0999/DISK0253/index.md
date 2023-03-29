@@ -9,13 +9,75 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #253"
+      B: "PC-SIG Library Disk 0253"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #253
+## Information about "3X5 CARD 1 OF 2 (1298)"
+
+    This program is an information handling system that allows your computer
+    to act like a very efficient 3x5 card system, thus it's name.  This
+    program would be great for keeping track of small pieces of information
+    such as a patient listing or small library card catalog.
+    
+    The 3by5 Starter Kit offers you the following features:
+    
+    ~ Fields - up to 10 variable length fields.
+    ~ Sort records by one field.
+    ~ Improved indexing for records greater that 512 bytes.
+    ~ Multiple print formats for mailing labels, 3by5 cards etc.
+    ~ Start-up Files that will automatically open your files and set printer
+    parameters, etc.
+    ~ Directory commands Change, Make, Remove and List directories.
+    ~ List files on a disk from within the program along with the date and
+    time last modified, and file size.
+    ~ Report generator.  Print records in a user defined format.
+    ~ Reference Manager.  Enter journal, book and chapter references in a
+    standard format and the 3by5 Reference Manager will rearrange them
+    into the style required by any journal.
+    ~ Correspondence Manager.  Handles all your correspondence needs:
+    writing letters, mail merge, correspondence follow-up.
+    ~ Field definitions.  Specify Free-text, Line, Numeric, Date, Time, Mask
+    and Person fields.
+    ~ Macros.  Insert predefined text or issue commands sequences with a
+    single key stoke.  Limit of ten user defined macros.
+    ~ Manual on Disk.
+    ~ Technical support by the author by mail only.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $69.95
+    
+    File Descriptions:
+    
+    3BY5     EXE  Main program.
+    3BY5HELP 3X5  Data file.
+    ADDRESS  3X5  Data file.
+    ADDRESS  MAP  Data file.
+    CONFIG   SYS  Configuration file used by DOS
+    FORMLET  PFM  Data file.
+    FORMS    IFM  Data file.
+    FORMS    PFM  Data file.
+    INTRO    3X5  Data file.
+    JOHN     PRG  Data file.
+    LETTERS  LET  Data file.
+    MACRO    IAC  Data file.
+    MACRO    MAC  Data file.
+    NOFIELDS 3X5  Data file.
+    NOFIELDS MAP  Data file.
+    PROGRAMS 3X5  Data file.
+    PROGRAMS MAP  Data file.
+    README        Brief direction on how to print documentation
+    REF      IEF  Data file.
+    REF      REF  Data file.
+    REFSTYLE IFS  Data file.
+    REFSTYLE RFS  Data file.
+
+### Directory of PC-SIG Library Disk 0253
 
      Volume in drive A has no label
      Directory of A:\

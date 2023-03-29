@@ -9,13 +9,77 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #502"
+      B: "PC-SIG Library Disk 0502"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #502
+## Information about "SALESEYE 2 OF 2 (ALSO 501)"
+
+    The SALESEYE package is ideal for individuals in sales, because it is
+    designed to help users keep track of prospects, leads, and those all-
+    important memos.  It has a highly developed system of ``tickler'' files
+    designed to keep track of deadlines, calls to be returned, lunch
+    appointments, etc.  There is even a simple word processor, along
+    commonly used letter formats.  This is disk one of a two disk set. The
+    tutorial is on disk 502.
+    
+    System Requirements:  256K, two floppies or a hard disk, monochrome
+    display.
+    
+    How to Start:  Read the README.1st file and then begin the Tutorial on
+    Disk #502 by consulting the BEGINNIN.TXT for documentation.  To run,
+    enter SELL and pressing <ENTER>.
+    
+    Suggested Registration:  To register this copy of SALESEYE and obtain a
+    printed 240 page manual (includes a full Tutorial Manual, Reference
+    Manual, Appendices, glossary and index), technical support, and
+    upgrade notices, send a check for $89 less the amount you paid
+    PC-SIG for these disks.
+    
+    File Descriptions:
+    The First Disk Contains:
+    CONFIG   SYS  Configuration file
+    ???????? MEM  Memory data files used by program
+    MLETTER  MLE  Letter format
+    MLEADS   HIS  Followup leads file
+    SAMPLE   ???  Sample leads files
+    QTS????  SCR  Help details file - 1 thru 5
+    MREPORT  CDF  Leads report
+    MQUAL?   CDF  Leads file - 1-8 & 44
+    SELL     EXE  Main Program
+    ???????? TIK  Tickler file LEADS    DBF  Leads file
+    SELL     OV?  Overlay 1 & 2
+    QTS      COM  Word processor
+    MLEADS   DBF  Master lead data file
+    README   1ST  Notes on program
+    
+    The Second Disk Contains:
+    ???      NDX  dBase index files
+    ???      DBF  dBase database files
+    INSTALL  TXT  Start-up instructions
+    ???      HIS  dBase history files
+    ???      MEM  dBase memory variable files
+    LEADS    HIS  Leads follow-up file
+    LEADS    NDX  Leads instruction file
+    LEADS    HDX  Leads follow-up instructions
+    QUAL?    NDX  Qualified leads index - 1 thru 7 QTMEMFIL MEM  Memo file
+    QUAL?    CDF  Qualified leads - 1 thru 7
+    TICKLERS TIK  Tickler file
+    TICKLERS NDX  Tickler instructions
+    BEGINNIN TXT  Starting Instructions
+    DEFAULTS MEM  Defaults file
+    ADDEFS   MEM  Additional definitions
+    PRINTDEF MEM  Definitions file
+    THANKS   TXT  Draft Letter - 7
+    SURVEY   TXT  Draft Letter - 6
+    SE-LTR1  TXT  Draft Letter - 5
+    PUR-LTR1 TXT  Draft Letter - 4
+    PICS-?   TXT  Draft Letter - 1 thru 3
+    LESSON?  TXT  Lessons 1 thru 8
+
+### Directory of PC-SIG Library Disk 0502
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,55 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #233"
+      B: "PC-SIG Library Disk 0233"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #233
+## Information about "NEWBASE II"
+
+    NEWBASE is a menu-driven database manager for mailing lists, name and
+    address lists, sales reports, expense account maintenance, and budget
+    preparation and maintenance. The program is a data management system
+    that makes it easy for you to organize and manage information. Thus,
+    you can later order, change, or retrieve, and then print the data to
+    suit a variety of circumstances. The database limits are: 36 fields per
+    record; 32,000 records per data file, and a field size of 750
+    characters.
+    
+    NEWBASE also interfaces with many of the most popular wordprocessing
+    systems.  NewBase is very easy to use.
+    
+    Features:
+    
+    ~ Multi-key sorting
+    
+    ~ Searching for less than, greater than, equal to, included, not, etc.
+    
+    ~ Global update/edit multiple records with a single entry
+    
+    ~ Statistical summaries
+    
+    ~ B-tree indexing
+    
+    ~ Lookup tables
+    
+    ~ Macro keys
+    
+    ~ Single-keystroke entry of repetitive data
+    
+    ~ Protected fields
+    
+    ~ Date fields
+    
+    ~ Invisible fields
+    
+    ~ Numeric accuracy to 16 digits
+    
+    ~ Report and form library
+
+### Directory of PC-SIG Library Disk 0233
 
      Volume in drive A has no label
      Directory of A:\

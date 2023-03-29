@@ -9,13 +9,32 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #297"
+      B: "PC-SIG Library Disk 0297"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #297
+## Information about "EAMON 2 OF 4 (ALOS 296, 1038, 1039)"
+
+    Become a character in a land of adventure and do great and marvelous
+    deeds!  In this fantasy role-playing game, your first goal is to stay
+    alive while getting rich during your questing.
+    
+    When you enter these different universes, you are no longer John (or
+    Jane) Smith -- a quiet, mild-mannered computer hobbyist.  Instead, you
+    are, ta-dah!, in the center of a tale of adventure -- fighting orcs,
+    trolls, dragons, knights, and mages with an arsenal of weapons and
+    terrible magic.
+    
+    An entire series of adventures await you, starting with The Main Hall
+    and including Ice Cave -- sagas with all the appropriate monsters and
+    traps.  The challenges are difficult, but not impossible to survive,
+    and will keep you on the edge of your chair.  The monsters are very
+    mean and give up their lives to stop you from getting any further in
+    your quest!
+
+### Directory of PC-SIG Library Disk 0297
 
      Volume in drive A has no label
      Directory of A:\

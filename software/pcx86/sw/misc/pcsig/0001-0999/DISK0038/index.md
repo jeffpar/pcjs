@@ -9,13 +9,56 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #38"
+      B: "PC-SIG Library Disk 0038"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #38
+## Information about "DOS & GRAPHICS UTILITIES"
+
+    With DRAW, you can draw, and then some!  Easy to understand and use
+    graphics program, plus DOS utilities you've been wishing for.  Set
+    your display to color/monochrome from DOS, examine and modify disk
+    directory, list files to screen, a page at a time, or even remove
+    control characters from down-loaded files!
+    
+    System Requirements: Some programs require color graphics.
+    
+    How to Start: Load DOS and type any .EXE file.  To run BASIC programs
+    consult the directions in GETTING STARTED for your configuration.
+    Consult the .DOC files for additional program information.
+    
+    Suggested Registration:  Contact author.
+    
+    File Descriptions:
+    
+    COLOR    EXE  Sets display to color from DOS
+    MONO     EXE  Sets display to monochrome from DOS
+    SCROLLK  COM  Compiled version of SCROLLK.BAS
+    SPOOLER2 COM  Printer spooler for color display card
+    SPOOLER1 COM  Printer spooler for monochrome display card
+    SPOOLBAS BAS  Allows scrolling to continue from BASIC to DOS
+    WS-DOS   BAS  Converts WordStar files to DOS files
+    LQ       BAS  Sets up Letter Quality printer for use under WORDSTAR
+    DMLQ     DOC  Documentation for DM and LQ
+    DM       BAS  Sets up Dot Matrix printer under WORDSTAR
+    FILTER   DOC  Documentation for FILTER program
+    FILTER   BAS  Removes control characters from downloaded files
+    DISKRTN  DOC  Documentation for DISKRTN
+    DISKRTN  EXE  Examine and modify disk directory
+    SPOOLER  DOC  Documentation file for spooler programs
+    LIST     EXE  Lists files to screen, one page at a time
+    -------- ---  DRAW Programs
+    DRAW     DOC  Documentation file for MDRAW and HDRAW
+    DRAW     CMT  Comment lines for HDRAW and MDRAW programs
+    MDRAW    BAS  Medium resolution DRAW program
+    MODROW   TXT  Additional information on graphics programs
+    HELP?    PIK  Help picture for DRAW programs
+    HDRAW    BAS  High resolution DRAW program
+    HELP?    PIC  Help picture for DRAW programs
+
+### Directory of PC-SIG Library Disk 0038
 
      Volume in drive A has no label
      Directory of A:\

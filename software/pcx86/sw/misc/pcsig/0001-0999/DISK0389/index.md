@@ -9,13 +9,35 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #389"
+      B: "PC-SIG Library Disk 0389"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #389
+## Information about "HOME BUDGET WORK SHEETS"
+
+    Pam's Home Budget Template for LOTUS 123 is well designed for managing
+    personal and household finances.  This disk contains 12 monthly files,
+    complete with expense management for tax purposes.  Because the files
+    are standalone files, only 256k RAM is necessary.  Each file is macro-
+    drive and easy to use.  Because of the size of the files, the disk is
+    quite full.  Therefore, it is recommended that you copy half the files
+    to a work disk for more efficient disk management.  The worksheets are
+    well documented, but assumes a limited understanding of simple single
+    entry accounting.
+    
+    System Requirements:  Two disk drives, LOTUS 1-2-3 v1A
+    
+    How to Start:  Access through LOTUS 1-2-3
+    
+    File Descriptions:
+    
+    AUTOEXP  WKS  Keep track of auto expenses, gas milage, etc.
+    ????EXP  WKS  Expense template for each month (12 files)
+    DOCUMENT WKS  Documentation template.
+
+### Directory of PC-SIG Library Disk 0389
 
      Volume in drive A has no label
      Directory of A:\

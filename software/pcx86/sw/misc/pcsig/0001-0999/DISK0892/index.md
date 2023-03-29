@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #892"
+      B: "PC-SIG Library Disk 0892"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #892
+## Information about "COLLEGE FOOTBALL POOL"
+
+    COLLEGE FOOTBALL POOL is designed to make football pool games easier to
+    play/follow/bet each week.
+    
+    A demonstration schedule is included.  Pick the week you want, and all
+    the games for that week will be displayed.  Choose any fourteen games
+    for the selection sheet.  The object of the game is for each player to
+    try to pick the most winners of the 14 weekly games.  Selection
+    sheets can then be printed showing all the players' choices.
+    
+    After the games are completed, enter the winning teams and print a final
+    report showing the number of games each player picked correctly.  In the
+    event of ties, the player who was the closest in guessing the total
+    number of points scored in the last game on the selection sheet is
+    declared the winner.  Up to 300 players can be handled by this program.
+
+### Directory of PC-SIG Library Disk 0892
 
      Volume in drive A has no label
      Directory of A:\

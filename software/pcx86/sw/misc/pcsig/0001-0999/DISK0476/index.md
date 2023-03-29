@@ -9,13 +9,37 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #476"
+      B: "PC-SIG Library Disk 0476"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #476
+## Information about "PATRICK'S BEST GAMES"
+
+    These games were gathered from previous PC-SIG disks to give a good
+    representation of high-quality games for the new user.  3-DEMON is a
+    great game that puts you in the body of Mr. PAC-MAN.  Instead of seeing
+    an overhead view of the maze while you dodge your pursuers, you will be
+    inside the maze running into walls and dodging demons.  SPACEVAD is a
+    super copy of the arcade game Space Invaders.  BUGS is a good version of
+    the classic arcade game of Centipedes.  All these games run best on an 8
+    or lower MHz system.  But, if you're brave enough, run them on an AT.
+    File Descriptions:
+    
+    README**      Documentation (4 files).
+    GO       BAT  File that prints help messages
+    CASTLE   EXE  An adventure game with clever animation and graphics.
+    BOOGERS! BAS  A maze game that requires destruction of blockades.
+    POKER    EXE  The school of implemented casino probability theory.
+    PACKGAL  COM  Multiscreen version of MS. PACMAN with a few twists.
+    3-DEMON  HI1  Records the high score of 3-DEMON game for posterity.
+    SPACEVAD EXE  Excellent version of SPACE INVADERS, great graphics.
+    3-DEMON  EXE  3-D view of PACMAN-like game from inside the maze.
+    BUGS     EXE  A good version of the classic arcade game CENTIPEDE.
+    CASTLE   RAN  File used by CASTLE.EXE.
+
+### Directory of PC-SIG Library Disk 0476
 
      Volume in drive A has no label
      Directory of A:\

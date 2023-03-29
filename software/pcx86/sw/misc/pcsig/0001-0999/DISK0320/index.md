@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #320"
+      B: "PC-SIG Library Disk 0320"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #320
+## Information about "PC-FASTYPE"
+
+    Don't let your lack of speed at the keyboard make computing a drag for
+    you.  Try this graphics-oriented, menu-driven touch-typing instructor
+    for typists of all skill levels.  Improve your keyboard typing speed and
+    accuracy.
+    
+    Keyboard displays of both the AT-Style keyboard and the 101-key Enhanced
+    Keyboard are provided.  Also available are keyboard images for the Old-
+    Style IBM PC the Tandy-1000 and the BTC-5339.  Use the self-paced
+    drills and exercises to refresh old skills and learn new ones. Customize
+    your drills by selecting the keys YOU want to learn. Import your own
+    text files for additional typing exercises.  After each test, check out
+    your score on words per minute, number of errors made and other data
+    concerning your typing performance.
+
+### Directory of PC-SIG Library Disk 0320
 
      Volume in drive A has no label
      Directory of A:\

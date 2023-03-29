@@ -9,13 +9,54 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #70"
+      B: "PC-SIG Library Disk 0070"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #70
+## Information about "DISKCAT"
+
+    DISKCAT and DC-SORT: These two programs combine for a disk cataloging
+    and sorting/pring system for keeping track of your disk files.  It
+    works with DOS 1.1 format disks only.
+    
+    PAGESKIP : This utility simply skips to the top of form from DOS 2.0,
+    so that you do not have to push buttons on your printer.  Just key
+    "PAGE" and hit enter to run, if the utility is on a diskette in your
+    default drive.  NOTE: it requires an EPSON MX or FX compatible.
+    
+    SMALLPRT and USMALLPRT: These install (and uninstall) a utility that
+    skips you to the top of form then sets the printer to compressed
+    double-strike mode.  While slow, it saves paper and makes printouts
+    more readable and xerox-able, when printing documentation like this.
+    
+    How to Start: Consult the .TXT and .DOC files for directions.
+    The BASIC programs require GWBASIC; the .EXE and .COM programs
+    can be run directly from DOS.
+    
+    File Descriptions:
+    
+    PAGE     BAT  Sends formfeed to printer
+    PAGESKIP DOC  Documentation for PAGESKIP.BAS
+    PAGES    KIP  Formfeed character
+    UNSMALLP BAT  Batch file to reset Epson in normal print mode
+    SMALLPRT DOC  Notes for using SMALLPRT.BAT
+    SMALLPRT BAT  Batch file to put Epson in condensed, double-strike mode
+    SMALLPR  INT  Commands to put Epson in condensed, double-strike mode
+    UNSMALLP DOC  Notes for using UNSMALLP.BAT
+    UNSMALLP RNT  Commands to put Epson printer back to normal mode
+    DISKCAT  BAS  Disk cataloging program
+    *        EXE  Compiled version of DISKCAT BASIC files (2 files
+    DISKCAT  DOC  Documentation for DISKCAT.BAS
+    VPRINT   COM  Redirects printer output to file
+    DC-SORT  BAS  Sort program for DISKCAT
+    VPRINT   ASM  Assembly language source for VPRINT.COM
+    DIRMANIP EXE  Directory manipulation program
+    VPRINT   DOC  Documentation for VPRINT.COM
+    VIRTUAL  PRN  Printer utility
+
+### Directory of PC-SIG Library Disk 0070
 
      Volume in drive A has no label
      Directory of A:\

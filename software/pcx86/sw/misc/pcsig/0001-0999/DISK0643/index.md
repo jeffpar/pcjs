@@ -9,13 +9,27 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #643"
+      B: "PC-SIG Library Disk 0643"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #643
+## Information about "TASM"
+
+    TASM is an assembler that runs on an IBM-PC/XT/AT or compatible and
+    creates codes for any of the following processors: 8048, 8051, 8085,
+    Z80, 6805, 6502, TMS7000, TMS32010, or 6801/6803.
+    
+    Features of TASM include: 17 operators for expression parsing, support
+    of a subset of C preprocessor commands, macros, multiple statements per
+    line, support of three object file formats, only absolute code
+    generation, uniform syntax across versions, and support for PROM
+    programming.  The source code is available.  Customize TASM to produce
+    codes for other processors by creating a proper instruction definition
+    table for the target chip.
+
+### Directory of PC-SIG Library Disk 0643
 
      Volume in drive A has no label
      Directory of A:\

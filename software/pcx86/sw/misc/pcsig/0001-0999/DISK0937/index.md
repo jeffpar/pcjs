@@ -9,13 +9,32 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #937"
+      B: "PC-SIG Library Disk 0937"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #937
+## Information about "REORDERS AND WEDPRICE"
+
+    A quote generation and reorder system for a professional photography
+    business.
+    
+    REORDERS stores the number of each negative, a description, and the
+    location, size, and quantity of the original.  Call up a record by its
+    number and enter a reorder by size and quantity.  You can also print a
+    listing of all originals and the amount of reorders.  WEDPRICE gives
+    three different versions of quotations for wedding pictures.
+    File Descriptions:
+    
+    README   1ST  How to view documentation.
+    REGISTER DOC  Registration form.
+    ST       COM  Program to view documentation.
+    REORDERS BAS  REORDERS program.
+    REORDER  SAM  Data file.
+    WEDPRICE BAS  WEDPRICE program.
+
+### Directory of PC-SIG Library Disk 0937
 
      Volume in drive A has no label
      Directory of A:\

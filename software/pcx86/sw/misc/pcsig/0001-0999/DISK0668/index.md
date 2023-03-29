@@ -9,13 +9,35 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #668"
+      B: "PC-SIG Library Disk 0668"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #668
+## Information about "WORLD STATISTICS"
+
+    WORLD is a simple, menu-driven database of statistical and demographic
+    information about the nations.  The information was extracted from
+    "The Encyclopedia Britanica Year Book for 1986" and "Countries of the
+    World and Their Leaders Yearbook 1986."
+    
+    Through the main menu you can select information about the names,
+    capitals, geography, population, per capita income, sovereignity of
+    more than 100 countries.  Probably the most interesting menu is the
+    Vital Statistics which also gives the death and birth rates, infant
+    mortality and life expectancy rates for male and female citizens.
+    
+    System Requirements: 64K, one disk drive and monochrome display
+    
+    How to Start: Enter WORLD and press <ENTER>.
+    
+    File Descriptions:
+    
+    WORLD    EXE  The program
+    DATABASE      The Data for the 1986 statistics
+
+### Directory of PC-SIG Library Disk 0668
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,24 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #598"
+      B: "PC-SIG Library Disk 0598"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #598
+## Information about "PROFESSIONAL MASTER KEY"
+
+    MASTER KEY is a powerful disk and file manipulation utility, comparable
+    to programs like Norton Utilities.
+    
+    Edit any part of any disk or file using a handy windowed hex and ASCII
+    screen dump. Editing can be from the ASCII text or the hex dump. Menus
+    and organization help you learn the package quickly. Many other
+    utilities are included, such as duplicate file search, file renaming
+    and erasing abilities, and unerasing of files mistakenly erased.
+
+### Directory of PC-SIG Library Disk 0598
 
      Volume in drive A has no label
      Directory of A:\

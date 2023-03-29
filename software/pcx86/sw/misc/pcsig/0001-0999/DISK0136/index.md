@@ -9,13 +9,41 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #136"
+      B: "PC-SIG Library Disk 0136"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #136
+## Information about "PC-PICTURE GRAPHICS"
+
+    This program allows you to create graphic images on your color monitor.
+    A number of ready-made images are included with the program. You can
+    digitize to a plotter, create your own "standard" graph files and even
+    generate your own slide show. You create new images by drawing them on
+    the screen, the program does not allow you to import or do a screen
+    capture.
+    
+    If you are in n a situation where you need to make presentations, but
+    don't have the big bucks to shell out, then PC-Picture Graphics may be
+    just what you need.
+    
+    System Requirements:  Graphics board, color monitor.
+    
+    How to Start:  Load DOS and type PCPG to enter the main program.
+    
+    Suggested Registration:  $20.00.
+    
+    File Descriptions:
+    
+    PCPG     FT?  Part of PC-Picture
+    PCPG     EXE  Great graphics drawing package(Requires graphics board)
+    PCPG     PIC  Part of PC-Picture
+    PCPG     HLP  PC-Picture help file
+    PCPG     SYM  Part of PC-Picture
+    DEMO*    GFL  Demo files for PC-Picture containing graphic immages
+
+### Directory of PC-SIG Library Disk 0136
 
      Volume in drive A has no label
      Directory of A:\

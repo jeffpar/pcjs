@@ -9,13 +9,32 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #776"
+      B: "PC-SIG Library Disk 0776"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #776
+## Information about "PSEUDOSAM CROSS ASSEMBLER 18 AND 65"
+
+    PSEUDOSAM 18 and 65 are machine language cross-assembler programs for
+    the RCA 1802, 4, 5, 6, and 6502 microprocessors.  These programs let
+    you construct 1802 and 6502 code on your IBM PC, to be transferred to
+    an 1802 or 6502-based system for use.
+    
+    The PSEUDOSAM (Pseudo brand Symbolic AsseMbler) assemblers conform to
+    common syntax based on the UNIX system V assembler syntax.  The opcode
+    and addressing syntax is compatible with the manufacturer's, but label,
+    directive, and expression operator syntax will differ.
+    
+    The author of PSEUDOSAM chose this syntax because of UNIX's popularity,
+    and to avoid the problem of maintaining compatibility with the many OEM
+    assemblers.  The documentation is well organized and easy to understand,
+    although no attempt is made to teach 1802 or 6502 programming.  You
+    should have a good understanding of machine language programming and
+    also be familiar with basic DOS functions.
+
+### Directory of PC-SIG Library Disk 0776
 
      Volume in drive A has no label
      Directory of A:\

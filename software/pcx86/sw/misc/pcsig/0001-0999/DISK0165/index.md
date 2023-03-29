@@ -9,13 +9,38 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #165"
+      B: "PC-SIG Library Disk 0165"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #165
+## Information about "GENERAL LEDGER"
+
+    Personal General Ledger is a template software package designed to
+    work with the Lotus 1-2-3 spreadsheet program.  This program handles
+    cash receipts, disbursements, salary, and general journals.  It also
+    offers a full general ledger and chart of accounts.
+    
+    System Requirements: Lotus 1-2-3 version 1 or 1a.
+    
+    How to Start:  Check out the LEDGER.DOC and CHART.DOC files for
+    directions. To run, enter Lotus 1-2-3 and type: AUTO123 <ENTER>.
+    
+    Suggested Registration: $50.00
+    
+    File Descriptions:
+    
+    RECTJRNL WKS  Cash receipt journal
+    SLRYJRNL WKS  Salary journal
+    DISBJRNL WKS  Cash disbursements journal
+    LEDGER   DOC  Documentation for Person General Ledger
+    GENLEDGR WKS  Full general ledger
+    AUTO123  WKS  Sets up automatic menu when first accessing 1-2-3
+    GENLJRNL WKS  General journal - everything else
+    CHART    DOC  Full chart of accounts
+
+### Directory of PC-SIG Library Disk 0165
 
      Volume in drive A has no label
      Directory of A:\

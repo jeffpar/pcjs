@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #694"
+      B: "PC-SIG Library Disk 0694"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #694
+## Information about "SLEUTH"
+
+    This is an interactive text game you can populate with your friends,
+    relatives and neighbors.  As you begin a game of SLEUTH, a murder has
+    just been committed!
+    
+    You must explore the house, question the houseguests for alibis and
+    locate both the weapon and the scene of the murder. The challenge is to
+    solve the crime, gather all of the suspects together and accuse the
+    guilty party -- before the killer becomes suspicious and eliminates
+    YOU!
+    
+    This fascinating crime-solving game works on a monochrome monitor, and
+    needs only the keyboard for input.
+    
+    And the killer is . . .
+
+### Directory of PC-SIG Library Disk 0694
 
      Volume in drive A has no label
      Directory of A:\

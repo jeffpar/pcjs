@@ -9,13 +9,36 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #721"
+      B: "PC-SIG Library Disk 0721"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #721
+## Information about "LORDS OF THE UNDERWORLD"
+
+    Here is the second prize winner in PC-SIG's ``Write an Adventure Module'
+    contest.
+    
+    You must fight your way through ``the underworld,'' taking on many foes
+    in order  to realize the object of your quest--a powerful sword.  The
+    adventure contained on this disk must be used in conjunction with the
+    main adventure program on disk #297 in our library.
+    
+    System Requirements:  (see disk #297).
+    
+    How to Start:  (see disk #297).
+    
+    File Descriptions:
+    
+    DUNGEON  BAS  Main dungeon module.
+    EAMON    ???  Data file (6 files).
+    ???????? PIC  Picture data file (2 files).
+    RESUME   BAS  Subprogram.
+    ROOM     NAM  Data file.
+    UNDERLND DOC  Documentation file.
+
+### Directory of PC-SIG Library Disk 0721
 
      Volume in drive A has no label
      Directory of A:\

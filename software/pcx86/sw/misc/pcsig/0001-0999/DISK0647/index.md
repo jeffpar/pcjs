@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #647"
+      B: "PC-SIG Library Disk 0647"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #647
+## Information about "AMY'S FIRST PRIMER (PCJR VERSION)"
+
+    This is a collection of a half-dozen games designed to teach basic
+    skills to children, ages 3-8. They stress positive reinforcement and
+    promote a ``learning is fun'' attitude.
+    
+    The collection includes a sing-along alphabet, a letter-matching game,
+    an alphabet tutorial, a numbers-counting game, a maze game, and a
+    pattern-matching game.
+    
+    Repeated suggestions that the parents use the games with their child add
+    a nice reinforcement toward family-based learning.  This version is
+    especially designed for the PCjr.
+    
+    bSPECIAL REQUIREMENTS:
+    PCjr with BASICA Cartridge.
+
+### Directory of PC-SIG Library Disk 0647
 
      Volume in drive A has no label
      Directory of A:\

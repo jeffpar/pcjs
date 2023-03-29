@@ -9,13 +9,22 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #419"
+      B: "PC-SIG Library Disk 0419"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #419
+## Information about "QPARSER PLUS"
+
+    Here is the public domain version of QPARSER, a tool for writing
+    translators, compilers, assemblers, and other language parsing
+    programs. This disk has the full QPARSER software but it is limited
+    with a top limit of 25 production/parsing rules.  QPARSER is an
+    excellent way to experiment with language design and compiler
+    development.  Very useful for computer science students.
+
+### Directory of PC-SIG Library Disk 0419
 
      Volume in drive A has no label
      Directory of A:\

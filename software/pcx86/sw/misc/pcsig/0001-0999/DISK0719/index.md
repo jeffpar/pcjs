@@ -9,13 +9,41 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #719"
+      B: "PC-SIG Library Disk 0719"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #719
+## Information about "LETTERWRITER"
+
+    LETTERWRITER is a different kind of address manager -- its specialty is
+    mailmerge.  You can keep address files full of different ``kinds'' of
+    people; i.e., business acquaintances, friends, or relatives.  You can
+    sort these different files by first name, last name, or zip code, just
+    as you would a more traditional database address manager.
+    
+    But with LETTERWRITER you can also merge the database information into
+    an ASCII document, such as a letter that has been created in a
+    wordprocessor.  In this way you can imbed names, phrases, or paragraphs
+    into the body of a letter.  And you can create form letters by simply
+    typing out one letter you want to send to any number of different
+    addresses and specifying those addresses.  LETTERWRITER automatically
+    prints a letter with each address.  It can also print labels, envelopes,
+    address books, and lots more.
+    File Descriptions:
+    
+    LW       COM  LETTERWRITER (executable program).
+    CONFIG   COM  DOS system configuration file.
+    READ     ME   Short description of LETTERWRITER (1 pg).
+    MANUAL        Documentation for LETTERWRITER (15 pp).
+    SUPPORT       Registration form for LETTERWRITER.
+    SAMPLE   ADR  Sample address for LETTERWRITER.
+    SAMPLE        Sample file.
+    CHECK    COM  Checks your copy of LETTERWRITER.
+    CHECK    TXT  Description of check.
+
+### Directory of PC-SIG Library Disk 0719
 
      Volume in drive A has no label
      Directory of A:\

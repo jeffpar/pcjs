@@ -9,13 +9,43 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #943"
+      B: "PC-SIG Library Disk 0943"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #943
+## Information about "DOCTOR DATA LABEL"
+
+    DOCTOR DATA LABEL is a professional mailing list manager designed for
+    adding, editing, organizing and printing mailing lists, including
+    international mailings.  Print on any size label (up to nine labels
+    across), rolodex cards, postcards, and envelopes.  Print multiple
+    copies
+    of a single label.
+    
+    DOCTOR DATA LABEL has an optional carrier route presort number for all
+    its data entries for bulk mailings.  You can index, filter, or sort
+    using all fields, as well as rename, copy, delete, join, divide and
+    backup the data files.  Also included is a 47,000+ city, state and
+    zipcode database.  It automatically inserts cities, states and area
+    codes upon the zip code you enter.  If there is more than one city for
+    the zip code, selection is allowed.
+    
+    Other features include:
+    
+    ~ Files created with DOCTOR DATA LABEL are compatible with dBASE III.
+    
+    ~ Allows up to one billion records per database file with unlimited
+    files.
+    
+    ~ Up to five automatically updated indexes per database.
+    
+    ~ A notes field to store up to 64K of miscellaneous information.
+    
+    ~ Allows international addresses.
+
+### Directory of PC-SIG Library Disk 0943
 
      Volume in drive A has no label
      Directory of A:\

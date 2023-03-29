@@ -9,13 +9,43 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #424"
+      B: "PC-SIG Library Disk 0424"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #424
+## Information about "PASCAL COMPILER"
+
+    This is a p-code compiler for an extended subset of Pascal.  It is
+    written in Turbo Pascal for the IBM PC.  This compiler will be of
+    interest especially to two groups of users: (1) students learning the
+    Pascal language, before making a commitment to a commercial compiler;
+    (2) compiler tinkerers who desire source code for modification or
+    extension.  The compiler adheres closely to the standard Pascal of
+    Jensen and Wirth, but does not implement file I/O.
+    
+    System Requirements:  Pascal Language.
+    
+    How to Start:  Type FACILIS (press enter).
+    
+    Suggested Registration:  None.
+    
+    File Descriptions:
+    
+    FACILIS  COM  Pascal compiler.
+    FACILIS  000  A required overlay file.
+    FACILIS  UM   Users Manual for this Pascal compiler.
+    FACILIS  DOC  A 1-page description of the diskette contents.
+    ZELLER   PAS  Short demo program.
+    FACILIS  IM   Implementation Manual for this Pascal compiler.
+    TEST     PAS  Overall confidence test for the compiler.
+    STEST    PAS  Exercises the string facility of the compiler.
+    FACILIS  PAS  Main program in Turbo to compute day of the week.
+    BLOCK    PAS  A required include file. Contains most of compiler.
+    INTERPRT PAS  A required include file. Contains run-time interpreter.
+
+### Directory of PC-SIG Library Disk 0424
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,62 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #14"
+      B: "PC-SIG Library Disk 0014"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #14
+## Information about "BARGRAPH"
+
+    BARGRAPH is a graphic display program that accepts your input data and
+    creates custom bar graphs.  These graphs that can be used to track
+    financial data, grades or profits.  BARGRAPH includes an option to
+    graph against the mean average.  You can specify whether the graph is
+    to be presented in percentages or in decimal figures.
+    
+    How to Start:  To run BASIC programs consult the directions for GETTING
+    STARTED for your configuration.  To use the VISICALC files consult your
+    VISICALC manual.  Consult PDSOFTWR.DOC for addition information.
+    
+    File Descriptions:
+    
+    PRINTER  BAS  Patch for DOS-disk COMM.BAS to toggle printer
+    BASMENU  BAS  Automatic menu for BASIC programs
+    BARGRAPH BAS  Well liked program makes bargraphs on mono display
+    METEOR   BAS  Fast-moving game using cursor movement keys
+    DWNLOAD  BAS  Patch for DOS-disk COMM.BAS to download files
+    YR20     BAR  Part of BARGRAPH
+    BACKLOG  BAR  Sample BARGRAPH input
+    YR17     BAR  Part of BARGRAPH
+    FCST     BAR  Part of BARGRAPH
+    COREFIX  BAS  BASIC program to inspect & patch storage
+    YAHTZEE  BAS  Yahtzee game rolls the dice & keeps score
+    TICKTOCK BAS  Sound effects
+    PLANACT  BAR  Part of BARGRAPH
+    FINANCE  BAS  Large package of financial programs
+    S        BAR  Part of BARGRAPH
+    QTR2G    BAR  Part of BARGRAPH
+    SPSHIPS  BAS  Sound effects
+    SSSSSS   BAR  Part of BARGRAPH
+    SSSSS    BAR  Part of BARGRAPH
+    SSS      BAR  Part of BARGRAPH
+    BIRDS    BAS  Sound effects
+    SS       BAR  Part of BARGRAPH
+    BLKLETER BAS  Generate block letters on the printer
+    SHELLSRT BAS  Shell-metzger sort written in BASIC
+    BKSPACE  BAS  Patch for DOS-disk COMM.BAS to handle backspaces
+    ASYN-PGM BAS  Asynchronous communication program
+    SORT     BAS  Another sort written in BASIC
+    PDSOFTWR DOC  Package of public domain software
+    GRAPHS   VC   VISICALC program - plotting points
+    HOMEBDGT VC   VISICALC program - home budget program
+    BRKEVEN  VC   VISICALC program - break-even points
+    COSINES  VC   VISICALC program - calculate table of cosines
+    PRTSETUP VC   VISICALC printer setup hints
+    FEDTAX   VC   VISICALC program - federal income tax
+
+### Directory of PC-SIG Library Disk 0014
 
      Volume in drive A has no label
      Directory of A:\

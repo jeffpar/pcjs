@@ -9,13 +9,64 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #172"
+      B: "PC-SIG Library Disk 0172"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #172
+## Information about "STEVE'S UTILITIES"
+
+    This is a very nice collection of utilities that would make a
+    worthwhile addition to almost anyone's system.  Included are routines
+    to: let you change the beep tone of your PC to suit yourself, clear
+    your display screen, several different programs to let you determine
+    status of your machines ports, rework your keyboard arrangement, and
+    much more.  The source code is included along with most of these
+    programs.  Those of you so inclined may use this to make changes, or
+    simply examine it to find out how other programmers do things.  This
+    is an excellent way to enhance your machines capabilities, as well as
+    your own.
+    
+    System Requirements:  Some programs require color, BASIC
+    
+    How to Start: To run an EXE or COM program simply type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    consult your DIS maunala.  For instructions on ASM or PAS listings,
+    refer to your Assembler or Pascal manual.  To read DOC files simply
+    enter TYPE filename.ext and press <ENTER>.
+    
+    File Descriptions:
+    
+    BEEP     ASM  Source code for BEEP.EXE
+    BEEP     DOC  Documentation for BEEP program
+    BEEP     COM  Program to produce "tone" on speaker
+    DSKTEST  BAS  Examines the status byte from the floppy controller
+    CLS      DOC  Documentation for CLS.ASM
+    CLS      ASM  Source code for routine to clear screen
+    BEEP     EXE  Program to produce "tone" on speaker
+    EDIT-MOD PAS  Source code for part of editor
+    DSKTEST  DOC  Documentation for DSKTEST.BAS
+    EDT-MAIN PAS  Source code for main editor module
+    EDITOR   DOC  Documentation for editor written in Pascal
+    INPORT   DOC  Documentation for INPORT.ASM
+    INPORT   ASM  Routine to interrogate requested port
+    PAS-BEEP DOC  How to create a beep in Pascal
+    MSBEDIT  EXE  Compiled version of editor written in Pascal
+    LOCATE   DOC  Documentation for LOCATE.ASM
+    LOCATE   ASM  Routine to locate curser position
+    PORTS    DOC  Documentation for PORTS.EXE
+    PORTS    EXE  Program to examine I/O ports
+    PORTS    PAS  Source code for PORTS.EXE
+    PRNSTATS DOC  Documentation for PRNSTATS.BAS
+    PRNSTATS BAS  Program to examine status of lineprinter port
+    RAMDISK  COM  Virtual disk driver from DOS 2.0 manual
+    SETKEY   DOC  Documentation for SETKEY.BAS
+    SETKEY   BAS  Keyboard reassignment program  (Requires DOS 2.0 up)
+    RAMDISK  DOC  Documentation for RAMDISK.COM
+    DIRECT   BAT  Prints out directory listing
+
+### Directory of PC-SIG Library Disk 0172
 
      Volume in drive A has no label
      Directory of A:\

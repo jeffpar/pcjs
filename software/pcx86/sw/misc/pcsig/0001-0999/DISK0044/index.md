@@ -9,13 +9,51 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #44"
+      B: "PC-SIG Library Disk 0044"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #44
+## Information about "GAME SERIES NO 7"
+
+    A collection of vastly different programs, which includes both graphic
+    and non-graphic games, text adventures, and printer art.  We also have a
+    game of chance for the gambler in you, a biorythm generator, and a
+    banner-printing program.
+    
+    Special Requirements:  BASIC and some programs require color graphics.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  None.
+    
+    File Descriptions:
+    
+    1500     BAS  BASIC program
+    21       BAS  A game similar to Blackjack
+    BALL     BAS  Shoot the ball at the target
+    BANNER   BAS  Produces large letters on printer
+    BIORYTHM BAS  Print your biorythms
+    BLKFRI3  BAS  Black Friday on the stockmarket
+    CHASE    BAS  Maze game
+    DECISION BAS  Executive decision maker
+    ENTEP    BAS  Produces Starship Enterprise on printer
+    HANOI    BAS  Towers of Hanoi
+    HANOI    DOC  Documentation for HANOI.BAS
+    HOBBIT   BAS  Adventure text game
+    HORSE    BAS  BASIC horse program
+    KING     BAS  Manage your kingdom
+    LINES    BAS  Draws pattern of lines on screen
+    MSQUARE  BAS  Builds magic squares
+    ROCKET   BAS  Rocket launch
+    ROULETTE BAS  Roulette game
+    SLOT     BAS  Slotmachine
+    STARTREK BAS  45K version of popular game
+    TREKINFO DOC  Documentation for STARTREK.BAS above
+    USALIST  BAS  Draws map of USA on color display
+
+### Directory of PC-SIG Library Disk 0044
 
      Volume in drive A has no label
      Directory of A:\

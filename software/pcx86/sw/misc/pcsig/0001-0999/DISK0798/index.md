@@ -9,13 +9,89 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #798"
+      B: "PC-SIG Library Disk 0798"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #798
+## Information about "PRO-MENU"
+
+    If you're one of those people who wishes there was some easier way of
+    telling your computer how to do its job beside typing in DOS commands,
+    PRO-MENU is for you.
+    
+    PRO-MENU is a complete menuing system that goes beyond choosing your
+    application from a single main menu.  PRO-MENU lets you to program
+    prompts to automatically come up after a menu selection.  For example,
+    selecting the option "Print a File" may be followed by the prompt
+    "Which File?"  You can also add comment lines to separate groups of
+    commands from a menu.  In addition to the single line description on
+    the actual menu you can add informational text files that appear once a
+    menu selection is made.
+    
+    PRO-MENU also lets you execute DOS commands from plain English text on
+    the menu screen.  For example, by selecting "Prepare disk in drive B"
+    from the menu screen, PRO-MENU can execute the DOS command "FORMAT
+    B:/S."  This is a particularly nice feature of the program.
+    
+    With a hard-disk system, PRO-MENU can be arranged into separate
+    submenus, each customized for a different application or for different
+    users.  PRO-MENU supports any number of submenus and can handle as many
+    as you wish.
+    File Descriptions:
+    
+    PMENU    DOC  Documentation for PRO-MENU.
+    PMENU    EXE  Menu manager program.
+    DEMO     BAT  Calls a demonstration menu program.
+    DEMO     MEN  The demo menu data file.
+    DEMO     HLP  An example HELP file for DEMO.MEN.
+    PLIC     EXE  Prowess, Inc. license agreement.
+    MENGEN   EXE  A program to help you create a menu data file.
+    MGHLP    EXE  Help program to help learn PRO-MENU syntax.
+    BRUN40   EXE  A run time file associated with the programs MENGEN.EXE
+    MG-C     EXE  Calls the menu generating program MENGEN (Color systems).
+    MG-M     EXE  Calls the menu generating program MENGEN (Mono Systems).
+    M        MEN  Data file.
+    
+    If you're one of those people who wishes there was some easier way of
+    telling your computer how to do its job beside typing in DOS commands,
+    PRO-MENU is for you.
+    
+    PRO-MENU is a complete menuing system that goes beyond choosing your
+    application from a single main menu.  PRO-MENU lets you to program
+    prompts to automatically come up after a menu selection.  For example,
+    selecting the option "print a file" may be followed by the prompt
+    "which file?"  You can also add comment lines to separate groups of
+    commands from a menu.  In addition to the single line description on
+    the actual menu you can add informational text files that appear once a
+    menu selection is made.
+    
+    PRO-MENU also lets you execute DOS commands from plain English text on
+    the menu screen.  For example, by selecting "Prepare disk in drive B:"
+    from the menu screen, PRO-MENU can execute the DOS command "FORMAT
+    B:/S."  This is a particularly nice feature of the program.
+    
+    With a hard-disk system, PRO-MENU can be arranged into separate
+    submenus, each customized for a different application or for different
+    users.  PRO-MENU supports any number of submenus and can handle as many
+    as you wish.
+    
+    File Descriptions:
+    PMENU    DOC  Documentation for PRO-MENU.
+    PMENU    EXE  Menu manager program.
+    DEMO     BAT  Calls a demonstration menu program.
+    DEMO     MEN  The demo menu data file.
+    DEMO     HLP  An example HELP file for DEMO.MEN.
+    PLIC     EXE  Prowess, Inc. license agreement.
+    MENGEN   EXE  A program to help you create a menu data file.
+    MGHLP    EXE  Help program to help learn PRO-MENU syntax.
+    BRUN40   EXE  A run time file associated with the programs MENGEN.EXE
+    MG-C     EXE  Calls the menu generating program MENGEN (Color systems).
+    MG-M     EXE  Calls the menu generating program MENGEN (Mono Systems).
+    M        MEN  Data file.
+
+### Directory of PC-SIG Library Disk 0798
 
      Volume in drive A has no label
      Directory of A:\

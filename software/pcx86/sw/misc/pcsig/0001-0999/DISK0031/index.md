@@ -9,13 +9,22 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #31"
+      B: "PC-SIG Library Disk 0031"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #31
+## Information about "MVP-FORTH"
+
+    MVP-FORTH (Mountain View Press Public Domain FORTH) is the programming
+    language FORTH intended primarily for advanced FORTH programmers on the
+    college or graduate level.  This program was developed to accompany the
+    book ``Starting Forth,'' by Leo Brodie.  This program is an
+    interpreter, not a compiler and, as such, will not create stand alone
+    EXE files.
+
+### Directory of PC-SIG Library Disk 0031
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,22 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #575"
+      B: "PC-SIG Library Disk 0575"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #575
+## Information about "PC-STOCK"
+
+    PC-STOCK finance program is a stock evaluation and tracking system.  It
+    will help you analyze stock trends with an easy to use, menu-driven
+    system and informative graphics.  Support is also included for graphics
+    printers, enabling you to save your analysis to hard copy.  Produce line
+    graphs for: high, volume, composite, on-balance volume and average
+    high/low analysis.
+
+### Directory of PC-SIG Library Disk 0575
 
      Volume in drive A has no label
      Directory of A:\

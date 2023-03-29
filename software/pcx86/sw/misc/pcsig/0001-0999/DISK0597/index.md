@@ -9,13 +9,38 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #597"
+      B: "PC-SIG Library Disk 0597"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #597
+## Information about "SYMPHONY WORKSHEETS #4"
+
+    Symphony Worksheet #4 contains three macros for managing a checkbook
+    (complete with a built in budget and IRS codes), developing loan tables
+    and creating mailing lists.  The spreadsheets are quite extensive
+    and are easy to use.  Another worksheet included is a discussion
+    on creating and using Symphony macros.  MAILLIST.WRK produces
+    mailing labels and up to 3 different form letters.
+    
+    System Requirements:  512K, two disk drives, monochrome display and
+    Lotus SYMPHONY
+    
+    How to Start:   Access through Lotus SYMPHONY
+    
+    File Descriptions:
+    
+    AUTOLOAD WRK  Macro to display systems on disk
+    0_DESCR  WRK  Instructions on executing demo
+    PRODUCTS WRK  Brief description of some macros
+    MAILLIST WRK  Mailing List Macro
+    LOANTABL WRK  Loan Table Macro
+    CHEKBOOK WRK  Check Book Macro
+    0_README WRK  Details about new revisions and location of files
+    0_HIGHLT WRK  Instructions on where to find details
+
+### Directory of PC-SIG Library Disk 0597
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,52 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #114"
+      B: "PC-SIG Library Disk 0114"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #114
+## Information about "ASSEMBLY"
+
+    The file ASM. is a tutorial on the assembly language for the IBM-PC's
+    8088 processor and was distributed by IBM itself.  It is a concise
+    description of the essentials of IBM-PC assembly language programming.
+    NEWCLOCK is a fixit device driver addressing the 24 hour rollover
+    problem as well as mis-stamped file times.  UASMLS is a utility that
+    will enable the creation of an almost-assembler-ready listing from the
+    output of a DEBUG dis-assembly.  The PCTALK files are overlays to the
+    original PCTALK III release and support VT100 or VT52 terminal
+    protocols.  TERM is overlay for the IBM ASYNC.BAS program.
+    
+    Special Requirements:  Some programs require a version of BASIC.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  None.
+    
+    File Descriptions:
+    
+    BASCOM   DOC  Four patches for the BASIC Compiler.
+    CABLE    DOC  Procedure for making a cable for the Sony Profeel.
+    FPLOT    BAS  Plots math functions in polar and Cartesian coordinates.
+    FPLOT    DOC  Documentation file for FPLOT.BAS.
+    KBDFIX   BAS  Fix for keyboard buffer program in September Softalk.
+    NEWCLOCK DOC  Documentation file for NEWCLOCK.SYS.
+    NEWCLOCK SYS  Fix for DOS 2.0 clock update function.
+    PC-TALK  DEF  PC-Talk utility file.
+    PC-TALK  DIR  PC-Talk utility file.
+    PC-TALK  KEY  PC-Talk utility file.
+    PCT3VT   BAS  Vidtex, VT52, VT100 & ANSI cursor control to PC-Talk III.
+    PROFEEL  DOC  Review of Sony KX 1211 HG monitor/TV.
+    TERM     BAS  Adds auto-dial and auto log-on to IBM ASYSC. Comm. 2.0.
+    TERM     DOC  Documentation file for TERM.BAS.
+    TREND123 DOC  Documentation file for TREND123.MAC.
+    TREND123 MAC  LOTUS 123 macro for straight line/exponential curves.
+    UASMLS   DOC  Documentation file for UASMLS.EXE.
+    UASMLS   EXE  Formats DEBUG unassemble output file.
+
+### Directory of PC-SIG Library Disk 0114
 
      Volume in drive A has no label
      Directory of A:\

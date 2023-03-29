@@ -9,13 +9,21 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #232"
+      B: "PC-SIG Library Disk 0232"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #232
+## Information about "PULLED FROM THE LIBRARY"
+
+    This is a student version of SPPC, a fully interactive statistical
+    package that enables you to enter, manage and analyze simple and
+    complex sets of data.  In order to use the SPPC, you must enter your
+    data and store it on a diskette or hard disk file.  You can then
+    conduct any statistical analysis that is available.
+
+### Directory of PC-SIG Library Disk 0232
 
      Volume in drive A has no label
      Directory of A:\

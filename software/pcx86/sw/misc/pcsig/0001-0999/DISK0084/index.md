@@ -9,13 +9,49 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #84"
+      B: "PC-SIG Library Disk 0084"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #84
+## Information about "DOS UTILITIES NO 4"
+
+    DOS Utilities No 4 is a selection of file tools which let you change a
+    file's attribute byte, control BASIC program functions with a command
+    shell, or give you a menu-driven BASIC file-deletion tool.  Another
+    program of interest is DRAWIT, a BASIC screen drawing utility, which
+    lets you design graphic screen displays.
+    
+    System Requirements:  Some programs require color; BASIC
+    
+    How to Start: To run a COM or EXE program simply type its name and
+    press <ENTER>.  For instructions on ASM or 'C' listings, refer to your
+    Assembler or 'C' language manuals.  For instructions on running BASIC
+    programs, please refer to the GETTING STARTED section in this catalog.
+    To read DOC files simply enter TYPE filename.ext and press <ENTER>.
+    
+    File Descriptions:
+    
+    CHMOD    EXE  Changes file attribute byte
+    CHMOD    C    Source for CHMOD.EXE, written in C86
+    DOWTRY   TXT  Sample data for DOWDIF.COM
+    DOWDIF   DOC  Documentation file for DOWDIF.COM
+    DOWDIF   COM  Converts Dow Jones date to DIF format for VISICALC & 123
+    DOWDIF   BAT  Batch file to print DOWDIF.DOC file
+    DRAWIT   BAS  Graphics draw utility - relatively simple, but very good
+    FILECMD  BAS  Loads, runs, renames or deletes .BAS files  (DOS 1.1)
+    FPR      C    File print routine written in C86. Personalize and compile
+    FILECMD2 BAS  Loads, runs, renames or deletes .BAS files  (DOS 2.0)
+    QPRINT   BIN  BLOADable BASIC CALL for fast screen writes, color or mono
+    QPRINT   BAS  Demo of QPRINT vs PRINT
+    QPRINT   ASM  Source for QPRINT.BIN from Byte, July 83, page 408
+    KILL     BAS  Deletes multiple files selected from a menu  (Color req)
+    TXTPRO   DOC  Documentation for TXTPRO.EXE
+    UPVC     DOC  How to unprotect VISICALC
+    TXTPRO   EXE  Filter utility for ASCII files  (Requires BASRUN.LIB)
+
+### Directory of PC-SIG Library Disk 0084
 
      Volume in drive A has no label
      Directory of A:\

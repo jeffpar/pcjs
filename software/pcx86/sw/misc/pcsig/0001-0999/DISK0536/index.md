@@ -9,13 +9,64 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #536"
+      B: "PC-SIG Library Disk 0536"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #536
+## Information about "PC-TOOLS"
+
+    This disk contains an assortment of useful utility programs with the
+    source code for most being provided as well.  They range from programs
+    to browse through a file and print files to others that merge sorted
+    files and even overstrike a files for a darker print.  These constitute
+    a public domain offering of some of the tools found in the packages
+    "WildCard" and "Ace" marketed by Prickly Pear Software in Tucson Arizona
+    (602-749-2864), $34.95 each.
+    
+    NOTE: 100% IBM compatible users will need to boot up with ANSI.SYS.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $34.95
+    
+    File Descriptions:
+    
+    BROWSE   C    Source code file.
+    BROWSE   EXE  File browse utility with 4 way scrolling
+    CASE     C    Contains string lower/upper utility
+    DARKEN   C    Source code file.
+    DARKEN   EXE  Overstrikes text file for darker print
+    DUMP     C    Source code file.
+    DUMP     EXE  Provides an ASCII/HEX dump of any file
+    FCOMP    C    Source code file.
+    FCOMP    EXE  File compare program
+    FTRIM    C    Contains Trim_fspec
+    GREP     C    Source code file.
+    GREP     EXE  Improved version of GREP utility
+    MAKEARG  H    Command line parser for quoted arguments
+    MERGE    C    Source code file.
+    MERGE    EXE  Merge sorted files into one sorted file
+    PAGE     C    Source code file.
+    PAGE     EXE  View files one screen at a time
+    PR       C    Source code file.
+    PR       EXE  File printer program.
+    READ     ME   Brief description of programs on this disk
+    RM       C    Source code file.
+    RM       EXE  Deletes files with or without verify
+    ROFF     C    Source code file.
+    ROFF     EXE  Readable source code for a text formater
+    SUBST    C    Source code file.
+    SUBST    EXE  Oldstring newstring file
+    WC       C    Source code file.
+    WC       EXE  A fast word count program
+    XDIR     C    Read directory from/to a certain point
+    XDIR     H    Source code for XDIR
+
+### Directory of PC-SIG Library Disk 0536
 
      Volume in drive A has no label
      Directory of A:\

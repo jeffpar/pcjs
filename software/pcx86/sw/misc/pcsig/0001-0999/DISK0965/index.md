@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #965"
+      B: "PC-SIG Library Disk 0965"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #965
+## Information about "MYSTIC PASCAL - PROGRAMERS UTILITY"
+
+    MYSTIC PASCAL is an integrated programming environment that rigidly
+    follows the ISO Pascal Standard.
+    
+    MYSTIC PASCAL combines editing, compiling, program testing, and
+    debugging in to one unit.  The traditional pattern of program
+    development -- the edit/compile/test cycle -- is greatly speeded up with
+    an integrated programming environment.  You do not need to return to the
+    operating system and reload each program at each phase of the cycle.
+    
+    MYSTIC PASCAL is an ``interactive compiler'' and can compile entire
+    Pascal source files.  It also lets you key in Pascal statements, as well
+    as instantly compile and execute then at the global level.  This is
+    similar to the Direct Mode of BASIC interpreters, with a critical
+    difference: MYSTIC PASCAL is a true object-code compiler.  It is not an
+    interpreter or a pseudo-code compiler.
+
+### Directory of PC-SIG Library Disk 0965
 
      Volume in drive A has no label
      Directory of A:\

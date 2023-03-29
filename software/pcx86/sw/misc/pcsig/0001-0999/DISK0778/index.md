@@ -9,13 +9,33 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #778"
+      B: "PC-SIG Library Disk 0778"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #778
+## Information about "PSEUDOSAM CROSS ASSEMBLER 80Z AND 85"
+
+    PSEUDOSAM 80z and 85 are machine language cross-assembler programs for
+    the ZILOG z80, NATIONAL SEMICONDUCTOR NSC800, and the INTEL 8085
+    microprocessors.  These programs let you construct 80z and 8085
+    code on your IBM PC, to be transferred to an 80z or 8085-based system
+    for use.
+    
+    The PSEUDOSAM (Pseudo-brand Symbolic AsseMbler) assemblers conform to
+    common syntax, based on the UNIX System V assembler syntax.  The opcode
+    and addressing syntax is compatible with the manufacturer's, but label,
+    directive, and expression operator syntax will differ.
+    
+    The author of PSEUDOSAM chose this syntax because of UNIX's popularity,
+    and to avoid the problem of maintaining compatibility with the many OEM
+    assemblers.  The documentation is well organized and easy to
+    understand, although no attempt is made to teach 80z or 8085
+    programming.  You should have a good understanding of machine
+    language programming and also be familiar with basic DOS functions.
+
+### Directory of PC-SIG Library Disk 0778
 
      Volume in drive A has no label
      Directory of A:\

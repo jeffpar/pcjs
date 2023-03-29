@@ -9,13 +9,39 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #382"
+      B: "PC-SIG Library Disk 0382"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #382
+## Information about "PC-CONVERT AND PC-SWEEP"
+
+    PC-CONVERT/SWEEP is a powerful collection of file conversion and disk
+    utilities.  PC-SWEEP is a file handling utility.  Operating in either
+    single or multi-file mode, this program lets you easily conduct file
+    operations (copy, delete, rename, etc.) and has some very informative
+    screen displays.  This one deserves a place in everyone's collection.
+    
+    System Requirements: PC (not MS) DOS 2.0 or greater, BASIC
+    
+    How to Start: To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  To run a BAT or COM program, just type its name and press
+    <ENTER>.  For instructions on running BASIC programs, please refer to
+    the GETTING STARTED section in this catalog.
+    
+    Suggested Registration:  PC-SWEEP $20.00
+    
+    File Descriptions:
+    
+    PC-SWEEP COM  Disk management utility
+    PCSWP110 COM  PC-SWEEP v1.10
+    PCSWEEP  DOC  Documentation for PCSWP110.COM
+    PC-SWEEP DOC  Documentation for PC-SWEEP.COM
+    PCONVERT EXE  Main program PC-CONVERT
+    PCONVDOC      Documentation for PCONVERT.EXE
+
+### Directory of PC-SIG Library Disk 0382
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,53 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #325"
+      B: "PC-SIG Library Disk 0325"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #325
+## Information about "LOGON AND LOGOFF"
+
+    This disk is dedicated to a special category of utilities: programs
+    for PC user logging, timekeeping and documenting job starting/ending.
+    For example, PC-Logger gives you a computer use log that creates a PC
+    FILE III database for later sort/print.  These types of utilities are
+    a must for anyone who needs to document machine-time, for taxes or
+    other reasons.
+    
+    How to Start:  To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  To run an EXE or COM program, just type its name and press
+    <ENTER>. For instructions on running BASIC programs, please refer to the
+    GETTING STARTED section in this catalog.
+    
+    Suggested Registration:  SYSLOG has a suggested donation of $25.00
+    
+    File Descriptions:
+    
+    -------- ---  Time Keeper
+    -------- ---  PC-Logger
+    TIMSTALL COM  Install program for TIMEKEEP
+    -------- ---  PC-Logger
+    TIMEKEEP EXE  TIMEKEEPER (Ver 3.0): produces job log report
+    TIMEKEEP DOC  Documentation for TIMEKEEP
+    STARTLOG COM  Writes date & time to log
+    DEFAULTS COM  Defaults.com creates log file
+    PCUSELOG DOC  Documentation
+    USELOG   RPT  PC-FILE III report file listing database
+    USELOG   HDR  PC-FILE III header file defining log database
+    STOPLOG  COM  Reads log, calculates time
+    -------- ---  SYSLOG
+    SYSLOG   EXE  SYSLOG (Ver 2.0): system use log (128K;DOS 2.0)
+    SYSLOG   DOC  Documentation
+    START    EXE  compiled version of start log program
+    START    BAS  START/END: Logs start & end of jobs with comments
+    END      EXE  compiled version of end log program
+    END      BAS  BASICA version of end log program
+    ONTIME   EXE  Part of TIMEKEEP utility
+    OFFTIME  EXE  Part of TIMEKEEP utility
+
+### Directory of PC-SIG Library Disk 0325
 
      Volume in drive A has no label
      Directory of A:\

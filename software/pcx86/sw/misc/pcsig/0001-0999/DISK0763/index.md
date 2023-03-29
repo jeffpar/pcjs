@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #763"
+      B: "PC-SIG Library Disk 0763"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #763
+## Information about "FINGER PAINTING PROGRAM"
+
+    FINGER PAINT, reminiscent of some programs for the Macintosh, is an
+    easy-to-use, straightforward paint program for either home or office
+    use.
+    
+    FINGER PAINT has most of the bells and whistles you would find in a
+    print program, such as variable drawing functions (dots, lines,
+    rectangles, circle, arcs, etc.).  But it also has a few that are rare
+    in a program of this price -- animation, variable text fonts, 3-D
+    drawing, and more.  The Movie command can serve as a slide show or
+    animation program.  19 demo pictures are included to demonstrate this
+    feature.  One of its major advantages is its Hercules graphics
+    compatibility.  This means it can run on many computers.  The picture
+    file format is PCX which can be used by almost all paint programs.  The
+    non-registered copy of FINGER PAINT works only with the HP LaserJet
+    printer and produces a 150 dot-per-inch output.
+
+### Directory of PC-SIG Library Disk 0763
 
      Volume in drive A has no label
      Directory of A:\

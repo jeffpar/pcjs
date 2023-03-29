@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #743"
+      B: "PC-SIG Library Disk 0743"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #743
+## Information about "FIVE DICE GAME"
+
+    Get ready to roll!  FIVE DICE GAME is a fun way to play dice.  It is
+    played by two or more players, with the object to attain a score of
+    5000 points or more.  Each player rolls the dice, accumulating a score
+    as long as he rolls scoring dice.  If he fails to roll any score, he
+    loses his turn and a "scratch" is posted against him.  After any player
+    has 5000 points, every other player gets one more chance to beat that
+    score.  The game can be played by up to 15 human or
+    computer-controlled players (counting yourself).  The computer can play
+    any of three different strategies, from very conservative to fairly
+    aggressive.
+    
+    The program is very easy to run and instructions are included.  This is
+    an excellent program for any user -- novice to expert.  The Turbo Pascal
+    source code is included in case you want to modify or write your own
+    computer opponents.
+
+### Directory of PC-SIG Library Disk 0743
 
      Volume in drive A has no label
      Directory of A:\

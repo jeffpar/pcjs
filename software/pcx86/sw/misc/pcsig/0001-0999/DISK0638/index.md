@@ -9,13 +9,56 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #638"
+      B: "PC-SIG Library Disk 0638"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #638
+## Information about "SUPERSTAT 1 OF 2 (ALSO 639)"
+
+    SuperSTat Share is a shareware Statistical Package for analyzing the
+    results of Market surveys and poles. The statistical analysis is very
+    complete. The program is operated by choosing items from menus and
+    filling in forms on the screen. This version allows 25 variables
+    and 50 data columns with up to nine values to the variable.
+    
+    This is a two disk set that requires both to function.
+    
+    System Requirements:  128K, two disk drives, Hercules graphics display,
+    Epson-compatible printer.
+    
+    How to Start:  After consulting the NOTES638.TXT and SST.DOC for
+    information, initiate the program by entering SSTMENU at the DOS
+    prompt.
+    
+    Suggested Registration:  $35.00; $20.00 for students.
+    
+    File Descriptions:
+    The First Disk Contains:
+    SCATTER  EXE  Scatter plot program
+    SSTMENU  EXE  Main menu and system management program
+    FREQ     EXE  Frequency distribution analysis program
+    CROSS    EXE  Cross tabulate program
+    SST      DEF  System configuration file
+    TEST     TTL  Analysis Module
+    TEST     DTA  Analysis Module
+    TEST     APD  Analysis Module
+    TEST     VRN  Analysis Module
+    INT      APD  Analysis Module
+    INT      DTA  Analysis Module
+    INT      TTL  Analysis Module
+    INT      VRN  Analysis Module
+    
+    The Second Disk Contains:
+    SSTMENU  EXE  The menu and system management program
+    SST      DEF  Configuration file
+    DATAMAN  EXE  The data management module
+    FILEMAN  EXE  The file management module
+    CODEMAN  EXE  The code entry module
+    SST      DOC  The short form of the SST Manual
+
+### Directory of PC-SIG Library Disk 0638
 
      Volume in drive A has no label
      Directory of A:\

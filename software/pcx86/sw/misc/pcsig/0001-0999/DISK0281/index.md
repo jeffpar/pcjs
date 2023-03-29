@@ -9,13 +9,37 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #281"
+      B: "PC-SIG Library Disk 0281"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #281
+## Information about "RECIPE INDEX"
+
+    Recipe83(tm) is a database index to 1800 recipes that appeared in the
+    1983 issues of Women's Day and Family Circle magazines.  If these
+    magazines are saved in your home, this database will provide the
+    advantages of computer indexing.  Note: it is necessary that you have
+    saved the magazines, or have them readily available from a library.
+    iRecipe83 is an INDEX ONLY, not a repeat of the recipes.
+    
+    How to Start:  To get a copy of the documentation, with this disk
+    in the A: drive, enter DOC and press <ENTER>.
+    
+    Suggested Registration:  $20.00
+    
+    File Descriptions:
+    
+    IRECIP83 ???  Header and index data files
+    *        DTA  Data base files
+    IR83PCF  DOC  Documentation (55K)
+    DOC      BAT  Prints documentation (IR83PCF.DOC)
+    *        RPT  Report formats
+    NESTMENU BAT  Prints NESTMENU.DOC
+    NESTMENU DOC  List of menus
+
+### Directory of PC-SIG Library Disk 0281
 
      Volume in drive A has no label
      Directory of A:\

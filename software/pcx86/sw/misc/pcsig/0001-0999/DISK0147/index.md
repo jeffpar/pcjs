@@ -9,13 +9,25 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #147"
+      B: "PC-SIG Library Disk 0147"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #147
+## Information about "SDB"
+
+    SDB is a relational database system written in the C programming
+    language.  SDB is a simple database manager developed to
+    provide a relatively low overhead system for storing data on machines
+    with limited disk and memory resources.
+    
+    While it performs very well as a somewhat limited database, the program
+    has the source code in the C language included.  This represents
+    opportunities for programmers to get a look at how the functions have
+    been constructed.
+
+### Directory of PC-SIG Library Disk 0147
 
      Volume in drive A has no label
      Directory of A:\

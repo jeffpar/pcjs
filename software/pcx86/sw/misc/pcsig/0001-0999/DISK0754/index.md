@@ -9,13 +9,49 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #754"
+      B: "PC-SIG Library Disk 0754"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #754
+## Information about "PORTRAC (FORMERLY UVESTOR)"
+
+    PORTRAC is perfect for any investor who needs a versatile and flexible
+    investments tracking program.  PORTRAC keeps track of investments and
+    evaluates their true return on a time-related basis.  It can handle 999
+    individual investor accounts with up to 396 investments for each
+    account.
+    
+    PORTRAC tracks all transactions of any investment, whether a stock, a
+    bond, fixed dollar-denominated investment, or an appreciable
+    dollar-denominated investment such as real estate.  It reads an
+    individual investment report and quickly computes the internal rate of
+    return.  It produces a portfolio showing the investment name, file name,
+    cost, present value, and gain or loss of the portfolio.  It graphically
+    and numerically presents the risk balance of the portfolio.  You can get
+    the total portfolio or selected portfolios by investment type.  PORTRAC
+    also produces net worth statements, amortized loan tables and provides
+    six additional interest rate programs.
+    
+    A major feature of the program is it can read an investment file and
+    quickly compute the internal rate of return of the investment.  With
+    complete and accurate records of investments, along with a measure of
+    the true time-related return of an investment, you can determine your
+    future investment policy.  The multiple account capability lets you set
+    up an account for investment studies.  With hypothetical investments,
+    you can measure the internal rate of return on the forecasted
+    investment.  It is very difficult to manually evaluate the true return
+    of an investment that had investments at different times, cash flow at
+    variable intervals and in varying amounts, and sale of the investment at
+    various time intervals and prices.  PORTRAC will do this for you.
+    
+    PORTRAC is menu-driven and easy to use.  It has a demonstration account
+    with files for quick familiarization.  You can view reports and print
+    them.  These features and others make PORTRAC the perfect investment
+    tracker and counselor.
+
+### Directory of PC-SIG Library Disk 0754
 
      Volume in drive A has no label
      Directory of A:\

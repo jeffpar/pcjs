@@ -9,13 +9,43 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #13"
+      B: "PC-SIG Library Disk 0013"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #13
+## Information about "PDRAW"
+
+    This disk contains two sections.  STARTREK is a fine implementation of
+    the game that has been around since time sharing has been popular on
+    college campuses.  The game runs under BASIC and has sound effects.
+    PDRAW is a simple line, circle, square, etc. drawing program.  It
+    doesn't require a mouse, and has color fill for the enclosed areas of
+    your drawing, not real powerful but a good starting program.  Last and
+    least IBMSONG is something that everyone should see at least once.
+    
+    System Requirements: Some programs require color graphics; printer
+    recommended.
+    
+    How to Start:  To run BASIC programs consult the directions in GETTING
+    STARTED for your configuration.  Consult PDRAW.DOC for program
+    documentation.
+    
+    File Descriptions:
+    
+    PDRAW    DOC  Comprehensive documentation of PDRAW package  (15K)
+    COLOR    BAS  Color sub-program
+    PDRAW    BAS  Drawing program
+    MONO     BAS  Monochrome sub-program
+    ???      BAT  Batch files used by PDRAW (4 files)
+    ???      PIC  Pictures used by PDRAW (6 files)
+    STARTREK BAS  Starship Enterprise - space war with sound effects
+    STARTREK HOW  Screens of instructions - invoked by BASIC program
+    STARTREK DUM  Data file used by program
+    IBMSONG  BAS  IBM rally song - lyrics & bouncing ball - 80 screen
+
+### Directory of PC-SIG Library Disk 0013
 
      Volume in drive A has no label
      Directory of A:\

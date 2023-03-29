@@ -9,13 +9,42 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #448"
+      B: "PC-SIG Library Disk 0448"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #448
+## Information about "GAME SERIES #19"
+
+    A fine collection of arcade type games, most of which require color-
+    graphics. Pinball is an absorbing video version of the old pool hall
+    favorite, and MAZE, KANGAROO, and RIBIT will all keep you hopping!
+    The rest of these are all equally entertaining, but BABY may not
+    appeal to all tastes.
+    
+    System Requirements:  128K, one disk drive, monochome monitor,
+    color graphics needed if file marked by a plus symbol (+).
+    
+    How to Start:  To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  To run an EXE program, just type its name and press <ENTER>.
+    For instructions on running BASIC programs, please refer your DOS
+    manual.
+    
+    File Descriptions:
+    
+    AF       DOC  Documentation file for AF.EXE
+    KANGAROO BAS  Donkey Kong-like game
+    RIBIT    EXE  Frogger clone
+    PINBALL  EXE  Pinball game made using Electronic Arts pinball program
+    BABY     EXE  Catch the falling babies as they jump from a building
+    AF       EXE  War game based in Afghanistan
+    BOOGERS! BAS  Shoot your way out of a maze
+    MAZE1-2A EXE  Hi-Res maze game (tough!)
+    ZYLGIS   SCR  High scores for ZYLGIS.BAS
+    ZYLGIS   BAS  Another PAC-MAN clone
+
+### Directory of PC-SIG Library Disk 0448
 
      Volume in drive A has no label
      Directory of A:\

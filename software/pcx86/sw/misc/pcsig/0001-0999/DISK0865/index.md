@@ -9,13 +9,35 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #865"
+      B: "PC-SIG Library Disk 0865"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #865
+## Information about "CATALIST 2 OF 2 (ALSO 864)"
+
+    Biorhythm theory holds that the human body is influenced by three
+    biological cycles which begin at birth and continue to rise and fall
+    throughout our lives ~- a physical cycle, an emotional cycle and an
+    intellectual cycle.  These cycles have differing periods so that one
+    cycle may be at its low point in a curve while another may be at the
+    peak of its own curve.  It is believed that the overlapping and timing
+    of these cycles or curves can be used to predict how you will perform in
+    the future.
+    
+    This program can calculate these biorhythm cycles for any person born
+    after the year 1753.  The physical, emotional and intellectual cycles
+    are marked by letters in columns for each day of the month, each letter
+    showing how high or low that particular cycle is.  An asterisk
+    indicates
+    a critical day for that cycle.
+    
+    Also included is a comparison of the biorhythms of two persons, which
+    will display the percentage of compatibility for each cycle.  Maybe it
+    wasn't just luck, maybe it really was a bad (or good) day when you met.
+
+### Directory of PC-SIG Library Disk 0865
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,39 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #765"
+      B: "PC-SIG Library Disk 0765"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #765
+## Information about "GALAXY 1 OF 2 (2210 ALSO)"
+
+    Updated with Microlytics' award-winning 100,000 word spell-checker and
+    220,000 word thesaurus, GALAXY's wealth of features make it powerful
+    and easy to learn and use.
+    
+    Logically structured keyboard commands are color-highlighted to help you
+    learn shortcuts.  Full mouse support gives you the option of working
+    without keyboard commands at all, if you prefer.  An Undo feature lets
+    you change your mind after changing your text.  Context-sensitive help
+    is always on-line, ready to explain a highlighted command to you.
+    
+    Features:
+    
+    ~ Work in up to ten windows on-screen at once.
+    
+    ~ Size, overlap, zoom any window to full screen in a single keystroke.
+    
+    ~ Format your text with pre-determined style sheets -- or create your
+    own formats.
+    
+    ~ Edit files as large as eight megabytes using EMS expanded memory or
+    hard disk.
+    
+    ~ Proportional spacing and microjustification.
+
+### Directory of PC-SIG Library Disk 0765
 
      Volume in drive A has no label
      Directory of A:\

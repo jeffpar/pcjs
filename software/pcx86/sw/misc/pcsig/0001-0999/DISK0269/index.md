@@ -9,13 +9,22 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #269"
+      B: "PC-SIG Library Disk 0269"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #269
+## Information about "BASIC DEVELOPMENT"
+
+    A completely functional version of BetaTool's BASIC Development
+    System for programs of less than 6500 bytes.  BetaTool's system works
+    with the BASIC interpreter to add easy file editing, instant
+    cross-reference lists, selective line renumbering, variable dump and
+    program expand/compress.  If you program in BASIC you should try this
+    package.
+
+### Directory of PC-SIG Library Disk 0269
 
      Volume in drive A has no label
      Directory of A:\

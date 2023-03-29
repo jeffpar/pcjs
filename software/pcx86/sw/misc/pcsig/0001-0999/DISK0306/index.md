@@ -9,13 +9,52 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #306"
+      B: "PC-SIG Library Disk 0306"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #306
+## Information about "SYMPHONY WORKSHEETS #2"
+
+    SYMPHONY WORKSHEETS 2 is a mixed-bag selection of small business
+    oriented worksheets and modem utilities.  The macro-driven Checkbook
+    program is quite sophisticated and can be used for any home or small
+    business.  Additional macro aids help manage disk contents, addresses
+    and phone numbers (using find functions), 1-2-3 macro conversion, and
+    more.  DIRECTORY.WRK is an excellent program for creating a library
+    for file names and descriptions, printing labels, letters, etc.
+    
+    System Requirements:  512K, two disk drives, Lotus SYMPHONY.
+    
+    How to Start:  Access through Lotus SYMPHONY.
+    
+    File Descriptions:
+    
+    DIR-LIST      Listing of included files
+    10_KEY   WRK  A 10-key calculator
+    1LETTER  WRK  Used with DIRECTRY.WRK
+    CHKBK    WRK  Macro-driven Checkbook
+    ADDR     WRK  Address Book
+    1SHEET   WRK  Used with DIRECTRY.WRK
+    1MACROS  WRK  Used with DIRECTRY.WRK
+    MCA      APP  1-2-3 Macro conversion aid add-in from Lotus
+    LABELS   WRK  Name and address labels for printer
+    INPUT    APP  1-2-3 'Range Input' feature add-in
+    DISKLABL WRK  Prints out list of disk contents
+    DIRECTRY WRK  Create a library for file names and descriptions
+    CTLBRK   APP  Break menu handling add-in
+    CHKBOO   WRK  Checkbook manager for home or small business
+    CHKBOO   DOC  Documentation file for CHKBOO.WRK
+    MCA      HLP  On disk help for MCA.APP
+    UN1      WRK  Unattended operation see UN1.CCF
+    UN1      CCF  Unattended operation .CCF file
+    SYSERR   APP  DOS error retry disable
+    PHONE    WRK  Phone dialer sample
+    PHNBRS   WRK  Database using find functions
+    MCARI    WRK  Documentation for MCA.APP
+
+### Directory of PC-SIG Library Disk 0306
 
      Volume in drive A has no label
      Directory of A:\

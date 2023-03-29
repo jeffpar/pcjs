@@ -9,13 +9,28 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #234"
+      B: "PC-SIG Library Disk 0234"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #234
+## Information about "TPNCALC"
+
+    This is a user-supported program, intended for use by Pharmacists to
+    calculate intravenous electrolyte additives needed to compound a
+    Hyperalimentation order according to the medical doctors
+    specifications.  A rather specialized field, it's true, but for those
+    with a need, it's a real timesaver.
+    
+    How to Start:   Load DOS and type TPNCALC to invoke the program.
+    Consult TPNDOC for program documentation.
+    
+    File Descriptions:
+    TPNDOC        Documentaion  (14K)
+    TPNCALC  EXE  Main program
+
+### Directory of PC-SIG Library Disk 0234
 
      Volume in drive A has no label
      Directory of A:\

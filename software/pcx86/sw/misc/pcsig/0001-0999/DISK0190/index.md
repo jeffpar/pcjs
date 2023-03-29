@@ -9,13 +9,55 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #190"
+      B: "PC-SIG Library Disk 0190"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #190
+## Information about "TEXT AND SCREEN"
+
+    Most of the programs on this disk are in BASIC and must be run under
+    the Interpretive BASIC provided on PC's and most clones.  The central
+    program on the disc is FULLSCREEN which is a fullscreen editor for use
+    with BASIC instead of the cranky line editor provided with PC BASIC.
+    It is simple to use, driven by the function key menu at the bottom of
+    the screen just as in standard BASIC.  The function key menu has
+    several levels which provide most all the functions offered by most
+    text editors.  The other programs provide a variety of functions, such
+    as form building, memo building, string search, file converions,
+    directory changes and the like.
+    
+    System Requirements: BASIC
+    
+    How to Start: Consult the RV-EDIT.DOC and INFO.DOC (FULLSCREEN) files
+    for instructions; the others have onscreen help.  To run a BASIC
+    program, type BASICA <filename> and hit <ENTER>.  Please note that you
+    must either put a copy of BASICA on this disk, or have BASICA on your
+    current DOS path.  To run programs suffixed .EXE, just type its name,
+    i.e., for X.EXE, type X and hit <ENTER>.
+    
+    File Descriptions:
+    
+    PC-FORM  EXE  PC-FILE form generator Version 1.1  (William Bailey)
+    MEMO     BAS  Quick memo writer  (John Harrington)
+    FIX-TEST BAS  Inserts carriage returns & line feeds
+    CUSTOM   BAS  Custom characters by Gary Antrim
+    RV-EDIT  BAS  Full screen editor Version 1.2  (Bob Vollmer)
+    TXTSCAN  BAS  Searches ASCII file for character string
+    RV-EDIT  DOC  Documentation
+    -------- ---  FULLSCRN
+    VUE      BAS  Nifty look into text files Version 1.0  (Buzz Hamilton)
+    FULLSCRN BAS  Full screen data entry
+    PGMCVRT  BAS  Part of FULLSCRN.BAS
+    XXXX     DAT  Part of FULLSCRN.BAS
+    FRM001   DAT  Part of FULLSCRN.BAS
+    FULLSCRN BSC  Part of FULLSCRN.BAS
+    FULLSCRN BSN  Part of FULLSCRN.BAS
+    FUL001   DAT  Part of FULLSCRN.BAS
+    INFO     DOC  Part of FULLSCRN.BAS - Documentation
+
+### Directory of PC-SIG Library Disk 0190
 
      Volume in drive A has no label
      Directory of A:\

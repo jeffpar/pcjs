@@ -9,13 +9,60 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #806"
+      B: "PC-SIG Library Disk 0806"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #806
+## Information about "REMARKABLE GENERAL LEDGER 1 OF 2 (807)"
+
+    New Zealand has done it now.  Remarkable Enterprises Ltd, which is
+    located in New Zealand, has created the REMARKABLE GENERAL LEDGER.  The
+    system will work with just about any denomination of dollar currency,
+    allowing you to use it in the USA as well as New Zealand, Australia,
+    Canada and many others.  This system also allows modifications of the
+    date structure to fit a particular countries customary standards.
+    
+    REMARKABLE GENERAL LEDGER will allow you to set up and operate a
+    complete General Ledger, with a wide range of reports, and a Bank
+    Information module including facilities for listing banks, reports on
+    used and unused checks and Bank Statement Reconciliation.  You can print
+    out reports on your transactions either in summary or in detail.
+    Reports can be printed either on a leading or account level.  You can
+    also print a trial balance and your chart of accounts.  A simple menu is
+    offered that allows you to add, change, delete, or view your various
+    entries made into your chart of accounts, journal, your record of bank
+    deposits and your checking account.  The program has on-line help for
+    every screen that requires input from the user.
+    
+    The full version of REMARKABLE GENERAL LEDGER includes all the features
+    of the public domain version plus profit and loss reports, balance
+    sheets, password protection, a complete manual and service and backup.
+    
+    Special Requirements:  512K memory and at least two disk drives.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $69.95, includes full version of the program
+    with a printed manual, and includes service and backup.
+    
+    File Descriptions:
+    The First Disk Contains:
+    INSTALL  BAT  Installation batch file
+    SUBINST  BAT  Installation batch file
+    TGL      BAT  Start-up batch file
+    TGL      EXE  Main program
+    TGL      INT  Subfile for main program
+    HELP     <DIR>Directory containing on-line help files
+    
+    The Second Disk Contains:
+    DOC      <DIR>Directory containing the documentation.
+    CONFIG   SYS  Sample configuration file.
+    ???????? DBF  Data file (12 files).
+    READ     ME   General information about the disk.
+
+### Directory of PC-SIG Library Disk 0806
 
      Volume in drive A has no label
      Directory of A:\

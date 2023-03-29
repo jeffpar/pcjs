@@ -9,13 +9,45 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #290"
+      B: "PC-SIG Library Disk 0290"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #290
+## Information about "FITT TAX WORKSHEETS"
+
+    A Lotus 1-2-3 worksheet to help you simplify the preparation of your
+    Federal Income Tax Return.  You don't have to be a Lotus 1-2-3 expert
+    to take advantage of FITT.
+    
+    Three new forms have been included with the most recent version:
+    
+    ~ Form 2210 - Underpayment of Estimated Tax by Individuals and
+    Fiduciaries
+    
+    ~ Form 1116 - Computation of Foreign Tax Credit
+    
+    ~ Form 8615 - Computation of Tax for Children Under Age 14 Who Have
+    Investment Income of More Than $1,000
+    
+    Forms 1040 and 2441, Schedules A, B, C, D, E, G and W can also be
+    produced.  In addition to the official IRS forms and schedules, FITT
+    includes a number of the worksheets that appear within the Form 1040
+    instruction package, such as:
+    
+    ~ Taxable Refunds of State and Local Income Taxes, Social Security
+    Benefits
+    
+    ~ IRA Worksheets 1 and 2, Self-Employed Health Insurance Deduction
+    
+    ~ Schedule SE Worksheet
+    
+    Fill in the blanks on the screen forms and FITT automatically performs
+    all the calculations, comparisons, table look-ups and other required
+    checks and cross-references.
+
+### Directory of PC-SIG Library Disk 0290
 
      Volume in drive A has no label
      Directory of A:\

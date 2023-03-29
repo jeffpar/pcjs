@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #23"
+      B: "PC-SIG Library Disk 0023"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #23
+## Information about "BOWLING LEAGUE SECRETARY"
+
+    So you've been fingered to run the company bowling league, eh?  No
+    problem. This software, aptly called BOWLING LEAGUE SECRETARY, will
+    make your job a snap.  The package includes 12 programs that cover
+    everything needed to run a league.
+    
+    This highly generalized system handles league name, team, configuration,
+    handicap basis, and schedule.  As distributed, the system can handle 24
+    teams, up to nine bowlers per team, and up to a 50-week season.
+    
+    Programs are provided to start all master files, enter scores and print
+    standings (weekly), as well as prepare book average listings, final
+    team/bowler standings, and display or print individual team/bowler
+    record sheets.
+
+### Directory of PC-SIG Library Disk 0023
 
      Volume in drive A has no label
      Directory of A:\

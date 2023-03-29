@@ -9,13 +9,84 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #9"
+      B: "PC-SIG Library Disk 0009"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #9
+## Information about "SQUISH"
+
+    This disk is half BASIC subprograms and the rest are DOS file-handling
+    programs.  The BASIC programs are all modules to be used in other
+    programs for both programming ease and consistency.  These are nice,
+    reuseable general purpose modules, like NUMVERT.BAS which displays
+    numbers in ASCII, dec, oct, hex and binary.
+    
+    The other programs help with day to day computer activities.  LOOK and
+    FIND search memory for certain bytes and strings.  SQUISH saves space
+    by removing unwanted extra bytes from BASIC programs.   Other goodies
+    include an autostart device, programs to shift you from monochrome to
+    color graphics and back, and even a miniature modem package with file
+    transfer capacity (MDM7I).
+    
+    System Requirements: 64K, one disk drive and monochrome display.
+    
+    How to Start: Consult the .DOC and README files for directions and
+    documentation.  To run the BASIC programs, consult the directions in
+    GETTING STARTED for your configuration.  To run a program with the
+    suffix .COM or .EXE, just type its name, i.e., for FF.BAT, type FF and
+    press <ENTER>.  LOAD (filename).BAS and then type RUN to run the
+    programs.
+    
+    File Descriptions:
+    
+    UPDATE   BAT  Program to copy updated BASIC programs
+    PAYMENT  BAS  Computes payment for a fully amortized loan
+    OPKEYS   BAS  Programs the Function Keys for BASIC programming
+    AUTOEXEC BAT  Boots up BASICA and AUTOST from power ON Startup
+    MDM7     DOC  This describes how the modem program is to be used
+    REAL$    BAS  Displays and prints a table of Real Estate Appreciation
+    STARTUP  BAT  Transfers DOS and BASICA from DOS Disk in B to Disk in A
+    2COLOR   COM  Transfers to Color Graphics Adapter and Monitor from DOS
+    !        BAT  Boots up BASICA and AUTOST from DOS
+    ASCICHAR BAS  Display or Prints primary and alternate character sets
+    PEEK     BAS  Peeks at a location in memory
+    ASCII    BAS  A chart of ASCII Characters  (Decimal)
+    NUMVERT  BAS  Displays numbers in ASCII, dec, oct, hex and binary
+    LONGZONE BAS  Computes GMT (UCT) and local time for any longitude
+    CRCK4    COM  This a file checksum program
+    2MONO    SYS  Transfers to Monochrome Adapter and Monitor from BASICA
+    MDMIBM   ASM  Part of MDM7I above
+    2MONO    COM  Transfers to Monochrome Adaptor and Monitor from DOS
+    TIME     BAS  Displays system date and time on the screen
+    MODULO   BAS  Demonstrates Modulo Arithmetic
+    Q        BAS  Returns to DOS with a clear screen and keys reset
+    CHECKOUT BAS  Checks Serial and Parallel equipment & handshake
+    AUTOST   BAS  Sets date and time, displays files and runs program
+    WASH     DOC  This documents WASH.COM
+    SQUISH   BAS  This program removes spaces, REM's and condenses lines
+    SQUISH   DOC  Documentation for SQUISH program
+    LOOK     COM  This is a memory byte search program
+    WASH     COM  This is a disk maintenance program
+    FIND     COM  This is a disk file string search program
+    CRCK4    CPM  Part of CRCK4.COM
+    MDM7I    COM  This is a MODEM and TERMINAL file transfer program
+    MONOSET  BAS  Displays screen options for the monochrome monitor
+    COLORSET BAS  Displays color options on a color monitor
+    MENU     BAS  Runs AUTOST.BAS program
+    AUTOINST BAS  Prints Autostart Program Instructions  (AUTOST.BAS)
+    INDEX    DOC  This contains details on files on this disk
+    DISKID   REV  Contains Disk ID Label and Year for AUTOST program
+    MINIPROG BAS  A Skeleton BASIC program used to start a new program
+    KEYSMP   BAS  Prints a Function Key OVERLAY for Multiplan programs
+    2COLOR   SYS  Transfers to Color Graphics Adapt and Monitor from BASICA
+    KEYSBAS  BAS  Programs Function keys for BASIC and prints OVERLAY
+    AUTOPEEK BAS  Displays 10 locations of memory in dec or hex
+    SYS      BAS  Returns to DOS with a clear screen and keys reset
+    ACATALOG BAS  A catalog of the programs on this disk  (Items 1-31)
+
+### Directory of PC-SIG Library Disk 0009
 
      Volume in drive A has no label
      Directory of A:\

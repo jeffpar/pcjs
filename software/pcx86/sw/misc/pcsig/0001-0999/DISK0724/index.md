@@ -9,13 +9,45 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #724"
+      B: "PC-SIG Library Disk 0724"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #724
+## Information about "COUPON, EZCOUNT, AND XDIR"
+
+    The GROCERY STORE COUPON ORGANIZER SYSTEM keeps track of grocery store
+    discount coupons.  Coupons can be added, modified, deleted or just
+    browsed through.  There is also a feature to delete all the coupons that
+    expire before a user-defined date.
+    
+    Writers, secretaries, transcribers -- Count the number of words in a
+    standard ASCII file.  Bells and whistles are minimal.  It counts words
+    and displays how much time the program took to count.
+    File Descriptions:
+    
+    EZREADME      Explains the rules used by EZCOUNT.
+    EZCOUNT  DOC  Description of the registered version.
+    EZASCII  TST  Sample ASCII file with 1200 words.
+    EZWDSTR  TST  Sample WordStar file to test other word counters.
+    EZCOUNT  COM  Main program.
+    
+    XDIR replaces the DOS commands DIR and COPY with enhanced functions, and
+    adds a function that DOS forgot -- MOVE.
+    
+    MOVE a file from place to place in a directory or to a completely
+    different directory. XDIR will move it and delete the original. You
+    don't have to worry about it.
+    
+    Put a 65-character comment onto each file. When you copy the file, the
+    comments are copied right along with it. You can even rename the file.
+    You can't fool XDIR.
+    
+    This program is great for people who tend to use very cryptic file
+    names -- now you can comment these files to remember what they were.
+
+### Directory of PC-SIG Library Disk 0724
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #845"
+      B: "PC-SIG Library Disk 0845"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #845
+## Information about "COST EFFECTIVE TRACKING SYSTEM"
+
+    Are you having a hard time figuring the cost of that construction job?
+    COST EFFECTIVE is here to help you out. COST EFFECTIVE keeps track of
+    your raw materials and their prices. When you have a job to do, you
+    tell the program what you will be needing and COST EFFECTIVE will tell
+    you what the price will be.
+    
+    Raw materials are never going to be the same price from day to day, this
+    why COST EFFECTIVE also allows you to enter new prices for your raw
+    materials and get a new estimate. Reports like raw materials listings a
+    prices can be printed from the program.
+    
+    The program is fully menu-driven and there are help screens available at
+    any point in the program. You will find COST EFFECTIVE a great asset
+    your company if raw materials are a part of your productions.
+
+### Directory of PC-SIG Library Disk 0845
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #969"
+      B: "PC-SIG Library Disk 0969"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #969
+### Directory of PC-SIG Library Disk 0969
 
      Volume in drive A has no label
      Directory of A:\

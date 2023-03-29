@@ -9,13 +9,34 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #781"
+      B: "PC-SIG Library Disk 0781"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #781
+## Information about "BIBLE MEN"
+
+    BIBLE MEN is a wonderful little quiz program that tests your finer
+    knowledge of the Word. You begin by telling BIBLE MEN whether you want
+    it to focus on either the Old or New Testament. Then it asks you for
+    each player's name (up to eight). It gives you some significant
+    passage, often written in first person, and asks you to identify the
+    person. For example, it might give you this:
+    
+    "May the Lord show mercy to the household of Onesephorus, because he
+    often refreshed me and was not ashamed of my chains."
+    
+    You then type the name of the person referred to. (In the above
+    example, the reference is to Onesephorus, the scripture is II Timothy
+    1:16, and the author is the Apostle Paul.) When you don't know the
+    answer, you can choose to see the verse, the answer, or move on to
+    another question. You can look at the answers to a question and move
+    on without affecting your score; scoring occurs only when you type an
+    answer. BIBLE MEN displays your score as tries, wrong, right, and
+    percent. Did you know the answer to the above example?
+
+### Directory of PC-SIG Library Disk 0781
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,33 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #134"
+      B: "PC-SIG Library Disk 0134"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #134
+## Information about "LISP"
+
+    File Descriptions:
+    
+    8087     ASM  Assembler macros for 8087 instructions
+    AUTODEX  EXE  Fantastic fullscreen directory/file manipulator
+    CC       C    C source program checker, catches mismatched parens
+    DOSINTS  TXT  Tells all about secret dos interrupt functions!
+    DOS_ERR  TXT  Information on DOS i/o redirection bugs
+    FIND     PAT  Patch to dos find command, makes it a better filter
+    LOAD     COM  Load com files bigger than 64k: load <filename>
+    LOAD     ASM  Source for above
+    MENUMAKR BAS  Interactively create menus callable from basic
+    PIL      LSP  Micro-prolog interpreter written in xlisp
+    PTURTLE  LSP  Programmable logo turtle written in xlisp
+    STEEPDES APL  Steepest descent equation solution in apl
+    TURTLE   LSP  Interactive logo turtle programmed in xlisp
+    XLISP    DOC  Documentation for xlisp interpreter
+    XLISP    EXE  A lisp interpreter with object-oriented extensions
+
+### Directory of PC-SIG Library Disk 0134
 
      Volume in drive A has no label
      Directory of A:\

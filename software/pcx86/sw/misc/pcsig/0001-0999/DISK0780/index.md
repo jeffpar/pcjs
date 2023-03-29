@@ -9,13 +9,26 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #780"
+      B: "PC-SIG Library Disk 0780"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #780
+## Information about "BRIDGEPAL THE GAME OF CONTRACT BRIDGE"
+
+    Want a good game of bridge but lack the players?  Want to improve your
+    skill a bit before your next big game with your friends?
+    This game's for you.
+    
+    BRIDGEPAL is played just like a normal game of bridge, except the
+    computer shuffles, deals, makes bids, plays the other three hands, and
+    keeps score.  You start bidding and playing from the south hand
+    position.  If your team wins the bidding, you get to play both the north
+    and south hands; otherwise, you play defense with east or west as dummy.
+    Optional besthand feature increases your chances for offensive play.
+
+### Directory of PC-SIG Library Disk 0780
 
      Volume in drive A has no label
      Directory of A:\

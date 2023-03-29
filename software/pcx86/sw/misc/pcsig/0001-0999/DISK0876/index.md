@@ -9,13 +9,28 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #876"
+      B: "PC-SIG Library Disk 0876"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #876
+## Information about "G.I.F.T.S. GREAT GIFT IDEAS"
+
+    Having that same old trouble coming up with a gift for Aunt Gertrude
+    year after year? How about Mom? Given her all the gifts you could
+    think of already?
+    
+    G.I.F.T.S. is a database designed to give you gift ideas for people.
+    From a menu you select two key words for the price range of the present,
+    the category of the item, and the type of person it's for. Gifts are
+    then selected out of the database, which may be viewed on the screen or
+    printed on the printer. Each listing will display the title of the
+    gift, the approximate cost, the supplier, a description, and a comment.
+    
+    Got that charge card ready?
+
+### Directory of PC-SIG Library Disk 0876
 
      Volume in drive A has no label
      Directory of A:\

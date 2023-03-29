@@ -9,13 +9,25 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #527"
+      B: "PC-SIG Library Disk 0527"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #527
+## Information about "BASIC WINDOWING TOOLBOX FOR PROGRAMERS"
+
+    BASIC WINDOWING TOOLBOX (B-WINDOW) is a collection of functions that
+    give windowing capability to a BASIC programmer.  Windows can be opened
+    over sections of the screen and, when closed, the overwritten section
+    of the screen is restored.  With B-WINDOW, BASIC programs look more
+    visually exciting and professional.  B-WINDOW works with both QuickBASIC
+    and interpreted BASIC.  Special windowing cursor control and string
+    character display, and border drawing are included.  Everything happens
+    at top speed because B-WINDOW was written in C, converted to assembler,
+    and hand-optimized.
+
+### Directory of PC-SIG Library Disk 0527
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,46 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #300"
+      B: "PC-SIG Library Disk 0300"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #300
+## Information about "CUBS AND INVENTORY"
+
+    There are two dBASE III programs on this disk.  INV is a household
+    goods inventory program.  INV maintains a description of each item,
+    date purchased and cost.  It also figures the total cost during the
+    print routine.  CUBS is a system for keeping the records of a cub
+    scout pack.
+    
+    System Requirements: 256K, two disk drives, dBASEIII, and a C. ITOH
+    Prowriter printer.
+    
+    How to Start: To use, insert a dBASE disk in drive A and this disk in
+    drive B. Then type <dBASE INV>, or <dBASE CUB> for the CUBS program.
+    To read the documentation, enter TYPE README.INV or TYPE README.CUB
+    
+    File Descriptions:
+    
+    ???      PRG  More programs in CUB system (30)
+    README   CUB  Brief description of CUB system
+    CUBS     PRG  Main program, type: DBASE CUBS to start
+    -------- ---  CUBS - Cub scout record keeping
+    INV      TXT  Sample printout
+    INV      NDX  Index file
+    INV      DBF  Database file
+    INV      PRG  Main program
+    -------- ---  INV - Household Goods Inventory
+    ???      FMT  dBase report programs
+    INV???   PRG  dBase home inventory programs
+    ???      BAK  dBAse backup files
+    ???      NDX  dBase index files
+    ???      DBF  dBase data files
+    README   INV  Notes on inventory programs
+
+### Directory of PC-SIG Library Disk 0300
 
      Volume in drive A has no label
      Directory of A:\

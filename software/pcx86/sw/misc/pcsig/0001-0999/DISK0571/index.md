@@ -9,13 +9,46 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #571"
+      B: "PC-SIG Library Disk 0571"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #571
+## Information about "LOTUS WORKSHEETS #7"
+
+    1-2-3 Worksheets 7 contains various useful worksheets for financial
+    analysis and accounting applications.  PAYROLL.WKS is a standalone
+    payroll system that can be used in many small businesses.  It even
+    includes graphs.  LOAN.WKS  requires 340k RAM and calculates
+    amortization on loans up to 50 years.  PAD.WKS is a Desktop-like
+    electronic notepad.   RENTAL.WKS is a detailed management system for
+    income property owners. This disk requires that you have LOTUS 1-2-3
+    version 1.1a, or you can convert to version 2 of LOTUS.  It will work
+    with any system that runs LOTUS.
+    
+    System Requirements:   256K, two disk drives, monochrome display, LOTUS
+    1-2-3 v1.1
+    
+    How to Start:   Access through LOTUS 1-2-3
+    
+    File Descriptions:
+    
+    PAD      WKS  LOTUS worksheet - Menu driven Notepad
+    LOAN     WKS  LOTUS worksheet - Amortization on 50 year loan
+    CHR256   WKS  LOTUS worksheet - Display all IBM characters in workshee t
+    BAR      WKS  LOTUS worksheet - Data  Entry for Curve Smoothing
+    PAYROLL  WKS  LOTUS worksheet - Menu driven Payroll
+    SCHEDULE WKS  LOTUS worksheet - Project Scheduler
+    PRNCINT  WKS  LOTUS worksheet - Principal, Interest and Insurance
+    RENTAL   WKS  LOTUS worksheet - Rental Units financial Manager
+    PRTFOL   WKS  LOTUS worksheet - Portfolio Manager
+    TREND123 MAC  LOTUS 1-2-3 Trend line curve fitting macro
+    TREND123 DOC  Documentation for TREND123.MAC
+    PAYROLL  PIC  Payroll grafix
+    CHR256   DOC  Documentation for using IBM characters in a Lotus Workshee
+
+### Directory of PC-SIG Library Disk 0571
 
      Volume in drive A has no label
      Directory of A:\

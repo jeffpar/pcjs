@@ -9,13 +9,39 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #207"
+      B: "PC-SIG Library Disk 0207"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #207
+## Information about "LOTUS WORKSHEETS #1"
+
+    This disk contains a collection of some really nice worksheets. AUTO.WKS
+    records every auto expense and tracks repair history. JOGLOG.WKS, a
+    memory hog (needs 340k), is designed for the serious runner who must
+    track performance at every level.  FEDTAX83.WKS is complete.  PAD.WKS
+    is a sophisticated demo of Desktop-like templates. Additional
+    spreadsheets are available from the author.  AUTO and JOGLOG are
+    especially well designed for profressional performance management.
+    
+    System Requirements: 340k, two disk drives, LOTUS 1-2-3 version 1A
+    
+    How to Start:  Access through LOTUS 1-2-3
+    
+    File Descriptions:
+    
+    123KEY   BAT  Batch start up file
+    123KEY   PRO  Prokey template - permits using numeric key pad with LOTUS
+    123KEY   DOC  Documentation
+    AUTO     WKS  Calculates your gas usage and mileage  (Vince Heiker)
+    JOGLOG   WKS  Simple jogging log  (Vince Heiker)
+    FEDTAX83 WKS  1983 Tax Schedules 1040, 1040A, B, C, W  (Les Wheeler)
+    TREND123 MAC  Version 1.0 (John Dannenfeldt) - Curve fitting macro
+    TREND123 DOC  Documentation
+    PAD      WKS  Version 1.2 (Frank Girard) - Desktop-like template
+
+### Directory of PC-SIG Library Disk 0207
 
      Volume in drive A has no label
      Directory of A:\

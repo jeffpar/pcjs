@@ -9,13 +9,76 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #420"
+      B: "PC-SIG Library Disk 0420"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #420
+## Information about "FILE UTILITIES #2"
+
+    System Enhancement through specially designed file handling utilities
+    is the target of this collection.  As expected, some of the files on
+    this disk are updates of old favorites found elsewhere in the library,
+    while some are redesigned towards new functions new.  Many of these can
+    are quite powerful and can be used to inspect individual disk sectors,
+    protect files from overwriting or erasure, encrypt or decrypt text
+    files, and many other important chores.  You'll find many new friends
+    and helpers here!
+    
+    System Requirements:  64K, one disk drive and monochrome
+    display.
+    
+    How to Start:  To run an EXE or COM program simply type its name and
+    press <ENTER>. To read DOC or TXT files simply enter TYPE filename.ext
+    and press <ENTER>.
+    
+    Suggested Registration:  ARC and TCOUNT both request donations, but do
+    not specify an amount; SORT-IT  $15.00; VIEWDISK  $15.00.
+    
+    File Descriptions:
+    
+    LU       EXE  Library maintaining program
+    LU       DOC  Documentation for LU.EXE
+    L6       COM  Full screen file browse
+    GCOPY2   TXT  Documentation file
+    GCOPY2   EXE  Copy files selectively
+    BACKSTAT EXE  List files on your hard disk which are not backed up
+    LC       COM  Count lines in a file
+    UN-LOCK  DOC  Documentation file for LOCK and UNLOCK
+    UNLOCK   COM  De-encrypt your files
+    LOCK     COM  Encrypt your files
+    NIB      EXE  Unerase, patch files, create files from menory
+    SORT-IT  DOC  Documentation file
+    SORT-IT  COM  File sorter
+    COPYPC   DOC  Documentation file
+    COPYPC   COM  A better DISKCOPY command
+    VIEWDISK DOC  Documentation file
+    VIEWDISK EXE  Look at individual disk sectors
+    FILTERS  TXT  How to prepare FILTERS.LBR for use
+    FILTERS  LBR  A collection of useful DOS filters
+    UNSQ     COM  Unsqueeze files
+    UNDEL    COM  Recover erased files
+    LQTYPE   COM  List squeezed library files
+    LF       COM  List files by extension - fast
+    TCOUNT   DOC  Documentation file
+    TCOUNT   COM  Count characters, words, lines, pages in document
+    TREED    COM  Make directory tree
+    DISKSQ   COM  Squeeze all files on disk
+    DISKUNSQ COM  Unsqueeze files
+    READWRIT DOC  Documentation file
+    READWRIT COM  Make file eraseable
+    READONLY DOC  Documentation file
+    READONLY COM  Make file uneraseable
+    SEARCH   DOC  Documentation file
+    SEARCH   COM  Search an entire disk for character or string
+    FCOMPARE DOC  Documentation file
+    FCOMPARE C    C source code
+    FCOMPARE EXE  Good file compare program
+    ARC      DOC  Documentation file
+    ARC      EXE  Combine and squeeze files in one pass
+
+### Directory of PC-SIG Library Disk 0420
 
      Volume in drive A has no label
      Directory of A:\

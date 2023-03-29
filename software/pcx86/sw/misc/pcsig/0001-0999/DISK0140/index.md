@@ -9,13 +9,48 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #140"
+      B: "PC-SIG Library Disk 0140"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #140
+## Information about "DOS UTILITIES NO 7"
+
+    This disk has several file maintanence programs.  LU, GDEL, GCOPY,
+    SQ-USQ, and EJLUTIL's all concern themselves with mass file storage
+    and handling.  FREE works like CPM's STAT, by locating free room on
+    the disk.  The 8087 files are routines to easily incorporate the Intel
+    8087 math chip into high level languages.
+    
+    How to Start: From DOS prompt enter TYPE EJLUTIL.DOC for information
+    about EJLUTIL. then enter LU EJLUTIL to unsqueeze EJLUTIL.  GDEL,
+    GCOPY, LU, and SQ-USQ all have .DOC files to explain them.  Enter TYPE
+    GDEL.DOC for example.
+    
+    File Descriptions:
+    
+    READ     ME   Listing of included files
+    EJLUTIL  LBR  A library of useful utilities.  Unpack with LU.EXE
+    EJLUTIL  DOC  Documentation for the utility library
+    FLCHART  WKS  1-2-3 worksheet macros for drawing flowcharts
+    FREE     COM  Reports free space on hard or floppy disk
+    GCOPY    EXE  Choose multiple files to copy from full-screen menu
+    GDEL     EXE  Choose multiple files to delete from full-screen menu
+    GCOPY    DOC  Documentation for GCOPY.EXE
+    GDEL     DOC  Documentation for GDEL.EXE
+    INTOOLS  PAS  Set of interactive keyboard I/O procedures and functions
+    LU       DOC  Documentation for LU.EXE
+    LU       EXE  The latest and best library maintainer
+    M8087    MAC  Macros for issuing 8087 instructions
+    P87_INT       Pascal interface to PAS87.ASM routines
+    PAS87    ASM  Assembler subroutines for using 8087 from Pascal
+    USQLC10  COM  The latest file unsqueeze utility
+    SQPC161  EXE  The latest file squeeze utility
+    X2COLOR  COM  Copies the monochrome screen to the color display
+    SQ-USQ   DOC  Documentation for SQPC161.EXE and USQLC10.COM
+
+### Directory of PC-SIG Library Disk 0140
 
      Volume in drive A has no label
      Directory of A:\

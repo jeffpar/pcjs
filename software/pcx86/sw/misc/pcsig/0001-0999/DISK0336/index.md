@@ -9,13 +9,75 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #336"
+      B: "PC-SIG Library Disk 0336"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #336
+## Information about "ABC DESIGN #1"
+
+    The ABC Design character-graphics, color-image editor program allows
+    one to create and use many sets of fonts for the Epson printer, create
+    drawings and dump them with graphics mode.  If you've ever felt
+    frustrated by the difficulty of getting the most out of your printer's
+    capabilities, check this one out!  See accompanying documentation
+    for complete operating instructions for this program.
+    
+    System Requirements: Graphics printer, color graphics, and BASIC.
+    Mouse Systems optical mouse is optional.
+    
+    How to Start: Load DOS and consult ME.TXT for program information.
+    Consult MANUAL.EXE on disk 337 for program documentation.
+    
+    Suggested Registration:  $5.00/Year.
+    
+    File Descriptions:
+    The First Disk Contains:
+    ASCREF?  PIC  Documentation file (2 files)
+    ALPHA?   PIC  Block symbol images (3 files)
+    D??????  PIC  Symbol Dictionary Image (3 files)
+    CHARDOC? PIC  Documentation file (5 Files)
+    BW       PIC  Symbol Dictionary Image
+    ASKDICK  PIC  Documentation file
+    *        SET  Character Set (19 files)
+    EDDIE    BAS  Character graphics color image program
+    WARRANTY TXT  Warranty form
+    EDDIE    BAT  Batch file to run Eddie
+    FEED     TXT  Text for Form Feed
+    EP       BAT  Batch file to create script files
+    ME       TXT  Instructions for this Disk
+    LICENSE  TXT  License information
+    INSERT   TXT  Instructions for printing documentation
+    ???      BIN  Binary output (3 files)
+    GETPETE  BAT  Batch File to copy Pete Program
+    GETEDDIE BAT  Batch File to copy Eddie Program
+    GET      BAT  Batch File to copy Eddie Program
+    FIXPIC   BAS  Blanks the 25th Line of an Eddie Image
+    SETREF   PIC  Documentation file
+    SEE      BAT  Batch file to list documentation to screen
+    SCUT     PIC  Symbol Dictionary Image
+    REGFORM  TXT  Registration form
+    READ     BAT  Batch file to print documentation
+    PUSHOVER BAT  Batch file to run Push Program
+    MOUSE    BAT  Batch file to run mouse version of Eddie
+    MEDDIE   COM  Monochrome version of EDDIE
+    PUSH     BAS  Character Set Conversion Utility
+    PRINT    SET  Character Set
+    PETEDOC2 PIC  Documentation file
+    PETEDOC1 PIC  Documentation file
+    PETE     SET  Character Set
+    ???      QUE  Script file (3 files)
+    PETE     EXE  Uses screen images to create symbols
+    PART?    TXT  Instructions for printing documentation (4 files)
+    
+    The Second Disk Contains:
+    MANUAL   EXE  Program to print ABC Design documentation
+    MAN      SET  which takes about 1 1/2 hours
+    MAN      DOC  Documentation for ABC Design
+    MAN      QUE  to print
+
+### Directory of PC-SIG Library Disk 0336
 
      Volume in drive A has no label
      Directory of A:\

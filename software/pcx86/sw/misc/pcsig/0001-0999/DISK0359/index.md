@@ -9,13 +9,35 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #359"
+      B: "PC-SIG Library Disk 0359"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #359
+## Information about "MOONBEAM"
+
+    For the would be astronomer or romantic this program may be for you.
+    This program determines the phase, position, and illumination of the
+    moon.  To plot the star data graphics is required.  It is not only
+    educational, but can be just plain fun to play around with!
+    
+    System Requirements:  Color graphics card and display.
+    
+    How to Start: Load DOS and type MOONBEAM to enter the main program.
+    The plotting routines will not work if STAR.REC is not present in the
+    default drive.
+    
+    Suggested Registration:  $5.00
+    
+    File Descriptions:
+    
+    READ     ME   Documentation on moonbeam program
+    STAR     REC  Star data file used by moonbeam to plot stars
+    MOONBEAM COM  Main program for moonbeam system
+    MOONBEAM V1   Source code for MOONBEAM
+
+### Directory of PC-SIG Library Disk 0359
 
      Volume in drive A has no label
      Directory of A:\

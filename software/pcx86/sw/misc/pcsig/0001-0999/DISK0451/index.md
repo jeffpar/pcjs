@@ -9,13 +9,22 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #451"
+      B: "PC-SIG Library Disk 0451"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #451
+## Information about "CAVEQUEST"
+
+    A graphics adventure game, in the same vein as Epyx's Temple of Aphsai.
+    You start as an immortal, choose your new mortal attributes, and travel
+    to Earth to seek out fame, fortune, and excitement.
+    
+    This is a rich and complex adventure with hundreds of hours of
+    first-class entertainment in store for you. Onward!
+
+### Directory of PC-SIG Library Disk 0451
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #825"
+      B: "PC-SIG Library Disk 0825"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #825
+## Information about "TIME TRAKER"
+
+    Do you have to keep track of the amount of work you do for others?  Are
+    you a contractor, lawyer, consultant or other hourly professional?
+    Here's an easy way for your to track your working hours and simplify the
+    billing process.
+    
+    TIME TRACKER keeps track of what you do for your clients and the time it
+    takes to complete it. It keeps track of all of your accounts and bills
+    them. It also records the receipt of money from your billings.
+    
+    Since your accounts receivable is taken care of, the only thing you have
+    to worry about is keeping track of your expenses. Moreover, it will let
+    you know where you stand in terms of accounts receivable, income, and
+    unbilled hours, at any time.
+
+### Directory of PC-SIG Library Disk 0825
 
      Volume in drive A has no label
      Directory of A:\

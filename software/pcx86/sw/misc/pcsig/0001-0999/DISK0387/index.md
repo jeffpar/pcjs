@@ -9,13 +9,64 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #387"
+      B: "PC-SIG Library Disk 0387"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #387
+## Information about "KEEP IN TOUCH"
+
+    Keep in Touch is a networking tool for all kinds of people and
+    organizations.  As networking is maintaining contact with people and
+    organizations thereby sharing and distributing information, products,
+    services, etc., tying them all together is key to success.  Keep in
+    Touch may be that key for you!  Two other interesting observations
+    about this program: while it is written in BASIC, Keep in Touch uses a
+    menu structure similar to Lotus 1-2-3!
+    
+    Features:
+    
+    ~ Call using your automatic dialer
+    ~ Display the elapsed time of a call
+    ~ Show the Things-To-Do list
+    ~ Hang up the telephone and show elapsed time
+    ~ Check the time or use the alarm clock
+    ~ Games, visual relaxation and amusement
+    ~ Use the built-in calculator
+    ~ Examine information on your contacts and clients
+    ~ Create reports about your contacts and clients
+    ~ Print a phonelist report
+    ~ Print a report of dates
+    ~ Print mailing labels using Avery Tabulabel 4146 4" format
+    ~ Check the amount of memory available
+    
+    System Requirements: BASIC
+    
+    How to Start: Consult the KIT.DOC file for directions and documentation.
+    To run this BASIC programs, consult the directions in GETTING STARTED
+    for your configuration.
+    
+    File Descriptions:
+    
+    CONFIG   BAS  Configures hardware, monitor, printer, telecommunications
+    AUTOEXEC BAT  Starts Keep In Touch when the system is booted.
+    KEYSET   BAS  Author's comments and copyright notice
+    JAPAN    DAT  Sample file
+    FILES    KIT  Directory data file
+    DEMOSET  BAS  Part of the demonstration program
+    DEMO     KIT  Demo data file
+    DEMO     BAT  Batch file to start the Keep In Touch demonstration
+    DEMO     BAS  Keep In Touch demonstration program
+    CONFIG   KIT  Configuration data file
+    KIT      BAS  The Keep In Touch program
+    KIT      DOC  Information about Keep In Touch
+    KIT      BAT  Same as AUTOEXEC.BAT
+    TODO     DAT  Sample file
+    NEW      DAT  Sample file
+    MENU     KIT  Menu data file
+
+### Directory of PC-SIG Library Disk 0387
 
      Volume in drive A has no label
      Directory of A:\

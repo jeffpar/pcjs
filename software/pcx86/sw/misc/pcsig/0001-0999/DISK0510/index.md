@@ -9,13 +9,32 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #510"
+      B: "PC-SIG Library Disk 0510"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #510
+## Information about "VISIBLE-PASCAL"
+
+    Visible-PASCAL, A PASCAL compiler, is particularly useful for teaching
+    and learning PASCAL.  With this package, users can watch the operation
+    of a program as it runs.  There are 19 different sample programs which
+    can be edited or run.
+    
+    AUTOEXEC BAT  Starts program from boot disk.
+    EDIT     BAT  Batch file to start the editor
+    ERR      TXT  Text file containing error messages
+    G        BAT  Batch file that explains how to start the program
+    MANUAL   1    User manual part 1 of 2 (27K)
+    MANUAL   2    User manual part 2 of 2 (52K)
+    PRINTMAN BAT  Batch file that prints the manual
+    RUN      BAT  Batch file to run a program
+    VISBUG   EXE  Part of compiler
+    VISED    EXE  Part of compiler
+    VISPAS   EXE  Part of compiler
+
+### Directory of PC-SIG Library Disk 0510
 
      Volume in drive A has no label
      Directory of A:\

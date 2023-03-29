@@ -9,13 +9,39 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #363"
+      B: "PC-SIG Library Disk 0363"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #363
+## Information about "PC-INPUT"
+
+    The PCINPUT and PCIGEN programs here give you a straightforward and
+    lean BASIC screen generation capacity.  With them you can design
+    alphanumeric, numeric, selected character set and keyword screen input
+    layouts for your software.  Study of these programs can also be
+    instructive towards developing modifications, especially of BASIC
+    programs.
+    
+    System Requirements: BASIC
+    
+    How to Start: Consult the INPUT.DOC and then run the DEMO to see how
+    the PCINPUT program functions.  Check your BASIC setup for running
+    these programs in the GETTING STARTED section.
+    
+    File Descriptions:
+    
+    DEMO     BAS  PCINPUT Demonstration
+    PCIGEN   EXE  Compiled version of PCIGEN
+    PCIGEN   BAS  Screen generator for BASIC programs
+    PCINPUT  DOC  File listing for PCINPUT
+    PCINPUT  BAS  Data entry generator for BASIC programs
+    SKELETON BAS  Generated BASIC statements
+    SKELETON MNU  Screen Generator skeleton names
+    SKELETON DAT  Screen Generator data files
+
+### Directory of PC-SIG Library Disk 0363
 
      Volume in drive A has no label
      Directory of A:\

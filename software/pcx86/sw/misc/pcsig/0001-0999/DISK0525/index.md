@@ -9,13 +9,25 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #525"
+      B: "PC-SIG Library Disk 0525"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #525
+## Information about "EXPRESSCALC 2 OF 2 (ALSO 524)"
+
+    EXPRESSCALC is a spreadsheet with a wide variety of applications ranging
+    from business forecasts to mortgage calculations.
+    
+    It does not require programming background to be able to use it, and
+    will interface with other files and databases -- allowing an exchange
+    of information.  Included is a tutorial, good documentation and the
+    option to configure the package to specific systems.  EXPRESSCALC
+    supports spreadsheets up to 64 columns by 256 lines.  Each column can
+    be up to 75 characters long.
+
+### Directory of PC-SIG Library Disk 0525
 
      Volume in drive A has no label
      Directory of A:\

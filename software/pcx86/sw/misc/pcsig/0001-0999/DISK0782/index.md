@@ -9,13 +9,68 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #782"
+      B: "PC-SIG Library Disk 0782"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #782
+## Information about "GT POWER 1 OF 4 (ALSO 783, 1549, 1550)"
+
+    GT POWER is an example of telecommunications at its finest.  An easy
+    set-up routine and quick simple-to-use commands make communicating with
+    other computers and BBSs a snap.  GT POWER is a set of programs and
+    files that provide complete capabilities for your system. Designed for
+    use on IBM/compatible micro-computers, it supports a wide variety of
+    modems including all Hayes compatibles, USRobotics, and IBM.
+    
+    Just a few of the features you will find on GT POWER are:
+    
+    ~ ANSI standard terminal emulation
+    
+    ~ ANSI.SYS style color graphics, without the need of ANSI.SYS!
+    
+    ~ Multiple telephone directories with 999 entries each. Records the
+    password for each BBS, as well as the date and time of last contact.
+    The total number of calls, accumulated time, uploads and downloads are
+    also recorded.
+    
+    ~ Numerous protocols are supported, such as: SEAlink, Xmodem/CRC,
+    WXmodem, Ymodem/CRC, Telink/CRC batch file, the CompuServe "B"
+    protocol and more.  Also, ten slots for external protocols to be added
+    by the user.  GT comes with several of these slots pre-setup for the
+    most popular protocols; i.e., Zmodem, Ymodem-G, Kermit, Jmodem,
+    Super8k, and BiMode. These can be changed easily or added to, by
+    modifying the External Protocol Table in the GT configuration.
+    
+    ~ ASCII file transmission, using XON/XOFF protocol and/or line-by-line
+    pacing and/or inter-character delays.
+    
+    ~ Full control of all communication parameters.
+    
+    ~ 40 function keys, to store logon, passwords, etc.
+    
+    ~ Full printer support, using XON/XOFF flow control with the host.
+    
+    ~ DOS Shell. Exit to DOS and return, GT stays in the background.
+    
+    ~ Interactive script language, to automate many repetitive tasks.
+    
+    ~ Optional LOG file. Keeps a complete record of your calls.
+    
+    ~ Detects BUSY, VOICE, NO DIAL TONE, and more, with modems that support
+    extended result codes, such as the USRobotics Courier 2400 Modem.
+    
+    ~ On-screen clock, so there is no need for a memory-resident clock
+    program.
+    
+    ~ Host mode. Allows user to set up a system to accept incoming calls.
+    
+    ~ Support for the non-standard COM ports: 3 and 4.
+    
+    A comprehensive Help menu is available at any time.
+
+### Directory of PC-SIG Library Disk 0782
 
      Volume in drive A has no label
      Directory of A:\

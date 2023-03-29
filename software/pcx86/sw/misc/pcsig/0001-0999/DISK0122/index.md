@@ -9,13 +9,33 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #122"
+      B: "PC-SIG Library Disk 0122"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #122
+## Information about "LETUS A-B-C VOL 2"
+
+    Letus A-B-C is a database in PC-FILE III format containing references
+    to articles in six major PC oriented magazines, beginning with 1982.
+    This disk of Letus A-B-C covers the following three magazines devoted
+    to the IBM PC: Softalk (SOFT), Personal Computer Age (PCAGE), and PC
+    Magazine (PCMAG)  This is the second disk of a three (#121-123); see
+    Disk #121 for a complete description.
+    
+    Suggested Registration:  $10.00 per disk.
+    
+    File Descriptions:
+    
+    PCMAG83A ???  PC Mag. first 6 months 1983 magazine ref. files (4 files)
+    SOFT83   ???  Softalk 1983 magazine reference files (4 files)
+    LOGO83A  COM  Generates Letus logo
+    LETUS    BAT  Batch file for starting Letus
+    PCAGE83  ???  PC Age 1983 magazine reference files (4 files)
+    PLOGO83  COM  Prints out LETUS A-B-C documentation
+
+### Directory of PC-SIG Library Disk 0122
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,39 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #693"
+      B: "PC-SIG Library Disk 0693"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #693
+## Information about "ACE 2 OF 2 (ALSO #692)"
+
+    This program is a general-purpose astronomy software package with three
+    separate parts -- ACECALC, ACESOLAR and ACECAT.
+    
+    ACECALC is a menu-driven astronomical ephemeris. Perform the most
+    needed astronomical calculations involving the sun, moon and planets.
+    The menu displays the local time, date and time zone name, universal
+    time, local mean sidereal time, julian day, and the name of the location
+    designated in the installation. It also calculates astrophotography
+    exposures, precession of coordinates, phases of the moon, equinoxes and
+    solstices, and satellites of Jupiter.
+    
+    ACESOLAR provides information on objects in the solar system such as
+    numeric data on the sun, the planets and their satellites. Also
+    available are narrative descriptions of the sun and planets and
+    observational data.
+    
+    ACECAT lets you search the sky catalog for objects by name, catalog
+    number, and position -- in terms of R.A./declination, object type, and
+    constellation. This sky catalog provides data on over 2000 deep-sky
+    objects, the entire Messier Catalog, 100 named objects, all bright stars
+    to magnitude 2.00, and 100 prominent double stars, with detailed
+    commentary on nearly 400 of these objects. Objects can be searched on
+    the basis of one criterion or by a combination.
+
+### Directory of PC-SIG Library Disk 0693
 
      Volume in drive A has no label
      Directory of A:\

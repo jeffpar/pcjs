@@ -9,13 +9,32 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #988"
+      B: "PC-SIG Library Disk 0988"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #988
+## Information about "MESSAGE MASTER AND ADDRESS BOOK"
+
+    Provide a message center in your computer.  Several users of the same
+    computer can leave messages and notes to each other.
+    
+    Type, read, and delete messages of up to 1,000 characters using the
+    Send and Read routines.  MAIL lists the names of the people who have
+    messages waiting for them and can be set up to be executed when the
+    computer is first turned on.  Although MESSAGE MASTER has limited text
+    editing capabilities and no password protection, it is very easy to use
+    and keeps a record of all messages sent until they are deleted.
+    
+    ADDRESS BOOK is an efficient way to keep the names, addresses, and phone
+    numbers of your customers and vendors in good order and up-to-date.  It
+    is designed for a small to mid-sized company.  Included is a way to add,
+    edit and delete your addresses, and a printer menu to print any or all
+    of your addresses.  Keep track of your personal and business address and
+    telephone lists with ease.
+
+### Directory of PC-SIG Library Disk 0988
 
      Volume in drive A has no label
      Directory of A:\

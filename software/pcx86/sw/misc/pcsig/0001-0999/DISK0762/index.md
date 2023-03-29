@@ -9,13 +9,28 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #762"
+      B: "PC-SIG Library Disk 0762"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #762
+## Information about "QUEST-3D"
+
+    QUEST-3D is a three-dimensional, wire-frame modeling program for
+    designing, viewing, and editing three-dimensional objects. A vertical
+    menu provides a selection of commands for many design and viewing
+    tasks. Move, scale, and rotate images any way you choose for many
+    creative design and illustration applications. QUEST-3D can also
+    create images from any viewpoint around your image.
+    
+    Drawing units and rotation increments are user-selectable. Portions of
+    the screen can be quickly enlarged or magnified, letting you see the
+    image you are drawing. QUEST-3D also lets you scale each axis
+    independently, so images can be stretched or condensed in height,
+    width, or length.
+
+### Directory of PC-SIG Library Disk 0762
 
      Volume in drive A has no label
      Directory of A:\

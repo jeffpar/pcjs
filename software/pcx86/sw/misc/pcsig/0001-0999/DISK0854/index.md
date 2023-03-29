@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #854"
+      B: "PC-SIG Library Disk 0854"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #854
+## Information about "DATABASE PUBLISHER"
+
+    DATABASE PUBLISHER is a menu-driven program to record and track any
+    kind of data you wish to store on the people in your life or the
+    customers of your business.
+    
+    DATABASE PUBLISHER handles data for up to 2,000 people, each with up to
+    100 categories. Records can be linked to multiple categories. Each
+    record can contain information about a person, the status of an
+    account, purchase history, demographic information or any other data
+    you may need to manage. A telephone call timer even helps you charge
+    customers for time spent on the phone.
+    
+    Print out sorted mailing labels with any combination of selected
+    categories. Format the database information into booklet form. The
+    records can be printed either on a laser or dot-matrix printer.
+
+### Directory of PC-SIG Library Disk 0854
 
      Volume in drive A has no label
      Directory of A:\

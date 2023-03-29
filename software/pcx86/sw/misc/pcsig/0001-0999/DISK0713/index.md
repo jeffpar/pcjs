@@ -9,13 +9,27 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #713"
+      B: "PC-SIG Library Disk 0713"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #713
+## Information about "COMPUTER CONTRACT BRIDGE"
+
+    COMPUTER CONTRACT BRIDGE is played by two teams, the we team and the
+    they team.  The we team consists of the North and the South.  The
+    computer is North and you're South.  The they team consists of the East
+    and the West, both played by the computer.  All your interactions with
+    your computer opponents are done through the keyboard, and you'll
+    generally get a prompt on the screen to tell you what to do next.  If
+    you pay attention to the prompts and follow their lead, you will have no
+    trouble playing.  The computer plays a fairly good game, but in time you
+    can learn how to win.  This particular version of the program is meant
+    for the novice bridge player.  Though it is a game and not a tutorial,
+    you will definitely learn a lot by playing it.
+
+### Directory of PC-SIG Library Disk 0713
 
      Volume in drive A has no label
      Directory of A:\

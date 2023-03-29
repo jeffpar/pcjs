@@ -9,13 +9,40 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #352"
+      B: "PC-SIG Library Disk 0352"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #352
+## Information about "TWO FORTHS"
+
+    Here are two FORTHS that are ready for the beginner to use.  They also
+    include the documentation and source code for experienced programers
+    who want to extensively expand or modify their FORTH.  Good examples
+    for those who want to write their own FORTH engine are provided in the
+    assembly language source files.  MVPFORTH and FORTH-H can be assembled
+    using IBM's assembler.
+    
+    System Requirements: MVPFORTH and FORTH-H source files can be assembled
+    IBM's assembler, but FORTH requires the Seattle Computer products
+    assembler.
+    
+    How to Start: Read the accompanying .DOC file.  To start MVPFORTH: type
+    MVPFORTH to load the MVPFORTH operating system from DOS.  Then typing
+    VLIST will list the available FORTH words (FORTH-79 compatible ).
+    
+    File Descriptions:
+    
+    MVPFORTH DOC  Documentation for MVPFORTH
+    MVPFORTH WDS  List of code level words for MVPFORTH
+    MVPFORTH ASM  Source code for MVPFORTH IBM assembler format
+    MVPFORTH COM  FORTH-79 compatible forth interpiter
+    FORTH-H  DOC  Documentation for Glen Haydon's FORTH
+    FORTH-H  COM  Glen Haydon's FORTH interpreter
+    FORTH-H  ASM  Source for Glen Haydon's version of MVPFORTH
+
+### Directory of PC-SIG Library Disk 0352
 
      Volume in drive A has no label
      Directory of A:\

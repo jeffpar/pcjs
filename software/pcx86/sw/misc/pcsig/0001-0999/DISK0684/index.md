@@ -9,13 +9,49 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #684"
+      B: "PC-SIG Library Disk 0684"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #684
+## Information about "PAGE ONE"
+
+    The PAGEONE programs provide a powerful, flexible document processor for
+    small to medium size files where the major emphasis is print formatting.
+    PAGEONE is a hybrid type of wordprocessor; it contains many features
+    either not found on many large wordprocessors (for instance, a
+    chain-printing device) or so difficult on them that most people do not
+    use them (line oriented formatting with embedded commands).
+    
+    It is especially useful for making letters, flyers, documents and forms
+    of all types; there is even a "typewriter" mode for dashing something
+    off.  It is easy to learn, and over 90% of its instructions are
+    displayed on the screen at all times alongside the work processed.  For
+    greater efficiency of operation, formatting is line oriented and editing
+    capabilities are fully screen oriented.
+    
+    System Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $34.00
+    
+    File Descriptions:
+    
+    CODES    EXE  Sub-program accessed by PAGEONE
+    DEMO     TXT  Demonstration file of PAGEONE features
+    ???????? DAT  Data files for running various printers (3 files)
+    FILECONV COM  File conversion from Wordstar to ASCII.
+    FILESOND ISK  Text file listing the major files on this disk
+    PAGEONE  COM  Main program file
+    PAGEONE  DOC  The operators manual
+    PRINFILE COM  Menu driven print queue utility
+    README   TXT  Instructions for starting program
+    STYLES   DOC  Documentation ad registration form for STYLES.EXE
+    STYLES   EXE  Sub-program accessed by PAGEONE
+
+### Directory of PC-SIG Library Disk 0684
 
      Volume in drive A has no label
      Directory of A:\

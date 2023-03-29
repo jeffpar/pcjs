@@ -9,13 +9,72 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #795"
+      B: "PC-SIG Library Disk 0795"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #795
+## Information about "BULLET SIMULATOR DEMO VERSION"
+
+    If you are into high-performance shooting, BULLET SIMULATOR is a program
+    you can't afford to be without.  BULLET SIMULATOR helps you understand,
+    predict and optimize the ballistic performance of your rifles.  This
+    program is based on a mathematical model of bullet flight which accounts
+    for just about any variable you can imagine.
+    
+    The following variables are included: bullet make, diameter, weight,
+    shape, ballistic coefficient, powder charge, muzzle velocity, rifle
+    weight, sight line height, rifle and your accuracy, temperature,
+    elevation above sea level, wind conditions, hill slope, vital target
+    height, target running speed and zero range.  The model is evaluated
+    over a range of distances that you specify in either yards or meters.
+    
+    Once you run a simulation, you can view as a table or graph the
+    following results: Remaining velocity, kinetic energy, sustained lead,
+    wind drift and trajectory.  Recoil, maximum effective range and
+    point-blank range are also calculated.  You can perform an optimal zero
+    range analysis to maximize the point-blank range and reduce the chance
+    of missing targets.
+    
+    Use the field simulation option to understand your load like the back of
+    your hand.  With your choice of range, hill slope and wind conditions,
+    you position crosshairs on game and silhouette graphics images where you
+    think the shot should be taken.  The bullet's impact is shown along with
+    the ideal crosshair hold.  BULLET SIMULATOR also plays a game, creating
+    random situations and keeping score of your hits and misses.  A great
+    training tool!
+    
+    A pop-up help system is available throughout the program.  This version
+    of BULLET SIMULATOR is a working demo version.  It provides all the
+    features of the registered version, but with a single bullet to give you
+    a complete idea of its capabilities.  The registeUred version uses the
+    library of over 500 bullets that you can edit to add any new bullets,
+    complete with a ballistic coefficient calculator.
+    
+    System Requirements:  320K memory.
+    
+    How to Start:  Type GO (press enter).
+    
+    File Descriptions:
+    
+    30-06    BS   Data file.
+    ATT      BGI  Data file.
+    BS       EXE  Main program.
+    BS       HLP  Help file.
+    BS       OVR  Overlay file.
+    CGA      BGI  Graphic data file for CGA card.
+    CONFIG   DTA  Data file.
+    DEMO     HLP  Help file.
+    EGAVGA   BGI  Graphic data file for EGA/VGA cards.
+    GO       BAT  Batch file to start program.
+    GUIDE    DOC  Users guide.
+    HERC     BGI  Graphic data file for Hercules card.
+    INPUTS   HLP  Help file.
+    LIBRARY  DTA  Data file.
+    PC3270   BGI  Data file.
+
+### Directory of PC-SIG Library Disk 0795
 
      Volume in drive A has no label
      Directory of A:\

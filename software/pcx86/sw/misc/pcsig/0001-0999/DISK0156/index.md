@@ -9,13 +9,26 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #156"
+      B: "PC-SIG Library Disk 0156"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #156
+## Information about "IBM USERS GROUP #1"
+
+    File Descriptions:
+    
+    ???????  NL   Data files (24 files).
+    MASTHEAD      Information file.
+    NEWS     EXE  Main viewing program.
+    PCKEY    BAS  Basic program to reassign function keys.
+    PCUGNEWS TOC  Information file.
+    READ     ME   Information file.
+    SCREEN   BAS  Program used by NEWS.EXE
+    ???????  PIC  Picture data files (10 files).
+
+### Directory of PC-SIG Library Disk 0156
 
      Volume in drive A has no label
      Directory of A:\

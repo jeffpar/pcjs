@@ -9,13 +9,26 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #918"
+      B: "PC-SIG Library Disk 0918"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #918
+## Information about "CAMBRIDGE THOROUGHBRED HANDICAPPER"
+
+    CAMBRIDGE THOROUGHBRED HANDICAPPER attempts to predict a horse or dog's
+    race performance by analyzing past performances in a consistent,
+    scientific manner.  It also gives you a strategy for betting on races
+    based on your handicapping analysis.
+    
+    The system blends sophistication and ease-of-use for the race fan who
+    enjoys the sport but doesn't have hours to devote to handicapping.  If
+    you've never handicapped a race before, you'll find this informative.
+    If you're an experienced handicapper, the data you collect is just as
+    useful as the ratings themselves.  Sharpen your own analytical thinking.
+
+### Directory of PC-SIG Library Disk 0918
 
      Volume in drive A has no label
      Directory of A:\

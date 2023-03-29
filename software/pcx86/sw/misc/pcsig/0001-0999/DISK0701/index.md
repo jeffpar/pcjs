@@ -9,13 +9,48 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #701"
+      B: "PC-SIG Library Disk 0701"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #701
+## Information about "DANCAD 3D 1 OF 4 (ALSO 702,703,704)"
+
+    DANCAD3D is an excellent and versatile drawing program that lets you do
+    very complex things like stereoscopic 3D wire-frame drawing, or very
+    simple things like designing letterheads. Draw in two and three
+    dimensions. Separate groups of lines into "elements" that can be
+    saved, loaded, magnified, rotated, flipped, offset (moved), and used
+    over and over again. Keep them as a file on a disk (give them names
+    like cube, sphere, and cylinder).
+    
+    DANCAD3D prints surprisingly sharp, crisp lines on Epson/IBM-compatible
+    dot-matrix printers. Use it for many different
+    applications, including the following:
+    
+    ~ Mechanical drawings and technical illustrations
+    
+    ~ Business forms of many kinds
+    
+    ~ Page layouts which combine text and drawings
+    
+    ~ Automatic computer slide shows
+    
+    ~ Engineering simulation to verify the fit of three-dimensional shapes
+    
+    DANCAD3D also supports many plotters, PostScript laser printers, and
+    image setters such as the Linotronic 300. It works with a mouse, 3-D
+    track ball, or cursor keys.
+    
+    DANCAD3D includes the DANMOVIE program, a full demonstration, and its
+    documentation. DANMOVIE is a very useful engineering tool. With it,
+    you can program DANCAD3D to make an animated close-up of parts in a
+    layout drawing. Use this close-up to confirm the fit of moving parts.
+    Produce an animated perspective view of the entire assembly with all of
+    the parts in motion.
+
+### Directory of PC-SIG Library Disk 0701
 
      Volume in drive A has no label
      Directory of A:\

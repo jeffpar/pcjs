@@ -9,13 +9,57 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #138"
+      B: "PC-SIG Library Disk 0138"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #138
+## Information about "PROGRAMERS UTILITIES #4"
+
+    A hackers paradise!  Utilities let you set printer modes from DOS,
+    diagnose parity errors and display interrupt vectors, and give you a
+    100-line virtual screen.  There are instructions on accessing DOS
+    enviornment variables from within batch files, and much, much, more!
+    
+    How to Start:  To run an EXE or COM program simply type it's name and
+    press <enter>.  For instructions on ASM or 'C' listings, refer to your
+    Assembler or 'C' language manuals.  For instructions on running
+    BASIC programs, please refer to the "Getting Started" section in
+    this catalog. To read DOC files simply enter TYPE filename.ext
+    and press <enter>.
+    
+    Suggested Registration:   RE-VIEW $15.00
+    
+    File Descriptions:
+    
+    BLYPROGS DOC  General description of BLY programs
+    CLA      COM  Part of RE-VIEW
+    ANSIPCH  EXE  Part of RE-VIEW
+    RE-VIEW  DOC  Documentation for above
+    RE-VIEW  COM  BLY's color support for 100-line virtual screen in DOS!
+    SETPRN   ASM  Source for above
+    SETPRN   COM  BLY's printer setup program
+    BRICKS   EXE  BLY's version of BREAKOUT
+    UP       COM  Part of RE-VIEW
+    CASE     COM  BLY's resident utility for auto case switch.
+    SETPRN   DOC  Documentation for above
+    VTYPE    EXE  BLY's replacement for DOS type command, many extensions
+    CASE     ASM  Source for above
+    VTYPE    DOC  Documentation for above
+    VTYPE    C    Source for above
+    ENVIRON  DOC  How to access DOS environment variables from batch files
+    IOS1_20  ASM  DOS 2.0 version of level 1 I/O routines for Lattice c
+    _MAIN    C    DOS 2.0 version of main routine for Lattice c
+    C        ASM  DOS 2.0 version of entry point routine for Lattice c
+    LIBRIAN  MRG  Merge file to upgrade IBM diskette librarian to DOS 2.0
+    LIBRIAN  DOC  Documentation for above
+    NORTPAT2 DOC  Patch to Norton Util 2.0 to support Teac 42 track drives
+    RMSPC    ASM  Source for above
+    RMSPC    COM  Interrupt handler for diagnosing parity errors
+    VECTS    EXE  Program to display interrupt vectors
+
+### Directory of PC-SIG Library Disk 0138
 
      Volume in drive A has no label
      Directory of A:\

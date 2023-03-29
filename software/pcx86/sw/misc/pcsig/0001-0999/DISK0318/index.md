@@ -9,13 +9,104 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #318"
+      B: "PC-SIG Library Disk 0318"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #318
+## Information about "DBASE II PROGRAMS"
+
+    The programs on this disk are all for use with dBASE II.  Some knowledge
+    of the language is assumed.  The first four sections shown below are
+    dBASE example programs and their format, index, and data files.  The
+    last section is a collection of dBASE utility programs that make life a
+    little bit easier for the dBASE user.
+    
+    System Requirements:  Two disk drives; dBASE II or III
+    
+    How to Start: To read DOC files simply enter TYPE filename.ext and
+    press <ENTER>.  To run dBASE programs, bring up dBASE II then load in
+    the selected program file.
+    
+    File Descriptions:
+    
+    ???      PRG  Other dBase program files
+    ???      FMT  Other dBase report files
+    DBASE1   DOC
+    DBASE1   BAT
+    ADD      PRG
+    MAIN     PRG
+    LASTNAME NDX
+    CAPITAL  DBF
+    GETDATA  FMT
+    DELCHECK PRG
+    DELETE   PRG
+    PRINT    FMT
+    DIRECTOR PRG
+    HELP     PRG
+    EDIT     PRG
+    ADD      MEM
+    INIT     PRG
+    MAILMEN  DOC
+    MAILINP  PRG
+    MAILED   PRG
+    MAIL     DBF
+    GETMAIL  FMT
+    BIRTHDAY PRG
+    REPORT   FMT
+    SIGN-ON  PRG
+    DATE     PRG
+    LAB-SEL  PRG
+    CRT-SEL  PRG
+    MENU     PRG
+    DUPREM   PRG
+    DUPCHECK PRG
+    MAINTAIN PRG
+    LABEL    PRG
+    DOP      DOC  Documentation for DOP2 and DOP3
+    MAILSET  MEM
+    XMASLAB  PRG
+    PRINTROL PRG
+    PRINTMEN FMT
+    PRINTLAB PRG
+    PRINTIND PRG
+    PRINTCAT PRG
+    MAILMEN  PRG
+    COPYFLD  PRG  Copies fields from one file to another
+    COPYFLD  DOC  Documentation for COPYFLD.PRG
+    DBS      EXE  Helps create dBASE II & III screens
+    COMP     NDX
+    DBASEGRF CMD  Graph program for dBASE II data files
+    LAST     NDX
+    DBASECHG BAS  Allows field changes without changing structure file
+    PROF1    NDX
+    -------- ---
+    PROF2    NDX
+    MAILDEL  PRG
+    PROF3    NDX
+    MAILED   BAK
+    MAILSET  PRG
+    TRACK_IT PRG
+    TRACK_IT DBT
+    LISTDB2  PRG
+    TRACKCO  NDX
+    TRACKMEM FMT
+    TRACKDEX PRG
+    LISTDB3  PRG
+    TRACK_IT DBF
+    TRACKSTS NDX
+    TRACKRST DBF
+    TRACKRDX NDX
+    TRACKPRO PRG
+    TRACKPRD NDX
+    TRACKNXT NDX
+    TRACKNME NDX
+    DOP2     PRG  Menu driven file inspect and change system for dBASE II
+    DBASE2C1 COM  Puts color into dBASE programs
+    DOP3     PRG  Menu driven file inspect and change system for dBASE III
+
+### Directory of PC-SIG Library Disk 0318
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,62 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #484"
+      B: "PC-SIG Library Disk 0484"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #484
+## Information about "GRAPHICS FONT DESIGN"
+
+    Graphics Font Design Utility is a program that allows the user to
+    design alternate sets of fonts for the ASCII characters in the high
+    set (numbers 128 to 255).  The new set of fonts may then be loaded
+    into any Turbo Pascal program and used in place of 128 to 255.
+    Graphics Font Design Utility then presents two ways which may be used
+    to save the font sets created.
+    
+    This utility was born to alleviate the pain of hand-coding each of the
+    characters.  This can be done on graph paper, but the final result
+    does not always look the way that is expected.  With Newfonts.com the
+    design of these character sets can be done interactively and without
+    the headaches of bit manipulation.  Plus, the program is well
+    documented!
+    
+    System Requirements: 256K, one disk drive and monochrome/graphics
+    display and a CGA card. A Pascal compiler is advisable.
+    
+    How to Start:  Type TYPE NEWFONT.DOC from the DOS prompt and
+    follow the instructions.
+    
+    Suggested Registration:  $10.00; Source code $20.00
+    
+    File Descriptions:
+    
+    NEWFONTS COM  Main program
+    USEFONTS LIB  Small library file with procedures to use the files
+    NEWFONT  DOC  Complete documentation and insructions (20k)
+    FNTDEMO? PAS  Pascal source code for FNTDEMO?.COM (4 Files)
+    JUNIOR16 PAS  Pascal source code
+    LORES    PIC  Graphics of NEWLORES.PAS
+    NEWLORES PAS  Pascal source code
+    CHEMMATH INC  Included file for merge of HI_ASCII.FNT and CHEMFONT.INC
+    CHEMFONT INC  Included file of numbers for ascii fonts
+    LOASCII  INC  Included file of standard ascii fonts
+    HIASCII  INC  Included file of standard ascii fonts
+    SAMPLE?? FNT  Sample fonts that can be used or modified (12 Files)
+    CHEMMATH FNT  Combination file with file merging option for
+    CHEMFONT FNT  Subscipts, superscripts, and some special symbols
+    LO_ASCII FNT  Standard Ascii fonts in disk file form
+    HI_ASCII FNT  Standard Ascii fonts in disk file form
+    FNTDEMO? COM  Executable file for main program (4 Files)
+    FRAKTUR  ???  Part of NEWFONTS.COM
+    ???      ???  Part of NEWFONTS.COM
+    ???CHARS ???  Part of NEWFONTS.COM
+    MEWPROC  INC  Part of NEWFONTS.COM
+    ADDENDA  DOC  Additions to documentation
+
+### Directory of PC-SIG Library Disk 0484
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,20 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #298"
+      B: "PC-SIG Library Disk 0298"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #298
+## Information about "PLANETS AND MORE"
+
+    PLANETS computes the position, distance, magnitude, orbital view, and
+    skyview for the planets, major asteroids, and Halley's Comet. The
+    skyview and orbital view can describe forward or retrograde motion. The
+    moons for each of the planets can be displayed.
+
+### Directory of PC-SIG Library Disk 0298
 
      Volume in drive A has no label
      Directory of A:\

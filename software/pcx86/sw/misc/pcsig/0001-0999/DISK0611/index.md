@@ -9,13 +9,53 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #611"
+      B: "PC-SIG Library Disk 0611"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #611
+## Information about "BLACKBEARD"
+
+    Programmers -- here's an editor that can perform just about every task
+    you'll need to have done.  This is due to its windowing capacity (13!),
+    work-horse text formatter, macro capabilites, and integral mouse
+    driver. It works well for source code editing in structured languages
+    such as Pascal, C, Fortran, etc.
+    
+    While its primary use is for source code editing, it also has some
+    wordprocessing features (reformats, centers, cut and paste, etc.) to
+    ease your housekeeping/documentation chores.
+    File Descriptions:
+    
+    READ     ME   Look here first (this file).
+    README   TOO  Version specific information.
+    PRESS    TXT  Press release info (good overall feature summary).
+    FORM     TXT  Order form (edit and mail, we thank you).
+    BB       EXE  The main program.
+    BB       HLP  On-line help file accessed by BB (not for humans).
+    BB       CFG  Data configuration file.
+    BB       LOG  Log of previous versions, including change info.
+    BBADA    LNG  Language sensitive editing templates for Ada.
+    BBC      EXE  Key binding compiler (creates BB.KEY).
+    BBC      DOC  Key binding compiler documentation.
+    BBKEYS   TXT  Source for default BB Key Bindings.
+    BB       KEY  Compiled key bindings (used by BB).
+    BBMAN    EXE  BLACKBEARD manual generator.
+    BB       MAN  Defines the BLACKBEARD manual. Customizable.
+    BBMAN    DOC  Describes how to use BBMAN.
+    BBF      DOC  BLACKBEARD text formatter Manual.
+    BBF      EXE  BLACKBEARD text formatter.
+    BB       FNT  Standard TTY type font (used by BBF formatter).
+    HPLASER  FNT  HP Laser Jet fonts (bold, underline, etc.).
+    TP351    FNT  Toshiba P351.
+    EMX80    FNT  Epson MX-80.
+    M_BB     MSC  Mouse systems movement definition file..
+    M_BB     COM  Mouse systems compiled menu file.
+    M_BB     COM  Mouse systems compiled menu file.
+    M_BB     COM  Mouse systems compiled menu file.
+
+### Directory of PC-SIG Library Disk 0611
 
      Volume in drive A has no label
      Directory of A:\

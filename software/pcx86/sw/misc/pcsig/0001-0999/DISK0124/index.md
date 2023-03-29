@@ -9,13 +9,24 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #124"
+      B: "PC-SIG Library Disk 0124"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #124
+## Information about "EXTENDED BATCH LANGUAGE"
+
+    Extended Batch Language adds additional features to the batch processing
+    capabilities already supported by DOS. The program will guide you in
+    the creation of batch files that prompt for responses and keep track of
+    variables.  Use it to set up printers, keep configuration parameters
+    up-to-date, initialize programs or create other batch files.  Optional
+    floating point, enhanced string and arithmetic operations and file I/O
+    support is provided.  It is well documented and includes example batch
+    programs.
+
+### Directory of PC-SIG Library Disk 0124
 
      Volume in drive A has no label
      Directory of A:\

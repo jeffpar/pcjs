@@ -9,13 +9,77 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #223"
+      B: "PC-SIG Library Disk 0223"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #223
+## Information about "ASSEMBLY AND PASCAL"
+
+    This disk contains a variety of Assembly language routines for screen
+    clearing and cursor size alteration.  There is a small database
+    management system written in Pascal which is linkable to LOCATE.ASM for
+    cursor positioning, a text-file preview utility, a routine using
+    ANSI.SYS to reset the keyboard, and others.  If you want to use these
+    in your programs, or just see how others do their tricks, be sure to
+    check out these.
+    
+    System Requirements: Two disk drives, an Assembler and a Pascal
+    compiler.
+    
+    How to Start:  To run the files with the C and PAS extentions, refer to
+    your Assembler and Pascal manuals. To read DOC files, just enter TYPE
+    filename.DOC and press <ENTER>.
+    
+    File Descriptions:
+    
+    INFO     BAT  Batch file to list file information on screen
+    FILE     PAS  Pascal Program to manage a small data base type program
+    LOCATE   ASM  Procedure to set cursor position from Pascal
+    RESPOND  DOC  Documentation for RESPOND
+    RESPOND  ASM  Produces beep
+    REPLY    EXE  Produces beep
+    REPLY    COM  Produces beep
+    REPLY    ASM  Source code for REPLY
+    READCHAR OBJ  Object file
+    READCHAR DOC  Documentation for READCHAR
+    READCHAR ASM  Procedure to read a specified number of characters
+    PREVIEW  PAS  Pascal source code for PREVIEW
+    PREVIEW  EXE  A Pascal utility to preview a text file prior to printing
+    MSBFILE  EXE  Executable image of file
+    LOCATE   DOC  Documentation for LOCATE
+    MORE     COM  Filter to one screen at a time
+    MODULE   PAS  Module to be linked with FILE.PAS
+    MODULE   OBJ  Object file
+    LOCATE   OBJ  Object file
+    RESPOND  OBJ  Object file
+    SETANSI  ASM  Source code for SETANSI
+    SETP     EXE  Program to setup Epson printer to skip perforations
+    SETP     ASM  Source code for SETP
+    SETANSI  EXE  Executable file version of SETANSI
+    SETANSI  COM  A procedure to communicate with ANSI.SYS to reset keys
+    SETP     OBJ  Object file
+    BEEP     ASM  Program to make "beep" on speaker
+    BEEP     DOC  Documentation for BEEP
+    CANCEL   ASM  Source for CANCEL
+    CLS      ASM  Program to clear screen
+    CANCEL   EXE  Program to cancel the setting that SETP causes
+    CLS      OBJ  Object file
+    CLS      DOC  Documentation for CLS
+    CONTRACT ASM  Procedure to restore the cursor to its system size
+    CONTENTS DOC  Description of file on this disk
+    EXPAND   DOC  Documentation for EXPAND
+    EXPAND   ASM  Procedure to expand curser to solid blinking rectangle
+    CONTRACT OBJ  Object file
+    CONTRACT DOC  Documentation for CONTRACT
+    EXPAND   OBJ  Object file
+    PREVIEW  ASM  Assembly language version of PREVIEW.EXE
+    PREVIEW  COM  Additional version of PREVIEW.EXE
+    SETP     COM  Program to setup Epson printer to skip perforations
+    ADDENDA  TXT  Notes on program improvements
+
+### Directory of PC-SIG Library Disk 0223
 
      Volume in drive A has no label
      Directory of A:\

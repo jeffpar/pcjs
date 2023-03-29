@@ -9,13 +9,45 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #100"
+      B: "PC-SIG Library Disk 0100"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #100
+## Information about "JUKEBOX"
+
+    Here is another mixed bag of early day games and music pieces programmed
+    in BASIC. The games can be fun, if a little mild compared to what game-
+    players are used to now.  But anyone interested in programming in BASIC
+    has some excellent examples of various music and games routines to study
+    and adapt or adopt at will or whimsy.
+    
+    System Requirements:  Some programs require CGA color (+); BASIC
+    
+    How to Start: To read DOC or TXT files, enter TYPE filename.ext and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    BAGPIPES BAS  Plays the bagpipes
+    MENU     PGM  Menu program for running programs on this disk
+    *        MUS  Music for JUKEBOX.BAS (10 files)
+    JUKEBOX  BAS  Jukebox music player
+    ALIEN    SPC  Files for ALIEN.BAS
+    ALIEN    BAS  Adventure type game
+    3DTT     BAS+ Play 3-D tic-tac-toe on a 4x4x4 board
+    A2       SPC  Files for ALIEN.BAS
+    ALIEN    DOC  Files for ALIEN.BAS
+    CIA      BAS  Adventure type game
+    TRADER   BAS  Interstellar trading game
+    MANOR    BAS  Adventure type game
+    EGGS     DOC  Brief description of EGGS.BAS
+    EGGS     BAS+ Draws patterns of eggs on graphics screen
+    ANIMATE  BAS+ Animation demo
+
+### Directory of PC-SIG Library Disk 0100
 
      Volume in drive A has no label
      Directory of A:\

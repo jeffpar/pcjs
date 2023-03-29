@@ -9,13 +9,40 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #921"
+      B: "PC-SIG Library Disk 0921"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #921
+## Information about "ASTRONOMY AND AERONAUTICS"
+
+    A trio of programs applicable to the performance of rockets and
+    gliders, and the air in which they fly.
+    
+    ATMOS determines properties of the standard atmosphere. ROCKET1
+    explores the flight performance of a single stage model rocket. GLIDER
+    determines the maximum flight range and endurance conditions of boost
+    and rocket gliders. This is also applicable to sailplanes, hang
+    gliders, and radio-controlled gliders.
+    
+    Explore some of the mechanics of the solar system with these tutorials
+    and calculators.
+    
+    KEPLER solves Kepler's equation for elliptic, parabolic and hyperbolic
+    orbits. SIDEREAL introduces you to the relationships between Julian
+    calendar dates and solar and sidereal times.
+    
+    J2000 converts stellar positions, proper motion, parallax and radial
+    velocity from the standard epoch B1950 (FK4) to epoch J2000 (FK5).
+    GALILEAN determines the position of the Galilean satellites relative to
+    Jupiter.
+    
+    SYNCSAT and TNODE help you determine the location of several
+    Earth-orbiting satellites. You can use this information for radio
+    tracking, communications and visual observations of Earth satellites.
+
+### Directory of PC-SIG Library Disk 0921
 
      Volume in drive A has no label
      Directory of A:\

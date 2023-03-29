@@ -9,13 +9,44 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #749"
+      B: "PC-SIG Library Disk 0749"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #749
+## Information about "QUANTOIDS, RESCUE, & LOTTERY FUN"
+
+    To the Spaceport!  If we don't hunt these madmen down, they'll destroy
+    life as we know it today!
+    
+    (C'mon, admit it. Would you want your daughter to marry an accountant
+    or... Heaven forbid... an MBA?!  Do you want your grandchildren
+    calculating ROI?! Aha, I thought not!)
+    
+    We must fight together and track down the QUANTOIDS OF NEBULOUS IV!!
+    
+    You find yourself looking out the cockpit of your spacecraft while
+    controlling ship maneuvers, varying your speed and firing at the enemy
+    ships, filled with those nefarious bean-counters intent on enslaving
+    us!
+    
+    Look out! They have COMPUTERS!!
+    
+    Keep track of all the winning numbers and numbers you have bet in "6/49"
+    lottery games.  Get a list whenever you need it. Source code included
+    for the tinkerer.
+    
+    A variation on the classic "Lunar Lander" theme.
+    
+    Launch from Earth, maneuver your ship to dock with a space station,
+    transfer the crew, return and land, preferably safely, on Earth again.
+    
+    There are only a few commands to learn, which is good.  You're not going
+    to have a lot of time for practice.  You'll be too busy trying to stay
+    alive.  Heads up!
+
+### Directory of PC-SIG Library Disk 0749
 
      Volume in drive A has no label
      Directory of A:\

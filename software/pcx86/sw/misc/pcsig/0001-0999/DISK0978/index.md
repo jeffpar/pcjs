@@ -9,13 +9,59 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #978"
+      B: "PC-SIG Library Disk 0978"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #978
+## Information about "MMAKE, FIXER, AND EGABLANK"
+
+    Programmers -- automate the process of compiling and linking a program
+    that is contained in several (or numerous) source files.  MMAKE can be
+    used with any programming language and with any compiler that can be run
+    from the MS-DOS command line.  It can speed-up program development
+    enormously, both by making recompilation of a program go much faster,
+    and by preventing errors when a changed file is not recompiled.  Based
+    on the UNIX ``make'' utility.
+    
+    Edit your WordStar, WordPerfect, or ASCII files so they can contain the
+    255 character ASCII set.  Press your ALT key along with the decimal
+    code that denotes the character you desire and it will be put into your
+    file.  The program has a full screen editor and on-line help is
+    available to you from a pop-up window.
+    
+    BREAKER is a life-saving utility when you have a text file that is too
+    large to fit in your wordprocessor.  Invoke BREAKER and you are asked
+    what file you want to break and how many lines each of your broken files
+    will contain.  The files are saved with any name you desire that has a
+    sequentially added number attached to it for easy tracking.
+    
+    Once you have worked with your broken files, put them back together
+    again in the same fashion.  A very easy program to use that should be in
+    any person's utility library.
+    File Descriptions:
+    
+    BREAKER  EXE  The BREAKER main program.
+    BUDG     PRN  Data file.
+    
+    STRIPPER reads an input text file and produces an output file by
+    replacing any control character visible.  You have the option of
+    deleting characters in the ASCII character set that are above 126, below
+    126, 126 only, below 32, above 32, delete spaces, or any combination in
+    between.
+    File Descriptions:
+    
+    STRIPPER EXE  The STRIPPER main program.
+    TESTMAIL DBF  Data base file.
+    
+    EGABLANK blanks your EGA screen after two minutes of inactivity.
+    Pressing any key will reactivate your screen.
+    File Descriptions:
+    
+    EGABLANK COM  Main program.
+
+### Directory of PC-SIG Library Disk 0978
 
      Volume in drive A has no label
      Directory of A:\

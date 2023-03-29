@@ -9,13 +9,19 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #625"
+      B: "PC-SIG Library Disk 0625"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #625
+## Information about "PC-CALC FOR THE PCJR"
+
+    This is Jim Button's famous spreadsheet program PC-CALC, specifically
+    recommended for the PCjr.  Perfect for small to mid-size applications
+    such as financial analysis and simple accounting.
+
+### Directory of PC-SIG Library Disk 0625
 
      Volume in drive A has no label
      Directory of A:\

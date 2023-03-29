@@ -9,13 +9,23 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #127"
+      B: "PC-SIG Library Disk 0127"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #127
+## Information about "PC-MUSICIAN"
+
+    PC-MUSICIAN is a tool for the beginning composer.  It lets you enter
+    musical notation and then plays it back.  It needs no extra keyboards or
+    instruments attached, as it uses only the keypad.
+    
+    Playback is on the one voice of the computer.  This program is more for
+    the aspiring musician than for the technically-proficient
+    musician/computer operator.
+
+### Directory of PC-SIG Library Disk 0127
 
      Volume in drive A has no label
      Directory of A:\

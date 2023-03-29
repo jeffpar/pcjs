@@ -9,13 +9,87 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #425"
+      B: "PC-SIG Library Disk 0425"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #425
+## Information about "ENGINEERING PASCAL"
+
+    Most of these programs come from the book entitled "Pascal Programs for
+    Scientists and Engineers", published by Sybex.  They include commonly-
+    used routines for engineering and statistics.  The MATHPACK.PAS is a
+    collection of mathematical and geometrical functions.  For example,
+    MEANS.PAS will compute the mean and standard deviation of a set
+    of numbers and is RANDOM.LIB which is a random generator.
+    
+    System Requirements:  64K, one disk drive, monochrome display, and
+    Turbo Pascal.
+    
+    How to Start:  To read the documentation enter TYPE PAS-ENG.DOC
+    
+    File Descriptions:
+    
+    BESY     PAS  Evaluation of the Bessel function of the 2nd kind
+    CFIT1A   PAS  "  (with a random number generator)
+    CFIT1    PAS  Linear least-squares curve fit
+    GAUSSJ   LIB  Gauss-Jordan matrix inversion and solution
+    GAUSS    PAS  Simultaneous solution by Gaussian elimination
+    GAUSID   PAS  Simultaneous solution by Gauss-Seidel
+    FITPOL   PAS  Linear least-squares fit to the ratio of two polynomi als
+    ERFSIMP  PAS  Gaussian error function by Simpson's rule
+    ERFD3    PAS  Gaussian error function and its complement
+    ERFD     PAS  Infinite series expansion for Gaussian error function
+    ERF4     PAS  An improved Gaussian error function
+    DIFFUS   PAS  An example of FITPOL: diffusion of Zn in Cu
+    DETERM   PAS  Calculate the determinant of a 3x3 matrix
+    CFIT4    PAS  Linear least-squares fit
+    CFIT2    PAS  Plotting program using PLOT.LIB
+    GD-LINF1 LIB  Linear least-squares fit with Gauss-Jordan routine
+    PAS-ENG  DOC  Description of files on this diskette
+    NLIN3    PAS  Linear least-squares fit with nonlinearized e-function
+    NEWTON-L LIB  Newton program with an iteration counter
+    NEWTON   LIB  Solves equations by Newton's method
+    NEWDR2   PAS  Solves equations by Newton's method
+    NEWDR    PAS  Solves equations by Newton's method
+    MEANS    PAS  Computes mean and standard deviation
+    MATR1    PAS  Matrix multiplication
+    LINFIT2  LIB  Fits a straight line through n sets of x,y points
+    LINFIT1  LIB  Fits a straight line through n sets of x,y points
+    LEAST6   PAS  Linear least-squares fit with Gauss-Jordan routine
+    LEAST3   PAS  Linear least-squares fit with Gauss-Jordan routine
+    LEAST2   PAS  Linear least-squares fit with Gauss-Jordan routine
+    LEAST1   PAS  Linear least-squares fit using a parabolic curve
+    JULIAN   LIB  Converts date to Julian
+    GD-LINF2 LIB  "
+    MATHPACK PAS  Mathematical & geometrical function package
+    TSTSORT  PAS  Test speed of sorting routine
+    TSTGAM   PAS  Tests the Gamma function
+    TSTBES   PAS  Tests the Bessel function
+    TRAPEZ   LIB  "  (with end-correction)
+    TRAP2    PAS  "
+    TRAP1    PAS  Integrations by the trapezoidal rule
+    SQUARE   LIB  Matrix multiplication
+    SORT-S   LIB  Shell-Metzner sort
+    SORT-Q-R LIB  Recursive Quick-sort
+    SORT-Q-N LIB  Nonrecursive Quick-sort
+    SORT-B   LIB  Bubble sort
+    SOLVGV   PAS  "  (with multiple constant vectors)
+    SOLVGJ2  PAS  "  (using more equations than unknowns)
+    SOLVGJ   PAS  Simul. equations, Gaussian elimination, Gauss-Jordan
+    SOLVEC   PAS  Performs simultaneous solution for complex coefficients
+    SIMQ1    PAS  Solves three simultaneous equations by Cramer's rule
+    SIMPS    LIB  "  (with end-correction)
+    SIMP1    PAS  Integration by Simpson's rule
+    ROMB3    PAS  "  (with adjustable panels)
+    ROMB1    PAS  Integration by the Romberg method
+    RANDOM   PAS  Source code for random number generator
+    RANDOM   LIB  Random number generator (0..1)
+    RANDG    LIB  Random number generator with gaussian distribution
+    PLOT     LIB  A plotter (printer) subroutine
+
+### Directory of PC-SIG Library Disk 0425
 
      Volume in drive A has no label
      Directory of A:\

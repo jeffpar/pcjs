@@ -9,13 +9,27 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #997"
+      B: "PC-SIG Library Disk 0997"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #997
+## Information about "OPUS 1 BRAIN TEASERS TRIVIA GAME"
+
+    Have you worn out your edition of Trivial Pursuit?  Wish you could have
+    more than six categories to test your brain cells?  OPUS 1 BRAIN TEASERS
+    fill this need.
+    
+    OPUS 1 is a trivia-oriented game for up to four people.  There are 25
+    different categories to choose from.  A few of the diverse categories
+    are:  body talk, tv & film, 1-2-3, two-way words, books, and plays.
+    
+    The game is played much like you would play Charades, with the clues
+    brought up as a graphic clue.  For example, The Graduate has the clue
+    ``GRADUUUUUUUU'' (Grad + eight U's = Grad-u-eight).  Have fun!
+
+### Directory of PC-SIG Library Disk 0997
 
      Volume in drive A has no label
      Directory of A:\

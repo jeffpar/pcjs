@@ -9,13 +9,38 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #242"
+      B: "PC-SIG Library Disk 0242"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #242
+## Information about "SAGE TRADER"
+
+    Sage Trader was written to provide the commodity trader with an analysis
+    and graphics program that would run on the IBM monochrome display.
+    This program features an autosave feature that saves your data to disk
+    whenever you change files or end the program. 'Typewriter' graphics are
+    used, so a graphics card is not required, and graphs can be printed
+    with a dot-matrix or daisywheel printer.
+    
+    How to Start:  Load DOS and type ST to enter the main program.  Consult
+    TRADER.PRN for program documentation (NOTE: this program prints
+    documentation directly to your printer).
+    
+    Suggested Registration:  $50.00
+    
+    File Descriptions:
+    
+    ST       ARF  Same as above
+    ST       SPC  Points to data files
+    ST       HLP  On line help for ST.EXE
+    ST       EXE  Main program
+    TRADER   PRN  Documentation for Sage Trader
+    INSTALL  BAT  Makes a working copy of original disk
+    *        CCC  Example data files (4 files)
+
+### Directory of PC-SIG Library Disk 0242
 
      Volume in drive A has no label
      Directory of A:\

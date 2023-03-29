@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #423"
+      B: "PC-SIG Library Disk 0423"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #423
+## Information about "PROJECT MANAGEMENT"
+
+    A complete interactive project management system using the critical
+    path method of project control.  Know where your project stands at all
+    times.  Identify those bottlenecks and deal with them before your
+    planning is affected.
+    
+    Handle 500 inter-related and dependent tasks, subcontractors, variable
+    start dates, and holidays.  Calculate the critical path, cash-flow,
+    cost reports, Gantt charts, and precedence networks.
+    
+    The system is designed to handle all necessary functions internally or
+    to let experienced users build and modify files using system-editing
+    software.
+    
+    A sophisticated tool for anyone who needs a good planning utility.
+
+### Directory of PC-SIG Library Disk 0423
 
      Volume in drive A has no label
      Directory of A:\

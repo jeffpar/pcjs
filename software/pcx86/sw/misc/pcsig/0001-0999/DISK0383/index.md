@@ -9,13 +9,51 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #383"
+      B: "PC-SIG Library Disk 0383"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #383
+## Information about "PC-DBMS"
+
+    PC-DBMS is a relational database management system that provides screen-
+    editing functions and on-line help.  The data of a database is in named
+    tables that have records and fields.  Each table resides in its own
+    file.  There may be any number of data files associated with a
+    database.
+    
+    Features:
+    
+    ~ Dynamically formatted full-screen forms for data entry.
+    ~ A query command that can retrieve records.
+    ~ Dynamic files.
+    ~ A fast-screen editor.
+    ~ A menu-based help system.
+    ~ Files resemble the data tables.
+    ~ Indexing with an automatic index update.
+    
+    System Requirements:  Two disk drives
+    
+    How to Start:  From DOS, enter TYPE MANUAL.1 and TYPE MANUAL.2 for
+    documentation.  To run program, enter PC-DBMS at the DOS prompt.
+    
+    Suggested Registration:  $35.00
+    
+    File Descriptions:
+    
+    PC-DBMS  SMP  Color table
+    ???      TXT  Additional documentation files
+    MUSIC    DEF  A sample database used in the tutorial
+    MANUAL   1    First half of the manual
+    OPUS     DAT  A sample database used in the tutorial
+    COMPOSER DAT  A sample database used in the tutorial
+    REQUEST  DOC  Payment form and invoice
+    READ     ME   Printing instructions for the manual
+    PC-DBMS  EXE  The PC-DBMS program
+    MANUAL   2    Second half of the manual
+
+### Directory of PC-SIG Library Disk 0383
 
      Volume in drive A has no label
      Directory of A:\

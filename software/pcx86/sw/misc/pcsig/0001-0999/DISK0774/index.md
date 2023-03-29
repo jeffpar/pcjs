@@ -9,13 +9,21 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #774"
+      B: "PC-SIG Library Disk 0774"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #774
+## Information about "THE MOVIE DATABASE 2 OF 2 (ALSO 311)"
+
+    Old movie buffs and videotape collectors -- here's a database of nearly
+    2,000 older movie titles now available on videotape.  You can search
+    each entry by title, MPPA rating, major cast members, writer, director,
+    and other information.  As you add to your collection, you can add new
+    movies to the list with a wordprocessor or text editor.
+
+### Directory of PC-SIG Library Disk 0774
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,44 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #488"
+      B: "PC-SIG Library Disk 0488"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #488
+## Information about "LIGHTYEAR DEMO"
+
+    LIGHTYEAR is a program designed to help the user to examine
+    possibilities in different areas of businesses for better output in
+    manufacturing, marketing, advertising, sales, finance, purchasing,
+    labor relations, personnel, banking, and financial planning.  It also
+    allows the user to look at alternatives, to create different criteria
+    and rules and to evaluate results.
+    
+    File Descriptions:
+    
+    VOC      LY   Sub-routine for main program
+    HELP     LY   Variable help screen
+    LY       EXE  Main program.
+    1        LY   Sub-routine for manufacturing and plant sites
+    CATALOG  LY   Business areas in which LIGHTYEAR explores
+    INSTALL  BAT  Batch file to make the light year disk a start up disk
+    9        LY   Sub-routine for labor relations and labor
+    8        LY   Sub-routine for labor relations and management
+    7        LY   Sub-routine for purchasing
+    6        LY   Sub-routine for finance and aquistions
+    5        LY   Sub-routine for sales and prospects
+    4        LY   Sub-routine for advertising and media plan
+    3        LY   Sub-routine for marketing and production planning
+    2        LY   Sub-routine for manufacturing and plant sites
+    11       LY   Sub-routine for banking and loan evaluatoin
+    10       LY   Sub-routine for personnel and hiring
+    13       LY   Sub-routine for main program
+    12       LY   Sub-routine for financial planning investments
+    CONFIG   LY   Program configuration file
+
+### Directory of PC-SIG Library Disk 0488
 
      Volume in drive A has no label
      Directory of A:\

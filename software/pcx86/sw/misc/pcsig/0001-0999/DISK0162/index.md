@@ -9,13 +9,48 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #162"
+      B: "PC-SIG Library Disk 0162"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #162
+## Information about "BASIC NECESSITIES"
+
+    This disk contains several handy items that are highly useful to a
+    BASIC programmer.  Its files include a source code archiver, a utility
+    to remove tabs from files, debug functions, and a structured BASIC
+    preprocessor.  This disk is must for any one doing any extensive
+    programming in BASIC.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $25.00
+    
+    File Descriptions:
+    
+    ARCH     EXE  Source code archiver.
+    ATTRIB   SB   Sample program.
+    CHARS    SB   Sample program.
+    CLS      INC  Fast screen clear functions.
+    DEBUG    INC  Debug functions.
+    DETAB    EXE  Utility to remove tabs from files.
+    ED       DOC  Editor manual  (26k).
+    ED       EXE  Program editor.
+    ENTAB    EXE  Utility to put tabs in files.
+    INPUT    INC  Input functions.
+    LC       SB   Sample program.
+    LLIST    EXE  Filename listing utility.
+    READ     ME   File to read first.
+    SB       DOC  Preprocessor manual  (30k).
+    SB       EXE  Structured BASIC preprocessor.
+    SCREEN   INC  Screen functions.
+    UTIL     DOC  Utilities manual  (17k).
+    XREF     EXE  Cross-reference.
+
+### Directory of PC-SIG Library Disk 0162
 
      Volume in drive A has no label
      Directory of A:\

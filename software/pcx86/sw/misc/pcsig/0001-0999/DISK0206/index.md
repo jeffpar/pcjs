@@ -9,13 +9,53 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #206"
+      B: "PC-SIG Library Disk 0206"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #206
+## Information about "MATH NO 1"
+
+    A collection of programs for working in and with BASIC programming
+    tasks.  For instance, FACTOR, when run with BASIC, calculates
+    factorials of integers, but does the math done so speedily there is no
+    effective upper limit on number size.  SORT is a FAST sort module to be
+    used in BASIC programs to speed up doing sorts in BASIC.
+    
+    For mathematical assistance, we have PUNYCALC which is a good "old math"
+    representation of math functions.  MULTREG does multiple regression
+    analysis specifically, for the beginner on up.
+    
+    Specialized and general helpers: CMP compares ALL types of files ASCII
+    or binary.  PERTCHT is PERT version 1.1 written in BASIC to generate a
+    critical path analysis of any project.  KEYPUNCH and VISICOM perform
+    specialised functions.
+    
+    System Requirements: Some programs require BASIC
+    
+    How to Start:  From the DOS prompt (A:) enter PRINT *.DOC, ready
+    your printer and print the document files for the files (there are 4 of
+    them) they will then explain how to run the programs.
+    
+    File Descriptions:
+    
+    CMP      COM  File compare utility Version 1.0  (Jack Gersbach)
+    CMP      DOC  Documentation
+    FACTOR   BAS  Calculates factorials
+    KEYPUNCH BAS  Programmable keypunching
+    PERT     DAT  Part of PERTCHT.BAS
+    MULTREG  EXE  Outstanding multiple regression analysis program
+    VISICOM  DOC  Convert VISICALC to COM file  (Corrected by J Wright)
+    SORTEST  BAS  Demo of SORT.BLD
+    SORT     DOC  Documentation
+    SORT     BLD  Machine language subroutine for BASIC programs
+    PUNYCALC DOC  Documentation
+    PUNYCALC BAS  Four function simple calculator  (S. Mones)
+    PROFILE  MEM  Helps optimize BASIC programs
+    PERTCHT  BAS  PERT schedule Version 1.1
+
+### Directory of PC-SIG Library Disk 0206
 
      Volume in drive A has no label
      Directory of A:\

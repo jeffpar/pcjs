@@ -9,13 +9,47 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #40"
+      B: "PC-SIG Library Disk 0040"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #40
+## Information about "STOCK MARKET ANALYSER"
+
+    Stock Market Analysis Program for creating, analyzing and plotting
+    security data files.  Stock market analyzer is a stock tracking
+    program that enables the user to update the history files of a
+    particular stock, either with current activity or a past record.  It
+    then displays the data in graphic form so the user may analyze the
+    stock trend.  Stock market analyzer comes complete with routines to
+    plot the compiled stock data.
+    
+    How to Start: To run BASIC programs consult the directions in GETTING
+    STARTED for your configuration.  Consult MAKSTKFL.DOC for program
+    documentation.
+    
+    File Descriptions:
+    
+    PLTSTKFL DOC  Documentation for PLTSTKFL.BAS
+    PLTSTKFL BAS  Main program to print stock data
+    MAKSTKFL DOC  Documentation for MAKSTKFL.BAS
+    MAKSTKFL BAS  Main program to create stock data file
+    SCHWABCM BAS  Part of stock market program
+    *        NYS  Stock data file (14 files)
+    PUTNAMHL MUT  Stock data file
+    INDUST   DJA  Stock data file
+    KELLYSER OTC  Stock data file
+    COMSHARE OTC  Stock data file
+    TRANSFER BAT  Backup batch file
+    PLTSEQFL ALL  Lists all plot files
+    UPDSTKFL ALL  Lists all securities files
+    MONEYMKT INT  Stock data file
+    GEMAR70  OPT  Stock data file
+    UPDSTKFL DAT  Lists all active files
+    PLTSEQFL DAT  List of files to be automatically plotted
+
+### Directory of PC-SIG Library Disk 0040
 
      Volume in drive A has no label
      Directory of A:\

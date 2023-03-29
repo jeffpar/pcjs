@@ -9,13 +9,79 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #308"
+      B: "PC-SIG Library Disk 0308"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #308
+## Information about "ASSEMBLY UTILITIES NO 2"
+
+    The files on this disk are Assembly programs that may serve to both
+    teach and tantalize you Assembly language programmers out there.  This
+    disk is intended for the more experienced, or adventurous, among you.
+    Not all routines have much in the way of remarks.
+    
+    Special Requirements:  An Assembler.
+    
+    How to Start: To read the files with the DOC extensions, enter TYPE
+    filename.DOC press return.  To run the files with the ASM extension,
+    refer to your Assembler manual.
+    
+    File Descriptions:
+    
+    ASC_BIN  ASM  Converts a string of numbers to a signed 16 binary
+    ASC_BIN  OBJ  Object code for ASC_BIN
+    BIN_ASC  ASM  Converts signed binary to a 6 digit ASCII string
+    BIN_ASC  OBJ  Object code for BIN_ASC
+    CASE     ASM  Source code for CASE
+    CASE     COM  Utility changes case for comments and instructions
+    CIRCLE_1 ASM  Calls circle subroutine
+    CIRCLE_2 ASM  Similar to CIRCLE_1.ASM
+    CIRCLE_3 ASM  Similar to CIRCLE_1.ASM
+    CLINK    DOC  Documentation file.
+    CLOSER   ASM  Demonstrates a bug in CLOSE routine in PC-DOS
+    COMPAQ   ASM  Function unknown
+    DEC_ADJ  ASM  Multiplies a number by ten
+    DEC_ADJ  OBJ  Object code for DEC_ADJ
+    DISP-REG ASM  Display various registers as set by loader
+    DPATH    ASM  Does something with subdirectories or paths
+    DRAWLINE ASM  Program to draw line
+    FAST_CIR ASM  Program to draw a circle
+    FLIST    ASM  Sorted list of diskette files
+    HELLO    ASM  Assembly language demo program
+    IBM      ASM  Function unknown
+    KEYBUFF  ASM  Keyboard buffer expansion program
+    LOAD     ASM  Will load a .COM file larger than 64k
+    LOOK     ASM  Looks at memory
+    MACRO    ASM  A bunch of utility macros
+    MACRO1   ASM  More macros
+    OPER     ASM  Demonstrates operators:20a
+    PMODE    ASM  Sets up printer modes
+    PX       DOC  Documentation for PX
+    PX       EXE  Keeps track of procedure calls within a program
+    SETOKI   ASM  Sends control characters to Okidata Microline 92
+    SQ_RT    ASM  Assembly source for SQ_RT
+    SQ_RT    EXE  Calculates square roots
+    SQ_RT    OBJ  Object code for SQ_RT
+    STDBOOT  ASM  Define IBMBIO entry point
+    SWITCH_1 ASM  Fool hardware switch settings
+    SWITCH_2 ASM  Another version of SWITCH_1
+    SWPTR    ASM  Exchanges printer addresses LPT1 and LPT2
+    SWPTR    COM  Swaps LPT1 and LPT2
+    SYSINT   ASM  Indexes system interrupt function calls
+    SYSINT2  ASM  Variation of SYSINT.ASM   "       "
+    TESTLINE ASM  Sample driver for DRAWLINE
+    TRACE02  COM  Displays current values of CS:IP registers
+    TRACE02  DOC  Documentation for TRACE02
+    UASM-LST BAS  Removes addresses and adds labels on DEBUG output
+    UNDOS    ASM  UnDOS a system disk
+    VMODE    ASM  Sets up display mode
+    VW-TO-WS ASM  Volkswriter to Wordstar conversion
+    WHEREIS  ASM  Find a file on a hard disk drive
+    WS-TO-VW ASM  Wordstar to Volkswriter conversion
+
+### Directory of PC-SIG Library Disk 0308
 
      Volume in drive A has no label
      Directory of A:\

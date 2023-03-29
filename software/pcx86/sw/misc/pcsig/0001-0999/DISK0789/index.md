@@ -9,13 +9,32 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #789"
+      B: "PC-SIG Library Disk 0789"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #789
+## Information about "CARD TRAK, EGA SCREEN SAVE, AND MORE"
+
+    A screen-blanking routine that shuts your EGA screen off after three
+    minutes of keyboard inactivity.  This helps prolong the life of your
+    screen by preventing ``image burn-in''.  Striking any key restores your
+    video display.
+    
+    MONTAGE2 is in this library for one reason: it's fun.  It presents a
+    colorful line display rivaled only by '60s music videos -- a good way to
+    show off your EGA system.  You configure parameters that determine the
+    color and pattern of the lines.  It's self-documented with a help
+    display during execution.
+    
+    LOTTOPIKS is a random number generator for playing six-number format
+    state lottos.  It sorts the numbers into ascending order and displays a
+    screen of games.  The Illinois and Missouri lottos are menued for the
+    basic games, but other states' games can be easily configured with the
+    program by setting that game's maximum high number (6 to 255).
+
+### Directory of PC-SIG Library Disk 0789
 
      Volume in drive A has no label
      Directory of A:\

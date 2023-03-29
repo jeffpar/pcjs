@@ -9,13 +9,48 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #200"
+      B: "PC-SIG Library Disk 0200"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #200
+## Information about "IBM USERS GROUP #4"
+
+    June 1984 issue of the electronic newsletter published by IBM Boca
+    Raton. To read it, type NEWS.  You will be presented with a menu of
+    topics and stories, including new product announcements, tips,
+    techniques and other material.
+    
+    Articles include:
+    
+    BASIC and machine code interfacing.
+    Running DOS commands from BASIC.
+    Using numbers in random files.
+    Installing half-height drives.
+    Comparing microprocessors.
+    Using macros.
+    Recovering data from bad directories.
+    Speeding up memory check
+    Poking around on the fixed disk.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  None.
+    
+    File Descriptions:
+    
+    ???????? NL   Data file (24 files).
+    AUTOEXEC BAT  Automatically starts the program.
+    ???????? PIC  Picture data file (10 files).
+    DESCRIBE      Text file which describes the program.
+    MASTHEAD      Information file.
+    NEWS     EXE  Main program.
+    PCUGNEWS TOC  Information file.
+
+### Directory of PC-SIG Library Disk 0200
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,51 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #735"
+      B: "PC-SIG Library Disk 0735"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #735
+## Information about "CHECKBOOKS AND BUDGETS"
+
+    CHECKBOOKS AND BUDGETS is the ideal household finance program for you,
+    whether you live alone or with a family of 10 or more.
+    
+    It is versatile, multi-featured, and is a universally useful program. It
+    not only lets you keep close and careful track of your personal checking
+    accounts, but also automatically sets aside portions of your income into
+    different categories in your budget.
+    
+    The budgeting portion of the program is completely flexible, and
+    lets you move budgeted funds from account to account at will.
+    
+    FEATURES:
+    
+    ~ Easy to use, windowed, menu-driven checkbook and budgeting system
+    ~ Optional printing of industry-standard checks
+    
+    ~ Built-in help menu system
+    
+    ~ Data input editing and error-checking
+    
+    ~ Up to 180 accounts -- 120 for expenses and 60 for income
+    
+    ~ Up to 65,535 check register entries (limited by disk space)
+    
+    ~ Keyed index files used for quick data storage and retrieval
+    
+    ~ Multiple formatted listings to screen or printer
+    
+    ~ Financial reports made, including bar graphs
+    
+    ~ Automatic balancing
+    
+    ~ Quick and easy bank statement reconciliation system
+    
+    ~ Financial and loan calculations
+
+### Directory of PC-SIG Library Disk 0735
 
      Volume in drive A has no label
      Directory of A:\

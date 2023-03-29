@@ -9,13 +9,46 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #260"
+      B: "PC-SIG Library Disk 0260"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #260
+## Information about "GAME SERIES NO 17"
+
+    This is a good game disk with some neat stuff like JETSET, a flight
+    simulator program, and a couple of cribbage games.  SIMONSEZ is a fun
+    way for the youngest of kids to get hooked on computers, while
+    training their memories at the same time.  Dueling Starships and the
+    Tron game are made for two people and are both highly recommended.
+    
+    Usage:  Entertainment.
+    
+    System Requirements: Some programs require color graphics, BASIC
+    
+    How to Start: To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  To run an EXE program, just type its name and press <ENTER>.
+    For instructions on running BASIC programs, please refer to the
+    GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    DSS      EXE  Dueling Starships
+    DSS      DOC  Documentation for Dueling Starships
+    CRIB2    BAS  Game of Cribbage, enjoy
+    JETSET   BAS  Real Time Simulation of B747 jet flight
+    CRIBBAGE BAS  Game of cribbage
+    JETSET   DOC  Documentation for JETSET.DOC
+    SIMONSEZ BAS  Remember the sequence game for young children
+    SCROLL1  ML   Data file for CRIBBAGE.BAS
+    SLOTMACH BAS  Nevada style
+    SIMONSEZ DOC  Documentation for SIMONSEZ.BAS
+    TRONLC   EXE  Compiled version of TRON
+    TRONLC   BAS  Game of TRON
+    MORSE    BAS  Morse code learning program
+
+### Directory of PC-SIG Library Disk 0260
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,126 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #376"
+      B: "PC-SIG Library Disk 0376"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #376
+## Information about "PATCHES"
+
+    PATCHES is our mega-collection for unprotecting and patching specific
+    programs.  The programs on this disk allow you to place the indicated
+    programs on your hard disk or to make backup copies, inspect file
+    descriptions, and includes a multitude of information on such subjects
+    as BASIC patches, CLOCKS, VisiCalc back-up, WORDSTAR 3.3 PATCH FOR PC
+    AT.  There is even a demonstration of building and searching a tree
+    structure, and how to run a non-serialized program with PRO Basic.
+    
+    Check carefully to be sure your program's unprotect program is here by
+    version.
+    
+    System Requirements: Some programs require BASIC
+    
+    How to Start: Except for three litte BASICs, these are all
+    documentation files (suffix .UNP (for unprotect), .DOC (for DOCument),
+    or .TXT (for TeXT) files.  Screen read with TYPE, then PRINT what you
+    need.
+    
+    File Descriptions:
+    
+    123      UNP  How to make backup copy of 123 (& run without key disk)
+    123A     UNP  How to make backup copy of 123 Ver A (& run w/o key disk)
+    123-LOGO PAT  How to eliminate 123 logo page
+    DB3ZAP   BAT  Batch file for unprotecting DBIII
+    BASRUN   PAT  Latest BASRUN patches
+    BASLIB   PAT  Latest BASLIB patches
+    BASCOM   PAT  Latest BASCOM patches
+    BASCOM   FIX  Documentation for patching bugs in Basic Compiler Ver 1.0
+    NEWCOLOR 123  Changes colors displayed by original 123
+    8088     TXT  How to identify defective 8088 chips which crash systems
+    123STAR  UNP  How to make backup copy of 123 Ver A*
+    EWBACKUP UNP  How to make backup copy of EasyWriter 1.0
+    DSKCPY20 MOD  Modifies DISCOPY to eliminate messages to user
+    DOS_ERR  DOC  How to fix 'C' programs to bypass DOS 2.0 redirection bug
+    FRMWK1   DOC  How to make backup copy of Framework Ver 1.0
+    DOSBUG   MOD  Fixes DOS 1.1 bug relating to random access I/O
+    DB3-NEW  DOC  Documentation for DB3ZAP.UNP and DB3ZAP.BAT
+    COMMOD   TXT  Adds resident commands to COMMAND.COM
+    VCBACKUP DOC  How to backup VisiCalc disk (1982 version)
+    COMMAND  MOD  Makes transient portion of COMMAND.COM be resident at IPL
+    COMCOM20 PAT  DOS 2.0 patch parameters for COMMAND.MOD
+    CLOCKFIX SYS  Installable driver to replace PC DOS2.0 CLOCK$
+    CLOCKFIX DOC  Info on PC DOS 2.0 CLOCK$; not to change date at midnight
+    XTALK    PAT  Bypass the sign-on screen on Crosstalk Rel 3.4
+    FILECMD  PAT  Add color to IBM's FileCommand
+    C86MOD   DOC  Enables C86 function MAIN to return error code to DOS 2.0
+    DB3ZAP   UNP  Parameters needed by DB3ZAP.BAT
+    FIND     MOD  Patch to eliminate header inserted by DOS 2.X FIND filter
+    PROKEY   UNP  How to backup PROKEY V3.0
+    PRINT20  DOC  Patch so DOS 2.0 PRINT.COM skip prompt for list device
+    POOLCOPY DOC  Patch to fix POOLCOPY monitor bug and to make backup copy
+    PE-LOGO  PAT  Patch to eliminate logo screen on IBM Personal Editor
+    PE-COLR  MOD  Patch to set colors in IBM Personal Editor
+    FRMWK1   UNP  Parameters needed by FRMWK1.BAT
+    PCM      UNP  How to make copy of IBM Personal Comm. Manager V 1.0
+    PATCHER  BAS  How to patch other programs using patch (.PAT) data file
+    FRMWK1   BAT  Batch file to backup Framework (see FRMWK1.DOC)
+    NORTONS  MOD  Patch to Norton Utilities V2.01: access tracks above #39
+    MEMSHIFT UNP  How to make backup copy of MEMORY/SHIFT
+    LAYOUT   UNP  How to make backup copy of PROKEY 3.0
+    JRAM123  MOD  How to use 123 V1.0 with JRAM memory board in IBM-XT
+    GENPATCH BAS  Generates patches for PATCHER.BAS
+    FORMAT20 MOD  Patch to cause DOS 2.0 FORMAT to prompt for volume label
+    FLT-SIM  MOD  Allows RGB monitor to show colors using Flight Simulator
+    DB3      UNP  Used in conjunction with DB3ZAP.UNP
+    SK100A   UNP  How to backup Side Kick 1.00A (another version)
+    SK110A   UNP  How to backup Side Kick 1.10A (another version)
+    NEWCOLOR IN   Unidentified color patches
+    RESCMD   DOC  Documentation to RESCMD.BAS
+    RESCMD   BAS  Program to make COMMAND.COM totally memory resident
+    XTFORMAT DOC  Batch utility for PC XT allows user to format A: only
+    TIME-MGR UNP  How to backup IBM Time Manager
+    SAMNA    UNP  How to backup SAMNA WORD II Ver 1.1
+    COPYWRIT UNP  How to backup Copywrit
+    RB4000   UNP  How to backup RB4000 Ver 1.11
+    TKSOLVER UNP  How to backup TK Solver Ver TK-1(2J)
+    CLOUT384 UNP  How to backup Clout V1.0 384K Disk 1
+    CLOUT256 UNP  How to backup Clout V1.0 256K Disk 1
+    WS33-AT  PAT  Patch to allow Wordstar 3.3 to work properly on the PC AT
+    MSWORD   UNP  How to backup Microsoft Word
+    BASIC2   MOD  Patch to fix LOF bug in BASIC and BASICA 2.0
+    ML28-30  UNP  How to backup MultiLink Ver 2.08,2.08c, and 3.00c
+    --NOTICE ---  Information on copyright law and file extensions
+    SYMPHONY UNP  Program to run Symphony Ver 1.0 without a key disk
+    SYMPH    COM  Executable version of program given in SYMPHONY.UNP
+    SYMPH    DOC  Explanation of the instructions for SYMPHONY.UNP
+    TREE     BAS  Demonstrates building and searching a tree structure
+    SARGON3  UNP  How to backup Sargon 3
+    ZORK3    UNP  How to backup Zork III
+    ZORK12   UNP  How to backup Zork I and Zork II
+    FLGHTSIM UNP  How to backup Microsoft Flight Simulator Ver 1.00
+    MLINK207 UNP  How to backup MultiLink Ver 2.07
+    SK111A   UNP  How to backup Side Kick Ver 1.11A
+    MULTILNK UNP  How to backup MultiLink Ver 2.06
+    MLINK206 UNP  Notes to accompany MULTILNK.UNP
+    TKNEW    UNP  How to backup TK Solver TK-1(2J)/PC-DOS/IBM5150
+    SK       UNP  How to backup Side Kick Ver 1.00A
+    XENOCOPY UNP  How to backup Xenocopy Plus Ver 1.09
+    TIMEMGR  UNP  How to backup Time Manager Ver 1.00
+    SK111C   UNP  How to backup Side Kick Ver 1.11C
+    TANK     UNP  How to backup ThinkTank Ver 1.00 and Ver 1.001
+    PFS-PROG UNP  How to backup PFS File/Report/Write
+    HPMV116  UNP  How to backup Harvard Project Manager V1.16
+    HARVARD  UNP  How to backup Harvard Project Manager V1.1
+    PROBASIC UNP  Run a non-serialized program with Pro Basic by Morgan
+    PCDRAW14 UNP  How to backup PC-Draw V1.4
+    PCDRAW   UNP  How to backup PC-Draw V1.2
+    MLINK    UNP  How to backup Multilink 2.07
+    FLTSIM   UNP  How to backup Flight Simulator Ver 1.00
+    EXECUVSN UNP  How to backup ExecuVision for Dos 1.1
+
+### Directory of PC-SIG Library Disk 0376
 
      Volume in drive A has no label
      Directory of A:\

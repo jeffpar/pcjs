@@ -9,13 +9,21 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #329"
+      B: "PC-SIG Library Disk 0329"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #329
+## Information about "ASTROSOFT'S TRIVIA"
+
+    Astrosoft's Trivia is truly a trivia game to tempt the science (and
+    science fiction) genius.  In addition to astronomy, science, words, and
+    grab bag questions, they added Star Trek and Star Wars questions. If you
+    think "pon farr" is a vegetable dish, you had better check out the Star
+    Trek trivia on this disk.
+
+### Directory of PC-SIG Library Disk 0329
 
      Volume in drive A has no label
      Directory of A:\

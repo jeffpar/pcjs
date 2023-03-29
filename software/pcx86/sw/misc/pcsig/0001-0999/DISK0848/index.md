@@ -9,13 +9,27 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #848"
+      B: "PC-SIG Library Disk 0848"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #848
+## Information about "JUDY THE MEMORY RESIDENT CALENDAR"
+
+    We've all wanted a personal secretary to keep track of our appointment
+    schedule for us.  Let PC-SIG introduce you to the answer to your wish:
+    JUDY CLONE, a memory-resident desktop organizer that keeps your
+    schedules and appointments for years to come.
+    
+    JUDY maintains the full-screen interactive calendar.  She takes
+    appointments, has editing functions, makes hard-copy, and goes through
+    your notes and records, doing the daily filing tasks.  She fills your
+    computer's memory, does her job, leaves and then returns her space to
+    the memory pool.  She even wishes you ``Happy Birthday'' when that day
+    rolls around.
+
+### Directory of PC-SIG Library Disk 0848
 
      Volume in drive A has no label
      Directory of A:\

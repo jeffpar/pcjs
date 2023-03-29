@@ -9,13 +9,52 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #109"
+      B: "PC-SIG Library Disk 0109"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #109
+## Information about "DOS UTILITIES NO 5"
+
+    A grabbag of utilities aimed mostly at the needs of the more advanced
+    programmer types among us.  BREAKPT lets you do a breakpoint within any
+    program, FILEDUMP will do a hex dump to your screen.  There are
+    routines to demonstrate structured macros and one on APL. One of the
+    most interesting programs here is UTIL.  This is a DOS utility that
+    allows you to do things like: sort directories, do paged display of
+    text files, redefine your keyboard, and others.  This could be quite
+    useful for anyone interested in a simple, effective way to enhance
+    their system.
+    
+    How to Start: To run an EXE or COM program simply type its name and
+    press <ENTER>.  WKS files are for use with LOTUS 1-2-3.  For
+    instructions on ASM listings, refer to your Assembler manual.  To read
+    DOC and read-me files simply enter TYPE filename.ext and press
+    <ENTER>.
+    
+    Suggested Registration:  UTIL $10.00, $15.00 includes latest
+    version and printed documentation.
+    
+    File Descriptions:
+    
+    BREAKPT  COM  Makes ctrl-esc do a breakpoint to trace any program
+    BREAKPT  DOC  Documentation for above
+    BREAKPT  ASM  Source for above
+    DATE     PRG  dBASE II program to validate dates
+    FEDTAX83 WKS  123 worksheet for 1040 form, schedules A, B, C, W
+    REGDISP  ASM  Source for program to display 8088 regs in real time
+    PV______ APL  Present value functions in APL
+    MACTEST  ASM  Illustrates structured assembler macros in STRUCT.MAC
+    FILEDUMP COM  Hex dump a file to screen
+    STRUCT   MAC  Assembler macros for structured programming
+    UTIL     EXE  Fantastic set of screen/file/directory, etc. functions
+    UTILREAD ME   Introductory note about these utilities
+    UTIL     DOC  Documentation for UTIL.DOC
+    DATABASE      Sample database
+    READ     ME   List of files on this diskette
+
+### Directory of PC-SIG Library Disk 0109
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,69 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #309"
+      B: "PC-SIG Library Disk 0309"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #309
+## Information about "ASSEMBLY UTILITIES NO 3"
+
+    A variety of Assembly language programs gathered for the convenience of
+    the programmer. Source code is in Assembly language. Many routines
+    improve handling of screens, disks and printers.  See file descriptions
+    for a real appreciation of the breadth of this collection.
+    File Descriptions:
+    
+    ASM      TXT  2 tips from Boca Raton.
+    BEEP     ASM  Sound effect generator.
+    CLEAR    ASM  Sample clear screen routine from CHASM.
+    CLOCK    ASM  Print date and time on screen.
+    CLOCK    DOC  Documentation for CLOCK.
+    CO       DOC  Documentation for COENDP and COPRNT.
+    COENDP   ASM  Part of program to list disk contents.
+    COPRNT   ASM  Part of program to list disk contents.
+    DISASM   BAS  A BASIC program that disassembles assembly programs.
+    DISKDIRL ASM  Part of program to list disk contents.
+    DISPTEXT ASM  Displays a line on screen without BIOS.
+    DOS-EDIT ASM  Assembly language text editor.
+    DOSERROR DOC  Lists error return codes.
+    DSK      ASM  Returns the number of free sectors on a disk.
+    FREE     ASM  Shows available free space on a disk.
+    FREE     DOC  Documentation for FREE.
+    GETSP    ASM  Lists free space on disk.
+    INIT     ASM  Assembly Source Code..
+    INITMEM  ASM  Initializes memory between 544k and 576k.
+    LIB      EXE  Sub-program.
+    LIST80   ASM  Lists the first 80 characters in a line of ASCII text.
+    MEMDRV   ASM  Faster bootup and use ALL of your available memory.
+    MEMDRV   DOC  Documents MEMDRV.
+    MORERAM  ASM  Use all of available RAM.
+    NOLF     ASM  Deletes extra linefeeds from some printer files.
+    OBJSNOOP COM  Displays label references in object files.
+    OPCODE   DOC  Used by DISASM.BAS.
+    OPCODE   TXT  Used by DISASM.BAS.
+    PAGE     ASM  Demonstrates multiple screen pages.
+    PARTBIOS LIS  Partial listing of BIOS low memory.
+    PASSWORD ASM  Password protection of system.
+    PRTPATH  ASM  Prints current directory path.
+    PUT_DEC  ASM  Puts decimal point in ASCII string.
+    PUT_DEC  OBJ  Object code for PUT_DEC.
+    ROMBIOS  ASM  ROM BIOS information.
+    SCRN     ASM  A variable time screen saver.
+    SCRN     DOC  Documentation for SCRN.ASM.
+    SCROLL10 ASM  Tests DISPTEXT.
+    SKELETON ASM  Skeleton of a minimal Assembly language program.
+    SL       ASM  Tests program that scrolls screen.
+    SPEDUPDK ASM  Changes some disk drive parameters.
+    TABS     ASM  Replaces blanks with tabs in ASCII text files.
+    TALK1    ASM  Dumb terminal for IBM PC.
+    TEXT     DOC  Documentation for TEXT.EXE.
+    TEXT     EXE  Several text conversion options.
+    UPDIR    ASM  Moves the user up one directory level.
+    UPPATCH  ASM  Patch of another program.
+
+### Directory of PC-SIG Library Disk 0309
 
      Volume in drive A has no label
      Directory of A:\

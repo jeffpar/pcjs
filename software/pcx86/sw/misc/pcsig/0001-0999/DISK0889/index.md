@@ -9,13 +9,49 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #889"
+      B: "PC-SIG Library Disk 0889"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #889
+## Information about "FAMTRAK AND DOS-PRO"
+
+    FAMTRACK is an effective management tool designed to make the
+    unpleasant task of family budgeting -- if not fun -- survivable and
+    profitable. It will accommodate every type of financial transaction
+    common to modern families.
+    
+    Produce screen or printed records of monthly and year-to-date
+    performance in 40 different budget categories for both husband and wife.
+    It can handle as many as 20 separate financial accounts -- checking,
+    savings, bank cards or charge accounts -- and will reconcile each
+    account at statement time. The payment activity for as many as 21
+    payees or income sources can also be tracked.
+    
+    Menu-driven FAMTRACK can automatically reconcile your checkbook at any
+    time during the month or whenever bank statements are issued. A
+    database of all financial transactions is maintained and there is an
+    automatic year-end closing procedure and data storage.
+    
+    One of the most useful features of FAMTRACK is its loans calculator. You
+    can easily calculate mortgage amortization, future values, present
+    values, interest rates, payoff times, effective annual rates, and
+    doubling times for any compounding period. These tools are extremely
+    valuable in comparing different credit options when purchasing homes,
+    automobiles, furniture, or other major items.
+    
+    Take real financial control and plan your future.
+    
+    DOS-PRO is a menu-driven utility that lists the most commonly used DOS
+    commands and is very helpful to novice users. Select the command you
+    want to use with the cursor. If you are unfamiliar with the use of
+    that specific DOS command, an on-line help function is ready to
+    explain it to you. DOS-PRO's menu occupies only one screen, and is
+    divided into directory commands, format commands, and other DOS
+    commands.
+
+### Directory of PC-SIG Library Disk 0889
 
      Volume in drive A has no label
      Directory of A:\

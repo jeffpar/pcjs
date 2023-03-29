@@ -9,13 +9,53 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #48"
+      B: "PC-SIG Library Disk 0048"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #48
+## Information about "RUNOFF"
+
+    RUNOFF is a simple text formatter that allows you to send form feed
+    commands to the printer from DOS and gives you even more control of
+    print commands from DOS. Along with EDIPAGE, FF, and PCFORM, this
+    combination of program which allows you to "custom print" with greater
+    control over your printout's appearance.  The documentation gives you
+    all the features and special functions that will assist you in running
+    the program.
+    
+    System Requirements:  Some programs require color graphics; printer
+    recommended.
+    
+    How to Start: Consult the .DOC and .TXT files for directions.
+    To run a program with the suffix .COM, .EXE, or .BAT, just type
+    its name, i.e., for FF.BAT, type FF <ENTER>. documentation.  To
+    run the BASIC programs, consult the directions in GETTING STARTED
+    for your configuration.
+    
+    Suggested Registration: $10.00
+    
+    File Descriptions:
+    
+    RUBIC    BAS  BASIC program
+    UPLOAD   BAS  BASIC program
+    XX       HED  Program
+    DATAFIX  BAS  Adds or deletes line numbers from sequential files
+    EDIPAGE  BAS  Produces formatted listing of BASIC programs
+    FORTH    BAS  Implimentation of FORTH language in BASIC  (From Dr Dobbs)
+    FF       TXT  Used by FF.BAT
+    FF       DOC  Description of FF.BAT
+    FF       BAT  Sends formfeed to printer
+    SERIAL   BAS  Allows printscreen command to work with serial printer
+    RUNOFF   RNO  Sample text for RUNOFF text formatter
+    RUNOFF   BAS  Simple text formatter
+    QUADRIVE DOC  Documentation for QUADRAM board
+    PCFORM   BAS  Form generator example
+    LOAN2    BAS  Calculates the missing loan amortization factor
+    GROWTH2  BAS  Analysis trends and projects future growth rates
+
+### Directory of PC-SIG Library Disk 0048
 
      Volume in drive A has no label
      Directory of A:\

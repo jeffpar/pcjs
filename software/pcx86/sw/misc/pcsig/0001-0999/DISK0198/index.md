@@ -9,13 +9,25 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #198"
+      B: "PC-SIG Library Disk 0198"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #198
+## Information about "SREEN UTILITIES #3"
+
+    File Descriptions:
+    
+    CASTLE   EXE  Great adventure game - combines text, pictures, animation
+    CASTLE   RAN  Data file for castle.exe
+    L4       EXE  Full-screen list program with 4-way scroll and search!
+    L4       DOC  Documentation for above
+    L4       ASM  Source for above
+    MEMBRAIN EXE  Best ram disk yet - supports many config parameters
+    MEMBRAIN DOC  Documentation for above
+
+### Directory of PC-SIG Library Disk 0198
 
      Volume in drive A has no label
      Directory of A:\

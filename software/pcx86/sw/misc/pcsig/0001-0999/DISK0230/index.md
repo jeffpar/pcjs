@@ -9,13 +9,43 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #230"
+      B: "PC-SIG Library Disk 0230"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #230
+## Information about "THE CONFIDANT"
+
+    The Confidant is a user-supported program which encodes sensitive data
+    in order to keep it confidential.  The Confidant protects information
+    transmitted by communications lines from alteration as well as from
+    unauthorized use by anyone intercepting it or trying to change it.
+    The Confidant gives a choice of two encryption procedures.  The
+    national Data Encryption Standard (DES) provides very high security.
+    A faster "privacy" procedure that is somewhat less secure provides
+    encryption for normal use, where speed is important.
+    
+    System Requirements:  2 disk drives
+    
+    How to Start: Consult the voluminous documentation in the four files
+    marked .DOC.  Initiate the program by typing CONFIDE at the DOS prompt.
+    
+    Suggested Registration:  $10.00
+    
+    File Descriptions:
+    
+    CONFIDE  EXE  Main program
+    CONFIDE  HLP  Help file
+    CONFIDE  CRY  Part of CONFIDE
+    CONFIDE  INV  Part of CONFIDE
+    REFCARD  DOC  A brief summary of the main commands
+    DESCRIPT DOC  An overall description of the program  (24K)
+    TUTORIAL DOC  A step-by-step tutorial  (69K)
+    TYPE     ME   How to list documentation
+    REFER    DOC  A technical reference manual  (60K)
+
+### Directory of PC-SIG Library Disk 0230
 
      Volume in drive A has no label
      Directory of A:\

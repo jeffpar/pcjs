@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #288"
+      B: "PC-SIG Library Disk 0288"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #288
+## Information about "FILE EXPRESS 2 OF 2 (ALSO 287)"
+
+    FILE EXPRESS is a database management system, useful to both novice and
+    professional user. All commands are available from an easy-to-use menu
+    system that will make handling your data almost effortless.
+    
+    FILE EXPRESS databases can handle an incredible 16 million records with
+    120 fields per record and 250 characters per field. Included is a
+    powerful formula handler with if/then logic and math-and-string
+    functions. A report generator allows full screen editing and makes
+    reports in a wide variety of formats. If you're using FILE EXPRESS for
+    an address list, print mailing labels up to five across.
+    
+    With all these capabilities, tedious jobs like mailing lists, order
+    processing, sales journals, billing and A/R, inventories, and
+    summary reports will be done with more ease than ever imagined.
+
+### Directory of PC-SIG Library Disk 0288
 
      Volume in drive A has no label
      Directory of A:\

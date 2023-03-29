@@ -9,13 +9,51 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #193"
+      B: "PC-SIG Library Disk 0193"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #193
+## Information about "FREEWILL"
+
+    The California Legislature approved, effective Jan. 1, 1983 the use of
+    a "Fill-in-the-blanks" approach for executing a valid will in
+    California.  They apparently felt this was better than having people die
+    without a will or with an invalid holographic will.  Two standard will
+    forms have been approved.  This diskette contains both forms (printable)
+    and a copy of the California civil code that covers the forms.  The
+    documentation should provide some background for deciding whether you
+    should have a will, whether either of the two California statutory will
+    forms can serve your needs, or whether you should obtain the services of
+    a lawyer to draft your will.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  None.
+    
+    File Descriptions:
+    
+    PRINTING DOC  Information on printing FREEWILL GROUP.
+    FREEWILL DOC  Introduction.
+    BANNER   ASC  FREEWILL LOGO.
+    C2       BAT  Execute "C2" in default drive for explanation.
+    TRUST         Second choice of FORMS.
+    WILL          First of two FORMS for your "Do-It-Yourself" will.
+    FREEWILL ASC  Explanation text.
+    PAGEII   ASC  Explanation text.
+    PAGEIII  ASC  Explanation text.
+    PAGEIV   ASC  Explanation text.
+    PAGEIX   ASC  Explanation text.
+    PAGEV    ASC  Explanation text.
+    PAGEVI   ASC  Explanation text.
+    PAGEVII  ASC  Explanation text.
+    PAGEVIII ASC  Explanation text.
+    DISCLAIM      Disclaimer for Freewill program.
+
+### Directory of PC-SIG Library Disk 0193
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #816"
+      B: "PC-SIG Library Disk 0816"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #816
+## Information about "TURBO C TUTORIAL 1 OF 2 (ALSO 817)"
+
+    If you are a programmer in C or other programming languages and have
+    been thinking about moving up to Turbo C, TURBO C TUTORIAL can help
+    open the door.
+    
+    TURBO C TUTORIAL will teach you the basic structure of the C
+    language.  Turbo C is not really a beginner's language and the author
+    assumes you are familiar with some other programming languages but know
+    nothing about C. The tutorial starts by explaining the C language and
+    by the time you have completed the lessons you should be very familiar
+    with Turbo C.
+    
+    Included are over 60 C source code files, which are to be used
+    with the tutorial.
+
+### Directory of PC-SIG Library Disk 0816
 
      Volume in drive A has no label
      Directory of A:\

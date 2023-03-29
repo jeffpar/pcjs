@@ -9,13 +9,40 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #977"
+      B: "PC-SIG Library Disk 0977"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #977
+## Information about "PROINDEX - A DATABASE"
+
+    Writers, Students, Editors -- PROINDEX lets you negotiate the most
+    problem-filled part of writing a document or book: building the index.
+    
+    PROINDEX saves you the trouble of having to handmark each and every word
+    you want in your index.  You simply provide a file of words listing the
+    keywords you want to be in your index, and PROINDEX searches your
+    document and marks all occurrences of those keywords.  Works with any
+    ASCII text file (as well as WordStar files).
+    File Descriptions:
+    
+    PROTEST  KEY  Example keyword file.
+    PROTEST  TXT  Example document file.
+    PROINDEX DOC  On disk documentation.
+    PROINDEX EXE  Main program.
+    ADMINESE TXT  Sample text file.
+    REVADMIN TXT  Sample text file.
+    AUTOEXEC BAT  Start-up batch file.
+    STUDNESE TXT  Sample text file.
+    STPAUL   TXT  Sample text file.
+    REVTEACH TXT  Sample text file.
+    REVSTUD  TXT  Sample text file.
+    UNWS     EXE  ASCII utility.
+    UNWS     DOC  Documentation for UNWS.EXE.
+    TEACHESE TXT  Sample text file.
+
+### Directory of PC-SIG Library Disk 0977
 
      Volume in drive A has no label
      Directory of A:\

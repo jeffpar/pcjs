@@ -9,13 +9,50 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #73"
+      B: "PC-SIG Library Disk 0073"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #73
+## Information about "3D"
+
+    3D is a collection of freeware or public domain programs which perform
+    useful or interesting functions...catalog your books or records, figure
+    growth rates and projects or calculate miles per gallon, percentages,
+    or windchill factors.  Also included are graphic figures which can be
+    rotated and displayed, plus a program to create your own 3Dimensional
+    figures.
+    
+    System Requirements: BASIC; Color graphics for 3D programs.
+    
+    How to Start:  To run BASIC programs consult the directions in GETTING
+    STARTED for your configuration.
+    
+    File Descriptions:
+    
+    TEMPCONV BAS  IPCO Temperature conversion
+    MPG-CAL  BAS  IPCO Miles per gallon calculator
+    MOLY-PAY BAS  IPCO Catalog books in your library
+    %-DIFF   BAS  IPCO Calculates percentages - educational value
+    SHIP          Data file for 3-D-ROT.BAS
+    WINDCHIL BAS  IPCO Calculates windchill factors
+    GROWTH   BAS  IPCO Growth rates and projections
+    SERIALNO BAS  IPCO serial number generator
+    JET           Data file for 3-D-ROT.BAS
+    CUBE          Data file for 3-D-ROT.BAS
+    PYRAMID       Data file for 3-D-ROT.BAS
+    3-D-ROT  BAS  IPCO Rotate and display objects
+    3D       DOC  Documentation for 3D
+    3D       GRF  BASIC source for 3D.EXE
+    3D       EXE  Creates 3D images on graphics board
+    3DTEST1  PLT  Part of 3D - image file
+    3DTEST2  PLT  Part of 3D - image file
+    PCFILECH BAS  Recreates PC-FILE data base in different format
+    SHIFTS   BAS  Subroutines to set/test shift keys
+    CLERK    BAS  IPCO Record keeping program
+
+### Directory of PC-SIG Library Disk 0073
 
      Volume in drive A has no label
      Directory of A:\

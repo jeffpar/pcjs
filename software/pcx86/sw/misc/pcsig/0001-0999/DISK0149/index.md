@@ -9,13 +9,46 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #149"
+      B: "PC-SIG Library Disk 0149"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #149
+## Information about "C UTILITIES NO 1"
+
+    The files on the disk contain many useful routines including LUMP which
+    is used to join files together for BBS file transfer. Inversely the
+    UNLUMP routine separates the files.  This disk also contains a UNIX-
+    type GREP string search function.
+    
+    System Requirements:  Optional C compiler
+    
+    How to Start: To read the files with the DOC extension enter
+    TYPE filename.DOC <ENTER>.  To run files with EXE extention,
+    type: filename <ENTER>.  To run the programs with the C
+    extension, refer to your C manual for compilation and linkage.
+    
+    File Descriptions:
+    
+    LUMP     DOC  Documentation for LUMP
+    UNLUMP   EXE  Program to split files apart
+    LUMP     EXE  Program to lump files together
+    UNLUMP   C    Source code for UNLUMP
+    LUMP     C    Source code for LUMP
+    GREP     EXE  Unix like grep command to find strings in files
+    GREP     DOC  Documentation for GREP
+    CC       C    Source code for CC
+    CC       OBJ  Object file for CC
+    CC       EXE  c program checker
+    CC       DOC  Documentation for CC
+    XC       EXE  Xreference utility for c programs
+    XC       C    Source code for LUMP
+    XC       DOC  Documentation for XC
+    GREP     C    Source code for LUMP
+    README        Notes about the files on this disk
+
+### Directory of PC-SIG Library Disk 0149
 
      Volume in drive A has no label
      Directory of A:\

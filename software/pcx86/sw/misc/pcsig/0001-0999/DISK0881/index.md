@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #881"
+      B: "PC-SIG Library Disk 0881"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #881
+## Information about "HERITAGE CHURCH SYSTEM"
+
+    HERITAGE CHURCH SYSTEM is designed to automate the most mundane
+    clerical tasks of the local church. Record and access contributions
+    and membership information in a quick and concise manner. Entries can
+    be made for families in general and for each individual in a family.
+    
+    Each entry includes the name, address, phone, and church status. An
+    envelope number can be entered if pre-numbered envelopes are used for
+    recording family giving. Contributions are entered separately and the
+    program then processes the data in a weekly accounting system and
+    prints contribution reports for each family.
+    
+    Mail merge capabilities work with PC-WRITE and Microsoft WORD,
+    allowing mass mailings to the congregations.
+
+### Directory of PC-SIG Library Disk 0881
 
      Volume in drive A has no label
      Directory of A:\

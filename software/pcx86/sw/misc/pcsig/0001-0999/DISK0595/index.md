@@ -9,13 +9,58 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #595"
+      B: "PC-SIG Library Disk 0595"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #595
+## Information about "PROGRAMMING INTRO"
+
+    This is a handy and interesting tool for getting acquainted with the
+    world of microcomputers and programming.
+    
+    It has an easily-understood tutorial on computers and does a good job on
+    BASIC -- introducing the beginner to the elemental concepts of the
+    language.  A big plus is a series of practice sessions so you can
+    actually see the programs operate!
+    
+    A set of simple games are included that will engage you in a lot of
+    keyboard practice.  They include a simple word processor and several
+    number games as well as varying levels of anagrams.
+    File Descriptions:
+    
+    PRINT    BAS  PRINTING FUN program.
+    MISSING  BAS  MISSING WORD program.
+    MATH     BAS  MATH program.
+    MENU     BAS  Main menu for the system.
+    TYPE     BAS  Typing practice program.
+    MPG      BAS  M.P.G. program.
+    PRINTING BAS  Printing program.
+    REPORT   DAT  Report data file.
+    GOTO     BAS   -- 8.
+    BTMENU   BAS   -- 7.
+    GR       BAS   -- 6.
+    SCRAMBLE BAS   -- 5.
+    READDATA BAS   -- 4.
+    IFTHEN   BAS   -- 3.
+    INPUT    BAS   -- 2.
+    LET      BAS  Command -- 1.
+    BASIC    BAS  BASIC programming section.
+    MODES    BAS  Modes program.
+    GUIDE    BAS  Guide program.
+    SUPSCRAM BAS  Superscam program.
+    WURD     BAS  WURD program.
+    COUNTING BAS  Counting program.
+    SPELLING BAS  Spelling skill program.
+    GUESS    BAS  Guess my number exercise.
+    FORNEXT  BAS   -- 9.
+    CHAIRMAN BAS  Climb the corporate ladder.
+    DOCSWAN  ARC  Archived version.
+    DOCSWAN  BAS  BASIC program.
+    TYPING   BAS  Typing skills program.
+
+### Directory of PC-SIG Library Disk 0595
 
      Volume in drive A has no label
      Directory of A:\

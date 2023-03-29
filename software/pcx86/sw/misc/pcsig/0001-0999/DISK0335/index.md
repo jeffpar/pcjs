@@ -9,13 +9,41 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #335"
+      B: "PC-SIG Library Disk 0335"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #335
+## Information about "MODS FOR PC-TALK III"
+
+    This disk contains BBS-TALK.EXE [and various support programs].
+    BBS-TALK adds functions to PC-TALK v3.0 level 830424.  BBS-TALK.MRG
+    represents an effort to bring together a large number of merge files
+    into one, giant merge for PC-TALK III. If you are a fan of this
+    program, this disk will add even more likable features.
+    
+    System Requirements:  PC-TALK III
+    
+    How to Start:  To read the documentation on BBS-TALK, enter TYPE
+    BBS-TALK.DOC <ENTER>. To run it, enter BBS-TALK <ENTER>.
+    
+    File Descriptions:
+    
+    READ     ME   Notes on this disk
+    BBS-TALK BAS  BASIC version of BBS-TALK.EXE
+    PCT-XMOD DOC  Notes PCTRLX.MRG
+    ???      OBJ  Other object files used with BBS-TALK.EXE
+    CHDIR    OBJ  Object file linked with BBS-TALK to change sub-directories
+    BBS-TALK MRG  Basic [Ascii format] file when merged with PC-TALK v3.0
+    BBS-TALK EXE  Executable PC-TALK including new functions
+    BBS-TALK DOC  Details added functions to PC-TALK v3.0, level 83024
+    DISKSPAC OBJ  Object file to link with BBS-TALK to give space remaining
+    COMPILE  BAT  Batch file to automatically compile and link BBS-TALK.EXE
+    SPD      COM  Put in your autoexec.bat file and run with BBS-TALK.
+    GETDIR   OBJ  Object file linked witn BBS-TALK to support PATH commands
+
+### Directory of PC-SIG Library Disk 0335
 
      Volume in drive A has no label
      Directory of A:\

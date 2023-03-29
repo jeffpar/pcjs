@@ -9,13 +9,44 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #43"
+      B: "PC-SIG Library Disk 0043"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #43
+## Information about "EXIDY WORD PROCESSOR"
+
+    Exidy is a full featured text editor with the flexibility of up to
+    four active screen windows and the sophistication to directly access
+    the buffers prior to saving the text in a disk file.  Exidy commands
+    are invoked by either the function keys or with the use of the ALT key
+    plus a keyboard key easily associated with the desired function, such
+    as ALT-I to Insert a line.  While Exidy has the lean feel of a text
+    editor, it includes a few key word processing features allowing for
+    credible but simple word processing.
+    
+    Features:
+    
+    ~  Split screen into as many as 4 windows
+    ~  Reformatting of specified lines
+    ~  On screen help
+    ~  Cursor move by line numbers
+    ~  Bold/Underline/Extended ASCII character set
+    
+    How to Start:  For directions, consult the HELP.EDX text file.  To
+    run it, at the DOS prompt type "EXIDY"<ENTER>.
+    
+    File Descriptions:
+    
+    EDIX     EXE  Program to run
+    TEXT          Sample text
+    GRADUATE BAT  Used to turn off tutorial mode
+    STUDENT  BAT  Used to turn on tutorial mode
+    EXELOAD  EXE  Part of Exidy system
+    ????     EDX  Exidy text, help, and config files
+
+### Directory of PC-SIG Library Disk 0043
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,22 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #101"
+      B: "PC-SIG Library Disk 0101"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #101
+## Information about "PORTWORTH PACKAGE"
+
+    The PORTWORTH PACKAGE is an interesting set of programs that you can
+    use to monitor and evaluate your stock portfolios.  All of the programs
+    are written in BASIC and so, are not overly fast, but they do the job.
+    Portfolios of up to 25 stocks can be processed.  It has graphing
+    capabilities, and includes documentation and sample files to illustrate
+    its usage.  Source code is included.
+
+### Directory of PC-SIG Library Disk 0101
 
      Volume in drive A has no label
      Directory of A:\

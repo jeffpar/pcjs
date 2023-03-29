@@ -9,13 +9,36 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #945"
+      B: "PC-SIG Library Disk 0945"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #945
+## Information about "ROCKET SIMULATION"
+
+    LAUNCHER simulates a single stage-to-orbit launch vehicle. This is a
+    very good quality simulation to learn the "feel" for orbital
+    mechanics. You can design your own vehicle and pilot it to orbit and
+    rendezvous with the space station. An interest in orbital mechanics is
+    required (knowledge about it would be helpful, but is not mandatory). A
+    documentation file is included.
+    
+    A collection of programs inspired by the Computer Recreations column in
+    "Scientific American." Several data files are included.
+    
+    ~ HYPER -- a hyper cube (fourth-dimensional cube) drawing program.
+    
+    ~ WALLPAP -- an intricate patterns drawing program with a very simple
+    numeric seed.
+    
+    ~ WATOR -- a biosphere simulation in which fish are eaten by sharks,
+    which die and reproduce.
+    
+    ~ CLUSTER -- a simulation of the motion of star clusters of two or more
+    stars.
+
+### Directory of PC-SIG Library Disk 0945
 
      Volume in drive A has no label
      Directory of A:\

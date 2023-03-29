@@ -9,13 +9,48 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #1"
+      B: "PC-SIG Library Disk 0001"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #1
+## Information about "GAME SERIES NO 1"
+
+    This disk is one of the original game disks for the IBM PC.  Many of
+    these games seem primitive when compared with more recent programs, but
+    they may be of interest to those who'd like to see where we've been.
+    And, as an added bonus, all can be addressed from a single menu.
+    
+    System Requirements:  Some programs require color graphics.
+    
+    How to Start:  From BASIC, type LOAD MENU, and press <ENTER>.
+    
+    File Descriptions:
+    
+    CASPAR   BAT  File copy utility.
+    OTHELLO  BAS  Computer based version of OTHELLO game.
+    CASPAR?  HLP  Help files for CASPAR File copy utility.
+    ASK      COM  (Y/N)? Question utility.
+    SAMPLES  BAS  BASIC program.
+    WOMBATS  WP   WOMBATS text file.
+    WOMBATS  DOC  Descriptions of how to use WOMBATS.BAS.
+    PATTERNS BAS  Generates random patterns on color monitor.
+    KALEID   BAS  Generates random patterns on the color display.
+    STRINGS  BAS  Generates random patterns on the color display.
+    MAXIT    BAS  Number game.
+    HATDANCE BAS  Plays the Mexican Hat Dance song.
+    COPYOVER DOC  Description of how to use COPYOVER.BAT
+    DOTS     BAS  Displays dot patterns for display characters.
+    MENU     BAS  Menu for selecting programs on this disk.
+    COPYOVER BAT  Copies games from DOS 1.0 or 1.1 disk.
+    WOMBATS  BAS  Generates word problems.
+    BLACKJCK BAS  Blackjack game on the monochrome display.
+    CIRCLES  BAS  Draws random patterns on the color display.
+    YAHTZEE  BAS  Yahtzee game on the monochrome display.
+    PONGPONG BAS  Pong type game.
+
+### Directory of PC-SIG Library Disk 0001
 
      Volume in drive A has no label
      Directory of A:\

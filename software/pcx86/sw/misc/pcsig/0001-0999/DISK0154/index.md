@@ -9,13 +9,21 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #154"
+      B: "PC-SIG Library Disk 0154"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #154
+## Information about "PRINTER ART"
+
+    This PRINTER ART package is a collection of ASCII text files, that when
+    sent to your printer, create many wondrous sights such as a clown,
+    Schroeder of Charlie Brown fame, the Enterprise, and more.  Some of
+    these sights may not be suitable for young eyes to view, so please use
+    your own discretion.
+
+### Directory of PC-SIG Library Disk 0154
 
      Volume in drive A has no label
      Directory of A:\

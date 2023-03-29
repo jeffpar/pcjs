@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #604"
+      B: "PC-SIG Library Disk 0604"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #604
+## Information about "LANDING PARTY"
+
+    Captain!! The energy crystals that power our life-support systems are
+    failing! We need to locate new ones before we all die!  You'll have to
+    count on your crew, now. Let's hope you chose them well.
+    
+    Your favorite movie stars, historical figures, friends and relatives can
+    become characters in this text adventure game if you choose them before
+    you become captain.  You must then deal with an assortment of monsters
+    from the planet's surface before you can get those energy crystals you
+    need so desperately. LANDING PARTY is menu-driven for ease of play.
+    Individual games are short and different each time.
+    
+    Hurry, Captain! The air... I... I can't breathe....
+    
+    On the same disk is a two player trivia tic-tac-toe game. Each player
+    must answer a trivia question to mark a square.
+
+### Directory of PC-SIG Library Disk 0604
 
      Volume in drive A has no label
      Directory of A:\

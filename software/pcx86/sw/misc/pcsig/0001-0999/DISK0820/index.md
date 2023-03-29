@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #820"
+      B: "PC-SIG Library Disk 0820"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #820
+## Information about "SEEKEASY"
+
+    SEEKEASY is a very easy-to-use, ``flexible match'' information-
+    retrieval program which lets you search a text file for a character
+    string and lists the ``best matches'' to your request in the order of
+    match quality. It can do this even if the item found is not exactly
+    what you requested, or has words in it that were not in your request,
+    or doesn't use words spelled exactly the same way.  Because of the
+    flexibility of the program, it can be used for a multitude of uses,
+    both for personal and business needs.
+    File Descriptions:
+    
+    SEEKREAD ME   Introduction and brief instructions.
+    SEEKEASY DAT  This is a demonstration SEEKEASY data file.
+    SEEKEASY EXE  This is the SEEKEASY program.
+    ASC2SEEK COM  Converts ASCII data files into SEEKEASY format.
+    PC-SIG   DAT  PC-SIG library of shareware.
+
+### Directory of PC-SIG Library Disk 0820
 
      Volume in drive A has no label
      Directory of A:\

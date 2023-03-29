@@ -9,13 +9,25 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #950"
+      B: "PC-SIG Library Disk 0950"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #950
+## Information about "DOC MASTER"
+
+    DOC MASTER is a set of utilities for printing and viewing on-disk
+    documentation files.
+    
+    With READ, you can display a file on the screen and scroll through the
+    text.  WAIT makes the printer print only single sheets at a time.  PRINT
+    prints unformatted or partially-formatted ASCII text files.  PRINT also
+    lets you set the left margin, specify the lines per page, print a
+    selected page-range, select a header with auto page numbering, and
+    select either single-sheet or continuous-feed paper.
+
+### Directory of PC-SIG Library Disk 0950
 
      Volume in drive A has no label
      Directory of A:\

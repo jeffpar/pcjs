@@ -9,13 +9,62 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #434"
+      B: "PC-SIG Library Disk 0434"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #434
+## Information about "KERMIT ASM MODULES 2 OF 2 (ALSO 433)"
+
+    KERMIT is a communications system that allows different types of
+    computers to exchange information.  The files on this disk are used by
+    smaller computers so that they may communicate with an IBM
+    minicomputer or mainframe computer.
+    
+    System Requirements:  128K, one disk drive, and monochrome display
+    
+    How to Start:  To view the documentation for Disks No. 433 and 434,
+    place Disk No. 433 in your disk drive and enter TYPE MSXSYS.DOC.  To
+    run any program file, type its name and press <ENTER>.
+    
+    File Descriptions:
+    The First Disk Contains:
+    MSHP150  EXE  Hewlett-Packard 150
+    MSGENER  EXE  Generic MS-DOS KERMIT.
+    MSMKBOO  C    Four-for-Three encoder, DEC-20 specific.
+    MSBOOT   FOR  Used on mainframe when downloading KERMIT.
+    MSRBBOO  BAS  Used on Rainbow to download KERMIT from mainframe.
+    MSRBBOO  HLP  Info on MSRBBOO.BAS.
+    MSPCBOOT BAS  Used on PC to download KERMIT from mainframe.
+    MSPCTRAN EXE  Compiled version of MSPCTRAN.BAS.
+    MSPCTRAN BAS  Converts MSKERMIT.BOO to an executable file.
+    MSRBEMAC INI  EMACS function key setup for Kermit-MS/Rainbow.
+    MSXSYS   DOC  Description of system dependent modules.
+    MSXRB    ASM  DEC Rainbow 100, 100+ module.
+    MSXHP150 ASM  Hewlett-Packard 150 module.
+    MSXGEN   ASM  Generic MS-DOS KERMIT module.
+    MSRB100  EXE  DEC Rainbow 100, 100+
+    
+    The Second Disk Contains:
+    MSAPC    HLP  Documentation for NEC APC Kermit
+    MSAPC    EXE  NEC APC
+    MSXTIPRO BWR  Documentation for TI Professional Kermit
+    MSXAPC   ASM  NEC APC module
+    MSXTEK   ASM  TI Pro Tektronix emulation module
+    MSXTIPRO ASM  TI Pro module
+    MSTIPRO  EXE  TI Professional
+    MSYZ100  ASM  Zenith Z-100 Y-module
+    MSXTIPRO BAT  TI Pro assembly/link script
+    MSWANG   EXE  Wang PC
+    MSXZ100  ASM  Zenith Z-100 X-module
+    MSZ100   EXE  Zenith Z-100
+    MSZ100   HLP  Documentation for Heath/Zenith Z-100 Kermit
+    MSXWNG   ASM  Wang PC module
+    MSWANG   EXE  Wang APC
+    MSAPC    EXE  NEC APC
+
+### Directory of PC-SIG Library Disk 0434
 
      Volume in drive A has no label
      Directory of A:\

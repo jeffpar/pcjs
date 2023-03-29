@@ -9,13 +9,34 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #610"
+      B: "PC-SIG Library Disk 0610"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #610
+## Information about "PACKDISK"
+
+    PACKDISK utilities is a handy collection for file, floppy and hard disk
+    management.  Clean up your act!
+    
+    ~ DELDIR -- Deletes a subdirectory with its files and subdirectories.
+    
+    ~ LISTFRAG -- Lists all fragmented files in the drive.
+    
+    ~ NAMEDIR -- Renames a subdirectory.
+    
+    ~ PACKDISK -- Eliminates file fragmentation in the drive. Eliminates
+    unallocated spaces between files. Reintegrates lost clusters (file
+    allocation units) into available disk space. Packs the root directory
+    and subdirectories. Frees trailing clusters.
+    
+    ~ TRANSDIR -- Transfers a subdirectory and its files and subdirectories
+    into another directory in the same drive.
+    
+    ~ PARK -- Parks disk head before power off.
+
+### Directory of PC-SIG Library Disk 0610
 
      Volume in drive A has no label
      Directory of A:\

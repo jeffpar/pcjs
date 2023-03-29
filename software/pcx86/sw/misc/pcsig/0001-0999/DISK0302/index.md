@@ -9,13 +9,56 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #302"
+      B: "PC-SIG Library Disk 0302"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #302
+## Information about "LOTUS WORKSHEETS #3"
+
+    LOTUS WORKSHEETS 3 is a collection of miscellaneous but useful
+    worksheets.  Investors, in particular, may find the stock analysis
+    worksheets very helpful for what-if analysis and portfolio management.
+    The cash and checkbook management worksheets are designed well, too.
+    Business professionals are sure to find most of these worksheets
+    useful, which are easy to use and nicely detailed.
+    
+    System Requirements: 256K, two disk drives, LOTUS 1-2-3 v2.0
+    
+    How to Start:  Access through LOTUS 1-2-3
+    
+    File Descriptions:
+    
+    2X2DISC  WKS  2 x 2 Linear Discriminant Function (Fisher's Method)
+    CARCOST  WKS  Auto operating expense
+    BIORYTHM WKS  Biorythm calculator and graph
+    AMORT1X  WKS  Loan amortization self study
+    ACRS     WKS  ACRS depreciation
+    PAD      WKS  123 template-notepad/calendar/phone directory -menued
+    OPTIONZ  WKS  Options manager/stock current price
+    NLBE     WKS  Non-linear breakeven analysis
+    MISTOX   WKS  Stock portfolio analysis-what-ifs
+    LEDGER   WKS  Checkbook ledger
+    IRR      WKS  Internal rate of return calculator
+    INDUST   WKS  Industry Analysis - Transportation sector stocks
+    ICR_CALC WKS  IRS interest calculator for tax underpayment
+    HANGROBO WKS  Game of hangman--very slow
+    GOLF     WKS  Golf handicapper
+    FLCHART  WKS  Draw & place flowchart symbols
+    EXPENSRP WKS  Travel business expense report
+    DATEWR   WKS  Date value to string form
+    CASHREAD WKS  Instructions for CASH.WKS
+    CASHMAN  WKS  Manual for CASH.WKS
+    CASH     WKS  Checkbook/cash management system & journal
+    PRNTMENU WKS  Menu for enhanced printer control - for EPSON
+    RENTAL   WKS  Rental property analysis
+    TAXPLAN  WKS  Five-year tax planner
+    TREND123 WKS  Macros-trend analysis-curve fitting
+    TREND123 DOC  Documentation file for TREND123.WKS
+    DIR-LIST      Listing of included files
+
+### Directory of PC-SIG Library Disk 0302
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,49 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #51"
+      B: "PC-SIG Library Disk 0051"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #51
+## Information about "HYPERDRIVE"
+
+    There are two different configurations of the HYPERDRIVE RAM-disk
+    program on this disk, as well as the source code to let users generate
+    their own configurations.  Note, however, that the documentation states
+    that you must reset DIP switches on your system board to use this
+    program.  Also included is an interesting BASIC program to figure
+    future.  And for all you heretics who still believe that computers can
+    be fun, too, a version of the game GOMOKU is included.  Translated into
+    Pascal from HP Basic, this is guaranteed to keep you up late for a few
+    nights.
+    
+    System Requirements:  Some programs require BASIC.
+    
+    How to Start: To run an EXE program simply type its name and press
+    <ENTER>.  For instructions on running BASIC programs, please refer to
+    the GETTING STARTED section in this catalog.  For instructions on ASM
+    listings, refer to your Assembler manual.  To read DOC files simply
+    enter TYPE filename.ext and press <ENTER>.
+    
+    File Descriptions:
+    
+    FOUR     EXE  Game - get four in a row
+    FUTRDATE BAS  Determines date - x days, months, years from now
+    GOMOKU   DOC  Documentation for GOMOKU.EXE
+    FUTRDATE DOC  Documentation for FUTRDATE.BAS
+    GOMOKU   EXE  Game - simular to tic-tac-toe but played on 20x20 board
+    HDD512   EXE  RAM disk program for 512K of memory
+    GOMOKU   PAS  Source code for game of GOMOKU
+    PCGLOBE  BAS  Draws globe
+    INTERUPT MAC  Macro assembly language interrupt routine
+    HYPERDRV DOC  Documentation for RAM disk program
+    HDS320   EXE  RAM disk program for 320K of memory
+    RAMDISK  ASM  Source code for RAM disk program
+    TMDAY    BAS  Digital clock
+
+### Directory of PC-SIG Library Disk 0051
 
      Volume in drive A has no label
      Directory of A:\

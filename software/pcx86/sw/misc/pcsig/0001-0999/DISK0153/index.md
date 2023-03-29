@@ -9,13 +9,22 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #153"
+      B: "PC-SIG Library Disk 0153"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #153
+## Information about "HANGMAN"
+
+    HANGMAN is a game that enhances spelling and vocabulary. The program
+    picks problems for you to solve from a diversified collection of data
+    files.  The vocabulary of words and phrases is extensive, keeping things
+    from getting boring through repetition.  You play against
+    yourself, so at least you know the quality of the competition, although
+    some players have been known to be surprised even then.
+
+### Directory of PC-SIG Library Disk 0153
 
      Volume in drive A has no label
      Directory of A:\

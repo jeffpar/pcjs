@@ -9,13 +9,41 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #875"
+      B: "PC-SIG Library Disk 0875"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #875
+## Information about "QREF, VXREF, AND CLOCK"
+
+    A memory-resident utility that displays a list of all the DOS commands
+    available and a detailed description of them.
+    
+    Scroll through a display of all the MS/PC-DOS commands. The DOS
+    prompt will always be displayed at the top. You can limit the list by
+    typing in a letter -- only the commands that begin with that letter
+    will be displayed. Pressing another letter will limit the list to
+    commands that begin with those two letters. Get a brief summary of the
+    command or a detailed description.
+    
+    BASIC programmers -- VREF (Variables Cross-Reference) is a programming
+    utility which will show all lines where a specific variable is located
+    in a BASIC program.
+    
+    VXREF works with all BASIC programs written in GW/PC BASIC or BASICA and
+    saved in an ASCII format.  It can distinguish between variables and
+    arrays of the same name and will ignore type declarations and system
+    variables.  Each occurrence of a variable in a line is mentioned once.
+    The list may be printed on a printer or saved to a disk file.
+    
+    CLOCK displays a full analog clock face on the screen of your computer,
+    including second hand, in real time taken from DOS.  A menu-based help
+    function is available to allow sizing and positioning of the clock on
+    the screen, but the default is full screen size.  The C source code for
+    the program is included.
+
+### Directory of PC-SIG Library Disk 0875
 
      Volume in drive A has no label
      Directory of A:\

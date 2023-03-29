@@ -9,13 +9,26 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #732"
+      B: "PC-SIG Library Disk 0732"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #732
+## Information about "TRACKER AND CATCHER FOR THE BLIND"
+
+    TRACKER is a general-purpose income/expense tracking program written for
+    the visually-impaired.  The program is designed for use with a speech
+    synthesizer, to vocalize information usually read from the screen.  The
+    documentation has internal help screens for each of the program's
+    commands.
+    
+    CATCHER is an interesting twist on an old theme.  The object is to catch
+    falling characters with a paddle at the bottom of the screen.  The twist
+    is the program was written for visually-impaired people and is designed
+    for use with a speech synthesizer.
+
+### Directory of PC-SIG Library Disk 0732
 
      Volume in drive A has no label
      Directory of A:\

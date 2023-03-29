@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #69"
+      B: "PC-SIG Library Disk 0069"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #69
+## Information about "DESIGNER"
+
+    THE DESIGNER is a programming tool for IBM BASIC users working with
+    animated graphics.  The source code in BASICA for each of the example
+    programs is included, for study or modification by anyone who wants to
+    write graphics games or experiment with animation.  At least a beginning
+    knowledge of programming and the BASIC language are recommended for
+    using this package.  It cannot use a mouse or joystick.
+    
+    Features:
+    
+    ~ Full PC function key use to control programming functions
+    
+    ~ On-line help
+    
+    ~ Printable reference card
+
+### Directory of PC-SIG Library Disk 0069
 
      Volume in drive A has no label
      Directory of A:\

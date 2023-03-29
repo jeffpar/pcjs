@@ -9,13 +9,28 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #399"
+      B: "PC-SIG Library Disk 0399"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #399
+## Information about "PCLOAN5"
+
+    PCLOAN 5 was designed by a retired bank president who negotiated,
+    originated and collected over 30,000 commercial loans.
+    
+    PCLOAN 5 provides analysis data for amortizing loans with output
+    to the screen, disk or printed reports.  Perform almost any
+    calculation needed for a business or personal loan which is amortized
+    in multiple payments. It is menu-driven and includes quite a bit of
+    on-line help.
+    
+    Use PCLOAN 5 functions to project just what a loan is going to cost and
+    when.  Know what you're getting into, financially, before you take that
+    final plunge.
+
+### Directory of PC-SIG Library Disk 0399
 
      Volume in drive A has no label
      Directory of A:\

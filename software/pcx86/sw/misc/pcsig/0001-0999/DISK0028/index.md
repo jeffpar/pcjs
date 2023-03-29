@@ -9,13 +9,67 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #28"
+      B: "PC-SIG Library Disk 0028"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #28
+## Information about "DISKMODF"
+
+    A variety of BASIC and DOS tools, directory listers, machine
+    tutorials, graphics and games.  Utilities are included to let you
+    design your own graphics characters, generate a resident COMMAND.COM,
+    or generate a large block font set from BASIC.  Some amusing games are
+    here as well.  DOS utilities include directory handlers, diskette
+    speed-up, one to confirm files when doing wildcard deletes, a function
+    to give status info on all drives, and others.
+    
+    System Requirements: Programs marked "+" require color
+    graphics.
+    
+    How to Start: To run an EXE or COM program simply type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.  To read DOC
+    files simply enter TYPE filename.ext and press <ENTER>.
+    
+    File Descriptions:
+    
+    BIGTYPE  BAS  Displays character set in large block font
+    DISKMODF BAS  Improved version of disk sector modifier program
+    DDATE    COM  Allows quick updating of date and time on bootup
+    PALLETTE BAS  Displays colors available in low-res (160x200) graphics
+    JUMBLE   BAS  Permutes jumbled words
+    LF       COM  Directory lister sorted by extension & filename
+    HALS     DOC  Doc on above files
+    TIMING   BAS  Accurately times the execution of short BASIC programs
+    SPEED411 COM  Sets disk step rate to 4 ms - test with format and copy
+    VDEL     COM  Provides for OK's when doing wildcard deletes
+    CD       COM  Sets default drive, file information, & sorts directory
+    WAIT     COM  Batch file PAUSE for three seconds
+    GUMUP1   DOC  Doc on LF, VDEL, CD, WAIT
+    SYSTAT   DOC  Documentation on SYSTAT.COM
+    SYSTAT   COM  Status report on all drives
+    FK       COM  Function key handler (with reset) for DOS 1.0 & 1.1
+    FK       DOC  Documentation on FK.COM
+    SD       COM  Directory lister, 4 up
+    UNPROT2  TXT  Ultra simple technique for unprotecting BASIC programs
+    SDIR     EXE  Directory lister, 2 up - upgrade of SDIR.COM on Disk #2
+    ARTILL   BAS  Artillery for 2, random terrain & winds - Quite good
+    GRAFGE   BAS  Uses graphic screen to develop your own upper ASCII set
+    RESCMDCK BAS  Resident COMMAND.COM with BEEP, PAGE, CLS
+    RESCMD   DOC  Documentation on resident COMMAND.COM
+    CPCPRO   DOC  Tutorials -BASIC PrtSc, Printer bit graphics, Keyloc
+    RESCMD   BAS  Generates resident COMMAND.COM
+    GSDUMP   BAS  Graphics Sideways memory DUMP (C.Itoh 8510 or NEC8023)
+    COLOUR   DOC  Tutorial + small routines re: Artifacting, high-res
+    SQUISH   EXE  Compresses BASIC programs, removes REM's, etc
+    SQUISH   SRC  Upgrade of SQUISH on Disk No 9, modified for compiler
+    MEMPEEK  BAS  Similiar to disk modify programs except for RAM memory
+    GRAFGE   DOC  Documentation for GRAFGE.BAS
+    SQUISH   DOC  Documentation on SQUISH
+
+### Directory of PC-SIG Library Disk 0028
 
      Volume in drive A has no label
      Directory of A:\

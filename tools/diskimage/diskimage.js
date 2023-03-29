@@ -677,6 +677,7 @@ function processDisk(di, diskFile, argv, diskette)
          * if we ever try to automatically rebuild the PCSIG software pages, too.
          */
         if (diskFile.indexOf("/private") >= 0 || diskFile.indexOf("/pcsig8") >= 0) return;
+
         let sListing = di.getFileListing(0, 4);
         if (!sListing) return;
         let sIndex = "", sIndexNew = "", sAction = "";
@@ -879,14 +880,27 @@ function processDisk(di, diskFile, argv, diskette)
         }
 
         /*
-         * Step 3: If a generated machine needs to be embedded, put it ahead of the first directory listing (which is why we waited until now).
+         * Step 3: If a generated machine needs to be embedded, put it ahead of the first directory listing
+         * (which is why we waited until now).  Also, any available 'info' summary lines should be embedded as well.
          */
-        if (sMachineEmbed) {
+        let sDiskInfo = ""
+        if (diskette.info) {
+            let i;
+            sDiskInfo += "\n## Information about \"" + diskette.info.diskTitle + "\"\n\n";
+            for (i = 0; i < diskette.info.diskSummary.length; i++) {
+                sDiskInfo += "    " + diskette.info.diskSummary[i] + "\n";
+            }
+        }
+        let sInsert = sMachineEmbed;
+        if (sIndexNew.indexOf(sDiskInfo) < 0) {
+            sInsert += sDiskInfo;
+        }
+        if (sInsert) {
             matchDirectory = sIndexNew.match(/\n(##+)\s+Directory of /);
             if (matchDirectory) {
-                sIndexNew = sIndexNew.replace(matchDirectory[0], sMachineEmbed + matchDirectory[0]);
+                sIndexNew = sIndexNew.replace(matchDirectory[0], sInsert + matchDirectory[0]);
             } else {
-                printf("warning: unable to embed machine: %s\n", sIndexFile);
+                sIndexNew += sInsert;
             }
         }
 

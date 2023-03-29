@@ -9,13 +9,28 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #840"
+      B: "PC-SIG Library Disk 0840"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #840
+## Information about "SHORTCUT (DOS SHELL)"
+
+    SHORTCUT is a memory-resident manager that makes DOS easier to use.
+    
+    The program displays a good deal of information about your
+    directories, system status and configuration, disk and memory status,
+    DOS, current date and time, and the main commands available to you.
+    
+    With SHORTCUT you can run, copy, move, type, print, erase, search, or
+    rename a file.  Format and copy your disks, and edit a file with your
+    favorite word processor from this program.
+    
+    SHORTCUT has simple menus, with optional on-line help.  Once you exit
+    to DOS, it will remain in memory until you need it again.
+
+### Directory of PC-SIG Library Disk 0840
 
      Volume in drive A has no label
      Directory of A:\

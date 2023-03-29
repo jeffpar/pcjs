@@ -9,13 +9,32 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #666"
+      B: "PC-SIG Library Disk 0666"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #666
+## Information about "SUPER BASIC PROGRAMING LANGUAGE"
+
+    The SUPER BASIC PROGRAMMING LANGUAGE a.k.a. Structured Programming
+    Language (SPL) is a hybrid of structured BASIC, with its easy-to-use
+    commands, and a Pascal-styled architecture.
+    
+    This compiler takes an input source code and produces an ASCII file
+    that can be executed in BASIC or compiled using the BASIC compiler. SPL
+    has powerful commands that let you build of procedures, functions and
+    structured programming blocks which are enclosed by BEGIN and END
+    statements.  SPL has graphics ability, mathematical operators, strong
+    string-manipulation commands, and the ability to handle arrays and disk
+    input and output routines.
+    
+    It offers a way to create structured programs with a fair amount of
+    ease although it is not intended for the novice computer user.  SPL
+    comes with a user's manual which has an error code list as well as a
+    feature index.
+
+### Directory of PC-SIG Library Disk 0666
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #538"
+      B: "PC-SIG Library Disk 0538"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #538
+## Information about "ASTRONOMY #1"
+
+    MOONBEAM is a program that takes the date and time, as well as your time
+    zone, and gives you general information regarding the position of the
+    moon and its relationship to Earth. SUNSET accepts the date, time and
+    location of position and displays general information about the sun in
+    relation to Earth. SOLAR is a duplicate of the SUNSET program mentioned
+    above, with some slight variations.
+    
+    OPTICS gets optical parameters from the sophisticated lens user and
+    returns a myriad of technical information about reflecting lenses or
+    telescopes.
+    File Descriptions:
+    
+    OPTICS   PAS  Source code in Pascal for OPTICS.
+    OPTICS   COM  Executable code to run OPTICS.
+
+### Directory of PC-SIG Library Disk 0538
 
      Volume in drive A has no label
      Directory of A:\

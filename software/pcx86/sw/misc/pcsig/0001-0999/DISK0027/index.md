@@ -9,13 +9,51 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #27"
+      B: "PC-SIG Library Disk 0027"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #27
+## Information about "ZOOSORT"
+
+    ZOOSORT is a game-configured device for using bubble sort techniques to
+    sort and list a wide variety of wild life.  The disk also contains three
+    games and a group of utilities, most noteworthy being the spoolers.
+    
+    System Requirements:  Some programs require color graphics.
+    
+    How to Start:  To run BASIC programs consult the directions in GETTING
+    STARTED for your configuration.  Review the .DOC files for program
+    information.
+    
+    File Descriptions:
+    
+    AUTHOR   BAS  Part of ZOOSORT program
+    COLTOMON BAS  Part of ZOOSORT program
+    NOISE    BAS  Demo - Produces different cycle sounds
+    MONTOCOL BAS  Part of ZOOSORT program
+    FLAG     BAS  Part of ZOOSORT program
+    LANDER   BAS  Fuel consumption
+    ZOOTIME  BAS  Part of ZOOSORT program
+    CRASHER  BAS  Planet landing
+    SETCOLOR ASM  Assembler source code for SETCOLOR
+    ZOOSORT  BAS  Graphical demonstration of bubble sort-by weight
+    STARTUP  BAS  Initial program to run for ZOOSORT
+    DISKMOD  BAS  Utility - Examine & modify disk sectors
+    DATETIME BAS  Utility - Easier way to set DOS date & time
+    FOILS    BAS  Utility - Produces foils from script-type file
+    TREK     BAS  Yet another Startrek game (color)
+    MSPOOL   DOC  Documentation for use with print spooler programs
+    MSPOOL   COM  Printer spooler for use with the monitor/print adaptor
+    CSPOOL   COM  Printer spooler for use with a separate printer adapter
+    SETCOLOR COM  Utility. Sets background and border color to blue
+    AUTHOR2  BAS  Part of ZOOSORT program
+    FLIP     MEM  Part of ZOOSORT program
+    ??       BAS  Binary files used in ZOOSORT program
+    FLIPD    MEM  Part of ZOOSORT program
+
+### Directory of PC-SIG Library Disk 0027
 
      Volume in drive A has no label
      Directory of A:\

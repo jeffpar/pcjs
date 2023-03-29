@@ -9,13 +9,43 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #303"
+      B: "PC-SIG Library Disk 0303"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #303
+## Information about "LOTUS WORKSHEETS #4"
+
+    LOTUS WORKSHEETS 4 contains the OptionWare demo for solving
+    mathematical problems.  Reports and graphs can be printed from the
+    demo.  This disk also contains tips on converting Lotus 1-2-3
+    worksheeks to Symphony worksheets, a 1984 Federal Income Tax template
+    and a template to create letters and labels.  Documentation is included
+    for all worksheets.
+    
+    System Requirements: 256K, two disk drives, LOTUS 1-2-3 v2.0
+    
+    How to Start:  Access through LOTUS 1-2-3
+    
+    Suggested Registration:  $25.00
+    
+    File Descriptions:
+    
+    DIR-LIST      Listing of included files
+    MAGEE    DOC  Documentation file for MAGEE.WKS
+    AUTO123  WKS  Demo of OptionWare 1-2-3 models - self start with 1-2-3
+    WSFF3    TXT  Worksheet File Format 1-2-3/Symphony:Appendix A
+    WSFF2    TXT  Worksheet File 1-2-3/Symphony:Summary of record types
+    WSFF1    TXT  Worksheet File Format 1-2-3/Symphony:Intro & quick ref.
+    TAX1984  WKS  Individual tax planning model
+    TAX1984  DOC  Documentation file for TAX1984.WKS
+    PREVIEW  WKS  Part of demo for OptionWare - used with AUTO123.WKS
+    MAIL     WKS  123 template to form letters/labels
+    MAGEE    WKS  Ledger/database date math + reports - menu driven
+    WSFF4    TXT  Worksheet File Format 1-2-3/Symphony:Appendix B
+
+### Directory of PC-SIG Library Disk 0303
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,47 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #490"
+      B: "PC-SIG Library Disk 0490"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #490
+## Information about "MICROCOMPUTER"
+
+    This disk is a compilation of very useful utilities for data security
+    as well as saftey when using DOS.  It was compiled by Dan Cronin who
+    refers to them in his book "Microcomputer Data Security: Issues and
+    Strategies."  Each of the files here listed has its own documentation
+    file!!
+    
+    System Requirements:  64K RAM, one disk drive and monochrome display
+    
+    How to Start: Consult the accompanying documentation files for
+    directions.  To run a program with the suffix .COM, .EXE, or .BAT,
+    just type its name, i.e., for BLANK.COM, type BLANK <ENTER>.
+    
+    File Descriptions:
+    
+    PC-ZERO  153  BASIC program for PC-ZERO.EXE
+    ASK      COM  Allows interactive input to a batch file
+    ALTER    COM  Hide a file or subdirectory
+    PC-ZERO  EXE  Security for zeroing out files before deleting the file
+    NDOSEDIT COM  DOS command editor
+    MOVE     COM  Hybrid of the Copy and Delete commands
+    GCOPY    EXE  Selective file copy utility
+    DJCRONIN DOC  A note from the autor of the book by this disk's name
+    CLEAN2   COM  Disk Drive head cleaning utility
+    BROWSE   COM  Allows two-way scrolling of text files
+    BLANK    COM  Turns off the computer screen in 5 minutes
+    VOLSER   COM  Alter or create volume lables on a disk
+    VDEL     COM  Selective delete utility
+    SYSTAT   COM  Enhanced version of DOS check disk (CHKDSK)
+    SDIR     COM  Sorted directory
+    ???????? DOC  Documentation files for programs by the same name
+    WHEREIS  COM  Find a file in any subdirectory, on floppy or hard disk
+
+### Directory of PC-SIG Library Disk 0490
 
      Volume in drive A has no label
      Directory of A:\

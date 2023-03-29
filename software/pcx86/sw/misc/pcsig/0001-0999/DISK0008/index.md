@@ -9,13 +9,38 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #8"
+      B: "PC-SIG Library Disk 0008"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #8
+## Information about "CROSSREF"
+
+    Here's an excellent Shareware BASIC programming tool that provides a
+    cross-referenced listing of variables referenced in the construction of
+    a BASIC program. Listing shows what and where the variable has been
+    used in the source code.
+    
+    The cross-referenced package is put into text file format which the
+    programmer can either punch up on the screen or print out for future
+    reference. Crossref is one of those "glad-to-have" tools that save the
+    programmer from re-inventing the wheel with each project.
+    
+    How to Start: Read and then print the file CROSSREF.DOC.  The
+    directions to run the programs are on that file.
+    
+    File Descriptions:
+    
+    CROSSREF DOC  Documentation file
+    CRMAIL   EXE  Generates a reply/contribution letter to the author
+    CROSSREF EXE  Extensive cross-reference generator for BASIC programs
+    MONITOR  DOC  Documentation file
+    MONITOR  BAS  BASIC subroutines for formatted screen displays
+    CROSSOPT      Options file
+    CROSSWDS DAT  Data file
+
+### Directory of PC-SIG Library Disk 0008
 
      Volume in drive A has no label
      Directory of A:\

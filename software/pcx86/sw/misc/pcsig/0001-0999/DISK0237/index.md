@@ -9,13 +9,26 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #237"
+      B: "PC-SIG Library Disk 0237"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #237
+## Information about "PC-GENERAL LEDGER"
+
+    PC-GENERAL LEDGER was written by a financial executive with over 25
+    years of experience in all areas of accounting, finance, and general
+    management. The program makes it easy to add entries, maintaining
+    charts of accounts, print entries and general ledger updates, as well as
+    print general ledger and trial balances, financial statements, and
+    month- and year-end closings. It handles up to five bank accounts and
+    eight departments, or cost centers, and also prints checks.
+    
+    The program is easy to use and can be set up and running in less than 15
+    minutes.
+
+### Directory of PC-SIG Library Disk 0237
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,96 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #471"
+      B: "PC-SIG Library Disk 0471"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #471
+## Information about "PRESENT"
+
+    This diskette contains the complete set of PRESENT programs (version
+    5.1), and associated utilities. It also has a set of pictures (.PIC)
+    that can be used to provide a demonstration.  The PRESENT program
+    provides the ability to have your computer act as an automatic or
+    manual slide projector. But this slide projector is special, it has
+    fades,  color changes, picture "piecing", and other things that a
+    computer can do to video.
+    
+    System Requirements:  128K RAM, color graphics, and joysticks.
+    
+    How to Start:  Load DOS and type PRESENT to enter the main program.
+    Consult PRESENT.DOC for program documentation.
+    
+    Suggested Registration: $40.00
+    
+    File Descriptions:
+    
+    PIC2RAS  COM  Picture to raster utility program
+    MERGE    PIC  Present slide picture file
+    P        PIC  Present slide picture file
+    OPEN     PIC  Present slide picture file
+    PRESE    PIC  Present slide picture file
+    PRES     PIC  Present slide picture file
+    PREPAREP PIC  Present slide picture file
+    PREPARE  HLP  This is PREPARE'S help file
+    PREPARE  COM  Use this program to "prepare" slides for presentation
+    PRE      PIC  Present slide picture file
+    PR       PIC  Present slide picture file
+    LETSSEE2 PIC  Present slide picture file
+    LETSSEE1 PIC  Present slide picture file
+    HAS12    PIC  Present slide picture file
+    HAS      PIC  Present slide picture file
+    GRAPHELP PIC  Graphics help file
+    GARFIELD PIC  Present slide picture file
+    GARFIEL  PIC  Present slide picture file
+    GARFIE   PIC  Present slide picture file
+    GARFI    PIC  Present slide picture file
+    GARF     PIC  Present slide picture file
+    GAR      PIC  Present slide picture file
+    GA       PIC  Present slide picture file
+    AND      PIC  Present slide picture file
+    BLACK    PIC  Present slide picture file
+    BIGSNOOP PIC  Present slide picture file
+    G        PIC  Present slide picture file
+    FTCAM    PIC  Present slide picture file
+    FEATURES PIC  Present slide picture file
+    FADEIN   PIC  Present slide picture file
+    EXPAND   PIC  Present slide picture file
+    EXPAND   COM  Converts PRESENT files to Basic Bsave format
+    DISOLVEN PIC  Present slide picture file
+    DEMO          This program is a demonstration of the features of PRESENT
+    COMPRESS COM  Converts Basic Bsave files to Present's internal format
+    CLOSE    PIC  Present slide picture file
+    CHARLIE3 PIC  Present slide picture file
+    CAMERAFT PIC  Present slide picture file
+    CAMERA4  PIC  Present slide picture file
+    CAMERA   COM  Memory resident utility takes pictures of screen images
+    PRESENT  COM  The main executable file
+    PRESEN   PIC  Present slide picture file
+    PRESENT2 PIC  Present slide picture file
+    PRESENT  PIC  Present slide picture file
+    PRESENT  HLP  Help file for PRESENT program
+    PRESENT  DOC  Author supplied documentation file
+    README   1ST  User supplied documentation file
+    RAS2PIC  COM  Raster to picture utility program
+    PULRIGHT PIC  Present slide picture file
+    PULLUP   PIC  Present slide picture file
+    PULLEFT  PIC  Present slide picture file
+    PULLDOWN PIC  Present slide picture file
+    PROGS    PIC  Present slide picture file
+    PRESENTP PIC  Present slide picture file
+    REPLACE  PIC  Present slide picture file
+    SNOOPY   PIC  Present slide picture file
+    SLIDE4   PIC  Present slide picture file
+    UTILITY  PIC  Present slide picture file
+    TREE     PIC  Present slide picture file
+    TEXTHELP PIC  Text help file
+    SWEEP    PIC  Present slide picture file
+    SQUEEZE  PIC  Present slide picture file
+    SNOOPY04 PIC  Present slide picture file
+
+### Directory of PC-SIG Library Disk 0471
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,37 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #609"
+      B: "PC-SIG Library Disk 0609"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #609
+## Information about "DISK SPOOL II & UNARCHIVING PROGRAMS"
+
+    Don't waste valuable computer time waiting for a report, a memo, a
+    spreadsheet or any other printing job to finish printing.  Send your
+    print files to a spooler.  The spooler will hold your file until the
+    printer is available while you go on with your work.  DISK SPOOL II has
+    two main parts: a spooler and a writer.  The spooler intercepts data
+    going to the printer, and redirects it to disk.  The writer takes data
+    from the disk and sends it to the printer.
+    
+    The pop-up menu lets you control whether or not the spooler and/or the
+    writer are active.  You can, for example, start the spooler and not the
+    writer, sending the printed output to disk and nothing will be printed.
+    This mode is particularly useful if you don't have a printer attached to
+    your computer.  You can still do your work and transport the spool file
+    to a machine that has a printer attached.
+    
+    Change spool and writer ports as needed, drive more than one printing
+    device at a time, and fine-tune your system for optimal printing speed.
+    
+    A collection of file archiving utilities. Use the space on your disks
+    more efficiently. Because file compatibility can change with
+    different versions of "ARC," four different versions are included.
+
+### Directory of PC-SIG Library Disk 0609
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,62 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #427"
+      B: "PC-SIG Library Disk 0427"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #427
+## Information about "TURBO PASCAL #9"
+
+    This is a fascinating and useful assortment of TURBO Pascal routines
+    and procedures.  There are I/O routines for the joystick, PC Mouse, and
+    asynchronous communications.  Several routines provide menu
+    capabilities, with stacked windows available.  TURBORUN allows the user
+    to issue DOS commands from within his TURBO Pascal program.  The low-
+    resolution graphics of PIBLORES is ideal for the color graphics of a
+    user's game program.  Timer interrupts, Turtle graphics, "help
+    facility" for Pascal, and listings of source code and cross-reference
+    on the screen or the printer are just a few of these helpful programs.
+    
+    System Requirements: 128K, two disk drives, game port, serial
+    port, monochrome or color graphics, Turbo Pascal
+    
+    How to Start:  To read DOC or TXT files, enter TYPE filename.ext and
+    press <ENTER>.  To run a COM program, just type its name and press
+    <ENTER>.  For instructions on PAS listings, refer to your Pascal
+    language manual.
+    
+    File Descriptions:
+    
+    MENUX    PAS  Generate & operate a user-defined menu
+    JOYSTICK PAS  Joystick control procedure & demo
+    SERTST   PAS  Demo/test of SERIAL.PAS
+    SERIAL   PAS  Routines for user to access COM1 & COM2
+    READWKS  PAS  Print Lotus .WKS Worksheet file data
+    READENV  INC  Functions to search DOS environment area
+    PLIST    COM  Output Pascal source & cross-ref to printer or screen
+    PIBDODOS PAS  Pascal routine to teach TURBORUN.COM
+    PIBDODOS DOC  Description of TURBORUN.COM
+    MOUSE    PAS  PC Mouse interface procedures
+    THELP    DOC  Description of THELP.COM
+    THELP    COM  TURBO Pascal resident "help facility"
+    TRBOEXT  PAS  Retrieve command line parameters
+    TPRO3    PAS  Draw line on screen at 13,000 pixels per second
+    TPRO2    PAS  Get record fix from Borland's Turbo Toolbox
+    TPRO     PAS  Very fast screen output;  screen handling
+    TURBLE   TXT  Description of TURBLE.LBR
+    TURBLE   LBR  Turtle graphics in LBR form ... for hard disk
+    PIBMENUS PAS  Menu routines, similar to Lotus;  stacked windows
+    PIBASYNC PAS  Asynchronous I/O for MS-DOS
+    PIBLORES PAS  Low-resolution (160x100x16 colors) graphics
+    TIMER    PAS  Timer interrupt routine for IBM PC DOS 2.0
+    POWERS   PAS  Computes an integer or real power of a real number
+    XREFPAS  PAS  Cross-reference generator
+    TURBORUN COM  Allows DOS commands from TURBO Pascal programs
+    TURBORUN ASM  Assembler source code for TURBORUN.COM
+
+### Directory of PC-SIG Library Disk 0427
 
      Volume in drive A has no label
      Directory of A:\

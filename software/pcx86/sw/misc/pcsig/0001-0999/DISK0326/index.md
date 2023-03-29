@@ -9,13 +9,63 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #326"
+      B: "PC-SIG Library Disk 0326"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #326
+## Information about "PRINTER UTILITIES #2"
+
+    A super collection of printer utilities for the popular Epson series,
+    this one is especially good for the setup and applications of the Epson
+    FX-80 printer.  You can get special effects, italics, doublestrike and
+    compressed characters, print mailing labels and much more.
+    
+    Worthy of your attention: the DISKMASTER utility prints disk labels on
+    5x1 7/16 inch label stock.  This size label just fits on the top of a
+    standard 5 1/4 inch disk.  The program supports EPSON, IBM and OKIDATA
+    printers with plug-n-play.  Many options are provided.  Also, for those
+    of you into banners, SIDEWAYS and POSTER are certainly worth playing
+    with.
+    File Descriptions:
+    
+    BUZOFF   COM  Checks for printer.
+    COLRVIEW EXE  Print & display text file in color.
+    EMBEDDED BAS  Basic prog to demonstrate embedded print attributes.
+    FASTPRT  COM  Resident speed up for PrtSc utility.
+    FASTPRT  DOC  Documentation for FASTPRT.COM.
+    FORMFEED COM  Set prnter to top of form from DOS, batch file, WordStar.
+    FORMFEED DOC  Documentation for FORMFEED.COM.
+    FSPOOL   COM  Resident prog to redirect parallel prnter output to disk.
+    FSPOOL   DOC  Documentation for FSPOOL.COM.
+    FXPR4    DOC  Epson FX-80 utility to change print font sizes & styles.
+    FXPR4    EXE  Documentation for FXPR4.
+    GRAF     COM  Print IBM PC graphics on bit-plot printers.
+    GRAF     DOC  Documentation for GRAF.COM.
+    JUST-LQ  EXE  Micro-justification file printer for EPSON LQ-1500.
+    JUSTIFY  DOC  Documentation for JUSTIFY.EXE.
+    JUSTIFY  EXE  Print justified copy on low-priced printers with graphics.
+    LABEL    EXE  Prints on 5 line labels.
+    P        COM  Powerful prnter utility - compress, double, italics, etc.
+    PERFSKIP COM  IBM or MX-80 printer utility to skip over perforations.
+    PERFSKIP DOC  Documentation for PERFSKIP.COM.
+    PLOTTER  BAS  Basic program to plot various graphs.
+    POSTER   BAS  Large poster maker. Puts your message on printer sideways.
+    PRINTES1 BAS  Printer test returns printer speed char/sec lines/min.
+    PRINTFIX COM  Possible fix for bad print - character/lines dropped.
+    PRINTFIX DOC  Documentation for PRINTFIX.COM.
+    PRTPAGE  DOC  Documentation for PRTPAGE.EXE.
+    PRTPAGE  EXE  Print with pagination - spool to disk, line numbering.
+    SCNMAP   BAS  Produces paper chart of 40 or 80 col screen Epson MX-80.
+    SCNMAP   DOC  Documentation for SCNMAP.BAS.
+    SETPRN   COM  Printer utility for IBM PC- set from DOS or batch file.
+    SETPRN   DOC  Documentation for SETPRN.COM.
+    SIDEWAYS EXE  Prints a disk file sideways on printer.
+    SWPTR    COM  Swaps printer LPT1: with printer LPT2:.
+    SWPTR    DOC  Documentation for SWPTR.COM
+
+### Directory of PC-SIG Library Disk 0326
 
      Volume in drive A has no label
      Directory of A:\

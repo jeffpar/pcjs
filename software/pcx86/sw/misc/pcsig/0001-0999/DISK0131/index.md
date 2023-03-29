@@ -9,13 +9,37 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #131"
+      B: "PC-SIG Library Disk 0131"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #131
+## Information about "PASCAL TOOLS VOL 2"
+
+    This is the second of the three-disk series Pascal Tools (Disks #130-
+    132), and contains routines for text file sorting, transliterating
+    characters, a word counter, and TED a small line editor.  See disk #130
+    for more information.
+    
+    How to Start: Enter TYPE README2 and press <ENTER> for program
+    information.  To run Pascal routines, refer to your Pascal language
+    manual.
+    
+    File Descriptions:
+    
+    TED      EXE  Line editor for text files
+    SORTF    EXE  Sort lines in text file
+    PRINTF   EXE  Print files with headings
+    MACRO    EXE  Expands string definitions
+    LINECNT  EXE  Counts number of lines in a text file
+    README2       Notes about using Pascal tools
+    WORDCNT  EXE  Counts words in standard inputs
+    UNROTATE EXE  Formats lines for a KWIC index
+    UNIQUE   EXE  Deletes adjacent duplicate lines
+    TRANSLIT EXE  Transliterate characters
+
+### Directory of PC-SIG Library Disk 0131
 
      Volume in drive A has no label
      Directory of A:\

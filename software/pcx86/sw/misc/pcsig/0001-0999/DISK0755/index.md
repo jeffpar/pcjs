@@ -9,13 +9,25 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #755"
+      B: "PC-SIG Library Disk 0755"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #755
+## Information about "CANTONESE TUTOR"
+
+    Cantonese is an extremely hard-to-learn language spoken by more people
+    than any other language in the world.  This program can help you learn
+    it.  It is menu-driven, with menus for both the student and teacher.
+    Lessons can be tailored by the teacher for drilling in certain areas.
+    
+    CANTONESE is designed for use with other forms of Chinese language
+    study, since it does not provide actual spoken Cantonese as an example.
+    The documentation can be somewhat difficult to follow at times, but has
+    all the needed information to run the program.
+
+### Directory of PC-SIG Library Disk 0755
 
      Volume in drive A has no label
      Directory of A:\

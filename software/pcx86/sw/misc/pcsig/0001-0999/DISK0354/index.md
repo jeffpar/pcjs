@@ -9,13 +9,45 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #354"
+      B: "PC-SIG Library Disk 0354"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #354
+## Information about "PC JR GAMES"
+
+    Attention -- PCjr owners!  Feeling lonesome and forgotten?  Nothing to
+    play with?  Dry those tears and know that we've been looking out for
+    you.  These games will ONLY work on the PCjr.
+    
+    TACTICAL COMBAT engages your skills as a planner/tactician in a combat
+    simulation.  Seek your fortune with DUNGEON QUEST, an entertaining
+    Dungeons and Dragons adventure.  Still not enough mayhem to suit you?
+    Then how about a nice GLOBAL THERMONUCLEAR WAR?
+    File Descriptions:
+    
+    -------- ---  DUNGEONS AND DRAGONS.
+    COMBAT   DOC  Documentation for TACTICAL COMBAT.
+    COMBAT   BAS  TACTICAL COMBAT simulation.
+    -------- ---  TACTICAL COMBAT.
+    DUNQUEST BAS  Initialization program to load arrays for play.
+    DUNPLAY  BAS  Main play program of DUNGEON QUEST.
+    DUNMAP*       Maps of dungeons used by DUNGEON QUEST.
+    DUNMAP   BAS  Map creation utility.
+    DUNEND   BAS  File update program for DUNGEON QUEST.
+    DUNCHAR  BAS  Update program for player file.
+    DUNCHAR       Data file of players for DUNGEON QUEST.
+    DUN      DOC  Documentation for DUNGEON QUEST.
+    DUNSHOP  BAS  File update program for supply file.
+    DUNSHOP       Data file of supplies, etc.
+    MENU     BAS  Main menu program for DUNGEON QUEST.
+    MAP           Data file of world map for war program.
+    WAR      BAS  GLOBAL THERMONUCLEAR WAR game.
+    -------- ---  GLOBAL THERMONUCLEAR WAR.
+    WAR      DOC  Documentation for war game.
+
+### Directory of PC-SIG Library Disk 0354
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,34 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #632"
+      B: "PC-SIG Library Disk 0632"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #632
+## Information about "FAMILY HISTORY 2 OF 3 (ALSO 361, 2291)"
+
+    Ever wonder who's lurking in the upper branches of your family tree?
+    The FAMILY HISTORY system, a modular genealogy program, will help you
+    organize and refine your search.
+    
+    The system stores information about individuals, including all family
+    relationships.  You are not limited in the number of relationships that
+    might exist for each individual, or the number of generations of
+    ancestors or descendants.  Information for up to 3200 individuals may
+    be stored on a diskette and up to 9999 on a hard disk.  You can produce
+    ancestor, descendant, relative, and family group reports and ancestor
+    (tree) charts.  You may print out blank worksheets and charts to record
+    information for entry into the system.  Sample files are included for
+    the descendants of Adam (as recorded in Genesis) and the family of
+    Prince Charles.  A GEDCOM export/import program permits sharing
+    information with other genealogy software.
+    
+    Research your roots and know where you came from.  A great gift for the
+    next generation.
+
+### Directory of PC-SIG Library Disk 0632
 
      Volume in drive A has no label
      Directory of A:\

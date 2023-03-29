@@ -9,13 +9,62 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #313"
+      B: "PC-SIG Library Disk 0313"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #313
+## Information about "BUSINESS SAMPLER #3"
+
+    Time Management is the theme of this business collection.  Highlights
+    include: the PC Yearbook which is a calendar/appointment schedule
+    program written in C; it also includes a notepad.  IPM.COM is a
+    (Critical Path Method) project scheduler written in Turbo Pascal.
+    This is a methodology for determining the critical task that, if not
+    accomplished by a certain time, contributes directly to the delay of
+    the whole project.  It does not have a calendar function or a project
+    tracking function.
+    
+    UserLog is a system utility designed to maintain a disk-based file of
+    computer usage, thus eliminating the need for a written log that
+    monitors the business and personal use of a computer.  Program Time
+    calculates the amount of computer time used.  It allows apportionment
+    of the time between business and non-business use.
+    
+    System Requirements:  BASIC
+    
+    How to Start: Consult the .DOC and README files for directions and
+    documentation.  To run the BASIC programs, consult the directions in
+    GETTING STARTED for your configuration.  To run a program suffixed
+    .COM or .EXE, just type its name, i.e., for IPM.COM, type IPM <ENTER>.
+    
+    Suggested Registration:   IPM $15.00; USERLOG $25.00
+    
+    File Descriptions:
+    
+    KEITH2   CPM  Sample data file for IPM.COM
+    ACRS     DOC  Documentation for ACRS
+    ACRS     BAS  Depreciation Calculating Program
+    KEYPAD   BAS  Keypad Practice Typing Program
+    IPM      DOC  Documentation for IPM
+    IPM      COM  Ivy League Project Manager
+    CALCULA  BAS  Large Screen Calculator
+    PCYEARBK DOC  Day Month and Year Calendar Program
+    PCYEARBK EXE  Documentation for PCYEARBK
+    PERT3    BAS  PERT/Path Critical Scheduling Program
+    PRGTIM   BAS  Utility Program for PRGTIM
+    PRGTIM   EXE  Computer Utilization Program
+    RPTUSE   BAS  Utility Program for PRGTIM
+    PRGTIM   DOC  Documentation for PRGTIM
+    TMSTRT   EXE  Utility Program for PRGTIM
+    TMSTRT   BAS  Utility Program for PRGTIM
+    USERLOG  DOC  Documentation for USERLOG
+    USERLOG  COM  Maintains Disk-Based File of Computer Usage
+    TAXDEDCT BAS  Income Tax Deduction Recording Program
+    USE-TIME DOC  General Documentation for TMSTRT and PRGTIM
+
+### Directory of PC-SIG Library Disk 0313
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,28 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #572"
+      B: "PC-SIG Library Disk 0572"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #572
+## Information about "FBLCC - BUILDING LIFE CYCLE COST PROGRAM"
+
+    The Federal Bureau of Standards has produced ``The Federal Building
+    Life-Cycle Cost Computer Program''.  This program compares various
+    building systems and evaluates the cost of alternative designs relative
+    to energy costs.  Compare initial design and construction costs of
+    various designs with projected energy costs recouped through the life
+    expectancy of the building.
+    
+    The FBLCC programs and data files provided are referenced in
+    National Bureau of Standards Technical Note 1222, ``A User's Guide to
+    the Federal Building Life-Cycle Cost Computer Program.'' April, 1976.
+    This program should not be used without the referenced user's guide
+    available from the U.S. Department of Energy.
+
+### Directory of PC-SIG Library Disk 0572
 
      Volume in drive A has no label
      Directory of A:\

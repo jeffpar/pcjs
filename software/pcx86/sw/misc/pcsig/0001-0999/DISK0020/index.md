@@ -9,13 +9,43 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #20"
+      B: "PC-SIG Library Disk 0020"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #20
+## Information about "DRAW"
+
+    Besides the four games on this disk, most of the programs on this disk
+    have something to do with either drawing or displaying a picture on
+    your screen.  Some are games which are visually displayed, while the
+    DRAW program allows you to, as the name implies, draw pictures with
+    your computer.  Two other programs are for the BASIC programmer.
+    CROSSREF is a cross-referencing utility, and B-SIMPLE is an aid for
+    structured BASIC programming.
+    
+    System Requirements:  Some programs require color graphics.
+    
+    How to Start:  From BASIC, type LOAD BASMENU, and press <ENTER>.
+    
+    File Descriptions:
+    
+    CHSONG   BAS  Music - Christmas songs  ('Tis the Season!)
+    WORM1    BAS  Watch him tunnel through the ground
+    CONTROL  BAS  Lets this diskette run under PCS
+    SCOPE    BAS  Display symmetric random patterns
+    BASMENU  BAS  AUTOMATIC MENU FOR BASIC PROGRAMS (See Disk No 14)
+    CROSSREF SCR  Documentation for CROSSREF  (SCRIPT source)
+    EDIT     BAT  Utility to invoke RV-EDIT from DOS (See Disk No 19)
+    DRAW     BAS  Program to draw pictures on color screen
+    CROSSREF EXE  Utility cross-reference program for BASIC programs
+    BLACKJCK BAS  Upgraded to use color monitor if on
+    HANGMAN  BAS  Color version of HANGMAN
+    B-SIMPLE BAS  Utility aid to create & structure BASIC programs
+    YAHTZEE  BAS  Upgraded to use color monitor if on
+
+### Directory of PC-SIG Library Disk 0020
 
      Volume in drive A has no label
      Directory of A:\

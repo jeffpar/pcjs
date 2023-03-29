@@ -9,13 +9,25 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #259"
+      B: "PC-SIG Library Disk 0259"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #259
+## Information about "C ADVENTURE"
+
+    Welcome to C ADVENTURE, a classic text adventure game.  You are standing
+    at the end of a road before a small brick building.  Go into the cave
+    and gather as much treasure as possible without getting dismembered,
+    eaten or otherwise maimed.  And, of course, escape with your loot!
+    
+    Since the C source code is included, the game players can explore and
+    the hackers can change things to suit themselves.  Features a good
+    English language parser.  Games can be saved in progress and restored
+    for later playing.
+
+### Directory of PC-SIG Library Disk 0259
 
      Volume in drive A has no label
      Directory of A:\

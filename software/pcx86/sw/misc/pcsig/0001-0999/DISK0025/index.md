@@ -9,13 +9,33 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #25"
+      B: "PC-SIG Library Disk 0025"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #25
+## Information about "FINANCE"
+
+    Finance is a collection of standard financial programs, designed so that
+    anyone can use them.  The programs prompt for input and are easy to run.
+    Some of the routines included are; Depreciation, Interest and Bond yield
+    calculators. A perfect item for all of you budding financial geniuses.
+    
+    How to Start:  To run BASIC programs consult the directions in GETTING
+    STARTED for your configuration.
+    
+    File Descriptions:
+    
+    FINANCE  BAS  20 Miscellaneous financial programs
+    GROWTH   BAS  Growth rate and projections
+    FINANCE1 BAS  5 more financial programs
+    REPORTS  BAS  Budget management report
+    GROWTH1  BAS  Calculates compound growth
+    KALCOL   BAS  Kaleidescope - mono/color  (Subroutine form)
+    PRLIST   BAS  Miscellaneous printer routines
+
+### Directory of PC-SIG Library Disk 0025
 
      Volume in drive A has no label
      Directory of A:\

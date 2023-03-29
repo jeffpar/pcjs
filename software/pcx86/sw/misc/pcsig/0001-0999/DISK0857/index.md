@@ -9,13 +9,44 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #857"
+      B: "PC-SIG Library Disk 0857"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #857
+## Information about "LEDGER EXPRESS, REQUIRES LOTUS 1-2-3"
+
+    LEDGER EXPRESS is a menu-driven, macro-programmed demonstration disk of
+    a general ledger accounting system for use with Lotus 1-2-3.  The
+    application extracted transactions from the 1GJRL.WKS into Extract
+    files and then posts the sorted and extracted information to the
+    respective ledger accounts.  The application has a feature to print the
+    ledger accounts during posting and also has an account balance
+    extraction feature for posting to the balance sheet.
+    
+    Although LEDGER EXPRESS is a demonstration, the experienced macro
+    programmer should be able to use this demo as a guide for producing
+    their own application.
+    
+    The complete application is available for $49.95 for those desiring
+    INSTALLATION worksheets, subsidiary ledger worksheets
+    (payables/receivables), and a complete system for financial statements.
+    
+    System Requirements:  Lotus 1-2-3.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $49.95
+    
+    File Descriptions:
+    
+    LEDGER-X ARC  Archived file.
+    MANUAL   BAT  Prints manual.
+    PKXARC   COM  Unarchiving program.
+    INSTALL  BAT  Install files to hard drive.
+
+### Directory of PC-SIG Library Disk 0857
 
      Volume in drive A has no label
      Directory of A:\

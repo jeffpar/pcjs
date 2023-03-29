@@ -9,13 +9,35 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #655"
+      B: "PC-SIG Library Disk 0655"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #655
+## Information about "KWIKSTAT 2 OF 2 (ALSO 654)"
+
+    KWIKSTAT is a scientific statistical analysis system complete with
+    graphics.  You can import ASCII files, dBase III files or build your own
+    databases.  KWIKSTAT is menu-driven, with six separate modules:
+    
+    ~ DATA    -- Create a database, enter and edit data.
+    
+    ~ REPORTS -- Export data to another program; display the structure of a
+    selected database and access DOS without exiting.
+    
+    ~ STAT1   -- Descriptive statistics and graphical representations such
+    as histograms, scatterplots and box plots.
+    
+    ~ STAT2   -- Explore comparative statistics with t-tests on paired or
+    matched data and one way analysis of variance (ANOVA).
+    
+    ~ STAT3   -- Perform simple linear and multiple regression analyses.
+    
+    ~ STAT4   -- Deal with various methods to analyze categorical data, as
+    opposed to measured data.
+
+### Directory of PC-SIG Library Disk 0655
 
      Volume in drive A has no label
      Directory of A:\

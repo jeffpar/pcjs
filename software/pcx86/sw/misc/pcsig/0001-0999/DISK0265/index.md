@@ -9,13 +9,57 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #265"
+      B: "PC-SIG Library Disk 0265"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #265
+## Information about "PRINTER AND GRAPHICS"
+
+    Three well-done and very different graphics utilites: GRAF displays
+    mathematical functions; SPIRO simulates a spirograph; and DEFINE allows
+    BASIC programmers use of PUT statements in graphics.  The best of the
+    printer utilites is OKIMENU.BAS which allows Okidata printer users a
+    menu- driven approach to formatting their output.  NOTE: OKIMENU.BAS
+    will function properly on a printer with the Okidata-IBM Plug'n'Play
+    ROMs installed.
+    
+    System Requirements: BASIC and color graphics
+    
+    How to Start: Consult the .DOC and README files for directions and
+    documentation.  To run the BASIC programs, consult the directions in
+    GETTING STARTED for your configuration.  To run a program with the
+    suffix .COM, or .EXE,, just type its name, i.e., for SPIRO.EXE, type
+    SPIRO and press <ENTER>.
+    
+    Suggested Registration:  $10.00
+    
+    File Descriptions:
+    
+    -------- ---  Graphics Utilities
+    SPIRO1   EXE  Demonstration of SPIRO
+    SPIRO    BAS  Source for SPIRO.EXE
+    SPIRO    DOC  Documentation for SPIRO.EXE  (9K)
+    SPIRO    EXE  Simulates a Spirograph, you enter the parameters,it draws
+    PRINT    DOC  Documentation for PRINT1.EXE and PRINT2.EXE
+    PRINT2   EXE  Same as PRINT1.EXE except drives COMM2 port
+    PRINT1   EXE  XON/XOFF Serial printer driver   Diable 630 and ?.
+    OKITALIC BAS  Downloadable italics font for OKIDATA printer
+    OKIMENU  DOC  Documentation for OKIDATA.BAS  (17K)
+    OKIMENUC BAS  Compressed (by BetaTools BDS) version of OKIMENU.BAS
+    OKIMENU  BAS  Menu based program for OKIDATA printer setup
+    OKICHAR  TXT  Explanatory text
+    OKICHAR  LBR  Library used for Okidata printers
+    SIDEWAYS PAS  Source for SIDEWAYS.EXE
+    SIDEWAYS EXE  Prints text file sideways on Epson printer
+    -------- ---  Printer Utilities
+    THING    PLT  Sample data file for DEFINE.BAS
+    DEFINE   INS  Instruction file for DEFINE.BAS
+    DEFINE   BAS  Defines graphics characters for use with PUT statements
+    GRAF     BAS  Plots mathematical function on graphics screen
+
+### Directory of PC-SIG Library Disk 0265
 
      Volume in drive A has no label
      Directory of A:\

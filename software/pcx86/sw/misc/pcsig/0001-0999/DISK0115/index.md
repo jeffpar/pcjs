@@ -9,13 +9,49 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #115"
+      B: "PC-SIG Library Disk 0115"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #115
+## Information about "DOS UTILITIES NO 6"
+
+    The programs on this disk include a very handy file-compression utility,
+    another to suppress the color signal when using a mono monitor, a very
+    interesting wave-form drawing utility (requires an 8087 chip),
+    and other useful programs.
+    
+    System Requirements: Some programs require color graphics & BASIC.
+    
+    How to Start: To run a COM or EXE program simply type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.  To read DOC
+    files simply enter TYPE filename.ext and press <ENTER>.
+    
+    Suggested Registration:  Contact authors.
+    
+    File Descriptions:
+    
+    DSKHND   BAS  Disk handler program from October Softalk
+    123KEY   DOC  Documentation file for 123KEY.PRO
+    123KEY   BAT  Batch file to run LOTUS 123 with PROKEY
+    123KEY   PRO  PROKEY file to enable numeric keypad with LOTUS 123
+    DHDEMO   BAS  Demo program for DSKHND.BAS
+    NOCOLOR  ASM  Suppress color for using mono monitor on C/G adapter
+    FREE     DOC  Catalog of user-supported software
+    SURF87   EXE  Produces wave forms on graphics printer  (Requires 8087)
+    SURF87   DOC  Documentation file for SURF87.EXE
+    SURFPR   BAS  Printer installation program for SURF87.EXE
+    SQUEEZE  EXE  File compression program
+    UNSQUEEZ EXE  Uncompress program
+    SQUSQ    DOC  Documentation file for SQUEEZ.EXE and UNSQUZ.EXE
+    NOCOLOR  COM  Executable program file
+    SCROLL   BAS  Scroll window program from PC Magazine, Oct 83, page 650
+    NOCOLOR  DOC  Documentation file for NOCOLOR.COM
+    PINUP?   PIC  Pinup picture;  COPY to LPT1:  (4 files)
+
+### Directory of PC-SIG Library Disk 0115
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,41 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #178"
+      B: "PC-SIG Library Disk 0178"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #178
+## Information about "GAME SERIES NO 13"
+
+    Are you ready for a challenge?  Then grab your hat and let's go! First
+    stop, your very own Kingdom, where you are responsible for the well-
+    being and prosperity of yourself and your subjects. Next, stop the mad
+    bomber in COLLIDE, it'll really blow you away!  Then off to deep space
+    with STARTREK, destroy Klingons and save your command.  Afterward, sit
+    back and let the stars of STAR3D relax you.
+    
+    System Requirements:  Some programs require color, BASIC
+    
+    How to Start: To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  To run an EXE program, just type its name and press <ENTER>.
+    For instructions on running BASIC programs, please refer to the
+    GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    AWARI    BAS  Old African game played with 7 sticks & 36 stones
+    CHESS88  EXE  Same as above game, either later or earlier version
+    CHESS    EXE  Color Graphics - plays well at first, not tough later
+    STAR3D   EXE  Sensation of traveling through space on color monitor
+    STAR3D   DOC  Documentation for STAR3D.EXE
+    HAMURABI BAS  Play King and find out its not such a good life
+    COLLIDE  BAS  Simple minded but not easy - shoot falling bombs
+    STARTREK BAS  Super version of Startrek
+    STARTREK EXE  Outstanding version of Startrek
+
+### Directory of PC-SIG Library Disk 0178
 
      Volume in drive A has no label
      Directory of A:\

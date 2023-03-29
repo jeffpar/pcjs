@@ -9,13 +9,49 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #159"
+      B: "PC-SIG Library Disk 0159"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #159
+## Information about "PC FIRING LINE"
+
+    This is the first issue of the PC FIRING LINE NEWSLETTER.  It has beena
+    positioned as the underground newspaper for the IBM user.  You will be
+    presented with the untold tales and in-depth programming aids.  Some of
+    the articles are about ADA, Assembly routines, and items not written
+    about by IBM.  It also contains many sample program listings with
+    accompanying  documentation.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $12.00
+    
+    File Descriptions:
+    
+    0        BAT  Batch file.
+    PATCH2   BAT  Batch file.
+    8087     REV  Information file.
+    ADA1CMP  REV  Information file.
+    BIGDEAL  ASM  Assembly source code.
+    GRABBAG  ASM  Assembly source code.
+    COLORFUL EXE  Sub-program.
+    DEBUG    PAT  Patch for DEBUG.
+    GRABBAG  EXE  Sub-program.
+    LIST1    ADA  Test the ADS compiler in ADA.
+    LIST1    ASM  Test the ADS compiler in Assembley.
+    LIST1    C    Test the ADS compiler in C.
+    LIST1    PAS  Test the ADS compiler in Pascal.
+    PCFL     EXE  Main Program.
+    PRETTY1  COM  Program embellisher
+    TXT      ADS  Advertisments
+    WRITERS  GDE  Text file.
+    ???????? TXT  Text file (20 files).
+
+### Directory of PC-SIG Library Disk 0159
 
      Volume in drive A has no label
      Directory of A:\

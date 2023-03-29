@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #940"
+      B: "PC-SIG Library Disk 0940"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #940
+## Information about "POINT & SHOOT HOME MANAGER"
+
+    HOME MANAGER helps you manage the details of operating a home and its
+    (sometimes complicated) day-to-day finances.
+    
+    Create a database of your assets and liabilities, budget and track your
+    home finances, print addresses on envelopes (laser printers only) or
+    labels, calculate various payments and interest earnings, schedule and
+    track maintenance on your home, create a list of things to do, track
+    your vehicle maintenance and make lists of general items, names,
+    addresses and phone numbers, and your important data.  Print any or all
+    of these records.  There is also a built-in calculator and calendar to
+    view each month of any year.  Also includes a complete double-entry
+    accounting system that is easy enough for beginners yet sophisticated
+    enough for small businesses.
+
+### Directory of PC-SIG Library Disk 0940
 
      Volume in drive A has no label
      Directory of A:\

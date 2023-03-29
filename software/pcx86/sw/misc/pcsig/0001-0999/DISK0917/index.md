@@ -9,13 +9,25 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #917"
+      B: "PC-SIG Library Disk 0917"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #917
+## Information about "TODO (MR. LABEL NOW ON DISK 1673)"
+
+    Keep a ``things to do'' list in your computer and in your pocket where
+    you need it.
+    
+    Each item or activity is a maximum of 38 characters to insure that the
+    printout will fit into a daily diary or ``day-timer''-type format.  TODO
+    automatically loads your list of up to 100 items when you run the
+    program and stores any changes you make on the list.  When you finish,
+    TODO sorts your items by due date first, then by priority, then by key.
+    If this sort pattern does not fit your needs, you can customize it.
+
+### Directory of PC-SIG Library Disk 0917
 
      Volume in drive A has no label
      Directory of A:\

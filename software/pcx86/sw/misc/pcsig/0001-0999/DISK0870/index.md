@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #870"
+      B: "PC-SIG Library Disk 0870"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #870
+## Information about "HGCIBM-COLOR EMULATION FOR HERCULES"
+
+    If you're the owner of a computer with a Hercules monochrome graphics
+    adapter card, and have been lusting after a nice piece of color graphic
+    (CGA) software, but can't run it because of your current computer set-
+    up, this software will solve your problems.
+    
+    HGCIBM provides owners of Hercules graphics cards with a means to run
+    software written for the IBM Color Graphics Adapter.  You need no
+    additional hardware to run this emulator -- HGCIBM works by ``tricking''
+    programs into thinking you have a color card when you don't.
+    
+    With HGCIBM, a color program won't shut itself down but instead, will
+    continue to send video output to your monochrome screen.  This program
+    is one of the few ``must-own'' programs for all Hercules users.
+
+### Directory of PC-SIG Library Disk 0870
 
      Volume in drive A has no label
      Directory of A:\

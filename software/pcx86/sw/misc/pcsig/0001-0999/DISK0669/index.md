@@ -9,13 +9,45 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #669"
+      B: "PC-SIG Library Disk 0669"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #669
+## Information about "GRAPHTIME II 1 OF 2 (ALSO 670)"
+
+    GRAPHTIME-II is a business and technical graphics system with text and
+    font editors.  Designed for use with dBASE II/III, Multiplan, Lotus 1-
+    2-3 and ASCII files, it can also be used on its own with data entered
+    from the keyboard into the built-in spreadsheet.  Epson compatible, HP
+    Deskjet and Laserjet printers are supported.
+    
+    The package consists of six main modules:
+    
+    ~  GRAPH -- 19 types available with up to 10 graphs per screen
+    
+    ~  DRAW -- Full-screen color graphics editor
+    
+    ~  FONT -- Text generator and font editor
+    
+    ~  FILE -- External file input/output
+    
+    ~  TEXTED -- Text and macro editor
+    
+    ~  PRINT -- Printer driver
+    
+    The graphics editor can create free-form diagrams or enhance a
+    previously made graph.  You can select arrow keys, joystick or mouse to
+    control the graphics cursor.
+    
+    GRAPHTIME-II can be either menu or command-driven, with an emphasis on
+    ease of use.  All scales and labels are made automatically with manual
+    override.  A macro facility is included for commonly-used
+    command sequences and to control slide shows.  Macros can also be
+    created by recording a sequence of commands as they are used.
+
+### Directory of PC-SIG Library Disk 0669
 
      Volume in drive A has no label
      Directory of A:\

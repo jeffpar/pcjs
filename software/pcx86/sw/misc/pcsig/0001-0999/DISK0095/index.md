@@ -9,13 +9,25 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #95"
+      B: "PC-SIG Library Disk 0095"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #95
+## Information about "MATH TUTOR"
+
+    This elementary grade level tutorial -- targeted at grades 1-6 --
+    supplies age-graded exercises and tests for a variable student body.
+    MATH TUTOR also supplies the opportunity to redesign exercises for
+    special problems.
+    
+    If you're a parent, or are involved in a tutorial situation, these
+    lessons and non-timed drills can be a lighthearted, challenging way to
+    teach math principles. It seems more appropriate for home use. Tests
+    are sent to the screen.
+
+### Directory of PC-SIG Library Disk 0095
 
      Volume in drive A has no label
      Directory of A:\

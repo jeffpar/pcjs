@@ -9,13 +9,51 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #61"
+      B: "PC-SIG Library Disk 0061"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #61
+## Information about "PRINTGR AND IPCO PROGRAMS"
+
+    PRINTGR is an early and well done set of printer utilities for users of
+    older versions of the Epson and compatible printers which do not have
+    graphic capabilities.
+    
+    The two programs, PRINTGR1 and PRINTGR2, will produce printed copies of
+    screen displays in either medium (320x200) or high (640x200) resolution
+    mode. PRINTGR1 prints out a small (5.3"W x 2.5"H) upright image.
+    PRINTGR2 prints and expanded (6.6"W x 8.9"H) image that is rotated
+    clockwise by 90 degrees.
+    
+    Special Requirements:  Graphic compatible printer and a version of
+    BASIC.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $9.00
+    
+    File Descriptions:
+    
+    PC-PAD   LST  Part of PC-PAD.BASappend.
+    PC-PAD   BAS  Editor, spreadsheet, and printing program.
+    BANNER   BAS  IPCO Creates large letters on printer.
+    SLOTMACH BAS  IPCO Roulette type game YAHTZEE  BAS  IPCO game.
+    STATCAPS BAS  IPCO Names, states and capitals - needs BASICA.
+    ITALICS  BAS  IPCO Prints in italics on Epson MX-80 printer.
+    NFL-PK   BAS  IPCO Picks point spreads between the 29 teams of the NFL.
+    MEMSIZE  BAS  IPCO Resets top of memory to avoid startup delay.
+    -------- ---  PRINTGR, prints screen graphics on Epson printer.
+    EPSONUTL BAS  IPCO Epson printer utility.
+    PRINTGR1 EXE  Prints medium/high resolution graphics - 5.3"x2.5".
+    PRTSC_2  ASM  Assembly language source for PRINTGR2.EXE.
+    PRTSC_1  ASM  Assembly language source for PRINTGR1.EXE.
+    PRINTGR  ASM  Common assembly language source for PRINTGR1&2.EXE.
+    PRINTGR2 EXE  Prints medium/high resolution graphics - 6.6"x8.9".
+    PRINTGR  DOC  Documentation for PRINTGR1&2.BAS.
+
+### Directory of PC-SIG Library Disk 0061
 
      Volume in drive A has no label
      Directory of A:\

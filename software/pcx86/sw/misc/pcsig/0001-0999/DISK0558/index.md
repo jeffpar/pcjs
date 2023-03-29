@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #558"
+      B: "PC-SIG Library Disk 0558"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #558
+## Information about "PC-PROMPT"
+
+    PC-PROMPT is a unique, memory-resident DOS help program that
+    automatically provides information for DOS commands as you type them.
+    The F10 function key can display additional help whenever needed. Help
+    screens can also be invoked for EDLIN, DEBUG, BASIC and Borland's Turbo
+    Pascal editor.
+    
+    Since PC-PROMPT is memory-resident, it stays loaded in memory until you
+    reboot the PC. It automatically activates at the DOS prompt, and
+    deactivates whenever you execute any DOS command, batch file, or
+    program. Because of this, it is compatible with most software, even
+    with programs which do direct screen memory operations without using
+    DOS. It is even compatible with various other memory-resident programs
+    such as RAM drive emulators, printer spoolers, and Borland's SideKick.
+
+### Directory of PC-SIG Library Disk 0558
 
      Volume in drive A has no label
      Directory of A:\

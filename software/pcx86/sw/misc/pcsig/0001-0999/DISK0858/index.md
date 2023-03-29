@@ -9,13 +9,35 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #858"
+      B: "PC-SIG Library Disk 0858"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #858
+## Information about "ARE YOU READY FOR CALCULUS, TUTOR"
+
+    A well-written pre-calculus tutor program designed to help students
+    review the basics of algebra and trigonometry.
+    
+    These programs give quizzes on those sections of algebra and
+    trigonometry essential to calculus.  There are two programs, one to
+    prepare you for Calculus I, and another for Business Calculus.  The
+    differences are that the quizzes are easier in the Business Calculus
+    section and there are fewer topics to review.
+    
+    You'll have several choices to choose from.  The instructions are
+    written so you can start using the program right away.  The quizzes are
+    multiple-choice and the different answers are well chosen.  The program
+    is conveniently presented to the user with different window layouts.
+    
+    If you don't know how to answer a particular question, ask for help.
+    You'll get a help screen which covers the topic of your quiz.
+    
+    If you want to take calculus next quarter or semester, this program is
+    for you.
+
+### Directory of PC-SIG Library Disk 0858
 
      Volume in drive A has no label
      Directory of A:\

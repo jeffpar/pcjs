@@ -9,13 +9,41 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #339"
+      B: "PC-SIG Library Disk 0339"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #339
+## Information about "CREATOR"
+
+    Creator, Reporter and Cheapsort comprise this database management
+    system.  Creator provides the principle database functions (record,
+    add, delete etc.); Reporter writes report programs; Cheapsort sorts
+    Creator files as well as files created under other database systems.
+    
+    System Requirements: Two disk drives
+    
+    How to Start:  From DOS, enter TYPE CSORT.DOC for documentation.
+    To run the BASIC programs consult the GETTING STARTED for
+    your configuration.  The Cheapsort programs run from DOS.
+    
+    File Descriptions:
+    
+    C451MIN  LIB  Alternate record management program
+    C451     LIB  Main record management program
+    R451     LIB  BASIC program shell for custom report programs
+    MENU     BAS  Menu program for Creator system
+    CSORT3   EXE  Cheapsort, version 3
+    CSORT3   DOC  Documentation for Cheapsort, version 3
+    CSORT2   EXE  Cheapsort, version 2
+    CSORT    EXE  The Cheapsort program
+    CSORT    DOC  Documentation for Cheapsort
+    CREATOR  BAS  Program that introduces the Creator system
+    REKEY    BAS  Utility program for maintaining Creator key files
+    REPORTOR BAS  Writes custom report programs
+
+### Directory of PC-SIG Library Disk 0339
 
      Volume in drive A has no label
      Directory of A:\

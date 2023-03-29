@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #708"
+      B: "PC-SIG Library Disk 0708"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #708
+## Information about "BACKGAMMON AND MORE"
+
+    Norsoft FOREIGN LANGUAGE HANGMAN is an excellent educational program for
+    learning Spanish, or for learning English for people who speak Spanish.
+    While being educational, this program is very entertaining.  It includes
+    three variations on the basic Hangman game.  The first is guessing what
+    the secret word is, while in the second version you must guess an entire
+    phrase.  The last is Personalized Hangman, which can be played by two to
+    nine players who enter a word or phrase to try to stump the others.
+    This program is quite useful for building up your vocabulary or for
+    learning basic grammar.
+    
+    BACKGAMMON is finally here for your PC!  Now you can play against a
+    strong opponent on your own computer.  If you've never played before, or
+    you're the champion of your local club, BACKGAMMON will fill the role of
+    instant opponent.  For the true afficionado, the program keeps track of
+    points, games, gammons, and backgammons.
+
+### Directory of PC-SIG Library Disk 0708
 
      Volume in drive A has no label
      Directory of A:\

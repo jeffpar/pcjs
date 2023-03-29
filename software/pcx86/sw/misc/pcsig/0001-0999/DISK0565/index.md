@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #565"
+      B: "PC-SIG Library Disk 0565"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #565
+## Information about "PC-PAYROLL 1 OF 2 (ALSO 1019)"
+
+    PC-PAYROLL is a complete, menu-driven payroll system for moderate-sized
+    companies.
+    
+    It handles 80 employees on floppy-based systems and 200 employees on
+    hard disk systems. PC-PAYROLL accepts hourly, salary, and tip wages, as
+    well as bonuses and commissions. Federal, state and local taxes, FICA,
+    pension and insurance withholding and user-defined deductions are
+    automatically computed.
+    
+    Paychecks and stubs can be printed according to several predefined
+    formats. A full range of reports are included: monthly, quarterly and
+    year-to-date summaries, federal tax reports (W2, W3, 941), and a
+    complete pay period detail. PC-PAYROLL is well organized, and has as
+    complete a list of facilities as commercial payroll systems.
+
+### Directory of PC-SIG Library Disk 0565
 
      Volume in drive A has no label
      Directory of A:\

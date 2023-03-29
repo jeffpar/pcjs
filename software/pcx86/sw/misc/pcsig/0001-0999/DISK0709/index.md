@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #709"
+      B: "PC-SIG Library Disk 0709"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #709
+## Information about "PC-CRYP2, DISKMASTER, & INSTACALENDAR"
+
+    Is computer security important to you?  Look into PC-CRYP2.  First, it
+    explains and demonstrates the Vernam encryption and decryption process
+    of using a password as a numeric seed for encoding computer information.
+    Second, it performs the encryption and decryption of your files.
+    
+    No one will be able to access your data except you!
+    
+    Tired of trying to read those scribbled labels on your disks? Print
+    disk labels on 5" x 1-7/16" label stock. This is the ideal size for a
+    floppy disk.
+    
+    INSTACAL can produce a full-page calendar for any month, or entire year,
+    from 1600 to 2050 A.D.  You can print the calendar or show it on the
+    screen.  The documentation is brief but gives all the help needed to use
+    the program.
+
+### Directory of PC-SIG Library Disk 0709
 
      Volume in drive A has no label
      Directory of A:\

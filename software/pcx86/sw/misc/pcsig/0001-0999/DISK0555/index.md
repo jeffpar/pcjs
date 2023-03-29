@@ -9,13 +9,55 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #555"
+      B: "PC-SIG Library Disk 0555"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #555
+## Information about "LINPACK DRIVERS"
+
+    The Linear Equation Package (LINPACK) is a set of routines which solves
+    systems of linear equations and related problems.  This package was
+    developed by the Applied Mathematics Division of Argonne National
+    Laboratory; this source code was taken from a distribution disk
+    provided by International Mathematics and Statistical Libraries,
+    Inc. (IMSL).
+    
+    System Requirements:  Fortran complier, 256K memory, color display,
+    graphics card and printer and one drive unit.
+    
+    How to Start:  Consult README and INDEX for program information.
+    
+    Suggested Registration:  $10.00
+    
+    File Descriptions:
+    
+    INDEX         An index of all the routines on the library and driver dis
+    SEX      CAL  Undocumented file
+    README        A comprehensive writeup on use of these routines
+    SP       LNK  The link list of binaries for the single precision
+    SGT      LNK  The link list of binaries for the single precision
+    SEX      LNK  The link list of binaries for the SEX test set.
+    SCH      LNK  The link list of binaries for the single precision
+    SUD      FOR  This is the test driver for matrix update subs.
+    ST       FOR  Main routine/driver for testing the ST routines.
+    SSV      FOR  Main routine/driver for testing the SSV routines.
+    SS       FOR  Main routine/driver for testing the SS routines.
+    SQR      FOR  Main routine/driver for testing the SQR routines.
+    SP       FOR  Main routine/driver for testing the SP routines.
+    SGT      FOR  Main routine/driver for testing the SGT routines.
+    SG       FOR  Main routine/driver for testing the SG routines.
+    SEX      FOR  Main routine/driver for testing the exchange routines.
+    SCH      FOR  Main routine/driver for testing the SCH routines.
+    SUD      CAL  Undocumented file
+    SS       LNK  The link list of binaries for the single precision
+    SQR      LNK  The link list of binaries for the single precision
+    SUD      LNK  An undocumented link list.
+    ST       LNK  The link list of binaries for the single precision
+    SSV      LNK  The link list of binaries for the single precision
+
+### Directory of PC-SIG Library Disk 0555
 
      Volume in drive A has no label
      Directory of A:\

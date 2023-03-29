@@ -9,13 +9,26 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #493"
+      B: "PC-SIG Library Disk 0493"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #493
+## Information about "DISK DRIVE-IN THEATER (VCR DBASE)"
+
+    Here's the answer for anyone who needs a simple, structured way to keep
+    track of all the movies and tapes they own.
+    
+    DISK DRIVE-IN THEATER has an ergonomic and efficient data-input screen
+    (one of the easiest anywhere), and a wealth of reports and searches, all
+    of which are accessible within three keystrokes.  Search by title, star,
+    movie type, tape number, and retrieve data such as remaining room on
+    tape.  Print two differently configured labels for your tape library.
+    With all these features and a database controller faster than most, it
+    is a clearly superior video library manager.
+
+### Directory of PC-SIG Library Disk 0493
 
      Volume in drive A has no label
      Directory of A:\

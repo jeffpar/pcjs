@@ -9,13 +9,40 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #381"
+      B: "PC-SIG Library Disk 0381"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #381
+## Information about "BASIC AIDS NO 4"
+
+    The BASICAID program will compress a BASIC program (by removing extra
+    spaces, etc.), expand a program, and generate a cross reference of
+    BASIC reserved words.  The TBASIC program allows the creation and
+    execution of TINY BASIC programs.  TINY BASIC is a limited version of
+    the BASIC language.  Included is an internal TINY BASIC editor.
+    
+    System Requirements: Some programs require BASIC
+    
+    How to Start:  Type BASICAID or TBASIC and press <ENTER> to start
+    either program.  To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.
+    
+    Suggested Registration:  $10.00
+    
+    File Descriptions:
+    
+    BASICAID BAS  BASIC source file for BASICAID.EXE
+    BASICAID EXE  Multi-fuction BASIC programmers utility
+    BASICAID DOC  Documentation for BASICAID.EXE
+    TBASIC   COM  TINY BASIC language. A very limited subset of BASIC
+    TBASIC   ASM  Source code for TBASIC.COM
+    BRENTBAS UM   BRENTBAS.EXE Users Manual
+    BRENTBAS EXE  A translator from a structured BASIC to Microsoft BASIC
+    TBASIC   DOC  Documentation for TBASIC.COM
+
+### Directory of PC-SIG Library Disk 0381
 
      Volume in drive A has no label
      Directory of A:\

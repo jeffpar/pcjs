@@ -9,13 +9,34 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #823"
+      B: "PC-SIG Library Disk 0823"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #823
+## Information about "INTERACTIVE MATRIX CALCULATOR"
+
+    Data collection for statistical analysis is made easier with MATRIX
+    CALCULATOR.  Twenty matrix areas, numbered from 1 to 20, can store 150
+    elements each.  Since the matrices are in contiguous blocks, the
+    capacities may be enlarged by, for instance, using every other matrix.
+    This strategy results in 10 matrices with a capacity of 300 each.  One
+    operation at a time is performed; i.e., only one multiplication, one
+    addition, etc.  Results may be displayed at any time using the Print
+    command.
+    
+    The idea of the INTERACTIVE REGRESSION program is that the researcher
+    knows his data best.  Rather than provide canned variable selection
+    routines, the researcher is prompted for the next step each time the
+    model changes due to the addition or deletion of a variable.  At any
+    particular step, variables that are in the equation may be deleted, or
+    variables which are not in the equation may be added.  No provision is
+    made for residual analysis since no data is stored.  This is a serious
+    limitation of the program in terms of modern regression analysis
+    procedures.
+
+### Directory of PC-SIG Library Disk 0823
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,48 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #304"
+      B: "PC-SIG Library Disk 0304"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #304
+## Information about "LOTUS WORKSHEETS #5"
+
+    Lotus 1-2-3 financial worksheets for a small business -- powerful enough
+    for the veteran 1-2-3 user, yet friendly to beginners.  Accounting
+    templates include a check book controller, cash flow managers, an EOQ
+    inventory mananger, depreciation and loan calculators.  The macro
+    library is sophisticated and requires reading of the included
+    documentation.
+    File Descriptions:
+    
+    ADC      WKS  ACRS Depreciation Calc.
+    ARC      WKS  Accounts receivable collections tracker.
+    CBB      WKS  Check book balancer.
+    CFM      WKS  Cash flow manager.
+    CDB      WKS  Cash disbursements.
+    EIO      WKS  EOQ inventory ordering.
+    CFP      WKS  Cash flow projection.
+    FFS      WKS  5-in-1 financial statement.
+    GCC      WKS  Growth capacity calculator.
+    IIB      WKS  Interactive income statement.
+    IRR      WKS  Internal rate-of-return.
+    LCT      WKS  Line-of-Credit tracker.
+    LNP      WKS  Loan payoff calculator.
+    LNA      WKS  Loan amortization.
+    MACRO_1  DOC  Documentation for MACLIB.WKS (5K).
+    MACLIB   WKS  Lotus 1-2-3 Macros Library-combined into most worksheets.
+    OLDBULL  DOC  Doc file of all bulletins from the Capitol PC BBS.
+    NVB      WKS  New venture budget.
+    QA1      WKS  Queue analysis (single-station service facility).
+    PVA      WKS  Price volume analysis.
+    STC      WKS  Statistics calculator.
+    RAR      WKS  Ratio analyzer.
+    QGN      WKS  Quote generator - form and tracker.
+    QAM      WKS  Queue analysis (multi-station service facility).
+
+### Directory of PC-SIG Library Disk 0304
 
      Volume in drive A has no label
      Directory of A:\

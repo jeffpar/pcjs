@@ -9,13 +9,35 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #456"
+      B: "PC-SIG Library Disk 0456"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #456
+## Information about "GAME SERIES #21"
+
+    Here is another fine collection of games that will keep you busy for
+    years to come.  FIRE.EXE is a good strategy game in which you build
+    fire breaks and drop water from a helicopter to keep your section of
+    the forest from burning away.  AIRTRAX.EXE is a very good game in which
+    you, as an air traffic controller, try to land several planes.
+    PTROOPER.EXE is a good arcade shoot-em-up that will keep you guessing.
+    And for you gamblers out there, we've got a version of the old
+    favorite, POKER.EXE.
+    File Descriptions:
+    
+    AIRTRAX  EXE  A very good air controller game.
+    HEART    EXE  good graphic version of PAC-MAN.
+    FIRE     COM  Can you keep a forest from going up in smoke?
+    POKER    EXE  The old card game favorite.
+    PACKGAL  COM  Version of MS. PAC-MAN, doesn't need graphics card.
+    LANDMINE EXE  Can you make it across a mine field without going boom!
+    HOSTAGES EXE  Shoot your way through walls to let prisoners free.
+    QUBERT   EXE  Good version of Q-BERT.
+    PTROOPER EXE  Keep the alien paratroopers from landing in your country.
+
+### Directory of PC-SIG Library Disk 0456
 
      Volume in drive A has no label
      Directory of A:\

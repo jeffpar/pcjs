@@ -9,13 +9,45 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #733"
+      B: "PC-SIG Library Disk 0733"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #733
+## Information about "VRS PLUS"
+
+    VEHICLE RECORD SYSTEM by K-Jon Software will track your car's fuel
+    and maintenance costs.  This program lets you set up codes for the
+    travel, maintenance, and fuel cost sections.  It even allows
+    you to keep track of loan expenses.
+    
+    This program is easy to use, menu driven, and comes with good
+    documentation.  However, this version only allows you to use four of
+    the twelve choices outlined in the programs main menu.
+    
+    This is a two-disk set.  The manual for this program is contained on
+    disk #1155 in the PC SIG library.
+    
+    System Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    File Descriptions:
+    
+    READ          Program information file.
+    VDRIVE   CTL  Default data drive control file.
+    VDRIVE   EXE  Program to change data drive.
+    VFUEL    EXE  Fuel log program.
+    VMAINT   EXE  Maint/access/misc log program.
+    VMENU    EXE  Main menu.
+    VRGTM    EXE  Fuel, travel & maint log program.
+    VRMENU   EXE  Report menu.
+    VVRS     EXE  Create/change files program.
+    GO       BAT  Batch file to start program.
+    File Descriptions:
+
+### Directory of PC-SIG Library Disk 0733
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,39 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #592"
+      B: "PC-SIG Library Disk 0592"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #592
+## Information about "TSHELL"
+
+    TSHELL is a powerful visual shell for the PC which provides an
+    efficient environment for the user to manage DOS. This version is a
+    working demonstration of a larger, more powerful version (2.0).
+    Complete with callable help screens, installation and customization
+    files, and a manual, this could be a solid enhancement for your system.
+    
+    System Requirements:  DOS 2.0 or greater, 256K, hard disk
+    recommended, monochrome monitor.
+    
+    How to Start: Read the README.1ST and then TSH.DOC for instructions and
+    documentation.  To run TSHELL, just type TSH.
+    
+    Suggested Registration:  Version 2.0 available for $37.50.
+    
+    File Descriptions:
+    
+    TSH      HLP  This file contains help screens
+    SETUP    TSH  The customizing routine for Tshell
+    TSH      DOC  Documentation manual
+    USQ      EXE  Expands (unsqueezes) compressed Tshell files
+    TSH      EXE  The main Tshell program file.
+    INSTALL  BAT  Batch file to install Tshell on a designated disk
+    README   1ST  Contains comments on installation and operation of Tshell
+
+### Directory of PC-SIG Library Disk 0592
 
      Volume in drive A has no label
      Directory of A:\

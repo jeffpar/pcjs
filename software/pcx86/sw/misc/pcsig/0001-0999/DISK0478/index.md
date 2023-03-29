@@ -9,13 +9,77 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #478"
+      B: "PC-SIG Library Disk 0478"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #478
+## Information about "HARD DISK UTILITIES"
+
+    This is a collection of utilities for the hard disk drive user, compiled
+    from over 25 disks in our library.  Some of the most famous: ALTER, used
+    to change your file attributes; DISKPARK, for positioning your hard disk
+    drive in the safety zone; and BACKSTAT to find out which files need to
+    be backed up.
+    File Descriptions:
+    
+    ALTER    COM  Utility to change file attributes (Hidden/Readonly/etc).
+    ALTER    DOC  Documentation for ALTER.COM (4k).
+    BACKSTAT EXE  Tells you which files need to be backed up.
+    CATALOG  COM  Make a sorted directory.
+    CDSECRET COM  Go to a ``secret'' sub-directory.
+    DD       BAT  Sort directory by date (PART OF DNXSD.BAT).
+    DIR2     BAS  BASIC version of a directory sorter.
+    DISKPARK DOC  Documentation for DISKPARK.EXE (1k).
+    DISKPARK EXE  Position the hard disk drive head in a safety zone.
+    DISRTN   EXE  Undeletes and recovers lost first sectors.
+    DN       BAT  Sort directory by name (Part of DNXSD.BAT).
+    DNXSD    DOC  Documentation for sorting directory.
+    DS       BAT  Sort directory by size (Part of DNXSD.BAT).
+    DX       BAT  Sort directory by extension (Part of DNXSD.BAT).
+    DXSAVE   BAT  Sample change in .BAT to save sorted directory to disk.
+    FREE     COM  Displays amount of actual free space on hard disk.
+    GCOPY    DOC  Documentation for GCOPY.EXE (1k).
+    GCOPY    EXE  Menu type selective copy program.
+    GDEL     DOC  Documentation for GDEL.EXE (1k).
+    GDEL     EXE  Menu type selective delete program.
+    MDSECRET COM  Make a ``secret'' sub-directory.
+    NDOSEDIT COM  VM style editor for DOS commands.
+    NDOSEDIT DOC  Documentation for NDOSEDIT.COM (5k).
+    POKING   TXT  Text file containing locations of information about disks.
+    RDSECRET COM  Remove ``secret'' sub-directory.
+    READONLY COM  Make a file read-only to make it un-erasable.
+    READONLY DOC  Documentation for READONLY.COM.
+    READWRIT COM  Return a read-only file back to normal read/write status.
+    READWRIT DOC  Documentation for READWRIT.COM.
+    SDIR5    COM  Utility to list files by types and different formats.
+    SDIR5    DOC  Documentation for SDIR5.COM.
+    SEARCH   COM  Useful replacement for DOS path command.
+    SEARCH   DOC  Documentation for SEARCH.COM (2k).
+    SECRET   DOC  Documentation for RDSECRET, MDSECRET, and CDSECRET.
+    TREED    COM  Make a directory tree.
+    UNDEL    COM  Recovers erased files.
+    UNDO     BAS  Allows fixed disk users to read backup diskettes.
+    VDL      COM  File deletion utility.
+    VDL      DOC  Documentation for VDL.COM (2k).
+    VIEWDISK DOC  Documentation for VIEWDISK.EXE.
+    VIEWDISK EXE  Look at individual disk sectors.
+    WHEREIS  COM  Find a file on the hard disk regardless of location.
+    WHEREIS  DOC  Documentation for WHEREIS.COM (1k).
+    WRT      DOC  Documentation for WRTE.COM and WRTP.COM.
+    WRTE     COM  Make a read-only file copyable.
+    WRTP     COM  Make a read-only file.
+    DIARY    COM  System use logging program.
+    ADD      BAT  Batch file used by DIARY.COM.
+    LST      BAT  Batch file used by DIARY.COM.
+    OFF      BAT  Batch file used by DIARY.COM.
+    SEE      BAT  Batch file used by DIARY.COM.
+    READ_ME  1ST  Introductory text file for DIARY.COM.
+    PASSWORD DOC  Documentation file for PASSWORD.EXE.
+    PASSWORD EXE  Protect your system with a password.
+
+### Directory of PC-SIG Library Disk 0478
 
      Volume in drive A has no label
      Directory of A:\

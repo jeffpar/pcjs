@@ -9,13 +9,52 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #135"
+      B: "PC-SIG Library Disk 0135"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #135
+## Information about "PROGRAMERS UTILITIES #3"
+
+    This disk contains many utility programs to facilitate modeming in
+    special situations.  For instance, included here is LAR, a program to
+    manipulate CP/M LU format libraries.  The primary use of LAR is to
+    combine several files together for upload/download to a personal
+    computer.  There are also utilities for patches and ways to get around
+    different problems with a BASIC Compiler.
+    
+    How to Start: Read the files suffixed .DOC or .TXT for directions and
+    documentation.  To run any file suffixed .EXE or .COM, just type its
+    name, i.e. for X.COM, type X and press <ENTER>.
+    
+    File Descriptions:
+    
+    APLCHIP  DOC  Where to get an APL character generator chip for IBM APL
+    BASRUN   PAT  Fixes for BASRUN.LIB  (See BASCOM.TXT)
+    BASLIB   PAT  Fixes for BASCOM.LIB
+    BASCOM   TXT  Instructions for program to fix all BASIC Compiler bugs!
+    BASCOM   PAT  Fixes for BASCOM.COM  (See BASCOM.TXT)
+    DOSFTE   PAS  Part of DOSFUN.PAS
+    DOSFUN   INC  Part of DOSFUN.PAS
+    DOSFUN   PAS  Procedures for extended DOS file access from Pascal
+    DRIVER   ASM  Interrupt driven comm I/O driver for Lattice c
+    FILKQQ   INC  Part of DOSFUN.PAS
+    DRIVER   OBJ  Linkable module for above
+    IBMPCTIP DOC  Tips on using PCDOS
+    FILUQQ   INC  Part of DOSFUN.PAS
+    LAR      EXE  Program to combine files into libraries to save space
+    LAR      DOC  Documentation for file library program
+    PRTSCRN  ASM  Replacement print screen driver, filters ctrl chars
+    PATCHER  BAS  Program to apply patches to IBM BASIC  (See BASCOM.TXT)
+    PAD      WKS  123 desktop-type worksheet, lots of useful functions
+    SCAV2XX  ASM  Program to make diskette with bad sectors useable
+    PRTSCRN  COM  Executable version of above
+    SYSCOM   INC  Assembly language includes for DOS functions
+    SCAV2XX  COM  Executable version of above
+    READ     ME   Listing of included files
+
+### Directory of PC-SIG Library Disk 0135
 
      Volume in drive A has no label
      Directory of A:\

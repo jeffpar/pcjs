@@ -9,13 +9,37 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #961"
+      B: "PC-SIG Library Disk 0961"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #961
+## Information about "MINI-MINDER AND INVENTORY SORT"
+
+    Keep track of your inventory and other applicable information  you need
+    to analyze your inventory position.
+    
+    INVENTORY SORT can handle multiple inventory lists which can have up to
+    1,000 part types in each. Maintain five fields of information per part
+    type -- including part number, part name, quantity, location, and cost.
+    Sort records alphabetically, numerically, or by location. Update and
+    delete part types, and get a formatted printout of the inventory list.
+    Wholesale and retail cost values can be tracked as well.
+    
+    MINI MINDER is an easy-to-use rental property management system written
+    specifically for managers of mini-warehouses or locker rental areas.
+    (With a little imagination, the program could be adapted to fit almost
+    any rental property situation.)
+    
+    Track information such as size (or other description), rental rate,
+    various tenant data, payment records, and expense of operation on a
+    property.  Perform other tasks, such as producing mailing labels in
+    record sequence and billing tenants.  Run daily reports, list all
+    outstanding units (those who have not paid yet), view the status on a
+    single unit, or list the status of all units.
+
+### Directory of PC-SIG Library Disk 0961
 
      Volume in drive A has no label
      Directory of A:\

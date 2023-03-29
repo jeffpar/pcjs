@@ -9,13 +9,93 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #391"
+      B: "PC-SIG Library Disk 0391"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #391
+## Information about "NMR"
+
+    This series of programs are simulations and problems for the serious
+    chemistry enthusiast of NMR - Nuclear Magnetic Resonance Spectroscopy.
+    A set of statistical analysis programs are also included.  The programs
+    are useful for students and professionals.
+    
+    System Requirements: Printer, graphic card and a hi-res color monitor.
+    
+    How to Start: To run BASIC programs consult the directions in GETTING
+    STARTED for your configuration.
+    
+    File Descriptions:
+    
+    BASTAT2V BAS  Basic statistics - two variables
+    BASHADAM BAS  NMR - Calculates surface tension by use of the BASFORTH
+    AUTOEXEC BAT  Starting batch file - lists directory, starts MENU.BAS
+    ADIABAT  BAS  NMR - Adiabatic slow passage experiment
+    GATDECUP BAS  Homonuclear gated decoupling for solvent peak suppression
+    GAMMA(X) BAS  Gamma functions by Stirling's approximation
+    FOURIER  BAS  Fourier coefficients
+    EXPFIT   BAS  Exponential curve fit
+    ERRANAL  BAS  Error analysis - root mean square
+    ERFERFC  BAS  Calculates erf(x) and erfc(x)
+    DIFFCAP  BAS  Differential capacitance of the electric double layer
+    DEBYESOL BAS  Heat capacity of Debye solid
+    CURVEFIT BAS  Curve fitter
+    CUBICSPL BAS  Cubic spline function interpolation
+    BESSELYN BAS  Calculates Bessel functions Yn(x)
+    BESSELJN BAS  Calculates Bessel functions Jn(x)
+    CUBICFIT BAS  Least squares cubic fit
+    CHISQDIS BAS  Chi-square distribution
+    BUBLSORT BAS  A bubble sort
+    BR2DIFFN BAS  Diffusion of Bromine in a tube
+    XRAYDIF1 BAS  X-ray diffraction simulations
+    TWOMEANS BAS  Compares the means of two populations
+    TRIDIAG  BAS  Tridiagonal systems of linear equations
+    SPINECHO BAS  Spin echo simulation in NMR
+    SPECPROB BAS  NMR Spectroscopy spin echo measurements problem
+    SIMPINT  BAS  Integration by Simpson's rule
+    SHELSORT BAS  A shell sort routine (300 entries max.)
+    RUTHSCAT BAS  Rutherford scattering - calculates & plots trajectories
+    RUTHEXPT BAS  Rutherford scattering apparatus & trajectories experiment
+    ROOTFHLF BAS  Roots of functions / Half-interval search
+    POWRCURV BAS  Power curve fit
+    OFFRES   BAS  Procession on and off resonance
+    NUMDIFF  BAS  Numerical differentiation - symmetrical 4-point formula
+    NMRROT   BAS  NMR - behavior of the magnetization vector
+    NMRRELAX BAS  Effect of correlation time on the longitudinal NMR
+    NMRPHASE BAS  NMR line phasing simulation
+    NMRFOURT BAS  Free induction decay in spectra with several signals
+    NMREXEC  BAS  Older version of MENU.BAS - interesting graphics
+    NMREXCH  BAS  NMR lineshapes in chemical exchange
+    NMRAPP2  PIC  Diagram of NMR apparatus
+    NMRAPP   PIC  Diagram of NMR apparatus
+    NMR-WEFT BAS  Water peak supression by WEFT - Water Elimination by
+    NMR-ABCD BAS  ABCD proton spectrum
+    NMR-ABC  BAS  ABC proton spectrum
+    NEWTONRT BAS  Newton's method for real roots of polynomials
+    MULTPULS BAS  Multiple pulses in NMR
+    MORSECRV BAS  Morse curves for diatomic molecules
+    MOMSKKUR BAS  Moments, skewness, kurtosis
+    MENU     BAS  Main menu program to gain access to all NMR programs
+    MATRINV  BAS  Matrix inversion
+    MATRDIAG BAS  Matrix diagonalization by partial pivot method
+    MATERBAL BAS  Material balance equations
+    LSQREXP  BAS  Non-linear least squares exponential curve fit
+    LSQPARAB BAS  Least squares parabola
+    LOGCURVE BAS  Logarithmic curve fit
+    LINREGR  BAS  Linear regression
+    LINLSQR  BAS  Linear least squares
+    LINEQNS  BAS  Simultaneous linear equations
+    HARMOSC  BAS  Harmonic oscillator function Hn(x) by recursion
+    INTERP4  BAS  Quartic interpolation
+    INTERP3  BAS  4-point polynomial interpolation
+    LEGENDRE BAS  Calculation of Legendre polynomials by recursion
+    INVRECOV BAS  NMR measurement of T1 by inversion recovery
+    LARMOR   BAS  NMR Spectroscopy Larmor precession and other effects
+    L2FILMS  BAS  Equation of state of L2 films in surface chemistry
+
+### Directory of PC-SIG Library Disk 0391
 
      Volume in drive A has no label
      Directory of A:\

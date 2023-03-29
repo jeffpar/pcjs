@@ -9,13 +9,51 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #194"
+      B: "PC-SIG Library Disk 0194"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #194
+## Information about "ROFF AND PC-READ"
+
+    ROFF is a text formatter.  Using ROFF, you can make nice printouts of a
+    file with as little or as much help from the program as you want,
+    depending on the commands.  There are default values for all parameters,
+    so if you don't put any commands in at all, your file will come out with
+    filled, right-justified lines.  The default line-length is 80 characters
+    and the default page-length is 66 lines per page.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  None.
+    
+    File Descriptions:
+    
+    INTEGRAL C    Source in C for integration routine.
+    INTEGRAL DCL  Declaration of integral for calling Pascal program.
+    INTEGRAL PAS  Source in Pascal for integration routine.
+    READ     ME   Notes on integration routine.
+    RKF45    C    Source in c for RKF45 integrator.
+    RKF45    DCL  Declaration of RKF45 for calling Pascal program.
+    RKF45    H    Part of RKF45 integration programs.
+    RKF45    PAS  Source in Pascal for RKF45 integrator.
+    ROFF     DOC  Documentation of ROFF.
+    ROFF     EXE  Version of ROFF produced from source code on this disk.
+    ROFF     H0   Header common to all ROFF source.
+    ROFF     H1   Header specific to ROFF1.
+    ROFF     H2   Header specific to ROFF2.
+    ROFF1    C    Part 1 of ROFF source  (Modified from PC-SIG Disk No 50).
+    ROFF2    C    Part 2 of ROFF source.
+    ROFF3    C    Part 3 of ROFF source.
+    TSTINTEG C    Source in C for example of use of integral.
+    TSTINTEG PAS  Source in Pascal for example for use of integral.
+    TSTRKF45 C    Source in C for example of use of RKF45.
+    TSTRKF45 PAS  Source in Pascal for example of use of RKF45.
+
+### Directory of PC-SIG Library Disk 0194
 
      Volume in drive A has no label
      Directory of A:\

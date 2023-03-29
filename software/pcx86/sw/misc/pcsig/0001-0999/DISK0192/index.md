@@ -9,13 +9,27 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #192"
+      B: "PC-SIG Library Disk 0192"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #192
+## Information about "HEALTH RISK"
+
+    A PC conversion of the CDC Health Risk appraisal program that helps
+    medical and health-care professionals -- doctors, nurses, public health
+    administrators, etc. -- continue to deliver quality care.
+    
+    A questionnaire helps you assess and evaluate risks to the patient's
+    health.  This program should only be used by qualified health
+    professionals who have the experience and training to adequately
+    interpret individual results.
+    
+    For further information on HEALTH RISK, contact the Center for Disease
+    Control directly in Atlanta, Georgia.
+
+### Directory of PC-SIG Library Disk 0192
 
      Volume in drive A has no label
      Directory of A:\

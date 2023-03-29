@@ -9,13 +9,41 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #177"
+      B: "PC-SIG Library Disk 0177"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #177
+## Information about "ARCADE SERIES 1"
+
+    The first in a series of disks which display some of the best, in our
+    opinion, of the games we have to offer in the library.  For a good
+    test of your heart rate, try to find the BOMB before it explodes.  Or
+    battle the vicious BUGS!  JUMPJOE is a real test of your reflexes, and
+    BREAKOUT is always a popular offering.  After all that, grab your
+    PENCIL and sketch your cares away.
+    
+    System Requirements:  Some programs require color, BASIC
+    
+    How to Start: To run an EXE or COM program, just type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    BOMB     BAS  Find the bomb in 1 of 1,000,000 rooms before BLAM!
+    PENCIL   BAS  Sketch on color monitor with joystick
+    JUMPJOE  SOL  Part of JUMPJOE.EXE
+    JUMPJOE  EXE  Version of Miner 2049'er or Donkey Kong (Color required )
+    HS       DAT  High scores for JUMPJOE.EXE
+    DRIVER   BAS  Drive racecar around track - tough on eyes!
+    CUBE     BAS  Cube game  (Color required)
+    BUGS!    SCR  Part of BUGS.EXE
+    BUGS     EXE  Centipede-like game - good version
+    BREAKOUT BAS  Hard Pong game  (Requires color graphics)
+
+### Directory of PC-SIG Library Disk 0177
 
      Volume in drive A has no label
      Directory of A:\

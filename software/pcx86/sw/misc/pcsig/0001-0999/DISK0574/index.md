@@ -9,13 +9,51 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #574"
+      B: "PC-SIG Library Disk 0574"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #574
+## Information about "FREECALC"
+
+    FREECALC is a mature spreadsheet program with numerous features.  While
+    it lacks some of the features and power of a product like LOTUS 1-2-3,
+    it also lacks LOTUS's high price.  As a better than average spreadsheet,
+    it is quite adequate for most applications.  Like LOTUS, FREECALC uses
+    all available memory (up to 640k) and is command bar driven.  FREECALC
+    also allows for a color monitor.   The disk manual is very complete and
+    is 106 pages long.
+    
+    Features:
+    
+    ~ 250 rows by 25 columns
+    
+    ~ Column width of 0 to 70 characters
+    
+    ~ Text can be entered
+    
+    ~ Left or right justified
+    
+    ~ Display 0 to 6 decimal places
+    
+    ~ Macros
+    
+    ~ Print spreadsheet by disk
+    
+    ~ Export spreadsheet to other programs
+    
+    ~ Load ASCII text files
+    
+    ~ Support for 8087 and 80287 coprocessors
+    
+    ~ Up to 15 significant digits
+    
+    ~ Wordprocessing mode
+    
+    ~ Move, copy, delete and insert columns/rows
+
+### Directory of PC-SIG Library Disk 0574
 
      Volume in drive A has no label
      Directory of A:\

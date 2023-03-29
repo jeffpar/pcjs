@@ -9,13 +9,28 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #479"
+      B: "PC-SIG Library Disk 0479"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #479
+## Information about "AM-TAX 1990"
+
+    AM-TAX helps you prepare your federal tax return.  It does most
+    calculations for you and, where possible, checks if the information you
+    entered is consistent and valid.
+    
+    Because it's powerful, you can try ``what if'' situations.  Change an
+    income or deduction and instantly see the result on your tax balance or
+    refund.  Many commonly-used forms and schedules are supported, as well
+    as worksheets for specific situations such as capital gains, partnership
+    and corporate income, and estate or trust income.  Information entered
+    or calculated for a supporting form is automatically transferred to the
+    appropriate line it supports.  All the forms can be printed and
+    filed directly with the IRS.
+
+### Directory of PC-SIG Library Disk 0479
 
      Volume in drive A has no label
      Directory of A:\

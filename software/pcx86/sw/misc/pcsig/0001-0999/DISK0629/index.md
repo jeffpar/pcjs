@@ -9,13 +9,40 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #629"
+      B: "PC-SIG Library Disk 0629"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #629
+## Information about "PC-ART"
+
+    PC-ART is a graphic-drawing program that lets you create color pictures
+    and designs using the standard color graphics adapter on the IBM-PC.
+    
+    This is a solid graphics package that does not depend upon the use of a
+    mouse, light pen, koala pad or joystick.  You can do everything
+    from the keyboard.   The following features are available to you:
+    
+    ~ Crayon function for free-hand drawing in any color
+    
+    ~ Paint brush function in any color using any one of 15 patterns
+    
+    ~ Line and box functions with four different line patterns
+    
+    ~ Circle function with a concentric repeat feature
+    
+    ~ Text function in two fonts in any color and in 10 character sizes
+    
+    ~ Retrieve or save an entire picture for later processing
+    
+    ~ Snapshot function to take a picture of the screen and store it
+    
+    ~ Image library to store and later retrieve drawn figures
+    
+    ~ Easy-to-use window panels to select functions, colors, etc
+
+### Directory of PC-SIG Library Disk 0629
 
      Volume in drive A has no label
      Directory of A:\

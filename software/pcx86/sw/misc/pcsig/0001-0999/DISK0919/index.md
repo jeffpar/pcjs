@@ -9,13 +9,35 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #919"
+      B: "PC-SIG Library Disk 0919"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #919
+## Information about "POTPOURRI MENUING PROGRAM"
+
+    POTPOURRI is a menuing system with several built-in programs.  Add
+    applications to the menu and execute them from within the system.  A DOS
+    gateway is provided so you can do housekeeping functions without leaving
+    the main system.
+    
+    Programs executable from the main menu include a programming calculator
+    for binary, hexagonal, and bit manipulation functions; a standard
+    four-function calculator; and an appointment calendar that can arrange
+    and print appointment schedules for up to 12 months.  Included in
+    POTPOURRI is a routine to describe system hardware configuration, a
+    drawing program for sketching and a music program to create and playback
+    music files.  All the programs described have documentation screens
+    accessible from the main menu.
+    File Descriptions:
+    
+    AUTOEXEC BAT  Automatic execution file.
+    INSTALL  BAT  Automatic installation batch file.
+    INSTALL  TXT  Installation explanation text file.
+    OGHAM    <DIR>Subdirectory.
+
+### Directory of PC-SIG Library Disk 0919
 
      Volume in drive A has no label
      Directory of A:\

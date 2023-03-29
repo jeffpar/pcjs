@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #477"
+      B: "PC-SIG Library Disk 0477"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #477
+## Information about "NAMEGRAM"
+
+    What do Lewis Carroll, Vladimir Nabokov, Jim Morrison, and Roman
+    Polanski have in common?  They all played with anagrams.  Lewis Carroll
+    rearranged politician William Ewart Gladstone's name to spell "wild
+    agitator! means well".  Nabokov named a character in Lolita "Vivian
+    Drakbloom", an anagram of his own name.  Jim Morrison of "The Doors" was
+    "Mr. Mojo Risen'".  And in the movie Rosemary's Baby, an anagram is an
+    important clue.  Picture these creative artists hunched over a desk
+    with a big dictionary arranging Scrabble titles to form words.  If only
+    they had NAMEGRAM!  With NAMEGRAM, creating anagrams is a breeze.
+    
+    NAMEGRAM takes a name or phrase, of up to 40 characters, and, using each
+    letter only once, creates anagrams.  The output, 1 to 16 letters each,
+    are real English words.  A curious, but fascinating exercise.
+
+### Directory of PC-SIG Library Disk 0477
 
      Volume in drive A has no label
      Directory of A:\

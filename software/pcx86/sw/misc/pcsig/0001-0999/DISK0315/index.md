@@ -9,13 +9,57 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #315"
+      B: "PC-SIG Library Disk 0315"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #315
+## Information about "C UTILITIES NO 5"
+
+    A set of C subroutines ranging from an explanation for how C does type
+    conversion for the beginner to a menu system for application programmers
+    to a small C for serious hacker.  Includes a C dump program to aid in
+    debugging C programs also.
+    
+    System Requirements:  Two disk drives, a C compiler
+    
+    How to Start: To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  To run an EXE program, just type its name and press <ENTER>.
+    For instructions on Clistings, refer to your C language manual.
+    
+    File Descriptions:
+    
+    CONIO    C    Console I/O getchar scanf ect.
+    ADDLF    C    Filter to add line feeds after carrage returns if needed
+    CPCLIB   OBJ  Part of CPCN
+    CPCN     C    Small C compiler written in C
+    CPMFILES C    Makes BDS C look more UNIX compatible
+    DUMP2    C    Debug type core dump
+    FUNKEY   C    Program to redefine the keyboard
+    FRAME    C    Builds a nice frame around menus
+    INKEY    C    Get a char from the keyboard
+    ISAMC    LBR  OBJ code for ISAM utilites
+    LAR      C    CP/M LU program to combine files for upload/download
+    ISCHECK  C    Checks Microsofts issomthing matrix
+    SNAP     C    Nice snap shot of memory for debugging C programs
+    RENAME   C    C program to rename a file
+    PRINT    C    Print text files with page numbers, headers, etc.
+    LIFE     C    Another life game
+    UNTAB4   EXE  UNTAB4 ready to run
+    UNTAB4   C    Convert tabs to spaces
+    TYPECONV C    Documentation on how C does type conversion
+    TOWERS   C    Towers of Hanoi
+    TINKEY   C    Test inkey program
+    TEXTFORM C    Prints WordStar files even if you don't have WordStar.
+    STRING   C    Complete set of string functions
+    SNAP     OBJ  Compiled SNAP
+    ZAPLOAD  C    Convert Binary file to INTEL hex format
+    ZAPLOAD  EXE  ZAPLOAD ready to run
+    ZAPLOAD  DOC  Documentation on ZAPLOAD
+    _MAIN    C    Shell for main C program that includes command line
+
+### Directory of PC-SIG Library Disk 0315
 
      Volume in drive A has no label
      Directory of A:\

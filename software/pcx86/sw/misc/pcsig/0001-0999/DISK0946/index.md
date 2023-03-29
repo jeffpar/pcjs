@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #946"
+      B: "PC-SIG Library Disk 0946"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #946
+## Information about "BASKETBALL SIMULATION"
+
+    BASKETBALL is a text-based simulation of basketball -- not an
+    interactive computer game.  Once you have chosen the teams and players,
+    the game begins and you are a spectator.
+    
+    As play proceeds, the radio announcer's dialogue rolls across the
+    screen.  If you enjoy listening to games on the radio, you will enjoy
+    this game!  Rather than trying to capture the physical representation of
+    basketball on the PC, this program effectively brings the thrill of the
+    game to you the same way the radio sports announcer does.
+    
+    The program comes with data for six teams: the Celtics, the Lakers, the
+    Rockets, the '76ers, and the East and West All-Star teams.  Play games
+    with any combination of these teams or create teams of your own.
+
+### Directory of PC-SIG Library Disk 0946
 
      Volume in drive A has no label
      Directory of A:\

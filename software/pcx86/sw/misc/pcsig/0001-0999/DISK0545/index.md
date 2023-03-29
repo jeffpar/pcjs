@@ -9,13 +9,54 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #545"
+      B: "PC-SIG Library Disk 0545"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #545
+## Information about "LETUS A-B-C #8"
+
+    Letus A-B-C is a database in PC-FILE III format containing references
+    to articles in six major PC oriented magazines, beginning with
+    1982.  This release of Letus A-B-C covers the following seven
+    magazines devoted to the IBM PC: Softalk (SOFT), Business
+    Computing (BCOMP), PCjr Magazine (PCJR), PCjr WORLD Magazine
+    (PCJRW), PC PRODUCT REVIEW (PCPRO), PEANUT Magazine (PNUT), and
+    PC WEEK (PCWK).  This database provides the PC user with a tool for
+    easily performing literature searches at a very nominal cost in one's
+    office or home. The search is done by keyword fields as well as
+    identification fields (i.e., author, title, magazine issue, and page);
+    also, the authors have included three lines that give a general
+    description of the article.
+    
+    System Requirements:   128k, 2 disk drives, PC-FILE III (Disk No 5)
+    
+    How to Start:  It is very important to read the Documentation file
+    (Letus.doc) located on disk #350 either by screening it (entering TYPE
+    LETUS.DOC at the A> and using CTRL-S to pause it) or accessing it with
+    your word processor.  To run it, "boot-up" the DOS system and put PC-
+    FILE system disk in drive A; enter PC-FILE <CR>.  PC-FILE will ask
+    where the database is; you will have put Letus A-B-C Disk #8 in drive
+    "B", so you will enter B:LETUS <CR>.  The various files on this
+    diskette, corresponding to magazine and year, will be displayed on the
+    screen for your selection.
+    
+    Suggested Registration:  $10.00 per disk.
+    
+    File Descriptions:
+    
+    PCPRO84C ???  PC PRODUCT REVIEW 3rd Qtr 1984 reference (4 files)
+    PCJRW84C ???  PCjr WORLD Magazine 3rd Qtr 1984 reference files (4 files)
+    PCJR84C  ???  PCjr Magazine 3rd Quarter 1984 reference files (4 files)
+    BCOMP84C ???  Business Computing 3rd Qtr 1984 reference files (4 files)
+    PCWK84C  ???  PC WEEK Third Quarter 1984 reference files (4 files)
+    SOFT84C  ???  SOFTALK Magazine 3rd Quarter 1984 reference files (4 files
+    PNUT84C  ???  PEANUT Magazine 3rd Quarter 1984 reference files (4 files)
+    LETUS    BAT  Batch file to generate logo
+    LOGO84N8 COM  Executable file to generate Letus logo
+
+### Directory of PC-SIG Library Disk 0545
 
      Volume in drive A has no label
      Directory of A:\

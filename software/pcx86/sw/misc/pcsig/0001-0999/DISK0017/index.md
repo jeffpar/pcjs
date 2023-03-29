@@ -9,13 +9,38 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #17"
+      B: "PC-SIG Library Disk 0017"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #17
+## Information about "GAME SERIES NO 3"
+
+    A nice collection of different kinds of entertaining games.  The text
+    adventure will keep you busy for quite a while.  And the arcade games
+    will keep you entertained for hours.  To make things easy, all programs
+    on this disk may be accessed from a single menu.
+    
+    How to start:  From BASIC, type LOAD MENU, and press <ENTER>.
+    
+    File Descriptions:
+    
+    MENU     BAS  Menu to execute programs on this diskette
+    SURVIVAL BAS  Can you survive a trip to the moon?
+    PCMAN    BAS  Pac-Man look alike for 80 column display
+    MOON     BAS  Enhanced version of SURVIVAL
+    STARTRK2 BAS  Documentation for STARTREK game
+    STARTREK BAS  Another STARTREK version with minor changes
+    JBREAK   BAS  Bounce the ball off of the wall  (BREAKOUT)
+    STARTREK DUM  Overlay module for STARTREK
+    BREAKOUT BAS  A more sophisticated version of BREAKOUT
+    PCINIT   BAS  Initialize a high score file for PCMAN
+    FENCE    BAS  Enhanced version of game on Disk No 12
+    METEOR   BAS  Enhanced version of game on Disk No 14
+    HISCORE  PC   File to keep high score
+
+### Directory of PC-SIG Library Disk 0017
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,53 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #526"
+      B: "PC-SIG Library Disk 0526"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #526
+## Information about "WSMX80"
+
+    Designed to be used with Epson MX/RX/FX dot matrix printers and
+    "Epson-compatible" printers, this product provides an impressive
+    variety of enhancements for WordStar documents.  It should be
+    especially useful to users of WordStar involved with mathematical and
+    scientific notation.  Character density, size and style are all subject
+    to a wide range of variation.  Any part of the document can be printed
+    in italics, boldface, "doublewide" or compressed type.  Sub-scripts and
+    superscripts are included.  WSMX80 prints a variety of underline styles
+    and strikeovers.  WSMX80 can insert alternate character sets, such as
+    the Greek alphabet included in the product, or custom character sets
+    designed by the user.  There are also features for Table of Contents
+    and Indexes of the document being printed.
+    
+    System Requirements:  WordStar 3.0 or better. Epson printer or
+    compatable, 256K memory, one drive and either a color or mono display.
+    
+    How to Start: Consult the .TXT and .DOC files for documentation.  To
+    run a program marked .EXE or .COM, just type its name, i.e., for
+    WSMX.EXE, type WSMX and press <ENTER>.
+    
+    Suggested Registration:   $25.00
+    
+    File Descriptions:
+    
+    WSMX     EXE  Main program
+    README   TXT  Notes on how to print documentation (TYPE "GO" to Display)
+    DBL      CHR  Double high character code file
+    DBL      TXT  Text file with examples of Double high text
+    WPATCH   EXE  WORDSTAR patch
+    CHRCOM   EXE  Character look-up program
+    GREEK    TXT  Text file with examples of Greek text
+    GREEKD   TXT  Text file with examples of Greek text for Diablo printers
+    GREEK    CHR  Greek character code file
+    HAPPY    PRN  Disk Backup instructions can be printed with WSMX
+    OMSG     TXT  Licence information; how to register
+    WSMXDOC  TXT  Instruction Manual
+    GREEKD   CHR  Greek character code file for the Diablo printer
+
+### Directory of PC-SIG Library Disk 0526
 
      Volume in drive A has no label
      Directory of A:\

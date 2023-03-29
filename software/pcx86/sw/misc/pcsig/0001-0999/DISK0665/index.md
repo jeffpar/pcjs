@@ -9,13 +9,63 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #665"
+      B: "PC-SIG Library Disk 0665"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #665
+## Information about "PC-DEMONSTRATION SYSTEM"
+
+    The PC Demonstration system is an excellent program for putting
+    together a presentation on the system or laying out the specifications
+    of a package.  There are three programs in the PC Demonstration System:
+    
+    Screen  Formatter  -  which  is used to create the screens for your
+    presentation.
+    
+    Demo  Maker  -  which  is  used  to  create  a "sequence file" that
+    describes  the order in which your screens will be displayed, along
+    with  the  valid  keys  that  can  be  used  to  branch within your
+    presentation.
+    
+    Demo  Run  -  which  takes  your screens and your sequence file and
+    "runs" your presentation.
+    
+    This shareware/evaluation version of PC Demonstration System limits
+    sequence file size to 10 records.  It also has a reminder-to-register
+    screen in place of a blank edit screen in Screen Formatter.  The
+    registered/enhanced version allows sequence files of 450 records and
+    does not have the reminder-to-register screen.
+    
+    System Requirements:  256K, one disk drive and color/monochrome display
+    MUST BE RUN in 80 column mode
+    
+    How to Start:  Documentation in READ.ME and MANUAL.DOC. To run, enter
+    DR for DEMO RUN program and SF for SCREEN FORMATTER program.
+    
+    Suggested Registration: $35.00 registrations covers the latest enhanced
+    version, update notification ($10.00), technical support, SHOW.COM
+    (will allow the use of screens created by Screen Formatter in batch
+    files and even dBase III programs, and a supplement to the User's Guide
+    that gives tips on how Screen Formatter screens can be used within
+    their own programs.
+    
+    File Descriptions:
+    
+    DM       COM  Demo Maker program
+    DM       SCN  Demo Maker screens
+    DMHLP    SCN  Demo Maker help
+    DR       COM  Demo run program
+    READ     ME   System introduction on how to run Demo
+    PRINTDOC BAT  Batch file to print documentation
+    PCDEMO   ???  Segments of introductory demonstration (41 files)
+    MANUAL   DOC  Actual text of system documentation
+    SF       SCN  Screen formatter screen file
+    SF       COM  Screen formatter program
+    SFHLP    SCN  Screen formatter help
+
+### Directory of PC-SIG Library Disk 0665
 
      Volume in drive A has no label
      Directory of A:\

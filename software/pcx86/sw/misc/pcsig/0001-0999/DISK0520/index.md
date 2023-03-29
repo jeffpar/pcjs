@@ -9,13 +9,33 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #520"
+      B: "PC-SIG Library Disk 0520"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #520
+## Information about "BUDGETRAK 2 OF 2 (ALSO 519)"
+
+    BUDGETRAK is an accounting package for anyone who needs to track their
+    budget and expenses more closely than is possible with an ordinary
+    accounting system.  Encumbrance accounting (the method used here) tracks
+    obligations and planned expenses rather than actual expenses.
+    
+    The system will handle up to budget records.  For simplicity, each
+    month's transactions are stored on an individual file that can contain
+    1200 transactions.  During the month you can look up account balances at
+    any time instantly. You may print a report of the transactions entered
+    to that point for the month or for any previous month.  The report is
+    sorted and summarized by company, department and grand total.
+    
+    When the actual expense is known, it is entered and the encumbrance
+    amount and budget are updated.  This gives a more accurate picture, for
+    budgeting purposes, than waiting to record an actual expense.
+    BUDGETRAK handles single and double-entry bookkeeping and has a built-in
+    password system.
+
+### Directory of PC-SIG Library Disk 0520
 
      Volume in drive A has no label
      Directory of A:\

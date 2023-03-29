@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #437"
+      B: "PC-SIG Library Disk 0437"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #437
+## Information about "HAM RADIO VOLUME 2 OF 2 (ALSO 436)"
+
+    Ham it up!  Learn and practice your Morse with the variable speed sender
+    and receiver programs.  Other routines help the amateur radio operator
+    compute various electronic formulas, design antennas, locate satellites
+    and calculate orbits.  RTTY and TTY are communication programs using
+    Baudot, ASCII, or Morse code at varying speeds.
+    
+    The USAT program provides real time tracking of the OSCAR 9, 10, and 11
+    and the RS 5, 7, and 8 satellites; the user specifies the date, time,
+    length of time, and tracking interval.  Several programs calculate coil
+    inductance, coil properties, signals for varying frequencies,
+    resistance and reactance.  NETWORK provides analysis of user-specified
+    circuits, to aid the amateur radio or electronic user.  The great circle
+    distance between any two points is computed by GRCIRDIS when the
+    latitudes and longitudes are entered.  An alphabetized list of all of
+    the counties in each state can be found in the COUNTIES files.
+
+### Directory of PC-SIG Library Disk 0437
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,130 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #388"
+      B: "PC-SIG Library Disk 0388"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #388
+## Information about "FORM LETTERS"
+
+    Need to remind some of your customers to pay their bill?  Have to turn
+    someone down for credit?  Would you like to send a thank you letter to
+    a valued client?
+    
+    These letters have already been written for you, along with 97 others
+    in this collection of 100 boiler-plate business letters.  See the file
+    listing below for specifics.  Tailor each to your individual needs by
+    modifying with any standard ASCII wordprocessor.
+    
+    Let FORM LETTERS do the work for you while you get down to business!
+    File Descriptions:
+    
+    1LTSCHRA      Overdue account letters.
+    EMPLMNT       Job inquiry turn down letter.
+    5LTSCHRA      Overdue account letters.
+    4SLPYBS       Overdue account letters.
+    4LTSCHRA      Overdue account letters.
+    3SLPYBS       Overdue account letters.
+    3LTSCHRA      Overdue account letters.
+    2SLPYBS       Overdue account letters.
+    2LTSCHRA      Overdue account letters.
+    1SLPYBS       Overdue account letters.
+    INCOMPL       Letter of sales exchange.
+    INCMTXCO      Tax consultant sales mailer.
+    INACTVE       Inactive customer sales inquiry.
+    INACTVCS      Inactive customer status inquiry.
+    ILLHLTH       Ill health resignation letter.
+    ILL           Ill employee response letter.
+    HSPTYGFT      Hospitality gift thank you letter.
+    GVNGLTR       Cancel incorrect service charges.
+    GDCRDTST      Positive response to credit reference inquiry.
+    FURN          Furniture store grand opening.
+    FOLLWUP       Follow up to phone call when customer not in.
+    FNDSLMT       Turn down charity donation request.
+    FNDRSNG       Decline charity sponsorship request.
+    FLLWUP        Customer sales visit follow up letter.
+    FLLUPREP      Mailing list follow up letter.
+    EXPNSVGT      Return of an expensive gift from a client.
+    DTHOTHER      Death sympathy.
+    DLYDCRD       Delayed returned merchandise refund.
+    DLVRMTH       Delivery method error refund letter.
+    DCLDN         Dinner invitation turn down letter.
+    CSTMRTHS      Customer thank you letter.
+    CRVOUCH       Neutral response to credit reference inquiry.
+    CRDTSUSP      Response from supplier suspending credit.
+    CRDTSTND      Response from supplier turning down credit request.
+    CRDTRQST      Response from supplier granting credit request.
+    CRDTINFR      Request to supplier for a credit account.
+    COPLCY        Company policy denial of donation request.
+    COND          Sympathy letter for co-workers death.
+    COMPLNT       Incomming product variance notice.
+    CNCLCNTR      Certified letter canceling the order.
+    CMPLNTAD      Product defect and replacement request to supplier.
+    5SLPYBS       Overdue account letters.
+    CLLCTN        Request for bill due date extension.
+    CLAIMS        Response to complaint about employee behavior.
+    CHRGACCT      New charge account acceptance.
+    BSCLSD        Layoff notice.
+    BSAPPCTN      Credit account denial.
+    BNKDPST       Idle bank account inquiry.
+    BLLNGMST      Billing error.
+    BDRSK         Bad risk notice.
+    BDBHVR        Bad behavior notice.
+    BADCHK        Bad check notice.
+    APOLOGYC      Apology for incorrect collection letter.
+    AFTRSLSL      Proposal follow up.
+    AD            Information about this and other programs.
+    ACKNORDR      Acknowledge order.
+    ABSNTRCD      Attendance notice.
+    6SLPYBS       Overdue account letters.
+    INTROSLS      Sales introduction.
+    INJURY        Injury gift.
+    UNSATCRD      Negative response to credit reference inquiry.
+    THNKYOU       COD shipment denial, holding product for payment.
+    STMTER        Corrected statement cover letter.
+    STATEMNT      Correction for billing error.
+    SLSVLM        Salesman congratulation for landing a new account.
+    SLSLLPRD      Negative response to slow selling product return request.
+    SLSGRMTN      Sales agreement cancellation confirmation.
+    SLS           Mail inquiry response letter.
+    SHRTEPMT      Negative credit application response.
+    SERVCHRG      Service charge increase announcement.
+    SECYRCM       Positive response to employement reference.
+    RSMJOB        Resume cover letter.
+    RJCTREF       Negative response to employement reference.
+    RETRMNT       Retirement congratulations.
+    RESIGN        Resignation letter.
+    RESCHDLO      Request production schedule change.
+    REFUND        Wrong product refund.
+    REFRNCE       Positive response to company reference inquiry.
+    REFPR         Deny price discount request.
+    RECMMD        Neutral response to company reference inquiry.
+    QUESTNNR      Sample credit questionnaire.
+    PRSNLCRD      Credit line denial.
+    PRQUOTE       Request for quote.
+    PRPY          Credit denial.
+    PRINTLET EXE  Program to print all the letters out to a prnter.
+    PRCRDT        Negative response to credit reference inquiry.
+    PRCRDIT       Order refusal due to bad credit history.
+    POSUNSTE      No position available response to job inquiry.
+    PMPTPMNT      Thank you for prompt credit account payments.
+    PERSCRE       Credit account offer mailer.
+    PERSCRDT      Incomplete credit application response.
+    ORDRCONF      Mail order request.
+    ORDRCNFR      Mail order request.
+    OPNACCT       Request for credit account.
+    NWCSTMR       New customer thank you.
+    NOINFRMT      Incomplete credit application response.
+    MSMTNG        Apology for missed meeting.
+    MNRNIMG       Gift return by civil court judge.
+    LTDLVY        Late delivery due to engraving.
+    JBDNWL        Christmas rush employee effort commendation letter.
+    LFINSRNC      Life insurance policy inquiry.
+    JBRSM         Job advertisement inquiry.
+
+### Directory of PC-SIG Library Disk 0388
 
      Volume in drive A has no label
      Directory of A:\

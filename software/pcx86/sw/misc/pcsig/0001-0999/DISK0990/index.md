@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #990"
+      B: "PC-SIG Library Disk 0990"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #990
+## Information about "|STAT 1 OF 4 (ALSO 991, 992, 2292)"
+
+    STAT is a set of data-manipulation and analysis programs developed at
+    the University of California, San Diego, and at the Wang Institute of
+    Graduate Studies.  They were designed under the UNIX philosophy that
+    says individual programs should be designed as tools to do one task well
+    and produce output suitable for input to other programs.
+    
+    There are two sets of STAT programs: data manipulation and data
+    analysis.  The data manipulation programs are general utilities that
+    cooperate with other programs.  The data analysis programs compute the
+    most widely-used descriptive and inferential statistics.  Although these
+    are independent programs, the output from one program can be used as
+    input to another.  A solid knowledge of statistics and computers is
+    assumed.
+
+### Directory of PC-SIG Library Disk 0990
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,39 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #606"
+      B: "PC-SIG Library Disk 0606"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #606
+## Information about "POLYMATH"
+
+    POLYMATH is a programming language much like Forth in structure, and
+    developed to bridge the gap between programmable calculators and
+    personal computer languages.  Anyone in the scientific or technical
+    fields will find this program extremely useful for its number-handling
+    abilities and ease of use.
+    
+    This language works much like the Hewlett Packard programmable
+    calculator and can be used as a calculator.  Those familiar with the HP
+    Reverse Polish Notation (RPN) know how simply complex formulas can be
+    entered into the calculator.  POLYMATH uses this same scheme, but with
+    defined words or functions.  Most words are defined with very simple
+    tasks and then used and integrated with other words to build more
+    powerful functions.  An entire programming dictionary of function words
+    can then be developed.
+    
+    POLYMATH has a wide variety of applications and special uses.  It has
+    strong on-line documentation which takes the first-time user through a
+    menu-driven tutorial.  It also has files that explain the syntax
+    and use of any word currently in its main dictionary.
+    
+    Included are a few dictionaries and application programs.  A review of
+    these programs will be very helpful when learning the language.  It
+    also features full graphics to round out the package.
+
+### Directory of PC-SIG Library Disk 0606
 
      Volume in drive A has no label
      Directory of A:\

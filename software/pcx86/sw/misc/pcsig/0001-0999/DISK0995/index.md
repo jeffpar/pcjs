@@ -9,13 +9,25 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #995"
+      B: "PC-SIG Library Disk 0995"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #995
+## Information about "H&P CALENDAR"
+
+    H&P CALENDAR creates a monthly calendar on screen with graphic designs
+    or a yearly wall calendar without graphics.
+    
+    Edit the monthly calendar by using the arrow keys to move the cursor
+    anywhere on the screen to enter holidays, special dates, anniversaries,
+    etc.  When the calendar is completed, it is dumped to the printer using
+    DOS ``GRAPHICS.COM.''  A database is included to save the data to disk.
+    The data for a particular month may be printed before filling in the
+    boxes.
+
+### Directory of PC-SIG Library Disk 0995
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,21 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #408"
+      B: "PC-SIG Library Disk 0408"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #408
+## Information about "ORIGAMI"
+
+    ORIGAMI is an introduction to the ancient Eastern art of paper folding.
+    This tutorial begins with the basics -- the main starting folds -- and
+    proceeds to demonstrate how to create many traditional and modern paper
+    sculptures.  Step-by-step colorful graphic instructions walk you
+    through the construction of graceful and fanciful creatures.
+
+### Directory of PC-SIG Library Disk 0408
 
      Volume in drive A has no label
      Directory of A:\

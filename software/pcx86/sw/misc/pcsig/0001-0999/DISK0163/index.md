@@ -9,13 +9,23 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #163"
+      B: "PC-SIG Library Disk 0163"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #163
+## Information about "FILTERS"
+
+    DBSCREEN is a filter package that lets you create dBase II, III,
+    and III+ screens. Instead of entering row and number designations into
+    a format file, simply "paint" your fields on your display in a
+    full-screen edit mode. See exactly what your screen is going to look
+    like.  DBSCREEN also lets you modify and print dBase II, III, and III+ s
+    formats. Other programs let you modify character strings, change tabs
+    into spaces, and encrypt/decrypt your files.
+
+### Directory of PC-SIG Library Disk 0163
 
      Volume in drive A has no label
      Directory of A:\

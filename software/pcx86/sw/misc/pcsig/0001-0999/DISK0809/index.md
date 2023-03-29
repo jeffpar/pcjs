@@ -9,13 +9,61 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #809"
+      B: "PC-SIG Library Disk 0809"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #809
+## Information about "GENERAL LEDGER UK VERSION 2 OF 2 (808)"
+
+    THE REMARKABLE GENERAL LEDGER allows you to set up and operate a
+    complete General Ledger with a wide range of reports.  The program
+    includes a Bank Information module with facilities for listing banks,
+    reports on used and unused checks, and bank statement reconciliation.
+    
+    With TRGL you can print out reports on your transactions either in
+    summary or in detail, on a leading or account level.  You can also
+    print a trial balance and your chart of accounts.  A simple menu is
+    offered that allows you to add, change, delete, or view your various
+    entries made into your chart of accounts, journal, your record of bank
+    deposits, and your checking account.  TRGL also has on-line help for
+    every screen that requires input from the user.
+    
+    This system is designed to work for the UK and countries using
+    currencies OTHER than the dollar.  (For countries using a dollar-based
+    monetary system, please see PC-SIG #806 & #807.)
+    
+    Please note: the version of THE REMARKABLE GENERAL LEDGER being
+    marketed on this disk is a restricted version of the program.  The full
+    version of THE REMARKABLE GENERAL LEDGER includes all the features of
+    the shareware version plus profit and loss reports, balance sheets,
+    password protection, a complete manual, service, and backup.  You will
+    also need disk #809 to operate this program.
+    
+    System Requirements: 512K memory and two disk drives.
+    
+    How to Start: Type GO (press enter).
+    
+    Suggested Registration: $69.95.  Includes full version of the program
+    with a printed manual, along with service and backup.
+    
+    File Descriptions:
+    The First Disk Contains:
+    READ     ME   How to get started.
+    SUBINST  BAT  Installation batch file.
+    INSTALL  BAT  Installation batch file.
+    TGL      INT  Subfile for main program.
+    TGL      EXE  Main program.
+    TGL      BAT  Start-up batch file.
+    
+    The Second Disk Contains:
+    CONFIG   SYS  Sample configuration file
+    ???????? DBF  Data file (12 files)
+    DOC      <DIR>Directory containing the documentation.
+    READ     ME   General information about the disk.
+
+### Directory of PC-SIG Library Disk 0809
 
      Volume in drive A has no label
      Directory of A:\

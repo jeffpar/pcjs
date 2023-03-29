@@ -9,13 +9,44 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #474"
+      B: "PC-SIG Library Disk 0474"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #474
+## Information about "TRIVIAL TOWERS 2 OF 2 (ALSO 473)"
+
+    Trivia freaks -- here's a new twist on an old favorite!
+    
+    TRIVIAL TOWERS, for two to four players, tests your knowledge of trivia
+    on a variety of different subjects.  By answering correctly, you build
+    ``towers.''  When all four towers have been completed, you win the
+    game. There are special spaces on the gameboard, that when landed on,
+    let you choose any topic of your choice.
+    
+    When you tire of the canned questions, enter your own questions and
+    answers, and build a custom game.  How about a section on your own
+    family?  How many times did Great-Aunt Tillie marry?  What is the one
+    thing that Dad will NOT eat?  You get the idea.  Have fun!
+    File Descriptions:
+    
+    The First Disk Contains:
+    TTSHARE  DOC  A welcome letter from the authors giving definitions.
+    TTNOTE   BAS  A letter from the authors of the program.
+    TTRULES  BAS  Rules for TTOWERS.BAS and directions on how to customize.
+    TTOWERS  BAS  Main program.
+    TTENTER  BAS  Program to enable the user to write customized questions.
+    
+    The Second Disk Contains:
+    CAPITALS      Question and answer file.
+    INCOMMON      Question and answer file.
+    COMPUTER S    Question and answer file.
+    VANITY        Question and answer file.
+    WRITERS       Question and answer file.
+    TVFILM        Question and answer file.
+
+### Directory of PC-SIG Library Disk 0474
 
      Volume in drive A has no label
      Directory of A:\

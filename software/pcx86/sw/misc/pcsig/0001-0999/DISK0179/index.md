@@ -9,13 +9,52 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #179"
+      B: "PC-SIG Library Disk 0179"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #179
+## Information about "PIZZA & CHECK"
+
+    This is a multi-purpose check register accounting system, written for
+    individuals and small businesses that can use a check register for
+    thier accounting.  The program writes and prints checks that have been
+    addressed for use with window envelopes.  The standard check register
+    can be printed with a running balance, a memo report, and an account
+    distribution summary.  A significant feature of this program is the
+    budget analysis and average month report.  This report shows how much
+    was expended, the amount budgeted, and computes an average monthly
+    amount for each account.  The other programs on this disk are for
+    preparing pizzas, recipes for dough and various toppings.
+    
+    Features:
+    
+    ~ Transaction entries
+    ~ Reconcile checkbook
+    ~ Run alternate accounts
+    ~ Begin new year
+    ~ Report Menu
+    ~ File maintenance menu
+    ~ Pizza recipes!
+    
+    System Requirements:  Some programs require color, BASIC
+    
+    How to Start: At the DOS prompt, enter TYPE MA.DOC <ENTER>.  This
+    provides the user with setup and operating instructions.
+    
+    Suggested Registration:  $35.00
+    
+    File Descriptions:
+    
+    MACOPY   BAT  Batch file to copy MA files
+    MA       DOC  Documentation for MA.BAS
+    MA       BAS  Micro Accounting check register system
+    PIZZA    EXE  Pizza recipes - main program
+    MADOC    BAT  Batch file to print MA.DOC
+    SCR*     DOC  Data for PIZZA.EXE
+
+### Directory of PC-SIG Library Disk 0179
 
      Volume in drive A has no label
      Directory of A:\

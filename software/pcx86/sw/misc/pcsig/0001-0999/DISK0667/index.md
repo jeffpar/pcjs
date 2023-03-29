@@ -9,13 +9,62 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #667"
+      B: "PC-SIG Library Disk 0667"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #667
+## Information about "THE WRITERS TOOL KIT"
+
+    The Writer's Toolkit is a collection of 20 executable utility programs
+    inspired by Kernighan and Pike's Software Tools.  Most of the
+    utilities are filters that process text files.  These utilities
+    include: converting lower case to upper case and upper case to lower
+    case, encrypting and decrypting files etc.  Each utility has a well
+    written documentation file with examples for each utility.
+    
+    The most interesting program is MEMO.  This program will display memos
+    that have the same date as the system date.  Runnerup is the FREQ.EXE
+    which determines frequency of use but only works on a sorted list
+    of words. You will have to use the WORDS and SORT programs first but
+    very handy for anyone doing a lot of wordprocessing and documentation.
+    
+    System Requirements: 64K, one disk drive and monochrome display
+    
+    How to Start: To run, enter its filename, e.g., for WORDS.EXE
+    enter WORDS and press <ENTER>.
+    
+    Suggested Registration:  $15.95
+    
+    File Descriptions:
+    
+    ???????? DOC  Documentation files (20 files)
+    CAL      EXE  Calendar for any month between 1901 and 1989.
+    BOOP     EXE  Beeps the speaker.
+    DECRYPT  EXE  Decrypt files encrypted with encrypt.
+    COLOR    EXE  Change the backgnd and foregnd colors.
+    CC-CLCL  EXE  Carriage return filter.
+    CAPITALS EXE  Capitalization filter. Converts lower case to upper case
+    SAMPLE   MEM  Sample memo file for the memo utility.
+    READ     ME   Writer's Toolkit information.
+    DUP      EXE  Duplicate line filter.
+    DETAB    EXE  Converts tabs into spaces.  From Software Tools.
+    WORDS    EXE  Unix words filter.
+    ENCRYPT  EXE  Encryption program from Software Tools.
+    FREQ     EXE  Word frequency counter.  Must use words and sort first.
+    ENTAB    EXE  Converts 8 spaces into a tab char.  From Software Tools.
+    WHITE    EXE  Whitespace counting filter.
+    TEE      EXE  UNIX tee filter.
+    SLEEP    EXE  Pauses for given number of seconds.
+    LL-CLCL  EXE  Carriage return filter.
+    RS       EXE  Removes whitespace at ends of lines.
+    LOWCASE  EXE  Lowercase filter.  Converts upper case to lower case.
+    NL       EXE  Line numbering filter.
+    MEMO     EXE  Display memos that have the system date.
+    WRITERS  TXT  Writer's Toolkit information.
+
+### Directory of PC-SIG Library Disk 0667
 
      Volume in drive A has no label
      Directory of A:\

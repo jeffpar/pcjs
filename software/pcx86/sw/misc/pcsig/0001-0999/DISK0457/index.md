@@ -9,13 +9,37 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #457"
+      B: "PC-SIG Library Disk 0457"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #457
+## Information about "GREATEST ARCADE GAMES"
+
+    An assortment of our finest arcade-type games, just like the quarter-
+    gulpers. Play FLIGHTMARE for space jockies, JUMPING JOE for Mario types,
+    STRIKER for fighter pilots, and SPACEWARS for battling star ships.
+    When you need to take a break from the action and thrills, try
+    SOLITAIRE, a game that isn't in the arcades but should be.
+    File Descriptions:
+    
+    JUMPJOE  EXE  DONKEY-KONG-like game using Mario as a Janitor.
+    FLIGHTM  EXE  Protect the Omegans from the desert warriors.
+    SOLITARE EXE  Play SOLITAIRE against the computer.
+    MISFAC   DAT  Stores an image of the missile factory in STRIKER.
+    STRKHINS BAT  This file will install STRIKER on a hard disk drive.
+    STRIKER  EXE  Public domain version of SCRAMBLE.
+    STRIKER  DOC  Documentation for STRIKER.EXE.
+    SPACEWAR DOC  Documentation for SWH.EXE and SWC.EXE.
+    STRKLOGO DAT  Stores the image of inital helicopter logo.
+    SWC      EXE  SPACEWARS program for use with a color graphics card.
+    STRKPARM DAT  Stores screen position parameters and the key assignments.
+    TUNNELS  DAT  Stores the tunnel terrain data.
+    SWH      EXE  Hercules graphics version of SPACEWARS.
+    HIGHSCOR DAT  High score data file.
+
+### Directory of PC-SIG Library Disk 0457
 
      Volume in drive A has no label
      Directory of A:\

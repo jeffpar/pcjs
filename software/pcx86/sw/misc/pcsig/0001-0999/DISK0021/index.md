@@ -9,13 +9,37 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #21"
+      B: "PC-SIG Library Disk 0021"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #21
+## Information about "PCMAN   (PAC MAN GAME AND MORE)"
+
+    This disk contains a splendid example of what can be done graphically
+    without the need of a graphics card, either monochrome or color. PCMAN
+    and PCGIRLA are two different versions of the age-old run-and-eat maze
+    game that revolutionized the computer and arcade industries. PCGIRLA
+    uses ASCII characters to draw out the maze, while PCMAN uses the same
+    character but in a 40-column color mode, to represent the player and
+    the monsters that live in the maze.
+    
+    System Requirements:  Some programs require color graphics.
+    
+    How to Start:  While PCCHEERS requires BASIC, all the other can be
+    run from DOS by typing their filename and pressing <ENTER>.
+    
+    File Descriptions:
+    
+    JOYSTICK DOC  Documentation file for JOYSTICK.EXE
+    JOYSTICK EXE  Program to test your joystick's positions
+    PCHEERS  BAS  THE TWELVE DAYS OF CHRISTMAS for the computer age
+    PACGIRLA EXE  Monochrome version of PAC-MAN
+    PCMAN    EXE  Color version of PAC-MAN
+    PCMANHI  FIL  High score data file for PCMAN
+
+### Directory of PC-SIG Library Disk 0021
 
      Volume in drive A has no label
      Directory of A:\

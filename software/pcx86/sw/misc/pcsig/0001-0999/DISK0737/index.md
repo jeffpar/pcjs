@@ -9,13 +9,29 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #737"
+      B: "PC-SIG Library Disk 0737"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #737
+## Information about "XANADU UTILITIES"
+
+    XANADU UTILITIES has some very useful programs. HOTDIR, for example, is
+    a colorful sorted directory program that displays different colors based
+    on file extension. The directory listing can be sent to the screen,
+    printer, or disk file. Files can be sorted by name, extension, date,
+    size, or other criteria. It can automatically display all files:
+    hidden, system, archive, directory, read-only, and normal.
+    
+    PCSTAT3 displays disk/RAM statistics and is much more extensive and
+    quicker than CHKDSK.
+    
+    SFIND finds files quickly anywhere on the disk and then lists on the
+    screen all the matching files. SFIND can list files found even in an
+    archive file.
+
+### Directory of PC-SIG Library Disk 0737
 
      Volume in drive A has no label
      Directory of A:\

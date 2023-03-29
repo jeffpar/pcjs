@@ -9,13 +9,36 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #802"
+      B: "PC-SIG Library Disk 0802"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #802
+## Information about "LIFE FORMS (LIFE CYCLE GENERATION)"
+
+    LIFE FORMS is an enhanced version of the "Game of Life," developed by
+    mathematician John Conway.  The program creates a video pattern that
+    evolves like biological cells, according to a certain growth rate. Many
+    features have been added to Conway's simple game, including eight extra
+    growth rules for producing whole new families of screen images.
+    
+    LIFE FORMS is simple to use, with lots of on-screen help and self-
+    explanatory menus.  The "life forms" that you create can be stored,
+    retrieved, edited, and deleted.  More than 100 life patterns are
+    supplied on the program disk, with room for 240 in all.  You can
+    "capture a specimen from the zoo," or design a life form according to
+    your own specifications.
+    
+    Control many factors that influence the growth cycle: complexity of
+    development, species, pigmentation, habitat and original seed shape.
+    There is a library of seed patterns which have been specifically chosen
+    for the interesting results that they tend to produce.  Choose one of
+    these, edit it or devise your own seed form.  As your life form starts
+    to grow, control how fast each growth step is displayed on the screen
+    and even pause your life form's development.
+
+### Directory of PC-SIG Library Disk 0802
 
      Volume in drive A has no label
      Directory of A:\

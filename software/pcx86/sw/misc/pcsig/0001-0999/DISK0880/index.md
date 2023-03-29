@@ -9,13 +9,30 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #880"
+      B: "PC-SIG Library Disk 0880"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #880
+## Information about "PROGRAMMER'S EDITOR"
+
+    PROGRAMMER'S EDITOR is a text editor primarily for programmers.
+    
+    Many special functions are featured, such as: multiple files and
+    windows, DOS file management and program execution, displayable ASCII
+    table, ANSI control sequences, insertable control characters, a Hex and
+    Decimal calculator, and a calendar.  Extended ASCII characters can be
+    used to produce boxes, charts and forms, math signs, and Greek
+    characters.  ANSI codes can control cursor movement, color, and other
+    display attributes from within a text.  This program has block commands,
+    search-and-replace functions, auto indent, word wrap, and line commands.
+    
+    You can execute commands by using a function key menu at the bottom line
+    of the screen, or use control-key sequences from the keyboard.  On-line
+    help is available.
+
+### Directory of PC-SIG Library Disk 0880
 
      Volume in drive A has no label
      Directory of A:\

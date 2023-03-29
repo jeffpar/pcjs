@@ -9,13 +9,77 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #351"
+      B: "PC-SIG Library Disk 0351"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #351
+## Information about "TURBO PASCAL SET #2"
+
+    This disk has handy tools for Turbo Pascal programs.  Routines include
+    library files for geometric drawings, peripherals information function,
+    make or remove subdirectories, DOS path get and set routines and more...
+    
+    System Requirements: Two disk drives, Turbo Pascal
+    
+    How to Start: Bring up Turbo Pascal, then load desired Pascal source
+    program into work file area, compile and run.  To read the files with
+    the DOC extension, enter TYPE filename.DOC and press <ENTER>.
+    
+    Suggested Registration:  $10.00
+    
+    File Descriptions:
+    
+    ALLFILES LIB  Get files matching template + display, then select
+    READTHIS NOW  Documentation (9pp) and detailing of disk files
+    DISKTYP  LIB  Get disk type (single/double/fixed, 8/9 sectors)
+    GETSECTR LIB  Read a sector from disk to buffer  (see DISKMOD.PAS)
+    CURSOR   LIB  Change or hide cursor
+    CIRCLE   LIB  Circle-drawing procedure for graphics mode
+    ERRMESSG LIB  Error messages for DOS 2.0 function calls
+    EQUIPMNT LIB  Returns information about equipment attached to PC
+    EXTENDIO LIB  EXTENDED I/O based on DOS 2.0 full-path commands
+    EXISTFIL LIB  Test for file's existence before opening
+    EXTENDIO DAT  Specifications for the new I/O functions
+    FILENAME TYP  Filename type definition -- shared by several others
+    FILEATTR LIB  Read and write the attribute byte for any file
+    HEXFUNCT LIB  Convert integers in range (-32,768 to 32,767)
+    GETINTGR LIB  Takes an integer in a given range
+    GETFREE  LIB  Get amount of free space on disk
+    GETFILE  LIB  Procedures to GET FILEs matching a template
+    *        PAS  Pascal source code for *.LIB files
+    SUCCESS  DOC  Documention (about another Turbo PASCAL resource)
+    WINDOWS  LIB  Eases use of windows and window-frames
+    REGPACK  TYP  Contains type definition for REGPACK (Where ...? [ED.])
+    SCREEN   LIB  Direct video screen input/output
+    SAFEWRIT LIB  Write to screen w/o control characters wrecking display
+    RECTANGL LIB  Rectangle-drawing procedure for graphics modes
+    QUEUE    LIB  A generic line-up
+    SCREENS  TYP  Type declarations for full-screen manipulation
+    POPSCREN DAT  Sample screen demo (uses SCREENS.TYP)
+    POPSCREN PAS  Source code for POPSCREN
+    POPSCREN LIB  Pop full screens into view by addressing screen memory
+    KEYCHART DAT  Chart of key codes for GETKEYS.LIB
+    GETKEYS  LIB  Simple procedure to catch any keystroke
+    PARAMETR COM  Runs COMPILED only
+    PARAMETR LIB  Pass parameters to programs from DOS command line
+    NEWINT9  LIB  Change the keyboard interrupt to get key release codes
+    MOVEFILE LIB  DOS 2.0 file RENAME with parameter for MOVE
+    MONITOR  LIB  Simple procedure to check for color or mono
+    MKRMDIR  LIB  Make or remove subdirectories
+    NUMDISKS COM  Runs COMPILED only (uses REBOOT.LIB)
+    LESSRAM  COM  Runs COMPILED only (uses REBOOT.LIB)
+    REBOOT   LIB  "Warm" system reboot (without clearing RAM)
+    SCANCODE DAT  Chart of keyboard Scan Codes (use with KEYBOARD.LIB)
+    KEYBOARD LIB  Another approach to catching any keystroke
+    KAVAIL   LIB  Returns available memory in K
+    GTSETDIR LIB  Get or Set the current directory path
+    TITLES   LIB  Uses ROM character patterns to create titles
+    GRFXTABL LIB  Get the dot patterns from the ROM graphics table
+    GETSETDD LIB  Get or set the default drive
+
+### Directory of PC-SIG Library Disk 0351
 
      Volume in drive A has no label
      Directory of A:\

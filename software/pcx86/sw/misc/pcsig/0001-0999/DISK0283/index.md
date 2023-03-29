@@ -9,13 +9,86 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #283"
+      B: "PC-SIG Library Disk 0283"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #283
+## Information about "DOS UTILITIES NO 15"
+
+    This disk contains a wide variety of different file and system tools.
+    DTK and CWEEP13 are powerful file handlers.  DOCUFILE lets you develop
+    callable help screens for your programs, RAM is a nice RAM-disk program,
+    installable as a device driver, (exercise caution when using with other
+    RAM-resident software, and it will serve you well).  Other utilities
+    give Epson owners good letter-quality print, generate interrupts on
+    demand, find files, and more.
+    
+    CWEEP 2.31a is a file-manager similar to the CP/M program SWEEP which
+    lets the user move through a list of files, tag ones to be worked on,
+    and then copy, delete, or rename them.  It will also allow the user to
+    view files, make and remove directories.
+    
+    A very fast, single keystroke way to work through a directory of files,
+    copying, viewing, and deleting them.  Has a protected copy feature,
+    which will warn the user if a file of the same name is about to be
+    over-written.  After a file is copied, it will (optionally) be re-opened
+    and a CRC done to verify the copy.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  DTK $10.00.
+    
+    File Descriptions:
+    
+    -------- ---  KWSEARCH by Patrick Teti
+    KWSEARCH DOC  Documentation for KWSEARCH (13K).
+    KWSEARCH EXE  Copies text using search criteria.
+    -------- ---  3 Utilities by John White
+    INT      COM  Program interrupt.
+    INT      DOC  Documentation for INT.
+    INT      A    Part of INT.
+    -------- ---  Famous Sweep program from CPM
+    CWEEP    DSC  Introductory text file.
+    CWEEP    EXE  Main program file.
+    CWEEP    TXT  Manual.
+    -------- ---  Directory Toolkit
+    DTK      DOC  Documentation for DTK (8K).
+    DTK      EXE  Sort directory, change attributes, etc.
+    MAKERAM  BAT  Batch file to install RAM.
+    MAKEINT  BAT  Batch file to install INT.
+    FFIND    DOC  Documentation for FFIND.
+    FFIND    C    Part of FFIND.
+    FFIND    EXE  Finds files by scanning for specific argument.
+    INT_PORT DOC  Additional Documentation for INT.
+    SETRAM   EXE  Sets up RAM.
+    RAM      DOC  Documentation for RAM.
+    RAM      A    Part of RAM.
+    RAM      SYS  RAM drive installer.
+    -------- ---  Docufile
+    KILLER   EXE  Deletes files.
+    AUTOEXEC BAT  Batch file to diskcopy.
+    README   BAS  BASIC version of README.TXT.
+    README   TXT  Documentation for DOCUFILE.
+    DOCUFILE BAS  Creates BASIC program of text file.
+    CATALOG  EXE  Demonstration of multiple file searcher.
+    HELP     BAT  DOCUFILE help screen generator.
+    DOCUFILE BAT  Batch file to bring up DOCUFILE in BASIC.
+    -------- ---  Letter Quality print routine
+    LQ       COM  Letter quality print on Epson MX printer.
+    LQ       DOC  Documentation for LQ (9K).
+    SETRAM   C    Part of SETRAM.EXE.
+    MESSAGE  EXE  Displays message at bootup.
+    LABELS   FIL  Part of LABELS.EXE.
+    LABELS   DOC  Documentation for LABELS.EXE.
+    LABELS   EXE  Envelope label making program.
+    MESSAGE  DOC  Documentation for MESSAGE.EXE.
+    MESSAGE  FIL  Part of MESSAGE.EXE.
+
+### Directory of PC-SIG Library Disk 0283
 
      Volume in drive A has no label
      Directory of A:\

@@ -9,13 +9,40 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #294"
+      B: "PC-SIG Library Disk 0294"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #294
+## Information about "EDIT"
+
+    EDIT is a general purpose text editor and word processing program.  It
+    supports a wide array of editing operations, including powerful
+    commands that are often not available even in very expensive word
+    processors.  For example, it supports not only "word wrapping", but
+    fully automatic paragraph reformatting as well.  Under versions 2.0 or
+    later of DOS, EDIT even allows you to execute DOS commands, or start
+    another program without leaving EDIT.  Files are limited to about
+    50,000 characters (25 single-spaced pages).
+    
+    How to Start: Consult the README and .TXT files for documentation; use
+    the PRINTDOC.BAT file to print it.  To run EDIT.EXE, just type EDIT
+    <ENTER>.
+    
+    Suggested Registration:  $25.00
+    
+    File Descriptions:
+    
+    EDIT     EXE  Main program - type "edit" to start
+    ???      TXT  Documentation files (70K total)
+    ???      SET  Print format files
+    PRINTDOC BAT  Batch file to print documentation
+    READ     ME   Brief description
+    ???      EXE  Various PC file and disk tools
+    MESSAGE? DOC  Notes on EDIT
+
+### Directory of PC-SIG Library Disk 0294
 
      Volume in drive A has no label
      Directory of A:\

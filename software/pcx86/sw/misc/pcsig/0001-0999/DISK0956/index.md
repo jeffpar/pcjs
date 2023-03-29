@@ -9,13 +9,28 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #956"
+      B: "PC-SIG Library Disk 0956"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #956
+## Information about "PROFONEDIT - EDITOR"
+
+    PROCOMM PLUS is a good telecommunications program, but you can only
+    edit single entries at a time.  With PROFONEDIT PLUS, you can mark
+    entire blocks of the directory for moving, deleting, inserting,
+    exchanging, packing, and sorting telephone entries.  Edit your PROCOMM
+    PLUS dialing directory like a wordprocessor.
+    
+    PROFONEDIT PLUS gives more editing capabilities on each line of the
+    directory and can ``undo'' multiple-editing changes.  A backup file can
+    be created at any time and on-line help explains each command of the
+    program menu.  This program is a necessity for anyone using
+    PROCOMM PLUS who wants to edit and reorganize their telephone
+    directory.
+
+### Directory of PC-SIG Library Disk 0956
 
      Volume in drive A has no label
      Directory of A:\

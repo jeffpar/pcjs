@@ -9,13 +9,46 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #942"
+      B: "PC-SIG Library Disk 0942"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #942
+## Information about "HYDROFLO DEMO VERSION"
+
+    This is a demo version of HDROFLO with two sample problems.  HYDROFLO
+    performs the functions of a hydraulic system calculator.  The design
+    engineer essentially works in a worksheet-type environment, analyzing
+    hydraulic elements and observing the bottom line effects.  HYDROFLO's
+    calculations can be done in English or metric units and use any type of
+    fluid.  HYDROFLO can prescribe a pump for a system to meet a specified
+    flow and determine possible cavitation situations.  This demo is a
+    working version in that your own hydraulic calculations can be performed
+    and verified.  Full screen graphics of the system and pump operation are
+    accessible along with full report functions.  The full-featured version
+    includes other functions where, with a single command, the entire
+    systems diameter or friction can be changed to a new value and the
+    systems new operating point and pump specification be determined.
+    HYDROFLO automatically uses fitting and valve friction coefficients from
+    menus, and help is available anywhere in the program.
+    
+    Special Requirements:  None.
+    
+    How to Start: Type GO (press enter).
+    
+    Suggested Registration:  $195.00
+    
+    File Descriptions:
+    
+    DEMO     EXE  Main program.
+    DEMO1    FLO  Sample problem.
+    DEMO2    FLO  Sample problem.
+    HF       DOC  Documentation.
+    HF       FIT  Support program.
+    HF       HLP  Help file.
+
+### Directory of PC-SIG Library Disk 0942
 
      Volume in drive A has no label
      Directory of A:\

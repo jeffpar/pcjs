@@ -9,13 +9,39 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #187"
+      B: "PC-SIG Library Disk 0187"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #187
+## Information about "COMMUNICATION NO 2"
+
+    This disk contains various communications programs.  Included is
+    AUTODIAL.BAS, an auto telephone dialer; BASECONV.BAS which converts
+    to/from hex, binary, decimal; EZSIG3.HLP which prints out a guide to
+    SIG functions and commands, it is meant to be printed onto six pages
+    and kept handy by your terminal while using the SIG; and HAYSMODM.BAS
+    a Hayes SmartModem demo.
+    
+    System Requirements: BASIC; modem.
+    
+    How to Start: To run the BASIC programs, consult the directions in
+    GETTING STARTED for your configuration.
+    
+    File Descriptions:
+    
+    AUTODIAL BAS  Auto telephone dialer
+    HAYSMODM BAS  Hayes SmartModem demo - nifty!
+    EZSIG3   HLP  CompuServe IBM SIG instructions  (1/84)
+    CONVERT  BAS  Converts EXE & COM files to BASIC for transmission (V1.1)
+    BASECONV BAS  Converts to/from hex, binary, decimal  (Robert West)
+    PC-SPEAK BAS  Data communications program by Larry Jordan
+    KILLNULL BAS  Converts nulls in a file to spaces
+    TALK450  DOC  Documentation on how to speed up Hayes to 450 baud
+    TALK450  MRG  BASIC code to program 8250 to run at 450 baud
+
+### Directory of PC-SIG Library Disk 0187
 
      Volume in drive A has no label
      Directory of A:\

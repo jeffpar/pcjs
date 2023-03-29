@@ -9,13 +9,73 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #429"
+      B: "PC-SIG Library Disk 0429"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #429
+## Information about "ELEMENTARY C"
+
+    Are you just learning how to program in C?  Or have you been doing it
+    for a while?  This collection of C language routines has something for
+    both of you.
+    
+    They can help you learn the language and also provide a shortcut
+    library for more experienced users.  Included are some basic data
+    movement routines, a help facility, amortization programs, and matrix
+    manipulation.  A short but succinct example shows how to initialize a
+    Hayes smartmodem with Lattice C.  An entire set of functions is
+    provided for string processing of a list of arguments, with an example
+    showing how to use these functions for command tail processing.
+    
+    Take advantage of the edge you can find here and save yourself time and
+    trouble with this variety of tools.
+    File Descriptions:
+    
+    ABOUT    C    Elementary help facility for C functions.
+    ABOUT    EXE  Object code for help facility.
+    ABOUT    DAT  Descriptions for ABOUT.C help facility.
+    AMORTIZE EXE  Amortization, where user or PC specifies payment.
+    AMORTIZ3 C    Amortization, where user or PC specifies payment.
+    AMORTIZ2 C    Amortization, where user or PC specifies payment.
+    AMORTIZ1 C    Link of AMORTIZE.EXE.
+    DOSTIME  C    Return system time in characters.
+    DOSDATE  C    Return system date in characters.
+    CLS      C    Clear screen.
+    C        DOC  Description of files on diskette.
+    BACKUP   EXE  Description of files on diskette.
+    BACKUP   C    Create backup copy of a file with the extension .BAK.
+    AMORTPRN EXE  Same as AMORTIZE.EXE with data also sent to disk.
+    INTEREST C    Link of AMORTPRN.EXE.
+    GETPOS   C    First part of comments on Lynn's routines.
+    MAT      H    Matrix source and object code.
+    LYNN     LIB  Object code only.
+    LYNN     DOC  Middle part of comments on Lynn's routines.
+    LOCATE   C    Position cursor.
+    M_INVERT C    Inverse of matrix.
+    M_DUMP   C    Print matrix.
+    M_DETERM C    Determinant of matrix.
+    M_COPY   C    Duplicate copy of matrix.
+    M_COFACT C    Cofactor of element of matrix.
+    MENU     C    Link of AMORTPRN.EXE.
+    MATRIX   S    Matrix manipulation subroutine descriptions.
+    MATRIX   3L   Matrix manipulation subroutine descriptions.
+    STRINGS  C    String processing of list of arguments.
+    SETHAYES C    Hayes smartmodem initialization routine.
+    PYMT     C    Link of AMORTPRN.EXE.
+    PRTSCN   C    Print screen to printer.
+    PRINTAB  EXE  Print screen to printer.
+    PRINTAB  C    Print from ASCII file, with spaces.
+    PRINT    EXE  Print from ASCII file, with spaces.
+    PRINT    C    Print from ASCII file, with tabs.
+    OUTSTNG  C    Short section of LYNN.DOC.
+    M_TRANSP C    Transpose matrix.
+    M_SOLVE  C    Matrix linear equations.
+    M_READ   C    Read into matrix.
+    M_MULTIP C    Multiply matrix 1 x matrix 2.
+
+### Directory of PC-SIG Library Disk 0429
 
      Volume in drive A has no label
      Directory of A:\

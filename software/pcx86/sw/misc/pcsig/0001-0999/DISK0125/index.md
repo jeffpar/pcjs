@@ -9,13 +9,53 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #125"
+      B: "PC-SIG Library Disk 0125"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #125
+## Information about "HOST-III PUBLIC BBS"
+
+    The HOST-III communications package, while designed for private
+    remote-to-host type file transfers, can be used as a public BBS.
+    HOST-III automates the RECEIVE end of any file transfer, allowing
+    unattended operation of the host.  HOSTCALL automates unattended file
+    transfers for late-night, low-rate use.
+    
+    HOSTCALL can also initiate telephone calls to host computers (such as an
+    IBM-PC running HOST-III) and exchange files based on the commands in
+    what is called a Command File.  The host computer may or may not be an
+    IBM-PC.  You create the Command File which contains the information
+    HOSTCALL needs, such as the time to call a host system, the telephone
+    number, and the names of the files to exchange.  A single COMMAND FILE
+    can sequentially access a number of host computers.  Both programs
+    support the XMODEM protocol of file transmission.
+    
+    While this is an older program and does not have some of the features of
+    the more up-to-date models, is is also considerably less complicated to
+    set up.
+    
+    Special Requirements:  Two disk drives and Hayes Smartmodem or
+    equivalent.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $35.00
+    
+    File Descriptions:
+    
+    CS-NEW        Text file
+    HOST-III DOC  Documentation for HOST-III
+    HOST-III EXE  Program that receives telephone calls
+    HOSTCALL BAT  Batch file that starts up HOSTCALX
+    HOSTCALL DOC  Documentation for HOSTCALL
+    HOSTCALX EXE  Program that initiates telephone calls...Part 1
+    HOSTCL2X EXE  Program that initiates telephone calls...Part 2
+    RACKET   BBS  Example of BBS SIG
+    README        Information about HOST-III use & other programs available
+
+### Directory of PC-SIG Library Disk 0125
 
      Volume in drive A has no label
      Directory of A:\

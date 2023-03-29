@@ -9,13 +9,26 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #913"
+      B: "PC-SIG Library Disk 0913"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #913
+## Information about "FLODRAW 2 OF 3 (ALSO 912, 2020)"
+
+    FLODRAW is a graphics editor that produces black and white full-page
+    diagrams.  It is designed to handle symbols quickly and easily and is
+    ideal for documentation such as flowcharts, organization charts, system
+    diagrams and other symbol-oriented materials.  It combines text and
+    graphics and is equipped with a basic graphics editor for lines and
+    circles, plus pixel editing.
+    
+    FLODRAW has symbol libraries for flowcharts, HIPO charts, and electric
+    diagrams.  Design your own symbols, save them, and combine them into new
+    libraries, or add them to an existing library.
+
+### Directory of PC-SIG Library Disk 0913
 
      Volume in drive A has no label
      Directory of A:\

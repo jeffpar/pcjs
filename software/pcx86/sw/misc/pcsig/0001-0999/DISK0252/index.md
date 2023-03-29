@@ -9,13 +9,44 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #252"
+      B: "PC-SIG Library Disk 0252"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #252
+## Information about "LISTMATE AND LOAD-US"
+
+    This disk contains two user-supported programs from SWFTE.  ListMate
+    is a menu driven label producer with all documentation and help
+    displayed from the program.  Load-US (tm) allows you to run Lotus 123
+    and Symphony directly from a hard disk without the system disk in
+    Drive A. This saves you the aggravation of locating your System disk
+    each time you need to run it.
+    
+    Features include:  ListMate contains on-line help screens, internal
+    documentation, and is compatible with MultiMate files.
+    
+    System Requirements:  Load-Us requires a hard disk.
+    
+    How to Start: Type LISTMATE and press <ENTER>.  To read DOC files
+    simply enter TYPE LISTMATE.DOC and press <ENTER>.  For Load-us, enter
+    TYPE LOAD-US.DOC to read docs, and LOAD-US <ENTER> to run.
+    
+    Suggested Registration:  ListMate $25.00, Load-Us $10.00.
+    
+    File Descriptions:
+    
+    LISTMATE EXE  This is the main ListMate program
+    LISTMATE SYS  ListMate system files
+    LOAD-US  COM  Main program
+    LISTMATE ABS  ListMate abstract
+    LISTMATE DOC  ListMate documentation (not listable)
+    LISTMATE HLP  ListMate help files
+    LISTMATE TXT  ListMate text files
+    LOAD-US  DOC  Documentation (listable) LOAD-US  ABS  Abstract
+
+### Directory of PC-SIG Library Disk 0252
 
      Volume in drive A has no label
      Directory of A:\

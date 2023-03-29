@@ -9,13 +9,31 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #465"
+      B: "PC-SIG Library Disk 0465"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #465
+## Information about "FAMILY TIES"
+
+    The FAMILY TIES Genealogy program is designed for the organized
+    compilation of personal genealogical information.  All of the names
+    entered in this program are automaticaly linked to each other.  Starting
+    with one individual (usually yourself) use the edit mode to enter your
+    information.  Then add a person linked to this first individual eg.
+    parents, spouse, other spouse or child and enter their information.  You
+    may start with any male person and then ancestors or decendants may be
+    added in any order.  You may jump around and add as you please.  This
+    program also does a nice job printing out a family tree.
+    
+    This program also has an optional mode which conforms to the preferences
+    of the Church of Jesus Christ of Latter Day Saints (LDS) and maintains
+    records according to sealings, baptisms, endowments, and temple dates.
+    Other history of relatives can be entered in the record for every
+    person covered.
+
+### Directory of PC-SIG Library Disk 0465
 
      Volume in drive A has no label
      Directory of A:\

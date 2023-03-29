@@ -9,13 +9,32 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #686"
+      B: "PC-SIG Library Disk 0686"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #686
+## Information about "HELPDOS"
+
+    A "help system" for learning and using the commands and functions of
+    DOS version 2.0. HELPDOS has menus, reference information, a
+    technical dictionary and a cross-reference feature which work together
+    to show you what DOS can do and how to use it.
+    
+    From the main menu, select brief or in-depth information on basic and
+    advanced DOS commands, special keyboard keys, batch subcommands, and an
+    overview of the DOS facilities.
+    
+    The technical dictionary explains frequently-used terms with overviews
+    of DOS facilities and personal computers. The dictionary also has
+    additional reference information and usage notes.
+    
+    When you select a category from the hint menu, HelpDOS will show you a
+    menu of the DOS features relating to that category. The hints
+    function is a unique and powerful aspect of HELPDOS.
+
+### Directory of PC-SIG Library Disk 0686
 
      Volume in drive A has no label
      Directory of A:\

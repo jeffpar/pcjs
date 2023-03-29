@@ -9,13 +9,24 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #10"
+      B: "PC-SIG Library Disk 0010"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #10
+## Information about "CHASM  (CHEAP ASSEMBLER)"
+
+    CHASM (Cheap Assembler) is a prime weapon for programmers who want to
+    learn to program in Assembly language.  The program comes with clearly-
+    written documentation and has a tutorial built in for users lacking
+    detailed experience with Assembly language.
+    
+    CHASM is a compiler only and there is no editor included.  You use an
+    ASCII word processor to create your source code file, then use CHASM to
+    compile it.
+
+### Directory of PC-SIG Library Disk 0010
 
      Volume in drive A has no label
      Directory of A:\

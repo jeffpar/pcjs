@@ -9,13 +9,28 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #814"
+      B: "PC-SIG Library Disk 0814"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #814
+## Information about "MODULA-2 TUTORIAL 1 OF 2 (ALSO 815)"
+
+    MODULA-2 TUTORIAL teaches you the fundamentals of this complex
+    language and will have you up and programming by the end of it.
+    
+    The first part of this tutorial is composed of those features that are
+    common to PASCAL and MODULA-2 and are also of a fundamental nature.  You
+    will need to study all of Part I in order to write meaningful MODULA-2
+    programs.  If you are already a fairly experienced Pascal programmer,
+    you should absorb this material very quickly.
+    
+    Parts II and III teach those features that are new in MODULA-2 --
+    advanced topics and features that allow the programmer to use the full
+    power of the language and write larger and more complex programs. File
+
+### Directory of PC-SIG Library Disk 0814
 
      Volume in drive A has no label
      Directory of A:\

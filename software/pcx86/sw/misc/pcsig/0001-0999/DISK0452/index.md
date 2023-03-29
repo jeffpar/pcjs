@@ -9,13 +9,41 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #452"
+      B: "PC-SIG Library Disk 0452"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #452
+## Information about "THE AMULET OF YENDOR (HACK)"
+
+    A Dungeons and Dragons-type text adventure from the Stichting Mathematis
+    Centrum in Amsterdam and converted to MS-DOS by Don Kneller.
+    
+    Played on more than 26 levels against slavering monsters, master
+    villains and very powerful magic, your job is to survive and prosper
+    using all the skill you can muster.  Play as an explorer, warrior,
+    magician, tourist, knight, or a caveman with all their associated
+    strength, knowledge, and powers.
+    
+    This is a bonanza for the adventure-addicted enthusiast who loves to
+    hack and slash. Unsheath your sword, grab your amulet and follow me!
+    File Descriptions:
+    
+    HACK     CNF  Data file.
+    HH            Data file.
+    HACK     EXE  D & D adventure the ``Amulet of Yendor''.
+    HACK     DOC  History and documentation for HACK.EXE.
+    HACK     MSG  Hints on how to get through this adventure.
+    DATA          List of objects and denizens of this empire.
+    HELP          More documentation for the game.
+    RECORD        Support file for HACK.EXE.
+    RUMORS        Support file for HACK.EXE.
+    README        Introduction file.
+    TERMCAP       Data file.
+    HINTS    DOC  Hints on staying alive.
+
+### Directory of PC-SIG Library Disk 0452
 
      Volume in drive A has no label
      Directory of A:\
