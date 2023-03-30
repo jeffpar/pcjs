@@ -786,7 +786,7 @@
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "BASTEST.img",
-        "--extract=FPTEST.BAS",
+        "--extract",
         "--normalize",
         "--overwrite"
       ],

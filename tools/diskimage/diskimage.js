@@ -41,7 +41,7 @@ function printError(err, filename)
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
  * A warning is always displayed when we replace line endings in any file being copied to a disk image.
  *
- * NOTE: Some files, like ".BAS" files, aren't always ASCII, which is why we now call isASCII() on all
+ * NOTE: Some files, like ".BAS" files, aren't always ASCII, which is why we now call isText() on all
  * these file contents first.
  */
 let asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".LRF", ".MAK", ".TXT", ".XML"];
@@ -299,16 +299,16 @@ function getTarget(sTarget)
 }
 
 /**
- * isASCII(data)
+ * isText(data)
  *
  * @param {string} data
- * @return {boolean} true if sData is entirely ASCII (ie, no bytes with bit 7 set)
+ * @return {boolean} true if sData is entirely ASCII (ie, no bytes with bit 7 set) *or* UTF-8
  */
-function isASCII(data)
+function isText(data)
 {
     for (let i = 0; i < data.length; i++) {
         let b = data.charCodeAt(i);
-        if (b & 0x80) return false;
+        if ((b & 0x80) && !CharSet.isCP437(data[i])) return false;
     }
     return true;
 }
@@ -629,6 +629,8 @@ function convertBASICFile(db, fNormalize)
             quoted = false;         // if you end a line with an open quote, BASIC automatically "closes" it
         }
         db = new DataBuffer(s);
+    } else {
+        db = new DataBuffer(CharSet.fromCP437(db.toString(), false));
     }
     return db;
 }
@@ -1538,8 +1540,8 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
                 printf("file data length (%d) does not match file size (%d)\n", data.length, stats.size);
             }
             if (fText) {
-                if (isASCII(data)) {
-                    let dataNew = data.replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
+                if (isText(data)) {
+                    let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
                     if (dataNew != data) printf("replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
                     data = dataNew;
                 } else {

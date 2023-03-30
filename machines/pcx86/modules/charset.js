@@ -13,8 +13,8 @@
 export default class CharSet {
 
     static CP437 = [
-        "<NUL>","<SOH>","<STX>","<ETX>","<EOT>","<ENQ>","<ACK>","<BEL>","<BS>", "<FT>", "<LF>", "<VT>", "<FF>", "<CR>", "<SO>", "<SI>",
-        "<DLE>","<DC1>","<DC2>","<DC3>","<DC4>","<NAK>","<SYN>","<ETB>","<CAN>","<EM>", "<SUB>","<ESC>","<FS>", "<GS>", "<RS>", "<US>",
+        " ",    "☺",    "☻",    "♥",    "♦",    "♣",    "♠",    "•",    "◘",    "○",    "◙",    "♂",    "♀",    "♪",    "♫",    "☼",
+        "►",    "◄",    "↕",    "‼",    "¶",    "§",    "▬",    "↨",    "↑",    "↓",    "→",    "←",    "∟",    "↔",    "▲",    "▼",
         " ",    "!",    "\"",   "#",    "$",    "%",    "&",    "'",    "(",    ")",    "*",    "+",    ",",    "-",    ".",    "/",
         "0",    "1",    "2",    "3",    "4",    "5",    "6",    "7",    "8",    "9",    ":",    ";",    "<",    "=",    ">",    "?",
         "@",    "A",    "B",    "C",    "D",    "E",    "F",    "G",    "H",    "I",    "J",    "K",    "L",    "M",    "N",    "O",
@@ -32,22 +32,54 @@ export default class CharSet {
     ];
 
     /**
-     * fromCP437(s)
+     * fromCP437(s, controlChars)
      *
      * @param {string} s
+     * @param {boolean} [controlChars] (true to include control characters)
      * @return {string}
      */
-    static fromCP437(s)
+    static fromCP437(s, controlChars = false)
     {
         let u = "";
         for (let i = 0; i < s.length; i++) {
             let c = s.charCodeAt(i);
-            if (c < CharSet.CP437.length) {
+            if (c < CharSet.CP437.length && (c >= 32 || controlChars)) {
                 u += CharSet.CP437[c];
             } else {
                 u += s[i];
             }
         }
         return u;
+    }
+
+    /**
+     * toCP437(u)
+     *
+     * @param {string} u
+     * @return {string}
+     */
+    static toCP437(u)
+    {
+        let s = "";
+        for (let i = 0; i < u.length; i++) {
+            let c = CharSet.CP437.indexOf(u[i]);
+            if (c > 0) {
+                s += String.fromCharCode(c);
+            } else {
+                s += u[i];
+            }
+        }
+        return s;
+    }
+
+    /**
+     * isCP437(c)
+     *
+     * @param {string} c
+     * @return {boolean} (true if UTF-8 character exists in CP437 character set)
+     */
+    static isCP437(c)
+    {
+        return CharSet.CP437.indexOf(c) >= 0;
     }
 }
