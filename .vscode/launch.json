@@ -780,6 +780,24 @@
       ]
     },
     {
+      "name": "Node: diskimage.js --extract --normalize",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "BASTEST.json",
+        "--extract=MENU.BAS",
+        "--normalize",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}/tmp",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskimage.js --collection --checkdisk",
       "type": "node",
       "request": "launch",

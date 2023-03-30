@@ -314,6 +314,18 @@ function isASCII(data)
 }
 
 /**
+ * isBASICFile(sFile)
+ *
+ * @param {string} sFile
+ * @return {boolean} true if the filename has a ".BAS" extension
+ */
+function isBASICFile(sFile)
+{
+    let ext = path.parse(sFile).ext;
+    return ext && ext.toUpperCase() == ".BAS";
+}
+
+/**
  * isTextFile(sFile)
  *
  * @param {string} sFile
@@ -326,6 +338,262 @@ function isTextFile(sFile)
         if (sFileUC.endsWith(asTextFileExts[i])) return true;
     }
     return false;
+}
+
+/**
+ * convertBASICFile(db, fNormalize)
+ *
+ * NOTE: The code in this function is based on https://github.com/rwtodd/bascat.  There is no warranty, express or implied.
+ *
+ * @param {DataBuffer} db
+ * @param {boolean} [fNormalize]
+ * @returns {DataBuffer}
+ */
+function convertBASICFile(db, fNormalize)
+{
+    let i = 0, s = "", quoted = false;
+
+    const tokens = [
+       /* 0x11 - 0x1B */
+       "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+       /* 0x81 - 0x90 */
+       "END", "FOR", "NEXT", "DATA", "INPUT", "DIM", "READ", "LET",
+       "GOTO", "RUN", "IF", "RESTORE", "GOSUB", "RETURN", "REM", "STOP",
+       /* 0x91 - 0xA0 */
+       "PRINT", "CLEAR", "LIST", "NEW", "ON", "WAIT", "DEF", "POKE",
+       "CONT", "<0x9A>", "<0x9B>", "OUT", "LPRINT", "LLIST", "<0x9F>", "WIDTH",
+       /* 0xA1 - 0xB0 */
+       "ELSE", "TRON", "TROFF", "SWAP", "ERASE", "EDIT", "ERROR", "RESUME",
+       "DELETE", "AUTO", "RENUM", "DEFSTR", "DEFINT", "DEFSNG", "DEFDBL", "LINE",
+       /* 0xB1 - 0xC0 */
+       "WHILE", "WEND", "CALL", "<0xB4>", "<0xB5>", "<0xB6>", "WRITE", "OPTION",
+       "RANDOMIZE", "OPEN", "CLOSE", "LOAD", "MERGE", "SAVE", "COLOR", "CLS",
+       /* 0xC1 - 0xD0 */
+       "MOTOR", "BSAVE", "BLOAD", "SOUND", "BEEP", "PSET", "PRESET", "SCREEN",
+       "KEY", "LOCATE", "<0xCB>", "TO", "THEN", "TAB(", "STEP", "USR",
+       /* 0xD1 - 0xE0 */
+       "FN", "SPC(", "NOT", "ERL", "ERR", "STRING$", "USING", "INSTR",
+       "'", "VARPTR", "CSRLIN", "POINT", "OFF", "INKEY$", "<0xDF>", "<0xE0>",
+       /* 0xE1 - 0xF0 */
+       "<0xE1>", "<0xE2>", "<0xE3>", "<0xE4>", "<0xE5>", ">", "=", "<",
+       "+", "-", "*", "/", "^", "AND", "OR", "XOR",
+       /* 0xF1 - 0xF4 */
+       "EQV", "IMP", "MOD", "\\",
+       /* 0xFD81 - 0xFD8B */
+       "CVI", "CVS", "CVD", "MKI$", "MKS$", "MKD$", "<0xFD87>", "<0xFD88>",
+       "<0xFD89>", "<0xFD8A>", "EXTERR",
+       /* 0xFE81 - 0xFE90 */
+       "FILES", "FIELD", "SYSTEM", "NAME", "LSET", "RSET", "KILL", "PUT",
+       "GET", "RESET", "COMMON", "CHAIN", "DATE$", "TIME$", "PAINT", "COM",
+       /* 0xFE91 - 0xFEA0 */
+       "CIRCLE", "DRAW", "PLAY", "TIMER", "ERDEV", "IOCTL", "CHDIR", "MKDIR",
+       "RMDIR", "SHELL", "ENVIRON", "VIEW", "WINDOW", "PMAP", "PALETTE", "LCOPY",
+       /* 0xFEA1 - 0xFEA8 */
+       "CALLS", "<0xFEA2>", "<0xFEA3>", "NOISE", "PCOPY", "TERM", "LOCK", "UNLOCK",
+       /* 0xFF81 - 0xFE90 */
+       "LEFT$", "RIGHT$", "MID$", "SGN", "INT", "ABS", "SQR", "RND",
+       "SIN", "LOG", "EXP", "COS", "TAN", "ATN", "FRE", "INP",
+       /* 0xFF91 - 0xFEA0 */
+       "POS", "LEN", "STR$", "VAL", "ASC", "CHR$", "PEEK", "SPACE$",
+       "OCT$", "HEX$", "LPOS", "CINT", "CSNG", "CDBL", "FIX", "PEN",
+       /* 0xFFA1 - 0xFFA5 */
+       "STICK", "STRIG", "EOF", "LOC", "LOF"
+    ];
+
+    let EOF = function() {
+        return i >= db.length;
+    };
+
+    let readU8 = function() {
+        return (i < db.length? db.readUInt8(i++) : 0);
+    };
+
+    let peek1 = function(v) {
+        return !EOF() && db.readUInt8(i) == v;
+    };
+
+    let peek2 = function(v1, v2) {
+        return (i < db.length - 1) && (db.readUInt8(i) == v1) && (db.readUInt8(i+1) == v2);
+    };
+
+    let skip = function(off) {
+        i += off;
+    };
+
+    let readU16 = function() {
+        let v = (i < db.length - 1)? db.readUInt16LE(i) : 0;
+        i += 2;
+        return v;
+    };
+
+    let readS16 = function() {
+        let v = (i < db.length - 1)? db.readInt16LE(i) : 0;
+        i += 2;
+        return v;
+    };
+
+    let readMBF32 = function() {
+        let mbf = new Array(4);
+        for (let i = 0; i < mbf.length; i++) {
+            mbf[i] = readU8();
+        }
+        if (mbf[3] == 0) return 0.0;
+        let sign = (mbf[2] & 0x80);
+        let exp = (mbf[3] - 2) & 0x80;
+        mbf[3] =  (sign | ((exp >> 1) & 0xff));
+        mbf[2] = ((exp << 7) | (mbf[2] & 0x7F)) & 0xff;
+        let buf = new ArrayBuffer(mbf.length);
+        let view = new DataView(buf);
+        mbf.forEach(function (b, i) {
+            view.setUint8(i, b);
+        });
+        return view.getFloat32(0);
+    }
+
+    let readMBF64 = function() {
+        let mbf = new Array(8);
+        for (let i = 0; i < mbf.length; i++) {
+            mbf[i] = readU8();
+        }
+        if (mbf[7] == 0) return 0.0;
+        /*
+         * Save and then erase the sign bit
+         */
+        let sign = (mbf[6] & 0x80);
+        mbf[6] &= 0x7f;
+        let exp = (mbf[7] - 129 + 1023) & 0xffff;
+        /*
+         * Shift over the significand by 3 bits (55 in ieee, 58 in mbf)
+         */
+        for (let i = 0; i < 7; i++) {
+            mbf[i] = ((mbf[i] >> 3) | (mbf[i + 1] << 5)) & 0xff;
+        }
+        /*
+         * Now fix up the top bytes
+         * exp 16 bits == FEDCB(A987654)(3210)
+         */
+        mbf[7] = (sign | ((exp >> 4) & 0x7f));
+        mbf[6] = ((mbf[6] & 0x0F) | ((exp & 0x0f) << 4)) & 0xff;
+
+        let buf = new ArrayBuffer(mbf.length);
+        let view = new DataView(buf);
+        mbf.forEach(function (b, i) {
+            view.setUint8(i, b);
+        });
+        return view.getFloat64(0);
+    }
+
+    let getToken = function() {
+        let token = "";
+        let v = readU8();
+        if (v >= 0xFD) {
+            v = (v << 8) | readU8();
+        }
+        if (v) {
+            /*
+             * The original code failed to account for programs that include IBM PC drawing characters
+             * inside strings, and those characters can literally be any 8-bit value, which is why we now
+             * track the "quoted" state.
+             *
+             * TODO: Now that "normalization" also includes CP437 to UTF-8 conversion, we will probably
+             * want to update the import normalization of BAS files too (ie, convert any UTF-8 characters
+             * back to CP437).
+             */
+            if (quoted && v < 0xFD || v >= 0x20 && v <= 0x7E && v != 0x3A) {
+                token = String.fromCharCode(v);
+                if (fNormalize) {
+                    token = CharSet.fromCP437(token);
+                }
+                if (v == 0x22) quoted = !quoted;
+            }
+            else {
+                switch (v) {
+                case 0x0B:
+                    token = "&O" + readU16().toString(8);
+                    break;
+                case 0x0C:
+                    token = "&H" + readU16().toString(16).toUpperCase();
+                    break;
+                case 0x0E:
+                    token = readU16().toString();
+                    break;
+                case 0x0F:
+                    token = readU8().toString();
+                    break;
+                case 0x1C:
+                    token = readS16().toString();
+                    break;
+                case 0x1D:
+                    token = readMBF32().toString();
+                    break;
+                case 0x1F:
+                    token = readMBF64().toString();
+                    break;
+                default:
+                    if (v == 0x3A) {
+                        if (peek1(0xA1)) {
+                            token = "ELSE";
+                            skip(1);
+                            break;
+                        }
+                        if (peek2(0x8F, 0xD9)) {
+                            token = "'";
+                            skip(2);
+                            break;
+                        }
+                        token = String.fromCharCode(v);
+                        break;
+                    }
+                    if (v == 0xB1 && peek1(0xE9)) {
+                        token = "WHILE";
+                        skip(1);
+                        break;
+                    }
+                    if (v >= 0x11 && v <= 0x1B) {
+                        token = tokens[v - 0x11];
+                        break;
+                    }
+                    if (v >= 0x81 && v <= 0xF4) {
+                        token = tokens[v - 118];
+                        break;
+                    }
+                    if (v >= 0xFD81 && v <= 0xFD8B) {
+                        token = tokens[v - 64770];
+                        break;
+                    }
+                    if (v >= 0xFE81 && v <= 0xFEA8) {
+                        token = tokens[v - 65015];
+                        break;
+                    }
+                    if (v >= 0xFF81 && v <= 0xFFA5) {
+                        token = tokens[v - 65231];
+                        break;
+                    }
+                    break;
+                }
+                if (!token) {
+                    s += "<0x" + v.toString(16) + ">";
+                }
+            }
+        }
+        return token;
+    }
+
+    let b = readU8();
+    if (b == 0xFF) {
+        while (!EOF()) {
+            let t;
+            if (readU16() == 0) break;
+            s += readU16() + "  ";
+            while ((t = getToken())) {
+                s += t;
+            }
+            s += (fNormalize? "\n" : "\r\n");
+            quoted = false;         // if you end a line with an open quote, BASIC automatically "closes" it
+        }
+        db = new DataBuffer(s);
+    }
+    return db;
 }
 
 /**
@@ -585,6 +853,17 @@ function processDisk(di, diskFile, argv, diskette)
                             return;
                         }
                         printf("extracting: %s\n", sFile);
+                    }
+                    /*
+                     * Originally, "normalize" was just an import option (to fix line endings of known text files on
+                     * disks we created); however, I'm going to make it an export option as well, and not just to revert
+                     * line endings, but to also address the fact that there are a lot of old "tokenized" BASIC files out
+                     * in the world, and they are much easier to work with locally in their "un-tokenized" form.
+                     */
+                    if (argv['normalize']) {
+                        if (isBASICFile(sPath)) {
+                            db = convertBASICFile(db, true);
+                        }
                     }
                     fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
                 }
