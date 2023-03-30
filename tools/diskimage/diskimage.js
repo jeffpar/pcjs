@@ -408,11 +408,11 @@ function convertBASICFile(db, fNormalize)
         return (i < db.length? db.readUInt8(i++) : 0);
     };
 
-    let peek1 = function(v) {
+    let peekU8 = function(v) {
         return !EOF() && db.readUInt8(i) == v;
     };
 
-    let peek2 = function(v1, v2) {
+    let peekU16 = function(v1, v2) {
         return (i < db.length - 1) && (db.readUInt8(i) == v1) && (db.readUInt8(i+1) == v2);
     };
 
@@ -438,16 +438,18 @@ function convertBASICFile(db, fNormalize)
             mbf[i] = readU8();
         }
         if (mbf[3] == 0) return 0.0;
-        let sign = (mbf[2] & 0x80);
-        let exp = (mbf[3] - 2) & 0x80;
-        mbf[3] =  (sign | ((exp >> 1) & 0xff));
-        mbf[2] = ((exp << 7) | (mbf[2] & 0x7F)) & 0xff;
+
         let buf = new ArrayBuffer(mbf.length);
         let view = new DataView(buf);
-        mbf.forEach(function (b, i) {
-            view.setUint8(i, b);
-        });
-        return view.getFloat32(0);
+        let sign = (mbf[2] & 0x80);
+        let exp = (mbf[3] - 2) & 0xff;
+
+        view.setUint8(3, sign | (exp >> 1));
+        view.setUint8(2, ((exp << 7) & 0x80) | (mbf[2] & 0x7f));
+        view.setUint8(1, mbf[1]);
+        view.setUint8(0, mbf[0]);
+
+        return view.getFloat32(0, true);
     }
 
     let readMBF64 = function() {
@@ -456,31 +458,64 @@ function convertBASICFile(db, fNormalize)
             mbf[i] = readU8();
         }
         if (mbf[7] == 0) return 0.0;
-        /*
-         * Save and then erase the sign bit
-         */
+
         let sign = (mbf[6] & 0x80);
         mbf[6] &= 0x7f;
         let exp = (mbf[7] - 129 + 1023) & 0xffff;
-        /*
-         * Shift over the significand by 3 bits (55 in ieee, 58 in mbf)
-         */
         for (let i = 0; i < 7; i++) {
-            mbf[i] = ((mbf[i] >> 3) | (mbf[i + 1] << 5)) & 0xff;
+            mbf[i] = ((mbf[i] >> 3) | ((mbf[i + 1] << 5) & 0xff));
         }
-        /*
-         * Now fix up the top bytes
-         * exp 16 bits == FEDCB(A987654)(3210)
-         */
         mbf[7] = (sign | ((exp >> 4) & 0x7f));
-        mbf[6] = ((mbf[6] & 0x0F) | ((exp & 0x0f) << 4)) & 0xff;
+        mbf[6] = ((mbf[6] & 0x0f) | ((exp & 0x0f) << 4));
 
         let buf = new ArrayBuffer(mbf.length);
         let view = new DataView(buf);
         mbf.forEach(function (b, i) {
             view.setUint8(i, b);
         });
-        return view.getFloat64(0);
+        return view.getFloat64(0, true);
+    }
+
+    /**
+     * unprotect(db)
+     *
+     * From: https://slions.net/threads/deciphering-gw-basic-basica-protected-programs.50/:
+     *
+     *  "The American Cryptogram Association (ACA) publishes a bimonthly periodical journal called The Cryptogram.
+     *   In their Computer Supplement #19 of summer 1994, Paul C. Kocher published BASCRACK, a C program to decipher
+     *   GW-BASIC protected files."
+     *
+     * This is a JavaScript port of BASCRACK.
+     *
+     * @param {DataBuffer} db
+     * @returns {DataBuffer}
+     */
+    let unprotect = function(db) {
+        const key1 = [
+            0xA9, 0x84, 0x8D, 0xCD, 0x75, 0x83, 0x43, 0x63, 0x24, 0x83, 0x19, 0xF7, 0x9A
+        ];
+        const key2 = [
+            0x1E, 0x1D, 0xC4, 0x77, 0x26, 0x97, 0xE0, 0x74, 0x59, 0x88, 0x7C
+        ]
+        if (db.readUInt8(0) == 0xFE) {                  // 0xFE: protected GW-BASIC signature byte
+            let index = 0;
+            let dbNew = new DataBuffer(db.length);
+            let i = 0;
+            dbNew.writeUInt8(0xFF, i++);                // 0xFF: unprotected GW-BASIC signature byte
+            while (i < db.length) {
+                let b = db.readUInt8(i);
+                if (b != 0x1A || i < db.length - 1) {   // don't "decrypt" the final byte if it's 0x1A (EOF)
+                    b -= 11 - (index % 11);
+                    b ^= key1[index % 13];
+                    b ^= key2[index % 11];
+                    b += 13 - (index % 13);
+                    index = (index+1) % (13*11);
+                }
+                dbNew.writeUInt8(b & 0xFF, i++);
+            }
+            db = dbNew;
+        }
+        return db;
     }
 
     let getToken = function() {
@@ -527,16 +562,16 @@ function convertBASICFile(db, fNormalize)
                     token = readMBF32().toString();
                     break;
                 case 0x1F:
-                    token = readMBF64().toString();
+                    token = readMBF64().toString() + '#';
                     break;
                 default:
                     if (v == 0x3A) {
-                        if (peek1(0xA1)) {
+                        if (peekU8(0xA1)) {
                             token = "ELSE";
                             skip(1);
                             break;
                         }
-                        if (peek2(0x8F, 0xD9)) {
+                        if (peekU16(0x8F, 0xD9)) {
                             token = "'";
                             skip(2);
                             break;
@@ -544,7 +579,7 @@ function convertBASICFile(db, fNormalize)
                         token = String.fromCharCode(v);
                         break;
                     }
-                    if (v == 0xB1 && peek1(0xE9)) {
+                    if (v == 0xB1 && peekU8(0xE9)) {
                         token = "WHILE";
                         skip(1);
                         break;
@@ -578,6 +613,8 @@ function convertBASICFile(db, fNormalize)
         }
         return token;
     }
+
+    db = unprotect(db);
 
     let b = readU8();
     if (b == 0xFF) {
