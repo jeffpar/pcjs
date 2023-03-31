@@ -341,15 +341,39 @@ function isTextFile(sFile)
 }
 
 /**
- * convertBASICFile(db, fNormalize)
+ * normalizeForHost(db)
  *
- * NOTE: The code in this function is based on https://github.com/rwtodd/bascat.  There is no warranty, express or implied.
+ * If DataBuffer is text, "normalize" for the host.
  *
  * @param {DataBuffer} db
- * @param {boolean} [fNormalize]
+ * @return {DataBuffer}
+ */
+function normalizeForHost(db)
+{
+    let s = db.toString();
+    if (isText(s)) {
+        s = s.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+        if (s.charCodeAt(s.length - 1) == 0x1A) {
+            s = s.slice(0, s.length - 1);
+        }
+        db = new DataBuffer(CharSet.fromCP437(s, false));
+    }
+    return db;
+}
+
+/**
+ * convertBASICFile(sPath, db, fNormalize)
+ *
+ * NOTE: The code in this function is based on https://github.com/rwtodd/bascat, which was a good start but had some issues.
+ * I'm sure there are still some lingering issues here (perhaps some magic whitespace rules that I'm unaware of), but this code
+ * seems to work pretty well now, and the new tokens dictionary is *much* more straightforward.
+ *
+ * @param {string} sPath (for informational purposes only, since we're working entirely with the DataBuffer)
+ * @param {DataBuffer} db (the contents of the BASIC file)
+ * @param {boolean} [fNormalize] (true if we should convert characters from CP437 to UTF-8, revert line-endings, and omit EOF)
  * @returns {DataBuffer}
  */
-function convertBASICFile(db, fNormalize)
+function convertBASICFile(sPath, db, fNormalize)
 {
     let i = 0, s = "", quoted = false;
 
@@ -556,7 +580,7 @@ function convertBASICFile(db, fNormalize)
     };
 
     let readU8 = function() {
-        return (i < db.length? db.readUInt8(i++) : 0);
+        return i < db.length? db.readUInt8(i++) : 0;
     };
 
     let peekU8 = function(v) {
@@ -757,7 +781,22 @@ function convertBASICFile(db, fNormalize)
     if (b == 0xFF) {
         while (!EOF()) {
             let t;
-            if (readU16() == 0) break;
+            /*
+             * Every line in the file begins with two 16-bit values: the offset of the *next* line,
+             * the line number of the *current* line.  The offset value can be used as a sanity check
+             * (eg, for file integrity) but we're not going to bother; all we'll check for here is
+             * an offset of ZERO, which effectively means end-of-program, and it's normally followed
+             * by an EOF byte (0x1A) (and which we'll pass along, *unless* we're normalizing the text).
+             */
+            let off = readU16();
+            if (!off) {
+                if (peekU8(0x1A)) {
+                    if (!fNormalize) s += String.fromCharCode(0x1A);
+                } else {
+                    printf("warning: %s invalid EOF at offset %#x\n", path.basename(sPath), i);
+                }
+                break;
+            }
             s += readU16() + "  ";
             while ((t = getToken())) {
                 s += t;
@@ -766,8 +805,9 @@ function convertBASICFile(db, fNormalize)
             quoted = false;         // if you end a line with an open quote, BASIC automatically "closes" it
         }
         db = new DataBuffer(s);
-    } else {
-        db = new DataBuffer(CharSet.fromCP437(db.toString(), false));
+    }
+    else if (fNormalize) {
+        db = normalizeForHost(db);
     }
     return db;
 }
@@ -1034,11 +1074,24 @@ function processDisk(di, diskFile, argv, diskette)
                      * Originally, "normalize" was just an import option (to fix line endings of known text files on
                      * disks we created); however, I'm going to make it an export option as well, and not just to revert
                      * line endings, but to also address the fact that there are a lot of old "tokenized" BASIC files out
-                     * in the world, and they are much easier to work with locally in their "un-tokenized" form.
+                     * in the world, and they are much easier to work with locally in their "de-tokenized" form.
                      */
                     if (argv['normalize']) {
+                        /*
+                         * BASIC files are dealt with separately, because there are 3 kinds: ASCII (for which we just
+                         * call normalizeForHost()), tokenized (which we convert to ASCII and automatically normalize in
+                         * the process), and protected (which we decrypt and then de-tokenize).
+                         */
                         if (isBASICFile(sPath)) {
-                            db = convertBASICFile(db, true);
+                            /*
+                             * In addition to "de-tokenizing", we're also setting convertBASICFile()'s normalize parameter
+                             * to true, to convert characters from CP437 to UTF-8, revert line-endings, and omit EOF.  We're
+                             * currently combining both features as part of the "normalize" process.
+                             */
+                            db = convertBASICFile(sPath, db, true);
+                        }
+                        else if (isTextFile(sPath)) {
+                            db = normalizeForHost(db);
                         }
                     }
                     fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);

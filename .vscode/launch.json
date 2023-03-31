@@ -785,7 +785,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "BASTEST.img",
+        "DISK0001.img",
         "--extract",
         "--normalize",
         "--overwrite"
