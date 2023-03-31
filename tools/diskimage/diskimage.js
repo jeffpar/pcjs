@@ -375,7 +375,7 @@ function normalizeForHost(db)
  */
 function convertBASICFile(sPath, db, fNormalize)
 {
-    let i = 0, s = "", quoted = false;
+    let i = 0, s = "", quoted = false, lineWarning = 0;
 
     const tokens = {
         0x11:   "0",
@@ -693,8 +693,8 @@ function convertBASICFile(sPath, db, fNormalize)
         return db;
     }
 
-    let getToken = function() {
-        let token = "";
+    let getToken = function(line) {
+        let token = null;                               // null will signal end of tokens for the line
         let v = readU8();
         if (v >= 0xFD) {
             v = (v << 8) | readU8();
@@ -768,7 +768,12 @@ function convertBASICFile(sPath, db, fNormalize)
                     break;
                 }
                 if (!token) {
-                    s += "<0x" + v.toString(16) + ">";
+                    let t = "<0x" + v.toString(16) + ">";
+                    if (lineWarning != line) {
+                        printf("warning: %s contains unexpected tokens (eg, %s on line %d)\n", path.basename(sPath), t, line);
+                        lineWarning = line;     // one such warning per line is enough...
+                    }
+                    token = "";                 // we're going to return an empty token instead of whatever "t" is...
                 }
             }
         }
@@ -793,12 +798,13 @@ function convertBASICFile(sPath, db, fNormalize)
                 if (peekU8(0x1A)) {
                     if (!fNormalize) s += String.fromCharCode(0x1A);
                 } else {
-                    printf("warning: %s invalid EOF at offset %#x\n", path.basename(sPath), i);
+                    printf("warning: %s contains invalid EOF at offset %#x\n", path.basename(sPath), i);
                 }
                 break;
             }
-            s += readU16() + "  ";
-            while ((t = getToken())) {
+            let line = readU16();
+            s += line + " ";        // BASIC defaults to one space between line number and first token
+            while ((t = getToken(line)) !== null) {
                 s += t;
             }
             s += (fNormalize? "\n" : "\r\n");
