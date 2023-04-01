@@ -832,6 +832,152 @@ function convertBASICFile(sPath, db, fNormalize)
 }
 
 /**
+ * extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
+ *
+ * @param {string} sDir
+ * @param {string} subDir
+ * @param {string} sPath
+ * @param {number} attr
+ * @param {Date} date
+ * @param {Buffer} db
+ * @param {Object} argv
+ * @param {Array.<fileData>} [files]
+ */
+function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
+{
+    /*
+     * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
+     * it mounts, so if we see any of those remnants (which we use to limit to "(attr & DiskInfo.ATTR.HIDDEN)"
+     * but no longer assume they always will hidden), then we ignore them.
+     *
+     * This is why I make all my IMG files read-only and also write-protect physical diskettes before inserting
+     * them into a drive.  Other operating systems pose similar threats.  For example, Windows 9x likes to modify
+     * the 8-byte OEM signature field of a diskette's boot sector with unique volume-tracking identifiers.
+     */
+    if (sPath.endsWith("~1.TRA") || sPath.endsWith("TRASHE~1") || sPath.indexOf("FSEVEN~1") >= 0) {
+        return true;
+    }
+
+    sPath = path.join(sDir, subDir, sPath);
+    let sFile = sPath.substr(sDir.length? sDir.length + 1 : 0);
+
+    let fSuccess = false;
+    let dir = path.dirname(sPath);
+    if (!existsFile(dir)) {
+        fs.mkdirSync(dir, {recursive: true});
+    }
+    if (attr & DiskInfo.ATTR.SUBDIR) {
+        if (!existsFile(sPath)) {
+            fs.mkdirSync(sPath);
+        }
+        fSuccess = true;
+    } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
+        let fPrinted = false;
+        let fQuiet = argv['quiet'];
+        if (!argv['collection']) {
+            if (!fQuiet) printf("extracting: %s\n", sFile);
+        } else {
+            // let sArchive = checkArchive(sPath, true);
+            // if (sArchive) {
+            //     let fExtracted;
+            //     if (existsFile(sPath)) {
+            //         if (!fQuiet) {
+            //             printf("extracted: %s\n", sFile);
+            //             fPrinted = true;
+            //         }
+            //     }
+            //     if (!existsFile(sArchive)) {
+            //         fExtracted = false;
+            //     } else {
+            //         let aArchiveFiles = glob.sync(path.join(sArchive, "**"));
+            //         if (!aArchiveFiles.length) {
+            //             fExtracted = false;
+            //             printf("warning: empty archive folder: %s\n", sArchive);
+            //         } else if (!fQuiet) {
+            //             aArchiveFiles.forEach((sArchiveFile) => {
+            //                 printf("expanded:  %s\n", sArchiveFile.substr(extractDir.length));
+            //             });
+            //         }
+            //     }
+            //     if (fExtracted === false) {
+            //         // printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
+            //     }
+            // }
+            if (existsFile(sPath)) {
+                if (!fPrinted && !fQuiet) printf("extracted: %s\n", sFile);
+                return true;
+            }
+            printf("extracting: %s\n", sFile);
+        }
+        if (argv['expand']) {
+            let arcType = isARCFile(sFile);
+            if (arcType) {
+                let zip = new StreamZip({
+                    file: sFile,
+                    buffer: db.buffer,
+                    arcType: arcType,
+                    storeEntries: true,
+                    nameEncoding: "ascii",
+                    printfDebug: printf,
+                    logErrors: true
+                }).on('ready', () => {
+                    let aFileData = getARCFiles(zip, argv['verbose']);
+                    for (let file of aFileData) {
+                        extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, file.files);
+                    }
+                    zip.close();
+                }).on('error', (err) => {
+                    printError(err, sFile);
+                });
+                zip.open();
+                /*
+                 * If we 'expand' the contents of an archive, then we likely don't want to also save the
+                 * archive itself, so we return now.  If you do want both, we'll have to add a new option.
+                 */
+                return true;
+            }
+        }
+        /*
+         * Originally, "normalize" was just an import option (to fix line endings of known text files on
+         * disks we created); however, I'm going to make it an export option as well, and not just to revert
+         * line endings, but to also address the fact that there are a lot of old "tokenized" BASIC files out
+         * in the world, and they are much easier to work with locally in their "de-tokenized" form.
+         */
+        if (argv['normalize']) {
+            /*
+             * BASIC files are dealt with separately, because there are 3 kinds: ASCII (for which we just
+             * call normalizeForHost()), tokenized (which we convert to ASCII and automatically normalize in
+             * the process), and protected (which we decrypt and then de-tokenize).
+             */
+            if (isBASICFile(sPath)) {
+                /*
+                 * In addition to "de-tokenizing", we're also setting convertBASICFile()'s normalize parameter
+                 * to true, to convert characters from CP437 to UTF-8, revert line-endings, and omit EOF.  We're
+                 * currently combining both features as part of the "normalize" process.
+                 */
+                db = convertBASICFile(sPath, db, true);
+            }
+            else if (isTextFile(sPath)) {
+                db = normalizeForHost(db);
+            }
+        }
+        fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
+    }
+    if (fSuccess) {
+        fs.utimesSync(sPath, date, date);
+        if (files) {
+            for (let file of files) {
+                if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, file.files)) {
+                    fSuccess = false;
+                    break;
+                }
+            }
+        }
+    }
+    return fSuccess;
+}
+
+/**
  * mapDiskToServer(diskFile)
  *
  * @param {string} diskFile
@@ -995,7 +1141,7 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     if (argv['extract']) {
-        let manifest = di.getFileManifest();
+        let manifest = di.getFileManifest(null, false);             // pass true for sorted manifest
         manifest.forEach(function extractDiskFile(desc) {
             /*
              * Parse each file descriptor in much the same way that buildFileTableFromJSON() does.  That function
@@ -1019,129 +1165,22 @@ function processDisk(di, diskFile, argv, diskette)
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
             device.assert(size == db.length);
-            let subDir = typeof argv['extract'] != "string"? di.getName() : "";
-            if (subDir || name == argv['extract']) {
+            let extractDir = typeof argv['extract'] != "string"? di.getName() : "";
+            if (extractDir || name == argv['extract']) {
                 let fSuccess = false;
                 if (argv['collection']) {
-                    subDir = getFullPath(path.join(path.dirname(diskFile), "archive", subDir));
+                    extractDir = getFullPath(path.join(path.dirname(diskFile), "archive", extractDir));
                     if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
-                        subDir = subDir.replace("/disks/archive", "/archive");
+                        extractDir = extractDir.replace("/disks/archive", "/archive");
                     }
                 }
-                sPath = path.join(subDir, sPath);
-                /*
-                 * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
-                 * it mounts, so if we see any of those remnants (which are normally hidden, but we do not assume that they
-                 * always will be), then we ignore them.
-                 *
-                 * This is why I make all my IMG files read-only and also write-protect physical diskettes before inserting
-                 * them into a drive.  Other operating systems pose similar threats.  For example, Windows 9x likes to modify
-                 * the 8-byte OEM signature field of a diskette's boot sector with unique volume-tracking identifiers.
-                 */
-                // if (attr & DiskInfo.ATTR.HIDDEN) {
-                    if (sPath.endsWith("~1.TRA") || sPath.endsWith("TRASHE~1") || sPath.indexOf("FSEVEN~1") >= 0) return;
-                // }
-                let dir = path.dirname(sPath);
-                if (!existsFile(dir)) {
-                    fs.mkdirSync(dir, {recursive: true});
-                }
-                if (attr & DiskInfo.ATTR.SUBDIR) {
-                    if (!existsFile(sPath)) {
-                        fs.mkdirSync(sPath);
-                        fSuccess = true;
-                    }
-                } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
-                    let fPrinted = false;
-                    let fQuiet = argv['quiet'];
-                    let sFile = sPath.substr(subDir.length? subDir.length + 1 : 0);
-                    if (!argv['collection']) {
-                        if (!fQuiet) printf("extracting: %s\n", sFile);
-                    } else {
-                        let sArchive = checkArchive(sPath, true);
-                        if (sArchive) {
-                            let fExtracted;
-                            if (existsFile(sPath)) {
-                                if (!fQuiet) {
-                                    printf("extracted: %s\n", sFile);
-                                    fPrinted = true;
-                                }
-                            }
-                            if (!existsFile(sArchive)) {
-                                fExtracted = false;
-                            } else {
-                                let aArchiveFiles = glob.sync(path.join(sArchive, "**"));
-                                if (!aArchiveFiles.length) {
-                                    fExtracted = false;
-                                    printf("warning: empty archive folder: %s\n", sArchive);
-                                } else if (!fQuiet) {
-                                    aArchiveFiles.forEach((sArchiveFile) => {
-                                        printf("expanded:  %s\n", sArchiveFile.substr(subDir.length));
-                                    });
-                                }
-                            }
-                            if (fExtracted === false) {
-                                // printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
-                            }
-                        }
-                        if (existsFile(sPath)) {
-                            if (!fPrinted && !fQuiet) printf("extracted: %s\n", sFile);
-                            return;
-                        }
-                        printf("extracting: %s\n", sFile);
-                    }
-                    if (argv['expand']) {
-                        let arcType = isARCFile(sFile);
-                        if (arcType) {
-                            let zip = new StreamZip({
-                                file: sFile,
-                                buffer: db.buffer,
-                                arcType: arcType,
-                                storeEntries: true,
-                                nameEncoding: "ascii",
-                                printfDebug: printf,
-                                logErrors: true
-                            }).on('ready', () => {
-                                let aFileData = getARCFiles(zip, argv['verbose']);
-                                zip.close();
-                            }).on('error', (err) => {
-                                printError(err, sFile);
-                            });
-                            zip.open();
-                        }
-                    }
-                    /*
-                     * Originally, "normalize" was just an import option (to fix line endings of known text files on
-                     * disks we created); however, I'm going to make it an export option as well, and not just to revert
-                     * line endings, but to also address the fact that there are a lot of old "tokenized" BASIC files out
-                     * in the world, and they are much easier to work with locally in their "de-tokenized" form.
-                     */
-                    if (argv['normalize']) {
-                        /*
-                         * BASIC files are dealt with separately, because there are 3 kinds: ASCII (for which we just
-                         * call normalizeForHost()), tokenized (which we convert to ASCII and automatically normalize in
-                         * the process), and protected (which we decrypt and then de-tokenize).
-                         */
-                        if (isBASICFile(sPath)) {
-                            /*
-                             * In addition to "de-tokenizing", we're also setting convertBASICFile()'s normalize parameter
-                             * to true, to convert characters from CP437 to UTF-8, revert line-endings, and omit EOF.  We're
-                             * currently combining both features as part of the "normalize" process.
-                             */
-                            db = convertBASICFile(sPath, db, true);
-                        }
-                        else if (isTextFile(sPath)) {
-                            db = normalizeForHost(db);
-                        }
-                    }
-                    fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
-                }
-                if (fSuccess) fs.utimesSync(sPath, date, date);
+                extractFile(extractDir, "", sPath, attr, date, db, argv);
             }
         });
     }
 
     if (argv['manifest']) {
-        let manifest = di.getFileManifest(getHash, argv['metadata']);
+        let manifest = di.getFileManifest(getHash, argv['sorted'], argv['metadata']);
         printManifest(diskFile, di.getName(), manifest);
     }
 

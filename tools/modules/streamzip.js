@@ -20,9 +20,9 @@ import LegacyZip from './legacyzip.js';
  * @property {boolean} arcType (ARC file if 1, ZIP file if 2 or undefined; added for PCjs)
  * @property {boolean} storeEntries (default is true; ie, always store entries)
  * @property {boolean} skipEntryNameValidation (default is false; ie, always validate entry names)
- * @property {string} nameEncoding (default is "utf8" with no TextDecoder; undocumented)
+ * @property {string} nameEncoding (default is "utf8"; undocumented)
  * @property {number} fd (file descriptor; undocumented as normally we open our own file descriptor)
- * @property {number} chunkSize (undocumented)
+ * @property {number} chunkSize (size of internal file buffer, default is generally 1024; undocumented)
  * @property {boolean} logErrors (log errors instead of throwing them; added for PCjs and LegacyZip support)
  * @property {function()} printfDebug (optional debug logging function; added for PCjs)
  */
@@ -1256,17 +1256,18 @@ class CentralDirectoryZip64Header
 
 class Entry
 {
-    constructor(streamZip, logErrors)
+    constructor(streamZip)
     {
-        this.errors = [];
-        this.logErrors = logErrors;
         this.streamZip = streamZip;
+        if (streamZip.config.logErrors) {
+            this.errors = [];
+        }
     }
 
     error(msg, type = "error")
     {
         msg = type + ": " + path.basename(this.streamZip.fileName) + "/" + (this.name? this.name + ": " : "")  + msg;
-        if (!this.logErrors) {
+        if (!this.errors) {
             throw new Error(msg);
         }
         if (this.name) {
