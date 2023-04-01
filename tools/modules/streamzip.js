@@ -15,12 +15,13 @@ import LegacyZip from './legacyzip.js';
 
 /**
  * @typedef {Object} Config
- * @property {string} file (file name)
+ * @property {string} file (filename; required, unless fd is specified)
+ * @property {Buffer} buffer (buffer; optional, and if present, used instead of file/fd)
  * @property {boolean} arcType (ARC file if 1, ZIP file if 2 or undefined; added for PCjs)
  * @property {boolean} storeEntries (default is true; ie, always store entries)
- * @property {boolean} skipEntryNameValidation (default is false (ie, always validate entry names))
+ * @property {boolean} skipEntryNameValidation (default is false; ie, always validate entry names)
  * @property {string} nameEncoding (default is "utf8" with no TextDecoder; undocumented)
- * @property {number} fd (file descriptor; undocumented as normally this opens its own file descriptor)
+ * @property {number} fd (file descriptor; undocumented as normally we open our own file descriptor)
  * @property {number} chunkSize (undocumented)
  * @property {boolean} logErrors (log errors instead of throwing them; added for PCjs and LegacyZip support)
  * @property {function()} printfDebug (optional debug logging function; added for PCjs)
@@ -29,7 +30,7 @@ import LegacyZip from './legacyzip.js';
 /**
  * @class StreamZip
  */
-export default class StreamZip {
+export default class StreamZip extends events.EventEmitter {
     /*
      * Public class fields
      */
@@ -145,7 +146,7 @@ export default class StreamZip {
             'ARC_LZD':  0x08,                           // LZ dynamic
             'ARC_SQSH': 0x09                            // "squashing"
         })
-        .field('name',          13)                     // file name (null terminated)
+        .field('name',          13)                     // filename (null terminated)
         .field('compressedSize',Structure.UINT32)       // compressed size
         .field('date',          Structure.UINT16)       // modification date
         .field('time',          Structure.UINT16)       // modification time (date and time order is reversed from ZIP files)
@@ -221,19 +222,33 @@ export default class StreamZip {
 
     /**
      * @this {StreamZip}
-     * @param {Config} [config]
+     * @param {Config} config
      */
     constructor(config)
     {
-        this.config = config || {}; // allow config to be optional
+        super();
+
+        this.config = config;
         this.opened = false;        // true if WE opened the file (as opposed to the caller)
         this.ready = false;
         this.#entries = config.storeEntries !== false? {} : null,
         this.fileName = config.file,
+        this.buffer = config.buffer;
         this.arcType = config.arcType || StreamZip.TYPE_ZIP;
         this.textDecoder = config.nameEncoding? new TextDecoder(config.nameEncoding) : null;
         this.printfDebug = config.printfDebug || function() {};
-        this.open();
+
+        /*
+         * Don't automatically call open() if the caller has provided a buffer, because in that case,
+         * all the initial reads are synchronous, and so the caller won't have a chance to set up its
+         * event handlers before we start emitting events.
+         *
+         * Personally, I don't think open() should have *ever* been automatic in the first place....
+         */
+        if (!this.buffer) {
+            this.open();
+        }
+
         Object.defineProperty(this, 'ready', {
             get() {
                 return this.ready;
@@ -248,7 +263,10 @@ export default class StreamZip {
      */
     open()
     {
-        if (this.config.fd) {
+        if (this.buffer) {
+            this.readFile();
+        }
+        else if (this.config.fd) {
             this.fd = this.config.fd;
             this.readFile();
         } else {
@@ -270,30 +288,37 @@ export default class StreamZip {
      */
     readFile()
     {
-        fs.fstat(this.fd, (err, stat) => {
-            if (err) {
-                return this.emit('error', err);
-            }
-            this.fileSize = stat.size;
-            this.chunkSize = this.config.chunkSize || Math.round(this.fileSize / 1000);
-            this.chunkSize = Math.max(
-                Math.min(this.chunkSize, Math.min(128 * 1024, this.fileSize)),
-                Math.min(1024, this.fileSize)
-            );
-            if (this.arcType == StreamZip.TYPE_ARC) {
-                this.readArcEntries()
+        let readFileDone = function(archive) {
+            if (archive.arcType == StreamZip.TYPE_ARC) {
+                archive.readArcEntries()
             } else {
-                this.readCentralDirectory();
+                archive.readCentralDirectory();
             }
-        });
+        };
+        if (this.buffer) {
+            this.fileSize = this.chunkSize = this.buffer.length;
+            readFileDone(this);
+        } else {
+            fs.fstat(this.fd, (err, stat) => {
+                if (err) {
+                    return this.emit('error', err);
+                }
+                this.fileSize = stat.size;
+                this.chunkSize = this.config.chunkSize || Math.round(this.fileSize / 1000);
+                this.chunkSize = Math.max(
+                    Math.min(this.chunkSize, Math.min(128 * 1024, this.fileSize)), Math.min(1024, this.fileSize)
+                );
+                readFileDone(this);
+            });
+        }
     }
 
     /**
-     * readUntilFoundCallback()
+     * readCentralDirectoryCallback()
      *
      * @this {StreamZip}
      */
-    readUntilFoundCallback(err, bytesRead)
+    readCentralDirectoryCallback(err, bytesRead)
     {
         if (err || !bytesRead) {
             return this.emit('error', err || new Error('Archive read failed'));
@@ -322,7 +347,7 @@ export default class StreamZip {
             return this.emit('error', new Error('Bad archive'));
         }
         const expandLength = Math.min(this.op.chunkSize, pos - minPos);
-        this.op.win.expandLeft(expandLength, this.readUntilFoundCallback.bind(this));
+        this.op.win.expandLeft(expandLength, this.readCentralDirectoryCallback.bind(this));
     }
 
     /**
@@ -332,9 +357,10 @@ export default class StreamZip {
      */
     readCentralDirectory()
     {
-        const totalReadLength = Math.min(StreamZip.CentralEndHeader.getSize() + StreamZip.MAXFILECOMMENT, this.fileSize);
+        const totalReadLength = this.buffer?
+            this.fileSize :
+            Math.min(StreamZip.CentralEndHeader.getSize() + StreamZip.MAXFILECOMMENT, this.fileSize);
         this.op = {
-            win: new FileWindowBuffer(this, "CentralDirectory"),
             totalReadLength,
             minPos: this.fileSize - totalReadLength,
             lastPos: this.fileSize,
@@ -343,7 +369,16 @@ export default class StreamZip {
             sig: StreamZip.CentralEndHeader.signature.ENDSIG,
             complete: this.readCentralDirectoryComplete.bind(this),
         };
-        this.op.win.read(this.fileSize - this.op.chunkSize, this.op.chunkSize, this.readUntilFoundCallback.bind(this));
+        if (this.buffer) {
+            this.op.win = {
+                buffer: this.buffer,
+                position: 0
+            };
+            this.readCentralDirectoryCallback(null, this.fileSize);
+        } else {
+            this.op.win = new FileWindowBuffer(this, "CentralDirectory");
+            this.op.win.read(this.fileSize - this.op.chunkSize, this.op.chunkSize, this.readCentralDirectoryCallback.bind(this));
+        }
     }
 
     /**
@@ -374,7 +409,6 @@ export default class StreamZip {
                 this.centralDirectory.size === StreamZip.EF_ZIP64_OR_32 || this.centralDirectory.offset === StreamZip.EF_ZIP64_OR_32) {
                 this.readZip64CentralDirectoryLocator();
             } else {
-                this.op = {};
                 this.readEntries();
             }
         } catch (err) {
@@ -404,7 +438,7 @@ export default class StreamZip {
                 sig: StreamZip.ENDL64SIG,
                 complete: this.readZip64CentralDirectoryLocatorComplete.bind(this),
             };
-            this.op.win.read(this.op.lastPos - this.op.chunkSize, this.op.chunkSize, this.readUntilFoundCallback.bind(this));
+            this.op.win.read(this.op.lastPos - this.op.chunkSize, this.op.chunkSize, this.readCentralDirectoryCallback.bind(this));
         }
     }
 
@@ -431,7 +465,7 @@ export default class StreamZip {
             sig: StreamZip.Central64EndHeader.signature.END64SIG,
             complete: this.readZip64CentralDirectoryComplete.bind(this),
         };
-        this.op.win.read(this.fileSize - this.op.chunkSize, this.op.chunkSize, this.readUntilFoundCallback.bind(this));
+        this.op.win.read(this.fileSize - this.op.chunkSize, this.op.chunkSize, this.readCentralDirectoryCallback.bind(this));
     }
 
     /**
@@ -449,7 +483,6 @@ export default class StreamZip {
         this.centralDirectory.size = zip64cd.size;
         this.centralDirectory.offset = zip64cd.offset;
         this.entriesCount = zip64cd.volumeEntries;
-        this.op = {};
         this.readEntries();
     }
 
@@ -485,7 +518,7 @@ export default class StreamZip {
             while (this.op.entriesLeft != 0) {
                 let entry = new ArcEntry(this, this.config.logErrors);
                 const headerLen = StreamZip.ArcHeader.getSize();
-                if (!entry.readArcHeader(buffer, bufferPos, bufferPos + bufferAvail)) {
+                if (!entry.getArcHeader(buffer, bufferPos, bufferPos + bufferAvail)) {
                     break;
                 }
                 entry.offset = this.op.win.position + bufferPos;
@@ -518,12 +551,20 @@ export default class StreamZip {
      */
     readEntries() {
         this.op = {
-            win: new FileWindowBuffer(this, "readEntries"),
             pos: this.centralDirectory.offset,
             chunkSize: this.chunkSize,
             entriesLeft: this.centralDirectory.volumeEntries,
         };
-        this.op.win.read(this.op.pos, Math.min(this.chunkSize, this.fileSize - this.op.pos), this.readEntriesCallback.bind(this));
+        if (this.buffer) {
+            this.op.win = {
+                buffer: this.buffer,
+                position: 0
+            }
+            this.readEntriesCallback(null, this.fileSize);
+        } else {
+            this.op.win = new FileWindowBuffer(this, "readEntries");
+            this.op.win.read(this.op.pos, Math.min(this.chunkSize, this.fileSize - this.op.pos), this.readEntriesCallback.bind(this));
+        }
     }
 
     /**
@@ -544,7 +585,7 @@ export default class StreamZip {
             while (this.op.entriesLeft > 0) {
                 if (!entry) {
                     entry = new ZipEntry(this, this.config.logErrors);
-                    entry.readCentralHeader(buffer, bufferPos);
+                    entry.getCentralHeader(buffer, bufferPos);
                     entry.headerOffset = this.op.win.position + bufferPos;
                     this.op.entry = entry;
                     this.op.pos += StreamZip.CentralHeader.getSize();
@@ -557,7 +598,7 @@ export default class StreamZip {
                     this.op.move = true;
                     return;
                 }
-                entry.read(buffer, bufferPos, this.textDecoder);
+                entry.getEntryName(buffer, bufferPos, this.textDecoder);
                 if (!this.config.skipEntryNameValidation) {
                     entry.validateName();
                 }
@@ -668,11 +709,15 @@ export default class StreamZip {
             throw err;
         }
         let src = Buffer.alloc(entry.compressedSize);
-        new FsRead(this, "entryDataSync", src, 0, entry.compressedSize, this.dataOffset(entry), (e) => {
-            err = e;
-        }).read(true);
-        if (err) {
-            throw err;
+        if (this.buffer) {
+            this.buffer.copy(src, 0, this.dataOffset(entry), this.dataOffset(entry) + entry.compressedSize);
+        } else {
+            new FsRead(this, "entryDataSync", src, 0, entry.compressedSize, this.dataOffset(entry), (e) => {
+                err = e;
+            }).read(true);
+            if (err) {
+                throw err;
+            }
         }
         let dst;
         let largeWindow, literalTree;
@@ -738,29 +783,42 @@ export default class StreamZip {
         if (!entry.isFile) {
             return callback(new Error('Entry is not file'));
         }
-        if (!this.fd) {
-            return callback(new Error('Archive closed'));
-        }
         if (this.arcType == StreamZip.TYPE_ARC) {
             /*
-             * ARC files contain only one set of file headers, which we have already
-             * read, so all we have to do is return the entry.
+             * ARC files contain only one set of file headers, which we have already read,
+             * so all we have to do is return the entry.
              */
             callback(null, entry);
         }
         else {
             /*
-             * ZIP files have both central directory entries (which were used to
-             * create the list of entries) and local directory entries, which is what
-             * we read now.
+             * ZIP files have both central directory entries (which were used to create the list
+             * of entries) and local directory entries, which is what we read now.
              */
+            if (this.buffer) {
+                /*
+                 * If we're using a buffer, we can simply use the buffer's data as the local header.
+                 */
+                try {
+                    entry.getLocalHeader(this.buffer, entry.offset);
+                    if (entry.encrypted) {
+                        return callback(new Error('Entry encrypted'));
+                    }
+                } catch (e) {
+                    return callback(e);
+                }
+                return callback(null, entry);
+            }
+            if (!this.fd) {
+                return callback(new Error('Archive closed'));
+            }
             const buffer = Buffer.alloc(StreamZip.LocalHeader.getSize());
             new FsRead(this, "openEntry", buffer, 0, buffer.length, entry.offset, (err) => {
                 if (err) {
                     return callback(err);
                 }
                 try {
-                    entry.readLocalHeader(buffer);
+                    entry.getLocalHeader(buffer, 0);
                     if (entry.encrypted) {
                         err = new Error('Entry encrypted');
                     }
@@ -1064,8 +1122,6 @@ export default class StreamZip {
 //     fs = customFs;
 // };
 
-util.inherits(StreamZip, events.EventEmitter);
-
 const propZip = Symbol('zip');
 
 StreamZip.async = class StreamZipAsync extends events.EventEmitter
@@ -1243,7 +1299,7 @@ class Entry
 
 class ArcEntry extends Entry
 {
-    readArcHeader(data, offset, length)
+    ArcHeader(data, offset, length)
     {
         StreamZip.ArcHeader.setData(data, offset, length);
         /*
@@ -1280,9 +1336,9 @@ class ArcEntry extends Entry
 
 class ZipEntry extends Entry
 {
-    readLocalHeader(data)
+    getLocalHeader(data, offset)
     {
-        StreamZip.LocalHeader.setData(data);
+        StreamZip.LocalHeader.setData(data, offset);
         StreamZip.LocalHeader.verifyField("signature", "LOCSIG");
         StreamZip.LocalHeader.assignField(this, ["version", "flags", "method"]);
         const time = StreamZip.LocalHeader.getField("time");
@@ -1301,7 +1357,7 @@ class ZipEntry extends Entry
         StreamZip.LocalHeader.assignField(this, ["fnameLen", "extraLen"]);
     }
 
-    readCentralHeader(data, offset)
+    getCentralHeader(data, offset)
     {
         StreamZip.CentralHeader.setData(data, offset);
         StreamZip.CentralHeader.verifyField("signature", "CENSIG");
@@ -1313,7 +1369,7 @@ class ZipEntry extends Entry
         StreamZip.CentralHeader.assignField(this, ["crc", "compressedSize", "size", "fnameLen", "extraLen", "comLen", "diskStart", "intAttr", "attr", "offset"]);
     }
 
-    read(data, offset, textDecoder)
+    getEntryName(data, offset, textDecoder)
     {
         const nameData = data.slice(offset, (offset += this.fnameLen));
         this.name = textDecoder? textDecoder.decode(new Uint8Array(nameData)) : nameData.toString('utf8');
@@ -1321,13 +1377,13 @@ class ZipEntry extends Entry
         this.isDirectory = lastChar === 47 || lastChar === 92;
 
         if (this.extraLen) {
-            this.readExtra(data, offset);
+            this.getEntryExtra(data, offset);
             offset += this.extraLen;
         }
         this.comment = this.comLen? data.slice(offset, offset + this.comLen).toString() : null;
     }
 
-    readExtra(data, offset)
+    getEntryExtra(data, offset)
     {
         let signature, size;
         const maxPos = offset + this.extraLen;
@@ -1337,26 +1393,26 @@ class ZipEntry extends Entry
             size = data.readUInt16LE(offset);
             offset += 2;
             if (StreamZip.ID_ZIP64 === signature) {
-                this.parseZip64Extra(data, offset, size);
+                this.getZip64Extra(data, offset, size);
             }
             offset += size;
         }
     }
 
-    parseZip64Extra(data, offset, length)
+    getZip64Extra(data, offset, length)
     {
         if (length >= 8 && this.size === StreamZip.EF_ZIP64_OR_32) {
-            this.size = ZipEntry.readUInt64LE(data, offset);
+            this.size = ZipEntry.getUInt64LE(data, offset);
             offset += 8;
             length -= 8;
         }
         if (length >= 8 && this.compressedSize === StreamZip.EF_ZIP64_OR_32) {
-            this.compressedSize = ZipEntry.readUInt64LE(data, offset);
+            this.compressedSize = ZipEntry.getUInt64LE(data, offset);
             offset += 8;
             length -= 8;
         }
         if (length >= 8 && this.offset === StreamZip.EF_ZIP64_OR_32) {
-            this.offset = ZipEntry.readUInt64LE(data, offset);
+            this.offset = ZipEntry.getUInt64LE(data, offset);
             offset += 8;
             length -= 8;
         }
@@ -1367,7 +1423,7 @@ class ZipEntry extends Entry
     }
 
     /**
-     * readUInt64LE(buffer, offset)
+     * getUInt64LE(buffer, offset)
      *
      * TODO: Should Zip64 support be using BigInts?  Because what this function is currently
      * doing cannot accurately handle integer values larger than 2^53 (Number.MAX_SAFE_INTEGER).
@@ -1376,7 +1432,7 @@ class ZipEntry extends Entry
      * @param {number} offset
      * @returns {number}
      */
-    static readUInt64LE(buffer, offset)
+    static getUInt64LE(buffer, offset)
     {
         return buffer.readUInt32LE(offset + 4) * 0x0000000100000000 + buffer.readUInt32LE(offset);
     }

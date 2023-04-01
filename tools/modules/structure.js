@@ -8,6 +8,34 @@
  */
 
 /**
+ * Structure is a helper class for defining and reading on-disk structures (no write support at the moment).
+ *
+ * Here's an example (from StreamZip.js):
+ *
+ *     static LocalHeader = new Structure("LocalHeader")
+ *       .field('signature',     Structure.UINT32, {
+ *           'LOCSIG': 0x04034b50                        // "PK\003\004" (local file header signature)
+ *       })
+ *       .field('version',       Structure.UINT16)       // version needed to extract
+ *       .field('flags',         Structure.UINT16, {     // general purpose bit flag
+ *           ENC:        0x0001,                         // encrypted file
+ *           COMP1:      0x0002,                         // compression option
+ *           COMP2:      0x0004,                         // compression option
+ *           DESC:       0x0008,                         // data descriptor
+ *           ENH:        0x0010,                         // enhanced deflation
+ *           STR:        0x0040,                         // strong encryption
+ *           LNG:        0x0400                          // UNICODE encoding
+ *       })
+ *       .field('method',        Structure.UINT16)       // compression method
+ *       .field('time',          Structure.UINT16)       // modification time
+ *       .field('date',          Structure.UINT16)       // modification date
+ *       .field('crc',           Structure.UINT32)       // uncompressed file CRC-32 value
+ *       .field('compressedSize',Structure.UINT32)       // compressed size
+ *       .field('size',          Structure.UINT32)       // uncompressed size
+ *       .field('fnameLen',      Structure.UINT16)       // filename length
+ *       .field('extraLen',      Structure.UINT16)       // extra field length
+ *       .verifySize(30);
+ *
  * @class Structure
  */
 export default class Structure {
@@ -113,6 +141,8 @@ export default class Structure {
     /**
      * setData(buf, offset, maxOffset)
      *
+     * Sets the buffer to be used by getField() and its siblings.
+     *
      * @this {Structure}
      * @param {Buffer} buf
      * @param {number} [offset]
@@ -163,6 +193,10 @@ export default class Structure {
             v = this._littleEndian? this._buf.readInt32LE(off) : this._buf.readInt32BE(off);
             break;
         case Structure.INT64:
+            /*
+             * TODO: As we noted in StreamZip, perhaps we should be using BigInts, because what this function is
+             * currently doing cannot accurately handle integer values larger than 2^53 (Number.MAX_SAFE_INTEGER).
+             */
             v = this._littleEndian?
                 (this._buf.readInt32LE(off) + this._buf.readInt32LE(off + 4) * 0x0000000100000000) :
                 (this._buf.readInt32BE(off) * 0x0000000100000000 + this._buf.readInt32BE(off + 4));
@@ -177,6 +211,10 @@ export default class Structure {
             v = this._littleEndian? this._buf.readUInt32LE(off) : this._buf.readUInt32BE(off);
             break;
         case Structure.UINT64:
+            /*
+             * TODO: As we noted in StreamZip, perhaps we should be using BigInts, because what this function is
+             * currently doing cannot accurately handle integer values larger than 2^53 (Number.MAX_SAFE_INTEGER).
+             */
             v = this._littleEndian?
                 (this._buf.readUInt32LE(off) + this._buf.readUInt32LE(off + 4) * 0x0000000100000000) :
                 (this._buf.readUInt32BE(off) * 0x0000000100000000 + this._buf.readUInt32BE(off + 4));

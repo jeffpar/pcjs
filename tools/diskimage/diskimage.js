@@ -44,6 +44,7 @@ function printError(err, filename)
  * NOTE: Some files, like ".BAS" files, aren't always ASCII, which is why we now call isText() on all
  * these file contents first.
  */
+let asARCFileExts = [".ARC", ".ZIP"];       // order must match StreamZip.TYPE_* constants
 let asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".LRF", ".MAK", ".TXT", ".XML"];
 
 /**
@@ -311,6 +312,18 @@ function isText(data)
         if ((b & 0x80) && !CharSet.isCP437(data[i])) return false;
     }
     return true;
+}
+
+/**
+ * isARCFile(sFile)
+ *
+ * @param {string} sFile
+ * @return {number} StreamZip TYPE value, or 0 if not an archive file
+ */
+function isARCFile(sFile)
+{
+    let sExt = path.parse(sFile).ext.toUpperCase();
+    return asARCFileExts.indexOf(sExt) + 1;
 }
 
 /**
@@ -983,7 +996,7 @@ function processDisk(di, diskFile, argv, diskette)
 
     if (argv['extract']) {
         let manifest = di.getFileManifest();
-        manifest.forEach(function extractManifestFile(desc) {
+        manifest.forEach(function extractDiskFile(desc) {
             /*
              * Parse each file descriptor in much the same way that buildFileTableFromJSON() does.  That function
              * doesn't get the file's CONTENTS, because it's working with the file descriptors that have been stored
@@ -1075,6 +1088,26 @@ function processDisk(di, diskFile, argv, diskette)
                             return;
                         }
                         printf("extracting: %s\n", sFile);
+                    }
+                    if (argv['expand']) {
+                        let arcType = isARCFile(sFile);
+                        if (arcType) {
+                            let zip = new StreamZip({
+                                file: sFile,
+                                buffer: db.buffer,
+                                arcType: arcType,
+                                storeEntries: true,
+                                nameEncoding: "ascii",
+                                printfDebug: printf,
+                                logErrors: true
+                            }).on('ready', () => {
+                                let aFileData = getARCFiles(zip, argv['verbose']);
+                                zip.close();
+                            }).on('error', (err) => {
+                                printError(err, sFile);
+                            });
+                            zip.open();
+                        }
                     }
                     /*
                      * Originally, "normalize" was just an import option (to fix line endings of known text files on
@@ -1758,6 +1791,110 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
 }
 
 /**
+ * getARCFiles(zip, fVerbose)
+ *
+ * @param {StreamZip} zip
+ * @param {boolean} fVerbose
+ * @returns {Array.<FileData>}
+ */
+function getARCFiles(zip, fVerbose)
+{
+    let aFileData = [];
+    let aDirectories = [];
+    if (fVerbose) {
+        printf("\n%s\n", zip.fileName);
+        printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
+        printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
+    }
+    let entries = Object.values(zip.entries());
+    for (let entry of entries) {
+
+        let file = {path: entry.name, name: path.basename(entry.name), nameEncoding: "cp437"};
+        //
+        // The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
+        // because file times stored in a ZIP file are *local* times.
+        //
+        // So I've updated StreamZip to include the file's local time as a Date object
+        // ('date') in the entry object.  If it's not available (eg, we're using an older
+        // version of StreamZip), then we'll fall back to our 'time' field work-around.
+        //
+        file.date = entry.date;
+        if (!file.date) {
+            let date = new Date(entry.time);
+            file.date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+        }
+        if (entry.isDirectory) {
+            file.attr = DiskInfo.ATTR.SUBDIR;
+            file.size = -1;
+            file.data = new DataBuffer();
+            file.files = [];
+            aDirectories.push(file);
+        } else {
+            let data;
+            if (fVerbose == "nodata") {
+                /*
+                 * HACK to skip decompression (--verbose=nodata)
+                 */
+                data = new DataBuffer(entry.size);
+            }
+            else {
+                try {
+                    data = zip.entryDataSync(entry.name);
+                } catch(err) {
+                    if (entry.error) {
+                        entry.error(err.message);
+                    } else {
+                        printError(err);
+                    }
+                }
+                data = new DataBuffer(data || 0);
+            }
+            file.attr = DiskInfo.ATTR.ARCHIVE;
+            file.size = data.length;
+            file.data = data;
+        }
+        if (entry.errors) {
+            for (let error of entry.errors) {
+                printf("%s\n", error);
+            }
+        }
+        let d, sDir = path.dirname(file.path) + path.sep;
+        for (d = 0; d < aDirectories.length; d++) {
+            let dir = aDirectories[d];
+            if (dir.path == sDir) {
+                dir.files.push(file);
+                break;
+            }
+        }
+        if (d == aDirectories.length) {
+            aFileData.push(file);
+        }
+        if (fVerbose) {
+            let methodsARC = [
+                "Unpacked"
+            ];
+            let methodsZIP = [
+                "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
+            ];
+            let filename = CharSet.fromCP437(file.name);
+            if (filename.length > 14) {
+                filename = "..." + filename.slice(filename.length - 11);
+            }
+            let filesize = file.size;
+            if (filesize < 0) {
+                filesize = 0;
+                filename += "/";
+            }
+            let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
+            let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
+            printf("%-14s %7d   %-9s %7d   %3d%%   %T   %08x\n",
+                filename, filesize, method, entry.compressedSize, ratio, file.date, entry.crc);
+        }
+    }
+    return aFileData;
+}
+
+/**
  * readARCFiles(sARC, arcType, sLabel, fVerbose, done)
  *
  * @param {string} sARC (ARC/ZIP filename)
@@ -1777,97 +1914,7 @@ function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
         logErrors: true
     });
     zip.on('ready', () => {
-        let aFileData = [];
-        let aDirectories = [];
-        if (fVerbose) {
-            printf("\n%s\n", sARC);
-            printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
-            printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
-        }
-        let entries = Object.values(zip.entries());
-        for (let entry of entries) {
-            let file = {path: entry.name, name: path.basename(entry.name), nameEncoding: "cp437"};
-            //
-            // The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
-            // because file times stored in a ZIP file are *local* times.
-            //
-            // So I've updated StreamZip to include the file's local time as a Date object
-            // ('date') in the entry object.  If it's not available (eg, we're using an older
-            // version of StreamZip), then we'll fall back to our 'time' field work-around.
-            //
-            file.date = entry.date;
-            if (!file.date) {
-                let date = new Date(entry.time);
-                file.date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-            }
-            if (entry.isDirectory) {
-                file.attr = DiskInfo.ATTR.SUBDIR;
-                file.size = -1;
-                file.data = new DataBuffer();
-                file.files = [];
-                aDirectories.push(file);
-            } else {
-                let data;
-                if (fVerbose == "nodata") {
-                    /*
-                     * HACK to skip decompression (--verbose=nodata)
-                     */
-                    data = new DataBuffer(entry.size);
-                }
-                else {
-                    try {
-                        data = zip.entryDataSync(entry.name);
-                    } catch(err) {
-                        if (entry.error) {
-                            entry.error(err.message);
-                        } else {
-                            printError(err);
-                        }
-                    }
-                    data = new DataBuffer(data || 0);
-                }
-                file.attr = DiskInfo.ATTR.ARCHIVE;
-                file.size = data.length;
-                file.data = data;
-            }
-            if (entry.errors) {
-                for (let error of entry.errors) {
-                    printf("%s\n", error);
-                }
-            }
-            let d, sDir = path.dirname(file.path) + path.sep;
-            for (d = 0; d < aDirectories.length; d++) {
-                let dir = aDirectories[d];
-                if (dir.path == sDir) {
-                    dir.files.push(file);
-                    break;
-                }
-            }
-            if (d == aDirectories.length) {
-                aFileData.push(file);
-            }
-            if (fVerbose) {
-                let methodsARC = [
-                    "Unpacked"
-                ];
-                let methodsZIP = [
-                    "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
-                ];
-                let filename = CharSet.fromCP437(file.name);
-                if (filename.length > 14) {
-                    filename = "..." + filename.slice(filename.length - 11);
-                }
-                let filesize = file.size;
-                if (filesize < 0) {
-                    filesize = 0;
-                    filename += "/";
-                }
-                let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
-                let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
-                printf("%-14s %7d   %-9s %7d   %3d%%   %T   %08x\n",
-                    filename, filesize, method, entry.compressedSize, ratio, file.date, entry.crc);
-            }
-        }
+        let aFileData = getARCFiles(zip, fVerbose);
         zip.close()
         done(aFileData);
     });

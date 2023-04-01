@@ -678,6 +678,25 @@
       ]
     },
     {
+      "name": "Node: diskimage.js --extract --expand",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "DISK0212.ZIP",
+        "--extract",
+        "--expand",
+        "--overwrite",
+        "--verbose"
+      ],
+      "cwd": "${workspaceFolder}/tmp",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskimage.js --zip --list",
       "type": "node",
       "request": "launch",
