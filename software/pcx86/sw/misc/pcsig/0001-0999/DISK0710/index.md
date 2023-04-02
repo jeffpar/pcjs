@@ -6,16 +6,30 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #710"
+      B: "PC-SIG Library Disk 0710"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #710
+## Information about "INSTACALC"
+
+    INSTACALC is a full-featured spreadsheet program with an interesting
+    twist: it's memory-resident.  This means that on the first run, nothing
+    seems to happen.  INSTACALC has simply been loaded into memory and is
+    now waiting for you to call it up by pressing ``Alt I''. INSTACALC waits
+    patiently while you type a letter with your wordprocessor, update your
+    database, or whatever.  Then when you press ``Alt I'', it's on the
+    screen and ready to serve you.  This has some very useful applications,
+    such as incorporating part of a spreadsheet table into a wordprocessing
+    file, or cutting and pasting with other programs.  You can import and
+    export from Lotus 1-2-3, dBASE, and .DIF files.  PC Magazine made
+    INSTACALC an Editor's Choice among low cost spreadsheets.
+
+### Directory of PC-SIG Library Disk 0710
 
      Volume in drive A has no label
      Directory of A:\

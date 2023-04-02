@@ -6,16 +6,81 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #317"
+      B: "PC-SIG Library Disk 0317"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #317
+## Information about "DATABASE PROGRAMS"
+
+    A collection of database management programs.  The mailing labels
+    program allows sorting by four fields and keying printing of labels by
+    any field.  PMB15.BAS provides a way of keeping track of events which
+    occur periodically such as bills, preventive maintenence items, dental
+    appointments, etc.  INDXCARD.BAS is intended to make it very easy to
+    create and maintain 3" by 5" card files.  By itself, it forms an
+    electronic typewriter with full editing facilities for the 3 by 5 card
+    format.  It can be used with the program PC- FILE III.
+    
+    Features:
+    
+    ~ Forms an electronic typewriter with full editing facilities.
+    ~ Uses PC-FILE to sort index cards prior to printing.
+    ~ Sorts a mailing list by four fields.
+    ~ Prints one across or two across labels.
+    ~ Keeps track of bills, preventive maintenence items, dental
+    appointments.
+    ~ Writes your appointments  or  activities for the whole year.
+    ~ Schedules your activities from 6 a.m. till 10 p.m.
+    ~ Creates a computerized Rolodex.
+    
+    System Requirements:  Two disk drives, a Color/Graphics
+    Adapter Card (color not used), Epson MX-80 (or compatible) printer.
+    
+    How to Start: Consult the .DOC files for documentation and
+    directions.  To run the BASIC programs follow the GETTING STARTED
+    instructions for your configuration.
+    
+    File Descriptions:
+    
+    ADDRESS1 FIL  Subroutine for the above program
+    ADDRESS  BAS  Random address file and mailing label printing program
+    FRM      BAS  BASIC program to generate blank 3" by 5"index cards
+    FILECAB  BAS  BASIC program to create and maintain databases
+    BOOKINV  BAS  Menu for book tracking in the library
+    BARRGOLD FRM  Format of gold prices quotes
+    INDXCARD BAS  BASIC program to generate index cards
+    INDXCARD BAT  A DOS batch file to prepare a data disk
+    INDXCARD CMP  A BASIC program to compress data
+    INDXCARD DTA  Card data entered by INDXCARD.BAS
+    INDXCARD DOC  Documentation for INDXCARD.BAS
+    PC^3LOG  FRM  Format for meeting reminder and log for PC meetings
+    MAIL1    DOC  Documentation for MAIL1.BAS
+    MAIL1    BAS  Mailing list program
+    INDXCARD RPT  Used by PC-FILE to clone sorted data
+    INDXCARD KEY  Key definitions used by INDXCARD.BAS
+    INDXCARD INX  Index file used by PC-FILE
+    INDXCARD HDR  Field definitions used by PC-FILE
+    INDXCARD FRM  Card format created by INDXCARD.BAS
+    PMB15    DOC  Documentation for PMB15.BAS
+    PMB15    BAS  A preventive maintenance, bills and message program
+    WSJSTOCK FRM  Format for stock prices
+    WEATHER  FRM  Format for weather report
+    VWREPAIR FRM  Format for VW Rabbit service log
+    TEST     FRM  Format for test pattern
+    SCHEDU   DOC  Documentation for SCHEDU.BAS
+    SCHEDU   BAS  A BASIC program to generate and maintain calendars
+    ROLODEX  DOC  Documentation for Rolodex.bas
+    ROLODEX  BAS  A computerized Rolodex
+    ???      BAK  Backup or information files
+    ITEMDATA DAT  Data file for PMB
+    GRAPHICS      Graphics subdirectory
+
+### Directory of PC-SIG Library Disk 0317
 
      Volume in drive A has no label
      Directory of A:\

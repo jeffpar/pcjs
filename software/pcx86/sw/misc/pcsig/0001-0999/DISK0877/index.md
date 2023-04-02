@@ -6,16 +6,50 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #877"
+      B: "PC-SIG Library Disk 0877"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #877
+## Information about "BARCODE, HYDE, AND DOVETAIL III"
+
+    You've seen them everywhere: on your soda can, at the grocery store, on
+    the TV guide -- those groups of lines with numbers under them. BARCODE
+    allows you to print these bar code labels on your printer. It is
+    designed to print code three of nine, a type of bar code which allows
+    both alphabetic and numeric characters. Labels can be printed up to 15
+    characters in length.
+    
+    Define the placement of the bar codes, place a description over each
+    code, print single or multiple copies of one bar code, or print a run of
+    sequentially-numbered bar codes. BARCODE can hold three different
+    printer configurations, and can switch between these configurations with
+    one key stroke. The three configurations can be modified to accommodate
+    a multitude of printers and are pre-configured for IBM graphics, APA
+    graphics, and Epson graphics printers.
+    
+    Protect your data -- HYDE allows you to hide/unhide files. When you
+    hide a file, it won't be accessible by DOS until you use the unhide
+    program.
+    
+    DOVETAIL III merges a form letter with addresses from a mailing list and
+    even addresses envelopes.  It works with mailing lists and form letters
+    written with WordStar, Easywriter or PerfectWriter.  Source code is in
+    BASIC and the executable program file is also included.
+    File Descriptions:
+    
+    IIIDOCMT BAS  BASIC source code of the documentation.
+    IIIDOCMT EXE  Compiled version of the documentation.
+    IIIDOVE  BAS  The main program in BASIC source code.
+    IIIDOVE  EXE  Compiled version of the main program.
+    SAMPL*** WS   Sample file written with WORDSTAR (3 files).
+    UNWS     EXE  Utility file to remove WORDSTAR buried commands.
+
+### Directory of PC-SIG Library Disk 0877
 
      Volume in drive A has no label
      Directory of A:\

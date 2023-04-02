@@ -6,16 +6,84 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #664"
+      B: "PC-SIG Library Disk 0664"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #664
+## Information about "TEACHERS SPECIAL"
+
+    This diskette contains a mix of educational programs designed to help
+    both the teacher and the student.  The Register, "written by a teacher
+    for teachers and tested in the classroom," is a grade database that
+    will keep track of students' marks by course.  This is a fully featured
+    demo version of the larger Register package.
+    
+    Differences between DEMO and REGULAR versions
+    
+    DEMO                                     REGULAR
+    -limited to 13 students                  -maximum of 135 students
+    per file                                 per file
+    -limited to 6 grades in                  -22 grades in 3 different
+    3 different categories                   categories -- total of
+    total of 18 grades                       66 grades per student
+    each quarter (4)                         each quarter (4)
+    -no personalized information             -personalized information
+    for printouts                            on all printouts
+    -default print (pica)                    -elite print
+    -README.DOC file for partial             -manual on disk
+    manual
+    -grades are NUMBERS only                 -grades are NUMBERS only
+    
+    The Atlas Software group as developed three color graphics and sound
+    programs to drill students on history, our solor system and
+    mathematical factors.  The STAR program will generate star charts.
+    Each program has well developed on-line documentation and Register
+    comes with over 40k of documentation.
+    
+    System Requirements:  128K, one disk drive (two floppies recommended)
+    and a monochrome display.
+    
+    How to Start:  To run BASIC programs consult the directions in GETTING
+    STARTED for your configuration.  Consult READSTAR.ME and MANUAL.DOC for
+    program documentation.
+    
+    Suggested Registration:  $45.00 for REGISTER.
+    
+    File Descriptions:
+    
+    ATLAS    BAS  Screen Image for Atlas package
+    -------- ---  -  Atlas Package
+    ERROR    BAS  Atlas program routine
+    ATLASARM BAS  Screen Image
+    GRADE    000  Demonstration data
+    -------- ---  -  Register Program (v1.0)
+    REGISTER      Atlas registration information
+    MULTID   BAS  Program: Multitime
+    MENU2    BAS  Atlas program routine
+    MENU     BAS  Main Menu program, run this first
+    NTP      BAS  Program: Name That Planet
+    HQ       BAS  Program: Historomaina
+    MANUAL   DOC  Documentation for Register, about 40k
+    INSTALL  COM  Installation program, read manual
+    GRADES   111  Demonstration data
+    GRADE    COM  Main register program
+    NAMES    11   Demonstration data
+    -------- ---  -  Star Program
+    READ     ME   Startup information
+    STAR     BAS  BASIC program, Star, will run from BASIC only
+    GO       BAT  Startup information for entire disk
+    READSTAR ME   Startup information
+    STAR     DAT  Program information
+    HARD     BAT  Installs on hard system
+    FLOPPY   BAT  Installs on floppy system
+    SAMPLES  DOC  Sample documentation file
+
+### Directory of PC-SIG Library Disk 0664
 
      Volume in drive A has no label
      Directory of A:\

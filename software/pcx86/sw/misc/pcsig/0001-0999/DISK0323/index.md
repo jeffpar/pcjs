@@ -6,16 +6,44 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #323"
+      B: "PC-SIG Library Disk 0323"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #323
+## Information about "TRANSTOK"
+
+    TRANSTOK helps anyone interested in the stock market to easily download
+    constantly updated stock market information from The Source (a public
+    communications network).
+    
+    TRANSTOCK acts as a data translator, enabling any data management
+    software (spreadsheets, databases, graphics programs, etc.) to use this
+    information for analysis and trend development.  Stock information can
+    be imported to dBase II, III III+, Multiplan and Lotus 1-2-3.
+    
+    Track your stocks, analyze trends and be on top of your investments!
+    File Descriptions:
+    
+    READ-ME   1ST  How to use PRINTDOC.BAT.
+    PRINTDOC  BAT  Batch file to print documentation.
+    PRINTDOC  MSG  Documentation message.
+    TRANSTOK  DOC  Full Documentation for TRANSTOK.
+    TRANSTOK  EXE  Main program.
+    TRANSTOK  DFL  Default information file.
+    TRANSTOK  DF2  Copy of TRANSTOK.DFL.
+    DEFAULTS  EXE  Customizes TRANSTOK for you -- do first..
+    AMEX      STB  Stock name abbreviations.
+    NYSE      STB  Stock name abbreviations.
+    STOKCHEK  DJI  Sample data file.
+    UNISTOX   DJI  Sample data file.
+    UNISTOX   DJC  Sample data file.
+
+### Directory of PC-SIG Library Disk 0323
 
      Volume in drive A has no label
      Directory of A:\

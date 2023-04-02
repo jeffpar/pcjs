@@ -6,16 +6,30 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #837"
+      B: "PC-SIG Library Disk 0837"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #837
+## Information about "HOME MONEY MANAGER"
+
+    Enter transactions in up to 12 check registers, keep track of your
+    balance and reconcile your bank statements. You can void, search, edit,
+    reconcile, mark as cleared, and consolidate your recorded transactions.
+    HMM will support split transactions and keep running totals for each
+    account.
+    
+    You'll know the amount of money you are spending in any of 84
+    categories. This program also provides a variety of reports that can
+    help you organize your records at tax time or just report on where and
+    how much money was spent and on what. On-line help screens are provided
+    to guide you as you use the program.
+
+### Directory of PC-SIG Library Disk 0837
 
      Volume in drive A has no label
      Directory of A:\

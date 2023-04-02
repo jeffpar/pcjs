@@ -6,16 +6,37 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #123"
+      B: "PC-SIG Library Disk 0123"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #123
+## Information about "LETUS A-B-C VOL 3"
+
+    Letus A-B-C is a database in PC-FILE III format containing references
+    to articles in six major PC oriented magazines, beginning with 1982.
+    This disk of Letus A-B-C covers the following four magazines devoted
+    to the IBM PC: PC Magazine (PCMAG), PC World (PCW), and PC Tech
+    Journal (PCTEC), Byte Magazine (BYTE).  This is the third of a three
+    disk set (#121-123).  See Disk #121 for a complete description.
+    
+    Suggested Registration:  $10.00 per disk.
+    
+    File Descriptions:
+    
+    PLOGO83  COM  Prints out LETUS A-B-C documentation
+    LOGO83B  COM  Generates Letus logo
+    LETUS    BAT  Batch file for starting Letus
+    BYTE83   ???  Byte 1983 magazine reference files (4 files)
+    PCTEC83  ???  PC Tech Journal 1983 magazine reference files (4 files)
+    PCMAG83B ???  PC Magazine 2nd 6 months 1983 reference files (4 files)
+    PCW83    ???  PC World 1983 magazine reference files (4 files)
+
+### Directory of PC-SIG Library Disk 0123
 
      Volume in drive A has no label
      Directory of A:\

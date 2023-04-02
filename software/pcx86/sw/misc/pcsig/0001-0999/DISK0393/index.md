@@ -6,16 +6,35 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #393"
+      B: "PC-SIG Library Disk 0393"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #393
+## Information about "CHECKBOOK MANAGEMENT 1 OF 2 (ALSO 2049)"
+
+    CHECKBOOK MANAGEMENT is a complete checkbook management system which
+    takes the check register one step further while helping you to maintain
+    your budget. It's good for personal and small business checking
+    accounts.
+    
+    Record all forms of checking account transactions, including bank
+    charges, ATM deposits and withdrawals, and interest. CHECKBOOK
+    MANAGEMENT writes checks, but you can also reconcile bank
+    statements and get a variety of reports on itemized transactions and
+    periodic summaries. You can keep up to 3000 transactions on floppies,
+    or an unlimited number if you use a hard disk.
+    
+    Establish budget categories and assign each transaction item to a
+    budget classification. This flexible program lets you change these
+    designations as needed. At last, you'll be able to find out just where
+    it all goes!
+
+### Directory of PC-SIG Library Disk 0393
 
      Volume in drive A has no label
      Directory of A:\

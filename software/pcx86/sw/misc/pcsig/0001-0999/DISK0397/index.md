@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #397"
+      B: "PC-SIG Library Disk 0397"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #397
+## Information about "CHEKLIST SYSTEM"
+
+    A simple system for maintaining bank account records for the home that
+    provides the functions you need to keep your bank-related information
+    accurate and up-to-date.
+    
+    Track up to 10 bank accounts with 1000 entries, or transactions.
+    Maintain ledger accounts, draw instant balances, bank statement
+    reconciliations and flexible search and sort options.
+    
+    Convenient to use, this checkbook manager provides thorough
+    recordkeeping for today's harried householder.
+
+### Directory of PC-SIG Library Disk 0397
 
      Volume in drive A has no label
      Directory of A:\

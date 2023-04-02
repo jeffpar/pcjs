@@ -6,16 +6,25 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #742"
+      B: "PC-SIG Library Disk 0742"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #742
+## Information about "CHURCH MEMBERSHIP SYSTEM"
+
+    The CHURCH MEMBERSHIP SYSTEM, designed as a database to keep track of
+    members of your church, works equally well for your group, club, or
+    business. Keep track of birthdays and anniversaries, or any other
+    special or important dates. Some of the handy features include:
+    modify/delete, browsing, and making multiple reports. Menu-driven and
+    user-friendly.
+
+### Directory of PC-SIG Library Disk 0742
 
      Volume in drive A has no label
      Directory of A:\

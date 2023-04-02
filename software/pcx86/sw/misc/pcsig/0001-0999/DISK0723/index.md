@@ -6,16 +6,25 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #723"
+      B: "PC-SIG Library Disk 0723"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #723
+## Information about "SUPER PINBALL"
+
+    SUPER PINBALL is a collection of five great pinball games, each with a
+    unique layout. You control the flippers with your left- and right-shift
+    keys for realistic pinball action. The disk is menu-driven, letting you
+    jump between games without exiting to DOS.  No documentation is provided
+    with this disk and none is needed -- simply type GO and choose your
+    game.
+
+### Directory of PC-SIG Library Disk 0723
 
      Volume in drive A has no label
      Directory of A:\

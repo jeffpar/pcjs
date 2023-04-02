@@ -6,16 +6,48 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #247"
+      B: "PC-SIG Library Disk 0247"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #247
+## Information about "BOBCAT"
+
+    BOBCAT is a database of small business computer information.  Reviews,
+    tutorials, general articles, buying guides, even ads on special
+    products that apply to small businesses are listed.  The database may
+    be searched by any combination of category, subject, form, product or
+    company name.  BOBCAT is distributed as user-supported software in Jim
+    Button's PC-File III format.  BOBCAT needs PC-File III, or other
+    similar program to sort and print information and indexes in a usable
+    format.
+    
+    System Requirements: 2 disk drives, PC-FILE III (Disk No 5)
+    
+    How to Start: It is very important to read the Documentation file
+    BOBCAT.TXT.  To run it, bring up PC-FILE and enter BOBCAT as you would
+    any database/data file.
+    
+    Suggested Registration:  $10.00
+    
+    File Descriptions:
+    
+    BOBCAT01 DTA  Data base
+    CATEGORY RPT  Part of BOBCAT
+    MAG      RPT  Formats a report for data from BOBCAT01.DTA
+    MAG      DTA  Data base
+    MAG      INX  Index
+    MAG      HDR  Header information
+    ORDERFRM TXT  Order form and information to communicate with author
+    BOBCAT   TXT  Help program
+    BOBCAT01 HDR  Header information
+    BOBCAT01 INX  Index
+
+### Directory of PC-SIG Library Disk 0247
 
      Volume in drive A has no label
      Directory of A:\

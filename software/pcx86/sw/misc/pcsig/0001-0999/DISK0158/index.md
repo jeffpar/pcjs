@@ -6,16 +6,33 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #158"
+      B: "PC-SIG Library Disk 0158"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #158
+## Information about "IBM USERS GROUP #3"
+
+    File Descriptions:
+    
+    ???????  NL   Data file (21 files).
+    ADDRESS  SCR  Data file.
+    AUTOEXEC BAT  Batch file to automatically start the program.
+    ???????  PIC  Data picture file (10 files).
+    DESCRIBE      Description about program.
+    EXPNDTAB ASM  Assembly program to expand tabs.
+    ???????? PRO  Data file (4 files).
+    MASTHEAD      Information file.
+    NEWS     EXE  Main program.
+    PCUGNEWS TOC  Information file.
+    TESTTAB  PAS  Pascal program to expand tabs.
+    WEBER    SCR  Article from the author.
+
+### Directory of PC-SIG Library Disk 0158
 
      Volume in drive A has no label
      Directory of A:\

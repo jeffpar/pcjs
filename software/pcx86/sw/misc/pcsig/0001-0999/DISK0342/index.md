@@ -6,16 +6,41 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #342"
+      B: "PC-SIG Library Disk 0342"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #342
+## Information about "GOLF SCORECARD"
+
+    A menu-driven system that keeps track of golf scores.  Keeps track of
+    a number of golfers, courses, and golf rounds.  Good way to track the
+    improvement of your golf game.  It is written in BASIC, and includes a
+    compiled, as well as the source files.  For the computer-oriented
+    golfer, or the golf oriented computist, a handy analysis tool.
+    
+    System Requirements:  Two disk drives;
+    
+    How to Start:  Load DOS and type GOLFCARD to enter the main program.
+    Consult README.DOC for additional program information.
+    
+    File Descriptions:
+    
+    COURSPTR DAT  Pointer for number of courses in COURSE.DAT
+    COURSE   DAT  Golf course data
+    GOLFPTR  DAT  Pointer for the number of golfers in GOLFERS.DAT
+    GOLFERS  DAT  Contains data on golfers
+    GOLFCARD EXE  Main program [type in to run GOLFCARD program]
+    GOLFCARD BAS  Basic source for GOLFCARD program
+    ROUNDPTR DAT  Pointer for the number of rounds in ROUND.DAT
+    ROUND    DAT  Golfers round data
+    README   DOC  Introduction
+
+### Directory of PC-SIG Library Disk 0342
 
      Volume in drive A has no label
      Directory of A:\

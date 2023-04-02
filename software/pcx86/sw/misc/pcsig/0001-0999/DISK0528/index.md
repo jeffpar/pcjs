@@ -6,16 +6,25 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #528"
+      B: "PC-SIG Library Disk 0528"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #528
+## Information about "NEW YORK WORD"
+
+    NEW YORK WORD is a powerful word processor that allows split-screen
+    editing, movement of text between windows, and creation of macros (to
+    perform functions with just a few keystrokes), and footnotes.  It also
+    features automatic table of contents, automatic index generation,
+    automatic hyphenation, and mail merge.  This shareware package is more
+    powerful than some retail word processors.
+
+### Directory of PC-SIG Library Disk 0528
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,36 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #966"
+      B: "PC-SIG Library Disk 0966"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #966
+## Information about "ASTROL95 - ASTROLOGY PROGRAM"
+
+    Know what the stars have in store for you, your family and friends.
+    ASTROL96 is a comprehensive astrology program that calculates the
+    zodiacal positions of all of the planets and the sun, moon, and the 12
+    house cusps for any date, time, and place. Display the aspects and
+    midpoints between the planets, ascendant, and midheaven and
+    midpoint/planet conjunctions.
+    
+    ASTROL96 lets you calculate a person's transits for up to one year.
+    Charts can be displayed in either graphic chartwheel format or in non-
+    graphic format. The charts can be saved to disk, reviewed, deleted,
+    sorted alphabetically, and compared with other charts.
+    
+    You can compare mutual aspects and indexes of communication for
+    compatibility, as well as conduct rapid searches for compatible matches
+    between charts.
+    
+    So, what's your sign?
+
+### Directory of PC-SIG Library Disk 0966
 
      Volume in drive A has no label
      Directory of A:\

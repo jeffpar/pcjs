@@ -6,16 +6,38 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #759"
+      B: "PC-SIG Library Disk 0759"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #759
+## Information about "WRITER'S HEAVEN AND MOREPERFECT"
+
+    WRITER'S HEAVEN transforms the popular wordprocessing program PC-Write
+    into one of the fastest and most efficient editing tools today.
+    
+    WRITER'S HEAVEN, using PC-WRITE's own macro feature, grafts a unique
+    keyboard structure onto PC-WRITE itself.  The result is a
+    wordprocessor that combines speed, power, simplicity, and ease of
+    learning -- a wordprocessor that brings on-screen editing significantly
+    closer to the speed of thought.  While most of the principal PC-WRITE
+    command keys remain intact as an alternate command set, you can now edit
+    text without ever moving your hands from the typewriter position, and
+    you can do it faster than ever before.
+    
+    Here is a utility program WordPerfect fans should have.  MOREPERFECT
+    adds to the word processing program a new set of command keys in an
+    ingenious arrangement.  With a single keystroke, you can move the cursor
+    or delete--by character, word, line, sentence, paragraph, or page--
+    forward or backward--without moving your hands from the letter keys!
+    MOREPERFECT can double your editing speed, yet it's easy to learn and
+    use.
+
+### Directory of PC-SIG Library Disk 0759
 
      Volume in drive A has no label
      Directory of A:\

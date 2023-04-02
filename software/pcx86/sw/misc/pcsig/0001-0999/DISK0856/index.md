@@ -6,16 +6,65 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #856"
+      B: "PC-SIG Library Disk 0856"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #856
+## Information about "FUNCTION KEY HELPER/FONT EDITOR/GROCERY"
+
+    Make lists of the uses of function keys for various programs and add or
+    edit a function-key template.  Many are already included on this disk --
+    Lotus 1-2-3, WordStar, WordPerfect, Multimate, PROCOMM, SuperCalc, RBBS,
+    Turbo Lightning, and more.
+    
+    Once a template is created, you may print the function-key assignments
+    for quick and easy reference.  Up to eight templates may be printed on a
+    page and they include the Shift, Ctrl, and Alt-function key sequences
+    in addition to the normal uses.
+    
+    Design and display your own special font characters.  Two font editors
+    have been provided: one for medium-resolution modes and the other for
+    high-resolution mode.
+    
+    After a font file is loaded or created, the entire font set is displayed
+    at the bottom of the screen (all 128 characters) and the upper-right
+    corner displays the bit mapping of a single font set.  You can edit each
+    bit or pixel of a certain character.  The character can be rotated,
+    moved, inverted, copied, and saved for future use.
+    
+    The upper-left corner contains a menu of function-key commands for easy
+    reference.  Once you have created a font set to your satisfaction, you
+    can access and use the file with Assembler, Pascal, C, BASIC or any
+    other language that allows you to load the font file into a specific
+    location in memory and then program DOS to acknowledge that location.
+    
+    FONT EDITOR will not only help you to create your own fonts, but it can
+    also help you design game graphics characters that make moving screen
+    objects easier and neater to code.
+    
+    Save your budget and your diet. Never go into a grocery store without a
+    grocery list and don't deviate from it once you're in the store. Know
+    what you need, go get it, and get out while you're still in control.
+    How? Use GROCERY!
+    
+    The marketing specialists know that if we wander around without a
+    specific idea of what to buy, we're more likely to "impulse buy."
+    GROCERY keeps track of grocery items bought on a regular, or irregular,
+    basis. Items are stored in aisles, and the program will handle up to
+    30 aisles with 36 items in each. Duplicate the floorplan and layout of
+    your favorite store. Once all the data is entered, you can print out the
+    entire list or only the items that you select. The printout is quick
+    and organized according to aisle.
+    
+    A few more words of advice -- never shop hungry and don't look at the
+    aisle end-caps!
+
+### Directory of PC-SIG Library Disk 0856
 
      Volume in drive A has no label
      Directory of A:\

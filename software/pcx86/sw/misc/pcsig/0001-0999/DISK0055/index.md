@@ -6,16 +6,26 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #55"
+      B: "PC-SIG Library Disk 0055"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #55
+## Information about "GAME SERIES NO 9"
+
+    SMSPOKER is similar to a Las Vegas poker machine.  It's a solo game
+    played against the deck/machine.  You are dealt five cards in a
+    horizontal row.  The better the hands you get, the more $$ you can
+    win.  Between each poker hand, the game asks if you want to bet on
+    whether a random card drawn from the deck is higher or lower than eight.
+    Game features include adjustable playing speed, dealer/player
+    interaction, and real awards to registered winners.
+
+### Directory of PC-SIG Library Disk 0055
 
      Volume in drive A has no label
      Directory of A:\

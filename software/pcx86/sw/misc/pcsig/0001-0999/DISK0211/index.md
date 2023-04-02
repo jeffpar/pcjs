@@ -6,16 +6,41 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #211"
+      B: "PC-SIG Library Disk 0211"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #211
+## Information about "JUSTIFY AND SPEED READ"
+
+    JUSTIFY is a proportional spacing device for text printed on IBM,
+    EPSON or STAR Micronics printers.  The Speed Reading Demo gives you a
+    solid overview of this commercial program's style and exercises.
+    LINEBUG is a very useful BASIC utility to verify line numbering.
+    
+    System Requirements: Two drives, BASIC
+    
+    How to Start: After loading BASICA from DOS, switch disks to drive
+    A: and type SR.BAS or LINEBUG.BAS.  Run JUSTIFY.EXE directly from
+    DOS.
+    
+    File Descriptions:
+    
+    LINEBUG  BAS  Part of JUSTIFY.EXE
+    TIMED    TXT  Part of Speed Reading demo
+    SR       BAS  Speed Reading demo  (BBP)
+    JUSTIFY  EXE  Right/left micro-justifies text  (COMFAX)
+    JUSTIFY  ASM  Assembler source code
+    EYE      TXT  Part of Speed Reading demo
+    ART      TXT  Part of Speed Reading demo
+    TUTOR2        Part of JUSTIFY.EXE
+    TUTORIAL      Part of JUSTIFY.EXE
+
+### Directory of PC-SIG Library Disk 0211
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,71 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #435"
+      B: "PC-SIG Library Disk 0435"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #435
+## Information about "TURBO PASCAL SET #11"
+
+    This disk contains three separate sets of Turbo Pascal routines.
+    Looking at the directory, all but the last three entries pertain to
+    the package of statistical distribution functions.  The distributions
+    include the Beta, Log Gamma, Incomplete Gamma, F, T, Chi-square, and
+    Normal distributions; both the forward and inverse functions are
+    provided.  TRIGFUNC contains Pascal procedures for the common trigono-
+    metric functions.  UTIL features more than 50 Turbo Pascal utility
+    routines for such diverse functions as screen output, frames, windows,
+    menus, serial communications, string manipulation, loan calculations,
+    file I/O, and even a siren for intruder alert.
+    
+    System Requirements: 64K, one disk drive and monochrome display;
+    Borland's Turbo Pascal.
+    
+    How to Start:  Enter TYPE README.DOC from the DOS prompt and
+    follow the directions in that file.
+    
+    File Descriptions:
+    
+    NINV     PAS  Find percentage point of normal distribution
+    README   DOC  Description of statistical distribution procedures
+    SIGCONST PAS  Global constants for significance routines
+    ERF      PAS  Error function
+    SIGF     PAS  Significance of F distribution
+    TESTSIGF PAS  Demo of F-significance routine
+    GAMMAIN  PAS  Evaluate incomplete Gamma integral
+    POWTEN   PAS  Calculate power of ten (integer powers only)
+    TESTSIGC PAS  Demo of Chi-square distribution routine
+    CDNORM   PAS  Cumulative normal distribution probability
+    SIGCHI   PAS  Significance of Chi-square distribution
+    CDBETA   PAS  Cumulative Beta distribution
+    ALGAMA   PAS  Logarithm (base E) of Gamma distribution
+    SIGT     PAS  Significance of T distribution
+    CINV     PAS  Inverse Chi-square (percentage point)
+    TESTINVN PAS  Demo of inverse normal routine
+    TESTINVC PAS  Demo of inverse Chi-square routine
+    TESTSIGT PAS  Demo of T-significance routine
+    TESTINVF PAS  Demo of inverse F routine
+    NINV2    PAS  Percentage point of normal distribution
+    LOGTEN   PAS  Base 10 logarithm
+    BETAINV  PAS  Inverse Beta distribution
+    SIGALL   PAS  List of statistical routines on this disk
+    FINV     PAS  Inverse central F distribution
+    APINVB   PAS  Inverse Beta distribution
+    TESTSIGN PAS  Demo of significance of normal distribution
+    SIGNORM  PAS  Significance of normal distribution
+    POWER    PAS  Exponentiation of real to real power
+    TRIGFUNC PAS  Pascal procedures for trigonometric functions
+    TINV     PAS  Inverse central T distribution
+    POWERI   PAS  Exponentiation of real to integer power
+    TESTINVT PAS  Demo of inverse central T distribution
+    UTIL     PAS  More than 50 utility routines
+
+### Directory of PC-SIG Library Disk 0435
 
      Volume in drive A has no label
      Directory of A:\

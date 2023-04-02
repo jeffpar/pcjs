@@ -6,16 +6,40 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #39"
+      B: "PC-SIG Library Disk 0039"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #39
+## Information about "FLIGHT SIMULATOR"
+
+    This is one of the first user-supported programs to appear for flight
+    simulation.  It's not the best, and does not compare with some of the
+    commercially available simulators, but it will entertain.
+    
+    Usage:  Entertainment.
+    
+    System Requirements:  Some programs require color graphics.
+    
+    How to Start: To read DOC files, enter TYPE filename.ext (press
+    enter).  To run an EXE program, just type its name (press enter).
+    For instructions on running BASIC programs, please refer to the GETTING
+    STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    JETSET   BAS  Combines AJETOFF.BAS & AJETCRUZ.BAS in one
+    JETSET   DOC  Documentation for flight simulator program
+    AJETCRUZ BAS  Half-source of program  (For mono display)
+    OJETCRUZ EXE  Faster, compiled version of above  (Also mono)
+    JETSET   EXE  Faster, compiled version of above  (Also mono)
+    AJETOFF  BAS  Half-source of program  (For mono display)
+
+### Directory of PC-SIG Library Disk 0039
 
      Volume in drive A has no label
      Directory of A:\

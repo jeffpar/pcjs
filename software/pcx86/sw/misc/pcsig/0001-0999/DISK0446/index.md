@@ -6,16 +6,48 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #446"
+      B: "PC-SIG Library Disk 0446"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #446
+## Information about "ZORK UTILITIES"
+
+    This disk is dedicated to the adventurers out there. Half of the disk
+    is dedicated to the Zork trilogy of adventures by Infocom.  Files
+    include solutions to these programs and utilities to use with these
+    programs.  The other half is full of adventure and arcade game
+    programs, and a utility to help Dungeon & Dragon players.
+    
+    System Requirements:  128K, One disk drive, Monochome monitor, Color
+    graphics needed if file marked by a plus symbol (+).
+    
+    How to Start:  To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  To run an EXE or COM program, just type its name and press
+    <ENTER>. For instructions on running BASIC programs, please refer to
+    the GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    PIRATE   BAS  Adventure game. Find island, explore, and get treasure
+    ASTRO    COM  Asteroids game.
+    PIRATE   DOC  Documentation for PIRATE.BAS
+    XWING    BAS  Relive Star Wars.
+    TEMPLE   BAS  Temple of Loth! Like Dungeons and Dragons.
+    Q-BERT   EXE  Like arcade game. Turn squares to different colors
+    ZORK2    DOC  Solution for Zork II.
+    ZORK1    DOC  Solution for Zork I.
+    CRISIS   EXE  Space Game (c/g required)
+    ZT16     DOC  Documentation for ZT16.EXE. (11K)
+    ZT16     COM  Zork Tools!! Great utility for any Infocom game.
+    ZORK3    DOC  Solution for Zork III.
+    GODCREAT BAS  Advanced Dungeons & Dragons God Creation Program
+
+### Directory of PC-SIG Library Disk 0446
 
      Volume in drive A has no label
      Directory of A:\

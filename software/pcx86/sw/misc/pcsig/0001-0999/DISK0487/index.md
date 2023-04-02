@@ -6,16 +6,44 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #487"
+      B: "PC-SIG Library Disk 0487"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #487
+## Information about "REFLEX POINT"
+
+    This is a BASIC program in which you, a Freedom Fighter, combat
+    the evil Invid Alien Invaders.  Through the course of the game
+    your cyclone changes into battle armor.  Then when you reach the
+    alpha fighter you can can change into battloid form.  Reach the
+    Reflex Point and kill the Evil Alien Prince.  This game will run
+    on a 128k PCjr.
+    
+    System Requirements:  128K, one disk drive, color monitor, color
+    graphics needed, IBM BASIC or IBM PCjr BASIC.
+    
+    How to Start:  From BASIC, type LOAD"REFLEX" <ENTER>, then
+    RUN <ENTER>.
+    
+    File Descriptions:
+    
+    ALPHA    PIC  Image file of Alpha Fighter
+    RP-HELP  BAS  Tips on how to play
+    REFLEX   PIC  Image of Reflex Point
+    REFLEX   KEY  Subprogram for REFLEX.BAS
+    REFLEX   BAS  Reflex Point game
+    POWER    PIC  Graphic image
+    CYCLONE2 PIC  Image of jumping Cyclone
+    CYCLONE  PIC  Image of Cyclone
+    CYCLONE  KEY  Subprogram for REFLEX.BAS
+    TITLE    PIC  Image of title screen
+
+### Directory of PC-SIG Library Disk 0487
 
      Volume in drive A has no label
      Directory of A:\

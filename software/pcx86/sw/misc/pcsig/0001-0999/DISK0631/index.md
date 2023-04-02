@@ -6,16 +6,41 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #631"
+      B: "PC-SIG Library Disk 0631"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #631
+## Information about "HDM IV: HARD DISK MENU SYSTEM"
+
+    HARD DISK MENU IV or HDM is a hard disk menuing utility of the finest
+    commercial quality in a shareware package.  Access and execute up to
+    100,000 different programs with this utility.  HDM IV offers a
+    multitude
+    of features including multiple and independent menu modules with each
+    having its own color and other set up characteristics, multiple levels
+    of security, color and border control, mouse sensitivity, macros,
+    command line arguments and the most striking ability to accomplish
+    timed execution of programs; this latter feature being enough of a
+    reason
+    to purchase this utility!  HDM IV can be operated within about 90% of
+    it's abilities without ever consulting the documentation and the only
+    confusion the user may encounter is centered around the use of macros
+    and switching from one menu module to another.  You will especially like
+    the ability of HDM IV to execute programs at any time of day or week
+    with it's "timed" program execution option.  This feature alone is
+    reason enough to purchase this splendid shareware utility.  Jim Hass,
+    the program author, offers various levels of licensing for HDM IV,
+    beginning with a single user package rate of thirty-five dollars; the
+    printed manual is an additional fifteen dollars.  HDM IV offers all of
+    the features of DIRECT ACCESS, a commercial hard disk menuing program,
+    and a good deal more; a substantial value for your dollar!
+
+### Directory of PC-SIG Library Disk 0631
 
      Volume in drive A has no label
      Directory of A:\

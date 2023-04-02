@@ -6,16 +6,25 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #896"
+      B: "PC-SIG Library Disk 0896"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #896
+## Information about "POCKET FILER/POCKET NOTES (ESYPL ON 1541"
+
+    POCKET FILER and POCKET NOTES are two programs that make double-sided
+    pocket address or note booklets from the entries in the program.
+    
+    Entries can be edited, deleted, sorted, searched, and saved.  Print a
+    hard copy in a pocketbook format that will fit into a checkbook cover.
+    Each program also allows you to page through and browse the records.
+
+### Directory of PC-SIG Library Disk 0896
 
      Volume in drive A has no label
      Directory of A:\

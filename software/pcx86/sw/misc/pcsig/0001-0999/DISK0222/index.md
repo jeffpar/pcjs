@@ -6,16 +6,50 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #222"
+      B: "PC-SIG Library Disk 0222"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #222
+## Information about "TRANSTAR UTILITIES"
+
+    This disk contains a copy of the SOFT and EASY UTILITIES for the
+    TranStar printers.  In addition to the three main program procedures,
+    there are ASCII files which contain copies of both the user's manual
+    and the appendicies for that manual (together totaling 60+ pages!)
+    Each of these ASCII files will produce a formatted manual, (or
+    appendix), on your TranStar 315 printer. DO NOT ATTEMPT TO PRINT THESE
+    FILES ON ANY OTHER PRINTERS.  JUST WON'T WORK...
+    
+    System Requirements: TranStar printer, some programs require BASIC
+    
+    How to Start: Consult the MANUAL.DOC and APPENDIX.DOC files for
+    directions and documentation.  To run the BASIC programs, consult the
+    directions in GETTING STARTED for your configuration.  To run a
+    program with the suffix .COM, or .EXE, just type its name, i.e., for
+    PRNT-CHR.COM, type PRNT-CHR and hit <ENTER>.
+    
+    Suggested Registration:  $10.00
+    
+    File Descriptions:
+    
+    PRNT-CHR COM  Allows italics and extended ASCII characters to be printed
+    PRNT-SCN COM  Print screen utility
+    PRN-MAN  BAT  Batch file to print manual
+    USMAP    PIC  Graphic test image of USA for use with SCN-DEMO
+    CHR-DEMO BAS  Demonstration program for PRNT-CHR
+    SCN-DEMO BAS  Demonstration program for PRNT-SCN
+    MANUAL   DOC  Documentation (Use TranStar 315 only-takes 50 minutes)
+    APPENDIX DOC  Appendix  (Use TranStar 315 - takes 30 minutes - 36K)
+    PRN-APX  BAT  Batch file to print appendix
+    README        Instruction for printing documentation
+    NOTICE        Message to those who print manual and/or appendix
+
+### Directory of PC-SIG Library Disk 0222
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,32 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #883"
+      B: "PC-SIG Library Disk 0883"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #883
+## Information about "XXXPERT"
+
+    XXXPERT lets you create question-and-answer diagnostic programs to help
+    solve problems -- an expert system.
+    
+    An expert system can be used for just about any application that lends
+    itself to a hierarchy of rules. Once a set of rules is created and
+    entered into the expert system, it will let you make decisions more
+    quickly and consistently than before. The same set of rules, used by
+    another, should yield the same decisions.
+    
+    XXXPERT lets you create a file of rules in an English language syntax.
+    Then you enter questions into a file. Both rules and questions are
+    compiled and then executed by the CONSULT program. This lets a person
+    answer questions and make decisions.
+
+### Directory of PC-SIG Library Disk 0883
 
      Volume in drive A has no label
      Directory of A:\

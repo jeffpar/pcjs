@@ -6,16 +6,55 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #540"
+      B: "PC-SIG Library Disk 0540"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #540
+## Information about "TINY PASCAL COMPILER"
+
+    This disk will let you design and implement a small subset Pascal
+    compiler, using the Turbo Pascal compiler.  It will let you translate
+    the program into 8086 symbolic assembly language which you can compile.
+    Not only can you build a small compiler, you learn how to create your
+    own language tanslators and compilers.
+    
+    System Requirements:  64K, one disk drive and monochrome display, and a
+    TURBO PASCAL compiler.
+    
+    How to Start:  To read TXT files, enter TYPE filename.ext and press
+    <ENTER>.  To run a COM program, just type its name and press <ENTER>.
+    For instructions on PAS listings, refer to your Pascal manual.
+    
+    File Descriptions:
+    
+    TUUTILS  PAS  Skeleton source file
+    TUSYMS   PAS  Skeleton source file
+    TUSKEL   PAS  Main "skeleton" file used by QPARSER to create
+    PMACS    TXT  Macro forms file for use with QPARSER program generator
+    CHASM    CFG  Configuration file for use with CHASM assembler
+    TUSEMS   PAS  Skeleton source file
+    TURUN    TXT  Sample program for compiler
+    TURUN    LST  Chasm assembler list file
+    TURUN    COM  Assembled (executable) sample program
+    TURUN    ASM  Compiler output (8086 assembly code)
+    TURPT    TXT  QPARSER report file (from compiler creation)
+    TUPROG   PAS  Tiny Pascal compiler program
+    TUPROG   COM  Executable compiler
+    TUFILES  PAS  Skeleton source file
+    TUDECLS  PAS  Skeleton source file
+    TUDBUG   PAS  Skeleton source file
+    TU       TBL  Table file created by QPARSER table generator
+    TU       GRM  Tiny Turbo Pascal grammar
+    TU       DOC  Tutorial on creating a Tiny Pascal compiler
+    STDIO    HDR  Standard assembly IO routines needed for Tiny Pascal
+    STDIO    HDR  Standard assembly IO routines needed for Tiny Pascal
+
+### Directory of PC-SIG Library Disk 0540
 
      Volume in drive A has no label
      Directory of A:\

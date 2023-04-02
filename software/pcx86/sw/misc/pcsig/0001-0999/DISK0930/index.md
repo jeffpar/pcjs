@@ -6,16 +6,28 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #930"
+      B: "PC-SIG Library Disk 0930"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #930
+## Information about "POINT & SHOOT HARD DISK MANAGER"
+
+    The POINT & SHOOT Hard Disk Manager addresses two of the most
+    important needs of hard disk users -- program execution and file/
+    directory management.
+    
+    POINT & SHOOT includes all of the standard menu, file, and directory
+    commands with a split-screen file list and directory tree. The
+    program includes DOS access, floppy disk formatting, multiple hard
+    drive support, mouse support, file and subdirectory undelete,
+    passwords and time logging, text search, and much more.
+
+### Directory of PC-SIG Library Disk 0930
 
      Volume in drive A has no label
      Directory of A:\

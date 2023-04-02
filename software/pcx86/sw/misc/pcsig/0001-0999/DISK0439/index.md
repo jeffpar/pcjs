@@ -6,16 +6,52 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #439"
+      B: "PC-SIG Library Disk 0439"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #439
+## Information about "COMMUNICATION #3"
+
+    MODEM86 is a communications program for Intel 8086/88 based computers.
+    It runs under both CP/M-86 and MS(PC)-DOS.  It provides such features as
+    file copying using XMODEM protocol, terminal emulation, file transfer
+    with all hosts, X-ON/X-OFF flow control, batch mode, optional on-line
+    help and menus, file transfer and conversion utilities, and
+    auto-dialing.
+    
+    Special Requirements:  A modem.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $35.00 for MODEM86
+    
+    File Descriptions:
+    
+    BIN2HEX  COM  Converts a binary file to a hex file.
+    COM2CMD  COM  Converts MS(PC)-DOS programs to CP/M-86 programs.
+    COM2CMD  CMD  Converts MS(PC)-DOS programs to CP/M-86 programs.
+    CMD2COM  COM  Converts CP/M-86 programs to MS(PC)-DOS programs.
+    DISTMDM  BAT  Copies distribution disk files - for MS(PC)-DOS.
+    DISTMDM  SUB  Copies distribution disk files - for CP/M-86.
+    EXPAND   COM  Replaces tabs with blanks.
+    MODEMSET COM  Configures MODEM86 for running environment.
+    MODEM86  DOC  Abbreviated user manual.
+    MODEM86  HST  Program's revision history info.
+    MODEM86  SET  Unconfigured MODEM86 program.
+    PATCHES  DOC  Text file containing a history of programming patches.
+    PHONES   DAT  Example phone number directory.
+    REMOVECC COM  Removes FORTRAN-style carriage controls.
+    SHRINK   COM  Replaces blanks with tabs.
+    SIOBIOS  A86  Source for an example CP/M-86 custom serial I/O BIOS.
+    SIOBIOS  MAC  Source for an example MS(PC)-DOS custom serial I/O BIOS.
+    UNSQZ    COM  Decodes squeezed files.
+
+### Directory of PC-SIG Library Disk 0439
 
      Volume in drive A has no label
      Directory of A:\

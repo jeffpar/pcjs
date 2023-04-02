@@ -204,6 +204,30 @@ export default class DataBuffer {
     }
 
     /**
+     * readInt16BE(off)
+     *
+     * @this {DataBuffer}
+     * @param {number} off
+     * @returns {number}
+     */
+    readInt16BE(off)
+    {
+        return this.buffer.readInt16BE(off);
+    }
+
+    /**
+     * readInt16LE(off)
+     *
+     * @this {DataBuffer}
+     * @param {number} off
+     * @returns {number}
+     */
+    readInt16LE(off)
+    {
+        return this.buffer.readInt16LE(off);
+    }
+
+    /**
      * readUInt32BE(off)
      *
      * @this {DataBuffer}

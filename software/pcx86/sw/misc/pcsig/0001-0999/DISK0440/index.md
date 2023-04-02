@@ -6,16 +6,67 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #440"
+      B: "PC-SIG Library Disk 0440"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #440
+## Information about "BUSINESS SAMPLER #6"
+
+    A mixture of BASIC and Pascal programs that perform a variety of
+    personal and business tasks.
+    
+    The Printed Circuit Board (PCBD.BAS) assists in estimating the
+    production cost of double-sided printed circuit boards.  The Restaurant
+    House Charge Billing System (GBILL) lets you record each of your
+    guest's house charges and produce mail-ready bills and stubs.  The
+    bills that the system produces provide your "open account" customers
+    with year-to-date account totals, and helps your account management.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $28.00 for GBILL.
+    
+    File Descriptions:
+    
+    AMORT    ABS  Abstract of the AMORT.BAS program.
+    AMORT    BAS  Calculates Loan Amortization - results to the printer.
+    AMRTMENU ABS  Abstract of the AMRTMENU.BAS program.
+    AMRTMENU BAS  Program that selects AMORT.BAS or SCRNAMRT.BAS.
+    AUTOEXEC BAT  Boot file.
+    CAPSLOCK COM  Program to set Caps Lock to on. Place in Autoexec.bat.
+    CLEAR    EXE  Program to clear screen.
+    COMMENT  MEM  Memory file used in Disk-File.
+    FILEFIX  ABS  Abstract of the FILEFIX.BAS program.
+    FILEFIX  ASC  ASCII text file of the Basic source code.
+    FILEFIX  BAS  Prepares ASCII text files with CR/LF delimiters for import
+    FILEFIX  DOC  Documentation file (2K).
+    FILEFIX  PAS  Source file.
+    FILEFIX  COM  Main program for FILEFIX.
+    GBILL    DOC  Documentation (15K).
+    GBILL    EXE  Main program for GBILL.
+    HOLD     DAT  Data file.
+    IRA      BAS  Basic program.
+    IRA      DAT  Data file.
+    PCBD     ABS  Abstract of the PCBD.BAS program.
+    PCBD     ASC  ASCII text file of the Basic source code.
+    PCBD     BAS  Source file.
+    PCBD     DOC  Documentation for PCBD.BAS (4K).
+    PRINT    BAS  BASIC print program.
+    READ     BAT  Batch file to run DISKFILE.DOC.
+    READ     ME   Explains the file extensions of the Basic programs.
+    READ-ME       Notes for printing documentation and installing system.
+    SCRNAMRT ABS  Abstract of the SCRNAMRT.BAS program.
+    SCRNAMRT BAS  Calculates Loan Amortization - results to the screen.
+    SETUP    EXE  Setup program.
+
+### Directory of PC-SIG Library Disk 0440
 
      Volume in drive A has no label
      Directory of A:\

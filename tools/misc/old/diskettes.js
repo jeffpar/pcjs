@@ -187,6 +187,103 @@ function processFiles(sDir, diskettes)
 }
 
 /**
+ * getDiskDB(info)
+ *
+ * If we're parsing a ".UPP" file, then we'll return a DB object containing "DISKnnnn" properties, where
+ * each "DISKnnnn" will contain a 'diskSummary' property with an array of lines containing that disk's raw information.
+ *
+ * @param {Object} info
+ * @returns {Object|null}
+ */
+function getDiskDB(info)
+{
+    let diskDB = null;
+    let appendLine = function(lines, line) {
+        if (line) {
+            lines.push(line);
+            return;
+        }
+        if (lines.length && lines[lines.length - 1]) {
+            lines.push(line);
+        }
+    };
+    let trimLines = function(lines) {
+        if (lines.length && !lines[lines.length - 1].length) {
+            lines.pop();
+        }
+    };
+    for (let volume in info) {
+        try {
+            let sFile = path.join("/Volumes", volume, info[volume]);
+            let text = fs.readFileSync(sFile, {encoding: "ascii"});
+            let ext = path.parse(sFile).ext;
+            if (ext == ".UPP") {
+                diskDB = {};
+                let prevDisk = "";
+                let lines = text.split("\r\n");
+                for (let line of lines) {
+                    if (!line) continue;
+                    let matchLine = line.match(/^([0-9][0-9][0-9][0-9]) ?(.*)$/);
+                    if (matchLine) {
+                        let disk = "DISK" + matchLine[1];
+                        if (!diskDB[disk]) diskDB[disk] = {diskSummary: []};
+                        let data = diskDB[disk];
+                        line = matchLine[2].trim();
+                        let matchField = line.match(/(DISK-NUMBER|DISK-TITLE|PC-SIG VERSION|PROGRAM|AUTHOR VERSION): ?(.*)/);
+                        if (matchField) {
+                            let prop = "";
+                            let value = matchField[2].trim();
+                            switch(matchField[1]) {
+                            case "DISK-NUMBER":
+                                prop = 'diskIndex';
+                                break;
+                            case "DISK-TITLE":
+                                prop = 'diskTitle';
+                                break;
+                            case "PC-SIG VERSION":
+                                prop = 'diskVersion';
+                                break;
+                            case "PROGRAM":
+                                prop = 'diskProgram';
+                                break;
+                            case "AUTHOR VERSION":
+                                prop = 'authorVersion';
+                                break;
+                            default:
+                                break;
+                            }
+                            if (prop) {
+                                if (!data[prop]) {
+                                    data[prop] = value;
+                                } else {
+                                    data[prop] += " / " + value;
+                                }
+                                /*
+                                 * If this field appeared in the middle of a disk's summary, then emit a blank line.
+                                 */
+                                if (data.diskSummary.length) {
+                                    appendLine(data.diskSummary, "");
+                                }
+                                continue;
+                            }
+                        }
+                        if (prevDisk && disk != prevDisk) {
+                            trimLines(diskDB[prevDisk].diskSummary);
+                        }
+                        appendLine(data.diskSummary, line);
+                        prevDisk = disk;
+                    }
+                }
+                if (prevDisk) {
+                    trimLines(diskDB[prevDisk].diskSummary);
+                }
+            }
+        } catch(err) {}
+    }
+    return diskDB;
+}
+
+/**
  * processFolders(sDir, argv)
  *
  * @param {string} sDir
@@ -268,11 +365,12 @@ function processFolders(sDir, argv)
             }
         }
 
-        let i;
+        let i, diskDB;
         let lastObj, lastPart;
         let diskObj = diskettes;
         let title = "", jsonName = "";
         let media, mediaName, archiveType, photoType;
+
         for (i = 0; i < imgParts.length; i++) {
             if (imgParts[i] != "archive") {
                 let obj = diskObj[imgParts[i]];
@@ -290,7 +388,12 @@ function processFolders(sDir, argv)
                     }
                 }
                 diskObj = obj;
-                if (diskObj && diskObj['@title']) title = diskObj['@title'];
+                if (diskObj) {
+                    if (diskObj['@title']) title = diskObj['@title'];
+                    if (diskObj['@diskDB']) {
+                        diskDB = getDiskDB(diskObj['@diskDB']);
+                    }
+                }
             }
             else {
                 /*
@@ -385,6 +488,11 @@ function processFolders(sDir, argv)
                                 printf("warning: @archive '%s' should possibly be '%s' instead\n", diskObj['@archive'], archiveType);
                             }
                         }
+
+                        if (diskDB && diskDB[mediaName]) {
+                            diskObj['@diskInfo'] = diskDB[mediaName];
+                            diskettesUpdated = true;
+                        }
                     }
                 }
             }
@@ -396,13 +504,11 @@ function processFolders(sDir, argv)
             /*
              * Add a new entry...
              */
-            let groupName;
-            let i = imgPath.indexOf('-');
-            if (i < 0) {
-                groupName = imgParts[0].toUpperCase();
-            } else {
-                groupName = imgPath.slice(0, i).toUpperCase();
-            }
+            let groupName = imgParts[0].toUpperCase()
+            // let i = imgPath.indexOf('-');
+            // if (i >= 0) {
+            //     groupName = imgPath.slice(0, i).toUpperCase();
+            // }
             if (media) {
                 if (!title || title == groupName) {
                     title = groupName + ' ' + mediaName;
@@ -433,9 +539,9 @@ function processFolders(sDir, argv)
                 diskettesUpdated = true;
                 printf("warning: added diskette %s\n", jsonName);
             } else {
-                let itemName = imgParts[3];
+                let itemName = imgParts[lastPart+1];
                 let disketteUpdated = false;
-                if (lastObj && imgParts[4] == "archive") {
+                if (lastObj && imgParts[lastPart+2] == "archive") {
                     let versions = lastObj['@versions'];
                     if (versions) {
                         let matchDigits = itemName.match(/([0-9]+)$/);
@@ -445,7 +551,7 @@ function processFolders(sDir, argv)
                         versions[itemName] = {
                             '@title': title,
                             '@media': [
-                                {'@diskette': imgParts[5].replace(sExtOrig, ".json")}
+                                {'@diskette': imgParts[lastPart+3].replace(sExtOrig, ".json")}
                             ]
                         };
                         if (sExt != ".img") {

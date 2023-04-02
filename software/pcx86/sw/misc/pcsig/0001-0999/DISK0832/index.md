@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #832"
+      B: "PC-SIG Library Disk 0832"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #832
+## Information about "BEYOND THE TITANIC (KROZ ON 2001 NOW)"
+
+    Lucky you! BEYOND THE TITANIC begins as you find yourself aboard the
+    Titanic just seconds before she sinks!
+    
+    Your goal is to survive and get back home.  On the journey, you'll
+    discover a long-forgotten secret under the sea, travel to the Earth's
+    future, get chased by a three-armed monster and more!!
+    
+    If you've played any of Infocom's games, you'll notice the similarity in
+    style.  To add to the realism, a 16-color display and sound effects are
+    used throughout the game.
+
+### Directory of PC-SIG Library Disk 0832
 
      Volume in drive A has no label
      Directory of A:\

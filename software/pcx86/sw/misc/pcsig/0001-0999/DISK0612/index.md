@@ -6,16 +6,41 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #612"
+      B: "PC-SIG Library Disk 0612"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #612
+## Information about "LANGUAGES"
+
+    LANGUAGE TEACHER is a series of menu-driven language tutorial programs
+    for vocabulary, verb conjugations and standard phrases in French,
+    Spanish, German, and Italian.  HEBREW is a separate program for
+    language-skills development.
+    
+    Each lesson is a self-paced tutorial in that specific language. Hundreds
+    of word combinations and thousands of verb conjugations are provided.
+    Various tests are presented including multiple choice and diagnostics.
+    Questions and word choices are randomly selected.
+    
+    These lessons are not designed to teach conversational languages but
+    rather to provide drills in order to increase your working vocabulary
+    and practice your use of the conjugation forms.
+    File Descriptions:
+    
+    ARC      EXE  Unarchiving program.
+    SPANISH* ARC  Archived files with Spanish lessons (2 files).
+    LANGUAGE TXT  Documentation file.
+    ITALIAN  ARC  Archived file with Italian lessons.
+    HEBREW   EXE  Hewbrew lessons.
+    GERMAN*  ARC  Archived files with German lessons (2 files).
+    FRENCH*  ARC  Archived files with French lessons (2 files).
+
+### Directory of PC-SIG Library Disk 0612
 
      Volume in drive A has no label
      Directory of A:\

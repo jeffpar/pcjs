@@ -6,16 +6,36 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #697"
+      B: "PC-SIG Library Disk 0697"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #697
+## Information about "THE FRONT OFFICE 1 OF 3 (ALSO 698, 2311)"
+
+    Open the door to more opportunity with THE FRONT OFFICE (TFO).  TFO is
+    a marketing and sales productivity system for prospecting and lead
+    tracking, telemarketing and call reporting, follow-up and sales
+    performance.
+    
+    TFO is menu-driven and uses a single data-entry system for all data.
+    Data entered in one area is automatically copied to all other
+    applicable areas -- cutting down on data-entry costs, time, and
+    errors.  It comes with its own word processor and works with others, as
+    well.
+    
+    Letters, envelopes, labels, and reports are selectively produced by
+    prospect code, salesperson code, zip code, follow-up date, customer
+    code, product code, or your own user-defined fields for efficient and
+    flexible prospect tracking and follow-up.  Call reports include
+    telephone time, sales forecasts, and potential sales volume for
+    management analysis and sales support.
+
+### Directory of PC-SIG Library Disk 0697
 
      Volume in drive A has no label
      Directory of A:\

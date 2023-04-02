@@ -2052,7 +2052,7 @@ export default class DiskInfo {
                     fileTable = this.fileTable.slice(0);
                     fileTable.sort(function(a, b) {
                         /*
-                         * We can't use "a.path.localeCompare(b.path)", because we want to do a traditional
+                         * We don't use "a.path.localeCompare(b.path)", because we want a traditional
                          * ASCII sort, not a Unicode sort.
                          */
                         return a.path < b.path? -1 : (a.path > b.path? 1 : 0); //
@@ -2254,7 +2254,7 @@ export default class DiskInfo {
     }
 
     /**
-     * getFileManifest(fnHash, fMetaData)
+     * getFileManifest(fnHash, fSorted, fMetaData)
      *
      * Returns an array of FILEDESC (file descriptors).  Each object is largely a clone
      * of the FileInfo object, with the exception of cluster and aLBA properties (which aren't
@@ -2263,10 +2263,11 @@ export default class DiskInfo {
      *
      * @this {DiskInfo}
      * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
+     * @param {boolean} [fSorted]
      * @param {boolean} [fMetaData]
      * @returns {Array}
      */
-    getFileManifest(fnHash, fMetaData)
+    getFileManifest(fnHash, fSorted, fMetaData)
     {
         let aFiles = [];
         if (this.buildTables() > 0) {
@@ -2275,6 +2276,15 @@ export default class DiskInfo {
                 if (file.name == "." || file.name == "..") continue;
                 if ((file.attr & DiskInfo.ATTR.METADATA) && !fMetaData) continue;
                 aFiles.push(this.getFileDesc(file, true, fnHash));
+            }
+            if (fSorted) {
+                aFiles.sort(function(a, b) {
+                    /*
+                     * We don't use "a.path.localeCompare(b.path)", because we want a traditional
+                     * ASCII sort, not a Unicode sort.
+                     */
+                    return a.path < b.path? -1 : (a.path > b.path? 1 : 0); //
+                });
             }
         }
         return aFiles;

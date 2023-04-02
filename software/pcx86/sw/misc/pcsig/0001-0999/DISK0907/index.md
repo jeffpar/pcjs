@@ -6,16 +6,95 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #907"
+      B: "PC-SIG Library Disk 0907"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #907
+## Information about "FUNKYTOOLBOX - MISC. UTILITIES"
+
+    FUNKY TOOLBOX (function key toolbox) contains a large number of
+    utilities for the programmer in you.  Along with the utilities are a
+    lot of miscellaneous BASIC programs and text files, to be used as
+    examples for doing a specific programming procedure, or even used as
+    subroutines within a program you are creating.  See file descriptions
+    for explanations of individual programs.
+    File Descriptions:
+    
+    AINK$    TBX  Controls KYBD for opening files correctly.
+    ANYKEY   TBX  Advanced routine for any key to continue.
+    ARAYCOMP TBX  Compute ARRAY size overhead in DEFSNG-DEFDBL-DEFSTR.
+    ALLCHARS TBX  Displays a hexadecimal table of all screen characters.
+    ASCKEY$  TBX  ASCII Numbers for all keys.
+    AUREVOIR TBX  Flashing panels say a big good-bye.
+    BLACKOUT TBX  Example of a screen black-out.
+    SOUNDZ   TBX  Unusual sounds and musical effects.
+    SONGRITR TBX  Easy music from score to CPU.
+    NICELEGS TBX  How to make legs for your printer.
+    BANANA2  TBX  Error-trapping alternative.
+    BANANA1  TBX  Error-trapping ON-OFF routine.
+    ERROR2   TBX  Tough tests CPU for accuracy.
+    ERROR1   TBX  Fun tests the IBM-PC CPU for accuracy.
+    TESTEROR TBX  Error-trapping demo.
+    COLRTOGL TBX  Switches between mono and color.
+    LOKATE   TBX  Flashes screen address and points location.
+    SCRNMAP  TBX  Creates a map of the computer screen.
+    MARKSCRN TBX  Roadmap your display for convenience.
+    FLIPPIES TBX  How to use both sides of your disks.
+    INDEX1   BAS  Index on the files on this disk.
+    ABSECTOR TBX  Converts track-sector to absolute sector for DEBUG use.
+    DEBUG    DOC  How to use DEBUG and error trapping.
+    GSBMUSIC TBX  Background music for your programs.
+    GOBANANA DOC  How to error-trap your programs.
+    PEEKFILE DOC  How to peek into files and ROM with DEBUG.
+    HORNBOOK DOC  Information on DOS for programmers.
+    ERORNUM  DAT  Data file for ERRMESAG.TBX.
+    ERRMESAG TBX  Shows ERROR messages.
+    CURSER   TBX  Demo of CRSLIN and POS(0) for bookmarking.
+    INDEX2   BAS  Index of the files on this disk.
+    LETTER   BAS  A letter from PeopleSystems.
+    TALKPAGE BAS  Why talking pages make reading easier.
+    BROWSE   COM  Utility for viewing text files.
+    STUFCHIP DOC  How to protect your chips.
+    DOLABEL  TBX  Self-producing label program. Uses printer, but no labels.
+    DISKLABL TBX  Label your disks with wide Directory.  No labels needed.
+    PEOPLSYS TBX  Big screen opening and closing.  Chains to AUREVOIR.TBX.
+    INPUTEST TBX  Trap KYBD entry with easy INSTR routine.
+    NOTENUMB TBX  Makes octave shifts easy.
+    F5ERRMSG TBX  Print out error messages by pressing F5.
+    README        How to get started.
+    WHATISPS DOC  Information on PeopleSystems.
+    SOFTKEYS TBX  Loads new F keys for color/mono then erases program.
+    WPROT    TBX  How to unprotect a file to list and save it.
+    MACHLANG TBX  Using poke and machine language complete easy computation.
+    HEXSCALE TBX  Graphics for addressing-nibbles-bytes-segment:  offset.
+    FUNCTKEY TBX  How to use your function keys.
+    MEMTEST1 TBX  Tests your computer memory.
+    COLORBOX TBX  Displays various colored boxes.
+    MONO     BAS  Separate subroutine to run mono.
+    COLOR    BAS  Separate subroutine to run color.
+    COMO     TBX  Merge this color/mono subroutine into your program.
+    IBMKEYS  TBX  Reloads the F1 to F10 keys the way they were.
+    README2  DOC  Information on PeopleSystems.
+    HEX2DEC  TBX  Automatically convert any HEX address to decimal numbers.
+    SCRNCHRS TBX  Now see all screen chars, some unmentionables.
+    BASUNPRO TBX  Create machine language to unprotect files.
+    SAVEDLIN TBX  Recovers lost EDLIN file when disk is full.
+    PROTECTD TBX  A protected file for you to practice on.
+    PEPLSYST BAS  The system of people and computers.
+    DAMNTRIV DOC  Information on PeopleSystems.
+    FRIENDLY TBX  How to be friendly.
+    CLUSECTR TBX  DOS 2.0 conversion of start cluster to absolute sector.
+    SENSITIV DOC  How to work with people.
+    DISKMOD  DOC  How to modify a disk with DEBUG.
+    BOOBOO   DOC  Improvement for the IBM-PC.
+    XMASTREE TBX  Mono graphics and music for the season.
+
+### Directory of PC-SIG Library Disk 0907
 
      Volume in drive A has no label
      Directory of A:\

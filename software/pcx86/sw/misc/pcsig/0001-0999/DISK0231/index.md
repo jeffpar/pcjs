@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #231"
+      B: "PC-SIG Library Disk 0231"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #231
+## Information about "REFLIST"
+
+    REFLIST is an easy-to-use program that lets you create and format lists
+    of references and bibliographies, --  elements which are always a
+    problem for the writer submitting material to a variety of publishing
+    houses, each with its own specific requirements.
+    
+    The truly unique feature of REFLIST is that once your paper has been
+    written, it reformats your references into different user-defined
+    formats.  You can submit a paper to one publisher with the references
+    in one format and then, with REFLIST, reformat the references to a
+    different format expected by another publisher -- all quickly and
+    easily. In addition, REFLIST has instructions for quick integration
+    into WordPerfect, PC-Write, or any ASCII-based wordprocessor.
+
+### Directory of PC-SIG Library Disk 0231
 
      Volume in drive A has no label
      Directory of A:\

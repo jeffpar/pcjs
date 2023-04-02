@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #731"
+      B: "PC-SIG Library Disk 0731"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #731
+## Information about "LOCATE"
+
+    LOCATE can help you quickly and conveniently locate files by searching
+    for key words.  It has two programs: INDEX and LOCATE. INDEX scans all
+    the files on a specified disk and builds an index, while LOCATE uses
+    that index to make a list of files with the specified keywords.
+    
+    The program has some limitations -- it won't recognize less than three
+    characters or more than seven.  It makes no distinction between words
+    whose first seven characters are identical.  For example,
+    ``complication'' and ``complicity'' would both be regarded as
+    ``complic.'' To solve this problem, more than one word can be specified
+    for the search criteria.
+    File Descriptions:
+
+### Directory of PC-SIG Library Disk 0731
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,47 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #989"
+      B: "PC-SIG Library Disk 0989"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #989
+## Information about "BASIC LINE NUMBERING & OTHER UTILITIES"
+
+    BASIC LINE NUMBERING removes unreferenced line numbers from -- or adds
+    line numbers to -- BASIC programs saved in an ASCII format.
+    
+    You can delete line numbers, use an ASCII editor to move sections of a
+    code, and then add line numbers to produce a usable interpreted BASIC
+    code.  Add line numbers to a BASIC file while leaving any existing line
+    numbers unchanged and add new numbers to unnumbered lines in the same
+    way as existing line numbers.  Line numbers can be added to a file
+    written in compiler BASIC for debugging purposes.  Switch easily between
+    interpreters that require line numbers and compilers that do not require
+    line numbers.
+    
+    Here is a menu-driven Metric/English -- English/Metric weight and
+    measure conversion program, can handle the following conversions:
+    linear, square and cubic measures; dry and liquid measure of capacity;
+    and Avoirdupois and Apothecaries' (Troy) weights and fluid measures.
+    File Descriptions:
+    
+    CONVPR   004  Conversion program.
+    CONVPR   ONE  Conversion program.
+    CONVPR   003  Conversion program.
+    CONVPR   TWO  Conversion program.
+    READ     TXT  Documentation.
+    LSQRPR   BAS  Least Squares program-printer output.
+    LRNCRVSC BAS  Learning Curves program-printer output.
+    LRNCRVPR BAS  Learning Curves program-screen output.
+    RUN      BAT  Batch file to automatically execute program.
+    README        Introduction to this disk.
+
+### Directory of PC-SIG Library Disk 0989
 
      Volume in drive A has no label
      Directory of A:\

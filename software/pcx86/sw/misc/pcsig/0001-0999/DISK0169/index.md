@@ -6,16 +6,52 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #169"
+      B: "PC-SIG Library Disk 0169"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #169
+## Information about "MAILING LIST PROGRAMS"
+
+    This disk contains three mailing list programs and a membership
+    program, all written in BASIC.  Mailist1 lets the user add new names
+    and addresses, and sorts files by either the name or zip code.  It
+    updates, corrects, deletes, and prints files.  It also displays a list
+    of phone numbers and automatically dials selected numbers.  It can
+    add, delete, and sort your files to print labels and report lists.
+    The Membership program adds, renews, and reviews memberships and club
+    affiliations.
+    
+    System Requirements: Two disk drives, BASIC or BASICA
+    
+    How to Start:  Check the MAILIST1.DOC, MEMBER.ASC and
+    EASYMENU.ASC files for directions.  To run the BASIC programs,
+    consult the directions in GETTING STARTED for your configuration.
+    
+    Suggested Registration: $15.00 for "Mail List"
+    
+    File Descriptions:
+    
+    EASYMAIL ASC  Documentation for EASYMAIL.BAS
+    ???MAIL  BAS  Part of EASYMAIL.BAS (4 files)
+    LAB????? BAS  Part of EASYMAIL.BAS (3 files)
+    BUILDML  BAS  Part of EASYMAIL.BAS
+    EASYMAIL BAS  Mailing label system
+    MAILLIST BAS  Another mailing list system
+    MAILIST1 DOC  Documentation for MAILIST1.BAS
+    MAILIST1 BAS  Another mailing list system
+    ????MEMB BAS  Part of MEMBERS.BAS (8 files)
+    MEMBERS  BAS  Membership system based on EASYMAIL.BAS
+    MEMBER   ASC  Documentation for MEMBERS.BAS
+    ????MAIL BAS  Part of EASYMAIL (4 files)
+    MAILMENU BAS  Part of EASYMAIL.BAS
+    MAILSORT BAS  Sort for MAILIST1.BAS
+
+### Directory of PC-SIG Library Disk 0169
 
      Volume in drive A has no label
      Directory of A:\

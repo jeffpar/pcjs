@@ -6,16 +6,63 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #88"
+      B: "PC-SIG Library Disk 0088"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #88
+## Information about "EPISTAT"
+
+    EPISTAT has a set of routines for analyzing small data sets, and is for
+    users well-versed in math and computer operations. The entire package
+    is fairly complicated and definitely not recommended for the casual
+    user. However, for anyone with a special interest -- chemistry,
+    biology, or psychology students who need a number-crunching routine in
+    their workflow -- it can be a boon.
+    
+    All of the programs are written in BASIC and the source code is
+    included.
+    
+    File Descriptions:
+    
+    AUTOEXEC BAT  Batch file to auto boot program.
+    ANOVA    BAS  One and two way analysis of variance.
+    CORRELAT BAS  Calculates Pearson's correlation coefficient.
+    CHISQR   BAS  Chi-square test.
+    BINOMIAL BAS  Binomial distribution.
+    BAYES    BAS  Bayes theorem to calc rates of false + and - tests. DATA-
+    ONE BAS  Main data entry program.
+    EPIMRG   BAS  Used by every EPISTAT program.
+    EPISETUP BAK  Backup for EPISETUP.DAT.
+    EPISETUP DAT  Used by every EPISTAT program.
+    FILETRAN BAS  Transfers data from one data file to another.
+    EPISTAT  BAS  Guides user to proper program to use.
+    FORTRANS BAS  Transfers FORTRAN to EPISTAT files.
+    FISHERS  BAS  Fisher's test to evaluate 2X2 tables of discrete values.
+    LNREGRES BAS  Two variable linear regression.
+    HISTOGRM BAS  Graphs data sample on CGA screen. NORMAL   BAS
+    Calculates
+    normal distribution.
+    MHCHISQR BAS  Mantel-Haenszel Chi-square test.
+    MHCHIMLT BAS  Mantel-Haenszel Chi-square test for multiple controls.
+    MCNEMAR  BAS  McNemar's test or paired Chi-square test.
+    SELECT   BAS  Select subset of a data set.
+    SCATRGRM BAS  Graph scattergrams.
+    SAMPLSIZ BAS  Calculates sample sizes for statistical significance.
+    RATEADJ  BAS  Rate adjustment program.
+    RANKTEST BAS  Three tests - signed rank, rank correlation and rank sum.
+    RANDOMIZ BAS  Random sample generator.
+    PRINTDOC      Documentation file  (25K).
+    POISSON  BAS  Calculates Poisson distribution.
+    T-TEST   BAS  T-test compares mean of 2 samples (paired and unpaired).
+    XTAB     BAS  Print crosstab reports.
+    EXAMPLE       Sample data set.
+
+### Directory of PC-SIG Library Disk 0088
 
      Volume in drive A has no label
      Directory of A:\

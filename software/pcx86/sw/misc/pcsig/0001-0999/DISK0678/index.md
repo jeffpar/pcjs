@@ -6,16 +6,34 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #678"
+      B: "PC-SIG Library Disk 0678"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #678
+## Information about "GOLDEN WOMBAT"
+
+    Your quest is to discover the Forbidden City of the Great Lost Empire
+    and unearth the mysteries it holds. Do you have a prayer of succeeding?
+    
+    SCORE:
+    Much as in life, there is no scoring in The Golden Wombat.
+    
+    THE POINT:
+    The point of THE GOLDEN WOMBAT OF DESTINY is destiny, itself.
+    Obviously. You'll know when you've found it. Possibly.
+    
+    What do you think?
+    
+    This text adventure game can handle full-sentence commands and has a
+    large vocabulary of verbs. Users with CGA are able to customize screen
+    colors.
+
+### Directory of PC-SIG Library Disk 0678
 
      Volume in drive A has no label
      Directory of A:\

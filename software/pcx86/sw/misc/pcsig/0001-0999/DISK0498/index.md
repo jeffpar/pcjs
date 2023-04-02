@@ -6,16 +6,31 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #498"
+      B: "PC-SIG Library Disk 0498"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #498
+## Information about "DOS-A-MATIC"
+
+    DOSAMATIC is a task-switching utility that lets you load several
+    programs and transfer between them with simple keystroke commands.
+    
+    It has a menu that lists available drives, directories, and files on
+    the current drive.  Commands available include VIEW, SORT, RENAME, EDIT,
+    PRINT, DEBUG, COPY, and DELETE.  Programs can be run from memory.  Now
+    you can do two things at once.
+    File Descriptions:
+    
+    DOSAMATC DOC  Documentation for DOSAMATC.COM.
+    DOSAMATC HLP  Help screen information used with DOSAMATC.COM.
+    DOSAMATC COM  DOSAMATIC program.
+
+### Directory of PC-SIG Library Disk 0498
 
      Volume in drive A has no label
      Directory of A:\

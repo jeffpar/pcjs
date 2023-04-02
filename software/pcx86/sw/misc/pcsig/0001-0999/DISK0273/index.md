@@ -6,16 +6,52 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #273"
+      B: "PC-SIG Library Disk 0273"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #273
+## Information about "BEST UTILITIES"
+
+    The programs here are a collection of some of our most popular
+    utilities gathered from other disks in our library. Some of the high
+    points include: a DOS command editor that remembers your last 15 DOS
+    commands executed, a couple of selective copy-and-delete utilities to
+    perform mass-file functions with ease and confidence, and utilities to
+    let you BROWSE text files in a much easier manner than your DOS TYPE
+    command.
+    File Descriptions:
+    
+    BACKSCRL COM  Retrieve what has scrolled off screen top -- very useful.
+    BROWSE   COM  Browse through text files of any size.
+    BACKSCRL DOC  Documentation for BACKSCRL.COM.
+    MEMBRAIN EXE  Flexible RAMdisk.
+    MEMBRAIN DOC  Documentation for MEMBRAIN.EXE.
+    GDEL     EXE  Selective delete utility.
+    GDEL     DOC  Documentation for GDEL.EXE.
+    GCOPY    EXE  Selective copy -- changes date to current.
+    GCOPY    DOC  Documentation for GCOPY.EXE.
+    FILEDUMP COM  Display disk sectors on screen.
+    BROWSE   DOC  Documentation for BROWSE.DOC.
+    MOVE     COM  Flexible copy, copy-and-erase utility with prompts.
+    NDOSEDIT COM  DOS line editor, adapted from VMS.
+    MOVE     DOC  Documentation for MOVE.COM.
+    SP       DOC  Documentation for SP.EXE.
+    SDIR24C  DOC  Documentation for SDIR24C.COM.
+    SDIR24C  COM  Flexible screen directory display -- many options.
+    NDOSEDIT DOC  Documentation for NDOSEDIT.COM.
+    SP       EXE  Super spooler program -- variable size.
+    ST       COM  Super type command -- 2-way scrolling.
+    ST       DOC  Documentation for ST.COM.
+    VDEL     COM  Selective delete utility -- prompts to delete each file.
+    WHEREIS  DOC  Documentation for WHEREIS.COM.
+    WHEREIS  COM  Find a file in any subdirectory.
+
+### Directory of PC-SIG Library Disk 0273
 
      Volume in drive A has no label
      Directory of A:\

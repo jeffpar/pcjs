@@ -6,16 +6,26 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #503"
+      B: "PC-SIG Library Disk 0503"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #503
+## Information about "RELIANCE MAILING LIST"
+
+    RELIANCE MAILING LIST is a fast and sophisticated mailing list program
+    that should be useful to many groups, including political parties,
+    charitable organizations and small businesses.
+    
+    Print mailing labels four-across, select groups of people from the
+    database by specifying up to eight criteria and create a mailmerge
+    file.  Handle as many records as you have disk space for.
+
+### Directory of PC-SIG Library Disk 0503
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,30 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #157"
+      B: "PC-SIG Library Disk 0157"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #157
+## Information about "IBM USERS GROUP #2"
+
+    File Descriptions:
+    
+    ???????  NL   Data files (24 files).
+    AUTOEXEC BAT  Batch file to automatically start the program.
+    CRL      BAS  Basic program to change cursor size.
+    CRL      COM  Program to change cursor size.
+    CRS      COM  Program to change cursor size.
+    ???????  PIC  Picture data files (9 files).
+    MASTHEAD      Information file.
+    NEWS     EXE  Main program.
+    PCUGNEWS TOC  Information file.
+
+### Directory of PC-SIG Library Disk 0157
 
      Volume in drive A has no label
      Directory of A:\

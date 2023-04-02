@@ -6,16 +6,47 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #514"
+      B: "PC-SIG Library Disk 0514"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #514
+## Information about "FOLLIES"
+
+    This GAMES disk has 8 programs which will give you hours of fun and
+    relaxation.  ROULETTE and KENO might be used to develop your own
+    system of beating the casinos.  The 3-D TIC-TAC-TOE and the
+    OTHELLO games are great fun, for they match your wits against
+    the computer.  The PC-OTHELLO game is meant to be played by two
+    computer users over the telephone.  If you are a serious internals
+    person with experience in Assembly you may find COREWAR to be both
+    fun and a learning experience.  The BIORHYTHMS charting program is very
+    good.  All in all, a nice collection of computer games.
+    File Descriptions:
+    
+    COREWAR  EXE  COREWAR game program.
+    BRIDGE   DOC  Notes about the use of BRIDGE.EXE.
+    BRIDGE   EXE  Program which randomly deals bridge hands for practice.
+    BIORHY   COM  Program to calculate your biorythm on any date.
+    BIORHY   TXT  Short introduction to biorythm and its use.
+    3DTICTAC EXE  3-D TIC-TAC-TOE game against the computer.
+    COREWAR  DOC  Complete instructions on COREWAR.EXE.
+    PCOTHELL DOC  Documentation for PCOTHELL.EXE.
+    KENO     EXE  The program file for the KENO game.
+    PCOTHELL PN1  Communication file for COM1.
+    PCOTHELL EXE  Executable program for PC-OTHELLO.
+    KENO     EXE  The program file for the KENO game.
+    ROULETTE EXE  The program file for ROULETTE.
+    PCOTHELL PN2  Communication file for COM2.
+    ENTRAP   COM  Game for color systems.
+    ENT-BW   COM  ENTRAP for monochrome monitors.
+    ENTRAP   DOC  Documentation for ENTRAP.COM.
+
+### Directory of PC-SIG Library Disk 0514
 
      Volume in drive A has no label
      Directory of A:\

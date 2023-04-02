@@ -6,16 +6,34 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #532"
+      B: "PC-SIG Library Disk 0532"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #532
+## Information about "PC-MONEY"
+
+    PC-MONEY is a program designed to maintain personal, family, and small
+    business financial and tax records. It includes a module that keeps
+    records for a home business, and a module that consolidates tax
+    information from personal and home business tax records and then
+    estimates federal income tax liabilities.
+    
+    PC-MONEY makes it possible to keep records for as many as nine bank
+    accounts. It also maintains an annual tax account which includes up to
+    44 categories for easy consolidation and compilation of like items for
+    income tax estimating or preparation. Entries such as checks or
+    deposits that affect both a bank account and your tax account are made
+    in a single entry. Bank and tax records can be displayed (and printed)
+    a number of different ways. All operations are selected by menus that
+    are easy to use. All account data is entered via fill-in forms with
+    editing capabilities.
+
+### Directory of PC-SIG Library Disk 0532
 
      Volume in drive A has no label
      Directory of A:\

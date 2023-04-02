@@ -6,16 +6,36 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #284"
+      B: "PC-SIG Library Disk 0284"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #284
+## Information about "LABEL MAKER"
+
+    A simple menu-driven labelmaker, perfect for novices.  Print labels for
+    your library of floppies on the labels that come with your blank
+    diskettes.
+    
+    The program automatically reads and prints all file names,
+    subdirectories, a large title, up to eight lines of comments, the date,
+    number of files, disk format, and bytes used/free on three different
+    5.25 inchdiskette label sizes (3 1/2 x 15/16, 4 x 1 7/16, and 5 x 1
+    7/16) and on two 3.5 inch diskette label sizes ( 2 3/4 x 2 3/4 and 2 3/4
+    x 1 15/16).
+    
+    Options include printing multiple labels, and printing without listing
+    file names. Supports LQ printers as well as Epson dot matrix printers,
+    the IBM Proprinter or Graphics printer, and compatibles.  Will also work
+    on any printer capable of enlarged and compressed print modes.
+    Printer, screen colors, label size, size of title, and other options can
+    be configured to your specifications.
+
+### Directory of PC-SIG Library Disk 0284
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #483"
+      B: "PC-SIG Library Disk 0483"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #483
+## Information about "MAIL MONSTER MAILING LIST PROGRAM"
+
+    MAIL MONSTER is an extremely flexible mailing label manager for any
+    sized application. You can define the categories to fit your lists of
+    people and/or organizations.
+    
+    You can organize your mailing lists and print highly specialized
+    selections.  You can add, edit, sort, and print mailing labels in many
+    different configurations.  For example, print only those labels that
+    need to reach a specific group -- by targeted organization, zip code
+    area, etc. Also included is a mailmerge feature to merge-print letters,
+    as well as a personal telephone directory.
+
+### Directory of PC-SIG Library Disk 0483
 
      Volume in drive A has no label
      Directory of A:\

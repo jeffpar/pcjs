@@ -6,16 +6,25 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #594"
+      B: "PC-SIG Library Disk 0594"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #594
+## Information about "NOTES FOR GENEOLOGY ON DISPLAY"
+
+    NOTES AND SOURCES ON DISPLAY is an extension of the GENEALOGY ON DISPLAY
+    program (PC-SIG disk #90) and uses the "persons" file from that
+    program.  Enhance and organize the search for your ancestral past by
+    saving notes on each new find.  Keep track of your sources of
+    information, the types of information you use, the event date, the
+    research date and finally, the contents of the "note" itself.
+
+### Directory of PC-SIG Library Disk 0594
 
      Volume in drive A has no label
      Directory of A:\

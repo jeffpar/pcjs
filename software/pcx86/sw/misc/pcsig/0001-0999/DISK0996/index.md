@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #996"
+      B: "PC-SIG Library Disk 0996"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #996
+## Information about "DO-IT-YOURSELF PROMO KIT"
+
+    Why send a piece of cardboard or paper to express your feelings, when
+    you can send a disk that plays music? What a birthday surprise!
+    
+    These programs are a perfect replacement for traditional birthday and
+    Christmas cards -- they play music and greet the recipient. With the
+    included editor, you can write your own cards for any occasion. They
+    run on either a monochrome or color system, without the need for a
+    graphics card.
+    
+    Add that personal touch that people never forget!
+
+### Directory of PC-SIG Library Disk 0996
 
      Volume in drive A has no label
      Directory of A:\

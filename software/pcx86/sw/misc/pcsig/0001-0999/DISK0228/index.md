@@ -6,16 +6,45 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #228"
+      B: "PC-SIG Library Disk 0228"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #228
+## Information about "GAME SERIES NO 16"
+
+    Ever have the urge to blow up something?  Try NUKE-SF, it is a graphic
+    demo of nuclear destruction.  Then relax with a game of CRIBBAGE or
+    SLOT, or try two adventure games, VAMPIRE and T-ROAD.  Then try your
+    reflexes against FIREFIRE.  And when you're sure that you are the
+    fastest thing on two fingers, try PAC-GAL and see.
+    
+    System Requirements: Some programs require BASIC, color graphics.
+    
+    How to Start: To run an EXE program, just type its name and press
+    <ENTER>.  For instructions on running BASIC programs, please refer to
+    the GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    COLSLOT  BAS  One arm bandit in color - its a winner  (Requires color)
+    PAC-GAL  EXE  Game - eatem up dots
+    CRIBBAGE BLD  Subroutines for CRIBBAGE.BAS
+    CRIBBAGE BAS  Game - same rules as board game one player vs PC
+    FIREFIRE BAS  Game - reflexes on keyboard
+    T-ROAD   BAS  A neat and interesting adventure game
+    MAZE     BAS  Produces mazes of any size for screen or printer
+    NUKE-SF  BAS  A well done nuclear war demo
+    NEWFONT  BAS  The program in PC - bugs?
+    VAMPIRE  BAS  Adventure game
+    SLOT     BAS  Same as you have, but graphics are better and in color
+    README   DOC  Listing of included files
+
+### Directory of PC-SIG Library Disk 0228
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #920"
+      B: "PC-SIG Library Disk 0920"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #920
+## Information about "MAPTAB WORLD CULTURE DATABASE"
+
+    MAPTAB is a menu-driven data-management program that lets you search for
+    data on different cultures -- their beliefs, practices, and religions
+    across the world.
+    
+    This version of MAPTAB has a partial but useful sample of the
+    ethnographic data on 186 societies worldwide.  177 variables pertaining
+    to these cultures are provided, including kinship, social structure,
+    incidence of aggression, climatic information, and types of marriage
+    customs.  In addition to these items, the documented societies range in
+    time from 1750 B.C. to the present.
+
+### Directory of PC-SIG Library Disk 0920
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,34 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #970"
+      B: "PC-SIG Library Disk 0970"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #970
+## Information about "MSFORMS 1 OF 2 (ALSO 1453)"
+
+    MSFORMS and its utility program, NAMES, read a QUAN report from a
+    Finnigan(tm) mass spectrometer and produce a finished report for given
+    classes of target compound analysis (TCA), suitable for presentation to
+    a client.
+    
+    Attach the RS232 communications cable that runs from the GC/MS NOVA
+    computer to the Tektronix/Westward system terminal of the NOVA to the
+    serial port of your PC. Load a suitable terminal emulator program in
+    your PC and capture the Finnigan TCA QUAN reports as individual ASCII
+    files.
+    
+    MSFORMS is then loaded and the QUAN filenames are passed to the
+    program, along with other information, including matrix type and
+    dilution factors. MSFORMS processes it and prints an analysis form
+    suitable for delivery to a client.
+
+### Directory of PC-SIG Library Disk 0970
 
      Volume in drive A has no label
      Directory of A:\

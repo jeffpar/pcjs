@@ -6,16 +6,32 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #656"
+      B: "PC-SIG Library Disk 0656"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #656
+## Information about "REAL ESTATE SYSTEM"
+
+    RES is an asset for any professional real estate office.  It helps you
+    maintain and organize information on properties for sale, as well as
+    information on the agents in the company.
+    
+    Keep detailed records of sales and search for pending/closed sales at
+    any time.  Keep agents's records of current/previous year
+    commissions, add an agent, or search records of an agent.  Generate
+    valuable reports on office/agent commissions, projected income,
+    pending/closed sales, and unsold property listings.  An added feature is
+    year-end processing which purges all closed sales from the system.
+    
+    Spend your time and energy on selling real estate and leave the tiresome
+    bookkeeping to RES.
+
+### Directory of PC-SIG Library Disk 0656
 
      Volume in drive A has no label
      Directory of A:\

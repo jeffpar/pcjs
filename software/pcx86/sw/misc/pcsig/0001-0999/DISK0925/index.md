@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #925"
+      B: "PC-SIG Library Disk 0925"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #925
+## Information about "LSTSQR"
+
+    LSTSQR carries out a least-squares fit of data to a variety of
+    functional forms including linear, logarithmic, polynomial and
+    exponential.  It allows multiple fits of the same data using the same
+    or different functions without exiting the program.  LSTSQR87 supports
+    the 8087 math co-processor.
+    
+    The program has many measures of quality-of-fit, including standard
+    deviation and the 95% confidence interval.  The program also graphs and
+    prints the fit if desired.  You can input data by keyboard or from data
+    files.
+
+### Directory of PC-SIG Library Disk 0925
 
      Volume in drive A has no label
      Directory of A:\

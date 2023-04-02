@@ -6,16 +6,65 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #110"
+      B: "PC-SIG Library Disk 0110"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #110
+## Information about "PRGMR UTILITIES #2"
+
+    A Programmers Toolbag!  This disk holds lots of little tools,
+    such as AUTOFILE, PRINTER, DEFINE, SCRN, and DOSCOLOR, which are
+    all BASIC utilities.  HC, SIZER, UPPER, and WHEREIS are all tools
+    which perform some function on files from the DOS prompt.  The
+    rest are miscellaneous utilities.
+    
+    System Requirements:  A version of BASIC
+    
+    How to Start:  After loading DOS type DIR *.DOC for all the text
+    files on this disk. Each one describes its own utility and are well
+    documented that way.
+    
+    Suggested Registration:  Generally $3.00 to $15.00
+    
+    File Descriptions:
+    
+    AUTOFILE BAS  Free format filer/indexer with keyed lookup
+    AUTOFILE BAT  Batch file for invoking AUTOFILE
+    UPPER    ASM  Source for UPPER program
+    UPPER    DOC  Documentation for UPPER program
+    UPPER    COM  Filter program to convert file to upper case
+    AUTOFILE DOC  Documentation for AUTOFILE
+    DOSCOLOR BAT  Batch/documentation file for DOSCOLOR
+    DOSCOLOR BAS  Program to set colors used by DOS 2.0
+    DEFINE   DOC  Documentation for DEFINE
+    DEFINE   BAS  Create pictures your BASIC programs can GET/PUT
+    TABLET   BAS  Interactive graphics editor
+    STEEPDES APL  Steepest descent equation solution in APL
+    SIZER    ASM  Source for SIZER program
+    SIZER    DOC  Documentation for SIZER program
+    SIZER    COM  Checks the size of a file and sets ERRORLEVEL
+    HC       COM  Fast, assembly coded hex-binary file converter
+    PRINTER  COM  Menu-driven printer mode setup program
+    HC       DOC  Documentation for the above
+    SCRN     DOC  Documentation for the above
+    SCRN     ASM  BASIC-callable routines for display windowing
+    ROMBIOS  ASM  Source include file for ROM BIOS data areas
+    RAMDISK  DOC  Documentation for RAM disk program
+    RAMDISK  SYS  DOS 2.0 RAM disk sized by parameter in CONFIG.SYS
+    PRINTER  ASM  Source for PRINTER program
+    PRINTER  DOC  Documentation for PRINTER program
+    PRINTER  DAT  File to customize the above for your printer
+    WHEREIS  COM  Names all the subdirectories containing a given file
+    WHEREIS  DOC  Documentation for WHEREIS
+    XT370    DOC  Insider information on the new PC XT/370
+    README        Listing of included files
+
+### Directory of PC-SIG Library Disk 0110
 
      Volume in drive A has no label
      Directory of A:\

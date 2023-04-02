@@ -6,16 +6,106 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #414"
+      B: "PC-SIG Library Disk 0414"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #414
+## Information about "PROTECT AND UNPROTECT"
+
+    Frustrated by copy-protection schemes?  Here's a gold mine of
+    information about running copy-protected and ``key-disk'' programs from
+    your hard disk.  Save your original as a backup.  Step-by-step detailed
+    instructions walk you through a DOS ``debug'' session that lets you
+    easily use over 30 of the most popular copy-protected software products.
+    (Check the file listing.)  Get the most out of the software you
+    own.
+    File Descriptions:
+    
+    ALTER    COM  Program to allow user to change file attributes.
+    COPYPC   COM  A more intelligent alternative to DOS DISKCOPY program.
+    COPYALL  COM  Disk-saver program : copies most disks.
+    CHARTMAS UNP  Procedure on how to unprotect CHARTMASTER v6.04.
+    ALTER    DOC  Documentation for ALTER.COM program.
+    DB3ZAP   BIN  Overlay file needed by DB3ZAP.BAT.
+    DB3ZAP   BAT  Provides an executable backup copy of dBASEIII.
+    DB3V30   DOC  Documentation for all DB3???.* unprotection methods.
+    DB3V30   BIN  Overlay file needed by DB3V30.BAT.
+    DB3V30   BAT  Batch file to unprotect dBASEIII v1.0, Edition 2.
+    DB3V21   BIN  Overlay file needed by DB3V21.BAT.
+    DB3V21   BAT  Batch file to unprotect dBASEIII v1.0, Edition 1.
+    COPYPC   DOC  Documentation for COPYPC.COM program.
+    INFOCOM  DOC  Documentation for use of INFOCOM.COM program.
+    INFOCOM  COM  Utility programs to operate on INFOCOM games (ZORK).
+    GRAFWRTR UNP  Procedure to unprotect GRAPHWRITER v4.21.
+    FRMWK1   UNP  To create executable backup copy of FRAMEWORK v1.0.
+    FRMWK1   DOC  Documentation for backup of FRAMEWORK v1.0.
+    FRMWK1   BAT  Creates executable backup copy of FRAMEWORK v1.0.
+    FOCUSNEW UNP  Eliminates need for ``activator'' disk in A-drive.
+    FLTSIM   UNP  Procedure to unprotect Microsoft FLIGHT SIMULATOR v1.00.
+    FLTSIM   CPY  Make backup copies of Microsoft FLIGHT SIMULATOR.
+    EZWRITR  UNP  Procedure to unprotect EZWRITER 1.1.
+    EXECUVSN UNP  Procedure to unprotect the EXECUVISION graphics package.
+    ENABLE   UNP  Procedure to unprotect the ENABLE v1.0 integrated package.
+    DUPE     EXE  Backup utility.
+    DSAVER   COM  DISK-SAVER v2.01 - copies disks.
+    DOUBLDOS UNP  Instructions on how to unprotect the DOUBLEDOS SOFTGUARD.
+    DB3ZAP   DOC  Documentation for DB3ZAP.BAT.
+    ZORK3    UNP  Makes backup copies of INFOCOM's ZORK III game.
+    ZORK12   UNP  Procedure to make backup copies of INFOCOM's ZORK I, II.
+    WS2000   UNP  Procedure to unprotect WORDSTAR 2000 v1.00.
+    WORD1_1  UNP  Procedure to unprotect MS WORD v1.1 using Ultra-Utilities.
+    LAYOUT   UNP  Procedure to unprotect LAYOUT program.
+    MANY     UNP  Procedure to unprotect dBASEIII v1.1 (bypass SOFTGUARD).
+    LOADCALC UNP  Procedure to create a backup copy of LOADCALC v4.13.
+    LOAD-US  DOC  Documentation for use of LOAD-US.COM program.
+    LOAD-US  COM  Utility program to allow running LOTUS 1-2-3 & SYMPHONY.
+    NEW123UN V1A  Procedure to unprotect LOTUS 1-2-3 Release 1A.
+    NEW123   UNP  Procedure to unprotect LOTUS 1-2-3 Release 1A.
+    123STAR  UNP  Procedure to unprotect LOTUS 1-2-3 Release 1A.
+    MS2      UNP  How to unprotect MEMORY/SHIFT v2.1.
+    MOD123   DOC  Directions for use of MOD123.COM program.
+    MOD123   COM  Procedure to unprotect LOTUS 1-2-3.
+    MLINK206 UNP  Procedure to unprotect MULTILINK v2.06 and allow direct.
+    MEMSHIFT UNP  Procedure to unprotect MEMORY/SHIFT program.
+    WORD     UNP  Procedure to unprotect Microsoft WORD.
+    VISICALC UNP  Procedure to convert VISICALC to a .COM file.
+    UNPSYM   COM  Unprotect SYMPHONY.
+    UNPROT   DOC  Documentation on how to use UNPROT.B.
+    UNPROT   B    BLOAD file from BASIC, designed to unprotect BASIC file.
+    UNP123   TXT  Procedure to unprotect LOTUS 1-2-3 Release 1 & 1A.
+    ULTIMA   UNP  Procedure to unprotect ULTIMA II, PROKEY 3.0 & others.
+    TRIVIA   UNP  Procedure to unprotect TRIVIA FEVER (game & demo disks).
+    TM       UNP  Procedure to unprotect IBM TIME MANAGER (80 col, v1.00).
+    TIMER    SK   Patch to fix SIDEKICK/DOS PRINT.COM conflict.
+    SYMPHONY UP2  Same as SYMPHONY.UNP - simpler instructions.
+    SYMPHONY UNP  Procedure to patch SYMPHONY to allow it to run.
+    SYMPH    DOC  Documentation for SYMPHONY.COM program.
+    SYMPH    COM  Program to allow running SYMPHONY from hard disk.
+    SK11C    UNP  Procedure to unprotect SIDEKICK v1.11C.
+    SK       UNP  Procedure to unprotect SIDEKICK v1.00A.
+    SIGNMAST UNP  Procedure to unprotect SIGNMASTER v5.04.
+    SDKIK    UNP  Procedure to unprotect SIDEKICK v1.10A.
+    PCDRAW14 UNP  Procedure to unprotect PC-DRAW v1.4.
+    PCDRAW   UNP  Procedure to unprotect PC-DRAW.
+    PFSFILE  UNP  Procedure to unprotect PFS-FILE & PFS-REPORT.
+    PFS-ZAP  UNP  Procedure to ZAP PFS-FILE & PFS-REPORT.
+    PFS      UNP  Procedure to unprotect PFS-FILE, PFS-REPORT, PFS-WRITE.
+    PCM      UNP  Procedure to unprotect IBM PERSONAL COMMUNICATIONS MGR.
+    READWRIT DOC  Documentation for READWRIT.COM.
+    READWRIT COM  Program to reset read-only files to read/write and more.
+    READONLY DOC  Documentation for READONLY.COM.
+    READONLY COM  Program to make a file read-only.
+    RB4000   UNP  Procedure to unprotect RBASE 4000 v1.11.
+    PROKEY30 UNP  Procedure to unprotect PROKEY v3.0.
+    PROKEY   COM  Program referred to as part of procedure in PRODWN.TXT.
+    PRODWN   TXT  Patches to allow PROKEY v3.0 to run with SIDEKICK.
+
+### Directory of PC-SIG Library Disk 0414
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,64 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #444"
+      B: "PC-SIG Library Disk 0444"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #444
+## Information about "HOTKEY, XDOS AND EZ-MENU"
+
+    PC/CALCULATOR turns your PC into a programmable multi-function RPN
+    (Reverse Polish Notation) calculator. It features 16 visible
+    memories, seven function key modes, and 14 number display formats. Run
+    it in stand-alone mode or keep it in RAM. Define a "pop-up" key and
+    call your calculator from inside any of your other applications.
+    
+    You'll always be able to add things up!
+    
+    Show your PC who's in charge here anyway!  EZ-MENU gives you a quick and
+    easy way to run your programs while ending the clutter and confusion of
+    scanning through directory and file listings.  Handle 200 .EXE, .COM,
+    .BAT and .BAS programs without breaking a sweat.
+    
+    Have your keyboard do more of the work for you.  Program specific keys
+    to perform specialized functions, enter text strings or series of
+    lengthy repetitive keystrokes.  Do more computing and less typing! File
+    
+    A handy collection of DOS enhancements that will make your life a little
+    easier.
+    
+    ALARM is a RAM-resident alarm clock to remind you of those important
+    appointments and commitments. Go ahead and work on your application.
+    This clock will call you anyway.
+    
+    CAT is similar to the DOS DIR command with some major exceptions:
+    
+    ~  CAT pauses at the end of each screen of listings and waits for a
+    prompt from you before proceeding
+    
+    ~  Files in subdirectories are automatically listed -- down to five
+    levels of directories
+    
+    ~  All files are displayed, including system and hidden files
+    
+    ~  The display is more aesthetically pleasing than DOS
+    
+    HELP is a text file that explains and expands on the use of DOS commands
+    and syntax. Exit to DOS at any time.
+    
+    LOCK lets you change two of a file's attributes -- locked and hidden.
+    Consider using this for sensitive or confidential information.
+    
+    NOPRINT lets you divert data being sent to the printer and display it on
+    your monitor. Helpful when developing and testing printed output without
+    using a printer.
+
+### Directory of PC-SIG Library Disk 0444
 
      Volume in drive A has no label
      Directory of A:\

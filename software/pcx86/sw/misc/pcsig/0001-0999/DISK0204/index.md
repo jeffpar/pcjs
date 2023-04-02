@@ -6,16 +6,57 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #204"
+      B: "PC-SIG Library Disk 0204"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #204
+## Information about "DOS UTILITIES NO 12"
+
+    This disk holds many DOS system chore-handling programs: FCOPY copies
+    and formats single-sided disks in 30 seconds; GCOPY copies files from
+    one drive to another; GDEL can be used to delete files from current
+    drive; MSPOOL2 allows up to 4 printer spoolers simultaneously; VDL is
+    a file delete utility for DOS 2.0 only, VISIPROT converts VISICALC
+    DISK to a disk that can be copied by DISKCOPY; WRTE sets and resets
+    the read-only bit on a file to protect it from being deleted or
+    updated; and FILECOPY paginates and prints test files.
+    
+    System Requirements: 256K RAM, two disk drives, BASIC
+    
+    How to Start: Check the .DOC files for each program.  To run
+    a program with the suffix .COM or .EXE, just type its name, i.e.
+    for GDEL.COM, type GDEL <ENTER>.
+    
+    File Descriptions:
+    
+    FCOPY    EXE  Copies & formats SS disk in 30 sec  (Peter Norton)
+    FCOPY    OBJ  Object code
+    FCOPY    PAS  Pascal source code
+    FCMAGIC  ASM  Assembler routines for FCOPY.EXE
+    READ     ME   FCOPY documentation
+    FCOPY    LNK  Part of FCOPY
+    MSPOOL2  COM  Up to 4 simultaneous printer spoolers  (Rich Winkel)
+    GDEL     EXE  Enhanced DOS delete utility  (Gordon Waite)
+    GDEL     DOC  Documentation
+    GCOPY    EXE  Enhanced DOS copy utility  (Gordon Waite)
+    GCOPY    DOC  Documentation
+    FILEOUT  BAS  Epson printing utility  (Don Withrow)
+    FILECOPY BAS  Paginates & prints text files
+    FCMAGIC  OBJ  Object code
+    MSPOOL2  DOC  Documentation
+    VDL      DOC  Documentation
+    VDL      COM  File delete utility for DOS 2.0  (Tom Roberts)
+    WRTP     COM  Make a file read-only
+    WRTE     COM  Make a read-only file copyable
+    WRT      DOC  Documentation - WRTE.COM & WRTP.COM  (Kent Quirk)
+    VISIPROT DOC  Unprotect VISICALC
+
+### Directory of PC-SIG Library Disk 0204
 
      Volume in drive A has no label
      Directory of A:\

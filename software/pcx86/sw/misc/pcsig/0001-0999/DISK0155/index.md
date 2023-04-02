@@ -6,16 +6,52 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #155"
+      B: "PC-SIG Library Disk 0155"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #155
+## Information about "BUDGETRK AND TASKPLAN"
+
+    Here are five useful programs in BASIC for planning or tracking business
+    projects, expenses and making loan analyses.  BUDGETRAK (Budget Track)
+    tracks budgeted disbursements by numbering budgeted items as grouped
+    under any one of eighty projects.  It tracks them on three levels:
+    DISBURSEMENTS being the lowest level, ITEMS comprise the middle level
+    and PROJECTS are the highest level.
+    
+    The three-part LOAN section contains a Loan Savings Solution which
+    prepares schedules of loan payments, with and without extra payments to
+    the principal.  Leas-By1 compares automobile purchase (with loan) to
+    closed-in lease.  It's an analysis applications package for "private
+    use" autos.  Loan Mortgage Solutions prepares schedules of loan
+    payments, both with and without payment to the principal. Rounding out
+    this package is TASKPLAN, an elementary project manager.
+    
+    System Requirements: BASIC
+    
+    How to Start: Consult the DOC files for BudgetTrack and TaskPlan; the
+    other three have interior directions.  To run the BASIC programs,
+    consult the directions in GETTING STARTED for your configuration.
+    
+    File Descriptions:
+    
+    ??????        Various data files for BUDGETRK.EXE
+    -------- ---  BUDGETRK 3.3
+    BUDGETRK EXE  Budget tracking program
+    BUDGETRK DOC  Documentation for BUDGETRK.BAS  (2 pages)
+    TASKPLAN BAS  Task planning program
+    DESCRIPT DOC  Task plan documentation
+    LEAS-BY1 BAS  Lease - buy analysis for auto purchase or lease
+    -------- ---  LOAN
+    LOANSVGS BAS  Loan payment solutions
+    LOAN-MTG BAS  Loan mortgage schedules, after tax impact
+
+### Directory of PC-SIG Library Disk 0155
 
      Volume in drive A has no label
      Directory of A:\

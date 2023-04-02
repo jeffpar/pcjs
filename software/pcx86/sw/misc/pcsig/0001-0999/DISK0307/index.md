@@ -6,16 +6,88 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #307"
+      B: "PC-SIG Library Disk 0307"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #307
+## Information about "ASSEMBLY UTILITIES NO 1"
+
+    The programs on this disk are utilities for hackers or experienced
+    programmers.  They do many different things and most are aimed at
+    system operations and DOS commands.  Routines include on-screen
+    calculator, and a disk drive alignment program.
+    
+    System Requirements: Optional 8087 co-processor
+    
+    How to Start: To read DOC or TXT files, enter TYPE filename.ext and
+    press <ENTER>.  To run an EXE or COM program, just type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    87ERROR  COM  Handles error calls from optional 8087 math co-processor
+    87ERROR  ASM  Assembly source for 87ERROR
+    87ERROR  DOC  Documentation for 87ERROR
+    ALIGN    BAS  Head alignment program
+    87ERROR  OBJ  Part of 87ERROR
+    AST-TEST COM  Memory test program
+    ASCII    COM  Displays ASCII table on screen
+    ANSIKEYS DOC  Documentation for ANSI&2K
+    ANSI&2K  SYS  Expands function key buffer by 2k
+    SYSTAT   COM  Displays name and comments of each disk drive in system
+    SYSTAT   DOC  Documentation for SYSTAT
+    TEE      COM  Allows you to see what is being piped in piping commands
+    UNDOBKUP BAS  Same as UNDO
+    UNDO     BAS  Allows fixed disk users to read backup diskettes
+    TESTDRV  BAS  Performs read/write test on drives
+    TEE      DOC  Documentation for TEE
+    CALC     EXE  On screen calculator
+    BDNCHM   TXT  A fast and dirty function accuracy test
+    CLEARRO  COM  Clears read only attribute from files
+    CIPHER   BAS  A simple encoding and decoding security system
+    CORELOOK COM  Takes snapshot of memory core
+    CLEARRO  DOC  Docs for CLEARRO
+    DEBUG    TXT  A small tutorial about the DEBUG command in DOS
+    CURSOR   DOC  Documentation for CURSOR
+    CURSOR   COM  Sets maximum size of cursor
+    CPMDOSXR DOC  Displays equivelent commands in DOS and CP/M
+    DEFRAG   BAS  Unifies a file that is fragmented by repeated use
+    DEFRAG   DOC  Documentation for DEFRAG
+    DOS-BUG  4E   Reports on bug in DOS 2.1 function calls
+    ENVINUSE COM  Sizes environment buffer
+    DOS2A    TXT  Information about DOS 2.0 interrupts
+    MEMORY   DOC  Docs to explain MEMORY
+    MEMORY   COM  Allows dynamic memory switch change
+    LOOKMEM  COM  Another memory look program
+    KEYS          Optional key assignment list
+    ENVXPAND SYS  Expands environment buffer by 1k
+    ENVIRO   PAT  Patches COMMAND.COM for larger environement area
+    ENVXPAND DOC  Documentation for ENVXPAND
+    ENVIRON  DOC  Explains some of the SET command options
+    SETVAR   DOC  Documentation for SETVAR
+    SETVAR   COM  Allows variables and variations to the set command
+    SETRO    DOC  Documentation for SETRO
+    SETRO    COM  Sets read only parameter to on
+    SETKEY   EXE  Allows user redefinition of keyboard
+    SETKEY   DOC  Documentation for SETKEY
+    REBOOT   EXE  Software system reboot
+    REBOOT   DOC  Brief apologetic note explaining lack of documentation
+    QUIKUPQD COM  Part of QUIKUP
+    QUIKUP   DOC  Documentation for QUIKUP
+    QUIKUP   COM  Faster bootup by use of software memory switches
+    PARINT   COM  Parity intercept
+    NULLKEYS      Optional key assignment list
+    MORERAM  DOC  Docs for MORERAM
+    MORERAM  COM  Allows PC to use more RAM then switch sets suggest
+    MORERAM  ASM  Assembler source for MORERAM
+
+### Directory of PC-SIG Library Disk 0307
 
      Volume in drive A has no label
      Directory of A:\

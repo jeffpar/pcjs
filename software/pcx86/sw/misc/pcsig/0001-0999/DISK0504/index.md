@@ -6,16 +6,63 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #504"
+      B: "PC-SIG Library Disk 0504"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #504
+## Information about "DOS UTILITIES #21"
+
+    ``Exotic'' or ``esoteric'' might better (than Miscellaneous) describe
+    this assortment of programs that perform a WIDE variety of functions.
+    They include DUMP3, a program for the examination of files, CLEAN,
+    which assists in the cleaning of diskettes, to TTD5PT2, a teletype
+    interface for deaf people.  This disk includes both documentation and
+    the source code.  Also included is a mail-list management program and a
+    specially designed utility program to give you the ability to run
+    programs in two memory partitions.
+    
+    System Requirements:  64K, one disk drive and monochrome display.
+    
+    How to Start:   To run an EXE or COM program simply type its name and
+    press <ENTER>. To read DOC files simply enter TYPE filename.ext and pres
+    <ENTER>.
+    
+    Suggested Registration: DUMP3 $5.00; HOTDEMO requests $20.00 for a full
+    working version of HOT-DOS, and USERLOG requests $25.00.
+    
+    File Descriptions:
+    
+    AREACODE EXE  Displays phone area codes for different states
+    BG       EXE  Program to produces batch file with file names
+    BG       DOC  Documentation for BG system
+    QUIKTIME COM  Displays the time in words
+    TDD5PT2  DOC  TDD5PT2 documentation
+    TDD5PT2  EXE  Teletype interface program - 2
+    TDD5PT2  ASM  Teletype interface program for deaf people
+    HOTDEMO  COM  Creates two memory partitions for programs
+    HOTDEMO  DOC  HOTDEMO documentation
+    SYSLOG   TXT  Older version of USERLOG
+    USERLOG  COM  Maintains log of usage of system
+    CALPO    EXE  Appointment generator program
+    CALPO    DOC  CALPO documentation
+    CLOCK    EXE  Clock program
+    CLEAN    COM  Clear discettes program
+    CLEAN    DOC  CLEAN documentation
+    USERLOG  DOC  USERLOG documentation
+    PCUTIL   COM  Various simple PC Utilities
+    DUMP3    EXE  Search, dump & maintain files
+    DUMP3    DOC  DUMP documentation
+    MAILLIST EXE  Mail list management system
+    MAILLIST DOC  MAILLIST documentation
+    FATDUMP  COM  Lists disk files allocation table
+    FATDUMP  DOC  FATDUMP documentation
+
+### Directory of PC-SIG Library Disk 0504
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,25 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #445"
+      B: "PC-SIG Library Disk 0445"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #445
+## Information about "WILLY THE WORM"
+
+    Arcadiacs -- Try WILLY THE WORM, a high-quality action game!
+    
+    Like Donkey Kong or Lode Runner?  Then you'll love WILLY.  When you've
+    exhausted the possibilities or grown weary of the screens as they are,
+    use EDWILLY and create your own screens.  Keep Willy moving and keep
+    having fun!
+
+### Directory of PC-SIG Library Disk 0445
 
      Volume in drive A has no label
      Directory of A:\

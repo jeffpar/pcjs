@@ -6,16 +6,55 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #83"
+      B: "PC-SIG Library Disk 0083"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #83
+## Information about "WORMCITY"
+
+    For all of you who can't afford the ticket to the planet Arrakis of Dune
+    fame, here is Wormcity, home of another voracious creature. Among the
+    other fun BASIC games here are the Towers of Hanoi, the 15Puzzle and
+    TARGET, a really decent arcade shoot-em-up (which requires a monochrome
+    graphics system).  Rouning out the disk are several utilities, the best
+    of which is a program for taking a compiled file back to Assembly
+    (COM2ASM) and Keyflags, which lets you track your use of NumLock and
+    ScrollLock in the upper right-hand corner of your screen.
+    
+    System Requirements: Version of BASIC.
+    
+    How to Start: Consult your BASIC manual for instructions on how to run
+    BASIC programs for your computer.
+    
+    Suggested Registration: None
+    
+    File Descriptions:
+    
+    15PUZZLE BAS+ Well known puzzle, arrange 15 numbered pieces in order
+    COM2ASM  BAS  Adds labels to debug's unassemble, aids modifying asm code
+    COM2ASM  DOC  Documentation for COM2ASM
+    DISKMDF2 BAS  Diskmdf upgraded for DOS 2.0's nine sector tracks
+    GRPH64K  BAS  Sample register settings as used with GRPH64K board
+    GRPH64K  DOC  How to convert IBM color board for higher resolution
+    HANOI    BAS  Towers of Hanoi - standard programming exercise, nice!
+    KEYFLAGS ASM  Source for KEYFLAGS.COM
+    KEYFLAGS COM  Display @ and # on screen to show capslock & numlock
+    LANDER   BAS+ Simple, but not easy "land on the pad" game
+    MENU2    BAS  Menu program to load and run .BAS programs  (DOS 2.0)
+    NWCLOCK  BAS  Displays time in very large hh:mm:ss format
+    PCGLOBE  BAS+ Globe of PC World's premier issue, page 220
+    STARMAP  BAS  Starmap for any date/time
+    TARGET   BAS+ Arcade aim and shoot game
+    TARGET   DOC  Documentation for TARGET.BAS
+    TARGET   PIC  Data file for TARGET.BAS
+    WORMCITY BAS+ Help the worm eat an apple, escape maze
+
+### Directory of PC-SIG Library Disk 0083
 
      Volume in drive A has no label
      Directory of A:\

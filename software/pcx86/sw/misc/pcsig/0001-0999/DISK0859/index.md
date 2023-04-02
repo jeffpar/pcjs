@@ -6,16 +6,51 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #859"
+      B: "PC-SIG Library Disk 0859"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #859
+## Information about "PC/370 CROSS ASSEMBLER 2 OF 3 (402,1352)"
+
+    PC/370 is a cross assembler that lets you compile and run IBM 370
+    Assembly language programs on a PC, XT or AT.
+    
+    These programs are well-documented with a good demonstration program.
+    This is one of the most complete emulations of the VM370 assembler
+    around.  A generous debugging and erase facility is also included to
+    help you complete development cycles without the big blue box.
+    
+    Features included:
+    
+    ~ PC/370 assembler subroutines can be called from Micro Focus COBAL/2
+    programs running either in extended memory-protected mode or normal MS-
+    DOS real mode.  Standard linkage conventions are supported.
+    
+    ~ PC/370 run-time emulator can be made resident to eliminate loading it
+    for each program or subroutine execution.  As part of making the
+    emulator reusable, debug supports restoring traces
+    
+    ~ Hardware assist is available for the CVB and CVD 370 instructions
+    using the math co-processor to speed up the instructions by a factor of
+    four
+    
+    ~ Two new supervisor calls are included: SVC 36 will load into a
+    predefined area of memory (useful for overlays); SVC 37 defines user
+    SVC exits for modifying native SVC support without requiring an
+    emulated interrupt driven shell
+    
+    ~ The cross assembler supports the copy statement to include source
+    code files
+    
+    ~ The linkage editor supports option U to allow external unresolved
+    references.
+
+### Directory of PC-SIG Library Disk 0859
 
      Volume in drive A has no label
      Directory of A:\

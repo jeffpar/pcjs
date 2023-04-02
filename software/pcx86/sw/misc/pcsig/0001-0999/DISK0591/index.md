@@ -6,16 +6,44 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #591"
+      B: "PC-SIG Library Disk 0591"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #591
+## Information about "GENESIS"
+
+    GENESIS is a program designed to work with TRAVELLER (a science fiction
+    role playing game) from Game Designers Workshop. It helps to speed up
+    the process of setting up planets by the referee and handles aspects
+    such as planetary size, atmosphere and population.
+    
+    System Requirements:  128K, one disk drive, monochome monitor,
+    Traveller software.
+    
+    How to Start:  To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  To run a BAT file, just type its name and press <ENTER>.
+    
+    File Descriptions:
+    
+    README   NEW  File with list of revisions
+    SECTOR   CHN  Planet sctor detail file
+    SETUP    BAT  Batch file for setup
+    SYSTEM1  DAT  System data file to set up planet
+    GENESIS  COM  Main GENESIS program
+    PLANET   CHN  Planet detail file
+    SUBSEC   CHN  Planet subsector detail file
+    AUTOEXEC BAT  Auto-execute file
+    GENESIS  DOC  System documentation with users guide
+    --GNSS10 DID  Genesis system work file
+    PLANET   000  Sample planet detail file
+    README   NOW  Introduction to GENESIS with feature list
+
+### Directory of PC-SIG Library Disk 0591
 
      Volume in drive A has no label
      Directory of A:\

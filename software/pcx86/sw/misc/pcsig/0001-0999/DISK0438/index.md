@@ -6,16 +6,23 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #438"
+      B: "PC-SIG Library Disk 0438"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #438
+## Information about "PRINTER UTILITIES #8"
+
+    ATTENTION Star, Gemini, Epson and Panasonic printer owners -- Here's a
+    set of utility programs to exercise some of the more popular printers
+    and really take advantage of their special capabilities.  Jazz up your
+    printing!
+
+### Directory of PC-SIG Library Disk 0438
 
      Volume in drive A has no label
      Directory of A:\

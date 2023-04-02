@@ -6,16 +6,54 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #853"
+      B: "PC-SIG Library Disk 0853"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #853
+## Information about "SPORTS LOG TRACKING SYSTEM"
+
+    If you read the sports page every day avidly, you'll find that you'll
+    never be able to figure out how you were unable to live without this
+    PC-SIG disk!
+    
+    SPORTS LOG allows you to track games from the NFL, NBA, and many other
+    sport leagues.  You enter the names of the teams in the game and the
+    point spread, then your bet on the games.  Once this is done, you can
+    enter the results of the games, and the program will figure out your
+    accounts automatically and tell you whether you made or lost money in
+    each account.
+    
+    SPORTS LOG also prints a profit-and-loss statement, and lets you entrust
+    your gambling urges to a warning system that flags unsettling
+    imbalances.  This version of the program is limited to one entry, or
+    game, but is fully functional in that aspect.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $25.00
+    
+    File Descriptions:
+    
+    CONFIG   SYS  Configuration file.
+    DEMO     BAT  Starts demo.
+    ???????? INT  Data file (9 files).
+    ISAM     EXE  Run-time module.
+    RUNCOB   EXE  Run-time module.
+    BOOKFILE      Data file.
+    BOOKFILE KEY  Data file.
+    LINEFILE      Data file.
+    LINEFILE KEY  Data file.
+    PITCHERS      Data file.
+    PITCHERS KEY  Data file.
+
+### Directory of PC-SIG Library Disk 0853
 
      Volume in drive A has no label
      Directory of A:\

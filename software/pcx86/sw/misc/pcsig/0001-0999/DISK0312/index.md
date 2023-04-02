@@ -6,16 +6,66 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #312"
+      B: "PC-SIG Library Disk 0312"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #312
+## Information about "SCREEN DESIGN AID"
+
+    The two programs here are for designing your screen and your output.
+    
+    Screen Design Aid (SDA) is for designing display screens for data
+    input use in other programs; these screens will be callable from
+    Assembler, BASIC, or other high-level programs.  SDA includes
+    specifications for blinking, high-intensity, underscoring, and
+    reverse-video options, as well as a full range of color foreground and
+    background options.  It permits the definition of a "screen" utilizing
+    any combination of the 254 displayable characters and saves it in a
+    highly compressed form.
+    
+    The second program is the FORMS program for forms generation and
+    management.  It allows you to generate and edit master forms tailored
+    to your individual application which can then be recalled, filled out,
+    and stored as completed forms.  FORMS supports IBM/Epson/compatible
+    dot matrix as well as Daisy wheel printers.
+    
+    How to Start: Consult the FORMS.DOC, BASSCR.DOC and SDA.DOC for
+    documentation and instructions.  To run either, enter program name and
+    press <ENTER>.
+    
+    Suggested Registration: $25.00 SDA; $30.00 FORMS (includes full
+    manual, latest updates and program revisions)
+    
+    File Descriptions:
+    
+    -------- ---  Screen Design Aid
+    $SDA     OBJ  Screen Design Aid, object code
+    SDA      EXE  Screen Design Aid, Version 3.0
+    BASMEN   OBJ  Object file for BASSCR
+    BASSCR   ASM  BASIC Interface for SDA, Assembler
+    BASSCR   OBJ  BASIC Interface for SDA, object code
+    $FIELD   MAC  Macros for Screen Design Aid
+    BUGREPT  FRM  Bug report form to report FORMS problems
+    REGISTER FRM  Registration form for FORMS users
+    FORMS    DOC  Forms program documentation (10 pages)
+    FORMS    COM  Forms generation and management program
+    -------- ---  Form Generator
+    ANSISCR  EXE  Screen driver
+    BASSCR   DOC  BASIC-SDA Interface manual (2 pages)
+    SDA      DOC  Screen Design Aid manual (32 pages)
+    DEMO     BAS  ASCII description of DEMO.EXE source code
+    DEMO     EXE  SDA demo program, color monitor, 1 screen
+    BONUS    DOC  Notes on included programs
+    READ     ME   Listing of files that are a part of FORMS
+    SDA      EXE  SDA comptession utility
+    IMAGE    DOC  Documentation on SDA.EXE
+
+### Directory of PC-SIG Library Disk 0312
 
      Volume in drive A has no label
      Directory of A:\

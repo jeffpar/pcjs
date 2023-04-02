@@ -6,16 +6,93 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #374"
+      B: "PC-SIG Library Disk 0374"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #374
+## Information about "DOS UTILITIES NO 18"
+
+    A collection of handy DOS programs and utilities that can be used to
+    improve your system.  From the simple (a screen-clock routine), to the
+    sublime (give programs access to DOS path-search capabilities.  Along
+    with display controllers, security programs, and others, this disk can
+    become a valuable part of your everyday operations.
+    
+    System Requirements: Some programs require BASIC
+    
+    How to Start: To read DOC or TXT files, enter TYPE filename.ext and
+    press <ENTER>.  To run an EXE or COM program, just type its name and
+    press <ENTER>.
+    
+    File Descriptions:
+    
+    AUTORES  BAT  Batch file for AUTOMENU under DOS 2.0
+    FK20     DOC  Documentation for FK20.COM
+    FK20     COM  Function key handler for PC-DOS 1.0 and 1.1
+    EXL      EXE  Allows extension of DOS commands.
+    EQUIP    DOC  Documentation for EQUIP.COM
+    EQUIP    COM  Display of the equiptment installed in/on the PC/XT.
+    DU       COM  Displays disk/directory information.
+    DPATH    DOC  Documentation for DPATH.COM
+    DPATH    COM  Gives programs a directory path search capability
+    CLOKATTR DOC  Instructions to change clock display
+    CLCK     COM  Displays clock and key status in the upper right hand
+    CGCLOCK  DOC  Documentation for CGCLOCK.COM
+    CGCLOCK  COM  Real time clock display for color/graphics display.
+    CAL-YR   BAS  Displays a calendar for any given year.
+    BANNER2  LBR  Library of the BANNER program files.
+    BANNER2  BAT  batch file to extract all the files from BANNER.LBR
+    AUTORES2 BAT  Same as AUTORES.BAT
+    XTMENU   BAS  Menu and utilities program.
+    UPDIR    COM  Utility to go back up the directory path
+    SPRINT   DOC  Documentation for SPRINT.COM
+    SPRINT   COM  Speedy PRINT replacement for IBM ROM BIOS routines.
+    SPOOL20  COM  Improved print spooling utility.
+    FLIP     COM  Control special key status (i.e. FLIP NUM OFF).
+    KEYSTAT  DOC  Documentation for KEYSTAT.COM
+    KEYSTAT  COM  Displays status of CapsLock and NumLock keys.
+    KEYLOC_3 EXE  Modifies operation of the Alt, Ctrl, AND Shift keys.
+    KEYLOC   DOC  Documentation for KEYLOC_3.EXE
+    KBFIX    FIX  Patch to quiet the bell in KBFIX.COM
+    KBFIX    COM  Change DOS keyboard buffer size.
+    HGC      DOC  Documentation for HGC.COM
+    HGC      COM  Screen Save Program for the Hercules Graphics Card
+    SPEEDKEY DOC  Documentation for SPEEDKEY.COM
+    LUE      COM  Used by BANNER2.BAT
+    MONOCLK2 DOC  Documentation for MONOCLK2.COM
+    MONOCLK2 COM  MONOCHROME Clock display.
+    NPAD     COM  A windowing notepad.
+    NOLF     DOC  Documentation for NOLF.EXE
+    NOLF     EXE  Allows use of RADIO SHACK printer with the IBM PC.
+    NOBLINK  COM  Prevents blinking of displayed characters.
+    RE-VIEW  COM  Screen scroll buffer program
+    PC-WINDO COM  Public domain attempt at SIDEKICK
+    PASSWORD DOC  Documentation for PASSWORD.BAS
+    PASSWORD DAT  Password file
+    PASSWORD BAS  Provides password protection for you system
+    NPAD     DOC  Documentation for NPAD.COM
+    SPEEDKEY COM  Speeds up the PC keyboard.
+    SNAPSHOT COM  DOS extension saves graphics screen in a disk file.
+    SEARCH   DOC  Documentation for SEARCH.COM
+    SEARCH   COM  Useful replacement for the DOS PATH command.
+    SCRN     DOC  Documentation for SCRN.COM
+    SCRN     COM  Shuts off display when it has not been used for a time
+    S-LOCK   COM  Part of RE-VIEW.COM
+    RUN      DOC  Documentation for RUN.COM
+    RUN      COM  Allows execution of a file in a 'HIDDEN' directory
+    RE-CLS   COM  Used by RE-VIEW.COM
+    RE-VIEW  DOC  Documentation for RE-VIEW.COM
+    REMIND   COM  Memo keeper. Like a string around your finger.
+    RECALL   DOC  Documentation for RECALL.COM
+    RECALL   COM  Allows retrieval of previously issued DOS commands
+    RE-UP    COM  Used by RE-VIEW.COM
+
+### Directory of PC-SIG Library Disk 0374
 
      Volume in drive A has no label
      Directory of A:\

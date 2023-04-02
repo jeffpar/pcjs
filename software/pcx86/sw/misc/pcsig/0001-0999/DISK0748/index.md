@@ -6,16 +6,38 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #748"
+      B: "PC-SIG Library Disk 0748"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #748
+## Information about "THE DIRECTORY ASSISTANT"
+
+    The DIRECTORY ASSISTANT is ideal for the busy person like yourself.  It
+    helps you organize name and address information for use in your
+    personalized phone books, mailing labels, and on-line phone number
+    look-ups.  It also helps you keep track of your meetings and events.
+    It is completely menu-driven and has a help option at each prompt, as
+    well an on-line help menu.  The documentation is very easy to read and
+    understand.  It is well-organized and gives manay examples. Fine for
+    the novice computer user.
+    File Descriptions:
+    
+    DA       EXE  Main program (run this one).
+    DIRECT   EXE  Part of main program.
+    DALOAD   EXE  Part of main program .
+    SYSTEM   ***  Default telephone directory (3 files).
+    DA       FMT  Required system data file.
+    DA       HLP  Required system help file.
+    MANUAL   DOC  Documentation file.
+    READ     ME   Quick file descriptions.
+    GO       BAT  Batch file with start-up message.
+
+### Directory of PC-SIG Library Disk 0748
 
      Volume in drive A has no label
      Directory of A:\

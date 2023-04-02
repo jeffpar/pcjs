@@ -6,16 +6,24 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #311"
+      B: "PC-SIG Library Disk 0311"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #311
+## Information about "THE MOVIE DATABASE 1 OF 2 (ALSO 774)"
+
+    Old movie buffs and videotape collectors -- here's a database of nearly
+    2,000 older movie titles now available on videotape.  You can search
+    each entry by title, MPPA rating, major cast members, writer, director,
+    and other information.  As you add to your collection, you can add new
+    movies to the list with a wordprocessor or text editor.
+
+### Directory of PC-SIG Library Disk 0311
 
      Volume in drive A has no label
      Directory of A:\

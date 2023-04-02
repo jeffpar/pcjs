@@ -6,16 +6,43 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #30"
+      B: "PC-SIG Library Disk 0030"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #30
+## Information about "PASCAL I/O"
+
+    The Pascal programs on this disk show how to do disk I/O with Pascal.
+    PASCAL I/O is logical well written and documented code.  At the heart
+    of PASCAL I/O is INTRPT.OBJ which in conjunction with IOSTUFF.OBJ and
+    IOSTUFF.INC demonstrate IBM I/O routines in Pascal.  Also included is
+    DISKREAD which displays the disk contents using IBM BIOS.
+    
+    System Requirements:  An IBM PASCAL compiler.
+    
+    How to Start:  To read documentation enter: TYPE IOSTUFF.DOC.  To run a
+    .PAS program, load Pascal, compile and run.
+    
+    File Descriptions:
+    
+    INTRPT   ASM  Source for INTRPT.OBJ
+    IOSTUFF  DOC  Describes files below
+    DISKREAD OBJ  Object for DISKREAD.EXE
+    DISKREAD EXE  Displays disk contents by sector
+    INTRPT   OBJ  Object to be linked to your Pascal program object
+    DISKREAD PAS  Source for DISKREAD.OBJ
+    IOSTUFF  OBJ  Object to be linked to your Pascal program object
+    IOSTUFF  INC  Source to be INCLUDED with your Pascal program source
+    IOSTUFF  PAS  Source for IOSTUFF object
+    PRIME    PAS  Source for DEMO
+    SAMPLE   PAS  Source for DEMO
+
+### Directory of PC-SIG Library Disk 0030
 
      Volume in drive A has no label
      Directory of A:\

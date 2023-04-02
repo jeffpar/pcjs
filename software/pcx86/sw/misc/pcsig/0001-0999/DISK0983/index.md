@@ -6,16 +6,36 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #983"
+      B: "PC-SIG Library Disk 0983"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #983
+## Information about "NATIONAL BUREAU OF STANDARDS LIFE-CYCLE"
+
+    NATIONAL BUREAU OF STANDARDS LIFE-CYCLE COST (NBSLCC) performs thorough
+    cost-analyses of buildings and building systems, and compares the
+    economic performances of differing designs and alternatives.
+    
+    It computes total life-cycle costs, net present value savings,
+    savings-to-investment ratio and adjusted internal rate-of-return.  It
+    can apply to commercial and non-commercial buildings and includes income
+    tax adjustments and financing effects in the analysis.  Long-term energy
+    price projections can be automatically retrieved for use in the LCC
+    analysis of energy projects when you want them.
+    
+    NBSLCC consists of an introductory program, five major modules, a
+    worksheet and a stand-alone program called DISCOUNTs for computing
+    discounted cash flows.  NBSLCC is user-oriented -- it prompts you for
+    data and assumptions, advises you when entries appear improper, lets
+    you make changes to input data files, and allows you to move by menu
+    selection.
+
+### Directory of PC-SIG Library Disk 0983
 
      Volume in drive A has no label
      Directory of A:\

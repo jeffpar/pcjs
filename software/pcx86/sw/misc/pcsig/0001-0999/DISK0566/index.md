@@ -6,16 +6,57 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #566"
+      B: "PC-SIG Library Disk 0566"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #566
+## Information about "SURVEYSOFT"
+
+    SURVEYSOFT is a series of programs designed for the surveyor with
+    modules including field traverse, entry and storage of
+    coordinates and many more. It is a fairly comprehensive package
+    and has a complete set of documentation.
+    
+    Features:
+    
+    ~ Field traverse
+    ~ Bearing/bearing intersection
+    ~ Close and adjust
+    ~ Bearing/distance intersect
+    ~ Distance/distance intersect
+    ~ Rotate coordinates
+    ~ Inverse with curves and areas
+    ~ List coordinates
+    ~ Data storage
+    ~ Data retrieval
+    
+    System Requirements:  Two disk drives, 128K and monochrome/graphics
+    display.
+    
+    How to Start:  Read the READ_ME and MANUAL.TXT. Enter GO to
+    start.
+    
+    Suggested Registration:  $75.00
+    
+    File Descriptions:
+    
+    GO       BAT  Main system loader
+    PRINTEXT BAT  Batch file to print manual
+    DRIVFILE PAS  Name of drive
+    MANUAL   TXT  Detailed documentation
+    SETDRIVE COM  Utility to set drive
+    SURVEY?  00?  Surveysoft routines
+    MSG?     01   Text printed by batch file
+    FILES    TXT  File with list of package files
+    RUN      BAT  Execution program (Copy of GO.BAT)
+    READ_ME  BAT  Instructions file
+
+### Directory of PC-SIG Library Disk 0566
 
      Volume in drive A has no label
      Directory of A:\

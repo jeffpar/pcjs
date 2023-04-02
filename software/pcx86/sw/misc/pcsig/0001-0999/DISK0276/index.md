@@ -6,16 +6,28 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #276"
+      B: "PC-SIG Library Disk 0276"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #276
+## Information about "COLLIST"
+
+    File Descriptions:
+    
+    RELSE-2    0     Displays title in directory
+    COLLST     PRE   Displays title in directory
+    INSTALL    ED    Displays title in directory
+    DISK             Displays title in directory
+    START      TXT   Part of COLLIST
+    START      EXE   This is the program to start the decoding, type "start"
+    ??????     ???   Part of COLLIST (17 more files)
+
+### Directory of PC-SIG Library Disk 0276
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #481"
+      B: "PC-SIG Library Disk 0481"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #481
+## Information about "STILL RIVER SHELL"
+
+    The STILL RIVER SHELL provides an intuitive interface with your system
+    that MS/PC-DOS has never provided the user.
+    
+    Typical DOS functions of execute, find, copy, move, delete, or list are
+    completed with significantly fewer keystrokes while still providing
+    access to all DOS commands. It gives you a more comfortable and
+    informative operating environment than DOS alone, and the friendly,
+    visible nature of the display can actually help the new user to better
+    understand the operating system.
+    
+    Get things done with greater speed and precision. After all, isn't that
+    the point of computing?
+
+### Directory of PC-SIG Library Disk 0481
 
      Volume in drive A has no label
      Directory of A:\

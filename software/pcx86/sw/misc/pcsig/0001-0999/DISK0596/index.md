@@ -6,16 +6,38 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #596"
+      B: "PC-SIG Library Disk 0596"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #596
+## Information about "SYMPHONY WORKSHEETS #3"
+
+    Business planners and investors will find this disk especially valuable
+    to Symphony users.  5YEAR.WRK allows the financial planning of any
+    business over a five year period, including the appropriate pro forma
+    calculations.  PROJECT.WRK enables planners to determine production and
+    performance timetables for implementing and executing project oriented
+    businesses.  Both spreadsheets are macro-driven but do require reading
+    the documentation and assumes basic knowledge of buiness plan
+    development.
+    
+    System Requirements:  512K, two disk drives, monochrome display and
+    Lotus SYMPHONY
+    
+    How to Start:  Access through Lotus SYMPHONY
+    
+    File Descriptions:
+    
+    5YEAR    WRK  Five year business plan macro
+    0_DESCR  WRK  Description of macros on this disk
+    PROJECT  WRK  Project oriented company planner macro
+
+### Directory of PC-SIG Library Disk 0596
 
      Volume in drive A has no label
      Directory of A:\

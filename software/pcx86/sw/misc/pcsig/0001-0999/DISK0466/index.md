@@ -6,16 +6,32 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #466"
+      B: "PC-SIG Library Disk 0466"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #466
+## Information about "CPA LEDGER 1 OF 2 (ALSO 468)"
+
+    A menu-driven general ledger and financial statement program designed
+    for non-manufacturing businesses that offer products or services for
+    sale.
+    
+    Start your books and maintain them: post transactions; prepare
+    unadjusted and post-closing trial balances, and income statements; print
+    a list of all postings for any period; search for previously-entered
+    transactions; and reconstruct specific GL accounts and add new ones.
+    CPA-LEDGER has plenty of muscle to record your daily transactions. Any
+    single general ledger entry can have up to 30 debits and 30 credits,
+    with total values of up to $999,999,999.99. A very powerful system.
+    Some knowledge of double-entry bookkeeping is necessary to operate this
+    package.
+
+### Directory of PC-SIG Library Disk 0466
 
      Volume in drive A has no label
      Directory of A:\

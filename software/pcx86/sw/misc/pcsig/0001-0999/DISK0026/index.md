@@ -6,16 +6,46 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #26"
+      B: "PC-SIG Library Disk 0026"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #26
+## Information about "BOOK INDEX BUILDER"
+
+    BOOK INDEX is a simple and straightforward set of programs and
+    procedures for preparing book indices.  They allow the user to easily
+    create a data file that will form the index.  This program can be a
+    lifesaver for those aspiring writers whose word processors do not
+    include built-in index abilities.
+    
+    System Requirements:  128k, two disk drives, monochrome monitor
+    
+    How to Start: From DOS, enter INFO for documentation and
+    instructions on using the program.  With program disk in drive A and
+    working data disk in drive B, enter START to begin program.
+    
+    File Descriptions:
+    
+    START    BAT  Start-up program. Creates empty data file
+    INFO     BAT  Informational file for Book Indexing programs
+    INPUT    PAS  Pascal source code for Book Indexing Program
+    BUILD    EXE  Compiled programs for Book Indexing
+    MERGE    EXE  Compiled programs for Book Indexing
+    SORT     EXE  Compiled programs for Book Indexing
+    INPUT    EXE  Compiled programs for Book Indexing
+    INDEX    BAT  Format an index from the data
+    COMBINE  BAT  Sort/merge new entries with any previous entries
+    ENTER    BAT  Begin index entries
+    SORT     PAS  Pascal source code for Book Indexing Program
+    MERGE    PAS  Pascal source code for Book Indexing Program
+    BUILD    PAS  Pascal source code for Book Indexing Program
+
+### Directory of PC-SIG Library Disk 0026
 
      Volume in drive A has no label
      Directory of A:\

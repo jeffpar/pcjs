@@ -6,16 +6,47 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #56"
+      B: "PC-SIG Library Disk 0056"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #56
+## Information about "KEYBOARD UTILITIES 1"
+
+    This assortment of BASIC language programs gives you animation,
+    word processing, a filing system, and more.  This disk has good
+    stuff for those interested in exploring the capabilities of the
+    BASIC language.  The keyboard programs serve to give the user
+    an on-screen status display of the CAPS LOCK and NUM LOCK keys,
+    and are meant for use with BASIC and the Volkswriter word
+    processing program.
+    
+    System Requirements:  Some programs require BASIC.
+    
+    How to Start:  To run an EXE program simply type its name and press
+    <ENTER>. To read DOC files, enter TYPE filename.ext and press <ENTER>.
+    
+    File Descriptions:
+    
+    BASIC-KB ASM  Assembly language source for BASIC-KB.EXE
+    BASIC-KB DOC  Documentation for BASIC-KB.BAS
+    BASIC-KB EXE  Executable program file
+    SPEECH   BAS  IPCO Produces test of speech
+    DISTAR   BAS  IPCO Computes stellar parameters
+    XMASCARD BAS  IPCO Animated Christmas card
+    DECIDE   BAS  IPCO Decision maker
+    MINI-WP  BAS  Mini word processor
+    KEYBOARD DOC  Documentation for KEYBOARD.BAS
+    KEYBOARD EXE  Executable program file
+    KEYBOARD ASM  Assembly language source for KEYBOARD.EXE
+    ADDR-PH  BAS  IPCO Filing system for names, addresses & phone #s
+    PROVERB1 BAS  IPCO Prints proverbs
+
+### Directory of PC-SIG Library Disk 0056
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,35 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #882"
+      B: "PC-SIG Library Disk 0882"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #882
+## Information about "THE POOL MANAGER"
+
+    It's a great day, sports fans!  Here's something you've needed for
+    years.
+    
+    THE POOL MANAGER makes running a football pool a snap.  Whether the
+    featured event at a private party or the regular office pool, FPM does
+    all the tedious work.  Enter the basic information and it handles
+    everything else, from generating a picksheet to printing the final
+    standings.
+    
+    It has complete flexibility to handle up to 18 games and 90
+    participants in a single pool.  For NFL pools, the teams are already
+    stored in the program, just indicate the opponents.  You can maintain
+    season-long standings, utilize a tiebreaker, and determine winning teams
+    by applying the point spread.  It can be used for pools in any sport.
+    
+    So, who do you like for next week?
+
+### Directory of PC-SIG Library Disk 0882
 
      Volume in drive A has no label
      Directory of A:\

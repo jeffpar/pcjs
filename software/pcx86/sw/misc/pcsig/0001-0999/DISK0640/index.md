@@ -6,16 +6,44 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #640"
+      B: "PC-SIG Library Disk 0640"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #640
+## Information about "LIST"
+
+    LIST is a printer-related utility program designed to aid programmers
+    and others with simple document printing requirements.  The program
+    controls printing of documents, providing automatic pagination, page
+    numbering, titling, printing of headers and footers, and a number of
+    other similar features.  Most significantly, the program easily
+    handles printing multiple documents, such as might occur when a
+    programmer wishes to print out all program source code files used on a
+    project.
+    
+    System Requirements: 256K, one floppy drive and a monochrome,
+    black & white, or color monitor.  To print hardcopy documents, a
+    parallel (LPT) printer is required.
+    
+    How to Start: After consulting the documentation in LIST.DOC,
+    initiate the program by running INSTALL and then LIST.
+    
+    Suggested Registration:  $10.00
+    
+    File Descriptions:
+    
+    README   DOC  Contents,  installation and execution  of LIST
+    LINSTALL COM  Program run by the BAT file
+    INSTALL  BAT  Batch file to install LIST for display type
+    LIST     COM  Main program
+    LIST     DOC  Documentation file
+
+### Directory of PC-SIG Library Disk 0640
 
      Volume in drive A has no label
      Directory of A:\

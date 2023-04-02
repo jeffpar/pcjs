@@ -6,16 +6,44 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #266"
+      B: "PC-SIG Library Disk 0266"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #266
+## Information about "NAEPIRS"
+
+    This disk contains data from the National Assessment of Educational
+    Progress Information Retrieval System (NAEPIRS) and programs to access
+    the data.  It is produced by the National Institute of Education.  It
+    has been designed so that users can ask for findings according to
+    subject or age group; look for trends or attitudes; or compare
+    findings between groups such as rural and urban students, males and
+    females, students of different races, etc.  Example of findings --
+    About 10 percent of the surveyed students at each age do not read in
+    their spare time.
+    
+    System Requirements: 2 disk drives
+    
+    How to Start: Load DOS and type NAEPIRS to enter the main program.
+    
+    File Descriptions:
+    
+    NAEPIRS  EXE  Main program, type "NAEPIRS" to start
+    SPOOL    EXE  Spooler, so you don't have to wait for your printer
+    AUTOEXEC BAT  Auto start file
+    SETUP    BAT  Batch file to set up working disk
+    JSUM     BIN  Part of NAEPIRS system
+    JINT     BIN  Part of NAEPIRS system
+    @??      OVL  Overlay files
+    DBFIND   DAT  NAEPIRS data file
+    REFYR    BIN  Part of NAEPIRS system
+
+### Directory of PC-SIG Library Disk 0266
 
      Volume in drive A has no label
      Directory of A:\

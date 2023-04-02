@@ -6,16 +6,74 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #569"
+      B: "PC-SIG Library Disk 0569"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #569
+## Information about "PC-CODE3 AND PC-CODE4"
+
+    PC-CODE3 is a simplified version of PC-CODE2 (V1.53); it is a code
+    analysis program.  PC-CODE4 is a simplified version of PC-CODE1 (V1.53)
+    and likewise is intended for encoding files as opposed to text.
+    
+    PC-STAT3 is a simple statistical program by which the user may do
+    simple analysis of either a Plain Text FILE or a Coded FILE.
+    Basically, it does frequency counts that were previously embedded
+    features of PC-CODE1 & 2.
+    
+    PC-CODE3 and PC-CODE4 are Portable Versions Specifically for Generic
+    MS-DOS and Xenix 5.  They are written in a strictly portable Microsoft
+    FORTRAN-77 V3.30.  The Object code on these diskette(s) is compatiable
+    with both MS-DOS and Microsoft Xenix; meaning these program need NO
+    recompiling - they only needed to LINKED to the respective libraries.
+    
+    System Requirements:  64K RAM, two disk drives and a monochrome
+    display; MS-DOS or Xenix 5 are operating system options.
+    
+    How to Start:  After loading DOS, enter PC-CODE.DOC for a review of
+    the documentation.  Note that you must run INSTALL3 before you can run
+    either PC-CODE3 or 4.
+    
+    Suggested Registration:  $10.00
+    
+    File Descriptions:
+    
+    PC-CODE  DOC  Documentation and Notes on PC-CODE3 & PC-CODE4
+    PC-STAT3 OBJ  Object code for BOTH MS-DOS (PC-DOS) and XENIX V
+    PC-STAT3 EXE  A Analysis program to check codes/texts
+    INSTALL3 EXE  A program configurator that sets options/defaults
+    PC-CODE4 EXE  Cluster Oriented Block Semi-binary version PC-CODE3
+    PC-CODE3 EXE  Combination 8086(88) and 8087 version (works on both)
+    INSTALL3 OBJ  Object code for BOTH MS-DOS (PC-DOS) and XENIX V
+    PC-CODE3 OBJ  Object code for BOTH MS-DOS (PC-DOS) and XENIX V
+    PC-CODE4 OBJ  Object code for BOTH MS-DOS (PC-DOS) and XENIX V
+    INSTALL3 FOR  FORTRAN77 Source Code for Installer program
+    PC-CODE3 FOR  FORTRAN77 Source Code for PC-CODE3.EXE (8088/8087)
+    PC-CODE4 FOR  FORTRAN77 Source Code for PC-CODE4.EXE (8088/8087)
+    PC-STAT3 FOR  FORTRAN77 Source Code for PC-STAT.EXE
+    CONFIG   PC3  The Configuration file used by PC-CODE3 & INSTALL3
+    SECRET3  MSG  Test file for Encoding using PC-CODE3
+    SECRET3  KEY  Test key file for encoding "SECRET.MSG" for PC-CODE3
+    SECRET3  COD  Test code from encoding "SECRET.MSG" using PC-CODE3
+    EXAMPLE  DOC  This Execution Log or printout of sample run
+    CRC      TXT  This is the Check Bit Sums for the Entire Disk
+    CRC      COM  Does Check Bit sums to verify NO alterations of files
+    SECRET4  TXT  Result of decoding SECRET.COD using PC-CODE4
+    SECRET4  KEY  Test key file for encoding "SECRET.MSG" for PC-CODE4
+    SECRET4  COD  Test code from encoding "SECRET.MSG" using PC-CODE4
+    SECRET4  MSG  Test file for Encoding using PC-CODE4
+    SECRET3  TXT  Result of decoding SECRET.COD using PC-CODE3
+    README        Notes on programs
+    COPYRIGH T    Copyright notice
+    DIR      TXT  Listing of included files
+    ???      DOC  Notes on programs
+
+### Directory of PC-SIG Library Disk 0569
 
      Volume in drive A has no label
      Directory of A:\

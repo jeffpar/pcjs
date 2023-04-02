@@ -6,16 +6,47 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #550"
+      B: "PC-SIG Library Disk 0550"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #550
+## Information about "LETUS A-B-C #13"
+
+    Letus A-B-C is a database in PC-FILE III format containing references
+    to articles in six major PC oriented magazines, beginning with 1982.
+    This release of Letus A-B-C covers the following two magazines devoted
+    to the IBM PC: Byte Magazine (BYTE), and PC Week (PCWK).  This database
+    provides the PC user with a tool for easily performing literature
+    searches at a very nominal cost in one's office or home. The search is
+    done by keyword fields as well as identification fields (i.e., author,
+    title, magazine issue, and page); also, the authors have included
+    three lines that give a general description of the article.
+    
+    System Requirements:   128k, 2 disk drives, PC-FILE III (Disk No 5)
+    
+    How to Start: It is very important to read the Documentation file
+    (Letus.doc) located on disk #350 either by screening it (entering TYPE
+    LETUS.DOC at the A> and using CTRL-S to pause it) or accessing it with
+    your word processor.  To run it, "boot-up" the DOS system and put
+    PC-FILE system disk in drive A; enter PC-FILE <CR>.  PC-FILE will
+    ask where the database is; you will have put Letus A-B-C Disk #13
+    in drive "B", so you will enter B:LETUS <CR>.  The various files
+    on this diskette, corresponding to magazine and year, will
+    be displayed on the screen for your selection.
+    
+    Suggested Registration:  $10.00 per disk.
+    
+    File Descriptions:
+    
+    BYTE85B  ???  BYTE Magazine Second Quarter 1985 reference files.
+    PCWK85B  ???  PC Week Second Quarter 1985 reference files (4 files)
+
+### Directory of PC-SIG Library Disk 0550
 
      Volume in drive A has no label
      Directory of A:\

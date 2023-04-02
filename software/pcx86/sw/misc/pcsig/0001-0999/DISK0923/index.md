@@ -6,16 +6,30 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #923"
+      B: "PC-SIG Library Disk 0923"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #923
+## Information about "PROFESSIONAL REAL ESTATE ANALYST"
+
+    PROFESSIONAL REAL ESTATE ANALYST is designed for multi-family and
+    commercial real estate analysis.  All files in the ANALYST are
+    interrelated, operate via Lotus-like menus, and have help screens.
+    
+    The main program, Cash Flow Analysis, has LOTUS worksheets that perform
+    13 measures of investment, including Cap Rate, IRR, FMRR, Cash on Cash,
+    NPV, and Debt Coverage Ratio.  Determine purchase price with IRR, CR,
+    GRM and more.  It has been updated to comply with current tax laws.
+    
+    The 130-page manual includes menu maps.  You don't need to know Lotus to
+    use this program.
+
+### Directory of PC-SIG Library Disk 0923
 
      Volume in drive A has no label
      Directory of A:\

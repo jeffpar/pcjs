@@ -6,16 +6,41 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #794"
+      B: "PC-SIG Library Disk 0794"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #794
+## Information about "COMPOSER BY OAK TREE SOFTWARE"
+
+    If you're like most people, you've always had the urge to create music.
+    But for some reason you never picked up that first instrument and
+    really learned how to play it.  COMPOSER makes your computer that first
+    instrument.
+    
+    COMPOSER is a graphics-based music editor that lets you compose, edit,
+    play, save, and print single-voice music on your PC.  Since COMPOSER is
+    a graphics-based editor, you can actually see the notes that make up
+    your music.  You do not have to work with a confusing mixture of
+    letters and numbers.  Once your music looks correct on the screen and
+    sounds correct, you can print your music with any dot matrix printer.
+    
+    COMPOSER is easy to use and very flexible.  If you have a PCjr, or
+    compatible three-voice machine, COMPOSER can also create music files
+    that later can be combined to make three-part sound.  This lets you
+    create harmony and chords.
+    
+    COMPOSER's editing features make music entry easy.  By using COMPOSER's
+    block insert and delete mode, you can manipulate large sections of music
+    quickly.  Includes Beethoven's Symphony Number 5 and Minuet in G, John
+    Phillip Sousa's Stars and Stripes Forever, and Scott Joplin's Maple Leaf
+    Rag.
+
+### Directory of PC-SIG Library Disk 0794
 
      Volume in drive A has no label
      Directory of A:\

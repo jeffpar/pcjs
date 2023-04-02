@@ -6,16 +6,70 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #366"
+      B: "PC-SIG Library Disk 0366"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #366
+## Information about "TURBO PASCAL SET #6"
+
+    Collection of files and routines written in Turbo Pascal for the IBM-PC.
+    The files on this disk include a good array of communication routines
+    which include, a Hayes modem dialer, serial communication routine, and
+    a file opener with error handling.  These files can help users
+    construct their own communications software.
+    
+    System Requirements:  Turbo Pascal
+    
+    How to Start:  To read DOC files simply enter TYPE filename.ext and
+    press <ENTER>.  For instructions on PAS listings, refer to your Pascal
+    language manual.
+    
+    File Descriptions:
+    
+    ARGLIST2 PAS  Get command line parameters (argument list) -- classy
+    2DIR     PAS  Sorted directory
+    DIALER   PAS  Dials HAYES SmartModem
+    COMMCALL PAS  Serial communications routines
+    COLORDEM PAS  Demonstrates TURBO color modes
+    CLIMB    PAS  Climb around the directory tree -- compiled only
+    DIRSRCH  PAS  Directory search
+    FILEIO   INC  File IO routines, w/o explanation
+    INUSE    PAS  Password demonstration
+    INKEYGET PAS  Program to receive ANY keypress from keyboard
+    INKEY    INC  Routine to get char from keyboard -- like BASIC INKEY$
+    INDEX    PAS  Index, view, delete, or print files on disk
+    LU       PAS  Library Utility -- needs modification for IBM & TURBO
+    JFYDIR   PAS  Writes directory of default drive
+    LU-2     PAS  Included file
+    LU-1     PAS  Included file
+    PASCAL   LIB  Various routines
+    OPENFILE INC  Opens a file, with protection agains error crashes
+    LU       DOC  Documentation
+    SENDASCI INC  Routine to send ASCII chars ???
+    READDATE INC  Function accepts and returns a valid data (oo/oo/oo)
+    PRINTUSG PAS  Demonstration
+    PRINTUSG INC  Print according to "mask", like BASIC PRINT USING
+    TYPES    INC  Type declarations used by other files
+    SCREEN   INC  Routines to accept valid data of various types
+    FREESPAC INC  Routine to get amount of free space on disk
+    DRAWBOX  INC  Draw a box (one style) and use window inside it
+    DIR      PAS  Get directory -- incomplete???
+    BLANK    INC  Routines to create string of blanks, center string
+    -------- ---  The following five files are incomplete in some way
+    XREFT    PAS  TURBO cross-reference & lister -- $Include files, too
+    XLIST    PAS  TURBO cross-reference & lister
+    UTIL     INC  Fifty-Two utility routines (!!!)
+    TXREF    COM  Compiled version
+    TXREF    PAS  TURBO cross-reference & lister -- needs TURBO TOOLBOX
+    TOOLKIT  INC  Routines for interactive programs -- NOT TURBO
+    STRIPTAB PAS  Strips TABs from a file -- replaces with one space
+
+### Directory of PC-SIG Library Disk 0366
 
      Volume in drive A has no label
      Directory of A:\

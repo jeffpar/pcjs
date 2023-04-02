@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #523"
+      B: "PC-SIG Library Disk 0523"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #523
+## Information about "SIDE WRITER"
+
+    Are your spreadsheets too wide to print in one piece?  Have you had to
+    resort to cut-and-paste methods to tie your outline together?  Try
+    SIDEWRITER.
+    
+    SIDEWRITER lets printers output sideways on paper.  This lets you print
+    reports and other materials that do not fit across a page, because it
+    prints down the length of the sheet instead of across the width.  It
+    works much like SIDEWAYS.
+    
+    SIDEWRITER prints existing text sideways, allowing unlimited print
+    width.  Spreadsheet columns can be printed on one continuous page.  The
+    function keys and menus make it easy to learn and use.
+
+### Directory of PC-SIG Library Disk 0523
 
      Volume in drive A has no label
      Directory of A:\

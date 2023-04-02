@@ -6,16 +6,28 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #370"
+      B: "PC-SIG Library Disk 0370"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #370
+## Information about "FLASH CARDS 4 OF 4 (367, 368, 369)"
+
+    A menu-driven 7,500-Word Vocabulary Builder and Spelling Teacher for the
+    high school and college-level student.  The flash card format has proved
+    to be an effective teaching mechanism for improving spelling and
+    vocabulary skills.
+    
+    The dictionary does not include the 4,000 most basic words but, rather,
+    the 7,500 next most commonly-used words.  BASIC source code is included.
+    While you're polishing your spelling, learn the parts of speech and the
+    definition of each word.
+
+### Directory of PC-SIG Library Disk 0370
 
      Volume in drive A has no label
      Directory of A:\

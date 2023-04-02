@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #984"
+      B: "PC-SIG Library Disk 0984"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #984
+## Information about "DOUBLE BOGIE KILLER AND GOLF DATABASE"
+
+    DOUBLE BOGIE KILLER is a golf stats/database used to track on-course
+    performance.
+    
+    For each hole played, three data items are recorded: gross, putts and
+    fairways.  Course data such as yardages, hole pars and course ratings
+    are taken from the scorecard and recorded into the course database.
+    Your stats for each round are entered into your player file.
+    
+    The following reports can be run at any time after the first hole has
+    been entered: overall summary, course by course review, USGA handicap
+    and nine-hole handicap report, scoring percentages and efficiency
+    Analysis. Send reports to a disk or printer.
+
+### Directory of PC-SIG Library Disk 0984
 
      Volume in drive A has no label
      Directory of A:\

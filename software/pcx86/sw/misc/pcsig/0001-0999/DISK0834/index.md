@@ -6,16 +6,30 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #834"
+      B: "PC-SIG Library Disk 0834"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #834
+## Information about "GRAPHTIME II 2 OF 2 (HERCULES) ALSO 833"
+
+    GRAPHTIME II is a business-presentation graphics program.  GRAPHTIME II
+    does various line, column and pie charts.  The charts can be printed or
+    plotted, viewed individually, or set up to run as an unattended "slide
+    show" on the monitor.  It accepts data from dBase II/III, Multiplan,
+    and Lotus 1-2-3, or you can enter data directly.  It has a font editor,
+    macro editor and math functions including moving averages.  There is
+    even an "undo" function. A Microsoft mouse (or compatible) is
+    recommended for the draw program.
+    
+    This version will plot 24 data points and will print "paint" files or
+    save them to disk.
+
+### Directory of PC-SIG Library Disk 0834
 
      Volume in drive A has no label
      Directory of A:\

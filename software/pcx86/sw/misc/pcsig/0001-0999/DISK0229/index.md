@@ -6,16 +6,28 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #229"
+      B: "PC-SIG Library Disk 0229"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #229
+## Information about "FUNNELS AND BUCKETS"
+
+    FUNNELS teaches math as a game, attracting young ones to the subject. A
+    very effective tool since they'll be too busy having fun to notice they
+    are learning!
+    
+    Arithmetic problems fall from the sky and the idea is to solve them
+    before they hit the bucket on the ground. A tap on the space bar while
+    the problem is falling brings the solution. The "falling" speed can
+    be adjusted for age. When the buckets are full, the game is over.
+    Target ages: 5-11.
+
+### Directory of PC-SIG Library Disk 0229
 
      Volume in drive A has no label
      Directory of A:\

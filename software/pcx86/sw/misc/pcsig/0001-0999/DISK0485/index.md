@@ -6,16 +6,42 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #485"
+      B: "PC-SIG Library Disk 0485"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #485
+## Information about "ICON MAKER & FXMATRIX"
+
+    ICON MAKER is a menu-driven program that allows you to create graphical
+    icons and cross-stitch graphics interactively in any of three graphical
+    modes supported by the IBM PC family.  These three modes include the
+    high resolution 640 X 200 two color, the 320 X 200 four color, and the
+    160 X 100 sixteen color.  The icons you create can then be used
+    directly in your program data area instead of having to be accessed as
+    an outside file by your program.
+    
+    All icons created can be saved in an ASCII file which will than be used
+    in a form that is acceptable by the macro assembler (in the form of dw
+    and db statements) and can be used in the data segment of your program
+    to define your shape.
+    
+    Are you sick and tired of printing the same old characters over and
+    over again on your Epson FX or JX printer?  Or maybe you've decided to
+    come up with your own alphabet.  Well, FXMATRIX can add some spice to
+    your printouts.
+    
+    FXMATRIX is a matrix program that permits you to design user-created
+    characters, store them in a file, and download them to the Epson FX and
+    JX dot matrix printers.  These created characters can then be used from
+    any word processor, even if your word processor resets the
+    printer upon execution.
+
+### Directory of PC-SIG Library Disk 0485
 
      Volume in drive A has no label
      Directory of A:\

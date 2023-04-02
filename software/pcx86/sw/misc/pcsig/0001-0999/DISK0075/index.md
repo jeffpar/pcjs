@@ -6,16 +6,39 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #75"
+      B: "PC-SIG Library Disk 0075"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #75
+## Information about "FORMS MANAGER DEMO"
+
+    File Descriptions:
+    
+    DEMO     BAT  Batch file to start demo
+    DEMO1    CAL  Demo data file.
+    DEMO1    DAT  Demo data file.
+    DEMO1    IX   Demo data file.
+    DEMO2    CAL  Demo data file.
+    DEMO2    DAT  Demo data file.
+    DEMODFM  EXE  Main program
+    DEMOEX1  FM   Demo form.
+    DEMOEX2  FM   Demo form.
+    DEMOFED  EXE  Demo of program.
+    DEMOX    FM   Demo form.
+    DFM      HLP  Help file.
+    KBDDFM   TXT  Information text file.
+    KBDFED   TXT  Information text file.
+    ORDER    FM   Order form
+    XXXAUTOF DAT  Data file.
+    XXXPAD   FM   Sample form.
+    XYZ      FM   Sample form.
+
+### Directory of PC-SIG Library Disk 0075
 
      Volume in drive A has no label
      Directory of A:\

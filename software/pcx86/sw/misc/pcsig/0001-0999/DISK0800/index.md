@@ -6,16 +6,52 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #800"
+      B: "PC-SIG Library Disk 0800"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #800
+## Information about "BAKER'S DOZEN"
+
+    This disk of utility programs, from the author of PC-File+ and
+    PC-Calc+, is a must for anyone who owns a PC. BAKER'S DOZEN is packed
+    with more than 13 handy utility programs to run alone or from the menu.
+    
+    Some of BAKER'S DOZEN utilities: a powerful disk program to recover
+    deleted files, a calendar that can be memory-resident, a file finder
+    that searches strings of text, a sideways printer, a mini-spreadsheet
+    that supports formulas, trig, business functions and hexadecimal/decimal
+    conversion, and much more.
+    File Descriptions:
+    
+    BTTNCALC EXE  One-page spreadsheet.
+    DOZEN    BAT  Batch file to run BAKER'S DOZEN.
+    SWLPT12  COM  Switch printer ports for LPT1 and LPT2.
+    SWCOM12  COM  Switch RS-232 ports for COM1 and COM2.
+    SNAPSHOT COM  Take pictures of any 80-column screen (not graphics).
+    SET-SCRN EXE  Used to set screen border color and default screen colors.
+    CALENDAR COM  Programmable date calendar.
+    RDIR     EXE  Remove subdirectory including all files and all children.
+    PRN-FILE EXE  Redirects all information normally sent to your printer.
+    PC-SORT  EXE  Sort files with up to four fields.
+    P90      EXE  Print files at ninety degrees (also prints normally).
+    LOCATE   EXE  Find any file(s) on disk.
+    GKEY     EXE  Provides all keyboard information.
+    FILECOMP EXE  Compare two ASCII text files.
+    DISKUTIL EXE  Disk utility program.
+    BAKERS12 EXE  Menu program to run the dozen utilities on this disk.
+    CAL      DAT  Data for holidays in calendar.
+    DOZEN    TBL  Lookup table used by menu program.
+    SETSCRN  COM  Sets up screen.
+    RESPONSE      User response form.
+    READ     ME   Shareware notice and introductions.
+    ORDER         Order form.
+
+### Directory of PC-SIG Library Disk 0800
 
      Volume in drive A has no label
      Directory of A:\

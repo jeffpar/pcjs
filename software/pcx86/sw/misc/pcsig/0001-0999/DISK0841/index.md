@@ -6,16 +6,36 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #841"
+      B: "PC-SIG Library Disk 0841"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #841
+## Information about "MANDELBROT MAGIC"
+
+    Fractal geometry has been used in the past to create images of many
+    different subjects.  From three-dimensional pictures of landscapes to
+    an accurate cross section of the heart, fractals are the wave of the
+    future.
+    
+    MANDELBROT MAGIC generates color displays of the Mandelbrot Set, a
+    famous group of mathematical structures also known as fractals.
+    Fractal geometry is a complicated field in mathematics, but this
+    program is easy to use and will automatically create the fractal slides
+    according to your specifications.
+    
+    With this program you can create a new slide, or recreate a slide from
+    an already existing one.  A set of fractal slides will display a portion
+    of the former slide in greater detail.  Generating a slide is an
+    intensive computational task and can easily take from three to 16 hours,
+    but an 8087 math coprocessor will reduce the generation time by a factor
+    of 10.
+
+### Directory of PC-SIG Library Disk 0841
 
      Volume in drive A has no label
      Directory of A:\

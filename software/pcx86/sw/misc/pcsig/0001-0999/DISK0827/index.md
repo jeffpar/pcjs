@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #827"
+      B: "PC-SIG Library Disk 0827"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #827
+## Information about "T-REF"
+
+    If your programming language of choice is Turbo Pascal, you'll find that
+    you won't be able to resist this one.
+    
+    T-REF is a lister/cross-referencing program that makes your programming
+    easier and quicker.  Features include a full-screen driver with switch-
+    selectable options; context-sensitive help windows to speed the learning
+    process; and output directable to file or printer.  You can also reform
+    words in the lister along with line numbers, lexical and block-level
+    numbering; cross-reference selection by object type and usage; error
+    analysis; procedural table of contents; and much, much more.
+
+### Directory of PC-SIG Library Disk 0827
 
      Volume in drive A has no label
      Directory of A:\

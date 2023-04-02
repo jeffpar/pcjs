@@ -6,16 +6,82 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #324"
+      B: "PC-SIG Library Disk 0324"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #324
+## Information about "TURBO PASCAL #1"
+
+    Useful subroutine collections, hi-resolution graphics demonstrations,
+    a calculator and even a game or two make this collection of source
+    programs very worthwhile.  The code can be used as is in your
+    programs, modified for your special purpose, or just used as a model
+    for learning.
+    
+    System Requirements: 2 disk drives, color graphics, Turbo Pascal
+    
+    How to Start: Bring up Turbo Pascal, then load desired Pascal
+    program into the work file area, compile and run.  To view the
+    .DOC files, enter TYPE filename.DOC <ENTER>.
+    
+    File Descriptions:
+    
+    -------- ---  Graphics programs
+    LINE     INV  Required by PLOT3D, PLOTFUNC, SPIN, SPOKES, WORLDMAP
+    CLS      INV  Required by PLOT3D, GALEXY
+    CUBE     3D   Data file for PLOT3D
+    PLOT3DD  PAS  3D object display, rotation and scaling by user
+    PLOT3D   PAS  3D object display, rotation and scaling demo
+    POINT    INV  Required by GALEXY, RANDDOT
+    SPOKES   PAS  Polyhedron ("spoke-connected wheel") hi-res graphics demo
+    SPIN     PAS  Spinning box hi-res graphics demo
+    RANDDOT  PAS  Graphics screen hi-speed random dot display
+    PLOTFUNC PAS  Hi-res graphics 2 function plot with hidden line features
+    STARS    DAT  Data file for GALEXY
+    GALEXY   PAS  Travel thru the Milky Way! Best with 8087 chip.
+    PYRAMID  3D   Data file for PLOT3D
+    DIAMOND  3D   Data file for PLOT3D
+    WORLDMAP PAS  Draws continents on hi-res graphics screen
+    WORLDMAP DAT  Data file for WORLDMAP
+    PTOOLENT INC  Routines to display, edit and validate data entry fields
+    PTOOLDAT PAS  Demo of PTOOLDAT routines
+    PTOOLDAT INC  Convert and manipulate Gregorian and Julian dates
+    -------- ---  PASCAL tools
+    PTOOLTIM INC  Routines to read and interpret system clock
+    PDEMOENT PAS  Demo of PTOOLENT routines
+    PTOOLWIN INC  Routines to create and manipulate text windows
+    PTOOLTIM PAS  Demo of PTOOLTIM routines
+    PTOOLWIN DOC  How to use the windowing routines in PTOOLWIN.INC
+    PTOOLWIN PAS  Demo of PTOOLWIN routines
+    LOADER   INC  Required by CONVRT - include in calling program
+    CONVRT   PAS  Convert TURBO PASCAL chain files to callable COM pgms
+    CALL     PAS  Garbage
+    -------- ---  Miscellaneous
+    FASTPRNT INV  TURBO PASCAL external routine
+    HAL-PC   DOC  HAL-PC PASCAL disk library information
+    HAT      PAS  Draw the "hat" mathematical function. Best with 8087 chip.
+    INPUT2   PAS  Routines to display, edit and validate data entry fields
+    HEXDUMP  PAS  HEX/ASCII listing of any disk file - continuous display
+    TENKEY   PAS  4-function algebraic-notation calculator
+    SIEVE    PAS  Counts primes between 1 and a max number
+    SHOWCHRS PAS  Display all 256 characters on monitor
+    PRINTDIR PAS  Print directory listings
+    PFORMAT  DOC  How to use PFORMAT
+    LIFE     PAS  Conway's game of LIFE - user defines cell coords
+    PFORMAT  PAS  Change case of PASCAL source code - NO INDENTING - v1.01
+    LIFETRBO PAS  Conway's game of LIFE - define cell coordinates
+    TSTATTR  PAS  Display combinations of color monitor display attributes
+    TEST     PAS  Garbage
+    TYPEFILE PAS  Do line-oriented file I/O in TURBO PASCAL (same as NEW)
+    NEW      PAS  How to do line-oriented file I/O in TURBO PASCAL
+    TURBOTST PAS  Test TURBO PASCAL version 2.0 for math errors
+
+### Directory of PC-SIG Library Disk 0324
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,40 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #174"
+      B: "PC-SIG Library Disk 0174"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #174
+## Information about "GAMES SERIES NO 12"
+
+    Most of the games presented here are written in BASIC and represent an
+    excellent example of game functions for the student programmer in BASIC
+    to study. Most use ASCII graphics, so you can use any monitor.
+    File Descriptions:
+    
+    *        BAT  Letter A-L for MENU.BAT.
+    COMBOT   DOC  Documentation for COMBOT.BAS.
+    COMBOT   BAS  Program two robots to fight each other with lasers.
+    CIVILWAR BAS  Civil war simulation.
+    CIA      BAS  CIA adventure simulation.
+    XWING    BAS  Re-live Star Wars; graphics required.
+    FOOTBALL BAS  Another football simulation.
+    FOOTBAL  BAS  Big-8 football simulation -- K.U. versus your choice.
+    FROG     EXE  Good Frogger type game; graphics required.
+    GRINCH   BAS  El Grinch game -- cute, neat game.
+    MARS-ESC BAS  Escape from Mars adventure.
+    MENU     BAT  Menu for the files on this disk.
+    RACECAR  BAS  Good race car game.
+    MENU     SCR  Part of MENU.BAT.
+    SEAWOLF  BAS  Excellent game -- sink subs, PT's, tankers.
+    SOLITARE BAS  Solitaire card game; you can't cheat with this one.
+
+### Directory of PC-SIG Library Disk 0174
 
      Volume in drive A has no label
      Directory of A:\

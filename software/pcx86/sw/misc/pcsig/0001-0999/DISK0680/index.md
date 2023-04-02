@@ -6,16 +6,61 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #680"
+      B: "PC-SIG Library Disk 0680"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #680
+## Information about "FORGE A FORMS GENERATER"
+
+    FORGE is a Turbo Pascal and dBase III programmer's aid. it allows the
+    programmer to design data input forms or help screens, then generate
+    Turbo Pascal or dBase III source code for those forms. This source code
+    can then be compiled and used as is for data entry, or it can be
+    included as a procedure within a larger more comprehensive
+    program.  Since this is a utility for Turbo Pascal and dBase III,
+    a working knowledge of these programming languages is assumed.
+    
+    The concept of FORGE is somewhat analogous to word processing. with a
+    word processor you can write, review, change, insert, delete and
+    otherwise perfect your text before committing it to its final form.
+    FORGE allows you to do the same thing with a data input form or
+    information screen. Some of the outstanding features of FORGE are that
+    you can: fill an area on the screen with color, without affecting the
+    characters that are already on the screen, insert or delete lines from
+    the screen, define areas on the form for entering data, define data
+    entry areas as "string", "integer", or "real" data types, use IBM
+    graphics characters to "draw" boxes etc., and use blinking characters.
+    
+    System Requirements:  TURBO Pascal 2.0 or higher.
+    
+    How to Start:  Type FORGE (press enter).
+    
+    Suggested Registration:  $20.00
+    
+    File Descriptions:
+    
+    BUGFIX   TXT  Listing of bugfixes that created this version of FORGE.
+    CONTENTS TXT  Text file describing the contents of this disk.
+    DEMO     DTA  Practice form.
+    DEMO     FMT  dBase III code generated from DEMO.DTA.
+    DEMO     PAS  Turbo Pascal code generated from DEMO.DTA.
+    EXTPROC1 PAS  Turbo Pascal include files.
+    EXTPROC2 PAS  Turbo Pascal include files.
+    EXTPROC3 PAS  Turbo Pascal include files.
+    EXTPROC4 PAS  Turbo Pascal include files.
+    FORGE    COM  Main program for large memory systems.
+    FORGE    DOC  Documentation file.
+    FORGE2   000  Overlay files for small memory systems.
+    FORGE2   COM  Main program for small memory systems.
+    GRAPHICS DTA  Practice form.
+    README   TXT  Overview of FORGE & explanation how to print documentation
+
+### Directory of PC-SIG Library Disk 0680
 
      Volume in drive A has no label
      Directory of A:\

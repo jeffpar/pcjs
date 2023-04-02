@@ -6,16 +6,54 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #659"
+      B: "PC-SIG Library Disk 0659"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #659
+## Information about "CHURCH CONTRIBUTION SYSTEM"
+
+    This is an easy-to-use program that allows you to record pledged and
+    unpledged contributions for each member of your church in 240
+    separate categories. Print out membership reports, mailing labels,
+    pledges and contributions. Create data files of member time and
+    talent resources, use these files in a word processor and print lists
+    based on these talent categories. CHURCH CONTRIBUTION SYSTEM is
+    currently in use by churches throughout the United States.
+    
+    Features include:
+    
+    ~ Easy entry of contributions
+    
+    ~ Two formats for Member Summary
+    
+    ~ Contribution List by date (Ledger Sheet)
+    
+    ~ Contribution totals for period of time by category
+    
+    ~ Mailing Labels
+    
+    ~ Member Directories with any combination of the following:
+    
+    Name
+    
+    Family Members
+    
+    Address
+    
+    Phone
+    
+    Envelope Number
+    
+    Pledge Amount
+    
+    Contributions to Date
+
+### Directory of PC-SIG Library Disk 0659
 
      Volume in drive A has no label
      Directory of A:\

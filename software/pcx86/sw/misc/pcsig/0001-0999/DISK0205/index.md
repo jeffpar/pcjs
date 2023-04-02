@@ -6,16 +6,52 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #205"
+      B: "PC-SIG Library Disk 0205"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #205
+## Information about "DOS UTILITIES NO 13"
+
+    DOS Utilities No 13 is a collection of miscellaneous programs for
+    serious computer users.  NDOSEDIT is a fine DOS command editor.
+    BROWSE lets you view files (better than TYPE).  Other utilities
+    allow you to change cursor shape, enhance your COMMAND.COM, and
+    more.
+    
+    System Requirements: Some programs require BASIC, color graphics.
+    
+    How to Start: To run an EXE or COM program simply type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.  To read DOC
+    files simply enter TYPE filename.ext and press <ENTER>
+    
+    File Descriptions:
+    
+    CGCLOCK2 DOC  Documentation
+    CGCLOCK2 COM  Color display clock, beeps every 15 minutes
+    BROWSE   DOC  Documentation
+    BROWSE   COM  View file contents - similar to CMS BROWSE command
+    CMD185   DOC  Documentation
+    CMD185   COM  Creates resident COMMAND.COM with good internal commands
+    CV2      COM  Changes diskette labels under DOS 2.0
+    CURSOR   COM  Changes cursor shape - enter "cursor8" for block shape
+    FILELIST BAS  Displays text files with pause for each full screen
+    EDLIN    BAS  Better documentation for EDLIN  (Mel Rothman)
+    NDOSEDIT DOC  Documentation
+    NDOSEDIT COM  VM style editor for DOS commands, with command stack
+    KEY      BAS  Something like simple Prokey for DOS 2.0
+    BAT2DEMO BAT  Extended Batch Language demo program
+    BAT      COM  Extended Batch Language program
+    CAT      DOC  Documentation for CAT.COM
+    CAT      COM  Directory maintenance program
+    BAT2DOC  BAT  Extended Batch Language documentation
+
+### Directory of PC-SIG Library Disk 0205
 
      Volume in drive A has no label
      Directory of A:\

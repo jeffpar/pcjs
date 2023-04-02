@@ -6,16 +6,27 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #901"
+      B: "PC-SIG Library Disk 0901"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #901
+## Information about "PC-BOOKS - FINANCIAL SOFTWARE"
+
+    PC-BOOKS is a menu-driven general ledger program for small businesses,
+    designed so you can convert a manual system to a computerized system
+    with minimal effort.
+    
+    Standard financial reports, including journals, balance sheets, income
+    statements and general ledgers, are simple to produce.  The number of
+    accounts and transactions are limited only by disk space and each
+    transaction can have up to 14 accounts.
+
+### Directory of PC-SIG Library Disk 0901
 
      Volume in drive A has no label
      Directory of A:\

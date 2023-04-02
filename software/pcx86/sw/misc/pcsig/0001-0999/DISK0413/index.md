@@ -6,16 +6,76 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #413"
+      B: "PC-SIG Library Disk 0413"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #413
+## Information about "DOS UTILITIES #19"
+
+    This disk is chock full of very useful sets of utility programs and
+    systems that enhance and simplify the sometimes obscure MS/PC-DOS oper-
+    ating system command structure. There are also utility programs that
+    provide functions that are not available in 'plain vanilla' DOS.
+    
+    System Requirements: 64K memory and one disk drive (some programs
+    require color graphics).
+    
+    How to Start: Type: FILENAME (press enter) to start a program. FILENAME
+    is equal to the name of the program that you want to run, for
+    example: to start the program 1DIR, type: 1DIR (press enter).
+    
+    Suggested Registration: Various amounts.
+    
+    File Descriptions:
+    
+    1DIR     COM  A sample of this 'Wonder' DOS shell program
+    BWVID    ASM  Source code of the BWVID.COM program
+    BWVID    COM  A program that stops a composite monitor from putting out
+    colors, displaying shades of grey instead
+    BWVID    DOC  Documentation of the BWVID.COM program
+    CED      COM  Command EDitor (expanded DOSEDIT) - command line editing
+    facility - many useful functions
+    CED      DOC  Documentation for the CED.COM program
+    COMMENT  DOC  Documentation for the COMMENT.SYS device driver
+    COMMENT  SYS  An MS/PC-DOS 2.0(+) device driver whose function is simply
+    to echo strings to the standard output device
+    DW       COM  DiskWipe - totally erases a diskette to its virgin state
+    DW       DOC  Documentation for DW.COM program
+    FASTFMT  LBR  Fast format utility system - formats diskettes using both
+    disk drives; has safety features; auto labelling sequence
+    FASTFMT  TXT  Text file explaining how to unscramble FASTFMT.LBR into a
+    usable system - the process is completely automated
+    LU       EXE  A Library unscramble program - used by the FASTFMT and
+    SCREN2 systems
+    MEMINIT  EXE  Sets memory switches; speed up power on
+    PARTNER  COM  RAM resident utility program which provides a set of disk
+    and directory maintenance facilities available from inside
+    running application programs at the touch of a key.
+    Requires a color graphics adapter.
+    PARTNER  DOC  Documentation for the PARTNER.COM program
+    PC-STAT  COM  Diplays system status - both hardware & software config.
+    PCPF     COM  A session manager - replaces bare DOS prompt with a
+    friendly display panel
+    PCPF     DOC  Documentation for the PCPF.COM program
+    SCREN2   LBR  Screen Image Editor and utility; program DOS menus;
+    graphics control
+    SCREN2   TXT  Text file explaining how to unscramble SCREN2.LBR into a
+    usable system - the process is completely automated
+    SETBW40  COM  Used with BWVID.COM-does the same thing as DOS's MODE BW40
+    SETBW80  COM  Used with BWVID.COM-does the same thing as DOS's MODE BW80
+    UNSQ     COM  Unsqeeze utility.  Restores sqeezed files.  Used by SCREN2
+    and FASTFMT systems above
+    
+    Please note: the POPALARM program, which is listed as being on this
+    disk in the 4th edition of the PC-SIG Library Directory, has been
+    withdrawn from the author.
+
+### Directory of PC-SIG Library Disk 0413
 
      Volume in drive A has no label
      Directory of A:\

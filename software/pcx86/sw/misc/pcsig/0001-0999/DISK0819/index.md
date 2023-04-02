@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #819"
+      B: "PC-SIG Library Disk 0819"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #819
+## Information about "CROSSWORD CREATOR"
+
+    CROSSWORD CREATOR can be used by anyone who enjoys designing or solving
+    crossword puzzles. It provides the tools you need to lay out a puzzle
+    on the computer's screen, define clues for each word, save your design
+    on disk, and produce professional-looking printouts of your crosswords.
+    
+    Enhancements include: 70 pages of context-sensitive available on-line,
+    support for Wordfind (Castle Oaks Computing), desktop publishing
+    conversion, support for all types of printers (including
+    lasers), and an automatic word placement feature that will actually
+    build a puzzle for you, using words you enter.
+
+### Directory of PC-SIG Library Disk 0819
 
      Volume in drive A has no label
      Directory of A:\

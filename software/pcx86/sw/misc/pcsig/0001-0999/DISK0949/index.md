@@ -6,16 +6,30 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #949"
+      B: "PC-SIG Library Disk 0949"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #949
+## Information about "STATISTICAL CONSULTANT"
+
+    The STATISTICAL CONSULTANT is an expert system to help you select the
+    right statistical test for your problem.
+    
+    The system asks you a series of questions about the variables and goals
+    of the measurement.  Based on your responses, the system chooses a
+    statistical test or measure.  Should your problem require a deeper
+    analysis than can be addressed within CONSULTANT, the system indicates
+    references for further study.
+    
+    The program assumes a level of technical knowledge greater than that
+    offered in a first course in statistics.
+
+### Directory of PC-SIG Library Disk 0949
 
      Volume in drive A has no label
      Directory of A:\

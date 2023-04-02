@@ -6,16 +6,52 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #379"
+      B: "PC-SIG Library Disk 0379"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #379
+## Information about "WORDSTAR AIDS"
+
+    An all-star collection of useful WordStar utilities to enhance your
+    usage of this valuable word processor.  The collection includes
+    keyboard redefinitions, printer patches, color, and editing features.
+    Among others: WS2000.DIR gives you a full description of that versions
+    keyboard defintions.  Also here is ST -- the SuperTyper program -- an
+    improved version of the DOS "TYPE" command.
+    
+    System Requirements: WordStar
+    
+    How to Start: Consult the files suffixed .DOC, .KEY and .TXT for
+    documentation.  To run a program with the suffix .COM or .EXE, just
+    type its name, i.e., for ST.COM, type ST and hit <ENTER>.
+    
+    File Descriptions:
+    
+    MODWS1   ASM  Strips underline from WS files
+    MODWS1   EXE  "
+    ST       DOC  Documenatation for ST.COM
+    ST       COM  Supertyper for WordStar
+    WS2      KEY  Keyboard redefinition
+    WS-PROKY KEY  Function key redefinitions
+    WS--3-24 PAT  WS printer patches
+    UNWS     EXE  Removes high-order bits from WS
+    WSNUM    EXE  Numbers paragraphs in ws files
+    WSMX80G  WS   Patches for MX-80G
+    WSMOD    COM  Adds color to WS
+    WSFXNEC  TXT  Function key redefinitions
+    WSFIX3   TXT  Function key redefinitions
+    WS3530   WS   Printer patches for NEC3530
+    WS2KEY   DOC  Keyboard redefinition
+    WS2000   DIR  Keyboard redefinition
+    WSPNEC35 BAS  Patches for various printers
+    WSUNNUM  EXE  Unnumbers paragraphs in WS files
+
+### Directory of PC-SIG Library Disk 0379
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,74 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #401"
+      B: "PC-SIG Library Disk 0401"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #401
+## Information about "THE ADDRESS BOOK"
+
+    The Address Book is a user-friendly personal or business address book
+    program written in BASIC.  With it, you can create your own address
+    book file which can be edited, printed, searched, and sorted.  Mailing
+    labels can be routinely prepared.  Birthdays and other user-defined
+    notes may be kept.  WordStar and WordPerfect mailmerge files also can
+    be created.  Sub-directories of the main directory can be routinely
+    created.  Function keys are used extensively and a RAM-disk may be used
+    for more speed.
+    
+    NOTE: This program is set up to run on PC-DOS; clear directions to move
+    to MS-DOS are enclosed. It has been updated recently to assure it will
+    run on compatibles as well as IBM systems.
+    
+    System Requirements:  64K, one disk drive and monochrome display
+    
+    How to Start: Read the README.DOC and MANUAL.DOC files before
+    starting. To run the BASIC programs follow the GETTING STARTED
+    instructions for your configuration.
+    
+    Suggested Registration:  $25.00
+    
+    File Descriptions:
+    
+    AD       BAS  Abreviated ADSTART.BAS without starting graphics
+    AD       HLP  Text file used by program to provide online help
+    AD       BAT  Batch file for starting ADSTART.BAS
+    ADFILES  BAS  Creates all necessary data files
+    ADEDIT   BAS  Program to edit entries
+    ADDIR    BAS  ?? << doesn't load properly >>
+    ADDELETE BAS  Program to delete entries
+    ADTRANS  BAS  Program to transfer records
+    ADSTART  BAS  Set-up and start program - chains to ADMAIN.BAS
+    ADSORT   BAS  Program to sort base by criteria
+    ADSEARCH BAS  Program to search by criteria
+    ADRODX   BAS  Program to print Rolodex-type labels
+    ADREAD   BAS  Program to scan entries
+    ADPRTC   BAS  Supplemental printing program
+    ADPRTA   BAS  Supplemental printing program
+    ADPRT    BAS  Master printing program
+    ADPRINT  BAS  Program to set printer parameters
+    ADNOTE   BAS  Program to create notes to records
+    ADNAME   BAS  Determines name of sub-program to run
+    ADMAIN   BAS  Main address book program
+    ADMAIL   HLP  Help file used by ADMAIL.BAS
+    ADMAIL   BAS  Prints address labels
+    ADLIST   BAS  Prints address book
+    ADWP     BAS  Converts data files for WordPerfect mail-merge
+    MANUAL   DOC  Text file containing instructions and user manual
+    AUTOEXEC BAT  Auto-start batch file to run ADSTART.BAS
+    ADZIP    BAS  Prints labels by zip code
+    ADWS     BAS  Converts data files for WordStar mail-merge
+    TEMPOR   TEM  Temporary data file (used internally)
+    SAMPLES  NTE  Data file - note codes
+    SAMPLES  ISS  Sample configuration file
+    SAMPLES  DAT  Sample data file
+
+### Directory of PC-SIG Library Disk 0401
 
      Volume in drive A has no label
      Directory of A:\

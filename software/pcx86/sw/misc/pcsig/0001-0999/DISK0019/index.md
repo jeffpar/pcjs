@@ -6,16 +6,53 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #19"
+      B: "PC-SIG Library Disk 0019"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #19
+## Information about "ARCHIE"
+
+    The title program, ARCHIE, gives you the basic elements for doing
+    structured BASIC programming.  ARCHIE is a fun tutorial for beginners
+    in BASIC.  RV-EDIT is a simple and sturdy full-screen text editor
+    written in BASIC and PCS is a program control system designed to help
+    take charge of your PC.  RV-EDIT and PCS are well documented and invite
+    tinkering!
+    
+    How to Start:  To run BASIC programs consult the directions in GETTING
+    STARTED for your configuration.  Consult the .DOC files for program
+    documentation.
+    
+    System Requirements:  128k, two disk drives, some of the programs on
+    this disk require color graphics.
+    
+    File Descriptions:
+    
+    MENU     BAS  Menu program for Disk No 19
+    ARCHIE   DOC  Documentation for ARCHIE
+    ARCHIE   BAS  Archie la cucharacha - game, BASIC tutorial & fun program
+    PCS      DOC  Program control system description
+    CONTROL  BAS  Runs the prime program on a BASIC diskette
+    CONTROL  PCS  Returns control to Drive "A"
+    AUTOEXEC BAT  Requests date & time and gives control to SYSTEM.BAT
+    SYSTEM   BAT  Loads BASICA, runs TRANSFER.BAS, runs b:CONTROL.BAT
+    MENU     PCS  Sample menu file for BASIC programs
+    EXIT     PCS  Mergeable exit hierarchy
+    COVER    PCS  Mergeable cover page and exit hierarchy
+    CONTROLD PCS  Copy to CONTROL.BAT on data diskettes
+    CONTROLB PCS  Copy to CONTROL.BAT on BASIC program diskettes
+    TRANSFER BAS  Displays disk swap message, waits for keystroke
+    RV-EDIT  DOC  Full screen editor documentation
+    RV-EDIT  BAS  Full screen editor  (Limited usefulness)
+    CONTROLM PCS  Copy to CONTROL.BAT on machine language program diskettes
+    RUN      BAT  Runs the program passed as a parameter
+
+### Directory of PC-SIG Library Disk 0019
 
      Volume in drive A has no label
      Directory of A:\

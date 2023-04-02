@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #396"
+      B: "PC-SIG Library Disk 0396"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #396
+## Information about "PDS*BASE 1 OF 2 (ALSO 1025)"
+
+    A complete hierarchical database system of the master/detail (or
+    mother/daughter) type and, although written for BASIC programmers, is
+    particularly well-suited to inventory systems, payroll or job control
+    systems.
+    
+    A series of program generators create both a custom database (with up
+    to 10 files) and BASIC programs to operate against the custom
+    database. The generated programs can be easily modified. The system
+    has excellent documentation and BASIC source code is included.
+    
+    This is the database management system for anyone who doesn't want to
+    go to the expense and trouble of learning a new programming language.
+
+### Directory of PC-SIG Library Disk 0396
 
      Volume in drive A has no label
      Directory of A:\

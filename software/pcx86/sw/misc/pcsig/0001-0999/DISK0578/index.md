@@ -6,16 +6,32 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #578"
+      B: "PC-SIG Library Disk 0578"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #578
+## Information about "C TUTOR 2 OF 2 (ALSO 577)"
+
+    C TUTOR is a comprehensive instructional course for the C programming
+    language which assumes the user has a moderate amount of programming
+    experience.
+    
+    The C source code is included for each of several examples discussed
+    throughout the tutorial.  These examples are meant to be studied and
+    then compiled and run by the student.  The examples are short and focus
+    on specific topics.
+    
+    All of the points of C language, including properly-structured
+    programming techniques, are covered at the elementary level.  The
+    description and instruction are applicable to most compilers with some
+    slight differences.
+
+### Directory of PC-SIG Library Disk 0578
 
      Volume in drive A has no label
      Directory of A:\

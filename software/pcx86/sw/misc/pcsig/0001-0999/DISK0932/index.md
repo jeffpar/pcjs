@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #932"
+      B: "PC-SIG Library Disk 0932"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #932
+## Information about "LABCOAT - DATA AND COST ANALYSIS"
+
+    LABCOAT, a laboratory data and cost analysis program, can help you to
+    manage a clinical lab. Calculate item depreciation and evaluate
+    extensive-test cost data for your equipment. Routine lab statistics
+    and Q.C. charting are included.
+    
+    LABCOAT handles data entry and calculations for lipoprotein data. You
+    can calculate numerical data, mean and standard deviation, and range.
+    Also included is an evaluation program for prospective lab assistants,
+    based on such criteria as job knowledge, judgment decisions, patient
+    awareness, organizational skills, and more.
+
+### Directory of PC-SIG Library Disk 0932
 
      Volume in drive A has no label
      Directory of A:\

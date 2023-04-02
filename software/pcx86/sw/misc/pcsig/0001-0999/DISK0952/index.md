@@ -6,16 +6,35 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #952"
+      B: "PC-SIG Library Disk 0952"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #952
+## Information about "SUPERNOVA - A TEXT ADVENTURE GAME"
+
+    SUPERNOVA is an interactive text adventure set in the future.  As the
+    dauntless adventurer, you will partake in an epic story that spans a
+    galaxy and gives you the chance to save a civilization from an exploding
+    star.
+    
+    You begin the game on a remote mining planet with little to look forward
+    to except another back-breaking day in the mines.  From here on, you're
+    on your own!
+    
+    A 16-color display keeps you abreast of your injuries, hunger and thirst
+    levels, sickness, and weariness, and displays necessary diagrams and
+    signs.  Sound effects are used throughout the game and over 1000 words
+    are in the vocabulary.  Included is a nice touch -- a "clue" function
+    when you are well and truly stuck.
+    
+    Now, if you're going to save a civilization, you'd better get started!
+
+### Directory of PC-SIG Library Disk 0952
 
      Volume in drive A has no label
      Directory of A:\

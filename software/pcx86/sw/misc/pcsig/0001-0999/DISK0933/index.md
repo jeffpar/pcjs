@@ -6,16 +6,47 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #933"
+      B: "PC-SIG Library Disk 0933"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #933
+## Information about "SORTED DIRECTORY AND FLIST / PC"
+
+    SDR.COM provides more information than the resident DOS DIR command
+    about the files on a disk, and lets you select, sort, format, and
+    display the information in a variety of ways. You can specify a
+    pattern name to select the desired files and by specifying any of a
+    variety of command line switches. The default switch values have been
+    carefully chosen to reflect their most common use, and for
+    compatibility with the standard DIR command. Select files by
+    attribute, age, or string match. Sort on any directory field. Global
+    disk directories can be searched for files matching the specified
+    criteria.
+    
+    Use in stand-alone mode or as memory-resident. It is possible to use SD
+    in an almost infinite variety of ways by using the switches in different
+    combinations. Designed to be as transparent as possible in normal
+    operation, it does not impose itself between the user and the operating
+    system. Novices or experienced users both can profit from this utility.
+    
+    FLIST/PC is a selection menu for manipulating your files in a more
+    efficient manner.
+    
+    Copy, move, rename, delete, edit, and execute a file by simply
+    indicating the desired action. Multiple actions can be executed with a
+    function key. FLIST/PC can be used with your own word processor or
+    text editor without exiting FLIST/PC. The disk file directory can be
+    sorted by filename, extension, size, or date. You can easily scroll
+    through a directory, display the tree structure of all subdirectories
+    on the current disk drive, and select new paths and directories to be
+    displayed.
+
+### Directory of PC-SIG Library Disk 0933
 
      Volume in drive A has no label
      Directory of A:\

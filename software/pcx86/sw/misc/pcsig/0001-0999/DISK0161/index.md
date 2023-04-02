@@ -6,16 +6,47 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #161"
+      B: "PC-SIG Library Disk 0161"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #161
+## Information about "PC FIRING ISSUE #2A"
+
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  None.
+    
+    File Descriptions:
+    
+    SPLITB   BAT  Batch file.
+    T86      BAT  Batch file.
+    GC       EXE  Sub-programs.
+    GRABBAG  EXE  Sub-programs.
+    T86D     EXE  Sub-programs.
+    FORTH    BAT  Will display the FORTH.MSG file
+    FORTH    MSG  Tells you how to create a self-booting FORTH disk
+    FORTH    OBJ  Object code to create a self-booting FORTH disk
+    MANUAL   BAT  File to print the Manual for Programmer's Calculator
+    MANUAL   DOC  Documentation for PC.EXE
+    PC       EXE  Programmer's Calculator
+    POLYMAZE EXE  Maze Program
+    SQ       C    C source code for SQ.EXE
+    SQ       EXE  Program to compress files
+    T86TXT1  TXT  Text file.
+    T86TXT2  TXT  Text file.
+    XXXXXXXX XX2  Data file.
+    XXXXXXXX XX3  Data file.
+    XXXXXXXX XX4  Data file.
+    XXXXXXXX XX5  Data file.
+
+### Directory of PC-SIG Library Disk 0161
 
      Volume in drive A has no label
      Directory of A:\

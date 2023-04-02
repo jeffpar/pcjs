@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #784"
+      B: "PC-SIG Library Disk 0784"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #784
+## Information about "CHECKMATE"
+
+    Keep an accurate account of your personal finances -- without all the
+    hassle.  It records and maintains your checking and charge transactions
+    while giving you full editing capabilities at your fingertips. It sorts
+    and prints reports, searches for selected items, helps you reconcile
+    your statements, and even prints your checks for you. CHECKMATE can
+    also print checks and reports in any of three pitches, and reports can
+    be printed in two different layouts.
+    
+    CHECKMATE is very intuitive. It has a user's guide and built-in,
+    context-sensitive help menus.
+
+### Directory of PC-SIG Library Disk 0784
 
      Volume in drive A has no label
      Directory of A:\

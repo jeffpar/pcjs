@@ -6,16 +6,24 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #975"
+      B: "PC-SIG Library Disk 0975"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #975
+## Information about "COLLAGE"
+
+    A computerized show and tell software package to create colorful graphic
+    pictures on your computer.  Create and save slides, combine created
+    slides, and present the created and combined slides as a show on your
+    computer screen.  COLLAGE also lets you create and maintain text files
+    (upper ASCII included) with several good editing and block features.
+
+### Directory of PC-SIG Library Disk 0975
 
      Volume in drive A has no label
      Directory of A:\

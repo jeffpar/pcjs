@@ -6,16 +6,41 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #736"
+      B: "PC-SIG Library Disk 0736"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #736
+## Information about "LIGHTWAVE UTILITY DISK"
+
+    LIGHTWAVE UTILITIES is a large collection of useful programs; some are
+    quite uncommon. WHERE looks in all the directories of a specified drive
+    and reports where a filename occurs. LS and DR both give sorted
+    directories listed in column form, but DR also includes file size
+    information.
+    
+    The other seven utilities are in BASIC, and they include the source
+    code. They will:
+    
+    ~ Show you all the screen attributes of your screen
+    
+    ~ Show you all the screen characters
+    
+    ~ Find all the active memory in your PC
+    
+    ~ Tell you when your BIOS chip was designed
+    
+    ~ Tell you when your BASIC chip was designed
+    
+    ~ Show you the keyboard status bits
+    
+    ~ Perform percent-change calculations from one month to the next.
+
+### Directory of PC-SIG Library Disk 0736
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,81 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #322"
+      B: "PC-SIG Library Disk 0322"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #322
+## Information about "MUSIC COLLECTION"
+
+    Play your PC like a piano.  See a representation of the keyboard of your
+    computer on the screen of your PC. The musical notes are displayed and
+    when you press that key, the note sounds.  Although you cannot play
+    chords, since the PC only plays one note at a time, you can change the
+    pitch and duration of the notes.  Do you take requests?
+    File Descriptions:
+    
+    PIANO COM Turns keyboard into piano keys to play music on.
+    
+    A diverse collection of musical programs.  Play pre-recorded music,
+    compose new songs, enter old favorites and incorporate any or all of
+    them into your BASIC programs.
+    
+    The two main menus are jukebox and classics.  Select from more than a
+    dozen choices of old favorites such as Arkansas Traveler, Baby Elephant
+    Walk, Hungarian Rhapsody, Messiah, a Bach Minuet and the Nutcracker
+    Suite.  Compose something new and different on the keyboard of your PC.
+    Play your choice or include appropriate music and sound effects in your
+    BASIC programs to add interest and fun!
+    File Descriptions:
+    
+    PIANO    COM  Turns keyboard into piano keys for playing music.
+    MINWALTZ EXE  Minute Waltz.
+    ANT2     BAS  Anteater Music II demo.
+    ANVIL    BAS  A song.
+    ARKTRAV  BAS  Arkansas Traveler.
+    BACH     BAS  Classic: A song by Bach.
+    BLUESBOX BAS  Part of MUSICBOX.BAS.
+    BOUREE   BAS  A song.
+    CHOPIN1  BAS  Classic: A song by Chopin.
+    CLASSICS BAS  Menu for the selection of CLASSIC songs.
+    DANCE    BAS  Dance of the Watchacallit.
+    ELEPHANT TUN  Baby Elephant Walk song that is part of TUNE.BAS.
+    HAPPYB   BAS  Happy Birthday song.
+    HEARING  BAS  Hearing test.
+    HUNGRHAP BAS  Hungarian Rapsody.
+    IBMSONG  BAS  IBM fight song.
+    JSB      BAS  Sonata VI in E Major, 1st Movement. by J.S. Bach.
+    JSB      MUS  Same as JSB.BAS.
+    JUKEBOX  BAS  Music menu program with a colection of songs.
+    LIEBESTR BAS  Franz Liszt.
+    LUDWIG   BAS  Classic: Song by Bach [Ludwig].
+    MAGDALEN BAS  Classic: From The Little Notebook For Anna Magdalena Bach.
+    MESSIAH  BAS  Messiah.
+    MINUET   BAS  Classic: Minuet by J.S. Bach.
+    MTN-KING BAS  A song.
+    MUSICBOX BAS  Compose your song and save to disk [requires graphics].
+    NUTCRAKR BAS  Nutcracker Suite.
+    NYLOGO   BAS  New York PC Users Group song and graphics demo [graphics].
+    PRAELUD1 BAS  A song.
+    PRAELUD2 BAS  A song.
+    RAIL     BAS  Classic: I've Been Working On The Railroad.
+    SCALES   BAS  Plays different music scales.
+    SFG-BACH BAS  Classic: Solfeggietto by Bach.
+    SIREN    BAS  Alarm Siren.
+    SOUNDS   BAS  Different sounds.
+    SYMPH-5  BAS  A symphony.
+    SYNTH    BAS  Demo.
+    TRAUMERI BAS  Traumerei.
+    TUNE     BAS  Plays music files [ELEPHANT.TUN].
+    WILLTELL BAS  Classic: William Tell Overture.
+    XMAS     BAS  Collection of Xmas songs.
+
+### Directory of PC-SIG Library Disk 0322
 
      Volume in drive A has no label
      Directory of A:\

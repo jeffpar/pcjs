@@ -6,16 +6,67 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #644"
+      B: "PC-SIG Library Disk 0644"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #644
+## Information about "THE STOCK TRADER"
+
+    STOCK TRADER tracks selected stock performances and generates buy and
+    sell signals according to trends over user-selected periods of time.
+    There are 8 stocks at the start for demo purposes. Stocks may be added
+    and deleted, and the DOW performance, or an other accepted market
+    average is also displayed. Stock performance is graphed in x-y mode,
+    and graphs may be printed. The program is menu-driven requires color
+    graphics.
+    
+    System Requirements: 128K memory, two disk drives and color graphics.
+    
+    How to Start:  Load DOS and type STOCK to enter the main program.
+    Consult READ.ME for program information.
+    
+    Suggested Registration: $35.00.
+    
+    File Descriptions:
+    
+    CONFIG   BAT  Batch file for configuration program.
+    SCREENA2 DAT  Help screen #2 for updating stocks.
+    SCREENA  DAT  Help screen #1 for updating stocks.
+    READ     ME   File instructions for starting The STOCK TRADER.
+    MONEY    DAT  Call-up screen for info on donations, copyrights, etc.
+    GOER     BAT  Batch file used in configuration of the STOCK TRADER.
+    FIGURA   EXE  Program for configuration.
+    CONTROL  DAT  Screen data for help screen to set printer codes.
+    CONFIG   DAT  Configuration data file used to format screens and graphs.
+    SCREENM3 DAT  Help screen #3 for the menu menu.
+    SCREENM2 DAT  Help screen #2 for the menu menu.
+    SCREENM  DAT  Help screen #1 for the menu menu.
+    SCREENJ2 DAT  Help screen  #2 for entering modifications to trading.
+    SCREENJ  DAT  Help screen  #1 for entering modifications to trading.
+    SCREENI  DAT  Help screen for changing printer codes.
+    SCREENH  DAT  Help screen for stock splitting.
+    SCREENF  DAT  Working screen for printout of stock performance.
+    SCREENE  DAT  Working screen for posting the data entry date.
+    SCREEND3 DAT  Help screen #3 for graphing a stock.
+    SCREEND2 DAT  Help screen #2 for graphing a stock.
+    SCREEND  DAT  Help screen #1 for graphing a stock.
+    SCREENC  DAT  Help screen for deleting a stock.
+    SCREENA3 DAT  Help screen #3 for updating stocks.
+    SCREENB2 DAT  Help screen #2 for adding a stock to data file.
+    SCREENB  DAT  Help screen #1 for adding a stock to data file.
+    STOCK    COM  The STOCK TRADER main program.
+    WARNING  DAT  Usage information screen.
+    STOCKS   DAT  Data file for stocks for demonstration and additions.
+    UNSTALL  EXE  Exe program to un-install the STOCK TRADER.
+    NOTES    TXT  Notes on programs
+    INFO     BAT  Prints out documentation files
+
+### Directory of PC-SIG Library Disk 0644
 
      Volume in drive A has no label
      Directory of A:\

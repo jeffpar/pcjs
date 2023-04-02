@@ -6,16 +6,59 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #152"
+      B: "PC-SIG Library Disk 0152"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #152
+## Information about "RBBS FOR THE IBM PC"
+
+    This is a really nifty package from the Capital PC Users Group that
+    allows you to set up your own BBS. This was originally a CP/M BBS
+    Written in BASIC, many people have built onto it.  This one disk is all
+    that is necessary to run and modify a BBS.  For a less technical BBS,
+    read the sample bulletin BULLET1.
+    
+    System Requirements: Two drives, one serial port, a Hayes
+    Smartmodem or equivalent.
+    
+    How to Start:  After loading DOS, enter A:TYPE -README-.DOC for
+    instructions.  For the documentation check RBBS-PC.DOC.
+    
+    Suggested Registration: $6.00
+    
+    File Descriptions:
+    
+    -README- DOC  Initial suggestions for starting out
+    BULLETIN      Menu for bulletins
+    BULLET1       Sample bulletin
+    DIR99         Description of most recent file uploads
+    DIR           Description of file directories
+    CONFIG   BAS  Sets up RBBS configuration
+    CAPITAL  PC   Capital IBM PC Users Group information
+    USRINIT2 BAS  Reads callers file & updates
+    USRINIT1 BAS  Clears user download/upload counts
+    STARTUP  BAT  Installs RBBS onto two diskettes
+    RBBS-PC  REM  Remarks used by RBBS-PC.xxx programs
+    RBBS-PC  EXE  Compiled version
+    RBBS-PC  DOC  Documentation
+    RBBS-PC  BAS  BASIC version
+    NEWUSER       Welcome message
+    MENU3G        Menu - RBBS files - with border
+    MENU3         Menu - RBBS files
+    MENU2G        Menu - main RBBS menu - with border
+    MENU2         Menu - main RBBS menu
+    MENU1G        Menu - SYSOP utilities - with border
+    MENU1         Menu - SYSOP utilities
+    HELP??        User help files (7 files)
+    FIXFILES BAS  Cleans up caller file
+    UTSPACE  OBJ  Part of RBBS-PC.xxx programs
+
+### Directory of PC-SIG Library Disk 0152
 
      Volume in drive A has no label
      Directory of A:\

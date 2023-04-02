@@ -6,16 +6,44 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #87"
+      B: "PC-SIG Library Disk 0087"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #87
+## Information about "PRGMR'S CALCULATOR"
+
+    The Programmer's Calculator offers a powerful Reverse Polish Notation
+    format calculator to all those in the professions or students who have
+    need of such a tool.  With its on-screen stack display, complex
+    calculations become much easier to follow; it also functions as good
+    instructional tool for those who are just learning stack operations.
+    With good documentation and informative displays, this is an excellent
+    value.
+    
+    Features:
+    ~ Auto configure for color or monochrome systems
+    ~ Up to 16-place precision
+    ~ Convert between octal, hex, decimal, and binary
+    ~ Toggle between Convert and Calculate modes
+    ~ Displays all functions and registers.
+    
+    How to Start:  Read the MANUAL.DOC file or print it out with the
+    MANUAL.BAT file.  To run, enter PC and <ENTER>.
+    
+    File Descriptions:
+    
+    PC       EXE  Programmer's calculator - main program
+    MANUAL   DOC  Documentation file  (41K)
+    GC       EXE  Number base conversion program for use with PC.EXE
+    DUP      BAT  Batch file to copy program files to another disk
+    MANUAL   BAT  Batch file to print documentation
+
+### Directory of PC-SIG Library Disk 0087
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,43 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #301"
+      B: "PC-SIG Library Disk 0301"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #301
+## Information about "LOTUS WORKSHEETS #2"
+
+    A broad-ranging collection of Lotus 1-2-3 technical notes, utility
+    programs, operation hints and templates for both the power user and the
+    novice.
+    
+    Features:
+    ~ Create address labels
+    
+    ~ A for-next loop
+    
+    ~ Make menu macros
+    
+    ~ Learn to document formulas
+    
+    ~ Import files
+    
+    ~ Build a table for range names
+    
+    ~ Learn about /XI macros
+    
+    ~ Understand the /datafill Function
+    
+    ~ Construct a macro library
+    
+    ~ Tech notes on many Lotus capabilities
+
+### Directory of PC-SIG Library Disk 0301
 
      Volume in drive A has no label
      Directory of A:\

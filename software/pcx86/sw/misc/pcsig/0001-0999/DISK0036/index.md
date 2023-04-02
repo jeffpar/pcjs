@@ -6,16 +6,78 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #36"
+      B: "PC-SIG Library Disk 0036"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #36
+## Information about "PASCAL COLLECTION #1"
+
+    The diverse selection of programs on this disk are primarily intended
+    for intermediate to advanced programmers who want to clarify aspects of
+    PASCAL programming left unclear by the programming manual.
+    
+    Again it offers the programmer the opportunity to explore the how-to's
+    of specific functions or, on the other hand, offers specific functions
+    that can be adapted to a current project. It includes routines like
+    GETDIR.PAS, a PASCAL directory program.  TOOLS.PAS is full of BASIC
+    keyword subroutines, ie:, INKEY, LOCATE and ESCAPE.  This collection
+    even includes SIDEWAYS for custom printing on an Epson MX-80 printer.
+    
+    How to Start:  Type GO to start
+    
+    File Descriptions:
+    
+    SCREEN   PAS  Short program to assess specific memory addresses.
+    PASCL    BAT  Batch file to compile and link.
+    SCREENC  PAS  Color/graphics version of screen.pas.
+    PASC     BAT  Batch file to compile only.
+    C-LST    BAT  Batch file to compile/list (no prompts).
+    C        BAT  Batch file to compile only (no prompts).
+    CL       BAT  Batch file to compile/link (no prompts).
+    CL-LST   BAT  Batch file to compile/list/link (no prompts).
+    MATH     DOC  Documentation file for the math subroutine library.
+    BUILD    EXE  Executable file of build.pas.
+    BUILD    PAS  Index building program by Peter Norton Corp 1983.
+    FLUSH    BAT  Batch file cleans up PASCAL compilation and test residue.
+    PRINTER  PAS  Utility to print multiple files.
+    MATH     INT  PASCAL interface for the math subroutine library.
+    *        P    Part of PRINTER.PAS (3 files).
+    VIDEO    ASM  PASCAL callable routine to perform bios video interrupts.
+    VIDEO    OBJ  Object module of video.
+    PASCLG   BAT  Batch file to compile, link, and go.
+    GETSEC   OBJ  Object module of getsec.
+    MATH     OBJ  PASCAL v2.0 object module of the math subroutine library.
+    GETSEC   ASM  Assembly language utility used by getdir.
+    XREF     PAS  Cross-reference utility.
+    GETDIR   OBJ  Object module of getdir.
+    COPYFILE PAS  Program to show how files are defined, read and copied.
+    MATHTEST PAS  PASCAL driver program shows how to use the subroutine.
+    MATHV1   OBJ  PASCAL v1.0 object module of the math subroutine library.
+    MERGE    PAS  Index merging program.
+    OKIDATA  PAS  Sets mode of operation on Okidata Microline 92 printer.
+    PART?    PAS  Part of PRETTY.PAS (3 files).
+    PRETTY   PAS  Utility for listing PASCAL programs in pretty format.
+    UNSQ     PAS  Unsqueezes files compressed by huffman encoding.
+    DUMPFILE PAS  Produces hexadecimal and ASCII dump of a disk file.
+    GETDIR   PAS  Program to read disk directory.
+    TOOLS    PAS  MS and IBM PASCAL screen and I/O tools.
+    SIDEWAYS PAS  Prints a file sideways on the Epson mx-80 printer.
+    CONTENTS TXT  Description of files on this disk.
+    IBMPAS   DOC  Notes/info/patchs for IBM PASCAL.
+    CLEAN    BAT  Cleans up residue from compile.
+    MERGE    EXE  Executable version of MERGE.PAS.
+    TABSET1  PAS  Sets tabs on Epson mx-100 printer.
+    TIMM     PAS  Illustrates concept of PASCAL unit  (main program).
+    TABSET2  PAS  Simular to tabset1 but treats printer as binary file.
+    TIMI     PAS  Illustrates concept of PASCAL unit  (interface)
+    TIMU     PAS  Illustrates concept of PASCAL unit  (unit).
+
+### Directory of PC-SIG Library Disk 0036
 
      Volume in drive A has no label
      Directory of A:\

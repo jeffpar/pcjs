@@ -6,16 +6,47 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #658"
+      B: "PC-SIG Library Disk 0658"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #658
+## Information about "TOOLKIT UTILITIES"
+
+    This diskette contains a small but excellent collection of programs
+    which aid in DOS utilities and collectively are called "TOOLKIT."
+    WC.EXE is an advanced word/char/line counter PLUS checksummer, which
+    supports command line wildcards.  TC.EXE is an easy to read text
+    compare program to find differences in a file.  INPATH.EXE is a file
+    finder program with a twist: it locates files based upon the PATH
+    variable, and uses the same extension hierarchy (COM-EXE-BAT) that DOS
+    does; it is similar to "whereis" in the UNIX system.
+    
+    System Requirements:  128K, one disk drive and monochrome
+    display.
+    
+    How to Start:  Type GO and press <enter> for startup instructions. To
+    read DOC files simply enter TYPE filename.ext and press <ENTER>.
+    
+    Suggested Registration:  $5.00 gets you latest version and documentation
+    $20.00 requested for commercial/government usage.
+    
+    File Descriptions:
+    
+    INPATH   EXE  DOS file finder program
+    TC       EXE  Text compare program
+    TOOLKIT  DOC  Documentation for above programs (17k)
+    WC       EXE  Text word, character and line counter program
+    GO       BAT  Startup information batch file
+    TOOLKIT  ORD  Toolkit registration form
+    IDEA     DOC  Idea request message IDEA     FRM  Idea form
+    IDEA     FRM  Idea form
+
+### Directory of PC-SIG Library Disk 0658
 
      Volume in drive A has no label
      Directory of A:\

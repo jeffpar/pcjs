@@ -6,16 +6,50 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #143"
+      B: "PC-SIG Library Disk 0143"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #143
+## Information about "PROGRAMERS UTILITIES #7"
+
+    This disk contains many different kinds and flavors of utilities.  CMP
+    compares files (either ASCII or binary) of different lengths and
+    reports differences, good for archiving or updating text files. COPYFLD
+    is a dBASE II tool to cut and paste from different dBASE files.  D and
+    PC-ZAP both work on individual disk sectors, tracks, and sides for low
+    level disk data manipulation and display.  RUSQ performs the inverse
+    function of SQ, whichs squeezes files, but it does it in a different
+    way than the public domain version of UNSQ, helpful if UNSQ doesnt
+    work.  Lastly, SCRIPT is a XTALK utility used to set up a menu driven
+    environment within XTALK.
+    
+    System Requirements:  Some programs require BASIC.
+    
+    How to Start: Enter PRINT *.DOC at the DOS prompt (A:), the
+    instructions for running programs are in their respective text files.
+    
+    File Descriptions:
+    
+    COPYFLD  DOC  Documentation for COPYFLD.PRG
+    COPYFLD  PRG  dBASE II program to copy fields from one file to another
+    CMP      DOC  Documentation for CMP.COM
+    CMP      COM  Intelligent file compare - works on binary files
+    SCRIPT   DOC  A Crosstalk script for menu-driven operation
+    RUSQ     EXE  Another (different) file unsqueezer - as last resort!
+    PROJECTS DAT  Sample database for PROJECTS.BAS
+    PROJECTS BAS  Home projects database manager
+    PC-ZAP   DOC  Documentation for PC-ZAP.EXE
+    D        EXE  Display selected disk sides/sectors/tracks
+    PC-ZAP   EXE  Apply patches to disk(ette) - supports auto-patch files
+    D        DOC  Documentation for D.EXE
+    READ     ME   Listing of included files
+
+### Directory of PC-SIG Library Disk 0143
 
      Volume in drive A has no label
      Directory of A:\

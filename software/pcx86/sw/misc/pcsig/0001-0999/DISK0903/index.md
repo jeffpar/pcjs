@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #903"
+      B: "PC-SIG Library Disk 0903"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #903
+## Information about "VAR GRADE 1 OF 3 (ALSO 1357, 2099)"
+
+    VARGRADE is designed for teachers sho want to keep a computerized record
+    of their students' grades.  It tracks an unlimited number of students
+    and up to 99 sections of students per class for up to 240 days of
+    attendance.  There is no limit to the number of classes.
+    
+    VAR GRADE supports several grading methods, including weighted exams,
+    use of letter or number grades, and the ability to throw out the lowest
+    exam score(s).  Several statistical features are also available
+    through the program: calculation of mean, median, and mode for exams;
+    correlation of two exams; and the ability to sum, average, or take the
+    percentage of any combination of exams.  Plot the exam results on your
+    printer.
+
+### Directory of PC-SIG Library Disk 0903
 
      Volume in drive A has no label
      Directory of A:\

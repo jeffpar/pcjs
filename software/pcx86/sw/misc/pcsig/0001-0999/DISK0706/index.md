@@ -6,16 +6,28 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #706"
+      B: "PC-SIG Library Disk 0706"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #706
+## Information about "NAMEPAL"
+
+    NAMEPAL is the complete automatic address book.  It keeps lists of
+    names, addresses, phone numbers, and related comments, and prints them
+    in a pocket-size "book" you can use anywhere.  NAMEPAL works on plain
+    paper with any printer -- even lasers.  You can optionally print on both
+    sides of each page, and you can code your data to keep track of club
+    members, birthdays, babysitters, or any other grouping.  It also
+    performs other handy tasks, like printing mailing labels, Rolodex card
+    files, and full-page rosters.  NAMEPAL is also completely menu-driven,
+    and has on-line help screens.
+
+### Directory of PC-SIG Library Disk 0706
 
      Volume in drive A has no label
      Directory of A:\

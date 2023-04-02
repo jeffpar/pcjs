@@ -6,16 +6,81 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #512"
+      B: "PC-SIG Library Disk 0512"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #512
+## Information about "PROGRAMS FROM THE COMPLETE TURBO PASCAL"
+
+    This disk contains the example programs, subprograms, and data files
+    from Jeff Duntemann's book, The Complete Turbo Pascal, ISBN: 0-673-
+    18111-1.  The disk is meant to augment Duntemann's book by illustrating
+    Pascal programming. Source and compiled versions of most
+    routines are included, so you can run the routines, and review
+    the code to see how they work.
+    
+    System Requirements:  64K, one disk drive and monochrome display, Turbo
+    Pascal.
+    
+    How to Start:  Enter TYPE READ.ME and press <ENTER> for a note from the
+    author.  For instructions on PAS listings, refer to your Pascal manual.
+    
+    File Descriptions:
+    
+    ???      ASM  Assembly language programs
+    ???      SCR  PASCAL source funtion procedures
+    ???      PAS  PASCAL source code for programs
+    ISMONO   COM  Part of CRTTEST.BAT
+    CRTTEST  BAT  Tests monitor for mono, graphics, and color
+    CTP2E    ARC  Archived backup of all programs
+    BOXSTUFF SRC  Turbo Pascal source function/procedure
+    BEEP     SRC  Turbo Pascal source function/procedure
+    CURSON   SRC  Turbo Pascal source function/procedure
+    CURSOFF  SRC  Turbo Pascal source function/procedure
+    CASE     PAS  Turbo Pascal source program
+    BOXTEST  PAS  Turbo Pascal source program
+    FRCECASE SRC  Turbo Pascal source function/procedure
+    FLIPFLD  SRC  Turbo Pascal source function/procedure
+    FATPAD   PAS  Turbo Pascal source program
+    FACTRIAL SRC  Turbo Pascal source function/procedure
+    SNAPSHOT PIC  Support routine or data file for example program
+    VARDUMP  SRC  Turbo Pascal source function/procedure
+    SORTTEST PAS  Turbo Pascal source program
+    YES      SRC  Turbo Pascal source function/procedure
+    WRITEHEX SRC  Turbo Pascal source function/procedure
+    WRITEAT  SRC  Turbo Pascal source function/procedure
+    WHICH    PAS  Turbo Pascal source program
+    SHOWNAME PAS  Turbo Pascal source program
+    GETSTRIN SRC  Turbo Pascal source function/procedure
+    FRIENDS  NAP  Support routine or data file for example program
+    FRIENDS  KEY  Support routine or data file for example program
+    MAKE     BAT  Batch file for SCRNBLT.ASM program
+    KSEARCH  SRC  Turbo Pascal source function/procedure
+    ITERM    PAS  Turbo Pascal source program
+    HEXDUMP  PAS  Turbo Pascal source program
+    SHELSORT SRC  Turbo Pascal source function/procedure
+    SCRNBLT  COM  Compiled, executable Turbo Pascal program
+    SCRNBLT  ASM  Assembler source code program
+    SCREEN   PAS  Turbo Pascal source program
+    RVRSNAME SRC  Turbo Pascal source function/procedure
+    QUIKSORT SRC  Turbo Pascal source function/procedure
+    ROLLEM   PAS  Turbo Pascal source program
+    RANDOMS  KEY  Support routine or data file for example program
+    PULL     SRC  Turbo Pascal source function/procedure
+    POWER    SRC  Turbo Pascal source function/procedure
+    PARSTAIL SRC  Turbo Pascal source function/procedure
+    MONOTEST SRC  Turbo Pascal source function/procedure
+    OVLTEST  PAS  Turbo Pascal source program
+    OVLTEST  001  Overlay file for example program
+    OVLTEST  000  Overlay file for example program
+    MOUSE    SRC  Turbo Pascal source function/procedure
+
+### Directory of PC-SIG Library Disk 0512
 
      Volume in drive A has no label
      Directory of A:\

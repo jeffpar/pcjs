@@ -6,16 +6,27 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #636"
+      B: "PC-SIG Library Disk 0636"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #636
+## Information about "MUSES 2 OF 2 (ALSO 635)"
+
+    MUSE is a specialized database for authors and agents to organize the
+    circulation of manuscripts to publishers, especially useful when
+    sending multiple or simultaneous submissions. Keep track of queries,
+    submissions, publishers' responses, acceptances and publications, as
+    well as current mailings. Review the status of any manuscript at any
+    publisher at any time. Mail merge the address in the files with
+    appropriate form letters and print letters on one printer and
+    envelopes on another.
+
+### Directory of PC-SIG Library Disk 0636
 
      Volume in drive A has no label
      Directory of A:\

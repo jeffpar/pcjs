@@ -6,16 +6,38 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #987"
+      B: "PC-SIG Library Disk 0987"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #987
+## Information about "APOLLO MISSION"
+
+    The APOLLO MISSION SIMULATOR is an in-depth simulation of a manned lunar
+    exploration in the year 2010. This is NOT a game, it is a simulation.
+    There are no points to score; either you survive your mission or you and
+    your crew are space dust!
+    
+    In a typical mission, you begin in the Orbiting Laboratory, circling
+    150km above the lunar equator. Enter the landing vehicle, undock and
+    perform several orbital maneuvers, then land on the moon. Explore the
+    surface using a long-range mobile base and a short-range roving vehicle.
+    A permanent fixed base is also included. Names and locations of over
+    300 lunar features are listed in one of the documents, each of which is
+    actually in the simulation, so you can become familiar with real lunar
+    geography.
+    
+    The APOLLO MISSION SIMULATOR is not "just another Lunar Lander." You
+    participate in practically every aspect of a manned lunar exploration
+    program. Set program goals, plan specific missions, and carry out those
+    missions. Enough detail is provided so you can learn a great deal about
+    lunar geography, orbital mechanics and physics in general.
+
+### Directory of PC-SIG Library Disk 0987
 
      Volume in drive A has no label
      Directory of A:\

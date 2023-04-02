@@ -6,16 +6,63 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #570"
+      B: "PC-SIG Library Disk 0570"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #570
+## Information about "PROGRAMERS UTILITIES #11"
+
+    This disk has a useful assortment of PASCAL utilities along with
+    the source code for functions such as removing tabs from a file,
+    dumping either a HEX or ASCII file and formatting the FX-80.  For
+    most programs there are two versions, specific to either DOS 1.X
+    and DOS 2.X.
+    
+    System Requirements:  128K, two disk drives
+    
+    How to Start:  To run the programs with the .EXE and .BAT extension,
+    type in the filename and then press <ENTER>.  To run the programs with
+    .PAS extension, refer to your Pascal manual.
+    
+    Suggested Registration:  $20.00
+    
+    File Descriptions:
+    
+    DOSCALL  ASM  Pascal callable procedure to access DOS
+    COMMAND  OBJ  Pascal procedure to interpret command line arguments
+    DOSCALL  OBJ  Pascal callable procedure to access DOS
+    DOSIF    OBJ  Pascal unit to provide access to DOS functions
+    FF       ASM  Output a form-feed to printer
+    BDUMP    EXE  Dump a file treating it as 8 bit bytes
+    DETAB    EXE  Remove tabs from a file. DOS 2.X
+    IDUMP    EXE  Dump a file treating it as 16 bit integers. DOS 2.X
+    README        Pascal Utilities information file.
+    DETAB1   EXE  Remove tabs from a file. DOS 1.X
+    IDUMP1   EXE  Dump a file treating it as 16 bit integers. DOS 1.X
+    DUMP     EXE  Dump a file in Hex and ASCII. DOS 2.X
+    PR       EXE  Print Formatter for FX-80
+    FF       EXE  Output a form-feed to printer
+    PATH2    0    Used to link for 2.0 pathnames
+    DOSIF    INC  Pascal unit to provide access to DOS functions
+    GOB      BAT           "
+    GOI      BAT           "
+    GOPR     BAT           "
+    GODE     BAT  Various batch files
+    COMMAND  PAS  Pascal procedure to interpret command line arguments
+    DUMP     PAS                       "
+    BDUMP    PAS                       "
+    IDUMP    PAS                       "
+    PR       PAS                       "
+    GOD      BAT           "
+    DETAB    PAS                       "
+    DOSIF    PAS  Pascal Source code for utilities
+
+### Directory of PC-SIG Library Disk 0570
 
      Volume in drive A has no label
      Directory of A:\

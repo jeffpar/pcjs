@@ -6,16 +6,30 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #846"
+      B: "PC-SIG Library Disk 0846"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #846
+## Information about "LOTUS LEARNING SYSTEM (ALSO 847)"
+
+    THE LOTUS LEARNING SYSTEM is designed to teach the novice computer user
+    how to use LOTUS 1-2-3.  The program starts by how to use the tutorial
+    and its menu structure.
+    
+    Choose the option you would like to start with.  From this menu you may
+    choose spreadsheet background, applications for LOTUS 1-2-3, keyboard
+    features, menu structure, commands, access system, control panel
+    features, and more.  Practice copying, moving, formatting, inserting,
+    retrieving, saving, columns, and more in a look and feel simulation of
+    Lotus 1-2-3.  A 130-page workbook comes with registration.  A must for
+    anyone about to buy, or who already has, LOTUS 1-2-3.
+
+### Directory of PC-SIG Library Disk 0846
 
      Volume in drive A has no label
      Directory of A:\

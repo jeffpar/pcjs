@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #521"
+      B: "PC-SIG Library Disk 0521"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #521
+## Information about "FREE FILE"
+
+    FREEFILE is a relational database system for anyone with little or no
+    programming experience to determine how files are to be created, enter
+    information, and print reports.
+    
+    It is particularly useful for someone interested in maintaining a
+    collection of information with the ability to set up "calculated
+    fields" and import or export data to and from other packages. FREEFILE
+    has on-line help and two tutorials. It allows 10 indexes per database,
+    2 billion records, 1000 characters per record, and 100 fields per
+    record.
+
+### Directory of PC-SIG Library Disk 0521
 
      Volume in drive A has no label
      Directory of A:\

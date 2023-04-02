@@ -6,16 +6,57 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #238"
+      B: "PC-SIG Library Disk 0238"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #238
+## Information about "SPRITE GRAPPHICS"
+
+    There are several unrelated programs on this disk.  SPRITE is a user-
+    supported program which lets you conveniently create Sprite charaters.
+    A Sprite character is a graphics figure made from a set of colored
+    pixels.  Instead of displaying this figure pixel by pixel, BASIC lets
+    you display the figure in one step with the graphics form of the PUT
+    statement.  This is similar to the Sprite graphics available on other
+    microcomputers.  Other files included are various files to explain how
+    to unprotect some popular software.  A benchmark is here as well as a
+    program to prints foreign language characters on an EPSON printer.
+    
+    System Requirements: Some programs require color, BASIC
+    
+    How to Start:  Load DOS and type SPRITE to enter the main program.  To
+    run BASIC programs consult the directions in GETTING STARTED for your
+    configuration.  Consult the .DOC files for additional information.
+    
+    Suggested Registration:  $20.00
+    
+    File Descriptions:
+    
+    SPRITE   SAV  This is a sample SPRITE save file.
+    SPRITE   COM  This is the SPRITE Program
+    SPRITE   BAS  A sample BASIC program created with the SPRITE program
+    PC-PRINT DOC  Documentation file  (11k)
+    PC-PRINT EXE  German, Spanish, Banner, EPSON printer utilities
+    SK       UNP  How to unprotect Sidekick
+    RBASE    UNP  How to unprotect RBASE
+    LAYOUT   UNP  How to unprotect LAYOUT
+    PROKEY   UNP  How to unprotect PROKEY
+    TKSOLVER UNP  How to unprotect TKSOLVER
+    NKYPKY   TXT  Comparison of NEWKEY and PROKEY
+    HARDBO   DOC  How to reboot off hard disk
+    QUIET    DOC  How to quiet Tandon drives  (DOS 2.0+)
+    TIMER         Explains how to get around PRINT/SIDEKICK incompatibility
+    CVTBIN   BAS  Converts CIS (Intel hex format) .BIN files to true Binary
+    SEIV     DOC  Benchmark test for several computers including c test
+    BASTOD   BAS  BASIC program shows how to call DOS functions  (50K)
+    SPRITE   DOC  Documentation message - SPRITE is self documenting
+
+### Directory of PC-SIG Library Disk 0238
 
      Volume in drive A has no label
      Directory of A:\

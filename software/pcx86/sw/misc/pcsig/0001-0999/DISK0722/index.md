@@ -6,16 +6,32 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #722"
+      B: "PC-SIG Library Disk 0722"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #722
+## Information about "COMPOSER"
+
+    OK, Schroeder -- I mean Beethoven -- here's a program for you.
+    COMPOSER
+    is a simple music editor that lets you create music and then integrate
+    your creation into a batch file or a program written in Turbo Pascal. A
+    visual display of a piano keyboard lets you play and "record" your
+    music from the computer keys.  COMPOSER is a great way to bring musical
+    life to programs you have written.  It has a three-octave range and
+    requires some knowledge of music terminology to create original music.
+    Eleven prewritten songs come with the program.
+    
+    Though it lets Turbo Pascal access the songs, it does not put the files
+    into source code.  By calling the file TRBOTUNE.SYS in your Pascal
+    program, you can access your songs.
+
+### Directory of PC-SIG Library Disk 0722
 
      Volume in drive A has no label
      Directory of A:\

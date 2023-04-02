@@ -6,16 +6,59 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #52"
+      B: "PC-SIG Library Disk 0052"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #52
+## Information about "DOS UTILITIES NO 1"
+
+    An updated version of the FREE1 RAM-disk package for electronic disk
+    fans.  Use this collection of file handling utilities to insert
+    carriage returns, strip high-order characters from a text file, and to
+    hide a file from prying eyes.  Also included is a text-search routine,
+    and a binary to hex converter.
+    
+    System Requirements:  Some programs run under DOS 1.x ONLY; BASIC
+    
+    How to Start: To run a COM or EXE program simply type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.  To read DOC
+    files simply enter TYPE filename.ext and press <ENTER>.
+    
+    Suggested Registration:  FREE4 $15.00; FREE5 $10.00
+    
+    File Descriptions:
+    
+    BEEP     COM  Generates beep sound - useful for match files
+    CRETURN  BAS  Adds carriage returns to downloaded files
+    FILTER   BAS  Removes control and non-ASCII characters from disk files
+    DISRTN   EXE  File directory utility
+    FIXDEL   EXE  Disk file utility
+    DSKPGM2  BAS  Creates batch file for copying files
+    FIXIT    BAS  Creates PRINTFIX.COM
+    FREE4    COM  160K electronic disk drive - update to FREE1
+    FREE5    COM  New reset program - update to FREE3
+    FREE4    DOC  Documentation for FREE4.COM
+    FREE5    DOC  Documentation for FREE5.COM
+    HIDEFILE BAS  Modifies a file's directory status
+    HEX      BAS  Convert binary files to and from hex format for download
+    PR256    ASM  Printer patch
+    POKEPEEK DOC  Memory locations in ROM BIOS accessible from BASIC
+    PATCH256 ASC  Patches various printers into PR256
+    PARTCOPY EXE  Copies files from a double-sided to 2 single-sided disks
+    UTSCAN   BAS  Scans text files for specified string and prints
+    TUNE     COM  Plays tune
+    SHIFTIBM COM  Converts backslash key back to IBM standard configuration
+    SHIFTBS  COM  Converts backslash key into left shift key
+    FILEMOD  ASC  Part of DISRTN.EXE program
+    ABSTRACT DOC  Documentation for utilities
+
+### Directory of PC-SIG Library Disk 0052
 
      Volume in drive A has no label
      Directory of A:\

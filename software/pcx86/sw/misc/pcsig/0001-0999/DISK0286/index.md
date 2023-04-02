@@ -6,16 +6,62 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #286"
+      B: "PC-SIG Library Disk 0286"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #286
+## Information about "PC-VT"
+
+    PC-VT is a software emulator which makes the IBM PC function as a DEC
+    VT102 or a VT100 Video Terminal.  PC-VT emulates most VT100/102
+    functions of the VT100/102: With this package, you can communicate
+    with larger mainframes, or services that would normally only be
+    available to access by a dedicated terminal.  It's like having a
+    second computer available to you when you need it!  NOTE: PC-VT no
+    longer supports DOS 1.0 or 1.1.
+    
+    Features:
+    
+    ~ Communications support for all of the popular baud rate
+    and data bit/parity bit combinations
+    ~ On line  HELP by pressing the ALT-H key while in the
+    communications, SETUP, DIALING, or MACRO frames
+    ~ Fast screen update for PC's  with the color graphics display
+    card
+    ~ Select either a VMS or UNIX host
+    ~ Full Duplex with no EIA modem control
+    ~ VT52 Compatibility Mode
+    ~ Support  for  Hayes  dialing commands  and  includes  a Dialing
+    Directory with 10 entries
+    ~ Full receive parity checking can be enabled
+    ~ Both Numeric and Application Keypad modes
+    ~ Full feature Upload and Download file capability
+    ~ Capability to  echo all displayed characters to LPT1 or
+    LPT2 as hardcopy record of a terminal session
+    ~ Run DOS functions or other programs without terminating PC-VT
+    ~ PC-VT  supports buffer sizes of 256 and 2048 characters
+    
+    System Requirements:  Monochrome or Color/Graphics card, RS-232 port.
+    
+    How to Start: Check the READ.ME for the author's note and for
+    documentation consult the file PC-VT.DOC.  To run enter PC-VT <ENTER>.
+    
+    Suggested Registration:  $35.00
+    
+    File Descriptions:
+    
+    *        DAT  Data file for PC-VT (4 files)
+    KERMIT   COM  Kermit protoccol
+    READ     ME   Authors note
+    PC-VT    DOC  Documentation for PC-VT (aprox. 100 pages)
+    PC-VT    EXE  Main PC-VT program
+
+### Directory of PC-SIG Library Disk 0286
 
      Volume in drive A has no label
      Directory of A:\

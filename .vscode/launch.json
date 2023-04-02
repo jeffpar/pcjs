@@ -559,13 +559,14 @@
       ]
     },
     {
-      "name": "Node: diskettes.js",
+      "name": "Node: diskettes.js pcsigdisks",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/misc/old/diskettes.js",
       "args": [
-        "/disks/pcsig0",
-        "--folders"
+        "/disks/pcsigdisks",
+        "--folders",
+        "--overwrite"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -677,6 +678,25 @@
       ]
     },
     {
+      "name": "Node: diskimage.js --extract --expand",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "DISK0212.ZIP",
+        "--extract",
+        "--expand",
+        "--overwrite",
+        "--verbose"
+      ],
+      "cwd": "${workspaceFolder}/tmp",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskimage.js --zip --list",
       "type": "node",
       "request": "launch",
@@ -768,8 +788,26 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "/pcsig8a-disks/pcx86/shareware/pcsig08/DISK0798.json",
+        "/disks/pcsig8a-disks/pcx86/shareware/pcsig08/DISK0798.json",
         "--extract"
+      ],
+      "cwd": "${workspaceFolder}/tmp",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskimage.js --extract --normalize",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "DISK0001.img",
+        "--extract",
+        "--normalize",
+        "--overwrite"
       ],
       "cwd": "${workspaceFolder}/tmp",
       "stopOnEntry": false,
@@ -835,7 +873,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "/gamedisks/pcx86/game/other/1990/oregon_trail/OREGON_TRAIL-210.json",
+        "/disks/gamedisks/pcx86/game/other/1990/oregon_trail/OREGON_TRAIL-210.json",
         "--list"
       ],
       "cwd": "${workspaceFolder}",

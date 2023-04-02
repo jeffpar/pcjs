@@ -6,16 +6,39 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #18"
+      B: "PC-SIG Library Disk 0018"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #18
+## Information about "IQBUILDER"
+
+    This set of educational programs is ideal for parents or teachers who
+    want to work with youngsters to develop word and number skills. Each
+    of these BASIC programs is separately loaded from a main program menu.
+    The synonym and antonym programs are particularly challenging.
+    
+    IQ BUILDER uses no graphics, but it does get the job done. The target
+    group is children between the ages of 5-10.
+    File Descriptions:
+    
+    MENU     BAS  Menu to select programs for execution.
+    MASTER   BAS  MASTERMIND -- guess the code.
+    READING  BAS  Improve your reading speed.
+    FRANK    BAS  HANGMAN by another name.
+    WORDS    BAS  Data for FRANK.
+    MATH     BAS  Drill of simple math problems.
+    NIM      BAS  Ancient game of skill and strategy.
+    BACKGAM  BAS  BACKGAMMON.
+    BLACK    BAS  BLACKJACK -- 1 or 2 players.
+    TRUCKER  BAS  Make your fortune in the trucking business.
+    IQBUILD  BAS  Sub-menu to run the IQ-Builder Series.
+
+### Directory of PC-SIG Library Disk 0018
 
      Volume in drive A has no label
      Directory of A:\

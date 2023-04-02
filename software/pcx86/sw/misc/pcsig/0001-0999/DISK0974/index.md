@@ -6,16 +6,24 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #974"
+      B: "PC-SIG Library Disk 0974"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #974
+## Information about "BIBLE QUIZ PLUS 1 OF 2 (ALSO 2126)"
+
+    BIBLE QUIZ PLUS is a religious trivia game with three different levels
+    of play for one to six players.  Questions are asked and answers can be
+    in  multiple choice, fill-in-the-blank, or answer only format.  These
+    questions are from the Book of Psalms and the Book of Proverbs from the
+    King James version of the Bible.
+
+### Directory of PC-SIG Library Disk 0974
 
      Volume in drive A has no label
      Directory of A:\

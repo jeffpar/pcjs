@@ -6,16 +6,20 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #986"
+      B: "PC-SIG Library Disk 0986"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #986
+## Information about "PULLED FROM THE LIBRARY"
+
+    This disk is no longer in the PC-SIG Library.
+
+### Directory of PC-SIG Library Disk 0986
 
      Volume in drive A has no label
      Directory of A:\

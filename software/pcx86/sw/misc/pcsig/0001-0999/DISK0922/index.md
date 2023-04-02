@@ -6,16 +6,48 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #922"
+      B: "PC-SIG Library Disk 0922"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #922
+## Information about "WIZQUIZ AND JEM"
+
+    WIZQUIZ is an educational program that offers randomly-generated
+    problems across a wide area of the average elementary school
+    mathematics curriculum including such disciplines as addition,
+    subtraction, multiplication, division, lowest common denominator,
+    greatest common factor, simple and advanced fractions, decimals and
+    percentages, and reciprocals.
+    
+    Each type of problem has 10 levels with a target score determined by
+    the number of errors and the time it takes to solve all 10 problems of
+    that level. Since WIZQUIZ asks for and remembers a player's age, it
+    restricts access to easier problems by age.
+    
+    After each set of 10 problems, the program calculates the new average,
+    checks the score against the best ever and the player's own previous
+    best performance, and announces the score. WIZQUIZ keeps a separate
+    record for each player's best score and averages.
+    
+    WIZQUIZ can be used both at home for personal studying and at school in
+    the classroom.
+    
+    JEM LOGO was written to teach children the basics of computer
+    programming. A very simple programming language, it teaches children
+    the logic associated with a computer and how to combine commands to
+    carry out complex tasks.
+    
+    JEM has three basic modes: Help, Explain, and Run. The first mode you
+    see is Run, when the logos are displayed. If you type Help, you get
+    four pages of text, giving a brief description of the logo or word you
+    indicated when you requested help.
+
+### Directory of PC-SIG Library Disk 0922
 
      Volume in drive A has no label
      Directory of A:\

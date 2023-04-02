@@ -6,16 +6,49 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #2"
+      B: "PC-SIG Library Disk 0002"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #2
+## Information about "SPOOLERS"
+
+    BASIC utilities, as well as screen handlers, print spoolers, and a good
+    directory utility.
+    
+    How to Start: To run a COM or EXE program simply type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.  To read DOC or
+    TXT files simply enter TYPE filename.ext and press <ENTER>.
+    
+    File Descriptions:
+    
+    KYBD     BAS  Outputs keyboard input to the printer like a typewriter.
+    CROSSREF BAS  Generates a cross-reference listing for BASIC programs.
+    STARTREK BAS  Command the Enterprise while hunting for Klingons.
+    LISTER   BAS  Generates a formatted listing of BASIC programs.
+    DISKMOD  BAS  Utility to examine and modify disk sectors.
+    MONITOR       Toggles between monochrome and color display.
+    PROGRAM  DOC  Details for running the programs on this disk.
+    NEWKEY   BAS  Reassigns the ten function keys.
+    ADDCR    BAS  Adds a carriage return to each line in a text file.
+    GRAF2    COM  Graphic screen dump using the PrtSc key.
+    CSPOOL   COM  Print spooler for printer adapter.
+    SYSTAT   COM  Displays system status.
+    UNPROT   TXT  Procedure for unprotecting BASIC programs.
+    CLS      COM  Clears the screen from DOS.
+    SDIR     COM  Displays the directory on one screen (DOS 1.1 only).
+    CLEAN    COM  Exercises disk when using a cleaning diskette.
+    HEXCONV  BAS  Converts binary files to ASCII for transmission.
+    MSPOOL   COM  Print spooler for monochrome/printer adapter.
+    HGRI     EXE  Graphics screen dump using PrtSc key.
+    CR       BAS  Cleans up downloaded BASIC files.
+
+### Directory of PC-SIG Library Disk 0002
 
      Volume in drive A has no label
      Directory of A:\

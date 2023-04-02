@@ -6,16 +6,56 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #168"
+      B: "PC-SIG Library Disk 0168"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #168
+## Information about "MUSIC AND EDUCATION"
+
+    MUSIC/ED is a far-ranging collection of items.  The miscellaneous
+    music includes the chance to write your own!  The educational pieces
+    range widely, from ALGEBRA (a graphic function demo), to both SPELL
+    and SPELLING BEE (to teach spelling skills), to BABYMATH (a visual
+    display of a selected number of objects.  Other fun and educational
+    programs are here too.  Have fun, and teach your children well.
+    
+    System Requirements:  Color graphics, two disk drives, BASIC
+    
+    How to Start:  To run BASIC program consult the directions in GETTING
+    STARTED for your configuration.  Consult CLASROOM.DOC for program
+    documentation.
+    
+    File Descriptions:
+    
+    MINUET2  BAS  Bach Minuet
+    BABYMATH EXE  Select a number, displays a dot matrix  (Color req)
+    ALGEBRA  BAS  Displays several algebra functions in 3-d  (Color req)
+    PIANO1   BAS  Play the piano from your keyboard  (Color required)
+    SPELL    BAS  Spelling bee
+    PIANO2   BAS  Same as above, except it guides you through sample songs
+    SPELL?   DAT  Data files for SPELLBEE.BAS (4 files)
+    SPELLBEE BAS  Another spelling bee program
+    SPELLDAT BAS  Part of SPELLBEE.BAS
+    BACH2    BAS  Compose your own music  (Bach to BASIC Version 1.2)
+    BACH     BAS  J. S. Bach Prelude 1 in C Major
+    CHEMQUES BAS  Chemistry test aid
+    BIBLE    BAS  The Bible Song
+    CLASROLL BAS  Update, print class roll, attendance, labels
+    CHEMTEST BAS  Chemistry test aid
+    JESUSLOV BAS  Jesus Loves Me
+    GODFATHR BAS  Theme from "The Godfather"
+    COFFEE   BAS  Percolating coffee  (Color required)
+    CLASROLL DOC  Documentation
+    MINUET   BAS  Bach Minuet in D Minor
+    STORY    BAS  Supply the words to complete the story
+    TELLTIME BAS  Good way to teach youngster to tell time (Color req)
+
+### Directory of PC-SIG Library Disk 0168
 
      Volume in drive A has no label
      Directory of A:\

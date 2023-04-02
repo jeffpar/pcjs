@@ -6,16 +6,39 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #562"
+      B: "PC-SIG Library Disk 0562"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #562
+## Information about "PC-HAM"
+
+    PC-HAM is a set of amateur radio database programs.  The program is
+    based, in part, on programs described in, "Software for Amateur
+    Radio," by Joe Kasser (G3ZCZ) and published by TAB Books.
+    
+    PC-HAM has several features that are invaluable to any amateur
+    radio operator with a computer. Some of the program's capabilities
+    include:
+    
+    ~ Display/print of your QSO's sorted by call-sign, alphanumerical order
+    
+    ~ Search for and display of all QSO's with a specified prefix
+    
+    ~ Automatic generation of your DXCC status
+    
+    ~ Direct updating of award records from the log entries
+    
+    ~ Analyze contest QSO's for duplicates and scoring contacts
+    
+    ~ Automatic QSL 100% (after a contest or DX-Pedition) to all stations
+    worked for one contact on each of five bands.
+
+### Directory of PC-SIG Library Disk 0562
 
      Volume in drive A has no label
      Directory of A:\

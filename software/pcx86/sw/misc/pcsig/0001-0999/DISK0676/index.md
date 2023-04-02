@@ -6,16 +6,44 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #676"
+      B: "PC-SIG Library Disk 0676"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #676
+## Information about "THE ENABLE READER 3 OF 3 (674,675,677)"
+
+    The ENABLE READER PROFESSIONAL SPEECH SYSTEM was written to improve
+    computer access for the blind and visually-impaired, and is actually two
+    programs in one.
+    
+    The ``Full Screen Speech Review System'' is designed to let the
+    visually-impaired use the wide selection of software written for
+    MS-DOS compatibles.  Now programs like Lotus 1-2-3 or dBASE are
+    available to everyone.
+    
+    The ``Talking Tutorial Programmer's Aid'' gives programmers access to
+    many of the speech functions of the ENABLE READER to write talking
+    tutorials for their software.
+    
+    Several synthesizer language versions are included for the most popular
+    synthesizers available.  Among these are:
+    
+    ~ Artic Technologies - speech board.
+    
+    ~ Speech Plus - calltext 5050.
+    
+    ~ Digital Equipment Corp. - dectalk.
+    
+    ~ Street electronics - echo qp.
+    
+    ~ Votrax, Inc. - Votalker ib., Votrax pss., Votrax pss/b.
+
+### Directory of PC-SIG Library Disk 0676
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,70 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #613"
+      B: "PC-SIG Library Disk 0613"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #613
+## Information about "MANAGING YOUR MONEY"
+
+    All the BASIC programs in the book ``Managing Money With Your IBM PC,''
+    by A. Glazer, an economics professor at the University of California.
+    (Prentice-Hall, 1985).
+    
+    Among other things, you can determine the after-tax cost of a loan,
+    demonstrate the advantages of an Individual Retirement Account, compare
+    loans which have different interest rates and different origination
+    fees, and calculate the amount of monthly savings necessary to finance
+    a college education.  Many different types of loans are also well
+    demonstrated and made easier to understand.
+    
+    Includes BASIC source code.  Anyone interested in short, useful
+    investment calculation programs, with the source code, will find this
+    package very valuable.
+    File Descriptions:
+    
+    AMORTIZE BAS  Amortization schedule for a mortgage loan payment.
+    -------- ---  MANAGING YOUR MONEY (v1.0).
+    TERMDEPO BAS  Balance in a savings plan any number of years.
+    SIMPINV  BAS  Analysis of an investment that produces no annual income.
+    SAVHISTO BAS  Annual balance in a savings program with deposits.
+    RULEOF78 BAS  Amortization schedule for consumer and automobile loans.
+    README        General information and file information.
+    POINTS   BAS  Effective interest rate on a loan that charges points.
+    BALREM   BAS  Balance remaining on a mortgage.
+    CREDITCA BAS  Gains from using a credit card instead of paying cash.
+    CHARGEHI BAS  Monthly status of a revolving charge account.
+    PERTERM  BAS  How many deposits to make to reach a goal.
+    PERRATE  BAS  Interest rate to earn on your savings to reach goal.
+    PERDEPOS BAS  How much to deposit each month or year to reach goal.
+    PERBALAN BAS  Balance in savings account after any number of deposits.
+    PAYBACK  BAS  How long it takes to recover an investment.
+    CREDITPU BAS  Minimum payment schedule for a credit purchase.
+    NUMDAYS  BAS  Number of days between two dates.
+    DAILYODO BAS  Date that is a specified number of days away.
+    MONTHLYO BAS  Date that is a specified number of months away.
+    MNTHINCM BAS  Monthly income obtained from a specified amount of money.
+    LOANTERM BAS  How many payments you must make on a loan.
+    LOANQUAL BAS  Size of loan at interest rate and monthly payment.
+    LOANCOST BAS  After tax cost of a loan.
+    IRA      BAS  The benefits of saving in an IRA.
+    INVYIELD BAS  Annual rate of return on an investment.
+    INVVALUE BAS  Present value of an investment.
+    INVPRICE BAS  Sales price of an asset that yields a specified ROR.
+    INVINCOM BAS  Annual or monthly income that yields a specified ROR.
+    INVHISTO BAS  Annual description of an investment; value, ROR.
+    INTRATE  BAS  Interest rate on a loan.
+    DEPGROWS BAS  Balance in a savings program with deposits.
+    DAYOFWEE BAS  Day of week on which a specified date falls.
+    DATESINM BAS  Dates in a month which a specified day of the week falls.
+    DATEDIST BAS  Number of years, months, and days between two dates.
+
+### Directory of PC-SIG Library Disk 0613
 
      Volume in drive A has no label
      Directory of A:\

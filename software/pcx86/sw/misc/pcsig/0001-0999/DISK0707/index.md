@@ -6,16 +6,27 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #707"
+      B: "PC-SIG Library Disk 0707"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #707
+## Information about "CURVEFIT"
+
+    Burnt out on Euclid?  Got the Newton blues?  If you're a weary
+    mathematician or a bogged-down high-level math student, CURVEFIT is an
+    excellent program for you.  CURVEFIT performs a least-squares curve fit
+    on X, Y data.  Curves for 25 equations are fitted.  Equation
+    coefficients, correlation coefficient, and best fit are computed with
+    your data.  CURVEFIT can make predictions for Y in any of the 25
+    equations.  Residuals are calculated.  The program does not include any
+    graphics.
+
+### Directory of PC-SIG Library Disk 0707
 
      Volume in drive A has no label
      Directory of A:\

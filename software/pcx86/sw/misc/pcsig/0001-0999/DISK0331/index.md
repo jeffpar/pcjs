@@ -6,16 +6,39 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #331"
+      B: "PC-SIG Library Disk 0331"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #331
+## Information about "MEDLIN ACCOUNTING"
+
+    MEDLIN ACCOUNTING is a group of four companion accounting packages
+    which, when used together, provide fast easy-to-use accounting services
+    for the small to medium sized business.
+    
+    The first and main program, PC-GL, is a double-entry General Ledger
+    module which allows up to 800 items in the chart of accounts and 6,000
+    transactions per period. It can be used by itself or with PC-AP -- the
+    Accounts Payable package. PC-AP is an Accounts Payable program that
+    allows a maximum of 2000 vendors and 2000 invoices per month. PC-AR is
+    a menu-driven Accounts Receivable module and supports up to 2000
+    customers and 4000 invoices per month. PC-PR, the payroll program,
+    includes both current federal tax tables, support for most state taxes,
+    and a W2 program. All programs use the same commands, and share the
+    same operating features.
+    
+    NOTE: All programs are run in RAM which accounts for their speed but
+    also controls how many files can be supported at a time. Numbers of
+    supported accounts quoted above are based on at least 512K RAM. Less
+    RAM will allow the modules to run but will support a smaller number of
+    accounts.
+
+### Directory of PC-SIG Library Disk 0331
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,42 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #208"
+      B: "PC-SIG Library Disk 0208"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #208
+## Information about "PC-SIG SAMPLER #7"
+
+    A fine graphically oriented collection of programs, whether through
+    your monitor screen or your printer.  DESIGN is an intriguing graphics
+    demo, and MASTER2 is a good version of the classic Mastermind board
+    game.  Also included are two cute music pieces, and several nice
+    examples of printer art.
+    
+    System Requirements: Some programs require BASIC, color graphics.
+    
+    How to Start: To read TXT files, enter TYPE filename.ext and press
+    <ENTER>.  To run an EXE program, just type its name and press <ENTER>.
+    For instructions on running BASIC programs, please refer to the
+    GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    DESIGN   EXE  Neat graphics demo
+    FLASHDAN BAS  Flashdance  (Music - Judith Penner)
+    JSB      BAS  J.S. Bach Violin Sonata No 6, in E Major, 1st Movement
+    PRF      PRF  Part of MASTER2.BAS
+    NUDE84   TXT  Text nude with 84 calendar
+    NUDE     BAS  Graphics nude  (G. Wesley)
+    MASTER2  BAS  Mastermind  (Les Penner)
+    SMURF    BAS  Smurf printer art  (James Card, Phil Gill)
+
+### Directory of PC-SIG Library Disk 0208
 
      Volume in drive A has no label
      Directory of A:\

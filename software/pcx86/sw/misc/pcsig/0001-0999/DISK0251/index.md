@@ -6,16 +6,28 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #251"
+      B: "PC-SIG Library Disk 0251"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #251
+## Information about "TIME AND MONEY"
+
+    A simple financial record-keeping system for the home or small
+    business. Finally, you can know just where all the money goes!
+    
+    Design and keep a budget, create financial plans, track cash outlay, and
+    analyze rent/buy options. Track bank accounts, manage your checkbook,
+    and monitor your use of charge cards. Select menu options to project
+    future plans and analyze specific financial alternatives. The system
+    makes graphs of projected cash use for up to a year in the future.
+    Use TIME AND MONEY to help take control of your financial life!
+
+### Directory of PC-SIG Library Disk 0251
 
      Volume in drive A has no label
      Directory of A:\

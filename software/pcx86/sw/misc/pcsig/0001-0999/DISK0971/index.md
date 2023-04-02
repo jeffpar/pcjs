@@ -6,16 +6,34 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #971"
+      B: "PC-SIG Library Disk 0971"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #971
+## Information about "MULTI BASE"
+
+    MULTI-BASE is a database management system with many sophisticated
+    features to complement its simple file management capabilities.
+    
+    The program has a built-in screen definer, report writer, forms
+    generator, and menu generator.  MULTI-BASE can handle as many records in
+    a database as the space on your hard disk will allow.  In fact, when
+    first defining your database, you tell how many records you believe you
+    will need, and MULTI-BASE will allocate the needed space for these
+    records.
+    
+    The system can be completely menu-driven or you can use simple command
+    language to manipulate the data in your database.  Since the
+    representation of the data, format of the reports and menus are all
+    determined by you, MULTI-BASE offers a great deal of flexibility in the
+    way the program is used.
+
+### Directory of PC-SIG Library Disk 0971
 
      Volume in drive A has no label
      Directory of A:\

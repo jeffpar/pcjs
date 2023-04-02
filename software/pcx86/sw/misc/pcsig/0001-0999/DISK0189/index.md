@@ -6,16 +6,40 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #189"
+      B: "PC-SIG Library Disk 0189"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #189
+## Information about "TECH PRINT"
+
+    TechPrint is an inexpensive and remarkably easy-to-use program for doing
+    technical word processing on PCs linked with dot matrix printers.
+    TechPrint is currently designed to work with WordStar and Epson
+    printers.  It supports special characters and character sets,
+    strikeovers, superscripting, and subscripting.  It comes with an
+    excellent on-disk manual done in WordStar (sorry--so get an UNWS!).
+    
+    System Requirements: Epson printer, DOS 2.0 or later, and WordStar.
+    
+    How to Start: Consult the TECH.MNL for directions and documentation.
+    To run TechPrint, type TECH and press <ENTER>.
+    
+    Suggested Registration:  $25.00 for registration and updates
+    
+    File Descriptions:
+    
+    FLIER         Start documentation - read with WORDSTAR
+    TECH     MNL  Documentation manual
+    TECH     KEY  Prokey key definitions
+    TECH     EXE  Improved WORDSTAR printing on FX Epson
+    TECH     CLR  Color switch
+
+### Directory of PC-SIG Library Disk 0189
 
      Volume in drive A has no label
      Directory of A:\

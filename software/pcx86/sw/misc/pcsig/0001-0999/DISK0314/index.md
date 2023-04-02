@@ -6,16 +6,74 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #314"
+      B: "PC-SIG Library Disk 0314"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #314
+## Information about "C UTILITIES NO 4"
+
+    This disk has an excellent Unix-type Grep function (string find)
+    regardless of what C compiler you use.  Also here is XENIX which
+    is a very nice set of disk I/O routines that support all the DOS
+    features, and UNLUMP to help build larger C programs.
+    
+    System Requirements: C compiler and Assembler are optional.
+    
+    How to Start: To read DOC files, enter TYPE filename.ext and
+    press <ENTER>.  To run an EXE program, just type its name and
+    press <ENTER>.  For instructions on ASM or C listings, refer to
+    your Assembler or C language manuals.
+    
+    File Descriptions:
+    
+    CC       C    C program that does the same thing as C86SAMPL.BAT !
+    CASYNC   ASM  C interface to serial port. Includes XON/XOFF, buffered
+    C86SAMPL BAT  Batch file to run C86 compiler
+    C86MOD   DOC  How to make C86 programs return status to DOS 2.0
+    GETSEG-C ASM  Gets vaule for all the segment registors
+    CSYSINT  ASM  Interface between Lattice C and the 8088 interrupts
+    CRC      C    Does CRC error checking on blocks of data
+    CPRGRMS2 DOC  Short descption of the files on this disk
+    CPRGRMS1 DOC  Short descption of the files on this disk
+    CPRGRMS1 BAT  Copies all the files on this diskette to another disk
+    CLS      C    C program to clear screen
+    CC       EXE  CC.C ready to run
+    LOCATE   C    C routine to position cursor on screen
+    LEJ_LIB  C    Routines to count words etc, ASCII HEX conversion etc.
+    KERMITPC HLP  lets pc emmulate a TTY termial. Documentation on KERMIT
+    KERMITPC C    Reliable file transfer over unreliable I/O channels
+    IOS1-20  ASM  DOS disk I/O functions for Lattice C
+    GREP     DOC  GREP manual
+    GREP     C86  GREP for C86
+    GREP     C    GREP for Lattice C
+    LUMP     C    Lump a group of files together
+    MEMCLEAN C    Zeros memory to avoid parity checks
+    MEMCLEAN DOC  Documentation on MEMCLEAN
+    MOVMEML  ASM  C callable function to move memory
+    RANDOM   ASM  Random number generator for C
+    NAMES    C    Shows how to Access disk from C
+    SETPRTR  C    Setup the parameters for EPSON printers
+    RANDOM   C    Test for RANDOM.ASM
+    XENIX    OBJ  XENIX ready to link. Lattice C
+    XENIX    ASM  Source code for OPEN READ WRITE Supports full path names
+    XC       EXE  XC ready to run
+    XC       DOC  Documtation for XC
+    XC       C    Cross reference utility for C programs
+    USQ      C86  Unsqueeze a text file
+    SQ       C86  Squeeze a text file into less space
+    SWITCH1  C    Change display mode
+    SWITCH   C86  Change display type
+    UNLUMP   C    Seperate lumped files
+    TYPESQ   C86  Type a squeezed file
+    TPRINT   DOC  Documentation for TPRINT
+    TPRINT   C    Prints files with page numbers headers ect.
+
+### Directory of PC-SIG Library Disk 0314
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,59 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #906"
+      B: "PC-SIG Library Disk 0906"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #906
+## Information about "MISC. UTILITIES"
+
+    This disk contains about twenty different utilities for your PC or
+    compatible computer.  For example, the selective print screen utility
+    will select the number of rows on the screen that you want to printout
+    using the ``PrtSc'' option on your keyboard.  An ``unprotect'' guide
+    helps you run ``Managing Your Money'' from a hard disk without
+    inserting the original disk in drive A.
+    
+    Also included are communication utilities for Qmodem and other
+    utilities for Microsoft Word; DOS command utilities within windows;
+    some C language utilities; how to unprotect Chessmaster 2000; a
+    multi-level window in Turbo BASIC; and more.  See File Descriptions for
+    explanations of individual programs.
+    File Descriptions
+    
+    DBRELATE ARC  Extensions of dBase, Clipper relations.
+    CORDFORM ARC  AIA change order for Microsoft Word with style sheet.
+    CM2PTCH  ARC  Patch for Chessmaster 2000.
+    99       DIR  Telecommunication service library directory.
+    MIRRORDD ARC  Dialing directory from Mirror.
+    LOCKIT   DOC  Documentation for LOCKIT.COM.
+    DR       ARC  Better than DIR from ``PC Magazine.''
+    DC1      ARC  PC Junior DOS color program from CIS.
+    LOCKIT   COM  Lock/Unlock keyboard -- turn screen on/off.
+    FACE     COM  Lots of faces on your screen.
+    LINE26   DOC  Documentation for LINE26.COM.
+    LINE26   COM  Memory resident program that displays status info.
+    MYMENU   ARC  Menu maker for hard disk.
+    NEWDEX   ARC  Great floppy disk cataloger.
+    MYMUNP   ARC  Managing Your Money patches with version 3.0.
+    TYPEHEAD ARC  Clipper/dBase3-type ahead quash and why.  With demo progra
+    TCSEARCH ARC  Search for files - Turbo C source code.
+    TC-EQUIP ARC  Display PC equipment - Turbo C with source code.
+    TBWINDOW ARC  Turbo BASIC window routines with source code.
+    SLEEVE2  ARC  Print DIR on disk sleeve.
+    SLEEVE1  ARC  Make disk sleeve with DIR on it.
+    QUICKCHA ARC  Change color on any programs.
+    PRNTSCR- ARC  Print any part of screen with PrtSc key.
+    PKFIND11 EXE  Locate files on hard disk.
+    PCKWKPAT ARC  Patch for shareware PC-Kwik.
+    PKXARC   COM  Archiving utility.
+
+### Directory of PC-SIG Library Disk 0906
 
      Volume in drive A has no label
      Directory of A:\

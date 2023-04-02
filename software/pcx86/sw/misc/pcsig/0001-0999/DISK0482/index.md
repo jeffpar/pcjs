@@ -6,16 +6,49 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #482"
+      B: "PC-SIG Library Disk 0482"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #482
+## Information about "ENCODE AND DECODE"
+
+    ENCODE/DECODE gives you an efficient way to encrypt and
+    decrypt sensitive and company-private information.  Protect spreadsheets
+    source code, wordprocessor documents, data files -- in fact any file at
+    all.  If your data is valuable, secure it with ENCODE/DECODE.
+    File Descriptions:
+    
+    ENCODE   TXT  Documentation in plain vanilla DOS text file form.
+    ENCODE   DOC  Documentation MS-WORD 3.0 form.
+    ELITE    STY  Style sheet if your printer has 12 pitch 10 point type.
+    NORMAL   STY  The style sheet used by all documentation.
+    PICA     STY  Style sheet if your printer cannot do 12 pitch type.
+    PIG      STY  Style sheet used to create the plain *.TXT documents.
+    DECIPHER COM  Decipher executable.
+    DECIPHER PAS  Decipher source.
+    DECODE   COM  Decode executable.
+    DECODE   PAS  Decode source.
+    DECRYPT  COM  Decrypt executable.
+    DECRYPT  PAS  Decrypt source.
+    ENCIPHER 65   Encipher executable -- short 65 char lines.
+    ENCIPHER COM  Encipher executable -- normal 125 char lines.
+    ENCIPHER PAS  Encipher source.
+    ENCODE   65   Encode executable -- short 65 char lines.
+    ENCODE   COM  Encode executable -- normal 125 char lines.
+    ENCODE   PAS  Encode source.
+    ENCRYPT  65   Encrypt executable -- short 65 char lines.
+    ENCRYPT  COM  Encrypt executable -- normal 125 char lines.
+    ENCRYPT  PAS  Encrypt executable.
+    MAKEKEY  COM  Makekey executable.
+    MAKEKEY  PAS  MakeKey source.
+    README   TXT  Introductory text file.
+
+### Directory of PC-SIG Library Disk 0482
 
      Volume in drive A has no label
      Directory of A:\

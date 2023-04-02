@@ -6,16 +6,53 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #459"
+      B: "PC-SIG Library Disk 0459"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #459
+## Information about "ASSORTED AGRICULTURE"
+
+    More tools for today's farmer!
+    
+    The Department of Agriculture at the University of Minnesota has
+    prepared this wide-ranging collection of BASICA decision aids for farm
+    management.
+    
+    Several conversion programs and calculators help the busy farmer with
+    yield analysis, gestation dates, harvest and storage costs, probable
+    feed requirements, maximum bid price for farmland, and more. Applicable
+    information for small to large-sized farms help you through the
+    intricacies of farm management problems and opportunities.
+    File Descriptions:
+    
+    AUTOEXEC BAT  Automatic instructions to read this file.
+    ACRSCALC BAS  Analysis of federal depreciation computations.
+    FARMBID  BAS  Determines the maximum bid price for land or a farm.
+    DRYSTORE BAS  Analysis of harvest and storage cost & alternatives.
+    DATECALC BAS  Computes future (gestation) dates & calendars.
+    BESTCROP BAS  Price & yield analysis of crop choices (equal-margin).
+    FEEDPIGS BAS  Should I feed out a batch of feeder pigs?
+    MENU     BAS  Menu program for BASIC pgms on this disk.
+    FEEDVALU BAS  Given corn & SBM values, what's a feed worth?
+    FEEDSILO BAS  Calculates likely dairy feed in a silo given feed rate.
+    STEERBID BAS  Calculates equivalent FOB prices for fat steers at farm.
+    SOWINDEX BAS  Determines a sow index, relative to the group.
+    SDIR     COM  2 column directory.
+    SCROLLCK COM  Scroll lock - control with shift keys.
+    RUN      BAT  Batch file requests date, loads BASICA & starts MINNAIDS.
+    README   DOC  Documentation file.
+    READ     BAT  Batch file to provide instructions for SCROLLCK.COM.
+    PEARSON  BAS  Balances 1 ration nutrient from 2 feed sources.
+    USERDOCS BAS  Explains how to make hardcopy documentation of MINNAIDS.
+    ULOGO    BAS  University of Minnesota logo -- START HERE.
+    TIMEC    COM  Help program.
+
+### Directory of PC-SIG Library Disk 0459
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,32 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #954"
+      B: "PC-SIG Library Disk 0954"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #954
+## Information about "MINISTER ASSIGN PROGRAM"
+
+    MINISTER helps you schedule readers, altar boys, communion ministers,
+    head ushers, and greeters for the Catholic Mass.
+    
+    The scheduling process takes into account the preferences of the
+    people scheduled, vacations, and assignments of other family members.
+    The schedule is suitable for inclusion in the church bulletin. It can
+    handle up to 600 people and any reasonable number of masses. Schedule
+    Sunday masses, weekday masses, and special masses that appear on an
+    irregular basis, such as Christmas and Easter.
+    
+    Schedule an additional minister-type schedule of your own definition.
+    Display and print labels, phone lists for substitutes, or the entire
+    database.
+
+### Directory of PC-SIG Library Disk 0954
 
      Volume in drive A has no label
      Directory of A:\

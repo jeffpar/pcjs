@@ -6,16 +6,38 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #99"
+      B: "PC-SIG Library Disk 0099"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #99
+## Information about "PUBLIC BBS AND MORE"
+
+    The information in CS-IBM.SIG is intended only for use by subscribers to
+    CompuServe, to assist them in using the IBM SIG more effectively, and to
+    help potential subscribers determine if CompuServe may be of benefit to
+    them.  CS-USERS.IBM is a list of IBM SIG participants on CompuServe who
+    have entered their personal interests into the SIG database, so that
+    other CompuServe subscribers can contact them on subjects of mutual
+    interest.  Also included is a listing of public bulletin board systems.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    File Descriptions:
+    
+    CS-IBM   SIG  Instructions & information about CompuServe's IBM SIG.
+    CS-USERS IBM  List of CompuServe IBM SIG members & their interests.
+    S-BBS         List of public BBS from THE SOURCE.
+    TBBS-NOS      List of public BBS from a St. Louis local BBS.
+    README        Text file.
+
+### Directory of PC-SIG Library Disk 0099
 
      Volume in drive A has no label
      Directory of A:\

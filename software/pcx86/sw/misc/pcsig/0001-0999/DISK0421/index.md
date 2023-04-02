@@ -6,16 +6,69 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #421"
+      B: "PC-SIG Library Disk 0421"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #421
+## Information about "DOS UTILITIES #20"
+
+    This entry in our DOS utilities series is a collection of DOS
+    tools and helpers to keep your housekeeping chores from getting
+    out of hand.  DOSHELP gives you a helping hand when you can't
+    quite remember the right command.  PCWINDOW is a desktop utility
+    and makes a nice organizational tool.  SDIR% is simply one of the
+    nicest DOS file managers available.  The list goes on.  Once you
+    try some of these programs, you'll probably make them part of
+    your regular routine.  Enjoy!
+    
+    System Requirements:  128K, 1 disk drive, monochrome monitor.
+    
+    How to Start:  To read DOC or TXT files, enter TYPE filename.ext and
+    press <ENTER>.  To run an EXE or COM program, just type its name and
+    press <ENTER>.
+    
+    Suggested Registration: RAMTEST and SDIR5 both $10.00
+    
+    File Descriptions:
+    
+    PEACOCK  DOC  Documentation file
+    PEACOCK  COM  Dynamic notepad
+    PCWINDOW DOC  Documentation file
+    PCWINDOW COM  Notepad, alarm clock, ASCII table - Sidekickish
+    KBDBUF   DOC  Documentation file
+    KBDBUF   COM  160 character keyboard buffer
+    IPLTIME  COM  Easy way to get time and date
+    GLOBALS  DOC  Documentation file
+    GLOBALS  LBR  Do path calls with data files
+    DOSHELP  BAT  DOS syntax reference
+    DISKPARK EXE  Hard disk head parking
+    DISKPARK DOC  Documentation file
+    CLOCK    DOC  Documentation file
+    CLOCK    COM  Digital clock on upper right of screen
+    CAPS     DOC  Documentation file
+    CAPS     COM  Turn caps lock on from a batch file
+    RAMTEST  COM  Good memory checker
+    SDIR5    COM  Menu driven DOS helper with file management tool
+    RAMTEST  DOC  Documentation file
+    FFM      EXE  Dual menu DOS command helper
+    SPEEDKEY DOC  Documentation file
+    SPEEDKEY COM  Double your curser speed
+    SDIR5    DOC  Documentation file
+    CDSECRET COM  Goes to secret sub-directory
+    RDSECRET COM  Removes secret sub-directory
+    MDSECRET COM  Makes secret sub-directory
+    SECRET   DOC  Create and control secret directories
+    LIST2DAY COM  List all files created today
+    FILES    PAS  Pascal source code
+    FILES    DOC  Documentation file
+    FILES    COM  Intellegent DIR command
+
+### Directory of PC-SIG Library Disk 0421
 
      Volume in drive A has no label
      Directory of A:\

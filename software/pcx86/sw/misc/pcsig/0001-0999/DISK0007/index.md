@@ -6,16 +6,54 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #7"
+      B: "PC-SIG Library Disk 0007"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #7
+## Information about "EXPLIST"
+
+    Here are four of our earliest user-supported programming aids. EXPLIST
+    (for Expanding Lister) is the most powerful, giving a structured code
+    look to BASIC listings.  It does this by adding blank lines between
+    specific keywords (GOTO, NEXT, etc); FOR...NEXTs and WHILE...WENDs are
+    indented; and nested loops are indented even more.  REMarks are
+    highlighted in several ways. PRINT works with EXPLIST to print the
+    listings with title headings and page numbers.
+    
+    BIHEX converts any file to ASCII (7 bit) for modem transfer or printing.
+    LF prints a directory alphabetically with the post script on the right
+    of the list, and all names associated with that post script grouped to
+    the left of the list.
+    
+    System Requirements: 64K, one disk drive and monochrome display.
+    
+    How to Start: Consult the .DOC and README files for directions and
+    documentation.  To run the BASIC programs, consult the directions in
+    GETTING STARTED for your configuration.  To run a program with the
+    suffix .COM or .EXE, just type its name, i.e., for LF.EXE, type LF and
+    press <ENTER>.
+    
+    Suggested Registration: EXPLIST $15.00
+    
+    File Descriptions:
+    
+    EXPMAIL  EXE  Generates a reply/contribution letter to author
+    EXPLIST  EXE  Expanding lister for BASIC programs
+    PRINT    BAS  Prints ASCII files with title banner and page #'s
+    LF       COM  Directory list sorted alphabetically by extent & name
+    EXPLIST  DOC  Documentation file for Expanding Lister
+    EXPLISTR EXE  Expanding lister requiring compiler runtime library
+    PRINTNEC BAS  Same as "print" for NEC 8023/C.Itoh 8510 printers
+    BIHEX    BAS  Converts binary files to ASCII hex and back again
+    EXPOPT        Options file - EXPLIST.EXE
+    EXPOPT        Options file - EXPLIST.EXE
+
+### Directory of PC-SIG Library Disk 0007
 
      Volume in drive A has no label
      Directory of A:\

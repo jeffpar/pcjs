@@ -6,16 +6,50 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #47"
+      B: "PC-SIG Library Disk 0047"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #47
+## Information about "PC-SIG SAMPLER #1"
+
+    A virtual potpouri of programs, which range from games and musical
+    programs to utilities that calculate electric usage and dump pictures
+    to your printer.  The CASTLE program, an adventure in a wizard's
+    castle, is an old favorite.  And the FINPAK package is a collection of
+    useful financial aids.
+    
+    System Requirements:  Some programs require color graphics.
+    
+    How to Start: To read DOCfiles, enter TYPE filename.ext and press
+    <ENTER>.  To run an EXE program, just type its name and press <ENTER>.
+    For instructions on running BASIC programs, please refer to the
+    GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    CASTLE   DOC  Documentation for CASTLE game
+    CASTLE   BAS  Wizards castle game from July/Aug, Recreational Computing
+    XMAS     BAS  Plays Christmas song
+    CHRONSET BAS  Sets Hayes stack chronograph
+    DISRTN   EXE  Disk file utility - undeletes and recovers lost sectors
+    COMCHRON BAS  Program to read Hayes stack chronograph
+    SORT-BLK BAS  Sorts fixed length record files
+    PLOT     BAS  Creates plots on color display
+    MAILLIST BAS  Mailing list program
+    KILLNULL BAS  Removes nulls from sequential files
+    GDUMP2   BAS  Graphics dump program
+    GDUMP1   BAS  Graphics dump program
+    FINPAK   BAS  Package of 20 financial programs
+    ELECTRIC BAS  Computes electric usage
+    NORMAL-Z BAS  BASIC program
+    COMPRESS BAS  BASIC program
+
+### Directory of PC-SIG Library Disk 0047
 
      Volume in drive A has no label
      Directory of A:\

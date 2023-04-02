@@ -6,16 +6,36 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #835"
+      B: "PC-SIG Library Disk 0835"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #835
+## Information about "MULTIFILE"
+
+    MULTIFILE is a memory-resident database program designed specifically
+    for mailing labels, membership files, or small inventories.
+    
+    It is a small, versatile, menu-driven database that can arrange your
+    data into from one to six equally-spaced columns. These can then be
+    used for lists, mailing labels, envelopes, or printouts on paper for
+    windowed envelopes. Columns can be sorted so data will appear in
+    alphabetical or numerical order. The totals for each column can be
+    calculated and printed. Other corresponding columns can be sorted by
+    one particular column.
+    
+    Delete, edit, or search for a particular entry. Each file can be saved
+    or loaded from the disk. Two sample files are included to help you
+    become familiar with the program.
+    
+    MULTIFILE handles up to 500 records in memory and prints standard 3.5"
+    one-across labels. You can also define the print format for odd sized
+
+### Directory of PC-SIG Library Disk 0835
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,92 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #256"
+      B: "PC-SIG Library Disk 0256"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #256
+## Information about "DOS AND PROGRAMERS UTILITIES"
+
+    A fine collection of handy tools for almost anyone are on this disk.
+    The special emphasis is on file handling and management.  With some of
+    these programs, you can find free space on a floppy disk, find files
+    lost in your subdirectories, de-fragment floppies, etc.  A
+    particularly handy tool traps the infamous "parity error" and thereby
+    saves your work from being destroyed.  For those of you who need a
+    high-precision mathematics tool, there's BIGCALC, with 100-place or
+    better precision.
+    
+    System Requirements:  Some programs require BASIC
+    
+    How to Start: To run a COM or EXE program simply type its name and
+    press <ENTER>.  For instructions on ASM listings, refer to your
+    Assembler manual.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.  To read DOC
+    files simply enter TYPE filename.ext and press <ENTER>.
+    
+    File Descriptions:
+    
+    BIGCALC  EXE  Compiled version of BIGCALC.BAS
+    BIGCALC  BAS  High precision calculator, 100 digits or better.
+    BIGCALC  DOC  Documentation for BIGCALC
+    EXPAND   BAS  Replaces tabs with appropiate number of spaces
+    EXPAND   DOC  Documentation for EXPAND.BAS
+    DIRECT   BAS  Creates BLOADable file to directly read disk directory
+    WHEREIS  COM  Searches all directories for specified file
+    DIRDEM   BAS  Demonstrates DIRECTORY function created by DIRECT.BAS
+    WHEREIS  BAS  Generates WHEREIS.COM
+    DSKTYP   EXE  Reports the format of the selected diskette
+    DSKTYP   ASM  Source for DSKTYP.EXE
+    DCBA2    HOW  Modify DISKCOPY.COM (Version 2.10) for production copying
+    PE-NOTAB DOC  Fixes Personal Editor to save without those #@%& TABS
+    COLOR    PE   Passionate shades for the Personal Editor
+    FORMAT   VOL  Patch to DOS 2.0 FORMAT to always request VOL label
+    DISPRE   COM  Displays the 8088 registers after being loaded
+    SAVE     COM  Copy current screen to alternate monitor
+    DISPRE   ASM  Source for DISPRE.COM/EXE
+    DISPRE   EXE  by different programs, ie: DEBUG vs COMMAND.COM
+    MONOCLOK COM  Time in UR corner of mono display, graphics unaffected
+    DISPRE   DOC  Documentation for DISPRE.COM/EXE
+    FREE     ASM  Source for FREE.COM
+    LABEL    EXE  Diskette label program  (Softalk March 84)
+    FREE     COM  Reports free space on one or all drives
+    LABEL    ASM  Source for LABEL.EXE
+    FREE     DOC  Documentation for FREE.COM
+    WHEREIS  ASM  Source for WHEREIS.COM
+    DEFRAG   BAS  Defragments diskette space
+    NUSQ     COM  New UnSQueeze program, small, fast, improved
+    DEFRAG   DOC  Documentation for DEFRAG.BAS
+    TABS     EXE  Converts spaces to tabs  (Shrinks files )
+    REFCD    DOC  INT 21 reference card, DOS 2.1 version
+    DUMP     EXE  Displays a file in hex and ASCII  (From May Softalk)
+    NUSQ     DOC  Documentation on NUSQ.COM
+    PARCHK   DOC  Documentation for PARCHK.COM
+    PARCHK   ASM  Source for PARCHK.COM
+    PARCHK   COM  Replaces std parity routine, errors don't stop machine
+    DUMP     ASM  Source for DUMP.EXE
+    CAPSDEF  ASM  Source for CAPSDEF.COM
+    CAPSDEF  DOC  Documentation for CAPSDEF.COM
+    CAPSDEF  COM  Defeats the CapsLock key
+    CLOCK    ASM  Source for CLOCK.ASM
+    CLOCK    SYS  Device driver for AST and TECMAR boards with clock
+    QS       TXT  Documentation for QS.RIO
+    QS       RIO  Quick Startup patch for BIOS
+    ZAPTRE   DOC  Documentation for ZAPTRE.BAS
+    ZAPTRE   BAS  Patches TREE.COM to support a filename operand
+    TABS     ASM  Source for TABS.EXE
+    ZAPDEB   DOC  Documentation for ZAPDEB.BAS
+    TABS     DOC  Documentation for TABS.EXE
+    ZAPDEB   BAS  Patch DEBUG.COM to fix timer interrupt bug
+    LOOK     DOC  Documentation for LOOK.COM
+    LOOK     ASM  Source for LOOK.COM
+    LOOK     COM  Memory display program
+
+### Directory of PC-SIG Library Disk 0256
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,45 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #85"
+      B: "PC-SIG Library Disk 0085"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #85
+## Information about "VISICALC TEMPLATES"
+
+    Visicalc Templates is a collection of handy financial templates and
+    DIF file utilities (BASIC).  The utility assortment includes: DIF file
+    sort, DIF screen print and many miscellaneous sorting programs.
+    Documentation is included for each program and template.
+    
+    System Requirements:  Two disk drives, LOTUS 1-2-3 version 1A; BASIC
+    
+    How to Start:   Access the Visicalc templates through Visicalc.  To
+    run the BASIC program consult the directions in GETTING STARTED for your
+    configuration.
+    
+    File Descriptions:
+    
+    OPTMAR   GIN  Visicalc template for return on investment calculation
+    *        VC   Visicalc templates (18 files)
+    VC       DOC  General documentation for the files on this disk
+    SORTS    DOC  Documentation file for sorts.bas
+    SORTS    BAS  Basic program with all kinds of sorts
+    SORTDIF  DOC  Documentation file for sortdif.bas file
+    SORTDIF  BAS  DIF file sort program
+    WRITEDIF BAS  Creates DIF file on disk from the console
+    OPTMAR   DOC  Visicalc template documentation for optmar.gin
+    PRINTDIF BAS  Prints DIF file as it appears on screen
+    DUMPSDIF BAS  Prints DIF file as it was stored (cell by cell)
+    DIFNOTES ASK  Doc for DUMPSDIF.BAS, PRINTDIF.BAS, and WRITEDIF .BAS
+    PR       DOC  Documentation for PR.VC and BPR.VC Visicalc templates
+
+### Directory of PC-SIG Library Disk 0085
 
      Volume in drive A has no label
      Directory of A:\

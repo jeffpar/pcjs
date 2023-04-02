@@ -6,16 +6,61 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #216"
+      B: "PC-SIG Library Disk 0216"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #216
+## Information about "C UTILITIES NO 2"
+
+    This hard working, time-saving set of utilities and functions for the C
+    programmer includes many screen-handling routines to draw boxes, clear
+    lines, move the cursor, etc.  Some DOS interfaces let you access DOS
+    time (to hundredths), convert date formats, interface with BIOS, and
+    more.  If you'd like some help with your own programming projects, or
+    only want to investigate how others have done the job, be sure to check
+    out this one!
+    File Descriptions:
+    
+    README   DOC  Notes about programs on this disk.
+    READS    C    Reads string from stdin.
+    WEEKDAY  C    Gives the day of week a given Gregorian date.
+    SCRATT   C    Toggles screen attributes (ie BOLD, blink, reverse video).
+    SCRINIT  C    Initializes screen and keyboard arrays.
+    JTOJ     C    Returns Julian day from date in form (yddd).
+    DOSDATE  ASM  Returns DOS month, day, year as integers.
+    JTOG     C    Function to convert Julian date to Gregorian date.
+    ELINE    C    Function to erase line of screen.
+    CHOSIT   C    Displays menu, prompt for a response and validate.
+    SCONTROL H    Header file used by screen and keyboard control library.
+    FRAME    C    Function to draw box given two corners.
+    CURSOR   C    Function to move cursor to a specific r,c position.
+    GTOJ     C    Converts Gregorian date to Julian date.
+    CVTDATE  C    Unpacks Gregorian date (1/1/84) to (01/01/84).
+    GETLINE  C    Read record from file to string.
+    CURDOWN  C    Function to move curser down y relative lines.
+    GETDATE  C    Gets date in string form MM/DD/YY.
+    GETTIME  C    Gets time in form HH:MM:SS  (24 hour clock).
+    DOSTIME  ASM  Gives DOS time in hours, minutes, seconds, 1/100 seconds.
+    ESCREEN  C    Function to erase line from screen.
+    CURUP    C    Mover cursor up y lines.
+    PAUSE    C    Pauses a program for period of time.
+    CURBACK  C    Move cursor back x columns.
+    CURFOR   C    Move cursor forward x columns.
+    BIOSIO   ASM  Assembly routines which interface directly with BIOS.
+    READC    C    Function to read string from stdin.
+    WRITES   C    Function to write string to stdout.
+    WRITEC   C    Function to write character to screen using DOS function.
+    COMM     MNU  Menu for communications program.
+    MENCON   C    Function to open menu file and display it on screen.
+    ???      BAT  Batch files to emulate UNIX commands (9 files).
+    IBMTTY   C    Terminal emulation program with file upload & download.
+
+### Directory of PC-SIG Library Disk 0216
 
      Volume in drive A has no label
      Directory of A:\

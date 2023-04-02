@@ -6,16 +6,63 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #341"
+      B: "PC-SIG Library Disk 0341"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #341
+## Information about "C UTILITIES NO 6"
+
+    This disk contains a collection of programs and subroutines in 'C',
+    which can serve as time savers for those who don't wish to have to
+    write everything themselves.  Ii is also useful as a learning tool for
+    the novice, since you can inspect the source code and see how others
+    do it.  Many of the routines/programs perform elemental functions
+    similar to those found on many "seasoned" UNIX or XENIX systems.
+    
+    System Requirements: `C' compiler.
+    
+    How to Start:   To read TXT files simply enter TYPE filename.ext and
+    press <ENTER>.  For instructions on ASM or 'C' listings, refer to your
+    Assembler or 'C' language manuals.
+    
+    File Descriptions:
+    
+    CC       ASM  C shell for Lattice C and DOS 2.00
+    ADDLF    C    Program to add linefeeds to text if found absent
+    CRC      C    Cyclic Redundancy Check functions
+    CONIO    C    Source for console I/O routines
+    DOS_ERR  TXT  Documentation on DOS 2.00 redirection of I/O bug
+    FRAME    C    Function to draw a frame on the screen
+    DUMP2    C    Program to print parts of large files in dump format
+    IOS1_20  ASM  Level 1 I/O routines for DOS 2.00 and Lattice C
+    INKEY    C    Input from keyboard function
+    GETSEG_C ASM  Function returning current register values
+    FUNKEY   C    Program to build function key reassignment files
+    _MAIN    C    New version of "_main" for DOS 2.00 and Lattice C
+    XC       C    C concordance utility
+    TYPECONV C    Demo of type conversions in C
+    TOWERS   C    "Towers of Hanoi" game written in C
+    TINKEY   C    Program to test "inkey" function
+    TIMEMARK TXT  Timestamping functions and benchmarks tests
+    SYSINT   ASM  General interrupt call function
+    STRING   C    Source for standard string functions (a la K&R book)
+    SNAP     OBJ  Object code for the above
+    SNAP     C    Dump memory area in hex/character format
+    RENAME   C    Functional equivalent of a DOS "rename" in C
+    PRINT    C    Program to print ASCII file with heading on each page
+    MEMCLEAN DOC  Documentation for the above
+    MEMCLEAN C    Program to "clean" memory above 640K
+    M8087    MAC  Assembler macros for 8087 coprocessor support
+    LIFE     C    "Game of Life" written in C
+    LEJ_LIB  C    Example functions from Kernighan & Ritchie book on C
+    ISCHECK  C    Program to verify Microsoft's "isxxxxxx" routines
+
+### Directory of PC-SIG Library Disk 0341
 
      Volume in drive A has no label
      Directory of A:\

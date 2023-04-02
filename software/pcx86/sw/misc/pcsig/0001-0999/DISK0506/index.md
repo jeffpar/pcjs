@@ -6,16 +6,29 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #506"
+      B: "PC-SIG Library Disk 0506"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #506
+## Information about "BUSINESS AND MORAL VALUE (ALSO 1018)"
+
+    BIBLIOGRAPHY OF BUSINESS ETHICS AND MORAL VALUES has a list of
+    periodical references, texts, books, syllabi collections, and
+    audiovisual materials compiled by Dr. Kenneth Bond of Humboldt State
+    University. This is the fourth edition and it is updated about every
+    year and a half.
+    
+    Some subjects included are: energy, environmental issues (strip mining,
+    toxic chemicals and water pollution), worker issues (discrimination,
+    sexual harassment, whistle blowing, etc.), privacy, distribution of
+    wealth, third world issues and more.  An incredible resource!
+
+### Directory of PC-SIG Library Disk 0506
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,69 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #330"
+      B: "PC-SIG Library Disk 0330"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #330
+## Information about "DATACOUNT ACCOUNTING"
+
+    While very different, these programs are alike in that this general
+    ledger program, a check register program, and two mail list programs
+    here are all menu-driven and will run on a PCjr with one disk drive and
+    sufficient memory.
+    
+    DATACOUNT is a general ledger program suitable for individuals or small
+    businesses.  The MICRO ACCOUNTING SYSTEM is a multi-purpose check
+    register accounting system.  This software package was written for
+    individuals and small businesses that can use a check register for their
+    accounting.  The MAILISTI program lets you create a file of names and
+    addresses.  You can add to this list, change and delete entries.  It
+    sorts, displays, prints a hardcopy to labels or reports, and it will
+    automatically dial selected phone numbers with an autodial modem.
+    
+    Special Requirements:  Some programs require BASIC.
+    
+    How to Start:  Type GO to Start.
+    
+    Suggested Registration:  $30.00 for DATACOUNT II, $35.00 for MICRO
+    ACCOUNTING SYSTEM, $15.00 for MAILIST1.
+    
+    File Descriptions:
+    
+    ------------  Datacount II
+    CONCOL   BAS  Program used by General Ledger
+    CONCOL   EXE  Subprogram.
+    CONF     PAR  Program used by General Ledger
+    DAT      DOC  ASCII text file containing documentation for DATAC.EXE.
+    DATAC    EXE  Main ledger program.
+    DEMO          Sample data file for DATAC.EXE.
+    DEMOA         Sample data file for DATAC.EXE.
+    DEMON         Sample data file for DATAC.EXE.
+    ------------  Check register
+    MA       BAS  Multi-purpose check register accounting system.
+    MA       DOC  ASCII text file containing documentation for MA.BAS.
+    MACOPY   BAT  Batch file for copying this group of files to user disk.
+    MADOC    BAT  Batch file for printing MA.DOC.
+    START    BAT  Batch file for running MA.BAS.
+    ------------  Maillist program
+    DATA          Sample data file for MAIL.IST.
+    MAIL     DIR  ASCII text file containing a list of this group of files.
+    MAIL     DOC  ASCII text file containing documentation for MAIL.IST.
+    MAIL     IST  Mail list maintenance program (BASIC language; treat as
+    .BAS file).
+    ------------  Another maillist program
+    AUTODIAL BAS  Autodial program chained to by MAILIST1.BAS.
+    MAILIST1 BAS  Mail list maintenance program.
+    MAILIST1 DIR  ASCII text file containing a list of this group of files.
+    MAILIST1 DOC  ASCII text file containing documentation for MAILIST1.BAS.
+    MAILSORT BAS  Sort program chained to by MAILIST1.BAS.
+
+### Directory of PC-SIG Library Disk 0330
 
      Volume in drive A has no label
      Directory of A:\

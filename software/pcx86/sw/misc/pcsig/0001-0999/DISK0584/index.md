@@ -6,16 +6,56 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #584"
+      B: "PC-SIG Library Disk 0584"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #584
+## Information about "MISCELLANEOUS 123 WORKSHEETS"
+
+    This disk contains a variety of spreadsheets, ranging from printing
+    utilities to common financial applications (loan amortization,
+    checkbook manager, etc.).  Included is the demo version of Toolkit and
+    ACII driver, with mathematical calculators for solving triangles,
+    creating ASCII tables and more.  Another math spreadsheet performs
+    polynomial regressions.  Miscellaneous utilities allow default colors
+    to be changed, the preparation of using chronological dates as column
+    titles, intructions for using PRTGRAPH.COM to generate special fonts,
+    etc.  There are also worksheets for time management, mail list database
+    and vendor database.
+    
+    System Requirements:  256K, two disk drives, monochrome monitor, LOTUS
+    1-2-3 v2.0
+    
+    Features:  LOTUS 1-2-3 spreadsheets, utilities and databases
+    
+    How to Start:  Access through LOTUS 1-2-3.
+    
+    File Descriptions:
+    
+    CHARS2   WKS  File of ASCII characters not directly accessible by LOTUS
+    ASCIIUSE WKS  How to use CHARS2 worksheet.
+    NEWCOLOR WKS  Instructions for NEWCOLOR.IN.
+    NEWCOLOR IN   Redirect output for DEBUG program to change LOTUS 123 colo
+    MAILLIST WKS  Mailing list database.
+    LOANTABL WKS  Installment loan analyzer.
+    LOAN     WKS  Loan analysis worksheet.
+    CONTENTS WKS  Toolkit Shell and ASCII driver.
+    CODESAMP WKS  Printer driver for specialized fonts.
+    CHEKBOOK WKS  Personal checkbook ledger.
+    TRIANGLE WKS  Solve for triangles given sides.
+    TITLES   WKS  Prepare chronological dates as titles for columns.
+    PRTGRAPH WKS  Instructions for using PRTGRAPH.COM for special fonts.
+    POLREG   WKS  Calculate polynomial regressions.
+    VENDOC   WKS  Documentation for VENDORS.WKS
+    WEEKRPT  WKS  Time management/Job logging utility.
+    VENDORS  WKS  Macro driven data base of suppliers for business.
+
+### Directory of PC-SIG Library Disk 0584
 
      Volume in drive A has no label
      Directory of A:\

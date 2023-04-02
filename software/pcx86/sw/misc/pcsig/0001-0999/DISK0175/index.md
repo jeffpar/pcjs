@@ -6,16 +6,50 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #175"
+      B: "PC-SIG Library Disk 0175"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #175
+## Information about "SIMULATION & BOARD"
+
+    Have you ever wanted to play baseball when it is raining? Or explore a
+    distant planet?  Or try to keep your money on the stock market,
+    while everyone else is jumping out of windows?  This disk will
+    let you do all those things, plus much more.
+    
+    System Requirements:  Some programs require color, BASIC
+    
+    How to Start: To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  To run an EXE program, just type its name and press <ENTER>.
+    For instructions on running BASIC programs, please refer to the
+    GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    ACEY-DUE BAS  Acey-duecy card game
+    BLKFRDY  BAS  Stock market simulation
+    BLACKBOX BAS  Find the balls in an 8x8 grid using rays
+    BASEBALL BAS  Baseball simulation
+    ALIEN    BAS  Adventure version
+    BLOCK    EXE  Pong - requires graphics and BASRUN.EXE
+    HUSTLE   BAS  Like Hoser - good game
+    CHECKERS BAS  Checkers - slow but okay
+    HUSTLE   DAT  Part of HUSTLE.BAS
+    HUSTLE   DOC  Documentation
+    KNOCK    ASC  Documentation
+    MUSICFIL BAS  Music class management program
+    KNOCK    BAS  Knock-knock joke teller
+    JHBAND   MUS  Sample data created by MUSICFIL.BAS
+    JHORCH   MUS  Sample data created by MUSICFIL.BAS
+    MEDLEY   BAS  Name that tune-plays favorite songs (Requires DOS 2.0)
+    SHORCH   MUS  Sample data created by MUSICFIL.BAS
+
+### Directory of PC-SIG Library Disk 0175
 
      Volume in drive A has no label
      Directory of A:\

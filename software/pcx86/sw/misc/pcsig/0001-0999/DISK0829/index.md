@@ -6,16 +6,51 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #829"
+      B: "PC-SIG Library Disk 0829"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #829
+## Information about "NEW YORK EDIT (PROGRAMMERS EDITOR)"
+
+    NEW YORK EDIT is a program editor, written by the author of NEW YORK
+    WORD, containing a C-like macro programming language which can be used
+    to extend the editor.
+    
+    Sample macros are included and you can create other macros to define
+    your own commands.  Other features of interest to programmers are:
+    multiple windows, column cut-and-paste, capturing DOS output, line
+    marking, regular expression search and substitute, EGA support
+    (forty-three-line display), and a keyboard remapper.
+    
+    Up to 12 windows can be displayed simultaneously, with a different
+    file in each window.  You can enlarge any window to occupy the whole
+    screen.  Place bookmarks at various points in the document, and return
+    to any point at any time.  Scroll continuously up or down the document,
+    with user-selectable scrolling speed.  There are 10 buffers which you
+    can use to temporarily store text.  A configuration file is included to
+    change the program parameters.
+    File Descriptions:
+    
+    ARCE     COM  Unarchiving program.
+    CHANGES  DOC  Text file outlining changes in new version.
+    CONFIG   ME   Sample configuration file.
+    CTAGS    EXE  File used by main program.
+    INSTALL  BAT  Installation batch file.
+    KEYCHART      Keychart descriptions.
+    MANUAL   ARC  Archived version of the manual.
+    ME       EXE  Main program.
+    HELP     ARC  Archived help files.
+    MACROS   ARC  Archived macro files.
+    READ     ME   Information from the author.
+    REGISTER DOC  Registration form.
+    WP       DOC  Sales pitch for NEW YORK WORD.
+
+### Directory of PC-SIG Library Disk 0829
 
      Volume in drive A has no label
      Directory of A:\

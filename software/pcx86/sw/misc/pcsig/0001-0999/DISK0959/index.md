@@ -6,16 +6,41 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #959"
+      B: "PC-SIG Library Disk 0959"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #959
+## Information about "FLOPCAT - DISK CATALOGING SYSTEM"
+
+    FLOPCAT is a menu-driven disk-cataloging system with 23 functions to
+    organize and manage your ever-increasing inventory of floppy disks.
+    
+    The disk labeling feature alone makes it well worth owning. Print
+    labels with volume name, volume comment line, disk number, free bytes,
+    file names and extensions. Build and update your catalog of disks.
+    Look through the index or at the directory of a specific disk. Change
+    the volume name, add a comment about the volume or make specific
+    comments about individual files as you review the contents of each
+    disk. Search through all floppy directories for volume names or wild
+    card search strings. Volumes or files found are displayed on the
+    screen or printer. A numerical or alphabetical listing of volumes is
+    supported.
+    
+    Print a disk label in 3.5" or 5.25" formats. This function takes the
+    directory information and neatly prints it on self-adhesive labels.
+    This makes your selection of disks uniformly labeled, numbered, named,
+    and dated, with the free bytes listed as well.
+    
+    New features include pop-up command windows, choice of file date
+    record or comments, disk label path mask (allows labels to be printed
+    only for selected drives), and expanded search functions.
+
+### Directory of PC-SIG Library Disk 0959
 
      Volume in drive A has no label
      Directory of A:\

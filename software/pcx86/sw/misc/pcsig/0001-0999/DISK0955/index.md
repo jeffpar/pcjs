@@ -6,16 +6,42 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #955"
+      B: "PC-SIG Library Disk 0955"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #955
+## Information about "AUTOMATED PLANNING FORM (APF)"
+
+    AUTOMATED PLANNING FORM (APF) is a menu-driven set of planning tools.
+    You can quickly make, store, retrieve, and update project schedules.
+    
+    APF uses CGA graphics, and via DOS GRAPHICS.COM, can quickly produce
+    presentation-quality printouts on most dot matrix printers.  Plan
+    projects, and communicate plans and progress to management, clients and
+    those working on the project.
+    
+    APF features:
+    
+    ~ Up to 17 action items with subschedules for more detail
+    
+    ~ Works in weeks, months, quarters, or years
+    
+    ~ Automatically translate from weeks to months to quarters to years
+    
+    ~ Shows percent completion of each task (action item)
+    
+    ~ Shows dependencies in critical path
+    
+    ~ Full edit ability
+    
+    ~ Automatic origination and revision dating
+
+### Directory of PC-SIG Library Disk 0955
 
      Volume in drive A has no label
      Directory of A:\

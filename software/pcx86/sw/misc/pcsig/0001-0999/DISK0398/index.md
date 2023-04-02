@@ -6,16 +6,34 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #398"
+      B: "PC-SIG Library Disk 0398"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #398
+## Information about "ESIE"
+
+    Put some smarts in your personal computer and turn it into your very own
+    assistant. ESIE, the Expert System Inference Engine, is an artificial
+    intelligence shell that lets you build a custom knowledge base, or
+    expert system, to help you make decisions.
+    
+    Simple but effective, ESIE operates by loading in a knowledge base and
+    building inferences out of the rules contained therein. You define the
+    rules that the system uses. This is especially good as an introduction
+    to expert systems as well as having excellent on-disk documentation to
+    get you started in AI. For the advanced student, ESIE can handle the
+    normal gamut of expert systems building.
+    
+    To see how ESIE works without building your own knowledge base, load
+    ESIE and one of the three supplied knowledge bases (ANIMAL, DOCTOR, or
+    GLASS) and try it!
+
+### Directory of PC-SIG Library Disk 0398
 
      Volume in drive A has no label
      Directory of A:\

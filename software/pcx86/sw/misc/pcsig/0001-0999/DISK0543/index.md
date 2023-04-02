@@ -6,16 +6,95 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #543"
+      B: "PC-SIG Library Disk 0543"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #543
+## Information about "UTILITIES ECETERA"
+
+    Not your typical utilities disk by any means!  This interesting
+    assortment of programs includes routines to print the time on the
+    screen, several astronomically oriented tasks, polar to rectangular
+    conversions and vice versa, a system to help document files on a disk,
+    another to help hide and protect files, a sample general ledger and
+    another for a simple address book and lots, lots more!
+    
+    System Requirements:  128K 1 disk drive, some programs on this disk
+    require color/graphics.
+    
+    How to Start:   To run an EXE or COM program simply type its name and
+    press <ENTER>. For instructions on running BASIC programs, please refer
+    to the GETTING STARTED section in this catalog. To read DOC files
+    simply enter TYPE filename.ext and press <ENTER>.
+    
+    Suggested Registration:  GLV12 $50.00; SEARCH $15.00
+    
+    File Descriptions:
+    
+    ADDRBOOK BAS  Simple address program
+    DOORS    COM  Gives a window (new screen) for input
+    DOORS    BAS  Source for DOORS.COM in BASIC
+    BLATHER  DOC  Documents BLATHER
+    AUTOMENU BAT  Batch file to run MENU.BAS
+    ARCTRIG  BAS  Inverse trig functions
+    ADDRBOOK DOC  Addressbook documentation
+    DAYNUM   BAS  Calculates days since Jan 1
+    COVER    DOC  Documents COVER
+    COVER    COM  Print diskette directory for jacket
+    CLOCK    COM  Digital clock in DOS upper right screen
+    CLOCK    BAS  Creates CLOCK.COM
+    CDEL     BAT  Batch file to run YN.COM erase files
+    BLATHER  EXE  Communications program
+    HALLEY   BAS  Commet calculations for Halley's
+    GLV12    EXE  General ledger program
+    GLV12    DOC  Documents GVL12
+    FINDFILE DOC  Documentation for FINDFILE.BAT
+    FINDFILE BAT  Find any file current drive
+    F        EXE  Program to hide/protect/backup files on a disk
+    EASTER   BAS  Finds day of easter sunday
+    DOORS    DOC  Documentation for DOORS.COM
+    PRTSCOFF COM  COMPAQ ONLY - disables Shift-Prtsc key
+    PRECESS  BAS  Astonomical precession calculation
+    PORE     DOC  Documentation for PORE.COM and PMOR.BAT
+    PORE     COM  Modified MORE to allow 55 line listings
+    MENU     BAS  Generates BASIC menu
+    LOTTO    BAS  Generates winning(?) LOTTO 649 numbers
+    LOCSTIME BAS  Local sidereal time calculation
+    KEPLER   BAS  Kepler's equation for astronomy
+    POLRECT  BAS  Polar to rectangular coordinates
+    PMOR     BAT  Batch file to run PORE.COM
+    NPAD     DOC  Documentation for NPAD.COM
+    NPAD     COM  Displays a small window in upper right
+    NPAD     BAS  Source in BASIC for NPAD.COM
+    MOVDIR   EXE  Move directory around
+    MENU     DOC  Documentation for MENU.BAS
+    README   GL   Readme for GVL12
+    RANDOM   BAS  Random number generating program
+    SEARCH   COM  Set path search
+    SAMPLEGL GL2  Sample ledger for GVL12
+    SAMPLEGL GL1  Sample ledger for GVL12
+    RECTPOL  BAS  Rectangular to polar coordinates
+    WHERE    BAS  Source for WHERE.COM  in BASIC
+    WEEKDAYS BAS  Days of the week astronomy program
+    TOUT     BAS  Pick the winners at the track!
+    TIMEAL   BAS  Time, altitude and azimuth, julian date
+    SUNNY    BAS  Sunrise...sunset... calculations
+    SFX      EXE  Simplifile - document files on a disk
+    SF       BAT  Starts SFX with passable parameter
+    SEARCH   DOC  Documents SEARCH
+    YN       DOC  Documentation for YN.COM
+    YN       COM  Protective batch for ERASE.COM(DOS)
+    XYZ      BAS  Astronomical coordinates of the sun
+    WHEREIS  COM  Find a file anywhere in a tree-structured directory
+    WHERE    DOC  Documentation for WHERE.COM
+    WHERE    COM  Finds files dir. & subdir. any  drive
+
+### Directory of PC-SIG Library Disk 0543
 
      Volume in drive A has no label
      Directory of A:\

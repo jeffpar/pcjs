@@ -6,16 +6,36 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #760"
+      B: "PC-SIG Library Disk 0760"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #760
+## Information about "MINIGEN"
+
+    MINIGEN is a screen generator that creates Turbo Pascal code for either
+    color or monochrome displays.  You can paint data-entry screens
+    (constants areas and data fields), open and close windows with borders
+    and cursor memory, perform controlled data entry, and create pull-down
+    menus.
+    
+    MINIGEN produces Turbo Pascal code which you can later add to your
+    programs.  It is entirely written in Turbo Pascal using the same source
+    code routines provided on the disk.  Also included is a TPU for
+    accessing Microsoft-compatible mouse drivers.
+    
+    Since this is a programming aid, the documentation assumes you already
+    know how to program in Turbo Pascal.  It also assumes knowledge of DOS
+    and jumps right in describing the various functions and how to use them.
+    
+    This program is primarily for intermediate to experienced users, and not
+    the novice.
+
+### Directory of PC-SIG Library Disk 0760
 
      Volume in drive A has no label
      Directory of A:\

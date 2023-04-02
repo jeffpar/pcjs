@@ -6,16 +6,28 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #583"
+      B: "PC-SIG Library Disk 0583"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #583
+## Information about "LOTUS WHITEROCK"
+
+    The WHITEROCK ALTERNATIVE is a macro-driven worksheet shell
+    (AUTO123.WKS) for Lotus 1-2-3 worksheets with four very useful
+    applications: a checkbook manager, mailing list, loan amortizer and a
+    jobcosting/time management worksheet.
+    
+    AUTO123.WKS is a worksheet manager that allows access to other 1-2-3
+    worksheets.  Supported by clever screen graphics, the WHITEROCK
+    ALTERNATIVE applications are a pleasure to use.  A library of 1-2-3
+    macros is also included.
+
+### Directory of PC-SIG Library Disk 0583
 
      Volume in drive A has no label
      Directory of A:\

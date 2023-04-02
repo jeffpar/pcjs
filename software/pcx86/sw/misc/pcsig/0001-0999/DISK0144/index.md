@@ -6,16 +6,73 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #144"
+      B: "PC-SIG Library Disk 0144"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #144
+## Information about "FABULA DISK 1 OF 2  (#145 SECOND DISK)"
+
+    A fine collection of tools for communications users and others.  The
+    SQIBM and USQIBM programs compress and expand files to save on costs
+    when using modem transmission.  TALK450 shows how to add 450 baud
+    capacity to your Hayes 300 modem.  There are other goodies like
+    SCRNSAVE, which prevents phosphor burn on your monitor, and a series of
+    batch files to give sorted directory listings.
+    
+    How to Start: To run a COM or BAT program simply type its name and
+    press <ENTER>.  To read DOC files simply enter TYPE filename.ext and
+    press <ENTER>.
+    
+    File Descriptions:
+    
+    The First Disk Contains:
+    DNXSD    DOC  Documentation for .BAT files
+    DN       BAT  Sorts Directory by fileName
+    DXSAVE   BAT  Sorts Directory by eXtension and saves sorted
+    DD       BAT  Sorts Directory by Date
+    DS       BAT  Sorts Directory by Size
+    DX       BAT  Sorts Directory by eXtension
+    USQ      COM  Unsqueezes files
+    SQ       DOC  Documentation for SQIBM
+    SQ       COM  Squeezes files
+    SCRNSAVE COM  Prevents screen "burn-in"
+    SCROLLK  DOC  Documentation for SCROLLK
+    TALK450  MRG  Adds 450 baud capacity to PC-TALK III
+    SCROLLK  COM  Enables SCROLLLOCK key
+    TALK450  DOC  Documentation for TALK450.MRG
+    USQ      DOC  Documentation for USQIBM
+    
+    The Second Disk Contains:
+    ASMGEN   COM  Converts EXE and COM to ASM files
+    ASMGEN   DOC  Documentation for ASMGEN.COM
+    BINSIX   DOC  Documentation for BINSIX.DOC
+    COMP     BAS  Compares two tokenized BASIC files
+    BINSIX   EXE  New squeeze program, 20% less then hex
+    DIP-MEM  COM  Bypasses power-up memory test
+    CROSSOPT      Data file for CROSSREF.EXE
+    MAKEDATA BAS  Checksumed data files for COM/EXE
+    DIP-MEM  DOC  Documentation for DIP-MEM.COM
+    SQIBM    DOC  Documentation for SQIBM.DOC
+    SQIBM    COM  Squeezes files for faster transfer
+    RSVD     COM  Changes the size of VDISK
+    WRT      DOC  DOC for WRTE.COM and WRTP.COM
+    WRITECOM BAS  Converts data from MAKEDATA.BAS to EXE/COM
+    UPNUM    COM  Shows if NumLock or CapsLock in use
+    TABS     BAS  Puts tab codes in or removes them
+    VDISK    COM  160k RAM disk program  (see RSVD.COM)
+    USQIBM   DOC  Documentation for USQIBM.COM
+    USQIBM   COM  Unsqueezes files squeezed by SQIBM
+    UPNUM    DOC  Documentation for UPNUM.DOC
+    WRTE     COM  Erases read-only attribute from a file
+    WRTP     COM  Sets read-only attribute of a file
+    XREF     BAS  BASIC program
+
+### Directory of PC-SIG Library Disk 0144
 
      Volume in drive A has no label
      Directory of A:\

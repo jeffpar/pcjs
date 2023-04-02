@@ -6,16 +6,36 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #821"
+      B: "PC-SIG Library Disk 0821"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #821
+## Information about "HDP ACCOUNTS RECEIVABLES"
+
+    HDP ACCOUNTS RECEIVABLES manages your customer accounts and
+    transactions for your business. It not only stores, organizes, and
+    retrieves customer information, but also lets you edit all data or
+    transaction information kept on file for each customer. With HDP
+    ACCOUNTS RECEIVABLES you have full control over your transactions and
+    invoices.
+    
+    The reports option lets you print and compute finance charges, print
+    mailing labels, and process data at the end of the month. The system
+    utilities of the program let you check data files and rebuild the
+    various indexes, clear all transactions off accounts, selectively delete
+    transactions on one account, and add new customer files.
+    
+    This version of the program is limited to about 250 customers but does
+    not require you to pay a registration fee to use it. If you like it and
+    want to upgrade up to the commercial version, you then need to purchase
+    the program.
+
+### Directory of PC-SIG Library Disk 0821
 
      Volume in drive A has no label
      Directory of A:\

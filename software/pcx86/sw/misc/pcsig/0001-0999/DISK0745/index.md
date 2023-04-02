@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #745"
+      B: "PC-SIG Library Disk 0745"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #745
+## Information about "WILDCAT BBS 1 OF 2 (ALSO 746)"
+
+    A full featured BBS with the easiest setup operation in the industry.
+    In his review of the installation procedure John Dvorak says "...this is
+    the way it's supposed to be done". A complete indexed documentation
+    file is included which covers all program features. The message system
+    includes private mail, forwarding, carbon copies, and return receipts.
+    File transfers make use of Xmodem, Ymodem (batch), Zmodem (batch,
+    Kermit, and any others as external protocols. A branching questionnaire
+    allows formatted answers for order-taking or polling callers. WILDCAT!
+    features specific internal support for multi-tasking operation. Baud
+    rates up to 19,200 are supported. WILDCAT! lets you install an
+    operational BBS and get a real feel for the power of the commercial
+    multi-line/LAN release.
+
+### Directory of PC-SIG Library Disk 0745
 
      Volume in drive A has no label
      Directory of A:\

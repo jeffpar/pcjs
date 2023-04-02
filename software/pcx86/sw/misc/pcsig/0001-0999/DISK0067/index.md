@@ -6,16 +6,53 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #67"
+      B: "PC-SIG Library Disk 0067"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #67
+## Information about "NONLIN"
+
+    This disk contains a variety of useful BASIC programs that will
+    unprotect a BASIC program saved with the \P switch, print labels, and
+    control your printer.  NONLIN also includes some interesting math
+    functions.  In addition, there is a simple communication program and
+    several PC-TALK modification files.
+    
+    System Requirements:  Some programs require BASIC.
+    
+    How to Start:  For instructions on running BASIC programs, please refer
+    to the GETTING STARTED section in this catalog. To read DOC files simply
+    enter TYPE filename.ext and press <ENTER>.
+    
+    File Descriptions:
+    
+    GROWTH   BAS  Growth rate projections
+    UN       P    File used to unprotect a BASIC program
+    PRINTER  BAS  Epson printer routine
+    UNPROT   DOC  Description of how to unprotect a BASIC program
+    REGRESS  BAS  IPCO game - linear regression
+    DATA          Part of NONLIN - set of test data
+    FUNC1    BAS  Part of NONLIN - Lorentzian function
+    FUNC2    BAS  Part of NONLIN - Gausian function
+    NONLIN   BAS  Performs non-linear least squares fit
+    TM-TIME1 BAS  PC-TALK 2.0 add on to correct system on program exit
+    TM-LDIR1 BAS  PC-TALK 2.0 modifications to expand directory to 4 pages
+    TM-DIAL2 BAS  PC-TALK 2.0 modifications to add automatic redial function
+    TM-BREAK BAS  PC-TALK 2.0 modifications to add true break with ALT-B
+    CLKMOD   BAS  Prints day of week
+    APPLECOM BAS  Simple communication program
+    LABELS   BAS  Quick label printer
+    BIGCHAR  BAS  Displays big characters on screen
+    LABELEPS BAS  Label maker
+    SCISUBV1 BAS  Simple plotting program
+    MATHFUNC BAS  IPCO 20 complex math functions
+
+### Directory of PC-SIG Library Disk 0067
 
      Volume in drive A has no label
      Directory of A:\

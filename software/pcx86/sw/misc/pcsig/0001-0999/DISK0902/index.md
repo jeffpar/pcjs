@@ -6,16 +6,33 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #902"
+      B: "PC-SIG Library Disk 0902"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #902
+## Information about "HEBREW QUIZ AND TUTORIAL"
+
+    HEBREW QUIZ is a Biblical Hebrew language tutor that teaches the Hebrew
+    alphabet, vocabulary, verbs, and grammar.  It is designed for use with
+    Thomas O. Lambdin's "Introduction to Biblical Hebrew" from MacMillan &
+    Co.
+    
+    Learn the vocabulary by a certain word type, frequency of occurrence in
+    the Hebrew Bible, and cognate groups.  You can learn verbs by verb type,
+    conjugation, tense, person, gender, number, or suffix.  You can also
+    choose the part of grammar to review.
+    
+    In addition to the quiz program, HEBREW QUIZ comes with a tutor for each
+    section that tracks your scores.  Hebrew words are shown one at a time
+    with an English translation.  A menu on the screen displays all the
+    options available.
+
+### Directory of PC-SIG Library Disk 0902
 
      Volume in drive A has no label
      Directory of A:\

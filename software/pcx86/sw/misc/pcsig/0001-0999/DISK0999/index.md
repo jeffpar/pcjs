@@ -6,16 +6,66 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #999"
+      B: "PC-SIG Library Disk 0999"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #999
+## Information about "PCJR SURVIVAL KIT"
+
+    The PCjr SURVIVAL KIT is a collection of utilities for the PCjr line of
+    computers.
+    
+    JRTELE is a telecommunications package that rivals the most popular
+    communications software out there.  Also included are: a print spooler,
+    a patch for QuickBASIC, a RAM disk, a text editor, a mouse controller,
+    and various other utilities every PCjr user should have on hand.
+    
+    Our thanks go out to the METRO PCjr Users Group in Bethesda, Maryland,
+    for putting these utilities together.
+    File Descriptions:
+    
+    CACHEJR  BAS  BASIC program.
+    COMREST  EXE  Comport program.
+    COMSWAP  DOC  Comport program documentation.
+    COMSPEC  COM  Comport program.
+    INT9JR   COM  QuickBASIC patch.
+    INT9JR   ASM  Source code for INT9JR.COM.
+    HUSH     DOC  Documentation for HUSH.COM .
+    HUSH     COM  Program to quiet error messages.
+    HELP     HLP  Help file.
+    COMSWAP  EXE  Comport program.
+    DOS21    DOC  Documentation for DOS21.
+    DOS21         System file.
+    JRCONFIG DOC  Documentation for JRCONFIG.
+    INT9SYS  SYS  Device driver for QuickBasic Patch.
+    INT9SYS  ASM  Source code for INT9SYS.
+    INT9JR   DOC  Documentation for INT9JR.
+    JRCONFIG NRD  Data file.
+    JRCONFIG DSK  System file.
+    JRSPOOL  COM  Print spooler.
+    JRTELE   COM  Telecommunications program.
+    JRSPOOL  DOC  Documentation for JRSPOOL.COM.
+    TSCRIPT  PAS  Source code for TSCRIPT.COM.
+    TSCRIPT  COM  Text editor.
+    SETRAM   EXE  RAM disk program.
+    RAM      SYS  Need by SETRAM.EXE.
+    PMM      EXE  POOR MAN'S MOUSE main program.
+    PMM      DOC  Documentation for the POOR MAN'S MOUSE.
+    PCJR-NEW SCR  Data screen file.
+    PATCHBAS DOC  Documentation file.
+    PATCHBAS BAT  Batch file.
+    PATCH    TXT  Brief note from the author of PATCH.
+    PATCH    DOC  Documentation for PATCH.COM.
+    PATCH    COM  Patch program for the jr.
+    KEY      BAS  BASIC program.
+    JRTELE   DOC  Documentation for JRTELE.COM.
+
+### Directory of PC-SIG Library Disk 0999
 
      Volume in drive A has no label
      Directory of A:\

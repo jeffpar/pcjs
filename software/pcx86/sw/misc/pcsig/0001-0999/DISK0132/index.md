@@ -6,16 +6,38 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #132"
+      B: "PC-SIG Library Disk 0132"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #132
+## Information about "PASCAL TOOLS VOL 3"
+
+    This is the third of the three-disk series Pascal Tools, and includes
+    the source code for the routines included on Disks No 130 and
+    131 along with batch files to create utilties, all accompanied by
+    documentation.  See disk #130 for more information.
+    
+    How to Start: Enter TYPE README3 and press <ENTER> for program
+    information.  To run Pascal routines, refer to your Pascal language
+    manual.
+    
+    File Descriptions:
+    
+    GLOBCONS INC  Include files (3 files)
+    GETFCB   ASM  Pascal callable routine to fill File Control Block (FCB)
+    *        AR   Source code for Pascal tools (15 files)
+    README3       Notes about using Pascal tools
+    *        OBJ  Object files
+    *        DCL  Procedure definition files
+    CMDFILE  BAT  Batch files used to create utilities (3 files)
+    ???      BAT  PASCAL batch file utilities
+
+### Directory of PC-SIG Library Disk 0132
 
      Volume in drive A has no label
      Directory of A:\

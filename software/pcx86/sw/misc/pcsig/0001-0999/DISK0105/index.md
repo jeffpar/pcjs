@@ -6,16 +6,26 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #105"
+      B: "PC-SIG Library Disk 0105"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #105
+## Information about "PC-PROFESSOR"
+
+    PC-PROFESSOR is a popular tutorial for teaching the BASIC
+    programming language. It has an easy-to-understand, well-organized
+    presentation and a comprehensive keyboard tutorial, although it is not
+    overly interactive. The program also offers four chapters of indexed
+    documentation for quick-referencing capability. It might be helpful to
+    have at least a fundamental knowledge of BASIC before using this
+    tutorial, but it is primarily for beginning programmers.
+
+### Directory of PC-SIG Library Disk 0105
 
      Volume in drive A has no label
      Directory of A:\

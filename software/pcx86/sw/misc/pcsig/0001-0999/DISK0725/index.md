@@ -6,16 +6,32 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #725"
+      B: "PC-SIG Library Disk 0725"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #725
+## Information about "TURNKEY DEMO"
+
+    TURNKEY helps you set up your computer as a menu-driven system.  You
+    construct and edit menu choices to your liking (the words you want
+    displayed on the menu).  Then it lets you specify what will happen for
+    each item in the menu by helping you write simple batch files that
+    correspond to the menu choice.  TURNKEY can then pop up a menu with
+    your choices and let you run a program simply by moving the cursor to
+    your choice and pressing enter.  When you finish running your program,
+    you are returned to the menu.
+    File Descriptions:
+    
+    INSTALL  BAT  Installation batch file
+    README        Introductory text file
+    TK31     PGM  Main program file
+
+### Directory of PC-SIG Library Disk 0725
 
      Volume in drive A has no label
      Directory of A:\

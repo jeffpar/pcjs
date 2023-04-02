@@ -6,16 +6,49 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #203"
+      B: "PC-SIG Library Disk 0203"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #203
+## Information about "GAME SERIES NO 14"
+
+    This entry in our Game series offers you ADVEN1,a version of the classic
+    Adventure, and a related game, SURVIVAL, both should present you with a
+    challenge.  The classic Lunar Lander is here also, accompanied by an
+    ASTEROID game to keep you space-jockeys happy.  Many other challenges
+    await you here, try it and see!
+    
+    System Requirements: Some programs require BASIC, color graphics.
+    
+    How to Start:  For instructions on running BASIC programs, please refer
+    to the GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    ASTEROID BAS  Asteroid Pilot by Dorn Stickle & R A Bower (Color req)
+    ADVEN1   BAS  Adventure by Scott Adams
+    SLOTCOLR BAS  Color graphics slotmachine  (Modified by Arnold Thomson)
+    NEWCHESS BAS  Chess game by M. C. Rakaska  (Modified by S. W. Huggins)
+    MOON     BAS  Lunar lander  (Color graphics) (Allan & Andrew Lee)
+    HINT3    DOC  Part of ADVENT1.BAS
+    HINT2    DOC  Part of ADVENT1.BAS
+    HINT1    DOC  Part of ADVENT1.BAS
+    FLY      BAS  Simple fly swatting game  (Color graphics)
+    BLESS    BAS  God Bless America  (With flag display)
+    SOLITAIR BAS  Klondyke solitaire  (Jeff Littlefield, Ken Handzik)
+    SURVIVAL BAS  Space adventure-like game  (Allan and Andrew Lee)
+    TRAILER  BAS  Trailer for rent
+    TRUMPET  BAS  Trumpeters Lullaby  (Leroy Anderson)
+    WHEEL    BAS  Wheel of Fortune  (David Lien)
+    WELLTEMP BAS  Praeludium I from The Well-Tempered Clavier by J S Bach
+    WORDPLAY BAS  Generates sentences from lists of nouns,adjectives,verbs
+
+### Directory of PC-SIG Library Disk 0203
 
      Volume in drive A has no label
      Directory of A:\

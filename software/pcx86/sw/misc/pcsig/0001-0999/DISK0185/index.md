@@ -6,16 +6,53 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #185"
+      B: "PC-SIG Library Disk 0185"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #185
+## Information about "DOS UTILITIES NO 10"
+
+    A variety of handy utilities to help manage your files.  Two different
+    squeeze/unsqueeze programs, SQIBM/USQIBM, and ZSQ/ZUSQ save time when
+    transmitting files by modem, and save disk space when archiving files.
+    Several directory managers let you view/save your file listings the way
+    you want, including hidden files.
+    
+    Special Requirements:  BASIC for some version.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  Various amounts.
+    
+    File Descriptions:
+    
+    CATALOG  COM  Sorted directory.
+    DD       BAT  Directory sorted by date  (Part of DNXSD.BAT).
+    SDIR     DOC  Documentation.
+    SDIR     COM  Sorted directory by Ted Reuss.
+    DXSAVE   BAT  Sample change in BAT to save sorted directory on disk.
+    DX       BAT  Directory sorted by file extension  (Part of DNXSD.BAT).
+    DS       BAT  Directory sorted by file size  (Part of DNXSD.BAT).
+    DNXSD    DOC  Series of batch sorted directory utilities.
+    DN       BAT  Directory sorted by filename  (Part of DNXSD.BAT).
+    DIR2     BAS  Diskette sorted directory by Wes Meier, Version 2.0.
+    SDIR24C  ASM  Assembler source.
+    SDIR24C  DOC  Documentation.
+    SDIR24C  COM  Sorted directory Version 2.4 by John Ratti.
+    USQIBM   DOC  Documentation.
+    USQIBM   COM  Unsquishes a squished file.
+    SQIBM    DOC  Documentation.
+    SQIBM    COM  Squishes a file.
+    ZUSQ     EXE  Unsquishes a squished file.
+    ZSQ-ZUSQ DOC  Documentation.
+    ZSQ      EXE  Squishes a file.
+
+### Directory of PC-SIG Library Disk 0185
 
      Volume in drive A has no label
      Directory of A:\

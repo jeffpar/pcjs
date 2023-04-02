@@ -6,16 +6,43 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #679"
+      B: "PC-SIG Library Disk 0679"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #679
+## Information about "IDEAL TERMINAL"
+
+    IDEAL TERMINAL (IT) is a VT-100 and VT-52 terminal emulator and a
+    full-service communications program.
+    
+    Features:
+    
+    ~ Fast -- suitable for screen editing at 9600 baud
+    
+    ~ On-line help, including current macro definitions
+    
+    ~ KERMIT, XMODEM, and ASCII file-transfer capabilities
+    
+    ~ Wildcard file specs for KERMIT transfers
+    
+    ~ Auto-dialing/auto-retry for Hayes-compatible modems
+    
+    ~ Save and review screen images
+    
+    ~ Log to printer or disk
+    
+    ~ History of the most recent 16 screens of data
+    
+    ~ Automatic screen blanking, after 30 minutes of inactivity
+    
+    ~ Macro key definition and script files
+
+### Directory of PC-SIG Library Disk 0679
 
      Volume in drive A has no label
      Directory of A:\

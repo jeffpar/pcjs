@@ -6,16 +6,88 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #80"
+      B: "PC-SIG Library Disk 0080"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #80
+## Information about "DOS UTILITIES NO 3"
+
+    Here's a little bit of everything for anyone looking to add some
+    functionality to their system.  DOS UTILITIES No. 3 has some great
+    routines; including two improved directory utilities, SD20 and XDIR,
+    which let you alter file attributes EASILY!  (Keep someone from erasing
+    those important files!)  Also of interest is MOVE, which can combine
+    the functions of COPY and ERASE (much quicker, too).  There are also
+    color-setting routines, an expanded ANSI.SYS driver, modification to
+    let you use the ALT, CTRL, and SHIFT keys as toggles (on/off).  Toggle
+    on/off functions can help people who have problems depressing multiple
+    keys to more safely use their PC functions. There's much more--explore
+    and enjoy!
+    
+    System Requirements: Some programs require color graphics; BASIC
+    
+    How to Start: To run an EXE or COM program, simply type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.  For instructions
+    on ASM listings, refer to your Assembler manual.  To read DOC files,
+    simply enter TYPE filename.ext and press <ENTER>.
+    
+    File Descriptions:
+    
+    ALTER    DOC  Documentation file for ALTER.COM.
+    ALTER    COM  Utility to change file attributes  (DOS 2.0).
+    ASK      DOC  Documentation file for ASK.COM.
+    ASK      COM  Allows interactive input to a batch file  (DOS 2.0).
+    RENUM    BAS  BASIC source code for RENUM.
+    RENUM    EXE  Renumbers a file that has been through NUMZAP.
+    NUMZAP   BAS  BASIC source code for NUMZAP.
+    NUMZAP   DOC  Documentation for NUMZAP.
+    NUMZAP   EXE  Removes line numbers from BASIC programs.
+    BIGANSI  SYS  Enlarged ANSI.SYS, allows for redefinition of 40 keys.
+    LOAD-US  ABS  Documentation for LOAD-US.
+    LOAD-US  COM  Enables you to use Lotus and Symphony on hard disk.
+    XDIR     DOC  Documentation file for XDIR.COM.
+    CISEXE   COM  Communications program that supports Compuserve protocol.
+    XDIR     COM  Extended directory - shows file attributes.
+    WMTELL   BAS  Plays William Tell Overture.
+    SOLFE    BAS  Plays "Solfeggietto" by Carl Phillip Emanual Bach.
+    CISEXE   DOC  Documentation file for CISEXE.COM.
+    CL       ASM  Source for CL.COM.
+    CL       DOC  Documentation file for CL.COM.
+    CL       COM  Sets blue background.
+    EDITNO   DOC  Documentation file for EDITNO.BAS.
+    EDITNO   BAS  Formats numeric output in ways that PRINT USING cannot.
+    COLOR    DOC  Documentation file for COLOR.COM.
+    COLOR    COM  Machine language equivalent of BASIC's COLOR statement.
+    SD20     DOC  Documentation file for SD20.COM.
+    SD20     COM  Sort directory for DOS 2.0.  Includes several run options.
+    OKIMOD   DOC  Doc on how to modify MODE.COM for different printers.
+    ET4      BAS  BASIC text file line editor - an alternative to EDLIN.
+    KEYLK3   EXE  KeyLock program for BIOS ROM..
+    ET4      EXE  Compiled BASIC version.
+    MEM640   ZAP  Modifies BIOS to handle memory greater than 544KB.
+    MEM640   DOC  Documentation file for MEM640.ZAP.
+    MOVE     COM  Utility to move files across directories without copying
+    MOVE     DOC  Documentation file for MOVE.COM.
+    FCBCRT   BAS  Create loadable program for reading directory from BASIC.
+    FCBEXM   BAS  Demonstrates use of BLOADable file.
+    FCBREAD  BSV  BLOADable file created by FCBCRT.BAS.
+    FKREST   COM  Companion to FKSET.COM - resets keys to original functions
+    FKREST   ASM  Source for FKREST.COM.
+    FKSET    ASM  Source for FKSET.COM.
+    KEYLK    DOC  Documentation for KEYLK and KEYLK3.
+    HIQUE    BAS  Board game that supports light pen input.
+    FLIGHT   NEW  How to modify Flight Simulator for color on a RGB monitor.
+    FKSET    COM  Upgrade of function key definition routine for DOS 2.0.
+    KEYLK3   ASM  Source code for KeyLock program for latest BIOS ROM.
+    File Descriptions:
+
+### Directory of PC-SIG Library Disk 0080
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,34 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #553"
+      B: "PC-SIG Library Disk 0553"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #553
+## Information about "LLSQ"
+
+    This disk contains LLSQ, a package of 14 basic, high-quality
+    mathematical FORTRAN subprograms that can be utilized in your
+    applications programs.  These first appeared in the "IMSL Numerical
+    Computations Newsletter," "User News," and "Directions."
+    
+    System Requirements:  64K, one disk drive and monochrome display.
+    
+    How to Start:   For instructions on FOR listings, refer to your FORTRAN
+    language manual.
+    
+    File Descriptions:
+    
+    PROG?    FOR  Test drivers for the various modules
+    LINK?    BAT  Batch files to properly link the various modules
+    ???????? FOR  LLSQ FORTRAN source code modules
+
+### Directory of PC-SIG Library Disk 0553
 
      Volume in drive A has no label
      Directory of A:\

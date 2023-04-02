@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #593"
+      B: "PC-SIG Library Disk 0593"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #593
+## Information about "GANTT PAC 1 OF 2 (ALSO 1198)"
+
+    This is a group of project management aids that produce presentation-
+    quality Gantt charts -- graphic displays of schedules -- from a list of
+    projects, dates and times.
+    
+    Four primary applications are provided: Gantt chart transparencies for
+    meeting displays, the ability to directly drive a video projector from a
+    PC for meeting displays, Gantt charts for insertion into the
+    text files of word processors, and direct use to view project status.
+    These types of displays are commonly used throughout industry for
+    management presentations of project status and resource use.
+
+### Directory of PC-SIG Library Disk 0593
 
      Volume in drive A has no label
      Directory of A:\

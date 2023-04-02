@@ -6,16 +6,75 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #443"
+      B: "PC-SIG Library Disk 0443"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #443
+## Information about "T-SCORE AND EDUCATION"
+
+    These are programs designed to grade your scores and score your grades!
+    T-SCORE contains programs for asigning equitable grades to up to 60
+    students, based on 16 scores.  PC GRADEBOOK is a program to maintain
+    and display sorted lists of up to 12 classes with 35 students per class
+    and 45 grades per student.  Printouts and grades may be displayed by
+    student or class as well as by assignment, grade to date or cumulative.
+    PC Gradebook runs under the MicroSoft BASIC interpreter; the source
+    code is GRADES.BAS and generates a report card which REPORTS.BAS
+    prints.  A FLASHcard spelling, MATH facts and TYPE(ing) tutor fill out
+    this very educational disk.
+    
+    System Requirements:  128K, one disk drive and monochrome display.
+    T-SCORE requires an 8087 math co-processor (source code is provided)
+    
+    How to Start:  To run BASIC programs consult the directions in GETTING
+    STARTED for your configuration.  Consult the .DOC files for program
+    documentation.
+    
+    Suggested Registration:  PC-GRADEBOOK $25.00
+    
+    File Descriptions:
+    
+    -------- ---  T-Scores System (REQUIRES AN 8087 MATH CO-PROCESSOR!!)
+    TSCORE   EXE  Calculate T-scores, to assign equitable grades.
+    TSCORE   DOC  Brief description file for T-Score (4K)
+    TSCORE   DAT  Sample data for input to TSCORE.
+    TSCORE   FOR  Fortran source text, output from SFtran processor.
+    TSCORE   S3L  Pretty 4 page listing, from SFtran processor.
+    TSCORE   S3I  SFtran source text for TSCORE.
+    FLASH    BAS  A spelling program
+    -------- ---  Flashcards
+    README   TXT  Introductory message and notes on operation (3K)
+    REPORTS  BAS  ASCII BASICA routine to produce printed reports
+    NOTICE   BAS  ASCII BASICA plea for money
+    GRADES   BAS  ASCII BASICA program for main routine
+    -------- ---  PC Gradebook
+    TSCORE   LIS  Output corresponding to TSCORE.DAT.
+    KILL     DOC  Documentation for KILL.BAS and KILL2.BAS
+    KILL2    BAS  Updated version of KILL.BAS
+    KILL     BAS  Utility to save you time in BASIC
+    TYPE     DOC  Documentation for TYPE.BAS
+    TYPE     BAS  Program to improve your typing skills
+    MENU     BAS  Menu for this set of programs
+    MATH     DOC  Documentation for math.bas
+    MATH     BAS  A math program that will help you learn your math facts
+    -------- ---  T-Score Education Programs
+    -------- ---  HSO - High Score Organizer
+    FLASH    DOC  Documentation for FLASH.BAS (short)
+    FLASH    BAT  Batch file to load FLASH.BAS in DOS
+    ???      DOC  Documentation for SCR-MENU
+    ???      BAS  Programs called from SCR-MENU
+    SCR-EXEC BAT  Batch file to start SCR-MENU
+    READ     ME   Notes on T-SCORE program
+    FILES         Listing of FLASH program files
+    FILELIST TXT  Listing of files for PC Gradebook
+    BLK      BLK  Listing of files included
+
+### Directory of PC-SIG Library Disk 0443
 
      Volume in drive A has no label
      Directory of A:\

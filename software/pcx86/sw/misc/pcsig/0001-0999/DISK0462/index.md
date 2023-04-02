@@ -6,16 +6,30 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #462"
+      B: "PC-SIG Library Disk 0462"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #462
+## Information about "CK SYSTEM"
+
+    Use this personal and household financial mangement program to keep a
+    close eye on income and expenses. You worked hard to get it -- know
+    what you're doing with it!
+    
+    CK tracks your cashflow and financial obligations in checkbook form and
+    prints checks and many types of reports. Repeating checks can be
+    printed each month by changing the check number and date and re-printing
+    the checks. Keep an orderly and accurate check register/deposit record.
+    Prepare a month-by-month year-end summary of all your income and
+    expenses for up to nine separate accounts. Draw up bar charts on
+    income/expenses. Detailed documentation is provided for the new user.
+
+### Directory of PC-SIG Library Disk 0462
 
      Volume in drive A has no label
      Directory of A:\

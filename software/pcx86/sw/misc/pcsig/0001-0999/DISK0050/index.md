@@ -6,16 +6,62 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #50"
+      B: "PC-SIG Library Disk 0050"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #50
+## Information about "ROFF"
+
+    This version of ROFF, based on the formatter in Kernighan and
+    Plauger's book SOFTWARE TOOLS, is written in BDS C, and employs
+    the directed i/o functions that go along with that package.
+    
+    Using ROFF, you can make nice printouts of a file, with as little
+    or as much help from the program as you want.  There are default
+    values for all parameters, so if you don't put any commands in at
+    all, your file will come out with filled, right-justified lines.
+    The default line-length is 80 characters; the default page-length
+    is 66 lines per page.  "Filled lines" means that as many input
+    words as possible are packed onto a line before it is printed;
+    "non-filled" lines go through the formatter w/o rearrangement.
+    "Right-justified" simply means that spaces are added between
+    words to make all the right margins line up nicely.
+    
+    Filling out the disk are a group of solid utilities like SDIR and
+    REBOOT and some useful BASIC programs.
+    
+    How to Start:  Consult ROFF.DOC for directions and
+    documentation. Type ROFF <ENTER> to run.  For the BASIC programs,
+    consult the directions in Getting Started for your configuration.
+    
+    File Descriptions:
+    
+    COLOR    COM  Allows switch to and from mono screen
+    MUSICBOX BAS  A few tunes to while away the moment
+    MONO     COM  Allows switch to and from mono screen
+    FILEIO   C    File redirection utility
+    DEPREC   BAS  Simple depreciation
+    REBOOT   ASM  Assembly code for REBOOT
+    ROFF     EXE  ROFF text formatter
+    ROFF     HE   ROFF subprogram ROFF1
+    ROFF     H    ROFF subprogram
+    SDIR     ASM  Assembly code
+    SDIR     COM  Compiled version of directory shell
+    REBOOT   COM  Utility for special warm boots
+    ROFF     DOC  Directions on using ROFF
+    REBOOT   EXE  Executable version of REBOOT
+    TABLET   BAS  One for Moses, one for you
+    TICCLOCK BAS  Time keeper for your PC
+    ROFF?    C    Uncompiled version of ROFF.EXE to modify.
+    ADDCRS   BAS  Adds carriage returns to downloaded files
+    ASCFILTR BAS  Filter non-ASCII characters from files
+
+### Directory of PC-SIG Library Disk 0050
 
      Volume in drive A has no label
      Directory of A:\

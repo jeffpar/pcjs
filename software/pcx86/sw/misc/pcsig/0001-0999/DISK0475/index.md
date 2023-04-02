@@ -6,16 +6,24 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #475"
+      B: "PC-SIG Library Disk 0475"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #475
+## Information about "TUNE TRIVIA"
+
+    Remember ``Name That Tune''?  Here's a new version.
+    
+    TUNE TRIVIA plays songs on your PC so you can try to guess the
+    songs' titles.  Once you've answered correctly, you are then challenged
+    with trivia questions about musical history.
+
+### Directory of PC-SIG Library Disk 0475
 
      Volume in drive A has no label
      Directory of A:\

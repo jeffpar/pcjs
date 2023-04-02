@@ -6,16 +6,36 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #442"
+      B: "PC-SIG Library Disk 0442"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #442
+## Information about "SPA:WN"
+
+    Learn the concepts of nodal or structured programming with SPA:WN,
+    Structured Programming Automated: Warnier Notation.
+    
+    Tutorials are provided on the concepts of structured programming, and a
+    program for use during design, documentation, and long-term
+    maintenance of structured programs in any high-level language.
+    
+    Warnier notation provides a graphic description of relationships between
+    various components.  SPA:WN provides the framework that lets you track
+    these relationships.  It then produces target language source code,
+    again in any high-level language, as well as automatic layout and
+    pagination of a Warnier diagram.  The SPA:WN  system provides the
+    technical support which enables life cycle program/system management to
+    be done entirely from Warnier diagrams.
+    
+    The concepts of structured programming are also applicable to computer
+    or other complex system design.
+
+### Directory of PC-SIG Library Disk 0442
 
      Volume in drive A has no label
      Directory of A:\

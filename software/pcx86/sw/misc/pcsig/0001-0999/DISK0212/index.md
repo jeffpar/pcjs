@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #212"
+      B: "PC-SIG Library Disk 0212"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #212
+## Information about "RBBS-PC 1 OF 5 (ALSO 334,621,622,2092)"
+
+    The RBBS is the bulletin board system of choice for many IBM PC
+    bulletin boards. It's a large system on four disks and supports the
+    PC-SIG LIBRARY ON CD ROM.
+    
+    RBBS-PC's internal structure is modularized and structured. The
+    program includes a File Management System for directories, additional
+    file exchange protocols, support for managing subscriptions,
+    configurable command letters, multiple uploads on a single command
+    line, new A)nswer and V)erbose ARC list commands, and
+    context-sensitive help. It also can run as a local application on a
+    network, use any field or define a new field to identify callers, and
+    individualize callers having the same ID. The source code is included.
+
+### Directory of PC-SIG Library Disk 0212
 
      Volume in drive A has no label
      Directory of A:\

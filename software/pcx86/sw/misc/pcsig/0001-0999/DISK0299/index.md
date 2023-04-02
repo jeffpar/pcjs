@@ -6,16 +6,75 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #299"
+      B: "PC-SIG Library Disk 0299"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #299
+## Information about "PC-SIG SAMPLER #9"
+
+    System tools for everyone.  DOORS allows you to switch displays in
+    mid- program, PARINT will keep the dreaded "parity error" from
+    stopping you in mid-task, and PGBRK lets you print listings with
+    proper page breaks.  And for you entertainment buffs, NUTREK is a Star
+    Trek game featuring full screen-oriented control.  Several
+    color-graphic test patterns are also included.
+    
+    System Requirements: Some programs require color graphics, BASIC.
+    
+    How to Start: To run an EXE or COM program simply type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.  To read DOC
+    files simply enter TYPE filename.ext and press <ENTER>.
+    
+    Suggested Registration: M.EXE $10.00;COMPACT.BAS and REFORM.BAS $30.00
+    each.
+    
+    File Descriptions:
+    
+    CROSSWDS DAT  List of BASIC keywords
+    CONTENTS DOC  Description of files on this disk
+    MEMSET   BAS  Allows use of 640K memory in older PCs
+    PGBRK    BAT  Produces printed listings with page breaks
+    4BARLINK BAS  Animation program (requires color graphics)
+    COMPACT  BAS  A program to compact BASIC programs
+    M        EXE  A user-supported version of MEMSET - fast
+    MEMINST  DAT  Used by MEMSET.BAS
+    CHARDEFN BAS  Color graphics test patterns
+    CONVERGE BAS  Color graphics test patterns
+    BARS     BAS  Color graphics test patterns
+    INTLCVID BAS  Color graphics test patterns
+    MLTIBRST BAS  Color graphics test patterns
+    ANIMATE  BAS  Color graphics test patterns
+    TWOLINE  BAS  Color graphics test patterns
+    PGBRK    BAS  Part of PGBRK
+    PGBRK    BEG  Part of PGBRK
+    PGBRK    END  Part of PGBRK
+    DOORS    BAS  Permits you to switch between diskplay adapters
+    PARINT   COM  Program to trap parity error interupts
+    DOORS    COM  Permits you to switch between diskplay adapters
+    PARINT   ASM  Assembly source code
+    PARINT   LST  Assembler listing
+    RED      ASM  Source code
+    RED      COM  Rename files accross directories
+    EPBENCHI BAS  Benchmark program
+    NUTREK   BAS  Screen oriented startrek program
+    MEGATREK BAS  Startrek type program
+    RED      LST  Assembly listing
+    4MSSTEP  COM  Sets floppy disk step interval down to 4 milliseconds
+    DIFF     EXE  File comparison utility (handles files different sizes)
+    NPAD     COM  Popup Electronic Notepad
+    DISKMODP BAS  Faster, improved version of DISKMODF on #28
+    DITHER   BAS  Generates 128 distinct colors on Tecmar Graphics-Master
+    PERTCHRT BAS  Pertchart program
+    BIRD     BAS  Sound effect program
+    REFORM   BAS  Adds spaces to BASIC program required by PC
+
+### Directory of PC-SIG Library Disk 0299
 
      Volume in drive A has no label
      Directory of A:\

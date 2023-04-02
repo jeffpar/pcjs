@@ -6,16 +6,64 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #346"
+      B: "PC-SIG Library Disk 0346"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #346
+## Information about "YOUR ART"
+
+    How to Start: Type: MENU (press enter).
+    
+    Suggested Registration: $100.00 for full user registration.
+    
+    File Descriptions:
+    
+    AUTOEXEC BAT  Start Up.
+    KD-DRAW  EXE  Main drawing program.
+    KD-DRAW  TXT  Program text.
+    KD-DRAW  HLP  Help file for program.
+    KD-PAINT PIC  Paint colors.
+    KD-PTRN  PIC  64 fill patterns.
+    KD-FONT? FNT  Text font files.
+    KD-MOUSE MSC  Mouse files.
+    KD-MOUSE COM  Mouse files.
+    KD-MSMOS DEF  Mouse files.
+    KD-MSMOS MNU  Mouse files.
+    KD-PRNT? TBL  Printer tables.
+    KD-UPDAT TXT  Update information.
+    KD-MENU  TXT  DOS Menu.
+    KD-DRAW  HOT  Hot Key definition file.
+    BASRUN   EXE  Used by other EXE files.
+    DATEIT   EXE  Replaces DOS DATE.
+    CAMERA   COM  Screen capture.
+    KD-TRANS EXE  Macro to text translation.
+    KEYTBL   DAT  Translation table used by KD-TRANS.EXE.
+    H        BAT  DOS help info.
+    I        BAT  Copyright info.
+    KD       BAT  Runs KD-DRAW.
+    DEMO     BAT  Sample Macro file demo.
+    SLIDEMO  BAT  Runs SCNSHOW.MCR on library disk.
+    DOC      BAT  Prints Documentation.
+    INSTALL  BAT  Copies disk or installs to hard disk.
+    MENU     BAT  ---!!!!RUN THIS FIRST!!!!---
+    H        BAT  DOS help info.
+    I        BAT  Copyright info.
+    KD       BAT  Runs KD-DRAW.
+    DEMO     BAT  Sample Macro file demo.
+    SLIDEMO  BAT  Runs SCNSHOW.MCR on library disk.
+    DOC      BAT  Prints Documentation.
+    INSTALL  BAT  Copies disk or installs to hard disk.
+    MENU     BAT  ---!!!!RUN THIS FIRST!!!!---
+    XTSUNIT  PTN  Part of YOUART
+    YA1V4    EXE  Program to generate medium res graphics
+    YA1V4    DOC  Documentation for YA1V4
+
+### Directory of PC-SIG Library Disk 0346
 
      Volume in drive A has no label
      Directory of A:\

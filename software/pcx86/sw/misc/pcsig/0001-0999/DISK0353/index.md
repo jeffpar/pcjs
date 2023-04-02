@@ -6,16 +6,64 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #353"
+      B: "PC-SIG Library Disk 0353"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #353
+## Information about "TURBO PASCAL SET #3"
+
+    This disk contains Turbo Pascal programs and other programs suited both
+    to the novice and the advanced user alike.  Most of the files on this
+    disk pertain more to visual routines.  For example, the file SHOWMOVI
+    which is a text animation program.  There is an array of printer
+    utilities, and a program that generates mazes.
+    
+    System Requirements: Two disk drives, Turbo Pascal
+    
+    How to Start: To read DOC files simply enter TYPE filename.ext and
+    press <ENTER>.  For instructions on PAS listings, refer to your Pascal
+    language manual.
+    
+    File Descriptions:
+    
+    AMAZING  COM  Produces a maze-like pattern (great with color)
+    DECIHEX  COM  Enter a decimal integer, receive a hexadecimal number
+    AMAZING  PAS  TURBO PASCAL source code
+    FONTEDIT BAS  Create new fonts for OKIDATA 93, 92, and maybe 82
+    DECIHEX  ASM  Source code from Waite Group book -- <Ctrl>C to exit
+    NEWCHARS BAS  Program created by FONTEDIT.BAS (Okidata fonts)
+    FONTEDIT DOC  Documentation guide
+    MAKAMOVI COM  Create animation in text mode (needs 96K minimum)
+    KEYDEMO  PAS  TURBO PASCAL source code
+    KEYDEMO  COM  A demo program that reads all keystrokes
+    NEWCHARS DOC  Documentation guide
+    FILES    TXT  Disk documentation
+    TURBO    DOC  Random comments about Borland's Turbo Pascal
+    PIANO    TXT  Short text on PIANO.COM
+    PIANO    PAS  TURBO PASCAL source code
+    PIANO    COM  PC piano (version 1.00) with record and playback
+    MAKAMOVI DOC  Documentation (user guide) version 1.0
+    NOISE    ASM  Source code from Waite Group book on IBM Assembler
+    MAKAMOVI PAS  TURBO PASCAL source code
+    SHOWMOVI PAS  TURBO PASCAL source code
+    SHOWMOVI DOC  Documentation (user guide)
+    SHOWMOVI COM  Used to "show" the "movies" created by MAKAMOVI.COM
+    INTRO    SCN  Used by MAKAMOVI.COM (must be on same disk)
+    NOISE    COM  Makes a "machine-gun" noise
+    DICT     OKI  File created by OKIGRAFX.COM
+    ANAGRAM  OKI  File created by OKIGRAFX.COM
+    OKIGRAFX PAS  TURBO PASCAL source code
+    OKIGRAFX DOC  Documentation guide
+    OKIGRAFX COM  Create all-points-addressable graphics up to 10" square
+    SQUARE   SCN  File created by MAKAMOVI.COM (used by SHOWMOVI.COM)
+    BOUNCY   SCN  File created by MAKAMOVI.COM (used by SHOWMOVI.COM)
+
+### Directory of PC-SIG Library Disk 0353
 
      Volume in drive A has no label
      Directory of A:\

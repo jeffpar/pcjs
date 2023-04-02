@@ -6,16 +6,56 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #150"
+      B: "PC-SIG Library Disk 0150"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #150
+## Information about "IBM BBS"
+
+    A simple, straight-forward BBS written especially for the IBM PC. The
+    code is compiled BASIC.  Both the source and executable versions are
+    provided so you can run it as is or modify it.
+    
+    It is a reasonably powerful system with a lot of thought and experience
+    behind its design.  However, it has been around for awhile and many of
+    the newer BBS offerings surpass its capabilities by quite a bit. This
+    system, for example, handles only one line at a time.
+    
+    System Requirements: Two drives, one serial port, modem, BASIC
+    
+    How to Start: Documentation is spread out in files marked .DOC (for
+    DOCument) and .HLP and plenty of simple text files.  To run IBBS.EXE,
+    type IBBS and hit <ENTER>.
+    
+    File Descriptions:
+    
+    BBSCOMP  BAT  BAT startup file
+    BBSLOGO  BAS  Logo displayed upon BBS startup
+    CALLERS       List of each logon, excepting SYSOP
+    COUNTERS      Workfile containing next message #, next caller, etc.
+    FLASH         File displayed after WELCOME file
+    IBBS     BAS  Compiler BASIC source code
+    HARDWARE      Information file on hardware prices
+    HELP     BBS  Help file
+    IBBS     DOC  Limited documentation
+    IBBS     EXE  Compiler object code for IBBS
+    NEWCOM        Message file for first-time callers
+    MESSAGES      Main messages file
+    RBBSUTIL BAS  Source code for file cleanup utility
+    SOFTWARE      Information file on software prices
+    RBBSUTIL EXE  Compiled object code for file cleanup utility
+    USERS         List of logon IDs
+    SUMMARY       Messages summary file
+    XFER     HLP  Help file for file transfer function
+    WELCOME       First file displayed after logon
+    XFERLIST      List of files that can be transferred
+
+### Directory of PC-SIG Library Disk 0150
 
      Volume in drive A has no label
      Directory of A:\

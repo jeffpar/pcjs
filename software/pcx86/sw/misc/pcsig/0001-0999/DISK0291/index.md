@@ -6,16 +6,32 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #291"
+      B: "PC-SIG Library Disk 0291"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #291
+## Information about "MUILTIPLAN TEMPLATES"
+
+    Tax 84 is a series of templates designed for Multiplan users.  In
+    addition to calculating the 1984 Federal Tax, most schedules are
+    available in worksheet form.  The spreadsheets are simple to access
+    and use.  The documentation is reasonably complete, but assumes the
+    user is familiar with calculating Federal taxes.
+    
+    System Requirements:  265K RAM, two disk drives, Multiplan
+    
+    How to Start:   Access through Multiplan
+    
+    File Descriptions:
+    
+    ???           Multiplan Worksheet files (26 files)
+
+### Directory of PC-SIG Library Disk 0291
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,85 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #404"
+      B: "PC-SIG Library Disk 0404"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #404
+## Information about "EZ-FORMS EXECUTIVE"
+
+    Stop trying to satisfy your information needs by using someone else's
+    idea of the "right" form. Make documents tailored to your specific
+    requirements to answer your special questions.
+    
+    You can print forms to fill out by hand, or to fill in before printing.
+    Spreadsheet math functions automate numerical extensions such as
+    multiple items/per item pricing and tax computation. Merge with
+    information from a database and automatically insert dates and times as
+    desired. Editing functions, such as word wrap, text centering and
+    automatic justification, help you make professional-looking forms,
+    quickly and easily.
+    
+    Useful for small businesses or organizations that need few copies or
+    store all data electronically. Especially valuable as a forms
+    development tool for designing and streamlining before committing to a
+    large print run.
+    
+    Features include:
+    
+    ~ Macros (keystroke record/playback makes form fill-out a breeze)
+    
+    ~ ASCII data file merge
+    
+    ~ Data Export in 8 different ASCII delimited formats
+    
+    ~ Auto date, time, increment numbering
+    
+    ~ Chain (multi-page forms) and multi-copy printing
+    
+    ~ Handles forms up to 248 columns by 132 lines
+    
+    ~ Enhanced printer support includes extensive user modifiable printer
+    attributes and embedded characters, also double/single block/shade
+    character line drawing and any character "drag" modes
+    
+    ~ Italics, superscript, subscript, double wide, bold, underline, etc.
+    are supported for properly equipped printers
+    
+    ~ Laser Printer (HP and compatibles) support includes auto font
+    downloading, graphics emulation and custom font support
+    
+    ~ File encryption to protect sensitive files
+    
+    ~ File compression to save valuable disk space
+    
+    ~ Increment number counter (different number on each form) printing
+    
+    ~ Auto-tab/fill-in and file (makes filling out pre-printed forms a
+    snap)
+    
+    ~ Field markers (lock out designated areas)
+    
+    ~ Vertical typing
+    
+    ~ Cut and paste
+    
+    ~ Mouse support for Logitech and Microsoft mice.
+    
+    ~ 101+ pre-designed and user modifiable forms  (Basic Forms Pack)
+    included.
+    
+    ~ Search Mode: Like a mini free form database.
+    
+    ~ Basic Laser Fonts now included. 10 soft fonts (which include the line
+    drawing characters not usually available in soft fonts) for the
+    HP-LaserJet Plus.
+
+### Directory of PC-SIG Library Disk 0404
 
      Volume in drive A has no label
      Directory of A:\

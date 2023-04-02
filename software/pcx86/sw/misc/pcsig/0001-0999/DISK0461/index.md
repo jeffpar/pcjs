@@ -6,16 +6,39 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #461"
+      B: "PC-SIG Library Disk 0461"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #461
+## Information about "RIDGETOWN COLLEGE"
+
+    From Ridgetown College of Ontario comes this fine collection of farm
+    management tools. Besides a handy metric conversion program, highlights
+    include:
+    
+    LUMBER -- Welcome to the world of computer carpentry. Enter your basic
+    design and constraints, if any. It produces reliable estimates of all
+    the construction materials you will need for your project and keep a
+    running total of the costs.
+    
+    USLE -- Deal with the problem of soil loss evaluation on irregular
+    slopes with this program. Get a fast, accurate estimate of
+    such soil loss. As many, if not most, fields have irregular
+    slopes, the farmer/conservation specialist can benefit from
+    this aid.
+    
+    WOODHEAT -- Explore the economics of using wood as a primary source of
+    heating.
+    
+    The documentation also includes the code for Hewlett Packard (HP-41c)
+    calculators.
+
+### Directory of PC-SIG Library Disk 0461
 
      Volume in drive A has no label
      Directory of A:\

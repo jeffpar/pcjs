@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #828"
+      B: "PC-SIG Library Disk 0828"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #828
+## Information about "EDRAW"
+
+    EDRAW is a sophisticated graphics program for drawing electronic
+    schematics, block diagrams and flow charts. Originally designed for
+    technical people such as engineers, teachers and students, it can even
+    be used to lay out a printed circuit board!
+    
+    EDRAW features several text fonts for incorporating into any drawing or
+    diagram. Logic and electronic symbols have been included for
+    drawing electronic circuits as well as lines, boxes, circles, and other
+    icons. EDRAW is a must for anyone who has specific drawing or graphic
+    needs.
+
+### Directory of PC-SIG Library Disk 0828
 
      Volume in drive A has no label
      Directory of A:\

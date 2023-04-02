@@ -6,16 +6,57 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #378"
+      B: "PC-SIG Library Disk 0378"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #378
+## Information about "DICTIONARY"
+
+    This disk is full of tools to aid the aspiring writer.  If you wish to
+    check your spelling, we have a nice BASIC-based dictionary program.
+    Along with it there is a simple text editor included, as well as word-
+    counters and complexity analyzers.  For anyone interested in improving
+    the quality of their writing, this is a good investment.
+    
+    System Requirements: Some programs require BASIC
+    
+    How to Start: Consult the .DOC files for instructions.  To run programs
+    suffixed .COM or .EXE: enter their name and <ENTER>, i.e., for
+    WORDFREQ.EXE, type WORDFREQ and hit <ENTER>.  To run the PC-SPELL.BAS
+    type BASICA PC-SPELL and hit <ENTER>.
+    
+    Suggested Registration:  FSED $35.00; FOGFIN $15.00
+    
+    File Descriptions:
+    
+    SETFSED  DOC  Documentation for SETFSED.COM
+    SETFSED  COM  FSED installation program
+    FSED     DOC  Manual for FSED
+    FSED     COM  FSED V2.0 Full Screen Editor by D.W. Daetwyler
+    CHOP     EXE  Subdivides text files - Ver 1.1 by W.J. Kennamer
+    INDEX    EXE  Creates index of word & phrases marked with control codes
+    INDEX    DOC  Documentation for INDEX.EXE
+    FOGFIN   DOC  Documentation for FOGFIN.COM
+    FOGFIN   COM  Measures writing complexity using Gunning Fog Index
+    WORDFREQ BAS  Source for WORDFREQ.EXE
+    WORDFREQ EXE  Graphs word length frequency for a writing sample
+    DICTIONA      PC-SPELL dictionary of correctly spelled words
+    SORTDIC  BAS  Adds words to PC-SPELL dictionary
+    PC-SPELL UNI  Part of PC-SPELL
+    PC-SPELL DOC  Documentation to PC-SPELL V1.0
+    PC-SPELL SOR  Part of PC-SPELL dictionary oriented spelling checker
+    TALLY    EXE  Counts characters, words, & lines (similar to UNIX WC)
+    PC-SPELL BAS  Ver 1.0 of ASCII file spelling checker by Andy Wildenberg
+    FSEDIT   EXE  A simple full screen editor called the Stopgap Editor
+    FSEDIT   DOC  Summary of MicroComputing article about Stopgap Editor
+    TALLY    DOC  Documentation for TALLY.EXE
+
+### Directory of PC-SIG Library Disk 0378
 
      Volume in drive A has no label
      Directory of A:\

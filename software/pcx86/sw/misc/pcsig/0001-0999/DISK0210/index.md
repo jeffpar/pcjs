@@ -6,16 +6,39 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #210"
+      B: "PC-SIG Library Disk 0210"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #210
+## Information about "GAME SERIES NO 15"
+
+    This disk contains three of our most popular games.  CASTLE is an
+    adventure-quest game, find treasure and slay the monsters.  PACKGAL is
+    a good translation of the arcade favorite.  And SPACEVAD is one of the
+    best versions of the classic Space Invaders.
+    
+    System Requirements: SpaceVad requires color graphics
+    
+    How to Start: To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  To run an EXE or COM program, type its name and press
+    <ENTER>.
+    
+    Suggested Registration: $10.00
+    
+    File Descriptions:
+    
+    CASTLE   DOC  Documentation for CASTLE.EXE adventure game
+    CASTLE   RAN  Required data file for CASTLE.EXE
+    CASTLE   EXE  Main program
+    PACKGAL  COM  Travel trough a maze eating dots and avoiding ghosts
+    SPACEVAD EXE  Save the world from the extra-terrestrial invaders.
+
+### Directory of PC-SIG Library Disk 0210
 
      Volume in drive A has no label
      Directory of A:\

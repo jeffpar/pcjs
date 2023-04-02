@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #948"
+      B: "PC-SIG Library Disk 0948"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #948
+## Information about "FORA COMMUNICATIONS SOFTWARE"
+
+    FORA is a multi-user chat BBS system.  It lets up to 17 people
+    communicate simultaneously at up to 2400 baud, chatting as a group or
+    privately with each other.
+    
+    Use FORA to set up your own bulletin board or use it as a service for
+    your business.  It requires at least eight phone lines installed where
+    it is used and can be located in an area where many people can dial in
+    toll-free.  FORA has extensive documentation with guidelines on finding
+    a location for your system, purchasing the hardware needed, and
+    installing it into your system.
+
+### Directory of PC-SIG Library Disk 0948
 
      Volume in drive A has no label
      Directory of A:\

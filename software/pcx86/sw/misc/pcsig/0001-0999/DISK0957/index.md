@@ -6,16 +6,32 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #957"
+      B: "PC-SIG Library Disk 0957"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #957
+## Information about "PC-FLOW - BUDGETING SYSTEM"
+
+    PC-FLOW, the personal cash-flow budgeting system, lets you forecast and
+    evaluate your home or small-business budget, emphasizing daily cash-
+    flow. Each transaction can be designated as once-only, daily, weekly,
+    or monthly. The entries can be exact or estimated. Record incoming and
+    outgoing activities and sort and categorize by group.
+    
+    Schedule future transactions within a user-defined time period. This
+    approach to budgeting lets you observe the cash-flow situation as the
+    transactions are scheduled to occur. Reports of starting resources,
+    cash-flow, and transaction breakdown can be printed. Sort budget
+    transactions by ID, frequency or ending date. There are three cash-flow
+    reports: daily transaction detail; daily, weekly, monthly, or yearly
+    cash-flow summaries; and breakdown by transaction classification.
+
+### Directory of PC-SIG Library Disk 0957
 
      Volume in drive A has no label
      Directory of A:\

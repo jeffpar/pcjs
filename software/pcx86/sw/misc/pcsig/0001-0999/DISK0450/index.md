@@ -6,16 +6,41 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #450"
+      B: "PC-SIG Library Disk 0450"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #450
+## Information about "GAME SERIES #20"
+
+    A good collection of games.  Some shoot-em-ups, two different stock
+    market simulations for you financial wizards, and other assorted
+    entertainments.  All are written in BASIC, so you can play with and
+    change 'em around if you have the desire to experiment.  All will run
+    on a monochrome system, too!
+    
+    System Requirements: 128k, one disk drive, monochrome monitor
+    
+    How to start:  For instructions on running BASIC programs, please refer
+    to the GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    ELECTION BAS  You get to run for President
+    DICE     BAS  A simple dice game
+    WALLST   BAS  Another Stock Market simulation
+    STAR2001 BAS  Another space game
+    ROBOTNKA BAS  Shoot the tank before it gets to you
+    RIEMAN   BAS  Can you survive in the intergalactic trading circle
+    PRESCH   BAS  A word game for pre-schoolers
+    MONEYMKT BAS  Can you succeed in the stock market?
+    FUN      BAS  A fun with numbers game
+
+### Directory of PC-SIG Library Disk 0450
 
      Volume in drive A has no label
      Directory of A:\

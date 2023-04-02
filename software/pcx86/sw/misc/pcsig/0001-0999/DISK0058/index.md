@@ -6,16 +6,37 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #58"
+      B: "PC-SIG Library Disk 0058"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #58
+## Information about "TEXT TOOLS 2 OF 2  (#57 FIRST DISK)"
+
+    Tools to manipulated test files.  See Disks #130-132 for more complete
+    and better documented versions of the utilities on this disk and disk
+    #58.
+    
+    File Descriptions:
+    
+    The First Disk Contains:
+    TRANSLIT EXE  TRANSLITERATION UTILITY
+    SORT     EXE  SORTS TEXT FILES
+    FIND     EXE  FINDS TEXT STRINGS IN FILES
+    CHANGE   EXE  CHANGES TEXT STRINGS IN FILE
+    COMPARE  EXE  COMPARES TWO FILES
+    
+    The Second Disk Contains:
+    FORMAT   EXE  TEXT FORMATTER
+    DEFINE   EXE  STRING REPLACEMENT MACROPROCESSOR
+    MACRO    EXE  EXPANDS MACROS WITH ARGUMENTS
+    EDIT     EXE  TEXT EDITOR
+
+### Directory of PC-SIG Library Disk 0058
 
      Volume in drive A has no label
      Directory of A:\

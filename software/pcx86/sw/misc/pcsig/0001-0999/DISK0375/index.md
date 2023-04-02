@@ -6,16 +6,86 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #375"
+      B: "PC-SIG Library Disk 0375"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #375
+## Information about "TURBO PASCAL SET #7"
+
+    Collection of programs and utilities useful for both the Pascal
+    Programmer and the casual Pascal user.  Routines include floating point
+    accuracy testing, sorted directory printing, file dumping in hex and
+    ASCII, file allocation table information, and a routine to read the
+    internal clock.
+    
+    System Requirements:  Turbo Pascal
+    
+    How to Start: To read DOC files simply enter TYPE filename.ext and
+    press <ENTER>.  For instructions on PAS listings, refer to your Pascal
+    language manual.
+    
+    File Descriptions:
+    
+    BENCHMRK PAS  Program to test the accuracy of floating point functions.
+    PASCAPS  PAS  Converts identifiers in a source code file to upper case
+    MEMDISP  PAS  Displays the contents of memory onto the IBM PC screen
+    MEM      INC  Part of TEST.PAS
+    LINE     INV  Used by FRACTAL.PAS
+    INFO     BAT  Information on producing book indexes
+    INDEX    BAT  Formats an book index from your data
+    HEXDUMP  PAS  Dump the specified file in hex and ascii
+    HEAPTEST PAS  This program demonstrates a bug in Turbo's version 2
+    HAL-PC   DOC  Information on HAL-PC library disk
+    GETSEC   OBJ  Assembled version of GETSEC.ASM
+    GETSEC   ASM  Assembly source code for direct disk access
+    GETFREE  INC  Part of PRINTDIR.PAS, READFAT.PAS
+    GETDIR   PAS  Get the directory by using DOS function calls
+    GETDATE  INC  Part of PRINT2.PAS, PRINTDIR.PAS, READFAT.PAS
+    FREE     INC  Part of TEST.PAS
+    FRACTAL  PAS  Produces fractal images on the hi-res graphics screen
+    FLOAT    PAS  Test range of floating point numbers
+    FASTPRNT INV  Used by FRACTAL.PAS
+    EQUIP    INC  Performs Bios interrupt hex 11 the equipment check
+    ENTER    BAT  Enter index entries for book indexing
+    DUMPHEX  INC  Part of READFAT.PAS
+    DTA      INC  Part of PRINT2.PAS
+    DOWN     PAS  Looks like some kind of BASIC to Pascal file conversi on?
+    DOT      PAS  Program to test the speed of Bios interupt to perform
+    DECBIN   INC  Part of TESTDB.PAS
+    DATE     INC  Part of TEST.PAS
+    COVER    DOC  Documentation for COVER.COM
+    COVER    COM  Utility to print a sorted directory for a disk cover
+    COMBINE  BAT  Sort/Merge book index file
+    CLS      INV  Used by FRACTAL.PAS
+    CHECKPSP INC  Part of PRINT2.PAS
+    BIOSREAD INC  Part of PRINTDIR.PAS, READFAT.PAS
+    TURBO-UT PAS  Utilities to handle data input, validation of data
+    POINTERS PAS  Demo on how to use pointers & dynamic memory (Heap Space)
+    POINT    INV  Used by FRACTAL.PAS
+    TSIN     PAS  Test range of sin function
+    TIMESTMP PAS  Reads the internal clock returning a string of the form
+    PRINTDIR PAS  Print a sorted directory listing
+    PRINT2   PAS  Program to print an ASCII file in a nice way
+    TIME     INC  Part of TEST.PAS
+    TESTDB   PAS  Test of utility funtions
+    TEST     PAS  Test of utility funtions
+    STRPRNT  PAS  Program for testing of Dos 2.0 print string function
+    START    BAT  Begins book indexing
+    READFAT  PAS  Read the File Allocation Table information
+    SIDEWYTR PAS  Print the `infile' sideways on an EPSON MX-80 Printer
+    READPSP1 INC  Read Program Segment Prefix information
+    UT-MOD?? INC  Part of TURBO-UT.PAS (6 files)
+    TSTSOUND COM  Part of TURBO-UT.PAS
+    TURBO-UT DOC  Documentation for TURBO-UT.PAS
+    TURBO-UT DEM  Demo file for TURBO-UT.PAS
+    TURBO-UT COM  Compiled version of TURBO-UT.PAS
+
+### Directory of PC-SIG Library Disk 0375
 
      Volume in drive A has no label
      Directory of A:\

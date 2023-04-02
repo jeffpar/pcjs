@@ -2344,9 +2344,9 @@ class Web {
         }
 
         if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsig[0-9]|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
+            sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         } else {
-            sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsig[0-9]|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
+            sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
         }
 
 
@@ -70868,6 +70868,7 @@ class JSONLib {
                             let demos = release['@demos'];
                             let source = item['@source'];
                             let documents = release['@documents'];
+                            let info = item['@diskInfo'];
                             if (title) diskette['title'] = title;                       // the software title (as opposed to the diskette name)
                             if (format) diskette['format'] = format;                    // eg, "PC360K"
                             if (archive) diskette['archive'] = archive;                 // eg, "folder", or the name of a specific ".img" file, etc
@@ -70882,6 +70883,7 @@ class JSONLib {
                             if (demos) diskette['demos'] = demos;                       // names, if any, of pages created to demo the disk(s)
                             if (source) diskette['source'] = source;                    // source (eg, URL) of our copy of the media
                             if (documents) diskette['documents'] = documents;
+                            if (info) diskette['info'] = info;
                         }
                         if (!item['@localonly'] || hostName == "localhost") {
                             aDiskettes.push(diskette);
@@ -82691,7 +82693,7 @@ function parseXML(sXML, sXMLFile, idMachine, sAppName, sAppClass, sParms, sClass
         done(sXMLFile, sXML, xmlDoc);
     };
     if (sXML) {
-        if (PRIVATE) sXML = sXML.replace(/\/library.xml/, "/private/library.xml");
+        if (PRIVATE) sXML = sXML.replace(/\/library.xml/, "/disks/private/library.xml");
         if (fResolve) {
             resolveXML(sXMLFile, sXML, display, buildXML);
             return;

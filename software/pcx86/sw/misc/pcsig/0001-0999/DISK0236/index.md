@@ -6,16 +6,58 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #236"
+      B: "PC-SIG Library Disk 0236"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #236
+## Information about "PRINTER UTILITIES"
+
+    FPRINT's purpose is to print ASCII files, but with certain safeguards
+    built-in for your convenience.  For instance, a check will be made to
+    see if it is indeed an ASCII file.  If the program thinks you are
+    trying to print a non-ASCII file, it will pause and tell you so.  You
+    then have the option to cancel your print request, or continue anyway.
+    FPRINT also has a printer setup menu which can be useful for regular
+    print jobs when you want specific printer settings.  This can be very
+    useful with the accompanying set of tables for using the Toshiba
+    printer with Volkswriter Deluxe.  The program converts the IBM codes
+    into Toshiba codes and allows the user to use the various types of
+    printer programs with ease.
+    
+    System Requirements:  Toshiba printer with Volkswriter
+    
+    How to Start: Consult the .DOC and README files for
+    directions and documentation.  To run the BASIC programs, consult
+    the directions in GETTING STARTED for your configuration.  To run
+    a program suffixed .COM or .EXE, just type its name, i.e., for
+    FPRINTF.EXE, type FRPINT and press <ENTER>.
+    
+    Suggested Registration: $15.00 to $25.00 for Volkswriter to Toshiba.
+    
+    File Descriptions:
+    
+    -------- ---  BPRINT (BASIC program lister) Version 1.05
+    BPRINT   EXE  List BASIC programs
+    COPYPRTR BAT  Copy file utilities for Toshiba/Volks tables (3 files)
+    VXPRINT* TBL  Part of Toshiba printer/Volkswriter tables
+    ???      FMT  Part of Toshiba printer/Volkswriter tables (5 files)
+    INSTVXPT RCE  Part of Toshiba printer/Volkswriter tables
+    README        How to use the Toshiba printer/Volkswriter tables
+    -------- ---  Toshiba/Volkswriter printer tables
+    FPRINT   TRY  Sample file for FPRINT.EXE
+    FPRINT   HLP  Help file for FPRINT.EXE
+    FPRINT   DOC  Documentation for FPRINT.EXE
+    FPRINT   EXE  List ASCII files
+    COPYALL  BAT  Makes diskcopy of Volkswriter printer tables
+    PC-SIG   DOC  Notes on BPRINT, FPRINT, etc.
+    COPYINST BAT  Copies *.fmt files to second diskette
+
+### Directory of PC-SIG Library Disk 0236
 
      Volume in drive A has no label
      Directory of A:\

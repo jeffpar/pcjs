@@ -41,9 +41,10 @@ function printError(err, filename)
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
  * A warning is always displayed when we replace line endings in any file being copied to a disk image.
  *
- * NOTE: Some files, like ".BAS" files, aren't always ASCII, which is why we now call isASCII() on all
+ * NOTE: Some files, like ".BAS" files, aren't always ASCII, which is why we now call isText() on all
  * these file contents first.
  */
+let asARCFileExts = [".ARC", ".ZIP"];       // order must match StreamZip.TYPE_* constants
 let asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".LRF", ".MAK", ".TXT", ".XML"];
 
 /**
@@ -299,18 +300,42 @@ function getTarget(sTarget)
 }
 
 /**
- * isASCII(data)
+ * isText(data)
  *
  * @param {string} data
- * @return {boolean} true if sData is entirely ASCII (ie, no bytes with bit 7 set)
+ * @return {boolean} true if sData is entirely ASCII (ie, no bytes with bit 7 set) *or* UTF-8
  */
-function isASCII(data)
+function isText(data)
 {
     for (let i = 0; i < data.length; i++) {
         let b = data.charCodeAt(i);
-        if (b & 0x80) return false;
+        if ((b & 0x80) && !CharSet.isCP437(data[i])) return false;
     }
     return true;
+}
+
+/**
+ * isARCFile(sFile)
+ *
+ * @param {string} sFile
+ * @return {number} StreamZip TYPE value, or 0 if not an archive file
+ */
+function isARCFile(sFile)
+{
+    let sExt = path.parse(sFile).ext.toUpperCase();
+    return asARCFileExts.indexOf(sExt) + 1;
+}
+
+/**
+ * isBASICFile(sFile)
+ *
+ * @param {string} sFile
+ * @return {boolean} true if the filename has a ".BAS" extension
+ */
+function isBASICFile(sFile)
+{
+    let ext = path.parse(sFile).ext;
+    return ext && ext.toUpperCase() == ".BAS";
 }
 
 /**
@@ -326,6 +351,630 @@ function isTextFile(sFile)
         if (sFileUC.endsWith(asTextFileExts[i])) return true;
     }
     return false;
+}
+
+/**
+ * normalizeForHost(db)
+ *
+ * If DataBuffer is text, "normalize" for the host.
+ *
+ * @param {DataBuffer} db
+ * @return {DataBuffer}
+ */
+function normalizeForHost(db)
+{
+    let s = db.toString();
+    if (isText(s)) {
+        s = s.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+        if (s.charCodeAt(s.length - 1) == 0x1A) {
+            s = s.slice(0, s.length - 1);
+        }
+        db = new DataBuffer(CharSet.fromCP437(s, false));
+    }
+    return db;
+}
+
+/**
+ * convertBASICFile(sPath, db, fNormalize)
+ *
+ * NOTE: The code in this function is based on https://github.com/rwtodd/bascat, which was a good start but had some issues.
+ * I'm sure there are still some lingering issues here (perhaps some magic whitespace rules that I'm unaware of), but this code
+ * seems to work pretty well now, and the new tokens dictionary is *much* more straightforward.
+ *
+ * @param {string} sPath (for informational purposes only, since we're working entirely with the DataBuffer)
+ * @param {DataBuffer} db (the contents of the BASIC file)
+ * @param {boolean} [fNormalize] (true if we should convert characters from CP437 to UTF-8, revert line-endings, and omit EOF)
+ * @returns {DataBuffer}
+ */
+function convertBASICFile(sPath, db, fNormalize)
+{
+    let i = 0, s = "", quoted = false, lineWarning = 0;
+
+    const tokens = {
+        0x11:   "0",
+        0x12:   "1",
+        0x13:   "2",
+        0x14:   "3",
+        0x15:   "4",
+        0x16:   "5",
+        0x17:   "6",
+        0x18:   "7",
+        0x19:   "8",
+        0x1A:   "9",
+        0x1B:   "10",
+        0x81:   "END",
+        0x82:   "FOR",
+        0x83:   "NEXT",
+        0x84:   "DATA",
+        0x85:   "INPUT",
+        0x86:   "DIM",
+        0x87:   "READ",
+        0x88:   "LET",
+        0x89:   "GOTO",
+        0x8A:   "RUN",
+        0x8B:   "IF",
+        0x8C:   "RESTORE",
+        0x8D:   "GOSUB",
+        0x8E:   "RETURN",
+        0x8F:   "REM",
+        0x90:   "STOP",
+        0x91:   "PRINT",
+        0x92:   "CLEAR",
+        0x93:   "LIST",
+        0x94:   "NEW",
+        0x95:   "ON",
+        0x96:   "WAIT",
+        0x97:   "DEF",
+        0x98:   "POKE",
+        0x99:   "CONT",
+        0x9C:   "OUT",
+        0x9D:   "LPRINT",
+        0x9E:   "LLIST",
+        0xA0:   "WIDTH",
+        0xA1:   "ELSE",
+        0xA2:   "TRON",
+        0xA3:   "TROFF",
+        0xA4:   "SWAP",
+        0xA5:   "ERASE",
+        0xA6:   "EDIT",
+        0xA7:   "ERROR",
+        0xA8:   "RESUME",
+        0xA9:   "DELETE",
+        0xAA:   "AUTO",
+        0xAB:   "RENUM",
+        0xAC:   "DEFSTR",
+        0xAD:   "DEFINT",
+        0xAE:   "DEFSNG",
+        0xAF:   "DEFDBL",
+        0xB0:   "LINE",
+        0xB1:   "WHILE",
+        0xB2:   "WEND",
+        0xB3:   "CALL",
+        0xB7:   "WRITE",
+        0xB8:   "OPTION",
+        0xB9:   "RANDOMIZE",
+        0xBA:   "OPEN",
+        0xBB:   "CLOSE",
+        0xBC:   "LOAD",
+        0xBD:   "MERGE",
+        0xBE:   "SAVE",
+        0xBF:   "COLOR",
+        0xC0:   "CLS",
+        0xC1:   "MOTOR",
+        0xC2:   "BSAVE",
+        0xC3:   "BLOAD",
+        0xC4:   "SOUND",
+        0xC5:   "BEEP",
+        0xC6:   "PSET",
+        0xC7:   "PRESET",
+        0xC8:   "SCREEN",
+        0xC9:   "KEY",
+        0xCA:   "LOCATE",
+        0xCC:   "TO",
+        0xCD:   "THEN",
+        0xCE:   "TAB(",
+        0xCF:   "STEP",
+        0xD0:   "USR",
+        0xD1:   "FN",
+        0xD2:   "SPC(",
+        0xD3:   "NOT",
+        0xD4:   "ERL",
+        0xD5:   "ERR",
+        0xD6:   "STRING$",
+        0xD7:   "USING",
+        0xD8:   "INSTR",
+        0xD9:   "'",
+        0xDA:   "VARPTR",
+        0xDB:   "CSRLIN",
+        0xDC:   "POINT",
+        0xDD:   "OFF",
+        0xDE:   "INKEY$",
+        0xE6:   ">",
+        0xE7:   "=",
+        0xE8:   "<",
+        0xE9:   "+",
+        0xEA:   "-",
+        0xEB:   "*",
+        0xEC:   "/",
+        0xED:   "^",
+        0xEE:   "AND",
+        0xEF:   "OR",
+        0xF0:   ">=",
+        0xF1:   "EQV",
+        0xF2:   "IMP",
+        0xF3:   "MOD",
+        0xF4:   "\\",
+        0xFD81: "CVI",
+        0xFD82: "CVS",
+        0xFD83: "CVD",
+        0xFD84: "MKI$",
+        0xFD85: "MKS$",
+        0xFD86: "MKD$",
+        0xFD8B: "EXTERR",
+        0xFE81: "FILES",
+        0xFE82: "FIELD",
+        0xFE83: "SYSTEM",
+        0xFE84: "NAME",
+        0xFE85: "LSET",
+        0xFE86: "RSET",
+        0xFE87: "KILL",
+        0xFE88: "PUT",
+        0xFE89: "GET",
+        0xFE8A: "RESET",
+        0xFE8B: "COMMON",
+        0xFE8C: "CHAIN",
+        0xFE8D: "DATE$",
+        0xFE8E: "TIME$",
+        0xFE8F: "PAINT",
+        0xFE90: "COM",
+        0xFE91: "CIRCLE",
+        0xFE92: "DRAW",
+        0xFE93: "PLAY",
+        0xFE94: "TIMER",
+        0xFE95: "ERDEV",
+        0xFE96: "IOCTL",
+        0xFE97: "CHDIR",
+        0xFE98: "MKDIR",
+        0xFE99: "RMDIR",
+        0xFE9A: "SHELL",
+        0xFE9B: "ENVIRON",
+        0xFE9C: "VIEW",
+        0xFE9D: "WINDOW",
+        0xFE9E: "PMAP",
+        0xFE9F: "PALETTE",
+        0xFEA0: "LCOPY",
+        0xFEA1: "CALLS",
+        0xFEA4: "NOISE",
+        0xFEA5: "PCOPY",
+        0xFEA6: "TERM",
+        0xFEA7: "LOCK",
+        0xFEA8: "UNLOCK",
+        0xFF81: "LEFT$",
+        0xFF82: "RIGHT$",
+        0xFF83: "MID$",
+        0xFF84: "SGN",
+        0xFF85: "INT",
+        0xFF86: "ABS",
+        0xFF87: "SQR",
+        0xFF88: "RND",
+        0xFF89: "SIN",
+        0xFF8A: "LOG",
+        0xFF8B: "EXP",
+        0xFF8C: "COS",
+        0xFF8D: "TAN",
+        0xFF8E: "ATN",
+        0xFF8F: "FRE",
+        0xFF90: "INP",
+        0xFF91: "POS",
+        0xFF92: "LEN",
+        0xFF93: "STR$",
+        0xFF94: "VAL",
+        0xFF95: "ASC",
+        0xFF96: "CHR$",
+        0xFF97: "PEEK",
+        0xFF98: "SPACE$",
+        0xFF99: "OCT$",
+        0xFF9A: "HEX$",
+        0xFF9B: "LPOS",
+        0xFF9C: "CINT",
+        0xFF9D: "CSNG",
+        0xFF9E: "CDBL",
+        0xFF9F: "FIX",
+        0xFFA0: "PEN",
+        0xFFA1: "STICK",
+        0xFFA2: "STRIG",
+        0xFFA3: "EOF",
+        0xFFA4: "LOC",
+        0xFFA5: "LOF"
+    };
+
+    let EOF = function() {
+        return i >= db.length;
+    };
+
+    let readU8 = function() {
+        return i < db.length? db.readUInt8(i++) : 0;
+    };
+
+    let peekU8 = function(v) {
+        return !EOF() && db.readUInt8(i) == v;
+    };
+
+    let peekU16 = function(v1, v2) {
+        return (i < db.length - 1) && (db.readUInt8(i) == v1) && (db.readUInt8(i+1) == v2);
+    };
+
+    let skip = function(off) {
+        i += off;
+    };
+
+    let readU16 = function() {
+        let v = (i < db.length - 1)? db.readUInt16LE(i) : 0;
+        i += 2;
+        return v;
+    };
+
+    let readS16 = function() {
+        let v = (i < db.length - 1)? db.readInt16LE(i) : 0;
+        i += 2;
+        return v;
+    };
+
+    let readMBF32 = function() {
+        let mbf = new Array(4);
+        for (let i = 0; i < mbf.length; i++) {
+            mbf[i] = readU8();
+        }
+        if (mbf[3] == 0) return 0.0;
+
+        let buf = new ArrayBuffer(mbf.length);
+        let view = new DataView(buf);
+        let sign = (mbf[2] & 0x80);
+        let exp = (mbf[3] - 2) & 0xff;
+
+        view.setUint8(3, sign | (exp >> 1));
+        view.setUint8(2, ((exp << 7) & 0x80) | (mbf[2] & 0x7f));
+        view.setUint8(1, mbf[1]);
+        view.setUint8(0, mbf[0]);
+
+        return view.getFloat32(0, true);
+    }
+
+    let readMBF64 = function() {
+        let mbf = new Array(8);
+        for (let i = 0; i < mbf.length; i++) {
+            mbf[i] = readU8();
+        }
+        if (mbf[7] == 0) return 0.0;
+
+        let sign = (mbf[6] & 0x80);
+        mbf[6] &= 0x7f;
+        let exp = (mbf[7] - 129 + 1023) & 0xffff;
+        for (let i = 0; i < 7; i++) {
+            mbf[i] = ((mbf[i] >> 3) | ((mbf[i + 1] << 5) & 0xff));
+        }
+        mbf[7] = (sign | ((exp >> 4) & 0x7f));
+        mbf[6] = ((mbf[6] & 0x0f) | ((exp & 0x0f) << 4));
+
+        let buf = new ArrayBuffer(mbf.length);
+        let view = new DataView(buf);
+        mbf.forEach(function (b, i) {
+            view.setUint8(i, b);
+        });
+        return view.getFloat64(0, true);
+    }
+
+    /**
+     * unprotect(db)
+     *
+     * From: https://slions.net/threads/deciphering-gw-basic-basica-protected-programs.50/:
+     *
+     *  "The American Cryptogram Association (ACA) publishes a bimonthly periodical journal called The Cryptogram.
+     *   In their Computer Supplement #19 of summer 1994, Paul C. Kocher published BASCRACK, a C program to decipher
+     *   GW-BASIC protected files."
+     *
+     * This is a JavaScript port of BASCRACK.
+     *
+     * @param {DataBuffer} db
+     * @returns {DataBuffer}
+     */
+    let unprotect = function(db) {
+        const key1 = [
+            0xA9, 0x84, 0x8D, 0xCD, 0x75, 0x83, 0x43, 0x63, 0x24, 0x83, 0x19, 0xF7, 0x9A
+        ];
+        const key2 = [
+            0x1E, 0x1D, 0xC4, 0x77, 0x26, 0x97, 0xE0, 0x74, 0x59, 0x88, 0x7C
+        ]
+        if (db.readUInt8(0) == 0xFE) {                  // 0xFE: protected GW-BASIC signature byte
+            let index = 0;
+            let dbNew = new DataBuffer(db.length);
+            let i = 0;
+            dbNew.writeUInt8(0xFF, i++);                // 0xFF: unprotected GW-BASIC signature byte
+            while (i < db.length) {
+                let b = db.readUInt8(i);
+                if (b != 0x1A || i < db.length - 1) {   // don't "decrypt" the final byte if it's 0x1A (EOF)
+                    b -= 11 - (index % 11);
+                    b ^= key1[index % 13];
+                    b ^= key2[index % 11];
+                    b += 13 - (index % 13);
+                    index = (index+1) % (13*11);
+                }
+                dbNew.writeUInt8(b & 0xFF, i++);
+            }
+            db = dbNew;
+        }
+        return db;
+    }
+
+    let getToken = function(line) {
+        let token = null;                               // null will signal end of tokens for the line
+        let v = readU8();
+        if (v >= 0xFD) {
+            v = (v << 8) | readU8();
+        }
+        if (v) {
+            /*
+             * The original code failed to account for programs that include IBM PC drawing characters
+             * inside strings, and those characters can be (almost) any 8-bit value, which is why we must
+             * track the "quoted" state of the text stream and decode accordingly.
+             *
+             * I say "almost" because there are a few control characters (below 0x20) that you can't use
+             * inside strings.  But many can be.  For example, you can use the IBM PC's "Alt Num Keypad"
+             * trick to enter decimal character 16 and a "►" will appear.  And while I could be paranoid
+             * and try to nail down the exact set of usable control characters, I don't think it's worth the
+             * effort.  Let the chips fall where they may.
+             *
+             * For text that's not quoted, we still have to handle 0x3A (colon) elsewhere, because it's a
+             * weird one; see the 'default' case below.
+             */
+            if (quoted && v < 0xFD || v >= 0x20 && v <= 0x7E && v != 0x3A) {
+                token = String.fromCharCode(v);
+                if (fNormalize) {
+                    token = CharSet.fromCP437(token, true);
+                }
+                if (v == 0x22) quoted = !quoted;
+            }
+            else {
+                switch (v) {
+                case 0x0B:
+                    token = "&O" + readU16().toString(8);
+                    break;
+                case 0x0C:
+                    token = "&H" + readU16().toString(16).toUpperCase();
+                    break;
+                case 0x0E:
+                    token = readU16().toString();
+                    break;
+                case 0x0F:
+                    token = readU8().toString();
+                    break;
+                case 0x1C:
+                    token = readS16().toString();
+                    break;
+                case 0x1D:
+                    token = readMBF32().toPrecision(7).replace(/0+$/, "");
+                    break;
+                case 0x1F:
+                    token = readMBF64().toPrecision(15).replace(/0+$/, "") + '#';
+                    break;
+                default:
+                    if (v == 0x3A) {
+                        if (peekU8(0xA1)) {
+                            token = "ELSE";
+                            skip(1);
+                            break;
+                        }
+                        if (peekU16(0x8F, 0xD9)) {
+                            token = "'";
+                            skip(2);
+                            break;
+                        }
+                        token = String.fromCharCode(v);
+                        break;
+                    }
+                    if (v == 0xB1 && peekU8(0xE9)) {
+                        token = "WHILE";
+                        skip(1);
+                        break;
+                    }
+                    token = tokens[v];
+                    break;
+                }
+                if (!token) {
+                    let t = "<0x" + v.toString(16) + ">";
+                    if (lineWarning != line) {
+                        printf("warning: %s contains unexpected tokens (eg, %s on line %d)\n", path.basename(sPath), t, line);
+                        lineWarning = line;     // one such warning per line is enough...
+                    }
+                    token = "";                 // we're going to return an empty token instead of whatever "t" is...
+                }
+            }
+        }
+        return token;
+    }
+
+    db = unprotect(db);
+
+    let b = readU8();
+    if (b == 0xFF) {
+        while (!EOF()) {
+            let t;
+            /*
+             * Every line in the file begins with two 16-bit values: the offset of the *next* line,
+             * the line number of the *current* line.  The offset value can be used as a sanity check
+             * (eg, for file integrity) but we're not going to bother; all we'll check for here is
+             * an offset of ZERO, which effectively means end-of-program, and it's normally followed
+             * by an EOF byte (0x1A) (and which we'll pass along, *unless* we're normalizing the text).
+             */
+            let off = readU16();
+            if (!off) {
+                if (peekU8(0x1A)) {
+                    if (!fNormalize) s += String.fromCharCode(0x1A);
+                } else {
+                    printf("warning: %s contains invalid EOF at offset %#x\n", path.basename(sPath), i);
+                }
+                break;
+            }
+            let line = readU16();
+            s += line + " ";        // BASIC defaults to one space between line number and first token
+            while ((t = getToken(line)) !== null) {
+                s += t;
+            }
+            s += (fNormalize? "\n" : "\r\n");
+            quoted = false;         // if you end a line with an open quote, BASIC automatically "closes" it
+        }
+        db = new DataBuffer(s);
+    }
+    else if (fNormalize) {
+        db = normalizeForHost(db);
+    }
+    return db;
+}
+
+/**
+ * extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
+ *
+ * @param {string} sDir
+ * @param {string} subDir
+ * @param {string} sPath
+ * @param {number} attr
+ * @param {Date} date
+ * @param {Buffer} db
+ * @param {Object} argv
+ * @param {Array.<fileData>} [files]
+ */
+function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
+{
+    /*
+     * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
+     * it mounts, so if we see any of those remnants (which we use to limit to "(attr & DiskInfo.ATTR.HIDDEN)"
+     * but no longer assume they always will hidden), then we ignore them.
+     *
+     * This is why I make all my IMG files read-only and also write-protect physical diskettes before inserting
+     * them into a drive.  Other operating systems pose similar threats.  For example, Windows 9x likes to modify
+     * the 8-byte OEM signature field of a diskette's boot sector with unique volume-tracking identifiers.
+     */
+    if (sPath.endsWith("~1.TRA") || sPath.endsWith("TRASHE~1") || sPath.indexOf("FSEVEN~1") >= 0) {
+        return true;
+    }
+
+    sPath = path.join(sDir, subDir, sPath);
+    let sFile = sPath.substr(sDir.length? sDir.length + 1 : 0);
+
+    let fSuccess = false;
+    let dir = path.dirname(sPath);
+    if (!existsFile(dir)) {
+        fs.mkdirSync(dir, {recursive: true});
+    }
+    if (attr & DiskInfo.ATTR.SUBDIR) {
+        if (!existsFile(sPath)) {
+            fs.mkdirSync(sPath);
+        }
+        fSuccess = true;
+    } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
+        let fPrinted = false;
+        let fQuiet = argv['quiet'];
+        if (!argv['collection']) {
+            if (!fQuiet) printf("extracting: %s\n", sFile);
+        } else {
+            // let sArchive = checkArchive(sPath, true);
+            // if (sArchive) {
+            //     let fExtracted;
+            //     if (existsFile(sPath)) {
+            //         if (!fQuiet) {
+            //             printf("extracted: %s\n", sFile);
+            //             fPrinted = true;
+            //         }
+            //     }
+            //     if (!existsFile(sArchive)) {
+            //         fExtracted = false;
+            //     } else {
+            //         let aArchiveFiles = glob.sync(path.join(sArchive, "**"));
+            //         if (!aArchiveFiles.length) {
+            //             fExtracted = false;
+            //             printf("warning: empty archive folder: %s\n", sArchive);
+            //         } else if (!fQuiet) {
+            //             aArchiveFiles.forEach((sArchiveFile) => {
+            //                 printf("expanded:  %s\n", sArchiveFile.substr(extractDir.length));
+            //             });
+            //         }
+            //     }
+            //     if (fExtracted === false) {
+            //         // printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
+            //     }
+            // }
+            if (existsFile(sPath)) {
+                if (!fPrinted && !fQuiet) printf("extracted: %s\n", sFile);
+                return true;
+            }
+            printf("extracting: %s\n", sFile);
+        }
+        if (argv['expand']) {
+            let arcType = isARCFile(sFile);
+            if (arcType) {
+                let zip = new StreamZip({
+                    file: sFile,
+                    buffer: db.buffer,
+                    arcType: arcType,
+                    storeEntries: true,
+                    nameEncoding: "ascii",
+                    printfDebug: printf,
+                    logErrors: true
+                }).on('ready', () => {
+                    let aFileData = getARCFiles(zip, argv['verbose']);
+                    for (let file of aFileData) {
+                        extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, file.files);
+                    }
+                    zip.close();
+                }).on('error', (err) => {
+                    printError(err, sFile);
+                });
+                zip.open();
+                /*
+                 * If we 'expand' the contents of an archive, then we likely don't want to also save the
+                 * archive itself, so we return now.  If you do want both, we'll have to add a new option.
+                 */
+                return true;
+            }
+        }
+        /*
+         * Originally, "normalize" was just an import option (to fix line endings of known text files on
+         * disks we created); however, I'm going to make it an export option as well, and not just to revert
+         * line endings, but to also address the fact that there are a lot of old "tokenized" BASIC files out
+         * in the world, and they are much easier to work with locally in their "de-tokenized" form.
+         */
+        if (argv['normalize']) {
+            /*
+             * BASIC files are dealt with separately, because there are 3 kinds: ASCII (for which we just
+             * call normalizeForHost()), tokenized (which we convert to ASCII and automatically normalize in
+             * the process), and protected (which we decrypt and then de-tokenize).
+             */
+            if (isBASICFile(sPath)) {
+                /*
+                 * In addition to "de-tokenizing", we're also setting convertBASICFile()'s normalize parameter
+                 * to true, to convert characters from CP437 to UTF-8, revert line-endings, and omit EOF.  We're
+                 * currently combining both features as part of the "normalize" process.
+                 */
+                db = convertBASICFile(sPath, db, true);
+            }
+            else if (isTextFile(sPath)) {
+                db = normalizeForHost(db);
+            }
+        }
+        fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
+    }
+    if (fSuccess) {
+        fs.utimesSync(sPath, date, date);
+        if (files) {
+            for (let file of files) {
+                if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, file.files)) {
+                    fSuccess = false;
+                    break;
+                }
+            }
+        }
+    }
+    return fSuccess;
 }
 
 /**
@@ -492,8 +1141,8 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     if (argv['extract']) {
-        let manifest = di.getFileManifest();
-        manifest.forEach(function extractManifestFile(desc) {
+        let manifest = di.getFileManifest(null, false);             // pass true for sorted manifest
+        manifest.forEach(function extractDiskFile(desc) {
             /*
              * Parse each file descriptor in much the same way that buildFileTableFromJSON() does.  That function
              * doesn't get the file's CONTENTS, because it's working with the file descriptors that have been stored
@@ -516,85 +1165,22 @@ function processDisk(di, diskFile, argv, diskette)
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
             device.assert(size == db.length);
-            let subDir = typeof argv['extract'] != "string"? di.getName() : "";
-            if (subDir || name == argv['extract']) {
+            let extractDir = typeof argv['extract'] != "string"? di.getName() : "";
+            if (extractDir || name == argv['extract']) {
                 let fSuccess = false;
                 if (argv['collection']) {
-                    subDir = getFullPath(path.join(path.dirname(diskFile), "archive", subDir));
+                    extractDir = getFullPath(path.join(path.dirname(diskFile), "archive", extractDir));
                     if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
-                        subDir = subDir.replace("/disks/archive", "/archive");
+                        extractDir = extractDir.replace("/disks/archive", "/archive");
                     }
                 }
-                sPath = path.join(subDir, sPath);
-                /*
-                 * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
-                 * it mounts, so if we see any of those remnants (which are normally hidden, but we do not assume that they
-                 * always will be), then we ignore them.
-                 *
-                 * This is why I make all my IMG files read-only and also write-protect physical diskettes before inserting
-                 * them into a drive.  Other operating systems pose similar threats.  For example, Windows 9x likes to modify
-                 * the 8-byte OEM signature field of a diskette's boot sector with unique volume-tracking identifiers.
-                 */
-                // if (attr & DiskInfo.ATTR.HIDDEN) {
-                    if (sPath.endsWith("~1.TRA") || sPath.endsWith("TRASHE~1") || sPath.indexOf("FSEVEN~1") >= 0) return;
-                // }
-                let dir = path.dirname(sPath);
-                if (!existsFile(dir)) {
-                    fs.mkdirSync(dir, {recursive: true});
-                }
-                if (attr & DiskInfo.ATTR.SUBDIR) {
-                    if (!existsFile(sPath)) {
-                        fs.mkdirSync(sPath);
-                        fSuccess = true;
-                    }
-                } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
-                    let fPrinted = false;
-                    let fQuiet = argv['quiet'];
-                    let sFile = sPath.substr(subDir.length? subDir.length + 1 : 0);
-                    if (!argv['collection']) {
-                        if (!fQuiet) printf("extracting: %s\n", sFile);
-                    } else {
-                        let sArchive = checkArchive(sPath, true);
-                        if (sArchive) {
-                            let fExtracted;
-                            if (existsFile(sPath)) {
-                                if (!fQuiet) {
-                                    printf("extracted: %s\n", sFile);
-                                    fPrinted = true;
-                                }
-                            }
-                            if (!existsFile(sArchive)) {
-                                fExtracted = false;
-                            } else {
-                                let aArchiveFiles = glob.sync(path.join(sArchive, "**"));
-                                if (!aArchiveFiles.length) {
-                                    fExtracted = false;
-                                    printf("warning: empty archive folder: %s\n", sArchive);
-                                } else if (!fQuiet) {
-                                    aArchiveFiles.forEach((sArchiveFile) => {
-                                        printf("expanded:  %s\n", sArchiveFile.substr(subDir.length));
-                                    });
-                                }
-                            }
-                            if (fExtracted === false) {
-                                // printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
-                            }
-                        }
-                        if (existsFile(sPath)) {
-                            if (!fPrinted && !fQuiet) printf("extracted: %s\n", sFile);
-                            return;
-                        }
-                        printf("extracting: %s\n", sFile);
-                    }
-                    fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
-                }
-                if (fSuccess) fs.utimesSync(sPath, date, date);
+                extractFile(extractDir, "", sPath, attr, date, db, argv);
             }
         });
     }
 
     if (argv['manifest']) {
-        let manifest = di.getFileManifest(getHash, argv['metadata']);
+        let manifest = di.getFileManifest(getHash, argv['sorted'], argv['metadata']);
         printManifest(diskFile, di.getName(), manifest);
     }
 
@@ -677,6 +1263,7 @@ function processDisk(di, diskFile, argv, diskette)
          * if we ever try to automatically rebuild the PCSIG software pages, too.
          */
         if (diskFile.indexOf("/private") >= 0 || diskFile.indexOf("/pcsig8") >= 0) return;
+
         let sListing = di.getFileListing(0, 4);
         if (!sListing) return;
         let sIndex = "", sIndexNew = "", sAction = "";
@@ -879,14 +1466,27 @@ function processDisk(di, diskFile, argv, diskette)
         }
 
         /*
-         * Step 3: If a generated machine needs to be embedded, put it ahead of the first directory listing (which is why we waited until now).
+         * Step 3: If a generated machine needs to be embedded, put it ahead of the first directory listing
+         * (which is why we waited until now).  Also, any available 'info' summary lines should be embedded as well.
          */
-        if (sMachineEmbed) {
+        let sDiskInfo = ""
+        if (diskette.info) {
+            let i;
+            sDiskInfo += "\n## Information about \"" + diskette.info.diskTitle + "\"\n\n";
+            for (i = 0; i < diskette.info.diskSummary.length; i++) {
+                sDiskInfo += "    " + diskette.info.diskSummary[i] + "\n";
+            }
+        }
+        let sInsert = sMachineEmbed;
+        if (sIndexNew.indexOf(sDiskInfo) < 0) {
+            sInsert += sDiskInfo;
+        }
+        if (sInsert) {
             matchDirectory = sIndexNew.match(/\n(##+)\s+Directory of /);
             if (matchDirectory) {
-                sIndexNew = sIndexNew.replace(matchDirectory[0], sMachineEmbed + matchDirectory[0]);
+                sIndexNew = sIndexNew.replace(matchDirectory[0], sInsert + matchDirectory[0]);
             } else {
-                printf("warning: unable to embed machine: %s\n", sIndexFile);
+                sIndexNew += sInsert;
             }
         }
 
@@ -1208,8 +1808,8 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
                 printf("file data length (%d) does not match file size (%d)\n", data.length, stats.size);
             }
             if (fText) {
-                if (isASCII(data)) {
-                    let dataNew = data.replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
+                if (isText(data)) {
+                    let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
                     if (dataNew != data) printf("replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
                     data = dataNew;
                 } else {
@@ -1225,6 +1825,110 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
     }
     if (iFile < asFiles.length && nMaxCount <= 0) {
         printf("warning: %d file limit reached, use --maxfiles # to increase\n", nMaxInit);
+    }
+    return aFileData;
+}
+
+/**
+ * getARCFiles(zip, fVerbose)
+ *
+ * @param {StreamZip} zip
+ * @param {boolean} fVerbose
+ * @returns {Array.<FileData>}
+ */
+function getARCFiles(zip, fVerbose)
+{
+    let aFileData = [];
+    let aDirectories = [];
+    if (fVerbose) {
+        printf("\n%s\n", zip.fileName);
+        printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
+        printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
+    }
+    let entries = Object.values(zip.entries());
+    for (let entry of entries) {
+
+        let file = {path: entry.name, name: path.basename(entry.name), nameEncoding: "cp437"};
+        //
+        // The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
+        // because file times stored in a ZIP file are *local* times.
+        //
+        // So I've updated StreamZip to include the file's local time as a Date object
+        // ('date') in the entry object.  If it's not available (eg, we're using an older
+        // version of StreamZip), then we'll fall back to our 'time' field work-around.
+        //
+        file.date = entry.date;
+        if (!file.date) {
+            let date = new Date(entry.time);
+            file.date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+        }
+        if (entry.isDirectory) {
+            file.attr = DiskInfo.ATTR.SUBDIR;
+            file.size = -1;
+            file.data = new DataBuffer();
+            file.files = [];
+            aDirectories.push(file);
+        } else {
+            let data;
+            if (fVerbose == "nodata") {
+                /*
+                 * HACK to skip decompression (--verbose=nodata)
+                 */
+                data = new DataBuffer(entry.size);
+            }
+            else {
+                try {
+                    data = zip.entryDataSync(entry.name);
+                } catch(err) {
+                    if (entry.error) {
+                        entry.error(err.message);
+                    } else {
+                        printError(err);
+                    }
+                }
+                data = new DataBuffer(data || 0);
+            }
+            file.attr = DiskInfo.ATTR.ARCHIVE;
+            file.size = data.length;
+            file.data = data;
+        }
+        if (entry.errors) {
+            for (let error of entry.errors) {
+                printf("%s\n", error);
+            }
+        }
+        let d, sDir = path.dirname(file.path) + path.sep;
+        for (d = 0; d < aDirectories.length; d++) {
+            let dir = aDirectories[d];
+            if (dir.path == sDir) {
+                dir.files.push(file);
+                break;
+            }
+        }
+        if (d == aDirectories.length) {
+            aFileData.push(file);
+        }
+        if (fVerbose) {
+            let methodsARC = [
+                "Unpacked"
+            ];
+            let methodsZIP = [
+                "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
+            ];
+            let filename = CharSet.fromCP437(file.name);
+            if (filename.length > 14) {
+                filename = "..." + filename.slice(filename.length - 11);
+            }
+            let filesize = file.size;
+            if (filesize < 0) {
+                filesize = 0;
+                filename += "/";
+            }
+            let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
+            let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
+            printf("%-14s %7d   %-9s %7d   %3d%%   %T   %08x\n",
+                filename, filesize, method, entry.compressedSize, ratio, file.date, entry.crc);
+        }
     }
     return aFileData;
 }
@@ -1249,97 +1953,7 @@ function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
         logErrors: true
     });
     zip.on('ready', () => {
-        let aFileData = [];
-        let aDirectories = [];
-        if (fVerbose) {
-            printf("\n%s\n", sARC);
-            printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
-            printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
-        }
-        let entries = Object.values(zip.entries());
-        for (let entry of entries) {
-            let file = {path: entry.name, name: path.basename(entry.name), nameEncoding: "cp437"};
-            //
-            // The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
-            // because file times stored in a ZIP file are *local* times.
-            //
-            // So I've updated StreamZip to include the file's local time as a Date object
-            // ('date') in the entry object.  If it's not available (eg, we're using an older
-            // version of StreamZip), then we'll fall back to our 'time' field work-around.
-            //
-            file.date = entry.date;
-            if (!file.date) {
-                let date = new Date(entry.time);
-                file.date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-            }
-            if (entry.isDirectory) {
-                file.attr = DiskInfo.ATTR.SUBDIR;
-                file.size = -1;
-                file.data = new DataBuffer();
-                file.files = [];
-                aDirectories.push(file);
-            } else {
-                let data;
-                if (fVerbose == "nodata") {
-                    /*
-                     * HACK to skip decompression (--verbose=nodata)
-                     */
-                    data = new DataBuffer(entry.size);
-                }
-                else {
-                    try {
-                        data = zip.entryDataSync(entry.name);
-                    } catch(err) {
-                        if (entry.error) {
-                            entry.error(err.message);
-                        } else {
-                            printError(err);
-                        }
-                    }
-                    data = new DataBuffer(data || 0);
-                }
-                file.attr = DiskInfo.ATTR.ARCHIVE;
-                file.size = data.length;
-                file.data = data;
-            }
-            if (entry.errors) {
-                for (let error of entry.errors) {
-                    printf("%s\n", error);
-                }
-            }
-            let d, sDir = path.dirname(file.path) + path.sep;
-            for (d = 0; d < aDirectories.length; d++) {
-                let dir = aDirectories[d];
-                if (dir.path == sDir) {
-                    dir.files.push(file);
-                    break;
-                }
-            }
-            if (d == aDirectories.length) {
-                aFileData.push(file);
-            }
-            if (fVerbose) {
-                let methodsARC = [
-                    "Unpacked"
-                ];
-                let methodsZIP = [
-                    "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
-                ];
-                let filename = CharSet.fromCP437(file.name);
-                if (filename.length > 14) {
-                    filename = "..." + filename.slice(filename.length - 11);
-                }
-                let filesize = file.size;
-                if (filesize < 0) {
-                    filesize = 0;
-                    filename += "/";
-                }
-                let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
-                let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
-                printf("%-14s %7d   %-9s %7d   %3d%%   %T   %08x\n",
-                    filename, filesize, method, entry.compressedSize, ratio, file.date, entry.crc);
-            }
-        }
+        let aFileData = getARCFiles(zip, fVerbose);
         zip.close()
         done(aFileData);
     });

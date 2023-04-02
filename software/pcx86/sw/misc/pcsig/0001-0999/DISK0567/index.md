@@ -6,16 +6,34 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #567"
+      B: "PC-SIG Library Disk 0567"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #567
+## Information about "DUNGEONS OF THE NECROMANCER'S DOMAIN"
+
+    DND is a computer fantasy role-playing game inspired by Dungeons and
+    Dragons -- the "grandaddy" of all the computer games that was
+    developed and played on mainframe computers back in the '60s.
+    
+    Different than most games, it uses character graphics in the upper-right
+    corner of the screen, instead of graphics.  Become a wizard and fight
+    evil monsters and ghosts with your growing power.  Or become a fighter
+    and go head-to-head with mighty dragons.  Or a cleric and try to dispel
+    the evil spirits of the dungeons.  The object is to stay alive and
+    venture deeper and deeper into the depths of the dungeons.  You have
+    five completed dungeons to choose from, with expanded screen displays,
+    character spells, and room furnishings.   No matter which character you
+    choose to be, this is a game that will test all of your game playing
+    skills.  Registration of the program includes a copy of "The Domain
+    Master" for creating and editing both characters and dungeons.
+
+### Directory of PC-SIG Library Disk 0567
 
      Volume in drive A has no label
      Directory of A:\

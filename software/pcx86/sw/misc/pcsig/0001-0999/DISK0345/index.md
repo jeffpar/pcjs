@@ -6,16 +6,82 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #345"
+      B: "PC-SIG Library Disk 0345"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #345
+## Information about "PC-KEY DRAW 2 OF 4 (ALSO 344,1032,1124)"
+
+    PC-KEY DRAW combines the features of CAD, paint, slide show, and desktop
+    publishing programs into one powerful and flexible drawing package.
+    
+    Create a wide variety of graphics such as:
+    
+    ~ Mechanical design
+    
+    ~ Country quilt design
+    
+    ~ Landscape architecture
+    
+    ~ Graphics game development
+    
+    ~ Business presentations
+    
+    ~ Graphic art
+    
+    Fast and easy to use, with or without a mouse.
+    
+    Drawing features include:
+    
+    ~ Lines -- parallel, spoke
+    
+    ~ Circles -- arcs, pie slices, ellipse
+    
+    ~ Curves -- sine, rose, spiral
+    
+    ~ Others -- dots, vectors, polygon, fillets and arrows
+    
+    Paint features include:
+    
+    ~ Spray paint
+    
+    ~ Shading
+    
+    ~ 29 colors
+    
+    ~ Modify color
+    
+    ~ 64 fill patterns
+    
+    ~ Fade/shift/strip colors
+    
+    ~ Reverse video
+    
+    Maximum drawing size is 55120 x 1600 with 64 layers.  Thirty-six text
+    fonts are included in the registered version, four fonts in the
+    shareware version, with the ability to create your own.  It can read and
+    write HP soft fonts.  Text can be placed at the cursor location,
+    justified, moved, rotated, and imported a an ASCII file.  Screen
+    modification includes all standard options and a few unusual ones.
+    
+    Additional features include object area calculation, animation,
+    templates, banner/poster printing, macro language, and powerful
+    slide-show system.
+    
+    The newest version of PC-KEY-DRAW also includes HYPERDRAW.  HYPERDRAW
+    provides a means to link related screens of information together in a
+    database structure that is ideal for a variety of tasks such as teaching
+    aids, interactive slide shows, image organization, drawing detailing,
+    project scheduling, cataloging, process diagraming, and much more.
+    There is also a full interactive tutorial that uses the linked screens
+    of HYPERDRAW to teach the basic drawing commands of PC-KEY DRAW.
+
+### Directory of PC-SIG Library Disk 0345
 
      Volume in drive A has no label
      Directory of A:\

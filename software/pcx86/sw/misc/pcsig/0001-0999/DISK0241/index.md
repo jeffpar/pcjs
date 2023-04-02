@@ -6,16 +6,53 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #241"
+      B: "PC-SIG Library Disk 0241"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #241
+## Information about "PCJR EDUCATIONAL GAMES"
+
+    This is an excellent collection of games for kids aged 6 through
+    60 and beyond.  There are games to tease and tantalize the intellect,
+    and some that are just plain fun.  For anyone with a PCjr, this package
+    of fun really works overtime to exploit the strengths of this computer,
+    its sound, and graphics.
+    File Descriptions:
+    
+    0        BAS  End program and Goodbye screen.
+    2        BAS  Alphabetize a word list.
+    1        BAS  Spelling Bee.
+    3        BAS  Fun arcade-type bowling game.
+    4        BAS  A graphics display program.
+    5        BAS  Maxit, a strategy/numbers game.
+    6        BAS  Othello, an old standby.
+    8        BAS  Find-a-Word puzzle (requires printer).
+    7        BAS  Word Problems game.
+    10       BAS  Finds your age in days.
+    9        BAS  Creates a unique maze each time (requires printer).
+    12       BAS  Black and white version of word matching game.
+    11       BAS  Word matching game, similar to Concentration.
+    15       BAS  Word Scramble (1).
+    14       BAS  Word Scramble Number 1.
+    13       BAS  Hangman, an old favorite.
+    MENU     BAS  Menu that allows selection and calls up the games.
+    GRADE-*  LST  Wordlist for grade 1 through 5 (5 files).
+    BRIEFLY  BAS  Part of titles used by TITLE.BAS.
+    AUTOEXEC BAT  A batch file that helps create a working disk.
+    ACS      PIC  Picture file -- used by *.
+    20       BAS  Program descriptions -- called from menu.
+    17       BAS  Mazes number 2.
+    16       BAS  Screen machine, a draw program (requires color graphics).
+    README   DOC  Documentation by authors.
+    TITLE2   BAS  Additional titles.
+    TITLE    BAS  Title page and pointer to other documentation.
+
+### Directory of PC-SIG Library Disk 0241
 
      Volume in drive A has no label
      Directory of A:\

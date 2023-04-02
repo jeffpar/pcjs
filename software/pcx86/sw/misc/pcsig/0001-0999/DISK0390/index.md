@@ -6,16 +6,37 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #390"
+      B: "PC-SIG Library Disk 0390"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #390
+## Information about "GAME SERIES NO 18"
+
+    This is one of the finest collections of color graphic games
+    in the library.  They cover a wide range of interests.  ABC is a fun
+    way to teach your children the alphabet.  ACQB is armchair fun for you
+    football fans.  BRICK and BABY are fast-paced challengers, and the list
+    goes on.  For a good time, try this disk.
+    File Descriptions:
+    
+    ABC      BAS  Kids use the computer and learn the alphabet.
+    BRICK    EXE  Knock down the brick wall game.
+    BABY     EXE  Try to catch the bouncing babies in time.
+    ACQB     EXE  Armchair quarterback strategy football game.
+    ABC      DOC  Documentation for ABC.DOC.
+    SOVIET   DOC  Documentation for SOVIET.
+    SOVIET   BAS  Escape from Soviet Science And Detention Base.
+    QUIMBEE  EXE  Dice game requires color monitor.
+    FLIGHTM  EXE  Protect the Omegans from the Desert Warriors.
+    README   BAT  Notes on EMPIRE.BAS.
+    EMPIRE   BAS  BASIC game.
+
+### Directory of PC-SIG Library Disk 0390
 
      Volume in drive A has no label
      Directory of A:\

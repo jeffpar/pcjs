@@ -6,16 +6,115 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #295"
+      B: "PC-SIG Library Disk 0295"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #295
+## Information about "TAX-FILE"
+
+    TAX-FILE is a complete tax record keeping system written for
+    Ashton-Tate's dBASE II.  It enables a person to collect financial
+    records throughout the year and then print several reports making the
+    yearend tax job quick and easy.  The system keeps complete personal
+    records for all types of deductions and income.  Recording of business
+    related expenses is also included.The TAX-FILE makes use of the menu
+    approach for entering and editing data and has several built-in
+    reports.
+    
+    System Requirements:  dBASEII software.
+    
+    How to Start:  Access through dBASEII.
+    
+    Suggested Registration:  $10.00 for registration and updated manual.
+    
+    File Descriptions:
+    
+    ???      PRG  dBase programs for TAX-FILE
+    READ2    TXT  Notes on TAX-FILE
+    ???      FRM  dBase report forms
+    ???      MEM  dBase memory variable files
+    MENU     PRG  The main TAX-FILE menu
+    TAXFILE  DBF  Database for income tax record transactions
+    SALESTAX MEM  Memory variables for sales tax computation
+    CHKORDER FRM  Report form for check list in check number order
+    INTRCOST PRG  Program to report on the interest paid during the year
+    DIVILIST PRG  Program to list dividends earned
+    EDITINCO PRG  Program to edit income earned
+    POLICOST PRG  Runs report of political campaign contributions
+    PLACGONE FRM  Report form for overnight expense
+    MENUCHEK PRG  Checkbook menu
+    INCOFILE MEM  Memory variable for next income identification number
+    ADDINCO  PRG  Program to enter income earned
+    MILEGONE FRM  Report form for mileage traveled
+    ORGANIZE PRG  Program to organize files
+    MENUINCO PRG  Income menu
+    DIVDLIST FRM  Report form for list of dividend income received
+    FILELIST TXT  Text file describing the types of files used by TAX- FILE
+    TAINCOST PRG  Program to run report of business entertainment expenses
+    FILEDRIV MEM  Memory variable to store data drive letter
+    MANUAL   PRG  Prints order form for TAX-FILE manual on diskette
+    CHEKVIEW PRG  List checks in the system
+    TRAVEL   DBF  Database to record travel mileage and expenses
+    MENUMILE PRG  Travel menu
+    PRNTIT   PRG  Sets up printer
+    ADDRECD  PRG  Adds a payment
+    SALETAX  PRG  Computes sales tax
+    STOCKS   DBF  Database for stocks and bonds
+    ADDCHEK  PRG  Records a check
+    INTRPAID PRG  Runs report on interest paid
+    POLICOST FRM  Report form for political campaign contributions
+    BONDSTOK PRG  Report for securities bought and sold during the year
+    WORKCOST PRG  Report of non-entertainment business expenses
+    INCOME   DBF  Database for income earned
+    INCOME   FRM  Form for list of sources of income during the tax year
+    MISCLIST FRM  Form for printer list of miscellaneous deductions
+    CHECKS   DBF  Database for checks
+    SECURITY FRM  Form for list of securities purchased during the year
+    TAXLIST  FRM  Report form for list of tax deductible payments
+    READ     BAT  Batch file to read program description text files
+    INTRPAID FRM  Report form for interest paid
+    AUTOCOST FRM  Report form for business related automobile expenses
+    DONACOST FRM  Report form for charitable donations
+    TAXPAID  FRM  Report form for state taxes paid
+    MEDICOST FRM  Report form for medical costs
+    EDITCHEK PRG  Program to edit a check entry
+    COMPCOST FRM  Report form for computer related expenses
+    MEDIPAY  FRM  Form for list of mileage incurred with medical cost
+    TAINCOST FRM  Report form for business related entertainment costs
+    STOKLIST FRM  Report form for stock and bond list
+    MEDICAL  DBF  Database of medical deductions
+    INTRLIST PRG  Program to list interest earned
+    READ1    TXT  Second text file continuing program description
+    TAXCOST  PRG  Program to run report on state taxes paid
+    INTEREST PRG  Program to run report of interest expense incurred
+    DONATION PRG  Program to run report on charitable donations
+    MISCCOST PRG  Program to run report on miscellaneous deductions
+    COMPCOST PRG  Program to run report on computer related expenses
+    AUTOCOST PRG  Program to run report on business automobile expenses
+    TAXES    PRG  Program to run report on taxes that are deductible
+    TRANFILE MEM  Memory variable for next transaction number
+    EDITRECD PRG  Program to edit a payment
+    WORKCOST FRM  Report form for non-entertainment business expenses
+    MISCCOST FRM  Report form for list of miscellaneous deductible expenses
+    INTRLIST FRM  Report form for list of interest payments made to lenders
+    SETUP    PRG  Menu lists as sales tax setting, actually program setup
+    SALECOST PRG  Program to run report on sales tax paid
+    OTHRCOST PRG  Program to run report on miscellaneous deductions
+    INTRCOST FRM  Report form for list of interest expenses incurred
+    BUSICOST FRM  Report form for list of business expenses incurred
+    ADDSTOK  PRG  Report form to add a stock transaction to the database
+    CHKPAYEE FRM  Report form for check list in payee order
+    MENUREPT PRG  Report menu
+    DATABASE BAT  Batch file to setup data files on drive B for dual floppy
+    SETPRINT PRG  Program to set up printer
+    TAXDATA  MEM  Memory variable for tax year
+
+### Directory of PC-SIG Library Disk 0295
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,67 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #112"
+      B: "PC-SIG Library Disk 0112"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #112
+## Information about "COMPUTER SECURITY"
+
+    This computer security package is a set of Shareware programs for
+    encrypting data files to prevent unauthorized access or for transmission
+    across phone lines.  If you have a need to protect sensitive or private
+    communications, then this disk has a lot to offer you.  Please read DOC
+    files for operating instructions. The security principle employed in
+    this program is coding with authorized persons having decoding
+    capabilities.  The package also includes the ability to ascertain
+    whether files have been tampered with.
+    
+    Special Requirments:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Special Registration:  $25.00
+    
+    File Descriptions:
+    
+    PC-CODE1 153  Program versions to use with BASRUN.EXE.
+    PC-CODE2 153  Program versions to use with BASRUN.EXE.
+    PC-MENU  153  Program versions to use with BASRUN.EXE.
+    PC-TAMP1 153  Program versions to use with BASRUN.EXE.
+    PC-TAMP2 153  Program versions to use with BASRUN.EXE.
+    PC-ZERO  153  Program versions to use with BASRUN.EXE.
+    NEW1     KEY  Key file.
+    NEW2     KEY  Key file.
+    SAMPLE   KEY  Key file.
+    AUTOEXEC BAT  Auto execute file.
+    COPYRIGH T    Copyright notes - disk not for export.
+    DIALOG?? DOC  Sample dialogues for using programs (12 files).
+    FILES    DOC  Documentation.
+    I-8087   DOC  Source of 8087 BASIC compiler versions.
+    PC-CODE1 EXE  Encodes/decodes files.
+    PC-CODE2 EXE  Encodes/decodes text files.
+    PC-CODE1 DOC  Documentation for PC-CODE.
+    PC-CODE2 DOC  Documentation for PC-CODE.
+    PC-HELP  EXE  Type "PC-HELP" for help.
+    PC-MENU  EXE  Execute other programs from this one.
+    PC-STAT2 LOG  Sample files.
+    PC-TAMP1 DOC  Documentation for PC-TAMP.
+    PC-TAMP1 EXE  Checks if files have been altered or examined.
+    PC-TAMP2 EXE  Checks if files have been altered or examined.
+    PC-ZERO  DOC  Documentation for PC-ZERO.
+    PC-ZERO  EXE  Writes "zeros" to file before deleting it.
+    READ     ME   Notes from the author.
+    SAMPLE   MSG  Sample message.
+    SAMPLE1  COD  Sample file.
+    SAMPLE2  COD  Sample file.
+    SAMPLE3  COD  Sample file.
+
+### Directory of PC-SIG Library Disk 0112
 
      Volume in drive A has no label
      Directory of A:\

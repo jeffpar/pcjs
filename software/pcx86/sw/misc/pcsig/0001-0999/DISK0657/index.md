@@ -6,16 +6,86 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #657"
+      B: "PC-SIG Library Disk 0657"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #657
+## Information about "ZURI"
+
+    This diskette contains the Zuri text editor, which is a very powerful
+    program made up of many features. Primarily, it is very easy to use;
+    Zuri is greatly intended for someone who easily forgets the common
+    commands.  The program can edit as big a file as will fit into memory
+    (maximum 480K in a 640K machine) and text lines can be up to 225
+    characters, also lines longer than 75 characters are wrapped to the
+    next line.  Zuri supports text macros with search and replace options
+    and also block commands which are available.  A great deal of
+    documentation comes with Zuri as well as on-screen help menus.
+    
+    IMPORTANT NOTE: The Zuri editor works ONLY on the MONOCHROME adapter
+    card.
+    
+    System Requirements:  190K, at least one disk drive and a
+    moncohrome display.  With this memory, the maximum editable file
+    is 32K. Each additional 32K memory adds that much to the maximum
+    editable file, up to the maximum 640K giving a possible file size
+    of 480K!
+    
+    How to Start: Read carefully the ZURI.DOC file and all other .DOC files
+    for the different parts of the editor.  TO start the editor, enter ZURI
+    <ENTER>, making sure that the file zuri.com is on the drive being used.
+    
+    Suggested Registration:  $15.00 includes update and Turbo Pascal source
+    code if you request it.
+    
+    File Descriptions:
+    
+    -------- ---  -  ZURI EDITOR (V3.2)
+    DI       COM  This is a program to list a directory in sorted form
+    Z        COM  The control file for the .chn programs, must be on same di
+    DI       DOC  Documentation for di.com (28k)
+    ZMAKEKEY CHN  This program provides an easy way to make text macros on Z
+    ZURI     COM  The zuri editor. Start it by typing zuri
+    ZMAKEKEY DOC  Documentation for zmakekey.chn
+    ZURI     DOC  Documentation for the zuri editor
+    GO       BAT  Startup information, type: GO (enter)
+    ZURITWO  DOC  Documentation for zuritwo.chn
+    ZURITWO  CHN  Display two files simultaneously, in windows
+    ZURISPLT DOC  Documentation for zurisplt.chn
+    ZURISPLT CHN  To split a file into several parts
+    ZURISORT DOC  Documentation for zurisort.chn
+    ZURISORT CHN  Sorts a text file, which can be quite big
+    ZURISEQ  DOC  Documentation for zuriseq.chn
+    ZURISEQ  CHN  Checks that a file is in a given order
+    ZURIREIN DOC  Documentation for zurirein.chn
+    ZURIREIN CHN  Cleans up a file;
+    ZURIPRNT DOC  Documentation for zuriprnt.chn
+    ZURIPRNT CHN  A program to print a specified file
+    ZURIMERG DOC  Documentation for zurimerg.chn
+    ZURIMERG CHN  To merge two sorted text files
+    ZURIJUST DOC  Documentation for zurijust.chn
+    ZURIJUST CHN  A program to word-wrap and justify a file
+    ZURIINST COM  To install go-to-DOS feature on the editor; see zuri.doc
+    ZURIEXTR DOC  Documentation for zuriextr.chn
+    ZURIEXTR CHN  Extracts specified lines from a file
+    ZURIDELL DOC  Documentation for zuridell.chn
+    ZURIDELL CHN  Eliminates duplicate lines in a file
+    ZURICOUN DOC  Documentation for zuricoun.chn
+    ZURICOUN CHN  Counts lines and words in a file
+    ZURICOMP DOC  Documentation for zuricomp.chn
+    ZURICONV DOC  Documentation for zuriconv.chn
+    ZURICONV CHN  Convert special characters; see also zurirein.chn
+    ZURICOMP CHN  Compare two files, line by line
+    ZURICHS  DOC  Documentation for zurichs.chn
+    ZURICHS  CHN  A program to choose records by certain criteria
+    ZURI     HLE  Help file for the editor. Can be omitted if desired
+
+### Directory of PC-SIG Library Disk 0657
 
      Volume in drive A has no label
      Directory of A:\

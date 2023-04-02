@@ -6,16 +6,59 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #201"
+      B: "PC-SIG Library Disk 0201"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #201
+## Information about "WORDSTART & FINANCIAL"
+
+    This early collection of WordStar utilities is headlined by Version 2.1
+    of UNDOWS, considered an answer to prayer by many word processors.  If
+    you need to change WordStar files to ASCII in a hurry or want to remove
+    those soft hyphens or embedded control characters that WordStar leaves
+    in a file, UNDOWS does all that for you.  And more: two new options
+    allow you to strip extra carriage return / line feed pairs and to
+    remove embedded dot commands from your text.
+    
+    Other WordStar Helps: FIXWS converts Wordstar files to ASCII and UNDOWS
+    which converts Wordstar to standard ASCII as well as WS-DOC.BAS, a
+    BASIC program for doing both!  It also has some special word
+    processors: FORMGEN.BAS, a BASIC and simple word processor and POW.COM,
+    an equally small but effective word processor.
+    
+    The financial programs include: 78INT.BAS is a handy utility and BASIC
+    program for calculating the Rule of 78's (interest/principle) and
+    DISBURSE.BAS which handles disbursements register, single entry, with
+    annual summaries.
+    
+    System Requirements:  BASIC
+    
+    How to Start:  For the BASIC programs, consult the Getting
+    Started section for your configuration.  The rest run from DOS by
+    entering the filename and pressing <ENTER>.
+    
+    File Descriptions:
+    
+    78INT    BAS  Rule of 78's interest/principle calculating utility
+    DISBURSE TXT  Documentation
+    DISBURSE BAS  Disbursements register, single entry,  annual summaries
+    FIXWS    DOC  Documentation
+    FIXWS    COM  Converts WORDSTAR files to ASCII
+    FORMGEN  TXT  Documentation
+    FORMGEN  BAS  Simple word processor
+    UNDOWS   DOC  Documentation
+    POW      COM  Simple word processor by Michael Maioli  (Version 3.0)
+    POW      DOC  Documentation
+    OUTPUTS  PRF  Part of DISBURSE.BAS
+    UNDOWS   EXE  Version 2.1 by Gary Elfring converts Wordstar to ASCII
+    WS-DOS   BAS  Converts WORDSTAR files to ASCII, and ASCII to WORDSTAR
+
+### Directory of PC-SIG Library Disk 0201
 
      Volume in drive A has no label
      Directory of A:\

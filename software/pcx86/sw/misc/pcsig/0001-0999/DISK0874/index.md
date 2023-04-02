@@ -6,16 +6,40 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #874"
+      B: "PC-SIG Library Disk 0874"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #874
+## Information about "ZZAP AND OTHER UTILITIES FOR PROGRAMMERS"
+
+    ZZAP is a disk editor that can read, modify and write any sector on the
+    disk, as well as any file by filename upon the disk -- along the same
+    lines as Norton's Utilities.
+    
+    A 4,096-byte buffer is used to hold the information to be written to or
+    read from the disk.  Editing can be done on a byte-by-byte basis by
+    entering the data in hex, decimal, octal or ASCII format.  You can also
+    add, copy, or exchange the data of the current buffer.
+    
+    Programmers -- VECTOR inspects the interrupt vector table of your
+    system and displays the vectors in human-readable form with some brief
+    comments describing each interrupt.  This is useful because some
+    interrupts are not standardized and are difficult to interpret.
+    
+    Attention, programmers -- 400 inspects the BIOS communications area and
+    the DOS communications area and displays them in human-readable form.
+    It also displays some brief comments describing each byte of the
+    communications areas.
+    
+    RPN is a Reverse Polish Notation calculator based on a fully-visible
+    stack, especially useful to busy programmers and computer specialists.
+
+### Directory of PC-SIG Library Disk 0874
 
      Volume in drive A has no label
      Directory of A:\

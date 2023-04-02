@@ -6,16 +6,29 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #590"
+      B: "PC-SIG Library Disk 0590"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #590
+## Information about "NUCLEAR MAGNETIC"
+
+    This highly-technical and useful nuclear magnetic resonance (NMR)
+    analysis program is of interest to students of chemistry and physics.
+    Written by a University of South Florida professor of chemistry, NMR
+    allows the analysis of this technique, used in many advanced chemistry
+    applications.
+    
+    This unique program displays the calculated spectrum including
+    adjustable peak broadening. Simulated plotting of very complex
+    molecules, such as strong coupled proton spectra, is supported.
+    Parameters for up to seven spins (nuclei) can be calculated.
+
+### Directory of PC-SIG Library Disk 0590
 
      Volume in drive A has no label
      Directory of A:\

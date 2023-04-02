@@ -6,16 +6,26 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #385"
+      B: "PC-SIG Library Disk 0385"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #385
+## Information about "PHRASE CRAZE"
+
+    A word game that's great fun for the whole family. If you've ever seen
+    ``Wheel of Fortune'' on TV, then you already know how to play PHRASE
+    CRAZE.  (Sorry, Vanna is NOT included.)
+    
+    This is a phrase-guessing game where you fill in letters as outlined on
+    the screen in a series of words that make up a well-known phrase.  Can I
+    have an ``R'', please?
+
+### Directory of PC-SIG Library Disk 0385
 
      Volume in drive A has no label
      Directory of A:\

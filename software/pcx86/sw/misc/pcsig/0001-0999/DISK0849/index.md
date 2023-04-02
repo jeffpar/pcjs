@@ -6,16 +6,27 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #849"
+      B: "PC-SIG Library Disk 0849"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #849
+## Information about "GRAPHICS COACH FOR RUNNERS"
+
+    GRAPHICS COACH gives serious runners of all levels an easy way to
+    monitor their training, progress, and plans for improving fitness and
+    race performance.  Personal advice is given that establishes a training
+    schedule based upon the runner's time for a 5K or a 10K run.
+    
+    Monthly and yearly graphs and tables display the runner's pace, average
+    speed, and total distance run.  A practical, useful program for any
+    runner who wants to improve and pace his/her running ability.
+
+### Directory of PC-SIG Library Disk 0849
 
      Volume in drive A has no label
      Directory of A:\

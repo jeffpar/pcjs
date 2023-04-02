@@ -6,16 +6,87 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #373"
+      B: "PC-SIG Library Disk 0373"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #373
+## Information about "DOS UTILITIES NO 17"
+
+    This collection is oriented towards general system maintenance with
+    programs for applying self-styled, useful filename extensions and other
+    enhancements to the DOS batch file capabilities.  There is also an
+    assortment of general purpose utilities.  You can improve the security
+    of your system by preventing `break-out' of a boot or file operation.
+    The SCR121F package provides full screen design and edit capabilities,
+    and interfaces to DOS, DBase, MS Cobol, and Clipper.  And just for fun,
+    the BANNER program lets you design and print large messages.
+    
+    System Requirements: Some programs require BASIC
+    
+    How to Start: To run a COM or BAT program simply type its name and
+    press <ENTER>.  For instructions on running BASIC programs, please
+    refer to the GETTING STARTED section in this catalog.  To read DOC
+    files simply enter TYPE filename.ext and press <ENTER>.
+    
+    Suggested Registration:  SCR1 $24.00
+    
+    File Descriptions:
+    
+    WAIT     COM  Pauses a batch file for 3 seconds to allow interruption
+    BRK      COM  Causes a termination with error code return
+    BANNR1   BAT  Batch file to run BANNER1.COM
+    BANNER1  DOC  Documentation for BANNER1.COM
+    BANNER1  COM  Prints block letters on the display/printer with options.
+    WAITTIME COM  Used in batch files to wait for a certain time to pass
+    WAIT     DOC  Documentation for WAIT.COM
+    WAITTIME DOC  Documentation for WAITTIME.COM
+    TUNE     DOC  Documentation for TUNE.COM
+    TUNE     COM  Used in batch files to produce an audible signal of
+    SIZER    DOC  Documentation for SIZER.COM
+    SETERROR DOC  Documentation for SETERROR.COM
+    SIZER    COM  Tests the size of a file and sets an errorlevel based
+    SIZER    BAS  BASIC version of SIZER
+    SIZER    ASM  Assembly version of SIZER
+    SIGNAL   COM  Produces a signal and waits for a keystroke
+    SETERROR COM  Accepts one command line argument and sets the DOS
+    QUERY    EXE  Batch file 'Y/N' prompt routine
+    SCR21F   ARC  Screen editor and display utilities (Archived format)
+    REMDOT   EXE  Displays keyboard buffer strings
+    QUERY    ASM  Assembly source code for QUERY.EXE
+    PRTSC    DOC  Documentation for PRTSC.COM
+    PRTSC    COM  Starts/stops the printer during batch file processing
+    PAUSE2   DOC  Documentation for PAUSE2.COM
+    PAUSE2   COM  Improved version of DOS's PAUSE command
+    NORESET  BAS  Disables the <Ctrl><Alt><Del> keyboard reset sequence
+    CHECKING DOC  Documentation for CHECKING.COM
+    CHECKING COM  Allows conditional termination of batch files
+    FLIP     COM  Control special key states from the DOS command line
+    DSIZE    DOC  Documentation for DSIZE.COM
+    DSIZE    COM  Determine the format of a diskette from in a batch file
+    CR       COM  Useful for putting 64K, one disk drive and monochrome
+    NORESET  ASM  Disables the <Ctrl><Alt><Del> keyboard reset sequence
+    NOBRKCOM BAS  Patches COMMAND.COM to prevent breaking of AUTOEXEC.BAT
+    INPUT    COM  Get input from console
+    INP-TEST BAT  Sample batch file
+    INP      BAT  Sample batch file
+    GETDIGIT DOC  Documentation for GETDIGIT.COM
+    GETDIGIT COM  Accepts a prompt from the command line and a one digit
+    FLIP     DOC  Documentation for FLIP.COM
+    SCREDIT  COM  Screen editor
+    SETERROR ASM  Source code for SETERROR.COM
+    SCRHELP? SCR  Help screens for SCREDIT.COM
+    SCR      TXT  Documentation for SCREDIT.COM
+    SCR???   ???  Programming language interfaces for SCREDIT.COM
+    SCRBATCH COM  Display files created by SCREDIT.COM
+    CR       DOC  Documentation of CR.COM
+    ANSIPCH  EXE  Part of Re-View
+
+### Directory of PC-SIG Library Disk 0373
 
      Volume in drive A has no label
      Directory of A:\

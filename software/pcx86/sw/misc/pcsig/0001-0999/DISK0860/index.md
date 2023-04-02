@@ -6,16 +6,47 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #860"
+      B: "PC-SIG Library Disk 0860"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #860
+## Information about "REIPS, THE SIMPLE BOOKKEEPER, TYPERITE"
+
+    Real estate professionals -- evaluate prospective real estate
+    investments and keep track of them for your clients.
+    
+    Evaluations are based on measurements produced by REIPS, such as the
+    financial management rate of return, internal rate of return, net
+    present-value profitability index, debt coverage ratio, and gross income
+    multiplier.  Compare these measurements with competing investments to
+    help in making investment decisions personally or for clients.  NOTE:
+    The comparison between competing potential investments is the important
+    concept, not an exact prediction of future results for an individual
+    investment.
+    
+    REIPS is designed around current Federal income tax law, although
+    certain simplifying assumptions, such as those regarding the alternative
+    minimum tax and passive losses, are made.  The manual provides
+    information in terms that are easy to understand.
+    
+    The SIMPLE BOOKKEEPER is the easiest single entry bookkeeping system
+    available for home or small businesses. No accounting experience is
+    required. Keep track of business expenses (40 categories) and income
+    for the year. Three report formats include yearly profit/loss summary
+    and ytd expenses. Information is entered on a monthly basis.
+    Registered users receive additional features including sorting, six
+    income accounts, and six report formats.
+    
+    Turn your PC and its printer into an electric typewriter.  TYPERITE is
+    simple, straight-forward and faster than using a wordprocessor for some
+    day-to-day jobs.
+
+### Directory of PC-SIG Library Disk 0860
 
      Volume in drive A has no label
      Directory of A:\

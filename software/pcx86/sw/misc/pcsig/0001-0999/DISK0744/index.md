@@ -6,16 +6,22 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #744"
+      B: "PC-SIG Library Disk 0744"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #744
+## Information about "PRTLABEL"
+
+    PRTLABEL prints multiple copies of a single label or single labels with
+    a new address each time.  It prints as many labels as you like in a
+    given run, up to six labels across, 10 lines per label.
+
+### Directory of PC-SIG Library Disk 0744
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,76 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #282"
+      B: "PC-SIG Library Disk 0282"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #282
+## Information about "BUSINESS SAMPLER #2"
+
+    The Home Financing Analyst is a comprehensive real estate evaluation
+    program written from the perspective of homeowners, potential
+    homeowners, or renters.  It can also assist real estate agents,
+    brokers, and developers in forcasting and allocating the cost of home
+    ownership and then comparing ownership, rental, and alternatives. It's
+    can be used to determine if mortgage refinancing is worthwhile. The
+    program can not be used to evaluate real estate purchased for
+    investment purposes, as it does not take into account depreciation
+    charges and rental income.
+    
+    PC-Check has been designed to track one or more home or office checking
+    accounts.  It will allow you to create your own code file in which you
+    can store up to 677 two letter codes.  The Checkbook Distribution
+    program provides a quick and easy way to group credit card data or
+    checks into expense catageories, handy for tracking check data entry
+    and editing, balancing, and coding of entries.
+    
+    The CheckBook Distribution Program provides a quick & easy way to group
+    check or credit card data into expense categories.  For example, check
+    data may be abbreviated to just the $-Amount and a short expense Code
+    for speedy data entry.  However, more complete entries, including dates
+    and check descriptions, may also be used when desired.  This
+    flexibility provides fast results for tax, business, or budget
+    purposes.
+    
+    How to Start: Consult the .DOC and README files for directions and
+    documentation.  To run the BASIC programs, consult the directions in
+    GETTING STARTED for your configuration.
+    
+    Suggested Registration: ANALYST has a suggested registration of
+    $15.00.  PC-CHECK has a suggested registration of $40.00.  And the
+    CDB package has a suggested registration of $20.00
+    
+    File Descriptions:
+    
+    PC-CHECK DOC  PC-CHECK documentation
+    SMPLCODE CO   Suggested two letter codes
+    AUTOEXEC BAT  Prints registration form
+    REGIS    DOC  User support registration
+    HELP     BAT  How to print PC-CHECK documentation
+    PC-CHECK BAS  Checkbook management program
+    -------- ---  PC-CHECK
+    CBD-READ ME   Checkbook distribution documentation (39K)
+    CBD      DAT  Part of CBD.BAS
+    CBD      BAS  Main program
+    -------- ---  Checkbook distribution by John Stevens
+    MERGE    EXE  Main program
+    -------- ---  MERGEPLAN V1.00 (Multiplan spreadsheet consolidator)
+    SMPLCHK       More suggested codes
+    -------- ---  Stock Analyst
+    -------- ---  Home Financial Analyst
+    STKANAL  DOC  STKANALY.SIS documentation (16K)
+    DATAST        Sample data sheet
+    STKANALY SIS  Stock value analyzer
+    ANALYST  EXE  Home ownership cost analyzer
+    SAMPLE   HFA  Example
+    ANALYST  DOC  Documentation (9K)
+
+### Directory of PC-SIG Library Disk 0282
 
      Volume in drive A has no label
      Directory of A:\

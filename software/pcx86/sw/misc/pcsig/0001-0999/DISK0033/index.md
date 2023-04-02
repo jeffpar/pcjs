@@ -6,16 +6,95 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #33"
+      B: "PC-SIG Library Disk 0033"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #33
+## Information about "DOS AND PRINTER UTILITIES"
+
+    For anyone with an older Epson printer, this series of programs could
+    enhance your printing capabilities. While many of the current breed of
+    printers have graphics capabilities built in, someof the older Epsons
+    did not.
+    
+    The programs on this disk allows the user to "grab" pictures or
+    graphics off the computer screen and print them out on your Epson,
+    Toshiba, or C. Itoh (in two sizes).
+    
+    This disk also contains some patches to existing DOS routines, and
+    simplify or speedup some operations.  In addition to the DOS and
+    printer utilities, there are some simple (but useful) communication
+    utilities.
+    
+    System Requirements: Some programs require color graphics.
+    
+    How to Start: To run an EXE or COM program, simply type its name and
+    press <ENTER>.  To print a documentation file, type: COPY filename.ext
+    PRN (press enter) where filename is the name of the file, and ext is
+    the extension (TXT or DOC).
+    
+    File Descriptions:
+    
+    CALLGRAF BAS  Program to call GRAFTRAX from Basic
+    COPYGRAF BAT  Batch file to copy GRAFTRAX files to disk
+    CALLGRAF TXT  ASCII version of CALLGRAF
+    SOUNDS   BAS  Generates different sounds - contains documentation
+    DOTABLE  ASM  Data file used by Graftrax
+    DOTS     DAT  Data file used by Graftrax
+    DOTDATA  ASM  Data file used by Graftrax
+    DOTS     PRO  Data file used by Graftrax
+    GRAFTRAX ASM  Source code for Graftrax
+    GDEMO    BAS  Graphics demo program
+    GRAFTRAX COM  Compiled version of Graftrax
+    GRAFTRAX BAS  Basic code for Graftrax
+    NECGRAF  COM  NEC version of Graftrax
+    MAKEDOTS BAS  Graphics display utility
+    GRCITOH  COM  C-ITOH version of Graftrax
+    GRAFTRAX DOC  Documentation for Graftrax
+    NEWT     ASM  Source code for enhanced Toshiba Graftrax version
+    OKIGRAF  ASM  Source code for Okidata Graftrax program
+    NEWT     COM  Compiled Toshiba Graphtrax program
+    PRTFIX   DOC  Documentation file
+    PRTFIX   COM  Corrects "DEVICE TIMEOUT" errors with printer
+    POSTER   BAS  Prints large character posters
+    PEPATCH  DOC  Patch to IBM's Personal Editor
+    SHELL    BAT  Bat file used with BATMAN.BAS
+    SCROLL2  BAS  Sample program
+    SCROLL1  BAS  Sample program
+    SCROLL   DOC  Documentation file
+    SCROLL   BLD  Program file to "BLOAD" from BASIC
+    SCROLL   ASM  Scrolls specified area of display screen
+    QD       DOC  Documentation file
+    QD       COM  Quadram RAMDRIVE program - FOR QUADRAM BOARD ONLY
+    TOSHIBA  COM  Compiled version of Toshiba Graftrax
+    TOSHIBA  DOC  Documentation for Toshiba Graftrax programs
+    BATMAN   BAS  Sample menu/batch manager program; requires SHELL.BAT
+    FK203    ASM  Source code for FK203.EXE
+    HANG     COM  Hangs up Hayes Smartmodem
+    FK203    EXE  Function key reassignment program for DOS 2.0
+    HOST     DOC  Documentation file for HOST.BAS
+    HOST     BAS  Communication program for remote access
+    TOSHIBA  ASM  Source code for original Toshiba Graftrax program
+    OKIGRAF  COM  Compiled version of Okidata Graphtrax
+    READ     ME   Author's notes on Graftrax routines
+    BSR      DAT  Data file for BSR.BAS
+    BUZOFF   COM  Turn off paper out buzzer on Epson
+    CVTHEX   EXE  Binary/hex conversion for files larger than 32K
+    COMPRS   COM  Enables compressed print on Epson
+    DIR      DAT  Sample data file
+    DIR      BAS  Disk cataloging program - very colorful
+    DIAL     COM  Dials Hayes Smartmodem
+    DCPATCH  DOC  Patch for DISKCOPY.COM 2.0
+    DIR      DOC  Documentation file
+    BATMAN   DOC  Documentation file
+    BSR      BAS  Simple program to drive ABM/BSR controller
+
+### Directory of PC-SIG Library Disk 0033
 
      Volume in drive A has no label
      Directory of A:\

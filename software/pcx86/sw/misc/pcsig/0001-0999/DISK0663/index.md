@@ -6,16 +6,56 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #663"
+      B: "PC-SIG Library Disk 0663"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #663
+## Information about "DATA BOSS 2 OF 2 (662 1ST DISK IN SET)"
+
+    This is the first of a two-disk set comprising the DATABOSS Data
+    Management System. DATABOSS is a database with flexible report-
+    generation and the ability to import and export data to Wordstar, PC-
+    File III, DW III and many other programs. It sports user-defined color
+    screens, up to eight different disk drives or subdirectories, pre-
+    computed (equivalence) fields, wide standard reports, user-defined
+    printer characteristics, a full alphabet keyboard enhancer, simple
+    mathematical and statistical functions, sorting for up to eight levels,
+    and enhanced search capabilities.  This first disk holds the
+    documentation for version 3.00.01 of the DATABOSS system -- 70+ pages
+    of how-to information with some special tips on maximizing the use of
+    your hard disk(s). NOTE: DATABOSS runs in BASIC and needs MS/PC DOS
+    3.xx and a hard disk for full functioning.
+    
+    System Requirements: 128K memory and at least one disk drive.  Two
+    drives or a hard drive is recommended.
+    
+    How to Start: For information on starting the program and printing the
+    documentation, type: GO (press enter).
+    
+    Suggested Registration: $50.00
+    
+    File Descriptions:
+    The First Disk Contains:
+    CHANGES  DOC  Note about recent changes to the program.
+    BOSS3    DOC  The DATABOSS user's manual.
+    README   IMG  The author's introduction to DATABOSS
+    FLASH    COM  Video display utility.
+    AUTOEXEC BAT  Batch file to print user's manual.
+    
+    The Second Disk Contains:
+    FLOPPY   BAT  To load the system onto a floppy.
+    FIXED    BAT  To load DataBoss onto a hard disk.
+    ???????? 01   Data Base functional modules (14 files)
+    DB       BAS  The DataBoss menu and control program.
+    DATABOSS BAT  To load basic and start the program.
+    COLOR    BAT  To start the color set up program.
+
+### Directory of PC-SIG Library Disk 0663
 
      Volume in drive A has no label
      Directory of A:\

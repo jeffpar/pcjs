@@ -6,16 +6,30 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #717"
+      B: "PC-SIG Library Disk 0717"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #717
+## Information about "LIGHTWAVE COMMUNICATIONS"
+
+    SUPERCOM is a standard asynchronous communications package, letting you
+    communicate with other computers and transfer files over the phone
+    lines.  This is a simple, direct package for someone who doesn't need
+    to bother with a lot of fancy features.
+    
+    An electronic phone dialer that maintains a list of names and phone
+    numbers.  Look through an unlimited number of names and instantly dial
+    the correct phone number associated with the name you select. It's
+    assumed that you're already using a modem and communications package.
+    DIALER lets you interact and talk on a BBS, but does not support the
+    uploading or downloading of files.
+
+### Directory of PC-SIG Library Disk 0717
 
      Volume in drive A has no label
      Directory of A:\

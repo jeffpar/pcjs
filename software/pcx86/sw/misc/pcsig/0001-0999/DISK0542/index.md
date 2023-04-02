@@ -6,16 +6,54 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #542"
+      B: "PC-SIG Library Disk 0542"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #542
+## Information about "POLYGLOT AND LETTERFALL  (EDUCATIONAL)"
+
+    POLYGLOT is a program that matches between two sets of data such as
+    words and sentences, terms and definitions, questions and anwers.  It
+    takes the user's answers and displays the percentage of correct answers
+    up to and including the most recent answer.  It is an incredible
+    educational tool for drill type studying.  LETTERFALL is a tutorial
+    game to teach you how to type using the touch method.  It is set-up in
+    a game enviroment and is very easy to use.  There are seventeen
+    different parts to this program, but the author has supplied only one
+    part for you to look at.  We don't normally include demos such as this
+    but the program is outstanding.
+    
+    System Requirements:  128K, two disk drives and a monochrome display
+    
+    How to Start:  Type POLYGLOT or LETTERFA and press <ENTER> to start
+    these programs.
+    
+    Suggested Registration:  $15.00
+    
+    File Descriptions:
+    
+    -------- ---  Polyglot
+    FILLIN   DIC  A Polyglot dictionary file containing fill-in-the-blanks.
+    FACTS    DIC  A Polyglot dictionary file concerning Polyglot
+    INVST01  DIC  A Polyglot dictionary file for investment terms.
+    POLY001  DIC  A Polyglot dictionary for vocabulary set one.
+    NETWORK  DIC  A Polyglot dictionary for computer networking
+    POLY003  DIC  A Polyglot dictionary for vocabulary set three.
+    POLY002  DIC  A Polyglot dictionary for vocabulary set two.
+    LETTERFA EXE  Executable program
+    -------- ---  Letterfall (V1.1)
+    POLYGLOT EXE  Main program
+    POLYGLOT DIR  Definiation file for Polyglot
+    POLY005  DIC  A Polyglot dictionary for vocabulary set five.
+    POLY004  DIC  A Polyglot dictionary for vocabulary set four.
+    SCORE    DTA  Data file to retain scores
+
+### Directory of PC-SIG Library Disk 0542
 
      Volume in drive A has no label
      Directory of A:\

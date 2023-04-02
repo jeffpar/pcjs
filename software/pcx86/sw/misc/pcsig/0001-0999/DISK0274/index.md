@@ -6,16 +6,42 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #274"
+      B: "PC-SIG Library Disk 0274"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #274
+## Information about "BRIAN'S GAMES"
+
+    This disk has some of the better games in the PC-SIG library.  Shoot
+    the martians before they kill you in the arcade game, SPACEVAD.  Hear
+    Wocka, Wocka, Wocka as you play that old favorite, PACKMAN, and keep
+    your eye on the ball when playing BREAKOUT.  All these games run on the
+    PCjr, so nobody is left out.
+    File Descriptions:
+    
+    CASTLE   EXE  Find your way out of castle, get treasures, kill monsters.
+    CASTLE   RAN  Part of CASTLE game.
+    GAMES    TXT  Comments from the person who selected these programs.
+    XWING    BAS  Try to destroy the deathstar.
+    WIZARD   BAS  A role game to find the ORB of ZOT.
+    LIFE2    BAS  Source code for LIFE2.
+    LIFE2    EXE  Try to make your bacteria live.
+    BUGS!    SCR  Part of BUGS.
+    BUGS     EXE  Shoot crawling creatures before they get you.
+    LANDER   SCR  Part of LANDER.
+    LANDER   BIN  Part of LANDER.
+    LANDER   BAS  Land a space ship on a pad without crashing.
+    SPACEVAD EXE  Shoot invaders before they invade earth.
+    BREAKOUT BAS  Try to break out of a brick wall, like tennis.
+    PACKMAN  DOC  Documentation for PACKMAN.EXE.
+    PACKMAN  EXE  Gobble power pellets and eat monsters.
+
+### Directory of PC-SIG Library Disk 0274
 
      Volume in drive A has no label
      Directory of A:\

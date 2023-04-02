@@ -6,16 +6,57 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #219"
+      B: "PC-SIG Library Disk 0219"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #219
+## Information about "MAPMAKER"
+
+    This disk contains some powerful programs designed for making computer
+    plotted maps.  MM1 is the simplest requiring only a color graphics
+    card and single monitor.  MM2 is more complex and requires both a
+    color and a monochrome monitor, for enhanced graphics.  The major
+    benefit from this program is that it allows the user to easily turn
+    statistical data based on area into a form representing the data
+    displayed as a map.
+    
+    System Requirements:  Color graphics.
+    
+    How to Start:  Load DOS and type MAPMAKER to enter the main program.
+    Consult MANUAL.DOC for program documentation.
+    
+    Suggested Registration: $55.00 MapMaker
+    
+    File Descriptions:
+    
+    MANUAL   DOC  Documentation  (Approximately 20 pages)
+    FLAPAN        Data set - NW Florida
+    GNV           Data set - Gainsville, Florida
+    OFFICES       Data set - sample floorplan
+    USA           Data set - contigous USA
+    FLA-INC       Statistical data - per capita income (FLAPAN)
+    FLA-POP       Statistical data - number of residents by county (FLAPAN)
+    SCREEN2  BAS  Screen image files - Circle - Gainesville Population
+    SCREEN1  BAS  Screen image files - Choropleth - Office Residency
+    USA-CENT      Centroid data set (USA)
+    FLA-CENT      Centroid data set (FLAPAN)
+    USA-SUN       Statistical data - percent sunny days during an avg year
+    GNV-POP       Statistical data - number of residents in 1970
+    GNV-65        Statistical data - % of residents 65 years & older, 1970
+    OFF-YRS       Statistical data - number of years of occupancy
+    SCREEN3  BAS  Screen image files - Circle - N.W. Florida Population
+    SCREEN5  BAS  Screen image files - Choropleth - U.S. Sunny Days
+    SCREEN4  BAS  Screen image files - Choropleth - Gainesville Elderly
+    MM1      EXE  Main program for color system
+    MM2      EXE  Main program for color and/or monochrome system
+    USA-MSA       Statistical data - subject unknown
+
+### Directory of PC-SIG Library Disk 0219
 
      Volume in drive A has no label
      Directory of A:\

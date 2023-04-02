@@ -6,16 +6,58 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #332"
+      B: "PC-SIG Library Disk 0332"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #332
+## Information about "KLP DTA AND MUA"
+
+    The Kinetics Linear Programming (KLP) System requires a knowledge with
+    linear (LP) programming.  KLP in an integrated software system which
+    can be used to define, solve, review and refine a linear programming
+    problem.  Although no other software is necessary, KLP can be used
+    with VisiCalc, Lotus 1-2- 3, and SuperCalc 2.  KLP is an integrated
+    software system that allows you to solve linear programming problems
+    of considerable complexity.  The results can be printed, saved to the
+    disk, or written to a spreadsheet input file.
+    
+    System Requirements: Printer with condensed print capabilities (132
+    columns).
+    
+    How to Start: Consult the .DOC and README files for directions and
+    documentation.  To run the BASIC programs, consult the directions in
+    GETTING STARTED for your configuration.  To run any of these programs,
+    just type its name, i.e., for KLP.EXE, type KLP <ENTER>.
+    
+    Suggested Registration: KLP $45.00
+    
+    File Descriptions:
+    
+    MUMSG    TXT  Message file
+    MU       EXE  MULTIATTRIBUTE UTILITY ANALYSIS
+    COBRUN   EXE  Microsoft COBOL Runtime Monitor (Both DT & MU need it)
+    MESSAGE  TXT  Message file
+    MESSAGE  KEY  Message file
+    DTDATA   S-1  Sample data file
+    DT       EXE  DECISION TREE ANALYSIS: A technique to analyze
+    -------- ---  DECISION TREE ANALYSIS & MULTIATTRIBUTE UTILITY ANALYSIS
+    README   KLP  Documentation (brief introduction)
+    KLP      DOC  Documentation (27pp) manual
+    FURNFAC  TXT  Results file
+    FURNFAC  SSI  Spreadsheet output
+    FURNFAC  MAT  Furniture factory problem
+    FURNFAC  DMP  Matrix print file
+    KLP      EXE  System can integrate Lotus, SuperCalc or VisiCalc
+    -------- ---  KINETICS LINEAR PROGRAMMING SYSTEM     (version 1.9)
+    MUMSG    KEY  Message file
+    MUDATA   S-1  Sample data file
+
+### Directory of PC-SIG Library Disk 0332
 
      Volume in drive A has no label
      Directory of A:\

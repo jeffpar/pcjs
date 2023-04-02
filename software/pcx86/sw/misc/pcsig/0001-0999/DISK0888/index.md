@@ -6,16 +6,28 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #888"
+      B: "PC-SIG Library Disk 0888"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #888
+## Information about "PULLED FROM THE LIBRARY"
+
+    MANAGEX I is based on the idea that it is best to send a statement to
+    each client at some regular interval.  Even when nothing is due from the
+    client during that period, a statement should be sent, just to let the
+    client know you're thinking of him.
+    
+    The minimum period for which a client can be billed with MANAGEX I is
+    one calendar month.  Each bill includes all transactions from the
+    beginning of the first month covered by the bill to the end of the last
+    month covered.
+
+### Directory of PC-SIG Library Disk 0888
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,42 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #936"
+      B: "PC-SIG Library Disk 0936"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #936
+## Information about "DCOPY, MYMENU, AND MENUEZE"
+
+    DCOPY is an enhancement of the MS-DOS COPY command.  You can still copy
+    files, but you control the copying process based on the file's
+    creation/revision date.  The program also pauses when the new disk
+    becomes full, lets you put in another, and even formats it!  If you
+    want, you can ask DCOPY to prompt you before each file is copied.
+    Wildcard copies are supported.
+    
+    MYMENU creates a start-up menu for your hard disk.  A BASIC program is
+    created by the program, and you provide a directory and the program name
+    for each option in the menu.  The menu can have up to 18 options, each
+    having a short description of the program.
+    
+    After the BASIC program is created, a few lines are entered into your
+    AUTOEXEC.BAT file, and your menu is ready to go!
+    
+    Make menus to automatically load programs on your various disk drives.
+    Put an automatic menu on each of the disks you use regularly.
+    
+    You are prompted for the names of the programs you want included in a
+    particular menu, then asked for the commands needed to run them.
+    MENU-EZE lets you choose the colors for your menu screen and you can
+    make a different menu for each of the disks in your library (including
+    your hard disk).
+
+### Directory of PC-SIG Library Disk 0936
 
      Volume in drive A has no label
      Directory of A:\

@@ -8,7 +8,7 @@ machines:
   - id: ibm5170-vga
     type: pcx86
     config: /machines/pcx86/ibm/5170/vga/2048kb/cdrom/machine.xml
-    cdromDrives: '[{name:"CD",type:0,path:"/discs/cds002/microsoft/tools/MSPL10/cdrom"}]'
+    cdromDrives: '[{name:"CD",type:0,path:"/disks/cdroms/cds002/microsoft/tools/MSPL10/cdrom"}]'
 ---
 
 I recently obtained a copy of Microsoft Programmer's Library 1.0, a CD-ROM released in 1988.

@@ -6,16 +6,48 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #673"
+      B: "PC-SIG Library Disk 0673"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #673
+## Information about "FREEWAY 3 OF 3 (ALSO 671, 672)"
+
+    This is a payroll management system built expressly for the European
+    businessplace. FREEWAY PAYROLL programs can accomodate weekly,
+    fortnightly, four weekly and monthly pay frequencies. The programs
+    provide:
+    
+    ~ Payslip stationery (obtainable from the author)
+    
+    ~ Bank Giro's and payment lists
+    
+    ~ Cheque printing
+    
+    ~ Internal pension schemes with fixed sum or percentage contributions
+    ~ Additional voluntary contributions
+    
+    ~ Up to 99 departments each with a coin analysis and cost of payroll
+    total
+    
+    You may create your own headings for taxable and non-taxable additions
+    to pay and post-tax deductions. You may produce lists of deductions
+    under these headings. (Year-end documentation includes P35 and P60
+    forms, also obtainable from author.) The system accommodates
+    statutory sick pay, and password protection. The user may change tax
+    rates and bandwidths, as well as earnings brackets.
+    
+    Each employee may have attached to his record card, in addition to basic
+    pay and hours, any regularly occuring payment or deduction. During
+    entry of pay data, only these employees will have the variables entered.
+    Calculation of pay and deductions is very flexible,
+    permitting recalculation if necessary.
+
+### Directory of PC-SIG Library Disk 0673
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,84 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #184"
+      B: "PC-SIG Library Disk 0184"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #184
+## Information about "DOS UTILITIES NO 9"
+
+    Among this disk's collection are programs that allow you to copy
+    "protected" disks, generate a listing of directories, alter file
+    attributes, clean your disk drives, purge files, fix DOS 1.1 bugs, and
+    other miscellaneous utilities.  The remainder is a group of early
+    devices for removing copy protection schemes from your software.
+    
+    NOTE: CAREFULLY EXAMINE THE UNPROTECT FILES TO BE SURE THAT YOUR
+    VERSION IS HERE.
+    
+    Special Requirements:  Some programs require color and others
+    require BASIC.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:
+    
+    File Descriptions:
+    
+    (READ    ME)  Part of COVER.COM.
+    123STAR  UNP  How to unprotect LOTUS 123.
+    ALTER    COM  Alter file attributes.
+    ALTER    DOC  Documentation.
+    BASIC    UNP  How to unprotect BASIC compiler.
+    CHMOD    BAS  Change file attributes.
+    CHMOD    DOC  Documentation.
+    CLEAN2   COM  Update to disk drive cleaning utility.
+    CLEAN2   DOC  Documentation.
+    CO???    ASM  Source code for COVER.COM modules (7 files)..
+    CO???    OBJ  Object modules for COVER.COM (7 files).
+    COFIX    BAT  Batch file..
+    COLINK        Part of COVER.COM.
+    COPY40   COM  Copy utility that breaks some protected items.
+    COPY40   DOC  Documentation.
+    COPYALL  COM  Copy utility that breaks some protected items.
+    COVER    ASM  Part of COVER.COM.
+    COVER    COM  Create listing of a directory to put into disk envelope.
+    COVER    DOC  Part of COVER.COM (13K).
+    COVER    TXT  Documentation for COVER.COM.
+    COVERPRO ASM  Source for COVERPRO.COM.
+    COVERPRO COM  C.Itoh Prowriter version of COVER.COM.
+    CV       COM  Changes disk labels  (DOS 1.1, 2.0, 2.1).
+    CV       DOC  Documentation.
+    DCOPY    COM  Copies some protected items.
+    DFORMAT  COM  Format utility  (Buggy).
+    DOSBUG   DOC  Fix DOS 1.1 bugs.
+    EASYWR11 UNP  How to unprotect EASYWRITER.
+    FLTSIM   UNP  How to unprotect FLIGHT SIMULATOR.
+    LOTUS1A  UNP  How to unprotect LOTUS 123 1A.
+    MEMSHIFT UNP  How to unprotect MEMORY SHIFT.
+    MINIPRT  DOC  Prints directory in small shape for disk envelopes.
+    MS2      UNP  How to unprotect MEMORY SHIFT.
+    NEW123   UNP  How to unprotect LOTUS 123.
+    PFSFILE  UNP  How to unprotect PFS File.
+    PURGE    COM  Deletes selected files.
+    PURGE    DOC  Documentation.
+    RAMDSK16 COM  160KB RAM disk.
+    RAMDSK18 COM  180KB RAM disk.
+    RAMDSK32 COM  320KB RAM disk.
+    RAMDSK36 COM  360KB RAM disk.
+    RM18     ASM  Assembler source for RAM disks.
+    SPEEDUP2 DOC  DOS 2.0 disk drive speed up utility.
+    VISICALC UNP  How to unprotect VISICALC.
+    WORD     UNP  How to unprotect WORD.
+    WORDNEW  UNP  How to unprotect WORD.
+    ZORK3    UNP  How to unprotect ZORK.
+
+### Directory of PC-SIG Library Disk 0184
 
      Volume in drive A has no label
      Directory of A:\

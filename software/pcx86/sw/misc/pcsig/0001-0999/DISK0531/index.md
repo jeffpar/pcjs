@@ -6,16 +6,53 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #531"
+      B: "PC-SIG Library Disk 0531"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #531
+## Information about "ALAN'S TEXT EDITOR"
+
+    Alan's Text Editor & Spreadsheet is a full screen ASCII text processor
+    program with simple wordprocessing functions, including multi-file
+    capabilities.  The program is well supported with documentation and
+    help menus, but does require an understanding of ASCII text editing.
+    The spreadsheet is functional, but clumsy.  Sample spreadsheet files
+    include balloon payments, loan mortgages and other simple accounting
+    uses.
+    
+    System Requirements:  128K, two disk drives and monochrome display
+    
+    How to Start:   Load DOS and type AE to enter the ASCII editor program.
+    Type AC to enter the spreadsheet program. Consult README and the .DOC
+    files for program documentation.
+    
+    Suggested Registration:  $35.00
+    
+    File Descriptions:
+    
+    AE       HLP  Help Screens for Alan's Editor
+    AE       DOC  Documentation for Alan's Editor - printer formatted manual
+    AE       EXE  Alan's Editor ASCII Text Processor Program
+    -------- ---  Alan's Editor
+    BUDGET   AC   Sample Spreadsheet File - Household Budget Calculations
+    SUMMARY  AC   Sample Spreadsheet File - Business Budget Summary
+    BALANCE  AC   Sample Spreadsheet File - Checkbook Balancing exercize
+    MORT     AC   Sample Spreadsheet File - Amortgage on a loan
+    BALLOON  AC   Sample Spreadsheet File - Balloon Payments for car purchas
+    AC       DOC  Documentation for Alan's Calc - printer formatted manual
+    AC       EXE  Alan's Calc Spreadsheet Program
+    -------- ---  Alan's Spreadsheet
+    SHEET2   AC   Sample Spreadsheet File - Work Sheet #2 for Summary
+    SHEET1   AC   Sample Spreadsheet File - Linked Work Sheet #1 for Summary
+    README        Author's Introduction to files on disk.
+    XYZCO    AC   Sample Spreadsheet File - Financial Data, XYZCO
+
+### Directory of PC-SIG Library Disk 0531
 
      Volume in drive A has no label
      Directory of A:\

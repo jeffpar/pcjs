@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #741"
+      B: "PC-SIG Library Disk 0741"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #741
+## Information about "PURCHASE ORDER SYSTEM"
+
+    PURCHASE ORDER SYSTEM is great for almost any kind of business. It
+    makes it easy to enter and print purchase orders, and keep a record of
+    all vendors. You can enter a list of vendors with addresses and phone
+    numbers, which you can later browse, edit, or delete. And you can print
+    a vendor master list.
+    
+    When entering a purchase order, the screen is divided into several
+    columns for the account number, quantity, unit, item description, and
+    price. Outstanding purchase transactions can be printed by account,
+    vendor, or purchase order. Purchases received can be cleared
+    immediately, and if a purchase transaction is accidentally cleared it
+    can be uncleared for recall.
+
+### Directory of PC-SIG Library Disk 0741
 
      Volume in drive A has no label
      Directory of A:\

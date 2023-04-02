@@ -6,16 +6,49 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #160"
+      B: "PC-SIG Library Disk 0160"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #160
+## Information about "PC FIRING ISSUE #2"
+
+    This is the second issue of PC Firing Line, with the magazine's official
+    title.  It has been positioned as the underground newspaper for the IBM
+    user.  You will be presented with the untold tales and in-depth
+    programming aids.  Some of the articles are ADA, Assembly routines,
+    LISP, Fortran, and items not written about by IBM.  It also contains
+    many sample program listings with accompanying documentation.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $12.00
+    
+    File Descriptions:
+    
+    ???      TXT  Various information and reviews (22 files).
+    ADABOOK  REV  Book reviews on 6 different ADA books.
+    GRABBAG  C    Source code for USQ.C.
+    ITOP     LSP  Routine converts infix to prefix mathematical expressions.
+    LISP1    TXT  Various mathematical utilities.
+    LIST1    ADA  Various mathematical utilities
+    LIST1    ASM  Various mathematical utilities.
+    LIST1    BAS  Various mathematical utilities
+    LIST1    C    Various mathematical utilities
+    LIST1    FOR  Various mathematical utilities.
+    PCFL     EXE  PC-Firing Line main program.
+    PRETTY1  COM  Printer interface routine.
+    READISCO PE   Documentation for READISCOPE program.
+    SPLITA   BAT  Splits this diskette for side sided copying.
+    WRITERS  GDE  Text file.
+
+### Directory of PC-SIG Library Disk 0160
 
      Volume in drive A has no label
      Directory of A:\

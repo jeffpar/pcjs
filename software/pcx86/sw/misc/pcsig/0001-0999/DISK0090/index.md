@@ -6,16 +6,50 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #90"
+      B: "PC-SIG Library Disk 0090"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #90
+## Information about "GENEALOGY ON DISPLAY"
+
+    Genealogy On Display is an integrated, menu-driven group
+    of 20 unprotected BASIC programs for IBM PCs (including the IBM-PCjr).
+    The programs will help you organize, record, and report your own
+    genealogical data.
+    
+    As shipped, GENEALOGY ON DISPLAY provides for 500 persons and 200
+    marriages within its database, with no specific generation limit. These
+    numbers can be increased to over 3000 persons and over 1000
+    marriages with sufficient storage space; i.e., a hard drive.
+    
+    Output available for printing or displaying on the screen includes:
+    
+    ~ Charts of ancestors (pedigree or family tree charts)
+    
+    ~ Charts of families (family group charts)
+    
+    ~ Charts of descendants (30 generations default)
+    
+    ~ Detailed personal information
+    
+    ~ Detailed marriage information
+    
+    ~ Lists of persons (by number or alphabetized)
+    
+    ~ Lists of marriages (by number or alphabetized)
+    
+    ~ Lists of parent/child relationships
+    
+    Note: A companion disk (PC-SIG disk number 594) is not necessary to run
+    this disk, but it offers additional functions and smooths out the
+    operation.
+
+### Directory of PC-SIG Library Disk 0090
 
      Volume in drive A has no label
      Directory of A:\

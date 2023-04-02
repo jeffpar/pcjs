@@ -6,16 +6,26 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #254"
+      B: "PC-SIG Library Disk 0254"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #254
+## Information about "PC-DOS HELP"
+
+    Lost in the wilds of DOS again? Here's real direction for you -- an
+    on-line help function for DOS commands in versions 2.0, 2.1 and PCjr.
+    This is especially informative for the beginner.
+    
+    How do you get there from here? Just type HELP, followed by the DOS
+    command you are unsure of, and PC-DOS HELP shows you its proper usage
+    and leads you back into the light.
+
+### Directory of PC-SIG Library Disk 0254
 
      Volume in drive A has no label
      Directory of A:\

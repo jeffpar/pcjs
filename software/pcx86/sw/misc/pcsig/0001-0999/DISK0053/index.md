@@ -6,16 +6,28 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #53"
+      B: "PC-SIG Library Disk 0053"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #53
+## Information about "SOUNDS"
+
+    SOUNDS is BASICally just good fun.  It is a collection of routines
+    written in BASIC that produce sounds ranging from TA-DAH to exploding
+    bombs.  Actually, since the routines produce no graphics -- nothing on
+    the screen at all -- they work best with another, probably fun,
+    project.  A little something to add that ``extra'' touch.
+    
+    On the other hand, SOUNDS represents an excellent study tool for the
+    BASIC programmer looking to determine the details of a given sound
+    routine.
+
+### Directory of PC-SIG Library Disk 0053
 
      Volume in drive A has no label
      Directory of A:\

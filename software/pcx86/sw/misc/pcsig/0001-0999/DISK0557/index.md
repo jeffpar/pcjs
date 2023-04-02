@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #557"
+      B: "PC-SIG Library Disk 0557"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #557
+## Information about "PINBALL RALLY"
+
+    Here is a disk for the pinball addict.  It has three games
+    created using the program ``Pinball Construction Set,'' by Bill
+    Budge.  The games vary in the level of difficulty but they are all
+    interesting.  They include PINBALL, which is the standard pinball game;
+    RAIN, is a more complicated game as it uses five pinballs at the same
+    time; and TWILZON2, is perhaps the most difficult -- something for the
+    Rod Serling fans.
+    File Descriptions:
+    
+    RAIN     EXE  Pinball program with 5 balls!
+    PINBALL  EXE  Program to execute a standard pinball game
+    TWILZON2 COM  TWILIGHT ZONE pinball, a must for the pinball player
+
+### Directory of PC-SIG Library Disk 0557
 
      Volume in drive A has no label
      Directory of A:\

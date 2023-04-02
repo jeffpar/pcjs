@@ -6,16 +6,42 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #915"
+      B: "PC-SIG Library Disk 0915"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #915
+## Information about "EDIR:  A DOS UTILITY"
+
+    EDIR lets you manipulate MS-DOS directories in a full-screen editor.
+    The program gives you full control over the order in which the
+    individual directory entries are stored on disk.  It can sort
+    directories by filename, extension, date, size, or any other arbitrary
+    order.  EDIR gives you a number of other facilities to manage your
+    directories: change filenames, file attributes, date and time stamps on
+    files.  You can also create, copy, delete, move, and view files in a
+    convenient manner.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  $20.00
+    
+    File Descriptions:
+    
+    EDIR1301 ARC  EDIR archive file.
+    EDIR1301 DOC  Documentation on EDIR version 1.301.
+    EDIR1301 EXE  The EDIR main program.
+    EDIR301  DOC  Documentation on EDIR version 3.01.
+    EL25     COM  EGA utility: 25 lines display.
+    EL43     COM  EGA utility: 43 lines display.
+
+### Directory of PC-SIG Library Disk 0915
 
      Volume in drive A has no label
      Directory of A:\

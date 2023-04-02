@@ -6,16 +6,32 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #839"
+      B: "PC-SIG Library Disk 0839"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #839
+## Information about "GREETINGWARE CHRISTMAS AND BIRTHDAY"
+
+    This is one greeting card that won't get thrown in a shoebox after the
+    occasion is over. Just think of the fun your friends and relatives will
+    have when they receive a customized birthday or Christmas card-on-a-disk
+    from you!
+    
+    GREETINGWARE's CHRISTMAS MEDLEY and BIRTHDAY MEDLEY will let you send a
+    musical and colorful electronic greeting card. The Christmas card
+    entertains you with a Christmas tree with flashing lights, while the
+    birthday card greets you with a cake and candles.
+    
+    Each card plays six songs, which your family and friends can sing along
+    with. The program will put the words on the screen and then... just
+    follow the bouncing ball.
+
+### Directory of PC-SIG Library Disk 0839
 
      Volume in drive A has no label
      Directory of A:\

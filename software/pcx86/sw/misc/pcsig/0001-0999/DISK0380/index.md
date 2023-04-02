@@ -6,16 +6,43 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #380"
+      B: "PC-SIG Library Disk 0380"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #380
+## Information about "GLUDRAW"
+
+    GLUDRAW offers good graphics generation software with extensive on-line
+    help and sample drawings.  It is a simple easy to use program for both
+    children and adults.  This software requires BASRUN.EXE which is part
+    of the BASIC compiler, a commercial program.  If you need to generate
+    graphics images with any regularity, this is a program worth your
+    consideration.
+    
+    System Requirements: Color graphics; some programs require BASIC
+    
+    How to Start: Load DOS and type GLUDRAW.  (BASRUN.EXE must be resident
+    on memory.)  To run BASIC programs consult the directions in GETTING
+    STARTED for your configuration.
+    
+    File Descriptions:
+    
+    GLUDRAW  EXE  Main executable program
+    DRAW3    EXE  Part of GLUDRAW.EXE
+    DRAW2    EXE  Part of GLUDRAW.EXE
+    DRAWHELP DIR  On-line help system
+    *        PIC  Sample picture file  (30 Files)
+    DRAW5    EXE  Part of GLUDRAW.EXE
+    DRAW4    EXE  Part of GLUDRAW.EXE
+    DRAW???? HLP  Part of on-line help system (32 Files)
+    BASRUN   BAS  BASIC runtime program
+
+### Directory of PC-SIG Library Disk 0380
 
      Volume in drive A has no label
      Directory of A:\

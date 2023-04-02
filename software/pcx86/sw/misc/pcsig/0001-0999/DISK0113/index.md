@@ -6,16 +6,70 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #113"
+      B: "PC-SIG Library Disk 0113"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #113
+## Information about "THREE USER SUPPORTED PROGRAMS"
+
+    Here are three programs for system enhancement: 1) the Datamorphics
+    Screen package for greater display control, 2) PC-COMPARE for comparing
+    data files and; 3) DEFKEY, a keyboard reassignment program simular to
+    Prokey.  All of these programs can be quite helpful in streamlining and
+    simplifying your daily operations.
+    
+    System Requirements:  Some programs require a version of BASIC
+    
+    How to Start: Consult the .DOC and README files for directions and
+    documentation.  To run the BASIC programs, consult the directions in
+    GETTING STARTED for your configuration.  To run any of the programs
+    with the suffix .COM or .EXE, just type its name, i.e., for
+    COMPARE.COM, type COMPARE and press <ENTER>.
+    
+    Suggested Registration:  PC-PAGE $20.00
+    
+    File Descriptions:
+    
+    -------- ---  Datamorphics Screen programs
+    DEFKEY   BAT  Batch file to automatically run DEFKEY program
+    DEFKEY   BAS  Program to reassign keyboard keys  (Requires DOS 2.0)
+    PROGRAM  DOC  Instructions for running DEFKEY program
+    READ     ME   Brief description of Datamorphics Screen programs
+    FILES    LST  Listing of the PC-COMPARE files
+    -------- ---  DEFKEY
+    INVOICE       Form for generating invoice for screen package
+    PC-BW    DOC  Documentation for PC-BW  (3 pages)
+    PC-PAGE  DOC  Documentation for PC-PAGE  (3 pages)
+    PC-TTY   DOC  Documentation for PC-TTY  (4 pages)
+    WRAP     COM  Sets line wrapping on or off
+    PC-TTY   COM  Program modifies TTY emulation of BIOS
+    PC-BW    COM  Allows monochrome screen calls to work on color board
+    -------- ---  PC-COMPARE 1.30
+    *        D11  DOS 1.1 optimized versions of screen programs (3 files)
+    PC-PAGE  COM  Prevents text from scrolling off screen
+    PAGE     COM  Modifies page length setting of PC-PAGE
+    COMPARE? DOC  Part of PC-COMPARE documentation (6 files)
+    RUN      BAT  Invokes the PC-COMPARE 4-part screen tutorial and program
+    BEEP     COM  Used by PC-COMPARE
+    CLS      COM  Utility to clear the screen, for running under DOS 1.10
+    PRINTDOC BAT  Used to send COMPLETE.DOC to the printer
+    COMPLETE DOC  Documentation for COMPARE.COM (3 pages)
+    COMPARE  COM  The COMPARE program itself
+    COPYCOMP BAT  Makes a backup PC-COMPARE files from Drive A to Drive B
+    SAMP2    TXT  Sample file to be used with RUN.BAT
+    SAMP1    TXT  Sample file to be used with RUN.BAT
+    KEYS     BAS  Program to redefine BASIC program keys
+    DEFKEY   DOC  Instructions for running DEFKEY program  (3 pages)
+    BASICAK  BAT  Loads BASIC and runs KEYS.BAS from DOS
+    MOD100IN BAS  Program to load files from Radio Shack Model 100
+    MOD100IN DOC  Documentation for MOD100IN.BAS  (5 pages)
+
+### Directory of PC-SIG Library Disk 0113
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #793"
+      B: "PC-SIG Library Disk 0793"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #793
+## Information about "TYPING BY RYSOFT"
+
+    Get those fingers of yours warmed up!  Here is a new test for them.
+    TYPING is an easy-to-use program that gives feedback on your
+    typing performance.  It displays the text on the screen, and you start
+    typing -- quickly, now! -- and no mistakes!  The timer starts as soon as
+    you hit the first key.
+    
+    TYPING does not display any statistics while you are typing.  When the
+    timer runs out, the screen clears and your typing performance is
+    displayed in words per minute, total errors, and adjusted words per
+    minute.  The nice thing about TYPING is you can either type from
+    the screen or print the test file and type from that.  You can
+    also supply your own file to type if you want.
+
+### Directory of PC-SIG Library Disk 0793
 
      Volume in drive A has no label
      Directory of A:\

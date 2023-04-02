@@ -6,16 +6,31 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #218"
+      B: "PC-SIG Library Disk 0218"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #218
+## Information about "ADDRESS MANAGER"
+
+    ADDRESS MANAGER helps you keep multiple databases of names, addresses,
+    phone numbers, and useful comments.  You can add new entries and delete
+    or update current ones easily.
+    
+    The program is especially designed to address envelopes -- always a
+    problem area, as well as print labels and even entire mailing lists.
+    Labels can be printed on sheets from one to four across, and all
+    entries can be sorted by zip code before printing.
+    
+    ADDRESS MANAGER menus are function-key driven.  On-line help is
+    available from each menu.  This provides a quick and user-friendly
+    interface, one that is easy to learn and use.
+
+### Directory of PC-SIG Library Disk 0218
 
      Volume in drive A has no label
      Directory of A:\

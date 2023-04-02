@@ -6,16 +6,61 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #589"
+      B: "PC-SIG Library Disk 0589"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #589
+## Information about "PTOOLS"
+
+    PTOOLS will prove to be an aid to the Turbo Pascal programmer at every
+    level.  Included on the disk are the source code files for each of the
+    routines, which will be included in your programs when compiled.  Also
+    included is a documentation file with complete rules for use and a
+    description of the routine itself.  Included for your convenience is a
+    demonstration program of each of the routines.
+    
+    Also, these are complete stand-alone programs which can be compiled
+    and run.  They will give the user a good feel for exactly what the
+    routine does and how to best utilize it.  Included on this disk are
+    routines which will create a window of any size and color which can
+    overlay a text screen and later be removed (PTOOLWIN), a routine to
+    change date types and manipulate them, many routines to allow program
+    controlled data entry and editing.
+    
+    System Requirements: 64K, one disk drive and monochrome/graphics
+    display.
+    
+    How to Start: Check the .DOC files for each program.  Then, since
+    these are all Turbo Pascal routines to incorporate into other PASCAL
+    programs, the document files will provide all the instructions.
+    
+    Suggested Registration:  $20.00
+    
+    File Descriptions:
+    
+    PTOOLSCR PAS  Demo for the PTOOLSCR routines
+    PTOOLSCR INC  Routines to manipulate screen functions
+    PTOOLENT PAS  Demo of the PTOOLENT routines
+    PTOOLENT INC  Routines to display, edit and validate data entry fields
+    PTOOLENT DOC  Documentation of the PTOOLENT routines
+    PTOOLDAT PAS  Demo of PTOOLDAT routines
+    PTOOLDAT INC  Converts and manipulates Gregorian & Julian dates
+    PTOOL1   BOX  Combination of PTOOLDAT, PTOOLENT, PTOOLSCR programs
+    PTOOLTIM PAS  Demo for the PTOOLTIM routines
+    PTOOLTIM INC  Routines to read and interpret system clock
+    PTOOLWIN PAS  Demo for the PTOOLWIN routines
+    PTOOLWIN DOC  Documentation of the PTOOLWIN routines
+    PTOOLWI3 PAS  Demo for the PTOOLWI3 routines
+    PTOOLWI3 INC  Routines to create and manipulate text windows
+    PTOOLWI3 DOC  Documentation of the PTOOLWI3 routines
+    PTOOLWIN INC  Routines to create and manipulate text windows
+
+### Directory of PC-SIG Library Disk 0589
 
      Volume in drive A has no label
      Directory of A:\

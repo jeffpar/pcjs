@@ -6,16 +6,42 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #71"
+      B: "PC-SIG Library Disk 0071"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #71
+## Information about "GAME SERIES NO 10"
+
+    This is truly a game collection for the adventurous.  Can you fly a
+    starship into a hostile galaxy?  How about finding the minerals you
+    need?  Can you survive a journey into a dangerous castle, hunt the
+    elusive, (and sometimes dangerous), Wumpus?  Challenge the unknown,
+    accompanied by your trusty computer, and live to tell about it!
+    
+    System Requirements:  BASIC.
+    
+    How to Start: To read DOC files, enter TYPE filename.ext and press
+    <ENTER>.  For instructions on running BASIC programs, please refer to
+    the GETTING STARTED section in this catalog.
+    
+    File Descriptions:
+    
+    STARTREK BAS  Another Startrek
+    ZAP'EM   BAS  IPCO shoot'em type game
+    STARTREK DOC  Documentation for STARTREK.BAS
+    CYCLE    BAS  IPCO motorcycle race, Q&A type game
+    LOSTGOLD BAS  IPCO Adventure type game
+    DROIDS   BAS  IPCO Hunt for minerals (board game)
+    WIZARD   BAS  IPCO The Wizards Castle
+    MEMORY   BAS  IPCO game to test your memory
+    SPELLER  BAS  IPCO spelling word drill (input your own words)
+
+### Directory of PC-SIG Library Disk 0071
 
      Volume in drive A has no label
      Directory of A:\

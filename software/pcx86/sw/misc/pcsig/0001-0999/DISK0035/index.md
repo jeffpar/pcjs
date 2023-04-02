@@ -6,16 +6,58 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #35"
+      B: "PC-SIG Library Disk 0035"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #35
+## Information about "GAMES SERIES NO 5"
+
+    Another collection of games from the earlier years of PC-SIG.  All
+    these games have been in the library since the early 1980's.  These
+    programs are not only entertaining, but will show you the origins of
+    some of later programs in the library.  Some programs here have some
+    practical uses as well.  Simple phone lists, checkbook programs, and
+    others provide useful functions for you to enjoy.
+    
+    Special Requirements:  A version of BASIC.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:  None.
+    
+    File Descriptions:
+    
+    BULLSEYE BAS  Simulated dart game.
+    CHESS    BAS  Play chess with the computer.
+    CHIEF    BAS  Math game.
+    CAPTURE  BAS  Logic game, try to capture the enemy space ship.
+    DECIDE   BAS  Helps decide between alternatives.
+    GOLF     BAS  Play golf, pick your club and stroke.
+    DESERT   BAS  Try to cross the desert without getting killed.
+    BARGRAPH BAS  Creates bargraphs.
+    KENO     BAS  Nevada style bingo.
+    ICICLE   BAS  A race to the top of the screen.
+    LOAN     BAS  Loan amortization program.
+    LEM      BAS  A moon lander program.
+    LANDER   BAS  Another moon lander program.
+    KINGDOM  BAS  Can you survive your term as king?
+    MISSLE   BAS  Earth under attack from another planet.
+    SECRETNO BAS  You try to guess the number.
+    STARS    BAS  Challenging permutation puzzle to solve.
+    STORY    BAS  Creates four stories from user-supplied words.
+    TRAP     BAS  Number guessing game.
+    STRIKE9  BAS  Dice roll numbers game.
+    ZAP-EM   BAS  Space shoot'em on the monochrome.
+    23MATCH  BAS  The match game.
+    ADDRESS  BAS  Addresses and phone numbers.
+    BANKER   BAS  Checking account maintenance, expense categories.
+
+### Directory of PC-SIG Library Disk 0035
 
      Volume in drive A has no label
      Directory of A:\

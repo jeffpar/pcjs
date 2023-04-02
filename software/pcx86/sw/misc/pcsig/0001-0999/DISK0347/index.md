@@ -6,16 +6,33 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #347"
+      B: "PC-SIG Library Disk 0347"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #347
+## Information about "PC-FOIL"
+
+    PC-FOIL consists of two routines - FOIL-EDIT and PC-FOIL.  These
+    programs combine to provide a multi- purpose tool for the creation of
+    overhead transparencies and attractive documents.
+    
+    When the large print, bold print, and boxes are combined with your own
+    creativity and agenda, the effect can be dramatic.  You develop the
+    presentation or document using FOIL-EDIT, a general purpose full-screen
+    editor, and then print it.  Use it as a word processor, creating
+    programs or modifying standard DOS files.  Fast and easy to use, it
+    offers both menus and commands appropriate to your skill level.
+    Complete with on-line Help.
+    
+    You have the information you want to present.  Now, here's the program
+    that can do it!
+
+### Directory of PC-SIG Library Disk 0347
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,30 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #980"
+      B: "PC-SIG Library Disk 0980"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #980
+## Information about "VANILLA SNOBOL4"
+
+    VANILLA SNOBOL4 is an easy-to-learn, flexible language used for
+    non-numeric applications, such as artificial intelligence, database
+    analysis, text formatting, data conversion, identifying data patterns,
+    searching text files, and more.
+    
+    This version of SNOBOL4 does not have real numbers, and the object
+    program and data cannot exceed 30K in size.  Otherwise, VANILLA SNOBOL4
+    provides the entire SNOBOL4 programming language as described in
+    textbooks.  Source programs for SNOBOL4 are typically 5 to 10 times
+    smaller than equivalent C or Pascal programs.  A 150-page language
+    tutorial and reference manual are included.
+
+### Directory of PC-SIG Library Disk 0980
 
      Volume in drive A has no label
      Directory of A:\

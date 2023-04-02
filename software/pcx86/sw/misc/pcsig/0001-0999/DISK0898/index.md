@@ -6,16 +6,53 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #898"
+      B: "PC-SIG Library Disk 0898"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #898
+## Information about "PC-TED AND COPYFIT-IT"
+
+    Programmers -- A text editor written especially for you to enter and
+    edit source code files.
+    
+    PC-TED can process two files at the same time; has full horizontal-
+    vertical screen editing; adjustable horizontal-vertical screen edit;
+    file comparison; full find/replace functions; block commands; an ASCII
+    table; and a DOS exit and command processor.  Print files, encrypt
+    files, and select a file to load from a directory list.  Help screens
+    are available.
+    File Descriptions:
+    
+    -------- ---  PC-TED.
+    PKXARC   EXE  Unarchiving utility.
+    READ     ME   Introductory note.
+    TED23    ARC  Archive containing above files.
+    TED      EXE  Main program.
+    
+    Copyfitting is the process of figuring out what typesetting format will
+    make a text fit the space available for it in a layout.  Try various
+    typeface (or typefaces) from those available from your typesetter.
+    COPYFIT-IT makes copyfitting faster and easier.
+    
+    The essential data needed is the character count and the type size.
+    COPYFIT-IT can calculate the height and number of lines for paragraphs.
+    Determine the line length, the characters per line and number of
+    characters in the line.  This program can copyfit individual lines of
+    type with the same or different type sizes, paragraphs, paragraphs and
+    individual lines together, or long texts.
+    File Descriptions:
+    
+    -------- ---  COPYFIT-IT.
+    COPYFIT  COM  Main program.
+    COPYFIT  DOC  Documentation.
+    README        Program introduction.
+
+### Directory of PC-SIG Library Disk 0898
 
      Volume in drive A has no label
      Directory of A:\

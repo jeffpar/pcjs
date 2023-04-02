@@ -6,16 +6,28 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #120"
+      B: "PC-SIG Library Disk 0120"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #120
+## Information about "PC-CHESS"
+
+    This program lets you play chess against the computer or a human
+    opponent. The level of the computer's chess games are not particularly
+    difficult, so it is not a challenge for experts.  But when competing
+    against human opponents, the program can store up to 26 games in-
+    progress.
+    
+    The graphics of the game only appear on systems using either EGA or CGA
+    adapter cards. The program uses ASCII characters to depict the chess
+    pieces on a monochrome or Hercules graphics systems.
+
+### Directory of PC-SIG Library Disk 0120
 
      Volume in drive A has no label
      Directory of A:\

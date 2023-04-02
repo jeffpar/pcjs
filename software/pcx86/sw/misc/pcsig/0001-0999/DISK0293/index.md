@@ -6,16 +6,35 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #293"
+      B: "PC-SIG Library Disk 0293"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #293
+## Information about "ARCADE SERIES 3"
+
+    A really fine collection of colorful arcade games.  If you can't find a
+    game to suit you here, perhaps you're just not a game player.  This
+    collection of games for the color tube will catch and hold your
+    attention for hours.  They work well on the PCjr also.
+    
+    File Descriptions:
+    
+    3-DEMON  EXE  A fascinating 3D Packman type game.
+    3-DEMON  HI1  Score keeper for 3-DEMON.
+    PC-GOLF  EXE  Plays golf on your color tube.
+    PANGO    EXE  Use blocks to squish the bees before they get YOU. PANGO
+    HGH  Score keeper for PANGO.
+    KONG     EXE  Jump the barrels and watch out for the gorilla.
+    FORTUNE  EXE  Word game like Wheel of Fortune (mono).
+    PYRAMID  EXE  Climb the pyramid and the blocks change color.
+    PITFALL  EXE  Diving down a long pit but don't touch the walls (mono).
+
+### Directory of PC-SIG Library Disk 0293
 
      Volume in drive A has no label
      Directory of A:\

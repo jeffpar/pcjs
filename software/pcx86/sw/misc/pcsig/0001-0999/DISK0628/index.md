@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #628"
+      B: "PC-SIG Library Disk 0628"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #628
+## Information about "BIBLEQ"
+
+    BIBLE-Q is a trivia-type game with 600 multiple-choice questions drawn
+    from the Bible (600 more available with registration). Bible students
+    and teachers of the church school variety will certainly want this in
+    their collections.
+    
+    Test youself and others on a wide range of topics including geography of
+    the Biblical lands, personalities, incidents, and teachings of the
+    Gospels. Players can choose the category and difficulty level of the
+    question. Combine with WORDWORKER (PC-SIG disk #'s 581, 582) and you
+    have the foundation for an excellent on-line scripture study system.
+
+### Directory of PC-SIG Library Disk 0628
 
      Volume in drive A has no label
      Directory of A:\

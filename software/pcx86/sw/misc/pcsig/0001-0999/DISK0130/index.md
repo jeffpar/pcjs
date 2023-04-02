@@ -6,16 +6,42 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #130"
+      B: "PC-SIG Library Disk 0130"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #130
+## Information about "PASCAL TOOLS VOL 1"
+
+    This is the first of the three-disk series Pascal Tools (Disks #130-
+    132).  The series consists of routines adapted from the book "Software
+    Tools in Pascal" which are useful for processing and extracting
+    information from text files.  This disk includes six programs for
+    formatting output, echoing arguments to output, defining your KWIC
+    (key-word-in-context) index, and a file archiving program.
+    
+    How to Start: Read manual (*.MAN) files before using corresponding
+    programs.  To run a .EXE file, enter: filename <ENTER>.
+    
+    File Descriptions:
+    
+    README1       Notes about using Pascal Tools
+    ARCHIVE  EXE  File archiving program
+    CHARCNT  EXE  Count characters in input
+    CHANGE   EXE  Changes patterns in text
+    KWIC     EXE  Produce lines for KWIC index
+    FMT      EXE  Produce formatted output
+    FINDP    EXE  Find patterns in text
+    ECHOARG  EXE  Echo arguments to output
+    *        MAN  Documentation  (17 files)
+    *        FNT  Printer setup files (4 files)
+    MAN      IM   Macros for manual page
+
+### Directory of PC-SIG Library Disk 0130
 
      Volume in drive A has no label
      Directory of A:\

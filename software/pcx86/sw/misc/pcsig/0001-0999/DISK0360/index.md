@@ -6,16 +6,33 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #360"
+      B: "PC-SIG Library Disk 0360"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #360
+## Information about "PFROI, PORTFOLIO MANAGEMENT WITH ROI"
+
+    Now you can track your investments daily.  How often have you analyzed
+    just how much of an increase, (or, sadly, a decrease), from the
+    original cost, that daily value represents?  PFROI helps you to
+    maintain and manage a securities (stocks, bonds, mutual funds, CDs,
+    etc.) portfolio and periodically measure the return on investment.
+    
+    Several reports and analyses are available: gains, dividends, interest,
+    miscellaneous income, open lots, transactions, account position,
+    relative strength, valuation plot, portfolio ROI, security ROI and
+    client statement.  Focus on those marginal investments in order to make
+    well-informed GO/NO GO decisions.  PFROI does not download electronic
+    stock data.  A demonstration data file is included.
+    
+    Manage an extensive portfolio and plan and prepare your taxes.
+
+### Directory of PC-SIG Library Disk 0360
 
      Volume in drive A has no label
      Directory of A:\

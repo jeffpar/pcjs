@@ -6,16 +6,62 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #587"
+      B: "PC-SIG Library Disk 0587"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #587
+## Information about "SYMPHONY MACROS AND WORDPROS. TIPS"
+
+    This disk contains a variety of prize-winning tips and Macros for
+    SYMPHONY, including tips on importing wordprocessor files, Multiplan
+    files, using SIDEKICK with SYMPHONY, and much more.  In addition to
+    great tips, there are also worksheets for creating a phone and address
+    directory, creating and printing mailling labels, creating macros, and
+    setting up multi-column documents.  Utilities perform hexadecimal to
+    decimal conversions (and vice versa), simulation of 123 window
+    sychronization capability, calculation of metric values of resistance
+    and tolerance of resistors.  Also included is a macro demonstration and
+    macro tips using the {get} function.  These utilities seem to solve
+    many of the conversion problems for major programs (WordStar, etc.).
+    
+    System Requirements:  512K, two disk drives, monochrome display and
+    Lotus SYMPHONY
+    
+    How to Start:  Access through Lotus Symphony
+    
+    File Descriptions:
+    
+    LABELS   WRK  Produces labels based upon a mailing list.
+    FLIPPER  APP  Data mover extension.
+    DEMO     WRK  Demonstration file.
+    DUALDS   WRK  Install Symphony with two monitors
+    APPTMENT WRK  An appointment and time management system.
+    ADDRMAC  WRK  Create an address book.
+    SKPROB   WRK  How to use SideKick with Symphony.
+    SEARDOC  WRK  Worksheet format Search documentation.
+    SEARCH   PRN  Printable documentation on search capability.
+    SEARCH   WRK  Worksheet using search capability.
+    MPLAN    APP  Imports Multiplan data into Symphony.
+    RESICO   WRK  Metric values of resistance and tolerance of resistors.
+    WNDWSY   WRK  Simulates 123 window synchronization capability.
+    CALC2    WRK  Elapsed calendar and business days between two dates.
+    HEX2DE   WRK  Converts hexadecimal to decimal numbers and vice versa.
+    SEARCH   APP  Searches spreadsheet for specific character.
+    WRDPRF   WRK  Use Word Proof in conjunction with Symphony.
+    WORDST   CTF  Converts a WordStar document for Symphony.
+    TWOCOL   WRK  Sets up a multi-column document.
+    MACRO1   WRK  Demonstration macro.
+    LEEVFORM WRK  Offers an important macro concept using {get}.
+    USERTIPS DOC  Protocols for use of some of these capabilities.
+    ORD_ENT  WRK  Uses almost all Symphony commands for order-entry program.
+    MOVIE    WRK  Use Symphony to display moving graphics.
+
+### Directory of PC-SIG Library Disk 0587
 
      Volume in drive A has no label
      Directory of A:\

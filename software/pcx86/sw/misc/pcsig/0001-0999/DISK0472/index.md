@@ -6,16 +6,58 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #472"
+      B: "PC-SIG Library Disk 0472"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #472
+## Information about "SIMPLIFIED BUSINESS"
+
+    All of the programs on this disk are menu driven and written in BASIC.
+    However, simplified doesn't mean simple; its powers and features are
+    quite substantial and we urge a careful reading of the documentation.
+    The Simplified Bookkeeping System offers you the following programs:
+    Expenses, Income, Bank Account, Payroll, Accounts Receivable,and
+    Summary of Operations.  A quite powerful collection for financial
+    management.
+    
+    System Requirements: 128K, two disk drives, monochrome display and
+    a printer
+    
+    How to Start: Consult the BKG.DOC file for documentation.  To run the
+    BASIC programs, consult the directions in GETTING STARTED for your
+    configuration.
+    
+    Suggested Registration: $35.00
+    
+    File Descriptions:
+    
+    ACCTREC  BAS  Processes Accounts Receivables
+    A        EXE  Information on how to use to backup your data
+    AUTOEXEC BAT  Request the DATE then loads BASICA BKPG /F:5
+    C        BAT  COPY PAYEE.FIL, CATEGORY.FIL, INCOME.FIL to B:
+    BKPG     BAK  Backup file of bookkeeping
+    BKPG     DOC  Author supplied documentation file
+    BKPG     BAS  This is the bookkeeping program
+    EXPENSE  BAS  Keeps track of expenses
+    CHECKING BAS  Maintains the checking account
+    L        BAT  Copies checking.acc to new backup bookkeeping disk.
+    INCOME   BAS  Keeps track of income
+    G        BAT  Copies totals to new backup bookkeeping disk.
+    F        BAT  Creates and formats two new disks.
+    X        BAT  Makes new backup copy of PAYROLL FILE DISK on drive B:
+    STARTUP  BAT  Author supplied User startup procedure batch file
+    SHELLSRT BAS  This is a shell sort program for sorting files
+    S        BAT  Format 6 disks by responding  "Y" first 5 times.
+    N        BAT  Creates two disks then loads BASICA & runs Payroll program
+    R        BAT  Creates two disks then loads BASICA & runs A/R program
+    PAYROLL  BAS  Processes the payroll
+
+### Directory of PC-SIG Library Disk 0472
 
      Volume in drive A has no label
      Directory of A:\

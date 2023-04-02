@@ -6,16 +6,40 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #904"
+      B: "PC-SIG Library Disk 0904"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #904
+## Information about "DROEGE 1 OF 2 (ALSO 905)"
+
+    DROEGE (Design Robot for Origination of Exacting Graphic Engineering)
+    was created for designing printed circuit photomasters.
+    
+    DROEGE is a manual CAD system, which means it has no automatic
+    functions such as schematic capture, wire listing, routing, parts
+    lists, etc. It does provide the computer-aided equivalent of a taped
+    master or drawing board with the advantage of always having things in
+    perfect registration and the ability to work on selected layers.
+    
+    General features include a 65" x 65" working area, twelve layers deep,
+    with a resolution of 0.001". The output can be scaled, however, so
+    what is actually provided is a 65,000 X 65,000 point working space.
+    Layers can be turned on and off and assigned any available color.
+    Lines, pads, symbols, arcs and labels can be entered. The symbol
+    feature is particularly powerful since symbols can be nested up to
+    twenty levels deep, allowing the construction of very complex objects
+    with a few keystrokes.
+    
+    Note: This program has a limited documentation file, so it will be
+    very helpful if you have prior experience with CAD systems and with
+    designing printed circuit boards.
+
+### Directory of PC-SIG Library Disk 0904
 
      Volume in drive A has no label
      Directory of A:\

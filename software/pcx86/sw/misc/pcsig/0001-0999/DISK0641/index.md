@@ -6,16 +6,41 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #641"
+      B: "PC-SIG Library Disk 0641"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #641
+## Information about "MAHJONG"
+
+    Run programs requiring a CGA card on a Hercules Graphics adapter.  This
+    emulator allows such programs as PC-Paint, Printmaster, Flight
+    Simulator and many others to run with no visible difference.
+    
+    MAHJONG is a Chinese gambling game which arrived in the West in the
+    early 1920's.  The origin of the game is unclear but its development has
+    touched on astrology, chess, gambling and, oddest of all, the Earth's
+    magnetic field.
+    
+    It is a fast moving, dynamic game that becomes addictive with its
+    excitement and intrigue.  The basic premise is a card game with 136
+    cards (or "tiles" as they are called in MAHJONG) requiring both skill
+    and luck.  Four players receive 13 tiles each and then pick up and
+    discard tiles as they try to obtain four complete sets and a single pair
+    of tiles.
+    
+    The game is interesting because of the many combinations possible and
+    the skill required to increase your score.  To add further excitement,
+    the fast pace provides little chance for contemplation -- thus
+    developing an "instinct" rarely seen in other games.  Three levels of
+    play are provided: beginner, advanced and professional.  An entertaining
+    game for the whole family.
+
+### Directory of PC-SIG Library Disk 0641
 
      Volume in drive A has no label
      Directory of A:\

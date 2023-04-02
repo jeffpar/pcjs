@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #958"
+      B: "PC-SIG Library Disk 0958"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #958
+## Information about "STOCK INVENTORY CONTROL"
+
+    STOCK was created specifically for maintaining inventory control for
+    businesses with a standard list of inventory items with specific order
+    levels. (Businesses that stock one-of-a-kind items can use STOCK, but
+    they must ignore references to order levels and year-to-date sales for
+    each item.)
+    
+    Items are listed as individual records in the database and each item has
+    an order level. The program was written in dBase III+, compiled and
+    runs directly from DOS. For those who know dBase, and like to tinker,
+    the source code is provided.
+
+### Directory of PC-SIG Library Disk 0958
 
      Volume in drive A has no label
      Directory of A:\

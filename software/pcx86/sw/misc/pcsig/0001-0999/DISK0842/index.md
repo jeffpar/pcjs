@@ -6,16 +6,37 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #842"
+      B: "PC-SIG Library Disk 0842"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #842
+## Information about "BOX (PROGRAMMERS UTILITY)"
+
+    BOX is a screen-designing tool that lets you quickly create entry
+    screens, help screens and menus.
+    
+    You start with a blank screen, and using simple commands, you can draw
+    lines, boxes, enter text, and change foreground and background colors.
+    You can repeat an entry, paint an area, copy or move portions of the
+    screen and select special characters from an ASCII table.  Boxes are
+    incredibly easy to design, and several different border lines are
+    provided to create them.
+    
+    Any screen can be saved in any of three formats, (ASCII, memory, or
+    packed), depending on the use of the screen.  ASCII format lets you save
+    your screen so it can be edited by a word processor.
+    
+    Memory or packed format screens can be loaded directly and popped
+    instantly on the monitor from a Pascal or C program.  This disk also
+    contains all the source code routines that you need to incorporate BOX
+    in your Turbo Pascal programs.
+
+### Directory of PC-SIG Library Disk 0842
 
      Volume in drive A has no label
      Directory of A:\

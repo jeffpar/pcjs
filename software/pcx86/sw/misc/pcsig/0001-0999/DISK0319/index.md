@@ -6,16 +6,82 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #319"
+      B: "PC-SIG Library Disk 0319"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #319
+## Information about "DOS UTILITIES NO 16"
+
+    This collection has a bit of something for every DOS user.  Find files
+    lost in a hard disk subdirectory or in a big pile of floppies.  List
+    BASIC and WordStar files without having to go into either program first.
+    Develop a visual DOS shell, remove hidden directories, manage your
+    memory, increase the speed of your disk drives, create a disk catalog,
+    print diskette labels and much more.  If you've ever been frustrated by
+    the design of DOS commands, this is a library you will use often.
+    File Descriptions:
+    
+    SCAVEN   DOC  Documentation for SCAVEN.
+    DRVTEST  BAS  Simple disk test.
+    DISKORAY EXE  Check diskette for rotation speed and seek test.
+    COVER2   COM  Prints compressed directory for diskette envelopes.
+    COVER    DOC  Documentation for cover2.
+    KNEW     DOC  Documentation for KNEW.EXE.
+    HIDE_RD  COM  Remove a hidden directory.
+    HIDE_MD  COM  Make a hidden directory.
+    HIDE_CD  COM  Access a hidden directory.
+    HIDE     DOC  Documentation for HIDE, a simple security system.
+    FDATE    DOC  Documentation for FDATE.
+    FDATE    COM  Change date and time stamp of a disk file.
+    FASTDISK COM  Part of SPEEDUP.
+    SCAVEN   COM  Protect blocks from being deallocated by CHKDSK.
+    RENDIR   COM  Rename directories.
+    READBAS5 EXE  List a non-ASCII basic program without loading BASIC.
+    PFM      COM  Visual shell for DOS commands.
+    PC-DISK  COM  Catalogs your floppy diskettes.
+    MOVE     DOC  Documentation for MOVE2.
+    MOVE     COM  Copy files to new dir and verify copy, erase old copy.
+    LISTPAST COM  List all files created before today.
+    LISTARCH COM  List all archive files.
+    KNEW     EXE  Copy *.* but only new files with more recent date stamp.
+    LIST---- DOC  Documentation for LIST2DAY,LISTPAST,LISTARCH.
+    LABEL    LBR  Part of COVER2.
+    LIST52   HLP  Part of LIST52.
+    LIST52   DOC  Documentation for LIST52.
+    LIST52   COM  Scroll up and down through files using editor keys.
+    LIST2DAY COM  List all files with today's date stamp.
+    SDIR26   COM  List directories in 4 columns with file name and size.
+    SDIR50   COM  Visual shell for executing DOS programs.
+    SDL      COM  List directories sorted by various means.
+    SDISK2   DOC  Documentation for SDISK2.
+    SDISK2   COM  Sorts disk directory so dir will list files in order.
+    SDIR50   DOC  Documentation for SDIR50.
+    SHOWDIR  COM  List subdirectories in a given directory.
+    SDL      DOC  Documentation for SDL.
+    SORTF    EXE  Sorts ASCII data files.
+    SORTF    DOC  Documentation for SORTF.
+    SPEEDUP  DOC  Documentation on SPEEDUP.
+    SPEEDUP  COM  Make your floppy disk run faster.
+    TD13     DOC  Documentation on TD13.
+    TD13     COM  Combines DOS TREE and DIR commands; makes a better tree.
+    ST       DOC  Documentation for ST.COM.
+    ST       COM  List WORDSTAR files one screen at a time.
+    TREE2    COM  Tree showing only subdirectory names without file names.
+    UNIQCOPY BAT  Same as copy *.* but only new files not on target disk.
+    UNIQCOPY DOC  Documentation for UNIQCOPY.
+    VFILER   EXE  Visual interface for maintaining files and subdirectories.
+    VFILER   DOC  Documentation for VFILER.
+    Z        EXE  Visual shell lets you look at your directories.
+    WHEREII  DOC  Documentation for WHEREII.
+    WHEREII  COM  Finds directory path for all copies of a file on a disk.
+    READ     ME   Notes on DB Screen.
+
+### Directory of PC-SIG Library Disk 0319
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,52 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #564"
+      B: "PC-SIG Library Disk 0564"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #564
+## Information about "JON DART'S UTILITIES"
+
+    Dos Utilities is a collection of usefull utilities for the PC user.
+    These programs do a number of diffrent things, from making a file read
+    only to doing a word count. There is even source code included on the
+    disk if you want to see how the programs were written.
+    
+    Special Requirements:  None.
+    
+    How to Start:  Type GO (press enter).
+    
+    Suggested Registration:
+    
+    File Descriptions:
+    
+    CLEAN    EXE  Program to remove control chars. from a file.
+    CP       EXE  File/directory copy utility.
+    CRC      EXE  Cyclic Redundancy Code generator.
+    DETAB    EXE  Program to expand tabs to spaces.
+    FDUMP    EXE  File dump/patch utility.
+    FIXLINES EXE  Makes all lines in a file end with CR/LF.
+    HEAD     EXE  Displays first few lines of a file.
+    LS-PC    EXE  Directory listing program.
+    LS       EXE  Directory listing program.
+    MODEM    EXE  Simple communications program.
+    MV       EXE  File/directory move utility.
+    RM       EXE  Improved DEL function.
+    RO       EXE  Sets file to read-only status.
+    RW       EXE  Sets file to read-write status.
+    SHOW     EXE  Bidirectional file display program.
+    TAIL     EXE  Displays last few lines of a file.
+    UPDATE   EXE  Makes date and time of a file current.
+    UTIL     DOC  Documentation for all programs.
+    WC       EXE  Date/word/line counting utility.
+    SOURCE   ARC  Source code for the above files.
+
+### Directory of PC-SIG Library Disk 0564
 
      Volume in drive A has no label
      Directory of A:\

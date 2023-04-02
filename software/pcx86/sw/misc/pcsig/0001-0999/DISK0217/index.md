@@ -6,16 +6,53 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #217"
+      B: "PC-SIG Library Disk 0217"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #217
+## Information about "ELIST AND DISK ALIGNMENT"
+
+    NELIST is a Pascal source lister, capable of automatically enhancing
+    your printouts, and configurable to your own needs.  WA-TOR is a
+    fascinating predator-prey simulation, try changing it's parameters and
+    watch what happens!  SUPERDIR is a diskette file manager that allows
+    you to give each file a descriptive comment line.
+    
+    How to Start: To run a COM program simply type its name and press
+    <ENTER>.  For instructions on running BASIC programs, please refer to
+    the GETTING STARTED section in this catalog.  For information on PAS
+    programs, consult your Pascal manual.
+    
+    Suggested Registration:  NET/ALIGN $20.00.
+    
+    File Descriptions:
+    
+    SUPERDIR BAS  "Super directory" program  (Compute Magazine April, l984)
+    RESWORDS TXT  Key word list used by NELIST
+    DUMPSCRN MRG  Model BASIC program for using DUMPSCRN.BAS
+    DUMPSCRN BAS  BLOADable high resolution screen dump  (Softalk July 1983)
+    SUPERDIR DOC  Documentation for SUPERDIR.BAS
+    NELIST   PAS  Source code for NELIST
+    NEINST   COM  Installation program to create NEPRN.DAT
+    NEPRN    DAT  Printer control data for NELIST
+    NELIST   COM  Turbo Pascal source lister - underlines key words etc.
+    NELIST   DOC  Documentation for NELIST
+    ALIGN    DOC  Documentation for disk alignment program
+    ALIGN    EXE  Disk alignment program
+    DUMPSCRN DOC  Documentation for DUMPSCRN
+    NEINST   PAS  Source code for NEINST
+    WA-TOR   000  Overlays used by WA-TOR.COM
+    WA-TOR   COM  Predator-prey simulation (Scientific American, Dec., 1984)
+    WA-TOR   DOC  Documentation for WA-TOR
+    WA-TOR   PAS  Turbo Pascal source code for WA-TOR
+    LETTER        Notes on WA-TOR.COM
+
+### Directory of PC-SIG Library Disk 0217
 
      Volume in drive A has no label
      Directory of A:\

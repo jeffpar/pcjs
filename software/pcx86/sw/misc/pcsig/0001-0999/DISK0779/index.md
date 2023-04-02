@@ -6,16 +6,62 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #779"
+      B: "PC-SIG Library Disk 0779"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #779
+## Information about "PROMENU AND PATCH AND OTHER UTILITIES"
+
+    A memory-resident printer-control menu for Epson and compatible
+    printers.
+    
+    PMENU3 gives you control codes, such as condensed, double strike, or
+    underline, on command.  Once loaded, you can access PMENU3 while running
+    your program and enter codes one at a time, or combinations of codes
+    such as ``bold and italics''.
+    
+    Smarter than your average printing program, PMENU3 does not display or
+    send conflicting codes to the printer, and can also be removed from
+    memory.
+    
+    PATCH lets you view and modify disk files in memory or peruse and change
+    the computer's memory as if it were a disk file.
+    
+    Display the contents of a file in memory, 256 bytes at a time.  Move
+    around in the file, modify its contents, cancel modifications and search
+    for specified strings.  Move immediately to the beginning or end of a
+    file or jump to a portion of the file that is a certain offset, in
+    bytes, from the beginning of the file.
+    
+    The file contents are displayed in both ASCII and hexadecimal.  You can
+    do searches and modifications in either format.  Both formats of the
+    file are viewed at the same time, with the hexadecimal on the left and
+    the ASCII on the right.
+    
+    "Welcome Home" for the new baby, the traveller or the convalescent,
+    "Sale Today" to boost your daily cash-flow, or "Hi Mom" from the
+    football game. You can have them all and more with PC-BANNER.
+    
+    Here is a simple, menu-driven banner program that lets you change the
+    style of print from light to dark. And it uses the IBM graphics
+    character sets for high-quality banners.
+    
+    Here are a pair of protective utilities.
+    
+    SCRNOFF3 blanks your screen after three minutes of keyboard inactivity.
+    This avoids etching your monitor.  Pressing any key brings the screen
+    back into view.
+    
+    KYLOCK blanks your screen and locks the keyboard from others.  When the
+    keyboard is locked, not even a Ctrl-Alt-Del routine reboots the
+    computer.
+
+### Directory of PC-SIG Library Disk 0779
 
      Volume in drive A has no label
      Directory of A:\

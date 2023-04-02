@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #579"
+      B: "PC-SIG Library Disk 0579"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #579
+## Information about "PASCAL TUTOR 1 OF 2 (ALSO 580)"
+
+    PASCAL TUTOR is a text-based tutorial on programming with the Pascal
+    language.  The assumption is that you know nothing about Pascal in
+    particular and programming in general.
+    
+    It begins with the most elementary aspects of programming and takes you
+    through each step from dynamic allocation to the use of linked lists.
+    The program was specifically written for use with Turbo Pascal versions
+    3.0, 4.0, and 5.0.  Version 5.5 is also supported through two additional
+    chapters covering object oriented programming.  The Pascal source code
+    used for examples throughout the tutorial is included.
+
+### Directory of PC-SIG Library Disk 0579
 
      Volume in drive A has no label
      Directory of A:\

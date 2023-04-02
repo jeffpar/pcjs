@@ -6,16 +6,32 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #751"
+      B: "PC-SIG Library Disk 0751"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #751
+## Information about "ASEASYAS"
+
+    ASEASYAS is an enhanced and refined spreadsheet program that supports
+    256 columns and 8,192 rows.  It has a high degree of command
+    compatibility with Lotus 1-2-3, lets you use Lotus files and includes a
+    broad range of formulas and functions.
+    
+    Unlike many other spreadsheet programs, however, ASEASYAS can plot 11
+    different types of graphs from within the program.  ASEASYAS is very
+    easy to use because you enter commands through on-screen menus, unlike
+    Lotus.  Other unique features include direct dBase III import/export,
+    spreadsheet auditing, search and replace, macro record and playback,
+    goalseeking, spreadsheet linking, and a full complement of macro
+    commands.  There is also a linked calculation sequence that saves
+    considerable time when recalculating.
+
+### Directory of PC-SIG Library Disk 0751
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,72 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #362"
+      B: "PC-SIG Library Disk 0362"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #362
+## Information about "SIMTERM"
+
+    This package provides Hewlett-Packard terminal simulation to Unix
+    systems; it was last revised 07/28/84.  SimTerm creates on an IBM-PC
+    simulation of an H/P like terminal to the UNIX system.  It no longer
+    requires the asynchronous communications software supporting package.
+    If you have need of terminal simulation for your communication chores,
+    this disk may be just what you've been looking for.
+    
+    How to Start:  To start, enter SIMTERM For 14 pages of documentation,
+    enter TYPE README.  To run, enter SIMTERM <ENTER>.
+    
+    File Descriptions:
+    
+    BOARDS        BBSs phone numbers
+    ARCHCOPY BAT
+    XXGRAPH  ASM
+    COMM     INC
+    COM      ASM
+    ARGLIST  PAS
+    ARGLIST  INC
+    XTRANS   C
+    XRECV    C
+    VERSION  OBJ
+    VENTEL   PAS
+    UTIL     PAS
+    UTIL     INC
+    UPDOWN   PAS
+    TOKEN    PAS
+    TERMCAP  IBM
+    STRUCT   MAC
+    STDIO    INC
+    STDIO    ASM
+    GRAPH    INC
+    GETPUT   PAS
+    ESCPAR   PAS
+    COMP     PAS
+    SMVENTEL PAS
+    SMTERM   LNK
+    SIMTERM  LNK
+    SIMTERM  INC
+    SIMTERM  EXE  Main program execution file
+    SCANLINE PAS
+    SAVDIS   PAS
+    README        Documentation (14 pp) manual
+    SAVDIS   PAS
+    SCANLINE PAS
+    MENUS         (Clues)
+    MENUIT   PAS
+    MAINSIM  PAS
+    MACTEST  ASM
+    LOGIN    PAS
+    KEYPARSE PAS
+    INFO          (Prologue)      terminal
+    IBMPR    C
+
+### Directory of PC-SIG Library Disk 0362
 
      Volume in drive A has no label
      Directory of A:\

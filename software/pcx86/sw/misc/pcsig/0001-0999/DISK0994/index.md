@@ -6,16 +6,28 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #994"
+      B: "PC-SIG Library Disk 0994"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #994
+## Information about "FINANCIAL CALCULATOR"
+
+    FINANCIAL CALCULATOR is a simple, menu-driven program that calculates
+    interest on loans, savings, or payments.
+    
+    Calculate your monthly payments, total interest, and the total amount
+    you will pay to the bank at the end of the loan.  Get a month-by-month
+    breakdown of your monthly payments, interest for that month, payment on
+    the principal and the ending balance for that month.  You can also
+    figure the approximate annual interest rate for a loan.  A metric
+    conversion utility is included.
+
+### Directory of PC-SIG Library Disk 0994
 
      Volume in drive A has no label
      Directory of A:\

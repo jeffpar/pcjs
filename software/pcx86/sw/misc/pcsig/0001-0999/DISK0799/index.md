@@ -6,16 +6,65 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #799"
+      B: "PC-SIG Library Disk 0799"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #799
+## Information about "SIDEFILE"
+
+    SIDEFILE is a memory-based database manager that works with relatively
+    small to medium sized files.  These files can be subjected to extremely
+    fast manipulation because all of the data is stored in memory,
+    eliminating the constant slow down of accessing the disk for
+    information.
+    
+    SIDEFILE is also a disk-based data manager that can operate on large
+    numbers of records in a manner similar to larger programs.  In this
+    filing mode, SIDEFILE retains its easy to use interface and
+    spreadsheet-like screens while affording disk-based usage.
+    
+    SIDEFILE is a fast, easy, and very forgiving program that attempts to
+    make life easier for all who regularly use small business or personal
+    data files for nearly any purpose.  SIDEFILE lets you to manipulate
+    your many notes, lists and files with a flexibility approaching,
+    sometimes surpassing the talents of larger systems.  You can also keep
+    some of your small spreadsheet-type applications in SIDEFILE instead of
+    in an expensive spreadsheet program.  You can even do small editing
+    jobs right within SIDEFILE instead of having to find and load yet
+    another program such as a word processor or editor.  Of course, all of
+    your SIDEFILE files will still be compatible with those other programs
+    should you choose to use them.
+    
+    SIDEFILE uses two types of files: those with a built-in header line
+    (data file), and those without a built-in header line (text file).  You
+    can perform all available commands with a data file, but not with a
+    text file.  Text file manipulation is mostly for convenience.
+    
+    SIDEFILE has proven to be one of the most flexible database programs
+    available for the IBM PC.
+    
+    System Requirements:  None.
+    
+    How to Start: To start the SIDEFILE program, put your working disk in
+    one of your disk drives and type SF (press enter).  You may type the
+    name of the data file you wish SIDEFILE to load right on the command
+    line -- SF DATAFILE (press enter).
+    
+    File Descriptions:
+    
+    ???????  SF   Example database file (11 files).
+    EXAMPLES DOC  Documentation file explaining example files.
+    SF       DOC  Documentation file.
+    SF       EXE  Main program.
+    SF       HLP  Help file used by SF.EXE.
+    PADLOCK  ADD  Advertisement for another of the author's programs.
+
+### Directory of PC-SIG Library Disk 0799
 
      Volume in drive A has no label
      Directory of A:\

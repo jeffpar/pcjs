@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #929"
+      B: "PC-SIG Library Disk 0929"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #929
+## Information about "LOTTO FEVER"
+
+    LOTTO FEVER is a synthesis of astrology and lottery simulation with a
+    sprinkling of numerology.  Told the date and year of your birth, it
+    gives your astrological forecast and a description of your personality.
+    Next, it asks for the range of numbers for the lottery you are playing.
+    LOTTO FEVER chooses numbers and shows your lucky lotto numbers, based on
+    the data you have given it.
+    
+    NOTE: The program will not display your lotto numbers on a monochrome
+    monitor. If your system has a monochrome monitor,  you must have a
+    printer in order to see your numbers.
+
+### Directory of PC-SIG Library Disk 0929
 
      Volume in drive A has no label
      Directory of A:\

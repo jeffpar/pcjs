@@ -6,16 +6,42 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #3"
+      B: "PC-SIG Library Disk 0003"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #3
+## Information about "RATBAS"
+
+    If you're an advanced Basic programmer, RATBAS could be just what
+    you're looking for. It allows basic programs to be written in a more
+    structured way without line numbers. Programs written in Rationalized
+    BASIC are converted into standard BASIC by the RATBAS translator. In
+    effect, RATBAS is a translation program that takes your RATional BASic
+    programs and converts them to Standard BASIC. It forms the bridge
+    between Pascal-like Rational BASIC and standard BASIC by making the
+    conversion process easier. Note, this is not a version of BASIC, but an
+    adjunct.
+    
+    How to Start: To read documentation --strongly recommended-- enter
+    TYPE RATBAS.UM and press <ENTER>.  To start program, type RT and press
+    <ENTER>
+    
+    File Descriptions:
+    
+    TEST     BAS  TEST.RAT after being processed by RT.EXE.
+    SORT     INC  An "include" routine which will be used by TEST.RAT
+    RATBAS   TXT  Paper on RatBAS by the authors.
+    TEST     RAT  A sample program written in RatBAS.
+    RATBAS   UM   User's Manual for the RatBAS language.
+    RT       UM   User's Manual for RT.EXE.
+    RT       EXE  The RatBAS translator.
+
+### Directory of PC-SIG Library Disk 0003
 
      Volume in drive A has no label
      Directory of A:\

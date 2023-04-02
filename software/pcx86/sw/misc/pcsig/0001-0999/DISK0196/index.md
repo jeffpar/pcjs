@@ -6,16 +6,46 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #196"
+      B: "PC-SIG Library Disk 0196"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #196
+## Information about "DOS UTILITIES NO 11"
+
+    These programs let you speed your file-handling chores greatly. You can
+    copy or delete multiple files at a time, compare directory listings to
+    find duplicates, and move or rename files easily.  Also, we have
+    included an interesting program to allow the user to prepare and show
+    computer generated `slides' on your color graphics monitor.
+    
+    System Requirements:  DOS 2.0 or greater, 80-column display.
+    
+    How to Start: To run a COM or EXE program simply type its name and
+    press <ENTER>.  For instructions on ASM listings, refer to your
+    Assembler manual.  To read DOC files simply enter TYPE filename.ext
+    and press <ENTER>.
+    
+    File Descriptions:
+    
+    README        Listing of included files
+    DIRCOMP  COM  Compares two directories and lists files found in both
+    EQUIP102 COM  Displays system equipment configuration
+    SLIDE    COM  Prepare slides on graphics display
+    MV       DOC  Documentation for above
+    MV       EXE  Sophisticated file move/rename utility
+    EQUIP102 DOC  Documentation for above
+    SHOW     EXE  Show prepared slides on graphics display
+    SLIDE    ASM  Source for above
+    SHOW     ASM  Source for above
+    UTIL102  COM  Copy/delete multiple files
+    UTIL102  DOC  Documentation for above
+
+### Directory of PC-SIG Library Disk 0196
 
      Volume in drive A has no label
      Directory of A:\

@@ -6,16 +6,29 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #886"
+      B: "PC-SIG Library Disk 0886"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #886
+## Information about "DIVORCE, ANIMATED STRATEGY FOR MEN"
+
+    CALIFORNIA DIVORCE is designed to educate men on their rights and the
+    procedures they should know about and follow -- in California -- in case
+    of a divorce.
+    
+    This program presents a series of graphic screens along with text
+    concerning the legal matters of divorce, and is written in a humorous
+    manner, entertaining and educational.  Since it was written by a man for
+    other men, it does have a slight bias against women and marriage in
+    general.  Once viewed, the educated user can then choose a course of
+    action on a self-help basis or with the assistance of legal counsel.
+
+### Directory of PC-SIG Library Disk 0886
 
      Volume in drive A has no label
      Directory of A:\

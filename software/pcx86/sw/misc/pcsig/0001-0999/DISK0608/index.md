@@ -6,16 +6,47 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #608"
+      B: "PC-SIG Library Disk 0608"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #608
+## Information about "AUTOMENU"
+
+    AUTOMENU helps you control your computer in ways you only dreamed of
+    before. Use the Menu Definition Language to create menus for accessing
+    frequently-used programs.  Forget obscure parameters while you perform
+    DOS commands -- execute application programs, batch files, and DOS
+    commands with single keystrokes.  Personalize your own menus.
+    
+    AUTOMENU can prompt you for needed input for application programs.
+    Chain from menu to menu with no limits on the number of menus.
+    Demand different and unique passwords for different menu
+    selections and use optional encryption of menu files.  Take a nap while
+    your computer executes menu selections according to the time of day.
+    Short of memory?  You can remove AUTOMENU from memory prior to starting
+    an application program.  Confused?  Press``H'' anywhere in the program
+    for on-line help.
+    
+    CGA, MDA, EGA, VGA, Hercules graphics displays and their compatibles are
+    all supported.  Try real-time switching between color and monochrome
+    monitors.  Use your mouse's sensitivity to navigate among menus.
+    Prevent image-burning of your screen with automatic screen blanking and
+    a periodically-displayed user message.
+    
+    Highlight and select menu options: function keys, number and arrow keys,
+    numeric keypad, spacebar, mouse or voice controller, date and time
+    display.  AUTOMENU features redirection capability and support for the
+    ANSI.SYS driver.  Five sections of the 114-page user guide are
+    tutorials
+    for inexperienced computer users.  The option to network is available to
+    advanced users.
+
+### Directory of PC-SIG Library Disk 0608
 
      Volume in drive A has no label
      Directory of A:\

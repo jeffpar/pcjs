@@ -6,16 +6,32 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #873"
+      B: "PC-SIG Library Disk 0873"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #873
+## Information about "THE WINDOW BOSS 1 OF 2 (ALSO 1113)"
+
+    WINDOW BOSS enhances and accelerates the development of systems and
+    applications programs in the C language.  Create programs that have the
+    same look and feel as the top-selling spreadsheet, database and desktop
+    accessory packages.  Pop-up windows, pull-down menus, status lines, and
+    in-context on-line help functions can be easily implemented.  Your
+    applications can drag windows around the screen and automatically sense
+    the video card installed.  All of this without snow, flicker, or
+    delay!
+    
+    Includes support for Microsoft 6.0, Microsoft QuickC 2.5, shadowed
+    windows, super titles, and graphics character text input.  The Window
+    Boss now supports Microsoft, Borland, Lattice, Watcom, Mix Power C,
+    Computer Innovations, Datalight, and Aztec C!
+
+### Directory of PC-SIG Library Disk 0873
 
      Volume in drive A has no label
      Directory of A:\

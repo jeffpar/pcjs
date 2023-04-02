@@ -6,16 +6,74 @@ machines:
   - id: ibm5150
     type: pcx86
     config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #59"
+      B: "PC-SIG Library Disk 0059"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk #59
+## Information about "PEPSON/FASTPRT/QCKREF"
+
+    PEPSON and PSCREEN make up a text formatting program.  Together, these
+    programs allow you to enter text more or less "free-form," with
+    formatting commands interspersed with the text.  It can adjust the
+    lines of text (align) to any length you specify (under 71 columns)
+    center lines.  It also accepts pre-formatted text (i.e., text that is
+    to be printed without aligning) and allows you to change the fonts in
+    the middle of a line.
+    
+    QUICKREF is a means of inexpensively producing a function key template
+    on your printer.  This template can indicate the purpose of any or all
+    of the 40 function keys for any program you desire. It allows you to
+    create, update or change a template, review existing templates on the
+    monitor, or print the templates. FASTPRT is a speed-up utility for the
+    PrtSc function; it enables you to STOP a PrtSc operation on any
+    printer.
+    
+    System Requirements:  Some programs require BASIC, EPSON-compatible
+    printer.
+    
+    How to Start: Consult the .DOC and .TXT files for directions.  To run
+    a program with the suffix .COM, .EXE, or .BAT, just type its name,
+    i.e., for FASTPRT.BAT, type FASTPRT and hit <ENTER>.  To run the BASIC
+    programs, consult the directions in GETTING STARTED for your
+    configuration.
+    
+    Suggested Registration:  FASTPRT $10.00
+    
+    File Descriptions:
+    
+    -------- ---  PEPSON Epson printer utility
+    PRINT    DOC  Documentation for PRINT.BAS
+    PEPSON   BAS  Printer formatter to work with Epson printer
+    PEPCON   DOC  Documentation for PEPCON.BAS
+    PSCREEN  BAS  Printer formatter to show results to screen
+    PEPSON   EXE  Compiled version of PEPSON.BAS
+    PSCREEN  EXE  Compiled version of PSCREEN.BAS
+    -------- ---  FASTPRT, a faster PrtSc function
+    ADD      BAT  Part of FASTPRT
+    AUTO     BAT  Part of FASTPRT
+    AUTOEXEC BAT  Part of FASTPRT
+    AUTOADD  BAT  Part of FASTPRT
+    TWO      BAT  Part of FASTPRT
+    INSTALL  BAT  To install FASTPRT
+    FASTPRT  DOC  Documentation for FASTPRT.BAS
+    FASTPRT  COM  Main program -Speedup the PrtSc function on PC or XT
+    -------- ---  QUICKREF creates quick reference keyboard templates
+    AUTOEXEC BAK  Part of QUICKREF
+    GUIDE    BAT  Prints QUICKREF.DOC file
+    QUICKREF BAS  Main program to create keyboard reference templates
+    QUICKREF DOC  Doc for QUICKREF.BAS  (May not print on all printers )
+    EW       KEY  Part of QUICKREF - template file for Easywriter
+    BASIC    KEY  Part of QUICKREF - template file for BASIC
+    TEMPLE   KEY  Part of QUICKREF - template file for Temple of Apshai
+    VOLKSWTR KEY  Part of QUICKREF - template file for Volkswriter
+    QR       KEY  Part of QUICKREF - blank template file
+
+### Directory of PC-SIG Library Disk 0059
 
      Volume in drive A has no label
      Directory of A:\

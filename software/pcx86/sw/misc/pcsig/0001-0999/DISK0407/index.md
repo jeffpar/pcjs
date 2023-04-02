@@ -6,16 +6,58 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #407"
+      B: "PC-SIG Library Disk 0407"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #407
+## Information about "VIDEO CHEM"
+
+    VideoChem is an educational game designed to teach secondary school
+    students about chemical valences, atomic bonding and structure. While
+    limited in depth, VideoChem offers a fun introduction to an otherwise
+    complex and difficult subject.  Teachers may like to use this program
+    for  independent instruction.  The game needs no special instructions
+    to be played.
+    
+    System Requirements:  128K, one disk drive and monochrome display.
+    
+    How to Start:  Load DOS and type VCHEM to enter the main program.
+    Consult VCHEM.DOC for program documentation.
+    
+    File Descriptions:
+    
+    LOGO     EXE  Start with this program
+    LF-100%  DAT  Data file used by program
+    LAB      EXE  A program file
+    DRUGS    B    Picture file used by program
+    DATA2         Data file used by program
+    DATA          Data file used by program
+    CEREAL   B    Picture file used by program
+    CART     DAT  Data file used by program
+    B8       DAT  Data file used by program
+    B7       DAT  Data file used by program
+    B6       DAT  Data file used by program
+    B5       DAT  Data file used by program
+    B4       DAT  Data file used by program
+    B3       DAT  Data file used by program
+    B2       DAT  Data file used by program
+    B1       DAT  Data file used by program
+    RT-100%  DAT  Data file used by program
+    THIM2    B    Picture file used by program
+    TABLE    B    Picture file used by program
+    SPACE    DAT  Data file used by program
+    SLAB     EXE  A program file
+    WIZ      B    Picture file used by program
+    VIDEO1   DAT  Data file used by program
+    VCHEM    EXE  A program file
+    VCHEM    DOC  Text file of instructions
+
+### Directory of PC-SIG Library Disk 0407
 
      Volume in drive A has no label
      Directory of A:\

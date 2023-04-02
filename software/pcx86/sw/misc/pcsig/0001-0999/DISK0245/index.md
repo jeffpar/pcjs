@@ -6,16 +6,42 @@ machines:
   - id: ibm5160
     type: pcx86
     config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #245"
+      B: "PC-SIG Library Disk 0245"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
 
-### Directory of PC-SIG Library Disk #245
+## Information about "ULTRA UTILITIES UNARCHIVED VER. OF 133"
+
+    The Ultra-Utilities are a powerful collection of tools for the PC owner
+    interested in getting more from his system.  U-MIND is an "intelligent"
+    database generator which allows you to produce clean, sophisticated
+    programs very quickly.  U-OPT will help clean-up BASIC code so that it
+    will compile tighter and faster.  More of these utilities are
+    available, in squeezed format, on Disk 133.
+    
+    How to Start:  For instructions on running BASIC programs, please refer
+    to the GETTING STARTED section in this catalog.  To run an EXE program
+    simply type its name and press <ENTER>. To read DOC or TXT files simply
+    enter TYPE filename.ext and press <ENTER>.
+    
+    Suggested Registration:  Ultra-Utilities $30.00
+    
+    File Descriptions:
+    
+    U-MIND   DOC  Documentation for U-MIND  (51K)
+    U-MIND   BAS  Ultra-Mind program  (Intelligent database)
+    SKELETON BAS  Used with Ultra-Mind
+    U-OPT    EXE  Ultra-Optimize program
+    DOC42    TXT  Ultra-Utility documentation - Part 2  (23K)
+    DOC41    TXT  Ultra-Utility documentation - Part 1  (52K)
+    U-OPT    DOC  Documentation for O-OPT  (2K)
+
+### Directory of PC-SIG Library Disk 0245
 
      Volume in drive A has no label
      Directory of A:\

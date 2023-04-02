@@ -6,16 +6,56 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #895"
+      B: "PC-SIG Library Disk 0895"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #895
+## Information about "SCOUT AND SIMS"
+
+    SCOUT is a memory-resident disk file manager you can customize to your
+    liking. Define paths and your favorite applications and change your
+    options at any time.
+    
+    Any program can be executed from SCOUT by scrolling through the
+    directory and pressing the appropriate key. Tag files or scroll
+    through the directory to copy, move, alter, delete, or rename the
+    files. SCOUT can search for a particular file, and can change the
+    file's date and time. Create a directory, create a volume label,
+    format, or display disk memory information. Read text files and even
+    display a directory listing of an .ARC file.
+    
+    Special features include a displayable calendar and an ASCII character
+    table. SCOUT also displays RAM memory usage, showing how much memory
+    each memory-resident program is currently using. When exiting from
+    SCOUT, you have the option of removing it from memory.
+    
+    SELECT I MENU SYSTEM (SIMS) is a memory-resident program to design,
+    edit, and maintain menus for your computer system providing
+    user-friendly access to programs.
+    
+    Menus are created from an ASCII text source file converted into menu
+    format.  These menus greatly simplify computer operation and program
+    access for new and unfamiliar users of your system.  Not only does this
+    program help you save time in training other users, but it also eases
+    personal use.
+    
+    A security feature can be selected that requires a password for certain
+    options on the menu.  Total freedom is given to the menu creator
+    regarding screen layout and options specified.  The number of menus
+    that can be incorporated into the system is only limited by available
+    disk space.  The screen design controls the colors, windows, menu
+    options, placement of options, procedure for execution, user-defined
+    fields, and security for the menus.
+    
+    In other words, you can be quite creative with this program and use it
+    for any application you wish.
+
+### Directory of PC-SIG Library Disk 0895
 
      Volume in drive A has no label
      Directory of A:\

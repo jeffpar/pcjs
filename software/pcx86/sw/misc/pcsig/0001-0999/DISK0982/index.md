@@ -6,16 +6,28 @@ machines:
   - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig0/pcx86/diskettes.json
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk #982"
+      B: "PC-SIG Library Disk 0982"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of PC-SIG Library Disk #982
+## Information about "TAX-PLANNER"
+
+    TAX-PLANNER is a question-and-answer program to help you estimate the
+    income tax you'll owe Uncle Sam. Then, you can fine-tune your
+    paycheck deductions so you'll have enough withheld when you file your
+    returns the next year.
+    
+    You can easily modify the withholding options, such as marital status,
+    number of exemptions and additional taxes for withholdings.  You can
+    also estimate deductions from various employers and print reports each
+    time an estimate is completed.
+
+### Directory of PC-SIG Library Disk 0982
 
      Volume in drive A has no label
      Directory of A:\
