@@ -504,13 +504,11 @@ function processFolders(sDir, argv)
             /*
              * Add a new entry...
              */
-            let groupName;
-            let i = imgPath.indexOf('-');
-            if (i < 0) {
-                groupName = imgParts[0].toUpperCase();
-            } else {
-                groupName = imgPath.slice(0, i).toUpperCase();
-            }
+            let groupName = imgParts[0].toUpperCase()
+            // let i = imgPath.indexOf('-');
+            // if (i >= 0) {
+            //     groupName = imgPath.slice(0, i).toUpperCase();
+            // }
             if (media) {
                 if (!title || title == groupName) {
                     title = groupName + ' ' + mediaName;
@@ -541,9 +539,9 @@ function processFolders(sDir, argv)
                 diskettesUpdated = true;
                 printf("warning: added diskette %s\n", jsonName);
             } else {
-                let itemName = imgParts[3];
+                let itemName = imgParts[lastPart+1];
                 let disketteUpdated = false;
-                if (lastObj && imgParts[4] == "archive") {
+                if (lastObj && imgParts[lastPart+2] == "archive") {
                     let versions = lastObj['@versions'];
                     if (versions) {
                         let matchDigits = itemName.match(/([0-9]+)$/);
@@ -553,7 +551,7 @@ function processFolders(sDir, argv)
                         versions[itemName] = {
                             '@title': title,
                             '@media': [
-                                {'@diskette': imgParts[5].replace(sExtOrig, ".json")}
+                                {'@diskette': imgParts[lastPart+3].replace(sExtOrig, ".json")}
                             ]
                         };
                         if (sExt != ".img") {
