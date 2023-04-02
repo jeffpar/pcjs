@@ -128,7 +128,7 @@ Here's an example of `--zip` in action:
 
 The `--verbose` option generates the `PKZIP`-style file listing, displaying the individual file names, compressed and uncompressed file sizes, compression ratio, etc.
 
-In fact, creating a disk image is entirely optional; you can use **DiskImage** to simply examine the contents of `zip` file:
+In fact, creating a disk image is entirely optional; you can use **DiskImage** to simply examine the contents of `ZIP` file:
 
     node diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --verbose
 
@@ -136,7 +136,7 @@ To simplify dealing with large collections of files, I also added an `--all` opt
 
     node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --verbose
 
-That command will locate *all* matching `zip` files and automatically display their contents.  `--all` also supports file extensions `JSON` and `IMG`; the `--zip` option is implied for any file ending with a `ZIP` extension.
+That command will locate *all* matching `ZIP` files and automatically display their contents.  `--all` also supports file extensions `JSON` and `IMG`; the `--zip` option is implied for any file ending with a `ZIP` extension.
 
 If you want to create a disk image for every `ZIP` file:
 
