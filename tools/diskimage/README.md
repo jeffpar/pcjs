@@ -142,7 +142,17 @@ If you want to create a disk image for every `ZIP` file:
 
     node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --output=tmp --type=img
 
-`--output` specifies the output folder and `--type` specifies the output file type (either `img` or `json`).  Each output file will have the same basename as the `zip` file.
+`--output` specifies the output folder and `--type` specifies the output file type (either `IMG` or `JSON`).  Each output file will have the same basename as the `ZIP` file.
+
+Last but not least, any `ZIP` files *inside* disk images can be automatically expanded during disk image processing as well; just add the new `--expand` option.  Each `ZIP` file will be replaced with a folder of the same name, and that folder will contain the entire uncompressed contents of the archive; the original `ZIP` file will *not* be included in the disk image:
+
+    node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --expand --output=tmp
+
+Finally, if you just want to extract the expanded contents of a set of `ZIP` files to your current directory, instead of creating disk images, you can do that, too:
+
+    node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --expand --extract
+
+The contents of each `ZIP` file will be extracted to a folder with a matching name.  Internally, diskimage.js will still be creating disk images from each `ZIP` file, and performing `--expand` and `--extract` operations on those disk images, but since no output is specified, no disk images will be saved at the end of those operations.
 
 ### Examining PCjs Disk Images
 
@@ -161,7 +171,7 @@ the server mapping.  The list of implicit paths for PC disks currently includes 
   - [/disks/diskettes](https://diskettes.pcjs.org)
   - [/disks/gamedisks](https://gamedisks.pcjs.org)
   - [/disks/miscdisks](https://miscdisks.pcjs.org)
-  - [/disks/pcsig0](https://pcsig0.pcjs.org)
+  - [/disks/pcsigdisks](https://pcsigdisks.pcjs.org)
   - [/disks/harddisks](https://harddisks.pcjs.org)
   - [/disks/cdroms/cds001](https://cds001.pcjs.org)
 
@@ -173,7 +183,7 @@ To get a DOS-compatible directory listing of a disk image:
 
     node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list
 
-To display all the unused bytes of a disk image:
+To display all the unused bytes of a disk image (JSON-encoded disk images only):
 
     node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list=unused
 

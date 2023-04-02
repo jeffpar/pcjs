@@ -2405,12 +2405,14 @@ function main(argc, argv)
             "--target=[nK|nM]":         "set target disk size to nK or nM (eg, \"360K\", \"10M\")"
         };
         let optionsAction = {
+            "--dump=[C:H:S:N]":         "dump N sectors starting at sector C:H:S",
             "--expand (-x)\t":          "expand all archives in disk image(s)",
             "--extract (-e)\t":         "extract all files in disk image(s)",
             "--extract[=filename]":     "extract specified file in disk image(s)",
             "--label=[label]\t":        "set volume label",
             "--list (-l)\t":            "display directory listings of disk image(s)",
-            "--normalize\t":            "change line endings and character encodings for text files",
+            "--list=unused\t":          "display unused space in disk image(s) (.json only)",
+            "--normalize\t":            "change line endings and character encodings of text files",
             "--quiet (-q)\t":           "minimum messages",
             "--verbose (-v)\t":         "maximum messages (eg, display archive contents)"
         };
