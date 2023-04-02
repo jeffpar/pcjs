@@ -702,7 +702,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--verbose",
+        "-v",
         "tmp/posts.zip"
       ],
       "cwd": "${workspaceFolder}",

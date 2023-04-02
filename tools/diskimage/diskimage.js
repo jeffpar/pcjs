@@ -38,13 +38,18 @@ function printError(err, filename)
 }
 
 /*
+ * List of archive file types to expand when "--expand" is specified.  ".ARC" is currently
+ * disabled but it retains its place in the table for the day when StreamZip supports it (TBD).
+ */
+let asARCFileExts = [".ARC-TBD", ".ZIP"];       // order must match StreamZip.TYPE_* constants
+
+/*
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
  * A warning is always displayed when we replace line endings in any file being copied to a disk image.
  *
  * NOTE: Some files, like ".BAS" files, aren't always ASCII, which is why we now call isText() on all
  * these file contents first.
  */
-let asARCFileExts = [".ARC", ".ZIP"];       // order must match StreamZip.TYPE_* constants
 let asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".LRF", ".MAK", ".TXT", ".XML"];
 
 /**
@@ -2378,7 +2383,7 @@ function main(argc, argv)
     useServer = !!argv['server'];
 
     if (!argv['quiet']) {
-        printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s", options) : ""));
+        printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s", options) : ""));
     }
 
     if (Device.DEBUG) {
@@ -2386,6 +2391,44 @@ function main(argc, argv)
     }
 
     device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
+
+    if (argv['help']) {
+        let optionsInput = {
+            "--all=[filespec]":         "process all matching disk images",
+            "--disk=[diskimage]":       "read disk image (.img or .json)",
+            "--dir=[directory]":        "read all files in a directory",
+            "--files=[filelist]":       "read all files in a comma-separated list",
+            "--zip=[zipfile]\t":        "read all files in an archive"
+        };
+        let optionsOutput = {
+            "--output=[diskimage]":     "write disk image (.img or .json)",
+            "--target=[nK|nM]":         "set target disk size to nK or nM (eg, \"360K\", \"10M\")"
+        };
+        let optionsAction = {
+            "--expand (-x)\t":          "expand all archives in disk image(s)",
+            "--extract (-e)\t":         "extract all files in disk image(s)",
+            "--extract[=filename]":     "extract specified file in disk image(s)",
+            "--label=[label]\t":        "set volume label",
+            "--list (-l)\t":            "display directory listings of disk image(s)",
+            "--normalize\t":            "change line endings and character encodings for text files",
+            "--quiet (-q)\t":           "minimum messages",
+            "--verbose (-v)\t":         "maximum messages (eg, display archive contents)"
+        };
+        let optionGroups = {
+            "Input options:":           optionsInput,
+            "Output options:":          optionsOutput,
+            "Action options:":          optionsAction
+        }
+        printf("\nUsage:\n\n\tnode diskimage.js [input diskimage] [output diskimage] [options]\n");
+        for (let group in optionGroups) {
+            printf("\n%s\n\n", group);
+            for (let option in optionGroups[group]) {
+                printf("\t%s\t%s\n", option, optionGroups[group][option]);
+            }
+        }
+        printf("\nOption values can be enclosed in single or double quotes (eg, if they contain whitespace or wildcards).\n");
+        return;
+    }
 
     if (argv['collection']) {
         readCollection(argv);
@@ -2408,4 +2451,11 @@ function main(argc, argv)
     printf("nothing to do\n");
 }
 
-main(...pcjslib.getArgs());
+main(...pcjslib.getArgs({
+    '?': "help",
+    'e': "extract",
+    'l': "list",
+    'q': "quiet",
+    'v': "verbose",
+    'x': "expand"
+}));

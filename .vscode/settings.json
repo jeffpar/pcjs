@@ -548,6 +548,7 @@
     "FILEHIDE",
     "fileimage",
     "fileinfo",
+    "filelist",
     "fileoverview",
     "FILESIZE",
     "FILESORT",
