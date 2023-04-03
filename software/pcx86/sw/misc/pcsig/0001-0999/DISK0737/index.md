@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "XANADU UTILITIES"
 
     XANADU UTILITIES has some very useful programs. HOTDIR, for example, is
@@ -30,6 +32,8 @@ machines:
     SFIND finds files quickly anywhere on the disk and then lists on the
     screen all the matching files. SFIND can list files found even in an
     archive file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0737
 

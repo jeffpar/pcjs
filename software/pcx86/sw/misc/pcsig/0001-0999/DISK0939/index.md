@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FLIGHT PLANNING (ALSO 1476 )"
 
     FLIGHT is a flight-planning program for private pilots.
@@ -38,6 +40,8 @@ machines:
     sent.  MORSE also sends individual random letters well spaced in time
     and reads text files prepared by your wordprocessor in capitals, then
     sends the text line-by-line.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0939
 

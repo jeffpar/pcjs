@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "RESICALC"
 
     RESICALC v.1.0 is a memory-resident calculator which can be "popped-up"
@@ -55,6 +57,8 @@ machines:
     NAMELIST      Names of built-in functions of RESICALC.
     READ     ME   Quick start-up procedure for RESICALC.
     MANUAL   DOC  Short manual of RESICALC.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0661
 

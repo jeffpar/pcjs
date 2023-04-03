@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LOTUS UTILITIES"
 
     Lotus Utilities (not affiliated with LOTUS Corp.) is a mixed-bag
@@ -50,6 +52,8 @@ machines:
     CLRJET   ARC  Archived file - IBM Color Jet Printer Drivers
     TRYVM123 DOC  Documentation for  TRYVM123
     WKS-FRMT TXT  Worksheet files format
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0568
 

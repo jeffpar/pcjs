@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CHURCH CONTRIBUTION SYSTEM"
 
     This is an easy-to-use program that allows you to record pledged and
@@ -52,6 +54,8 @@ machines:
     Pledge Amount
     
     Contributions to Date
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0659
 

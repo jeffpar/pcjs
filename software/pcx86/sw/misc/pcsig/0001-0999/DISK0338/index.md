@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SYSCOMM"
 
     This is an excellent menu-driven communications package.  It comes in
@@ -57,6 +59,8 @@ machines:
     MLREAD   ME   How to expand the manual files using EXPAND.BAT
     MANUAL?  !!!  Manual part 1 compressed (3 files)
     MAKEMAN  COM  Expands compressed manual files
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0338
 

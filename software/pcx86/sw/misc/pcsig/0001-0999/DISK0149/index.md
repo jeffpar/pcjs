@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "C UTILITIES NO 1"
 
     The files on the disk contain many useful routines including LUMP which
@@ -47,6 +49,8 @@ machines:
     XC       DOC  Documentation for XC
     GREP     C    Source code for LUMP
     README        Notes about the files on this disk
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0149
 

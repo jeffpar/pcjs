@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROFESSIONAL REAL ESTATE ANALYST"
 
     PROFESSIONAL REAL ESTATE ANALYST is designed for multi-family and
@@ -28,6 +30,8 @@ machines:
     
     The 130-page manual includes menu maps.  You don't need to know Lotus to
     use this program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0923
 

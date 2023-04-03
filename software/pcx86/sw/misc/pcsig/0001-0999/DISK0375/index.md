@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO PASCAL SET #7"
 
     Collection of programs and utilities useful for both the Pascal
@@ -84,6 +86,8 @@ machines:
     TURBO-UT DOC  Documentation for TURBO-UT.PAS
     TURBO-UT DEM  Demo file for TURBO-UT.PAS
     TURBO-UT COM  Compiled version of TURBO-UT.PAS
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0375
 

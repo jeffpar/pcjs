@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FLOPCAT - DISK CATALOGING SYSTEM"
 
     FLOPCAT is a menu-driven disk-cataloging system with 23 functions to
@@ -39,6 +41,8 @@ machines:
     New features include pop-up command windows, choice of file date
     record or comments, disk label path mask (allows labels to be printed
     only for selected drives), and expanded search functions.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0959
 

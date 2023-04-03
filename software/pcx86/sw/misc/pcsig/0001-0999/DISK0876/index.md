@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "G.I.F.T.S. GREAT GIFT IDEAS"
 
     Having that same old trouble coming up with a gift for Aunt Gertrude
@@ -29,6 +31,8 @@ machines:
     gift, the approximate cost, the supplier, a description, and a comment.
     
     Got that charge card ready?
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0876
 

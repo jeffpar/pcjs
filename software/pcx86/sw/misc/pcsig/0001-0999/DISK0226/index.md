@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FREECOPY"
 
     FREECOPY is a disk utility that is functionally equivalent to DISKCOPY
@@ -41,6 +43,8 @@ machines:
     FREECOPY ASM  Source code for FREECOPY.COM
     FREECOPY MAP  Assembler map listing
     FREECOPY REF  Assembler reference listing
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0226
 

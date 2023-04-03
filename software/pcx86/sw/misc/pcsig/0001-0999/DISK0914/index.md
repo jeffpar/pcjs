@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-DEMO GRAPHICS PRESENTATION PACKAGE"
 
     PC-DEMO is a graphics package that lets you create demonstrations
@@ -26,6 +28,8 @@ machines:
     even rotate it.  Use the cursor keys to draw your picture without the
     need for a mouse or pad.  Slides can be organized into an interactive
     demo which accepts input from users.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0914
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LETUS A-B-C VOL 6"
 
     Letus A-B-C is a database in PC-FILE III format containing references
@@ -49,6 +51,8 @@ machines:
     PLOGO82  COM  generates LETUS logo part 2
     LOGO84N6 COM  generates LETUS logo part 1
     LETUS    DOC  information about LETUS
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0350
 

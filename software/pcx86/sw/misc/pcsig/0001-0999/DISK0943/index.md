@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DOCTOR DATA LABEL"
 
     DOCTOR DATA LABEL is a professional mailing list manager designed for
@@ -44,6 +46,8 @@ machines:
     ~ A notes field to store up to 64K of miscellaneous information.
     
     ~ Allows international addresses.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0943
 

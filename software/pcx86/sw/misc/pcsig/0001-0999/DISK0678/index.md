@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GOLDEN WOMBAT"
 
     Your quest is to discover the Forbidden City of the Great Lost Empire
@@ -32,6 +34,8 @@ machines:
     This text adventure game can handle full-sentence commands and has a
     large vocabulary of verbs. Users with CGA are able to customize screen
     colors.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0678
 

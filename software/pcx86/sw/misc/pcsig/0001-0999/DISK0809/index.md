@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GENERAL LEDGER UK VERSION 2 OF 2 (808)"
 
     THE REMARKABLE GENERAL LEDGER allows you to set up and operate a
@@ -62,6 +64,8 @@ machines:
     ???????? DBF  Data file (12 files)
     DOC      <DIR>Directory containing the documentation.
     READ     ME   General information about the disk.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0809
 

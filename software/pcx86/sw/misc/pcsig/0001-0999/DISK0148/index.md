@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "XLISP"
 
     XLISP is an experimental programming language combining some features of
@@ -25,6 +27,8 @@ machines:
     
     This package represents an inexpensive opportunity to begin to tackle
     programming in the field of artificial intelligence.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0148
 

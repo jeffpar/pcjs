@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MIX IT UP MISC. GAMES"
 
     If you're in a gaming mood, here are four great entertainment programs
@@ -71,6 +73,8 @@ machines:
     inside the car, what do you do?  Get out, go into the phone booth, call
     your friend to find out how to start the car?  You'll have to discover
     what to do on your own.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0911
 

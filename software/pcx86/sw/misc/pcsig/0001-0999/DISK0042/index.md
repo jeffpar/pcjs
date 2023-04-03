@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "KERMIT"
 
     KERMIT implements a file transfer protocol for the MS/PC-DOS operating
@@ -77,6 +79,8 @@ machines:
     MSKERM   ABR  File used by MSKERM.EXE.
     SCANCHEK C    Source for SCANCHEK.EXE.
     SCANCHEK EXE  Keyboard testing program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0042
 

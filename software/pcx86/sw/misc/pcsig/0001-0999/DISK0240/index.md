@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FAMILY TREE GENEALOGY"
 
     FAMILY TREE is a general purpose genealogy system designed for charting
@@ -30,6 +32,8 @@ machines:
     
     The chart function uses the database to make reports by pedigree,
     ancestors, family groups, decendants, and relationships.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0240
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SPACEWARS AND OTHER GAMES"
 
     The primary program on this disk, SPACEWAR, is an excellent asteroid
@@ -100,6 +102,8 @@ machines:
     TRACK    BAS  BASIC demo.
     TYPE     BAS  Mini typing test (may have bugs).
     VACATION BAS  Mini vacation demo.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0292
 

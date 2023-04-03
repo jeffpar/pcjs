@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE STOCK TRADER"
 
     STOCK TRADER tracks selected stock performances and generates buy and
@@ -65,6 +67,8 @@ machines:
     UNSTALL  EXE  Exe program to un-install the STOCK TRADER.
     NOTES    TXT  Notes on programs
     INFO     BAT  Prints out documentation files
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0644
 

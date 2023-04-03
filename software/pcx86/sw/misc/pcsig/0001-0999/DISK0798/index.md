@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PRO-MENU"
 
     If you're one of those people who wishes there was some easier way of
@@ -90,6 +92,8 @@ machines:
     MG-C     EXE  Calls the menu generating program MENGEN (Color systems).
     MG-M     EXE  Calls the menu generating program MENGEN (Mono Systems).
     M        MEN  Data file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0798
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PDS*BASE 1 OF 2 (ALSO 1025)"
 
     A complete hierarchical database system of the master/detail (or
@@ -29,6 +31,8 @@ machines:
     
     This is the database management system for anyone who doesn't want to
     go to the expense and trouble of learning a new programming language.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0396
 

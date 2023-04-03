@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TEACHER'S DATABASE FOR THE CLASSROOM"
 
     TEACHER'S DATABASE is designed particularly for teachers to organize
@@ -35,6 +37,8 @@ machines:
     
     Let the computer do the paperwork while you focus on teaching.  After
     all, that's why you became a teacher.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0878
 

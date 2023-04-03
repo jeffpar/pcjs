@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MEALMATE"
 
     On a diet?  Need some help?
@@ -36,6 +38,8 @@ machines:
     operated and presents nutritional information on many common foods.
     
     Pass the salad, please.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0700
 

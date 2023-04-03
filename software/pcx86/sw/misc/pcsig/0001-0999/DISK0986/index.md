@@ -15,9 +15,13 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PULLED FROM THE LIBRARY"
 
     This disk is no longer in the PC-SIG Library.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0986
 

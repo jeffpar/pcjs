@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LETUS A-B-C VOL 1"
 
     Letus A-B-C is a database in PC-FILE III format containing references
@@ -55,6 +57,8 @@ machines:
     BYTE82   ???  Byte 1982 magazine reference files (4 files)
     LETUS    DOC  Documentation for using Letus  (11 pages)
     LOGO82   COM  Generates Letus logo
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0121
 

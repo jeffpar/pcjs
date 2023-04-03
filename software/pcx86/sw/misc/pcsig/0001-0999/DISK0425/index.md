@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ENGINEERING PASCAL"
 
     Most of these programs come from the book entitled "Pascal Programs for
@@ -88,6 +90,8 @@ machines:
     RANDOM   LIB  Random number generator (0..1)
     RANDG    LIB  Random number generator with gaussian distribution
     PLOT     LIB  A plotter (printer) subroutine
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0425
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "NEW YORK ADVENTURE"
 
     NEW YORK is a cleverly-designed adventure program. The goal is to
@@ -35,6 +37,8 @@ machines:
     -------- ---  -  New York (v1.0)
     NEWYORK  DOC  Documentation for NEWYORK.BAS
     DOC      TXT  Documentation files
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0614
 

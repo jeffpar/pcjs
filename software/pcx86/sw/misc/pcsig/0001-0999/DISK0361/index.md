@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FAMILY HISTORY 1 OF 3 (ALSO 632, 2291)"
 
     Ever wonder who's lurking in the upper branches of your family tree?
@@ -35,6 +37,8 @@ machines:
     
     Research your roots and know where you came from.  A great gift for the
     next generation.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0361
 

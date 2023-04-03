@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-GENERAL LEDGER"
 
     PC-GENERAL LEDGER was written by a financial executive with over 25
@@ -27,6 +29,8 @@ machines:
     
     The program is easy to use and can be set up and running in less than 15
     minutes.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0237
 

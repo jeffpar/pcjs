@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MIT / ISI COMM GROUP"
 
     This is a serial I/O package originally developed by John Romkey and
@@ -55,6 +57,8 @@ machines:
     GLASSTTY PAS  Simple dumb terminal for IBM PC. (Microsoft Pascal)
     BEAUTY   H    A set of macros and type definitions which enhance c
     README        Description of included files
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0202
 

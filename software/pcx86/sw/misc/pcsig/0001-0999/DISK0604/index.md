@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LANDING PARTY"
 
     Captain!! The energy crystals that power our life-support systems are
@@ -32,6 +34,8 @@ machines:
     
     On the same disk is a two player trivia tic-tac-toe game. Each player
     must answer a trivia question to mark a square.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0604
 

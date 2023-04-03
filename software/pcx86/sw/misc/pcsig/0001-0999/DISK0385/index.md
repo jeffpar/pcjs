@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PHRASE CRAZE"
 
     A word game that's great fun for the whole family. If you've ever seen
@@ -24,6 +26,8 @@ machines:
     This is a phrase-guessing game where you fill in letters as outlined on
     the screen in a series of words that make up a well-known phrase.  Can I
     have an ``R'', please?
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0385
 

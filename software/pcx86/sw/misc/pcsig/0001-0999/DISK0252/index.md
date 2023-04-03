@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LISTMATE AND LOAD-US"
 
     This disk contains two user-supported programs from SWFTE.  ListMate
@@ -45,6 +47,8 @@ machines:
     LISTMATE HLP  ListMate help files
     LISTMATE TXT  ListMate text files
     LOAD-US  DOC  Documentation (listable) LOAD-US  ABS  Abstract
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0252
 

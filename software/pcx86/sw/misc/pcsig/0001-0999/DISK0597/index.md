@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SYMPHONY WORKSHEETS #4"
 
     Symphony Worksheet #4 contains three macros for managing a checkbook
@@ -39,6 +41,8 @@ machines:
     CHEKBOOK WRK  Check Book Macro
     0_README WRK  Details about new revisions and location of files
     0_HIGHLT WRK  Instructions on where to find details
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0597
 

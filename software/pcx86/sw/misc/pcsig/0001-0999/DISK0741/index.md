@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PURCHASE ORDER SYSTEM"
 
     PURCHASE ORDER SYSTEM is great for almost any kind of business. It
@@ -29,6 +31,8 @@ machines:
     vendor, or purchase order. Purchases received can be cleared
     immediately, and if a purchase transaction is accidentally cleared it
     can be uncleared for recall.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0741
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "OPUS 1 BRAIN TEASERS TRIVIA GAME"
 
     Have you worn out your edition of Trivial Pursuit?  Wish you could have
@@ -28,6 +30,8 @@ machines:
     The game is played much like you would play Charades, with the clues
     brought up as a graphic clue.  For example, The Graduate has the clue
     ``GRADUUUUUUUU'' (Grad + eight U's = Grad-u-eight).  Have fun!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0997
 

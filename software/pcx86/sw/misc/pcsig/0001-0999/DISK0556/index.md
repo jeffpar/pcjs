@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FORTRAN AND ASSEMBLY"
 
     This is a mixed collection of games, usable programs, and utilities
@@ -68,6 +70,8 @@ machines:
     MAZE     FOR  Maze generator source code
     SSPLIB   FOR  Linear least squares program source code
     RND      FOR  Random numbers generator source code
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0556
 

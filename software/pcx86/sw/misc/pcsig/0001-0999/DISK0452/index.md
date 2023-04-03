@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE AMULET OF YENDOR (HACK)"
 
     A Dungeons and Dragons-type text adventure from the Stichting Mathematis
@@ -42,6 +44,8 @@ machines:
     README        Introduction file.
     TERMCAP       Data file.
     HINTS    DOC  Hints on staying alive.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0452
 

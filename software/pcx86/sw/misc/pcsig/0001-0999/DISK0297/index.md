@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "EAMON 2 OF 4 (ALOS 296, 1038, 1039)"
 
     Become a character in a land of adventure and do great and marvelous
@@ -33,6 +35,8 @@ machines:
     and will keep you on the edge of your chair.  The monsters are very
     mean and give up their lives to stop you from getting any further in
     your quest!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0297
 

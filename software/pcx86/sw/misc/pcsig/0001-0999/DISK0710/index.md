@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "INSTACALC"
 
     INSTACALC is a full-featured spreadsheet program with an interesting
@@ -28,6 +30,8 @@ machines:
     file, or cutting and pasting with other programs.  You can import and
     export from Lotus 1-2-3, dBASE, and .DIF files.  PC Magazine made
     INSTACALC an Editor's Choice among low cost spreadsheets.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0710
 

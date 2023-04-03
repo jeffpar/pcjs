@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HOST-III PUBLIC BBS"
 
     The HOST-III communications package, while designed for private
@@ -54,6 +56,8 @@ machines:
     HOSTCL2X EXE  Program that initiates telephone calls...Part 2
     RACKET   BBS  Example of BBS SIG
     README        Information about HOST-III use & other programs available
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0125
 

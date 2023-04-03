@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CHECKMATE"
 
     Keep an accurate account of your personal finances -- without all the
@@ -27,6 +29,8 @@ machines:
     
     CHECKMATE is very intuitive. It has a user's guide and built-in,
     context-sensitive help menus.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0784
 

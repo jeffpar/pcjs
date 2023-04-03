@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HARD DISK MANAGEMENT"
 
     This disk is meant to be used with the book `"Hard Disk Management with
@@ -51,6 +53,8 @@ machines:
     anyone to touch, there is the LOCK program.  This protects your data
     safely from accidental (or deliberate and unauthorized) viewing or
     editing.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0786
 

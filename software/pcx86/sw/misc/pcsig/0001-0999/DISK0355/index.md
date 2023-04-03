@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-ZAP"
 
     PC-ZAP is a utility program which allows easy modification of any DOS
@@ -32,6 +34,8 @@ machines:
     
     PC-ZAP20 EXE  Executable PC-ZAP program
     PC-ZAP20 DOC  Documentation for PC-ZAP.  Only prints on IBM/EPSON or
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0355
 

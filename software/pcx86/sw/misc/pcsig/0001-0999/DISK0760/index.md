@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MINIGEN"
 
     MINIGEN is a screen generator that creates Turbo Pascal code for either
@@ -34,6 +36,8 @@ machines:
     
     This program is primarily for intermediate to experienced users, and not
     the novice.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0760
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FORMS MANAGER DEMO"
 
     File Descriptions:
@@ -37,6 +39,8 @@ machines:
     XXXAUTOF DAT  Data file.
     XXXPAD   FM   Sample form.
     XYZ      FM   Sample form.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0075
 

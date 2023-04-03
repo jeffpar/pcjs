@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MANAGEMENT ACTION EXPERT"
 
     MAE (Management Action Expert) is an expert system shell that can solve
@@ -28,6 +30,8 @@ machines:
     
     Create your own knowledge base with a few simple commands and use the
     program for a variety of applications.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0976
 

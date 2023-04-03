@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO PASCAL SET #2"
 
     This disk has handy tools for Turbo Pascal programs.  Routines include
@@ -78,6 +80,8 @@ machines:
     TITLES   LIB  Uses ROM character patterns to create titles
     GRFXTABL LIB  Get the dot patterns from the ROM graphics table
     GETSETDD LIB  Get or set the default drive
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0351
 

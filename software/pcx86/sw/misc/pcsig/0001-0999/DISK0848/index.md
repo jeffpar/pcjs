@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "JUDY THE MEMORY RESIDENT CALENDAR"
 
     We've all wanted a personal secretary to keep track of our appointment
@@ -28,6 +30,8 @@ machines:
     computer's memory, does her job, leaves and then returns her space to
     the memory pool.  She even wishes you ``Happy Birthday'' when that day
     rolls around.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0848
 

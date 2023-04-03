@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DUNGEONS OF THE NECROMANCER'S DOMAIN"
 
     DND is a computer fantasy role-playing game inspired by Dungeons and
@@ -32,6 +34,8 @@ machines:
     choose to be, this is a game that will test all of your game playing
     skills.  Registration of the program includes a copy of "The Domain
     Master" for creating and editing both characters and dungeons.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0567
 

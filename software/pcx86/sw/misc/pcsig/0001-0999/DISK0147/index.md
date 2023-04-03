@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SDB"
 
     SDB is a relational database system written in the C programming
@@ -26,6 +28,8 @@ machines:
     has the source code in the C language included.  This represents
     opportunities for programmers to get a look at how the functions have
     been constructed.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0147
 

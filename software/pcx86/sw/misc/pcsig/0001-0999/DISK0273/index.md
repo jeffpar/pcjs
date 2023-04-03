@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BEST UTILITIES"
 
     The programs here are a collection of some of our most popular
@@ -50,6 +52,8 @@ machines:
     VDEL     COM  Selective delete utility -- prompts to delete each file.
     WHEREIS  DOC  Documentation for WHEREIS.COM.
     WHEREIS  COM  Find a file in any subdirectory.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0273
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FIVE DICE GAME"
 
     Get ready to roll!  FIVE DICE GAME is a fun way to play dice.  It is
@@ -32,6 +34,8 @@ machines:
     an excellent program for any user -- novice to expert.  The Turbo Pascal
     source code is included in case you want to modify or write your own
     computer opponents.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0743
 

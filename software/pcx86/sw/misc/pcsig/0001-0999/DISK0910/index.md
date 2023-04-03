@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BILLING MANAGER 2 OF 2 (ALSO 909)"
 
     dTIME-KEEPER is designed to increase effectiveness in the client
@@ -36,6 +38,8 @@ machines:
     description is 35 characters and spaces, about average for this type of
     information, and with ``extended description lines,'' you may expand
     this description by up to 99 lines of 60 characters and spaces.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0910
 

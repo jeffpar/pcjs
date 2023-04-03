@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BASIC DEVELOPMENT"
 
     A completely functional version of BetaTool's BASIC Development
@@ -23,6 +25,31 @@ machines:
     cross-reference lists, selective line renumbering, variable dump and
     program expand/compress.  If you program in BASIC you should try this
     package.
+{% comment %}info_end{% endcomment %}
+
+{% comment %}samples_begin{% endcomment %}
+
+## SAMPLE.BAS
+
+```bas
+10 'This is a REMark
+20 DEFINT H,I
+30 DBL.PRECISION# = 4.#
+40 HEX.VALUE = &HFFFF
+50 B.STRING$ = "This is a string"
+60 SNG.PRECISION = 5
+70 IF DBL.PRECISION# > SNG.PRECISION THEN GOTO 150
+80 DIM ARRAY(4)
+90 FOR INDEX% = 1 TO 4
+100 ARRAY(INDEX%) = INDEX%^2
+110 NEXT INDEX%
+120 GOTO 150
+130 A.STRING$ = "This is a string" + ", too!"
+140 YEAR = 1982
+150 PRINT "End"
+```
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk 0269
 

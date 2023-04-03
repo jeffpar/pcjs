@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TSHELL"
 
     TSHELL is a powerful visual shell for the PC which provides an
@@ -40,6 +42,8 @@ machines:
     TSH      EXE  The main Tshell program file.
     INSTALL  BAT  Batch file to install Tshell on a designated disk
     README   1ST  Contains comments on installation and operation of Tshell
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0592
 

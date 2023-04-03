@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PDS*QUOTE"
 
     This group of programs helps you quickly and accurately prepare
@@ -24,6 +26,8 @@ machines:
     financial data, this could be a great help.  A very professional package
     for small to medium-sized businesses needing analysis and projection
     tools.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0533
 

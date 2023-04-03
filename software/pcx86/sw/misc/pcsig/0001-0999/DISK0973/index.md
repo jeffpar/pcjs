@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PEOPLESYSTEMS 2 OF 2 (ALSO 972)"
 
     More than just programs and data come on disks nowadays.  The
@@ -30,6 +32,8 @@ machines:
     Peoplesystems (PS) are simple patterns of people events that guide,
     control or affect our daily lives.  This book shows how to create better
     Peoplesystems that will free us from old fashioned ideas.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0973
 

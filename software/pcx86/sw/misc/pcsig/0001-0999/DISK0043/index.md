@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "EXIDY WORD PROCESSOR"
 
     Exidy is a full featured text editor with the flexibility of up to
@@ -45,6 +47,8 @@ machines:
     STUDENT  BAT  Used to turn on tutorial mode
     EXELOAD  EXE  Part of Exidy system
     ????     EDX  Exidy text, help, and config files
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0043
 

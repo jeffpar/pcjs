@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CRYPTANALYSIS HELPER"
 
     This program is designed to aid in the decoding of simple substitution
@@ -41,6 +43,8 @@ machines:
     ??       DCT  Dictionary of ?? letter words
     SAMPLE   CIP  Sample message that needs decoding
     SORTALL  BAT  Sorts all the dictionaries
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0491
 

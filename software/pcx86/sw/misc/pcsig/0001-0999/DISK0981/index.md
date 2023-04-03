@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MASTERFILE DISK MANAGEMENT SYSTEM"
 
     Stop searching through your floppies or hard disk trying to locate
@@ -27,6 +29,8 @@ machines:
     
     Search for your files by name or description. Print a hard copy of
     your disk library with these descriptions.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0981
 

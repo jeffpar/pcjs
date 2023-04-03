@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COMPASS DESKTOP MANAGER"
 
     COMPASS is the first integrated program that combines six major
@@ -52,6 +54,8 @@ machines:
     COMPASS is the perfect program for the lap-top computer user on the go.
     It is easy to use, runs from one floppy disk, and is completely self-
     contained. Great for beginners!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0764
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FINANCE MANAGER II"
 
     Finance Manager II is an extremely flexible and comprehensive
@@ -40,6 +42,8 @@ machines:
     ~ Listing a current Chart of Accounts to be run after changes
     
     ~ Listing of budgeted income or expense accounts
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0151
 

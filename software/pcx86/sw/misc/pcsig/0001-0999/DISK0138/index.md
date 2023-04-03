@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROGRAMERS UTILITIES #4"
 
     A hackers paradise!  Utilities let you set printer modes from DOS,
@@ -58,6 +60,8 @@ machines:
     RMSPC    ASM  Source for above
     RMSPC    COM  Interrupt handler for diagnosing parity errors
     VECTS    EXE  Program to display interrupt vectors
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0138
 

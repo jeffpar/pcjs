@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MSPANTOC, BIBLIO, AND LIST-MRG"
 
     Writers -- here's a useful addition to your library.
@@ -79,6 +81,8 @@ machines:
     BIBLIO   EXE  The BIBLIO main program.
     BIBLIO   REF  The reference sample file to use with the BIBLIO program.
     BIBLIO   TXT  Introduction file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0935
 

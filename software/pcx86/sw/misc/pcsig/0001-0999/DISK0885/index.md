@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MISC. UTILITIES FOR PROGRAMMERS"
 
     A collection of handy utilities for programmers and computer users in
@@ -62,6 +64,8 @@ machines:
     hand-optimized.  The C-WINDOWING TOOLBOX (C-WINDOW) programs on this
     disk perform the same function for the programming language C (Lattice C
     or Microsoft C version 3 or 4).
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0885
 

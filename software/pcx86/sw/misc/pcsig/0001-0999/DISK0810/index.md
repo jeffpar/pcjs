@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DISK NAVIGATOR"
 
     DISK NAVIGATOR takes over for the ordinary DOS prompt on your computer
@@ -31,6 +33,8 @@ machines:
     directories on the screen at the same time, giving your computer a
     "super" disk directory. Scan one disk directory or the entire disk
     directory structure.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0810
 

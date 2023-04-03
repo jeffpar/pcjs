@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BLACKBEARD"
 
     Programmers -- here's an editor that can perform just about every task
@@ -54,6 +56,8 @@ machines:
     M_BB     COM  Mouse systems compiled menu file.
     M_BB     COM  Mouse systems compiled menu file.
     M_BB     COM  Mouse systems compiled menu file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0611
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PRESENT"
 
     This diskette contains the complete set of PRESENT programs (version
@@ -97,6 +99,8 @@ machines:
     SWEEP    PIC  Present slide picture file
     SQUEEZE  PIC  Present slide picture file
     SNOOPY04 PIC  Present slide picture file
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0471
 

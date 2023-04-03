@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FREEWAY 3 OF 3 (ALSO 671, 672)"
 
     This is a payroll management system built expressly for the European
@@ -46,6 +48,8 @@ machines:
     entry of pay data, only these employees will have the variables entered.
     Calculation of pay and deductions is very flexible,
     permitting recalculation if necessary.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0673
 

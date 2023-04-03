@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "EXPRESSCALC 2 OF 2 (ALSO 524)"
 
     EXPRESSCALC is a spreadsheet with a wide variety of applications ranging
@@ -26,6 +28,8 @@ machines:
     option to configure the package to specific systems.  EXPRESSCALC
     supports spreadsheets up to 64 columns by 256 lines.  Each column can
     be up to 75 characters long.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0525
 

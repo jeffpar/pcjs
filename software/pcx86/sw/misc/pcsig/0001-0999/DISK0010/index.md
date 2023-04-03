@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CHASM  (CHEAP ASSEMBLER)"
 
     CHASM (Cheap Assembler) is a prime weapon for programmers who want to
@@ -25,6 +27,8 @@ machines:
     CHASM is a compiler only and there is no editor included.  You use an
     ASCII word processor to create your source code file, then use CHASM to
     compile it.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0010
 

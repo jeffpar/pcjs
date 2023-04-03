@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-WRITE 1 OF 3 (ALSO 627, 1235)"
 
     PC-WRITE is a wordprocessor with features and power that
@@ -40,6 +42,8 @@ machines:
     supports for laser printers, including Postscript.  It also accepts most
     WordStar commands and converts WordStar files.  The  pop-up menus make
     most tasks easier and the user guide is included on-disk.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0078
 

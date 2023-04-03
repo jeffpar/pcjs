@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-DOS HELP"
 
     Lost in the wilds of DOS again? Here's real direction for you -- an
@@ -24,6 +26,8 @@ machines:
     How do you get there from here? Just type HELP, followed by the DOS
     command you are unsure of, and PC-DOS HELP shows you its proper usage
     and leads you back into the light.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0254
 

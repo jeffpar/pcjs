@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FREEWILL"
 
     The California Legislature approved, effective Jan. 1, 1983 the use of
@@ -52,6 +54,8 @@ machines:
     PAGEVII  ASC  Explanation text.
     PAGEVIII ASC  Explanation text.
     DISCLAIM      Disclaimer for Freewill program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0193
 

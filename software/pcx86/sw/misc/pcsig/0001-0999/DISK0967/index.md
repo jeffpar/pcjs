@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ADVENTURE AND MUSIC COLLECTION"
 
     You are in a spaceship exploring the Orion Nebula for NASA.  Your
@@ -40,6 +42,8 @@ machines:
     The dulcimer tuning program helps beginners learn to tune their
     instruments with an electronic tuner.  Instructions are included in the
     program, and tones can be repeated if desired.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0967
 

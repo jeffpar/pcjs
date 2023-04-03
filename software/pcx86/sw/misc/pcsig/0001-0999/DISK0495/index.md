@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "WORLD DIGITIZED 2 OF 3 (ALSO 494, 496)"
 
     The WORLD DIGITIZED is a compilation of more than 100,000 points of
@@ -35,6 +37,8 @@ machines:
     transform the data for Mercator projection.
     
     It really is a small world and now you can have it all.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0495
 

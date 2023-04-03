@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ABC FUN KEYS, EDUCATIONAL FOR CHILDREN"
 
     In our rapidly moving technological world, people are being introduced
@@ -47,6 +49,8 @@ machines:
     
     ABC FUN KEYS is educational and designed to make learning as fun and
     stimulating as possible.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0844
 

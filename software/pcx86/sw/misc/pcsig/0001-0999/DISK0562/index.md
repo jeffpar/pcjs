@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-HAM"
 
     PC-HAM is a set of amateur radio database programs.  The program is
@@ -37,6 +39,8 @@ machines:
     
     ~ Automatic QSL 100% (after a contest or DX-Pedition) to all stations
     worked for one contact on each of five bands.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0562
 

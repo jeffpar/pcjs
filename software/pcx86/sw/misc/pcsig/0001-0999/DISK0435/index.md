@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO PASCAL SET #11"
 
     This disk contains three separate sets of Turbo Pascal routines.
@@ -69,6 +71,8 @@ machines:
     POWERI   PAS  Exponentiation of real to integer power
     TESTINVT PAS  Demo of inverse central T distribution
     UTIL     PAS  More than 50 utility routines
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0435
 

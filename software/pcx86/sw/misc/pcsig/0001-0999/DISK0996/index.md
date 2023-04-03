@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DO-IT-YOURSELF PROMO KIT"
 
     Why send a piece of cardboard or paper to express your feelings, when
@@ -27,6 +29,8 @@ machines:
     graphics card.
     
     Add that personal touch that people never forget!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0996
 

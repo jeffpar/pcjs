@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CATALIST 1 OF 2 (ALSO 865)"
 
     Biorhythm theory holds that the human body is influenced by three
@@ -36,6 +38,8 @@ machines:
     Also included is a comparison of the biorhythms of two persons, which
     will display the percentage of compatibility for each cycle.  Maybe it
     wasn't just luck, maybe it really was a bad (or good) day when you met.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0864
 

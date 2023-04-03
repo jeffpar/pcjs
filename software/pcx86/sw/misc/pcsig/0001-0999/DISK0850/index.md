@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "INSURE, A HOME INSURANCE TRACKING SYSTEM"
 
     INSURE is a convenient way to track your all-important medical insurance
@@ -51,6 +53,8 @@ machines:
     INSURE   EXE  Main Program
     INSDATA  1ST  Data file
     INSDATA  2ND  Data file
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0850
 

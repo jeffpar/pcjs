@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ROFF AND PC-READ"
 
     ROFF is a text formatter.  Using ROFF, you can make nice printouts of a
@@ -52,6 +54,8 @@ machines:
     TSTINTEG PAS  Source in Pascal for example for use of integral.
     TSTRKF45 C    Source in C for example of use of RKF45.
     TSTRKF45 PAS  Source in Pascal for example of use of RKF45.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0194
 

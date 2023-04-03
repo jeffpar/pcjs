@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "POWER WORKSHEETS"
 
     Power-Worksheets is a user-supported program which relieves you of the
@@ -54,6 +56,8 @@ machines:
     SREGR    WKS  Linear Regression program
     TV       WKS  Part of Power Worksheet
     TEST     WKS  Test worksheet
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0289
 

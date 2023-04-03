@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-STOCK"
 
     PC-STOCK finance program is a stock evaluation and tracking system.  It
@@ -23,6 +25,8 @@ machines:
     printers, enabling you to save your analysis to hard copy.  Produce line
     graphs for: high, volume, composite, on-balance volume and average
     high/low analysis.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0575
 

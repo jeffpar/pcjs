@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MICROGOURMET 1 OF 2  (#117 SECOND DISK)"
 
     MicroGourmet is a two-disk software package, which functions through
@@ -52,6 +54,8 @@ machines:
     MANUAL   TXT  MicroGOURMET manual  (WORDSTAR format)
     GOURMET  DBF  MicroGOURMET dBASE II database file
     UNWS     BAS  Program for converting WORDSTAR files to DOS files
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0116
 

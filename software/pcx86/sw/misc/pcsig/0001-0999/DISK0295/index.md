@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TAX-FILE"
 
     TAX-FILE is a complete tax record keeping system written for
@@ -113,6 +115,8 @@ machines:
     DATABASE BAT  Batch file to setup data files on drive B for dual floppy
     SETPRINT PRG  Program to set up printer
     TAXDATA  MEM  Memory variable for tax year
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0295
 

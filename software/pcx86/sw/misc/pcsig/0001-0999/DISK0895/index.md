@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SCOUT AND SIMS"
 
     SCOUT is a memory-resident disk file manager you can customize to your
@@ -54,6 +56,8 @@ machines:
     
     In other words, you can be quite creative with this program and use it
     for any application you wish.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0895
 

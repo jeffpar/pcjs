@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "REIPS, THE SIMPLE BOOKKEEPER, TYPERITE"
 
     Real estate professionals -- evaluate prospective real estate
@@ -45,6 +47,8 @@ machines:
     Turn your PC and its printer into an electric typewriter.  TYPERITE is
     simple, straight-forward and faster than using a wordprocessor for some
     day-to-day jobs.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0860
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CAVEQUEST"
 
     A graphics adventure game, in the same vein as Epyx's Temple of Aphsai.
@@ -23,6 +25,8 @@ machines:
     
     This is a rich and complex adventure with hundreds of hours of
     first-class entertainment in store for you. Onward!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0451
 

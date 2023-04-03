@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "WIZQUIZ AND JEM"
 
     WIZQUIZ is an educational program that offers randomly-generated
@@ -46,6 +48,8 @@ machines:
     see is Run, when the logos are displayed. If you type Help, you get
     four pages of text, giving a brief description of the logo or word you
     indicated when you requested help.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0922
 

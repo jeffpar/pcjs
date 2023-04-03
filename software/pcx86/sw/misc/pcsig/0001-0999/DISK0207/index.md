@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LOTUS WORKSHEETS #1"
 
     This disk contains a collection of some really nice worksheets. AUTO.WKS
@@ -40,6 +42,8 @@ machines:
     TREND123 MAC  Version 1.0 (John Dannenfeldt) - Curve fitting macro
     TREND123 DOC  Documentation
     PAD      WKS  Version 1.2 (Frank Girard) - Desktop-like template
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0207
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MULTI BASE"
 
     MULTI-BASE is a database management system with many sophisticated
@@ -32,6 +34,8 @@ machines:
     representation of the data, format of the reports and menus are all
     determined by you, MULTI-BASE offers a great deal of flexibility in the
     way the program is used.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0971
 

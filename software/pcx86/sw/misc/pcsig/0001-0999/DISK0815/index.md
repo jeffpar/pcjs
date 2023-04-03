@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MODULA-2 TUTORIAL 2 OF 2 (ALSO 814)"
 
     MODULA-2 TUTORIAL teaches you the fundamentals of this complex
@@ -29,6 +31,8 @@ machines:
     Parts II and III teach those features that are new in MODULA-2 --
     advanced topics and features that allow the programmer to use the full
     power of the language and write larger and more complex programs. File
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0815
 

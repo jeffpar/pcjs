@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-MAIL 2 OF 2 (ALSO 868, 1475)"
 
     PC-MAIL is a menu-driven mailing list and address management program
@@ -35,6 +37,8 @@ machines:
     PC-MAIL is not just another mailing list program, but a
     fully-functional
     package which will greatly assist you in your home or business.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0869
 

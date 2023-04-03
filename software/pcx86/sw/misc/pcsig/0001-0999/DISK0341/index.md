@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "C UTILITIES NO 6"
 
     This disk contains a collection of programs and subroutines in 'C',
@@ -61,6 +63,8 @@ machines:
     LIFE     C    "Game of Life" written in C
     LEJ_LIB  C    Example functions from Kernighan & Ritchie book on C
     ISCHECK  C    Program to verify Microsoft's "isxxxxxx" routines
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0341
 

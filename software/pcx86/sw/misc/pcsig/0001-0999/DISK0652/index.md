@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HI-RES RAINBOW"
 
     HI-RES RAINBOW is a full featured paint package which includes pull-
@@ -43,6 +45,8 @@ machines:
     HIRES    EXE  The HI-RES drawing program
     README   1ST  Documentation file
     QUICKEYS COM  Program to speed up program use while in keyboard mode
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0652
 

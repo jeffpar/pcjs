@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TASM"
 
     TASM is an assembler that runs on an IBM-PC/XT/AT or compatible and
@@ -28,6 +30,8 @@ machines:
     programming.  The source code is available.  Customize TASM to produce
     codes for other processors by creating a proper instruction definition
     table for the target chip.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0643
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SLEUTH"
 
     This is an interactive text game you can populate with your friends,
@@ -31,6 +33,8 @@ machines:
     needs only the keyboard for input.
     
     And the killer is . . .
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0694
 

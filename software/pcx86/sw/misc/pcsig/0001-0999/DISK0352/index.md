@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TWO FORTHS"
 
     Here are two FORTHS that are ready for the beginner to use.  They also
@@ -41,6 +43,8 @@ machines:
     FORTH-H  DOC  Documentation for Glen Haydon's FORTH
     FORTH-H  COM  Glen Haydon's FORTH interpreter
     FORTH-H  ASM  Source for Glen Haydon's version of MVPFORTH
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0352
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MINISTER'S SERMON INDEXER"
 
     MINISTER'S SERMON INDEXER is a simple database designed with the
@@ -28,6 +30,8 @@ machines:
     interface. Also featured are pull-down menus accessed by your cursor
     control keys. The documentation is very good, although the program is
     so easy to use it is hardly needed.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0790
 

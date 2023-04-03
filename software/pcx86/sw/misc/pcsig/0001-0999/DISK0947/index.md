@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "KINETICS"
 
     KINETICS calculates dosages of several commonly-used drugs such as
@@ -30,6 +32,8 @@ machines:
     
     These programs should be used by a clinical pharmacist or a physician
     with training in pharmacokinetic dosing of drugs.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0947
 

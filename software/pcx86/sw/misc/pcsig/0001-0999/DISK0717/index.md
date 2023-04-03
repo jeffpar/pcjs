@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LIGHTWAVE COMMUNICATIONS"
 
     SUPERCOM is a standard asynchronous communications package, letting you
@@ -28,6 +30,8 @@ machines:
     assumed that you're already using a modem and communications package.
     DIALER lets you interact and talk on a BBS, but does not support the
     uploading or downloading of files.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0717
 

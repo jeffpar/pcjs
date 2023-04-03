@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BIBLE MEN"
 
     BIBLE MEN is a wonderful little quiz program that tests your finer
@@ -35,6 +37,8 @@ machines:
     on without affecting your score; scoring occurs only when you type an
     answer. BIBLE MEN displays your score as tries, wrong, right, and
     percent. Did you know the answer to the above example?
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0781
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-MUSICIAN"
 
     PC-MUSICIAN is a tool for the beginning composer.  It lets you enter
@@ -24,6 +26,8 @@ machines:
     Playback is on the one voice of the computer.  This program is more for
     the aspiring musician than for the technically-proficient
     musician/computer operator.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0127
 

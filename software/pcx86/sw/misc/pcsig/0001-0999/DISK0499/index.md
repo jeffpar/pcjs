@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROCOMM"
 
     ProComm is a general-purpose program designed to provide easy and
@@ -43,6 +45,8 @@ machines:
     
     There are a host of additional features in this top-rated program,
     including keyboard macros, disk and printer logging, and many others.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0499
 

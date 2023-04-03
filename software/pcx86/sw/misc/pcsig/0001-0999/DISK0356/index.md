@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FANSI-CONSOLE 1 OF 2 (ALSO 650)"
 
     A sophisticated memory-resident program which replaces the standard IBM
@@ -30,6 +32,8 @@ machines:
     specific keys to perform complex series of keystokes.  Reconfigure your
     keyboard however you wish -- even a Dvorak layout.  Experiment with
     different drivers.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0356
 

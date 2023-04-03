@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HELPDOS"
 
     A "help system" for learning and using the commands and functions of
@@ -33,6 +35,8 @@ machines:
     When you select a category from the hint menu, HelpDOS will show you a
     menu of the DOS features relating to that category. The hints
     function is a unique and powerful aspect of HELPDOS.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0686
 

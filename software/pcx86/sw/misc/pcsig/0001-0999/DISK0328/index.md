@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TRIVIA 2 OF 2 (ALSO 327)"
 
     A captivating trivia game which challenges you to put your knowledge of
@@ -37,6 +39,8 @@ machines:
     TM       FNT  Support file for trivia game
     CATEGORY D    Mixed Bag trivia questions
     CATEGORY B    Sports and Recreation trivia questions
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0328
 

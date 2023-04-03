@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "OMEGA-LINK"
 
     OMEGA-LINK is a communications program for the modem, which can be
@@ -37,6 +39,8 @@ machines:
     protocols include: ASCII, XMODEM and YMODEM.  If these aren't enough,
     there is an external protocol handler that allows you to add
     additional protocols such as ZMODEM, WXMODEM and KERMIT.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0843
 

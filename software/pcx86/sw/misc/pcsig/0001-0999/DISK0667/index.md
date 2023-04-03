@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE WRITERS TOOL KIT"
 
     The Writer's Toolkit is a collection of 20 executable utility programs
@@ -63,6 +65,8 @@ machines:
     NL       EXE  Line numbering filter.
     MEMO     EXE  Display memos that have the system date.
     WRITERS  TXT  Writer's Toolkit information.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0667
 

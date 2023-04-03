@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "XASM CROSSASSEMBLER"
 
     XASM is a cross-assembler that allows the use of a PC as a development
@@ -44,6 +46,8 @@ machines:
     XASM     EXE  Macro configured Cross-assembler.
     README   1ST  Information on APL workspace files.
     APLDEMO  AWS  APL workspace file - 115 public domain utility functions.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0573
 

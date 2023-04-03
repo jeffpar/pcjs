@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PASCAL COLLECTION #1"
 
     The diverse selection of programs on this disk are primarily intended
@@ -76,6 +78,8 @@ machines:
     TABSET2  PAS  Simular to tabset1 but treats printer as binary file.
     TIMI     PAS  Illustrates concept of PASCAL unit  (interface)
     TIMU     PAS  Illustrates concept of PASCAL unit  (unit).
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0036
 

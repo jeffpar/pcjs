@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BUSINESS AND MORAL VALUE (ALSO 1018)"
 
     BIBLIOGRAPHY OF BUSINESS ETHICS AND MORAL VALUES has a list of
@@ -27,6 +29,8 @@ machines:
     toxic chemicals and water pollution), worker issues (discrimination,
     sexual harassment, whistle blowing, etc.), privacy, distribution of
     wealth, third world issues and more.  An incredible resource!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0506
 

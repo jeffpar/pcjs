@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "EASYMENU 1 OF 3 (ALSO 739, 740)"
 
     EASYMENU is a simple menu system with a few extra features that make
@@ -69,6 +71,8 @@ machines:
     PRINTER  MHH  Printer control help.
     PASSWORD EXE  Password program.
     OPTIONS  EXE  Control program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0738
 

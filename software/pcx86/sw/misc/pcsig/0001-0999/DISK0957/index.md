@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-FLOW - BUDGETING SYSTEM"
 
     PC-FLOW, the personal cash-flow budgeting system, lets you forecast and
@@ -30,6 +32,8 @@ machines:
     transactions by ID, frequency or ending date. There are three cash-flow
     reports: daily transaction detail; daily, weekly, monthly, or yearly
     cash-flow summaries; and breakdown by transaction classification.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0957
 

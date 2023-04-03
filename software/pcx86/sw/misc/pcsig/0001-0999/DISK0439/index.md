@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COMMUNICATION #3"
 
     MODEM86 is a communications program for Intel 8086/88 based computers.
@@ -50,6 +52,8 @@ machines:
     SIOBIOS  A86  Source for an example CP/M-86 custom serial I/O BIOS.
     SIOBIOS  MAC  Source for an example MS(PC)-DOS custom serial I/O BIOS.
     UNSQZ    COM  Decodes squeezed files.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0439
 

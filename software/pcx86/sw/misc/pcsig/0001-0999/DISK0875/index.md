@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "QREF, VXREF, AND CLOCK"
 
     A memory-resident utility that displays a list of all the DOS commands
@@ -42,6 +44,43 @@ machines:
     function is available to allow sizing and positioning of the clock on
     the screen, but the default is full screen size.  The C source code for
     the program is included.
+{% comment %}info_end{% endcomment %}
+
+{% comment %}samples_begin{% endcomment %}
+
+## HANDSGEN.BAS
+
+```bas
+100 REM ******************************************************* HANDSGEN.BAS
+101 REM * GENERATES TABLES FOR CLOCK HANDS
+110 REM ********************************************************************
+200 DEFINT A-Q, S-Z
+500 OPEN "E:HANDSGEN.TAB" FOR OUTPUT AS #1
+1000 FOR HAND = 0 TO 7
+1100 RANGLE = (360/60) * HAND * (3.141593/180)
+1150 PRINT #1,TAB(16);"/*--- hand entry #";HAND;" ---*/"
+1200 RMULTI = TAN (RANGLE)
+1250 POSITION = 0
+1300 FOR I = 0 TO 100
+1400 POSITION = POSITION + 12
+1500 RCOL = 160 + (I * RMULTI)
+1700 IROW = 100 - I
+1800 ICOL = RCOL
+1900 PRINT #1, TAB(POSITION);
+2000 PRINT #1, USING "###_,";IROW;ICOL;
+2012 PRINT #1, "1,";
+2020 IF POSITION < 60 GOTO 2090
+2024 PRINT #1," "
+2030 POSITION = 0
+2090 REM
+2900 NEXT I
+3100 NEXT HAND
+8900 CLOSE #1
+9000 END
+9999 SAVE "E:HANDSGEN.BAS"
+```
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk 0875
 

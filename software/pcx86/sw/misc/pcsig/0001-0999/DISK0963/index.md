@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PAY-TIME PAYROLL SYSTEM (ALSO 1034)"
 
     For most of us, payday is one of the most important times of the week.
@@ -27,6 +29,8 @@ machines:
     the person's name, mailing address, employee ID, Social Security number,
     and payroll status. Once all the information for the tax files are
     entered, you can edit, display, add, delete, and print the records.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0963
 

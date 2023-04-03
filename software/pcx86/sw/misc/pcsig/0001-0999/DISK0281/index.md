@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "RECIPE INDEX"
 
     Recipe83(tm) is a database index to 1800 recipes that appeared in the
@@ -38,6 +40,8 @@ machines:
     *        RPT  Report formats
     NESTMENU BAT  Prints NESTMENU.DOC
     NESTMENU DOC  List of menus
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0281
 

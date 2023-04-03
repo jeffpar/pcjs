@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DFSTICKL"
 
     A menu-driven calendar/tickler program designed to display certain
@@ -44,6 +46,8 @@ machines:
     you if that is the program you wish to execute. When using a hard disk
     and thousands of programs, XCUTE will do the work of finding your
     program and will even execute it for you.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0818
 

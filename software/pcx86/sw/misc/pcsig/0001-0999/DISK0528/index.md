@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "NEW YORK WORD"
 
     NEW YORK WORD is a powerful word processor that allows split-screen
@@ -23,6 +25,8 @@ machines:
     features automatic table of contents, automatic index generation,
     automatic hyphenation, and mail merge.  This shareware package is more
     powerful than some retail word processors.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0528
 

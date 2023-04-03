@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DANCAD 3D 2 OF 4 (ALSO 701,703,704)"
 
     DANCAD3D is an excellent and versatile drawing program that lets you do
@@ -49,6 +51,8 @@ machines:
     layout drawing. Use this close-up to confirm the fit of moving parts.
     Produce an animated perspective view of the entire assembly with all of
     the parts in motion.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0702
 

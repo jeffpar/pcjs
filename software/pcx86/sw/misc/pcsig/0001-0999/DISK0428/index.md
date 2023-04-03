@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO PASCAL #10"
 
     The Turbo Pascal routines on this diskette perform a wide variety
@@ -50,6 +52,8 @@ machines:
     STRNGLIB DOC  Description of STRNGLIB.INC
     SCROLL   PAS  Scroll portion or all of screen up or down
     SAMPPATH PAS  Example of how to use PATHS.PAS
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0428
 

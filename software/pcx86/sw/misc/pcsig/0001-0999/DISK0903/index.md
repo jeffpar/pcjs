@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "VAR GRADE 1 OF 3 (ALSO 1357, 2099)"
 
     VARGRADE is designed for teachers sho want to keep a computerized record
@@ -29,6 +31,8 @@ machines:
     correlation of two exams; and the ability to sum, average, or take the
     percentage of any combination of exams.  Plot the exam results on your
     printer.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0903
 

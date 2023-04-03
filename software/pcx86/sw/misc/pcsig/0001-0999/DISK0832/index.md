@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BEYOND THE TITANIC (KROZ ON 2001 NOW)"
 
     Lucky you! BEYOND THE TITANIC begins as you find yourself aboard the
@@ -27,6 +29,8 @@ machines:
     If you've played any of Infocom's games, you'll notice the similarity in
     style.  To add to the realism, a 16-color display and sound effects are
     used throughout the game.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0832
 

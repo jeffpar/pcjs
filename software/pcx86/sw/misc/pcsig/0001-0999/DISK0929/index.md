@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LOTTO FEVER"
 
     LOTTO FEVER is a synthesis of astrology and lottery simulation with a
@@ -27,6 +29,8 @@ machines:
     NOTE: The program will not display your lotto numbers on a monochrome
     monitor. If your system has a monochrome monitor,  you must have a
     printer in order to see your numbers.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0929
 

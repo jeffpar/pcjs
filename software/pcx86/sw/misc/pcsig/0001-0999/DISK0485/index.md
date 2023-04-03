@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ICON MAKER & FXMATRIX"
 
     ICON MAKER is a menu-driven program that allows you to create graphical
@@ -40,6 +42,8 @@ machines:
     JX dot matrix printers.  These created characters can then be used from
     any word processor, even if your word processor resets the
     printer upon execution.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0485
 

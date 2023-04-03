@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DECISION ANALYSIS SYSTEM"
 
     DECISION ANALYSIS SYSTEM, (DAS), is probably the best decision analysis
@@ -62,6 +64,8 @@ machines:
     Applications include: location planning, cost/benefit analysis,
     strategic planning, employee selection, resource allocation, sales
     forecasting, taste  testing, new product evaluations, and many more.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0953
 

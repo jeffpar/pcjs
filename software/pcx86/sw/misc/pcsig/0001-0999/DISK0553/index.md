@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LLSQ"
 
     This disk contains LLSQ, a package of 14 basic, high-quality
@@ -32,6 +34,8 @@ machines:
     PROG?    FOR  Test drivers for the various modules
     LINK?    BAT  Batch files to properly link the various modules
     ???????? FOR  LLSQ FORTRAN source code modules
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0553
 

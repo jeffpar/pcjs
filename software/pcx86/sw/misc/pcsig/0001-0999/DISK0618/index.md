@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MAKEMYDAY"
 
     A quartet of time-management systems for today's super-busy people.
@@ -34,6 +36,8 @@ machines:
     and provides the necessary documentation when you need it.  Attorneys,
     accountants, consultants and other service professionals will appreciate
     it.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0618
 

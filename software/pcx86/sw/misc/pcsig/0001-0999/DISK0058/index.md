@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TEXT TOOLS 2 OF 2  (#57 FIRST DISK)"
 
     Tools to manipulated test files.  See Disks #130-132 for more complete
@@ -35,6 +37,8 @@ machines:
     DEFINE   EXE  STRING REPLACEMENT MACROPROCESSOR
     MACRO    EXE  EXPANDS MACROS WITH ARGUMENTS
     EDIT     EXE  TEXT EDITOR
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0058
 

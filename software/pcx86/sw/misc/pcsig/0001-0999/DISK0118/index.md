@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "QSYS DOS MENU 1 OF 2 (#278 SECOND DISK)"
 
     Who needs to get organized? Not everyone, certainly. But if you do feel
@@ -55,6 +57,8 @@ machines:
     MAKEDOC  BAT  Batch file to print documentation
     READ     ME!  Read this first ________
     Q_*      DOC  Documentation files (17 files)
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0118
 

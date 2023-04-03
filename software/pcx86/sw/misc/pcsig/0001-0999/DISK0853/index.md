@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SPORTS LOG TRACKING SYSTEM"
 
     If you read the sports page every day avidly, you'll find that you'll
@@ -52,6 +54,8 @@ machines:
     LINEFILE KEY  Data file.
     PITCHERS      Data file.
     PITCHERS KEY  Data file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0853
 

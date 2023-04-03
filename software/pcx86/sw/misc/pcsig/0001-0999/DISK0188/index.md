@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MINITEL"
 
     MINITEL is an asynchronous communications program for any MSDOS or PCDOS
@@ -48,6 +50,8 @@ machines:
     MINITEL  DOC  Documentation
     MINITEL  LBR  File transfer program
     MINITEL  DQC  Compressed documentation
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0188
 

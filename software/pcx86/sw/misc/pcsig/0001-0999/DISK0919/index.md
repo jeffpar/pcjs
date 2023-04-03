@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "POTPOURRI MENUING PROGRAM"
 
     POTPOURRI is a menuing system with several built-in programs.  Add
@@ -36,6 +38,8 @@ machines:
     INSTALL  BAT  Automatic installation batch file.
     INSTALL  TXT  Installation explanation text file.
     OGHAM    <DIR>Subdirectory.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0919
 

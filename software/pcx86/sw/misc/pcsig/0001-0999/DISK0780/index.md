@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BRIDGEPAL THE GAME OF CONTRACT BRIDGE"
 
     Want a good game of bridge but lack the players?  Want to improve your
@@ -27,6 +29,8 @@ machines:
     position.  If your team wins the bidding, you get to play both the north
     and south hands; otherwise, you play defense with east or west as dummy.
     Optional besthand feature increases your chances for offensive play.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0780
 

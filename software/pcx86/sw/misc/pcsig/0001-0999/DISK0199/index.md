@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-CALC+ 1 OF 3 (ALSO 1016, 1017)"
 
     If value means good product for the ``right'' price, then PC-CALC+ is
@@ -46,6 +48,8 @@ machines:
     PC-CALC+ combines number-crunching power, graphing and flexible report
     options for an ideal spreadsheet.  PC-CALC+'s pop-up menus and context-
     sensitive help screens make it a pleasure to use.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0199
 

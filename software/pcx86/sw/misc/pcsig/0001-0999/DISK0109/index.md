@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DOS UTILITIES NO 5"
 
     A grabbag of utilities aimed mostly at the needs of the more advanced
@@ -53,6 +55,8 @@ machines:
     UTIL     DOC  Documentation for UTIL.DOC
     DATABASE      Sample database
     READ     ME   List of files on this diskette
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0109
 

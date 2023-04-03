@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MULTIFILE"
 
     MULTIFILE is a memory-resident database program designed specifically
@@ -34,6 +36,8 @@ machines:
     
     MULTIFILE handles up to 500 records in memory and prints standard 3.5"
     one-across labels. You can also define the print format for odd sized
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0835
 

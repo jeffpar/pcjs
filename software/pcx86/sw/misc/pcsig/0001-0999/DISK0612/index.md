@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LANGUAGES"
 
     LANGUAGE TEACHER is a series of menu-driven language tutorial programs
@@ -39,6 +41,8 @@ machines:
     HEBREW   EXE  Hewbrew lessons.
     GERMAN*  ARC  Archived files with German lessons (2 files).
     FRENCH*  ARC  Archived files with French lessons (2 files).
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0612
 

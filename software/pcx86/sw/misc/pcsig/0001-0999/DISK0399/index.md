@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PCLOAN5"
 
     PCLOAN 5 was designed by a retired bank president who negotiated,
@@ -29,6 +31,8 @@ machines:
     Use PCLOAN 5 functions to project just what a loan is going to cost and
     when.  Know what you're getting into, financially, before you take that
     final plunge.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0399
 

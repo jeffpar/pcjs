@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FABULA DISK 1 OF 2  (#145 SECOND DISK)"
 
     A fine collection of tools for communications users and others.  The
@@ -71,6 +73,8 @@ machines:
     WRTE     COM  Erases read-only attribute from a file
     WRTP     COM  Sets read-only attribute of a file
     XREF     BAS  BASIC program
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0144
 

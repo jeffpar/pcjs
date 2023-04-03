@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BUSINESS SAMPLER #5"
 
     This disk contains an assortment of utility programs to aid you in
@@ -46,6 +48,8 @@ machines:
     PCYEARBK DOC  Documentation for PCYEARBK.EXE program
     PCRECIPE EXE  A recipe filing system
     TELEFONE COM  A telephone book and dialer (must have modem)
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0412
 

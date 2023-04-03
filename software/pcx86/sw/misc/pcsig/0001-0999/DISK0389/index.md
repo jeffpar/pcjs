@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HOME BUDGET WORK SHEETS"
 
     Pam's Home Budget Template for LOTUS 123 is well designed for managing
@@ -36,6 +38,8 @@ machines:
     AUTOEXP  WKS  Keep track of auto expenses, gas milage, etc.
     ????EXP  WKS  Expense template for each month (12 files)
     DOCUMENT WKS  Documentation template.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0389
 

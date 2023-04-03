@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "WHEEL OF MISFORTUNE AND SOLITAIRE"
 
     We've all said ``I can do that'' when it comes to guessing the letters
@@ -44,6 +46,8 @@ machines:
     may not want to use, such as peeking at the first overturned card in
     each stack.  On-line help is available to the player throughout the
     game.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0891
 

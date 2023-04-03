@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PAGE ONE"
 
     The PAGEONE programs provide a powerful, flexible document processor for
@@ -50,6 +52,8 @@ machines:
     README   TXT  Instructions for starting program
     STYLES   DOC  Documentation ad registration form for STYLES.EXE
     STYLES   EXE  Sub-program accessed by PAGEONE
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0684
 

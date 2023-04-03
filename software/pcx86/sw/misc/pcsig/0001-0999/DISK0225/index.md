@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-FONT"
 
     PC-FONT enables an Epson MX (with Graftrax), RX, or FX printer to
@@ -42,6 +44,8 @@ machines:
     PC-FONT2 PRN  Manual  (70K bytes)
     DESCRIPT TXT  Brief program description
     README        How to print manual
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0225
 

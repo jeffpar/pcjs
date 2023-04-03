@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-PROMPT"
 
     PC-PROMPT is a unique, memory-resident DOS help program that
@@ -30,6 +32,8 @@ machines:
     with programs which do direct screen memory operations without using
     DOS. It is even compatible with various other memory-resident programs
     such as RAM drive emulators, printer spoolers, and Borland's SideKick.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0558
 

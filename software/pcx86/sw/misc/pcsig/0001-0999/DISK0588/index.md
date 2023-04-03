@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SYMPHONY BANK"
 
     This disk contains Symphony sample files that illustrate how Symphony
@@ -71,6 +73,8 @@ machines:
     1_SCHEDL WRK  Example file for SCHEDULE worksheet
     1_RESEAR WRK  Example file for RESEARCH worksheet
     1_CAPEQP WRK  Example file for CAPEQPT worksheet
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0588
 

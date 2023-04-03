@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "C UTILITIES NO 5"
 
     A set of C subroutines ranging from an explanation for how C does type
@@ -58,6 +60,8 @@ machines:
     ZAPLOAD  EXE  ZAPLOAD ready to run
     ZAPLOAD  DOC  Documentation on ZAPLOAD
     _MAIN    C    Shell for main C program that includes command line
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0315
 

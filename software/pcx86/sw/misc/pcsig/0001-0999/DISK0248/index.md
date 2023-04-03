@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PASCAL MATH LIBRARY"
 
     File Descriptions
@@ -32,6 +34,8 @@ machines:
     PRINTER    PAS   Source code for PRINTER.COM
     FUNCTION   PAS   Additional functions for Turbo Pascal
     FUNCTION   DOC   Documentation for FUNCTION.PAS
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0248
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "QCHECK3 CHECK ACCOUNT MANAGEMENT SYSTEM"
 
     QCHECK3 -- Creative Resources's checking account management system is a
@@ -37,6 +39,8 @@ machines:
     for "pay to" entries, user-defined printer set-up strings, a handy
     calendar function for date look-up, and checks for adequate disk space
     prior to actions requiring more space.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0968
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-CHESS"
 
     This program lets you play chess against the computer or a human
@@ -26,6 +28,8 @@ machines:
     The graphics of the game only appear on systems using either EGA or CGA
     adapter cards. The program uses ASCII characters to depict the chess
     pieces on a monochrome or Hercules graphics systems.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0120
 

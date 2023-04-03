@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FASTBUCKS 1 OF 2 (ALSO 1296)"
 
     FASTBUCKS is a completely menu-driven home-finance program that is easy
@@ -46,6 +48,8 @@ machines:
     file path, and expense categories as desired. FASTBUCKS presently
     supports 141 printers and a user configuration, if your printer is not
     presently supported.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0855
 

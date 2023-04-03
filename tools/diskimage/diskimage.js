@@ -1390,7 +1390,7 @@ function processDisk(di, diskFile, argv, diskette)
                     let sDiskettes = "";
                     let diskMatch = diskFile.match(/\/pcsig\/([0-9])[0-9]+-/);
                     if (diskMatch) {
-                        sDiskettes = "    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig" + diskMatch[1] + "/pcx86/diskettes.json\n";
+                        sDiskettes = "    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json\n";
                     }
                     if (diskette.bootable) {
                         bootDisk = demoDisk;
@@ -1477,25 +1477,66 @@ function processDisk(di, diskFile, argv, diskette)
         }
 
         /*
-         * Step 3: If a generated machine needs to be embedded, put it ahead of the first directory listing
-         * (which is why we waited until now).  Also, any available 'info' summary lines should be embedded as well.
+         * Step 3: If a generated machine needs to be embedded, put it just ahead of the first directory listing (which
+         * is why we waited until now); if there are any diskette 'info' summary lines, we want it just ahead of those, too.
          */
-        let sDiskInfo = ""
+        let info = ""
         if (diskette.info) {
             let i;
-            sDiskInfo += "\n## Information about \"" + diskette.info.diskTitle + "\"\n\n";
+            info += "\n## Information about \"" + diskette.info.diskTitle + "\"\n\n";
             for (i = 0; i < diskette.info.diskSummary.length; i++) {
-                sDiskInfo += "    " + diskette.info.diskSummary[i] + "\n";
+                info += "    " + diskette.info.diskSummary[i] + "\n";
             }
         }
-        let sInsert = sMachineEmbed;
-        if (sIndexNew.indexOf(sDiskInfo) < 0) {
-            sInsert += sDiskInfo;
+
+        /*
+         * Along with any diskette info, see if there are any files in the decompressed archive folder that we might want
+         * to include in the index, too.
+         */
+        let samples = "";
+        let sampleSpec = path.join(path.dirname(getFullPath(diskette.path)), "archive", "**", "*.BAS");
+        let sampleFiles = glob.sync(sampleSpec);
+        for (let sampleFile of sampleFiles) {
+            let sample = readFile(sampleFile);
+            if (sample) {
+                if (sample[sample.length-1] != '\n') sample += '\n';
+                sample = "```bas\n" + sample /* .replace(/([^\n]*\n)/g, '    $1\n') */ + "```\n";
+                samples += "\n## " + path.basename(sampleFile) + "\n\n" + sample;
+            }
         }
+
+        /*
+         * Clean out any old info and samples first.  They should be bracketed by {% #info_begin %} and {% #info_end %},
+         */
+        let sInsert = sMachineEmbed;
+        if (info) {
+            let match = sIndexNew.match(/\n\{% comment %\}info_begin\{% endcomment %\}[\S\s]*\{% comment %\}info_end\{% endcomment %\}\n\n/);
+            if (match) {
+                sIndexNew = sIndexNew.slice(0, match.index) + sIndexNew.slice(match.index + match[0].length);
+            } else {
+                let i = sIndexNew.indexOf(info);
+                if (i >= 0) {
+                    sIndexNew = sIndexNew.slice(0, i) + sIndexNew.slice(i + info.length);
+                }
+            }
+            sInsert += "\n{% comment %}info_begin{% endcomment %}\n" + info + "{% comment %}info_end{% endcomment %}\n\n";
+        }
+
+        if (samples) {
+            let match = sIndexNew.match(/\{% comment %\}samples_begin\{% endcomment %\}[\S\s]*\{% comment %\}samples_end\{% endcomment %\}\n/);
+            if (match) {
+                sIndexNew = sIndexNew.slice(0, match.index) + sIndexNew.slice(match.index + match[0].length);
+            }
+            sInsert += "{% comment %}samples_begin{% endcomment %}\n" + samples + "\n{% comment %}samples_end{% endcomment %}\n";
+        }
+
         if (sInsert) {
             matchDirectory = sIndexNew.match(/\n(##+)\s+Directory of /);
             if (matchDirectory) {
-                sIndexNew = sIndexNew.replace(matchDirectory[0], sInsert + matchDirectory[0]);
+                /*
+                 * WARNING: This is another place where we need to work around JavaScript's handling of '$' in the replacement string.
+                 */
+                sIndexNew = sIndexNew.replace(matchDirectory[0], sInsert.replace(/\$/g, "$$$$") + matchDirectory[0]);
             } else {
                 sIndexNew += sInsert;
             }

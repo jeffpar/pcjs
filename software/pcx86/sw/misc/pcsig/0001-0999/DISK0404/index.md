@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "EZ-FORMS EXECUTIVE"
 
     Stop trying to satisfy your information needs by using someone else's
@@ -83,6 +85,8 @@ machines:
     ~ Basic Laser Fonts now included. 10 soft fonts (which include the line
     drawing characters not usually available in soft fonts) for the
     HP-LaserJet Plus.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0404
 

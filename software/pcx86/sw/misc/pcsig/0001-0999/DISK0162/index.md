@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BASIC NECESSITIES"
 
     This disk contains several handy items that are highly useful to a
@@ -49,6 +51,8 @@ machines:
     SCREEN   INC  Screen functions.
     UTIL     DOC  Utilities manual  (17k).
     XREF     EXE  Cross-reference.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0162
 

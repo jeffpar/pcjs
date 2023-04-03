@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SHORTCUT (DOS SHELL)"
 
     SHORTCUT is a memory-resident manager that makes DOS easier to use.
@@ -29,6 +31,8 @@ machines:
     
     SHORTCUT has simple menus, with optional on-line help.  Once you exit
     to DOS, it will remain in memory until you need it again.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0840
 

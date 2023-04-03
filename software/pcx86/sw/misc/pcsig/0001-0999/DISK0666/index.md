@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SUPER BASIC PROGRAMING LANGUAGE"
 
     The SUPER BASIC PROGRAMMING LANGUAGE a.k.a. Structured Programming
@@ -33,6 +35,8 @@ machines:
     ease although it is not intended for the novice computer user.  SPL
     comes with a user's manual which has an error code list as well as a
     feature index.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0666
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "POINT & SHOOT HOME MANAGER"
 
     HOME MANAGER helps you manage the details of operating a home and its
@@ -30,6 +32,8 @@ machines:
     view each month of any year.  Also includes a complete double-entry
     accounting system that is easy enough for beginners yet sophisticated
     enough for small businesses.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0940
 

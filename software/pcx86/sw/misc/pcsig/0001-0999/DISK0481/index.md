@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "STILL RIVER SHELL"
 
     The STILL RIVER SHELL provides an intuitive interface with your system
@@ -29,6 +31,8 @@ machines:
     
     Get things done with greater speed and precision. After all, isn't that
     the point of computing?
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0481
 

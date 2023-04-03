@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SQUEEZE PRINT"
 
     If you're a programmer, or a writer, or anyone with a long, text-heavy
@@ -41,6 +43,8 @@ machines:
     QUICK    EXE  Simplified SQUEEZE PRINT.
     SQUEEZE  EXE  SQUEEZE PRINT executable program.
     File Descriptions:
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0753
 

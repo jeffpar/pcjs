@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GREETINGWARE CHRISTMAS AND BIRTHDAY"
 
     This is one greeting card that won't get thrown in a shoebox after the
@@ -30,6 +32,8 @@ machines:
     Each card plays six songs, which your family and friends can sing along
     with. The program will put the words on the screen and then... just
     follow the bouncing ball.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0839
 

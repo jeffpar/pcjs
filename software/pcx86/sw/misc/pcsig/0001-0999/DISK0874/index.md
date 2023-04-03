@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ZZAP AND OTHER UTILITIES FOR PROGRAMMERS"
 
     ZZAP is a disk editor that can read, modify and write any sector on the
@@ -38,6 +40,8 @@ machines:
     
     RPN is a Reverse Polish Notation calculator based on a fully-visible
     stack, especially useful to busy programmers and computer specialists.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0874
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FILE EXPRESS 2 OF 2 (ALSO 287)"
 
     FILE EXPRESS is a database management system, useful to both novice and
@@ -31,6 +33,8 @@ machines:
     With all these capabilities, tedious jobs like mailing lists, order
     processing, sales journals, billing and A/R, inventories, and
     summary reports will be done with more ease than ever imagined.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0288
 

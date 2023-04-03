@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COMPILED PASCAL"
 
     File Descriptions:
@@ -31,6 +33,8 @@ machines:
     REGPACK  TYP  Type command for pascal.
     SCREENS  TYP  Type command for pascal.
     SUCCESS  DOC  Documentation for SUCCESS.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0392
 

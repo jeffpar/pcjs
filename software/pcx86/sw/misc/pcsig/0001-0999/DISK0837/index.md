@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HOME MONEY MANAGER"
 
     Enter transactions in up to 12 check registers, keep track of your
@@ -28,6 +30,8 @@ machines:
     help you organize your records at tax time or just report on where and
     how much money was spent and on what. On-line help screens are provided
     to guide you as you use the program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0837
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PFROI, PORTFOLIO MANAGEMENT WITH ROI"
 
     Now you can track your investments daily.  How often have you analyzed
@@ -31,6 +33,8 @@ machines:
     stock data.  A demonstration data file is included.
     
     Manage an extensive portfolio and plan and prepare your taxes.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0360
 

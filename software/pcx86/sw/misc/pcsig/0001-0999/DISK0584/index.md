@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MISCELLANEOUS 123 WORKSHEETS"
 
     This disk contains a variety of spreadsheets, ranging from printing
@@ -54,6 +56,8 @@ machines:
     VENDOC   WKS  Documentation for VENDORS.WKS
     WEEKRPT  WKS  Time management/Job logging utility.
     VENDORS  WKS  Macro driven data base of suppliers for business.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0584
 

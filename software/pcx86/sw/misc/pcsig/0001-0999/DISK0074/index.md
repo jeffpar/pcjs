@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PASCAL UTILITIES DEMO"
 
     The Pascal Utilities Package consists of over 70 Pascal callable
@@ -65,6 +67,8 @@ machines:
     DEMOS    PAS  Source code for displaying a table of color text.
     DEMOMINI PAS  Source codes.
     README        Intro to PASCAL utilities
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0074
 

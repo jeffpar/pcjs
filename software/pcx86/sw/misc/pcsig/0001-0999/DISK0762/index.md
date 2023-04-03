@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "QUEST-3D"
 
     QUEST-3D is a three-dimensional, wire-frame modeling program for
@@ -29,6 +31,8 @@ machines:
     image you are drawing. QUEST-3D also lets you scale each axis
     independently, so images can be stretched or condensed in height,
     width, or length.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0762
 

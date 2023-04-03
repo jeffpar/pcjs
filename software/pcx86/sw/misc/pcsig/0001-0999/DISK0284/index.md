@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LABEL MAKER"
 
     A simple menu-driven labelmaker, perfect for novices.  Print labels for
@@ -34,6 +36,8 @@ machines:
     on any printer capable of enlarged and compressed print modes.
     Printer, screen colors, label size, size of title, and other options can
     be configured to your specifications.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0284
 

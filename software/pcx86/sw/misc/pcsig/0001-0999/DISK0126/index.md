@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DBASE II PROGRAMS"
 
     Here are seven routines that will enhance your overall business use of
@@ -57,6 +59,8 @@ machines:
     ML2      DBF  Part of dBASE II mailing label manager
     ???      NDX  Index files used by programs
     ???      DBF  Database files used by programs
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0126
 

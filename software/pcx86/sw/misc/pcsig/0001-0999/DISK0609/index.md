@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DISK SPOOL II & UNARCHIVING PROGRAMS"
 
     Don't waste valuable computer time waiting for a report, a memo, a
@@ -38,6 +40,8 @@ machines:
     A collection of file archiving utilities. Use the space on your disks
     more efficiently. Because file compatibility can change with
     different versions of "ARC," four different versions are included.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0609
 

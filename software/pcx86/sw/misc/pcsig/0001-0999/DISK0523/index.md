@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SIDE WRITER"
 
     Are your spreadsheets too wide to print in one piece?  Have you had to
@@ -29,6 +31,8 @@ machines:
     SIDEWRITER prints existing text sideways, allowing unlimited print
     width.  Spreadsheet columns can be printed on one continuous page.  The
     function keys and menus make it easy to learn and use.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0523
 

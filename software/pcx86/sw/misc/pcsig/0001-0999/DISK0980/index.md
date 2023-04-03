@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "VANILLA SNOBOL4"
 
     VANILLA SNOBOL4 is an easy-to-learn, flexible language used for
@@ -28,6 +30,8 @@ machines:
     textbooks.  Source programs for SNOBOL4 are typically 5 to 10 times
     smaller than equivalent C or Pascal programs.  A 150-page language
     tutorial and reference manual are included.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0980
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO SPRITES"
 
     Turbo Sprites and Animation is a series of utilities, library files
@@ -66,6 +68,8 @@ machines:
     DEMO?    COM  Compiled version of DEMO programs
     ANIMALS  TAB  Data file
     ADENDA   DOC  Notes on DESIGNER.COM
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0511
 

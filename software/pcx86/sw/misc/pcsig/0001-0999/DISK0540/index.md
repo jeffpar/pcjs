@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TINY PASCAL COMPILER"
 
     This disk will let you design and implement a small subset Pascal
@@ -53,6 +55,8 @@ machines:
     TU       DOC  Tutorial on creating a Tiny Pascal compiler
     STDIO    HDR  Standard assembly IO routines needed for Tiny Pascal
     STDIO    HDR  Standard assembly IO routines needed for Tiny Pascal
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0540
 

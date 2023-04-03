@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DOS EXTENSIONS 2 OF 2 (ALSO 585)"
 
     An interesting series of extremely flexible and useful DOS enhancements.
@@ -61,6 +63,8 @@ machines:
     PRNT     EXE  DOS extension -- output selected text lines of files.
     MV       EXE  DOS extension -- move files.
     MERGE    EXE  DOS extension -- merge text lines from multiple files.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0586
 

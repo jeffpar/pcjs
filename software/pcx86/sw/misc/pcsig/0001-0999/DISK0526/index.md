@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "WSMX80"
 
     Designed to be used with Epson MX/RX/FX dot matrix printers and
@@ -54,6 +56,8 @@ machines:
     OMSG     TXT  Licence information; how to register
     WSMXDOC  TXT  Instruction Manual
     GREEKD   CHR  Greek character code file for the Diablo printer
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0526
 

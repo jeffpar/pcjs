@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "RELIANCE MAILING LIST"
 
     RELIANCE MAILING LIST is a fast and sophisticated mailing list program
@@ -24,6 +26,8 @@ machines:
     Print mailing labels four-across, select groups of people from the
     database by specifying up to eight criteria and create a mailmerge
     file.  Handle as many records as you have disk space for.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0503
 

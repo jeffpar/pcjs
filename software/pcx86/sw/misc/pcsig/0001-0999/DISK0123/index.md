@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LETUS A-B-C VOL 3"
 
     Letus A-B-C is a database in PC-FILE III format containing references
@@ -35,6 +37,8 @@ machines:
     PCTEC83  ???  PC Tech Journal 1983 magazine reference files (4 files)
     PCMAG83B ???  PC Magazine 2nd 6 months 1983 reference files (4 files)
     PCW83    ???  PC World 1983 magazine reference files (4 files)
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0123
 

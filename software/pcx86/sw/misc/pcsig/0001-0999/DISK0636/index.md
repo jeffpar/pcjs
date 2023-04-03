@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MUSES 2 OF 2 (ALSO 635)"
 
     MUSE is a specialized database for authors and agents to organize the
@@ -25,6 +27,8 @@ machines:
     publisher at any time. Mail merge the address in the files with
     appropriate form letters and print letters on one printer and
     envelopes on another.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0636
 

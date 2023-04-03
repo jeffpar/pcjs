@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "KERMIT ASM MODULES 2 OF 2 (ALSO 433)"
 
     KERMIT is a communications system that allows different types of
@@ -63,6 +65,8 @@ machines:
     MSXWNG   ASM  Wang PC module
     MSWANG   EXE  Wang APC
     MSAPC    EXE  NEC APC
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0434
 

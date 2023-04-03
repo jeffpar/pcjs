@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SEEKEASY"
 
     SEEKEASY is a very easy-to-use, ``flexible match'' information-
@@ -32,6 +34,8 @@ machines:
     SEEKEASY EXE  This is the SEEKEASY program.
     ASC2SEEK COM  Converts ASCII data files into SEEKEASY format.
     PC-SIG   DAT  PC-SIG library of shareware.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0820
 

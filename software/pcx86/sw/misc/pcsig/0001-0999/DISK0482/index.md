@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ENCODE AND DECODE"
 
     ENCODE/DECODE gives you an efficient way to encrypt and
@@ -47,6 +49,8 @@ machines:
     MAKEKEY  COM  Makekey executable.
     MAKEKEY  PAS  MakeKey source.
     README   TXT  Introductory text file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0482
 

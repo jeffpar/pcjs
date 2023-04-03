@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COMPUTER CONTRACT BRIDGE"
 
     COMPUTER CONTRACT BRIDGE is played by two teams, the we team and the
@@ -28,6 +30,8 @@ machines:
     can learn how to win.  This particular version of the program is meant
     for the novice bridge player.  Though it is a game and not a tutorial,
     you will definitely learn a lot by playing it.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0713
 

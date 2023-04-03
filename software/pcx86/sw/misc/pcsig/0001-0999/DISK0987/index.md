@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "APOLLO MISSION"
 
     The APOLLO MISSION SIMULATOR is an in-depth simulation of a manned lunar
@@ -36,6 +38,8 @@ machines:
     program. Set program goals, plan specific missions, and carry out those
     missions. Enough detail is provided so you can learn a great deal about
     lunar geography, orbital mechanics and physics in general.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0987
 

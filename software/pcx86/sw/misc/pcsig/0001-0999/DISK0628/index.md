@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BIBLEQ"
 
     BIBLE-Q is a trivia-type game with 600 multiple-choice questions drawn
@@ -27,6 +29,8 @@ machines:
     Gospels. Players can choose the category and difficulty level of the
     question. Combine with WORDWORKER (PC-SIG disk #'s 581, 582) and you
     have the foundation for an excellent on-line scripture study system.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0628
 

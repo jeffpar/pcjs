@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SCREEN DESIGN AID"
 
     The two programs here are for designing your screen and your output.
@@ -64,6 +66,47 @@ machines:
     READ     ME   Listing of files that are a part of FORMS
     SDA      EXE  SDA comptession utility
     IMAGE    DOC  Documentation on SDA.EXE
+{% comment %}info_end{% endcomment %}
+
+{% comment %}samples_begin{% endcomment %}
+
+## DEMO.BAS
+
+```bas
+	REM
+	REM	THIS BASIC PROGRAM DEMONSTRATES	THE SCREEN DESIGN AID
+	REM
+
+	DEF SEG=&H40
+	POKE &H10,(PEEK(&H10) AND &H0CF) OR &H10
+	DEF SEG
+	SCREEN	0,1,0,0
+	WIDTH 40
+	LOCATE	1,1,1,6,7
+100	CMD%=0:FLD%=1:PRM$="       "
+	GOSUB 200
+	FLD%=1
+	CMD%=2
+	GOSUB 200
+	FLD%=ASC(LEFT$(PRM$,1))-48
+	IF FLD%	<0 OR FLD% >3 THEN 100
+	IF FLD%=0 THEN 1000
+	FLD%=FLD%+1
+	CMD%=0
+	GOSUB 200
+	FLD%=1
+	CMD%=2
+	GOSUB 200
+	GOTO 100
+
+200	CALL	BASSCR(CMD%,FLD%,PRM$)
+	RETURN
+
+1000	SCREEN 0,0
+	END
+```
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk 0312
 

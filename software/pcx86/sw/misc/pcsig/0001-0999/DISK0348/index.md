@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LETUS A-B-C VOL 4"
 
     Letus A-B-C is a database in PC-FILE III format containing references
@@ -51,6 +53,8 @@ machines:
     LOGO84A  COM  generates LETUS logo part 1
     SOFT84A  ???  SOFTALK Magazine Jan-Mar 1984 reference files (4 files)
     BYTE84A  ???  Database files for Byte Magazine
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0348
 

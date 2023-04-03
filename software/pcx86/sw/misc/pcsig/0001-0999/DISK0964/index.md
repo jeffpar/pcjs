@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MINI COUPCAT - COUPON CATALOGER"
 
     MINI COUPCAT is a coupon management program to help catalog and organize
@@ -61,6 +63,8 @@ machines:
     MINICOUP EXE  Main program.
     MINICOUP DOC  Documentation file for MINI COUPCAT.
     INSTHARD BAT  Hard disk installation batch file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0964
 

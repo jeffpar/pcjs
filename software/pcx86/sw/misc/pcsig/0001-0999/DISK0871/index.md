@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FILE FRIEND AND FANCY LABEL MAKER"
 
     FILEFRIEND is a memory-resident file manager which can display files
@@ -49,6 +51,8 @@ machines:
     can use either 3-1/2" x 15/16" labels, on which you can print up to
     five lines, or 4" x 7/16" labels, on which you can print up to eight
     lines per label.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0871
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-BOOKS - FINANCIAL SOFTWARE"
 
     PC-BOOKS is a menu-driven general ledger program for small businesses,
@@ -25,6 +27,8 @@ machines:
     statements and general ledgers, are simple to produce.  The number of
     accounts and transactions are limited only by disk space and each
     transaction can have up to 14 accounts.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0901
 

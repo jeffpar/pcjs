@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GET LUCKY!"
 
     This disk has a multi-faceted adult-oriented game, featuring trivia
@@ -26,6 +28,8 @@ machines:
     performing a task, telling a joke, or trying to say a tongue twister --
     all of which can be considered optional... or mandatory, depending upon
     the players.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0711
 

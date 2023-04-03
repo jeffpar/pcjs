@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SOAR 2 OF 2 (ALSO 812)"
 
     SOAR (Service-Oriented Accounts Receivables) helps you simplify
@@ -53,6 +55,8 @@ machines:
     
     SOAR does not teach accounting rules and assumes a certain level of
     expertise in accepted accounting procedures and protocols.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0813
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-SIG D.O.D. 2 OF 5 (270,400,605,805)"
 
     This is the first volume of the directory on disk.  Directory
@@ -67,6 +69,8 @@ machines:
     PC_SIG   TXT  Information on PC-SIG.
     ORDER    TXT  Order information.
     SUBMIT   TXT  Software submission information.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0271
 

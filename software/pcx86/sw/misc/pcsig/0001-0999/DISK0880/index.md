@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROGRAMMER'S EDITOR"
 
     PROGRAMMER'S EDITOR is a text editor primarily for programmers.
@@ -31,6 +33,8 @@ machines:
     You can execute commands by using a function key menu at the bottom line
     of the screen, or use control-key sequences from the keyboard.  On-line
     help is available.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0880
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "STOCK INVENTORY CONTROL"
 
     STOCK was created specifically for maintaining inventory control for
@@ -27,6 +29,8 @@ machines:
     an order level. The program was written in dBase III+, compiled and
     runs directly from DOS. For those who know dBase, and like to tinker,
     the source code is provided.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0958
 

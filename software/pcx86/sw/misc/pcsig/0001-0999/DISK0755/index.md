@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CANTONESE TUTOR"
 
     Cantonese is an extremely hard-to-learn language spoken by more people
@@ -26,6 +28,8 @@ machines:
     study, since it does not provide actual spoken Cantonese as an example.
     The documentation can be somewhat difficult to follow at times, but has
     all the needed information to run the program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0755
 

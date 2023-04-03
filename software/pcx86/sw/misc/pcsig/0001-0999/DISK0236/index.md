@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PRINTER UTILITIES"
 
     FPRINT's purpose is to print ASCII files, but with certain safeguards
@@ -56,6 +58,8 @@ machines:
     COPYALL  BAT  Makes diskcopy of Volkswriter printer tables
     PC-SIG   DOC  Notes on BPRINT, FPRINT, etc.
     COPYINST BAT  Copies *.fmt files to second diskette
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0236
 

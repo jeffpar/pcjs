@@ -15,11 +15,15 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-CALC FOR THE PCJR"
 
     This is Jim Button's famous spreadsheet program PC-CALC, specifically
     recommended for the PCjr.  Perfect for small to mid-size applications
     such as financial analysis and simple accounting.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0625
 

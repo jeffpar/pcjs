@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROINDEX - A DATABASE"
 
     Writers, Students, Editors -- PROINDEX lets you negotiate the most
@@ -41,6 +43,8 @@ machines:
     UNWS     EXE  ASCII utility.
     UNWS     DOC  Documentation for UNWS.EXE.
     TEACHESE TXT  Sample text file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0977
 

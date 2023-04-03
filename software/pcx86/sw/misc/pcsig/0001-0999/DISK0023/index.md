@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BOWLING LEAGUE SECRETARY"
 
     So you've been fingered to run the company bowling league, eh?  No
@@ -30,6 +32,8 @@ machines:
     standings (weekly), as well as prepare book average listings, final
     team/bowler standings, and display or print individual team/bowler
     record sheets.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0023
 

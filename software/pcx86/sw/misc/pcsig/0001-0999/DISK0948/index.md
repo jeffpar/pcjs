@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FORA COMMUNICATIONS SOFTWARE"
 
     FORA is a multi-user chat BBS system.  It lets up to 17 people
@@ -27,6 +29,8 @@ machines:
     toll-free.  FORA has extensive documentation with guidelines on finding
     a location for your system, purchasing the hardware needed, and
     installing it into your system.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0948
 

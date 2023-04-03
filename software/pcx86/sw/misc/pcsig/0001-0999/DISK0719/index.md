@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LETTERWRITER"
 
     LETTERWRITER is a different kind of address manager -- its specialty is
@@ -42,6 +44,8 @@ machines:
     SAMPLE        Sample file.
     CHECK    COM  Checks your copy of LETTERWRITER.
     CHECK    TXT  Description of check.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0719
 

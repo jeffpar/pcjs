@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BAKER'S DOZEN"
 
     This disk of utility programs, from the author of PC-File+ and
@@ -50,6 +52,8 @@ machines:
     RESPONSE      User response form.
     READ     ME   Shareware notice and introductions.
     ORDER         Order form.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0800
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SIDEFILE"
 
     SIDEFILE is a memory-based database manager that works with relatively
@@ -63,6 +65,8 @@ machines:
     SF       EXE  Main program.
     SF       HLP  Help file used by SF.EXE.
     PADLOCK  ADD  Advertisement for another of the author's programs.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0799
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "NEW FIG FORTH"
 
     For fans of FORTH, here is the latest version of this unusual
@@ -44,6 +46,8 @@ machines:
     FORTH    ARC  Archived file
     README        Introductory text file
     UNPACK   BAT  Batch file to unpcak FORTH.ARC
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0685
 

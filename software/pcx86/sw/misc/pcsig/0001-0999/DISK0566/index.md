@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SURVEYSOFT"
 
     SURVEYSOFT is a series of programs designed for the surveyor with
@@ -55,6 +57,8 @@ machines:
     FILES    TXT  File with list of package files
     RUN      BAT  Execution program (Copy of GO.BAT)
     READ_ME  BAT  Instructions file
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0566
 

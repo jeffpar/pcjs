@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LETUS A-B-C #13"
 
     Letus A-B-C is a database in PC-FILE III format containing references
@@ -45,6 +47,8 @@ machines:
     
     BYTE85B  ???  BYTE Magazine Second Quarter 1985 reference files.
     PCWK85B  ???  PC Week Second Quarter 1985 reference files (4 files)
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0550
 

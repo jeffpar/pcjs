@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "WORDWORKER 2 OF 2 (ALSO 581)"
 
     This is an electronic New Testament Bible reference system ideal for
@@ -26,6 +28,8 @@ machines:
     on-line help, bookmarks, speed reading, word use and 14,800 references
     to research works. WORDWORKER also has a complete editor to create
     letters, sermons or other text with the information in the database.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0582
 

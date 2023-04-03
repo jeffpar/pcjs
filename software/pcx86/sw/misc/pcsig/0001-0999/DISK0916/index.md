@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PLAY 'N' LEARN"
 
     PLAY 'N' LEARN is a delightful collection of six simple educational
@@ -26,6 +28,8 @@ machines:
     children to recognize colors; WORD WHIRL and NEXT NUMBER are perfect
     for learning words and simple counting from 1 to 9. PLAY 'N' LEARN
     also includes a game that helps a child learn shapes.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0916
 

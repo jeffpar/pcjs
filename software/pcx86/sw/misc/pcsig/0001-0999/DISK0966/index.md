@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ASTROL95 - ASTROLOGY PROGRAM"
 
     Know what the stars have in store for you, your family and friends.
@@ -34,6 +36,8 @@ machines:
     between charts.
     
     So, what's your sign?
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0966
 

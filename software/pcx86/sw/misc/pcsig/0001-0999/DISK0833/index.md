@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GRAPHTIME II 1 OF 2 (HERCULES) ALSO 834"
 
     GRAPHTIME II is a business-presentation graphics program.  GRAPHTIME II
@@ -28,6 +30,8 @@ machines:
     
     This version will plot 24 data points and will print "paint" files or
     save them to disk.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0833
 

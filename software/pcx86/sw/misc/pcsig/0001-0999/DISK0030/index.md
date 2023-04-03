@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PASCAL I/O"
 
     The Pascal programs on this disk show how to do disk I/O with Pascal.
@@ -41,6 +43,8 @@ machines:
     IOSTUFF  PAS  Source for IOSTUFF object
     PRIME    PAS  Source for DEMO
     SAMPLE   PAS  Source for DEMO
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0030
 

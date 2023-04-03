@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "REFLIST"
 
     REFLIST is an easy-to-use program that lets you create and format lists
@@ -29,6 +31,8 @@ machines:
     different format expected by another publisher -- all quickly and
     easily. In addition, REFLIST has instructions for quick integration
     into WordPerfect, PC-Write, or any ASCII-based wordprocessor.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0231
 

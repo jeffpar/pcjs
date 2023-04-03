@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CUBS AND INVENTORY"
 
     There are two dBASE III programs on this disk.  INV is a household
@@ -47,6 +49,8 @@ machines:
     ???      NDX  dBase index files
     ???      DBF  dBase data files
     README   INV  Notes on inventory programs
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0300
 

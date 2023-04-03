@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DOS UTILITIES #20"
 
     This entry in our DOS utilities series is a collection of DOS
@@ -67,6 +69,8 @@ machines:
     FILES    PAS  Pascal source code
     FILES    DOC  Documentation file
     FILES    COM  Intellegent DIR command
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0421
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "REMARKABLE GENERAL LEDGER 2 OF 2 (806)"
 
     New Zealand has done it now.  Remarkable Enterprises Ltd, which is
@@ -61,6 +63,8 @@ machines:
     CONFIG   SYS  Sample configuration file.
     ???????? DBF  Data file (12 files).
     READ     ME   General information about the disk.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0807
 

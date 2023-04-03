@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "C ADVENTURE"
 
     Welcome to C ADVENTURE, a classic text adventure game.  You are standing
@@ -26,6 +28,8 @@ machines:
     the hackers can change things to suit themselves.  Features a good
     English language parser.  Games can be saved in progress and restored
     for later playing.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0259
 

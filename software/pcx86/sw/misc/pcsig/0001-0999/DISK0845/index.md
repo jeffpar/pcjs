@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COST EFFECTIVE TRACKING SYSTEM"
 
     Are you having a hard time figuring the cost of that construction job?
@@ -31,6 +33,8 @@ machines:
     The program is fully menu-driven and there are help screens available at
     any point in the program. You will find COST EFFECTIVE a great asset
     your company if raw materials are a part of your productions.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0845
 

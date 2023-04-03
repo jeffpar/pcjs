@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PIANOMAN & PLAYER PIANO"
 
     Play your computer keyboard as if it were an electronic piano!  More
@@ -33,6 +35,8 @@ machines:
     Create lovely music with this versatile composition tool.  Record your
     songs on disk and send music to your friends.  They'll smile when you
     sit down at the computer!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0279
 

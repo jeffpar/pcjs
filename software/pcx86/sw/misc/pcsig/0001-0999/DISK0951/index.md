@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CLASSBOOK DELUXE - A TEACHERS AID"
 
     CLASSBOOK DELUXE is a multi-function, menu-driven package that helps
@@ -25,6 +27,8 @@ machines:
     You can calculate grades, as well as create and print progress reports,
     class lists, and seating charts.  Get the complete status on any student
     at the touch of a few keys!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0951
 

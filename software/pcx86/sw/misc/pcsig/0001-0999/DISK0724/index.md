@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COUPON, EZCOUNT, AND XDIR"
 
     The GROCERY STORE COUPON ORGANIZER SYSTEM keeps track of grocery store
@@ -46,6 +48,8 @@ machines:
     
     This program is great for people who tend to use very cryptic file
     names -- now you can comment these files to remember what they were.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0724
 

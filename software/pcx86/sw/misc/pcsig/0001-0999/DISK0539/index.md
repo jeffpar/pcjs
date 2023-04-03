@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ADVENTURE SOLUTIONS"
 
     HINTS gives hints for solving some games: Zork I, II, & III,
@@ -48,6 +50,8 @@ machines:
     ADAMS    ARC  An archive file containing soulutions for ADAMS games.
     INFOCOM  ARC  An archived file containing soulutions for INFOCOM games.
     ARC      EXE  Program to unarchive the solutions.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0539
 

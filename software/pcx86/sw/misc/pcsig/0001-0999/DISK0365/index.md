@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO PASCAL SET #5"
 
     Collection of routines written in Turbo Pascal for the IBM-PC.
@@ -60,6 +62,8 @@ machines:
     DATETIME INC  Date and time functions
     CRFONTS  DOC  Documentation
     BLIST    COM  Complied version of BLIST.PAS
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0365
 

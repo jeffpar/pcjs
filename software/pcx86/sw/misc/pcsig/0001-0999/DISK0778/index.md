@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PSEUDOSAM CROSS ASSEMBLER 80Z AND 85"
 
     PSEUDOSAM 80z and 85 are machine language cross-assembler programs for
@@ -34,6 +36,8 @@ machines:
     understand, although no attempt is made to teach 80z or 8085
     programming.  You should have a good understanding of machine
     language programming and also be familiar with basic DOS functions.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0778
 

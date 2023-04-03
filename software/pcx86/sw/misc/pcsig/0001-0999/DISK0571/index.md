@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LOTUS WORKSHEETS #7"
 
     1-2-3 Worksheets 7 contains various useful worksheets for financial
@@ -47,6 +49,8 @@ machines:
     TREND123 DOC  Documentation for TREND123.MAC
     PAYROLL  PIC  Payroll grafix
     CHR256   DOC  Documentation for using IBM characters in a Lotus Workshee
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0571
 

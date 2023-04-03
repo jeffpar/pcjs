@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "EDRAW"
 
     EDRAW is a sophisticated graphics program for drawing electronic
@@ -27,6 +29,8 @@ machines:
     drawing electronic circuits as well as lines, boxes, circles, and other
     icons. EDRAW is a must for anyone who has specific drawing or graphic
     needs.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0828
 

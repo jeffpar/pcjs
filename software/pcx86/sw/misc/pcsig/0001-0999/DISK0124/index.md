@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "EXTENDED BATCH LANGUAGE"
 
     Extended Batch Language adds additional features to the batch processing
@@ -25,6 +27,8 @@ machines:
     floating point, enhanced string and arithmetic operations and file I/O
     support is provided.  It is well documented and includes example batch
     programs.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0124
 

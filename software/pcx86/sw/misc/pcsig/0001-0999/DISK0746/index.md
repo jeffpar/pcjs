@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "WILDCAT BBS 2 OF 2 (ALSO 745)"
 
     A full featured BBS with the easiest setup operation in the industry.
@@ -29,6 +31,8 @@ machines:
     rates up to 19,200 are supported. WILDCAT! lets you install an
     operational BBS and get a real feel for the power of the commercial
     multi-line/LAN release.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0746
 

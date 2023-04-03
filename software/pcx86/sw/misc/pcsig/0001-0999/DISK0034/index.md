@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SORTED DIRECTORY"
 
     This collection includes a program to redefine your keyboard, one to
@@ -50,6 +52,8 @@ machines:
     VDISK2   COM  Executable program file
     VOLSER   COM  Program to write 2.0 volume labels on diskettes
     PC3SC    MRG  Adds split screen capability to PC-Talk III
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0034
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HEBREW QUIZ AND TUTORIAL"
 
     HEBREW QUIZ is a Biblical Hebrew language tutor that teaches the Hebrew
@@ -31,6 +33,8 @@ machines:
     section that tracks your scores.  Hebrew words are shown one at a time
     with an English translation.  A menu on the screen displays all the
     options available.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0902
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ACE 2 OF 2 (ALSO #692)"
 
     This program is a general-purpose astronomy software package with three
@@ -40,6 +42,8 @@ machines:
     to magnitude 2.00, and 100 prominent double stars, with detailed
     commentary on nearly 400 of these objects. Objects can be searched on
     the basis of one criterion or by a combination.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0693
 

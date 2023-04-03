@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROGRAMS FROM THE COMPLETE TURBO PASCAL"
 
     This disk contains the example programs, subprograms, and data files
@@ -79,6 +81,8 @@ machines:
     OVLTEST  001  Overlay file for example program
     OVLTEST  000  Overlay file for example program
     MOUSE    SRC  Turbo Pascal source function/procedure
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0512
 

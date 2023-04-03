@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LEDGER EXPRESS, REQUIRES LOTUS 1-2-3"
 
     LEDGER EXPRESS is a menu-driven, macro-programmed demonstration disk of
@@ -45,6 +47,8 @@ machines:
     MANUAL   BAT  Prints manual.
     PKXARC   COM  Unarchiving program.
     INSTALL  BAT  Install files to hard drive.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0857
 

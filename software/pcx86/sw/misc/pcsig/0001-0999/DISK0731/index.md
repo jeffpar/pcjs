@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LOCATE"
 
     LOCATE can help you quickly and conveniently locate files by searching
@@ -29,6 +31,8 @@ machines:
     ``complic.'' To solve this problem, more than one word can be specified
     for the search criteria.
     File Descriptions:
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0731
 

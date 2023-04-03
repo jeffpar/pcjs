@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MEDLIN ACCOUNTING"
 
     MEDLIN ACCOUNTING is a group of four companion accounting packages
@@ -37,6 +39,8 @@ machines:
     supported accounts quoted above are based on at least 512K RAM. Less
     RAM will allow the modules to run but will support a smaller number of
     accounts.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0331
 

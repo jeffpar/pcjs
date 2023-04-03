@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HDM IV: HARD DISK MENU SYSTEM"
 
     HARD DISK MENU IV or HDM is a hard disk menuing utility of the finest
@@ -39,6 +41,8 @@ machines:
     printed manual is an additional fifteen dollars.  HDM IV offers all of
     the features of DIRECT ACCESS, a commercial hard disk menuing program,
     and a good deal more; a substantial value for your dollar!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0631
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "EDIT"
 
     EDIT is a general purpose text editor and word processing program.  It
@@ -41,6 +43,8 @@ machines:
     READ     ME   Brief description
     ???      EXE  Various PC file and disk tools
     MESSAGE? DOC  Notes on EDIT
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0294
 

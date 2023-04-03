@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-TOOLS"
 
     This disk contains an assortment of useful utility programs with the
@@ -65,6 +67,8 @@ machines:
     WC       EXE  A fast word count program
     XDIR     C    Read directory from/to a certain point
     XDIR     H    Source code for XDIR
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0536
 

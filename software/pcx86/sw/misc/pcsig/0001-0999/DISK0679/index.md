@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "IDEAL TERMINAL"
 
     IDEAL TERMINAL (IT) is a VT-100 and VT-52 terminal emulator and a
@@ -41,6 +43,8 @@ machines:
     ~ Automatic screen blanking, after 30 minutes of inactivity
     
     ~ Macro key definition and script files
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0679
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TIME AND MONEY"
 
     A simple financial record-keeping system for the home or small
@@ -26,6 +28,8 @@ machines:
     future plans and analyze specific financial alternatives. The system
     makes graphs of projected cash use for up to a year in the future.
     Use TIME AND MONEY to help take control of your financial life!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0251
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GREATEST ARCADE GAMES"
 
     An assortment of our finest arcade-type games, just like the quarter-
@@ -38,6 +40,8 @@ machines:
     TUNNELS  DAT  Stores the tunnel terrain data.
     SWH      EXE  Hercules graphics version of SPACEWARS.
     HIGHSCOR DAT  High score data file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0457
 

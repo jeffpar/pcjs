@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "IN-CONTROL 2 OF 2 (ALSO 687)"
 
     IN-CONTROL is a well-rounded business prospect/contacts and activity-
@@ -36,6 +38,8 @@ machines:
     IN-CONTROL requires registration after you have placed 50 records in
     the Prospect file.  If not registered, this program will lock you out
     from access to the program, though the data files are always intact.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0688
 

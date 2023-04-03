@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FOOTBALL FUN"
 
     FOOTBALL FUN (FFUN) is a complete office football pool management
@@ -44,6 +46,8 @@ machines:
     The program makes a playoff selection sheet that includes the four
     quarterfinal games, the two conference championships, and the Super
     Bowl.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0747
 

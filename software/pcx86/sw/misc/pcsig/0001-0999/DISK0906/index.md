@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MISC. UTILITIES"
 
     This disk contains about twenty different utilities for your PC or
@@ -57,6 +59,8 @@ machines:
     PKFIND11 EXE  Locate files on hard disk.
     PCKWKPAT ARC  Patch for shareware PC-Kwik.
     PKXARC   COM  Archiving utility.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0906
 

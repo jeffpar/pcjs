@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "XXXPERT"
 
     XXXPERT lets you create question-and-answer diagnostic programs to help
@@ -30,6 +32,8 @@ machines:
     Then you enter questions into a file. Both rules and questions are
     compiled and then executed by the CONSULT program. This lets a person
     answer questions and make decisions.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0883
 

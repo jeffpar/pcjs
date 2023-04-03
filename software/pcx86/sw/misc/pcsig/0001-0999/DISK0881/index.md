@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HERITAGE CHURCH SYSTEM"
 
     HERITAGE CHURCH SYSTEM is designed to automate the most mundane
@@ -30,6 +32,8 @@ machines:
     
     Mail merge capabilities work with PC-WRITE and Microsoft WORD,
     allowing mass mailings to the congregations.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0881
 

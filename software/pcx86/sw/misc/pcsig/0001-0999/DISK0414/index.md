@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROTECT AND UNPROTECT"
 
     Frustrated by copy-protection schemes?  Here's a gold mine of
@@ -104,6 +106,8 @@ machines:
     PROKEY30 UNP  Procedure to unprotect PROKEY v3.0.
     PROKEY   COM  Program referred to as part of procedure in PRODWN.TXT.
     PRODWN   TXT  Patches to allow PROKEY v3.0 to run with SIDEKICK.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0414
 

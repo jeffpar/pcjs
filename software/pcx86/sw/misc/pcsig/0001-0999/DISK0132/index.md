@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PASCAL TOOLS VOL 3"
 
     This is the third of the three-disk series Pascal Tools, and includes
@@ -36,6 +38,8 @@ machines:
     *        DCL  Procedure definition files
     CMDFILE  BAT  Batch files used to create utilities (3 files)
     ???      BAT  PASCAL batch file utilities
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0132
 

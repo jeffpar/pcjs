@@ -15,11 +15,15 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PRTLABEL"
 
     PRTLABEL prints multiple copies of a single label or single labels with
     a new address each time.  It prints as many labels as you like in a
     given run, up to six labels across, 10 lines per label.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0744
 

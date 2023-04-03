@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BULLET SIMULATOR DEMO VERSION"
 
     If you are into high-performance shooting, BULLET SIMULATOR is a program
@@ -73,6 +75,8 @@ machines:
     INPUTS   HLP  Help file.
     LIBRARY  DTA  Data file.
     PC3270   BGI  Data file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0795
 

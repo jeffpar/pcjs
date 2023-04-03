@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE DRAFTSMAN"
 
     The Draftsman is a sophisticated package for producing
@@ -65,6 +67,8 @@ machines:
     DRAWDOC  ARC  Contains the following files:
     BROWSE   COM  Text-file display utility
     ARC      EXE  Un-archiving program
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0515
 

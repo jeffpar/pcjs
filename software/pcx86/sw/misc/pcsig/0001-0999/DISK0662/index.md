@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DATA BOSS 1 OF 2 (ALSO 663)"
 
     This is the first of a two-disk set comprising the DATABOSS Data
@@ -54,6 +56,8 @@ machines:
     DB       BAS  The DataBoss menu and control program.
     DATABOSS BAT  To load basic and start the program.
     COLOR    BAT  To start the color set up program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0662
 

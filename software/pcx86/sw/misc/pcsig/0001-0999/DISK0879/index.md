@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BIORHYTHM MONTHLY SCHEDULE PROGRAM"
 
     Many people believe that the human body experiences a number of cycles
@@ -32,6 +34,8 @@ machines:
     
     BIOCOMP.EXE compares the biorhythms of two persons, and will display
     the percentage of compatibility for each cycle.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0879
 

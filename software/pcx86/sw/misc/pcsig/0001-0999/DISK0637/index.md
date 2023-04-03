@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "UNCLE"
 
     UNCLE provides analysis of four different possible tax strategies
@@ -60,6 +62,8 @@ machines:
     README   BAT  File to automate READ
     READ          Some information from the Author.
     BRUN20   EXE  BASIC Runtime
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0637
 

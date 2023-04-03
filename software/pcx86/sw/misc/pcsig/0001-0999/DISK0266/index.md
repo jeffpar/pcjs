@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "NAEPIRS"
 
     This disk contains data from the National Assessment of Educational
@@ -42,6 +44,8 @@ machines:
     @??      OVL  Overlay files
     DBFIND   DAT  NAEPIRS data file
     REFYR    BIN  Part of NAEPIRS system
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0266
 

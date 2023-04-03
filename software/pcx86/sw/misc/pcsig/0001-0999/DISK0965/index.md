@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MYSTIC PASCAL - PROGRAMERS UTILITY"
 
     MYSTIC PASCAL is an integrated programming environment that rigidly
@@ -32,6 +34,8 @@ machines:
     similar to the Direct Mode of BASIC interpreters, with a critical
     difference: MYSTIC PASCAL is a true object-code compiler.  It is not an
     interpreter or a pseudo-code compiler.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0965
 

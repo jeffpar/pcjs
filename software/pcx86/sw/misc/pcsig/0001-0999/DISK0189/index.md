@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TECH PRINT"
 
     TechPrint is an inexpensive and remarkably easy-to-use program for doing
@@ -38,6 +40,8 @@ machines:
     TECH     KEY  Prokey key definitions
     TECH     EXE  Improved WORDSTAR printing on FX Epson
     TECH     CLR  Color switch
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0189
 

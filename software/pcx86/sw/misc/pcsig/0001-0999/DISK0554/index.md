@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LINPACK LIBRARY"
 
     The Linear Equation Package (LINPACK) is a set of routines which solves
@@ -88,6 +90,8 @@ machines:
     SSPFA    FOR  real symmetric indefinite packed factor
     SSPDI    FOR  real symmetric indefinite packed determinant, inverse, ine
     SSPCO    FOR  real symmetric indefinite packed condition estimate
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0554
 

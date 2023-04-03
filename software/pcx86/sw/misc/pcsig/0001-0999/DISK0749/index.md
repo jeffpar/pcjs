@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "QUANTOIDS, RESCUE, & LOTTERY FUN"
 
     To the Spaceport!  If we don't hunt these madmen down, they'll destroy
@@ -45,6 +47,8 @@ machines:
     There are only a few commands to learn, which is good.  You're not going
     to have a lot of time for practice.  You'll be too busy trying to stay
     alive.  Heads up!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0749
 

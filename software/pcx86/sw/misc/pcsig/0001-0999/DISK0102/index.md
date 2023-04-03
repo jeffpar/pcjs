@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DBASE II AD AGENCY"
 
     Usage:  dBASE II Ad Agency.
@@ -33,6 +35,8 @@ machines:
     CONSTANT MEM  Memory constants
     TEST     SUB  Part of ad agency accounting package
     README        Text file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0102
 

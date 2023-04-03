@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DOS-A-MATIC"
 
     DOSAMATIC is a task-switching utility that lets you load several
@@ -29,6 +31,8 @@ machines:
     DOSAMATC DOC  Documentation for DOSAMATC.COM.
     DOSAMATC HLP  Help screen information used with DOSAMATC.COM.
     DOSAMATC COM  DOSAMATIC program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0498
 

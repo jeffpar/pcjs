@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-VT"
 
     PC-VT is a software emulator which makes the IBM PC function as a DEC
@@ -60,6 +62,8 @@ machines:
     READ     ME   Authors note
     PC-VT    DOC  Documentation for PC-VT (aprox. 100 pages)
     PC-VT    EXE  Main PC-VT program
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0286
 

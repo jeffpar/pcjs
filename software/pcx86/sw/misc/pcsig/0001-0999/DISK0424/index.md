@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PASCAL COMPILER"
 
     This is a p-code compiler for an extended subset of Pascal.  It is
@@ -44,6 +46,8 @@ machines:
     FACILIS  PAS  Main program in Turbo to compute day of the week.
     BLOCK    PAS  A required include file. Contains most of compiler.
     INTERPRT PAS  A required include file. Contains run-time interpreter.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0424
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BUTTONWARE ADVENTURE"
 
     This diskette contains two of J. Button's adventures in his adventure
@@ -38,6 +40,8 @@ machines:
     SAMERICA EXE  South America Trek adventure, runs from DOS.
     INFO     DOC  Program startup documentation.
     GO       BAT  Initial program information, type: go (enter).
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0683
 

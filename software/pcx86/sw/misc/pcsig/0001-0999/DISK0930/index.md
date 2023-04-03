@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "POINT & SHOOT HARD DISK MANAGER"
 
     The POINT & SHOOT Hard Disk Manager addresses two of the most
@@ -26,6 +28,8 @@ machines:
     program includes DOS access, floppy disk formatting, multiple hard
     drive support, mouse support, file and subdirectory undelete,
     passwords and time logging, text search, and much more.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0930
 

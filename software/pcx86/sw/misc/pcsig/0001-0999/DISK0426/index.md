@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO PASCAL #8"
 
     This disk contains powerful TURBO Pascal routines to assist users
@@ -48,6 +50,8 @@ machines:
     PTOOLWI3 DOC  Description of PTOOLWI3.INC
     TURBHERC PAS  Collection of procedures for Hercules graphics support
     PTOOLWI3 PAS  Demo program for PTOOLWI3.INC
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0426
 

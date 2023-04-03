@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LSTSQR"
 
     LSTSQR carries out a least-squares fit of data to a variety of
@@ -27,6 +29,8 @@ machines:
     deviation and the 95% confidence interval.  The program also graphs and
     prints the fit if desired.  You can input data by keyboard or from data
     files.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0925
 

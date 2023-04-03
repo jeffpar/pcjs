@@ -15,7 +15,11 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LETUS A-B-C #10"
+
+{% comment %}info_end{% endcomment %}
 
 
 ### Directory of PC-SIG Library Disk 0547

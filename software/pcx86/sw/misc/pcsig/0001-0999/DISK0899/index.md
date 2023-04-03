@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ESL WRITER 1 OF 2 (ALSO 900)"
 
     ESL WRITER is a word processing program and four help programs
@@ -59,6 +61,8 @@ machines:
     PREWRITE  COM  Main program.
     READ      ME   Introduction.
     TOPIC     000  Overlay file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0899
 

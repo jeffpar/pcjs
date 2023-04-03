@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TRANSTOK"
 
     TRANSTOK helps anyone interested in the stock market to easily download
@@ -42,6 +44,8 @@ machines:
     STOKCHEK  DJI  Sample data file.
     UNISTOX   DJI  Sample data file.
     UNISTOX   DJC  Sample data file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0323
 

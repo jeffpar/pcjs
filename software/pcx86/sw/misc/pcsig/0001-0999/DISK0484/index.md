@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GRAPHICS FONT DESIGN"
 
     Graphics Font Design Utility is a program that allows the user to
@@ -63,6 +65,8 @@ machines:
     ???CHARS ???  Part of NEWFONTS.COM
     MEWPROC  INC  Part of NEWFONTS.COM
     ADDENDA  DOC  Additions to documentation
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0484
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CONDEN"
 
     CONDEN as in "Condense" is the theme here!  On board you'll find several
@@ -43,6 +45,8 @@ machines:
     DELO3    DOC  Documentation for DELO3.EXE
     DELO2C   EXE  Slower version of DELO2B.EXE
     DELO2B   EXE  Checks for duplication
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0384
 

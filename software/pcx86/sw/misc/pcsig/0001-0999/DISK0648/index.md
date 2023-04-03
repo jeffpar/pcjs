@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "WALMYR PROGRAMS 1 OF 2 (ALSO 649)"
 
     This disk has three demonstration programs. The WALMYR DISK PROTECTOR
@@ -81,6 +83,8 @@ machines:
     README        How to get started
     WTA     <DIR> Directory containing all files for Teaching Assistant
     ITA     <DIR> Directory containing all files for Index of Teaching Abili
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0648
 

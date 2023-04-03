@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MENU-MASTER"
 
     MENU-MASTER is a general-purpose menu utility designed to allow easy
@@ -30,6 +32,8 @@ machines:
     context sensitive HELP Function, and the configuration page may be
     password protected to avoid unauthorized changes.  The menu name
     itself is user-defined, as is the sub-function menu.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0642
 

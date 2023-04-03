@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "W-ED AND WORD PROCESSING PREVIEWER"
 
     Dash off a letter, work on your poetry, or revise your Christmas list
@@ -61,6 +63,8 @@ machines:
     &        DOC  Documentation for WPPS (33 pp).
     &PCW     CUE  Configuration file for PC-WRITE users.
     &READ    ME   Short description of WPPS (1 pg).
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0415
 

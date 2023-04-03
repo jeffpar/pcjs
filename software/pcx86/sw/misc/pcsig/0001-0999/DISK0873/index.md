@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE WINDOW BOSS 1 OF 2 (ALSO 1113)"
 
     WINDOW BOSS enhances and accelerates the development of systems and
@@ -30,6 +32,8 @@ machines:
     windows, super titles, and graphics character text input.  The Window
     Boss now supports Microsoft, Borland, Lattice, Watcom, Mix Power C,
     Computer Innovations, Datalight, and Aztec C!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0873
 

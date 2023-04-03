@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MAIL MONSTER MAILING LIST PROGRAM"
 
     MAIL MONSTER is an extremely flexible mailing label manager for any
@@ -27,6 +29,8 @@ machines:
     need to reach a specific group -- by targeted organization, zip code
     area, etc. Also included is a mailmerge feature to merge-print letters,
     as well as a personal telephone directory.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0483
 

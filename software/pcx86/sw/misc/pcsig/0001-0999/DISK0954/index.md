@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MINISTER ASSIGN PROGRAM"
 
     MINISTER helps you schedule readers, altar boys, communion ministers,
@@ -30,6 +32,8 @@ machines:
     Schedule an additional minister-type schedule of your own definition.
     Display and print labels, phone lists for substitutes, or the entire
     database.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0954
 

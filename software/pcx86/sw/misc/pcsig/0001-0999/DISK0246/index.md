@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "STOCK CHARTING SYSTEM 1 OF 2 (1354 ALSO)"
 
     The STOCK CHARTING SYSTEM draws or prints "volume/high/low/close"
@@ -34,6 +36,8 @@ machines:
     SMENTRY2 EXE  Data entry and graphics program.
     SMTRANS2 EXE  ASCII conversion program.
     BRUN30   EXE  QuickBASIC run-time routines.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0246
 

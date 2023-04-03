@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MAPTAB WORLD CULTURE DATABASE"
 
     MAPTAB is a menu-driven data-management program that lets you search for
@@ -27,6 +29,8 @@ machines:
     incidence of aggression, climatic information, and types of marriage
     customs.  In addition to these items, the documented societies range in
     time from 1750 B.C. to the present.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0920
 

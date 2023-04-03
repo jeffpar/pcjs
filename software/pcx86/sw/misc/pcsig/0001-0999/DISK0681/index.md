@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-TYPE II 2 OF 3 (ALSO 455, 682)"
 
     PC-TYPE II, Jim Button's supercharged new version of PC-TYPE, comes
@@ -33,6 +35,8 @@ machines:
     accumulated.  Save up to 25 macros per file to eliminate repetitive
     keystrokes.  An extensive on-line help system provides all the support
     you need to produce professional work.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0681
 

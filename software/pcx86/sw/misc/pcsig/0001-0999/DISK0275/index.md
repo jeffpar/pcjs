@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-CHECK"
 
     A menu-driven financial system for a small business or professional
@@ -30,6 +32,8 @@ machines:
     
     Let PC-CHECK take the mystery and drudgery out of financial control and
     put you back in charge -- where you belong!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0275
 

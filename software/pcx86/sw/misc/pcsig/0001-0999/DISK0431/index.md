@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ANALYTICALC 2 OF 3 (ALSO 430, 432)"
 
     AnalytiCalc is a complete Spreadsheet/Database/Graphics/Word Processor
@@ -146,6 +148,8 @@ machines:
     SETUP    CMD  How to configure ANSI.SYS for aux keypad definitions
     ANNOT    NOT  Cell annotation instructions
     README   1ST  Notes from author
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0431
 

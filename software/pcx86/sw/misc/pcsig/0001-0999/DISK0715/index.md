@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "NEWSBASE"
 
     NEWSBASE is a convenient and powerful database application to help you
@@ -36,6 +38,8 @@ machines:
     investigative reporter hot on a story, a bewildered publisher/editor
     needing to keep track of materials, or a student struggling on a term
     paper -- NEWSBASE will help you stay on top of the information heap.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0715
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MR. BILL 1 OF 2 (ALSO 470)"
 
     Money in the bank -- a lovely phrase. Money owed to your company could
@@ -32,6 +34,8 @@ machines:
     Prepare itemized invoices/bills and generate a bevy of summary and in-
     depth reports including account aging and an excellent audit trail. The
     28-page manual is adequate for experienced clerks.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0469
 

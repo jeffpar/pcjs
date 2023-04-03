@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "NAMEGRAM"
 
     What do Lewis Carroll, Vladimir Nabokov, Jim Morrison, and Roman
@@ -30,6 +32,8 @@ machines:
     NAMEGRAM takes a name or phrase, of up to 40 characters, and, using each
     letter only once, creates anagrams.  The output, 1 to 16 letters each,
     are real English words.  A curious, but fascinating exercise.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0477
 

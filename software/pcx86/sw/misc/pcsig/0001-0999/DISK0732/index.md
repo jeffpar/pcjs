@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TRACKER AND CATCHER FOR THE BLIND"
 
     TRACKER is a general-purpose income/expense tracking program written for
@@ -27,6 +29,8 @@ machines:
     falling characters with a paddle at the bottom of the screen.  The twist
     is the program was written for visually-impaired people and is designed
     for use with a speech synthesizer.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0732
 

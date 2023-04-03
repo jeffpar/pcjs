@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "RBBS-PC 1 OF 5 (ALSO 334,621,622,2092)"
 
     The RBBS is the bulletin board system of choice for many IBM PC
@@ -29,6 +31,8 @@ machines:
     context-sensitive help. It also can run as a local application on a
     network, use any field or define a new field to identify callers, and
     individualize callers having the same ID. The source code is included.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0212
 

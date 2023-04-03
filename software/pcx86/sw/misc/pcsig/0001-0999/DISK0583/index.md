@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LOTUS WHITEROCK"
 
     The WHITEROCK ALTERNATIVE is a macro-driven worksheet shell
@@ -26,6 +28,8 @@ machines:
     worksheets.  Supported by clever screen graphics, the WHITEROCK
     ALTERNATIVE applications are a pleasure to use.  A library of 1-2-3
     macros is also included.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0583
 

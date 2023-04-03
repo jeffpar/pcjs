@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ASEASYAS"
 
     ASEASYAS is an enhanced and refined spreadsheet program that supports
@@ -30,6 +32,8 @@ machines:
     goalseeking, spreadsheet linking, and a full complement of macro
     commands.  There is also a linked calculation sequence that saves
     considerable time when recalculating.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0751
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MANDELBROT MAGIC"
 
     Fractal geometry has been used in the past to create images of many
@@ -34,6 +36,8 @@ machines:
     intensive computational task and can easily take from three to 16 hours,
     but an 8087 math coprocessor will reduce the generation time by a factor
     of 10.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0841
 

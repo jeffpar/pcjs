@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DOS UTILITIES NO 11"
 
     These programs let you speed your file-handling chores greatly. You can
@@ -44,6 +46,8 @@ machines:
     SHOW     ASM  Source for above
     UTIL102  COM  Copy/delete multiple files
     UTIL102  DOC  Documentation for above
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0196
 

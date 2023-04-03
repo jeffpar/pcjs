@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DOS UTILITIES #19"
 
     This disk is chock full of very useful sets of utility programs and
@@ -74,6 +76,8 @@ machines:
     Please note: the POPALARM program, which is listed as being on this
     disk in the 4th edition of the PC-SIG Library Directory, has been
     withdrawn from the author.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0413
 

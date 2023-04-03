@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "EZ-SPREADSHEETS"
 
     You too can become a spreadsheet pro in 20 minutes or less!
@@ -28,6 +30,8 @@ machines:
     The applications provided range from budget worksheets and loan
     calculators to savings plans and financial statements.  A good tool for
     home and business.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0695
 

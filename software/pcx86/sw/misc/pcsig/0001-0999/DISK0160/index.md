@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC FIRING ISSUE #2"
 
     This is the second issue of PC Firing Line, with the magazine's official
@@ -47,6 +49,90 @@ machines:
     READISCO PE   Documentation for READISCOPE program.
     SPLITA   BAT  Splits this diskette for side sided copying.
     WRITERS  GDE  Text file.
+{% comment %}info_end{% endcomment %}
+
+{% comment %}samples_begin{% endcomment %}
+
+## LIST1.BAS
+
+```bas
+1 '**                    SIMPMAZE.BAS
+2 '**     Generic Maze Generator by Dan Rollins, 04/05/83
+3 '**  Generates a simple maze.  Uses standard Microsoft BASIC.
+10 DEFINT A-Z
+20 DIM T(5), MZ(100,100)   '** maze array (may be expanded to memory size)
+30 DIM YD(3),XD(3)  :YD(0)=-1 :XD(1)=1 :YD(2)=1	:XD(3)=-1
+40 DIM PWR2(3)	    :PWR2(0)=1 :PWR2(1)=2 :PWR2(2)=4 :PWR2(3)=8
+50 RANDOMIZE  VAL(RIGHT$(TIME$,2))  '** get a random seed
+60 CLS
+90 PRINT"       SIMPMAZE ... Generic Maze generation program"
+95 PRINT"   Public domain program written by Dan Rollins 04/05/83
+97 PRINT
+100 INPUT "horizontal size (26 fits on screen)";H
+110 INPUT "vertical size (11 fits on screen) ";V
+115 PRINT "calculating maze... please be patient"
+120 H=H-1 :V=V-1		'** figure-in 0th elements
+130 X=INT(RND*H) :Y=INT(RND*V)	'** random starting point
+140 GOSUB 1000			'** generate the maze
+150 MZ(0,0)=MZ(0,0)+1		'** open a North door for maze entrance
+160 GOSUB 2000			'** print the maze
+165 INPUT "press enter to generate next maze",A$
+170 GOTO 100
+996 '**       ---- Maze generation subroutine ----
+997 '** expects: TR=total rooms, H=horizontal max, V=vertical max
+998 '**          XD(dir), YD(dir) = motion vectors, PWR2() = powers of 2
+999 '**
+1000 FOR J=0 TO	H :FOR K=0 TO V	:MZ(J,K)=0 :NEXT :NEXT '** "close" all doors
+1010 RC=0 :TR=(H+1)*(V+1)-1	  '** initialize Room Count, Total Rooms
+1019 '** ---- Main maze generation loop ---- **
+1020 Q=0 :IF RC	= TR THEN RETURN   '** if Room Count = Total Rooms then done
+1030   IF Y>0 THEN IF MZ(X,Y-1)=0 THEN Q=Q+1 :T(Q)=0	    '** North
+1040   IF X<H THEN IF MZ(X+1,Y)=0 THEN Q=Q+1 :T(Q)=1	    '** East
+1050   IF Y<V THEN IF MZ(X,Y+1)=0 THEN Q=Q+1 :T(Q)=2	    '** South
+1060   IF X>0 THEN IF MZ(X-1,Y)=0 THEN Q=Q+1 :T(Q)=3	    '** West
+1090   IF Q=0 GOTO 1200					    '** no move
+1098   '** open the doors and move into new room
+1099   '**
+1100   D=INT(RND*Q)+1 :DIR=T(D)		       '** choose randomly from list
+1110   MZ(X,Y)=MZ(X,Y) + PWR2(DIR)	       '** add door in current room
+1120   Y=Y+YD(DIR) :X=X+XD(DIR)		       '** move to new room
+1130   ND=DIR-2	:IF ND<0 THEN ND=4+ND	       '** opposite DIR for New Dir
+1140   MZ(X,Y)=MZ(X,Y) + PWR2(ND)	       '** add door in new room
+1150   RC=RC+1				       '** update Room Count
+1160 GOTO 1020
+1199   '** Trapped! Scan for an unvisited room.
+1200   Y=Y+1 :IF Y>V THEN Y=0 :X=X+1 :IF X>H THEN X=0
+1210   IF MZ(X,Y)=0 THEN 1200	     '** if empty keep scanning, else....
+1220 GOTO 1020			     '** see if neighbor has been visited
+1996 '**   ---- subroutine prints the maze ----
+1997 '**   only checks for North and West doors
+1998 '** change all PRINTs to LPRINTs for hardcopy
+2000 CLS
+2010 FOR Y=0 TO	V
+2020   FOR X=0 TO H
+2030	 IF INT(MZ(X,Y)/2)=MZ(X,Y)/2 THEN PRINT	"+--"; :GOTO 2050
+2040	 PRINT "+  ";                           '** must have a North door
+2050   NEXT X  :PRINT "+"
+2060   FOR X=0 TO H
+2070	 IF MZ(X,Y) > 7	THEN PRINT"   "; :GOTO 2090   '** must be a West door
+2080	 PRINT"I  ";
+2090   NEXT X  :PRINT "I"
+2100 NEXT Y
+2110 FOR X=0 TO	H-1	   '** add the bottom line
+2120   PRINT"+--";
+2130 NEXT X :PRINT "+  +"  '** maze exit in Southwest corner
+2140 RETURN
+
+
+
+
+		     ����������������������������������Ŀ
+		     � File Name:  ��	list1.bas   ��	�
+		     ������������������������������������
+
+```
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk 0160
 

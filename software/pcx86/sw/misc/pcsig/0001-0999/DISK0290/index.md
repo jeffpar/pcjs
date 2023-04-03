@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FITT TAX WORKSHEETS"
 
     A Lotus 1-2-3 worksheet to help you simplify the preparation of your
@@ -46,6 +48,8 @@ machines:
     Fill in the blanks on the screen forms and FITT automatically performs
     all the calculations, comparisons, table look-ups and other required
     checks and cross-references.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0290
 

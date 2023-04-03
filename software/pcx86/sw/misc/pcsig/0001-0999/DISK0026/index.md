@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BOOK INDEX BUILDER"
 
     BOOK INDEX is a simple and straightforward set of programs and
@@ -44,6 +46,8 @@ machines:
     SORT     PAS  Pascal source code for Book Indexing Program
     MERGE    PAS  Pascal source code for Book Indexing Program
     BUILD    PAS  Pascal source code for Book Indexing Program
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0026
 

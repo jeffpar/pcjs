@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ALAN'S TEXT EDITOR"
 
     Alan's Text Editor & Spreadsheet is a full screen ASCII text processor
@@ -51,6 +53,8 @@ machines:
     SHEET1   AC   Sample Spreadsheet File - Linked Work Sheet #1 for Summary
     README        Author's Introduction to files on disk.
     XYZCO    AC   Sample Spreadsheet File - Financial Data, XYZCO
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0531
 

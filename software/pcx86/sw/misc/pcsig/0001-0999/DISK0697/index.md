@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE FRONT OFFICE 1 OF 3 (ALSO 698, 2311)"
 
     Open the door to more opportunity with THE FRONT OFFICE (TFO).  TFO is
@@ -34,6 +36,8 @@ machines:
     flexible prospect tracking and follow-up.  Call reports include
     telephone time, sales forecasts, and potential sales volume for
     management analysis and sales support.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0697
 

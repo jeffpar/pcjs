@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GANTT PAC 1 OF 2 (ALSO 1198)"
 
     This is a group of project management aids that produce presentation-
@@ -27,6 +29,8 @@ machines:
     text files of word processors, and direct use to view project status.
     These types of displays are commonly used throughout industry for
     management presentations of project status and resource use.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0593
 

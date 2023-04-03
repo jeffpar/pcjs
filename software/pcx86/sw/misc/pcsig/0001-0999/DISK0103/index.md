@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COMPUSERVE AND BBS UTILITIES"
 
     This disk has two sections.  The first is about Compuserve, the
@@ -40,6 +42,8 @@ machines:
     EMC80    BBS  Sample from a TRS80 St. Louis public BBS
     MIDWEST  BBS  Instructions for sex-oriented St. Louis public BBS
     README        Listing of included files
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0103
 

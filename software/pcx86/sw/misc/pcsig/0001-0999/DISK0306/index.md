@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SYMPHONY WORKSHEETS #2"
 
     SYMPHONY WORKSHEETS 2 is a mixed-bag selection of small business
@@ -53,6 +55,8 @@ machines:
     PHONE    WRK  Phone dialer sample
     PHNBRS   WRK  Database using find functions
     MCARI    WRK  Documentation for MCA.APP
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0306
 

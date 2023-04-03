@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TODO (MR. LABEL NOW ON DISK 1673)"
 
     Keep a ``things to do'' list in your computer and in your pocket where
@@ -26,6 +28,8 @@ machines:
     program and stores any changes you make on the list.  When you finish,
     TODO sorts your items by due date first, then by priority, then by key.
     If this sort pattern does not fit your needs, you can customize it.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0917
 

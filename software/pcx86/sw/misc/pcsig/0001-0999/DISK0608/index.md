@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "AUTOMENU"
 
     AUTOMENU helps you control your computer in ways you only dreamed of
@@ -45,6 +47,8 @@ machines:
     tutorials
     for inexperienced computer users.  The option to network is available to
     advanced users.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0608
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CROSSWORD CREATOR"
 
     CROSSWORD CREATOR can be used by anyone who enjoys designing or solving
@@ -27,6 +29,8 @@ machines:
     conversion, support for all types of printers (including
     lasers), and an automatic word placement feature that will actually
     build a puzzle for you, using words you enter.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0819
 

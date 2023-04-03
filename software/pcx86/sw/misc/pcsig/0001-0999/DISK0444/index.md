@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HOTKEY, XDOS AND EZ-MENU"
 
     PC/CALCULATOR turns your PC into a programmable multi-function RPN
@@ -62,6 +64,91 @@ machines:
     NOPRINT lets you divert data being sent to the printer and display it on
     your monitor. Helpful when developing and testing printed output without
     using a printer.
+{% comment %}info_end{% endcomment %}
+
+{% comment %}samples_begin{% endcomment %}
+
+## EZ-MENU.BAS
+
+```bas
+10 MENU=1:COMMON MENU
+20 '     Set screen conditions...
+30 KEY OFF:SCREEN 0,0,0:COLOR 7,0,0:CLS:WIDTH 80
+40 '     Error trapping routine...
+50 ON ERROR GOTO 300
+60 '    Initialize varibles...
+70 DIM F$(200):P=1:SP=1
+80 '    Shell into DOS and do diskette work...
+90 SHELL "DIR >DIR.DIR"
+100 '    Load file "DIR.DIR" into RAM and organize it...
+110 OPEN "DIR.DIR" FOR INPUT AS #1
+120 FOR L=1 TO 200
+130 INPUT #1,F$
+140 G$=MID$(F$,10,3)
+150 IF G$<>"BAS" AND G$<>"EXE" AND G$<>"COM" AND G$<>"BAT" THEN GOTO 130
+160 F$=LEFT$(F$,21)
+170 IF F$="COMMAND  COM    22042" THEN GOTO 130
+180 IF LEFT$(F$,12)="EZ-MENU  BAS" THEN GOTO 130
+190 IF RIGHT$(F$,9)<>"        0" THEN F$(L)=LEFT$(F$,12) ELSE GOTO 130
+200 NEXT L
+210 BEEP:BEEP:PRINT "You have over TWO HUNDRED files on the default disk."
+220 PRINT "EZ-MENU can only handle 200.  Copy one-half of the files into a"
+230 PRINT "Sub-directory, and copy EZ-MENU as well.  Run EZ-MENU in the"
+240 PRINT "directory containing the files.  If you still get this message,"
+250 PRINT "do the same on the directory.  (You can see how many times you"
+260 PRINT "will need to do this process by using the DIR command and divide"
+270 PRINT "the number of files by 200.":BEEP:BEEP
+280 COLOR 0,7:LOCATE 25,1:PRINT "Press ESC to exit."
+290 A$=INPUT$(1):IF A$<>CHR$(27) THEN GOTO 290 ELSE CLS:COLOR 7,0,0:END
+300 '   Trap error...
+310 IF ERR=62 AND ERL=130 THEN RESUME 360
+320 CLS:PRINT "-ERROR-  Press ESC to restart program."
+330 A$=INPUT$(1):IF A$<>CHR$(27) THEN GOTO 330
+340 RESUME 350
+350 RUN
+360 '   Make selection...
+370 CLS:L=L-1
+380 '   Display possibilites...
+390 LOCATE 1,1:IF D=1 THEN LOCATE 24,1:PRINT F$(P):D=0:GOTO 450
+400 IF (P-SP)+23>L THEN E=L ELSE E=(P-SP)+23
+410 FOR A=P TO E
+420 PRINT F$(A)
+430 NEXT A
+440 '   Display current selection...
+450 LOCATE SP,1:COLOR 0,7:PRINT F$(P):COLOR 7,0
+460 '   Get command...
+470 A$=INKEY$
+480 IF A$=CHR$(27) THEN RUN
+490 IF A$=CHR$(13) THEN GOTO 650
+500 IF A$=CHR$(0)+"H" THEN GOTO 530
+510 IF A$=CHR$(0)+"P" THEN GOTO 590
+520 GOTO 470
+530 '   Move pointer UP
+540 IF P=1 THEN GOTO 470
+550 LOCATE SP,1:PRINT F$(P)
+560 P=P-1:SP=SP-1
+570 IF SP=0 THEN SP=1:GOTO 390
+580 GOTO 450
+590 '   Move pointer DOWN
+600 IF P=L THEN GOTO 470
+610 LOCATE SP,1:PRINT F$(P)
+620 P=P+1:SP=SP+1
+630 IF SP=24 THEN SP=23:D=1:GOTO 390
+640 GOTO 450
+650 '   Run program...
+660 F$=F$(P):O=0
+670 '   Update selected file name...
+680 FOR A=1 TO LEN(F$):IF MID$(F$,A,1)=" " THEN O=O+1
+690 NEXT A:N$=LEFT$(F$,9-O)+"."+RIGHT$(F$,3)
+700 CLS
+710 R3$=RIGHT$(F$,3):IF R3$="COM" OR R3$="EXE" OR R3$="BAT" THEN SHELL F$
+720 IF R3$<>"BAS" THEN GOTO 750
+730 CLOSE
+740 CLS:CHAIN F$
+750 RUN
+```
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk 0444
 

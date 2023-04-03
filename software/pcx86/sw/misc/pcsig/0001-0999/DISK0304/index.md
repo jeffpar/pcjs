@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LOTUS WORKSHEETS #5"
 
     Lotus 1-2-3 financial worksheets for a small business -- powerful enough
@@ -49,6 +51,8 @@ machines:
     RAR      WKS  Ratio analyzer.
     QGN      WKS  Quote generator - form and tracker.
     QAM      WKS  Queue analysis (multi-station service facility).
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0304
 

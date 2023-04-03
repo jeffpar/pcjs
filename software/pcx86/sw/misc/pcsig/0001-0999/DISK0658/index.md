@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TOOLKIT UTILITIES"
 
     This diskette contains a small but excellent collection of programs
@@ -45,6 +47,8 @@ machines:
     TOOLKIT  ORD  Toolkit registration form
     IDEA     DOC  Idea request message IDEA     FRM  Idea form
     IDEA     FRM  Idea form
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0658
 

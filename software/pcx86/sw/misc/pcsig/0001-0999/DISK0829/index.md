@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "NEW YORK EDIT (PROGRAMMERS EDITOR)"
 
     NEW YORK EDIT is a program editor, written by the author of NEW YORK
@@ -49,6 +51,8 @@ machines:
     READ     ME   Information from the author.
     REGISTER DOC  Registration form.
     WP       DOC  Sales pitch for NEW YORK WORD.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0829
 

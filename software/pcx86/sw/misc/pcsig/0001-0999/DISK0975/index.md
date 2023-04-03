@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COLLAGE"
 
     A computerized show and tell software package to create colorful graphic
@@ -22,6 +24,8 @@ machines:
     slides, and present the created and combined slides as a show on your
     computer screen.  COLLAGE also lets you create and maintain text files
     (upper ASCII included) with several good editing and block features.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0975
 

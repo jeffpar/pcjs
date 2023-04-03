@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "KLP DTA AND MUA"
 
     The Kinetics Linear Programming (KLP) System requires a knowledge with
@@ -56,6 +58,8 @@ machines:
     -------- ---  KINETICS LINEAR PROGRAMMING SYSTEM     (version 1.9)
     MUMSG    KEY  Message file
     MUDATA   S-1  Sample data file
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0332
 

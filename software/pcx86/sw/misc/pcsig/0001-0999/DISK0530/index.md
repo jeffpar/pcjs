@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FREEWORD"
 
     FreeWord is a powerful and easy to use, menu-driven word processor.  It
@@ -48,6 +50,8 @@ machines:
     DEMO2         Demonstration file.
     FW       DOC  Documentation on FREEWORD.
     READ     ME   Notes on program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0530
 

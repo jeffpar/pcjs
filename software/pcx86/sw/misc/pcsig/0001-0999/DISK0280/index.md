@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MAGAZINE"
 
     This disk contains references to articles in two areas: Amateur Radios
@@ -44,6 +46,8 @@ machines:
     PCRTTY   EXE  Full featured ham radio RTTY baudot program
     PCRTTY   DOC  Documentation for PCRTTY.EXE
     README        Notes on Disk0280
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0280
 

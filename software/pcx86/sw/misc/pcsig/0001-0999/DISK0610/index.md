@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PACKDISK"
 
     PACKDISK utilities is a handy collection for file, floppy and hard disk
@@ -35,6 +37,8 @@ machines:
     into another directory in the same drive.
     
     ~ PARK -- Parks disk head before power off.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0610
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FORGE A FORMS GENERATER"
 
     FORGE is a Turbo Pascal and dBase III programmer's aid. it allows the
@@ -59,6 +61,8 @@ machines:
     FORGE2   COM  Main program for small memory systems.
     GRAPHICS DTA  Practice form.
     README   TXT  Overview of FORGE & explanation how to print documentation
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0680
 

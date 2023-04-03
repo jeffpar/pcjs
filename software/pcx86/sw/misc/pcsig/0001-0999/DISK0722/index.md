@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COMPOSER"
 
     OK, Schroeder -- I mean Beethoven -- here's a program for you.
@@ -30,6 +32,8 @@ machines:
     Though it lets Turbo Pascal access the songs, it does not put the files
     into source code.  By calling the file TRBOTUNE.SYS in your Pascal
     program, you can access your songs.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0722
 

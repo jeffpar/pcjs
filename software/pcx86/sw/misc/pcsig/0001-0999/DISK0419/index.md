@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "QPARSER PLUS"
 
     Here is the public domain version of QPARSER, a tool for writing
@@ -23,6 +25,8 @@ machines:
     with a top limit of 25 production/parsing rules.  QPARSER is an
     excellent way to experiment with language design and compiler
     development.  Very useful for computer science students.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0419
 

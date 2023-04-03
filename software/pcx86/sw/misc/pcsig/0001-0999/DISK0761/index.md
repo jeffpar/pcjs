@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE IMP SHELL"
 
     IMP SHELL is a powerful expert system for the IBM-PC. It has
@@ -35,6 +37,8 @@ machines:
     architecture for applications that need a well-defined sequence of
     complex steps -- applications such as cost estimation or equipment
     configuration. These should be done on a forward-chaining shell.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0761
 

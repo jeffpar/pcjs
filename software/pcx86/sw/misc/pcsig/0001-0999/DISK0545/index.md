@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LETUS A-B-C #8"
 
     Letus A-B-C is a database in PC-FILE III format containing references
@@ -55,6 +57,8 @@ machines:
     PNUT84C  ???  PEANUT Magazine 3rd Quarter 1984 reference files (4 files)
     LETUS    BAT  Batch file to generate logo
     LOGO84N8 COM  Executable file to generate Letus logo
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0545
 

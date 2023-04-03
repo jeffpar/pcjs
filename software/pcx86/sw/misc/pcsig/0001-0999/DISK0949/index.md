@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "STATISTICAL CONSULTANT"
 
     The STATISTICAL CONSULTANT is an expert system to help you select the
@@ -28,6 +30,8 @@ machines:
     
     The program assumes a level of technical knowledge greater than that
     offered in a first course in statistics.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0949
 

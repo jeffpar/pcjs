@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PSEUDOSAM CROSS ASSEMBLER 18 AND 65"
 
     PSEUDOSAM 18 and 65 are machine language cross-assembler programs for
@@ -33,6 +35,8 @@ machines:
     although no attempt is made to teach 1802 or 6502 programming.  You
     should have a good understanding of machine language programming and
     also be familiar with basic DOS functions.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0776
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SUPERSTAT 2 OF 2 (ALSO 638)"
 
     SuperSTat Share is a shareware Statistical Package for analyzing the
@@ -57,6 +59,8 @@ machines:
     FILEMAN  EXE  The file management module
     CODEMAN  EXE  The code entry module
     SST      DOC  The short form of the SST Manual
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0639
 

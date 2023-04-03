@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO PASCAL SET #6"
 
     Collection of files and routines written in Turbo Pascal for the IBM-PC.
@@ -68,6 +70,8 @@ machines:
     TXREF    PAS  TURBO cross-reference & lister -- needs TURBO TOOLBOX
     TOOLKIT  INC  Routines for interactive programs -- NOT TURBO
     STRIPTAB PAS  Strips TABs from a file -- replaces with one space
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0366
 

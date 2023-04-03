@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ARE YOU READY FOR CALCULUS, TUTOR"
 
     A well-written pre-calculus tutor program designed to help students
@@ -36,6 +38,8 @@ machines:
     
     If you want to take calculus next quarter or semester, this program is
     for you.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0858
 

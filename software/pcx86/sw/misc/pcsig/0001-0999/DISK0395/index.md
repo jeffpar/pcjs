@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HOME INVENTORY"
 
     Keep track of everything you own; furniture, heirlooms, paintings,
@@ -29,6 +31,8 @@ machines:
     The documentation for this menu-driven program is extensive and very
     thorough.  Routines are included to print complete inventories or
     reports on specific categories.  A must for every homeowner!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0395
 

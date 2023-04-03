@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FINANCIAL CALCULATOR"
 
     FINANCIAL CALCULATOR is a simple, menu-driven program that calculates
@@ -26,6 +28,8 @@ machines:
     the principal and the ending balance for that month.  You can also
     figure the approximate annual interest rate for a loan.  A metric
     conversion utility is included.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0994
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LETUS A-B-C #14"
 
     Letus A-B-C is a database in PC-FILE III format containing references
@@ -42,6 +44,8 @@ machines:
     your selection.
     
     Suggested Registration:  $10.00 per disk.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0551
 

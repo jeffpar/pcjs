@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BIBLE QUIZ PLUS 1 OF 2 (ALSO 2126)"
 
     BIBLE QUIZ PLUS is a religious trivia game with three different levels
@@ -22,6 +24,8 @@ machines:
     in  multiple choice, fill-in-the-blank, or answer only format.  These
     questions are from the Book of Psalms and the Book of Proverbs from the
     King James version of the Bible.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0974
 

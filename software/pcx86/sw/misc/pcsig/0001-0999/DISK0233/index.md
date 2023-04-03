@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "NEWBASE II"
 
     NEWBASE is a menu-driven database manager for mailing lists, name and
@@ -56,6 +58,8 @@ machines:
     ~ Numeric accuracy to 16 digits
     
     ~ Report and form library
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0233
 

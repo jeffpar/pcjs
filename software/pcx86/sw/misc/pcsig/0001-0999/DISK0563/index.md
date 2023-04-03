@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MAX - EMACS EDITOR"
 
     MAX is a freeware text editor that is a downsized version of the
@@ -55,6 +57,8 @@ machines:
     
     ???           Various information files
     AUTOEXEC BAT  Special program to configure system at bootup
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0563
 

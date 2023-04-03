@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FOLLIES"
 
     This GAMES disk has 8 programs which will give you hours of fun and
@@ -45,6 +47,8 @@ machines:
     ENTRAP   COM  Game for color systems.
     ENT-BW   COM  ENTRAP for monochrome monitors.
     ENTRAP   DOC  Documentation for ENTRAP.COM.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0514
 

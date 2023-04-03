@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LABCOAT - DATA AND COST ANALYSIS"
 
     LABCOAT, a laboratory data and cost analysis program, can help you to
@@ -27,6 +29,8 @@ machines:
     Also included is an evaluation program for prospective lab assistants,
     based on such criteria as job knowledge, judgment decisions, patient
     awareness, organizational skills, and more.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0932
 

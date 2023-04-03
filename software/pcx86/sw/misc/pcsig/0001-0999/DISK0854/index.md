@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DATABASE PUBLISHER"
 
     DATABASE PUBLISHER is a menu-driven program to record and track any
@@ -31,6 +33,8 @@ machines:
     Print out sorted mailing labels with any combination of selected
     categories. Format the database information into booklet form. The
     records can be printed either on a laser or dot-matrix printer.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0854
 

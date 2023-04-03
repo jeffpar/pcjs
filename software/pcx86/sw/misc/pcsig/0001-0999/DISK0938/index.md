@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CHEMICAL MOLECULAR MODELING"
 
     CHEMICAL -- a molecular-modeling program for 3-D representations of
@@ -31,6 +33,8 @@ machines:
     
     Included is CHEMVIEW (an EGA-only function), a companion program that
     shows three-dimensional animation of the models made with CHEMICAL.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0938
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-FASTYPE"
 
     Don't let your lack of speed at the keyboard make computing a drag for
@@ -30,6 +32,8 @@ machines:
     text files for additional typing exercises.  After each test, check out
     your score on words per minute, number of errors made and other data
     concerning your typing performance.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0320
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TRIVIAL TOWERS 2 OF 2 (ALSO 473)"
 
     Trivia freaks -- here's a new twist on an old favorite!
@@ -45,6 +47,8 @@ machines:
     VANITY        Question and answer file.
     WRITERS       Question and answer file.
     TVFILM        Question and answer file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0474
 

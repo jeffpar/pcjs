@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-TED AND COPYFIT-IT"
 
     Programmers -- A text editor written especially for you to enter and
@@ -51,6 +53,8 @@ machines:
     COPYFIT  COM  Main program.
     COPYFIT  DOC  Documentation.
     README        Program introduction.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0898
 

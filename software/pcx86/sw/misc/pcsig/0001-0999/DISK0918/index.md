@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CAMBRIDGE THOROUGHBRED HANDICAPPER"
 
     CAMBRIDGE THOROUGHBRED HANDICAPPER attempts to predict a horse or dog's
@@ -27,6 +29,8 @@ machines:
     you've never handicapped a race before, you'll find this informative.
     If you're an experienced handicapper, the data you collect is just as
     useful as the ratings themselves.  Sharpen your own analytical thinking.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0918
 

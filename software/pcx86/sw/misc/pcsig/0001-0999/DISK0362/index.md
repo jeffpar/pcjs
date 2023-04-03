@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SIMTERM"
 
     This package provides Hewlett-Packard terminal simulation to Unix
@@ -70,6 +72,8 @@ machines:
     KEYPARSE PAS
     INFO          (Prologue)      terminal
     IBMPR    C
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0362
 

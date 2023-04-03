@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROFESSIONAL MASTER KEY"
 
     MASTER KEY is a powerful disk and file manipulation utility, comparable
@@ -25,6 +27,8 @@ machines:
     and organization help you learn the package quickly. Many other
     utilities are included, such as duplicate file search, file renaming
     and erasing abilities, and unerasing of files mistakenly erased.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0598
 

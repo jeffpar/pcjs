@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DOS UTILITIES #21"
 
     ``Exotic'' or ``esoteric'' might better (than Miscellaneous) describe
@@ -61,6 +63,8 @@ machines:
     MAILLIST DOC  MAILLIST documentation
     FATDUMP  COM  Lists disk files allocation table
     FATDUMP  DOC  FATDUMP documentation
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0504
 

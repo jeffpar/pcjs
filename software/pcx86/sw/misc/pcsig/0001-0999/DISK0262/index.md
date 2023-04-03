@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-GOLF"
 
     PC-GOLF is a score analysis program for all levels of golfers and golf
@@ -29,6 +31,8 @@ machines:
     
     Improved player performance is the focus so let your PC do the analysis
     while you concentrate on your game.  And keep your head down!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0262
 

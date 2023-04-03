@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GAME SERIES NO 15"
 
     This disk contains three of our most popular games.  CASTLE is an
@@ -37,6 +39,8 @@ machines:
     CASTLE   EXE  Main program
     PACKGAL  COM  Travel trough a maze eating dots and avoiding ghosts
     SPACEVAD EXE  Save the world from the extra-terrestrial invaders.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0210
 

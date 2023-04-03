@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TWO TREKS"
 
     There are two version of Treks on this disk.  MS-TREK is a user-
@@ -42,6 +44,8 @@ machines:
     TREKRUN  EXE  File used by Galaxy Trek
     TREKPIK  EXE  Galaxy Trek real time TREK game - start by typing TREKPIK
     -------- ---  Galaxy Trek
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0197
 

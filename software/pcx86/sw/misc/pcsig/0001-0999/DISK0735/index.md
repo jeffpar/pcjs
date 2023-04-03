@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CHECKBOOKS AND BUDGETS"
 
     CHECKBOOKS AND BUDGETS is the ideal household finance program for you,
@@ -52,6 +54,8 @@ machines:
     ~ Quick and easy bank statement reconciliation system
     
     ~ Financial and loan calculations
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0735
 

@@ -15,12 +15,16 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BANNER"
 
     Print long, large banners for birthdays, anniversaries, sales or
     announcements. Included is the MS-FORTRAN source code to customize the
     program to suit your needs. A straightforward program and a good
     addition to anyone's collection.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0386
 

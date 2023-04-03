@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "POKER & ULTIMA21"
 
     Play draw poker head-to-head with the computer.  POKER has
@@ -43,6 +45,8 @@ machines:
     play, and other things to keep it interesting.
     
     Hit me!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0791
 

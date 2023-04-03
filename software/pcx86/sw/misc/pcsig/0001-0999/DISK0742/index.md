@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CHURCH MEMBERSHIP SYSTEM"
 
     The CHURCH MEMBERSHIP SYSTEM, designed as a database to keep track of
@@ -23,6 +25,8 @@ machines:
     special or important dates. Some of the handy features include:
     modify/delete, browsing, and making multiple reports. Menu-driven and
     user-friendly.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0742
 

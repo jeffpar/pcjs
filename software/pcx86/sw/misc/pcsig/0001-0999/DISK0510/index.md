@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "VISIBLE-PASCAL"
 
     Visible-PASCAL, A PASCAL compiler, is particularly useful for teaching
@@ -33,6 +35,8 @@ machines:
     VISBUG   EXE  Part of compiler
     VISED    EXE  Part of compiler
     VISPAS   EXE  Part of compiler
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0510
 

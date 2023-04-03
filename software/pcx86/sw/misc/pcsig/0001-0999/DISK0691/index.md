@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BEST-PLAN 2 OF 3 (690,1105 ALSO IN SET)"
 
     BEST-PLAN is a mathematical modeling package which simplifys analysis
@@ -65,6 +67,8 @@ machines:
     The Third Disk Contains:
     DATA     <DIR>Subdirectory containing sample data files (36 files).
     HELP     <DIR>Subdirectory containing help files (81 files).
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0691
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-DEMONSTRATION SYSTEM"
 
     The PC Demonstration system is an excellent program for putting
@@ -64,6 +66,8 @@ machines:
     SF       SCN  Screen formatter screen file
     SF       COM  Screen formatter program
     SFHLP    SCN  Screen formatter help
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0665
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE DIRECTORY ASSISTANT"
 
     The DIRECTORY ASSISTANT is ideal for the busy person like yourself.  It
@@ -36,6 +38,8 @@ machines:
     MANUAL   DOC  Documentation file.
     READ     ME   Quick file descriptions.
     GO       BAT  Batch file with start-up message.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0748
 

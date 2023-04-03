@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC/370 CROSS ASSEMBLER 1 OF 3 (859,1352)"
 
     PC/370 is a cross assembler that lets you compile and run IBM 370
@@ -49,6 +51,8 @@ machines:
     
     ~ The linkage editor supports option U to allow external unresolved
     references.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0402
 

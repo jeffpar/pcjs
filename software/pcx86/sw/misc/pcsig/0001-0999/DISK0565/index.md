@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-PAYROLL 1 OF 2 (ALSO 1019)"
 
     PC-PAYROLL is a complete, menu-driven payroll system for moderate-sized
@@ -31,6 +33,8 @@ machines:
     year-to-date summaries, federal tax reports (W2, W3, 941), and a
     complete pay period detail. PC-PAYROLL is well organized, and has as
     complete a list of facilities as commercial payroll systems.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0565
 

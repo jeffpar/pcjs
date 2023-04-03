@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FREE FILE"
 
     FREEFILE is a relational database system for anyone with little or no
@@ -27,6 +29,8 @@ machines:
     has on-line help and two tutorials. It allows 10 indexes per database,
     2 billion records, 1000 characters per record, and 100 fields per
     record.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0521
 

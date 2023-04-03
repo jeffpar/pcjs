@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COMPUTER SECURITY"
 
     This computer security package is a set of Shareware programs for
@@ -65,6 +67,8 @@ machines:
     SAMPLE1  COD  Sample file.
     SAMPLE2  COD  Sample file.
     SAMPLE3  COD  Sample file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0112
 

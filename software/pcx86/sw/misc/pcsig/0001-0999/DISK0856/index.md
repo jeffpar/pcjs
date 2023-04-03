@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FUNCTION KEY HELPER/FONT EDITOR/GROCERY"
 
     Make lists of the uses of function keys for various programs and add or
@@ -63,6 +65,8 @@ machines:
     
     A few more words of advice -- never shop hungry and don't look at the
     aisle end-caps!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0856
 

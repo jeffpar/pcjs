@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GRAPHICS COACH FOR RUNNERS"
 
     GRAPHICS COACH gives serious runners of all levels an easy way to
@@ -25,6 +27,8 @@ machines:
     Monthly and yearly graphs and tables display the runner's pace, average
     speed, and total distance run.  A practical, useful program for any
     runner who wants to improve and pace his/her running ability.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0849
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO CALC"
 
     Turbo Calc is a spreadsheet program of about medium size; 512 rows by
@@ -64,6 +66,8 @@ machines:
     TC810    ARC  Archived version of TurboCalc
     PKXARC   COM  Unarchiving utility
     README   TOO  Notes on programs
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0651
 

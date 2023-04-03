@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "AUTOMATED PLANNING FORM (APF)"
 
     AUTOMATED PLANNING FORM (APF) is a menu-driven set of planning tools.
@@ -40,6 +42,8 @@ machines:
     ~ Full edit ability
     
     ~ Automatic origination and revision dating
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0955
 

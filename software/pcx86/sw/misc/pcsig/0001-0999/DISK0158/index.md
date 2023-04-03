@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "IBM USERS GROUP #3"
 
     File Descriptions:
@@ -31,6 +33,8 @@ machines:
     PCUGNEWS TOC  Information file.
     TESTTAB  PAS  Pascal program to expand tabs.
     WEBER    SCR  Article from the author.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0158
 

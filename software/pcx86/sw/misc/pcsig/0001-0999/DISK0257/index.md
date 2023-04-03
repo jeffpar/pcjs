@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "UTILITY 1-2-3"
 
     Utility 1-2-3 (not affiliated with LOTUS) is a useful tutorial and
@@ -48,6 +50,8 @@ machines:
     PROKYTUT WKS  ProKey templates
     PRINTTUT WKS  Tutorial for printer control generator
     PRINTER  WKS  Reference file of printer control characters
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0257
 

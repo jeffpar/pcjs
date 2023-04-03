@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SOFT-TOUCH"
 
     Soft-touch is a program that allows keys to be programmed with
@@ -44,6 +46,8 @@ machines:
     MCRO     KEY  Tutorial and example micros.
     README        An introductory text file.
     MANUAL   BAT  A batch file to print out the operations manual.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0500
 

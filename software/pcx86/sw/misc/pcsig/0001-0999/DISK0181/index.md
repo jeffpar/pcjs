@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "NEWKEY"
 
     NEWKEY keyboard enhancer simplifies the entry of common keystroke
@@ -79,6 +81,8 @@ machines:
     ~ Improved macro definition facilities
     
     ~ And much more.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0181
 

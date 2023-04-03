@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FILTERS"
 
     DBSCREEN is a filter package that lets you create dBase II, III,
@@ -24,6 +26,8 @@ machines:
     like.  DBSCREEN also lets you modify and print dBase II, III, and III+ s
     formats. Other programs let you modify character strings, change tabs
     into spaces, and encrypt/decrypt your files.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0163
 

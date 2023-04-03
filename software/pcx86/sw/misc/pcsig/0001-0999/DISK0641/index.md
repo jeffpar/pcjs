@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MAHJONG"
 
     Run programs requiring a CGA card on a Hercules Graphics adapter.  This
@@ -39,6 +41,8 @@ machines:
     developing an "instinct" rarely seen in other games.  Three levels of
     play are provided: beginner, advanced and professional.  An entertaining
     game for the whole family.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0641
 

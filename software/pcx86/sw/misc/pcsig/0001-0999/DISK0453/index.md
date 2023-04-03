@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ADVENTUREWARE"
 
     A fistful of text adventure games, ranging from a mystery adventure, to
@@ -46,6 +48,8 @@ machines:
     choose to accept it), is to enter the caves and the Soviet complex,
     locate the laser, steal the plans for it and then return to the surface
     to be picked up by a helicopter. Where are your mittens?
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0453
 

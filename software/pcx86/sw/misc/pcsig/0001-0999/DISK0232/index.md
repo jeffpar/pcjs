@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PULLED FROM THE LIBRARY"
 
     This is a student version of SPPC, a fully interactive statistical
@@ -22,6 +24,8 @@ machines:
     complex sets of data.  In order to use the SPPC, you must enter your
     data and store it on a diskette or hard disk file.  You can then
     conduct any statistical analysis that is available.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0232
 

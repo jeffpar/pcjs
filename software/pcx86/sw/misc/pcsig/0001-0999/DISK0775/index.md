@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PSEUDOSAM CROSS ASSEMBLER 68 AND 685"
 
     PSEUDOSAM 68 and 685 are machine language cross-assembler programs for
@@ -34,6 +36,8 @@ machines:
     understand, although no attempt is made to teach 6800 or 6805
     programming.  The user should have a good understanding of machine
     language programming and also be familiar with basic DOS functions.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0775
 

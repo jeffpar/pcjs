@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "INTELLI-TRIEVE"
 
     INTELLI-TRIEVE is a "weighted retrieval" utility for users of dBase
@@ -37,6 +39,8 @@ machines:
     your database or program. The function is nondestructive and leaves
     the original files intact. New files are created with the data
     rearranged according to the sort criteria.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0811
 

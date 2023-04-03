@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CORBIN HANDBOOK 2 OF 2 (ALSO 616)"
 
     This disk is the first of a two disk set containing the Corbin Handbook
@@ -74,6 +76,8 @@ machines:
     ST       DOC  Documentation for ST.COM
     ST       COM  Text display utility
     FKEY     BAT  Function key batch file to set utility function
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0617
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TEST AND TRAIN"
 
     Whether you're a teacher wanting to give tests on the computer, or a
@@ -32,6 +34,8 @@ machines:
     counts the number of incorrect answers entered.  At the end of the test
     the program displays an optional evaluation, and stores the results in a
     permanent file on your disk.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0797
 

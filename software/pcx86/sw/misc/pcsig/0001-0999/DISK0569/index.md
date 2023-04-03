@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-CODE3 AND PC-CODE4"
 
     PC-CODE3 is a simplified version of PC-CODE2 (V1.53); it is a code
@@ -72,6 +74,8 @@ machines:
     COPYRIGH T    Copyright notice
     DIR      TXT  Listing of included files
     ???      DOC  Notes on programs
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0569
 

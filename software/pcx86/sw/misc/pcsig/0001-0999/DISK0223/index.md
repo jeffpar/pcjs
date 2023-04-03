@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ASSEMBLY AND PASCAL"
 
     This disk contains a variety of Assembly language routines for screen
@@ -78,6 +80,8 @@ machines:
     PREVIEW  COM  Additional version of PREVIEW.EXE
     SETP     COM  Program to setup Epson printer to skip perforations
     ADDENDA  TXT  Notes on program improvements
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0223
 

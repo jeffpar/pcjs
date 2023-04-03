@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MSFORMS 1 OF 2 (ALSO 1453)"
 
     MSFORMS and its utility program, NAMES, read a QUAN report from a
@@ -32,6 +34,8 @@ machines:
     program, along with other information, including matrix type and
     dilution factors. MSFORMS processes it and prints an analysis form
     suitable for delivery to a client.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0970
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-DESKTEAM"
 
     Take control of your PC and manage your work more efficiently with this
@@ -30,6 +32,8 @@ machines:
     
     A super alternative to SIDEKICK, with full documentation and on-line
     help.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0405
 

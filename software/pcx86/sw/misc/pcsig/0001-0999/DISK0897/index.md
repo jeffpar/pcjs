@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROMAN  PROGRAM MANAGEMENT"
 
     PRO MAN is a menuing program to manage access to the files and
@@ -42,6 +44,8 @@ machines:
     INSTALL  BAT  Batch file for installation.
     FILES    COM  Creates files used by the program.
     ENCRYPT  COM  Encryption file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0897
 

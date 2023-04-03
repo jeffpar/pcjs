@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GLUDRAW"
 
     GLUDRAW offers good graphics generation software with extensive on-line
@@ -41,6 +43,8 @@ machines:
     DRAW4    EXE  Part of GLUDRAW.EXE
     DRAW???? HLP  Part of on-line help system (32 Files)
     BASRUN   BAS  BASIC runtime program
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0380
 

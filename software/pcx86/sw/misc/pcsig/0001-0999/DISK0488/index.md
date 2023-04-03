@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LIGHTYEAR DEMO"
 
     LIGHTYEAR is a program designed to help the user to examine
@@ -45,6 +47,8 @@ machines:
     13       LY   Sub-routine for main program
     12       LY   Sub-routine for financial planning investments
     CONFIG   LY   Program configuration file
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0488
 

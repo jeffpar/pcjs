@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COLLEGE FOOTBALL POOL"
 
     COLLEGE FOOTBALL POOL is designed to make football pool games easier to
@@ -31,6 +33,8 @@ machines:
     event of ties, the player who was the closest in guessing the total
     number of points scored in the last game on the selection sheet is
     declared the winner.  Up to 300 players can be handled by this program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0892
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROMENU AND PATCH AND OTHER UTILITIES"
 
     A memory-resident printer-control menu for Epson and compatible
@@ -60,6 +62,8 @@ machines:
     KYLOCK blanks your screen and locks the keyboard from others.  When the
     keyboard is locked, not even a Ctrl-Alt-Del routine reboots the
     computer.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0779
 

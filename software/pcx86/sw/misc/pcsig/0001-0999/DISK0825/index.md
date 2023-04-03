@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TIME TRAKER"
 
     Do you have to keep track of the amount of work you do for others?  Are
@@ -30,6 +32,8 @@ machines:
     to worry about is keeping track of your expenses. Moreover, it will let
     you know where you stand in terms of accounts receivable, income, and
     unbilled hours, at any time.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0825
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PSEUDOSAM CROSS ASSEMBLER 48 AND 51"
 
     PSEUDOSAM 48 and 51 are machine language cross-assembler programs
@@ -33,6 +35,8 @@ machines:
     although no attempt is made to teach 8748 or 8751 programming.  You
     should have a good understanding of machine language programming and
     also be familiar with basic DOS functions.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0777
 

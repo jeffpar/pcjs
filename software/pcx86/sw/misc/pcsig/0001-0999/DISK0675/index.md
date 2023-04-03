@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE ENABLE READER 2 OF 4 (674,676,677)"
 
     The ENABLE READER PROFESSIONAL SPEECH SYSTEM was written to improve
@@ -42,6 +44,8 @@ machines:
     ~ Street electronics - echo qp.
     
     ~ Votrax, Inc. - Votalker ib., Votrax pss., Votrax pss/b.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0675
 

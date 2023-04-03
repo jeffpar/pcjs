@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BASKETBALL SIMULATION"
 
     BASKETBALL is a text-based simulation of basketball -- not an
@@ -30,6 +32,8 @@ machines:
     The program comes with data for six teams: the Celtics, the Lakers, the
     Rockets, the '76ers, and the East and West All-Star teams.  Play games
     with any combination of these teams or create teams of your own.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0946
 

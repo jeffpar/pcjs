@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-DBMS"
 
     PC-DBMS is a relational database management system that provides screen-
@@ -52,6 +54,8 @@ machines:
     READ     ME   Printing instructions for the manual
     PC-DBMS  EXE  The PC-DBMS program
     MANUAL   2    Second half of the manual
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0383
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LIFE FORMS (LIFE CYCLE GENERATION)"
 
     LIFE FORMS is an enhanced version of the "Game of Life," developed by
@@ -37,6 +39,8 @@ machines:
     these, edit it or devise your own seed form.  As your life form starts
     to grow, control how fast each growth step is displayed on the screen
     and even pause your life form's development.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0802
 

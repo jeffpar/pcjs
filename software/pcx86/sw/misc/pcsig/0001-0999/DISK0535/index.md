@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COMPUTER HANDBAG #2"
 
     This disk contains several powerful DOS utilities, a background
@@ -81,6 +83,8 @@ machines:
     FLIP     COM  Flips between page 0 & 1 of graphics text screens.
     CED1_03B COM  DOS Multiple Command Line Editor-create new DOS commands
     CED1_03B DOC  Documentation for CED1_03B.COM
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0535
 

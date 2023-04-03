@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO C TUTORIAL 1 OF 2 (ALSO 817)"
 
     If you are a programmer in C or other programming languages and have
@@ -30,6 +32,8 @@ machines:
     
     Included are over 60 C source code files, which are to be used
     with the tutorial.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0816
 

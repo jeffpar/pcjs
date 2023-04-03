@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MVP-FORTH"
 
     MVP-FORTH (Mountain View Press Public Domain FORTH) is the programming
@@ -23,6 +25,8 @@ machines:
     book ``Starting Forth,'' by Leo Brodie.  This program is an
     interpreter, not a compiler and, as such, will not create stand alone
     EXE files.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0031
 

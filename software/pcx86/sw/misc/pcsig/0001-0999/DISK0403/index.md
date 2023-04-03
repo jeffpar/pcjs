@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COMPUTER TUTORIAL"
 
     Did they laugh when you sat down at the keyboard? No more!  TUTOR.COM
@@ -27,6 +29,8 @@ machines:
     how to write batch files. Do all of this at your own speed, in the
     privacy of your own computer, and without an instructor breathing down
     your neck.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0403
 

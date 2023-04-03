@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SOURCE AND COMPUSERVE"
 
     For use by current or potential SOURCE and Compuserve subscribers for
@@ -34,6 +36,8 @@ machines:
     CS-IBM   SIG  Information from IBM-PC SIG
     T-BBS-NO      Listing of BBSs
     S-BBS         Information about BBSs
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0098
 

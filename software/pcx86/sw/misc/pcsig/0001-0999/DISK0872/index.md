@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "AMPLE NOTICE APPOINTMENT CALANDER"
 
     AMPLE NOTICE is a calendar and alarm clock program that helps organize
@@ -37,6 +39,8 @@ machines:
     activities for business purposes.  Searching for a given appointment
     (future or past) is fast and easy.  Also included is a program for
     addressing envelopes sideways from data on the screen or from a file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0872
 

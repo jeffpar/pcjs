@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PORTRAC (FORMERLY UVESTOR)"
 
     PORTRAC is perfect for any investor who needs a versatile and flexible
@@ -50,6 +52,8 @@ machines:
     with files for quick familiarization.  You can view reports and print
     them.  These features and others make PORTRAC the perfect investment
     tracker and counselor.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0754
 

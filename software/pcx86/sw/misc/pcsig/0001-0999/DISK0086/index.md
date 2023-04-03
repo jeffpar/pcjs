@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SCREEN"
 
     A straightforward and powerful text editor which provides all the
@@ -57,6 +59,8 @@ machines:
     PRTLPT2  BAT  Batch file to copy documentation to lpt2:
     STRIPPER EXE  Strips out Tabs and replaces with spaces
     SAMPLE   TXT  Sample text for SCREEN.EXE
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0086
 

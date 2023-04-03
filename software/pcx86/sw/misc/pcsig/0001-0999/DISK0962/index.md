@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PDVIM, INDENT, AND SXU"
 
     INDENT is a C program formatter that reformats any C program in the
@@ -59,6 +61,8 @@ machines:
     stops VIM, so the code can be traced and variables examined.  VIM's
     virtual approach allows it to debug programs that others can't,
     including terminate-and-stay-resident programs and device drivers.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0962
 

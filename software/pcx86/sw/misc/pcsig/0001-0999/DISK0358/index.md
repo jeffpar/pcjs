@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BASIC XREF"
 
     The BASIC CROSS REFERENCE UTILITY is for the serious BASIC
@@ -30,6 +32,36 @@ machines:
     statements.  You can remove unreferenced statement numbers from
     compiled programs, remove REM statements from the source code, and
     unprotect source programs saved as protected programs.
+{% comment %}info_end{% endcomment %}
+
+{% comment %}samples_begin{% endcomment %}
+
+## TESTPROG.BAS
+
+```bas
+10 REM SAMPLE PROGRAM FOR PROCESSING BY CROSS REFERENCE UTILITY
+20 '   PROGRAM DOESN'T DO MUCH OF ANYTHING
+30 DEFSTR C-G
+40 DIM A(20),B(2,5),C(100)
+50 ON ERROR GOTO 160
+55 G$=INKEY$:IF G$=" " THEN 55 ELSE IF G$="-" THEN 55
+60 FOR I=1 TO 5
+70 A(I)=2*I:PRINT A(I)
+80 NEXT I
+90 A=12!
+100 PRINT USING "A=####";A
+110 IF A < 0 THEN 60 ELSE IF A=0 THEN CLOSE:END ELSE PRINT A
+112 IF ERL = 90 THEN 115
+115 IF 100=ERL THEN 112 ELSE IF ERL <> 60 THEN END
+120 OPEN "SCRN:" FOR OUTPUT AS #1
+130 OPEN "LPT1:" FOR OUTPUT AS #2
+140 OPEN "KYBD:" FOR INPUT AS #3
+150 CLOSE:END
+160 BEEP:IF ERR=12 THEN 180 ELSE IF ERR=13 THEN 190 ELSE IF ERR=14 THEN 180 ELSE IF ERR=15 THEN 78000 ELSE PRINT #1,"ERROR= ";ERR
+170 GOTO 150
+```
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk 0358
 

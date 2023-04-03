@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PRO-DEX DATABASE MANAGEMENT SYSTEM"
 
     PRO-DEX is a Rolodex tracking system that stores and maintains an index
@@ -32,6 +34,8 @@ machines:
     status.  The utilities menu lets you backup files, update the index,
     specify the drive/path setting, and enter your company name to be
     displayed on the logo of the program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0927
 

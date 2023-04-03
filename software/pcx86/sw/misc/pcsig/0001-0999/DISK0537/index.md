@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DBS-KAT FILE LIBRARIAN PACKAGE"
 
     DBS-KAT is a menu-driven file cataloger for hard drive users who want
@@ -40,6 +42,8 @@ machines:
     can start thinking of your disks as being as hard disk subdirectories,
     for you will be able to find out directory information about any file
     you have worked on.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0537
 

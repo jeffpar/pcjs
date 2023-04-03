@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DOUBLE BOGIE KILLER AND GOLF DATABASE"
 
     DOUBLE BOGIE KILLER is a golf stats/database used to track on-course
@@ -29,6 +31,8 @@ machines:
     been entered: overall summary, course by course review, USGA handicap
     and nine-hole handicap report, scoring percentages and efficiency
     Analysis. Send reports to a disk or printer.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0984
 

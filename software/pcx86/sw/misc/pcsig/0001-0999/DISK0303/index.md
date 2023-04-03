@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LOTUS WORKSHEETS #4"
 
     LOTUS WORKSHEETS 4 contains the OptionWare demo for solving
@@ -44,6 +46,8 @@ machines:
     MAIL     WKS  123 template to form letters/labels
     MAGEE    WKS  Ledger/database date math + reports - menu driven
     WSFF4    TXT  Worksheet File Format 1-2-3/Symphony:Appendix B
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0303
 

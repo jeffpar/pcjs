@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "H&P CALENDAR"
 
     H&P CALENDAR creates a monthly calendar on screen with graphic designs
@@ -26,6 +28,8 @@ machines:
     DOS ``GRAPHICS.COM.''  A database is included to save the data to disk.
     The data for a particular month may be printed before filling in the
     boxes.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0995
 

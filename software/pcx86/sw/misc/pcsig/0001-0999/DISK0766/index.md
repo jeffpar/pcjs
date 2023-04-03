@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE BIBLE 1OF7 (767,768,769,770,771,772)"
 
     This disk is part of a seven-disk set with the entire King James version
@@ -69,6 +71,8 @@ machines:
     FLOPPY   BAT  Installation batch file for floppy systems.
     BIBLE7   ARC  Archived files from THE BIBLE.
     ARCE     COM  Unarchiving program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0766
 

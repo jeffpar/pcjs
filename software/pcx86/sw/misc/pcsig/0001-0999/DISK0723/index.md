@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SUPER PINBALL"
 
     SUPER PINBALL is a collection of five great pinball games, each with a
@@ -23,6 +25,8 @@ machines:
     jump between games without exiting to DOS.  No documentation is provided
     with this disk and none is needed -- simply type GO and choose your
     game.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0723
 

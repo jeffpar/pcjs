@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PASCAL TUTOR 2 OF 2 (ALSO 579)"
 
     PASCAL TUTOR is a text-based tutorial on programming with the Pascal
@@ -27,6 +29,8 @@ machines:
     3.0, 4.0, and 5.0.  Version 5.5 is also supported through two additional
     chapters covering object oriented programming.  The Pascal source code
     used for examples throughout the tutorial is included.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0580
 

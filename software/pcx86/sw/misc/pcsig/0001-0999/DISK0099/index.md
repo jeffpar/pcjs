@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PUBLIC BBS AND MORE"
 
     The information in CS-IBM.SIG is intended only for use by subscribers to
@@ -36,6 +38,8 @@ machines:
     S-BBS         List of public BBS from THE SOURCE.
     TBBS-NOS      List of public BBS from a St. Louis local BBS.
     README        Text file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0099
 

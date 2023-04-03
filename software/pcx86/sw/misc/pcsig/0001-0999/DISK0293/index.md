@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ARCADE SERIES 3"
 
     A really fine collection of colorful arcade games.  If you can't find a
@@ -33,6 +35,8 @@ machines:
     FORTUNE  EXE  Word game like Wheel of Fortune (mono).
     PYRAMID  EXE  Climb the pyramid and the blocks change color.
     PITFALL  EXE  Diving down a long pit but don't touch the walls (mono).
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0293
 

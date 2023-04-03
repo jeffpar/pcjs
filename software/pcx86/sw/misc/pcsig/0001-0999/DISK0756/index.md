@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MEMOIRS"
 
     We all need a private place to keep our thoughts and notes, a place
@@ -31,6 +33,8 @@ machines:
     
     MEMOIRS also encrypts and decrypts ASCII text files or documents.  As
     with the personal diary, you can watch the encryption taking place.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0756
 

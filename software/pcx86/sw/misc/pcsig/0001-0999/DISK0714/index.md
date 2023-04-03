@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COMPUTER DRAW POKER"
 
     Walk away from your next game a winner!  COMPUTER DRAW POKER is a fun
@@ -33,6 +35,8 @@ machines:
     sophistication and will bet high or low, as well as bluff, at random.
     When you can consistently beat the computer, you are playing with a
     good deal of skill.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0714
 

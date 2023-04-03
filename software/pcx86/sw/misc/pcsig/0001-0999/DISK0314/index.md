@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "C UTILITIES NO 4"
 
     This disk has an excellent Unix-type Grep function (string find)
@@ -72,6 +74,8 @@ machines:
     TYPESQ   C86  Type a squeezed file
     TPRINT   DOC  Documentation for TPRINT
     TPRINT   C    Prints files with page numbers headers ect.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0314
 

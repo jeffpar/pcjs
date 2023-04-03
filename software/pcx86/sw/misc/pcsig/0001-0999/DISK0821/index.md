@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HDP ACCOUNTS RECEIVABLES"
 
     HDP ACCOUNTS RECEIVABLES manages your customer accounts and
@@ -34,6 +36,8 @@ machines:
     not require you to pay a registration fee to use it. If you like it and
     want to upgrade up to the commercial version, you then need to purchase
     the program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0821
 

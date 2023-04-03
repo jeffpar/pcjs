@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "C TUTOR 2 OF 2 (ALSO 577)"
 
     C TUTOR is a comprehensive instructional course for the C programming
@@ -30,6 +32,8 @@ machines:
     programming techniques, are covered at the elementary level.  The
     description and instruction are applicable to most compilers with some
     slight differences.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0578
 

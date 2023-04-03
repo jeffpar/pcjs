@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SAGE TRADER"
 
     Sage Trader was written to provide the commodity trader with an analysis
@@ -39,6 +41,8 @@ machines:
     TRADER   PRN  Documentation for Sage Trader
     INSTALL  BAT  Makes a working copy of original disk
     *        CCC  Example data files (4 files)
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0242
 

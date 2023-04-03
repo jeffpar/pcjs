@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "UNIFORTH"
 
     The UNIFORTH Sampler from Unified Software Systems is a subset of the
@@ -38,6 +40,8 @@ machines:
     VEDITOR  FTH  The configuration file for the video editor
     FORTH    FTH  The default file that is opened when UNIFORTH is executed.
     UNIFORTH DOC  Documentation for UNIFORTH (87K)
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0454
 

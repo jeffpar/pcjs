@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ASTRONOMY STAR CATALOGUE 2 OF 2 (851)"
 
     A valuable collection of useful programs for anyone with an interest in
@@ -43,6 +45,8 @@ machines:
     CONSTELLATION NAMES lists (surprise!) the names of the constellations,
     and ASTRONOMY CONVERSIONS contains information about different systems
     of distance, temperature, and time.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0852
 

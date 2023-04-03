@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PTOOLS"
 
     PTOOLS will prove to be an aid to the Turbo Pascal programmer at every
@@ -59,6 +61,8 @@ machines:
     PTOOLWI3 INC  Routines to create and manipulate text windows
     PTOOLWI3 DOC  Documentation of the PTOOLWI3 routines
     PTOOLWIN INC  Routines to create and manipulate text windows
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0589
 

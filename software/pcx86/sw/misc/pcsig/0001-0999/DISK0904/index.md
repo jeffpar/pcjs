@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DROEGE 1 OF 2 (ALSO 905)"
 
     DROEGE (Design Robot for Origination of Exacting Graphic Engineering)
@@ -38,6 +40,8 @@ machines:
     Note: This program has a limited documentation file, so it will be
     very helpful if you have prior experience with CAD systems and with
     designing printed circuit boards.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0904
 

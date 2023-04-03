@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PINBALL RALLY"
 
     Here is a disk for the pinball addict.  It has three games
@@ -29,6 +31,8 @@ machines:
     RAIN     EXE  Pinball program with 5 balls!
     PINBALL  EXE  Program to execute a standard pinball game
     TWILZON2 COM  TWILIGHT ZONE pinball, a must for the pinball player
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0557
 

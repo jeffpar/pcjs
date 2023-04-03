@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "NAMEPAL"
 
     NAMEPAL is the complete automatic address book.  It keeps lists of
@@ -26,6 +28,8 @@ machines:
     performs other handy tasks, like printing mailing labels, Rolodex card
     files, and full-page rosters.  NAMEPAL is also completely menu-driven,
     and has on-line help screens.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0706
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SALESEYE 2 OF 2 (ALSO 501)"
 
     The SALESEYE package is ideal for individuals in sales, because it is
@@ -78,6 +80,8 @@ machines:
     PUR-LTR1 TXT  Draft Letter - 4
     PICS-?   TXT  Draft Letter - 1 thru 3
     LESSON?  TXT  Lessons 1 thru 8
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0502
 

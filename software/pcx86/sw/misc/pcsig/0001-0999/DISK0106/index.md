@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DISKCAT"
 
     DISKCAT keeps track of all your disk files. The program reads eight- or
@@ -54,6 +56,8 @@ machines:
     DC4-SAMP DTA  Sample data file for DISKCAT
     DC4-SAMP DT2  Sample data file for DISKCAT
     DC4-READ EXE  Program to read & catalog disk files
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0106
 

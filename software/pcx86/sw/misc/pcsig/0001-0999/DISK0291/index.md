@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MUILTIPLAN TEMPLATES"
 
     Tax 84 is a series of templates designed for Multiplan users.  In
@@ -30,6 +32,8 @@ machines:
     File Descriptions:
     
     ???           Multiplan Worksheet files (26 files)
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0291
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SAGE CALENDAR AND TAG"
 
     Sage Calendar is an electronic desk calendar.  It allows you to create
@@ -42,6 +44,8 @@ machines:
     TAG      HLP  On line help for Sage Tag
     TAGINST  BAT  Batch program to make working copy
     TAG      PRN  Documentation for Sage Tag
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0243
 

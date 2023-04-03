@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "QMODEM SST 1 OF 5 (1022,1023,1483,1484)"
 
     A fast and powerful telecommunications program for anyone using a
@@ -30,6 +32,8 @@ machines:
     and Televideo 925 ensure further flexibility.  LOG allows you to
     maintain usage records -- who called, time called, time online and a
     Date/Time stamp for each log entry.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0310
 

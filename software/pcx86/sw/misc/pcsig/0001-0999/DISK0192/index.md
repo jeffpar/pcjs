@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HEALTH RISK"
 
     A PC conversion of the CDC Health Risk appraisal program that helps
@@ -28,6 +30,8 @@ machines:
     
     For further information on HEALTH RISK, contact the Center for Disease
     Control directly in Atlanta, Georgia.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0192
 

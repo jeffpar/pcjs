@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CHECKBOOK MANAGEMENT 1 OF 2 (ALSO 2049)"
 
     CHECKBOOK MANAGEMENT is a complete checkbook management system which
@@ -33,6 +35,8 @@ machines:
     budget classification. This flexible program lets you change these
     designations as needed. At last, you'll be able to find out just where
     it all goes!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0393
 

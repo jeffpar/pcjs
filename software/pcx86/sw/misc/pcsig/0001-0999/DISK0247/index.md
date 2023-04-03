@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BOBCAT"
 
     BOBCAT is a database of small business computer information.  Reviews,
@@ -46,6 +48,8 @@ machines:
     BOBCAT   TXT  Help program
     BOBCAT01 HDR  Header information
     BOBCAT01 INX  Index
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0247
 

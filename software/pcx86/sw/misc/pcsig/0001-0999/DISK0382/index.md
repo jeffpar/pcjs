@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-CONVERT AND PC-SWEEP"
 
     PC-CONVERT/SWEEP is a powerful collection of file conversion and disk
@@ -40,6 +42,8 @@ machines:
     PC-SWEEP DOC  Documentation for PC-SWEEP.COM
     PCONVERT EXE  Main program PC-CONVERT
     PCONVDOC      Documentation for PCONVERT.EXE
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0382
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DESKTOP 2 OF 2  (#64 FIRST DISK)"
 
     DESKTOP is a LOTUS 1-2-3 worksheet featuring a menu-driven manager's
@@ -40,6 +42,8 @@ machines:
     The Second Disk Contains:
     DESK     DOC  Documentation for DESKTOP.
     INSTRUCT WKS  DESKTOP instruction worksheet.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0065
 

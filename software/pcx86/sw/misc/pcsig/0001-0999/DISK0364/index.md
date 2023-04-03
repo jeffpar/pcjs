@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO PASCAL SET #4"
 
     This disk of Turbo Pascal files has some good tutorial
@@ -82,6 +84,8 @@ machines:
     TURBO    PAT  How to patch Z80 TURBO programs for your terminal
     TPATCH   DAT  Data for four patches -- serves as documentation
     TPATCH   PAS  Patcher for PROGRAMS compiled under TURBO
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0364
 

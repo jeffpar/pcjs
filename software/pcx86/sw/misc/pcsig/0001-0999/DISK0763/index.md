@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FINGER PAINTING PROGRAM"
 
     FINGER PAINT, reminiscent of some programs for the Macintosh, is an
@@ -32,6 +34,8 @@ machines:
     file format is PCX which can be used by almost all paint programs.  The
     non-registered copy of FINGER PAINT works only with the HP LaserJet
     printer and produces a 150 dot-per-inch output.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0763
 

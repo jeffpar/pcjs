@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SREEN UTILITIES #3"
 
     File Descriptions:
@@ -26,6 +28,8 @@ machines:
     L4       ASM  Source for above
     MEMBRAIN EXE  Best ram disk yet - supports many config parameters
     MEMBRAIN DOC  Documentation for above
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0198
 

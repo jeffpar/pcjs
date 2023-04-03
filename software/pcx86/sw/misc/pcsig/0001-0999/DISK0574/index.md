@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FREECALC"
 
     FREECALC is a mature spreadsheet program with numerous features.  While
@@ -52,6 +54,8 @@ machines:
     ~ Wordprocessing mode
     
     ~ Move, copy, delete and insert columns/rows
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0574
 

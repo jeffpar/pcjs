@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FINANCIAL PROGRAMS"
 
     A user-supported finance program to determine present and compound
@@ -34,6 +36,8 @@ machines:
     
     FINANCE  DOC  Documentation.
     FINANCE  EXE  Main program
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0227
 

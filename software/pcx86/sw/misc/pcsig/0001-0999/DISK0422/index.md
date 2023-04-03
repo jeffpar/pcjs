@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SCREENWRIGHT PROFESSIONAL"
 
     SCREENWRIGHT PROFESSIONAL is a complete word processing program
@@ -65,6 +67,8 @@ machines:
     DWASC    EXE  Converts DisplayWrite documents to ASCIII.
     TCOUNT   COM  Counts characters, words, lines and pages.
     TCOUNT   DOC  Documentation file (7K).
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0422
 

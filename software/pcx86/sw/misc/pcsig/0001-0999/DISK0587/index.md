@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SYMPHONY MACROS AND WORDPROS. TIPS"
 
     This disk contains a variety of prize-winning tips and Macros for
@@ -60,6 +62,8 @@ machines:
     USERTIPS DOC  Protocols for use of some of these capabilities.
     ORD_ENT  WRK  Uses almost all Symphony commands for order-entry program.
     MOVIE    WRK  Use Symphony to display moving graphics.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0587
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FORM LETTERS"
 
     Need to remind some of your customers to pay their bill?  Have to turn
@@ -131,6 +133,8 @@ machines:
     JBDNWL        Christmas rush employee effort commendation letter.
     LFINSRNC      Life insurance policy inquiry.
     JBRSM         Job advertisement inquiry.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0388
 

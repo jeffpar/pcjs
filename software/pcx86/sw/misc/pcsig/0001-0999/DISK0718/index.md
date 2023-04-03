@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LQ PRINTER UTILITY"
 
     So you want letter quality, but you're stuck with that old nine-pin dot
@@ -49,6 +51,8 @@ machines:
     letterheads.  LETHEAD is a graphics editor that works with LQ to
     produce high-resolution letterheads consisting of 1" x 1" pictures and
     up to four lines of accompanying text.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0718
 

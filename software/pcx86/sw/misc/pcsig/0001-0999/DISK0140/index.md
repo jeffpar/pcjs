@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DOS UTILITIES NO 7"
 
     This disk has several file maintanence programs.  LU, GDEL, GCOPY,
@@ -49,6 +51,8 @@ machines:
     SQPC161  EXE  The latest file squeeze utility
     X2COLOR  COM  Copies the monochrome screen to the color display
     SQ-USQ   DOC  Documentation for SQPC161.EXE and USQLC10.COM
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0140
 

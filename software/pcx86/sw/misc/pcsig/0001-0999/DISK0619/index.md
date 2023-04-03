@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HOTBOOT AND INSULTS"
 
     A couple of practical jokes that are fun for the PC user and, possibly,
@@ -30,6 +32,8 @@ machines:
     
     INSULTS can randomly generate 22 million insults on the unsuspecting PC
     user -- some of them even make sense.  Not for the weak-stomached.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0619
 

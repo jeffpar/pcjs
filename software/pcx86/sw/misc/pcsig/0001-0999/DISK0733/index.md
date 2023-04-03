@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "VRS PLUS"
 
     VEHICLE RECORD SYSTEM by K-Jon Software will track your car's fuel
@@ -46,6 +48,8 @@ machines:
     VVRS     EXE  Create/change files program.
     GO       BAT  Batch file to start program.
     File Descriptions:
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0733
 

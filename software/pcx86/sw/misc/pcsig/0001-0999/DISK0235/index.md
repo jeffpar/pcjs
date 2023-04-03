@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PARTS INVENTORY"
 
     The Parts Inventory Control database program can be used to track
@@ -64,6 +66,8 @@ machines:
     INVENT   DOC  Tutorial and User's Guide
     NOTICE   DOC  Press release
     AUTOEXEC BAT  Loads INVENT.COM at power on or with Alt, Ctrl, and Del
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0235
 

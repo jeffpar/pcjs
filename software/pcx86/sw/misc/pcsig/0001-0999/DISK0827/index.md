@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "T-REF"
 
     If your programming language of choice is Turbo Pascal, you'll find that
@@ -27,6 +29,8 @@ machines:
     words in the lister along with line numbers, lexical and block-level
     numbering; cross-reference selection by object type and usage; error
     analysis; procedural table of contents; and much, much more.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0827
 

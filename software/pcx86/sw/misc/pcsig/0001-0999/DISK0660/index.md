@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "EMPLOYEE MANAGEMENT SYSTEM"
 
     The EMPLOYEE MANAGEMENT SYSTEM 4.3 is a highly-accurate
@@ -40,6 +42,8 @@ machines:
     valuable as a personal communications tool between friends, marriage
     mates and any other relationship where personality is a strong
     component.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0660
 

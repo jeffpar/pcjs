@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TEKTRONIX 4010"
 
     The program on this disk emulates a Tektronix 4010 storage tube
@@ -32,6 +34,8 @@ machines:
     File Descriptions:
     
     TEK      ???  Tektronix 4010 Emulator and related programs
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0441
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "COMPUSERVE SAMPLER"
 
     This disk has three text files on it.  All are concerned with
@@ -34,6 +36,8 @@ machines:
     CS-EDUCA      CompuServe - Educational Services Sampler
     CS-HOME       CompuServe - Home Services Sampler
     CS-INDEX      CompuServe - Index to All Services, as of 12/83
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0104
 

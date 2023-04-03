@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-SPRINT"
 
     PC-SPRINT contains step-by-step directions on how to accomplish a low
@@ -50,6 +52,8 @@ machines:
     WARMBOOT COM  Program to set "warm boot" flag
     SCHEMATC      Electronic circuit diagram
     PCSPRINT DOC  Description & construction info
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0507
 

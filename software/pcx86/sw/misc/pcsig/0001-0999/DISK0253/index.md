@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "3X5 CARD 1 OF 2 (1298)"
 
     This program is an information handling system that allows your computer
@@ -76,6 +78,8 @@ machines:
     REF      REF  Data file.
     REFSTYLE IFS  Data file.
     REFSTYLE RFS  Data file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0253
 

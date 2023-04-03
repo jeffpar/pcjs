@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "WRITER'S HEAVEN AND MOREPERFECT"
 
     WRITER'S HEAVEN transforms the popular wordprocessing program PC-Write
@@ -36,6 +38,8 @@ machines:
     forward or backward--without moving your hands from the letter keys!
     MOREPERFECT can double your editing speed, yet it's easy to learn and
     use.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0759
 

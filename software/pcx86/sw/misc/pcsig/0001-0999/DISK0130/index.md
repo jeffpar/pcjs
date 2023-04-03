@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PASCAL TOOLS VOL 1"
 
     This is the first of the three-disk series Pascal Tools (Disks #130-
@@ -40,6 +42,8 @@ machines:
     *        MAN  Documentation  (17 files)
     *        FNT  Printer setup files (4 files)
     MAN      IM   Macros for manual page
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0130
 

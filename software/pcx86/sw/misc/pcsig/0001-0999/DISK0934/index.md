@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TICKLEX - TICKLER PROGRAM"
 
     TICKLEX is the ultimate scheduler/calendar.  There is no more powerful
@@ -32,6 +34,8 @@ machines:
     features -- find the day of the week for any date in the next half
     century, set up to 20 alarms for any day, and drag unmet deadlines (to-
     do's) forward from one day to the next.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0934
 

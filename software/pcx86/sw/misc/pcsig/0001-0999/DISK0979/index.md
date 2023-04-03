@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "VIRTUAL LIBRARY - BOOK ON A DISK"
 
     This is THE VIRTUAL LIBRARY, a book about the electronic society of the
@@ -26,6 +28,8 @@ machines:
     which might develop from an easily-accessed databank: how research is
     done, how academic and scientific findings are published and read, how
     knowledge is transmitted, and how people relate to each other.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0979
 

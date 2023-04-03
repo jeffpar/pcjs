@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "IMAGEPRINT 1 OF 2 (ALSO 2062)"
 
     IMAGEPRINT lets you produce high-quality characters on a dot matrix
@@ -46,6 +48,8 @@ machines:
     TUTOR_1  TXT  Simple IMAGEPRINT demonstration.
     TUTOR_2  TXT  Detailed IMAGEPRINT demonstration.
     UTILS    DOC  Documentation for CONTROL and ENHANCE.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0517
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "EDIR:  A DOS UTILITY"
 
     EDIR lets you manipulate MS-DOS directories in a full-screen editor.
@@ -40,6 +42,8 @@ machines:
     EDIR301  DOC  Documentation on EDIR version 3.01.
     EL25     COM  EGA utility: 25 lines display.
     EL43     COM  EGA utility: 43 lines display.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0915
 

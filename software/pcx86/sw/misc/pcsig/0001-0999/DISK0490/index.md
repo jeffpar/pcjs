@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MICROCOMPUTER"
 
     This disk is a compilation of very useful utilities for data security
@@ -48,6 +50,8 @@ machines:
     SDIR     COM  Sorted directory
     ???????? DOC  Documentation files for programs by the same name
     WHEREIS  COM  Find a file in any subdirectory, on floppy or hard disk
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0490
 

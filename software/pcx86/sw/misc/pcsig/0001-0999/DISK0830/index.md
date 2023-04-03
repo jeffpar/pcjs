@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "WAMPUM"
 
     One of the database granddaddys of the Shareware revolution, WAMPUM
@@ -34,6 +36,8 @@ machines:
     COMPUTER SHOPPER hailed WAMPUM as, "a gift-horse you CAN afford to
     look in the mouth." Wampum's form letter generator was rated by DATA
     BASED ADVISOR as, "the only tool you'll ever need." And PC WORLD
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0830
 

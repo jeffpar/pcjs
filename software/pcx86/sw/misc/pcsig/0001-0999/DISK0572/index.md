@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FBLCC - BUILDING LIFE CYCLE COST PROGRAM"
 
     The Federal Bureau of Standards has produced ``The Federal Building
@@ -29,6 +31,8 @@ machines:
     the Federal Building Life-Cycle Cost Computer Program.'' April, 1976.
     This program should not be used without the referenced user's guide
     available from the U.S. Department of Energy.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0572
 

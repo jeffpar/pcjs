@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DREAM 1 OF 2 (600 ALSO IN THIS SET)"
 
     DREAM is a relational database program that comes in three diskettes,
@@ -54,6 +56,8 @@ machines:
     ~ ASCII file format and portability of data.
     ~ Five levels of user expertise.
     ~ Electronic note pad.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0599
 

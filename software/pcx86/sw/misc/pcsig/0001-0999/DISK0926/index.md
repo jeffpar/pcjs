@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CC-SURVEYOR 1 OF 2 (ALSO 1029)"
 
     CC-SURVEYOR is a geometric design program for civil engineers and land
@@ -28,6 +30,8 @@ machines:
     plotting may be done on Epson compatible dot matrix printers and
     on Hewlett-Packard or Houston Instrument pen plotters. Data may be
     transferred to CAD programs via DXF files.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0926
 

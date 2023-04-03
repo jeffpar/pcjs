@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LIST"
 
     LIST is a printer-related utility program designed to aid programmers
@@ -42,6 +44,8 @@ machines:
     INSTALL  BAT  Batch file to install LIST for display type
     LIST     COM  Main program
     LIST     DOC  Documentation file
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0640
 

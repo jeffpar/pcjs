@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CHEKLIST SYSTEM"
 
     A simple system for maintaining bank account records for the home that
@@ -27,6 +29,8 @@ machines:
     
     Convenient to use, this checkbook manager provides thorough
     recordkeeping for today's harried householder.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0397
 

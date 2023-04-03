@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "KWIKSTAT 1 OF 2 (ALSO 655)"
 
     KWIKSTAT is a scientific statistical analysis system complete with
@@ -36,6 +38,8 @@ machines:
     
     ~ STAT4   -- Deal with various methods to analyze categorical data, as
     opposed to measured data.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0654
 

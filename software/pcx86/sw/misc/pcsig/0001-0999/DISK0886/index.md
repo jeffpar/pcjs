@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DIVORCE, ANIMATED STRATEGY FOR MEN"
 
     CALIFORNIA DIVORCE is designed to educate men on their rights and the
@@ -27,6 +29,8 @@ machines:
     other men, it does have a slight bias against women and marriage in
     general.  Once viewed, the educated user can then choose a course of
     action on a self-help basis or with the assistance of legal counsel.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0886
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BARCODE, HYDE, AND DOVETAIL III"
 
     You've seen them everywhere: on your soda can, at the grocery store, on
@@ -48,6 +50,8 @@ machines:
     IIIDOVE  EXE  Compiled version of the main program.
     SAMPL*** WS   Sample file written with WORDSTAR (3 files).
     UNWS     EXE  Utility file to remove WORDSTAR buried commands.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0877
 

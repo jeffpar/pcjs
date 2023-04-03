@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GAME SERIES #21"
 
     Here is another fine collection of games that will keep you busy for
@@ -36,6 +38,8 @@ machines:
     HOSTAGES EXE  Shoot your way through walls to let prisoners free.
     QUBERT   EXE  Good version of Q-BERT.
     PTROOPER EXE  Keep the alien paratroopers from landing in your country.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0456
 

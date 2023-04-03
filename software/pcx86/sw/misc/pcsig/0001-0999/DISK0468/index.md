@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CPA LEDGER 2 OF 2 (ALSO 466)"
 
     A menu-driven general ledger and financial statement program designed
@@ -30,6 +32,8 @@ machines:
     with total values of up to $999,999,999.99. A very powerful system.
     Some knowledge of double-entry bookkeeping is necessary to operate this
     package.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0468
 

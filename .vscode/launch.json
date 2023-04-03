@@ -771,10 +771,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--disk=/pcsig8a-disks/pcx86/shareware/pcsig08/archive/DISK0798.img",
-        "--output=tmp/DISK0798.json",
-        "--list",
-        "--overwrite"
+        "--disk=/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0798/DISK0798.json",
+        "--list"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -840,7 +838,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=disks/pcsig0",
+        "--collection=pcsig/0001-0999",
         "--checkpage",
         "--rebuild"
       ],

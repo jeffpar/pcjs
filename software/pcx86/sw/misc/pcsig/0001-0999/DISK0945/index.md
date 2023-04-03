@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ROCKET SIMULATION"
 
     LAUNCHER simulates a single stage-to-orbit launch vehicle. This is a
@@ -37,6 +39,8 @@ machines:
     
     ~ CLUSTER -- a simulation of the motion of star clusters of two or more
     stars.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0945
 

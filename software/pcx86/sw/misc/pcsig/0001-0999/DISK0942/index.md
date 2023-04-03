@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HYDROFLO DEMO VERSION"
 
     This is a demo version of HDROFLO with two sample problems.  HYDROFLO
@@ -47,6 +49,8 @@ machines:
     HF       DOC  Documentation.
     HF       FIT  Support program.
     HF       HLP  Help file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0942
 

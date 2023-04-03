@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CURVEFIT"
 
     Burnt out on Euclid?  Got the Newton blues?  If you're a weary
@@ -25,6 +27,8 @@ machines:
     your data.  CURVEFIT can make predictions for Y in any of the 25
     equations.  Residuals are calculated.  The program does not include any
     graphics.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0707
 

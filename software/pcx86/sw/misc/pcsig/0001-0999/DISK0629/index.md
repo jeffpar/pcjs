@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-ART"
 
     PC-ART is a graphic-drawing program that lets you create color pictures
@@ -41,6 +43,8 @@ machines:
     ~ Image library to store and later retrieve drawn figures
     
     ~ Easy-to-use window panels to select functions, colors, etc
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0629
 

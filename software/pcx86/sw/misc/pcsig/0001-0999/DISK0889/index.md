@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FAMTRAK AND DOS-PRO"
 
     FAMTRACK is an effective management tool designed to make the
@@ -50,6 +52,8 @@ machines:
     explain it to you. DOS-PRO's menu occupies only one screen, and is
     divided into directory commands, format commands, and other DOS
     commands.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0889
 

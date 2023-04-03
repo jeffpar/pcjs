@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "B MENU AND MENUGET"
 
     BMENU allows simplified development and use of command menus. The menu
@@ -68,6 +70,8 @@ machines:
     REGIS    FRM  Program registration form.
     VERSION  DOC  BMENU Version history.
     WORDS         Data file for HANGMAN.EXE.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0513
 

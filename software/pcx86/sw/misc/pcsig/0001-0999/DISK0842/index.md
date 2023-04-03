@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BOX (PROGRAMMERS UTILITY)"
 
     BOX is a screen-designing tool that lets you quickly create entry
@@ -35,6 +37,8 @@ machines:
     instantly on the monitor from a Pascal or C program.  This disk also
     contains all the source code routines that you need to incorporate BOX
     in your Turbo Pascal programs.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0842
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE BRAIN"
 
     With your modem and telecommunications program, you call up the local
@@ -34,6 +36,8 @@ machines:
     to use it, and know how to program your modem.  The manual has a
     glossary of commands (with detailed descriptions and brief examples of
     each) and a sample command file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0752
 

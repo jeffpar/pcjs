@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO PASCAL #1"
 
     Useful subroutine collections, hi-resolution graphics demonstrations,
@@ -80,6 +82,8 @@ machines:
     TYPEFILE PAS  Do line-oriented file I/O in TURBO PASCAL (same as NEW)
     NEW      PAS  How to do line-oriented file I/O in TURBO PASCAL
     TURBOTST PAS  Test TURBO PASCAL version 2.0 for math errors
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0324
 

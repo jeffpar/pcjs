@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC FIRING LINE"
 
     This is the first issue of the PC FIRING LINE NEWSLETTER.  It has beena
@@ -50,6 +52,8 @@ machines:
     TXT      ADS  Advertisments
     WRITERS  GDE  Text file.
     ???????? TXT  Text file (20 files).
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0159
 

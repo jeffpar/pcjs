@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "AM-TAX 1990"
 
     AM-TAX helps you prepare your federal tax return.  It does most
@@ -29,6 +31,8 @@ machines:
     or calculated for a supporting form is automatically transferred to the
     appropriate line it supports.  All the forms can be printed and
     filed directly with the IRS.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0479
 

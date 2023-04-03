@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CHURCH PROSPECT INFO SYSTEM"
 
     CHURCH PROSPECT INFORMATION SYSTEM will help you keep track of your
@@ -46,6 +48,8 @@ machines:
     GO       BAT  Displays README.
     README        General information file.
     CPS      EXE  Main program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0716
 

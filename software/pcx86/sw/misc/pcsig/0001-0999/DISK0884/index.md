@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BOWLING LEAGUE SECRETARY'S SYSTEM"
 
     Take the tedium out of a time-consuming task.
@@ -28,6 +30,8 @@ machines:
     The system can handle 40 teams, up to ten bowlers per team
     (400 total), and up to a 50-week season.  BOWLING LEAGUE SECRETARY is
     menu-driven and has on-line help.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0884
 

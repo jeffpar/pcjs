@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE BRIDGE GAME"
 
     TURBO-BRIDGE is a bridge game that lets you practice playing against
@@ -32,6 +34,8 @@ machines:
     BRIDGE   COM  Main program.
     BRIDGE        Script file.
     BID      BR   Data file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0890
 

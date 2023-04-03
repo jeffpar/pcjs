@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CHILDREN'S WORD"
 
     WORD PROCESSING FOR KIDS (WPK) is a simple word processor especially
@@ -27,6 +29,8 @@ machines:
     intimidating and easier for the little ones to read. The on-line help
     function takes only a few moments to master. Well-written and
     thorough documentation completes the package for the budding author.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0343
 

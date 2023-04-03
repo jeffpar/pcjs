@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "IBM USERS GROUP #4"
 
     June 1984 issue of the electronic newsletter published by IBM Boca
@@ -49,6 +51,8 @@ machines:
     MASTHEAD      Information file.
     NEWS     EXE  Main program.
     PCUGNEWS TOC  Information file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0200
 

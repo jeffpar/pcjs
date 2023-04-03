@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "UPDATED ALL FILES ON #2321"
 
     QUBECALC is a spreadsheet with many advanced features.  However, the
@@ -25,6 +27,8 @@ machines:
     worksheet can be rotated to allow you to view, enter, or manipulate your
     data from any of its six faces.  PC Magazine made it an Editor's Choice
     among low cost spreadsheets.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0696
 

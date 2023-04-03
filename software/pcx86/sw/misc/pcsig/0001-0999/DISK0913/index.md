@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FLODRAW 2 OF 3 (ALSO 912, 2020)"
 
     FLODRAW is a graphics editor that produces black and white full-page
@@ -27,6 +29,8 @@ machines:
     FLODRAW has symbol libraries for flowcharts, HIPO charts, and electric
     diagrams.  Design your own symbols, save them, and combine them into new
     libraries, or add them to an existing library.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0913
 

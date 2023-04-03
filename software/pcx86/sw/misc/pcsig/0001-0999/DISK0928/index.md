@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SNOBOLYT UTILITIES 1 OF 2 (ALSO 1128)"
 
     Programmers -- Here's a diskful of handy utilities to take
@@ -41,6 +43,8 @@ machines:
     
     Among the other utilities on this disk are MELIZA, a psychoanalysis
     program, and SPACE, a disk-space management and recover utility.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0928
 

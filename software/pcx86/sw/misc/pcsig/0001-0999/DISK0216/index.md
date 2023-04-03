@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "C UTILITIES NO 2"
 
     This hard working, time-saving set of utilities and functions for the C
@@ -59,6 +61,8 @@ machines:
     MENCON   C    Function to open menu file and display it on screen.
     ???      BAT  Batch files to emulate UNIX commands (9 files).
     IBMTTY   C    Terminal emulation program with file upload & download.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0216
 

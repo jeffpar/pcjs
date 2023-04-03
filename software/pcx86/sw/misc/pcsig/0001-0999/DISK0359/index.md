@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MOONBEAM"
 
     For the would be astronomer or romantic this program may be for you.
@@ -36,6 +38,8 @@ machines:
     STAR     REC  Star data file used by moonbeam to plot stars
     MOONBEAM COM  Main program for moonbeam system
     MOONBEAM V1   Source code for MOONBEAM
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0359
 

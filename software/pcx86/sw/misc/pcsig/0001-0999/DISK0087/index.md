@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PRGMR'S CALCULATOR"
 
     The Programmer's Calculator offers a powerful Reverse Polish Notation
@@ -42,6 +44,8 @@ machines:
     GC       EXE  Number base conversion program for use with PC.EXE
     DUP      BAT  Batch file to copy program files to another disk
     MANUAL   BAT  Batch file to print documentation
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0087
 

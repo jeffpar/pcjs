@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "INTERACTIVE MATRIX CALCULATOR"
 
     Data collection for statistical analysis is made easier with MATRIX
@@ -35,6 +37,8 @@ machines:
     made for residual analysis since no data is stored.  This is a serious
     limitation of the program in terms of modern regression analysis
     procedures.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0823
 

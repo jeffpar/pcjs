@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TAX-PLANNER"
 
     TAX-PLANNER is a question-and-answer program to help you estimate the
@@ -26,6 +28,8 @@ machines:
     number of exemptions and additional taxes for withholdings.  You can
     also estimate deductions from various employers and print reports each
     time an estimate is completed.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0982
 

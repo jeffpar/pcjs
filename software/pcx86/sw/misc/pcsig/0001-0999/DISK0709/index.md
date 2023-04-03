@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-CRYP2, DISKMASTER, & INSTACALENDAR"
 
     Is computer security important to you?  Look into PC-CRYP2.  First, it
@@ -32,6 +34,8 @@ machines:
     from 1600 to 2050 A.D.  You can print the calendar or show it on the
     screen.  The documentation is brief but gives all the help needed to use
     the program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0709
 

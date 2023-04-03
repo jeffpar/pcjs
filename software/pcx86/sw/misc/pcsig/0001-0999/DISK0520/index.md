@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BUDGETRAK 2 OF 2 (ALSO 519)"
 
     BUDGETRAK is an accounting package for anyone who needs to track their
@@ -34,6 +36,8 @@ machines:
     budgeting purposes, than waiting to record an actual expense.
     BUDGETRAK handles single and double-entry bookkeeping and has a built-in
     password system.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0520
 

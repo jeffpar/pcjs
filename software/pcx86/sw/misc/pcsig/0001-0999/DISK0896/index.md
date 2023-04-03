@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "POCKET FILER/POCKET NOTES (ESYPL ON 1541"
 
     POCKET FILER and POCKET NOTES are two programs that make double-sided
@@ -23,6 +25,8 @@ machines:
     Entries can be edited, deleted, sorted, searched, and saved.  Print a
     hard copy in a pocketbook format that will fit into a checkbook cover.
     Each program also allows you to page through and browse the records.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0896
 

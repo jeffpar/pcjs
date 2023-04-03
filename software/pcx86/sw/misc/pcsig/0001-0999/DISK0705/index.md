@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "KIDGAMES"
 
     KIDGAMES is a blast! This collection of games is specifically geared
@@ -32,6 +34,8 @@ machines:
     ~ ANIMALS, which teaches simple preschool math
     
     ~ CLOCKGAME, which teaches how to read an analog clock
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0705
 

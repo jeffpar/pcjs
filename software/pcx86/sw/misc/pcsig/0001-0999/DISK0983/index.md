@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "NATIONAL BUREAU OF STANDARDS LIFE-CYCLE"
 
     NATIONAL BUREAU OF STANDARDS LIFE-CYCLE COST (NBSLCC) performs thorough
@@ -34,6 +36,8 @@ machines:
     data and assumptions, advises you when entries appear improper, lets
     you make changes to input data files, and allows you to move by menu
     selection.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0983
 

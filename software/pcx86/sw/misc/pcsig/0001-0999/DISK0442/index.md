@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SPA:WN"
 
     Learn the concepts of nodal or structured programming with SPA:WN,
@@ -34,6 +36,8 @@ machines:
     
     The concepts of structured programming are also applicable to computer
     or other complex system design.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0442
 

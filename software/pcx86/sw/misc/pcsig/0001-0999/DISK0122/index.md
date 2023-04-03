@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LETUS A-B-C VOL 2"
 
     Letus A-B-C is a database in PC-FILE III format containing references
@@ -34,6 +36,8 @@ machines:
     LETUS    BAT  Batch file for starting Letus
     PCAGE83  ???  PC Age 1983 magazine reference files (4 files)
     PLOGO83  COM  Prints out LETUS A-B-C documentation
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0122
 

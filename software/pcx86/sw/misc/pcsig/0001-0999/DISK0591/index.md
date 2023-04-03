@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GENESIS"
 
     GENESIS is a program designed to work with TRAVELLER (a science fiction
@@ -42,6 +44,8 @@ machines:
     --GNSS10 DID  Genesis system work file
     PLANET   000  Sample planet detail file
     README   NOW  Introduction to GENESIS with feature list
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0591
 

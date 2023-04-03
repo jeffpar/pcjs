@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SYMPHONY WORKSHEETS #3"
 
     Business planners and investors will find this disk especially valuable
@@ -36,6 +38,8 @@ machines:
     5YEAR    WRK  Five year business plan macro
     0_DESCR  WRK  Description of macros on this disk
     PROJECT  WRK  Project oriented company planner macro
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0596
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GENERAL LEDGER"
 
     Personal General Ledger is a template software package designed to
@@ -39,6 +41,8 @@ machines:
     AUTO123  WKS  Sets up automatic menu when first accessing 1-2-3
     GENLJRNL WKS  General journal - everything else
     CHART    DOC  Full chart of accounts
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0165
 

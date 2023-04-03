@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LOGON AND LOGOFF"
 
     This disk is dedicated to a special category of utilities: programs
@@ -54,6 +56,33 @@ machines:
     END      BAS  BASICA version of end log program
     ONTIME   EXE  Part of TIMEKEEP utility
     OFFTIME  EXE  Part of TIMEKEEP utility
+{% comment %}info_end{% endcomment %}
+
+{% comment %}samples_begin{% endcomment %}
+
+## END.BAS
+
+```bas
+20 OPEN "A:TIMES" FOR APPEND AS #1
+30 PRINT #1, "End:   ";DATE$;"   ";TIME$;
+32 INPUT "Comment about session: ",X$
+34 PRINT #1, "   ";X$:PRINT #1,
+40 CLOSE #1: SYSTEM
+#1, "End:   ";DATE$;"   ";TIME$;
+32 INPUT "Comment about session: ",X$
+34 PRINT #
+```
+
+## START.BAS
+
+```bas
+10 '================START================
+20 OPEN "A:TIMES" FOR APPEND AS #1 ' ACCUMULATE ALL TIMES
+30 PRINT #1, "Start: ";DATE$;"   ";TIME$  'THIS DOES THE RECORDING
+40 CLOSE #1: SYSTEM  'WRAP-UP;RETURN TO DOS
+```
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk 0325
 

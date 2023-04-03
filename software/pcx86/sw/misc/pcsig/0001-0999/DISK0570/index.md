@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROGRAMERS UTILITIES #11"
 
     This disk has a useful assortment of PASCAL utilities along with
@@ -61,6 +63,8 @@ machines:
     GOD      BAT           "
     DETAB    PAS                       "
     DOSIF    PAS  Pascal Source code for utilities
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0570
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "|STAT 1 OF 4 (ALSO 991, 992, 2292)"
 
     STAT is a set of data-manipulation and analysis programs developed at
@@ -30,6 +32,8 @@ machines:
     are independent programs, the output from one program can be used as
     input to another.  A solid knowledge of statistics and computers is
     assumed.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0990
 

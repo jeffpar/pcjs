@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "VIDEO CHEM"
 
     VideoChem is an educational game designed to teach secondary school
@@ -56,6 +58,8 @@ machines:
     VIDEO1   DAT  Data file used by program
     VCHEM    EXE  A program file
     VCHEM    DOC  Text file of instructions
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0407
 

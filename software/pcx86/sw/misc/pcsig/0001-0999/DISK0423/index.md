@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROJECT MANAGEMENT"
 
     A complete interactive project management system using the critical
@@ -31,6 +33,8 @@ machines:
     software.
     
     A sophisticated tool for anyone who needs a good planning utility.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0423
 

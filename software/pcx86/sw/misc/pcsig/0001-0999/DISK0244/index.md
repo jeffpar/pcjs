@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SLIDE GENERATION"
 
     This program produces medium-quality slides and overhead transparencies.
@@ -22,6 +24,8 @@ machines:
     program.  Overhead transparencies are produced by photocopying the
     printed output onto transparent material.  Photographic slides are
     produced by photographing the display or printed output.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0244
 

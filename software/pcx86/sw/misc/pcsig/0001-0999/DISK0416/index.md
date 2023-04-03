@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ROFF4"
 
     A complete and well documented version of ROFF with test and sample
@@ -72,6 +74,8 @@ machines:
     ROFF4    DOC  19 pages of documentation
     ROFF4    EXE  Executable form of formatter
     ROFF4    C    Main source module
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0416
 

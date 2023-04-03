@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ELEMENTARY C"
 
     Are you just learning how to program in C?  Or have you been doing it
@@ -74,6 +76,8 @@ machines:
     M_SOLVE  C    Matrix linear equations.
     M_READ   C    Read into matrix.
     M_MULTIP C    Multiply matrix 1 x matrix 2.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0429
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SYMPHONY WORKSHEETS #1"
 
     SYMPHONY WORKSHEETS 1 is good assortment of miscellaneous
@@ -65,6 +67,8 @@ machines:
     WNDWSY   WRK  Macro for synchronizing windows like 1-2-3
     WRDST    CTF  Translation for Wordstar files to Symphony
     DIR-LIST      Listing of included files
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0305
 

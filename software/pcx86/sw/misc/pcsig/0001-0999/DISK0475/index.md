@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TUNE TRIVIA"
 
     Remember ``Name That Tune''?  Here's a new version.
@@ -22,6 +24,8 @@ machines:
     TUNE TRIVIA plays songs on your PC so you can try to guess the
     songs' titles.  Once you've answered correctly, you are then challenged
     with trivia questions about musical history.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0475
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SUPERNOVA - A TEXT ADVENTURE GAME"
 
     SUPERNOVA is an interactive text adventure set in the future.  As the
@@ -33,6 +35,8 @@ machines:
     when you are well and truly stuck.
     
     Now, if you're going to save a civilization, you'd better get started!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0952
 

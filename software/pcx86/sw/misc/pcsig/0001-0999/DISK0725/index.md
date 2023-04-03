@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURNKEY DEMO"
 
     TURNKEY helps you set up your computer as a menu-driven system.  You
@@ -30,6 +32,8 @@ machines:
     INSTALL  BAT  Installation batch file
     README        Introductory text file
     TK31     PGM  Main program file
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0725
 

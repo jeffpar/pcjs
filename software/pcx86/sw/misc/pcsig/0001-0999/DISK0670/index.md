@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GRAPHTIME II 2 OF 2 (ALSO 669)"
 
     GRAPHTIME-II is a business and technical graphics system with text and
@@ -46,6 +48,8 @@ machines:
     override.  A macro facility is included for commonly-used
     command sequences and to control slide shows.  Macros can also be
     created by recording a sequence of commands as they are used.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0670
 

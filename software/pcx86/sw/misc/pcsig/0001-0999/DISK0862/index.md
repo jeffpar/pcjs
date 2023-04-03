@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "STATMATE/PLUS 2 OF 3 (ALSO 861, 863)"
 
     A statistical analysis package for handling numerical data, operated by
@@ -41,6 +43,8 @@ machines:
     and data transformation and manipulation.  An on-line help facility is
     included to give you a detailed description of all the STATMATE
     commands.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0862
 

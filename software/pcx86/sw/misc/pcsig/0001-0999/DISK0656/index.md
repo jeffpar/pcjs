@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "REAL ESTATE SYSTEM"
 
     RES is an asset for any professional real estate office.  It helps you
@@ -30,6 +32,8 @@ machines:
     
     Spend your time and energy on selling real estate and leave the tiresome
     bookkeeping to RES.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0656
 

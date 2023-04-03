@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LOTUS WORKSHEETS #3"
 
     LOTUS WORKSHEETS 3 is a collection of miscellaneous but useful
@@ -57,6 +59,8 @@ machines:
     TREND123 WKS  Macros-trend analysis-curve fitting
     TREND123 DOC  Documentation file for TREND123.WKS
     DIR-LIST      Listing of included files
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0302
 

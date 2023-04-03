@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "JON DART'S UTILITIES"
 
     Dos Utilities is a collection of usefull utilities for the PC user.
@@ -50,6 +52,8 @@ machines:
     UTIL     DOC  Documentation for all programs.
     WC       EXE  Date/word/line counting utility.
     SOURCE   ARC  Source code for the above files.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0564
 

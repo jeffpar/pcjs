@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SPEEDY MAILER JR. MAILING LIST"
 
     SPEEDYMAILER lets you keep track of a list of people with their names
@@ -56,6 +58,8 @@ machines:
     ???????? NTX  Used by main program (9 files).
     ???????? DBF  Data files created by smail (3 files).
     ???????? LBL  Used by main program (12 files).
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0931
 

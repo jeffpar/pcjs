@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MESSAGE MASTER AND ADDRESS BOOK"
 
     Provide a message center in your computer.  Several users of the same
@@ -33,6 +35,8 @@ machines:
     edit and delete your addresses, and a printer menu to print any or all
     of your addresses.  Keep track of your personal and business address and
     telephone lists with ease.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0988
 

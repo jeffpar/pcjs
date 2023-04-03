@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PROFONEDIT - EDITOR"
 
     PROCOMM PLUS is a good telecommunications program, but you can only
@@ -29,6 +31,8 @@ machines:
     program menu.  This program is a necessity for anyone using
     PROCOMM PLUS who wants to edit and reorganize their telephone
     directory.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0956
 

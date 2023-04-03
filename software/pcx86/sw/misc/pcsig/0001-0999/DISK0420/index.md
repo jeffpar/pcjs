@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FILE UTILITIES #2"
 
     System Enhancement through specially designed file handling utilities
@@ -77,6 +79,8 @@ machines:
     FCOMPARE EXE  Good file compare program
     ARC      DOC  Documentation file
     ARC      EXE  Combine and squeeze files in one pass
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0420
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LABEL MASTER"
 
     LABEL MASTER is a program for maintaining, sorting, and printing lists
@@ -41,6 +43,8 @@ machines:
     FILE DESCRIPTIONS
     README         Documentation file.
     LM       EXE   Main program.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0750
 

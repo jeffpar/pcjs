@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PASCAL TOOLS VOL 2"
 
     This is the second of the three-disk series Pascal Tools (Disks #130-
@@ -38,6 +40,8 @@ machines:
     UNROTATE EXE  Formats lines for a KWIC index
     UNIQUE   EXE  Deletes adjacent duplicate lines
     TRANSLIT EXE  Transliterate characters
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0131
 

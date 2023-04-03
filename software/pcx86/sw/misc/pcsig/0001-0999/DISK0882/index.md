@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE POOL MANAGER"
 
     It's a great day, sports fans!  Here's something you've needed for
@@ -33,6 +35,8 @@ machines:
     by applying the point spread.  It can be used for pools in any sport.
     
     So, who do you like for next week?
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0882
 

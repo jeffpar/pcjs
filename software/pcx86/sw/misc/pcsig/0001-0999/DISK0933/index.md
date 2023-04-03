@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "SORTED DIRECTORY AND FLIST / PC"
 
     SDR.COM provides more information than the resident DOS DIR command
@@ -45,6 +47,8 @@ machines:
     through a directory, display the tree structure of all subdirectories
     on the current disk drive, and select new paths and directories to be
     displayed.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0933
 

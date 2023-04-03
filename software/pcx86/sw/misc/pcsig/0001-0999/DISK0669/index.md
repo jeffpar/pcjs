@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GRAPHTIME II 1 OF 2 (ALSO 670)"
 
     GRAPHTIME-II is a business and technical graphics system with text and
@@ -46,6 +48,23 @@ machines:
     override.  A macro facility is included for commonly-used
     command sequences and to control slide shows.  Macros can also be
     created by recording a sequence of commands as they are used.
+{% comment %}info_end{% endcomment %}
+
+{% comment %}samples_begin{% endcomment %}
+
+## GTFLP.BAS
+
+```bas
+10 'SAVE"GTFLP" 'Rene Rojas for Computer Performance 13-10-87
+20 REM
+30 A$=STRING$(78,205):COLOR 14,1:CLS
+40 LOCATE 3,1:PRINT STRING$(1,201):LOCATE 3,2:PRINT A$:LOCATE 3,80:PRINT STRING$(1,187):LOCATE 22,1:PRINT STRING$(1,200):LOCATE 22,2:PRINT A$:LOCATE 22,80:PRINT STRING$(1,188)
+50 FOR I=4 TO 21:LOCATE I,1:PRINT STRING$(1,186):LOCATE I,80:PRINT STRING$(1,186):NEXT I
+60 LOCATE 2,10:COLOR 14,1:PRINT "G R A P H T I M E - I I   F U N C T I O N    G E N E R A T I O N ";:LOCATE 11,36:COLOR 16,7:PRINT "LOADING";:COLOR 14,1
+70 RUN "GTFG"
+```
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk 0669
 

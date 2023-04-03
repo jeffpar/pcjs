@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "A.D.A. PROLOG"
 
     The PROLOG -- "Programming in Logic" -- language on this disk is
@@ -59,6 +61,8 @@ machines:
     ARCDOC   ARC  Archived directions on using the ARC.EXE utility
     ARC      EXE  Utility to "Unsqueeze" the files on this disk
     README        Notes on archiving programs
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0417
 

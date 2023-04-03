@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-FOIL"
 
     PC-FOIL consists of two routines - FOIL-EDIT and PC-FOIL.  These
@@ -31,6 +33,8 @@ machines:
     
     You have the information you want to present.  Now, here's the program
     that can do it!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0347
 

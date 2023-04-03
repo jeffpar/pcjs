@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PULLED FROM THE LIBRARY"
 
     MANAGEX I is based on the idea that it is best to send a statement to
@@ -26,6 +28,8 @@ machines:
     one calendar month.  Each bill includes all transactions from the
     beginning of the first month covered by the bill to the end of the last
     month covered.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0888
 

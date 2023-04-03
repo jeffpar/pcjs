@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FAMILY TIES"
 
     The FAMILY TIES Genealogy program is designed for the organized
@@ -32,6 +34,8 @@ machines:
     records according to sealings, baptisms, endowments, and temple dates.
     Other history of relatives can be entered in the record for every
     person covered.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0465
 

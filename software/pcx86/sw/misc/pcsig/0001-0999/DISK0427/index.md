@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TURBO PASCAL #9"
 
     This is a fascinating and useful assortment of TURBO Pascal routines
@@ -63,6 +65,8 @@ machines:
     XREFPAS  PAS  Cross-reference generator
     TURBORUN COM  Allows DOS commands from TURBO Pascal programs
     TURBORUN ASM  Assembler source code for TURBORUN.COM
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0427
 

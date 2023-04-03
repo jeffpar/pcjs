@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CARD TRAK, EGA SCREEN SAVE, AND MORE"
 
     A screen-blanking routine that shuts your EGA screen off after three
@@ -33,6 +35,8 @@ machines:
     screen of games.  The Illinois and Missouri lottos are menued for the
     basic games, but other states' games can be easily configured with the
     program by setting that game's maximum high number (6 to 255).
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0789
 

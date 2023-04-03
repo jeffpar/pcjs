@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GALAXY 1 OF 2 (2210 ALSO)"
 
     Updated with Microlytics' award-winning 100,000 word spell-checker and
@@ -40,6 +42,8 @@ machines:
     hard disk.
     
     ~ Proportional spacing and microjustification.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0765
 

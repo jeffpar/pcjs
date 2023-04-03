@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CHECKMATE-GL"
 
     Do you own a small business, or are you thinking of starting one -- only
@@ -50,6 +52,8 @@ machines:
     that you can be call up at a keystroke. CHECKMATE-GL also has unique
     "quick-look" reports and flexible predefined reports with output
     control.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0785
 

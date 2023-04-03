@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ESIE"
 
     Put some smarts in your personal computer and turn it into your very own
@@ -32,6 +34,8 @@ machines:
     To see how ESIE works without building your own knowledge base, load
     ESIE and one of the three supplied knowledge bases (ANIMAL, DOCTOR, or
     GLASS) and try it!
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0398
 

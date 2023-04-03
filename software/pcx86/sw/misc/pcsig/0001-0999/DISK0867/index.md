@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DEEP SPACE SUPPLEMENT 2 OF 2 (866)"
 
     DEEP SPACE 3-D is a powerful star mapping program that uses a database
@@ -48,6 +50,8 @@ machines:
     reliable guide to observational astronomy. For centuries man has gazed
     at the night-time sky and wondered what was out there. DEEP SPACE will
     help answer some of those questions.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0867
 

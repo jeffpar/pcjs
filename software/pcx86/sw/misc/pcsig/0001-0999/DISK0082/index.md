@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "BATCH FILE UTILITIES"
 
     Batch files are tireless worker files. Once written and tested to insure
@@ -54,6 +56,8 @@ machines:
     TESTF    BAT  Batch files used to test utilities.
     TESTQ    BAT  Batch files used to test utilities.
     TESTSET  BAT  Batch files used to test utilities.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0082
 

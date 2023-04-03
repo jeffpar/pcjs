@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HOME INSURANCE"
 
     HOME INSURANCE lets you keep track of what you own, where items are
@@ -42,6 +44,8 @@ machines:
     learn and simple to use.  Three user-selectable levels of operation and
     user-customized field names let you modify HOME INSURANCE to meet
     individual requirements.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0796
 

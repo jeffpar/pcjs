@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "MATH PAK III"
 
     MATH PAK III is a set of tutorials to help improve your problem-solving
@@ -35,6 +37,8 @@ machines:
     
     This set of programs can be used as an educational program to help
     expand your knowledge and appreciation of mathematics.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0394
 

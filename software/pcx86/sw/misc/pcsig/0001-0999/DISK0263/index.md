@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "FORTH 1 OF 2 (ALSO 264)"
 
     A Forth Language system from Henry Laxon and Mike Perry.  A compiler,
@@ -23,6 +25,8 @@ machines:
     language and includes an introductory text file for beginners.
     Documentation is brief and recommended reading is ``Starting FORTH'', by
     Leo Brodie.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0263
 

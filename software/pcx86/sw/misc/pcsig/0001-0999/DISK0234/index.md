@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TPNCALC"
 
     This is a user-supported program, intended for use by Pharmacists to
@@ -29,6 +31,8 @@ machines:
     File Descriptions:
     TPNDOC        Documentaion  (14K)
     TPNCALC  EXE  Main program
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0234
 

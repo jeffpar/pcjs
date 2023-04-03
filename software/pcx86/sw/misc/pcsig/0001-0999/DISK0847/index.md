@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LOTUS LEARNING SYSTEM (ALSO 846)"
 
     THE LOTUS LEARNING SYSTEM is designed to teach the novice computer user
@@ -28,6 +30,8 @@ machines:
     retrieving, saving, columns, and more in a look and feel simulation of
     Lotus 1-2-3.  A 130-page workbook comes with registration.  A must for
     anyone about to buy, or who already has, LOTUS 1-2-3.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0847
 

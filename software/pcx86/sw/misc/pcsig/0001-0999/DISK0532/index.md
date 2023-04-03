@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC-MONEY"
 
     PC-MONEY is a program designed to maintain personal, family, and small
@@ -32,6 +34,8 @@ machines:
     a number of different ways. All operations are selected by menus that
     are easy to use. All account data is entered via fill-in forms with
     editing capabilities.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0532
 

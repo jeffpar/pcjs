@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE MOVIE DATABASE 2 OF 2 (ALSO 311)"
 
     Old movie buffs and videotape collectors -- here's a database of nearly
@@ -22,6 +24,8 @@ machines:
     each entry by title, MPPA rating, major cast members, writer, director,
     and other information.  As you add to your collection, you can add new
     movies to the list with a wordprocessor or text editor.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0774
 

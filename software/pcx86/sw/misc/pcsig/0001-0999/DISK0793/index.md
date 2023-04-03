@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "TYPING BY RYSOFT"
 
     Get those fingers of yours warmed up!  Here is a new test for them.
@@ -29,6 +31,8 @@ machines:
     minute.  The nice thing about TYPING is you can either type from
     the screen or print the test file and type from that.  You can
     also supply your own file to type if you want.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0793
 

@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "DISK DRIVE-IN THEATER (VCR DBASE)"
 
     Here's the answer for anyone who needs a simple, structured way to keep
@@ -27,6 +29,8 @@ machines:
     tape.  Print two differently configured labels for your tape library.
     With all these features and a database controller faster than most, it
     is a clearly superior video library manager.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0493
 

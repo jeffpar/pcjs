@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "POLYMATH"
 
     POLYMATH is a programming language much like Forth in structure, and
@@ -40,6 +42,8 @@ machines:
     Included are a few dictionaries and application programs.  A review of
     these programs will be very helpful when learning the language.  It
     also features full graphics to round out the package.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0606
 

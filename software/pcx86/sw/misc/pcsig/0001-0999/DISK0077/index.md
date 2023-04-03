@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "1RD"
 
     "1-RingyDingy" is a general purpose asynchronous communications program.
@@ -53,6 +55,8 @@ machines:
     1RD      DOC  Documentation for 1RD  (49K).
     DOC      BAT  Batch file for printing documentation.
     SCRN          Data file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0077
 

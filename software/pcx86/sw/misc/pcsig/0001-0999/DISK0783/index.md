@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "GT POWER 2 OF 4 (ALSO 782,1549,1550)"
 
     GT POWER is an example of telecommunications at its finest.  An easy
@@ -69,6 +71,8 @@ machines:
     ~ Support for the non-standard COM ports: 3 and 4.
     
     A comprehensive Help menu is available at any time.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0783
 

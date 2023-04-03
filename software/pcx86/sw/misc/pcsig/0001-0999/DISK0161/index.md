@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "PC FIRING ISSUE #2A"
 
     Special Requirements:  None.
@@ -45,6 +47,8 @@ machines:
     XXXXXXXX XX3  Data file.
     XXXXXXXX XX4  Data file.
     XXXXXXXX XX5  Data file.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0161
 

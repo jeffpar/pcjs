@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5160" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "THE CONFIDANT"
 
     The Confidant is a user-supported program which encodes sensitive data
@@ -44,6 +46,8 @@ machines:
     TUTORIAL DOC  A step-by-step tutorial  (69K)
     TYPE     ME   How to list documentation
     REFER    DOC  A technical reference manual  (60K)
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0230
 

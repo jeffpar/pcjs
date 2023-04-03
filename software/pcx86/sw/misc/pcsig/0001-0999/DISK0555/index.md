@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "LINPACK DRIVERS"
 
     The Linear Equation Package (LINPACK) is a set of routines which solves
@@ -56,6 +58,8 @@ machines:
     SUD      LNK  An undocumented link list.
     ST       LNK  The link list of binaries for the single precision
     SSV      LNK  The link list of binaries for the single precision
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0555
 

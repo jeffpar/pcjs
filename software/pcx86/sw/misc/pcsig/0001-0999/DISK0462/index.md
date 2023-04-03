@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "CK SYSTEM"
 
     Use this personal and household financial mangement program to keep a
@@ -28,6 +30,8 @@ machines:
     Prepare a month-by-month year-end summary of all your income and
     expenses for up to nine separate accounts. Draw up bar charts on
     income/expenses. Detailed documentation is provided for the new user.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0462
 

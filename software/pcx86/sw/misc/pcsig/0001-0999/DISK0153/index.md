@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "HANGMAN"
 
     HANGMAN is a game that enhances spelling and vocabulary. The program
@@ -23,6 +25,8 @@ machines:
     from getting boring through repetition.  You play against
     yourself, so at least you know the quality of the competition, although
     some players have been known to be surprised even then.
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0153
 

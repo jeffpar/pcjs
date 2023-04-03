@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5170" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "ZURI"
 
     This diskette contains the Zuri text editor, which is a very powerful
@@ -84,6 +86,8 @@ machines:
     ZURICHS  DOC  Documentation for zurichs.chn
     ZURICHS  CHN  A program to choose records by certain criteria
     ZURI     HLE  Help file for the editor. Can be omitted if desired
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0657
 

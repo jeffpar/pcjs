@@ -15,6 +15,8 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
+{% comment %}info_begin{% endcomment %}
+
 ## Information about "WORLD STATISTICS"
 
     WORLD is a simple, menu-driven database of statistical and demographic
@@ -36,6 +38,8 @@ machines:
     
     WORLD    EXE  The program
     DATABASE      The Data for the 1986 statistics
+{% comment %}info_end{% endcomment %}
+
 
 ### Directory of PC-SIG Library Disk 0668
 
