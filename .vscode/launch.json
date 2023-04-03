@@ -683,13 +683,14 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "DISK0212.ZIP",
+        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/*/DISK*/DISK*.json'",
         "--extract",
         "--expand",
+        "--normalize",
         "--overwrite",
-        "--verbose"
+        "--extdir=%d/archive"
       ],
-      "cwd": "${workspaceFolder}/tmp",
+      "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

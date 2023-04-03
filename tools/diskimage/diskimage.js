@@ -260,7 +260,7 @@ function getFullPath(sFile)
  */
 function getDiskServer(diskFile)
 {
-    let match = diskFile.match(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|pcsig[0-9]|pcsig[0-9]*[a-z]*-disks|harddisks|decdisks|cdroms|private)\//);
+    let match = diskFile.match(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9]*[a-z]*-disks|cdroms|private)\//);
     return match && (match[1] + match[2]);
 }
 
@@ -276,7 +276,7 @@ function getServerPath(sFile)
      * In addition to disk server paths, we had to add /machines (for diskette config files) and /software (for Markdown files
      * containing supplementary copy-protection disk data).
      */
-    let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|pcsig[0-9]|pcsig[0-9]*[a-z]*-disks|harddisks|decdisks|cdroms|private)(\/.*)$/);
+    let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9]*[a-z]*-disks|cdroms|private)(\/.*)$/);
     if (match) {
         sFile = path.join(rootDir, (match[2] == "machines" || match[2] == "software"? "" : "disks"), match[2], match[3]);
     }
@@ -991,7 +991,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
 function mapDiskToServer(diskFile)
 {
     if (useServer || !existsFile(getFullPath(diskFile))) {
-        diskFile = diskFile.replace(/^\/disks\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsig[0-9]|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$1.pcjs.org/");
+        diskFile = diskFile.replace(/^\/disks\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$1.pcjs.org/");
     }
     return diskFile;
 }
@@ -1279,7 +1279,7 @@ function processDisk(di, diskFile, argv, diskette)
         if (!sListing) return;
         let sIndex = "", sIndexNew = "", sAction = "";
         let sHeading = "\n### Directory of " + diskette.name + "\n";
-        let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|pcsig[0-9]|pcsig[0-9a-z-]*-disks|private)\//, "/software/")), "index.md");
+        let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|pcsigdisks|pcsig[0-9a-z-]*-disks|private)\//, "/software/")), "index.md");
         if (existsFile(sIndexFile)) {
             sIndex = sIndexNew = readFile(sIndexFile);
             sAction = "updated";
@@ -1596,7 +1596,7 @@ function addMetaData(di, sDir, sPath)
 function readCollection(argv)
 {
     let family = "pcx86";
-    let asServers = ["diskettes", "gamedisks", "miscdisks", "pcsig0", "pcsig8a-disks", "pcsig8b-disks", "private"];
+    let asServers = ["diskettes", "gamedisks", "miscdisks", "pcsigdisks", "pcsig8a-disks", "pcsig8b-disks", "private"];
     let cCollections = 0, cDisks = 0;
     let asCollections = [];
     asServers.forEach((server) => {
@@ -2108,7 +2108,7 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
                 printf("%s not written, no data\n", diskName);
             }
         } else {
-            if (!fQuiet) printf("%s exists, use --overwrite to replace\n", diskFile);
+            if (!fQuiet) printf("warning: %s exists, use --overwrite to replace\n", diskFile);
         }
     }
     catch(err) {
@@ -2143,7 +2143,7 @@ function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
                 if (fReadOnly) fs.chmodSync(sFile, 0o444);
                 return true;
             }
-            if (!fQuiet) printf("%s exists, use --overwrite to replace\n", sFile);
+            if (!fQuiet) printf("warning: %s exists, use --overwrite to replace\n", sFile);
         } catch(err) {
             printError(err);
         }
@@ -2244,11 +2244,11 @@ function processAll(all, argv)
 {
     if (all && typeof all == "string") {
         let max = +argv['max'] || 0;
-        let asFiles = glob.sync(all);
+        let asFiles = glob.sync(getFullPath(all));
         if (asFiles.length) {
             let outdir = argv['output'];                // if specified, --output is assumed to be a directory
             if (!outdir || typeof outdir == "boolean") {
-                outdir == argv[1];
+                outdir = argv[1];
             }
             let type =  argv['type'] || "json";         // if specified, --type should be a known file extension
             if (type[0] != '.') type = '.' + type;
@@ -2257,8 +2257,8 @@ function processAll(all, argv)
             for (let sFile of asFiles) {
                 if (filter && !filter.test(sFile)) continue;
                 let args = [argv[0], sFile];
-                if (outdir) args['output'] = path.join(outdir.replace("%d", path.dirname(sFile)), path.parse(sFile).name + type);
-                for (let arg of ['list', 'extract', 'overwrite', 'quiet', 'verbose']) {
+                if (outdir) args['output'] = path.join(outdir, path.parse(sFile).name + type);
+                for (let arg of ['list', 'expand', 'extract', 'extdir', 'normalize', 'overwrite', 'quiet', 'verbose']) {
                     if (argv[arg] !== undefined) args[arg] = argv[arg];
                 }
                 processFile(args);

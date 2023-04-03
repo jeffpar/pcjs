@@ -16,15 +16,16 @@ More details to come.
 
 Disks 1-2485 were initially populated from the 9th Edition (Dec 1990) CD-ROM, which had the following issues:
 
-  - DISK2307 and DISK2389 were missing
+  - DISK0316.ZIP contained DISKO316.ZIP, which in turn contained the disk contents
   - DISK0411.ZIP: invalid archive (empty file)
-  - DISK0941.ZIP: invalid archive (empty file)
-  - DISK1322.ZIP/NCRISK.BRD: decompression failure (6)
   - DISK0442.ZIP/SPAWN.DOC: decompression failure (6)
   - DISK0442.ZIP/PWARN.EXE: decompression failure (6)
   - DISK0442.ZIP/PWARN.PAS: decompression failure (6)
   - DISK0442.ZIP/PWARN.WAR: decompression failure (6)
   - DISK0442.ZIP/CK.DOC: decompression failure (6)
+  - DISK0941.ZIP: invalid archive (empty file)
+  - DISK1322.ZIP/NCRISK.BRD: decompression failure (6)
+  - DISK2307 and DISK2389 were missing
 
 Disks 2486-2804 were initially populated from the 10th Edition (Sep 1991) CD-ROM.
 
