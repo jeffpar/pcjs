@@ -664,8 +664,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--zip=/Volumes/PC_SIG_12_90/701_800/DISK0798/DISK0798.ZIP",
-        "--output=tmp/DISK0798.json",
+        "--zip=tmp/DISK0798.ZIP",
+        "--output=%f/DISK0798.json",
         "--overwrite",
         "--list=sorted",
         "--verbose"

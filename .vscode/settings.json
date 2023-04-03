@@ -491,6 +491,7 @@
     "EXPDOWN",
     "EXPLAY",
     "EXTCRC",
+    "extdir",
     "EXTHDR",
     "EXTHDRIVE",
     "EXTLEN",

@@ -900,7 +900,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
             //             printf("warning: empty archive folder: %s\n", sArchive);
             //         } else if (!fQuiet) {
             //             aArchiveFiles.forEach((sArchiveFile) => {
-            //                 printf("expanded:  %s\n", sArchiveFile.substr(extractDir.length));
+            //                 printf("expanded:  %s\n", sArchiveFile.substr(sDir.length));
             //             });
             //         }
             //     }
@@ -1146,6 +1146,12 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     if (argv['extract']) {
+        let extractDir = argv['extdir'];
+        if (typeof extractDir != "string") {
+            extractDir = "";
+        } else {
+            extractDir = extractDir.replace("%d", path.dirname(diskFile));
+        }
         let manifest = di.getFileManifest(null, false);             // pass true for sorted manifest
         manifest.forEach(function extractDiskFile(desc) {
             /*
@@ -1170,16 +1176,16 @@ function processDisk(di, diskFile, argv, diskette)
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
             device.assert(size == db.length);
-            let extractDir = typeof argv['extract'] != "string"? di.getName() : "";
-            if (extractDir || name == argv['extract']) {
+            let extractFolder = (typeof argv['extract'] != "string")? di.getName() : "";
+            if (extractFolder || name == argv['extract']) {
                 let fSuccess = false;
                 if (argv['collection']) {
-                    extractDir = getFullPath(path.join(path.dirname(diskFile), "archive", extractDir));
+                    extractFolder = getFullPath(path.join(path.dirname(diskFile), "archive", extractFolder));
                     if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
-                        extractDir = extractDir.replace("/disks/archive", "/archive");
+                        extractFolder = extractFolder.replace("/disks/archive", "/archive");
                     }
                 }
-                extractFile(extractDir, "", sPath, attr, date, db, argv);
+                extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv);
             }
         });
     }
@@ -1529,11 +1535,15 @@ function processDisk(di, diskFile, argv, diskette)
         if (argv['boot']) {
             di.updateBootSector(readFile(argv['boot'], null));
         }
-        let output = argv['output'] || argv[1];
+        let output = argv['output'];
+        if (!output || typeof output == "boolean") {
+            output = argv[1];
+        }
         if (output) {
             if (typeof output == "string") output = [output];
             output.forEach((outputFile) => {
-                writeDisk(outputFile, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], argv['quiet'], argv['writable'], argv['source']);
+                let file = outputFile.replace("%d", path.dirname(diskFile));
+                writeDisk(file, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], argv['quiet'], argv['writable'], argv['source']);
             });
         }
     }
@@ -2236,7 +2246,10 @@ function processAll(all, argv)
         let max = +argv['max'] || 0;
         let asFiles = glob.sync(all);
         if (asFiles.length) {
-            let outdir = argv['output'] || argv[1];     // if specified, --output is assumed to be a directory
+            let outdir = argv['output'];                // if specified, --output is assumed to be a directory
+            if (!outdir || typeof outdir == "boolean") {
+                outdir == argv[1];
+            }
             let type =  argv['type'] || "json";         // if specified, --type should be a known file extension
             if (type[0] != '.') type = '.' + type;
             let filter = argv['filter'];
@@ -2244,7 +2257,7 @@ function processAll(all, argv)
             for (let sFile of asFiles) {
                 if (filter && !filter.test(sFile)) continue;
                 let args = [argv[0], sFile];
-                if (outdir) args['output'] = path.join(outdir, path.parse(sFile).name + type);
+                if (outdir) args['output'] = path.join(outdir.replace("%d", path.dirname(sFile)), path.parse(sFile).name + type);
                 for (let arg of ['list', 'extract', 'overwrite', 'quiet', 'verbose']) {
                     if (argv[arg] !== undefined) args[arg] = argv[arg];
                 }
@@ -2281,8 +2294,16 @@ function processFile(argv)
                 *
                 * This only affects the 'name' property in 'imageInfo', which is of limited interest anyway.
                 */
-                let name = argv['output'] || argv[1];
+                let name = argv['output'];
+                if (!name || typeof name == "boolean") {
+                    name = argv[1];
+                }
                 if (name) {
+                    /*
+                     * If name isn't a string, then it must be an array (because the user specified multiple
+                     * outputs), which is allowed in case you want to create, for example, both IMG and JSON
+                     * disk images with a single command.
+                     */
                     if (typeof name != "string") name = name[0];
                     di.setName(path.basename(name));
                 }
@@ -2291,14 +2312,34 @@ function processFile(argv)
         }
     };
 
+    /*
+     * Checking each --dir, --files, etc, for a boolean value allows the user to specify a value
+     * without an equal sign (ie, a small convenience).
+     */
     let input = argv['dir'];
     if (input) {
         fDir = true;                // if --dir, the directory should end with a trailing slash (but we'll make sure)
-        if (!input.endsWith(path.sep)) input += path.sep;
+        if (typeof input == "boolean") {
+            input = argv[1];
+            if (input) {
+                argv.splice(1, 1);
+            } else {
+                fDir = false;
+            }
+        }
+        if (input && !input.endsWith(path.sep)) input += path.sep;
     } else {
         input = argv['files'];
         if (input) {                // if --files, the list of files should be separated with commas (and NO trailing slash)
             fDir = fFiles = true;
+            if (typeof input == "boolean") {
+                input = argv[1];
+                if (input) {
+                    argv.splice(1, 1);
+                } else {
+                    fDir = fFiles = false;
+                }
+            }
         } else {
             input = argv['arc'];
             if (input) {
@@ -2307,21 +2348,21 @@ function processFile(argv)
                 input = argv['zip'];
                 if (input) {
                     arcType = 2;
-                } else {
-                    input = argv[1];
+                }
+            }
+            if (!input || typeof input == "boolean") {
+                input = argv[1];
+                if (input) {
                     argv.splice(1, 1);
-                    if (input) {
+                    if (!arcType) {
                         if (input.endsWith(path.sep)) {
                             fDir = true;
                         } else {
-                            let ext = path.extname(input).toLowerCase();
-                            if (ext == ".arc") {
-                                arcType = 1;
-                            } else if (ext == ".zip") {
-                                arcType = 2;
-                            }
+                            arcType = isARCFile(input);
                         }
                     }
+                } else {
+                    arcType = 0
                 }
             }
         }
@@ -2401,6 +2442,7 @@ function main(argc, argv)
             "--zip=[zipfile]\t":        "read all files in an archive"
         };
         let optionsOutput = {
+            "--extdir=[directory]":     "write extracted files to directory",
             "--output=[diskimage]":     "write disk image (.img or .json)",
             "--target=[nK|nM]":         "set target disk size to nK or nM (eg, \"360K\", \"10M\")"
         };
@@ -2428,7 +2470,8 @@ function main(argc, argv)
                 printf("\t%s\t%s\n", option, optionGroups[group][option]);
             }
         }
-        printf("\nOption values can be enclosed in single or double quotes (eg, if they contain whitespace or wildcards).\n");
+        printf("\nOptions --extdir and --output support \"%d\", which will be replaced with the input disk directory.\n");
+        printf("Option values can be enclosed in single or double quotes (eg, if they contain whitespace or wildcards).\n");
         return;
     }
 
@@ -2442,8 +2485,14 @@ function main(argc, argv)
         /*
          * If you use --disk to specify a disk image, then I call the experimental async function.
          */
-        processDiskAsync(input, argv);
-        return;
+        if (typeof input == "boolean") {
+            input = argv[1];
+            if (input) argv.splice(1, 1);
+        }
+        if (input) {
+            processDiskAsync(input, argv);
+            return;
+        }
     }
 
     if (processAll(argv['all'], argv) || processFile(argv)) {

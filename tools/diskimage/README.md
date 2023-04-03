@@ -202,6 +202,10 @@ To extract a specific file from a disk image:
 
     node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract=COMMAND.COM
 
+To extract files from a disk image into a specific directory (eg, tmp):
+
+    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract --extdir=tmp
+
 To dump a specific (C:H:S) sector from a disk image:
 
     node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --dump=0:0:1
