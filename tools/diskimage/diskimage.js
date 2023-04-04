@@ -732,10 +732,10 @@ function convertBASICFile(sPath, db, fNormalize)
              * inside strings.  But many can be.  For example, you can use the IBM PC's "Alt Num Keypad"
              * trick to enter decimal character 16 and a "►" will appear.
              *
-             * For text that's not quoted, we still have to handle 0x3A (colon) elsewhere, because it's a
-             * weird one; see the 'default' case below.
+             * For text that's not quoted or commented, we still have to handle 0x3A (colon) elsewhere,
+             * because it's a weird one; see the 'default' case below.
              */
-            if ((comment || quote || data) && v < 0xFF || v >= 0x20 && v <= 0x7E && v != 0x3A) {
+            if ((comment || quote || data && v != 0x3A) && v < 0xFF || v >= 0x20 && v <= 0x7E && v != 0x3A) {
                 token = String.fromCharCode(v);
                 if (fNormalize && v != 0x09) {          // normalize all characters except TAB
                     token = CharSet.fromCP437(token, true);

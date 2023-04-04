@@ -700,6 +700,24 @@
       ]
     },
     {
+      "name": "Node: diskimage.js --extract --normalize",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "~/Downloads/DISK0217.img",
+        "--extract",
+        "--normalize",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}/tmp",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskimage.js --zip --list",
       "type": "node",
       "request": "launch",
