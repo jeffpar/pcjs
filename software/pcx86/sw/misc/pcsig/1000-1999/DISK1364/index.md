@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Library Disk #1364"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1364/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/1000-1999/DISK1364/DISK1364.jpg
 machines:
   - id: ibm5170
     type: pcx86

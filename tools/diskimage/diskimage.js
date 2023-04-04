@@ -994,11 +994,12 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
  * mapDiskToServer(diskFile)
  *
  * @param {string} diskFile
+ * @param {boolean} [fRemote] (true to return remote address)
  * @returns {string}
  */
-function mapDiskToServer(diskFile)
+function mapDiskToServer(diskFile, fRemote)
 {
-    if (useServer || !existsFile(getFullPath(diskFile))) {
+    if (useServer || !existsFile(getFullPath(diskFile)) || fRemote) {
         diskFile = diskFile.replace(/^\/disks\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$1.pcjs.org/");
     }
     return diskFile;
@@ -1445,6 +1446,23 @@ function processDisk(di, diskFile, argv, diskette)
             let sDiskServer = getDiskServer(sDiskPic);
             if (sDiskServer) {
                 sListing += "\n![" + diskette.name + "]({{ site.software." + sDiskServer.replace("disks/", "") + ".server }}" + sDiskPic.slice(sDiskServer.length + 1) + ")\n";
+            }
+            /*
+             * Let's rematch the page header and see if the page also needs a preview image.
+             */
+            matchFrontMatter = sIndexNew.match(/^(---\n[\s\S]*?\n---\n)/);
+            if (matchFrontMatter) {
+                let sFrontMatter = matchFrontMatter[1];
+                let match = sFrontMatter.match(/\npreview:.*\n/);
+                if (!match) {
+                    match = sFrontMatter.match(/\npermalink:.*\n/);
+                    if (match) {
+                        let n = match.index + match[0].length;
+                        sDiskPic = mapDiskToServer(sDiskPic, true);
+                        sFrontMatter = sFrontMatter.slice(0, n) + "preview: " + sDiskPic + "\n" + sFrontMatter.slice(n);
+                        sIndexNew = sFrontMatter + sIndexNew.slice(matchFrontMatter[0].length);
+                    }
+                }
             }
         }
         if (diskette.source && !diskette.source.indexOf("http")) {

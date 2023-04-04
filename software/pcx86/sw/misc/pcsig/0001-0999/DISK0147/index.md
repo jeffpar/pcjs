@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Library Disk #147"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0147/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/0001-0999/DISK0147/DISK0147.jpg
 machines:
   - id: ibm5160
     type: pcx86

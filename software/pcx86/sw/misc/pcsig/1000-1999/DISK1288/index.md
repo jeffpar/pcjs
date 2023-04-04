@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Library Disk #1288"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1288/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/1000-1999/DISK1288/DISK1288.jpg
 machines:
   - id: ibm5150
     type: pcx86

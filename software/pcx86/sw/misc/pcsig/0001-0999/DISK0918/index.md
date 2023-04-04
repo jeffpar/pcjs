@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Library Disk #918"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0918/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/0001-0999/DISK0918/DISK0918.jpg
 machines:
   - id: ibm5170
     type: pcx86

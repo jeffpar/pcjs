@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Library Disk #2646"
 permalink: /software/pcx86/sw/misc/pcsig/2000-2999/DISK2646/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/2000-2999/DISK2646/DISK2646.jpg
 machines:
   - id: ibm5170
     type: pcx86

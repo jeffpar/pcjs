@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Library Disk #905"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0905/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/0001-0999/DISK0905/DISK0905.jpg
 machines:
   - id: ibm5150
     type: pcx86
