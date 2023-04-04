@@ -66,7 +66,7 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0964
+### Directory of PC-SIG Library Disk #0964
 
      Volume in drive A has no label
      Directory of A:\

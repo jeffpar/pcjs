@@ -17,7 +17,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2602
 
-     Volume in drive A has no label
+     Volume in drive A is #2602 S1.0
      Directory of A:\
 
     3D       ALG       435   8-17-90   4:21p
@@ -65,3 +65,5 @@ machines:
     GO       TXT      1158   4-10-91   2:37a
            43 file(s)     299749 bytes
                            38912 bytes free
+
+![PC-SIG Library Disk #2602]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2602/DISK2602.jpg)

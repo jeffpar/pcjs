@@ -67,16 +67,15 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1288
 
-     Volume in drive A has no label
+     Volume in drive A is #1288 S1.2
      Directory of A:\
 
+    GO       BAT        38  10-19-87   3:56p
+    GO       TXT      1695   1-13-89   1:07p
     BIBLIO   ZRX      2048  12-19-88   9:16p
     CANNING  ZRX      2048  12-19-88   9:16p
     CKBKINDX ZRX      2048  12-19-88   9:16p
     DAILY87  ZRX      2048  12-19-88   9:16p
-    FILE1288 TXT      1191   1-19-89   9:37a
-    GO       BAT        38  10-19-87   3:56p
-    GO       TXT      1695   1-13-89   1:07p
     HOMEINV  ZRX      2048  12-19-88   9:16p
     MAILLIST ZRX      3072  12-19-88   9:16p
     OFFICEFL ZRX      2048  12-19-88   9:16p
@@ -87,5 +86,8 @@ machines:
     SHOPPING ZRX      2048  12-19-88   9:16p
     TUTORIAL ZRX     82944  12-19-88   9:17p
     USINGZR  ZRX     12288  12-19-88   9:17p
-           17 file(s)     123756 bytes
-                           35328 bytes free
+    FILE1288 TXT      4663   4-16-90  10:25a
+           17 file(s)     127228 bytes
+                          233472 bytes free
+
+![PC-SIG Library Disk #1288]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/1000-1999/DISK1288/DISK1288.jpg)

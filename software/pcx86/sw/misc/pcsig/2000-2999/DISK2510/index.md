@@ -17,7 +17,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2510
 
-     Volume in drive A has no label
+     Volume in drive A is PCBREEZE
      Directory of A:\
 
     PCBREEZE EXE    168304   9-16-90  10:23p
@@ -48,3 +48,5 @@ machines:
     FILE2510 TXT      2521  10-04-90  10:03a
            26 file(s)     331961 bytes
                            15360 bytes free
+
+![PC-SIG Library Disk #2510]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2510/DISK2510.jpg)

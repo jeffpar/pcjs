@@ -17,7 +17,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2672
 
-     Volume in drive A has no label
+     Volume in drive A is #2672  S5.0
      Directory of A:\
 
     FE5DOC   EXE    224413   4-25-91   2:52p
@@ -26,4 +26,6 @@ machines:
     SHOW     EXE      2040   9-12-88  10:48a
     FILE2672 TXT      5329   5-30-91   8:09a
             5 file(s)     232463 bytes
-                           87040 bytes free
+                          126976 bytes free
+
+![PC-SIG Library Disk #2672]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2672/DISK2672.jpg)

@@ -184,7 +184,7 @@ ksprbas.bas                                             page 2
 
 {% comment %}samples_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0985
+### Directory of PC-SIG Library Disk #0985
 
      Volume in drive A has no label
      Directory of A:\

@@ -39,7 +39,7 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0841
+### Directory of PC-SIG Library Disk #0841
 
      Volume in drive A has no label
      Directory of A:\

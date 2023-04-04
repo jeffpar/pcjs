@@ -39,22 +39,24 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1665
 
-     Volume in drive A has no label
+     Volume in drive A is KEDITOR #2
      Directory of A:\
 
-    FILE1665 TXT      3405  11-30-89   7:41p
-    GO       BAT        38   1-01-80   1:37a
-    GO       TXT       540  12-01-89  10:30a
-    LANG123  KED     14682   3-30-89   1:16a
     LANGCLIP KED     22407   3-17-89  11:34a
-    LANGDBA3 KED     20673   3-17-89  11:34a
     LANGDBA4 KED     40948   3-17-89   2:03p
-    LANGFORT KED     28841   1-01-80   3:12a
-    LANGMASM KED     27591   1-01-80  12:15a
-    LANGMC   KED     40320   1-01-80  12:29a
-    LANGQB   KED     24154   1-01-80   3:08a
     LANGTASM KED     33649   1-01-80  12:19a
-    LANGTC   KED     48328   1-01-80   4:51a
+    LANG123  KED     14682   3-30-89   1:16a
+    LANGDBA3 KED     20673   3-17-89  11:34a
+    LANGMC   KED     40320   1-01-80  12:29a
+    LANGMASM KED     27591   1-01-80  12:15a
     LANGTPAS KED     32605   1-01-80  12:26a
+    LANGFORT KED     28841   1-01-80   3:12a
+    LANGTC   KED     48328   1-01-80   4:51a
+    LANGQB   KED     24154   1-01-80   3:08a
+    FILE1665 TXT      3405  11-30-89   7:41p
+    GO       TXT       540  12-01-89  10:30a
+    GO       BAT        38   1-01-80   1:37a
            14 file(s)     338181 bytes
                            17408 bytes free
+
+![PC-SIG Library Disk #1665]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/1000-1999/DISK1665/DISK1665.jpg)

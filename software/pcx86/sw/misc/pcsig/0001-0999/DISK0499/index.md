@@ -48,7 +48,7 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0499
+### Directory of PC-SIG Library Disk #0499
 
      Volume in drive A has no label
      Directory of A:\

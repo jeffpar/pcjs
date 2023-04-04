@@ -67,7 +67,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1287
 
-     Volume in drive A has no label
+     Volume in drive A is #1287 v1.2
      Directory of A:\
 
     F1HELP   ZRX     21504   1-20-89  10:31a
@@ -87,3 +87,5 @@ machines:
     ZR       EXE    194462   1-01-80   1:20a
            15 file(s)     349055 bytes
                            11264 bytes free
+
+![PC-SIG Library Disk #1287]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/1000-1999/DISK1287/DISK1287.jpg)

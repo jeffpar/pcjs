@@ -61,7 +61,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2151
 
-     Volume in drive A has no label
+     Volume in drive A is #2151  S3.0
      Directory of A:\
 
     INSTALL  COM      7212   8-08-90   8:24p
@@ -106,8 +106,10 @@ machines:
     TBDRAW   COM      7065   5-08-90  11:54a
     DCGA     COM      2189   8-08-90   8:29p
     MEGA     COM      2408   8-12-90   3:01p
-    GO       BAT        38   1-01-80   1:37a
+    GO       BAT*       38   1-01-80   1:37a
     GO       TXT       540  10-10-90  11:26a
     FILE2151 TXT      4071  10-10-90  11:22a
            45 file(s)     338270 bytes
                             1024 bytes free
+
+![PC-SIG Library Disk #2151]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2151/DISK2151.jpg)

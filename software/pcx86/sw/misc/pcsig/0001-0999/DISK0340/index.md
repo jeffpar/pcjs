@@ -324,7 +324,7 @@ machines:
 
 {% comment %}samples_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0340
+### Directory of PC-SIG Library Disk #0340
 
      Volume in drive A has no label
      Directory of A:\

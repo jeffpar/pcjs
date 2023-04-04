@@ -17,7 +17,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2555
 
-     Volume in drive A has no label
+     Volume in drive A is #2555  S5.0
      Directory of A:\
 
     DISK     ID         41   5-18-91   5:00a
@@ -27,4 +27,6 @@ machines:
     README   DOC      1819   5-18-91   5:00a
     FILE2555 TXT      5329   5-30-91   8:08a
             6 file(s)     175698 bytes
-                          143360 bytes free
+                          183296 bytes free
+
+![PC-SIG Library Disk #2555]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2555/DISK2555.jpg)

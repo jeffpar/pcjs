@@ -17,7 +17,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2638
 
-     Volume in drive A has no label
+     Volume in drive A is #2638 S1.0
      Directory of A:\
 
     INSTALL  BAT      2354   3-20-91  10:06a
@@ -28,3 +28,5 @@ machines:
     GO       TXT       771   6-24-91   4:47p
             6 file(s)     327427 bytes
                            31744 bytes free
+
+![PC-SIG Library Disk #2638]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2638/DISK2638.jpg)

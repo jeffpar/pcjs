@@ -50,7 +50,7 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0514
+### Directory of PC-SIG Library Disk #0514
 
      Volume in drive A has no label
      Directory of A:\

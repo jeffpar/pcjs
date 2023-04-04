@@ -151,7 +151,7 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0431
+### Directory of PC-SIG Library Disk #0431
 
      Volume in drive A has no label
      Directory of A:\

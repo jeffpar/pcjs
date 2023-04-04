@@ -35,9 +35,9 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0825
+### Directory of PC-SIG Library Disk #0825
 
-     Volume in drive A has no label
+     Volume in drive A is #0825 S2.4
      Directory of A:\
 
     GO       BAT       192   8-11-87   9:55a
@@ -65,3 +65,5 @@ machines:
     FILE0825 TXT      1013   4-21-90   1:29a
            23 file(s)     320787 bytes
                            31744 bytes free
+
+![PC-SIG Library Disk #0825]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/0001-0999/DISK0825/DISK0825.jpg)

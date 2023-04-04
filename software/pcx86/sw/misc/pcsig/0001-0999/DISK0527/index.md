@@ -490,7 +490,7 @@ keypress:
 
 {% comment %}samples_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0527
+### Directory of PC-SIG Library Disk #0527
 
      Volume in drive A has no label
      Directory of A:\

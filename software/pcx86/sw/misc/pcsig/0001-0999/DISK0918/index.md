@@ -32,18 +32,20 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0918
+### Directory of PC-SIG Library Disk #0918
 
-     Volume in drive A has no label
+     Volume in drive A is #918  S2.5
      Directory of A:\
 
-    FILES918 TXT      1643   2-01-88  11:58a
-    GO       BAT        38   1-27-88   9:22a
-    GO       TXT       386   1-27-88   9:22a
+    GO       BAT        38   4-18-91   8:22a
     HARNESS  ARC     97459  12-13-87  12:32p
     HOUNDS   ARC     96274  11-22-87   5:24a
     PKXARC   COM     11482  12-15-86
     THISDISK DOC      1304  12-13-87  12:43p
-    THORO    ARC     96653  10-21-87   2:18a
-            8 file(s)     305239 bytes
-                           11264 bytes free
+    THORO    ARC    115799   4-18-91   8:16a
+    GO       TXT      1310   4-18-91   8:53a
+    FILE0918 TXT      1851   4-18-91   7:55a
+            8 file(s)     325517 bytes
+                           30720 bytes free
+
+![PC-SIG Library Disk #0918]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/0001-0999/DISK0918/DISK0918.jpg)

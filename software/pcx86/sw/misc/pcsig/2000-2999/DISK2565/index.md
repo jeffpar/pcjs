@@ -17,7 +17,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2565
 
-     Volume in drive A has no label
+     Volume in drive A is #2565 S1.0
      Directory of A:\
 
     GO       TXT      1066   3-28-91   5:58a
@@ -35,4 +35,6 @@ machines:
     GO       BAT        28  11-13-90   9:23a
     FILE2565 TXT      3331   3-18-91  11:29a
            14 file(s)     188572 bytes
-                          124928 bytes free
+                          164864 bytes free
+
+![PC-SIG Library Disk #2565]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2565/DISK2565.jpg)

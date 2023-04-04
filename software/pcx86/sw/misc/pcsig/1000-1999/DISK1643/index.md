@@ -39,13 +39,15 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1643
 
-     Volume in drive A has no label
+     Volume in drive A is KEDITOR #1
      Directory of A:\
 
-    FILE1643 TXT      3405  11-30-89   7:43p
-    GO       BAT        38   1-01-80   1:37a
-    GO       TXT       540  12-01-89  10:25a
     KED      EXE     59916   3-30-89  12:31a
     README   1ST      3256   3-30-89  12:55a
+    FILE1643 TXT      3405  11-30-89   7:43p
+    GO       TXT       540  12-01-89  10:25a
+    GO       BAT        38   1-01-80   1:37a
             5 file(s)      67155 bytes
-                           91136 bytes free
+                          291840 bytes free
+
+![PC-SIG Library Disk #1643]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/1000-1999/DISK1643/DISK1643.jpg)

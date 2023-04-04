@@ -17,7 +17,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2537
 
-     Volume in drive A has no label
+     Volume in drive A is #2537 S1.11
      Directory of A:\
 
     README   1ST      2360   3-17-91   1:11a
@@ -27,4 +27,6 @@ machines:
     LIST     COM     20951   9-05-90   8:04a
     FILE2537 TXT      1925   4-26-91   2:02p
             6 file(s)     311847 bytes
-                            7168 bytes free
+                           47104 bytes free
+
+![PC-SIG Library Disk #2537]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2537/DISK2537.jpg)

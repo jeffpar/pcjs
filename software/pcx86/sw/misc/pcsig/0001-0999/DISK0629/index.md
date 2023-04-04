@@ -46,7 +46,7 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0629
+### Directory of PC-SIG Library Disk #0629
 
      Volume in drive A has no label
      Directory of A:\

@@ -36,23 +36,20 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0287
+### Directory of PC-SIG Library Disk #0287
 
-     Volume in drive A has no label
+     Volume in drive A is #287  S5.0
      Directory of A:\
 
-    FE       EXE     20097   1-25-89   4:28a
-    FE-MAIN  EXE    102081   1-25-89   4:28a
-    FE-DEF   EXE     52833   1-25-89   4:28a
-    FE-LBL   EXE     85041   1-25-89   4:28a
-    FE-OVL   EXE     70680   1-25-89   4:28a
-    FE       PRO      1820   1-25-89   4:28a
-    PRINTDOC EXE      5153   1-25-89   4:28a
-    ORDERFRM DOC      4677   1-25-89   4:28a
-    ORDER    BAT        24   1-25-89   4:28a
-    RESPONSE          3618   1-25-89   4:28a
-    FILES287 TXT      1538   4-19-89   1:02p
-    GO       BAT        38  10-19-87   3:56p
-    GO       TXT       540   4-19-89   1:03p
-           13 file(s)     348140 bytes
-                            6144 bytes free
+    README   DOC      1824   5-23-91   2:33p
+    DISK     ID         34   5-18-91   5:00a
+    INSTALL  EXE    110146   5-18-91   5:00a
+    INSTALL  DAT     44441   5-18-91   5:00a
+    FILE     001    146554   5-18-91   5:00a
+    FILE     002     49391   5-18-91   5:00a
+    GO       BAT        34   5-23-91   2:33p
+    SHOW     EXE      2040   9-12-88  10:48a
+            8 file(s)     354464 bytes
+                            3072 bytes free
+
+![PC-SIG Library Disk #0287]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/0001-0999/DISK0287/DISK0287.jpg)

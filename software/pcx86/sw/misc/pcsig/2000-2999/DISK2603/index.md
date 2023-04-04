@@ -3,9 +3,9 @@ layout: page
 title: "PC-SIG Library Disk #2603"
 permalink: /software/pcx86/sw/misc/pcsig/2000-2999/DISK2603/
 machines:
-  - id: ibm5170
+  - id: ibm5150
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
@@ -13,17 +13,24 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-{% include machine.html id="ibm5170" %}
+{% include machine.html id="ibm5150" %}
 
 ### Directory of PC-SIG Library Disk #2603
 
-     Volume in drive A has no label
+     Volume in drive A is #2603 S1.0
      Directory of A:\
 
     INSTALL  BAT       708   7-01-90  12:59a
+    HELP         <DIR>       4-09-91   1:15a
     FILE2603 TXT      1925   6-06-91   2:29p
     GO       BAT        37   2-22-91   5:43p
     GO       TXT       927   4-10-91   1:57a
+            5 file(s)       3597 bytes
+
+     Directory of A:\HELP
+
+    .            <DIR>       4-09-91   1:15a
+    ..           <DIR>       4-09-91   1:15a
     ABS      HLP        48   1-24-89  10:19p
     AGAIN    HLP        70   3-02-89   9:08p
     ALGORITH HLP       528   6-03-89  11:24p
@@ -202,5 +209,10 @@ machines:
     YMAX     HLP       511   2-03-89  10:53p
     YMIN     HLP       511   2-03-89  10:54p
     YPOSN    HLP       344   3-02-89  10:08p
-          182 file(s)     133225 bytes
-                         1032192 bytes free
+          180 file(s)     129628 bytes
+
+    Total files listed:
+          185 file(s)     133225 bytes
+                          102400 bytes free
+
+![PC-SIG Library Disk #2603]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2603/DISK2603.jpg)

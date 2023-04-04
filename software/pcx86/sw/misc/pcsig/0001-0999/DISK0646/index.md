@@ -1292,7 +1292,7 @@ machines:
 
 {% comment %}samples_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0646
+### Directory of PC-SIG Library Disk #0646
 
      Volume in drive A has no label
      Directory of A:\

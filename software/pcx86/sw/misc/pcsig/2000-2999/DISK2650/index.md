@@ -17,7 +17,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2650
 
-     Volume in drive A has no label
+     Volume in drive A is #2650 S1.0
      Directory of A:\
 
     BLANK-IT EXE     70322   6-26-91  11:21a
@@ -28,5 +28,10 @@ machines:
     PIK120   EXE     52109   6-26-91  11:28a
     FILE2650 TXT      4885   6-26-91  12:09p
     GO       TXT      3312   6-26-91  12:12p
-            8 file(s)     228300 bytes
-                           90112 bytes free
+    PIK      DOC     13358   3-07-91   5:00p
+    PIK      EXE     32283   3-07-91   5:00p
+    ORDER    FRM      2760   3-07-91   5:00p
+           11 file(s)     276701 bytes
+                           79872 bytes free
+
+![PC-SIG Library Disk #2650]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2650/DISK2650.jpg)

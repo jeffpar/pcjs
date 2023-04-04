@@ -67,7 +67,7 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0808
+### Directory of PC-SIG Library Disk #0808
 
      Volume in drive A has no label
      Directory of A:\

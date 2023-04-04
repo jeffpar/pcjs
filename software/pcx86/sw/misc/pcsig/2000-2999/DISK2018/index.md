@@ -44,26 +44,73 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2018
 
-     Volume in drive A has no label
+     Volume in drive A is #2018 S1
      Directory of A:\
 
+    LHARC        <DIR>       5-27-89   3:31a
+    LHDIR        <DIR>       5-27-89   3:31a
+    2LZH         <DIR>       5-27-89   3:31a
     FILE2018 TXT      2665   1-04-90  11:58a
+    FV           <DIR>       5-27-89   3:31a
+    MAD          <DIR>       5-27-89   3:31a
+    ZIPNOTE      <DIR>       5-27-89   3:31a
     GO       BAT        38   1-01-80   1:37a
     GO       TXT      1387   1-01-80   3:02a
+            9 file(s)       4090 bytes
+
+     Directory of A:\LHARC
+
+    .            <DIR>       5-27-89   3:31a
+    ..           <DIR>       5-27-89   3:31a
+    LHARC    MAN     32054   5-27-89   3:28a
+    LHARC    EXE     30470   5-04-89   3:37p
+            4 file(s)      62524 bytes
+
+     Directory of A:\LHDIR
+
+    .            <DIR>       5-27-89   3:31a
+    ..           <DIR>       5-27-89   3:31a
+    LHDIR    DOC      1718   5-26-89  12:54p
+    LHDIR    EXE     17239   5-26-89  11:38a
+            4 file(s)      18957 bytes
+
+     Directory of A:\2LZH
+
+    .            <DIR>       5-27-89   3:31a
+    ..           <DIR>       5-27-89   3:31a
     2LZH     DOC      1739   5-07-89  11:01p
     2LZH     EXE     13505   5-08-89  11:06a
     FLIPPER  EXE     13021   5-07-89  11:03p
-    LHARC    EXE     30470   5-04-89   3:37p
-    LHARC    MAN     32054   5-27-89   3:28a
-    LHDIR    DOC      1718   5-26-89  12:54p
-    LHDIR    EXE     17239   5-26-89  11:38a
+            5 file(s)      28265 bytes
+
+     Directory of A:\FV
+
+    .            <DIR>       5-27-89   3:31a
+    ..           <DIR>       5-27-89   3:31a
+            2 file(s)          0 bytes
+
+     Directory of A:\MAD
+
+    .            <DIR>       5-27-89   3:31a
+    ..           <DIR>       5-27-89   3:31a
     MAD      EXE     13229   5-28-89
     README   MAD      4791   5-27-89   3:30a
-    DEMO     ANS       322   3-20-89   9:12p
-    DEMO     SET        13   3-20-89   9:12p
-    GARBAGE  ZIP       119   3-20-89   9:12p
-    SAMPLE   SET        72   3-20-89   9:12p
+            4 file(s)      18020 bytes
+
+     Directory of A:\ZIPNOTE
+
+    .            <DIR>       5-27-89   3:31a
+    ..           <DIR>       5-27-89   3:31a
     ZIPNOTE  DOC      3881   5-27-89   3:29a
     ZIPNOTE  EXE     10480   3-20-89   9:12p
-           18 file(s)     146743 bytes
-                            8192 bytes free
+    DEMO     ANS       322   3-20-89   9:12p
+    DEMO     SET        13   3-20-89   9:12p
+    SAMPLE   SET        72   3-20-89   9:12p
+    GARBAGE  ZIP       119   3-20-89   9:12p
+            8 file(s)      14887 bytes
+
+    Total files listed:
+           36 file(s)     146743 bytes
+                          199680 bytes free
+
+![PC-SIG Library Disk #2018]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2018/DISK2018.jpg)

@@ -39,12 +39,14 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0830
+### Directory of PC-SIG Library Disk #0830
 
-     Volume in drive A has no label
+     Volume in drive A is #830 S4.2
      Directory of A:\
 
     WAMPUM42 EXE    234283   8-25-90   9:13a
     WAMPDOC  EXE    127581   8-25-90  10:14a
             2 file(s)     361864 bytes
                                0 bytes free
+
+![PC-SIG Library Disk #0830]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/0001-0999/DISK0830/DISK0830.jpg)

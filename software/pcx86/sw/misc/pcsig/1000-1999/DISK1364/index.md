@@ -48,26 +48,15 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1364
 
-     Volume in drive A has no label
+     Volume in drive A is #1364 S2.0
      Directory of A:\
 
-    ADDENDUM DOC     21473   3-15-90   1:10a
-    APPNOTE  TXT     25811   3-15-90   1:10a
-    AUTHVERI FRM      1744   3-15-90   1:10a
-    DEDICATE DOC       720   3-15-90   1:10a
-    GO       BAT        38   1-01-80   1:37a
-    GO       TXT       576   1-01-80  11:04a
-    LICENSE  DOC      9366   3-15-90   1:10a
-    MANUAL   DOC    140355   7-21-89   1:01a
-    OMBUDSMN ASP       595   3-15-90   1:10a
-    ORDER    DOC      4701   3-15-90   1:10a
-    PKUNZIP  EXE     23528   3-15-90   1:10a
-    PKZIP    EXE     34296   3-15-90   1:10a
-    PKZIPFIX EXE      9224   3-15-90   1:10a
-    PUTAV    EXE      4479   3-15-90   1:10a
-    README   DOC       800   3-15-90   1:10a
-    WHATSNEW 110      2916   3-15-90   1:10a
-    ZIP2EXE  EXE     22188   3-15-90   1:10a
-    FILE1364 TXT      2887   7-13-90  11:28p
-           18 file(s)     305697 bytes
-                            8192 bytes free
+    PKM104   EXE    130190   1-22-91  12:39a
+    PKZF11   EXE     23962   1-22-91   1:25a
+    PKZ110   EXE    149219   1-22-91   2:30a
+    PKL103   EXE     50375   1-22-91  12:46a
+    GO       COM      5428   2-26-91   1:39p
+            5 file(s)     359174 bytes
+                               0 bytes free
+
+![PC-SIG Library Disk #1364]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/1000-1999/DISK1364/DISK1364.jpg)

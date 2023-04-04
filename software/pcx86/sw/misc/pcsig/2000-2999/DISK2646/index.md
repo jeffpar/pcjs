@@ -17,7 +17,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2646
 
-     Volume in drive A has no label
+     Volume in drive A is #2646 S1.0
      Directory of A:\
 
     MRCRY200 EXE    230901   5-30-91  12:59a
@@ -27,4 +27,6 @@ machines:
     GO       BAT        38   1-31-91  12:58a
     GO       TXT      2388   5-30-91   2:08a
             6 file(s)     312538 bytes
-                            7168 bytes free
+                           47104 bytes free
+
+![PC-SIG Library Disk #2646]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2646/DISK2646.jpg)

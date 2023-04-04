@@ -921,7 +921,7 @@ machines:
 
 {% comment %}samples_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0473
+### Directory of PC-SIG Library Disk #0473
 
      Volume in drive A has no label
      Directory of A:\

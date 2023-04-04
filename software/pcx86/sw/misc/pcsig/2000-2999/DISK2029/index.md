@@ -49,17 +49,19 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2029
 
-     Volume in drive A has no label
+     Volume in drive A is #2029 v1.1
      Directory of A:\
 
-    CC312    ZIP     33677   6-05-89   9:28p
-    FD212    ZIP     36934   6-06-89  12:24p
-    FILE2029 TXT      3997   3-13-90   5:27p
     GBLINK   COM      8550   2-21-90   2:21p
     GBLINK   DOC      3135   2-21-90   2:21p
+    FILE2029 TXT      3997   3-13-90   5:27p
+    NC       INI       184   3-13-90   4:34p
+    CC312    ZIP     33677   6-05-89   9:28p
+    FD212    ZIP     36934   6-06-89  12:24p
+    PKUNZIP  EXE     18208   3-06-89
     GO       BAT        38   1-01-80   1:37a
     GO       TXT      1079   1-16-90  11:45a
-    NC       INI       184   3-13-90   4:34p
-    PKUNZIP  EXE     18208   3-06-89
             9 file(s)     105802 bytes
-                           51712 bytes free
+                          250880 bytes free
+
+![PC-SIG Library Disk #2029]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2029/DISK2029.jpg)

@@ -2836,7 +2836,7 @@ trl> and <Num Lock> keys simutaniously. To resume
 
 {% comment %}samples_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0167
+### Directory of PC-SIG Library Disk #0167
 
      Volume in drive A has no label
      Directory of A:\

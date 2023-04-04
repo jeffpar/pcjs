@@ -55,7 +55,7 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0548
+### Directory of PC-SIG Library Disk #0548
 
      Volume in drive A has no label
      Directory of A:\

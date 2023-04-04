@@ -37,7 +37,7 @@ machines:
 {% comment %}info_end{% endcomment %}
 
 
-### Directory of PC-SIG Library Disk 0678
+### Directory of PC-SIG Library Disk #0678
 
      Volume in drive A has no label
      Directory of A:\

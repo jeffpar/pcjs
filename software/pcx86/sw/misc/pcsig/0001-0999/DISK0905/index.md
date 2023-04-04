@@ -207,9 +207,9 @@ machines:
 
 {% comment %}samples_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0905
+### Directory of PC-SIG Library Disk #0905
 
-     Volume in drive A has no label
+     Volume in drive A is #905 v1.1
      Directory of A:\
 
     ABOUTPC  DOC     15191   9-17-88   5:17p
@@ -217,10 +217,7 @@ machines:
     COMMANDS DOC     40149   8-21-88   8:56p
     DEMO     DOC     11216   9-05-88  11:42p
     ERRORS   DOC      8731   8-21-88   9:04p
-    FILES905 TXT      2072   9-28-88  11:20a
     FIRST    DOC     11868   9-05-88  10:58p
-    GO       BAT        38  10-19-87   3:56p
-    GO       TXT       848   9-26-88   3:51p
     HOWTO    DOC     12257   8-21-88   8:52p
     INTRO    DOC      9983   9-05-88  11:01p
     KEYTREE  DOC     10613   9-07-88   8:31p
@@ -241,5 +238,10 @@ machines:
     TUTOR    DOC     16959   9-06-88   9:45p
     UPDATE   DOC     12960   9-07-88   9:08p
     USERS    DOC       935   9-07-88   8:44p
+    FILES905 TXT      2072   9-28-88  11:20a
+    GO       BAT        38  10-19-87   3:56p
+    GO       TXT       848   9-26-88   3:51p
            29 file(s)     233667 bytes
-                           74752 bytes free
+                          114688 bytes free
+
+![PC-SIG Library Disk #0905]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/0001-0999/DISK0905/DISK0905.jpg)

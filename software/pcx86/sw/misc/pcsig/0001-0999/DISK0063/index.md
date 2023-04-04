@@ -15,7 +15,7 @@ machines:
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk 0063
+### Directory of PC-SIG Library Disk #0063
 
      Volume in drive A has no label
      Directory of A:\

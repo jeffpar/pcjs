@@ -44,12 +44,14 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1933
 
-     Volume in drive A has no label
+     Volume in drive A is OVL
      Directory of A:\
 
+    OVL312   ARC    127888   5-10-89  12:43a
     FILE1933 TXT      2591  12-28-89   3:08p
     GO       BAT        38   1-01-80   1:37a
     GO       TXT       540   1-01-80   1:05a
-    OVL312   ARC    127888   5-10-89  12:43a
             4 file(s)     131057 bytes
-                           27648 bytes free
+                          229376 bytes free
+
+![PC-SIG Library Disk #1933]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/1000-1999/DISK1933/DISK1933.jpg)
