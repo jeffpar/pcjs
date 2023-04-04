@@ -841,7 +841,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=0001-0999/DISK0798",
+        "--collection=pcsig/0001-0999/DISK0147",
         "--checkdisk",
         "--rebuild"
       ],

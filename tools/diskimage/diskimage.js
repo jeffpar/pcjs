@@ -140,6 +140,9 @@ function createDisk(diskFile, diskette, argv, done)
         di = readDir(sArchiveFile, arcType, label, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
     } else {
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
+        if (di && done) {
+            done(di);
+        }
     }
     return di;
 }
@@ -1234,13 +1237,13 @@ function processDisk(di, diskFile, argv, diskette)
             createDisk(diskFile, diskette, argv, function(diTemp) {
                 let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
                 diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
-                writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false, undefined, diskette.source);
+                writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, true, undefined, diskette.source);
                 let warning = false;
                 if (diskette.archive.endsWith(".img")) {
                     let json = diTemp.getJSON();
                     diTemp.buildDiskFromJSON(json);
                     let sTempIMG = sTempJSON.replace(".json",".img");
-                    writeDisk(sTempIMG, diTemp, true, 0, true, false, undefined, diskette.source);
+                    writeDisk(sTempIMG, diTemp, true, 0, true, true, undefined, diskette.source);
                     if (!compareDisks(sTempIMG, diskette.archive)) {
                         printf("warning: %s unsuccessfully rebuilt\n", diskette.archive);
                         warning = true;
