@@ -7418,7 +7418,8 @@ machines:
 38115 PRINT "phone is (612) 373-1145.  Address is Dept of Agricultural & Applied Economics"
 38120 PRINT "249 COB, Univ. of Minn., St. Paul Mn., 55108."
 38130 PRINT "............Want a printed copy of this set of suggestions (Y or N) ";
-38135 INPUT Z$ :Z$ =LEFT$(Z$,1) : IF Z$ <> "Y" AND Z$ <> "y" THEN CHAIN"MENU.basOkP↨ⁿöÅ REPEATED MESSAGE FOR PRINTER (DELETE 'GOSUBS' 49000)
+38135 INPUT Z$ :Z$ =LEFT$(Z$,1) : IF Z$ <> "Y" AND Z$ <> "y" THEN CHAIN"MENU.basOk 
+38140 REM REPEATED MESSAGE FOR PRINTER (DELETE 'GOSUBS' 49000)
 38145 LPRINT TAB(20)"USER DOCUMENTATION of MINN-AIDS"
 38150 LPRINT TAB(17)"(Microsoft BASIC CP/M & MSDOS versions)"
 38155 LPRINT "    Most of the MINN-AIDS programs contain internal documentation.  Hard "

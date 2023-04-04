@@ -597,8 +597,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--all='/Volumes/PCSIG_13B/**/*.ZIP'",
-        "PCSIG_13B"
+        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/1000-1999/DISK1000/archive/DISK1000.ZIP'",
+        "--output=%d/..",
+        "--type=json"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -683,12 +684,13 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/*/DISK*/DISK*.json'",
+        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0478/archive/DISK0478.ZIP'",
         "--extract",
         "--expand",
         "--normalize",
         "--overwrite",
-        "--extdir=%d/archive"
+        "--quiet1",
+        "--extdir=%d"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -838,7 +840,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=pcsig/0001-0999",
+        "--collection=pcsig/1000-1999",
         "--checkpage",
         "--rebuild"
       ],

@@ -317,8 +317,6 @@ machines:
 5620 DATA pear, potato, tomato, fruit, pint, liquid, great dane, terrier, sweet, sour, peach, turnip, 5, tree to ground
 5630 DATA bear, fur, fish, seaweed, fish, gills, car, sheet metal, bug, wings, food, nutrients, 3, outside cover
 5640 DATA sheep, fold, macherel, school, dog, cat, bluefish, bait, planet, solar system, tortoise, shell, 1, types of herds
-
-5640 DATA sheep, fold, macherel, school, dog, cat, bluefish, bai
 ```
 
 ## ANTONYM.BAS
@@ -435,7 +433,6 @@ machines:
 5820 DATA explicit, immodest, conceited, valid, ambiguous, improbable, 4
 5830 DATA denounce, commend, rebut, behold, dissemble, establish, 1
 5840 DATA abet, compress, install, polarize, hinder, uncover, 4
-TA denounce, commend, rebut, behold, dissemble, esta
 ```
 
 ## BACKGAM.BAS
@@ -2585,8 +2582,6 @@ machines:
 10330 DATA funny,happy,story,hurry,party,any,many,very,ready,pretty
 10340 DATA write,knew,know,wrote,lamb,talk,walk,laugh,climb,eight
 10350 DATA one,two,three,four,five,six,seven,eight,nine,ten
-0340 DATA write,knew,know,wrote,lamb,talk,walk,laugh,climb,eight
-10350 DATA one,two,three,four,five,six,se
 ```
 
 {% comment %}samples_end{% endcomment %}

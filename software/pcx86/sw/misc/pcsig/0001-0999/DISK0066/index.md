@@ -103,24 +103,24 @@ machines:
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************** ALPHANUMERIC HEX$ WORKSHEET PLAN ************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN             ALPHANUMERIC TO HEXADECIMAL WORKSHEET UTILITY               OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN    This program will printout, on the screen in color or monochrome, a  OPEN
-24 'OPEN full easy-reference worksheet showing the hexadecimal conversions from  OPEN
-26 'OPEN zero (0) to lowercase "z".  This is useful when using a debug or other  OPEN
-28 'OPEN program in which you are inspecting or changing hexadecimal values on   OPEN
-30 'OPEN disk sectors.  You can convert from ASCII directly to HEX.              OPEN
-32 'OPEN                                                                         OPEN
-34 'OPEN    The display is printed out in contrasting color columns. This is     OPEN
-36 'OPEN controlled by line 670-90. If you wish to eliminate the color and use   OPEN
-38 'OPEN BLACK/WHITE MONOCHROME, SIMPLY REM line 690  and remove the REM from    OPEN
-40 'OPEN line 670.    The print out will be in emphasized print and the chart    OPEN
-42 'OPEN is suitable for wall display or notebook use.                           OPEN
-44 'OPEN                                                                         OPEN
-46 'OPEN    This program may be used in whole or in part without license or      OPEN
-48 'OPEN attribution.  (c)   G I N A C O  --  1983           Ver 5.1/160         OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║             ALPHANUMERIC TO HEXADECIMAL WORKSHEET UTILITY               ║
+20 '║                                                                         ║
+22 '║    This program will printout, on the screen in color or monochrome, a  ║
+24 '║ full easy-reference worksheet showing the hexadecimal conversions from  ║
+26 '║ zero (0) to lowercase "z".  This is useful when using a debug or other  ║
+28 '║ program in which you are inspecting or changing hexadecimal values on   ║
+30 '║ disk sectors.  You can convert from ASCII directly to HEX.              ║
+32 '║                                                                         ║
+34 '║    The display is printed out in contrasting color columns. This is     ║
+36 '║ controlled by line 670-90. If you wish to eliminate the color and use   ║
+38 '║ BLACK/WHITE MONOCHROME, SIMPLY REM line 690  and remove the REM from    ║
+40 '║ line 670.    The print out will be in emphasized print and the chart    ║
+42 '║ is suitable for wall display or notebook use.                           ║
+44 '║                                                                         ║
+46 '║    This program may be used in whole or in part without license or      ║
+48 '║ attribution.  (c)   G I N A C O  --  1983           Ver 5.1/160         ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ****** To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 *******
 60 KEY OFF
@@ -578,7 +578,7 @@ machines:
 3020 IF INPTR$ = CHR$( 13 ) THEN RETURN
 3030 IF INPTR$ < > CHR$( 8 ) THEN 3080
 3040 IF FIN$ = "" THEN SOUND 600,4 : GOTO 3000
-3050 PRINT CHR$( 29 );"; CHR$( ☼↔ );
+3050 PRINT CHR$( 29 );"■"; CHR$( 29 );
 3060 FIN$ = LEFT$( ( FIN$ ), LEN( FIN$ ) - 1 )
 3070 GOTO 3000
 3080 IF LEN( FIN$ ) = FINLEN THEN SOUND 600,4 : GOTO 3000
@@ -686,7 +686,7 @@ machines:
 4110 GOSUB 2640
 4120 FINLEN = 14
 4130 LOCATE 21,52
-4140 PRINT "DRIVE? .;
+4140 PRINT "DRIVE? ■:■■■■■■■■.■■■";
 4150 LOCATE 21,59,0
 4160 GOSUB 2960
 4170 FILESPEC$ = FIN$
@@ -710,7 +710,7 @@ machines:
 4350 GOSUB 2640
 4360 FINLEN = 14
 4370 LOCATE 21,52
-4380 PRINT "DRIVE? .;
+4380 PRINT "DRIVE? ■:■■■■■■■■.■■■";
 4390 LOCATE 21,59,0
 4400 GOSUB 2960
 4410 FILESPEC$ = FIN$
@@ -1741,65 +1741,65 @@ machines:
 1010 P = 56
 1020 FOR J=1 TO P
 1030 READ AA$(J),N(J)
-1040 DATA "ALPHAHEX.BAS",1:     REM LN  2000
-1050 DATA "BLUEBERY.BAS",2:     REM     2010
-1060 DATA "BLUEBERY.DOC",3:     REM     2020
-1070 DATA "BLUEBRY2.DOC",4:     REM     2030
-1080 DATA "BLUEMENU.BAS",5:     REM     2040
-1090 DATA "BOXINBOX.BAS",6:     REM LN  2050
-1100 DATA "BOXINPUT.BAS",7:     REM     2060
-1110 DATA "BUSCHECK.BAS",8:     REM     2070
-1120 DATA "CALULATE.BAS",9:     REM     2080
-1130 DATA "CHEKFORM.BAS",10:    REM     2090
-1140 DATA "CHR$PRNT.BAS",11:    REM LN  2100
-1150 DATA "CIRCLE  .GRA",12:    REM     2110
-1160 DATA "COLORSEE.CLR",13:    REM     2120
-1170 DATA "COMPOUND.BAS",14:    REM     2130
-1180 DATA "D&CFORM .BAS",15:    REM     2140
-1190 DATA "EASYRITE.BAS",16:    REM     2145
-1200 DATA "EASYWORD.BAS",17:    REM LN  2150
-1210 DATA "EPSONSET.BAS",18:    REM     2160
-1220 DATA "ESCKEY  .BAS",19:    REM     2170
-1230 DATA "FILEDATE.BAS",20:    REM     2180
-1240 DATA "GASFORM .BAS",21:    REM     2190
-1250 DATA "GENLEGER.BAS",22:    REM     2195
-1260 DATA "GLEGER.DAT  ",23:    REM     2197
-1270 DATA "HEADCLN .BAS",24:    REM LN  2200
-1280 DATA "HEXPRINT.BAS",25:    REM     2210
-1290 DATA "HEXSAY  .BAS",26:    REM     2220
-1300 DATA "IBMLABEL.BAS",27:    REM     2230
-1310 DATA "KEYSET  .BAS",28:    REM     2240
-1320 DATA "LABLFILE.BAS",29:    REM LN  2250
-1330 DATA "LISTSKIP.10P",30:    REM     2252
-1340 DATA "LISTSKIP,17P",31:    REM     2255
-1350 DATA "LPT12SET.BAS",32:    REM     2260
-1360 DATA "MENUPRNT.BAS",33:    REM     2270
-1370 DATA "NICELIST.BAS",34:    REM     2290
-1380 DATA "PC-COLOR.BAS",35:    REM LN  2300
-1390 DATA "PCADD   .GRA",36:    REM     2310
-1400 DATA "PEEKPRNT.BAS",37:    REM     2320
-1410 DATA "PRNTCALL.BAS",38:    REM     2330
-1420 DATA "PROGHEAD.BAS",39:    REM     2340
-1430 DATA "QUICKBOX.CLR",40:    REM LN  2350
-1440 DATA "RANDSEED.BAS",41:    REM     2360
-1450 DATA "SAVINGS .BAS",42:    REM     2380
-1460 DATA "SHOWBOX .BAS",43:    REM     2390
-1470 DATA "SIXBOXES.BAS",44:    REM LN  2400
-1480 DATA "STARTUP .BAS",45:    REM     2410
-1490 DATA "STARTUP .CLR",46:    REM     2420
-1500 DATA "TASKLIST.BAS",47:    REM     2430
-1510 DATA "TESTWRIT.BAS",48:    REM     2462
-1520 DATA "TESTWRIT.DOC",49:    REM     2464
-1530 DATA "TIMESHOW.BAS",50:    REM     2460
-1540 DATA "WEIGHTFM.BAS",51:    REM     2470
-1550 DATA "YESORNO .BAS",52:    REM     2480
-1560 DATA "YOURMENU.BAS",53:    REM     2510
-1570 DATA "ZIPCLEAR.BAS",54:    REM     2520
-1580 DATA "   README   ",55:    REM     2530
-1590 DATA "     GO     ",56:    REM     2540
-1600 DATA "--------.BAS",57:    REM LN  2550
-1610 DATA "--------.BAS",58:    REM     2560
-1620 DATA "--------.BAS",59:    REM     2590
+1040 DATA "ALPHAHEX.BAS",1:     Å LN  2000
+1050 DATA "BLUEBERY.BAS",2:     Å     2010
+1060 DATA "BLUEBERY.DOC",3:     Å     2020
+1070 DATA "BLUEBRY2.DOC",4:     Å     2030
+1080 DATA "BLUEMENU.BAS",5:     Å     2040
+1090 DATA "BOXINBOX.BAS",6:     Å LN  2050
+1100 DATA "BOXINPUT.BAS",7:     Å     2060
+1110 DATA "BUSCHECK.BAS",8:     Å     2070
+1120 DATA "CALULATE.BAS",9:     Å     2080
+1130 DATA "CHEKFORM.BAS",10:    Å     2090
+1140 DATA "CHR$PRNT.BAS",11:    Å LN  2100
+1150 DATA "CIRCLE  .GRA",12:    Å     2110
+1160 DATA "COLORSEE.CLR",13:    Å     2120
+1170 DATA "COMPOUND.BAS",14:    Å     2130
+1180 DATA "D&CFORM .BAS",15:    Å     2140
+1190 DATA "EASYRITE.BAS",16:    Å     2145
+1200 DATA "EASYWORD.BAS",17:    Å LN  2150
+1210 DATA "EPSONSET.BAS",18:    Å     2160
+1220 DATA "ESCKEY  .BAS",19:    Å     2170
+1230 DATA "FILEDATE.BAS",20:    Å     2180
+1240 DATA "GASFORM .BAS",21:    Å     2190
+1250 DATA "GENLEGER.BAS",22:    Å     2195
+1260 DATA "GLEGER.DAT  ",23:    Å     2197
+1270 DATA "HEADCLN .BAS",24:    Å LN  2200
+1280 DATA "HEXPRINT.BAS",25:    Å     2210
+1290 DATA "HEXSAY  .BAS",26:    Å     2220
+1300 DATA "IBMLABEL.BAS",27:    Å     2230
+1310 DATA "KEYSET  .BAS",28:    Å     2240
+1320 DATA "LABLFILE.BAS",29:    Å LN  2250
+1330 DATA "LISTSKIP.10P",30:    Å     2252
+1340 DATA "LISTSKIP,17P",31:    Å     2255
+1350 DATA "LPT12SET.BAS",32:    Å     2260
+1360 DATA "MENUPRNT.BAS",33:    Å     2270
+1370 DATA "NICELIST.BAS",34:    Å     2290
+1380 DATA "PC-COLOR.BAS",35:    Å LN  2300
+1390 DATA "PCADD   .GRA",36:    Å     2310
+1400 DATA "PEEKPRNT.BAS",37:    Å     2320
+1410 DATA "PRNTCALL.BAS",38:    Å     2330
+1420 DATA "PROGHEAD.BAS",39:    Å     2340
+1430 DATA "QUICKBOX.CLR",40:    Å LN  2350
+1440 DATA "RANDSEED.BAS",41:    Å     2360
+1450 DATA "SAVINGS .BAS",42:    Å     2380
+1460 DATA "SHOWBOX .BAS",43:    Å     2390
+1470 DATA "SIXBOXES.BAS",44:    Å LN  2400
+1480 DATA "STARTUP .BAS",45:    Å     2410
+1490 DATA "STARTUP .CLR",46:    Å     2420
+1500 DATA "TASKLIST.BAS",47:    Å     2430
+1510 DATA "TESTWRIT.BAS",48:    Å     2462
+1520 DATA "TESTWRIT.DOC",49:    Å     2464
+1530 DATA "TIMESHOW.BAS",50:    Å     2460
+1540 DATA "WEIGHTFM.BAS",51:    Å     2470
+1550 DATA "YESORNO .BAS",52:    Å     2480
+1560 DATA "YOURMENU.BAS",53:    Å     2510
+1570 DATA "ZIPCLEAR.BAS",54:    Å     2520
+1580 DATA "   README   ",55:    Å     2530
+1590 DATA "     GO     ",56:    Å     2540
+1600 DATA "--------.BAS",57:    Å LN  2550
+1610 DATA "--------.BAS",58:    Å     2560
+1620 DATA "--------.BAS",59:    Å     2590
 1630 NEXT J
 1640 RETURN
 1650 GOTO 210
@@ -1871,7 +1871,7 @@ machines:
 2640 LOCATE,,,0,7:GOTO 2650
 2650 STOP
 2660 END
-2670 REM **********************  SAVEROUTINE ****************************
+2670 REM **********************  SAVE	ROUTINE ****************************
 2680 END
 65100 COLOR 7,0:SAVE"A:BLUEMENU.BAS"
 65200 GOTO 10
@@ -1882,17 +1882,17 @@ machines:
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '***************** FORMATTED BOXES FOR PROGRAM USE   ***********************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN         FORMATTED BOXES WHICH CAN BE ALTERED OR MOVED BY CHANGES        OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN     This program provides four formatted "quick boxes" which may be     OPEN
-24 'OPEN  moved to any place on the screen by changing the coordinates.  They    OPEN
-26 'OPEN  may be changed in form by altering the CHR$ characters used for the    OPEN
-28 'OPEN  corners, the tops and the sides.  The appropriate CHR$ character       OPEN
-30 'OPEN  designation can be found in the table in Appendix G, IBM Basic Manual, OPEN
-32 'OPEN  pages C12 and C13.     A color monitor version using different format- OPEN
-33 'OPEN  ting is BOXINBOX.CLR (c) G I N A C O  -- 1983    Ver 5.1/160/320       OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║         FORMATTED BOXES WHICH CAN BE ALTERED OR MOVED BY CHANGES        ║
+20 '║                                                                         ║
+22 '║     This program provides four formatted "quick boxes" which may be     ║
+24 '║  moved to any place on the screen by changing the coordinates.  They    ║
+26 '║  may be changed in form by altering the CHR$ characters used for the    ║
+28 '║  corners, the tops and the sides.  The appropriate CHR$ character       ║
+30 '║  designation can be found in the table in Appendix G, IBM Basic Manual, ║
+32 '║  pages C12 and C13.     A color monitor version using different format- ║
+33 '║  ting is BOXINBOX.CLR (c) G I N A C O  -- 1983    Ver 5.1/160/320       ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -2005,43 +2005,43 @@ machines:
 ```bas
 5 CLS:KEY OFF:FOR I=1 TO 10:KEY I,"":NEXT:KEY 6,"GOTO 4000"+CHR$(13):KEY 2,"GOTO 50"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 7-43
 7 '**********************   SELECTED INPUT ROUTINE   *************************
-10 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-11 'OPEN                Format-protecting Sting-input Routine                    OPEN
-13 'OPEN                                                                         OPEN
-15 'OPEN    This program provides a simple sub-routine which will permit selec-  OPEN
-17 'OPEN tive keyboard input to a string or single element response prompt. The  OPEN
-19 'OPEN ability to disable any and/or all keys except those absolutely essen-   OPEN
-21 'OPEN tial to the input provide programming flexibilty and reduces operator   OPEN
-23 'OPEN error opportunity.  This program is provided in two forms, color with   OPEN
-25 'OPEN selective SCREEN Function demonstration, and monochrome which uses a    OPEN
-27 'OPEN visible scroll method for printing and clearing. Both BLUEBERY.BAS and  OPEN
-29 'OPEN LABELPRO.BAS use this protected input procedure as well as many other   OPEN
-31 'OPEN programming techniques demonstrated on BLUEBERY Pie A La Mode.          OPEN
-33 'OPEN                                                                         OPEN
-35 'OPEN    MONO Version < F2 >   COLOR Version  < F6 >    BLUEMENU  < F10 >     OPEN
-37 'OPEN                                                                         OPEN
-39 'OPEN                       (u) G I N A C O  - 1983             Ver 5.2/320   OPEN
-41 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+10 '╔═════════════════════════════════════════════════════════════════════════╗
+11 '║                Format-protecting Sting-input Routine                    ║
+13 '║                                                                         ║
+15 '║    This program provides a simple sub-routine which will permit selec-  ║
+17 '║ tive keyboard input to a string or single element response prompt. The  ║
+19 '║ ability to disable any and/or all keys except those absolutely essen-   ║
+21 '║ tial to the input provide programming flexibilty and reduces operator   ║
+23 '║ error opportunity.  This program is provided in two forms, color with   ║
+25 '║ selective SCREEN Function demonstration, and monochrome which uses a    ║
+27 '║ visible scroll method for printing and clearing. Both BLUEBERY.BAS and  ║
+29 '║ LABELPRO.BAS use this protected input procedure as well as many other   ║
+31 '║ programming techniques demonstrated on BLUEBERY Pie A La Mode.          ║
+33 '║                                                                         ║
+35 '║    MONO Version < F2 >   COLOR Version  < F6 >    BLUEMENU  < F10 >     ║
+37 '║                                                                         ║
+39 '║                       (u) G I N A C O  - 1983             Ver 5.2/320   ║
+41 '╚═════════════════════════════════════════════════════════════════════════╝
 43 '   ***** < F2 > MON0  ***** < F6 >  COLOR  ***** < F10 > BLUEMENU  *******
 50 CLS:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 100"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):KEY 6,"GOTO 4000"+CHR$(13):LIST 51-69
 51 '**************************   MONOCHROME VERSION  **************************
-52 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-53 'OPEN                 Format-protecting Sting-input Routine                   OPEN
-54 'OPEN                                                                         OPEN
-55 'OPEN    The monochrome version is straight forward. Follow the prompts and   OPEN
-56 'OPEN you will be participate in a deomonstration of protected keyboard in-   OPEN
-57 'OPEN put. The TONES used to indicate an attempt to enter an illegal stroke   OPEN
-58 'OPEN or command are somewhat exagerated for demonstation purposes only. When OPEN
-59 'OPEN you patch this routine into your program, you may wish to alter the     OPEN
-60 'OPEN various SOUND statements to a shorter duration and a single tone or     OPEN
-61 'OPEN pitch in the vicinity of 2000.  Sound 2000,4 is a comfortable tone and  OPEN
-62 'OPEN duration.  This version uses a single SCREEN statement.  The color ver- OPEN
-63 'OPEN sion uses the multiple SCREEN technique for demonstation purposes.      OPEN
-64 'OPEN                                                                         OPEN
-65 'OPEN    CONTINUE     < F2 >   COLOR Version  < F6 >    BLUEMENU  < F10 >     OPEN
-66 'OPEN                                                                         OPEN
-67 'OPEN                       (u) G I N A C O  - 1983             Ver 5.2/320   OPEN
-68 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+52 '╔═════════════════════════════════════════════════════════════════════════╗
+53 '║                 Format-protecting Sting-input Routine                   ║
+54 '║                                                                         ║
+55 '║    The monochrome version is straight forward. Follow the prompts and   ║
+56 '║ you will be participate in a deomonstration of protected keyboard in-   ║
+57 '║ put. The TONES used to indicate an attempt to enter an illegal stroke   ║
+58 '║ or command are somewhat exagerated for demonstation purposes only. When ║
+59 '║ you patch this routine into your program, you may wish to alter the     ║
+60 '║ various SOUND statements to a shorter duration and a single tone or     ║
+61 '║ pitch in the vicinity of 2000.  Sound 2000,4 is a comfortable tone and  ║
+62 '║ duration.  This version uses a single SCREEN statement.  The color ver- ║
+63 '║ sion uses the multiple SCREEN technique for demonstation purposes.      ║
+64 '║                                                                         ║
+65 '║    CONTINUE     < F2 >   COLOR Version  < F6 >    BLUEMENU  < F10 >     ║
+66 '║                                                                         ║
+67 '║                       (u) G I N A C O  - 1983             Ver 5.2/320   ║
+68 '╚═════════════════════════════════════════════════════════════════════════╝
 69 '   ***** < F2 > MON0  ***** < F6 >  COLOR  ***** < F10 > BLUEMENU  *******
 100 REM ===== MONO VERSION LEAD IN LINE =====
 110 FOR I!=1 TO 10:KEY I!,"":NEXT:LOCATE,,,O,7:SCREEN 0,0,0:
@@ -2201,7 +2201,7 @@ machines:
 1650 IF INPTR$ = CHR$(13) THEN RETURN
 1660 IF INPTR$ < > CHR$(8) THEN 1710
 1670 IF LEN(FIN$) = 0 THEN SOUND 400,3 : GOTO 1620
-1680 PRINT CHR$(29);"; CHR$(☼↔);
+1680 PRINT CHR$(29);"■"; CHR$(29);
 1690 FIN$ = LEFT$(FIN$, LEN(FIN$) - 1)
 1700 GOTO 1620
 1710 IF LEN(FIN$) = FINLEN% THEN SOUND 600,4 : GOTO 1620
@@ -2237,25 +2237,25 @@ machines:
 2010 END
 4000 CLS:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 4100"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):KEY 6,"GOTO 69"+CHR$(13):LIST 4002-4038
 4002 '********************  COLOR/GRAPHICS VERSION  *************************
-4004 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-4006 'OPEN             Format-protecting Sting-input Routine                   OPEN
-4008 'OPEN                                                                     OPEN
-4010 'OPEN     The comments which appear on the Lead-in and Monochrome version OPEN
-4012 'OPEN apply equally to this version. You will obtain more information as  OPEN
-4014 'OPEN the program progresses.  One warning. This program is written in a  OPEN
-4016 'OPEN Multi-screen format. Should you break out of the program when the   OPEN
-4018 'OPEN active and visual screen are not the same, it will appear that you  OPEN
-4020 'OPEN cannot control or regain your cursor.  Do not give up and BOOT the  OPEN
-4022 'OPEN system.  Enter the following commands (even if you cannot see them  OPEN
-4024 'OPEN on the screen) and you should regain control of the cursor. You can OPEN
-4026 'OPEN then do as you wish and see the commands. Type and <ENTER> in this  OPEN
-4027 'OPEN sequence. (You should gain control after one of them): SCREEN,,0    OPEN
-4028 'OPEN SCREEN,,1 and SCREEN,,2                                             OPEN
-4029 'OPEN                                                                     OPEN
-4030 'OPEN   CONTINUE     < F2 >    MONO Version  < F6 >    BLUEMENU  < F10 >  OPEN
-4032 'OPEN                                                                     OPEN
-4034 'OPEN                   (u) G I N A C O  - 1983             Ver 5.2/320   OPEN
-4036 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+4004 '╔═════════════════════════════════════════════════════════════════════╗
+4006 '║             Format-protecting Sting-input Routine                   ║
+4008 '║                                                                     ║
+4010 '║     The comments which appear on the Lead-in and Monochrome version ║
+4012 '║ apply equally to this version. You will obtain more information as  ║
+4014 '║ the program progresses.  One warning. This program is written in a  ║
+4016 '║ Multi-screen format. Should you break out of the program when the   ║
+4018 '║ active and visual screen are not the same, it will appear that you  ║
+4020 '║ cannot control or regain your cursor.  Do not give up and BOOT the  ║
+4022 '║ system.  Enter the following commands (even if you cannot see them  ║
+4024 '║ on the screen) and you should regain control of the cursor. You can ║
+4026 '║ then do as you wish and see the commands. Type and <ENTER> in this  ║
+4027 '║ sequence. (You should gain control after one of them): SCREEN,,0    ║
+4028 '║ SCREEN,,1 and SCREEN,,2                                             ║
+4029 '║                                                                     ║
+4030 '║   CONTINUE     < F2 >    MONO Version  < F6 >    BLUEMENU  < F10 >  ║
+4032 '║                                                                     ║
+4034 '║                   (u) G I N A C O  - 1983             Ver 5.2/320   ║
+4036 '╚═════════════════════════════════════════════════════════════════════╝
 4038 ' ***** < F2 > MON0  ***** < F6 >  COLOR  ***** < F10 > BLUEMENU  ****
 4100 FOR I=1 TO 10:KEY I,"":NEXT:LOCATE,,,0,7:SCREEN 0,1,0,0:A$="":B$="":C$="":D$="":DEFINT A-Z:I=0:DIM A$(200),B$(200),C$(200),INPTR$(50),FIN$(50):FINLEN=0:P!=0:IN$="":SCREEN,,2:CLS:SCREEN,,1:CLS:SCREEN,,0:CLS
 4110 CLS:KEY OFF:GOSUB 4470:GOSUB 4420:GOSUB 4440:GOSUB 4460
@@ -2305,7 +2305,7 @@ machines:
 4550 IF INPTR$=CHR$(13)THEN RETURN
 4560 IF INPTR$<>CHR$(8)THEN 4610
 4570 IF LEN(FIN$)=0 THEN SOUND 400,3:GOTO 4530
-4580 PRINT CHR$(29);";CHR$(☼↔);
+4580 PRINT CHR$(29);"■";CHR$(29);
 4590 FIN$=LEFT$(FIN$,LEN(FIN$)-1)
 4600 GOTO 4530
 4610 IFLEN(FIN$)=FINLENTHENSOUND600,4:GOTO4530
@@ -2325,19 +2325,19 @@ machines:
 
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
-10 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-12 'OPEN                 BUSINESS ACCOUNT BALACING PROGRAM                       OPEN
-14 'OPEN                                                                         OPEN
-16 'OPEN    This program will provide a screen and printer output to reconcile   OPEN
-18 'OPEN a business checking or other money account. It will record and print    OPEN
-20 'OPEN out payee/payor, check or deposit number, and account number. If you    OPEN
-22 'OPEN wish to ignore these input parameters, simply press <ENTER>. Added in-  OPEN
-24 'OPEN structions will appear on the initial screen display when the program   OPEN
-26 'OPEN is run.  For a less complex reconcilation program not needing payee/    OPEN
-28 'OPEN payor, check number, et cetera, see SAVINGS.BAS on this disk.           OPEN
-30 'OPEN    This program may be used, in whole or in part, without license or    OPEN
-32 'OPEN attribution.   (u)  G I N A C O  -  1983              Ver 5.2/320K      OPEN
-34 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+10 '╔═════════════════════════════════════════════════════════════════════════╗
+12 '║                 BUSINESS ACCOUNT BALACING PROGRAM                       ║
+14 '║                                                                         ║
+16 '║    This program will provide a screen and printer output to reconcile   ║
+18 '║ a business checking or other money account. It will record and print    ║
+20 '║ out payee/payor, check or deposit number, and account number. If you    ║
+22 '║ wish to ignore these input parameters, simply press <ENTER>. Added in-  ║
+24 '║ structions will appear on the initial screen display when the program   ║
+26 '║ is run.  For a less complex reconcilation program not needing payee/    ║
+28 '║ payor, check number, et cetera, see SAVINGS.BAS on this disk.           ║
+30 '║    This program may be used, in whole or in part, without license or    ║
+32 '║ attribution.   (u)  G I N A C O  -  1983              Ver 5.2/320K      ║
+34 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -2442,17 +2442,17 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************  ELECTRONIC CALCULATOR MODE!  ***************************
-12 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-14 'OPEN                     SIMPLE CALCULATOR PROGRAM                           OPEN
-16 'OPEN This simple program will run in SCREEN 0,0,0 WIDTH 40 in either mono-   OPEN
-18 'OPEN chrome or color.  The program has been expanded to show the structure   OPEN
-20 'OPEN of multiple statements.  Some of the basic routines may be applicable   OPEN
-22 'OPEN to your programming efforts. Note the use of INPUT$(n) in the RESPONSE  OPEN
-24 'OPEN routine. This is an interesting programming feature.  You may increase  OPEN
-26 'OPEN the screen width for use with a monochrome monitor, by changing the 40  OPEN
-28 'OPEN to 80 in line 160. This program, or any part, may be used without any   OPEN
-30 'OPEN license or attribution.   (c)  G I N A C O  -- 1983    Ver 5.1/160/320  OPEN
-32 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+12 '╔═════════════════════════════════════════════════════════════════════════╗
+14 '║                     SIMPLE CALCULATOR PROGRAM                           ║
+16 '║ This simple program will run in SCREEN 0,0,0 WIDTH 40 in either mono-   ║
+18 '║ chrome or color.  The program has been expanded to show the structure   ║
+20 '║ of multiple statements.  Some of the basic routines may be applicable   ║
+22 '║ to your programming efforts. Note the use of INPUT$(n) in the RESPONSE  ║
+24 '║ routine. This is an interesting programming feature.  You may increase  ║
+26 '║ the screen width for use with a monochrome monitor, by changing the 40  ║
+28 '║ to 80 in line 160. This program, or any part, may be used without any   ║
+30 '║ license or attribution.   (c)  G I N A C O  -- 1983    Ver 5.1/160/320  ║
+32 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -2597,18 +2597,18 @@ machines:
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************** CHECK RECORD AND RECONCILING SHEET  *********************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN           CHECK LEDGER AND STATMENT RECONCILIATION SHEET                OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN   This program will print a check-ledger and reconciliation sheet       OPEN
-24 'OPEN which can be used in a three-ring notebook or clipboard. The program    OPEN
-26 'OPEN will open with a "How many Copies? " query.  Make certain printhead is  OPEN
-28 'OPEN at perforation and printer in on-line before responding. The form can   OPEN
-30 'OPEN be modified for several uses by changing headings and adjusting the     OPEN
-32 'OPEN print spaces in the appropriate form-generating lines.                  OPEN
-34 'OPEN                                                                         OPEN
-36 'OPEN                       (c) G I N A C O  - 1983         Ver 5.2/160/320   OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║           CHECK LEDGER AND STATMENT RECONCILIATION SHEET                ║
+20 '║                                                                         ║
+22 '║   This program will print a check-ledger and reconciliation sheet       ║
+24 '║ which can be used in a three-ring notebook or clipboard. The program    ║
+26 '║ will open with a "How many Copies? " query.  Make certain printhead is  ║
+28 '║ at perforation and printer in on-line before responding. The form can   ║
+30 '║ be modified for several uses by changing headings and adjusting the     ║
+32 '║ print spaces in the appropriate form-generating lines.                  ║
+34 '║                                                                         ║
+36 '║                       (c) G I N A C O  - 1983         Ver 5.2/160/320   ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -2640,16 +2640,16 @@ machines:
 
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
-10 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-12 'OPEN                EPSON/GEMINI CHR$/DECIMAL/HEX$ CHART                     OPEN
-14 'OPEN Formatted printout of EPSON FX-80 (GRAFTRAX) Chr$ codes with decimal &  OPEN
-16 'OPEN hexadecimal equivalents.  Set printer 1 space below perforation.        OPEN
-17 'OPEN                                                                         OPEN
-18 'OPEN During printout, the line spacing is set purposely at less than 8 lines OPEN
-19 'OPEN per inch so the chart will fit on a single sheet of paper. You may make OPEN
-20 'OPEN an adjustment in Line CCCC to set the spacing you want.                 OPEN
-21 'OPEN                       G I N A C O -- 1968             Ver 5.2/160/320   OPEN
-22 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+10 '╔═════════════════════════════════════════════════════════════════════════╗
+12 '║                EPSON/GEMINI CHR$/DECIMAL/HEX$ CHART                     ║
+14 '║ Formatted printout of EPSON FX-80 (GRAFTRAX) Chr$ codes with decimal &  ║
+16 '║ hexadecimal equivalents.  Set printer 1 space below perforation.        ║
+17 '║                                                                         ║
+18 '║ During printout, the line spacing is set purposely at less than 8 lines ║
+19 '║ per inch so the chart will fit on a single sheet of paper. You may make ║
+20 '║ an adjustment in Line CCCC to set the spacing you want.                 ║
+21 '║                       G I N A C O -- 1968             Ver 5.2/160/320   ║
+22 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:FOR I=1 TO 10:KEY I,"":NEXT
@@ -2715,15 +2715,15 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************  COMPOUND INTEREST COMPUTER $$$$$  **********************
-12 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-14 'OPEN                   BASIC COMPOUND INTEREST PROGRAM                       OPEN
-16 'OPEN     This program will quickly display the annual compounded value of    OPEN
-18 'OPEN  a sum at the end of each year -- compounded monthly. Do not use comma  OPEN
-20 'OPEN  when entering initial dollar amount. Enter interest as whole number.   OPEN
-22 'OPEN  MAXIMUM NUMBER OF YEARS IS 30.  To increase, change DIM statements in  OPEN
-24 'OPEN  line 120 accordingly.  This program may be used without license or     OPEN
-26 'OPEN  attribution. (c) G I N A C O --  1983          Ver 5.1/160/320         OPEN
-28 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+12 '╔═════════════════════════════════════════════════════════════════════════╗
+14 '║                   BASIC COMPOUND INTEREST PROGRAM                       ║
+16 '║     This program will quickly display the annual compounded value of    ║
+18 '║  a sum at the end of each year -- compounded monthly. Do not use comma  ║
+20 '║  when entering initial dollar amount. Enter interest as whole number.   ║
+22 '║  MAXIMUM NUMBER OF YEARS IS 30.  To increase, change DIM statements in  ║
+24 '║  line 120 accordingly.  This program may be used without license or     ║
+26 '║  attribution. (c) G I N A C O --  1983          Ver 5.1/160/320         ║
+28 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -2795,17 +2795,17 @@ machines:
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '*****************   DEBIT/CREDIT INPUT WORK FORM  *************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN                      DEBIT CREDIT WORK SHEET                            OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN    This basic form can be used with WORKFILE.BAS as a manual D & C      OPEN 24 'OPEN entry worksheet. When the program is run, you will be queried as to     OPEN
-26 'OPEN the number of copies desired. Make certain the printhead is over the    OPEN
-28 'OPEN perforation and the printer is on line before responding to the number  OPEN
-30 'OPEN question. While the format for the form is for expenditures it may be   OPEN
-32 'OPEN modified easily by changing the headings and changing the spacing in    OPEN
-34 'OPEN the print lines (LINE 160 -- SPACING) which actually generate the form. OPEN
-36 'OPEN                       (c) G I N A C O - 1983          Ver 5.2/160/320   OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║                      DEBIT CREDIT WORK SHEET                            ║
+20 '║                                                                         ║
+22 '║    This basic form can be used with WORKFILE.BAS as a manual D & C      ║ 24 '║ entry worksheet. When the program is run, you will be queried as to     ║
+26 '║ the number of copies desired. Make certain the printhead is over the    ║
+28 '║ perforation and the printer is on line before responding to the number  ║
+30 '║ question. While the format for the form is for expenditures it may be   ║
+32 '║ modified easily by changing the headings and changing the spacing in    ║
+34 '║ the print lines (LINE 160 -- SPACING) which actually generate the form. ║
+36 '║                       (c) G I N A C O - 1983          Ver 5.2/160/320   ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -2839,7 +2839,7 @@ machines:
 50 REM =====  INITIALIZATION ROUTINE =====
 60 CLEAR:SCREEN0,0,0:COLOR7,0:WIDTH80:KEYOFF:FORKK=1TO10:KEYKK,"":NEXTKK:DIMMM$(30),TT$(20),MN$(30):DIMA$(200),INPTR$(200),FIN$(200),FILE$(200),P1%(200):REM =====  BOX PARAMETER DEFINITION  =====
 170 TLC$=CHR$(201):TLC2$=CHR$(218):TLC3$=CHR$(178):TRC$=CHR$(187):TRC2$=CHR$(191):TRC3$=CHR$(178):HL$=CHR$(205):HL2$=CHR$(196):HL3$=CHR$(178):BLC$=CHR$(200):BLC2$=CHR$(192):BLC3$=CHR$(178):BRC$=CHR$(188):BRC2$=CHR$(217):BRC3$=CHR$(178)
-220 VL$=CHR$(186):VL2$=CHR$(179):VL3$=CHR$(178):PR$=" ###":PR2$=" ║###  \                                                                       \":FILLSTR2$="··································································░║":DEFSEG:POKE91,25
+220 VL$=CHR$(186):VL2$=CHR$(179):VL3$=CHR$(178):PR$=" ###":PR2$=" ║###  \                                                                       \":FILLSTR2$="··································································░■■■ ║":DEFSEG:POKE91,25
 280 POKE92,25:LOCATE1,1,0,12,13:A$="":LN=0:NL=0:FIN$="":LC=0:INTPR$="":DEFINTA-Z:I=0:P=1:FINLEN=0:P=1:IN$="":ONERRORGOTO5010
 430 CLS:KEYOFF:BB$=TIME$:REM =====  INITIAL MASTHEAD DISPLAY  =====
 470 GOSUB 2470:COLOR 15,0:LOCATE 9,30:PRINT"EasyRite Processor - 1.5":LOCATE 11,40:PRINT"(c)":COLOR 7,0:LOCATE 15,30:PRINT"User Supported Software":LOCATE 16,30:PRINT"~~~~ ~~~~~~~~~ ~~~~~~~~":LOCATE 17,24:PRINT"Developed by G I N A C O  --  1984
@@ -3089,85 +3089,85 @@ machines:
 6920 CLS:GOSUB 2400:GOSUB 2470:LOCATE 9,27:PRINT"Change From Page 1 <PRESS 1>":LOCATE 11,27:PRINT"Change From Page ? <PRESS 2>":LOCATE 21,40,0:FINLEN=1:LOW=49:HIGH=50:GOSUB 6240:ON VAL(INPTR$)GOTO 7020,6980
 6980 LOCATE 16,25:PRINT"Start at what Page? <ENTER> Pg #";:LOCATE 18,27:PRINT"<Select from Pages 2 thru 9>";:LOCATE 21,40,0:FINLEN=1:LOW=50:HIGH=57:GOSUB 6240:ON VAL(INPTR$)-1 GOTO 7130,7230,7330,7440,7540,7640,7750,7850
 7020 REM =====  START OF LOADED FILE CHANGE ROUTINE, PAGE ONE  =====
-7030 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=1TO20:LOCATEI+1,3:PRINTUSINGPR$;I;:LOCATEI+1,8:PRINTSTRING$(66,"·");"░";";:╩IΘ↕,↓:æA$(I);:â:ì♫J→:Pτ☼╚:Iτ↕:PG#τ◄:PG#τ↕:LNτ◄:éIτ↕╠☼¶:LNτIΘ↕:ì♫å→
+7030 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=1TO20:LOCATEI+1,3:PRINTUSINGPR$;I;:LOCATEI+1,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI+1,8:PRINTA$(I);:NEXT:GOSUB6730:P=200:I=1:PG#=0:PG#=1:LN=0:FORI=1TO20:LN=I+1:GOSUB6790
 7110 IFLN=21THENI=20:GOSUB9010:GOTO7130
 7120 NEXT
 7130 REM =====  START OF SECOND CHANGE PAGE  =====
-7140 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=21TO40:LOCATEI-19,3:PRINTUSINGPR$;I;:LOCATEI-19,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼‼,↓:æA$(I);:â:ì♫J→:Pτ☼╚:Iτ☼¶:PG#τ◄:PG#τ‼:LNτ◄:éIτ☼§╠☼(:LNτIΩ☼‼:ì♫å→
+7140 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=21TO40:LOCATEI-19,3:PRINTUSINGPR$;I;:LOCATEI-19,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-19,8:PRINTA$(I);:NEXT:GOSUB6730:P=200:I=20:PG#=0:PG#=2:LN=0:FORI=21TO40:LN=I-19:GOSUB6790
 7210 IFLN=21THENI=40:GOSUB9010:GOTO7230
 7220 NEXT
 7230 REM =====  START OF THIRD CHANGE PAGE  =====
-7240 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=41TO60:LOCATEI-39,3:PRINTUSINGPR$;I;:LOCATEI-39,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼',↓:æA$(I);:â:ì♫J→:Pτ☼╚:Iτ☼(:PG#τ◄:PG#τ¶:LNτ◄:éIτ☼)╠☼<:LNτIΩ☼':ì♫å→
+7240 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=41TO60:LOCATEI-39,3:PRINTUSINGPR$;I;:LOCATEI-39,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-39,8:PRINTA$(I);:NEXT:GOSUB6730:P=200:I=40:PG#=0:PG#=3:LN=0:FORI=41TO60:LN=I-39:GOSUB6790
 7310 IFLN=21THENI=60:GOSUB9010:GOTO7330
 7320 NEXT
 7330 REM =====  START OF FOURTH CHANGE PAGE  =====
-7340 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=61TO80:LOCATEI-59,3:PRINTUSINGPR$;I;:LOCATEI-59,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼;,↓:æA$(I);:â:ì♫J→:Pτ☼╚:Iτ↕:PG#τ◄:PG#τ§:LNτ◄:éIτ☼=╠☼P:LNτIΩ☼;:ì♫å→
+7340 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=61TO80:LOCATEI-59,3:PRINTUSINGPR$;I;:LOCATEI-59,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-59,8:PRINTA$(I);:NEXT:GOSUB6730:P=200:I=1:PG#=0:PG#=4:LN=0:FORI=61TO80:LN=I-59:GOSUB6790
 7420 IFLN=21THENI=80:GOSUB9010:GOTO7440
 7430 NEXT
 7440 REM =====  START OF FIFTH CHANGE PAGE  =====
-7450 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=81TO100:LOCATEI-79,3:PRINTUSINGPR$;I;:LOCATEI-79,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼O,↓:æA$(I);:â:ì♫J→:Pτ☼╚:Iτ☼¶:PG#τ◄:PG#τ▬:LNτ◄:éIτ☼Q╠☼d:LNτIΩ☼O:ì♫å→
+7450 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=81TO100:LOCATEI-79,3:PRINTUSINGPR$;I;:LOCATEI-79,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-79,8:PRINTA$(I);:NEXT:GOSUB6730:P=200:I=20:PG#=0:PG#=5:LN=0:FORI=81TO100:LN=I-79:GOSUB6790
 7520 IFLN=21THENI=100:GOSUB9010:GOTO7540
 7530 NEXT
 7540 REM =====  START OF SIXTH CHANGE PAGE  =====
-7550 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=101TO120:LOCATEI-99,3:PRINTUSINGPR$;I;:LOCATEI-99,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼c,↓:æA$(I);:â:ì♫J→:Pτ☼<:Iτ☼╚:PG#τ◄:PG#τ↨:LNτ◄:éIτ☼e╠☼x:LNτIΩ☼c:ì♫å→
+7550 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=101TO120:LOCATEI-99,3:PRINTUSINGPR$;I;:LOCATEI-99,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-99,8:PRINTA$(I);:NEXT:GOSUB6730:P=60:I=200:PG#=0:PG#=6:LN=0:FORI=101TO120:LN=I-99:GOSUB6790
 7620 IFLN=21THENI=120:P=I:GOSUB9010:GOTO7640
 7630 NEXT
 7640 REM =====  START OF SEVENTH CHANGE PAGE  =====
-7650 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=121TO140:LOCATEI-119,3:PRINTUSINGPR$;I;:LOCATEI-119,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼w,↓:æA$(I);:â:ì♫J→:Pτ☼╚:Iτ↕:PG#τ◄:PG#τ↑:LNτ◄:éIτ☼y╠☼î:LNτIΩ☼w:ì♫å→
+7650 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=121TO140:LOCATEI-119,3:PRINTUSINGPR$;I;:LOCATEI-119,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-119,8:PRINTA$(I);:NEXT:GOSUB6730:P=200:I=1:PG#=0:PG#=7:LN=0:FORI=121TO140:LN=I-119:GOSUB6790
 7730 IFLN=21THENI=140:GOSUB9010:GOTO7750
 7740 NEXT
 7750 REM =====  START OF EIGTH CHANGE PAGE  =====
-7760 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=141TO160:LOCATEI-139,3:PRINTUSINGPR$;I;:LOCATEI-139,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼ï,↓:æA$(I);:â:ì♫J→:Pτ☼╚:Iτ☼¶:PG#τ◄:PG#τ↓:LNτ◄:éIτ☼ì╠☼á:LNτIΩ☼ï:ì♫å→
+7760 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=141TO160:LOCATEI-139,3:PRINTUSINGPR$;I;:LOCATEI-139,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-139,8:PRINTA$(I);:NEXT:GOSUB6730:P=200:I=20:PG#=0:PG#=8:LN=0:FORI=141TO160:LN=I-139:GOSUB6790
 7830 IFLN=21THENI=140:GOSUB9010:GOTO7850
 7840 NEXT
 7850 REM =====  START OF NINTH CHANGE PAGE  =====
-7860 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=161TO180:LOCATEI-159,3:PRINTUSINGPR$;I;:LOCATEI-159,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼ƒ,↓:æA$(I);:â:ì♫J→:Pτ☼╚:Iτ☼á:PG#τ◄:PG#τ→:LNτ◄:éIτ☼í╠☼┤:LNτIΩ☼ƒ:ì♫å→
+7860 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=161TO180:LOCATEI-159,3:PRINTUSINGPR$;I;:LOCATEI-159,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-159,8:PRINTA$(I);:NEXT:GOSUB6730:P=200:I=160:PG#=0:PG#=9:LN=0:FORI=161TO180:LN=I-159:GOSUB6790
 7930 IFLN=21THENI=180:GOSUB9010:GOTO7950
 7940 NEXT
 7950 REM =====  START OF TENTH CHANGE PAGE  =====
-7960 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=181TO200:LOCATEI-179,3:PRINTUSINGPR$;I;:LOCATEI-179,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼│,↓:æA$(I);:â:ì♫J→:Pτ☼╚:Iτ↕:PG#τ◄:PG#τ☼◙:LNτ◄:éIτ☼╡╠P:LNτIΩ☼│:ì♫å→
+7960 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=181TO200:LOCATEI-179,3:PRINTUSINGPR$;I;:LOCATEI-179,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-179,8:PRINTA$(I);:NEXT:GOSUB6730:P=200:I=1:PG#=0:PG#=10:LN=0:FORI=181TOP:LN=I-179:GOSUB6790
 8040 IFLN=21THENI=200:P=I:GOSUB9010:GOTO9640
 8050 NEXT
 8060 REM =====  START OF IN-MEMORY EDIT ROUTINE, PAGE SELECTOR  =====
 8070 CLS:GOSUB2400:GOSUB2470:LOCATE9,28:PRINT"Edit From Page 1 <PRESS 1>":LOCATE11,28:PRINT"Edit from Page ? <PRESS 2>":LOCATE21,40,0:FINLEN=1:LOW=49:HIGH=50:GOSUB6240:ONVAL(INPTR$)GOTO8170,8130
 8130 LOCATE 16,25:PRINT"Start at what Page? <ENTER> Pg #";:LOCATE 18,27:PRINT"<Select from Pages 2 thru 9>";:LOCATE 21,40,0:FINLEN=1:LOW=50:HIGH=57:GOSUB 6240:ON VAL(INPTR$)-1 GOTO 8260,8340,8420,8510,8590,8670,8760,8840
 8170 REM =====  START OF IN-MEMORY EDIT ROUTINE, PAGE ONE  =====
-8180 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=1TO20:LOCATEI+1,3:PRINTUSINGPR$;I;:LOCATEI+1,8:PRINTSTRING$(66,"·");"░";";:╩IΘ↕,↓:æA$(I);:â:Pτ☼╚:Iτ↕:PG#τ◄:PG#τ↕:LNτ◄:éIτ↕╠☼¶:LNτIΘ↕:ïLNτ☼§═Iτ☼¶:ì♫2#:ë♫D 
+8180 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=1TO20:LOCATEI+1,3:PRINTUSINGPR$;I;:LOCATEI+1,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI+1,8:PRINTA$(I);:NEXT:P=200:I=1:PG#=0:PG#=1:LN=0:FORI=1TO20:LN=I+1:IFLN=21THENI=20:GOSUB9010:GOTO8260
 8250 NEXT
 8260 REM =====  START OF SECOND EDIT PAGE  =====
-8270 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=21TO40:LOCATEI-19,3:PRINTUSINGPR$;I;:LOCATEI-19,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼‼,↓:æA$(I);:â:Pτ☼╚:Iτ☼¶:PG#τ◄:PG#τ‼:LNτ◄:éIτ☼§╠☼(:LNτIΩ☼‼
+8270 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=21TO40:LOCATEI-19,3:PRINTUSINGPR$;I;:LOCATEI-19,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-19,8:PRINTA$(I);:NEXT:P=200:I=20:PG#=0:PG#=2:LN=0:FORI=21TO40:LN=I-19
 8320 IFLN=21THENI=40:GOSUB9010:GOTO8340
 8330 NEXT
 8340 REM =====  START OF THIRD EDIT PAGE  =====
-8350 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=41TO60:LOCATEI-39,3:PRINTUSINGPR$;I;:LOCATEI-39,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼',↓:æA$(I);:â:Pτ☼╚:Iτ☼(:PG#τ◄:PG#τ¶:LNτ◄:éIτ☼)╠☼<:LNτIΩ☼'
+8350 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=41TO60:LOCATEI-39,3:PRINTUSINGPR$;I;:LOCATEI-39,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-39,8:PRINTA$(I);:NEXT:P=200:I=40:PG#=0:PG#=3:LN=0:FORI=41TO60:LN=I-39
 8400 IFLN=21THENI=60:GOSUB9010:GOTO8420
 8410 NEXT
 8420 REM =====  START OF FOURTH PAGE  =====
-8430 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=61TO80:LOCATEI-59,3:PRINTUSINGPR$;I;:LOCATEI-59,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼;,↓:æA$(I);:â:Pτ☼╚:Iτ↕:PG#τ◄:PG#τ§:LNτ◄:éIτ☼=╠☼P:LNτIΩ☼;
+8430 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=61TO80:LOCATEI-59,3:PRINTUSINGPR$;I;:LOCATEI-59,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-59,8:PRINTA$(I);:NEXT:P=200:I=1:PG#=0:PG#=4:LN=0:FORI=61TO80:LN=I-59
 8490 IFLN=21THENI=80:GOSUB9010:GOTO8510
 8500 NEXT
 8510 REM =====  START OF FIFTH EDIT PAGE  =====
-8520 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=81TO100:LOCATEI-79,3:PRINTUSINGPR$;I;:LOCATEI-79,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼O,↓:æA$(I);:â:Pτ☼╚:Iτ☼¶:PG#τ◄:PG#τ▬:LNτ◄:éIτ☼Q╠☼d:LNτIΩ☼O
+8520 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=81TO100:LOCATEI-79,3:PRINTUSINGPR$;I;:LOCATEI-79,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-79,8:PRINTA$(I);:NEXT:P=200:I=20:PG#=0:PG#=5:LN=0:FORI=81TO100:LN=I-79
 8570 IFLN=21THENI=100:GOSUB9010:GOTO8590
 8580 NEXT
 8590 REM =====  START OF SIXTH EDIT PAGE  =====
-8600 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=101TO120:LOCATEI-99,3:PRINTUSINGPR$;I;:LOCATEI-99,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼c,↓:æA$(I);:â:Pτ☼<:Iτ☼╚:PG#τ◄:PG#τ↨:LNτ◄:éIτ☼e╠☼x:LNτIΩ☼c
+8600 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=101TO120:LOCATEI-99,3:PRINTUSINGPR$;I;:LOCATEI-99,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-99,8:PRINTA$(I);:NEXT:P=60:I=200:PG#=0:PG#=6:LN=0:FORI=101TO120:LN=I-99
 8650 IFLN=21THENI=120:P=I:GOSUB9010:GOTO8670
 8660 NEXT
 8670 REM =====  START OF SEVENTH EDIT PAGE  =====
-8680 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=121TO140:LOCATEI-119,3:PRINTUSINGPR$;I;:LOCATEI-119,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼w,↓:æA$(I);:â:Pτ☼╚:Iτ↕:PG#τ◄:PG#τ↑:LNτ◄:éIτ☼y╠☼î:LNτIΩ☼w
+8680 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=121TO140:LOCATEI-119,3:PRINTUSINGPR$;I;:LOCATEI-119,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-119,8:PRINTA$(I);:NEXT:P=200:I=1:PG#=0:PG#=7:LN=0:FORI=121TO140:LN=I-119
 8740 IFLN=21THENI=140:GOSUB9010:GOTO8760
 8750 NEXT
 8760 REM =====  START OF EIGTH EDIT PAGE  =====
-8770 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=141TO160:LOCATEI-139,3:PRINTUSINGPR$;I;:LOCATEI-139,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼ï,↓:æA$(I);:â:Pτ☼╚:Iτ☼¶:PG#τ◄:PG#τ↓:LNτ◄:éIτ☼ì╠☼á:LNτIΩ☼ï
+8770 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=141TO160:LOCATEI-139,3:PRINTUSINGPR$;I;:LOCATEI-139,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-139,8:PRINTA$(I);:NEXT:P=200:I=20:PG#=0:PG#=8:LN=0:FORI=141TO160:LN=I-139
 8820 IFLN=21THENI=140:GOSUB9010:GOTO8840
 8830 NEXT
 8840 REM =====  START OF NINTH EDIT PAGE  =====
-8850 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=161TO180:LOCATEI-159,3:PRINTUSINGPR$;I;:LOCATEI-159,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼ƒ,↓:æA$(I);:â:Pτ☼╚:Iτ☼á:PG#τ◄:PG#τ→:LNτ◄:éIτ☼í╠☼┤:LNτIΩ☼ƒ
+8850 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=161TO180:LOCATEI-159,3:PRINTUSINGPR$;I;:LOCATEI-159,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-159,8:PRINTA$(I);:NEXT:P=200:I=160:PG#=0:PG#=9:LN=0:FORI=161TO180:LN=I-159
 8900 IFLN=21THENI=180:GOSUB9010:GOTO8920
 8910 NEXT
 8920 REM =====  START OF TENTH PAGE  =====
-8930 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=181TO200:LOCATEI-179,3:PRINTUSINGPR$;I;:LOCATEI-179,8:PRINTSTRING$(66,"·");"░";";:╩IΩ☼│,↓:æA$(I);:â:Pτ☼╚:Iτ↕:PG#τ◄:PG#τ☼◙:LNτ◄:éIτ☼╡╠P:LNτIΩ☼│
+8930 CLS:GOSUB2840:GOSUB3130:GOSUB3020:FORI=181TO200:LOCATEI-179,3:PRINTUSINGPR$;I;:LOCATEI-179,8:PRINTSTRING$(66,"·");"░";"■■■";:LOCATEI-179,8:PRINTA$(I);:NEXT:P=200:I=1:PG#=0:PG#=10:LN=0:FORI=181TOP:LN=I-179
 8990 IFLN=21THENI=200:P=I:GOSUB9010:GOTO9640
 9000 NEXT
 9010 REM =====  IS THIS CORRECT QUERY SUBROUTINE  =====
@@ -3341,21 +3341,21 @@ machines:
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 7 '***************************************************************************
 9 '*****************  POOR MAN WORD PROCESSOR ROUTINE  ***********************
-13 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-15 'OPEN                EPSON/GEMINI 10/15 SIMPLE WORD PROCESSOR                 OPEN
-17 'OPEN                                                                         OPEN
-19 'OPEN    This is a simple, high-speed, no-file word-processing program with   OPEN
-21 'OPEN a six print style option. If you do not like the print styles, you      OPEN
-23 'OPEN can modify the appropriate line with the codes contained in the print   OPEN
-25 'OPEN control subroutine at line 5000.   If you do make this change, you      OPEN
-27 'OPEN may wish to change the input menu.  The DIM statement is set to give    OPEN
-29 'OPEN you a fifty line printed page. ENTER will give you a blank line feed.   OPEN
-31 'OPEN To break out of the program when done "typewriting", use Ctrl/BREAK.    OPEN
-32 'OPEN    When using print expanded print styles, remember to reduce the num-  OPEN
-33 'OPEN ber of characters entered in a line or you will get wrap-around print.  OPEN
-34 'OPEN    This program, in whole or part, may be used without license or       OPEN
-35 'OPEN attribution.  (c) G I N A C O  -  1983               Ver 5.2/320        OPEN
-37 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+13 '╔═════════════════════════════════════════════════════════════════════════╗
+15 '║                EPSON/GEMINI 10/15 SIMPLE WORD PROCESSOR                 ║
+17 '║                                                                         ║
+19 '║    This is a simple, high-speed, no-file word-processing program with   ║
+21 '║ a six print style option. If you do not like the print styles, you      ║
+23 '║ can modify the appropriate line with the codes contained in the print   ║
+25 '║ control subroutine at line 5000.   If you do make this change, you      ║
+27 '║ may wish to change the input menu.  The DIM statement is set to give    ║
+29 '║ you a fifty line printed page. ENTER will give you a blank line feed.   ║
+31 '║ To break out of the program when done "typewriting", use Ctrl/BREAK.    ║
+32 '║    When using print expanded print styles, remember to reduce the num-  ║
+33 '║ ber of characters entered in a line or you will get wrap-around print.  ║
+34 '║    This program, in whole or part, may be used without license or       ║
+35 '║ attribution.  (c) G I N A C O  -  1983               Ver 5.2/320        ║
+37 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 FOR I=1 TO 10:KEY I,"":NEXT:KEY OFF
@@ -3484,21 +3484,21 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************  PRINTER STYLES AND CONTROL CODES  **********************
-12 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-14 'OPEN                EPSON/GEMINI 10/15 PRINT CONTROL PRINTOUT                OPEN
-16 'OPEN                                                                         OPEN
-18 'OPEN    This program establishes a series of standard control codes for      OPEN
-20 'OPEN the MX-80 and GEMINI series printers. If the controls are entered in    OPEN
-22 'OPEN your program as a subroutine and read on initializing, they may be      OPEN
-24 'OPEN used for printer control from your program in single or combined form.  OPEN
-26 'OPEN Run this program for an example of the print formats and then check out OPEN
-28 'OPEN the referenced line numbers to see the code make up and 'call code.'    OPEN
-30 'OPEN For an easy merge task, call up PRNTCALL.BAS on this disk.              OPEN
-32 'OPEN    The error routine will take care of printer 'off' or 'off line'. It  OPEN
-34 'OPEN will go to Basic error-handling for 'paper-out' or others.  This pro-   OPEN
-36 'OPEN gram may be used in whole or part without license or attribution.       OPEN
-38 'OPEN                    (c) G I N A C O   1983            Ver 5.1/160/320    OPEN
-40 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+12 '╔═════════════════════════════════════════════════════════════════════════╗
+14 '║                EPSON/GEMINI 10/15 PRINT CONTROL PRINTOUT                ║
+16 '║                                                                         ║
+18 '║    This program establishes a series of standard control codes for      ║
+20 '║ the MX-80 and GEMINI series printers. If the controls are entered in    ║
+22 '║ your program as a subroutine and read on initializing, they may be      ║
+24 '║ used for printer control from your program in single or combined form.  ║
+26 '║ Run this program for an example of the print formats and then check out ║
+28 '║ the referenced line numbers to see the code make up and 'call code.'    ║
+30 '║ For an easy merge task, call up PRNTCALL.BAS on this disk.              ║
+32 '║    The error routine will take care of printer 'off' or 'off line'. It  ║
+34 '║ will go to Basic error-handling for 'paper-out' or others.  This pro-   ║
+36 '║ gram may be used in whole or part without license or attribution.       ║
+38 '║                    (c) G I N A C O   1983            Ver 5.1/160/320    ║
+40 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS
@@ -3613,16 +3613,16 @@ machines:
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):KEY OFF:LIST 10-57
 13 '*****************  ESCAPE KEY RESPONSE SUBROUTINE  ************************
-19 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-22 'OPEN This will establish 'ESC' key as a 'CONTINUE' inkey response.  To use,  OPEN
-25 'OPEN delete lines 05-45, renumber to fit your program, save with the 'A'     OPEN
-28 'OPEN option and then merge in your program. Go to the subroutine with        OPEN
-31 'OPEN a 'GOSUB' if you intend to use the procedure more than once.            OPEN
-34 'OPEN If you do not want the F-KEY line ON, delete 'KEY-ON' from line 140.    OPEN
-37 'OPEN If you want the prompt 'TO CONTINUE, PRESS ESC KEY' higher on screen.   OPEN
-40 'OPEN Change the LOCATE 25 in the appropriate program lines.                  OPEN
-41 'OPEN                 (c) G I N A C O  -1983                 Ver 5.1/160/320  OPEN
-44 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+19 '╔═════════════════════════════════════════════════════════════════════════╗
+22 '║ This will establish 'ESC' key as a 'CONTINUE' inkey response.  To use,  ║
+25 '║ delete lines 05-45, renumber to fit your program, save with the 'A'     ║
+28 '║ option and then merge in your program. Go to the subroutine with        ║
+31 '║ a 'GOSUB' if you intend to use the procedure more than once.            ║
+34 '║ If you do not want the F-KEY line ON, delete 'KEY-ON' from line 140.    ║
+37 '║ If you want the prompt 'TO CONTINUE, PRESS ESC KEY' higher on screen.   ║
+40 '║ Change the LOCATE 25 in the appropriate program lines.                  ║
+41 '║                 (c) G I N A C O  -1983                 Ver 5.1/160/320  ║
+44 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -3643,22 +3643,22 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 13 '***************** FILE DATE AND TIME STAMP PROGRAM  ***********************
-17 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-19 'OPEN           PROGRAM TO CHANGE DATE AND HOUR OF DISK FILES                 OPEN
-21 'OPEN                                                                         OPEN
-23 'OPEN     This great basic program was written by Clay Jones of Tolleson, AZ. OPEN
-25 'OPEN You may have noticed that all of the files on the DOS Disk show the     OPEN
-27 'OPEN same date and hour. It might seem as if the internal clock had failed   OPEN
-29 'OPEN or there were some mighty fast and prolific programmers. This program   OPEN
-31 'OPEN permits you to put a new "time/date stamp" on PC disk files. It is an   OPEN
-33 'OPEN easy program to use. It is self-documenting.  The DIM statement has     OPEN
-35 'OPEN been set at 20. It is recommended that you limit the update to only     OPEN
-37 'OPEN 10 files in one "run" of the program. This will keep your input list    OPEN
-39 'OPEN at a reasonable level.  This program will work on .COM files also.      OPEN
-41 'OPEN                                                                         OPEN
-43 'OPEN     This program may be used in whole or in part without license or     OPEN
-45 'OPEN attribution.         (c) G I N A C O  -- 1983      Ver 5.1 160/320      OPEN
-47 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+17 '╔═════════════════════════════════════════════════════════════════════════╗
+19 '║           PROGRAM TO CHANGE DATE AND HOUR OF DISK FILES                 ║
+21 '║                                                                         ║
+23 '║     This great basic program was written by Clay Jones of Tolleson, AZ. ║
+25 '║ You may have noticed that all of the files on the DOS Disk show the     ║
+27 '║ same date and hour. It might seem as if the internal clock had failed   ║
+29 '║ or there were some mighty fast and prolific programmers. This program   ║
+31 '║ permits you to put a new "time/date stamp" on PC disk files. It is an   ║
+33 '║ easy program to use. It is self-documenting.  The DIM statement has     ║
+35 '║ been set at 20. It is recommended that you limit the update to only     ║
+37 '║ 10 files in one "run" of the program. This will keep your input list    ║
+39 '║ at a reasonable level.  This program will work on .COM files also.      ║
+41 '║                                                                         ║
+43 '║     This program may be used in whole or in part without license or     ║
+45 '║ attribution.         (c) G I N A C O  -- 1983      Ver 5.1 160/320      ║
+47 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 FOR I=1 TO 10:KEY I,"":NEXT
@@ -3695,19 +3695,19 @@ machines:
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************   GAS/DIESEL MILEAGE CHART  *****************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN     AUTOMOBILE AND RECREATIONAL VEHICLE MILEAGE AND TRIP RECORD         OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN   This program produces a chart and record which is suitable for re-    OPEN
-24 'OPEN cording daily & trip mileage in an automobile or R.V.  It is suitable   OPEN
-26 'OPEN for tax records, if appropriate. The headings include: Octane, location OPEN
-28 'OPEN of fuel purchase, date, odometer reading, cost/gallon; # of gallons     OPEN
-30 'OPEN purchased, total $$$ paid, total mileage between fill ups; and miles    OPEN
-32 'OPEN per gallon.  The daily trip portion indicates the location of the over- OPEN
-34 'OPEN night stop, the odometer reading, and the total daily (trip) mileage.   OPEN
-35 'OPEN   Try this form on your next trip.  The results are interesting.        OPEN
-36 'OPEN                     (c) G I N A C O  -- 1983          Ver 5.2/160/320   OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║     AUTOMOBILE AND RECREATIONAL VEHICLE MILEAGE AND TRIP RECORD         ║
+20 '║                                                                         ║
+22 '║   This program produces a chart and record which is suitable for re-    ║
+24 '║ cording daily & trip mileage in an automobile or R.V.  It is suitable   ║
+26 '║ for tax records, if appropriate. The headings include: Octane, location ║
+28 '║ of fuel purchase, date, odometer reading, cost/gallon; # of gallons     ║
+30 '║ purchased, total $$$ paid, total mileage between fill ups; and miles    ║
+32 '║ per gallon.  The daily trip portion indicates the location of the over- ║
+34 '║ night stop, the odometer reading, and the total daily (trip) mileage.   ║
+35 '║   Try this form on your next trip.  The results are interesting.        ║
+36 '║                     (c) G I N A C O  -- 1983          Ver 5.2/160/320   ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS
@@ -3742,25 +3742,25 @@ machines:
 
 ```bas
 1 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 2-47
-2 ' KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-3 ' OPEN           GENERAL LEDGER WORKFILE ENTRY SHEET WITH MONTH SORT           OPEN
-5 ' OPEN    This program provides a formatted Record Form for General Ledger or  OPEN
-6 ' OPEN daily journal input. The file can be saved under your FILESPEC$.  A     OPEN
-7 ' OPEN sample file for retrieval, review, and printout is named GLEGER.DAT.    OPEN
-8 ' OPEN User may select annual or monthly printouts of a wide variety.  It is   OPEN
-9 ' OPEN necessary to input the month with three capital letters as the print    OPEN
-10 'OPEN sort looks for the first three letters of the month name; i.e.:, JAN,   OPEN
-11 'OPEN FEB, MAR, etc.  The ENTRY under CHECK # may be as desired;i.e. NUMBER,  OPEN
-12 'OPEN INCOME, CASH, NAME, etc.  INCOME entries under CODE column may be user  OPEN
-13 'OPEN specified with different codes (101,102, etc) to show separate income   OPEN
-14 'OPEN classes (Load GLEGER.DAT to demonstrate).  The PRINT REPORT routine is  OPEN
-15 'OPEN able to discriminate and print out different categories.  DIM size may  OPEN
-16 'OPEN be decreased (lines 390-400) for smaller memory machines.  300 is OK    OPEN
-17 'OPEN for 64K.  Print this documentation with LLIST 1-45.  Delete line #1 to  OPEN
-18 'OPEN start program with basic menu.   When <PRESS> is directed, do not use   OPEN
-19 'OPEN <ENTER>   When <ENTER> is directed, press letter/number then <ENTER>.   OPEN
-20 'OPEN                          (c) G I N A C O -- 1987           Ver 5.871    OPEN
-21 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+2 ' ╔═════════════════════════════════════════════════════════════════════════╗
+3 ' ║           GENERAL LEDGER WORKFILE ENTRY SHEET WITH MONTH SORT           ║
+5 ' ║    This program provides a formatted Record Form for General Ledger or  ║
+6 ' ║ daily journal input. The file can be saved under your FILESPEC$.  A     ║
+7 ' ║ sample file for retrieval, review, and printout is named GLEGER.DAT.    ║
+8 ' ║ User may select annual or monthly printouts of a wide variety.  It is   ║
+9 ' ║ necessary to input the month with three capital letters as the print    ║
+10 '║ sort looks for the first three letters of the month name; i.e.:, JAN,   ║
+11 '║ FEB, MAR, etc.  The ENTRY under CHECK # may be as desired;i.e. NUMBER,  ║
+12 '║ INCOME, CASH, NAME, etc.  INCOME entries under CODE column may be user  ║
+13 '║ specified with different codes (101,102, etc) to show separate income   ║
+14 '║ classes (Load GLEGER.DAT to demonstrate).  The PRINT REPORT routine is  ║
+15 '║ able to discriminate and print out different categories.  DIM size may  ║
+16 '║ be decreased (lines 390-400) for smaller memory machines.  300 is OK    ║
+17 '║ for 64K.  Print this documentation with LLIST 1-45.  Delete line #1 to  ║
+18 '║ start program with basic menu.   When <PRESS> is directed, do not use   ║
+19 '║ <ENTER>   When <ENTER> is directed, press letter/number then <ENTER>.   ║
+20 '║                          (c) G I N A C O -- 1987           Ver 5.871    ║
+21 '╚═════════════════════════════════════════════════════════════════════════╝
 45 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 47 ' === To avoid DOCUMENTATION BOX, REM or DELETE line 1. Resave Program.===
 60 ' ===== GENERAL ACCOUNTING JOURNAL ENTRY PROGRAM FOR PC/XT/AT (IBM)
@@ -3913,10 +3913,13 @@ machines:
 1530 ' ===== FORMAT FOR INITIAL DATA FILE INPUT ROUTINE
 1540 WIDTH 80:LOCATE,,0
 1550 COLOR 15:LOCATE 3,5:PRINT"Enter DATA in UPPER CASE only.  Wrong characters will be rejected by tone.":COLOR 7
-1560 LOCATE 5,15:PRINT"DATE (MMM,DD): ":LOCATE 5,50:PRINT"
-1570 LOCATE 7,15:PRINT"Check # or Income: ":LOCATE 7,50:PRINT"
-1580 LOCATE 9,15:PRINT"DESCRIPTION: ":LOCATE 9,50:PRINT"°-6♠╩ ☼♂,☼☼:æ"TO/FROM: ":╩ ☼♂,☼2:æ").@LOCATE 13,15:PRINT"ACCOUNT (CODE) #: ":LOCATE 13,50:PRINT"
-1610 LOCATE 15,15:PRINT"I or E: ":LOCATE 15,50:PRINT"}.T♠╩ ☼◄,☼☼:æ"$ AMOUNT: ":╩ ☼◄,☼2:æ""
+1560 LOCATE 5,15:PRINT"DATE (MMM,DD): ":LOCATE 5,50:PRINT"■■■-■■
+1570 LOCATE 7,15:PRINT"Check # or Income: ":LOCATE 7,50:PRINT"■■■■■■
+1580 LOCATE 9,15:PRINT"DESCRIPTION: ":LOCATE 9,50:PRINT"■■■■■■■■■■■■■■■
+1590 LOCATE 11,15:PRINT"TO/FROM: ":LOCATE 11,50:PRINT"■■■■■■■■■■■■■■■
+1600 LOCATE 13,15:PRINT"ACCOUNT (CODE) #: ":LOCATE 13,50:PRINT"■■■■
+1610 LOCATE 15,15:PRINT"I or E: ":LOCATE 15,50:PRINT"■
+1620 LOCATE 17,15:PRINT"$ AMOUNT: ":LOCATE 17,50:PRINT"■■■■■■■■■■"
 1630 LOCATE  22,1:PRINT WT$:LOCATE 23,1:PRINT WU$
 1640 RETURN
 1650 ' ===== OUTLINE FOR INITIAL DATA FILE INPUT ROUTINE
@@ -3932,7 +3935,7 @@ machines:
 1750 ' ===== RECORD 1: MONTH AND DAY
 1760 LOCATE 5,4:PRINT I:LOCATE 5,47:PRINT"1.
 1770 FA=6:LOW=32:HA=90
-1780 COLOR 15:LOCATE 5,50:PRINT"":COLOR 7
+1780 COLOR 15:LOCATE 5,50:PRINT"■■■-■■":COLOR 7
 1790 LOCATE 5,70:PRINT"<ENTER>
 1800 LOCATE 5,50
 1810 GOSUB 7240
@@ -3952,7 +3955,7 @@ machines:
 1950 ' ===== RECORD 2: CHECK NUMBER OR INCOME
 1960 LOCATE 7,47:PRINT"2.
 1970 FA=6:LOW=32:HA=90
-1980 COLOR 15:LOCATE 7,50:PRINT"":COLOR 7
+1980 COLOR 15:LOCATE 7,50:PRINT"■■■■■■":COLOR 7
 1990 LOCATE 7,70:PRINT"<ENTER>
 2000 LOCATE 7,50
 2010 GOSUB 7240
@@ -3963,7 +3966,7 @@ machines:
 2060 ' ===== RECORD 3: DESCRIPTION
 2070 LOCATE 9,47:PRINT"3.
 2080 FA=15:LOW=32:HA=90
-2090 COLOR 15:LOCATE 9,50:PRINT":┐ ↑
+2090 COLOR 15:LOCATE 9,50:PRINT"■■■■■■■■■■■■■■■":COLOR 7
 2100 LOCATE 9,70:PRINT"<ENTER>
 2110 LOCATE 9,50
 2120 GOSUB 7240
@@ -3974,7 +3977,7 @@ machines:
 2170 ' ===== RECORD 4: TO/FROM
 2180 LOCATE 11,47:PRINT"4.
 2190 FA=15:LOW=32:HA=90
-2200 COLOR 15:LOCATE 11,50:PRINT":┐ ↑
+2200 COLOR 15:LOCATE 11,50:PRINT"■■■■■■■■■■■■■■■":COLOR 7
 2210 LOCATE 11,70:PRINT"<ENTER>
 2220 LOCATE 11,50
 2230 GOSUB 7240
@@ -3985,7 +3988,7 @@ machines:
 2280 ' ===== RECORD 5" ACCOUNT OR CODE NUMBER
 2290 LOCATE 13,47:PRINT"5.
 2300 FA=4:LOW=48:HA=57
-2310 COLOR 15:LOCATE 13,50:PRINT"":COLOR 7
+2310 COLOR 15:LOCATE 13,50:PRINT"■■■■":COLOR 7
 2320 LOCATE 13,70:PRINT"<ENTER>
 2330 LOCATE 13,50
 2340 GOSUB 7240
@@ -3996,7 +3999,7 @@ machines:
 2390 ' ===== RECORD 6: EXPENSE OR INCOME (E/I)
 2400 LOCATE 15,47:PRINT"6.
 2410 FA=1:LOW=69:HA=78
-2420 COLOR 15:LOCATE 15,50:PRINT":┐ ↑
+2420 COLOR 15:LOCATE 15,50:PRINT"■":COLOR 7
 2430 LOCATE 15,70:PRINT"<ENTER>
 2440 LOCATE 15,50
 2450 GOSUB 7240
@@ -4007,7 +4010,7 @@ machines:
 2500 ' ===== RECORD 7: $$ AMOUNT
 2510 LOCATE 17,47:PRINT"7.
 2520 FA=10:LOW=45:HA=57
-2530 COLOR 15:LOCATE 17,50:PRINT"":COLOR 7
+2530 COLOR 15:LOCATE 17,50:PRINT"■■■■■■■■■■":COLOR 7
 2540 LOCATE 17,70:PRINT"<ENTER>
 2550 LOCATE 17,50
 2560 GOSUB 7240
@@ -4487,7 +4490,7 @@ machines:
 7300 IF IA$=CHR$(13)THEN RETURN
 7310 IF IA$<>CHR$(8)THEN 7360
 7320 IF FIN$=""THEN SOUND 600,4:GOTO 7280
-7330 PRINT CHR$(29);";CHR$(☼↔);
+7330 PRINT CHR$(29);"■";CHR$(29);
 7340 FIN$=LEFT$((FIN$),LEN(FIN$)-1)
 7350 GOTO 7280
 7360 IF LEN(FIN$)=FA THEN SOUND 600,4:GOTO 7280
@@ -4657,24 +4660,24 @@ machines:
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 RUN
 13 '*****************  DISK HEAD CLEANING PROGRAM *****************************
-17 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-19 'OPEN              DISK HEAD CLEAN PROGRAM WITH DRIVE SELECTION               OPEN
-21 'OPEN                                                                         OPEN
-23 'OPEN     This simple program is a modification of a long-standing public     OPEN
-25 'OPEN domain program. The modification allows selection of different disk     OPEN
-27 'OPEN drives.  When you finish cleaning the second drive, you will receive    OPEN
-29 'OPEN an error message.  The work will already be done at that time.          OPEN
-31 'OPEN                                                                         OPEN
-33 'OPEN     There is some concern that "over cleaning" of the double-sided      OPEN
-35 'OPEN drives can cause premature failure of the upper head. This head is      OPEN
-37 'OPEN a "floater", unlike the lower head which is usually pedestal-mounted.   OPEN
-39 'OPEN Undue friction loads & flexing of the upper head might cause premature  OPEN
-41 'OPEN failure of the small ribbon cable connecting the upper head. Repair     OPEN
-43 'OPEN involves a difficult and precise soldering job. Clean the heads when    OPEN
-45 'OPEN necessary, and not just because you have a cleaning disk available.     OPEN
-47 'OPEN Some individuals prefer careful use of a Q-tip cleaner.  USE CARE!      OPEN
-49 'OPEN                  (c)  G I N A C O    --  1983         Ver 5.2/160/320   OPEN
-51 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+17 '╔═════════════════════════════════════════════════════════════════════════╗
+19 '║              DISK HEAD CLEAN PROGRAM WITH DRIVE SELECTION               ║
+21 '║                                                                         ║
+23 '║     This simple program is a modification of a long-standing public     ║
+25 '║ domain program. The modification allows selection of different disk     ║
+27 '║ drives.  When you finish cleaning the second drive, you will receive    ║
+29 '║ an error message.  The work will already be done at that time.          ║
+31 '║                                                                         ║
+33 '║     There is some concern that "over cleaning" of the double-sided      ║
+35 '║ drives can cause premature failure of the upper head. This head is      ║
+37 '║ a "floater", unlike the lower head which is usually pedestal-mounted.   ║
+39 '║ Undue friction loads & flexing of the upper head might cause premature  ║
+41 '║ failure of the small ribbon cable connecting the upper head. Repair     ║
+43 '║ involves a difficult and precise soldering job. Clean the heads when    ║
+45 '║ necessary, and not just because you have a cleaning disk available.     ║
+47 '║ Some individuals prefer careful use of a Q-tip cleaner.  USE CARE!      ║
+49 '║                  (c)  G I N A C O    --  1983         Ver 5.2/160/320   ║
+51 '╚═════════════════════════════════════════════════════════════════════════╝
 54 '************ PROGRAM ALLOWS USER TO SELECT DRIVE FOR CLEANING *************
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
@@ -4697,19 +4700,19 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************** PROGRAMMERS TABULAR HEX PRINTOUT  ***********************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN             TABLUAR HEX$ DECIMAL PRINTOUT FOR REFERENCE                 OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN     This program will provide an orderly, paged screen or hard copy     OPEN
-24 'OPEN printout of HEX$/DEC conversions. It displays the conversions in color  OPEN
-26 'OPEN on a color monitor and white on a monochrome. The printout is suitable  OPEN
-28 'OPEN for wall display or a note book.  It will provide progammers or others  OPEN
-30 'OPEN a ready hex/dec reference when reading many of the advanced articles    OPEN
-32 'OPEN in the Computer Magazines.  A companion program is ALPHAHEX.BAS.        OPEN
-34 'OPEN                                                                         OPEN
-35 'OPEN     This program, in whole or in part, may be used without license or   OPEN
-36 'OPEN attribution.   (c)  G I N A C O   --  1983             Ver 5.1/160/320  OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║             TABLUAR HEX$ DECIMAL PRINTOUT FOR REFERENCE                 ║
+20 '║                                                                         ║
+22 '║     This program will provide an orderly, paged screen or hard copy     ║
+24 '║ printout of HEX$/DEC conversions. It displays the conversions in color  ║
+26 '║ on a color monitor and white on a monochrome. The printout is suitable  ║
+28 '║ for wall display or a note book.  It will provide progammers or others  ║
+30 '║ a ready hex/dec reference when reading many of the advanced articles    ║
+32 '║ in the Computer Magazines.  A companion program is ALPHAHEX.BAS.        ║
+34 '║                                                                         ║
+35 '║     This program, in whole or in part, may be used without license or   ║
+36 '║ attribution.   (c)  G I N A C O   --  1983             Ver 5.1/160/320  ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:DIM A$(1000)
@@ -4844,21 +4847,21 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************** HEX TO DEC/DEC TO HEX CONVERTER *************************
-15 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-17 'OPEN                    CONVERT HEX TO DEC & VICE VERSA                      OPEN
-19 'OPEN                                                                         OPEN
-21 'OPEN    This simple program can be used effectively to convert hexadecimal   OPEN
-23 'OPEN numbers to decimal and decimal to hexadecimal. This is of value when    OPEN
-25 'OPEN working with some poke-peek values or converting some CHR$(&Hnn) to     OPEN
-27 'OPEN decimal values, such as when zapping disk sectors.                      OPEN
-29 'OPEN                                                                         OPEN
-31 'OPEN    At the prompt, enter the decimal number as "20" w/o quotes and the   OPEN
-33 'OPEN HEX$ value will be displayed.  Enter a HEX number as "&H234" also w/o   OPEN
-35 'OPEN quotes and both the decimal and HEX$ will be displayed.                 OPEN
-37 'OPEN                                                                         OPEN
-39 'OPEN    This program is based on the program in the IBM (c) BASIC MANUAL     OPEN
-41 'OPEN under HEX$.  (c) G I N A C O   - 1983                 Ver 5.1/160/320   OPEN
-43 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+15 '╔═════════════════════════════════════════════════════════════════════════╗
+17 '║                    CONVERT HEX TO DEC & VICE VERSA                      ║
+19 '║                                                                         ║
+21 '║    This simple program can be used effectively to convert hexadecimal   ║
+23 '║ numbers to decimal and decimal to hexadecimal. This is of value when    ║
+25 '║ working with some poke-peek values or converting some CHR$(&Hnn) to     ║
+27 '║ decimal values, such as when zapping disk sectors.                      ║
+29 '║                                                                         ║
+31 '║    At the prompt, enter the decimal number as "20" w/o quotes and the   ║
+33 '║ HEX$ value will be displayed.  Enter a HEX number as "&H234" also w/o   ║
+35 '║ quotes and both the decimal and HEX$ will be displayed.                 ║
+37 '║                                                                         ║
+39 '║    This program is based on the program in the IBM (c) BASIC MANUAL     ║
+41 '║ under HEX$.  (c) G I N A C O   - 1983                 Ver 5.1/160/320   ║
+43 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -4908,21 +4911,21 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 ' *************** EPSON/GEMINI MULITI-LABEL PROGRAM ************************
-12 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-14 'OPEN           MULTI-LABEL PROGRAM FOR EPSON/GEMINI - (NON FILE)             OPEN
-16 'OPEN                                                                         OPEN
-18 'OPEN       This program is designed to use the IBM/EPSON dot matrix printer. OPEN
-20 'OPEN  Codes may be modified to use other printers.  Print statements are     OPEN
-22 'OPEN  directed to LPT1:. If you are using LPT2, change the LPTn: reference   OPEN
-24 'OPEN  in line 420.  A NEC 8023A version is included elsewhere on this disk.  OPEN
-26 'OPEN  The error routine at 6000 will function for a printer 'off' or 'off    OPEN
-28 'OPEN  line' status. Other errors are processed by the BASIC error routine.   OPEN
-30 'OPEN       A more complex file and label program is on the disk as BLUE-     OPEN
-32 'OPEN  BERY.BAS and/or LABELPRO.BAS. It has a full file and revision capa-    OPEN
-34 'OPEN  bility.  The 320K disk contains both BLUEBERY.BAS and LABELPRO.BAS     OPEN
-36 'OPEN       All or part of this program may be used by purchaser without      OPEN
-38 'OPEN  license or attribution.  (c) G I N A C O  -- 1983   Ver 5.1/160/320    OPEN
-40 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+12 '╔═════════════════════════════════════════════════════════════════════════╗
+14 '║           MULTI-LABEL PROGRAM FOR EPSON/GEMINI - (NON FILE)             ║
+16 '║                                                                         ║
+18 '║       This program is designed to use the IBM/EPSON dot matrix printer. ║
+20 '║  Codes may be modified to use other printers.  Print statements are     ║
+22 '║  directed to LPT1:. If you are using LPT2, change the LPTn: reference   ║
+24 '║  in line 420.  A NEC 8023A version is included elsewhere on this disk.  ║
+26 '║  The error routine at 6000 will function for a printer 'off' or 'off    ║
+28 '║  line' status. Other errors are processed by the BASIC error routine.   ║
+30 '║       A more complex file and label program is on the disk as BLUE-     ║
+32 '║  BERY.BAS and/or LABELPRO.BAS. It has a full file and revision capa-    ║
+34 '║  bility.  The 320K disk contains both BLUEBERY.BAS and LABELPRO.BAS     ║
+36 '║       All or part of this program may be used by purchaser without      ║
+38 '║  license or attribution.  (c) G I N A C O  -- 1983   Ver 5.1/160/320    ║
+40 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 REM
@@ -5171,16 +5174,16 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '***************** PROGRAMMERS BASIC F-KEY SETTINGS  ***********************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN            PROGRAMMERS FUNCTION KEY SETTING COMBINATION                 OPEN
-20 'OPEN  F1: CLS -- CLEARS THE SCREEN      F2: RUNS RESIDENT PROGRAM            OPEN
-22 'OPEN  F3: CLEARS SCREEN, LISTS PROGRAM  F4: SETS UP LOAD FROM DRIVE A:       OPEN
-24 'OPEN  F5: SETS UP LOAD FROM DRIVE B:    F6: CLEARS & LISTS SPECIFIED LINES   OPEN
-26 'OPEN  F7: READS DIRECTORY IN DRIVE A:   F8: READS DIRECTORY IN DRIVE B:      OPEN
-28 'OPEN  F9: SETS UP SAVE TO DRIVE B:      F10: STEPS THRU LISTING.  JUST PUT   OPEN
-30 'OPEN                                         IN NEXT NUMBER.  OLD WILL SHOW. OPEN
-31 'OPEN                    (c) G I N A C O  1983           Ver 5.2/160/320      OPEN
-32 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║            PROGRAMMERS FUNCTION KEY SETTING COMBINATION                 ║
+20 '║  F1: CLS -- CLEARS THE SCREEN      F2: RUNS RESIDENT PROGRAM            ║
+22 '║  F3: CLEARS SCREEN, LISTS PROGRAM  F4: SETS UP LOAD FROM DRIVE A:       ║
+24 '║  F5: SETS UP LOAD FROM DRIVE B:    F6: CLEARS & LISTS SPECIFIED LINES   ║
+26 '║  F7: READS DIRECTORY IN DRIVE A:   F8: READS DIRECTORY IN DRIVE B:      ║
+28 '║  F9: SETS UP SAVE TO DRIVE B:      F10: STEPS THRU LISTING.  JUST PUT   ║
+30 '║                                         IN NEXT NUMBER.  OLD WILL SHOW. ║
+31 '║                    (c) G I N A C O  1983           Ver 5.2/160/320      ║
+32 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 REM
@@ -5321,7 +5324,7 @@ machines:
 3590 IFINPTR$=CHR$(13)THENRETURN
 3600 IFINPTR$<>CHR$(8)THEN3650
 3610 IFFIN$=""THENSOUND600,4:GOTO3570
-3620 PRINTCHR$(29);";CHR$(☼↔);:FIN$τLEFT$((FIN$),LEN(FIN$)Ω↕):ë♫≥♪
+3620 PRINTCHR$(29);"■";CHR$(29);:FIN$=LEFT$((FIN$),LEN(FIN$)-1):GOTO3570
 3650 IFLEN(FIN$)=FINLENTHENSOUND600,4:GOTO3570
 3660 IFASC(INPTR$)<31ORASC(INPTR$)>125THENSOUND400,4:GOTO3570
 3670 PRINTINPTR$;:FIN$=FIN$+INPTR$:GOTO3570
@@ -5340,14 +5343,14 @@ machines:
 4720 IFYN=2THEN5270
 4730 REM =====  DATA SAVE ROUTINE TO DISK  =====
 4740 CLS
-4750 GOSUB2150:GOSUB2410:LOCATE21,27,0:COLOR15:PRINT"What is FILE name? ";:COLOR7,0:GOSUB3170:FINLEN=14:LOCATE21,52:COLOR15:PRINT"DRIVE? .;:┐↑,◄:╩☼§,☼;,◄:ì♫└♪:FILESPEC$τFIN$:ì♫⌠♂:║ "O",↕,FILESPEC$
+4750 GOSUB2150:GOSUB2410:LOCATE21,27,0:COLOR15:PRINT"What is FILE name? ";:COLOR7,0:GOSUB3170:FINLEN=14:LOCATE21,52:COLOR15:PRINT"DRIVE? ■:■■■■■■■■.■■■";:COLOR7,0:LOCATE21,59,0:GOSUB3520:FILESPEC$=FIN$:GOSUB3060:OPEN "O",1,FILESPEC$
 4920 WRITE#1,P:FORI=1TOP:WRITE#1,A$(I),B$(I),C$(I),D$(I),E$(I),F$(I):IF(A$(I)="END"ORA$(I)="end")THENP=I
 4960 IF(A$(I)="END"ORA$(I)="end")THEN4980
 4970 NEXT
 4980 CLOSE:GOSUB12510:GOTO5270
 5010 REM =====  DISK DATA READ ROUTINE  =====
 5015 CLS
-5020 GOSUB 2150:GOSUB 2410:LOCATE 21,27:COLOR 15:PRINT"What is FILE name? ";:COLOR 7,0:GOSUB 3170:FINLEN=14:LOCATE 21,52:COLOR 15:PRINT"DRIVE? .;:┐ ↑,◄:╩ ☼§,☼;,◄:ì ♫└♪:FILESPEC$τFIN$:ì ♫⌠♂:║ "I",↕,FILESPEC$
+5020 GOSUB 2150:GOSUB 2410:LOCATE 21,27:COLOR 15:PRINT"What is FILE name? ";:COLOR 7,0:GOSUB 3170:FINLEN=14:LOCATE 21,52:COLOR 15:PRINT"DRIVE? ■:■■■■■■■■.■■■";:COLOR 7,0:LOCATE 21,59,0:GOSUB 3520:FILESPEC$=FIN$:GOSUB 3060:OPEN "I",1,FILESPEC$
 5200 INPUT#1,P:FORI=1TOP:INPUT#1,A$(I),B$(I),C$(I),D$(I),E$(I),F$(I):IF(A$(I)="END"ORA$(I)="end")THENP=I
 5240 IF(A$(I)="END"ORA$(I)="END")THEN5260
 5250 NEXT
@@ -5612,23 +5615,23 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '********************* LPT1 AND LPT2 TOGGLE PROGRAM ************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN         PROGRAM TO DIRECT OUTPUT LPT1: OR LPT2: (PARALLEL)              OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN     When you purchase an expansion board for the IBM with a second      OPEN
-24 'OPEN parallel port (LPT2:), the accompanying documentation usually states    OPEN
-26 'OPEN that you can "address" the port with appropriate software; however,     OPEN
-28 'OPEN the software is hard to find.  This program will toggle the computer    OPEN
-30 'OPEN output between LPT1: and LPT2:. You can use the routine in an AUTOEXEC  OPEN
-32 'OPEN program with a word-processor.  If you use it in this fashion, return   OPEN
-34 'OPEN to SYSTEM before calling up a .COM or .EXE word processor file. You     OPEN
-36 'OPEN may "REM" or DELETE all of the PRINT lines from 220 on to eliminate the OPEN
-38 'OPEN statements which report the state of the appropriate address ports.     OPEN
-40 'OPEN Run BLUEBERY.BAS or LABELPRO.BAS for an example of this routine being   OPEN
-42 'OPEN worked into an application program.  This program may be used in whole  OPEN
-44 'OPEN or in part without attribution or license.                              OPEN
-46 'OPEN                 (c) G I N A C O  -- 1968            Ver 5.2/320/160     OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║         PROGRAM TO DIRECT OUTPUT LPT1: OR LPT2: (PARALLEL)              ║
+20 '║                                                                         ║
+22 '║     When you purchase an expansion board for the IBM with a second      ║
+24 '║ parallel port (LPT2:), the accompanying documentation usually states    ║
+26 '║ that you can "address" the port with appropriate software; however,     ║
+28 '║ the software is hard to find.  This program will toggle the computer    ║
+30 '║ output between LPT1: and LPT2:. You can use the routine in an AUTOEXEC  ║
+32 '║ program with a word-processor.  If you use it in this fashion, return   ║
+34 '║ to SYSTEM before calling up a .COM or .EXE word processor file. You     ║
+36 '║ may "REM" or DELETE all of the PRINT lines from 220 on to eliminate the ║
+38 '║ statements which report the state of the appropriate address ports.     ║
+40 '║ Run BLUEBERY.BAS or LABELPRO.BAS for an example of this routine being   ║
+42 '║ worked into an application program.  This program may be used in whole  ║
+44 '║ or in part without attribution or license.                              ║
+46 '║                 (c) G I N A C O  -- 1968            Ver 5.2/320/160     ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:SCREEN 0,0,0:WIDTH 80:KEY OFF:FOR I=1 TO 10:KEY I,"":NEXT:CLEAR
@@ -5662,24 +5665,24 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************** GRAPHICS PRINT ROUTINE -- BASIC *************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN                      80 COLUMN GRAPHICS PRINTOUT                        OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN     This program will make a graphics printout of screen to a EPSON     OPEN
-24 'OPEN GRAFTRAK or GEMINI 10/15 printer. The quality and detail of the print   OPEN
-26 'OPEN are excellent.  Simply insert desired printout text in between lines    OPEN
-28 'OPEN 510  and  830.  You may add or subtract lines as desired.  To get an    OPEN
-30 'OPEN idea of the amount of text you can put in the designated program area,  OPEN
-31 'OPEN run this program. It prints out the 160k Blueberry Pie a la Mode disk   OPEN
-32 'OPEN menu.  You can input any data you want into the appropriate lines.      OPEN
-34 'OPEN     Before you run the program, ascertain that your printer is on-line  OPEN
-35 'OPEN and the paper is about five spaces below the perforation. PC-ADD.BAS    OPEN
-36 'OPEN is similar, allowing EITHER a 40 or 80 column display. When building    OPEN
-37 'OPEN up the menu or test, remove the REM marks from lines 505 and 830. This  OPEN
-38 'OPEN will permit you to run the program for test without a printout.         OPEN
-39 'OPEN     This program, in whole or in part, may be used without license or   OPEN
-40 'OPEN attribution.   G I N A C O    -  1983.                  REV 5.2/320     OPEN
-41 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║                      80 COLUMN GRAPHICS PRINTOUT                        ║
+20 '║                                                                         ║
+22 '║     This program will make a graphics printout of screen to a EPSON     ║
+24 '║ GRAFTRAK or GEMINI 10/15 printer. The quality and detail of the print   ║
+26 '║ are excellent.  Simply insert desired printout text in between lines    ║
+28 '║ 510  and  830.  You may add or subtract lines as desired.  To get an    ║
+30 '║ idea of the amount of text you can put in the designated program area,  ║
+31 '║ run this program. It prints out the 160k Blueberry Pie a la Mode disk   ║
+32 '║ menu.  You can input any data you want into the appropriate lines.      ║
+34 '║     Before you run the program, ascertain that your printer is on-line  ║
+35 '║ and the paper is about five spaces below the perforation. PC-ADD.BAS    ║
+36 '║ is similar, allowing EITHER a 40 or 80 column display. When building    ║
+37 '║ up the menu or test, remove the REM marks from lines 505 and 830. This  ║
+38 '║ will permit you to run the program for test without a printout.         ║
+39 '║     This program, in whole or in part, may be used without license or   ║
+40 '║ attribution.   G I N A C O    -  1983.                  REV 5.2/320     ║
+41 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 FOR I=1 TO 10:KEY I,"":NEXT
@@ -5795,17 +5798,17 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************  Pretty listing Program  BASIC **************************
-12 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-14 'OPEN               FORMATTED PROGRAM LISTING PROGRAM        Ver 5.1/160      OPEN
-16 'OPEN                                                                         OPEN
-18 'OPEN   This program, or versions of it, has been around for many years. It   OPEN
-20 'OPEN will send a formatted listing to the EPSON/GEMINI printer. It provides  OPEN
-22 'OPEN 55 lines per page with a heading, date, and name at the top of each     OPEN
-24 'OPEN page.  This program, in whole or part, may be used without license or   OPEN
-26 'OPEN attribution.  Listed program must be  saved with "A" option.            OPEN
-28 'OPEN     IF YOU HAVE A CLOCK BOARD INSTALLED, REMOVE REM ' FROM LINE 360.    OPEN
-29 'OPEN                   (c)  G I N A C O  -- 1983        Ver 5.3/160/320      OPEN
-30 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+12 '╔═════════════════════════════════════════════════════════════════════════╗
+14 '║               FORMATTED PROGRAM LISTING PROGRAM        Ver 5.1/160      ║
+16 '║                                                                         ║
+18 '║   This program, or versions of it, has been around for many years. It   ║
+20 '║ will send a formatted listing to the EPSON/GEMINI printer. It provides  ║
+22 '║ 55 lines per page with a heading, date, and name at the top of each     ║
+24 '║ page.  This program, in whole or part, may be used without license or   ║
+26 '║ attribution.  Listed program must be  saved with "A" option.            ║
+28 '║     IF YOU HAVE A CLOCK BOARD INSTALLED, REMOVE REM ' FROM LINE 360.    ║
+29 '║                   (c)  G I N A C O  -- 1983        Ver 5.3/160/320      ║
+30 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 REM
@@ -5883,21 +5886,21 @@ machines:
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '*****************  COLOR PALETTES AND COLOR CHIPS  ************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN                    PC-COLOR PROGRAM DELUXE                              OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN    This program was keyed in from the November 1982 PC-Magazine. It     OPEN
-24 'OPEN was provided in an article entiled "Color Palettes and Color Chips" by  OPEN
-26 'OPEN Karl Koessell. The article started on page 305.  The program allows     OPEN
-28 'OPEN users to test monitors before purchasing them. It checks the brilliance OPEN
-30 'OPEN of the screen, and demonstrates the color combinations which are avail- OPEN
-32 'OPEN able on the IBM-PC. It permits the viewer to determine the clarity and  OPEN
-34 'OPEN resolution of the WIDTH 80 presentation -- important if you plan to do  OPEN
-35 'OPEN extensive word-processing or detailed programming. This program has no  OPEN
-36 'OPEN commercial application and is provided as a service for personal use    OPEN
-37 'OPEN and color monitor evaluation.   Author: Karl Koessell, address unknown. OPEN
-38 'OPEN                G  I  N  A  C  O -- 1983                   Ver 5.2/320k  OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║                    PC-COLOR PROGRAM DELUXE                              ║
+20 '║                                                                         ║
+22 '║    This program was keyed in from the November 1982 PC-Magazine. It     ║
+24 '║ was provided in an article entiled "Color Palettes and Color Chips" by  ║
+26 '║ Karl Koessell. The article started on page 305.  The program allows     ║
+28 '║ users to test monitors before purchasing them. It checks the brilliance ║
+30 '║ of the screen, and demonstrates the color combinations which are avail- ║
+32 '║ able on the IBM-PC. It permits the viewer to determine the clarity and  ║
+34 '║ resolution of the WIDTH 80 presentation -- important if you plan to do  ║
+35 '║ extensive word-processing or detailed programming. This program has no  ║
+36 '║ commercial application and is provided as a service for personal use    ║
+37 '║ and color monitor evaluation.   Author: Karl Koessell, address unknown. ║
+38 '║                G  I  N  A  C  O -- 1983                   Ver 5.2/320k  ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -6127,21 +6130,21 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '*****************  MEMORY PEEKER/HEX CONVERTER IBM  ***********************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN               R.A.M/R.O.M PEEK ROUTINE & HEX$ CONVERTER                 OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN    This dual purpose program will peek into designated RAM and ROM      OPEN
-24 'OPEN areas and return the decimal value at the location. You may specify     OPEN
-26 'OPEN the range in either HEX$ or DECIMAL.  The range is entered as two #'s   OPEN
-28 'OPEN separated by a comma. I.E:, &H34,&H49 or 234,400.  The appropriate      OPEN
-30 'OPEN memory values will be displayed on the screen in an array.              OPEN
-31 'OPEN    The HEX$/DEC converter also allows input in either HEX$ or DECIMAL.  OPEN
-32 'OPEN The range requested will be printed on the screen and then routed to    OPEN
-33 'OPEN the printer. Certain HEX$ ranges can cause the printer to do strange    OPEN
-34 'OPEN things.  If this happens during the printout, turn the printer OFF/ON   OPEN
-36 'OPEN and the situation will be corrected.  This program may be used in whole OPEN
-37 'OPEN or in part without attribution. (c) G I N A C O -- 1983 Ver 5.2/160/320 OPEN
-38 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║               R.A.M/R.O.M PEEK ROUTINE & HEX$ CONVERTER                 ║
+20 '║                                                                         ║
+22 '║    This dual purpose program will peek into designated RAM and ROM      ║
+24 '║ areas and return the decimal value at the location. You may specify     ║
+26 '║ the range in either HEX$ or DECIMAL.  The range is entered as two #'s   ║
+28 '║ separated by a comma. I.E:, &H34,&H49 or 234,400.  The appropriate      ║
+30 '║ memory values will be displayed on the screen in an array.              ║
+31 '║    The HEX$/DEC converter also allows input in either HEX$ or DECIMAL.  ║
+32 '║ The range requested will be printed on the screen and then routed to    ║
+33 '║ the printer. Certain HEX$ ranges can cause the printer to do strange    ║
+34 '║ things.  If this happens during the printout, turn the printer OFF/ON   ║
+36 '║ and the situation will be corrected.  This program may be used in whole ║
+37 '║ or in part without attribution. (c) G I N A C O -- 1983 Ver 5.2/160/320 ║
+38 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:KEY OFF
@@ -6237,20 +6240,20 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************  PRINTER CONTROL SUB-ROUTINE IBM  ***********************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN                EPSON/GEMINI 10/15 PRINT CONTROL ROUTINE                 OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN    Delete lines 110-200 and save the remaining program with the ASCII   OPEN
-24 'OPEN option 'A ' so it can be merged into your program. GOSUB 5000 to set    OPEN
-26 'OPEN up printer control in your program. If you are proficient in the use    OPEN
-28 'OPEN of printer codes, you may wish to make the title shorter. If you only   OPEN
-30 'OPEN use codes occasionally, you may appreciate the more descriptive name.   OPEN
-31 'OPEN                                                                         OPEN
-32 'OPEN    The error routine will take care of printer off or 'off line'. It    OPEN
-33 'OPEN will go to Basic error handling for paper out or other.  This program   OPEN
-34 'OPEN or any part thereof may be used without license or attribution.         OPEN
-36 'OPEN                   (c) G I N A C O    1983              Ver 5.1/160/320  OPEN
-38 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║                EPSON/GEMINI 10/15 PRINT CONTROL ROUTINE                 ║
+20 '║                                                                         ║
+22 '║    Delete lines 110-200 and save the remaining program with the ASCII   ║
+24 '║ option 'A ' so it can be merged into your program. GOSUB 5000 to set    ║
+26 '║ up printer control in your program. If you are proficient in the use    ║
+28 '║ of printer codes, you may wish to make the title shorter. If you only   ║
+30 '║ use codes occasionally, you may appreciate the more descriptive name.   ║
+31 '║                                                                         ║
+32 '║    The error routine will take care of printer off or 'off line'. It    ║
+33 '║ will go to Basic error handling for paper out or other.  This program   ║
+34 '║ or any part thereof may be used without license or attribution.         ║
+36 '║                   (c) G I N A C O    1983              Ver 5.1/160/320  ║
+38 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 REM
@@ -6312,22 +6315,22 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '*****************   PUT TITLE HERE #############  *************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN                                                                         OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN                                                                         OPEN
-24 'OPEN                                                                         OPEN
-25 'OPEN                                                                         OPEN
-26 'OPEN                                                                         OPEN
-27 'OPEN                                                                         OPEN
-28 'OPEN                                                                         OPEN
-30 'OPEN                                                                         OPEN
-31 'OPEN                                                                         OPEN
-32 'OPEN                                                                         OPEN
-33 'OPEN                                                                         OPEN
-35 'OPEN                                                                         OPEN
-36 'OPEN                                                       Ver 5.2/160/320   OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║                                                                         ║
+20 '║                                                                         ║
+22 '║                                                                         ║
+24 '║                                                                         ║
+25 '║                                                                         ║
+26 '║                                                                         ║
+27 '║                                                                         ║
+28 '║                                                                         ║
+30 '║                                                                         ║
+31 '║                                                                         ║
+32 '║                                                                         ║
+33 '║                                                                         ║
+35 '║                                                                         ║
+36 '║                                                       Ver 5.2/160/320   ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 54 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 55 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 56 '**** ADD THE WORDS YOU WANT IN THE BOX AND DELETE EXTRA LINES TO BRING ****
@@ -6345,17 +6348,17 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '***************** VARIABLE RANDOM SEED GENERATOR **************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN          USE OF TIME$ TO STIMULATE RANDOM NUMBER GENERATOR              OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN    This simple program will do a better job of RANDOMIZING than the old OPEN
-24 'OPEN procedure of assigning a random seed number on a prompt.   This pro-    OPEN
-26 'OPEN cedure is recommended on page 4-236 of the IMB (c) BASIC (1.1/2.0)      OPEN
-28 'OPEN Manual.  This program is but an implementation of the procedure. To use,OPEN
-30 'OPEN eliminate the printout & timer loop.  Simply put lines 110 to 130 at    OPEN
-31 'OPEN the start of your program. The random 'seed' will change with the TIME$ OPEN
-32 'OPEN second advance.   G I N A C O  -- 1983                Ver 5.2/160/320   OPEN
-38 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║          USE OF TIME$ TO STIMULATE RANDOM NUMBER GENERATOR              ║
+20 '║                                                                         ║
+22 '║    This simple program will do a better job of RANDOMIZING than the old ║
+24 '║ procedure of assigning a random seed number on a prompt.   This pro-    ║
+26 '║ cedure is recommended on page 4-236 of the IMB (c) BASIC (1.1/2.0)      ║
+28 '║ Manual.  This program is but an implementation of the procedure. To use,║
+30 '║ eliminate the printout & timer loop.  Simply put lines 110 to 130 at    ║
+31 '║ the start of your program. The random 'seed' will change with the TIME$ ║
+32 '║ second advance.   G I N A C O  -- 1983                Ver 5.2/160/320   ║
+38 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -6377,20 +6380,20 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************** SAVINGS/CHECKING BALANCE PROGRAM  ***********************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN                 SAVINGS OR PERSONAL CHECK RECONCILER                    OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN    This is a simple progam to provide a screem display and printout of  OPEN
-24 'OPEN a savings or personal checking account. Sometimes the hand-held calcu-  OPEN
-26 'OPEN lator just does not do the job.  Check numbers, account numbers, or a   OPEN
-28 'OPEN payee/payor is not entered. Simply enter "W or D" for withdrawal and/or OPEN
-30 'OPEN deposit.  Enter " END " for a final balance. If you wish a more compre- OPEN
-32 'OPEN hensive printout showing payee/payor, check number and account number,  OPEN
-34 'OPEN see BUSCHECK.BAS on this disk.  This program will "timeout" if printer  OPEN
-35 'OPEN is not on-line.  To eliminate printer output, delete LPRINT lines.      OPEN
-36 'OPEN    This program may be used in whole or in part without attribution or  OPEN
-37 'OPEN license.      (c) G I N A C O  -- 1983                Ver 5.2/320       OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║                 SAVINGS OR PERSONAL CHECK RECONCILER                    ║
+20 '║                                                                         ║
+22 '║    This is a simple progam to provide a screem display and printout of  ║
+24 '║ a savings or personal checking account. Sometimes the hand-held calcu-  ║
+26 '║ lator just does not do the job.  Check numbers, account numbers, or a   ║
+28 '║ payee/payor is not entered. Simply enter "W or D" for withdrawal and/or ║
+30 '║ deposit.  Enter " END " for a final balance. If you wish a more compre- ║
+32 '║ hensive printout showing payee/payor, check number and account number,  ║
+34 '║ see BUSCHECK.BAS on this disk.  This program will "timeout" if printer  ║
+35 '║ is not on-line.  To eliminate printer output, delete LPRINT lines.      ║
+36 '║    This program may be used in whole or in part without attribution or  ║
+37 '║ license.      (c) G I N A C O  -- 1983                Ver 5.2/320       ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:KEY OFF:FOR I=1 TO 10:KEY I,"":NEXT
@@ -6515,21 +6518,21 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 12-57
 12 '***************** THIS IS A SIX NESTING BOX DISPLAY ***********************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN                  FOUR-CORNER COORDINATE BOX ROUTINE                     OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN    This is another program showing the techniques for programming a     OPEN
-24 'OPEN series of screen boxes.  You may use any of the subroutines alone to    OPEN
-25 'OPEN place a box anywhere on the screen. Note that INITIALIZATION statement  OPEN
-26 'OPEN establishes the four corner coordinates for the box.  You can easily    OPEN
-28 'OPEN put a box where you wish by the simple and FAST insertion of only four  OPEN
-30 'OPEN numbers.  The technique for programming the SOFT keys for a particular  OPEN
-32 'OPEN qualified response is also demonstrated.  This uses the INKEY$ function OPEN
-34 'OPEN to to examine the character returned.  All other returns (except that   OPEN
-36 'OPEN from the key which would normally return the CHR$ character specified)  OPEN
-38 'OPEN will be rejected by a tone and a return to the orininal prompt.         OPEN
-40 'OPEN         ** (c) G I N A C O   1983 **          Ver 5.2/160/320           OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║                  FOUR-CORNER COORDINATE BOX ROUTINE                     ║
+20 '║                                                                         ║
+22 '║    This is another program showing the techniques for programming a     ║
+24 '║ series of screen boxes.  You may use any of the subroutines alone to    ║
+25 '║ place a box anywhere on the screen. Note that INITIALIZATION statement  ║
+26 '║ establishes the four corner coordinates for the box.  You can easily    ║
+28 '║ put a box where you wish by the simple and FAST insertion of only four  ║
+30 '║ numbers.  The technique for programming the SOFT keys for a particular  ║
+32 '║ qualified response is also demonstrated.  This uses the INKEY$ function ║
+34 '║ to to examine the character returned.  All other returns (except that   ║
+36 '║ from the key which would normally return the CHR$ character specified)  ║
+38 '║ will be rejected by a tone and a return to the orininal prompt.         ║
+40 '║         ** (c) G I N A C O   1983 **          Ver 5.2/160/320           ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR
@@ -6670,22 +6673,22 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '*****************  START UP PROGRAM FOR BLUEBERRY   ***********************
-14 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-15 'OPEN      BLUEBERRY PIE A LA MODE DISK START UP PROGRAM -- MONO!             OPEN
-16 'OPEN                                                                         OPEN
-17 'OPEN     This is a basic box-formatted introductory program for BLUEBERRY    OPEN
-18 'OPEN  PIE A LA MODE using a High Resolution composite video green monitor    OPEN
-19 'OPEN  or IBM monochrome monitor.  There are some programming techniques      OPEN
-20 'OPEN  which may be of interest to the user.  The various subroutines may     OPEN
-21 'OPEN  be extracted and modified for your own programming use.                OPEN
-22 'OPEN                                                                         OPEN
-23 'OPEN     A COLOR version of this program is filed under STARTUP.CLR. If      OPEN
-24 'OPEN  you are using an 80 column / RGB color monitor, use the color version. OPEN
-25 'OPEN  This is USER SUPPORTED software. If you use the BLUEBERRY PIE programs,OPEN
-26 'OPEN  your contribution ($15.00 suggested) is welcome. Please copy and pass  OPEN
-27 'OPEN  BLUEBERRY to your friends. Send to GINACO,  10708 Santa Fe Drive,      OPEN
-28 'OPEN  Sun City  AZ  85351    (C) G I N A C O   1983      Ver 5.2/160/320     OPEN
-31 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+14 '╔═════════════════════════════════════════════════════════════════════════╗
+15 '║      BLUEBERRY PIE A LA MODE DISK START UP PROGRAM -- MONO!             ║
+16 '║                                                                         ║
+17 '║     This is a basic box-formatted introductory program for BLUEBERRY    ║
+18 '║  PIE A LA MODE using a High Resolution composite video green monitor    ║
+19 '║  or IBM monochrome monitor.  There are some programming techniques      ║
+20 '║  which may be of interest to the user.  The various subroutines may     ║
+21 '║  be extracted and modified for your own programming use.                ║
+22 '║                                                                         ║
+23 '║     A COLOR version of this program is filed under STARTUP.CLR. If      ║
+24 '║  you are using an 80 column / RGB color monitor, use the color version. ║
+25 '║  This is USER SUPPORTED software. If you use the BLUEBERRY PIE programs,║
+26 '║  your contribution ($15.00 suggested) is welcome. Please copy and pass  ║
+27 '║  BLUEBERRY to your friends. Send to GINACO,  10708 Santa Fe Drive,      ║
+28 '║  Sun City  AZ  85351    (C) G I N A C O   1983      Ver 5.2/160/320     ║
+31 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:FOR I=1 TO 10:KEY I,"":NEXT
@@ -6737,21 +6740,21 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************************************************************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN                  DAILY PHONE CALL AND "DO-LIST" FORM                    OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN    The form generated by this program can be used to record daily or    OPEN
-24 'OPEN other period phone calls and projects.  This type of form has been a    OPEN
-26 'OPEN legal and acceptable evidential exhibit to the IRS and the courts if it OPEN
-28 'OPEN can be shown that keeping track of these events on a regular, orderly   OPEN
-30 'OPEN basis is a habit.  The form can be modified easily to increase or de-   OPEN
-31 'OPEN crease the number of phone calls and/or projects by making an appropr-  OPEN
-32 'OPEN iate change in the number of loops printed. The loop size entries are   OPEN
-33 'OPEN in lines  230 and 330. By deleting lines 190 thru 280, the phone call   OPEN
-34 'OPEN portion can be eliminated completely. Set print head on first line be-  OPEN
-35 'OPEN low the perforation and make certain printer is ON LINE. Press <F2>.    OPEN
-36 'OPEN                   (c) G I N A C O    1983              Ver 5.1/160/320  OPEN
-38 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║                  DAILY PHONE CALL AND "DO-LIST" FORM                    ║
+20 '║                                                                         ║
+22 '║    The form generated by this program can be used to record daily or    ║
+24 '║ other period phone calls and projects.  This type of form has been a    ║
+26 '║ legal and acceptable evidential exhibit to the IRS and the courts if it ║
+28 '║ can be shown that keeping track of these events on a regular, orderly   ║
+30 '║ basis is a habit.  The form can be modified easily to increase or de-   ║
+31 '║ crease the number of phone calls and/or projects by making an appropr-  ║
+32 '║ iate change in the number of loops printed. The loop size entries are   ║
+33 '║ in lines  230 and 330. By deleting lines 190 thru 280, the phone call   ║
+34 '║ portion can be eliminated completely. Set print head on first line be-  ║
+35 '║ low the perforation and make certain printer is ON LINE. Press <F2>.    ║
+36 '║                   (c) G I N A C O    1983              Ver 5.1/160/320  ║
+38 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -6837,26 +6840,26 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '******************* EDUCATOR'S TOOLBOX SPECIAL ****************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN         TEACHER'S / EDUCATOR'S TESTWRITER & GRADE SHEET PROGRAM         OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN     This program was written and developed over a period of several     OPEN
-24 'OPEN years by Bill Alton, 4201 W Carol Avenue. Phoenix, AZ  85021.  It is    OPEN
-26 'OPEN a superbly crafted and implemented program with application far be-     OPEN
-28 'OPEN ond test writing and grading. The program is expanded on the 360K disc. OPEN
-30 'OPEN Big Blueberry Pie purchasers may examine the programming techniques in- OPEN
-31 'OPEN volved.  Please call up the TESTWRIT.DOC program with a "type" command  OPEN
-32 'OPEN in DOS.  Load the SAMPLE.TWD program when running this program for an   OPEN
-33 'OPEN example of the TESTWRITERS capability. Bill Alton will welcome letters  OPEN
-34 'OPEN with comments and applications of this program from educators or other  OPEN
-35 'OPEN users. The program has been modified to work on Drive A. To use the     OPEN
-36 'OPEN program for production, change Drive A references in Lines 1840, 2410,  OPEN
-37 'OPEN and 3200 to Drive B. DO NOT OVERWRITE THE DRIVE A DISK. USE WRITE TAB!  OPEN
-38 'OPEN NOTE:!  If you distribute this program, please leave Bill Alton's name  OPEN
-39 'OPEN in the lead-in REMARKS as shown.                                        OPEN
-40 'OPEN     An expanded version is on the 320K disk as TEST2WRT.BAS             OPEN
-41 'OPEN                       (c) G I N A C O -- 1983       Ver 5.3/320         OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║         TEACHER'S / EDUCATOR'S TESTWRITER & GRADE SHEET PROGRAM         ║
+20 '║                                                                         ║
+22 '║     This program was written and developed over a period of several     ║
+24 '║ years by Bill Alton, 4201 W Carol Avenue. Phoenix, AZ  85021.  It is    ║
+26 '║ a superbly crafted and implemented program with application far be-     ║
+28 '║ ond test writing and grading. The program is expanded on the 360K disc. ║
+30 '║ Big Blueberry Pie purchasers may examine the programming techniques in- ║
+31 '║ volved.  Please call up the TESTWRIT.DOC program with a "type" command  ║
+32 '║ in DOS.  Load the SAMPLE.TWD program when running this program for an   ║
+33 '║ example of the TESTWRITERS capability. Bill Alton will welcome letters  ║
+34 '║ with comments and applications of this program from educators or other  ║
+35 '║ users. The program has been modified to work on Drive A. To use the     ║
+36 '║ program for production, change Drive A references in Lines 1840, 2410,  ║
+37 '║ and 3200 to Drive B. DO NOT OVERWRITE THE DRIVE A DISK. USE WRITE TAB!  ║
+38 '║ NOTE:!  If you distribute this program, please leave Bill Alton's name  ║
+39 '║ in the lead-in REMARKS as shown.                                        ║
+40 '║     An expanded version is on the 320K disk as TEST2WRT.BAS             ║
+41 '║                       (c) G I N A C O -- 1983       Ver 5.3/320         ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -6966,19 +6969,19 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************  ELAPSED TIME DISPLAY ROUTINE  **************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN                ELAPSED TIME DISPLAY SUBROUTINE FOR MERGE                OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN    Frequently, we wish to know how long we have been working on a par-  OPEN
-24 'OPEN ticular operation in a program (Data entry, etc). This is calculated    OPEN
-26 'OPEN and displayed with the following subroutine. You can "GOTO 10000" at    OPEN
-28 'OPEN any functional break (enter data , etc) in your program and the total   OPEN
-30 'OPEN elapsed time since program start will display in line 25. Make certain  OPEN
-31 'OPEN you put the BB$=TIME$ (line 130) in the beginning of your program so    OPEN
-32 'OPEN that the start time is recorded.  You may decrease or eliminate the     OPEN
-33 'OPEN delay loop in line 10090 as desired.  This program may be used without  OPEN
-34 'OPEN license or attribution (c) G I N A C O    -- 1983  Ver 5.2/160/320      OPEN
-38 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║                ELAPSED TIME DISPLAY SUBROUTINE FOR MERGE                ║
+20 '║                                                                         ║
+22 '║    Frequently, we wish to know how long we have been working on a par-  ║
+24 '║ ticular operation in a program (Data entry, etc). This is calculated    ║
+26 '║ and displayed with the following subroutine. You can "GOTO 10000" at    ║
+28 '║ any functional break (enter data , etc) in your program and the total   ║
+30 '║ elapsed time since program start will display in line 25. Make certain  ║
+31 '║ you put the BB$=TIME$ (line 130) in the beginning of your program so    ║
+32 '║ that the start time is recorded.  You may decrease or eliminate the     ║
+33 '║ delay loop in line 10090 as desired.  This program may be used without  ║
+34 '║ license or attribution (c) G I N A C O    -- 1983  Ver 5.2/160/320      ║
+38 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -7011,21 +7014,21 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************************************************************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN                  DAILY WEIGHT RECORD "MOTIVATION" FORM                  OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN    The form generated by this program can be used to maintain daily or  OPEN
-24 'OPEN other periodic health records.  The form is designed primarily for a    OPEN
-26 'OPEN weight record; however, the word "WEIGHT" can be replaced easily by any OPEN
-28 'OPEN other word or dimension for which a daily or periodic record might be   OPEN
-30 'OPEN appropriate.  The form can be modified easily to increase or decrease   OPEN
-31 'OPEN the number of lines by making an appropriate change in the number of    OPEN
-32 'OPEN loops printed.  The loop size entry 27 and is currently set at 24 to    OPEN
-33 'OPEN make the form the right length with its present format and content.     OPEN
-34 'OPEN To run the form as designed, simply set print head at the first line    OPEN
-35 'OPEN below the perforation and ascertain the printer is ON LINE. Press <F2>. OPEN
-36 'OPEN                   (c) G I N A C O    1983              Ver 5.1/160/320  OPEN
-38 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║                  DAILY WEIGHT RECORD "MOTIVATION" FORM                  ║
+20 '║                                                                         ║
+22 '║    The form generated by this program can be used to maintain daily or  ║
+24 '║ other periodic health records.  The form is designed primarily for a    ║
+26 '║ weight record; however, the word "WEIGHT" can be replaced easily by any ║
+28 '║ other word or dimension for which a daily or periodic record might be   ║
+30 '║ appropriate.  The form can be modified easily to increase or decrease   ║
+31 '║ the number of lines by making an appropriate change in the number of    ║
+32 '║ loops printed.  The loop size entry 27 and is currently set at 24 to    ║
+33 '║ make the form the right length with its present format and content.     ║
+34 '║ To run the form as designed, simply set print head at the first line    ║
+35 '║ below the perforation and ascertain the printer is ON LINE. Press <F2>. ║
+36 '║                   (c) G I N A C O    1983              Ver 5.1/160/320  ║
+38 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -7105,19 +7108,19 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***********************   YES/NO <Y/N> SUBROUTINE   ***********************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN            YES/NO SUBROUTINE USING INKEY$ & QUALIFIERS                  OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN     This program will assign a value of Q=1 or Q=2 to the response      OPEN
-24 'OPEN (Y or y) or (N or n). The value is returned to the main program and     OPEN
-26 'OPEN may be used as the condition for a subsequent command or function.      OPEN
-27 'OPEN                                                                         OPEN
-28 'OPEN     Lines 5020 and 5030 demonstrate the optional method of testing the  OPEN
-30 'OPEN response by "CHR$(xx)" or by the literal string (Y,y,N,or n). Either    OPEN
-32 'OPEN conditional qualifier may be used effectively. Take your choice. Use    OPEN
-34 'OPEN GOSUB from your main program and assign program tasks using the value   OPEN
-38 'OPEN of "Q" returned.         (c) G I N A C O              Ver 5.2/160/320   OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║            YES/NO SUBROUTINE USING INKEY$ & QUALIFIERS                  ║
+20 '║                                                                         ║
+22 '║     This program will assign a value of Q=1 or Q=2 to the response      ║
+24 '║ (Y or y) or (N or n). The value is returned to the main program and     ║
+26 '║ may be used as the condition for a subsequent command or function.      ║
+27 '║                                                                         ║
+28 '║     Lines 5020 and 5030 demonstrate the optional method of testing the  ║
+30 '║ response by "CHR$(xx)" or by the literal string (Y,y,N,or n). Either    ║
+32 '║ conditional qualifier may be used effectively. Take your choice. Use    ║
+34 '║ GOSUB from your main program and assign program tasks using the value   ║
+38 '║ of "Q" returned.         (c) G I N A C O              Ver 5.2/160/320   ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS
@@ -7169,24 +7172,24 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************************************************************************
-16 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-18 'OPEN                  BASIC DISK MENU PROGRAM (BLANK)                        OPEN
-20 'OPEN                                                                         OPEN
-22 'OPEN    This is the basic Blueberry.bas Menu program without any data state- OPEN
-24 'OPEN ments or program names inserted. You may insert the program names at    OPEN
-26 'OPEN the appropriate places in the the DATA and RUN routines. To keep all    OPEN
-28 'OPEN the blank numbers from coming up, you may REM at the appropriate place  OPEN
-30 'OPEN in lines 250 to 395.  If you do not mind the full 64 numbers coming up  OPEN
-32 'OPEN on the MENU, you can make a single loop statement at line 250 and de-   OPEN
-34 'OPEN lete lines 260 through 395. The multi-statement method provides some    OPEN
-35 'OPEN flexibility when adding single programs.  For non-basic program MENU    OPEN
-36 'OPEN entries, you can make an appropriate statement at lines 2700 and those  OPEN
-37 'OPEN following. Direct the program to one of these lines with a RUN state-   OPEN
-38 'OPEN ment at the appropriate line between 2000 and 2690. (See BLUEMENU.BAS.) OPEN
-39 'OPEN     This program may be used, in whole or in part, without license or   OPEN
-40 'OPEN attribution.                                                            OPEN
-42 'OPEN               (c) G I N A C O -- 1983                      Ver 5.2/320  OPEN
-50 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+16 '╔═════════════════════════════════════════════════════════════════════════╗
+18 '║                  BASIC DISK MENU PROGRAM (BLANK)                        ║
+20 '║                                                                         ║
+22 '║    This is the basic Blueberry.bas Menu program without any data state- ║
+24 '║ ments or program names inserted. You may insert the program names at    ║
+26 '║ the appropriate places in the the DATA and RUN routines. To keep all    ║
+28 '║ the blank numbers from coming up, you may REM at the appropriate place  ║
+30 '║ in lines 250 to 395.  If you do not mind the full 64 numbers coming up  ║
+32 '║ on the MENU, you can make a single loop statement at line 250 and de-   ║
+34 '║ lete lines 260 through 395. The multi-statement method provides some    ║
+35 '║ flexibility when adding single programs.  For non-basic program MENU    ║
+36 '║ entries, you can make an appropriate statement at lines 2700 and those  ║
+37 '║ following. Direct the program to one of these lines with a RUN state-   ║
+38 '║ ment at the appropriate line between 2000 and 2690. (See BLUEMENU.BAS.) ║
+39 '║     This program may be used, in whole or in part, without license or   ║
+40 '║ attribution.                                                            ║
+42 '║               (c) G I N A C O -- 1983                      Ver 5.2/320  ║
+50 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLEAR:FOR I=1 TO 10:KEY I,"":NEXT
@@ -7225,70 +7228,70 @@ machines:
 1010 P = 60
 1020 FOR J=1 TO P
 1030 READ AA$(J),N(J)
-1040 DATA "--------.---",1:     REM LN  2000
-1050 DATA "--------.---",2:     REM     2010
-1060 DATA "--------.---",3:     REM     2020
-1070 DATA "--------.---",4:     REM     2030
-1080 DATA "--------.---",5:     REM     2040
-1090 DATA "--------.---",6:     REM LN  2050
-1100 DATA "--------.---",7:     REM     2060
-1110 DATA "--------.---",8:     REM     2070
-1120 DATA "--------.---",9:     REM     2080
-1130 DATA "--------.---",10:    REM     2090
-1140 DATA "--------.---",11:    REM LN  2100
-1150 DATA "--------.---",12:    REM     2110
-1160 DATA "--------.---",13:    REM     2120
-1170 DATA "--------.---",14:    REM     2130
-1180 DATA "--------.---",15:    REM     2140
-1190 DATA "--------.---",16:    REM LN  2150
-1200 DATA "--------.---",17:    REM     2160
-1210 DATA "--------.---",18:    REM     2170
-1220 DATA "--------.---",19:    REM     2180
-1230 DATA "--------.---",20:    REM     2190
-1240 DATA "--------.---",21:    REM LN  2200
-1250 DATA "--------.---",22:    REM     2210
-1260 DATA "--------.---",23:    REM     2220
-1270 DATA "--------.---",24:    REM     2230
-1280 DATA "--------.---",25:    REM     2240
-1290 DATA "--------.---",26:    REM LN  2250
-1300 DATA "--------.---",27:    REM     2260
-1310 DATA "--------.---",28:    REM     2270
-1320 DATA "--------.---",29:    REM     2280
-1330 DATA "--------.---",30:    REM     2290
-1340 DATA "--------.---",31:    REM     2300
-1350 DATA "--------.---",32:    REM     2310
-1360 DATA "--------.---",33:    REM     2320
-1370 DATA "--------.---",34:    REM     2330
-1380 DATA "--------.---",35:    REM     2340
-1390 DATA "--------.---",36:    REM LN  2350
-1400 DATA "--------.---",37:    REM     2360
-1410 DATA "--------.---",38:    REM     2370
-1420 DATA "--------.---",39:    REM     2380
-1430 DATA "--------.---",40:    REM     2390
-1440 DATA "--------.---",41:    REM LN  2400
-1450 DATA "--------.---",42:    REM     2410
-1460 DATA "--------.---",43:    REM     2420
-1470 DATA "--------.---",44:    REM     2430
-1480 DATA "--------.---",45:    REM     2440
-1490 DATA "--------.---",46:    REM LN  2450
-1500 DATA "--------.---",47:    REM     2460
-1510 DATA "--------.---",48:    REM     2470
-1520 DATA "--------.---",49:    REM     2480
-1530 DATA "--------.---",50:    REM     2490
-1540 DATA "--------.---",51:    REM LN  2500
-1550 DATA "--------.---",52:    REM     2510
-1560 DATA "--------.---",53:    REM     2520
-1570 DATA "--------.---",54:    REM     2530
-1580 DATA "--------.---",55:    REM     2540
-1590 DATA "--------.---",56:    REM LN  2550
-1600 DATA "--------.---",57:    REM     2560
-1610 DATA "--------.---",58:    REM     2570
-1620 DATA "--------.---",59:    REM     2580
-1630 DATA "--------.---",60:    REM     2590
-1640 DATA "--------.---",61:    REM LN  2600
-1650 DATA "--------.---",62:    REM     2610
-1660 DATA "--------.---",63:    REM     2620
-1670 DATA "--------.---",64:    REM     2630
+1040 DATA "--------.---",1:     Å LN  2000
+1050 DATA "--------.---",2:     Å     2010
+1060 DATA "--------.---",3:     Å     2020
+1070 DATA "--------.---",4:     Å     2030
+1080 DATA "--------.---",5:     Å     2040
+1090 DATA "--------.---",6:     Å LN  2050
+1100 DATA "--------.---",7:     Å     2060
+1110 DATA "--------.---",8:     Å     2070
+1120 DATA "--------.---",9:     Å     2080
+1130 DATA "--------.---",10:    Å     2090
+1140 DATA "--------.---",11:    Å LN  2100
+1150 DATA "--------.---",12:    Å     2110
+1160 DATA "--------.---",13:    Å     2120
+1170 DATA "--------.---",14:    Å     2130
+1180 DATA "--------.---",15:    Å     2140
+1190 DATA "--------.---",16:    Å LN  2150
+1200 DATA "--------.---",17:    Å     2160
+1210 DATA "--------.---",18:    Å     2170
+1220 DATA "--------.---",19:    Å     2180
+1230 DATA "--------.---",20:    Å     2190
+1240 DATA "--------.---",21:    Å LN  2200
+1250 DATA "--------.---",22:    Å     2210
+1260 DATA "--------.---",23:    Å     2220
+1270 DATA "--------.---",24:    Å     2230
+1280 DATA "--------.---",25:    Å     2240
+1290 DATA "--------.---",26:    Å LN  2250
+1300 DATA "--------.---",27:    Å     2260
+1310 DATA "--------.---",28:    Å     2270
+1320 DATA "--------.---",29:    Å     2280
+1330 DATA "--------.---",30:    Å     2290
+1340 DATA "--------.---",31:    Å     2300
+1350 DATA "--------.---",32:    Å     2310
+1360 DATA "--------.---",33:    Å     2320
+1370 DATA "--------.---",34:    Å     2330
+1380 DATA "--------.---",35:    Å     2340
+1390 DATA "--------.---",36:    Å LN  2350
+1400 DATA "--------.---",37:    Å     2360
+1410 DATA "--------.---",38:    Å     2370
+1420 DATA "--------.---",39:    Å     2380
+1430 DATA "--------.---",40:    Å     2390
+1440 DATA "--------.---",41:    Å LN  2400
+1450 DATA "--------.---",42:    Å     2410
+1460 DATA "--------.---",43:    Å     2420
+1470 DATA "--------.---",44:    Å     2430
+1480 DATA "--------.---",45:    Å     2440
+1490 DATA "--------.---",46:    Å LN  2450
+1500 DATA "--------.---",47:    Å     2460
+1510 DATA "--------.---",48:    Å     2470
+1520 DATA "--------.---",49:    Å     2480
+1530 DATA "--------.---",50:    Å     2490
+1540 DATA "--------.---",51:    Å LN  2500
+1550 DATA "--------.---",52:    Å     2510
+1560 DATA "--------.---",53:    Å     2520
+1570 DATA "--------.---",54:    Å     2530
+1580 DATA "--------.---",55:    Å     2540
+1590 DATA "--------.---",56:    Å LN  2550
+1600 DATA "--------.---",57:    Å     2560
+1610 DATA "--------.---",58:    Å     2570
+1620 DATA "--------.---",59:    Å     2580
+1630 DATA "--------.---",60:    Å     2590
+1640 DATA "--------.---",61:    Å LN  2600
+1650 DATA "--------.---",62:    Å     2610
+1660 DATA "--------.---",63:    Å     2620
+1670 DATA "--------.---",64:    Å     2630
 1700 NEXT J
 1710 RETURN
 1900 '****************** PROGRAM SELECTION RUN STATEMENTS *********************
@@ -7375,21 +7378,21 @@ machines:
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '******************** ZIPCLEAR OF FORMATTED SCREEN ************************
-15 'KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-17 'OPEN                IMMEDIATE CLEAR OF DESIGNATED SCREEN AREA                OPEN
-19 'OPEN                                                                         OPEN
-21 'OPEN    This simple program is a modification of a program contained in the  OPEN
-23 'OPEN Letters to the Editor, PC Magazine. It may not work consistently in a   OPEN
-25 'OPEN memory size of 64K or less. It will work in 128K. The program will      OPEN
-27 'OPEN demonstate a "slow screen wash" and then ask for coordinate inputs to   OPEN
-29 'OPEN clear the screen rapidly.  You can extract the routine and use in your  OPEN
-31 'OPEN programs. It is very  effective.  Instead of putting in the corners of  OPEN
-33 'OPEN the clear area with an prompt input statement, you can pre-program the  OPEN
-35 'OPEN area you want cleared before you go to the ZIPCLEAR subroutine.         OPEN
-37 'OPEN See LABELPRO.BAS and BLUEBERY.BAS for examples of routine in use.       OPEN
-39 'OPEN    This program may be used without license or attribution.             OPEN
-41 'OPEN                     (c) G I N A C O   - 1983           Ver 5.2/320/160  OPEN
-43 'SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+15 '╔═════════════════════════════════════════════════════════════════════════╗
+17 '║                IMMEDIATE CLEAR OF DESIGNATED SCREEN AREA                ║
+19 '║                                                                         ║
+21 '║    This simple program is a modification of a program contained in the  ║
+23 '║ Letters to the Editor, PC Magazine. It may not work consistently in a   ║
+25 '║ memory size of 64K or less. It will work in 128K. The program will      ║
+27 '║ demonstate a "slow screen wash" and then ask for coordinate inputs to   ║
+29 '║ clear the screen rapidly.  You can extract the routine and use in your  ║
+31 '║ programs. It is very  effective.  Instead of putting in the corners of  ║
+33 '║ the clear area with an prompt input statement, you can pre-program the  ║
+35 '║ area you want cleared before you go to the ZIPCLEAR subroutine.         ║
+37 '║ See LABELPRO.BAS and BLUEBERY.BAS for examples of routine in use.       ║
+39 '║    This program may be used without license or attribution.             ║
+41 '║                     (c) G I N A C O   - 1983           Ver 5.2/320/160  ║
+43 '╚═════════════════════════════════════════════════════════════════════════╝
 55 '        *****  < F2 > to RUN  *******  < F10 > For BLUEMENU  *****
 57 ' ====== To avoid DOCUMENTATION BOX each time, REM or DELETE  line 5 ======
 60 CLS

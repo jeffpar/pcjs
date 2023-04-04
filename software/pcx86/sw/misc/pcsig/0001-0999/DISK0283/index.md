@@ -163,7 +163,7 @@ machines:
 ## README.BAS
 
 ```bas
-1000 PRINT "DocuFile - Help Screen Generator         ○            General Information"
+1000 PRINT "DocuFile - Help Screen Generator         	            General Information"
 1002 PRINT "═══════════════════════════════════════════════════════════════════════════════"
 1004 PRINT ""
 1006 PRINT "DocuFile will take any standard text file and create a basic program to"
@@ -186,7 +186,7 @@ machines:
 1040 IF A$="C" OR A$="c" THEN CLS:SYSTEM
 1042 IF A$="P" OR A$="p" THEN CLS:GOTO  1000
 1044 CLS
-1046 PRINT "DocuFile - Help Screen Generator         ○               Source Text File"
+1046 PRINT "DocuFile - Help Screen Generator         	               Source Text File"
 1048 PRINT "═══════════════════════════════════════════════════════════════════════════════"
 1050 PRINT ""
 1052 PRINT "The source text file is the word processing file that you are going to"
@@ -206,7 +206,7 @@ machines:
 1080 IF A$="C" OR A$="c" THEN CLS:SYSTEM
 1082 IF A$="P" OR A$="p" THEN CLS:GOTO  1000
 1084 CLS
-1086 PRINT "Docufile - Help Screen Generator         ○○    Help Screen Program"
+1086 PRINT "Docufile - Help Screen Generator         		    Help Screen Program"
 1088 PRINT "═══════════════════════════════════════════════════════════════════════════════"
 1090 PRINT ""
 1092 PRINT "The destination help screen is the Basic program file that will contain the "

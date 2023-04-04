@@ -199,7 +199,6 @@ machines:
 50 GOTO 20              'get the next number
 100 PRINT "The sum of the";COUNT;"numbers is";SUM
 110 PRINT "and the average is";SUM/COUNT
-            'get the next n
 ```
 
 ## BACKUP.BAS

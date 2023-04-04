@@ -132,7 +132,6 @@ machines:
 310 END
 320 DATA 31,28,31,30,31,30,31,31,30,31,30,31,3,4,5,7,1,2,3,5,6,7,1,3,4,5,6,1,2,3,4,6,7,1,2,4,5,6,7,2," JANUARY ","FEBRUARY","  MARCH  ","  APRIL  ","  MAY  ", "  JUNE  ","  JULY  "," AUGUST ","SEPTEMBER","OCTOBER","NOVEMBER"
 330 DATA "DECEMBER "
-
 ```
 
 ## PASSWORD.BAS
@@ -180,7 +179,6 @@ machines:
 1375 LOCATE 12,20 :PRINT "- Illegal entry attempt! System killed -"
 1380 DEF SEG = 0
 1390 FOR I = 0 TO 32767:POKE I,0:NEXT
-
 ```
 
 ## XTMENU.BAS
@@ -380,7 +378,6 @@ machines:
 2210 '                                     Dave Armbruster
 2220 '
 2230 '*****************************************************************
-                          
 ```
 
 {% comment %}samples_end{% endcomment %}

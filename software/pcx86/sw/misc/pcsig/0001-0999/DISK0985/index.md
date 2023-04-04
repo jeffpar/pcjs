@@ -60,8 +60,8 @@ machines:
 
         This program is written in Sharp EL-5500III BASIC. Lower case 
         letters and extra spaces are used for clarity. The variable L is 
-        given as a capital letter. sqr is used instead of Sharp's � and 
-        pi is used instead of �. If your computer does not predefine pi, 
+        given as a capital letter. sqr is used instead of Sharp's √ and 
+        pi is used instead of π. If your computer does not predefine pi, 
         you will have to define it if you implement line 410. BASIC 
         dialects vary among small computers. Expect to make  substantial 
         changes in i/o and initialization statements if you use this 
@@ -90,9 +90,9 @@ machines:
         acceptable if both df are 8 or more, results are not acceptable 
         if both are 4 or less, and are mixed otherwise.
         
-        the program crashes if t = 0, x� = df - 1 or f = 1 with both 
+        the program crashes if t = 0, x² = df - 1 or f = 1 with both 
         degrees of freedom equal. the program will not accept df = 1 for 
-        Student's t or df < 3 for x�.
+        Student's t or df < 3 for x².
         
         the file ksprbas.err contains the results of extensive error 
         checks. use this for more detail about errors and for checking 
@@ -180,7 +180,6 @@ ksprbas.bas                                             page 2
 950 z = z * (e + 1/3 - (d+e+2/3)*p+c) / abs(e - (d+e)*p) : gosub 670
 960 using : print d+1;e+1;f;"qf=";using "###.####";q+0.00005 : goto 910
 
-
 ```
 
 {% comment %}samples_end{% endcomment %}

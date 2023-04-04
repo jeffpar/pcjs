@@ -542,7 +542,6 @@ machines:
 3600 GOTO 3590
 3610 CLS:COLOR 6:RETURN
 3620 'Last Line of ALIEN.BAS
-
 ```
 
 ## BASEBALL.BAS
@@ -551,26 +550,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            2085-A.BAS             ��"
-80 PRINT"��             BASEBALL              ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            2085-A.BAS             │░"
+80 PRINT"░│             BASEBALL              │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -1132,10 +1131,6 @@ machines:
 6530 DATA LOW AND INSIDE,HIGH AND OUTSIDE
 6540 END
 6550 CHAIN "MENU",1000
-OW,INSIDE,OUTSIDE,HIGH AND TIGHT,LOW AND OUTSIDE
-6530 DATA LOW AND INSIDE,HIGH AND OUTSIDE
-6540 END
-6550 CHAIN "MENU",1000
 ```
 
 ## BLACKBOX.BAS
@@ -1568,7 +1563,6 @@ machines:
 10480 LOCATE 24, 28 : COLOR LO : PRINT "<Press space bar to continue>";
 10490 Q = INKEY$ : IF Q = "" THEN 10490
 10500 RETURN
-
 ```
 
 ## BLKFRDY.BAS
@@ -1577,26 +1571,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            2090-A.BAS             ��"
-80 PRINT"��          BLACK FRIDAY #3          ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            2090-A.BAS             │░"
+80 PRINT"░│          BLACK FRIDAY #3          │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -1951,10 +1945,6 @@ machines:
 4460 NEXT N
 4470 RETURN
 4480 RESET
-
-4410 W=0
-4420 FOR J=1 TO 10
-4430 W=W+T(J)*M(
 ```
 
 ## CHECKERS.BAS

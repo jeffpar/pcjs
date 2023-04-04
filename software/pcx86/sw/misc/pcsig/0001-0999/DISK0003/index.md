@@ -212,10 +212,6 @@ machines:
  25200   CHOICE=IFUNC.GET
  25205   wend
  25210   END
- CEND
- 25190   IFUNC.GET=CHOICE
- 25195    GOSUB  500 ' GETSELECTION
- 
 ```
 
 {% comment %}samples_end{% endcomment %}

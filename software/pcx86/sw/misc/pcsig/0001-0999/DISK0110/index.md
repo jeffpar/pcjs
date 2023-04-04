@@ -920,7 +920,6 @@ machines:
 7100 PUT (0,0),HLPD:RETURN
 8000 GET (0,0)-(319,199),HLPD
 8001 GOTO 7000
-$="" THEN
 ```
 
 {% comment %}samples_end{% endcomment %}

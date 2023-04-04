@@ -285,11 +285,6 @@ machines:
  25320   close
  25325   '
  25330   end
-    beep
- 25310       print"end of file found"
- 25315    GOSUB  800 ' PRINT.TABLE
- 25320   close
- 25325   '
 ```
 
 ## 123RANGE.BAS

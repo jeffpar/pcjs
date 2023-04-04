@@ -763,13 +763,6 @@ machines:
 62980 PRINT "_";
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
- " "
-62950 KT = KT - 1
-62960 K$(KT) = " "
-62970 PRINT CHR$(CH);
-62980 PRINT "_";
-62990 PRINT CHR$(CH);
-63000 GOTO 6219
 ```
 
 ## REMARKS.BAS
@@ -1497,10 +1490,6 @@ machines:
 62980 PRINT "_";
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
- " "
-62950 KT = KT - 1
-62960 K$(KT) = " "
-62970 
 ```
 
 {% comment %}samples_end{% endcomment %}

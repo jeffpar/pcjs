@@ -208,7 +208,6 @@ machines:
 60750 IF WSTATUS% <> 1 THEN PRINT "Windowing initialization error":STOP
 60760 '
 60770 RETURN 'End of windowing initialization
-
 ```
 
 ## QBDEMO.BAS
@@ -317,7 +316,7 @@ machines:
            CALL wgotoxy(x%, y%)
            FOR i% = 1 TO 15
               CALL wfgcolor(i%)
-              CALL wwrite("����") 'ascii 219, which has no background
+              CALL wwrite("████") 'ascii 219, which has no background
            NEXT i%
         NEXT y%
      END IF

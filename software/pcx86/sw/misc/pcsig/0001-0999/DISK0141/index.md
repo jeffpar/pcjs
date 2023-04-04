@@ -722,7 +722,6 @@ machines:
 10310 IF KTYP$="I" THEN INP.INT%=VAL(INP.STR$):RETURN
 10320 INP.REL!=VAL(INP.STR$):IF INP.REL!=0 THEN INP.REL!-0
 10330 RETURN
-
 ```
 
 {% comment %}samples_end{% endcomment %}

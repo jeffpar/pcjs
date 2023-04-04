@@ -78,8 +78,6 @@ machines:
 10040   I=NROW0+NROW: J=NCOL0-1: X$="Column Totals"   : GOSUB 9920 'label row
 10050   I=NROW0-2: J=NCOL0+NCOL: X$="Row Totals"      : GOSUB 9920 'label col
 10060   GOTO 450           'this exits to the View Function
-W0-2: J=NCOL0+NCOL: X$="Row Totals"      : GOSUB 9920 'label col
-10060   GOTO 450           'this exits to the
 ```
 
 {% comment %}samples_end{% endcomment %}

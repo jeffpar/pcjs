@@ -1334,8 +1334,6 @@ machines:
 40200 NEXT O:LOCATE R,C:I=0:GOTO 29400
 65000 '         SAVE"b:indxcard.bas"
 65100 ' KEY 7,"kill"+chr$(34)+"indxcard":KEY 8,".dta"+chr$(34)
-CATE R,C:I=0:GOTO 29400
-65000 '         SAVE"b:in
 ```
 
 ## MAIL1.BAS

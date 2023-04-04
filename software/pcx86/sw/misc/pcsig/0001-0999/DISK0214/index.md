@@ -502,11 +502,6 @@ machines:
 51105 GOSUB 13000
 51110 PRINT " -BYE, Have a nice day
 51120 END
- 50960
-50970 RETURN
-51000 REM *******  DONE
-51100 CLOSE
-51
 ```
 
 ## CFILE.BAS
@@ -1145,9 +1140,6 @@ machines:
 62980 PRINT "_";
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
- " "
-62950 KT = KT - 1
-62960 K$(KT) = " "
 ```
 
 ## CFORM.BAS
@@ -1787,13 +1779,6 @@ machines:
 62980 PRINT "_";
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
- " "
-62950 KT = KT - 1
-62960 K$(KT) = " "
-62970 PRINT CHR$(CH);
-62980 PRINT "_";
-62990 PRINT CHR$(CH);
-63000 GO
 ```
 
 ## CHANGE.BAS
@@ -2799,9 +2784,6 @@ machines:
 61805 PRINT "                   Press any key to continue"
 61810 IF INKEY$ = "" THEN 61810
 61820 RETURN
-*"
-61800 PRINT ""
-61805 PRINT "                   Press any key to conti
 ```
 
 ## CINPUT.BAS
@@ -3647,10 +3629,6 @@ machines:
 62980 PRINT "_";
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
- " "
-62950 KT = KT - 1
-62960 K$(KT) = " "
-62970 PRINT CHR$(CH);
 ```
 
 ## CLIMITS.BAS
@@ -4131,10 +4109,6 @@ machines:
 62980 PRINT "_";
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
- " "
-62950 KT = KT - 1
-62960 K$(KT) = " "
-62970 PRINT CHR$(C
 ```
 
 ## CREAL.BAS
@@ -4712,10 +4686,6 @@ machines:
 62980 PRINT "_";
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
- " "
-62950 KT = KT - 1
-62960 K$(KT) = " "
-62
 ```
 
 ## CSCREEN.BAS
@@ -5381,8 +5351,6 @@ machines:
 62980 PRINT "_";
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
- " "
-6
 ```
 
 ## CTRANSFE.BAS
@@ -6162,13 +6130,6 @@ machines:
 62980 PRINT "_";
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
- " "
-62950 KT = KT - 1
-62960 K$(KT) = " "
-62970 PRINT CHR$(CH);
-62980 PRINT "_";
-62990 PRINT CHR$(CH);
-63000 G
 ```
 
 ## FORM.BAS
@@ -6658,11 +6619,6 @@ machines:
 51100 GOSUB 13000
 51200 PRINT "BYE - Have a nice day "
 51300 END
-Y$ = "" GOTO 50960
-50970 RETURN
-51000 REM ******** EXIT
-51100 GOSUB 13000
-512
 ```
 
 ## MAIN.BAS
@@ -8479,9 +8435,6 @@ machines:
 61470 X(FLD2) = XHLD2
 61475 X(TGTRN) = XHLD3
 61480 RETURN
-GOSUB 60300
-61460 X(FLD1) = XHLD1
-61465 IF FLD2 = 0 THEN 6
 ```
 
 ## SCAN.BAS
@@ -9503,12 +9456,6 @@ machines:
 51105 GOSUB 13000
 51110 PRINT " -BYE, Have a nice day
 51120 END
- 50960
-50970 RETURN
-51000 REM *******  DONE
-51100 CLOSE
-51105 GOSUB 13000
-51110 PRINT " -BYE, Have a nice day
 ```
 
 ## SORT.BAS
@@ -9958,7 +9905,6 @@ machines:
 61950 IF C2 = 75 THEN C = 19
 61960 IF C2 = 77 THEN C = 4 
 61970 RETURN
- IF C2 = 83 
 ```
 
 ## TESTASCI.BAS
@@ -9969,7 +9915,6 @@ machines:
 300 PRINT A$ 
 400 IF EOF(1) = 0 THEN 200
 500 END
- r�|�*   Y� OR YO
 ```
 
 ## TRANSFER.BAS
@@ -10580,11 +10525,6 @@ machines:
 51120 END
 51200 PRINT "BYE - Have a nice day "
 51300 END
-SUB 13000
-51105 GOSUB 13000
-51110 PRINT " -BYE, Have a nice day
-51120 END
-51
 ```
 
 {% comment %}samples_end{% endcomment %}

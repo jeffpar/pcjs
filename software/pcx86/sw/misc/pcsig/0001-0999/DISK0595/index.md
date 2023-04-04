@@ -114,10 +114,6 @@ machines:
 460 PRINT:PRINT
 470 INPUT  "          PRESS THE  [RETURN]  KEY FOR THE TUTORIAL MAIN MENU ",Z$
 480 LOAD"B:BTMENU.BAS",R
- !
-460 PRINT:PRINT
-470 INPUT  "          PRESS THE  [RETURN]  KEY FOR THE TUTORIAL MAIN MENU ",Z$
-480 LOAD"B:BTMENU.BA
 ```
 
 ## BTMENU.BAS
@@ -126,21 +122,21 @@ machines:
 10 ' MARK A. SWANSON         19:35:44  2/27/1985
 20 CLS
 30 PRINT "           ";:FOR A=1 TO 58:PRINT CHR$(176);:NEXT A
-40 PRINT "           �               THE BASIC TUTORIAL MENU                  �
-50 PRINT "           �                                                        �
-60 PRINT "           �                                                        �
-70 PRINT "           �   [1]  BASIC GUIDE                [6]  FOR / NEXT      �
-80 PRINT "           �                                                        �
-90 PRINT "           �   [2]  PRINT                      [7]  INPUT           �
-100 PRINT "           �                                                        �
-110 PRINT "           �   [3]  MODES OF OPERATION         [8]  IF / THEN       �
-120 PRINT "           �                                                        �
-130 PRINT "           �   [4]  GOTO                       [9]  READ / DATA     �
-140 PRINT "           �                                                        �
-150 PRINT "           �   [5]  LET                       [10]  GOSUB / RETURN  �
-160 PRINT "           �                                                        �
-170 PRINT "           �                                                        �
-180 PRINT "           �                       Q   QUIT                         �
+40 PRINT "           ░               THE BASIC TUTORIAL MENU                  ░
+50 PRINT "           ░                                                        ░
+60 PRINT "           ░                                                        ░
+70 PRINT "           ░   [1]  BASIC GUIDE                [6]  FOR / NEXT      ░
+80 PRINT "           ░                                                        ░
+90 PRINT "           ░   [2]  PRINT                      [7]  INPUT           ░
+100 PRINT "           ░                                                        ░
+110 PRINT "           ░   [3]  MODES OF OPERATION         [8]  IF / THEN       ░
+120 PRINT "           ░                                                        ░
+130 PRINT "           ░   [4]  GOTO                       [9]  READ / DATA     ░
+140 PRINT "           ░                                                        ░
+150 PRINT "           ░   [5]  LET                       [10]  GOSUB / RETURN  ░
+160 PRINT "           ░                                                        ░
+170 PRINT "           ░                                                        ░
+180 PRINT "           ░                       Q   QUIT                         ░
 190 PRINT "           ";:FOR A=1 TO 58:PRINT CHR$(176);:NEXT A
 200 PRINT:PRINT:PRINT:PRINT
 210 INPUT "               PRESS THE NUMBER FOR THE LESSON YOU WOULD LIKE ";Z$
@@ -156,8 +152,6 @@ machines:
 310 IF Z$="10" THEN LOAD"B:GR.BAS",R
 320 IF Z$="Q" THEN LOAD"B:MENU.BAS",R
 330 PRINT "INVALID RESPONSE ..............> TRY AGAIN ":GOTO 210
-HEN LOAD"B:GR.BAS",R
-32
 ```
 
 ## CHAIRMAN.BAS
@@ -1074,8 +1068,6 @@ machines:
 2230 PRINT
 2240 PRINT "        Remember to use quotations instead of double apostrophies ('')
 2250 PRINT "------------------------------------------------------------------------------"
-tead of double apostrophies ('')
-2250 PRINT "-----------------
 ```
 
 ## GOTO.BAS
@@ -1224,7 +1216,6 @@ machines:
 1410 PRINT "          As always, use quotations instead of double apostrophies
 1420 PRINT
 1430 PRINT "-----------------------------------------------------------------------------"
-           
 ```
 
 ## GR.BAS
@@ -1378,8 +1369,6 @@ machines:
 1460 PRINT
 1470 PRINT "                   To practice, type NEW and press [RETURN]
 1480 PRINT "------------------------------------------------------------------------------"
-ice, type NEW and press [RETURN]
-1480 PRINT "---------------
 ```
 
 ## GUESS.BAS
@@ -1585,7 +1574,7 @@ machines:
 910 PRINT "To use these characters in a program use PRINT with CHR$ ......
 920 PRINT
 930 PRINT "PRINT CHR$(X)                     Example --->    PRINT CHR$(177)
-940 PRINT "X is the ASCII number                             �
+940 PRINT "X is the ASCII number                             ▒
 945 FOR DELAY=1 TO 2000:NEXT
 950 PRINT
 960 LOCATE 8,1:FOR A=1 TO 78:PRINT CHR$(205);:NEXT
@@ -1595,9 +1584,6 @@ machines:
 980 INPUT "                     PRESS [P] PREVIOUS PAGE    [Q] MAIN BTMENU ",Z$
 990 IF Z$="P" THEN GOTO 650
 1000 IF Z$="Q" THEN LOAD"B:BTMENU.BAS",R ELSE GOTO 980
-P] PREVIOUS PAGE    [Q] MAIN BTMENU ",Z$
-990 IF Z$="P" THEN GOTO 650
-1000 IF Z$="Q" THEN L
 ```
 
 ## IFTHEN.BAS
@@ -1769,8 +1755,6 @@ machines:
 1640 PRINT
 1650 PRINT "         Remember to use quotations instead of double apostrophies ('')
 1660 PRINT "------------------------------------------------------------------------------"
-tead of double apostrophies ('')
-1660 PRINT "-
 ```
 
 ## INPUT.BAS
@@ -1913,7 +1897,6 @@ machines:
 1340 PRINT
 1350 PRINT "        Remember to use quotations instead of double appostrophies ('')
 1360 PRINT "------------------------------------------------------------------------------"
-
 ```
 
 ## LET.BAS
@@ -2050,7 +2033,6 @@ machines:
 1290 PRINT
 1300 PRINT " Remember, when using STRINGs, use quotations instead of double apostrophies.
 1310 PRINT "-------------------------------------------------------------------------------"
-
 ```
 
 ## MATH.BAS
@@ -2742,8 +2724,6 @@ machines:
 1960 PRINT "To get back to lessons, type LOAD''B:BTMENU.BAS'',R
 1970 PRINT "------------------------------------------------------------------------------"
 1980 PRINT "                       To begin, type NEW and press [RETURN]
---------------------------------------------------"
-1980 PRINT "                       To begin, type NEW and press [RET
 ```
 
 ## MPG.BAS
@@ -2752,24 +2732,24 @@ machines:
 1 CLS
 10 DIM TRCK(2,104)
 20 ' LOCATE C,R:PRINT CHR$(27)+CHR$(61)+CHR$(R+32)+CHR$(C+32)
-30 :REMCSRLIN RANGE 1
+30 :REM█ RANGE 1
 40 SX=56
 50 FOR J=1 TO 31:TRCK(1,J)= SX:SX=SX-1:TRCK(2,J)= 2:NEXT J
-55 :REMCSRLIN RANGE 2
+55 :REM█ RANGE 2
 60 FOR J=32 TO 49:READ TRCK(1,J):NEXT J
 70 DATA 24,23,21,20,19,18,17,16,14,14,14,14,16,17,18,19,20,21
 90 FOR J=32 TO 49:READ TRCK(2,J):NEXT J
 100 DATA 3,3,3,3,4,4,5,6,7,8,9,10,11,12,13,13,14,14
-110 :REMCSRLIN RANGE 3
+110 :REM█ RANGE 3
 120 SX=23:FOR J=50 TO 85:TRCK(1,J)= SX:SX=SX+1:NEXT J
 130 TRCK(2,50)= 14:TRCK(2,51)= 14:FOR J=52 TO 83:TRCK(2,J)= 15:NEXT J
 140 TRCK(2,84)= 14:TRCK(2,85)= 14
-150 :REMCSRLIN RANGE 4
+150 :REM█ RANGE 4
 160 FOR J=86 TO 104:READ TRCK(1,J):NEXT J
 170 DATA 61,62,63,64,65,66,67,67,67,67,66,65,64,63,62,61,59,57,56
 180 FOR J=86 TO 104:READ TRCK(2,J):NEXT J
 190 DATA 14,14,13,13,12,11,10,9,8,7,6,5,4,4,3,3,3,3,2
-200 :REMCSRLIN PROGRAM MPG
+200 :REM█ PROGRAM MPG
 210 CL$= CHR$(26)
 220 CLS
 230 FOR A=10 TO 30
@@ -3149,10 +3129,8 @@ machines:
 360 LOCATE ROW,COL:IF K$<>CHR$(8) THEN PRINT K$
 370 NEXT COL
 380 NEXT ROW
-390 LOCATE 22,22:INPUT "������ PRESS [RETURN] TO START OVER ������  ",STARTOVER
+390 LOCATE 22,22:INPUT "▒▒▒▒▒▒ PRESS [RETURN] TO START OVER ▒▒▒▒▒▒  ",STARTOVER
 400 GOTO 220
-K$
-370 NEX
 ```
 
 ## READDATA.BAS
@@ -3321,7 +3299,6 @@ machines:
 1610 PRINT
 1620 PRINT "                 To begin practice, type NEW and press [RETURN]
 1630 PRINT "------------------------------------------------------------------------------"
-
 ```
 
 ## SCRAMBLE.BAS
@@ -3581,7 +3558,7 @@ machines:
 200 X1=X1+2:Y1=Y1-1:X2=X2-2:Y2=Y2-1
 210 NEXT J
 220 FOR T=1 TO 400:NEXT T
-230 :REMCSRLIN****************** INTRO
+230 :REM█****************** INTRO
 240 CLS
 250 PRINT:PRINT
 260 PRINT"                        Welcome to Super Scram !!!!!!":PRINT

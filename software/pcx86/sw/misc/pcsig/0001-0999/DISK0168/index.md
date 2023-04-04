@@ -201,10 +201,6 @@ machines:
 1010 RESUME 390
 1210 CLS : PRINT "ALGEBRA Graphics Program"
 65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
-RROR HANDLER
-1010 RESUME 390
-1210 CLS : PRINT "ALGEBRA Graphics Program"
-65399 '*
 ```
 
 ## BACH.BAS
@@ -213,26 +209,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            4028-A.BAS             ��"
-80 PRINT"��       PRELUDE 1 IN C MAJOR        ��"
-90 PRINT"��            J.S. BACH              ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            4028-A.BAS             │░"
+80 PRINT"░│       PRELUDE 1 IN C MAJOR        │░"
+90 PRINT"░│            J.S. BACH              │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -339,7 +335,6 @@ machines:
 1980 '
 1990 IF ERR=73 THEN CLS:                                                          PRINT "THIS PROGRAM USES THE 'PLAY' STATEMENT WHICH REQUIRES ADVANCED BASIC.":  PRINT "LOAD 'BASICA' AND RE-RUN.":END
 2000 ON ERROR GOTO 0
-OGRAM USES THE 'PLAY' STATEMENT WHICH REQUIRES ADVANCED BASIC.":  PRINT "LOAD 'BASICA' AN
 ```
 
 ## BACH2.BAS
@@ -513,7 +508,6 @@ machines:
 760 REM ' PA 19474.  Source: STX453 / Compuserve: 70176,620 / Delphi: PAN
 765 REM '
 770 REM ' MAY THE SCORES BE WITH YOU...
-
 ```
 
 ## BIBLE.BAS
@@ -581,26 +575,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            5024-A.BAS             ��"
-80 PRINT"��        CHEMISTRY QUESTIONS        ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            5024-A.BAS             │░"
+80 PRINT"░│        CHEMISTRY QUESTIONS        │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -739,10 +733,6 @@ machines:
 2300 GOTO 1170
 2310 NEXT Y
 2320 END
-RINT :LPRINT :LPRINT
-2260 GOSUB 1290
-2270 K(Y,10)=M/V3
-2280 NEXT Y
 ```
 
 ## CHEMTEST.BAS
@@ -751,26 +741,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            5023-A.BAS             ��"
-80 PRINT"��          CHEMISTRY TEST           ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            5023-A.BAS             │░"
+80 PRINT"░│          CHEMISTRY TEST           │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -942,34 +932,32 @@ machines:
 2630 LPRINT Y*100;"CHEM 10                   PROBLEMS ABOUT MOLES         NAME___________________"
 2640 FOR X=1 TO 80:LPRINT "-";:NEXT X:LPRINT :LPRINT
 2650 RETURN
-     PROBLEMS ABOUT MOLES         NAME___________________"
-2640 FOR X=1 TO 80:LPRINT "-";:NEXT X:LPRINT :LPRINT
 ```
 
 ## CLASROLL.BAS
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            7027-A.BAS             ��"
-60 PRINT"��            CLASS ROLL             ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            7027-A.BAS             │░"
+60 PRINT"░│            CLASS ROLL             │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -1231,11 +1219,6 @@ machines:
 3540 PUT 1,SS
 3550 GOTO 1870
 3560 CLOSE:STOP
-12)
-3520 GOTO 3140
-3530 IF DEL$="x" THEN LSET DEL$=" " ELSE LSET DEL$ = "x"
-3540 PUT 1,SS
-3550 GO
 ```
 
 ## COFFEE.BAS
@@ -2237,26 +2220,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
 70 PRINT"              5019-A.BAS               "
 80 PRINT"                 SPELL                 "
 90 PRINT"                                       "
 100 PRINT"                                       "
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -2496,7 +2479,6 @@ machines:
 3850 DATA grass,rabbit,way,christmas,ground,rain,wind,coat,hand,ring
 3860 DATA window,corn,head,robin,wood,cow,hill,Santa Claus,squirrel,school
 3870 DATA little,down,go,here,it
-
 ```
 
 ## SPELLBEE.BAS

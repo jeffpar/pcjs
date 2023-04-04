@@ -283,8 +283,8 @@ machines:
 100 CHAYNBAK$="YES"
 110 CLS: KEY OFF
 120 PRINT :PRINT "DEAR FRIENDS
-130 PRINT :PRINT "Thank you for TRYING --PEOPLE SYSTEMS, LTD.  SOFTWARE FOR IBM-PC ≡►î
-37178  "We hope you will be a regular user of PEOPLE SYSTEM'S, LTD. WARMWARE.           It is a new concept. If you haven't already done so, RUN ~TALKPAGE~             and~PEPLSYST~ to learn more of our philosophy.
+130 PRINT :PRINT "Thank you for TRYING --PEOPLE SYSTEMS, LTD.  SOFTWARE FOR IBM-PC  
+140 PRINT :PRINT "We hope you will be a regular user of PEOPLE SYSTEM'S, LTD. WARMWARE.           It is a new concept. If you haven't already done so, RUN ~TALKPAGE~             and~PEPLSYST~ to learn more of our philosophy.
 150 PRINT :PRINT "As you can easily see we are working hard to produce a unique and               useful product, one that is ahead of it's time, low priced, but with            full service and support.
 160 PRINT :PRINT "We believe that PEOPLE SYSTEMS, LTD. has a LOCK on the better interface         to WARMWARE without FLASH or FANFARE.
 170 PRINT :PRINT "We want our customers to be happy with our products. We will appreciate         receiving your feed back, either good or bad, after you have used the           product and are familiar with it. (See below) If you send us a
@@ -369,7 +369,7 @@ machines:
 1145 LOCATE 7,6:PRINT "control or play a part in our lives. PeopleSystems are made up of
 1150 LOCATE  8,6:PRINT "the habits, the customs and the laws that affect people's behaviour
 1155 LOCATE  9,6:PRINT "and society's progress or its stagnation. EXAMPLES of PeopleSystems:
-1157 LOCATE 10,6:PRINT "Threeeals a day; grammar, high school, college, job or marriage.
+1157 LOCATE 10,6:PRINT "Three meals a day; grammar, high school, college, job or marriage.
 1160 LOCATE 12,6:PRINT "The progress of THING-SYSTEMS is centuries ahead of PeopleSystems.
 1165 LOCATE 13,6:PRINT "In fact, during the last several decades our PeopleSystems seem
 1170 LOCATE 14,6:PRINT "to be stumbling through all sorts of self-destructive patterns in

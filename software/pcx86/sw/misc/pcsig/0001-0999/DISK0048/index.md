@@ -1153,9 +1153,6 @@ machines:
 2770 RETURN
 2780 PRINT "THANK YOU FOR PLAYING. "
 2790 END
-N PUT (POSA%,POSB%),OA%  ,PSET
-2750 NEXT J: NEXT I
-2760 N
 ```
 
 ## RUNOFF.BAS
@@ -1672,9 +1669,6 @@ machines:
 410 LOCATE ,40:PRINT"Control PrtSc     in PC-DOS":LOCATE ,61:PRINT "as required";:LOCATE 15,1
 420 SYSTEM
 4800 , OR 9600
-r"
-410 LOCATE ,40:PRINT"Control PrtSc     in PC-DOS":LOCATE ,61:PRINT "as required";:LOCATE 15,1
-420 
 ```
 
 ## UPDLOAD.BAS
@@ -1790,8 +1784,6 @@ machines:
 5200 ON ERROR GOTO 9000
 9000 RESUME
 9990 END
-UME 3100
-5100 IF ERR = 68 OR ERR = 71 THEN PRINT "Check disk " : RESUME 3
 ```
 
 {% comment %}samples_end{% endcomment %}

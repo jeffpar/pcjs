@@ -208,7 +208,6 @@ machines:
 780 PRINT:RETURN
 790 PRINT "TOTAL COST = $";RT:PRINT:PRINT "<END>"
 800 END
-
 ```
 
 ## METRICON.BAS
@@ -2705,7 +2704,6 @@ machines:
 63999   GOTO 62000
 18530   IF OPION$="N" THEN 18535
 18532   PRINT#1, USING IMAGE12$;"Average residue cover required is",MINCOV,"%"
-
 ```
 
 ## WOODHEAT.BAS

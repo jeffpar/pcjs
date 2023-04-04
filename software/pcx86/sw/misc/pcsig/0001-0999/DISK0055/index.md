@@ -765,37 +765,32 @@ machines:
 2660 F=0
 2670 P=0
 2680 RETURN
-"
-2580 PRINT X$
-2590 PRINT Y$
-2600 END
-2
 ```
 
 ## HRSERACE.BAS
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            2045-A.BAS             ��"
-60 PRINT"��            HORSE RACES            ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            2045-A.BAS             │░"
+60 PRINT"░│            HORSE RACES            │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -910,9 +905,6 @@ machines:
 2070 REM ******* WAIT ******
 2080 FOR IW=1 TO 1000:NEXT
 2090 RETURN
-2060 IF SAMP$="YES" THEN CHAIN "SAMPLES",1000 ELSE END
-2070 REM ******* WAIT ******
-2080 F
 ```
 
 ## IPCOGOLF.BAS
@@ -1182,8 +1174,6 @@ machines:
 2710 DATA 374,4,434,4,210,3,376,4,205,3,440,4,422,4,510,5,595,5
 2720 DATA 510,5,434,4,210,3,312,4,428,4,440,4,205,3,515,5,318,4
 2730 END
-,4,434,4,210,3,376,4,205,3,440,4,422,4,510,5,595,5
-2720 DATA 510,5,434,4,210,3,312,4,428,4,440,4,205,3,515,5
 ```
 
 ## JETPILOT.BAS
@@ -1375,7 +1365,7 @@ machines:
 1750 T5=T7+RT/40+380*FU:IF T5>600 THEN T5=600
 1760 T6=RT/73:IF T6>65 THEN T6=65
 1770 TS=TS+INT(3*RND(1)):LOCATE 9,5:PRINT  USING "T5 ### C.    OIL PRESS ## PSI";T5;T6;
-1780 A$= INKEY$:IF A$<>"" THEN 1790 ELSE 1710
+1780 	A$= INKEY$:IF A$<>"" THEN 1790 ELSE 1710
 1790 LOCATE 10,21:PRINT ;:IF A$="F" AND FU=0 THEN PRINT "FUEL ON      ":FU=1: ELSE IF A$="F" THEN PRINT "FUEL OFF     ":FU=0:T7=50+INT(50*RND(1))
 1800 IF A$="S" AND ES=0 THEN PRINT "ENGINE SPIN     ":ST=3:GOTO 1710
 1810 IF A$="S" AND ES=1 AND FU=0 THEN PRINT "ENGINE SHUTDOWN":ST=-4:ES=0:GOTO 1710
@@ -1944,26 +1934,26 @@ machines:
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            5008-A.BAS             ��"
-60 PRINT"��              SESAME               ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            5008-A.BAS             │░"
+60 PRINT"░│              SESAME               │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -2118,7 +2108,6 @@ machines:
 2470 PRINT "Street? "
 2480 PLAY "c1"
 2490 CLS
-L
 ```
 
 ## STARWARS.BAS

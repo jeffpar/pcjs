@@ -243,8 +243,6 @@ machines:
 10941 '                                Usually " ".  Change to "\" [5cH]
 10950 ' 03b4           DB 3cH          Hard Cr.  End of line is paragraph termination.  Usually "<" Can change to " " [20H]
 10951 '                                Then can use ^B to reform program source files, where each line ends in CR
- " " [20H]
-10951 '                                                                                                                                                                                                                                                                                                
 ```
 
 {% comment %}samples_end{% endcomment %}

@@ -453,7 +453,6 @@ machines:
 60450 IF X$ = "Y" OR X$ = "y" THEN PRINT "press enter twice to execute"   ELSE PRINT "'press enter to execute"
 60460 LOCATE 4,1
 60470 END
-"Y" OR X$ = "y" THEN PRINT "press e
 ```
 
 ## RUBIC3.BAS
@@ -741,9 +740,6 @@ machines:
 2770 RETURN
 2780 PRINT "THANK YOU FOR PLAYING. "
 2790 END
-N PUT (POSA%,POSB%),OA%  ,PSET
-2750 NEXT J: NEXT I
-2760 N
 ```
 
 ## SOUNDEMO.BAS
@@ -1377,7 +1373,6 @@ machines:
 10220 DEF SEG: LOCATE ,,1,6,7
 10240 SCREEN 0: WIDTH 40: MONO=0
 10260 RETURN
-
 ```
 
 ## SW-PEG.BAS
@@ -1648,7 +1643,6 @@ machines:
 263 IF ANS="Y" OR ANS="y" OR ANS=CHR$(13) THEN GOSUB 33:MOVE=0:GOTO 197
 264 CLS
 265 END ' of program.
-
 ```
 
 ## TWINKLE.BAS

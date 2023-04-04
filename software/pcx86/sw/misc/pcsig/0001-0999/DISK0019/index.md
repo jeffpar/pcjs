@@ -203,7 +203,7 @@ machines:
 3100 '
 3101 'game - archie & mehitabel
 3110 KEY OFF:P=2:M=600
-3112 COLOR 0,7,0:CLS:LOCATE 23,1:PRINT"  Help Archie tag Mehitabel  TIME: ";
+3112 COLOR 0,7,0:CLS:LOCATE 23,1:PRINT"■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  Help Archie tag Mehitabel  TIME: ";
 3120 LOCATE 25,1:PRINT" HIT ("+CHR$(24)+CHR$(25)+CHR$(26)+CHR$(27)+") TO MOVE HIM (OR HIT "+CHR$(34)+"End"+CHR$(34)+")";
 3121 LOCATE 22,2:PRINT F$+" Promoted to ";:IF P=2 THEN PRINT "Junior Clerk";
 3122 IF P=4 THEN PRINT"Assoc. Clerk";
@@ -364,7 +364,7 @@ machines:
 6152 PRINT:PRINT " HI, ";:COLOR 1,7:PRINT N$;:COLOR 0,7:PRINT ","
 6154 PRINT:PRINT " May I call you ";:COLOR 1,7:PRINT F$;:COLOR 0,7:PRINT" (Y/N) ?"
 6156 PRINT:Y=24:GOSUB 1410 CHOICE:PRINT
-6160 IF MID$(X$,1,1)<>"y" AND MID$(X$,1,1)<>"Y" THEN IF LEN(N$)>11 THEN F$=LEFT$(N$,LEN(F$)+2)+" :í F$τN$
+6160 IF MID$(X$,1,1)<>"y" AND MID$(X$,1,1)<>"Y" THEN IF LEN(N$)>11 THEN F$=LEFT$(N$,LEN(F$)+2)+"■" ELSE F$=N$
 6162 PRINT " OK, ";:COLOR 1,7:PRINT F$;:COLOR 0,7:PRINT ","
 6164 PRINT:PRINT "  -- THAT'S A NICE NAME FOR A ";:COLOR 1,7:PRINT "COCKROACH";:COLOR 0,7:PRINT "!"
 6180 FOR I=32 TO 1 STEP -1:F=1-(F=1):LOCATE 21,I:PRINT C$(F);:SOUND 32767,4:NEXT:PRINT:PRINT:PRINT:PRINT
@@ -636,7 +636,7 @@ machines:
 12450 PRINT:PRINT"  My friend Archie, the original         software";:PRINT C$(1)+"bug, can easily find":PRINT" his way OUT of my programs!"
 12452 Y=24:GOSUB 1310 SPACE
 12460 RESTORE 30080:FOR I=9 TO 23:LOCATE I,1:PRINT "                                        ";:READ J:SOUND J,1:NEXT
-12462 COLOR 15,0:LOCATE 11,5:PRINT"SR";:LOCATE 11,20:PRINT"SR";:LOCATE 11,25:PRINT"SR;:╩ ☼♂,☼#:æ"SR";:╩ ☼♫,☼↓:æ"SR";:╩ ☼♫,☼∟:æ"SR";
+12462 COLOR 15,0:LOCATE 11,5:PRINT"SR";:LOCATE 11,20:PRINT"SR";:LOCATE 11,25:PRINT"SR■■■";:LOCATE 11,35:PRINT"SR";:LOCATE 14,25:PRINT"SR";:LOCATE 14,28:PRINT"SR";
 12464 COLOR 0,7:X=5:Y=8:U=5:V=10:GOSUB 4610 LINE:X=6:Y=11:U=6:V=9:GOSUB 4610 LINE
 12465 X=20:Y=8:U=20:V=10:GOSUB 4610 LINE:X=21:Y=11:U=21:V=9:GOSUB 4610 LINE
 12466 X=25:Y=8:U=25:V=10:GOSUB 4610 LINE:X=26:Y=11:U=26:V=9:GOSUB 4610 LINE
@@ -833,8 +833,6 @@ machines:
 
 ```bas
 10 RUN"MENU
-
-                                                                                                               
 ```
 
 ## MENU.BAS

@@ -125,10 +125,6 @@ machines:
 370 L$=LEFT$(L$,LEN(L$)-1)
 380 S$=""
 390 RETURN
-30 L$=L$+S$
-340 WEND
-350 LL%=LEN(L$)
-360 IF LL%<1, THEN S$=""
 ```
 
 ## BALL.BAS
@@ -1088,7 +1084,6 @@ machines:
 65001 LOCATE 25,1:PRINT SPACE$(79);:LOCATE 25,1:PRINT "  Press ESC key to continue ";:ANS$=INPUT$(1):IF ASC(ANS$)<>27 THEN 65001
 65002 IF ADDR.%<>0 THEN RUN DRIVE$+":"+"START"
 65005 END
- ESC key to continue ";:ANS$=INPUT$(1):
 ```
 
 ## LUNAR.BAS

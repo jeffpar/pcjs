@@ -151,7 +151,6 @@ machines:
 1100 '---------------------ERROR TRAPPING
 1110 B$ = ""
 1120 RESUME
-
 ```
 
 ## ED_AM.BAS
@@ -391,7 +390,6 @@ machines:
 1100 '---------------------ERROR TRAPPING
 1110 B$ = ""
 1120 RESUME
-
 ```
 
 {% comment %}samples_end{% endcomment %}

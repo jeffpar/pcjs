@@ -817,26 +817,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            6016-A.BAS             ��"
-80 PRINT"��      LOAN SAVINGS SOLUTIONS       ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            6016-A.BAS             │░"
+80 PRINT"░│      LOAN SAVINGS SOLUTIONS       │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -1650,7 +1650,6 @@ machines:
 9050 P=0:K=0:N=0:M=0
 9060 PRINT:GOTO 1190
 9070 END
-40 PRINT "ENTER FIGURES 
 ```
 
 ## TASKPLAN.BAS
@@ -1708,21 +1707,21 @@ machines:
 500 LOCATE 1,18,0
 510 PRINT "Please read these instructions before starting" : PRINT
 520 PRINT "1. Have on hand the general data for your project."
-530 PRINT "     project's name (up to 20 characters)"
-540 PRINT "     total number of tasks (2 to "; GIT; ")"
-550 PRINT "     total number of time periods (2 to "; GJP; ")"
-560 PRINT "     choice of rounding method"
-570 PRINT "         Normal,        +1 if fraction >= 0.5"
-580 PRINT "         Conservative,  +1 if fraction >  0.0"
-590 PRINT "     choice of Constant or Variable for cost multiplier M1"
-600 PRINT "         value of M1 if Constant is selected (xx.yyyzzz)"
-610 PRINT "     value of constant cost multiplier M2 (xx.yyyzzz)" : PRINT
+530 PRINT "     ■ project's name (up to 20 characters)"
+540 PRINT "     ■ total number of tasks (2 to "; GIT; ")"
+550 PRINT "     ■ total number of time periods (2 to "; GJP; ")"
+560 PRINT "     ■ choice of rounding method"
+570 PRINT "         ■ Normal,        +1 if fraction >= 0.5"
+580 PRINT "         ■ Conservative,  +1 if fraction >  0.0"
+590 PRINT "     ■ choice of Constant or Variable for cost multiplier M1"
+600 PRINT "         ■ value of M1 if Constant is selected (xx.yyyzzz)"
+610 PRINT "     ■ value of constant cost multiplier M2 (xx.yyyzzz)" : PRINT
 620 PRINT "2. Have on hand the specific data for the individual tasks."
-630 PRINT "     task's name (up to 20 characters)"
-640 PRINT "     task's start time (xx.yy), range = 0.0 to <";GJP;".00"
-650 PRINT "     task's end time (xx.yy),   range = >start time to ";GJP;".00"
-660 PRINT "     task's cost (wxxxyyy.zz)"
-670 PRINT "     task's cost multiplier M1, if Variable option was selected (xx.yyyzzz)" : PRINT
+630 PRINT "     ■ task's name (up to 20 characters)"
+640 PRINT "     ■ task's start time (xx.yy), range = 0.0 to <";GJP;".00"
+650 PRINT "     ■ task's end time (xx.yy),   range = >start time to ";GJP;".00"
+660 PRINT "     ■ task's cost (wxxxyyy.zz)"
+670 PRINT "     ■ task's cost multiplier M1, if Variable option was selected (xx.yyyzzz)" : PRINT
 680 PRINT "3. If using data from a previous TASKPLAN project, have on hand the                ";CHR$(34);"filename";CHR$(34); " under which the data were stored."
 690 GOSUB 4900
 700 LOCATE 1,28,0 : PRINT "Hints on using TASKPLAN" : PRINT
@@ -1731,17 +1730,17 @@ machines:
 730 PRINT "                       │   │   │   │"
 740 PRINT "     Time Period --->  ├─1─┼─2─┼─3─┼ ....  output costs per `Time Period'" : PRINT
 750 PRINT "2. Cost multipliers M1 and M2 are useful."
-760 PRINT "     (task final cost) = (task input cost) x (M1) x (M2)"
-770 PRINT "     Use M1 = 1.0 (Constant) and M2 = 1.0 for simple cases."
-780 PRINT "     Use M1 = Variable for task-varying factors such as overhead."
-790 PRINT "     Use M2 = 0.001 to convert input costs in dollars to output costs"
+760 PRINT "     ■ (task final cost) = (task input cost) x (M1) x (M2)"
+770 PRINT "     ■ Use M1 = 1.0 (Constant) and M2 = 1.0 for simple cases."
+780 PRINT "     ■ Use M1 = Variable for task-varying factors such as overhead."
+790 PRINT "     ■ Use M2 = 0.001 to convert input costs in dollars to output costs"
 800 PRINT "       in thousands-of-dollars." : PRINT
 810 PRINT "3. Conservative rounding is useful in budgeting.  An input cost of $654,321"
 820 PRINT "   converted (M2) to thousands-of-dollars would be 654 (normal rounding)"
 830 PRINT "   or 655 (conservative rounding)." : PRINT
 840 PRINT "4.  For introduction, use the provided data file SAMPLE.TPN"
-850 PRINT "     revise the `input' data as desired"
-860 PRINT "     try different output options"
+850 PRINT "     ■ revise the `input' data as desired"
+860 PRINT "     ■ try different output options"
 870 GOSUB 4900
 880 LOCATE 2,1
 890 LINE INPUT;"Do you wish to use data from a previous project (Y/N)?  ";GRD

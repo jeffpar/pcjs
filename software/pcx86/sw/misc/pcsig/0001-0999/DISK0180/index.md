@@ -1647,9 +1647,6 @@ machines:
 4120            WEND
 4130            CALCULATED.AREA = CALCULATED.AREA - PRECISION.ERROR
 4140     RETURN
-      I% = I% + 1
-4120            WEND
-4130          
 ```
 
 ## REGRESS.BAS

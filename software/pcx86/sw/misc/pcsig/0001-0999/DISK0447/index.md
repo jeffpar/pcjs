@@ -908,10 +908,10 @@ machines:
 
 ```bas
 100 REM ************* UNFORMAT.BAS **********************
-110 :REMCSRLIN
-120 :REMCSRLIN  To put waypoints back into format to be read by
-130 :REMCSRLIN  the airnav program
-140 :REMCSRLIN
+110 :REM█
+120 :REM█  To put waypoints back into format to be read by
+130 :REM█  the airnav program
+140 :REM█
 150 GOTO 170
 160 PRINT CHR$(27);CHR$(42):RETURN
 170 GOSUB 160
@@ -920,7 +920,7 @@ machines:
 210 COLOR "I", #1, INF$
 220 COLOR "O", #2, OPF$
 250 INPUT #1, WP$
-260 IF (1) STEP GOTO 390
+260 IF  DEFDBL(1) STEP GOTO 390
 270 X$ >= WP$
 280 PRINT #2, WP$
 290 PRINT WP$

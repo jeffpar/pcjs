@@ -120,7 +120,6 @@ machines:
 220 NEXT I%			     :'until end of the string
 230 DEF SEG			     :'return to normal data string
 240 '**************************************************************************
-
 ```
 
 ## CAPLOCK.BAS
@@ -156,7 +155,6 @@ machines:
 60 PRINT"Now you may LIST the program."
 65 DEF SEG:POKE 1124,0
 70 END
-
 ```
 
 ## DAYOFWK.BAS
@@ -178,7 +176,6 @@ machines:
 140 N=DAY+2*MONTH+INT(.6*(MONTH+1))+YEAR+INT(YEAR/4)-INT(YEAR/100)+INT(YEAR/400)+  2
 150 N=INT((N/7-INT(N/7))*7+.5)
 160 PRINT DAY$(N)
-
 ```
 
 ## DAYS.BAS
@@ -261,10 +258,6 @@ machines:
 2490 RETURN
 2500 F = 365 * (YY) + DD + 31 * (MM - 1) + INT((YY - 1)/4) - INT(.75 * (INT(((YY - 1)/100) + 1))
 2510 RETURN
-           RN
-2500 F = 365 * (YY) + DD + 31 * (MM - 1) + INT((YY - 1)/4) - INT(.75 * (INT(((YY - 1)/100) + 1))
-2510 RETURN
-                                                                                                                                                                                                                                                                           
 ```
 
 ## DIR4.BAS
@@ -313,7 +306,6 @@ machines:
 410 IF COUNT%>1 OR COUNT%=0 THEN PRINT "s." ELSE PRINT "."
 420 GOTO 150
 430 ' this is the last line >>>>>>>>>>>>>>>>>>>>>>>
-
 ```
 
 ## FCBREAD.BAS
@@ -361,10 +353,6 @@ machines:
 400 FILENAME$=SPACE$(14):CALL GETNEXT%(FILENAME$,STATUS%)
 410 PRINT FILENAME$,STATUS%
 420 IF STATUS%>=0 THEN GOTO 400
-ME$)
-400 FILENAME$=SPACE$(14):CALL GETNEXT%(FILENAME$,STATUS%)
-410 PRINT FILENAME$,STATUS%
-420 IF                                                                                                                                
 ```
 
 ## FIND-DS.BAS
@@ -388,7 +376,6 @@ machines:
 90 DATA &h55,&h8c,&hd8,&h89,&he5,&h8b,&h7e,&h06,&h89,&h05,&h5d,&hca,&h02,&h00
 100 CALL SUBRT(A%) 'give back ds
 110 PRINT "data segment=";HEX$(A%)
-                
 ```
 
 ## GETSP.BAS
@@ -449,7 +436,6 @@ machines:
 720 DATA 247, 246,  94, 128, 202,  48, 136,  21, 1122
 730 DATA  79, 135, 214,  11, 192, 117, 227,  93, 1068
 740 DATA 202,   4,   0, 203,   0,   0,   0,   0, 409
-, 136, 
 ```
 
 ## GETSP1.BAS
@@ -486,7 +472,6 @@ machines:
 480 ' KEYIN ROUTINE
 500 KY$=INKEY$: IF KY$="" THEN 500
 510 RETURN
-C% = PEEK(SUBLC% + 2) + PEEK(SUBLC%+3) * 
 ```
 
 ## HEAPSORT.BAS
@@ -571,7 +556,6 @@ machines:
 700 GOTO 130
 720 PRINT"Enter a stop code to indicate the end of list"
 740 RETURN
-OR I=1 TO 
 ```
 
 ## INKEY.BAS
@@ -701,9 +685,6 @@ machines:
 2010 GOTO 700
 3000 '
 3010 GOTO 700
-INT SPACE$(11)
-1320 ZIP$(I) = IN$
-1330 'loop:
 ```
 
 ## INKEY2.BAS
@@ -867,7 +848,6 @@ machines:
 1470 IF DTA$(I,J)="" THEN DTA$(I,J)=CONTROL$
 1480 RETURN
 1490 LOCATE 10,Z: PRINT I: FOR J=1 TO 5: LOCATE 10+J,Z: PRINT DTA$(I,J): NEXT:       RETURN
-
 ```
 
 ## JOYSTIK.BAS
@@ -883,7 +863,6 @@ machines:
 80 BX=STICK(2): BY=STICK(3): BT=STRIG(2) OR STRIG(3)
 90 LOCATE 10,1: PRINT USING F$;AX,AY,AT,BX,BY,BT
 100 GOTO 70
-
 ```
 
 ## JULIAN.BAS
@@ -1090,7 +1069,6 @@ machines:
 300 D$=D$+RIGHT$("00"+M$,2)
 310 ND%= (31+ND% MOD 31) MOD 31:M$=STR$(1+ND%):M$=RIGHT$(M$,LEN(M$)-1)
 320 D$=RIGHT$(D$+RIGHT$("00"+M$,2),6):RETURN
-
 ```
 
 ## PRTSC.BAS
@@ -1100,7 +1078,6 @@ machines:
 501 DIM Z.%(1):Z.%(0)=&H5CD:Z.%(1)=&HCB  ' Create tiny machine language program
 503 Y.%=VARPTR(Z.%(0)):CALL Y.%         ' Call it to print screen
 505 ERASE Z.%:RETURN            ' Erase it & return
-
 ```
 
 ## QSORT.BAS
@@ -1177,7 +1154,6 @@ machines:
 680 FLAG3=0:  RETURN
 690 SWAP DTA$(I), DTA$(J): PRINT TAB(27)"SWAP " DTA$(J)   " AND " DTA$(I)
 700 GOSUB 330: RETURN
-
 ```
 
 ## QUICKC.BAS
@@ -1210,10 +1186,6 @@ machines:
 230   NEXT
 240 ROW=6:  COL=5
 250 RETURN
-
-220 IF COMPILED(1) THEN CALL ABSOLUTE(A$,I,CLM,QPRINT) ELSE CALL QPRINT(A$,I,CLM)
-230   NEXT
-240 ROW=6:  CO
 ```
 
 ## READ_DIR.BAS
@@ -1307,7 +1279,6 @@ machines:
 940 DATA &H07
 950 DATA &H5D
 960 DATA &HCA,&H0A,&H00
-
 ```
 
 ## SCRLDEMO.BAS
@@ -1511,7 +1482,6 @@ machines:
 650 LPRINT
 660 NEXT J
 670 LPRINT CHR$(27);"@";TIME$
-
 ```
 
 ## SCROLL.BAS
@@ -1549,29 +1519,29 @@ machines:
 390 '**************************************************************************
 400 '
 410 '                            ATTRIBUTE TABLE
-420 'VARPTRSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBSAVESOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBSAVESOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDCOLOR        CALL     Attribute Byte         CALL      Monochrome    CALL  Color/Graphics    CALL
-430 'CALL7  6   5   4   3  2   1   0 CALL    Display Adapter CALL  Monitor Adapter   CALL
-440 'BLOADSOUNDSOUNDBSAVESOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBSAVESOUNDSOUNDSOUNDBSAVESOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBEEPSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBSAVESOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBEEPSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBSAVESOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND        CALLB CALLR   G   B CALL I CALLR   G   B CALL          CALL         CALL          CALL         CALL
-450 'BLOADSOUNDSOUNDBEEPSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBEEPSOUNDSOUNDSOUNDMOTORSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBackgroundCALLCharacterCALLBackgroundCALLCharacterCALL
-460 'CALLFGCALLBackgroundCALL    ForegroundCALL   Color  CALL  Color  CALL   Color  CALL  Color  CALL
-470 'BLOADSOUNDSOUNDBEEPSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBEEPSOUNDSOUNDSOUNDBSAVESOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBEEPSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBEEPSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBEEPSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDBEEPSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND        CALLB CALL0   0   0 CALL I CALL1   1   1 CALL   Black  CALL  White  CALL   Black  CALL  White  CALL
-480 'CALLB CALL1   1   1 CALL I CALL0   0   0 CALL   White  CALL  Black  CALL   White  CALL  Black  CALL
-490 'CALLB CALL0   0   0 CALL I CALL0   0   0 CALL   Black  CALL  Black  CALL   Black  CALL  Black  CALL
-500 'CALLB CALL1   1   1 CALL I CALL1   1   1 CALL   White  CALL  White  CALL   White  CALL  White  CALL
-510 'CLSSOUNDSOUNDMOTORSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDMOTORSOUNDSOUNDSOUNDMOTORSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDMOTORSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDMOTORSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDMOTORSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDMOTORSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND'
+420 '┌────────────────────────────┬────────────────────┬────────────────────┐        │     Attribute Byte         │      Monochrome    │  Color/Graphics    │
+430 '│7  6   5   4   3  2   1   0 │    Display Adapter │  Monitor Adapter   │
+440 '├──┬──────────┬───┬──────────┼──────────┬─────────┼──────────┬─────────┤        │B │R   G   B │ I │R   G   B │          │         │          │         │
+450 '├──┼──────────┼───┴──────────┤Background│Character│Background│Character│
+460 '│FG│Background│    Foreground│   Color  │  Color  │   Color  │  Color  │
+470 '├──┼──────────┼───┬──────────┼──────────┼─────────┼──────────┼─────────┤        │B │0   0   0 │ I │1   1   1 │   Black  │  White  │   Black  │  White  │
+480 '│B │1   1   1 │ I │0   0   0 │   White  │  Black  │   White  │  Black  │
+490 '│B │0   0   0 │ I │0   0   0 │   Black  │  Black  │   Black  │  Black  │
+500 '│B │1   1   1 │ I │1   1   1 │   White  │  White  │   White  │  White  │
+510 '└──┴──────────┴───┴──────────┴──────────┴─────────┴──────────┴─────────┘
 520 '
 530 '                      FOR THE COLOR/GRAPHICS ADAPTER
-540 'VARPTRSOUNDSOUNDSOUNDSOUNDSOUNDBSAVESOUNDSOUNDSOUNDSOUNDSOUNDBSAVESOUNDSOUNDSOUNDSOUNDSOUNDBSAVESOUNDSOUNDSOUNDSOUNDSOUNDBSAVESOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDCOLOR        CALL  R  CALL  G  CALL  B  CALL  I  CALL               COLOR                          CALL
-550 'BLOADSOUNDSOUNDSOUNDSOUNDSOUNDBEEPSOUNDSOUNDSOUNDSOUNDSOUNDBEEPSOUNDSOUNDSOUNDSOUNDSOUNDBEEPSOUNDSOUNDSOUNDSOUNDSOUNDBEEPSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND        CALL  0  CALL  0  CALL  0  CALL  0  CALL        Black                                 CALL
-560 'CALL  0  CALL  0  CALL  1  CALL  0  CALL        Blue                                  CALL        CALL  0  CALL  1  CALL  0  CALL  0  CALL        Green                                 CALL
-570 'CALL  0  CALL  1  CALL  1  CALL  0  CALL        Cyan                                  CALL        CALL  1  CALL  0  CALL  0  CALL  0  CALL        Red                                   CALL
-580 'CALL  1  CALL  0  CALL  1  CALL  0  CALL        Magenta                               CALL        CALL  1  CALL  1  CALL  0  CALL  0  CALL        Brown                                 CALL
-590 'CALL  1  CALL  1  CALL  1  CALL  0  CALL        White                                 CALL        CALL  0  CALL  0  CALL  0  CALL  1  CALL        Gray                                  CALL
-600 'CALL  0  CALL  0  CALL  1  CALL  1  CALL        Light Blue                            CALL        CALL  0  CALL  1  CALL  0  CALL  1  CALL        Light Green                           CALL
-610 'CALL  0  CALL  1  CALL  1  CALL  1  CALL        Light Cyan                            CALL        CALL  1  CALL  0  CALL  0  CALL  1  CALL        Light Red                             CALL
-620 'CALL  1  CALL  0  CALL  1  CALL  1  CALL        Light Magenta                         CALL        CALL  1  CALL  1  CALL  0  CALL  1  CALL        Yellow                                CALL
-630 'CALL  1  CALL  1  CALL  1  CALL  1  CALL        White (High Intensity)                CALL
-640 'CLSSOUNDSOUNDSOUNDSOUNDSOUNDMOTORSOUNDSOUNDSOUNDSOUNDSOUNDMOTORSOUNDSOUNDSOUNDSOUNDSOUNDMOTORSOUNDSOUNDSOUNDSOUNDSOUNDMOTORSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND'
+540 '┌─────┬─────┬─────┬─────┬──────────────────────────────────────────────┐        │  R  │  G  │  B  │  I  │               COLOR                          │
+550 '├─────┼─────┼─────┼─────┼──────────────────────────────────────────────┤        │  0  │  0  │  0  │  0  │        Black                                 │
+560 '│  0  │  0  │  1  │  0  │        Blue                                  │        │  0  │  1  │  0  │  0  │        Green                                 │
+570 '│  0  │  1  │  1  │  0  │        Cyan                                  │        │  1  │  0  │  0  │  0  │        Red                                   │
+580 '│  1  │  0  │  1  │  0  │        Magenta                               │        │  1  │  1  │  0  │  0  │        Brown                                 │
+590 '│  1  │  1  │  1  │  0  │        White                                 │        │  0  │  0  │  0  │  1  │        Gray                                  │
+600 '│  0  │  0  │  1  │  1  │        Light Blue                            │        │  0  │  1  │  0  │  1  │        Light Green                           │
+610 '│  0  │  1  │  1  │  1  │        Light Cyan                            │        │  1  │  0  │  0  │  1  │        Light Red                             │
+620 '│  1  │  0  │  1  │  1  │        Light Magenta                         │        │  1  │  1  │  0  │  1  │        Yellow                                │
+630 '│  1  │  1  │  1  │  1  │        White (High Intensity)                │
+640 '└─────┴─────┴─────┴─────┴──────────────────────────────────────────────┘
 650 '
 660 CLS
 670 A$=STRING$(18," ")
@@ -1594,15 +1564,15 @@ machines:
 840 CALL START
 850 LOCATE 9,3:PRINT"THIS IS AT THE TOP";
 860 MID$(A$,2,1)=CHR$(6):GOTO 780
-870 DATA  &HB4,&H06:'           MOV     AH,06   ;SCROLL ACTIVE PAGE UP
-880 DATA  &HB0,&H01:'           MOV     AL,01   ;NUMBER OF LINES TO BLANK
-890 DATA  &HB5,&H08:'           MOV     CH,08   ;ROW OF UPPER LEFT CORNER
-900 DATA  &HB1,&H02:'           MOV     CL,02   ;COLUMN OF UPPER LEFT CORNER
-910 DATA  &HB6,&H16:'           MOV     DH,17   ;ROW OF LOWER RIGHT CORNER
-920 DATA  &HB2,&H1B:'           MOV     DL,1B   ;COLUMN OF LOWER RIGHT CORNER
-930 DATA  &HBB,&H07,&H00:'      MOV     BX,0007 ;ATTRIBUTE USED ON BLANK LINE
-940 DATA  &HCD,&H10:'           INT     10      ;SCROLL THE WINDOW
-950 DATA  &HCB:'                RETF            ;RETURN TO SENDER
+870 DATA  &HB4,&H06::Å┘           MOV     AH,06   ;SCROLL ACTIVE PAGE UP
+880 DATA  &HB0,&H01::Å┘           MOV     AL,01   ;NUMBER OF LINES TO BLANK
+890 DATA  &HB5,&H08::Å┘           MOV     CH,08   ;ROW OF UPPER LEFT CORNER
+900 DATA  &HB1,&H02::Å┘           MOV     CL,02   ;COLUMN OF UPPER LEFT CORNER
+910 DATA  &HB6,&H16::Å┘           MOV     DH,17   ;ROW OF LOWER RIGHT CORNER
+920 DATA  &HB2,&H1B::Å┘           MOV     DL,1B   ;COLUMN OF LOWER RIGHT CORNER
+930 DATA  &HBB,&H07,&H00::Å┘      MOV     BX,0007 ;ATTRIBUTE USED ON BLANK LINE
+940 DATA  &HCD,&H10::Å┘           INT     10      ;SCROLL THE WINDOW
+950 DATA  &HCB::Å┘                RETF            ;RETURN TO SENDER
 ```
 
 ## SETMEM.BAS
@@ -1628,7 +1598,6 @@ machines:
 160 SYSTEM
 170 ' (still must reboot to let DOS adjust)
 180 END
-
 ```
 
 ## SHELSORT.BAS
@@ -1669,7 +1638,6 @@ machines:
 520 PRINT A$(X)+CHR$(32);
 530 NEXT X
 540 END
-
 ```
 
 ## SHORTSUB.BAS
@@ -1929,7 +1897,6 @@ machines:
 9794 '
 9795 '          SUBROUTINE IS    SUB-J          HIT  F7 KEY
 9799 END
-
 ```
 
 ## SPLTSCRN.BAS
@@ -1966,7 +1933,7 @@ machines:
 290 DATA &HFE,&HC9
 300 DATA &Hfe,&Hce
 310 DATA &HFE,&HCA
-320 DATA &HB4,&H06 :REM 06 =scroll up, 07 =scroll down
+320 DATA &HB4,&H06 :Å 06 =scroll up, 07 =scroll down
 330 DATA &HCD,&H10
 340 DATA &H5E
 350 DATA &H5A
@@ -2027,7 +1994,6 @@ machines:
 290 DATA &H55,&H8B,&HEC,&HB4,&H2C,&HCD,&H21,&H8B,&H7E,&HC,&H88,&H2D,&H8B
 300 DATA &H7E,&HA,&H88,&HD,&H8B,&H7E,&H8,&H88,&H35,&H8B,&H7E,&H6,&H88,&H15
 310 DATA &H5D,&HCA,&H8,&H0,&HBB5
-
 ```
 
 ## UPCASE.BAS
@@ -2051,7 +2017,6 @@ machines:
 405  O%=ASC(MID$(CS$,K%,1))
 407  IF O%>96 AND O%<123 THEN MID$(CS$,K%,1)=CHR$(O%-32)
 409 NEXT K%       :RETURN
-
 ```
 
 {% comment %}samples_end{% endcomment %}

@@ -28,25 +28,25 @@ export default class CharSet {
         "└",    "┴",    "┬",    "├",    "─",    "┼",    "╞",    "╟",    "╚",    "╔",    "╩",    "╦",    "╠",    "═",    "╬",    "╧",
         "╨",    "╤",    "╥",    "╙",    "╘",    "╒",    "╓",    "╫",    "╪",    "┘",    "┌",    "█",    "▄",    "▌",    "▐",    "▀",
         "α",    "ß",    "Γ",    "π",    "Σ",    "σ",    "µ",    "τ",    "Φ",    "Θ",    "Ω",    "δ",    "∞",    "φ",    "ε",    "∩",
-        "≡",    "±",    "≥",    "≤",    "⌠",    "⌡",    "÷",    "≈",    "°",    "•",    "·",    "√",    "ⁿ",    "²",    "■"
+        "≡",    "±",    "≥",    "≤",    "⌠",    "⌡",    "÷",    "≈",    "°",    "•",    "·",    "√",    "ⁿ",    "²",    "■",    " "
     ];
 
     /**
-     * fromCP437(s, controlChars)
+     * fromCP437(data, controlChars)
      *
-     * @param {string} s
+     * @param {string|Buffer} data
      * @param {boolean} [controlChars] (true to include control characters)
      * @return {string}
      */
-    static fromCP437(s, controlChars = false)
+    static fromCP437(data, controlChars = false)
     {
         let u = "";
-        for (let i = 0; i < s.length; i++) {
-            let c = s.charCodeAt(i);
+        for (let i = 0; i < data.length; i++) {
+            let c = typeof data == "string"? data.charCodeAt(i) : data.readUint8(i);
             if (c < CharSet.CP437.length && (c >= 32 || controlChars)) {
                 u += CharSet.CP437[c];
             } else {
-                u += s[i];
+                u += String.fromCharCode(c);
             }
         }
         return u;

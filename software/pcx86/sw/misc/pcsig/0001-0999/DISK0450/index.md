@@ -2445,11 +2445,11 @@ machines:
 400 PRINT " * *  Got Tank in ";C;
 410 PRINT " shots.  * *":GOTO 300
 415 '
-5000 REM Radian to Degree 
+5000 REM	 Radian to Degree 
 5020 D=180/3.14159*R
 5040 RETURN
 5050 '
-5100 REMDegree to Radian
+5100 REM	Degree to Radian
 5120 R=3.14159/180*D
 5140 RETURN
 5150 '

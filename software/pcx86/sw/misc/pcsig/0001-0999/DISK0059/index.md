@@ -417,8 +417,6 @@ machines:
 3010    IF FLAG(K) = 1 THEN BUFFER$ = BUFFER$ + ONN$(K)                                    ELSE BUFFER$ = BUFFER$ + OFFF$(K)
 3020 NEXT K
 3030 RETURN
-EN BUFFER$ = BUFFER$ + ONN$(K)                                    ELSE BUFFER$ = BUFFER$ + OFFF$(K)
-3020 N
 ```
 
 ## PSCREEN.BAS
@@ -751,7 +749,6 @@ machines:
 3010 '  IF FLAG(K) = 1 THEN BUFFER$ = BUFFER$ + ONN$(K)                                    ELSE BUFFER$ = BUFFER$ + OFFF$(K)
 3020 NEXT K
 3030 RETURN
-EN BUFFER$ = BUFFER$ + ONN$(K)
 ```
 
 ## QUICKREF.BAS

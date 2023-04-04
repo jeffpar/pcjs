@@ -909,20 +909,20 @@ machines:
 11460 '==================
 11470 '
 11480 CLS: LOCATE 2
-11490 PRINT TAB(14) "�������������������������������������������������������ͻ"
-11500 PRINT TAB(14) "�                                                       �"
-11510 PRINT TAB(14) "�                 NUMZAP Version 1.00                   �"
-11520 PRINT TAB(14) "�        Selective Line Number Removing Utility         �"
-11530 PRINT TAB(14) "�                                                       �"
-11540 PRINT TAB(14) "�     If you have used this program and found it of     �"
-11550 PRINT TAB(14) "�   value, your $15 contribution would be appreciated.  �"
-11560 PRINT TAB(14) "�                                                       �"
-11570 PRINT TAB(14) "�               David Whitman                           �"
-11580 PRINT TAB(14) "�               136 Wellington Terrace                  �"
-11590 PRINT TAB(14) "�               Lansdale, PA 19446                      �"
-11600 PRINT TAB(14) "�                                                       �"
-11610 PRINT TAB(14) "�   You are encouraged to copy and share this program.  �"
-11620 PRINT TAB(14) "�������������������������������������������������������ͼ
+11490 PRINT TAB(14) "╔═══════════════════════════════════════════════════════╗"
+11500 PRINT TAB(14) "║                                                       ║"
+11510 PRINT TAB(14) "║                 NUMZAP Version 1.00                   ║"
+11520 PRINT TAB(14) "║        Selective Line Number Removing Utility         ║"
+11530 PRINT TAB(14) "║                                                       ║"
+11540 PRINT TAB(14) "║     If you have used this program and found it of     ║"
+11550 PRINT TAB(14) "║   value, your $15 contribution would be appreciated.  ║"
+11560 PRINT TAB(14) "║                                                       ║"
+11570 PRINT TAB(14) "║               David Whitman                           ║"
+11580 PRINT TAB(14) "║               136 Wellington Terrace                  ║"
+11590 PRINT TAB(14) "║               Lansdale, PA 19446                      ║"
+11600 PRINT TAB(14) "║                                                       ║"
+11610 PRINT TAB(14) "║   You are encouraged to copy and share this program.  ║"
+11620 PRINT TAB(14) "╚═══════════════════════════════════════════════════════╝
 11630 PRINT
 11640 RETURN
 11650 '=========================
@@ -1091,7 +1091,6 @@ machines:
 13280 C$ = INKEY$: IF C$ <> CHR$(27) THEN RETURN
 13290 SOUND 100,5: CLS: PRINT "====NUMZAP aborted from keyboard===="
 13300 END
-
 ```
 
 ## RENUM.BAS

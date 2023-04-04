@@ -64,26 +64,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            4024-A.BAS             ��"
-80 PRINT"��          BANNER PRINTER           ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            4024-A.BAS             │░"
+80 PRINT"░│          BANNER PRINTER           │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -179,8 +179,6 @@ machines:
 1870 DATA 0,448,0,448,0,0,0,0,448,0,0,0
 1880 DATA 499,273,511,273,415,0,387,398,312,483,487,0
 1890 WAIT 0,1,1:END
-85,224,0
-1870 DATA 0,448,0,448,0,0,0,0,
 ```
 
 ## EPSONUTL.BAS
@@ -189,26 +187,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            7037-A.BAS             ��"
-80 PRINT"��      EPSON PRINTER OPTIONS        ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            7037-A.BAS             │░"
+80 PRINT"░│      EPSON PRINTER OPTIONS        │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -246,7 +244,6 @@ machines:
 1290 LPRINT CHR$(27);"0";:RETURN
 1300 LPRINT CHR$(27);"8";:RETURN
 1310 END
-);"G";:
 ```
 
 ## ITALICS.BAS
@@ -358,34 +355,32 @@ machines:
 1890 LPRINT
 1900 GOTO 1830
 1910 ' SAVE"prtital2",a
-,N,1)
-1860 ITL$=CHR$(A
 ```
 
 ## MEMSIZE.BAS
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            7029-A.BAS             ��"
-60 PRINT"��      MEMORY SIZING ROUTINE        ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            7029-A.BAS             │░"
+60 PRINT"░│      MEMORY SIZING ROUTINE        │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -437,9 +432,6 @@ machines:
 1440 REM
 1450 T=VAL(T$) : H=INT(T/256) : L=T-H*256 : RETURN
 1460 END
-0 KEY OFF : CLS : LOCATE ,,1 : CALL SUBRT : DO IT!!!!
-1440 REM
-1450 T=VAL(T$)
 ```
 
 ## NFL-PK.BAS
@@ -448,26 +440,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            6013-A.BAS             ��"
-80 PRINT"��             NFL-PIKS              ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            6013-A.BAS             │░"
+80 PRINT"░│             NFL-PIKS              │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -641,8 +633,6 @@ machines:
 2650 OPEN "R",1,"STATS"
 2660 FIELD 1,20 AS T$,2 AS O$,2 AS D$,2 AS PS$,2 AS PG$,2 AS G$, 2 AS W$,96 AS ZZ$
 2670 RETURN
-URN
-2650 OPEN
 ```
 
 ## PC-PAD.BAS
@@ -794,26 +784,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            2051-A.BAS             ��"
-80 PRINT"��               SLOT                ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            2051-A.BAS             │░"
+80 PRINT"░│               SLOT                │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -1210,36 +1200,32 @@ machines:
 4880 LOCATE ROW+1,COLUMN
 4890 PRINT CHR$(219);CHR$(219);CHR$(32);CHR$(32);CHR$(32);CHR$(219);CHR$(219)
 4900 RETURN
-HR$(32)
-4880 LOCATE ROW+1,COLUMN
-4890 PRINT CHR$(219);CHR$(219);CHR$(32);CHR$(32);CHR$(32);CHR$(219);CHR$(219)
-4
 ```
 
 ## STATCAPS.BAS
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��           5009-A.BAS              ��"
-60 PRINT"��         STATES AND CAPITALS       ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│           5009-A.BAS              │░"
+60 PRINT"░│         STATES AND CAPITALS       │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -1751,9 +1737,6 @@ machines:
 6040 SCREEN 0,0,0
 6050 WIDTH 80
 6060 CLS':LIST 3880-3920
-AGL4FO2ABO3L4C":RETURN
-6020 A$ = INKEY$
-6030 
 ```
 
 ## YAHTZEE.BAS
@@ -1762,26 +1745,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            2053-A.BAS             ��"
-80 PRINT"��             YAHTZEE               ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            2053-A.BAS             │░"
+80 PRINT"░│             YAHTZEE               │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -2371,35 +2354,31 @@ machines:
 6810 FOR Y= 1 TO 13:READ M(Y):NEXT :RETURN :RETURN 
 6820 REM player's board
 6830 CLS
-6840 PRINT"             �����������������������͸
-6850 PRINT"ACES........1�...�...�...�...�...�...�1"
-6860 PRINT"TWOS........2�...�...�...�...�...�...�2"
-6870 PRINT"THREES......3�...�...�...�...�...�...�3"
-6880 PRINT"FOURS.......4�...�...�...�...�...�...�4"
-6890 PRINT"FIVES.......5�...�...�...�...�...�...�5"
-6900 PRINT"SIXES.......6�...�...�...�...�...�...�6"
-6910 PRINT"             �����������������������͵"
-6920 PRINT"TOTAL UPPER..�...�...�...�...�...�...�"
-6930 PRINT"             �����������������������͵"
-6940 PRINT"3 OF A KIND.7�...�...�...�...�...�...�7"
-6950 PRINT"4 OF A KIND.8�...�...�...�...�...�...�8"
-6960 PRINT"FULL HOUSE..9�...�...�...�...�...�...�9"
-6970 PRINT"SM STRAIGHT.A�...�...�...�...�...�...�A"
-6980 PRINT"LG STRAIGHT.B�...�...�...�...�...�...�B"
-6990 PRINT"YATZEE......C�...�...�...�...�...�...�C"
-7000 PRINT"CHANCE......D�...�...�...�...�...�...�D"
-7010 PRINT"             �����������������������͵"
-7020 PRINT"TOTAL LOWER..�...�...�...�...�...�...�"
-7030 PRINT"TOP BONUS....�...�...�...�...�...�...�"
-7040 PRINT"GRAND TOTAL..�...�...�...�...�...�...�"
-7050 PRINT"             �����������������������;"
+6840 PRINT"             ╒═══╤═══╤═══╤═══╤═══╤═══╕
+6850 PRINT"ACES........1│...│...│...│...│...│...│1"
+6860 PRINT"TWOS........2│...│...│...│...│...│...│2"
+6870 PRINT"THREES......3│...│...│...│...│...│...│3"
+6880 PRINT"FOURS.......4│...│...│...│...│...│...│4"
+6890 PRINT"FIVES.......5│...│...│...│...│...│...│5"
+6900 PRINT"SIXES.......6│...│...│...│...│...│...│6"
+6910 PRINT"             ╞═══╪═══╪═══╪═══╪═══╪═══╡"
+6920 PRINT"TOTAL UPPER..│...│...│...│...│...│...│"
+6930 PRINT"             ╞═══╪═══╪═══╪═══╪═══╪═══╡"
+6940 PRINT"3 OF A KIND.7│...│...│...│...│...│...│7"
+6950 PRINT"4 OF A KIND.8│...│...│...│...│...│...│8"
+6960 PRINT"FULL HOUSE..9│...│...│...│...│...│...│9"
+6970 PRINT"SM STRAIGHT.A│...│...│...│...│...│...│A"
+6980 PRINT"LG STRAIGHT.B│...│...│...│...│...│...│B"
+6990 PRINT"YATZEE......C│...│...│...│...│...│...│C"
+7000 PRINT"CHANCE......D│...│...│...│...│...│...│D"
+7010 PRINT"             ╞═══╪═══╪═══╪═══╪═══╪═══╡"
+7020 PRINT"TOTAL LOWER..│...│...│...│...│...│...│"
+7030 PRINT"TOP BONUS....│...│...│...│...│...│...│"
+7040 PRINT"GRAND TOTAL..│...│...│...│...│...│...│"
+7050 PRINT"             ╘═══╧═══╧═══╧═══╧═══╧═══╛"
 7060 FOR N=1 TO 5:LOCATE N*4-2,46:PRINT N;:NEXT
 7070 RETURN
 7080 LOCATE 25,1:PRINT STRING$(70," ");:LOCATE 25,1:RETURN
-7090 ' KB INPUT AND ESCAPE
-7100 KB$="":WHILE KB$="":KB$=INKEY$:WEND
-7110 IF KB$=CHR$(27) THEN 5100 ELSE RETURN
-25,1:RETURN
 7090 ' KB INPUT AND ESCAPE
 7100 KB$="":WHILE KB$="":KB$=INKEY$:WEND
 7110 IF KB$=CHR$(27) THEN 5100 ELSE RETURN

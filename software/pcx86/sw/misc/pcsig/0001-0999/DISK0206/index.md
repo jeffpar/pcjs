@@ -448,12 +448,6 @@ machines:
 22030 RETURN
 30000 GOTO 20070
 30010 RETURN
-
-22015 IF ABORT AND XCHECK THEN M%=M%-1:N%=N%-1:XCHECK=0
-22020 LOCATE ONCE,WAS
-22030 RETURN
-30000 GOTO 20070
-300
 ```
 
 ## PUNYCALC.BAS
@@ -518,7 +512,7 @@ machines:
 550   PRINT
 560           'if the printer is on
 570 IF PR=1 THEN ON ERROR GOTO 3770
-580       'send a format to the printer
+580 	      'send a format to the printer
 590 IF PR=1 THEN LPRINT "Entries:";TAB(33);"Running Total:"
 600         'either go to completion module or print total to screen
 610 IF S$(C)="=" THEN GOTO 1720 ELSE PRINT S$(C);
@@ -569,7 +563,7 @@ machines:
 1060       COLOR 0,7
 1070  M$=" M= "+N$
 1080       PRINT USING "\                    \";M$;
-1090   COLOR 7,0
+1090 	  COLOR 7,0
 1100       LOCATE X,Y
 1110                 GOTO 1260
 1120             'input old memory  (EMCTR=1 once you've done it on this pass)
@@ -663,7 +657,7 @@ machines:
 1970   LOCATE 1,1
 1980         GOTO 470
 1985 M$=""
-1990 'clear prompt line: move cursor back to beginning
+1990 		'clear prompt line: move cursor back to beginning
 2000 X=CSRLIN
 2010   LOCATE X,1
 2020   PRINT TAB(77);
@@ -834,7 +828,7 @@ machines:
 3630                   'selecting the print format for printer
 3640 IF K$="0" THEN GOTO 3670 ELSE IF K$="1" THEN GOTO 3680 ELSE IF K$="2" THEN GOTO 3690 ELSE IF K$="3" THEN GOTO 3700 ELSE IF K$="4" THEN GOTO 3710 ELSE IF K$="5" THEN GOTO 3720
 3650 IF K$="6" THEN GOTO 3730 ELSE IF K$="7" THEN GOTO 3740 ELSE IF K$="8" THEN GOTO 3750
-3660           'printing the running total to printer
+3660 	          'printing the running total to printer	
 3670 LPRINT USING "############.";T: RETURN
 3680 LPRINT USING "############.#";T: RETURN
 3690 LPRINT USING "############.##";T: RETURN

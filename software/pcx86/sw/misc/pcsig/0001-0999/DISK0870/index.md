@@ -73,7 +73,6 @@ machines:
 390	SCREEN 0:WIDTH 80
 400	IF A$="Y" OR A$="y" GOTO 110
 410	END
-
 ```
 
 {% comment %}samples_end{% endcomment %}

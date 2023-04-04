@@ -166,33 +166,32 @@ machines:
 1150  PRINT "THAT IMPOSSIBLE!"
 1160  GOTO 140
 1170 PRINT " ADIOS ":END
-30  LOCATE 1,1 :CLS: PRINT : GOTO 
 ```
 
 ## DROIDS.BAS
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            2043-A.BAS             ��"
-60 PRINT"��              DROIDS               ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            2043-A.BAS             │░"
+60 PRINT"░│              DROIDS               │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -341,35 +340,32 @@ machines:
 2410 IF RESP$="Y" OR RESP$="y" THEN  GOTO 1090
 2420 IF SAMPLE$="YES" THEN CHAIN "SAMPLES",1000 ELSE END
 2430 GOTO 1030
-400
-2410 IF RESP$="Y" OR RESP$="y" THEN  GOTO 1090
-2420 IF SAMPLE$=
 ```
 
 ## LOSTGOLD.BAS
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            2038-A.BAS             ��"
-60 PRINT"��        LOST DUTCHMAN'S GOLD       ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            2038-A.BAS             │░"
+60 PRINT"░│        LOST DUTCHMAN'S GOLD       │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -704,9 +700,6 @@ machines:
 4270 INPUT "SURE ";QM$ : IF LEFT$(QM$+" ",1) <> "Y" THEN 1590
 4280 GOTO 1590
 4290 END
-"CAN'T DO THAT... WEIRDO !" : RETURN
-4270 INPUT "SURE ";QM$ : IF LEFT$(QM$+" ",1) <> "Y" THEN 1590
-4280 GOT
 ```
 
 ## MEMORY.BAS
@@ -715,26 +708,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            5011-A.BAS             ��"
-80 PRINT"��              MEMORY               ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            5011-A.BAS             │░"
+80 PRINT"░│              MEMORY               │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -1081,7 +1074,6 @@ machines:
 4380 RETURN
 4390 PRINT CHR$(21); CHR$(15); CHR$(15) CHR$(21)
 4400 RETURN
-0 PRINT CHR$(200); CHR$(23
 ```
 
 ## SPELLER.BAS
@@ -1186,11 +1178,6 @@ machines:
 1820 BEEP
 1830 PRINT "THAT'S ALL FOR NOW!"
 1840 KEY ON
-PRINT "CONGRATULATIONS! YOU SPELLED THEM ALL CORRECTLY"
-1810 PRINT
-1820 BEEP
-1830 PRINT "THAT'S ALL FOR NOW!"
-184
 ```
 
 ## STARTREK.BAS
@@ -1704,34 +1691,32 @@ machines:
 5550  NEXT K
 5560 NEXT SI
 5570 RETURN
- *18.2
-5520
 ```
 
 ## WIZARD.BAS
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            2039-A.BAS             ��"
-60 PRINT"��        THE WIZARD'S CASTLE        ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            2039-A.BAS             │░"
+60 PRINT"░│        THE WIZARD'S CASTLE        │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -2655,8 +2640,6 @@ machines:
 10160 PRINT "YOU ARE AT (";X;",";Y;") LEVEL";Z;"."
 10170 RETURN
 10180 IF SAMP$="YES" THEN CHAIN "SAMPLES",1000 ELSE  END
-N
-10160 PRINT "YO
 ```
 
 ## ZAP'EM.BAS

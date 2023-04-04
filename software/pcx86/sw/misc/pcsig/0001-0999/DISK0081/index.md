@@ -563,7 +563,6 @@ machines:
 17000 LPRINT "the address of the attribute. To access these bytes in BASIC, use the instruction DEF SEG=&HB800 then PEEK(n) or POKE n,data.
 17100 LPRINT CHR$(12);:ON ERROR GOTO 0:RUN
 17200 '         SAVE"scnmap.bas",a
-n DEF SEG=&H
 ```
 
 ## SORTS.BAS

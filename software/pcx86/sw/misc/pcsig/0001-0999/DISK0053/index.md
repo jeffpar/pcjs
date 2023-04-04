@@ -662,8 +662,6 @@ machines:
 660 PRINT "ERROR ";ERR;" HAS OCCURED IN LINE # ";ERL
 670 IF ERR>23 AND ERR<27 THEN PRINT " PLACE YOUR PRINTER ON LINE PLEASE:
 680 END
-"ERROR ";ERR;" HAS OCCURED IN LINE # ";ERL
-670 IF ERR>23 AND ERR<27 THEN PRINT " PLACE YOUR PRIN
 ```
 
 ## ENGINE.BAS
@@ -921,26 +919,26 @@ machines:
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            7019-A.BAS             ��"
-60 PRINT"��       SCROLL  DEMONSTRATION       ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            7019-A.BAS             │░"
+60 PRINT"░│       SCROLL  DEMONSTRATION       │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -1000,8 +998,6 @@ machines:
 1520 PRINT " ";DISPLAY.OPTION$(DISPLAY.TYPE)
 1530 PRINT NUMBER.OF.DISKS;"- 5 1/4 INCH DISK DRIVES."
 1540 PRINT MEMORY.SIZE#;"(";MEMORY.SIZE#/1024#;"K ) BYTES RANDOM ACCESS MEMORY."
-NUMBER.OF.DISKS;"- 5 1/4 INCH DISK DRIVES."
-1540 PRINT MEMORY
 ```
 
 ## SHELLSRT.BAS

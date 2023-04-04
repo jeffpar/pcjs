@@ -846,20 +846,17 @@ machines:
 8600 LOCATE STARTROW,STARTCOL:PRINT MID$(SM.FIELD$,1,RL)
 8610 RETURN
 8650 SAVE FILENAME$:CHAIN "A:ASDARUN"
-RL
-8590 NEXT X
-8600 LOCATE STARTROW,STARTCOL:PRINT MID$(SM.F
 ```
 
 ## EFS.BAS
 
 ```bas
-0 ' REVISING AUTHOR:   STEPHEN LEOCE
-1 '201 DELAWARE AVENUE
-2 'KINGSTON, NEW YORK  12401
-3 '[914] 338-4593
+0 ' REVISING AUTHOR:   	STEPHEN LEOCE
+1 '				201 DELAWARE AVENUE
+2 '				KINGSTON, NEW YORK  12401
+3 '				[914] 338-4593
 4 '
-5 ' LAST REVISION:22-DECEMBER-1983
+5 ' LAST REVISION:		22-DECEMBER-1983
 6 '
 10  COLOR 10,7:PRINT "*EOF [EOB]; now decide":COLOR 7,0
 50 KEY OFF
@@ -2768,7 +2765,7 @@ machines:
 250 '      filename when prompted, and, when prompted for conversion title,
 260 '      simply change extension to ".ALT" for the dump; hit <ENTER>; now
 270 '      await the BEEP for completion. (Volkswriter 1.2 also reads file)
-280 '[from PC Age (Jan 83) p63 Phillip Jacka  AIA]
+280 '[from PC Age (Jan 83) p63 ■ Phillip Jacka  AIA]
 ```
 
 {% comment %}samples_end{% endcomment %}

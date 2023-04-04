@@ -200,7 +200,7 @@ machines:
 ```bas
 1 ' GRAFTRAX as a subroutine  9/21/84
 10 DEFINT A-Z
-20 GOSUB 300' draw some graphics for demo. not needed in your program.
+20 GOSUB 300	' draw some graphics for demo. not needed in your program.
 30 ' Make sure variables used in this routine are defined BEFORE they are used,
 32 '    in other words, put lines 60-110 in early in your program.
 34 ' Integer variable descriptors, i.e. variable% should be used

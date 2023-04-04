@@ -62,10 +62,6 @@ machines:
 590 NEXT T
 620 LPRINT ""
 9000 END
-0
-400 IF C <= 127 THEN LPRINT A$;
-450 IF C > 127 THEN LPRINT CHR$(C-128);
-580 NEX
 ```
 
 {% comment %}samples_end{% endcomment %}

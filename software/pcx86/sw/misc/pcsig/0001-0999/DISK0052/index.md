@@ -430,21 +430,19 @@ machines:
 10020 IF ERL = 5040 OR ERL = 4050 THEN PRINT : PRINT "Unable to open input file." : CLOSE : RESUME 2200
 10030 IF ERL = 5100 OR ERL = 4100 THEN PRINT : PRINT "Unable to open output file." : CLOSE : RESUME 2200
 10999 CLS : LOCATE 12, 10: PRINT "Unexpected error #"; ERR; "at line"; ERL: ON ERROR GOTO : END
-file." : CLOSE : RESUME 2200
-10999 CLS : LOCATE 12, 10: PRINT "Unexpected error #"; ERR; "at line"; ERL: ON ERROR GOTO : EN
 ```
 
 ## HIDEFILE.BAS
 
 ```bas
 10 REM ********************************************************************
-20 REM *       HideFile     by  John Vandegrift  *
-30 REM *  *
-40 REM *  This program allows the user to modify diskette files in the  *
+20 REM *       HideFile 	    by		  John Vandegrift	  *
+30 REM *								  *
+40 REM *  This program allows the user to modify diskette files in the	  *
 50 REM *  following ways.  First, the user can change a file to a normal  *
 60 REM *  file, hidden file, system file or hidden/system file.  The file *
 70 REM *  to be changed can be any of the above.  The second function of  *
-80 REM *  this program is to allow the user to undelete files.Although  *
+80 REM *  this program is to allow the user to undelete files.	Although  *
 90 REM *  this will undelete files, it is limited in its ability to do so.*
 100 REM *  If a file is bigger than 512 bytes (1 sector), then the file    *
 110 REM *  will have to be in on contiguous set of sectors, as this program*
@@ -454,20 +452,20 @@ machines:
 150 REM *  to see if they are allocated.  If not, it assumes that those    *
 160 REM *  sectors belong to that file and uses them.  If they are in use  *
 170 REM *  then this program cannot undelete that file.  A user can also   *
-180 REM *  use this to scan through the directory of a file.   *
-190 REM *   *
+180 REM *  use this to scan through the directory of a file.		   *
+190 REM *								   *
 200 REM *  Limitations:  If the diskette is double-sided, then this reads  *
-210 REM * the first 64 directory entries. The diskette in   *
-220 REM * drive A is the diskette to be read, although   *
-230 REM * provision is made for reading drive B if the user *
-240 REM * wants to add the user i/o for the drive. The   *
-245 REM * user must have 64k memory and 1 disk drive,   *
-246 REM * minimum configuration.    *
+210 REM *		 the first 64 directory entries. The diskette in   *
+220 REM *		 drive A is the diskette to be read, although	   *
+230 REM *		 provision is made for reading drive B if the user *
+240 REM *		 wants to add the user i/o for the drive. The	   *
+245 REM *		 user must have 64k memory and 1 disk drive,	   *
+246 REM *		 minimum configuration. 			   *
 250 REM ********************************************************************
 260 CLEAR ,&H4000:KEY OFF
 270 DEF SEG=0
 275 GOSUB 1880
-280 REM  Assembler Routine
+280 REM 	 Assembler Routine
 290 REM
 300 REM  This routine pokes a machine language subroutine into high memory.
 310 REM  This subroutine reads and writes the diskette directory and FAT
@@ -489,15 +487,15 @@ machines:
 470 FOR I=0 TO 35:READ J:POKE &HE000+I,J:NEXT I
 480 SUBRT=&HE000
 490 REM
-500 REM Call the routine to read FAT and Directory from diskette
-510 REM and check for single-sided format.
+500 REM 	Call the routine to read FAT and Directory from diskette
+510 REM 	and check for single-sided format.
 520 REM
 530 A%=2    '2 for read or 3 for write
 540 B%=0    '0 for drive A or 1 for drive B
 550 CALL SUBRT (A%, B%)
 560 IF PEEK(&HCC00)=&HFE THEN NOSIDES=1 ELSE NOSIDES=2
 590 REM
-600 REM Master Menu
+600 REM 	Master Menu
 610 REM
 620 REM  The user may want to follow the options in order of occurance,
 630 REM  first reading the directory, then altering it and finally
@@ -517,7 +515,7 @@ machines:
 735 IF IANS=5 THEN KEY ON:END
 740 GOTO 660
 745 REM
-750 REM Put Directory on diskette
+750 REM 	Put Directory on diskette
 751 REM
 752 REM    This routine takes the diskette directory and FAT images
 753 REM    in upper memory and writes them to the diskette.  Here
@@ -528,7 +526,7 @@ machines:
 770 CALL SUBRT (A%, B%)
 780 RETURN
 785 REM
-790 REM Display Files Routine
+790 REM 	Display Files Routine
 791 REM
 792 REM    This is a simple directory function that reads the directory
 793 REM    information from upper memory and displays to the user.  The
@@ -561,7 +559,7 @@ machines:
 1010 LOCATE 23,28:INPUT "Press return to continue",IANS
 1020 RETURN
 1025 REM
-1030 REM Alter Directory Entries Routine
+1030 REM	 Alter Directory Entries Routine
 1031 REM
 1032 REM   Allows the user to page through the entries of the diskette
 1033 REM   directory.  The user can change the file attribute from
@@ -593,7 +591,7 @@ machines:
 1250 IF A$=CHR$(75) THEN IF I>31 THEN I=I-32
 1260 IF A$=CHR$(77) THEN IF I<1985 THEN I=I+32
 1270 GOTO 1050
-1280 REMGet New File Attribute
+1280 REM	Get New File Attribute
 1290 LOCATE 23,10:PRINT STRING$(65,32)
 1300 LOCATE 14,30:PRINT "File Attribute:"
 1310 LOCATE 16,30:PRINT "1. Normal file"
@@ -608,12 +606,12 @@ machines:
 1380 FOR K=14 TO 22:LOCATE K,30:PRINT STRING$(45,32):NEXT K
 1390 RETURN
 1395 REM
-1400 REMUndelete File
+1400 REM	Undelete File
 1401 REM
 1402 REM   This routine allows the user to undelete a deleted file.
 1403 REM   The size of the file is obtained from the directory and the
 1404 REM   necessary number of sectors are checked following the first
-1405 REM   sector of the file.If none of the sectors following the
+1405 REM   sector of the file.	If none of the sectors following the
 1406 REM   the first sector are allocated, the program assumes those
 1407 REM   are the sectors belonging to the deleted program.  Otherwise,
 1408 REM   it will not undelete the file!
@@ -639,7 +637,7 @@ machines:
 1580 LOCATE 15,25:PRINT STRING$(53,32)
 1590 LOCATE 16,25:PRINT STRING$(53,32):RETURN
 1595 REM
-1600 REMCluster's Last Stand(checks clusters)
+1600 REM		Cluster's Last Stand(checks clusters)
 1601 REM
 1602 REM   This is the routine that checks the needed number of sectors
 1603 REM   immediatly following the first sector of the file being
@@ -655,7 +653,7 @@ machines:
 1660 FLAG$="yes"
 1670 RETURN
 1675 REM
-1680 REMCluster's Last Stand(updates clusters)
+1680 REM		Cluster's Last Stand(updates clusters)
 1681 REM
 1682 REM   This routine reallocates the sectors following the first sector.
 1683 REM   Appendix C of the DOS Manual gives the technique for accessing
@@ -669,7 +667,7 @@ machines:
 1730 POKE (&HCC00+TEMP),BYTE1:POKE (&HCE00+TEMP),BYTE1
 1740 POKE (&HCC00+TEMP+1),BYTE2:POKE (&HCE00+TEMP+1),BYTE2
 1750 NEXT INC
-1760 REMpoke end of file
+1760 REM		poke end of file
 1770 TEMP=INT((CLUSTER+RANGE)*1.5)
 1780 IF (CLUSTER+RANGE) MOD 2 = 1 THEN BYTE1=(PEEK(&HCC00+TEMP) AND 15) + 240:BYTE2=255:GOTO 1800
 1790 BYTE1=255:BYTE2=(PEEK(&HCC00+TEMP+1) AND 240) + 15
@@ -677,7 +675,7 @@ machines:
 1810 POKE (&HCC00+TEMP+1),BYTE2:POKE (&HCE00+TEMP+1),BYTE2
 1820 RETURN
 1880 REM
-1890 REMEnding Routine
+1890 REM		Ending Routine
 1895 REM
 2000 CLS
 2010 A$="HideFile":B$="b":C$="y":D$="John Vandegrift":COUNT=10
@@ -693,7 +691,7 @@ machines:
 2110 NEXT I
 2120 RETURN
 2130 REM
-2140 REMMove Header back to top
+2140 REM		Move Header back to top
 2150 REM
 2160 FOR I=14 TO 13 STEP -1:LOCATE I,33:PRINT SPACE$(15);:NEXT I
 2170 A$="HideFile":FOR I=12 TO 3 STEP -1
@@ -702,7 +700,7 @@ machines:
 2195 NEXT I
 2200 RETURN
 2210 REM
-2220 REMHelp Routine
+2220 REM		Help Routine
 2230 REM
 2240 CLS:LOCATE 4,10:PRINT "(1)  File Directory lists the directory of the diskette."
 2250 LOCATE 7,10:PRINT "(2)  Alter Directory allows the user to change directory attributes."
@@ -734,9 +732,6 @@ machines:
 1170 GOTO 1140 ' Loop back to try next line, if any
 1180 LPRINT:LPRINT "   E N D   O F   F I L E"
 1190 PRINT:PRINT:PRINT "  J O B   F I N I S H E D":END
- try next line, if any
-1180 LPRINT:LPRINT "   E N D   O F   F I L E"
-1190 PRINT:PRINT:PRINT "  J O B   F I
 ```
 
 {% comment %}samples_end{% endcomment %}

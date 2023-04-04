@@ -440,9 +440,6 @@ machines:
 14500 KEY ON:END
 14600 DATA "15/16",.9375,"1-7/8",1.875,"3-4/4",3.75,"7-1/2",7.5,"15",15
 14700 '   SAVE"CAS-REEL",A
-NEXT M
-14500 KEY ON:END
-14600 DATA "15/16",.9375,"1-7/8",1.875,"3-4/4",3
 ```
 
 ## GUITAR.BAS
@@ -690,9 +687,9 @@ machines:
 120 '****                                                               ****
 130 '***********************************************************************
 140 '***********************************************************************
-150 DEF SEG=0 '------------------------------SOUNDSOUNDSOUNDSOUNDSOUNDCOLOR
-160 K=PEEK(&H417) OR &H40 '                       CALL SET CAPS
-170 POKE &H417,K   '-------------------------SOUNDSOUNDSOUNDSOUNDSOUND'
+150 DEF SEG=0 '------------------------------─────┐
+160 K=PEEK(&H417) OR &H40 '                       │ SET CAPS
+170 POKE &H417,K   '-------------------------─────┘
 180 ROOM =0:SUB=0:SUBTTL=0:BUFFER=0
 190 SIZE=100:DIM DES$(SIZE), NO(SIZE), DOL(SIZE), RM(SIZE)
 200 KEY OFF:FOR I=1 TO 10: KEY I,"":NEXT

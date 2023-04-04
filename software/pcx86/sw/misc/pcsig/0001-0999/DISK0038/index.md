@@ -624,23 +624,23 @@ machines:
 
 ```bas
 10 ' ABSTRACT: Some of you may have tried the SPOOLER Programs on this disk,
-20 'and found that the spooler no longer operated when you moved
-30 ' from DOS to BASIC.  This BASIC program allows you to continue
-40 'printing to the spooler created by one of the SPOOLER programs
-50 'after you have started you BASIC Language.
+20 '		and found that the spooler no longer operated when you moved
+30 ' 		from DOS to BASIC.  This BASIC program allows you to continue
+40 '		printing to the spooler created by one of the SPOOLER programs
+50 '		after you have started you BASIC Language.
 60 ' CONTRIBUTED: To the BCS IBM Exchange by:
 70 '            Daniel Berman
-75 'Customized Data Services
-80 '7 Marble St.
-90 'PO Box 460
-100 'Whitman, MA 02382
+75 '		Customized Data Services
+80 '		7 Marble St.
+90 '		PO Box 460
+100 '		Whitman, MA 02382
 110 'Copyright (c) 1982 by Daniel Berman
 120 'This program is contributed to the Boston Computer Society's IBM User's
 130 'Group for the personal and educational use of its members.  The program
 140 'is not to be used for commercial gain.
 150 ' INSTRUCTIONS: AFTER starting the spooler program by typing SPOOLER1 or
 160 ' SPOOLER2 from DOS, and moving into BASIC Language, simply type:
-170 'RUN "spoolbas <cr>
+170 '				RUN "spoolbas <cr>
 180 ' The spooler's operation will then be extended into your BASIC operations.
 190 '
 200 ' The program restores the timer interrupt vector to what was set by spooler.

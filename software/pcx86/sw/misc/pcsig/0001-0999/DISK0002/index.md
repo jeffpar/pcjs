@@ -967,10 +967,6 @@ machines:
 2410 KEY ON
 2420 ON ERROR GOTO 0
 2430 END
-EY 8,"Cls"+CHR$(13)
-2390 KEY 9,"System"+CHR$(13)
-2400 KEY 10,"Screen"+CHR$(13)
-2410
 ```
 
 ## NEWKEY.BAS

@@ -1122,11 +1122,6 @@ machines:
 63130 PRINT "NA"
 63135 NFLG = 5
 63140 RETURN
-
-63100 REM N for no answer
-63110 IF NEFLG >< 5 THEN 60430
-63120 DT# = -999
-63130 PRINT
 ```
 
 ## REM.BAS
@@ -1892,12 +1887,6 @@ machines:
 60270 KTMAX = 0
 60280 FOR T9 = 1 TO MAX
 60290 K$(T9) = " "
-K **********
-60245 NFLG = 0
-60250 A$ = ""
-60260 K$(20) = " "
-60270 KTMAX = 0
-60280 FO
 ```
 
 ## TEMP.BAS
@@ -1921,9 +1910,6 @@ machines:
 64280 PRINT " PRESS ANY KEY TO CONTINUE"
 64290 IF INKEY$ = "" THEN 64290
 64300 RESUME 70 
- ; " ON LINE ";ERL
-64270 CLOSE 
-64280 PRINT " 
 ```
 
 {% comment %}samples_end{% endcomment %}

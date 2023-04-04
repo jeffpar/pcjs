@@ -314,7 +314,9 @@ function isText(data)
 {
     for (let i = 0; i < data.length; i++) {
         let b = data.charCodeAt(i);
-        if ((b & 0x80) && !CharSet.isCP437(data[i])) return false;
+        if ((b & 0x80) && !CharSet.isCP437(data[i])) {
+            return false;
+        }
     }
     return true;
 }
@@ -359,22 +361,27 @@ function isTextFile(sFile)
 }
 
 /**
- * normalizeForHost(db)
+ * normalizeForHost(db, fAssumeText)
  *
  * If DataBuffer is text, "normalize" for the host.
  *
  * @param {DataBuffer} db
+ * @param {boolean} [fAssumeText]
  * @return {DataBuffer}
  */
-function normalizeForHost(db)
+function normalizeForHost(db, fAssumeText)
 {
-    let s = db.toString();
-    if (isText(s)) {
+    /*
+     * Either the caller tells us the data is text, or we at least make sure the first 4 bytes look like text.
+     */
+    if (fAssumeText || isText(db.toString("utf8", 0, 4))) {
+        let s = CharSet.fromCP437(db.buffer, false);
         s = s.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-        if (s.charCodeAt(s.length - 1) == 0x1A) {
-            s = s.slice(0, s.length - 1);
+        let i = s.indexOf(String.fromCharCode(0x1A));
+        if (i >= 0) {
+            s = s.slice(0, i);
         }
-        db = new DataBuffer(CharSet.fromCP437(s, false));
+        db = new DataBuffer(s);
     }
     return db;
 }
@@ -393,7 +400,7 @@ function normalizeForHost(db)
  */
 function convertBASICFile(sPath, db, fNormalize)
 {
-    let i = 0, s = "", quoted = false, lineWarning = 0;
+    let i = 0, s = "", quote = false, comment = false, data = false, lineWarning = 0;
 
     const tokens = {
         0x11:   "0",
@@ -714,32 +721,31 @@ function convertBASICFile(sPath, db, fNormalize)
     let getToken = function(line) {
         let token = null;                               // null will signal end of tokens for the line
         let v = readU8();
-        if (v >= 0xFD) {
-            v = (v << 8) | readU8();
-        }
         if (v) {
             /*
              * The original code failed to account for programs that include IBM PC drawing characters
-             * inside strings, and those characters can be (almost) any 8-bit value, which is why we must
-             * track the "quoted" state of the text stream and decode accordingly.
+             * inside strings or comments or DATA statements, and those characters can be (almost) any 8-bit
+             * value, which is why we must track the "quote" and "comment" and "data" states of the text
+             * stream and decode accordingly.
              *
-             * I say "almost" because there are a few control characters (below 0x20) that you can't use
+             * I say "almost" because there are a few control characters (below 0x20) that you can't embed
              * inside strings.  But many can be.  For example, you can use the IBM PC's "Alt Num Keypad"
-             * trick to enter decimal character 16 and a "►" will appear.  And while I could be paranoid
-             * and try to nail down the exact set of usable control characters, I don't think it's worth the
-             * effort.  Let the chips fall where they may.
+             * trick to enter decimal character 16 and a "►" will appear.
              *
              * For text that's not quoted, we still have to handle 0x3A (colon) elsewhere, because it's a
              * weird one; see the 'default' case below.
              */
-            if (quoted && v < 0xFD || v >= 0x20 && v <= 0x7E && v != 0x3A) {
+            if ((comment || quote || data) && v < 0xFF || v >= 0x20 && v <= 0x7E && v != 0x3A) {
                 token = String.fromCharCode(v);
-                if (fNormalize) {
+                if (fNormalize && v != 0x09) {          // normalize all characters except TAB
                     token = CharSet.fromCP437(token, true);
                 }
-                if (v == 0x22) quoted = !quoted;
+                if (v == 0x22 && !comment) quote = !quote;
             }
             else {
+                if (v >= 0xFD) {
+                    v = (v << 8) | readU8();
+                }
                 switch (v) {
                 case 0x0B:
                     token = "&O" + readU16().toString(8);
@@ -771,10 +777,12 @@ function convertBASICFile(sPath, db, fNormalize)
                         }
                         if (peekU16(0x8F, 0xD9)) {
                             token = "'";
+                            comment = true;
                             skip(2);
                             break;
                         }
                         token = String.fromCharCode(v);
+                        data = false;                   // unlike REM, other colon-separated statements CAN appear after a DATA statement
                         break;
                     }
                     if (v == 0xB1 && peekU8(0xE9)) {
@@ -783,15 +791,39 @@ function convertBASICFile(sPath, db, fNormalize)
                         break;
                     }
                     token = tokens[v];
+                    if (token == "REM") {
+                        comment = true;
+                    }
+                    else if (token == "DATA") {
+                        data = true;
+                    }
                     break;
                 }
                 if (!token) {
-                    let t = "<0x" + v.toString(16) + ">";
-                    if (lineWarning != line) {
-                        printf("warning: %s contains unexpected tokens (eg, %s on line %d)\n", path.basename(sPath), t, line);
-                        lineWarning = line;     // one such warning per line is enough...
+                    if (v == 0x09) {                    // we'll pass TABs through
+                        token = String.fromCharCode(v);
+                    } else if (v == 0x0A) {
+                        token = "";                     // and we'll ignore embedded LFs
+                    } else {
+                        /*
+                         * I've seen DATA statements with embedded non-ASCII characters, so at this point,
+                         * we pretty much have to encode anything else as raw text.  But first, we must un-read
+                         * any extra byte we fetched above.
+                         */
+                        let u = v;
+                        if (v >= 0xFD00) {
+                            i--;                        // un-read the extra byte
+                            v >>= 8;                    // and shift the value back to 8 bits
+                        }
+                        token = String.fromCharCode(v);
+                        if (fNormalize) {
+                            token = CharSet.fromCP437(token, true);
+                        }
+                        if (lineWarning != line) {
+                            printf("warning: %s contained unusual bytes (eg, %#x on line %d)\n", sPath, u, line);
+                            lineWarning = line;         // one such warning per line is enough...
+                        }
                     }
-                    token = "";                 // we're going to return an empty token instead of whatever "t" is...
                 }
             }
         }
@@ -803,30 +835,31 @@ function convertBASICFile(sPath, db, fNormalize)
     let b = readU8();
     if (b == 0xFF) {
         while (!EOF()) {
-            let t;
             /*
              * Every line in the file begins with two 16-bit values: the offset of the *next* line,
-             * the line number of the *current* line.  The offset value can be used as a sanity check
-             * (eg, for file integrity) but we're not going to bother; all we'll check for here is
+             * and the line number of the *current* line.  The offset can be used as a sanity check
+             * (eg, for file integrity) but we're not going to bother; all we check for here is
              * an offset of ZERO, which effectively means end-of-program, and it's normally followed
-             * by an EOF byte (0x1A) (and which we'll pass along, *unless* we're normalizing the text).
+             * by an EOF byte (0x1A) (and which we'll pass along, *unless* we're "normalizing" the text).
              */
             let off = readU16();
             if (!off) {
                 if (peekU8(0x1A)) {
                     if (!fNormalize) s += String.fromCharCode(0x1A);
-                } else {
-                    printf("warning: %s contains invalid EOF at offset %#x\n", path.basename(sPath), i);
+                } else if (!EOF()) {
+                    printf("warning: %s contains non-EOF at offset %#x (%#x)\n", sPath, i, readU8());
                 }
                 break;
             }
+            let t;
             let line = readU16();
             s += line + " ";        // BASIC defaults to one space between line number and first token
             while ((t = getToken(line)) !== null) {
                 s += t;
             }
             s += (fNormalize? "\n" : "\r\n");
-            quoted = false;         // if you end a line with an open quote, BASIC automatically "closes" it
+            quote = false;          // if you end a line with an open quote, BASIC automatically "closes" it
+            comment = data = false; // ditto for comments and DATA statements
         }
         db = new DataBuffer(s);
     }
@@ -879,41 +912,13 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
     } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
         let fPrinted = false;
         let fQuiet = argv['quiet'];
-        if (!argv['collection']) {
-            if (!fQuiet) printf("extracting: %s\n", sFile);
-        } else {
-            // let sArchive = checkArchive(sPath, true);
-            // if (sArchive) {
-            //     let fExtracted;
-            //     if (existsFile(sPath)) {
-            //         if (!fQuiet) {
-            //             printf("extracted: %s\n", sFile);
-            //             fPrinted = true;
-            //         }
-            //     }
-            //     if (!existsFile(sArchive)) {
-            //         fExtracted = false;
-            //     } else {
-            //         let aArchiveFiles = glob.sync(path.join(sArchive, "**"));
-            //         if (!aArchiveFiles.length) {
-            //             fExtracted = false;
-            //             printf("warning: empty archive folder: %s\n", sArchive);
-            //         } else if (!fQuiet) {
-            //             aArchiveFiles.forEach((sArchiveFile) => {
-            //                 printf("expanded:  %s\n", sArchiveFile.substr(sDir.length));
-            //             });
-            //         }
-            //     }
-            //     if (fExtracted === false) {
-            //         // printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
-            //     }
-            // }
+        if (argv['collection']) {
             if (existsFile(sPath)) {
                 if (!fPrinted && !fQuiet) printf("extracted: %s\n", sFile);
                 return true;
             }
-            printf("extracting: %s\n", sFile);
         }
+        if (!fQuiet) printf("extracting: %s\n", sFile);
         if (argv['expand']) {
             let arcType = isARCFile(sFile);
             if (arcType) {
@@ -1499,34 +1504,41 @@ function processDisk(di, diskFile, argv, diskette)
         for (let sampleFile of sampleFiles) {
             let sample = readFile(sampleFile);
             if (sample) {
-                if (sample[sample.length-1] != '\n') sample += '\n';
-                sample = "```bas\n" + sample /* .replace(/([^\n]*\n)/g, '    $1\n') */ + "```\n";
-                samples += "\n## " + path.basename(sampleFile) + "\n\n" + sample;
+                if (isText(sample)) {
+                    if (sample[sample.length-1] != '\n') sample += '\n';
+                    sample = "```bas\n" + sample /* .replace(/([^\n]*\n)/g, '    $1\n') */ + "```\n";
+                    samples += "\n## " + path.basename(sampleFile) + "\n\n" + sample;
+                } else {
+                    printf("warning: ignoring non-text file '%s'\n", sampleFile);
+                }
             }
         }
 
         /*
-         * Clean out any old info and samples first.  They should be bracketed by {% #info_begin %} and {% #info_end %},
+         * Clean out any old info and then add any new info.  It should be bracketed by 'info_begin'/'info_end' comments.
          */
         let sInsert = sMachineEmbed;
-        if (info) {
-            let match = sIndexNew.match(/\n\{% comment %\}info_begin\{% endcomment %\}[\S\s]*\{% comment %\}info_end\{% endcomment %\}\n\n/);
-            if (match) {
-                sIndexNew = sIndexNew.slice(0, match.index) + sIndexNew.slice(match.index + match[0].length);
-            } else {
-                let i = sIndexNew.indexOf(info);
-                if (i >= 0) {
-                    sIndexNew = sIndexNew.slice(0, i) + sIndexNew.slice(i + info.length);
-                }
+        let match = sIndexNew.match(/\n\{% comment %\}info_begin\{% endcomment %\}[\S\s]*\{% comment %\}info_end\{% endcomment %\}\n\n/);
+        if (match) {
+            sIndexNew = sIndexNew.slice(0, match.index) + sIndexNew.slice(match.index + match[0].length);
+        } else {
+            let i = sIndexNew.indexOf(info);            // look for (old) unbracketed info, too (probably don't need this anymore)
+            if (i >= 0) {
+                sIndexNew = sIndexNew.slice(0, i) + sIndexNew.slice(i + info.length);
             }
+        }
+        if (info) {
             sInsert += "\n{% comment %}info_begin{% endcomment %}\n" + info + "{% comment %}info_end{% endcomment %}\n\n";
         }
 
+        /*
+         * Clean out any old samples and then add any new samples.  They should be bracketed by 'samples_begin'/'samples_end' comments.
+         */
+        match = sIndexNew.match(/\{% comment %\}samples_begin\{% endcomment %\}[\S\s]*\{% comment %\}samples_end\{% endcomment %\}\n/);
+        if (match) {
+            sIndexNew = sIndexNew.slice(0, match.index) + sIndexNew.slice(match.index + match[0].length);
+        }
         if (samples) {
-            let match = sIndexNew.match(/\{% comment %\}samples_begin\{% endcomment %\}[\S\s]*\{% comment %\}samples_end\{% endcomment %\}\n/);
-            if (match) {
-                sIndexNew = sIndexNew.slice(0, match.index) + sIndexNew.slice(match.index + match[0].length);
-            }
             sInsert += "{% comment %}samples_begin{% endcomment %}\n" + samples + "\n{% comment %}samples_end{% endcomment %}\n";
         }
 
@@ -2298,7 +2310,9 @@ function processAll(all, argv)
             for (let sFile of asFiles) {
                 if (filter && !filter.test(sFile)) continue;
                 let args = [argv[0], sFile];
-                if (outdir) args['output'] = path.join(outdir, path.parse(sFile).name + type);
+                if (outdir) {
+                    args['output'] = path.join(outdir.replace("%d", path.dirname(sFile)), path.parse(sFile).name + type);
+                }
                 for (let arg of ['list', 'expand', 'extract', 'extdir', 'normalize', 'overwrite', 'quiet', 'verbose']) {
                     if (argv[arg] !== undefined) args[arg] = argv[arg];
                 }

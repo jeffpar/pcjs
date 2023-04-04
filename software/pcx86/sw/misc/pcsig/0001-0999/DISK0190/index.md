@@ -151,49 +151,49 @@ machines:
 734 '   99 = Start of new segment
 736 '   98 = Start a new color
 740 '   97 = End of character
-800 DATA 99,1,5,1,1,5,1,5,5,1,5,5,1,97:'         zero
-810 DATA 99,4,5,2,5,99,3,5,3,1,2,1,97:'          one
-820 DATA 99,5,5,1,5,1,3,5,3,5,1,1,1,97:'         two
-830 DATA 99,1,5,5,5,5,1,1,1,99,5,3,3,3,97:'      three
-840 DATA 99,4,5,4,1,99,5,4,1,4,1,1,97:'          four
-850 DATA 99,5,1,1,1,1,3,4,3,5,4,4,5,1,5,97:'     five
-860 DATA 99,1,1,1,5,5,5,5,3,1,3,97:'             six
-870 DATA 99,1,5,5,1,1,1,97:'                     seven
-880 DATA 99,4,5,2,5,2,1,4,1,4,5,99,2,3,4,3,97:'  eight
-890 DATA 99,5,5,5,1,1,1,1,3,5,3,97:'             nine
-900 DATA 99,3,2,99,3,4,97:'                      colan
-910 DATA 97:'                                    semicolan is space
-920 DATA 99,3,1,2,2,2,4,3,5,97:'                 < is (
-930 DATA 99,3,5,97:'                             = is period
-940 DATA 99,3,1,4,2,4,4,3,5,97:'                 > is )
-950 DATA 99,1,2,1,1,5,1,5,3,3,3,3,5,97:'         question mark
-960 DATA 99,3,4,2,5,97:'                         @ is comma
-970 DATA 99,1,5,1,1,5,1,5,5,99,1,3,5,3,97:'      A
-980 DATA 99,1,5,1,1,5,1,5,5,1,5,99,1,3,5,3,97:'  B
-990 DATA 99,5,5,1,5,1,1,5,1,97:'                 C
-1000 DATA 99,4,5,1,5,1,1,4,1,5,2,5,4,97:'        D
-1010 DATA 99,5,5,1,5,1,1,5,1,99,1,3,5,3,97:'     E
-1020 DATA 99,1,5,1,1,5,1,99,1,3,3,3,97:'         F
-1030 DATA 99,4,3,5,3,5,5,1,5,1,1,5,1,97:'        G
-1040 DATA 99,1,5,1,1,99,1,3,5,3,99,5,1,5,5,97:'  H
-1050 DATA 99,2,1,4,1,99,3,1,3,5,99,2,5,4,5,97:'  I
-1060 DATA 99,1,1,5,1,99,3,1,3,5,1,5,1,4,97:'     J
-1070 DATA 99,1,5,1,1,99,1,3,3,3,5,1,99,3,3,5,5,97:'K
-1080 DATA 99,5,5,1,5,1,1,97:'                    L
-1090 DATA 99,1,5,1,1,3,3,5,1,5,5,97:'            M
-1100 DATA 99,1,5,1,1,5,5,5,1,97:'                N
-1110 DATA 99,5,5,1,5,1,1,5,1,5,5,97:'            O
-1120 DATA 99,1,5,1,1,5,1,5,3,1,3,97:'            P
-1130 DATA 99,5,5,1,5,1,1,5,1,5,5,3,3,97:'        Q
-1140 DATA 99,1,5,1,1,5,1,5,3,1,3,99,3,3,5,5,97:' R
-1150 DATA 99,1,5,5,5,5,3,1,3,1,1,5,1,97:'        S
-1160 DATA 99,1,1,5,1,99,3,1,3,5,97:'             T
-1170 DATA 99,5,1,5,5,1,5,1,1,97:'                U
-1180 DATA 99,5,1,5,3,3,5,1,3,1,1,97:'            V
-1190 DATA 99,5,1,5,5,3,3,1,5,1,1,97:'            W
-1200 DATA 99,1,5,5,1,99,1,1,5,5,97:'             X
-1210 DATA 99,3,5,3,3,1,1,99,3,3,5,1,97:'         Y
-1220 DATA 99,5,5,1,5,5,1,1,1,97:'                Z
+800 DATA 99,1,5,1,1,5,1,5,5,1,5,5,1,97::Å┘         zero
+810 DATA 99,4,5,2,5,99,3,5,3,1,2,1,97::Å┘          one
+820 DATA 99,5,5,1,5,1,3,5,3,5,1,1,1,97::Å┘         two
+830 DATA 99,1,5,5,5,5,1,1,1,99,5,3,3,3,97::Å┘      three
+840 DATA 99,4,5,4,1,99,5,4,1,4,1,1,97::Å┘          four
+850 DATA 99,5,1,1,1,1,3,4,3,5,4,4,5,1,5,97::Å┘     five
+860 DATA 99,1,1,1,5,5,5,5,3,1,3,97::Å┘             six
+870 DATA 99,1,5,5,1,1,1,97::Å┘                     seven
+880 DATA 99,4,5,2,5,2,1,4,1,4,5,99,2,3,4,3,97::Å┘  eight
+890 DATA 99,5,5,5,1,1,1,1,3,5,3,97::Å┘             nine
+900 DATA 99,3,2,99,3,4,97::Å┘                      colan
+910 DATA 97::Å┘                                    semicolan is space
+920 DATA 99,3,1,2,2,2,4,3,5,97::Å┘                 < is (
+930 DATA 99,3,5,97::Å┘                             = is period
+940 DATA 99,3,1,4,2,4,4,3,5,97::Å┘                 > is )
+950 DATA 99,1,2,1,1,5,1,5,3,3,3,3,5,97::Å┘         question mark
+960 DATA 99,3,4,2,5,97::Å┘                         @ is comma
+970 DATA 99,1,5,1,1,5,1,5,5,99,1,3,5,3,97::Å┘      A
+980 DATA 99,1,5,1,1,5,1,5,5,1,5,99,1,3,5,3,97::Å┘  B
+990 DATA 99,5,5,1,5,1,1,5,1,97::Å┘                 C
+1000 DATA 99,4,5,1,5,1,1,4,1,5,2,5,4,97::Å┘        D
+1010 DATA 99,5,5,1,5,1,1,5,1,99,1,3,5,3,97::Å┘     E
+1020 DATA 99,1,5,1,1,5,1,99,1,3,3,3,97::Å┘         F
+1030 DATA 99,4,3,5,3,5,5,1,5,1,1,5,1,97::Å┘        G
+1040 DATA 99,1,5,1,1,99,1,3,5,3,99,5,1,5,5,97::Å┘  H
+1050 DATA 99,2,1,4,1,99,3,1,3,5,99,2,5,4,5,97::Å┘  I
+1060 DATA 99,1,1,5,1,99,3,1,3,5,1,5,1,4,97::Å┘     J
+1070 DATA 99,1,5,1,1,99,1,3,3,3,5,1,99,3,3,5,5,97::Å┘K
+1080 DATA 99,5,5,1,5,1,1,97::Å┘                    L
+1090 DATA 99,1,5,1,1,3,3,5,1,5,5,97::Å┘            M
+1100 DATA 99,1,5,1,1,5,5,5,1,97::Å┘                N
+1110 DATA 99,5,5,1,5,1,1,5,1,5,5,97::Å┘            O
+1120 DATA 99,1,5,1,1,5,1,5,3,1,3,97::Å┘            P
+1130 DATA 99,5,5,1,5,1,1,5,1,5,5,3,3,97::Å┘        Q
+1140 DATA 99,1,5,1,1,5,1,5,3,1,3,99,3,3,5,5,97::Å┘ R
+1150 DATA 99,1,5,5,5,5,3,1,3,1,1,5,1,97::Å┘        S
+1160 DATA 99,1,1,5,1,99,3,1,3,5,97::Å┘             T
+1170 DATA 99,5,1,5,5,1,5,1,1,97::Å┘                U
+1180 DATA 99,5,1,5,3,3,5,1,3,1,1,97::Å┘            V
+1190 DATA 99,5,1,5,5,3,3,1,5,1,1,97::Å┘            W
+1200 DATA 99,1,5,5,1,99,1,1,5,5,97::Å┘             X
+1210 DATA 99,3,5,3,3,1,1,99,3,3,5,1,97::Å┘         Y
+1220 DATA 99,5,5,1,5,5,1,1,1,97::Å┘                Z
 1230 DATA 99,97
 1240 END
 ```
@@ -202,26 +202,26 @@ machines:
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            7020-A.BAS             ��"
-60 PRINT"��             FIX-TEXT              ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            7020-A.BAS             │░"
+60 PRINT"░│             FIX-TEXT              │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -286,10 +286,6 @@ machines:
 1460 INPUT "Transfer another file?  (Y or N) : ";I$
 1470 IF I$="Y" OR I$="y" GOTO 1060
 1480 END
-(TB$);" bytes"
-1450 PRINT
-1460 INPUT "Transfer another file?  (Y or N) : ";I$
-1470 IF I$="Y" OR I$="y" GOTO 10
 ```
 
 ## FULLSCRN.BAS
@@ -895,7 +891,7 @@ machines:
 5620 '#######################################################################
 5630 '                              END
 5640 '#######################################################################
-5650 END
+5650 END
 ```
 
 ## PGMCVRT.BAS
@@ -1157,9 +1153,9 @@ machines:
 3401 ON ERROR GOTO 0:CONTIN=0:IF NOSAVE THEN GOSUB 3020:RETURN: ELSE GOSUB 400:GOSUB 3020:RETURN
 3500 CONTIN=-1:RETURN'[F5]=CONTINUE
 3600 GOSUB 3610:MSG$="":GOSUB 3199:GOSUB 400:RETURN
-3610 CLS:LOCATE,,0:GOSUB 50010:FILES:IF ERRSW=0 THEN FOR II=13 TO 65 STEP 13:LOCATE 1,II:FOR JI=1 TO 10:PRINT"�";CHR$(31);CHR$(29);:NEXT JI:NEXT II:ELSE LOCATE 23,1:PRINT"DISK ACCESS ERROR OCCURRED!";
+3610 CLS:LOCATE,,0:GOSUB 50010:FILES:IF ERRSW=0 THEN FOR II=13 TO 65 STEP 13:LOCATE 1,II:FOR JI=1 TO 10:PRINT"│";CHR$(31);CHR$(29);:NEXT JI:NEXT II:ELSE LOCATE 23,1:PRINT"DISK ACCESS ERROR OCCURRED!";
 3615 ON ERROR GOTO 0:IF ERRSW<>0 THEN RETURN
-3620 LOCATE 10,1:PRINT							       "��������������������������������������������������������������������������������";:LOCATE 23,1:COLOR,1:PRINT BLANK$;:COLOR,C2:GOSUB 99:RETURN
+3620 LOCATE 10,1:PRINT							       "────────────┴────────────┴────────────┴────────────┴────────────┴───────────────";:LOCATE 23,1:COLOR,1:PRINT BLANK$;:COLOR,C2:GOSUB 99:RETURN
 3700 ON ERROR GOTO 3710:MID$(XL$,1)=CL$:COLOR C2,C1
 3701 MID$(CL$,1)=" enter todays date=>"+DATE$+BLANK$:LOCATE 24,1,0:PRINT CL$;:LOCATE 24,21,1:LINE INPUT;K$:IF K$=""THEN 3703:ELSE ON ERROR GOTO 3710:DATE$=K$:ON ERROR GOTO 0:MID$(CL$,1)=XL$:LOCATE 24,1,0:PRINT CL$;:COLOR C1,C2:GOSUB 99:GOTO 3703
 3702 GOTO 3701
@@ -1215,9 +1211,6 @@ machines:
 65130 COLOR 7,5
 65150 GOTO 1
 65200 END
-R$(7);
-65120 COLOR 30:LOCATE 23,5,0:PRINT CHR$(15);:LOCATE 23,35,0:PRINT CHR$(15);
-65130 COLOR 7,5
 ```
 
 ## TXTSCAN.BAS
@@ -1242,9 +1235,6 @@ machines:
 1170 GOTO 1140 ' Loop back to try next line, if any
 1180 LPRINT:LPRINT "   E N D   O F   F I L E"
 1190 PRINT:PRINT:PRINT "  J O B   F I N I S H E D":END
- try next line, if any
-1180 LPRINT:LPRINT "   E N D   O F   F I L E"
-1190 PRINT:PRINT:PRINT "  J O B   F 
 ```
 
 ## VUE.BAS
@@ -1360,9 +1350,6 @@ machines:
 760 IF ERL=290 OR ERL=320 THEN BEEP:A$="/":RESUME 210
 770 IF ERR=200 THEN BEEP:RESUME 430
 780 LOCATE 25,1:PRINT SPC(39);:CLS:ON ERROR GOTO 0:END
-=320 THEN BEEP:A$="/":RESUME 210
-770 IF ERR=200 THEN BEEP:RESUME 430
-780 LOCATE 25,1:PRINT SPC(39);:CLS:ON ERROR 
 ```
 
 {% comment %}samples_end{% endcomment %}

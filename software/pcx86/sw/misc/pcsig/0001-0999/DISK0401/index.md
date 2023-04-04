@@ -333,15 +333,6 @@ machines:
 35040 IF SND$="N" THEN RETURN ELSE BEEP:RETURN
 ```
 
-## ADDIR.BAS
-
-```bas
-��@� ��      U��^�w�5@ �^��WG�?� �.�  �^
-�W.���!�^.�.�Z��!<�t.�� ��!<�t
-.�� ��.��~�]�
- .��?��.�.�6F� ��.G� ��
-```
-
 ## ADEDIT.BAS
 
 ```bas
@@ -3167,14 +3158,14 @@ machines:
 1040 PRINT TAB(5);"or do whatever else you wish with it except sell it.  You may not,"
 1050 PRINT TAB(5);"however:"
 1070 PRINT 
-1080 PRINT TAB(5);"○1.  Charge any price for the program or documentation. "
+1080 PRINT TAB(5);"	1.  Charge any price for the program or documentation. "
 1090 PRINT TAB(5);"Non-profit organizations may charge a distribution fee of up to"
 1100 PRINT TAB(5);"cover their overhead."
 1110 PRINT 
-1120 PRINT TAB(5);"○2.  Modify the program or documentation in any way.  Both"
+1120 PRINT TAB(5);"	2.  Modify the program or documentation in any way.  Both"
 1130 PRINT TAB(5);"the program and documentation must be distributed together."
 1140 PRINT 
-1150 PRINT TAB(5);" ○The Address Book is copyrighted and remains the property of"
+1150 PRINT TAB(5);" 	The Address Book is copyrighted and remains the property of"
 1160 PRINT TAB(5);"the authors."
 1170 PRINT 
 1175 GOSUB 1340:CLS:LOCATE 5,1
@@ -3182,15 +3173,15 @@ machines:
 1190 PRINT TAB(5);"donation to the authors.  The donation is voluntary and in no way"
 1200 PRINT TAB(5);"should be considered as payment for software or services."
 1210 PRINT 
-1220 PRINT TAB(5);"○The authors are:"
-1230 PRINT TAB(5);"○○                         Eddie L. Loh  and"
+1220 PRINT TAB(5);"	The authors are:"
+1230 PRINT TAB(5);"		                         Eddie L. Loh  and"
 1240 PRINT TAB(5);"                                     Robert L. Caret"
-1250 PRINT TAB(5);"   ○○○○○ Integrated Software Systems"
-1260 PRINT TAB(5);"○○○○○ POB 61"
-1270 PRINT TAB(5);"○○○○○ Phoenix, MD. 21131"
+1250 PRINT TAB(5);"   					 Integrated Software Systems"
+1260 PRINT TAB(5);"					 POB 61"
+1270 PRINT TAB(5);"					 Phoenix, MD. 21131"
 1280 PRINT 
 1290 PRINT 
-1300 PRINT TAB(5);"○The authors may also be reached via MCI Mail (c/o RCaret)"
+1300 PRINT TAB(5);"	The authors may also be reached via MCI Mail (c/o RCaret)"
 1310 PRINT TAB(5);"or CompuServe (72435,552/RCaret)."
 1320 PRINT 
 1330 PRINT:COLOR 3,0

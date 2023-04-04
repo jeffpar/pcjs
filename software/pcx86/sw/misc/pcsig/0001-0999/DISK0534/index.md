@@ -361,10 +361,10 @@ return
   DISPLAY.TITLE:
 ' **************
 '
-print "����������������������������������������������Ŀ"
-print "� TFL - Text File Lister Version ";version$;" ";versdate$;" �"
-print "�    (C)opyright 1985 by William D. Hileman    �"
-print "������������������������������������������������"
+print "┌──────────────────────────────────────────────┐"
+print "│ TFL - Text File Lister Version ";version$;" ";versdate$;" │"
+print "│    (C)opyright 1985 by William D. Hileman    │"
+print "└──────────────────────────────────────────────┘"
 '
 return
 '
@@ -678,7 +678,6 @@ rem endif
 '
 ' End of Code
 '
-
 ```
 
 {% comment %}samples_end{% endcomment %}

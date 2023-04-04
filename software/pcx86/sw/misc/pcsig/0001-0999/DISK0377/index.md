@@ -277,9 +277,9 @@ machines:
 935 ZCSW%=0:RETURN
 940 REM  ZEND
 945 CLS:Z=6:GOSUB 100
-950 LOCATE 10,32,0:PRINT "�";STRING$(17,"�");"�"
-955 LOCATE ,32:PRINT "�";"   End Program   ";"�"
-960 LOCATE ,32:PRINT "�";STRING$(17,"�");"�"
+950 LOCATE 10,32,0:PRINT "┌";STRING$(17,"─");"┐"
+955 LOCATE ,32:PRINT "│";"   End Program   ";"│"
+960 LOCATE ,32:PRINT "└";STRING$(17,"─");"┘"
 965 LOCATE 21,1,0:GOTO 25
 970 REM  ZCTR
 975 GOSUB 1030:GOTO 1025
@@ -331,200 +331,6 @@ machines:
 9090 REM Memory Display
 9100 CLS:LOCATE 10,1,0:PRINT TAB(32);"Memory Statistics":PRINT:PRINT TAB(27);"Remaining Memory:  ";FRE(0):PRINT:PRINT TAB(27);"Program Length:    ";61529!-FRE(0):RETURN
 10000 REM Begin Program Here
-                                              IED OR LIVING WITH SOMEONE ON A"
-2280 PRINT "PERMANENT BASIS";
-2290 LINE INPUT "? ";A$
-2300 IF LEFT$(A$,1)="Y" THEN PRINT TAB
-
-
-
-
-
-
-
-
-
-
-                              Computerenergy's MONITOR
-
-
-
-
-
-
-                                     Version 1.0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                 PROPRIETARY NOTICE
-
-
-     MONITOR is a  proprietary  product  developed  by  Richard C.   Bemis  and
-     distributed by Computerenergy Corporation, Denver, Colorado.
-
-     Copyright 1982  by Richard  C.  Bemis and Computerenergy Corporation.  All
-     rights  reserved except  those expressly  granted to the user within  this
-     document.
-
-     Computerenergy Corporation,  PO Box  6267, Denver, CO 80206 (303) 233-9118
-     Source: ST6070
-
-
-
-
-                                        - i -
-
-
-
-                                  TABLE OF CONTENTS
-
-     Section                                                               Page
-
-
-
-     CHAPTER 1  MONITOR DISTRIBUTION NOTICE ...............................   1
-
-     CHAPTER 2  INTRODUCTION AND SETUP ....................................   2
-        2.1  Use Restrictions .............................................   2
-        2.2  This Document ................................................   2
-        2.3  Setup and Use ................................................   2
-        2.4  Color Video Board Notes ......................................   3
-
-     CHAPTER 3  GENERAL INSTRUCTIONS ......................................   4
-        3.1  Program Interface to the Routines ............................   4
-        3.2  Returned Data ................................................   5
-        3.3  Return Codes .................................................   5
-        3.4  Returned Values ..............................................   5
-        3.5  Routine Interface Procedure ..................................   5
-        3.6  Routine Names ................................................   5
-        3.7  Reserved Variables ...........................................   5
-
-     CHAPTER 4  ROUTINE SUMMARY - BY NUMBER ...............................   6
-
-     CHAPTER 5  ROUTINE SUMMARY - BY TYPE .................................   7
-
-     CHAPTER 6  INPUT/OUTPUT ROUTINES .....................................   8
-        6.1  No. 1 - Data Entry - ZIN .....................................   8
-        6.2  No. 2 - Menu & "Enter Code" - ZMENU ..........................  12
-        6.3  No. 3 - Clear Target Area - ZTCLR ............................  14
-        6.4  No. 4 - Menu w/Targets for Data - ZTMENU .....................  15
-        6.5  No. 5 - Update Menu with Data - ZUPTMENU .....................  17
-        6.6  No. 6 - Boxed Title - ZBOX ...................................  18
-        6.7  No. 7 - Single-Line Page Heading - ZLINE .....................  19
-        6.8  No. 8 - All ok? - ZAOK .......................................  20
-
-     CHAPTER 7  EDIT ROUTINES .............................................  21
-        7.1  No. 9 - Test for Y or N - ZTESTYN ............................  21
-        7.2  No. 10 - Numeric Limit Test - ZNLIMIT ........................  22
-
-     CHAPTER 8  OTHER ROUTINES ............................................  23
-        8.1  No. 11 - Clear Screen - ZSCREEN ..............................  23
-        8.2  No. 12 - Sound Quiet Beep - ZBEEP ............................  23
-        8.3  No. 13 - Convert Input to Uppercase - ZUP ....................  23
-        8.4  No. 14 - Convert Input to Mixed Case - ZMIX ..................  23
-        8.5  No. 15 - End Program - ZEND ..................................  24
-        8.6  No. 16 - Print Centered Message - ZCTR .......................  25
-        8.7  No. 17 - Print Centered Message - Reverse Video - ZCTRR ......  25
-        8.8  No. 18 - Print Centered Message - Blinking - ZCTRB ...........  25
-        8.9  No. 19 - Print Centered Message - Underlined - ZCTRU .........  25
-
-     CHAPTER 9  ERROR MESSAGES ............................................  26
-        9.1  No. 20-26 - Error Messages - ZERRname ........................  26
-
-
-
-                                       - ii -
-
-
-
-                                  TABLE OF CONTENTS
-
-     Section                                                               Page
-
-
-     CHAPTER 10  MONITOR LINE USAGE MAP/SPECIAL VARIABLES .................  27
-        10.1  Monitor Line Number Usage Map ...............................  27
-        10.2  Special Variables ...........................................  27
-
-     CHAPTER 11  STANDALONE ROUTINES ......................................  28
-        11.1  Save Program Routine ........................................  28
-        11.2  Program Memory Map ..........................................  28
-
-     CHAPTER 12  OTHER INFORMATION ........................................  29
-        12.1  Distribution Disk Contents - Monitor ........................  29
-        12.2  Disclaimer ..................................................  29
-
-     CHAPTER 13  SUGGESTIONS, FEEDBACK, AND BUG REPORTS ...................  30
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-     Monitor                          - iii -        Computerenergy Corporation
-
-
-
-                                      CHAPTER 1
-
-                             MONITOR DISTRIBUTION NOTICE
-
-     Monitor is being  distributed using the "Freeware"* approach.  To t
 ```
 
 ## GDUMP.BAS
@@ -671,7 +477,6 @@ machines:
 1100 PRINT #2,FNPLOT$("a",0,50):FOR Y=50 TO 100 STEP 5:PRINT #2,FNPLOT$("a",0,Y);FNTICK$("y",.5,.5):NEXT Y
 1110 LABEL$="X-Axis":VER=0:HOR=1:SX=3:SY=3:DEL=-4:GOSUB 140:PRINT #2,FNPLOT$("a",XP,YP);FNLABEL$(LABEL$,SX,SY,HOR,VER)
 9000 CLOSE #2:END
-                                                                                                                              
 ```
 
 ## IDSPRISM.BAS
@@ -1338,10 +1143,6 @@ machines:
 4050 RETURN
 4060 REM end of program
 65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
-$ = LEFT$(SCRIPT$,LENGTH): GOTO 4030
-4050 RETURN
-4060 REM end of program
-65399 '** DONE - PRESS ENTER TO RETURN
 ```
 
 ## OK84ASET.BAS
@@ -1618,7 +1419,6 @@ machines:
 3680 S$ = INKEY$ : IF S$ = "" THEN 3680
 3690 S% = VAL(S$) : RETURN
 3700 END
-    
 ```
 
 {% comment %}samples_end{% endcomment %}

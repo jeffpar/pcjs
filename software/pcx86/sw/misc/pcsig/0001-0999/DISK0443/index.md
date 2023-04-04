@@ -747,10 +747,9 @@ machines:
 6160 NEXT CT%
 6170 ROW%=ROW%-15
 6180 RETURN 2720
-6190 'warning box                                                               �
+6190 'warning box                                                               ║
 6200 LOCATE 12,1:PRINT TAB(79):LOCATE 20,1:PRINT TAB(79):LOCATE 21,1:PRINT CHR$(201);STRING$(77,205);CHR$(187);:FOR CT%=22 TO 23:LOCATE CT%,1:PRINT CHR$(186);:LOCATE CT%,79:PRINT CHR$(186);:NEXT:LOCATE 24,1:PRINT CHR$(200);STRING$(77,205);CHR$(188);
 6210 FOR CT%=22 TO 23:LOCATE CT%,2:PRINT STRING$(77,32);:NEXT:RETURN
-
 ```
 
 ## KILL.BAS
@@ -1292,60 +1291,60 @@ machines:
 ## SCR-COLN.BAS
 
 ```bas
-1000 REMKEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-1010 REMOPEN                                                                     OPEN
-1020 REMOPEN   Without Graphics      HIGH SCORE ORGANIZER        Color Version   OPEN
-1030 REMOPEN        Board                                        6/9/85    5.1   OPEN
-1040 REMOPEN                     WRITTEN BY DAVID J. FRIEDMAN                    OPEN
-1050 REMOPEN                                                                     OPEN
-1060 REMOPEN   On Saturday February 23 and Sunday February 24 of the year 1985   OPEN
-1070 REMOPEN                                                                     OPEN
-1080 REMOPEN                                                                     OPEN
-1090 REMOPEN       Dave Friedman was born in Bakersfield, California located     OPEN
-1100 REMOPEN     in Kern County near Death Valley on October 24, 1968.  When     OPEN
-1110 REMOPEN     he was just about three years old, he moved to a small town     OPEN
-1120 REMOPEN     in Wisconsin called Irma.  Its population was approximately     OPEN
-1130 REMOPEN     100 people.  It is located north of Wausau.  In 1976, David     OPEN
-1140 REMOPEN     again moved, not so far this time, to Eau Claire, a city in     OPEN
-1150 REMOPEN     Wisconsin with a population of about 50,000 people.  He now     OPEN
-1160 REMOPEN     currently resides at 3330 Riverview Drive where he stays up     OPEN
-1170 REMOPEN     all night and writes stupid remarks in his programs.  Thank     OPEN
-1180 REMOPEN     you for your patience for reading this, and I hope you will     OPEN
-1190 REMOPEN     find the program to be useful.                                  OPEN
-1200 REMOPEN     VARPTRSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDCOLOR     Dave Friedman             OPEN
-1210 REMOPEN     CALL   If you find this program to CALL     3330 Riverview Drive      OPEN
-1220 REMOPEN     CALL be useful, a donation of five CALL     Eau Claire, Wisconsin     OPEN
-1230 REMOPEN     CALL dollars would be appreciated. CALL     (715) 834-8045  54703     OPEN
-1240 REMOPEN     CLSSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND'                               OPEN
-1250 REMTOTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENRANDOMIZE
-1260 REMOPEN                        SUMMARY OF SUBROUTINES                       OPEN
-1270 REMOPEN                        SOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND                       OPEN
-1280 REMOPEN                                                                     OPEN
-1290 REMOPEN     LINE NUMBERS      P U R P O S E   O F   S U B R O U T I N E     OPEN
-1300 REMOPEN     SOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND      SOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND     OPEN
-1310 REMOPEN     1000-1530         BIOGRAPHY AND SUMMARY OF SUBROUTINES          OPEN
-1320 REMOPEN     2000-2800         MARQUE TYPE INTRODUCTION-ONLY W/GRAPHICS      OPEN
-1330 REMOPEN     3000-3150         PROGRAM SETUP                                 OPEN
-1340 REMOPEN     4000-4060         DISPLAY DATE                                  OPEN
-1350 REMOPEN     5000-5260         CHANGE DATE                                   OPEN
-1360 REMOPEN     6000-6090         GET INFORMATION ABOUT RECORDS                 OPEN
-1370 REMOPEN     7000-7080         GET RECORDS FROM DATA FILE                    OPEN
-1380 REMOPEN     8000-8100         INPUT RECORDS                                 OPEN
-1390 REMOPEN     9000-9140         SORT RECORDS                                  OPEN
-1400 REMOPEN     10000-10280       CHECK RECORDS - ADD, DELETE, CORRECT, ABORT   OPEN
-1410 REMOPEN     11000-11150       CORRECT MISTAKES IN RECORD                    OPEN
-1420 REMOPEN     12000-12190       INITIALIZE PRINTING                           OPEN
-1430 REMOPEN     13000-13250       OUTPUT TO PRINTER                             OPEN
-1440 REMOPEN     14000-14280       PRINT TO SCREEN                               OPEN
-1450 REMOPEN     15000-15030       END PROGRAM                                   OPEN
-1460 REMOPEN     16000-16070       DELETE RECORD                                 OPEN
-1470 REMOPEN     17000-17100       SAVE RECORDS TO SEQUENTIAL DATAFILE           OPEN
-1480 REMOPEN     18000-18140       ADD RECORD                                    OPEN
-1490 REMOPEN     19000-19070       PAUSE WHILE SCROLLING                         OPEN
-1500 REMOPEN     20000-20190       PRINT OUTPUT TO DISK                          OPEN
-1510 REMOPEN     21000-21390       ERROR HANDLING ROUTINE                        OPEN
-1520 REMOPEN     22000-22120       SELECTIVE INPUT ROUTINE                       OPEN
-1530 REMSCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+1000 REM╔═════════════════════════════════════════════════════════════════════╗
+1010 REM║                                                                     ║
+1020 REM║   Without Graphics      HIGH SCORE ORGANIZER        Color Version   ║
+1030 REM║        Board                                        6/9/85    5.1   ║
+1040 REM║                     WRITTEN BY DAVID J. FRIEDMAN                    ║
+1050 REM║                                                                     ║
+1060 REM║   On Saturday February 23 and Sunday February 24 of the year 1985   ║
+1070 REM║                                                                     ║
+1080 REM║                                                                     ║
+1090 REM║       Dave Friedman was born in Bakersfield, California located     ║
+1100 REM║     in Kern County near Death Valley on October 24, 1968.  When     ║
+1110 REM║     he was just about three years old, he moved to a small town     ║
+1120 REM║     in Wisconsin called Irma.  Its population was approximately     ║
+1130 REM║     100 people.  It is located north of Wausau.  In 1976, David     ║
+1140 REM║     again moved, not so far this time, to Eau Claire, a city in     ║
+1150 REM║     Wisconsin with a population of about 50,000 people.  He now     ║
+1160 REM║     currently resides at 3330 Riverview Drive where he stays up     ║
+1170 REM║     all night and writes stupid remarks in his programs.  Thank     ║
+1180 REM║     you for your patience for reading this, and I hope you will     ║
+1190 REM║     find the program to be useful.                                  ║
+1200 REM║     ┌───────────────────────────────┐     Dave Friedman             ║
+1210 REM║     │   If you find this program to │     3330 Riverview Drive      ║
+1220 REM║     │ be useful, a donation of five │     Eau Claire, Wisconsin     ║
+1230 REM║     │ dollars would be appreciated. │     (715) 834-8045  54703     ║
+1240 REM║     └───────────────────────────────┘                               ║
+1250 REM╠═════════════════════════════════════════════════════════════════════╣
+1260 REM║                        SUMMARY OF SUBROUTINES                       ║
+1270 REM║                        ──────────────────────                       ║
+1280 REM║                                                                     ║
+1290 REM║     LINE NUMBERS      P U R P O S E   O F   S U B R O U T I N E     ║
+1300 REM║     ────────────      ─────────────────────────────────────────     ║
+1310 REM║     1000-1530         BIOGRAPHY AND SUMMARY OF SUBROUTINES          ║
+1320 REM║     2000-2800         MARQUE TYPE INTRODUCTION-ONLY W/GRAPHICS      ║
+1330 REM║     3000-3150         PROGRAM SETUP                                 ║
+1340 REM║     4000-4060         DISPLAY DATE                                  ║
+1350 REM║     5000-5260         CHANGE DATE                                   ║
+1360 REM║     6000-6090         GET INFORMATION ABOUT RECORDS                 ║
+1370 REM║     7000-7080         GET RECORDS FROM DATA FILE                    ║
+1380 REM║     8000-8100         INPUT RECORDS                                 ║
+1390 REM║     9000-9140         SORT RECORDS                                  ║
+1400 REM║     10000-10280       CHECK RECORDS - ADD, DELETE, CORRECT, ABORT   ║
+1410 REM║     11000-11150       CORRECT MISTAKES IN RECORD                    ║
+1420 REM║     12000-12190       INITIALIZE PRINTING                           ║
+1430 REM║     13000-13250       OUTPUT TO PRINTER                             ║
+1440 REM║     14000-14280       PRINT TO SCREEN                               ║
+1450 REM║     15000-15030       END PROGRAM                                   ║
+1460 REM║     16000-16070       DELETE RECORD                                 ║
+1470 REM║     17000-17100       SAVE RECORDS TO SEQUENTIAL DATAFILE           ║
+1480 REM║     18000-18140       ADD RECORD                                    ║
+1490 REM║     19000-19070       PAUSE WHILE SCROLLING                         ║
+1500 REM║     20000-20190       PRINT OUTPUT TO DISK                          ║
+1510 REM║     21000-21390       ERROR HANDLING ROUTINE                        ║
+1520 REM║     22000-22120       SELECTIVE INPUT ROUTINE                       ║
+1530 REM╚═════════════════════════════════════════════════════════════════════╝
 3000 '
 3010 REM ** SETUP **
 3020 '
@@ -1684,60 +1683,60 @@ machines:
 ## SCR-COLY.BAS
 
 ```bas
-1000 REMKEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-1010 REMOPEN                                                                     OPEN
-1020 REMOPEN   With Graphics         HIGH SCORE ORGANIZER        Color Version   OPEN
-1030 REMOPEN       Board                                         6/9/85    5.1   OPEN
-1040 REMOPEN                     WRITTEN BY DAVID J. FRIEDMAN                    OPEN
-1050 REMOPEN                                                                     OPEN
-1060 REMOPEN   On Saturday February 23 and Sunday February 24 of the year 1985   OPEN
-1070 REMOPEN                                                                     OPEN
-1080 REMOPEN                                                                     OPEN
-1090 REMOPEN       Dave Friedman was born in Bakersfield, California located     OPEN
-1100 REMOPEN     in Kern County near Death Valley on October 24, 1968.  When     OPEN
-1110 REMOPEN     he was just about three years old, he moved to a small town     OPEN
-1120 REMOPEN     in Wisconsin called Irma.  Its population was approximately     OPEN
-1130 REMOPEN     100 people.  It is located north of Wausau.  In 1976, David     OPEN
-1140 REMOPEN     again moved, not so far this time, to Eau Claire, a city in     OPEN
-1150 REMOPEN     Wisconsin with a population of about 50,000 people.  He now     OPEN
-1160 REMOPEN     currently resides at 3330 Riverview Drive where he stays up     OPEN
-1170 REMOPEN     all night and writes stupid remarks in his programs.  Thank     OPEN
-1180 REMOPEN     you for your patience for reading this, and I hope you will     OPEN
-1190 REMOPEN     find the program to be useful.                                  OPEN
-1200 REMOPEN     VARPTRSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDCOLOR     Dave Friedman             OPEN
-1210 REMOPEN     CALL   If you find this program to CALL     3330 Riverview Drive      OPEN
-1220 REMOPEN     CALL be useful, a donation of five CALL     Eau Claire, Wisconsin     OPEN
-1230 REMOPEN     CALL dollars would be appreciated. CALL     (715) 834-8045  54703     OPEN
-1240 REMOPEN     CLSSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND'                               OPEN
-1250 REMTOTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENRANDOMIZE
-1260 REMOPEN                        SUMMARY OF SUBROUTINES                       OPEN
-1270 REMOPEN                        SOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND                       OPEN
-1280 REMOPEN                                                                     OPEN
-1290 REMOPEN     LINE NUMBERS      P U R P O S E   O F   S U B R O U T I N E     OPEN
-1300 REMOPEN     SOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND      SOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND     OPEN
-1310 REMOPEN     1000-1530         BIOGRAPHY AND SUMMARY OF SUBROUTINES          OPEN
-1320 REMOPEN     2000-2800         MARQUE TYPE INTRODUCTION-ONLY W/GRAPHICS      OPEN
-1330 REMOPEN     3000-3150         PROGRAM SETUP                                 OPEN
-1340 REMOPEN     4000-4060         DISPLAY DATE                                  OPEN
-1350 REMOPEN     5000-5260         CHANGE DATE                                   OPEN
-1360 REMOPEN     6000-6090         GET INFORMATION ABOUT RECORDS                 OPEN
-1370 REMOPEN     7000-7080         GET RECORDS FROM DATA FILE                    OPEN
-1380 REMOPEN     8000-8100         INPUT RECORDS                                 OPEN
-1390 REMOPEN     9000-9140         SORT RECORDS                                  OPEN
-1400 REMOPEN     10000-10280       CHECK RECORDS - ADD, DELETE, CORRECT, ABORT   OPEN
-1410 REMOPEN     11000-11150       CORRECT MISTAKES IN RECORD                    OPEN
-1420 REMOPEN     12000-12190       INITIALIZE PRINTING                           OPEN
-1430 REMOPEN     13000-13250       OUTPUT TO PRINTER                             OPEN
-1440 REMOPEN     14000-14280       PRINT TO SCREEN                               OPEN
-1450 REMOPEN     15000-15030       END PROGRAM                                   OPEN
-1460 REMOPEN     16000-16070       DELETE RECORD                                 OPEN
-1470 REMOPEN     17000-17100       SAVE RECORDS TO SEQUENTIAL DATAFILE           OPEN
-1480 REMOPEN     18000-18140       ADD RECORD                                    OPEN
-1490 REMOPEN     19000-19070       PAUSE WHILE SCROLLING                         OPEN
-1500 REMOPEN     20000-20190       PRINT OUTPUT TO DISK                          OPEN
-1510 REMOPEN     21000-21390       ERROR HANDLING ROUTINE                        OPEN
-1520 REMOPEN     22000-22120       SELECTIVE INPUT ROUTINE                       OPEN
-1530 REMSCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+1000 REM╔═════════════════════════════════════════════════════════════════════╗
+1010 REM║                                                                     ║
+1020 REM║   With Graphics         HIGH SCORE ORGANIZER        Color Version   ║
+1030 REM║       Board                                         6/9/85    5.1   ║
+1040 REM║                     WRITTEN BY DAVID J. FRIEDMAN                    ║
+1050 REM║                                                                     ║
+1060 REM║   On Saturday February 23 and Sunday February 24 of the year 1985   ║
+1070 REM║                                                                     ║
+1080 REM║                                                                     ║
+1090 REM║       Dave Friedman was born in Bakersfield, California located     ║
+1100 REM║     in Kern County near Death Valley on October 24, 1968.  When     ║
+1110 REM║     he was just about three years old, he moved to a small town     ║
+1120 REM║     in Wisconsin called Irma.  Its population was approximately     ║
+1130 REM║     100 people.  It is located north of Wausau.  In 1976, David     ║
+1140 REM║     again moved, not so far this time, to Eau Claire, a city in     ║
+1150 REM║     Wisconsin with a population of about 50,000 people.  He now     ║
+1160 REM║     currently resides at 3330 Riverview Drive where he stays up     ║
+1170 REM║     all night and writes stupid remarks in his programs.  Thank     ║
+1180 REM║     you for your patience for reading this, and I hope you will     ║
+1190 REM║     find the program to be useful.                                  ║
+1200 REM║     ┌───────────────────────────────┐     Dave Friedman             ║
+1210 REM║     │   If you find this program to │     3330 Riverview Drive      ║
+1220 REM║     │ be useful, a donation of five │     Eau Claire, Wisconsin     ║
+1230 REM║     │ dollars would be appreciated. │     (715) 834-8045  54703     ║
+1240 REM║     └───────────────────────────────┘                               ║
+1250 REM╠═════════════════════════════════════════════════════════════════════╣
+1260 REM║                        SUMMARY OF SUBROUTINES                       ║
+1270 REM║                        ──────────────────────                       ║
+1280 REM║                                                                     ║
+1290 REM║     LINE NUMBERS      P U R P O S E   O F   S U B R O U T I N E     ║
+1300 REM║     ────────────      ─────────────────────────────────────────     ║
+1310 REM║     1000-1530         BIOGRAPHY AND SUMMARY OF SUBROUTINES          ║
+1320 REM║     2000-2800         MARQUE TYPE INTRODUCTION-ONLY W/GRAPHICS      ║
+1330 REM║     3000-3150         PROGRAM SETUP                                 ║
+1340 REM║     4000-4060         DISPLAY DATE                                  ║
+1350 REM║     5000-5260         CHANGE DATE                                   ║
+1360 REM║     6000-6090         GET INFORMATION ABOUT RECORDS                 ║
+1370 REM║     7000-7080         GET RECORDS FROM DATA FILE                    ║
+1380 REM║     8000-8100         INPUT RECORDS                                 ║
+1390 REM║     9000-9140         SORT RECORDS                                  ║
+1400 REM║     10000-10280       CHECK RECORDS - ADD, DELETE, CORRECT, ABORT   ║
+1410 REM║     11000-11150       CORRECT MISTAKES IN RECORD                    ║
+1420 REM║     12000-12190       INITIALIZE PRINTING                           ║
+1430 REM║     13000-13250       OUTPUT TO PRINTER                             ║
+1440 REM║     14000-14280       PRINT TO SCREEN                               ║
+1450 REM║     15000-15030       END PROGRAM                                   ║
+1460 REM║     16000-16070       DELETE RECORD                                 ║
+1470 REM║     17000-17100       SAVE RECORDS TO SEQUENTIAL DATAFILE           ║
+1480 REM║     18000-18140       ADD RECORD                                    ║
+1490 REM║     19000-19070       PAUSE WHILE SCROLLING                         ║
+1500 REM║     20000-20190       PRINT OUTPUT TO DISK                          ║
+1510 REM║     21000-21390       ERROR HANDLING ROUTINE                        ║
+1520 REM║     22000-22120       SELECTIVE INPUT ROUTINE                       ║
+1530 REM╚═════════════════════════════════════════════════════════════════════╝
 2000 '
 2010 REM ** MARQUE TYPE INTRODUCTION **
 2020 '
@@ -2216,61 +2215,61 @@ machines:
 ## SCR-MONN.BAS
 
 ```bas
-1000 REMKEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-1010 REMOPEN                                                                     OPEN
-1020 REMOPEN   Without Graphics      HIGH SCORE ORGANIZER   Monochrome Version   OPEN
-1030 REMOPEN        Board                                   6/9/85         5.1   OPEN
-1040 REMOPEN                     WRITTEN BY DAVID J. FRIEDMAN                    OPEN
-1050 REMOPEN                                                                     OPEN
-1060 REMOPEN   On Saturday February 23 and Sunday February 24 of the year 1985   OPEN
-1070 REMOPEN                                                                     OPEN
-1080 REMOPEN                                                                     OPEN
-1090 REMOPEN       Dave Friedman was born in Bakersfield, California located     OPEN
-1100 REMOPEN     in Kern County near Death Valley on October 24, 1968.  When     OPEN
-1110 REMOPEN     he was just about three years old, he moved to a small town     OPEN
-1120 REMOPEN     in Wisconsin called Irma.  Its population was approximately     OPEN
-1130 REMOPEN     100 people.  It is located north of Wausau.  In 1976, David     OPEN
-1140 REMOPEN     again moved, not so far this time, to Eau Claire, a city in     OPEN
-1150 REMOPEN     Wisconsin with a population of about 50,000 people.  He now     OPEN
-1160 REMOPEN     currently resides at 3330 Riverview Drive where he stays up     OPEN
-1170 REMOPEN     all night and writes stupid remarks in his programs.  Thank     OPEN
-1180 REMOPEN     you for your patience for reading this, and I hope you will     OPEN
-1190 REMOPEN     find the program to be useful.                                  OPEN
-1200 REMOPEN     VARPTRSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDCOLOR     Dave Friedman             OPEN
-1210 REMOPEN     CALL   If you find this program to CALL     3330 Riverview Drive      OPEN
-1220 REMOPEN     CALL be useful, a donation of five CALL     Eau Claire, Wisconsin     OPEN
-1230 REMOPEN     CALL dollars would be appreciated. CALL     (715) 834-8045  54703     OPEN
-1240 REMOPEN     CLSSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND'                               OPEN
-1250 REMTOTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENRANDOMIZE
-1260 REMOPEN                        SUMMARY OF SUBROUTINES                       OPEN
-1270 REMOPEN                        SOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND                       OPEN
-1280 REMOPEN                                                                     OPEN
-1290 REMOPEN     LINE NUMBERS      P U R P O S E   O F   S U B R O U T I N E     OPEN
-1300 REMOPEN     SOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND      SOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND     OPEN
-1310 REMOPEN     1000-1540         BIOGRAPHY AND SUMMARY OF SUBROUTINES          OPEN
-1320 REMOPEN     2000-2790         MARQUE TYPE INTRODUCTION-ONLY W/GRAPHICS      OPEN
-1330 REMOPEN     3000-3150         PROGRAM SETUP                                 OPEN
-1340 REMOPEN     4000-4060         DISPLAY DATE                                  OPEN
-1350 REMOPEN     5000-5260         CHANGE DATE                                   OPEN
-1360 REMOPEN     6000-6150         GET INFORMATION ABOUT RECORDS                 OPEN
-1370 REMOPEN     7000-7090         GET RECORDS FROM DATA FILE                    OPEN
-1380 REMOPEN     8000-8100         INPUT RECORDS                                 OPEN
-1390 REMOPEN     9000-9140         SORT RECORDS                                  OPEN
-1400 REMOPEN     10000-10280       CHECK RECORDS - ADD, DELETE, CORRECT, ABORT   OPEN
-1410 REMOPEN     11000-11150       CORRECT MISTAKES IN RECORD                    OPEN
-1420 REMOPEN     12000-12190       INITIALIZE PRINTING                           OPEN
-1430 REMOPEN     13000-13250       OUTPUT TO PRINTER                             OPEN
-1440 REMOPEN     14000-14280       PRINT TO SCREEN                               OPEN
-1450 REMOPEN     15000-15030       END PROGRAM                                   OPEN
-1460 REMOPEN     16000-16070       DELETE RECORD                                 OPEN
-1470 REMOPEN     17000-17100       SAVE RECORDS TO SEQUENTIAL DATAFILE           OPEN
-1480 REMOPEN     18000-18150       ADD RECORD                                    OPEN
-1490 REMOPEN     19000-19070       PAUSE WHILE SCROLLING                         OPEN
-1500 REMOPEN     20000-20190       PRINT OUTPUT TO DISK                          OPEN
-1510 REMOPEN     21000-21390       ERROR HANDLING ROUTINE                        OPEN
-1520 REMOPEN     22000-22120       SELECTIVE INPUT ROUTINE                       OPEN
-1530 REMOPEN                                                                     OPEN
-1540 REMSCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+1000 REM╔═════════════════════════════════════════════════════════════════════╗
+1010 REM║                                                                     ║
+1020 REM║   Without Graphics      HIGH SCORE ORGANIZER   Monochrome Version   ║
+1030 REM║        Board                                   6/9/85         5.1   ║
+1040 REM║                     WRITTEN BY DAVID J. FRIEDMAN                    ║
+1050 REM║                                                                     ║
+1060 REM║   On Saturday February 23 and Sunday February 24 of the year 1985   ║
+1070 REM║                                                                     ║
+1080 REM║                                                                     ║
+1090 REM║       Dave Friedman was born in Bakersfield, California located     ║
+1100 REM║     in Kern County near Death Valley on October 24, 1968.  When     ║
+1110 REM║     he was just about three years old, he moved to a small town     ║
+1120 REM║     in Wisconsin called Irma.  Its population was approximately     ║
+1130 REM║     100 people.  It is located north of Wausau.  In 1976, David     ║
+1140 REM║     again moved, not so far this time, to Eau Claire, a city in     ║
+1150 REM║     Wisconsin with a population of about 50,000 people.  He now     ║
+1160 REM║     currently resides at 3330 Riverview Drive where he stays up     ║
+1170 REM║     all night and writes stupid remarks in his programs.  Thank     ║
+1180 REM║     you for your patience for reading this, and I hope you will     ║
+1190 REM║     find the program to be useful.                                  ║
+1200 REM║     ┌───────────────────────────────┐     Dave Friedman             ║
+1210 REM║     │   If you find this program to │     3330 Riverview Drive      ║
+1220 REM║     │ be useful, a donation of five │     Eau Claire, Wisconsin     ║
+1230 REM║     │ dollars would be appreciated. │     (715) 834-8045  54703     ║
+1240 REM║     └───────────────────────────────┘                               ║
+1250 REM╠═════════════════════════════════════════════════════════════════════╣
+1260 REM║                        SUMMARY OF SUBROUTINES                       ║
+1270 REM║                        ──────────────────────                       ║
+1280 REM║                                                                     ║
+1290 REM║     LINE NUMBERS      P U R P O S E   O F   S U B R O U T I N E     ║
+1300 REM║     ────────────      ─────────────────────────────────────────     ║
+1310 REM║     1000-1540         BIOGRAPHY AND SUMMARY OF SUBROUTINES          ║
+1320 REM║     2000-2790         MARQUE TYPE INTRODUCTION-ONLY W/GRAPHICS      ║
+1330 REM║     3000-3150         PROGRAM SETUP                                 ║
+1340 REM║     4000-4060         DISPLAY DATE                                  ║
+1350 REM║     5000-5260         CHANGE DATE                                   ║
+1360 REM║     6000-6150         GET INFORMATION ABOUT RECORDS                 ║
+1370 REM║     7000-7090         GET RECORDS FROM DATA FILE                    ║
+1380 REM║     8000-8100         INPUT RECORDS                                 ║
+1390 REM║     9000-9140         SORT RECORDS                                  ║
+1400 REM║     10000-10280       CHECK RECORDS - ADD, DELETE, CORRECT, ABORT   ║
+1410 REM║     11000-11150       CORRECT MISTAKES IN RECORD                    ║
+1420 REM║     12000-12190       INITIALIZE PRINTING                           ║
+1430 REM║     13000-13250       OUTPUT TO PRINTER                             ║
+1440 REM║     14000-14280       PRINT TO SCREEN                               ║
+1450 REM║     15000-15030       END PROGRAM                                   ║
+1460 REM║     16000-16070       DELETE RECORD                                 ║
+1470 REM║     17000-17100       SAVE RECORDS TO SEQUENTIAL DATAFILE           ║
+1480 REM║     18000-18150       ADD RECORD                                    ║
+1490 REM║     19000-19070       PAUSE WHILE SCROLLING                         ║
+1500 REM║     20000-20190       PRINT OUTPUT TO DISK                          ║
+1510 REM║     21000-21390       ERROR HANDLING ROUTINE                        ║
+1520 REM║     22000-22120       SELECTIVE INPUT ROUTINE                       ║
+1530 REM║                                                                     ║
+1540 REM╚═════════════════════════════════════════════════════════════════════╝
 3000 '
 3010 REM ** SETUP **
 3020 '
@@ -2607,61 +2606,61 @@ machines:
 ## SCR-MONY.BAS
 
 ```bas
-1000 REMKEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-1010 REMOPEN                                                                     OPEN
-1020 REMOPEN   With Graphics         HIGH SCORE ORGANIZER   Monochrome Version   OPEN
-1030 REMOPEN       Board                                    6/9/85         5.1   OPEN
-1040 REMOPEN                     WRITTEN BY DAVID J. FRIEDMAN                    OPEN
-1050 REMOPEN                                                                     OPEN
-1060 REMOPEN   On Saturday February 23 and Sunday February 24 of the year 1985   OPEN
-1070 REMOPEN                                                                     OPEN
-1080 REMOPEN                                                                     OPEN
-1090 REMOPEN       Dave Friedman was born in Bakersfield, California located     OPEN
-1100 REMOPEN     in Kern County near Death Valley on October 24, 1968.  When     OPEN
-1110 REMOPEN     he was just about three years old, he moved to a small town     OPEN
-1120 REMOPEN     in Wisconsin called Irma.  Its population was approximately     OPEN
-1130 REMOPEN     100 people.  It is located north of Wausau.  In 1976, David     OPEN
-1140 REMOPEN     again moved, not so far this time, to Eau Claire, a city in     OPEN
-1150 REMOPEN     Wisconsin with a population of about 50,000 people.  He now     OPEN
-1160 REMOPEN     currently resides at 3330 Riverview Drive where he stays up     OPEN
-1170 REMOPEN     all night and writes stupid remarks in his programs.  Thank     OPEN
-1180 REMOPEN     you for your patience for reading this, and I hope you will     OPEN
-1190 REMOPEN     find the program to be useful.                                  OPEN
-1200 REMOPEN     VARPTRSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDCOLOR     Dave Friedman             OPEN
-1210 REMOPEN     CALL   If you find this program to CALL     3330 Riverview Drive      OPEN
-1220 REMOPEN     CALL be useful, a donation of five CALL     Eau Claire, Wisconsin     OPEN
-1230 REMOPEN     CALL dollars would be appreciated. CALL     (715) 834-8045  54703     OPEN
-1240 REMOPEN     CLSSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND'                               OPEN
-1250 REMTOTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENRANDOMIZE
-1260 REMOPEN                        SUMMARY OF SUBROUTINES                       OPEN
-1270 REMOPEN                        SOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND                       OPEN
-1280 REMOPEN                                                                     OPEN
-1290 REMOPEN     LINE NUMBERS      P U R P O S E   O F   S U B R O U T I N E     OPEN
-1300 REMOPEN     SOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND      SOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUNDSOUND     OPEN
-1310 REMOPEN     1000-1540         BIOGRAPHY AND SUMMARY OF SUBROUTINES          OPEN
-1320 REMOPEN     2000-2790         MARQUE TYPE INTRODUCTION-ONLY W/GRAPHICS      OPEN
-1330 REMOPEN     3000-3150         PROGRAM SETUP                                 OPEN
-1340 REMOPEN     4000-4060         DISPLAY DATE                                  OPEN
-1350 REMOPEN     5000-5260         CHANGE DATE                                   OPEN
-1360 REMOPEN     6000-6150         GET INFORMATION ABOUT RECORDS                 OPEN
-1370 REMOPEN     7000-7090         GET RECORDS FROM DATA FILE                    OPEN
-1380 REMOPEN     8000-8100         INPUT RECORDS                                 OPEN
-1390 REMOPEN     9000-9140         SORT RECORDS                                  OPEN
-1400 REMOPEN     10000-10280       CHECK RECORDS - ADD, DELETE, CORRECT, ABORT   OPEN
-1410 REMOPEN     11000-11150       CORRECT MISTAKES IN RECORD                    OPEN
-1420 REMOPEN     12000-12190       INITIALIZE PRINTING                           OPEN
-1430 REMOPEN     13000-13250       OUTPUT TO PRINTER                             OPEN
-1440 REMOPEN     14000-14280       PRINT TO SCREEN                               OPEN
-1450 REMOPEN     15000-15030       END PROGRAM                                   OPEN
-1460 REMOPEN     16000-16070       DELETE RECORD                                 OPEN
-1470 REMOPEN     17000-17100       SAVE RECORDS TO SEQUENTIAL DATAFILE           OPEN
-1480 REMOPEN     18000-18150       ADD RECORD                                    OPEN
-1490 REMOPEN     19000-19070       PAUSE WHILE SCROLLING                         OPEN
-1500 REMOPEN     20000-20190       PRINT OUTPUT TO DISK                          OPEN
-1510 REMOPEN     21000-21390       ERROR HANDLING ROUTINE                        OPEN
-1520 REMOPEN     22000-22120       SELECTIVE INPUT ROUTINE                       OPEN
-1530 REMOPEN                                                                     OPEN
-1540 REMSCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+1000 REM╔═════════════════════════════════════════════════════════════════════╗
+1010 REM║                                                                     ║
+1020 REM║   With Graphics         HIGH SCORE ORGANIZER   Monochrome Version   ║
+1030 REM║       Board                                    6/9/85         5.1   ║
+1040 REM║                     WRITTEN BY DAVID J. FRIEDMAN                    ║
+1050 REM║                                                                     ║
+1060 REM║   On Saturday February 23 and Sunday February 24 of the year 1985   ║
+1070 REM║                                                                     ║
+1080 REM║                                                                     ║
+1090 REM║       Dave Friedman was born in Bakersfield, California located     ║
+1100 REM║     in Kern County near Death Valley on October 24, 1968.  When     ║
+1110 REM║     he was just about three years old, he moved to a small town     ║
+1120 REM║     in Wisconsin called Irma.  Its population was approximately     ║
+1130 REM║     100 people.  It is located north of Wausau.  In 1976, David     ║
+1140 REM║     again moved, not so far this time, to Eau Claire, a city in     ║
+1150 REM║     Wisconsin with a population of about 50,000 people.  He now     ║
+1160 REM║     currently resides at 3330 Riverview Drive where he stays up     ║
+1170 REM║     all night and writes stupid remarks in his programs.  Thank     ║
+1180 REM║     you for your patience for reading this, and I hope you will     ║
+1190 REM║     find the program to be useful.                                  ║
+1200 REM║     ┌───────────────────────────────┐     Dave Friedman             ║
+1210 REM║     │   If you find this program to │     3330 Riverview Drive      ║
+1220 REM║     │ be useful, a donation of five │     Eau Claire, Wisconsin     ║
+1230 REM║     │ dollars would be appreciated. │     (715) 834-8045  54703     ║
+1240 REM║     └───────────────────────────────┘                               ║
+1250 REM╠═════════════════════════════════════════════════════════════════════╣
+1260 REM║                        SUMMARY OF SUBROUTINES                       ║
+1270 REM║                        ──────────────────────                       ║
+1280 REM║                                                                     ║
+1290 REM║     LINE NUMBERS      P U R P O S E   O F   S U B R O U T I N E     ║
+1300 REM║     ────────────      ─────────────────────────────────────────     ║
+1310 REM║     1000-1540         BIOGRAPHY AND SUMMARY OF SUBROUTINES          ║
+1320 REM║     2000-2790         MARQUE TYPE INTRODUCTION-ONLY W/GRAPHICS      ║
+1330 REM║     3000-3150         PROGRAM SETUP                                 ║
+1340 REM║     4000-4060         DISPLAY DATE                                  ║
+1350 REM║     5000-5260         CHANGE DATE                                   ║
+1360 REM║     6000-6150         GET INFORMATION ABOUT RECORDS                 ║
+1370 REM║     7000-7090         GET RECORDS FROM DATA FILE                    ║
+1380 REM║     8000-8100         INPUT RECORDS                                 ║
+1390 REM║     9000-9140         SORT RECORDS                                  ║
+1400 REM║     10000-10280       CHECK RECORDS - ADD, DELETE, CORRECT, ABORT   ║
+1410 REM║     11000-11150       CORRECT MISTAKES IN RECORD                    ║
+1420 REM║     12000-12190       INITIALIZE PRINTING                           ║
+1430 REM║     13000-13250       OUTPUT TO PRINTER                             ║
+1440 REM║     14000-14280       PRINT TO SCREEN                               ║
+1450 REM║     15000-15030       END PROGRAM                                   ║
+1460 REM║     16000-16070       DELETE RECORD                                 ║
+1470 REM║     17000-17100       SAVE RECORDS TO SEQUENTIAL DATAFILE           ║
+1480 REM║     18000-18150       ADD RECORD                                    ║
+1490 REM║     19000-19070       PAUSE WHILE SCROLLING                         ║
+1500 REM║     20000-20190       PRINT OUTPUT TO DISK                          ║
+1510 REM║     21000-21390       ERROR HANDLING ROUTINE                        ║
+1520 REM║     22000-22120       SELECTIVE INPUT ROUTINE                       ║
+1530 REM║                                                                     ║
+1540 REM╚═════════════════════════════════════════════════════════════════════╝
 2000 '
 2010 REM ** MARQUE TYPE INTRODUCTION **
 2020 '

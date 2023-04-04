@@ -584,9 +584,9 @@ machines:
 120 '****                                                               ****
 130 '***********************************************************************
 140 '***********************************************************************
-150 DEF SEG=0 '------------------------------����Ŀ
-160 K=PEEK(&H417) OR &H40 '                       � SET CAPS
-170 POKE &H417,K   '-------------------------������
+150 DEF SEG=0 '------------------------------─────┐
+160 K=PEEK(&H417) OR &H40 '                       │ SET CAPS
+170 POKE &H417,K   '-------------------------─────┘
 180 ROOM =0:SUB=0:SUBTTL=0:BUFFER=0
 190 SIZE=100:DIM DES$(SIZE), NO(SIZE), DOL(SIZE), RM(SIZE)
 200 KEY OFF:FOR I=1 TO 10: KEY I,"":NEXT
@@ -772,10 +772,6 @@ machines:
 2000 IF ANS$<>"Y" THEN GOTO 900
 2010 KILL "TEMP.DAT"
 2020 GOTO 1800
- "
-1990 INPUT "DO YOU WISH IT DELETED (Y OR N) ";ANS$
-2000 IF ANS$<>"Y" THEN GOTO 900
-2010 KIL
 ```
 
 ## LINREGRS.BAS
@@ -1071,7 +1067,7 @@ machines:
 100 REM     MAILING LABEL PROGRAM FOR 'Business Mailing Labels'
 200 REM     MAILING LABEL PROGRAM FOR 'Business Mailing Labels'
 300 REM     Created by:
-400 REM                  Alde�n C!. Olander III  <AL>
+400 REM                  Alde╛n C!. Olander III  <AL>
 500 REM                         WB9YYN
 600 REM                     (312) 671-0441
 700 REM 
@@ -1433,7 +1429,6 @@ machines:
 32700 NEXT I
 32800 CLOSE
 32900 RETURN 2000
-I);TAB(70);" ";A4$(I);TAB(83);" ";A5$(I);TA
 ```
 
 ## REMCACC.BAS
@@ -1571,7 +1566,6 @@ machines:
 8204 ' with the extension ENT. A data date is also recorded with the account file.
 8205 ' This date is the current date entered at the beginning of the program runor else the last time changes were made to both files if no changes were done this
 8206 ' time.
- beginnin
 ```
 
 ## WB-UPTLE.BAS

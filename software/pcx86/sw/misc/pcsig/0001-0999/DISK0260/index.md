@@ -3365,8 +3365,6 @@ machines:
 1170 LOCATE 24,1:PRINT"      PRESS ANY KEY TO CONTINUE";
 1180 A$=INKEY$:IF A$="" THEN 1180 ELSE 140
 1190 REM
-ust be `on'."
-1170 LO
 ```
 
 {% comment %}samples_end{% endcomment %}

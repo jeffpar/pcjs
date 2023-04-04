@@ -212,9 +212,6 @@ machines:
 1030    CLS : BEEP :BEEP                     '
 1040    PRINT "Program aborted due to error code = ";ERR
 1050    END                                  '
-                  '
-1040    PRINT "Program aborted due to error code = ";ERR
-1050    END                
 ```
 
 ## C.BAS
@@ -957,7 +954,6 @@ machines:
 700 GOTO 130
 720 PRINT"Enter a stop code to indicate the end of list"
 740 RETURN
-OR I=1 TO 
 ```
 
 ## IBMCS.BAS
@@ -1058,12 +1054,12 @@ machines:
 2705 'SCREEN NOT FOUND
 2710 '
 2715 CLS: LOCATE 10,5: PRINT "SCREEN ";NEXTSCR$;" NOT FOUND": LOCATE 23,5: PRINT "Press any key to end demo"
-2720 DELAY=FALSE: BRANCH$="$&END: Ä
+2720 DELAY=FALSE: BRANCH$="■*$&END■": RETURN
 2800 '
 2805 'INIT (INITIALIZATION SUBROUTINE)
 2810 '
 2815 DEFINT A-Z: KEY OFF: SCREEN 0,1,0,0
-2820 K$="": B$=": FALSEτ◄: TRUEτ╙ FALSE: Q$τCHR$(☼"): ESC$=CHR$(27): TERM=FALSE: RESTART=FALSE: BA$="": D$="$"
+2820 K$="": B$="■": FALSE=0: TRUE=NOT FALSE: Q$=CHR$(34): ESC$=CHR$(27): TERM=FALSE: RESTART=FALSE: BA$="■*": D$="$"
 2825 BS$=CHR$(0)+CHR$(67): BM$=CHR$(0)+CHR$(68): HELP$=CHR$(0)+CHR$(59): TERM$=CHR$(0)+CHR$(117): ID$=CHR$(0)+CHR$(66)
 2830 DEF FNTM!(T$)=VAL(LEFT$(T$,2))*3600.+VAL(MID$(T$,4,2))*60.+VAL(RIGHT$(T$,2))
 2835 'DISABLE FUNCTION KEYS
@@ -1102,7 +1098,7 @@ machines:
 3060 LOCATE 21,4:PRINT USING "&";SPACE$(19);"price";SPACE$(49);
 3063 LOCATE 22,4:PRINT USING "&";SPACE$(73);
 3066 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3069 LOCATE 2,42,0:DELAY=0:BRANCH$="$DYINT023:Ä
+3069 LOCATE 2,42,0:DELAY=0:BRANCH$="■*$DYINT023■":RETURN
 3072 'SAVE "B:DYINT023.ISD",A 'TITLE=PERSONAL SOLUTION 2
 3075 WIDTH 80:COLOR 7,0,0:CLS
 3078 COLOR 0,7:LOCATE 1,26:PRINT USING "&";" ┌─────────────────────────┐ ";
@@ -1124,7 +1120,7 @@ machines:
 3126 LOCATE 19,4:PRINT USING "&";"   - Supplies";SPACE$(61);
 3129 LOCATE 20,4:PRINT USING "&";SPACE$(74);
 3132 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3135 LOCATE 2,42,0:DELAY=0:BRANCH$="$DYINT024:Ä
+3135 LOCATE 2,42,0:DELAY=0:BRANCH$="■*$DYINT024■":RETURN
 3138 'SAVE "B:DYINT024.ISD",A 'TITLE=PERSONAL COMPUTER
 3141 WIDTH 80:COLOR 7,0,0:CLS
 3144 COLOR 0,7:LOCATE 1,27:PRINT USING "&";" ┌─────────────────────────┐ ";
@@ -1147,7 +1143,7 @@ machines:
 3195 LOCATE 20,3:PRINT USING "&";" TRANSPORTABLE:";SPACE$(16);"For use in your home and office.";SPACE$(13);
 3198 LOCATE 21,3:PRINT USING "&";SPACE$(76);
 3201 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3204 LOCATE 2,43,0:DELAY=0:BRANCH$="$DYINT025:Ä
+3204 LOCATE 2,43,0:DELAY=0:BRANCH$="■*$DYINT025■":RETURN
 3207 'SAVE "B:DYINT025.ISD",A 'TITLE=IBM Personal 2
 3210 WIDTH 80:COLOR 7,0,0:CLS
 3213 COLOR 0,7:LOCATE 1,27:PRINT USING "&";" ┌─────────────────────────┐ ";
@@ -1170,7 +1166,7 @@ machines:
 3264 LOCATE 20,3:PRINT USING "&";SPACE$(25);"investment.";SPACE$(40);
 3267 LOCATE 21,3:PRINT USING "&";SPACE$(76);
 3270 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3273 LOCATE 2,43,0:DELAY=0:BRANCH$="$DYINT026:Ä
+3273 LOCATE 2,43,0:DELAY=0:BRANCH$="■*$DYINT026■":RETURN
 3276 'SAVE "B:DYINT026.ISD",A 'TITLE=SUPPORT
 3279 WIDTH 80:COLOR 7,0,0:CLS
 3282 COLOR 0,7:LOCATE 1,28:PRINT USING "&";" ┌───────────────────────┐ ";
@@ -1193,7 +1189,7 @@ machines:
 3333 LOCATE 20,4:PRINT USING "&";"  SUPPLIES:";SPACE$(24);"Available locally at your dealer.      ";
 3336 LOCATE 21,4:PRINT USING "&";SPACE$(74);
 3339 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3342 LOCATE 12,69,0:DELAY=0:BRANCH$="$DYINT027:Ä
+3342 LOCATE 12,69,0:DELAY=0:BRANCH$="■*$DYINT027■":RETURN
 3345 'SAVE "B:DYINT027.ISD",A 'TITLE=APPLICATIONS
 3348 WIDTH 80:COLOR 7,0,0:CLS
 3351 COLOR 0,7:LOCATE 1,26:PRINT USING "&";" ┌─────────────────────────┐ ";
@@ -1215,7 +1211,7 @@ machines:
 3399 LOCATE 19,3:PRINT USING "&";SPACE$(35);"enhancements.";SPACE$(28);
 3402 LOCATE 20,3:PRINT USING "&";SPACE$(76);
 3405 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3408 LOCATE 2,42,0:DELAY=0:BRANCH$="$DYINT028:Ä
+3408 LOCATE 2,42,0:DELAY=0:BRANCH$="■*$DYINT028■":RETURN
 3411 'SAVE "B:DYINT028.ISD",A 'TITLE=IBM COMP SOL:GRAPHIC
 3414 WIDTH 80:COLOR 7,0,0:CLS
 3417 COLOR 0,7:LOCATE 1,25:PRINT USING "&";" ┌─────────────────────────┐ ";
@@ -1234,7 +1230,7 @@ machines:
 3456 COLOR 15,0:LOCATE 22,13:PRINT USING "&";"Support";
 3459 LOCATE 22,54:PRINT USING "&";"Applications";
 3462 LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3465 LOCATE 14,44,0:DELAY=0:BRANCH$="$&IBMDIY:Ä
+3465 LOCATE 14,44,0:DELAY=0:BRANCH$="■*$&IBMDIY■":RETURN
 ```
 
 ## IBMDIY.BAS
@@ -1341,12 +1337,12 @@ machines:
 2705 'SCREEN NOT FOUND
 2710 '
 2715 CLS: LOCATE 10,5: PRINT "SCREEN ";NEXTSCR$;" NOT FOUND": LOCATE 23,5: PRINT "Press any key to end demo"
-2720 DELAY=FALSE: BRANCH$="$&END: Ä
+2720 DELAY=FALSE: BRANCH$="■*$&END■": RETURN
 2800 '
 2805 'INIT (INITIALIZATION SUBROUTINE)
 2810 '
 2815 DEFINT A-Z: KEY OFF: SCREEN 0,1,0,0
-2820 K$="": B$=": FALSEτ◄: TRUEτ╙ FALSE: Q$τCHR$(☼"): ESC$=CHR$(27): TERM=FALSE: RESTART=FALSE: BA$="": D$="$"
+2820 K$="": B$="■": FALSE=0: TRUE=NOT FALSE: Q$=CHR$(34): ESC$=CHR$(27): TERM=FALSE: RESTART=FALSE: BA$="■*": D$="$"
 2825 BS$=CHR$(0)+CHR$(67): BM$=CHR$(0)+CHR$(68): HELP$=CHR$(0)+CHR$(59): TERM$=CHR$(0)+CHR$(117): ID$=CHR$(0)+CHR$(66)
 2830 DEF FNTM!(T$)=VAL(LEFT$(T$,2))*3600.+VAL(MID$(T$,4,2))*60.+VAL(RIGHT$(T$,2))
 2835 'DISABLE FUNCTION KEYS
@@ -1378,12 +1374,12 @@ machines:
 3039 COLOR 15,0:LOCATE 15,7:PRINT USING "&";"2.";
 3042 COLOR 7,0:PRINT USING "&";" IBM Personal Solution";
 3045 COLOR 15,0:LOCATE 22,5:PRINT USING "&";"Press the number of your choice";
-3048 LOCATE 15,7,0:DELAY=0:BRANCH$="$DYINT002$&IBMCS$DYINT999:Ä
+3048 LOCATE 15,7,0:DELAY=0:BRANCH$="■1$DYINT002■2$&IBMCS■3$DYINT999■":RETURN
 3051 'SAVE "B:DYINT999.ISD",A 'TITLE=OPTION 3 - NOT YET
 3054 WIDTH 40:COLOR 7,0,0:CLS
 3057 IF IBMBW THEN OUT 948,2:OUT 949,62
 3060 LOCATE 4,10:PRINT USING "&";"Option 3 has not been";:LOCATE 6,13:PRINT USING "&";"implemented yet.";:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3063 LOCATE 24,18,0:DELAY=0:BRANCH$="$&RETURN:Ä
+3063 LOCATE 24,18,0:DELAY=0:BRANCH$="■*$&RETURN■":RETURN
 3066 'SAVE "B:DYINT002.ISD",A 'TITLE=INTRODUCTION
 3069 WIDTH 80:COLOR 7,0,0:CLS
 3072 COLOR 0,7:LOCATE 1,21:PRINT USING "&";" ┌─────────────────────────────┐ ";
@@ -1401,7 +1397,7 @@ machines:
 3108 COLOR 15,0:PRINT USING "&";"Tie it together";
 3111 COLOR 7,0:PRINT USING "&";" so you can see how it can fit          Computer";:LOCATE 20,34:PRINT USING "&";"your business or personal needs.";
 3114 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3117 LOCATE 2,29,0:DELAY=0:BRANCH$="$DYINT003:Ä
+3117 LOCATE 2,29,0:DELAY=0:BRANCH$="■*$DYINT003■":RETURN
 3120 'SAVE "B:DYINT003.ISD",A 'TITLE=DEFINITIONS
 3123 WIDTH 40:COLOR 7,0,0:CLS
 3126 IF IBMBW THEN OUT 948,2:OUT 949,62
@@ -1413,7 +1409,7 @@ machines:
 3144 LOCATE 14,16:PRINT USING "&";" - Record ";
 3147 LOCATE 17,16:PRINT USING "&";" - File   ";
 3150 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3153 LOCATE 3,29,0:DELAY=0:BRANCH$="$DYINT004:Ä
+3153 LOCATE 3,29,0:DELAY=0:BRANCH$="■*$DYINT004■":RETURN
 3156 'SAVE "B:DYINT004.ISD",A 'TITLE=CHECK
 3159 WIDTH 80:COLOR 7,0,0:CLS
 3162 LOCATE 2,16:PRINT USING "&";"Take a look at a typical check in your checkbook.";
@@ -1431,7 +1427,7 @@ machines:
 3198 LOCATE 16,8:PRINT USING "&";"│     ~~~~~~~~~~~";SPACE$(30);"~~~~~~~~~~~~~~~~~│";
 3201 LOCATE 17,8:PRINT USING "&";"└───────────────────────────────────────────────────────────────┘";
 3204 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3207 LOCATE 11,72,0:DELAY=0:BRANCH$="$DYINT005:Ä
+3207 LOCATE 11,72,0:DELAY=0:BRANCH$="■*$DYINT005■":RETURN
 3210 'SAVE "B:DYINT005.ISD",A 'TITLE=RELATED INFO
 3213 WIDTH 80:COLOR 7,0,0:CLS
 3216 LOCATE 2,14:PRINT USING "&";"A check contains a collection of related information.";
@@ -1462,7 +1458,7 @@ machines:
 3291 LOCATE 22,45:PRINT USING "&";"          ~~~~~~~~~~~~~~~~~~~│";
 3294 LOCATE 23,45:PRINT USING "&";"─────────────────────────────┘";
 3297 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3300 LOCATE 7,23,0:DELAY=0:BRANCH$="$DYINT007:Ä
+3300 LOCATE 7,23,0:DELAY=0:BRANCH$="■*$DYINT007■":RETURN
 3303 'SAVE "B:DYINT007.ISD",A 'TITLE=CHECK: FIELD
 3306 WIDTH 80:COLOR 7,0,0:CLS
 3309 LOCATE 2,12:PRINT USING "&";"A ";
@@ -1487,7 +1483,7 @@ machines:
 3366 COLOR 15,0:PRINT USING "&";"FIELD";
 3369 COLOR 7,0:PRINT USING "&";" which contains the information item";:LOCATE 21,33:PRINT USING "&";"ABC Corp.";
 3372 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3375 LOCATE 10,9,0:DELAY=0:BRANCH$="$DYINT006:Ä
+3375 LOCATE 10,9,0:DELAY=0:BRANCH$="■*$DYINT006■":RETURN
 3378 'SAVE "B:DYINT006.ISD",A 'TITLE=CHECK: RECORD
 3381 WIDTH 80:COLOR 7,0,0:CLS
 3384 LOCATE 2,10:PRINT USING "&";"Treated as a unit, the entire check is an example of a ";
@@ -1521,7 +1517,7 @@ machines:
 3468 COLOR 7,0:LOCATE 20,17:PRINT USING "&";"Check number 1001 is the ";Q$;"name";Q$;" of this ";
 3471 COLOR 15,0:PRINT USING "&";"RECORD.";
 3474 LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3477 LOCATE 17,9,0:DELAY=0:BRANCH$="$DYINT008:Ä
+3477 LOCATE 17,9,0:DELAY=0:BRANCH$="■*$DYINT008■":RETURN
 3480 'SAVE "B:DYINT008.ISD",A 'TITLE=CHECK: FILE
 3483 WIDTH 80:COLOR 7,0,0:CLS
 3486 LOCATE 2,21:PRINT USING "&";"A ";
@@ -1563,7 +1559,7 @@ machines:
 3594 COLOR 23,0:LOCATE 22,4:PRINT USING "&";"└────";
 3597 COLOR 0,7:PRINT USING "&";"└──────────────────────────────────────────────────────────────┘";
 3600 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3603 LOCATE 22,9,0:DELAY=0:BRANCH$="$DYINT009:Ä
+3603 LOCATE 22,9,0:DELAY=0:BRANCH$="■*$DYINT009■":RETURN
 3606 'SAVE "B:DYINT009.ISD",A 'TITLE=FINDING DATA
 3609 WIDTH 80:COLOR 7,0,0:CLS
 3612 COLOR 0,7:LOCATE 1,26:PRINT USING "&";" ┌─────────────────────────┐ ";
@@ -1578,7 +1574,7 @@ machines:
 3639 COLOR 15,0:PRINT USING "&";"(DIRECT)";
 3642 COLOR 7,0:LOCATE 17,28:PRINT USING "&";"directly to that check.";
 3645 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3648 LOCATE 12,18,0:DELAY=0:BRANCH$="$DYINT010:Ä
+3648 LOCATE 12,18,0:DELAY=0:BRANCH$="■*$DYINT010■":RETURN
 3651 'SAVE "B:DYINT010.ISD",A 'TITLE=FIND DATA: SEQUENTL
 3654 WIDTH 80:COLOR 7,0,0:CLS
 3657 LOCATE 1,29:PRINT USING "&";"LOOK THROUGH THE CHECKS";
@@ -1612,7 +1608,7 @@ machines:
 3741 COLOR 7,0:PRINT USING "&";" To find this check (record)";:LOCATE 20,37:PRINT USING "&";"you must look through all the";:LOCATE 21,37:PRINT USING "&";"checks one at a time until you";:LOCATE 22,37:PRINT USING "&";"l";
 3744 PRINT USING "&";"ocate the check to ABC Corp.";
 3747 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3750 LOCATE 20,52,0:DELAY=0:BRANCH$="$DYINT011:Ä
+3750 LOCATE 20,52,0:DELAY=0:BRANCH$="■*$DYINT011■":RETURN
 3753 'SAVE "B:DYINT011.ISD",A 'TITLE=FIND DATA: INDEXED
 3756 WIDTH 80:COLOR 7,0,0:CLS
 3759 LOCATE 1,28:PRINT USING "&";"LOOK THROUGH THE CHECKBOOK";
@@ -1656,7 +1652,7 @@ machines:
 3873 COLOR 23,0:PRINT USING "&";" ABC Corp.";
 3876 COLOR 7,0:PRINT USING "&";"    │";:LOCATE 22,19:PRINT USING "&";"to help speed up the search.           │ 1002│ XYZ Co.      │";:LOCATE 23,58:PRINT USING "&";"└─────┴──────────────┘ ";
 3879 COLOR 15,0:PRINT USING "&";"Press the Space bar";
-3882 LOCATE 4,54,0:DELAY=0:BRANCH$="$DYINT012:Ä
+3882 LOCATE 4,54,0:DELAY=0:BRANCH$="■*$DYINT012■":RETURN
 3885 'SAVE "B:DYINT012.ISD",A 'TITLE=FIND DATA: DIRECT
 3888 WIDTH 80:COLOR 7,0,0:CLS
 3891 LOCATE 1,28:PRINT USING "&";"KNOWING THE CHECK NUMBER";
@@ -1688,7 +1684,7 @@ machines:
 3969 COLOR 15,0:LOCATE 19,25:PRINT USING "&";"Solution:";
 3972 COLOR 7,0:PRINT USING "&";" Knowing the check number allows";:LOCATE 20,35:PRINT USING "&";"you to go directly to it's";:LOCATE 21,35:PRINT USING "&";"location in the check file.";
 3975 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3978 LOCATE 4,52,0:DELAY=0:BRANCH$="$&IBMMC:Ä
+3978 LOCATE 4,52,0:DELAY=0:BRANCH$="■*$&IBMMC■":RETURN
 ```
 
 ## IBMMC.BAS
@@ -1791,12 +1787,12 @@ machines:
 2705 'SCREEN NOT FOUND
 2710 '
 2715 CLS: LOCATE 10,5: PRINT "SCREEN ";NEXTSCR$;" NOT FOUND": LOCATE 23,5: PRINT "Press any key to end demo"
-2720 DELAY=FALSE: BRANCH$="$&END: Ä
+2720 DELAY=FALSE: BRANCH$="■*$&END■": RETURN
 2800 '
 2805 'INIT (INITIALIZATION SUBROUTINE)
 2810 '
 2815 DEFINT A-Z: KEY OFF: SCREEN 0,1,0,0
-2820 K$="": B$=": FALSEτ◄: TRUEτ╙ FALSE: Q$τCHR$(☼"): ESC$=CHR$(27): TERM=FALSE: RESTART=FALSE: BA$="": D$="$"
+2820 K$="": B$="■": FALSE=0: TRUE=NOT FALSE: Q$=CHR$(34): ESC$=CHR$(27): TERM=FALSE: RESTART=FALSE: BA$="■*": D$="$"
 2825 BS$=CHR$(0)+CHR$(67): BM$=CHR$(0)+CHR$(68): HELP$=CHR$(0)+CHR$(59): TERM$=CHR$(0)+CHR$(117): ID$=CHR$(0)+CHR$(66)
 2830 DEF FNTM!(T$)=VAL(LEFT$(T$,2))*3600.+VAL(MID$(T$,4,2))*60.+VAL(RIGHT$(T$,2))
 2835 'DISABLE FUNCTION KEYS
@@ -1863,7 +1859,7 @@ machines:
 3144 PRINT USING "&";"          ~~~~~~~~ ├─┘";:LOCATE 23,56:PRINT USING "&";"│  Total    $10.00  │    ";
 3147 COLOR 15,0:PRINT USING "&";"Press the Space bar";
 3150 COLOR 7,0:LOCATE 24,56:PRINT USING "&";"└───────────────────┘   ";
-3153 LOCATE 10,80,0:DELAY=0:BRANCH$="$DYINT014:Ä
+3153 LOCATE 10,80,0:DELAY=0:BRANCH$="■*$DYINT014■":RETURN
 3156 'SAVE "B:DYINT014.ISD",A 'TITLE=MAN&COMP: COMPUTER
 3159 WIDTH 80:COLOR 7,0,0:CLS
 3162 COLOR 0,7:LOCATE 1,19:PRINT USING "&";" ┌───────────────────────────────────────┐ ";
@@ -1898,7 +1894,7 @@ machines:
 3249 COLOR 15,0:PRINT USING "&";"CLOSE FILES";
 3252 COLOR 7,0:PRINT USING "&";" ";Q$;"checkbook";Q$;" and ";Q$;"bills";Q$;"";
 3255 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3258 LOCATE 3,1,0:DELAY=0:BRANCH$="$DYINT015:Ä
+3258 LOCATE 3,1,0:DELAY=0:BRANCH$="■*$DYINT015■":RETURN
 3261 'SAVE "B:DYINT015.ISD",A 'TITLE=MAN&COMP: COMPARISON
 3264 WIDTH 80:COLOR 7,0,0:CLS
 3267 COLOR 0,7:LOCATE 1,19:PRINT USING "&";" ┌───────────────────────────────────────┐ ";
@@ -1929,7 +1925,7 @@ machines:
 3342 COLOR 15,0:PRINT USING "&";"WRITES";
 3345 COLOR 7,0:LOCATE 19,46:PRINT USING "&";"on diskette that bill is ";Q$;"paid";Q$;".";
 3348 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3351 LOCATE 5,62,0:DELAY=0:BRANCH$="$DYINT016:Ä
+3351 LOCATE 5,62,0:DELAY=0:BRANCH$="■*$DYINT016■":RETURN
 3354 'SAVE "B:DYINT016.ISD",A 'TITLE=MAN&COMP: GRAPHIC
 3357 WIDTH 80:COLOR 7,0,0:CLS
 3360 PRINT USING "&";"   ╒══════════╕";
@@ -1955,7 +1951,7 @@ machines:
 3420 PRINT USING "&";"";:LOCATE 21,40:PRINT USING "&";"│      ╡░░░░░░░░░░╞";:LOCATE 22,5:PRINT USING "&";"DISKETTE           PROGRAM";:LOCATE 22,47:PRINT USING "&";"└──═════───┘          P";
 3423 PRINT USING "&";"RINTER";:LOCATE 23,49:PRINT USING "&";"COMPUTER";
 3426 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3429 LOCATE 12,15,0:DELAY=0:BRANCH$="$DYINT017:Ä
+3429 LOCATE 12,15,0:DELAY=0:BRANCH$="■*$DYINT017■":RETURN
 3432 'SAVE "B:DYINT017.ISD",A 'TITLE=COMPUTER SOLUTION 1
 3435 WIDTH 80:COLOR 7,0,0:CLS
 3438 COLOR 0,7:LOCATE 1,27:PRINT USING "&";" ┌───────────────────────┐ ";
@@ -1985,7 +1981,7 @@ machines:
 3510 PRINT USING "&";"::::: │";:LOCATE 18,26:PRINT USING "&";"└───────────────────────────┘";:LOCATE 20,6:PRINT USING "&";"DISKETTES";:LOCATE 20,35:PRINT USING "&";"COMPUTER";:LOCATE 20,68:PRINT USING "&";"P";
 3513 PRINT USING "&";"RINTER";
 3516 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3519 LOCATE 5,56,0:DELAY=0:BRANCH$="$DYINT018:Ä
+3519 LOCATE 5,56,0:DELAY=0:BRANCH$="■*$DYINT018■":RETURN
 3522 'SAVE "B:DYINT018.ISD",A 'TITLE=COMPUTER SOLUTION 2
 3525 WIDTH 80:COLOR 7,0,0:CLS
 3528 COLOR 0,7:LOCATE 1,27:PRINT USING "&";" ┌───────────────────────┐ ";
@@ -2018,7 +2014,7 @@ machines:
 3609 PRINT USING "&";"::::: │";:LOCATE 18,26:PRINT USING "&";"└───────────────────────────┘";:LOCATE 20,6:PRINT USING "&";"DISKETTES";:LOCATE 20,35:PRINT USING "&";"COMPUTER";:LOCATE 20,68:PRINT USING "&";"P";
 3612 PRINT USING "&";"RINTER";
 3615 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3618 LOCATE 13,80,0:DELAY=0:BRANCH$="$DYINT019:Ä
+3618 LOCATE 13,80,0:DELAY=0:BRANCH$="■*$DYINT019■":RETURN
 3621 'SAVE "B:DYINT019.ISD",A 'TITLE=COMPUTER SOLUTION 3
 3624 WIDTH 80:COLOR 7,0,0:CLS
 3627 COLOR 0,7:LOCATE 1,27:PRINT USING "&";" ┌───────────────────────┐ ";
@@ -2054,7 +2050,7 @@ machines:
 3717 COLOR 23,0:PRINT USING "&";"│";
 3720 LOCATE 23,29:PRINT USING "&";"└──────────────────────┘";
 3723 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3726 LOCATE 4,59,0:DELAY=0:BRANCH$="$DYINT020:Ä
+3726 LOCATE 4,59,0:DELAY=0:BRANCH$="■*$DYINT020■":RETURN
 3729 'SAVE "B:DYINT020.ISD",A 'TITLE=COMPUTER SOLUTION 4
 3732 WIDTH 80:COLOR 7,0,0:CLS
 3735 COLOR 0,7:LOCATE 1,27:PRINT USING "&";" ┌───────────────────────┐ ";
@@ -2091,7 +2087,7 @@ machines:
 3828 PRINT USING "&";"::::: │";:LOCATE 18,26:PRINT USING "&";"└───────────────────────────┘";:LOCATE 20,6:PRINT USING "&";"DISKETTES";:LOCATE 20,35:PRINT USING "&";"COMPUTER";:LOCATE 20,68:PRINT USING "&";"P";
 3831 PRINT USING "&";"RINTER";
 3834 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3837 LOCATE 5,35,0:DELAY=0:BRANCH$="$DYINT021:Ä
+3837 LOCATE 5,35,0:DELAY=0:BRANCH$="■*$DYINT021■":RETURN
 3840 'SAVE "B:DYINT021.ISD",A 'TITLE=COMPUTER SOLUTION 5
 3843 WIDTH 80:COLOR 7,0,0:CLS
 3846 COLOR 0,7:LOCATE 1,27:PRINT USING "&";" ┌───────────────────────┐ ";
@@ -2126,7 +2122,7 @@ machines:
 3933 PRINT USING "&";"::::: │";:LOCATE 18,26:PRINT USING "&";"└───────────────────────────┘";:LOCATE 20,6:PRINT USING "&";"DISKETTES";:LOCATE 20,35:PRINT USING "&";"COMPUTER";:LOCATE 20,68:PRINT USING "&";"P";
 3936 PRINT USING "&";"RINTER";:LOCATE 22,18:PRINT USING "&";"This completes the introduction to computers.";
 3939 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3942 LOCATE 24,13,0:DELAY=0:BRANCH$="$&IBMDIY:Ä
+3942 LOCATE 24,13,0:DELAY=0:BRANCH$="■*$&IBMDIY■":RETURN
 ```
 
 ## LOGOC.BAS
@@ -2329,12 +2325,12 @@ machines:
 2705 'SCREEN NOT FOUND
 2710 '
 2715 CLS: LOCATE 10,5: PRINT "SCREEN ";NEXTSCR$;" NOT FOUND": LOCATE 23,5: PRINT "Press any key to end demo"
-2720 DELAY=FALSE: BRANCH$="$&END: Ä
+2720 DELAY=FALSE: BRANCH$="■*$&END■": RETURN
 2800 '
 2805 'INIT (INITIALIZATION SUBROUTINE)
 2810 '
 2815 DEFINT A-Z: KEY OFF: SCREEN 0,1,0,0
-2820 K$="": B$=": FALSEτ◄: TRUEτ╙ FALSE: Q$τCHR$(☼"): ESC$=CHR$(27): TERM=FALSE: RESTART=FALSE: BA$="": D$="$"
+2820 K$="": B$="■": FALSE=0: TRUE=NOT FALSE: Q$=CHR$(34): ESC$=CHR$(27): TERM=FALSE: RESTART=FALSE: BA$="■*": D$="$"
 2825 BS$=CHR$(0)+CHR$(67): BM$=CHR$(0)+CHR$(68): HELP$=CHR$(0)+CHR$(59): TERM$=CHR$(0)+CHR$(117): ID$=CHR$(0)+CHR$(66)
 2830 DEF FNTM!(T$)=VAL(LEFT$(T$,2))*3600.+VAL(MID$(T$,4,2))*60.+VAL(RIGHT$(T$,2))
 2835 'DISABLE FUNCTION KEYS
@@ -2358,7 +2354,7 @@ machines:
 3015 PRINT USING "&";"▀▀▀    ▀▀▀▀     ▀▀▀▀  ▀▀▀▀▀  ▀▀▀▀";:LOCATE 14,17:PRINT USING "&";"▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀   ▀▀▀   ▀▀▀▀▀▀";:LOCATE 15,17:PRINT USING "&";"▀▀▀▀▀▀▀▀   ▀";
 3018 PRINT USING "&";"▀▀▀▀▀▀▀▀▀▀▀     ▀▀▀▀▀▀    ▀    ▀▀▀▀▀▀";:LOCATE 18,32:PRINT USING "&";"Personal  Computer";
 3021 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
-3024 LOCATE 24,19,0:DELAY=0:BRANCH$="$MENU2:Ä
+3024 LOCATE 24,19,0:DELAY=0:BRANCH$="■*$MENU2■":RETURN
 3027 'SAVE "B:MENU2.ISD",A 'TITLE=Dealer Demo Menu
 3030 WIDTH 40:COLOR 7,0,0:CLS
 3033 IF IBMBW THEN OUT 948,2:OUT 949,62
@@ -2371,7 +2367,7 @@ machines:
 3054 PRINT USING "&";"r monitor";:LOCATE 21,10:PRINT USING "&";"7. Switch to IBM Monochrome";
 3057 COLOR 0,7:LOCATE 23,10:PRINT USING "&";" ";
 3060 COLOR 7,0:PRINT USING "&";"  Option";
-3063 LOCATE 23,10,1:DELAY=0:BRANCH$="$&TEXT$&IBMDIY$&SAMPLES$&COMM$&DEMO3$&C$&B:Ä
+3063 LOCATE 23,10,1:DELAY=0:BRANCH$="■1$&TEXT■2$&IBMDIY■3$&SAMPLES■4$&COMM■5$&DEMO3■6$&C■7$&B■":RETURN
 ```
 
 ## MX80.BAS
@@ -3349,12 +3345,6 @@ machines:
 91 IF INKEY$="" THEN 91
 100 SCREEN 0,0
 110 CHAIN "A:GTEST"
-```
-
-## TESTSCRN.BAS
-
-```bas
-� �   @                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ������������          ��������������                                           ꪪ���������          UUUUUUUUUUUUUW                                           ꪪ���������          UUUUUUUUUUUUUUp                                          ꪪ���������          UUUUUUUUUUUUUU\                                          ꪪ���������          UUUUUUUUUUUUUUW                                          ꪪ���������          UUUUUUUUUUUUUUU�                                         ꪪ���������          UUUUUUUUUUUUUUU\                                         ꪪ���������          UUUUUUUUUUUUUUUW                                         ꪪ���������          UUUUUUUUUUUUUUUU�                                        ꪪ���������          UUUUUUUUUUUUUUUU\                                        ꪪ���������          UUUUUUUUUUUUUUUUW                                        ꪪ���������          UUUUUUUUUUUUUUUUU�                                       ꪪ���������          UUUUUUUUUUUUUUUUU\                                       ꪪ���������          UUUUUUUUUUUUUUUUUW                                       ꪪ���������          UUUUUUUUUUUUUUUUUU�                                      ꪪ���������          UUUUUUUUUUUUUUUUUUp                                      ꪪ���������          UUUUUUUUUUUUUUUUUUW                                      ꪪ���������          UUUUUUUUUUUUUUUUUUU�                                     ꪪ���������          UUUUUUUUUUUUUUUUUUUp                                     ꪪ���������          UUUUUUUUUUUUUUUUUUUW                                     ꪪ���������          UUUUUUUUUUUUUUUUUUUU�                                    ꪪ���������          UUUUUUUUUUUUUUUUUUUUp                                    ꪪ���������          UUUUUUUUUUUUUUUUUUUUW                                    ꪪ���������          UUUUUUUUUUUUUUUUUUUUU�                                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUUp                                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUU\                                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUUU�         ���                     ꪪ���������          UUUUUUUUUUUUUUUUUUUUUUp        ������                    ꪪ���������                   ?�UUUUUUUUUUUU\      ���������                  >������������                  ?���UUUUUUUUUUU�     ��ꪪ�����                   �������������                 ?����UUUUUUUUUUp    ?�����������                   ꪪ���������                 ?������UUUUUUUU\   ������������                   ������������                ?�������UUUUUUUU�  �������������                   ������������               ?���������UUUUUUp  ��������������                    >������������              ?�����������UUUU\ ��������������                     ������������              ?������������UUUW ���������������                    ꪪ���������             ?��������������UUp������ꪪ������                     ������������            ?���������������U\?���������������                      ������������           ?�����������������?���������������                     ������������            ?�����������������?�������UUUUUUUp                     ꪪ���������             ?���������������U\?�������UUUUUUUp                    :�����������              ?�������������UUUp�������UUUUUUU�                   ������������              ?�����������UUUUW ������UUUUUUUU�                  ������������               ?����������UUUUU\ ������UUUUUUUW                   ꪪ���������                ?��������UUUUUUUp  ������UUUUUUU\                  :�����������                 ?������UUUUUUUUU�  ����UUUUUUUU�                 ������������                 ?����UUUUUUUUUU\   ����UUUUUUUW                 ������������                  ?��UUUUUUUUUUUUp    ?���UUUUUUU�                 ꪪ���������          ���������UUUUUUUUUUUUUU�     ���UUUUUU\                  ꪪ���������          UUUUUUUUUUUUUUUUUUUUUU\      �UUUUUUW�                  ꪪ���������          UUUUUUUUUUUUUUUUUUUUUUp        �UUUU|                    ꪪ���������          UUUUUUUUUUUUUUUUUUUUUU�         ���                     ꪪ���������          UUUUUUUUUUUUUUUUUUUUU\                                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUUp                                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUU�                                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUW                                    ꪪ���������          UUUUUUUUUUUUUUUUUUUUp                                    ꪪ���������          UUUUUUUUUUUUUUUUUUUU�                                    ꪪ���������          UUUUUUUUUUUUUUUUUUUW                                     ꪪ���������          UUUUUUUUUUUUUUUUUUUp                                     ꪪ���������          UUUUUUUUUUUUUUUUUUU�                                     ꪪ���������          UUUUUUUUUUUUUUUUUUW                                      ꪪ���������          UUUUUUUUUUUUUUUUUUp                                      ꪪ���������          UUUUUUUUUUUUUUUUUU�                                      ꪪ���������          UUUUUUUUUUUUUUUUUW                                       ꪪ���������          UUUUUUUUUUUUUUUUU\                                       ꪪ���������          UUUUUUUUUUUUUUUUU�                                       ꪪ���������          UUUUUUUUUUUUUUUUW                                        ꪪ���������          UUUUUUUUUUUUUUUU\                                        ꪪ���������          UUUUUUUUUUUUUUUU�                                        ꪪ���������          UUUUUUUUUUUUUUUW                                         ꪪ���������          UUUUUUUUUUUUUUU\                                         ꪪ���������          UUUUUUUUUUUUUUU�                                         ꪪ���������          UUUUUUUUUUUUUUW                                          ꪪ���������          UUUUUUUUUUUUUU\                                          ꪪ���������          UUUUUUUUUUUUUUp                                          ꪪ���������          UUUUUUUUUUUUUW                                           ������������          ��������������                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ꪪ���������          UUUUUUUUUUUUUW                                           ꪪ���������          UUUUUUUUUUUUUU�                                          ꪪ���������          UUUUUUUUUUUUUUp                                          ꪪ���������          UUUUUUUUUUUUUUW                                          ꪪ���������          UUUUUUUUUUUUUUU�                                         ꪪ���������          UUUUUUUUUUUUUUUp                                         ꪪ���������          UUUUUUUUUUUUUUU\                                         ꪪ���������          UUUUUUUUUUUUUUUU�                                        ꪪ���������          UUUUUUUUUUUUUUUUp                                        ꪪ���������          UUUUUUUUUUUUUUUU\                                        ꪪ���������          UUUUUUUUUUUUUUUUU�                                       ꪪ���������          UUUUUUUUUUUUUUUUUp                                       ꪪ���������          UUUUUUUUUUUUUUUUU\                                       ꪪ���������          UUUUUUUUUUUUUUUUUU�                                      ꪪ���������          UUUUUUUUUUUUUUUUUUp                                      ꪪ���������          UUUUUUUUUUUUUUUUUU\                                      ꪪ���������          UUUUUUUUUUUUUUUUUUW                                      ꪪ���������          UUUUUUUUUUUUUUUUUUUp                                     ꪪ���������          UUUUUUUUUUUUUUUUUUU\                                     ꪪ���������          UUUUUUUUUUUUUUUUUUUW                                     ꪪ���������          UUUUUUUUUUUUUUUUUUUUp                                    ꪪ���������          UUUUUUUUUUUUUUUUUUUU\                                    ꪪ���������          UUUUUUUUUUUUUUUUUUUUW                                    ꪪ���������          UUUUUUUUUUUUUUUUUUUUUp                                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUU\                                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUUW                                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUUU�        �����                    ꪪ���������          ���������UUUUUUUUUUUUU\       ��������                   ꪪ����������                  ?��UUUUUUUUUUUW      ?���������                  ������������                  ?���UUUUUUUUUUU�    ��ꪪ�����                   ������������                 ?�����UUUUUUUUU\    ������������                   >������������                ?�������UUUUUUUW   �������������                   �������������               ?��������UUUUUUU�  �����ꪪ������                   ꪪ���������               ?����������UUUUU\  ��������������                    ������������              ?�����������UUUUW ��������������                     ������������             ?�������������UUU����������������                     >������������            ?���������������Up?���������������                      ������������            ?����������������W?���������������                      ������������            ?���������������������������������                     >������������            ?����������������W?�������UUUUUUUp                    ������������             ?��������������UUp?�������UUUUUUUp                   ꪪ���������              ?������������UUUU�������UUUUUUUU�                   ������������               ?����������UUUUUW ������UUUUUUUW                   >������������               ?���������UUUUUU\  ������UUUUUUU\                  ������������                ?�������UUUUUUUU�  ������UUUUUUU|                 ꪪ���������                 ?�����UUUUUUUUUW   ����UUUUUUUU�                 ������������                  ?���UUUUUUUUUUU\    ����UUUUUUU\                 >������������                  ?�UUUUUUUUUUUUU�    ���UUUUUUW                  ꪪ���������          UUUUUUUUUUUUUUUUUUUUUUW      ?�UUUUUUUp                  ꪪ���������          UUUUUUUUUUUUUUUUUUUUUU\       �UUUUUW�                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUUU�        �UU�                    ꪪ���������          UUUUUUUUUUUUUUUUUUUUUW                                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUU\                                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUUp                                   ꪪ���������          UUUUUUUUUUUUUUUUUUUUW                                    ꪪ���������          UUUUUUUUUUUUUUUUUUUU\                                    ꪪ���������          UUUUUUUUUUUUUUUUUUUUp                                    ꪪ���������          UUUUUUUUUUUUUUUUUUUW                                     ꪪ���������          UUUUUUUUUUUUUUUUUUU\                                     ꪪ���������          UUUUUUUUUUUUUUUUUUUp                                     ꪪ���������          UUUUUUUUUUUUUUUUUUW                                      ꪪ���������          UUUUUUUUUUUUUUUUUU\                                      ꪪ���������          UUUUUUUUUUUUUUUUUUp                                      ꪪ���������          UUUUUUUUUUUUUUUUUU�                                      ꪪ���������          UUUUUUUUUUUUUUUUU\                                       ꪪ���������          UUUUUUUUUUUUUUUUUp                                       ꪪ���������          UUUUUUUUUUUUUUUUU�                                       ꪪ���������          UUUUUUUUUUUUUUUU\                                        ꪪ���������          UUUUUUUUUUUUUUUUp                                        ꪪ���������          UUUUUUUUUUUUUUUU�                                        ꪪ���������          UUUUUUUUUUUUUUU\                                         ꪪ���������          UUUUUUUUUUUUUUUp                                         ꪪ���������          UUUUUUUUUUUUUUU�                                         ꪪ���������          UUUUUUUUUUUUUUW                                          ꪪ���������          UUUUUUUUUUUUUUp                                          ꪪ���������          UUUUUUUUUUUUUU�                                          ꪪ���������          UUUUUUUUUUUUUW                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 ```
 
 ## TRANDUMP.BAS

@@ -1846,9 +1846,6 @@ machines:
 61470 X(FLD2) = XHLD2
 61475 X(TGTRN) = XHLD3
 61480 RETURN
-GOSUB 60300
-61460 X(FLD1) = XHLD1
-61465 IF FLD2 = 0 THEN 6
 ```
 
 {% comment %}samples_end{% endcomment %}

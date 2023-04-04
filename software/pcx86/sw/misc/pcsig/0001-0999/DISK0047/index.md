@@ -1005,9 +1005,6 @@ machines:
 2020 NEXT I
 2030 PRINT#1,CHR$(13)
 2040 RETURN
-5 RETURN
-2000 FOR I=1 TO LEN(OST$)
-2010 PRINT#1,OST$ 'OUTPUT CLOCK CO
 ```
 
 ## COMCHRON.BAS
@@ -1128,7 +1125,6 @@ machines:
 2030    'ELSE
 2040            MID$(OUTLINE$, J%, 1) = MID$(INLINE$, I%, 1)                                            : J% = J% + 1 : I% = I% + 1
 2050    RETURN
-UTLI
 ```
 
 ## ELECTRIC.BAS
@@ -1629,12 +1625,6 @@ machines:
 160 LPRINT CHR$(27) "A"  CHR$(8)
 170 NEXT Y%
 180  END
-HR$(1);
-130 FOR J%= 0 TO 319
-140 LPRINT CHR$(B%(J%));
-150 NEXT J%
-160 LPRINT CHR$(27) "A"  CHR$(8)
-170 NE
 ```
 
 ## GDUMP2.BAS
@@ -1658,13 +1648,6 @@ machines:
 160 LPRINT CHR$(27) "A"  CHR$(8)
 170 NEXT Y%
 180  END
-$(2);
-130 FOR J%= 0 TO 639
-140 LPRINT CHR$((B%(J%)));
-150 NEXT J%
-160 LPRINT CHR$(27) "A"  CHR$(8)
-170 NEXT Y%
-180  END
 ```
 
 ## KILLNULL.BAS
@@ -1682,13 +1665,6 @@ machines:
 100 NAME OLD$ AS "OLDFILE.BAK"
 110 NAME "NEW" AS OLD$
 120 END
-IF A$=CHR$(0) THEN 40
-70 PRINT #2,A$;
-80 GOTO 40
-90 CLOSE
-100 NAME OLD$ AS "OLDFILE.BAK"
-110 NAME "NEW" AS OLD$
-1
 ```
 
 ## MAILLIST.BAS
@@ -1865,9 +1841,6 @@ machines:
 1780 IF EOF(1) THEN CLOSE: KILL "TEMPFIL": RETURN
 1790 INPUT #1, L$, F$, A$, B$, D$, E$, G$, C$, S$, Z$
 1800 WRITE #2, L$, F$, A$, B$, D$, E$, G$, C$, S$, Z$: GOTO 1780
-TURN
-1790 INPUT #1, L$, F$, A$, B$, D$, E$, G$, C$, S$, Z$
-1800 WRITE #2, L$, F$, A$, B$, 
 ```
 
 ## NORMAL-Z.BAS
@@ -2004,9 +1977,6 @@ machines:
 4120            WEND
 4130            CALCULATED.AREA = CALCULATED.AREA - PRECISION.ERROR
 4140     RETURN
-      I% = I% + 1
-4120            WEND
-4130          
 ```
 
 ## PLOT.BAS
@@ -2049,7 +2019,6 @@ machines:
 431 X=X+X6
 435 IF X<X2 THEN 290 ELSE 460
 460             END
-430 PSET((X-X1)*(635/(X2-X1))+2
 ```
 
 ## SORT-BLK.BAS

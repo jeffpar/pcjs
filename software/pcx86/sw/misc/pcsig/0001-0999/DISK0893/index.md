@@ -179,7 +179,6 @@ machines:
 570 PRINT "Data line error"
 580 CLOSE #2
 590 RETURN
-
 ```
 
 {% comment %}samples_end{% endcomment %}

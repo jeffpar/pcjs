@@ -68,9 +68,6 @@ machines:
 32 INPUT "Comment about session: ",X$
 34 PRINT #1, "   ";X$:PRINT #1,
 40 CLOSE #1: SYSTEM
-#1, "End:   ";DATE$;"   ";TIME$;
-32 INPUT "Comment about session: ",X$
-34 PRINT #
 ```
 
 ## START.BAS

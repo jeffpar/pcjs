@@ -838,10 +838,6 @@ machines:
 58 FOR X%=1 TO 15:Y$=INKEY$:NEXT X%
 59 IF INKEY$="" THEN 59
 60 CHAIN "A:PLOTTER
- a f e d2"
-50 PLAY "t90 b-8 b-8 a f g f2"
-58 FOR X%=1 TO 15:Y$=INKEY$:NEXT X%
-59 IF INK
 ```
 
 ## HEARING.BAS
@@ -1057,11 +1053,6 @@ machines:
 9500 CLS
 9510 PRINT "This program requires ADVANCED BASIC; Please reload, using BASICA"
 9520 END
-00 COLOR 7,0
-9340 RETURN
-9500 CLS
-9510 PRINT "This program requires ADVANCED BASIC; Please reload, using BASICA"
-9520
 ```
 
 ## JSB.BAS
@@ -2921,10 +2912,6 @@ machines:
 36 FOR I=0 TO 29:PLAY TREB$+T$(I) :NEXT
 37 LOCATE 25,1:PRINT "Any key...";
 38 A$=INKEY$:IF A$="" THEN 38 ELSE WIDTH 80:END
-
-36 FOR I=0 TO 29:PLAY TREB$+T$(I) :NEXT
-37 LOCATE 25,1:PRINT "Any key...";
-38 A$=INKEY$:IF A$="" THEN 38 ELSE WIDTH 80:END
 ```
 
 ## SIREN.BAS
@@ -3064,7 +3051,6 @@ machines:
 1180 '          OUT     61H,AL
 1190 '          JMP     TOP
 1200 '
-                                                                                                                                                                                                                                                                                                                                                                                                                                         
 ```
 
 ## SYMPH-5.BAS

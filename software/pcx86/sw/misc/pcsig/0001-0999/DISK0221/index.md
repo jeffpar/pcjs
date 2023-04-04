@@ -150,7 +150,7 @@ machines:
 900 LOCATE ,W+2
 910 PRINT " E ║ α ß Γ π Σ σ µ τ Φ Θ Ω δ ∞ φ ε ∩ ║"
 920 LOCATE ,W+2
-930 PRINT " F ║ ≡ ± ≥ ≤ ⌠ ⌡ ÷ ≈ ° • · √ ⁿ ║"
+930 PRINT " F ║ ≡ ± ≥ ≤ ⌠ ⌡ ÷ ≈ ° • · √ ⁿ ² ■   ║"
 940 LOCATE ,W+2
 950 PRINT "   ╚═════════════════════════════════╝";
 960 '
@@ -204,7 +204,7 @@ machines:
 1440 READ PRTSC%(X)                     'read data statement
 1450 NEXT X                             'loop until done
 1460 RETURN                             'done, so return
-1470 DATA &H8955,&HCDE5,&H5D05,&H00CB:  'interface code
+1470 DATA &H8955,&HCDE5,&H5D05,&H00CB:  :Å┘interface code
 1480 '
 1490 '****************** CALL INTERFACE TO PRINT_SCREEN **********************
 1500 '
@@ -308,7 +308,7 @@ machines:
 870 READ PRTSC%(X)                              'read data statement
 880 NEXT X                                      'loop until odne
 890 RETURN                                      'done. so return
-900 DATA &H8955,&HCDE5,&H5D05,&H00CB:           'interface code
+900 DATA &H8955,&HCDE5,&H5D05,&H00CB:           :Å┘interface code
 910 '
 920 '********************* CALL PRINT_SCREEN INTERFACE ************************
 930 '
@@ -318,7 +318,7 @@ machines:
 970 SUBRT%=VARPTR(PRTSC%(0))                    'point to code string (variable
 980 CALL SUBRT%                                 'call the code interface
 990 LPRINT CHR$(12)                             'eject graphics print
-1000 RETURN                                      'done, so retINPUTENDn
+1000 RETURN                                      'done, so retàün
 ```
 
 {% comment %}samples_end{% endcomment %}

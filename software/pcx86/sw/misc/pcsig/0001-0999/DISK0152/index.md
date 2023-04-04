@@ -954,9 +954,9 @@ machines:
 3 REM $linesize: 132
 25 SCREEN 0,1,0:WIDTH 80:CLS:KEY OFF:LOCATE,,0:PRINT TAB(60)"tm":PRINT TAB(16)STRING$(15,205)" U S E R W A R E "STRING$(15,205):PRINT:PRINT TAB(17)"Capital PC User Group User-Supported Software":PRINT:PRINT TAB(7)CHR$(214)STRING$(62,196)CHR$(183)
 28 FOR I=1 TO 10:READ A$:PRINT TAB(7)CHR$(186);A$;SPACE$(62-LEN(A$));CHR$(186):NEXT:PRINT TAB(7)CHR$(211)STRING$(62,196)CHR$(189):PRINT TAB(27)"Copyright (c) 1983 Tom Mack, 10210 Oxfordshire Rd., Great Falls, Virginia  22066
-30 DATA"    RBBS-PC CPC12.1 users should consider a contribution to":DATA"":DATA"                 Capitol PC Software Exchange":DATA"                     Post Office Box 6128
-35 DATA"                Silver Spring, Maryland  20906":DATA"":DATA"    RBBS-PC CPC12.1 may be freely distributed providing":DATA"    1.  RBBS-PC CPC12 is not distributed in modified form.
-40 DATA"    2.  No fee or consideration is charged.":DATA"    3.  This notice is not bypassed or removed.":DEF FNTX!=CSNG(FIX((VAL(MID$(TIME$,1,2))*60*60)+(VAL(MID$(TIME$,4,2))*60)+(VAL(MID$(TIME$,7,2))*1))):IWAIT!=FNTX!+10
+30 DATA"    RBBS-PC CPC12.1 users should consider a contribution to":ä"":ä"                 Capitol PC Software Exchange":ä"                     Post Office Box 6128
+35 DATA"                Silver Spring, Maryland  20906":ä"":ä"    RBBS-PC CPC12.1 may be freely distributed providing":ä"    1.  RBBS-PC CPC12 is not distributed in modified form.
+40 DATA"    2.  No fee or consideration is charged.":ä"    3.  This notice is not bypassed or removed.":ù ╤TX!τCSNG(FIX((VAL(MID$(■Ä,↕,‼))δ☼<δ☼<)Θ(VAL(MID$(■Ä,§,‼))δ☼<)Θ(VAL(MID$(■Ä,↑,‼))δ↕))):IWAIT!τ╤TX!Θ☼◙
 43 DEFINT A-Z:DEF SEG=0:MLSW%=PEEK(&H1FE)+256*PEEK(&H1FF):IF MLSW%=0 THEN GOTO 44 ELSE PRINT "RBBS-PC running under MultiLink
 44 IF FNTX!<IWAIT! THEN 44
 90 CLOSE:CLEAR:WIDTH 80:SCREEN 0,0,0:KEY OFF:PAUSE$=CHR$(19):BELL$=CHR$(7):BK2$=CHR$(8):XOFF$=CHR$(19):XON$=CHR$(17):CLS:DEF FNTI!=CSNG(FIX((VAL(MID$(TIME$,1,2))*60*60)+(VAL(MID$(TIME$,4,2))*60)+(VAL(MID$(TIME$,7,2))*1)))
@@ -1115,7 +1115,7 @@ machines:
 1416 ON ERROR GOTO 13000
 1420 Y$=INPUT$(1,#3)
 1425 IF Y$=PAUSE$ THEN WHILE EOF(3):GOSUB 42000:WEND:GOTO 1420
-1430 IF Y$=ABT$AND STI THEN 1475
+1430 IF Y$=ABT$AND STI THEN 1475	
 1435 IF PRT THEN LOCATE,,1:PRINT A$;
 1437 IF LOCAL THEN 1450
 1440 IF UC THEN SWAP A$,Z$:GOSUB 5000:SWAP A$,Z$
@@ -1297,7 +1297,7 @@ machines:
 4300 GOSUB 1400:GOSUB 50500:RETURN
 4320 QU=-1:RT=0:SU=0:GOTO 4350
 4330 QU=0:RT=-1:SU=0:GOTO 4350
-4340 QU=0:RT=0:SU=-1
+4340 QU=0:RT=0:SU=-1	
 4350 QAH=-RT-QU-SU*5:IF Q>2 AND VAL(B$(Q))=0 THEN Z$=B$(Q):Q=Q-1 ELSE Z$="
 4360 GOSUB 5000:SC$=Z$:L=1:LI=Q:MYMSGS=0
 4370 L=L+1:IF L<=LI THEN MM=VAL(B$(L)):GOTO 4415

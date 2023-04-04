@@ -293,9 +293,6 @@ machines:
 9500 CLS
 9510 PRINT "This program requires ADVANCED BASIC; please reload using BASICA."
 9520 END
-7$(K%) : NEXT K% : RETURN
-9500 CLS
-951
 ```
 
 {% comment %}samples_end{% endcomment %}

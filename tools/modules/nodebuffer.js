@@ -292,10 +292,12 @@ export default class DataBuffer {
      *
      * @this {DataBuffer}
      * @param {string} [format]
+     * @param {number} [start]
+     * @param {number} [end]
      * @returns {string}
      */
-    toString(format)
+    toString(format, start, end)
     {
-        return this.buffer.toString(format);
+        return this.buffer.toString(format, start, end);
     }
 }

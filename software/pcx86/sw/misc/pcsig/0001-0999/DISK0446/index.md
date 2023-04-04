@@ -970,7 +970,6 @@ machines:
 25580 DATA Crew's Cabin,Hallway,Mid Deck,Mid Deck,Crow's Nest,Crow's Nest
 25590 DATA Mess Hall,Hallway,Starboard Deck,Starboard Deck,Galley,Hallway
 25600 DATA Ship's Library,Under Water,Top of the Bay,Bottom of the Bay
-,Hallway,Starboard Dec
 ```
 
 ## TEMPLE.BAS
@@ -981,10 +980,10 @@ machines:
 30 CLS:SCREEN 2:SCREEN 0:OUT &H3D0,8: OUT &H3D1,3:COLOR 3,0,1
 40 FOR A=60 TO 20 STEP -1
 50 COLOR 2,0,1:LOCATE 5,A:PRINT "   _______    ":NEXT
-60 FOR A=1 TO 20:LOCATE 6,A:PRINT "  /";:COLOR 3,0,1:PRINT ";:┐ ‼,◄,↕:æ "\   ":â
-70 FOR A=60 TO 20 STEP -1:LOCATE 7,A:PRINT " /";:COLOR 3,0,1:PRINT ";:┐ ☼☼,◄,↕:æ "Fantasy";:┐ ¶,◄,↕:æ ";:COLOR 2,0,1:PRINT "\  ":NEXT
-80 FOR A=1 TO 20:LOCATE 8,A:PRINT " \";:COLOR 3,0,1:PRINT "";:COLOR 15,0,1:PRINT "Warez";:COLOR 3,0,1:PRINT "";:COLOR 2,0,1:PRINT "/  ":NEXT
-90 FOR A=60 TO 20 STEP -1:LOCATE 9,A:PRINT "  \";:COLOR 3,0,1:PRINT "";:COLOR 15:PRINT "Inc";:COLOR 3:PRINT "";:COLOR 2,0,1:PRINT "/   ":NEXT
+60 FOR A=1 TO 20:LOCATE 6,A:PRINT "  /";:COLOR 3,0,1:PRINT "■■■■■■■";:COLOR 2,0,1:PRINT "\   ":NEXT
+70 FOR A=60 TO 20 STEP -1:LOCATE 7,A:PRINT " /";:COLOR 3,0,1:PRINT "■";:COLOR 15,0,1:PRINT "Fantasy";:COLOR 3,0,1:PRINT "■";:COLOR 2,0,1:PRINT "\  ":NEXT
+80 FOR A=1 TO 20:LOCATE 8,A:PRINT " \";:COLOR 3,0,1:PRINT "■■";:COLOR 15,0,1:PRINT "Warez";:COLOR 3,0,1:PRINT "■■";:COLOR 2,0,1:PRINT "/  ":NEXT
+90 FOR A=60 TO 20 STEP -1:LOCATE 9,A:PRINT "  \";:COLOR 3,0,1:PRINT "■■";:COLOR 15:PRINT "Inc";:COLOR 3:PRINT "■■";:COLOR 2,0,1:PRINT "/   ":NEXT
 100 COLOR 2:FOR A=1 TO 20:LOCATE 10,A:PRINT "     \_/      "
 110 NEXT
 120 COLOR 12,0,1:FOR A=1 TO 8:LOCATE A,35:PRINT "Presents";:COLOR 31:PRINT ". . . .":COLOR 12:NEXT:COLOR 12
@@ -1156,7 +1155,7 @@ machines:
 1780 PRINT "       ╔═════════════════════════════════════════════════════════════════╗"
 1790 PRINT "       ╠═════════════════╣";:COLOR 27,0,1:PRINT "* * * THE TEMPLE OF LOTH * * *";:COLOR 3,0,1:PRINT "╠════════════════╣"
 1800 PRINT "       ╠═════════════════════════════════════════════════════════════════╣"
-1810 'PRINT  OPEN                                                                 OPEN
+1810 'PRINT  ║                                                                 ║
 1820 PRINT "       ║                                                                 ║
 1830 'GOSUB 9060
 1840 PRINT "       ║      Many generations ago, during the great Elfin Wars  of the  ║
@@ -2099,12 +2098,12 @@ machines:
 11200 OF=1
 11210 O(1)=0
 11220 GOTO 6370
-11230 DATA An empty room,TAB(,the entrance,OR,stairs going up,U
+11230 DATA An empty room,╬,the entrance,∩,stairs going up,U
 11240 DATA stairs going down,D,a pool,P,a chest,C,gold pieces,G
-11250 DATA flares,,a warp,CSRLIN,a sinkhole,S,a Crystal Orb,<
-11260 DATA a book,B,a Green Slime,WEND,an Orc,LPRINT,an Evil Dwarf,LPRINT,a Goblin,LPRINT,a Mind Flayer,LPRINT
-11270 DATA a Troll,LPRINT,a Giant spider,LPRINT,a Minotar,LPRINT,a Drow,*,a Drider,LPRINT
-11280 DATA a Balor Demon,LPRINT,a Red Dragon,*,a Drow Merchant,-,the Ruby Red,T
+11250 DATA flares,ƒ,a warp,█,a sinkhole,S,a Crystal Orb,Φ
+11260 DATA a book,B,a Green Slime,▓,an Orc,¥,an Evil Dwarf,¥,a Goblin,¥,a Mind Flayer,¥
+11270 DATA a Troll,¥,a Giant spider,¥,a Minotar,¥,a Drow,*,a Drider,¥
+11280 DATA a Balor Demon,¥,a Red Dragon,δ,a Drow Merchant,Ω,the Ruby Red,T
 11290 DATA the Norn Stone,T,the Pale Pearl,T,the Opal Eye,T
 11300 DATA the Green Gem,T,the Blue Flame,T,the Palantir,T,the Silmaril,T
 11310 DATA X,"?",no weapon," Sandwich"
@@ -2558,26 +2557,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            2060-A.BAS             ��"
-80 PRINT"��              XWING                ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            2060-A.BAS             │░"
+80 PRINT"░│              XWING                │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -3287,7 +3286,6 @@ machines:
 8010  PRINT"****************************************"
 8020  PLAY "L1 N0":PLAY "L1 N0"
 8030   GOTO   1300
-YOU
 ```
 
 {% comment %}samples_end{% endcomment %}

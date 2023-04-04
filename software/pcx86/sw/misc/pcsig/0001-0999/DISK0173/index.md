@@ -426,7 +426,6 @@ machines:
 30020  CLOSE#1
 30025  KILL FILE$
 30030  RETURN 560
-
 ```
 
 {% comment %}samples_end{% endcomment %}

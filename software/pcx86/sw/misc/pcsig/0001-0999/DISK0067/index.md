@@ -227,8 +227,6 @@ machines:
 11130    FCALC(I)  =  P(1) * EXP( -1 * ( (VOBS(I,1) - P(3))^2 / P(2)^2 ) )
 11140    NEXT I
 11150 RETURN
- FOR I = 1 TO NOBS
-11130    FCALC(I)  =  P(1) * EXP( -1 * ( (VOBS(I,1) -
 ```
 
 ## FUNC2.BAS
@@ -251,8 +249,6 @@ machines:
 11170    FCALC(I) =  P(1) / (WSQ2 * (VOBS(I,1) - P(3))^2 + 1#)
 11230    NEXT I
 11240 RETURN
-P(2))
-11160 F
 ```
 
 ## GROWTH.BAS
@@ -455,9 +451,6 @@ machines:
 460 IF Z$="y" OR Z$="Y" THEN LOCATE 25,1:PRINT "You may reenter above inputs by pressing <End> then <enter>.";:LOCATE 1,1:RESTORE:GOTO 170
 470 KEY ON:CLS:END
 480 ' SAVE"LABELeps.BAS",A
-er above inputs by pressing <End> then <enter>.";:LOCATE 1,1:RESTORE:GOTO 170
-470 KEY ON:CLS:END
-480 ' SAVE"LABELeps.BA
 ```
 
 ## LABELS.BAS
@@ -870,8 +863,8 @@ machines:
 3620 G=.19353:H=.03587
 3630 LOCATE 9,24:PRINT"TYPE -G- FOR THE GAMMA FUNCTION"
 3640 LOCATE 10,24:PRINT"TYPE -F- FOR THE GENERALIZED FACTORIAL":A$=INPUT$(1)
-3650 IF A$="G" THEN LOCATE 9,22:PRINT"�":GOTO 3710
-3660 IF A$="F" THEN LOCATE 10,22:PRINT"�":GOTO 3800
+3650 IF A$="G" THEN LOCATE 9,22:PRINT"»":GOTO 3710
+3660 IF A$="F" THEN LOCATE 10,22:PRINT"»":GOTO 3800
 3670 'IF A$="G" THEN 5426
 3680 'IF A$="F" THEN 5446
 3690 PRINT "INVALID RESPONSE TRY AGAIN !!!!!$%&#??"
@@ -914,13 +907,13 @@ machines:
 4060  ON  A  GOTO  540,830,650,1080,1270,1450,1550,1740,1930,2070,2200,2600,2780,2870,2970,3130,3240,3370,3440,3580,5500,5600,5700,5800,6000,6100,6200,6300,6400,6500,6600,6700,7000,7100,7200,7600,7700,7800,7900,7950
 4070 PRINT CHR$(12):LOCATE 4,1:Z$=STRING$(80,CHR$(205)):PRINT Z$
 4080 PRINT:RETURN
-4090 FOR I=79 TO 2 STEP-1:LOCATE 23,I:PRINT"�":NEXT I
+4090 FOR I=79 TO 2 STEP-1:LOCATE 23,I:PRINT"▒":NEXT I
 4100 B$=INKEY$:IF B$="Y"THEN PRINT CHR$(12):RETURN
 4110 IF B$="N" THEN GOTO 4230
-4120 FOR I=79 TO 2 STEP-1:LOCATE 23,I:PRINT"�":NEXT I
+4120 FOR I=79 TO 2 STEP-1:LOCATE 23,I:PRINT"▓":NEXT I
 4130 B$=INKEY$:IF B$="Y" THEN PRINT CHR$(12):RETURN
 4140 IF B$="N" THEN GOTO 4230
-4150 FOR I=79 TO 2 STEP-1:LOCATE 23,I:PRINT"�":NEXT I
+4150 FOR I=79 TO 2 STEP-1:LOCATE 23,I:PRINT"█":NEXT I
 4160 B$=INKEY$:IF B$="Y" THEN PRINT CHR$(12):RETURN
 4170 IF B$="N" THEN GOTO 4230
 4180 LOCATE 23,2:COLOR 0,7:PRINT" WOULD YOU LIKE ANOTHER TRY ? ":COLOR 7
@@ -929,20 +922,18 @@ machines:
 4210 IF B$="N" THEN GOTO 4230
 4220 IF B$= "" THEN 4090
 4230 PRINT CHR$(12):GOTO 310
-4240 COLOR 15:LOCATE 1,2:PRINT"�":LOCATE 1,3:FOR I=1 TO 35:PRINT"�";:NEXT I:LOCATE 1,38:PRINT"�":FOR I=2 TO 21:LOCATE I,38:PRINT"�":NEXT I:LOCATE 22,38:PRINT"�":FOR I=37 TO 3 STEP-1:LOCATE 22,I:PRINT"�":NEXT I:LOCATE 22,2:PRINT"�"
-4250 FOR I=21 TO 2 STEP-1:LOCATE I,2:PRINT"�":NEXT I
-4260 REM LOCATE 1,42:PRINT"�":LOCATE 1,43:FOR I=1 TO 36:PRINT"�";:NEXT I:LOCATE 1,79:PRINT"�":FOR I=2 TO 21:LOCATE I,79:PRINT"�":NEXT I:LOCATE 22,79:PRINT"�":FOR I=78 TO 43 STEP-1:LOCATE 22,I:PRINT"�":NEXT I:LOCATE 22,42:PRINT"�"
-4270 REM I=21 TO 2 STEP-1:LOCATE I,42:PRINT"�":NEXT I
+4240 COLOR 15:LOCATE 1,2:PRINT"╔":LOCATE 1,3:FOR I=1 TO 35:PRINT"═";:NEXT I:LOCATE 1,38:PRINT"╗":FOR I=2 TO 21:LOCATE I,38:PRINT"║":NEXT I:LOCATE 22,38:PRINT"╝":FOR I=37 TO 3 STEP-1:LOCATE 22,I:PRINT"═":NEXT I:LOCATE 22,2:PRINT"╚"
+4250 FOR I=21 TO 2 STEP-1:LOCATE I,2:PRINT"║":NEXT I
+4260 REM LOCATE 1,42:PRINT"╔":LOCATE 1,43:FOR I=1 TO 36:PRINT"═";:NEXT I:LOCATE 1,79:PRINT"╗":FOR I=2 TO 21:LOCATE I,79:PRINT"║":NEXT I:LOCATE 22,79:PRINT"╝":FOR I=78 TO 43 STEP-1:LOCATE 22,I:PRINT"═":NEXT I:LOCATE 22,42:PRINT"╚"
+4270 REM I=21 TO 2 STEP-1:LOCATE I,42:PRINT"║":NEXT I
 4280 RETURN
-4290 LOCATE 24,22:PRINT"When ready � PRESS SPACE BAR or PROGRAM NUMBER"
+4290 LOCATE 24,22:PRINT"When ready » PRESS SPACE BAR or PROGRAM NUMBER"
 4300 LOCATE 24,70
 4310 COLOR 0,2
 4320 A$=INPUT$(1):IF A$=" " THEN 61400
 4330 A=VAL(A$):PRINT CHR$(12):RETURN
 4340 C=VAL(C$):PRINT CHR$(12)
 4350 ON C GOTO 1740,1840,1940,2040,2140
-=" " THEN 61400
-43
 ```
 
 ## NONLIN.BAS
@@ -1176,7 +1167,7 @@ machines:
 12630     DEV = FOBS(I) - FCALC(I)
 12640     DEVSQ = DEVSQ + DEV * DEV * OBSWT(I)
 12650     NEXT I
-12660 LOCATE 20,5 : PRINT USING "\         \#####.##";"Σ error= ";DEVSQ
+12660 LOCATE 20,5 : PRINT USING "\         \#####.##";"Σ error² = ";DEVSQ
 12670 IF IT = 1 THEN 12690  'no change in first iteration
 12680 LOCATE 21,5: PRINT USING "\         \#####.##";"Change =   ";DEVSQ-DEVSQ1;
 12690  RETURN
@@ -1230,7 +1221,7 @@ machines:
 14520 '*                                                                  *
 14530 '* calculates new weights for function values,                      *
 14540 '* using the follwing formula:                                      *
-14550 '* obswt(i) = 1/  [(dfdv)^2 * (1/varwt(v))]                        *
+14550 '* obswt(i) = 1/ Σ [(dfdv)^2 * (1/varwt(v))]                        *
 14560 '* note: obswt(i) = 1/L(i) in Wentworth article                     *
 14570 '********************************************************************
 14580 IF IT = 1 THEN RETURN  'skip weighting on first iteration
@@ -1411,8 +1402,8 @@ machines:
 19050 '* Note: assumes NEC 8023 printer. Modify to suit other printers.     *
 19060 '* On NEC, esc X turns on underlining, esc Y turns it off.            *
 19070 '* The following is a partial list of IBM screen charactors, followed *
-19080 '* by the charactor the NEC will print: WAIT = CALL ; COLOR = ; TO =          *
-19090 '* Thus "┐ error╠ =" prints as "Σ error=".                          *
+19080 '* by the charactor the NEC will print: û = │ ; ┐ = Σ; ╠ = ².         *
+19090 '* Thus "┐ error╠ =" prints as "Σ error² =".                          *
 19100 '**********************************************************************
 19110 GOSUB 11000  'subroutine function
 19130 LPRINT "FINAL REPORT"
@@ -1617,8 +1608,6 @@ machines:
 1370 X$ = INKEY$
 1380 IF X$ = "" THEN 1370
 1390 RETURN
-******************* Subroutine to get a keystroke into x$ *********
-137
 ```
 
 ## REGRESS.BAS
@@ -1681,12 +1670,6 @@ machines:
 640 PRINT
 650 GOTO 590
 660 END
-=";
-600 INPUT X
-610 REM RESTART OR END PROGRAM
-620 IF X=0 THEN 660
-630 PRINT "Y=";A+B*X
-640 
 ```
 
 ## SCISUBV1.BAS

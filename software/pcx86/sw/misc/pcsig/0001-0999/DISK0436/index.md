@@ -410,8 +410,8 @@ machines:
 9 C$=A$(C):IF(C<>32)=0THEN 11 ELSE IF LEN(C$)=0 THEN RETURN ELSE FOR I = 1 TO LEN(C$):IF MID$(C$,I,1)<>"a" THEN SOUND F, IS ELSE SOUND F, AS1
 10 SOUND Z,IS:NEXT I :SOUND Z,AS1:RETURN:GOTO 12
 11 SOUND Z,AS1*3:RETURN
-12 X=RND(1)*LEN(CHRS$)+0.5:IF X>LEN(CHRS$) OR X<1 THEN GOTO 12 ELSE C=ASC(MID$(CHRS$,X,1)):RETURN:DATA "ia","aiii","aiai","aii","i","iiai","aai","iiii","ii":DATA "iaaa","aia","iaii","aa","ai","aaa","iaai","aaia","iai"
-13 DATA "iii","a","iia","iiia","iaa","aiia","aiaa","aaii":DATA 15:DATA 0,"aaaaa",1,"iaaaaa",2,"iiaaa",3,"iiiaa",4,"iiiia",5,"iiiii":DATA 6,aiiii,7,aaiii,8,aaaii,9,aaaai,"?",iiaaii,",",aaiiaa:DATA ".",iaiaia,"/",aiiai,"-",aiiia
+12 X=RND(1)*LEN(CHRS$)+0.5:IF X>LEN(CHRS$) OR X<1 THEN GOTO 12 ELSE C=ASC(MID$(CHRS$,X,1)):RETURN:DATA "ia","aiii","aiai","aii","i","iiai","aai","iiii","ii":ä "iaaa","aia","iaii","aa","ai","aaa","iaai","aaia","iai"
+13 DATA "iii","a","iia","iiia","iaa","aiia","aiaa","aaii":ä 15:ä 0,"aaaaa",1,"iaaaaa",2,"iiaaa",3,"iiiaa",4,"iiiia",5,"iiiii":ä 6,aiiii,7,aaiii,8,aaaii,9,aaaai,"?",iiaaii,",",aaiiaa:ä ".",iaiaia,"/",aiiai,"-",aiiia
 14 CLS:IF(EXAM$="NO")=0THEN 17 ELSE PRINT "Total Characters - ";CHRCOUNT:PRINT "Right            - ";CORRECTCOUNT:PRINT "Wrong            - ";WRONGCOUNT
 15 IF CHRCOUNT<>0 THEN PRINT USING "&###";"Percentage Right - ";(CORRECTCOUNT/CHRCOUNT)*100
 16 GOSUB 33:CHRCOUNT=CHRCOUNT-1
@@ -1933,7 +1933,6 @@ machines:
 3220 LINE INPUT TEXT$
 3230 IF TEXT$="" THEN CLOSE:RETURN
 3240 PRINT #1,CHR$(34);TEXT$;" ";CHR$(34):GOTO 3220
-                                                                                                                                                                                                 
 ```
 
 ## OSCAR.BAS
@@ -2402,7 +2401,7 @@ machines:
 1665 IF EX=17 THEN BEEP:PRINT"===SPECIFY WIDTH ALARM===":PRINT"Current setting for right margin:";MARG:PRINT"New setting: ";:QL=3:GOSUB 2500:IF Q$="" THEN PRINT:PRINT GO$:GOTO 515 ELSE MARG=VAL(Q$):PRINT:PRINT GO$:GOTO 515 ' alt-w
 1670 IF EX=117 THEN OLDVAL=INP(LCR):BRKVAL=OLDVAL OR 64:OUT LCR,BRKVAL:SOUND 32767,3:SOUND 32767,1:OUT LCR,OLDVAL:GOTO 515 ' ctrl-end
 1674 IF EX=35 GOTO 2950 ' alt-h
-1675 IF EX=15 THEN RESTORE 9999:READ Q$:PRINT Q$:GOTO 515 ' shift-tab 0�
+1675 IF EX=15 THEN RESTORE 9999:READ Q$:PRINT Q$:GOTO 515 ' shift-tab 0─
 1676 IF EX=48 GOTO 2840 ' Alt-B Baud Rate Generator
 1677 IF EX=30 THEN OUT &H2FC,(INP(&H2FC) XOR &H2):GOTO 515  ' alt-a T/R Switch
 1678 IF EX=22 THEN RTTY=NOT RTTY:IF RTTY THEN PRINT "RTTY ON":GOTO 515 ELSE PRINT "RTTY OFF":GOTO 515    ' alt-u
@@ -3147,7 +3146,6 @@ machines:
 11480 DATA 86,59,61
 11490 DATA 00,00,00
 11500 RETURN
-
 ```
 
 ## SATFIND2.BAS

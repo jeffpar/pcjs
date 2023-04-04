@@ -63,21 +63,21 @@ machines:
 ## DB.BAS
 
 ```bas
-10 '************     KEYTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENCLOSE
-15 '* DataBoss *     OPENo| DataBoss 3.00.01 MS-DOS COLOR Version (C) 1984 |oOPEN
-20 '*  MS-DOS  *     OPENo| This source code may be read, printed, or used |oOPEN
-25 '************     OPENo| in part in other applications as long as there |oOPEN
-30 '*   Menu   *     OPENo| are no changes made to the original code as it |oOPEN
-35 '************     OPENo| is presented herein.                           |oOPEN
-40 '                 OPENo|------------------------------------------------|oOPEN
-45 ' LU:5/12/87      OPENo| Created By Kevin King, 389 Johnson Ln,  Apt. B |oOPEN
-50 '                 OPENo| Sheridan, WY 82801 to be a user-oriented, easy |oOPEN
-55 '                 OPENo| to learn, comprehensive information management |oOPEN
-60 '                 OPENo| system for the general public.  If you find it |oOPEN
-65 '                 OPENo| useful, a contribution of $50 would be greatly |oOPEN
-70 '                 OPENo| appreciated.  (Also, please include your name, |oOPEN
-75 '                 OPENo| address, phone, and application details.)      |oOPEN
-80 '                 SCREENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENTHENLOAD
+10 '************     ╔════════════════════════════════════════════════════╗
+15 '* DataBoss *     ║o| DataBoss 3.00.01 MS-DOS COLOR Version (C) 1984 |o║
+20 '*  MS-DOS  *     ║o| This source code may be read, printed, or used |o║
+25 '************     ║o| in part in other applications as long as there |o║
+30 '*   Menu   *     ║o| are no changes made to the original code as it |o║
+35 '************     ║o| is presented herein.                           |o║
+40 '                 ║o|------------------------------------------------|o║
+45 ' LU:5/12/87      ║o| Created By Kevin King, 389 Johnson Ln,  Apt. B |o║
+50 '                 ║o| Sheridan, WY 82801 to be a user-oriented, easy |o║
+55 '                 ║o| to learn, comprehensive information management |o║
+60 '                 ║o| system for the general public.  If you find it |o║
+65 '                 ║o| useful, a contribution of $50 would be greatly |o║
+70 '                 ║o| appreciated.  (Also, please include your name, |o║
+75 '                 ║o| address, phone, and application details.)      |o║
+80 '                 ╚════════════════════════════════════════════════════╝
 85 '
 90 COMMON FILE$,CT,CC
 95 ON ERROR GOTO 915

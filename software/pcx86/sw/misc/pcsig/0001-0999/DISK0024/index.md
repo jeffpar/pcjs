@@ -2798,7 +2798,6 @@ machines:
 660 IF YN$ = "yes" THEN 10: ELSE END
 670 A1 = A1 + 2
 680 NEXT A1:RETURN
- game! Do you want to
 ```
 
 ## WUMPUS.BAS
@@ -3173,9 +3172,6 @@ machines:
 4620 NEXT J
 4630 RETURN
 4640 END
-70 REM - input cave
-4580 FOR J=1 TO 20
-4590 FOR K=1 TO 3
 ```
 
 ## YESTER.BAS

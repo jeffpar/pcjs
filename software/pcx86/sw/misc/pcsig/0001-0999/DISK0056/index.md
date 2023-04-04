@@ -157,8 +157,6 @@ machines:
 1100 DATA ANESHANSELY DAN, SOMEWHERE IN ITHACA, ###########
 1110 DATA JOHNSON RUTH, 441 EAST 25nd ST NY NY, 212-455-0338
 1120 END
-ATA ANESHANSELY DAN, SOMEWHERE IN ITHACA, ###########
-1110 DATA JOHNSON 
 ```
 
 ## DECIDE.BAS
@@ -294,11 +292,6 @@ machines:
 1530 FOR J=1 TO 400:NEXT
 1540 CLS:PRINT TAB(26);"DECIDE":PRINT:RETURN
 1550 FOR J=1 TO 1500:NEXT:RETURN
-$(Q):NEXT
-1520 END
-1530 FOR J=1 TO 400:NEXT
-1540 CLS:PRINT TAB(26);"DECIDE":PRINT:RETURN
-1550 FOR J=1 TO
 ```
 
 ## DISTAR.BAS
@@ -416,9 +409,6 @@ machines:
 1190 IF ABS(X)<.9999999 THEN 1210 ELSE IF LAT2>LAT1 THEN AZ=0:RETURN
 1200 AZ=180: RETURN
 1210 Z=(1.570796-ATN(X/SQR(1-X*X))): RETURN
-BS(X)<.9999999 THEN 1210 ELSE IF LAT2>LAT1 THEN AZ=0:RETURN
-1200 AZ=180: RETURN
-1210
 ```
 
 ## MINI-WP.BAS
@@ -1031,8 +1021,6 @@ machines:
 1130 DATA "What good is the cow that gives plenty of milk and then kicks over the pail? * "
 1140 DATA "They are madly in love - he with himself, she with herself * "
 1150 DATA "z"
-k and then kicks over the pail? * "
-1140 DATA "They are madly in love - he with himself,
 ```
 
 ## SPEECH.BAS
@@ -1120,8 +1108,6 @@ machines:
 1650 RETURN
 1660 IF INKEY$ = "" THEN 1660
 1670 PRINT : RETURN
-FT$(L$,I) : L$=RIGHT$(L$,LEN(L$)-I) : GOTO 1610
-1640 NEXT I
 ```
 
 ## XMASCARD.BAS
@@ -1130,26 +1116,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            4023-A.BAS             ��"
-80 PRINT"��          CHRISTMAS CARD           ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            4023-A.BAS             │░"
+80 PRINT"░│          CHRISTMAS CARD           │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -1195,7 +1181,6 @@ machines:
 1370 DATA 77,69,82,82,89,00,67,72,82,73,83,84,77,65,83
 1380 DATA 65,78,68,00,65,00,72,65,80,80,89,00,78,69,87,00,89,69,65,82
 1390 DATA 70,82,79,77,00,66,79,66,00,65,78,69,83,00,65,78,68,00,70,65,77,73,76,89
-,72,65,80,80,89,00,78,69,87,00,
 ```
 
 {% comment %}samples_end{% endcomment %}

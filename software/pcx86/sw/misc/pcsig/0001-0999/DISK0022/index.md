@@ -400,8 +400,6 @@ machines:
 1130 IF RET<>0 THEN PRINT"Disk error status: ";RIGHT$("0"+HEX$(RET),2) :END
 1140 RETURN
 1150 SAVE "LDIR.BAS"
-etry on error
-1130 IF RET<>0 THEN PRINT"Disk error status: 
 ```
 
 ## LDIRC.BAS
@@ -761,8 +759,6 @@ machines:
 60990 REM 'Wait for input key subroutine
 60991 LOCATE 25,1:PRINT"Hit any key to continue";
 60992 K$=INKEY$:IF K$="" THEN 60992 ELSE RETURN
- for input key subroutine
-60991 LOCATE 25,1:PRINT"Hit any key t
 ```
 
 {% comment %}samples_end{% endcomment %}

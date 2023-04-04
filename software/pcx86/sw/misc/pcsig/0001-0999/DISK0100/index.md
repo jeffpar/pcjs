@@ -456,10 +456,6 @@ machines:
 3990 PRINT:PRINT
 4000 INPUT"Please fix the errror "
 4010 RETURN
-BASIC is required. Please load BASICA and rerun"
-3980 END
-3990 PRINT:PRINT
-4000 INPUT"Pleas
 ```
 
 ## ALIEN.BAS
@@ -507,8 +503,6 @@ machines:
 810 SCREEN 1,0,0,0
 820 GOTO 800
 830 RUN "A2.SPC"
-
-790 PRINT:PRINT:PRINT"Good luck..."
 ```
 
 ## ANIMATE.BAS
@@ -606,11 +600,6 @@ machines:
 580 LOCATE 23,1
 590 CLS:RUN "MENU.PGM"
 20000 PRINT "error encountered";ERL;"=error line";:RESUME
-=NEWX%:Y%=NEWY%
-570 WEND
-580 LOCATE 23,1
-590 CLS:RUN "MENU.PGM"
-20000 PRINT "error encountered";E
 ```
 
 ## BAGPIPES.BAS
@@ -918,12 +907,6 @@ machines:
 90 PAINT (XC,YC),C2,C
 100 NEXT I
 110 GOTO 45
-0
-75 C=RND(I)*3
-77 A=.2+RND(I)*5
-80 CIRCLE (XC,YC),R,C,,,A
-85 C2=RND(I)*3
-90 PA
 ```
 
 ## JUKEBOX.BAS

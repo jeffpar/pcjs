@@ -3055,14 +3055,14 @@ machines:
 ## LANDER.BAS
 
 ```bas
-1 REM----------------------------------------------------
-2 REML  A  N  D  E  R
-3 REM----------------------------------------------------
+1 	REM----------------------------------------------------
+2 	REM		L  A  N  D  E  R
+3 	REM----------------------------------------------------
 4       REM
-5 REMJUNE 16, 1977
+5 	REM		JUNE 16, 1977
 6       REM
-7 REMTHIS VERSION OF LUNAR LANDER IS COURTESY OF
-8 REMTHE IMSAI COMPANY.
+7 	REM	THIS VERSION OF LUNAR LANDER IS COURTESY OF
+8 	REM	THE IMSAI COMPANY.
 9       REM
 300 S3 =0
 310 N3=0
@@ -3962,7 +3962,7 @@ machines:
 ## STRIKE9.BAS
 
 ```bas
-90 DIM A(9),D(4),U(9)
+90 	DIM A(9),D(4),U(9)
 110 PRINT
 150 PRINT
 160 PRINT

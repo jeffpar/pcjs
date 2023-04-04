@@ -433,7 +433,7 @@ machines:
 1770 CLS
 1780 '-------------------provides choice of continuing or not-----------------
 1790 COLOR 10,0:LOCATE 8,1
-1800 PRINT "               PLOT SAME FUNCTION AGAIN ................1"
+1800 PRINT "                 PLOT SAME FUNCTION AGAIN ................1"
 1810 PRINT "                 CHANGE RANGE OF X FOR PRESENT FUNCTION ..2"
 1820 PRINT "                 INPUT A NEW FUNCTION ....................3"
 1830 PRINT "                 EXIT ....................................4":PRINT

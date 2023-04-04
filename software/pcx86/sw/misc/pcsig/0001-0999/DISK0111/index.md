@@ -521,7 +521,7 @@ machines:
 760 IF A$="" THEN INPUT A$:GOTO 760
 770 PRINT:PRINT TAB(26);:COLOR 7,0:PRINT "Revising file ";:COLOR 0,7:PRINT MID$(D$,1);CHR$(58);:FILES MID$(D$,1)+CHR$(58)+A$
 780 OPEN "R",#1,MID$(D$,1)+CHR$(58)+A$,128
-790 PRINT:PRINT "                Which disk does the revised fil(D$,↕);CHR$(☼:);:FILES MID$(D$,↕)ΘCHR$(☼:)ΘA$
+790 PRINT:PRINT "                Which disk does the revised fil(D$,↕);CHR$(☼:);:■ü MID$(D$,↕)ΘCHR$(☼:)ΘA$
 780 OPEN "R",#1,MID$(D$,1)+CHR$(58)+A$,128
 790 PRINT:PRINT "                Which disk does the revised file go on?"
 800 D$=INKEY$:IF D$="" THEN 800
@@ -678,7 +678,6 @@ machines:
 770 '
 780 LPRINT CHR$(27);"@" ;: WIDTH"lpt1:",80
 790 CLS : SYSTEM
-      
 ```
 
 {% comment %}samples_end{% endcomment %}

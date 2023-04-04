@@ -3521,7 +3521,6 @@ machines:
 10040   I=NROW0+NROW: J=NCOL0-1: X$="Column Totals"   : GOSUB 9920 'label row
 10050   I=NROW0-2: J=NCOL0+NCOL: X$="Row Totals"      : GOSUB 9920 'label col
 10060   GOTO 460           'this exits to the View Function
-                                                                                                                                                                                                                                                                                    
 ```
 
 ## PERPCAL.BAS
@@ -4460,7 +4459,7 @@ machines:
 ```bas
 4 BLANK$="                                                           "
 5 DIM PQ$(50)
-60 DIM MON$(12):DATA JANUARY,FEBRUARY,MARCH,APRIL,MAY,JUNE,JULY,AUGUST,SEPTEMBER,OCTOBER,NOVEMBER,DECEMBER:FOR I=1 TO 12:READ MON$(I):NEXT I
+60 DIM MON$(12):DATA JANUARY,FEBRUARY,MARCH,APRIL,MAY,JUNE,JULY,AUGUST,SEPTEMBER,OCTOBER,NOVEMBER,DECEMBER:é Iτ↕ ╠ ☼♀:ç MON$(I):â I
 70 DEF SEG:POKE 106,0:DIM P$(100):N1=1:N2=13:KEY OFF
 90 REM
 100 REM===========         Prompt for menu in P$

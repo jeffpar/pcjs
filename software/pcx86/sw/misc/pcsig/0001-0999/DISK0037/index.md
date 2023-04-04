@@ -326,7 +326,7 @@ machines:
 720 X=X1:Y=Y1
 730 GOTO 560
 740 IF B(X,Y)=0 THEN E=7:GOSUB 1270:S=S+5:GOTO 560
-750 IF Y$=" ═ Y$τ"*":CτCΘ↕:╩ Yδ‼Θ¶,Xδ¶Θ↨:┐ ☼☼:æ Y$:┐ ↑:ï CΦN ═ Eτ↓:ì ♫÷♦:ë ♫:☻ :í Eτ→:ì ♫÷♦:ë ♫û♣
+750 IF Y$="■" THEN Y$="*":C=C+1:LOCATE Y*2+3,X*3+6:COLOR 15:PRINT Y$:COLOR 7:IF C<N THEN E=8:GOSUB 1270:GOTO 570 ELSE E=9:GOSUB 1270:GOTO 1430
 760 GOTO 560
 770 WIDTH 40:SCREEN 0,0,0,1:CLS:COLOR 15:LOCATE 1,15,0
 780 PRINT "BLACK BOX":COLOR 7:PRINT
@@ -359,7 +359,7 @@ machines:
 1200 PRINT       "       32 31 30 29 28 27 26 25"
 1210 PRINT       "      ┌────────────────────────┐"
 1220 FOR I=1 TO 8
-1230 PRINT USING "     #│        │##";I,25-I
+1230 PRINT USING "     #│ ■  ■  ■  ■  ■  ■  ■  ■ │##";I,25-I
 1240 PRINT       "      │                        │":NEXT I
 1250 LOCATE 20:PRINT"      └────────────────────────┘"
 1260 PRINT       "        9 10 11 12 13 14 15 16":SCREEN 0,0,1,1:RETURN
@@ -656,8 +656,6 @@ machines:
 2350 INPUT"WOULD YOU LIKE TO TRY AGAIN (Y/N)";Z$
 2360 IF Z$="Y" THEN RUN
 2370 END
-"I'M DEAD!"
-2340 PRINT"YOU DIDN'T WIN
 ```
 
 ## EQNSOLVE.BAS

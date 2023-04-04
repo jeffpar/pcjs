@@ -323,7 +323,6 @@ machines:
 1010 ' Another helpful program from Steve Klein
 1020 ' With enhancements by John Siers (who found the original on the
 1030 ' Lehigh Valley BBS, Allentown PA -- 12/83)
-                                                                     
 ```
 
 {% comment %}samples_end{% endcomment %}

@@ -1363,8 +1363,6 @@ machines:
 10330 DATA funny,happy,story,hurry,party,any,many,very,ready,pretty
 10340 DATA write,knew,know,wrote,lamb,talk,walk,laugh,climb,eight
 10350 DATA one,two,three,four,five,six,seven,eight,nine,ten
-0340 DATA write,knew,know,wrote,lamb,talk,walk,laugh,climb,eight
-10350 DATA one,two,three,four,five,six,se
 ```
 
 {% comment %}samples_end{% endcomment %}

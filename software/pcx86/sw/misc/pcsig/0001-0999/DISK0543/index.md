@@ -115,11 +115,11 @@ machines:
 110 KEY OFF
 120 COLOR 7
 130 CLS
-140 PRINT "������������������������������������������������������������������������������ͻ";
+140 PRINT "╔══════════════════════════════════════════════════════════════════════════════╗";
 150 FOR A=1 TO 22
-160 PRINT "�                                                                              �";
+160 PRINT "║                                                                              ║";
 170 NEXT A
-180 PRINT"������������������������������������������������������������������������������ͼ";
+180 PRINT"╚══════════════════════════════════════════════════════════════════════════════╝";
 190 LOCATE 9,32
 200 PRINT "THE ADDRESS BOOK"
 210 LOCATE 11,39
@@ -129,9 +129,9 @@ machines:
 250 FOR A=1 TO 4000
 260 NEXT A
 270 CLS
-280 PRINT"�����������ķ"
-290 PRINT"� Main Menu �"
-300 PRINT"�����������Ľ"
+280 PRINT"╓───────────╖"
+290 PRINT"║ Main Menu ║"
+300 PRINT"╙───────────╜"
 310 PRINT
 320 PRINT
 330 PRINT"Options:"
@@ -152,9 +152,9 @@ machines:
 480 ON A GOTO 500,730,980,1230,1470,1590
 490 GOTO 440
 500 CLS
-510 PRINT"������������ķ"
-520 PRINT"� Enter Data �"
-530 PRINT"������������Ľ"
+510 PRINT"╓────────────╖"
+520 PRINT"║ Enter Data ║"
+530 PRINT"╙────────────╜"
 540 PRINT
 550 INPUT"Enter subject's name              ";NAM$
 560 INPUT"Enter subject's address           ";ADDRESS$
@@ -175,9 +175,9 @@ machines:
 710 CLS
 720 GOTO 270
 730 CLS
-740 PRINT"�����������ķ"
-750 PRINT"� Save Data �"
-760 PRINT"�����������Ľ"
+740 PRINT"╓───────────╖"
+750 PRINT"║ Save Data ║"
+760 PRINT"╙───────────╜"
 770 PRINT
 780 INPUT"What drive";DR$
 790 INPUT"Enter file name";NME$
@@ -200,9 +200,9 @@ machines:
 960 CLS
 970 GOTO 270
 980 CLS
-990 PRINT"�����������ķ"
-1000 PRINT"� Load Data �"
-1010 PRINT"�����������Ľ"
+990 PRINT"╓───────────╖"
+1000 PRINT"║ Load Data ║"
+1010 PRINT"╙───────────╜"
 1020 PRINT
 1030 INPUT"Enter drive ";DR$
 1040 INPUT"Enter file name ";NME$
@@ -225,9 +225,9 @@ machines:
 1210 CLS
 1220 GOTO 270
 1230 CLS
-1240 PRINT"������������ķ"
-1250 PRINT"� Print Data �"
-1260 PRINT"������������Ľ"
+1240 PRINT"╓────────────╖"
+1250 PRINT"║ Print Data ║"
+1260 PRINT"╙────────────╜"
 1270 PRINT
 1280 PRINT"Insert paper, and make sure printer is ";:COLOR 31:PRINT"ON":COLOR 7
 1290 PRINT
@@ -249,9 +249,9 @@ machines:
 1450 CLS
 1460 GOTO 270
 1470 CLS
-1480 PRINT"�����������������ķ"
-1490 PRINT"� Return to BASIC �"
-1500 PRINT"�����������������Ľ"
+1480 PRINT"╓─────────────────╖"
+1490 PRINT"║ Return to BASIC ║"
+1500 PRINT"╙─────────────────╜"
 1510 PRINT
 1520 PRINT"WARNING: ";
 1530 COLOR 7
@@ -261,9 +261,9 @@ machines:
 1570 IF LEFT$(A$,1)="y" THEN END
 1580 GOTO 270
 1590 CLS
-1600 PRINT"������������������ķ"
-1610 PRINT"� Return to MS-DOS �"
-1620 PRINT"������������������Ľ"
+1600 PRINT"╓──────────────────╖"
+1610 PRINT"║ Return to MS-DOS ║"
+1620 PRINT"╙──────────────────╜"
 1630 PRINT
 1640 COLOR 31
 1650 PRINT"WARNING: ";
@@ -274,9 +274,9 @@ machines:
 1700 IF LEFT$(A$,1)="y" THEN SYSTEM
 1710 GOTO 270
 1720 CLS
-1730 PRINT"���������������ķ"
-1740 PRINT"� Files Drive A �"
-1750 PRINT"���������������Ľ"
+1730 PRINT"╓───────────────╖"
+1740 PRINT"║ Files Drive A ║"
+1750 PRINT"╙───────────────╜"
 1760 PRINT
 1770 FILES "a:"
 1780 PRINT
@@ -284,19 +284,15 @@ machines:
 1800 IF INKEY$<>" " THEN 1800
 1810 GOTO 270
 1820 CLS
-1830 PRINT"���������������ķ"
-1840 PRINT"� Files Drive B �"
-1850 PRINT"���������������Ľ"
+1830 PRINT"╓───────────────╖"
+1840 PRINT"║ Files Drive B ║"
+1850 PRINT"╙───────────────╜"
 1860 PRINT
 1870 FILES "b:"
 1880 PRINT
 1890 PRINT" Hit ";:COLOR 31:PRINT"SPACE";:COLOR 7:PRINT" to return to menu"
 1900 IF INKEY$<>" " THEN 1800
 1910 GOTO 270
-NT
-1890 PRINT" Hit ";:COLOR 31:PRINT"SPACE";:COLOR 7:PRINT" to return to menu"
-1900 IF INKEY$<>" " THEN 1800
-1910 GO
 ```
 
 ## ARCTRIG.BAS

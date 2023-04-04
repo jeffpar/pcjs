@@ -358,7 +358,6 @@ machines:
 1580 ? "CANADA":? :? "PRINCE EDWARD ISLAND":? "NOVA SCOTIA":GOTO 20
 1590 ? "MEXICO":? :? "MEXICO CITY":GOTO 20
 1600 ? "MEXICO":? :? "NORTHWEST MEXICO":GOTO 20
-
 ```
 
 ## AUTOFILE.BAS
@@ -731,11 +730,6 @@ machines:
 8490 GOSUB 7160:RETURN
 9000 RESUME
 65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
-470 NEXT N1:GOTO 8490
-8480 NEXT M1
-8490 GOSUB 7160:RETURN
-9000 RESUME
-65399 '** DONE - PRESS ENTER TO RETURN TO M                                                                                                                                                                                                                                                                
 ```
 
 ## BUILFILE.BAS
@@ -1031,12 +1025,6 @@ machines:
 15360 PRINT CHR$(29);" ";CHR$(29);:FL$=LEFT$(FL$,LEN(FL$)-1):GOTO 15140
 15500 POKE 1047, (PEEK(1047) OR 32) : RETURN 'NUM LOCK on
 50000 '****** End of program listing ******
-EN(FL$)-1):GOTO 15140
-15500 POKE 1047, (PEEK(1047) OR 32) : RETURN 'NUM LOCK on
-50000 '****** En of program listing ******
-EN(FL$)-1):GOTO 15140
-15500 POKE 1047, (PEEK(1047) OR 32) : RETURN 'NUM LOCK on
-50000 '****** En                                                                                                                                                                                                                                                                
 ```
 
 ## COLRFILE.BAS
@@ -1909,26 +1897,26 @@ machines:
 10 KEY OFF:CLS
 20 SCREEN 0
 30 WIDTH 40
-40 PRINT"���������������������������������������"
-50 PRINT"������������������������������������Ŀ�"
-60 PRINT"��                                   ��"
-70 PRINT"��            6017-A.BAS             ��"
-80 PRINT"��        SPECIAL OCCASIONS          ��"
-90 PRINT"��                                   ��"
-100 PRINT"��                                   ��"
-110 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-120 PRINT"��      ����� ����� ����� �����      ��"
-130 PRINT"��        �   �   � �     �   �      ��"
-140 PRINT"��        �   ����� �     �   �      ��"
-150 PRINT"��        �   �     �     �   �      ��"
-160 PRINT"��      ����� �     ����� �����      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��      International PC Owners      ��"
-190 PRINT"��                                   ��"
-200 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-210 PRINT"��                                   ��"
-220 PRINT"�������������������������������������ٰ"
-230 PRINT"���������������������������������������"
+40 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+50 PRINT"░┌───────────────────────────────────┐░"
+60 PRINT"░│                                   │░"
+70 PRINT"░│            6017-A.BAS             │░"
+80 PRINT"░│        SPECIAL OCCASIONS          │░"
+90 PRINT"░│                                   │░"
+100 PRINT"░│                                   │░"
+110 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+120 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+130 PRINT"░│        █   █   █ █     █   █      │░"
+140 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+150 PRINT"░│        █   █     █     █   █      │░"
+160 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│      International PC Owners      │░"
+190 PRINT"░│                                   │░"
+200 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+210 PRINT"░│                                   │░"
+220 PRINT"░└───────────────────────────────────┘░"
+230 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 240 PRINT
 250 PRINT "       PRESS ANY KEY TO CONTINUE
 260 A$=INKEY$: IF A$="" THEN 260
@@ -2250,7 +2238,6 @@ machines:
 4130 CLOSE 1
 4140 GOTO 1150
 4150 END
-
 ```
 
 ## STATFILE.BAS
@@ -2804,7 +2791,7 @@ machines:
 45050 LOCATE 6,34:PRINT PROG1$:PRINT CHR$(10);TAB(32);REV$:COLOR 6,0
 45060 GOSUB 45090:CLS:LOCATE 20,1:COLOR 6,0:PRINT "DONE";CHR$(10):KEY ON
 45070 LOCATE ,,1:END
-45080     REM: DEFDBLDEFDBL DATE/TIME
+45080     REM: »» DATE/TIME
 45090 LOCATE 25,1:COLOR 10,0:PRINT "Press SPACE key to abort";:COLOR 6,0
 45100 LOCATE 22,1:PRINT"DATE IS: ";DATE$
 45110 LOCATE 23,1,0:PRINT"TIME IS:  ";

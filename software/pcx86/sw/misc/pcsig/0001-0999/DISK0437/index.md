@@ -63,7 +63,6 @@ machines:
 190 T1=INT(T1*10+.5)/10
 200 PRINT "TOTAL NUMBER OF TURNS IS: ";T1
 210 END
-PRINT 
 ```
 
 ## DIPOLE.BAS
@@ -127,8 +126,6 @@ machines:
 630 PRINT:PRINT
 640 GOTO 200
 650 END
-ECEMBER, 1981"
-620 PRINT"ISSUE OF CQ MAGAZINE, PAGE 44 FOR DETAILS OF THIS 
 ```
 
 ## GRTCRCL1.BAS
@@ -345,32 +342,32 @@ machines:
 1001 '
 1002 ' Origional: "Verify Network Frequency Response With This
 1003 '             Simple BASIC Program", Werner Schnider, EDN
-1004 '   magazine, Oct. 5, 1977 (HP 9830 implementation).  
+1004 '		   magazine, Oct. 5, 1977 (HP 9830 implementation).  
 1005 '
 1010 ' Next:      "Basic Program Performs Circuit Analysis", Richard
-1011 '    Steincross, EDN magazine, Sept. 1, 1982 (Apple ][
-1012 '    implementation with inductive elements added)
+1011 ' 		   Steincross, EDN magazine, Sept. 1, 1982 (Apple ][
+1012 ' 		   implementation with inductive elements added)	
 1013 '
-1020 ' Now:  Converted for the IBM PC/XT and compatibles by
-1021 '  Bruce A. Trolli, Cleveland, Oh., 2/16/85
+1020 ' Now:	  Converted for the IBM PC/XT and compatibles by
+1021 '		  Bruce A. Trolli, Cleveland, Oh., 2/16/85
 1022 '
 1100 CLS
 1110 LOCATE 2,10:PRINT "AC ELECTRONIC CIRCUIT FREQUENCY RESPONSE"
 1120 LOCATE 4,20:PRINT "NETWORK   (V1.0)"
 1140 PRINT
 1160 I=0:J=0:K=0:N=0:I1=0
-1180 GOSUB 6200  ' Print help information on screen
+1180 GOSUB 6200  			' Print help information on screen
 1190 PRINT
 1200 Y=40                               ' Allocate memory for circuit
 1220 'Note: If you have less than 64K in your system, you must decrease Y
 1240 DIM A(Y,Y),B(Y,Y),P(Y,Y),Q(Y,Y),B1(Y,Y),Q1(Y,Y)
-1300 N=0:PI=3.141592:LGTEN=8.685889' Initialize constants
+1300 N=0:PI=3.141592:LGTEN=8.685889	' Initialize constants	
 1340 INPUT"What file for input? [Hit CR for list.] ",F$
-1360 IF F$="" THEN FILES"*.net":GOTO 1340 ' Show possible input files
-1380 FOR I=1 TO LEN(F$)' Check for extension
+1360 IF F$="" THEN FILES"*.net":GOTO 1340 	' Show possible input files
+1380 FOR I=1 TO LEN(F$)				' Check for extension
 1400 IF MID$(F$,I,1)="." THEN J=I
 1420 NEXT I
-1440 IF J<>0 THEN F$=MID$(F$,1,J-1)' Add .NET if missing
+1440 IF J<>0 THEN F$=MID$(F$,1,J-1)		' Add .NET if missing	
 1460 F$=F$+".net"
 1500 OPEN F$ FOR INPUT AS #1
 1510 PRINT
@@ -399,25 +396,25 @@ machines:
 1851 '
 1852 ' ************** Enter Component Parameters into Matrix ****************
 1853 '
-1860 INPUT #1,I,J,V 'resistor
+1860 INPUT #1,I,J,V 					'resistor
 1861 PRINT I,J,V
 1880 V=1/V:GOSUB 3900:GOTO 1540
-1900 INPUT #1,I,J,V ' capacitor
+1900 INPUT #1,I,J,V 					' capacitor
 1901 PRINT I,J,V
 1920 V=V/1
 1940 GOSUB 4120:GOTO 1540
-1960 INPUT #1,I,J,V ' inductor
+1960 INPUT #1,I,J,V 					' inductor
 1961 PRINT I,J,V
 1980 V=-1/V
 2000 GOSUB 4260:GOTO 1540
-2020 INPUT #1,K,J,I,V 'fet
+2020 INPUT #1,K,J,I,V 					'fet
 2021 PRINT K,J,I,V
 2040 L=J:GOTO 2200
-2060 INPUT #1,K,J,I,B1,V 'npn transistor
+2060 INPUT #1,K,J,I,B1,V 				'npn transistor
 2061 PRINT K,J,I,B1,V
 2080 L=I:I=K:V=1/V:GOSUB 3900
 2100 I=L:L=J:GOTO 2180
-2120 ' op amp
+2120 							' op amp
 2140 INPUT #1,K,L,J,I,B1,V 'in+,-:out+,-:,gain,ohms
 2141 PRINT K,L,J,I,B1,V
 2160 V=1/V:GOSUB 3900

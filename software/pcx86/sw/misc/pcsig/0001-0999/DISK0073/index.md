@@ -131,33 +131,32 @@ machines:
 1540 KEY ON:COLOR 7,0,0:CLS:END
 1550 X$=INKEY$:IF X$="" THEN GOTO 1550 ELSE IF X$="N" OR X$="n" THEN A=1:RETURN:ELSE IF X$="Y" OR X$="y" THEN A=2:RETURN:ELSE A=3:LOCATE 25,1:PRINT "Please answer Y,y,N,or n";:FOR N=0 TO 500:NEXT :FOR N=0 TO 15:DUMP$=INKEY$:NEXT:RETURN
 1560 '    SAVE"percent2",a
-5,
 ```
 
 ## 3-D-ROT.BAS
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            4019-A.BAS             ��"
-60 PRINT"��      3-DIMMENTIONAL ROTATION      ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            4019-A.BAS             │░"
+60 PRINT"░│      3-DIMMENTIONAL ROTATION      │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -366,33 +365,32 @@ machines:
 1920 PP=CSRLIN:RETURN
 1925 ' * * * List Point Connections on CRT
 1930 FOR I=1 TO NC*2 STEP 2:L=FIX((((I+1)/2-1)*16+1)/80)+PP+1:LOCATE L,(((I+1)/2-1)*16+80-80*(L-PP))+1:PRINT (I+1)/2;:PRINT CHR$(29)+")";C(I);:PRINT CHR$(29);C(I+1);:NEXT I:RETURN
-0)+PP+1:LOCATE L,(((I+1)/2-1)*16+80-80*(L-PP))+1:PRINT (I+1)/2;:PRINT CHR$(29)+")";C(I);:PRIN
 ```
 
 ## CLERK.BAS
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            1016-A.BAS             ��"
-60 PRINT"��               CLERK               ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            1016-A.BAS             │░"
+60 PRINT"░│               CLERK               │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -714,38 +712,32 @@ machines:
 4110 REM CHOICE=5 : STOP SUBROUTINE
 4120 CLOSE: KEY ON
 4130 END
-  B$=INKEY$ : IF B$="" THEN 4080
-4090    CLS
-4100 RETURN
-4110 REM CHOICE=5 : STOP SUBROUTINE
-4120 CLOSE: KEY ON
-4130 END
 ```
 
 ## GROWTH.BAS
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            1017-A.BAS             ��"
-60 PRINT"��     GROWTH RATE & PROJECTION      ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            1017-A.BAS             │░"
+60 PRINT"░│     GROWTH RATE & PROJECTION      │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -854,38 +846,32 @@ machines:
 2010 PRINT INT((168-(J/5-1)*40)/S+.5);
 2020 NEXT J
 2030 RETURN
-5  18  21  24";
-1990 FOR J=5 TO 25 STEP 5
-2000 LOCATE J,1
-2010 PRINT INT((168-(J/5-1)*40)/S+.5);
-2020 NEXT J
-20
 ```
 
 ## MOLY-PAY.BAS
 
 ```bas
 10 KEY OFF:CLS
-20 PRINT"���������������������������������������"
-30 PRINT"������������������������������������Ŀ�"
-40 PRINT"��                                   ��"
-50 PRINT"��            6011-A.BAS             ��"
-60 PRINT"��              LIBCAT               ��"
-70 PRINT"��                                   ��"
-80 PRINT"��                                   ��"
-90 PRINT"�� BROUGHT TO YOU BY THE MEMBERS OF  ��"
-100 PRINT"��      ����� ����� ����� �����      ��"
-110 PRINT"��        �   �   � �     �   �      ��"
-120 PRINT"��        �   ����� �     �   �      ��"
-130 PRINT"��        �   �     �     �   �      ��"
-140 PRINT"��      ����� �     ����� �����      ��"
-150 PRINT"��                                   ��"
-160 PRINT"��      International PC Owners      ��"
-170 PRINT"��                                   ��"
-180 PRINT"��P.O. Box 10426, Pittsburgh PA 15234��"
-190 PRINT"��                                   ��"
-200 PRINT"�������������������������������������ٰ"
-210 PRINT"���������������������������������������"
+20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+30 PRINT"░┌───────────────────────────────────┐░"
+40 PRINT"░│                                   │░"
+50 PRINT"░│            6011-A.BAS             │░"
+60 PRINT"░│              LIBCAT               │░"
+70 PRINT"░│                                   │░"
+80 PRINT"░│                                   │░"
+90 PRINT"░│ BROUGHT TO YOU BY THE MEMBERS OF  │░"
+100 PRINT"░│      ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄ ▄▄▄▄▄      │░"
+110 PRINT"░│        █   █   █ █     █   █      │░"
+120 PRINT"░│        █   █▄▄▄█ █     █   █      │░"
+130 PRINT"░│        █   █     █     █   █      │░"
+140 PRINT"░│      ▄▄█▄▄ █     █▄▄▄▄ █▄▄▄█      │░"
+150 PRINT"░│                                   │░"
+160 PRINT"░│      International PC Owners      │░"
+170 PRINT"░│                                   │░"
+180 PRINT"░│P.O. Box 10426, Pittsburgh PA 15234│░"
+190 PRINT"░│                                   │░"
+200 PRINT"░└───────────────────────────────────┘░"
+210 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
 220 PRINT
 230 PRINT "       PRESS ANY KEY TO CONTINUE
 240 A$=INKEY$: IF A$="" THEN 240
@@ -1069,7 +1055,6 @@ machines:
 2770 PRINT "         FILES CLOSED. IF YOU HAVE ENTERED MANY NEW BOOKS INTO CATALOG THEN"
 2780 PRINT "         YOU WILL PROBABLY WISH TO MAKE BACKUP COPY OF THE FILES."
 2790 END
-D MANY NEW BOOKS INTO CATALO
 ```
 
 ## MPG-CAL.BAS
@@ -1118,8 +1103,6 @@ machines:
 1260 PRINT
 1270 PRINT
 1280 STOP
-****************"
-1250 REM *******************PROGRAM TERMINATION POINT***
 ```
 
 ## PCFILECH.BAS
@@ -1360,8 +1343,6 @@ machines:
 60990 REM 'Wait for input key subroutine
 60991 LOCATE 25,1:PRINT"Hit any key to continue";
 60992 K$=INKEY$:IF K$="" THEN 60992 ELSE RETURN
- for input key subroutine
-60991 LOCATE 25,1:PRINT"Hit any key t
 ```
 
 ## SERIALNO.BAS
@@ -1471,10 +1452,6 @@ machines:
 1870 IF ERR=25 THEN PRINT "Printer off line or something. Waiting!":RESUME
 1880 ON ERROR GOTO 0
 1890 '    SAVE"s-nbingo",a
-
-1870 IF ERR=25 THEN PRINT "Printer off line or something. Waiting!":RESUME
-1880 ON ERROR GOTO 0
-1890 '    SAVE"s-nbin
 ```
 
 ## SHIFTS.BAS
@@ -1497,8 +1474,6 @@ machines:
 60140 IF (PEEK(&H17) AND &H40) THEN PRINT"CAPS   LOCK ON" ELSE                               PRINT "CAPS   LOCK OFF"
 60150 IF (PEEK(&H17) AND &H20) THEN PRINT"NUM    LOCK ON" ELSE                               PRINT "NUM    LOCK OFF"
 60160 IF (PEEK(&H17) AND &H10) THEN PRINT"SCROLL LOCK ON" ELSE                               PRINT "SCROLL LOCK OFF"
-CK OFF"
-60160 IF (PEEK(&H17) AND &H10) THEN PRINT"SCROLL LOCK ON" ELSE                    
 ```
 
 ## TEMPCONV.BAS
@@ -1579,9 +1554,6 @@ machines:
 820 IF A$="n" THEN 840
 830 GOTO 780
 840 CLS: END
-T
-790 IF A$="Y" THEN 300
-800 IF A$="y" THE
 ```
 
 ## WINDCHIL.BAS
@@ -1622,8 +1594,6 @@ machines:
 420 DATA BELOW 78F,DEATH,
 430 PRINT USING"\         \ \                                 \ \                              \";A$,B$,C$;
 440 NEXT X
-ATH,
-430 PRINT USING"\         \ \                                 \ \          
 ```
 
 {% comment %}samples_end{% endcomment %}

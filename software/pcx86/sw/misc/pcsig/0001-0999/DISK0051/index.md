@@ -116,8 +116,6 @@ machines:
 13900 PRINT "Press any key to run the program again except <Esc> which will return to BASIC."
 14000 X$=INKEY$:IF X$="" THEN 14000 ELSE IF X$=CHR$(27) THEN KEY ON:END ELSE RUN
 65000 '         SAVE"futrdate",a
-o BASIC."
-14000 X$=INKEY$:IF X$="" THEN 14000 ELSE IF X$=CHR$(27) THEN KEY 
 ```
 
 ## PCGLOBE.BAS
@@ -243,8 +241,6 @@ machines:
 1180 RETURN
 1190 SCREEN 0,0,0,0:KEY  ON
 1200 END
-key to continue";
-1160 IF INKEY$>""THEN 1160
 ```
 
 ## TMDAY.BAS

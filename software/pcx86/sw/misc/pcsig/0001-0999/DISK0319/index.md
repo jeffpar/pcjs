@@ -136,12 +136,6 @@ machines:
 400  NEXT I
 410  END  'OF PROGRAM
 
----------
-370  FOR I=1 TO NUMFILES
-380    PRINT"ERASING: ";FS$(I)
-390    KILL FS$(I)
-400  NEXT I
-410 
 ```
 
 {% comment %}samples_end{% endcomment %}
