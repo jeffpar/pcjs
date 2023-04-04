@@ -410,8 +410,8 @@ machines:
 9 C$=A$(C):IF(C<>32)=0THEN 11 ELSE IF LEN(C$)=0 THEN RETURN ELSE FOR I = 1 TO LEN(C$):IF MID$(C$,I,1)<>"a" THEN SOUND F, IS ELSE SOUND F, AS1
 10 SOUND Z,IS:NEXT I :SOUND Z,AS1:RETURN:GOTO 12
 11 SOUND Z,AS1*3:RETURN
-12 X=RND(1)*LEN(CHRS$)+0.5:IF X>LEN(CHRS$) OR X<1 THEN GOTO 12 ELSE C=ASC(MID$(CHRS$,X,1)):RETURN:DATA "ia","aiii","aiai","aii","i","iiai","aai","iiii","ii":ä "iaaa","aia","iaii","aa","ai","aaa","iaai","aaia","iai"
-13 DATA "iii","a","iia","iiia","iaa","aiia","aiaa","aaii":ä 15:ä 0,"aaaaa",1,"iaaaaa",2,"iiaaa",3,"iiiaa",4,"iiiia",5,"iiiii":ä 6,aiiii,7,aaiii,8,aaaii,9,aaaai,"?",iiaaii,",",aaiiaa:ä ".",iaiaia,"/",aiiai,"-",aiiia
+12 X=RND(1)*LEN(CHRS$)+0.5:IF X>LEN(CHRS$) OR X<1 THEN GOTO 12 ELSE C=ASC(MID$(CHRS$,X,1)):RETURN:DATA "ia","aiii","aiai","aii","i","iiai","aai","iiii","ii":DATA "iaaa","aia","iaii","aa","ai","aaa","iaai","aaia","iai"
+13 DATA "iii","a","iia","iiia","iaa","aiia","aiaa","aaii":DATA 15:DATA 0,"aaaaa",1,"iaaaaa",2,"iiaaa",3,"iiiaa",4,"iiiia",5,"iiiii":DATA 6,aiiii,7,aaiii,8,aaaii,9,aaaai,"?",iiaaii,",",aaiiaa:DATA ".",iaiaia,"/",aiiai,"-",aiiia
 14 CLS:IF(EXAM$="NO")=0THEN 17 ELSE PRINT "Total Characters - ";CHRCOUNT:PRINT "Right            - ";CORRECTCOUNT:PRINT "Wrong            - ";WRONGCOUNT
 15 IF CHRCOUNT<>0 THEN PRINT USING "&###";"Percentage Right - ";(CORRECTCOUNT/CHRCOUNT)*100
 16 GOSUB 33:CHRCOUNT=CHRCOUNT-1

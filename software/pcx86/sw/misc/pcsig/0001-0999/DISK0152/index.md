@@ -954,9 +954,9 @@ machines:
 3 REM $linesize: 132
 25 SCREEN 0,1,0:WIDTH 80:CLS:KEY OFF:LOCATE,,0:PRINT TAB(60)"tm":PRINT TAB(16)STRING$(15,205)" U S E R W A R E "STRING$(15,205):PRINT:PRINT TAB(17)"Capital PC User Group User-Supported Software":PRINT:PRINT TAB(7)CHR$(214)STRING$(62,196)CHR$(183)
 28 FOR I=1 TO 10:READ A$:PRINT TAB(7)CHR$(186);A$;SPACE$(62-LEN(A$));CHR$(186):NEXT:PRINT TAB(7)CHR$(211)STRING$(62,196)CHR$(189):PRINT TAB(27)"Copyright (c) 1983 Tom Mack, 10210 Oxfordshire Rd., Great Falls, Virginia  22066
-30 DATA"    RBBS-PC CPC12.1 users should consider a contribution to":ä"":ä"                 Capitol PC Software Exchange":ä"                     Post Office Box 6128
-35 DATA"                Silver Spring, Maryland  20906":ä"":ä"    RBBS-PC CPC12.1 may be freely distributed providing":ä"    1.  RBBS-PC CPC12 is not distributed in modified form.
-40 DATA"    2.  No fee or consideration is charged.":ä"    3.  This notice is not bypassed or removed.":ù ╤TX!τCSNG(FIX((VAL(MID$(■Ä,↕,‼))δ☼<δ☼<)Θ(VAL(MID$(■Ä,§,‼))δ☼<)Θ(VAL(MID$(■Ä,↑,‼))δ↕))):IWAIT!τ╤TX!Θ☼◙
+30 DATA"    RBBS-PC CPC12.1 users should consider a contribution to":DATA"":DATA"                 Capitol PC Software Exchange":DATA"                     Post Office Box 6128
+35 DATA"                Silver Spring, Maryland  20906":DATA"":DATA"    RBBS-PC CPC12.1 may be freely distributed providing":DATA"    1.  RBBS-PC CPC12 is not distributed in modified form.
+40 DATA"    2.  No fee or consideration is charged.":DATA"    3.  This notice is not bypassed or removed.":DEF FNTX!=CSNG(FIX((VAL(MID$(TIME$,1,2))*60*60)+(VAL(MID$(TIME$,4,2))*60)+(VAL(MID$(TIME$,7,2))*1))):IWAIT!=FNTX!+10
 43 DEFINT A-Z:DEF SEG=0:MLSW%=PEEK(&H1FE)+256*PEEK(&H1FF):IF MLSW%=0 THEN GOTO 44 ELSE PRINT "RBBS-PC running under MultiLink
 44 IF FNTX!<IWAIT! THEN 44
 90 CLOSE:CLEAR:WIDTH 80:SCREEN 0,0,0:KEY OFF:PAUSE$=CHR$(19):BELL$=CHR$(7):BK2$=CHR$(8):XOFF$=CHR$(19):XON$=CHR$(17):CLS:DEF FNTI!=CSNG(FIX((VAL(MID$(TIME$,1,2))*60*60)+(VAL(MID$(TIME$,4,2))*60)+(VAL(MID$(TIME$,7,2))*1)))

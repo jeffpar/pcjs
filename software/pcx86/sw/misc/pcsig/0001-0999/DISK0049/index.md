@@ -1109,23 +1109,23 @@ machines:
 100 'DATA statements define system commands.
 110 '
 120 'Margin control --
-130 DATA .tm#::Å┘ Set # of blank lines at top of page.     Default =  0
-140 DATA .bm#::Å┘ Set # of blank lines at bottom of page.  Default = 12
-150 DATA .lm#::Å┘ Move left margin (+ = rightward)         Default =  0
-160 DATA .rm#::Å┘ Move right margin (- = leftward)         Default =  0
-170 DATA .pl#::Å┘ Set # of lines per page.                 Default = 66
-180 DATA .ma#::Å┘ Adjust both margins in (+) or out (-)#.  Default =  0
-190 DATA .ov#::Å┘ Move all text over # columns.            Default =  0
+130 DATA .tm#:' Set # of blank lines at top of page.     Default =  0
+140 DATA .bm#:' Set # of blank lines at bottom of page.  Default = 12
+150 DATA .lm#:' Move left margin (+ = rightward)         Default =  0
+160 DATA .rm#:' Move right margin (- = leftward)         Default =  0
+170 DATA .pl#:' Set # of lines per page.                 Default = 66
+180 DATA .ma#:' Adjust both margins in (+) or out (-)#.  Default =  0
+190 DATA .ov#:' Move all text over # columns.            Default =  0
 200 'Formatting --
-210 DATA .bl#::Å┘ Insert # blank lines.
-220 DATA .in#::Å┘ Indent # columns.                        Default =  0
-230 DATA .jl::Å┘  Justify left margin only. (This is the default condition.)
-240 DATA .jr::Å┘  Justify right margin only.
-250 DATA .jb::Å┘  Justify both margins.
-260 DATA .ls#::Å┘ Line spacing #. 1=single (default), 2=double, etc.
-270 DATA .ce::Å┘  Center the following line, up to next C/R.
-280 DATA .fi::Å┘  Fill each line as much as possible.  (Default)
-290 DATA .nf::Å┘  No filling. Print line essentially as entered.
+210 DATA .bl#:' Insert # blank lines.
+220 DATA .in#:' Indent # columns.                        Default =  0
+230 DATA .jl:'  Justify left margin only. (This is the default condition.)
+240 DATA .jr:'  Justify right margin only.
+250 DATA .jb:'  Justify both margins.
+260 DATA .ls#:' Line spacing #. 1=single (default), 2=double, etc.
+270 DATA .ce:'  Center the following line, up to next C/R.
+280 DATA .fi:'  Fill each line as much as possible.  (Default)
+290 DATA .nf:'  No filling. Print line essentially as entered.
 300 'Printer font selection for the IBM printer (Epson MX-80) --
 310 '  P     |  #=1 for normal, single-width, single-strike, unemphasized.
 320 '  R  F  |    2 for   "           "             "        emphasized.
@@ -1139,14 +1139,14 @@ machines:
 400 '           Runtime "plain" font corresponds to #=1, "pretty" to #=2.
 410 '           Only fonts 1-3 show proper line layout on the video screen.
 420 '
-430 DATA .pf#::Å┘ Select printer font (for full line only).
+430 DATA .pf#:' Select printer font (for full line only).
 440 'Carriage control --
-450 DATA .pa#::Å┘ Start new page, numbered #. If no #, use old# + 1.
-460 DATA .wt::Å┘  Wait for paper alignment at top of following page(s).
-470 DATA .tp#::Å┘ Test page; if <# lines remain, force a .pa command.
-480 DATA .hd::Å┘  Use the following line (to C/R) as header on following page(s).
+450 DATA .pa#:' Start new page, numbered #. If no #, use old# + 1.
+460 DATA .wt:'  Wait for paper alignment at top of following page(s).
+470 DATA .tp#:' Test page; if <# lines remain, force a .pa command.
+480 DATA .hd:'  Use the following line (to C/R) as header on following page(s).
 490 '
-500 DATA END::Å┘ of command definitions
+500 DATA END:' of command definitions
 510 'Put the above commands into a testable string.
 520 COMMAND$=".##"
 530 FOR I = 0 TO 50

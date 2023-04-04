@@ -983,13 +983,13 @@ machines:
 4970 D$=R$+":":GOTO4880
 5020 ONERRORGOTO0:SCREEN0,1,0,0:CLS:END
 5070 CLS:SYSTEM
-5150 DATA"Clear print buffer & reset printer":ä17,24,255:ä"Data Processing print mode":ä27,48,255:ä"Correspondence Quality print mode":ä27,49,255:ä"Downloaded Character print mode":ä27,50,255:ä"Enhanced printing **
-5240 DATA27,72,255:ä"Emphasized printing **":ä27,84,255:ä"Stop enhanced/emphasized printing":ä27,73,255:ä"10 characters per inch":ä30,255:ä"12 characters per inch":ä30,28,255:ä"17 characters per inch **":ä30,29,255
-5350 DATA"Double-width characters":ä31,255:ä"6 lines per inch":ä27,54,255:ä"8 lines per inch":ä27,56,255:ä"Underlining on":ä27,67,255:ä"Underlining off":ä27,68,255:ä"Subscripts/superscripts on
-5460 DATA27,77,27,75,27,76,255:ä"Subscripts/superscripts off":ä27,75,27,77,255:ä"Set variable horizontal tab stops":ä27,09,255:ä"Set fixed horizontal tab stops":ä27,09,255:ä"Clear all tab stops":ä27,09,13,255
-5550 DATA"Set form length (for form-feeds)":ä27,70,255:ä"Set top-of-form":ä27,05,255:ä"Advance to top-of-form":ä12,255:ä"Skip 01-99 lines":ä27,11,255:ä"Set left margin":ä27,37,67,255:ä"Set space between characters *
+5150 DATA"Clear print buffer & reset printer":DATA17,24,255:DATA"Data Processing print mode":DATA27,48,255:DATA"Correspondence Quality print mode":DATA27,49,255:DATA"Downloaded Character print mode":DATA27,50,255:DATA"Enhanced printing **
+5240 DATA27,72,255:DATA"Emphasized printing **":DATA27,84,255:DATA"Stop enhanced/emphasized printing":DATA27,73,255:DATA"10 characters per inch":DATA30,255:DATA"12 characters per inch":DATA30,28,255:DATA"17 characters per inch **":DATA30,29,255
+5350 DATA"Double-width characters":DATA31,255:DATA"6 lines per inch":DATA27,54,255:DATA"8 lines per inch":DATA27,56,255:DATA"Underlining on":DATA27,67,255:DATA"Underlining off":DATA27,68,255:DATA"Subscripts/superscripts on
+5460 DATA27,77,27,75,27,76,255:DATA"Subscripts/superscripts off":DATA27,75,27,77,255:DATA"Set variable horizontal tab stops":DATA27,09,255:DATA"Set fixed horizontal tab stops":DATA27,09,255:DATA"Clear all tab stops":DATA27,09,13,255
+5550 DATA"Set form length (for form-feeds)":DATA27,70,255:DATA"Set top-of-form":DATA27,05,255:DATA"Advance to top-of-form":DATA12,255:DATA"Skip 01-99 lines":DATA27,11,255:DATA"Set left margin":DATA27,37,67,255:DATA"Set space between characters *
 5660 DATA27,78,255
-5710 DATA"Download Italics character set":ä"Print test--all ASCII characters":ä"Print an ASCII text file":ä"Print disk directory (BASIC 2.00)":ä"Display disk directory":ä"Exit to MENU":ä"Exit to BASIC":ä"Exit to DOS
+5710 DATA"Download Italics character set":DATA"Print test--all ASCII characters":DATA"Print an ASCII text file":DATA"Print disk directory (BASIC 2.00)":DATA"Display disk directory":DATA"Exit to MENU":DATA"Exit to BASIC":DATA"Exit to DOS
 ```
 
 ## OKITALIC.BAS
@@ -1038,101 +1038,101 @@ machines:
 2030 '
 3000 '
 3010 ' *** Following are italic character definitions
-3032  DATA A,32,&H0,&H0,&H0,&H0,&H0,&H0,&H0,&H0,&H0,&H0,&H0           ::Å┘space
-3033  DATA A,33,&H0,&H0,&H40,&H0,&H8,&H4,&H2,&H1,&H0,&H0,&H0          ::Å┘!
-3034  DATA A,34,&H0,&H0,&H4,&H2,&H1,&H0,&H4,&H2,&H1,&H0,&H0           ::Å┘quote
-3035  DATA A,35,&H0,&H54,&H20,&H1C,&H2,&H55,&H20,&H1C,&H2,&H15,&H0    ::Å┘#
-3036  DATA A,36,&H0,&H0,&H24,&H48,&H32,&HC,&H22,&H9,&H12,&H0,&H0      ::Å┘$
-3037  DATA A,37,&H0,&H0,&H42,&H21,&H12,&H49,&H24,&H42,&H21,&H0,&H0    ::Å┘%
-3038  DATA A,38,&H0,&H30,&H0,&H4A,&H1,&H4C,&H11,&H22,&H50,&H8,&H0     ::Å┘&
-3039  DATA A,39,&H0,&H0,&H0,&H4,&H1,&H2,&H1,&H0,&H0,&H0,&H0           ::Å┘'
-3040  DATA A,40,&H0,&H0,&H0,&H18,&H24,&H42,&H0,&H1,&H0,&H0,&H0        ::Å┘(
-3041  DATA A,41,&H0,&H0,&H0,&H40,&H0,&H21,&H12,&HC,&H0,&H0,&H0        ::Å┘)
-3042  DATA A,42,&H0,&H8,&H20,&H18,&H2,&H1C,&H20,&HC,&H2,&H8,&H0       ::Å┘*
-3043  DATA A,43,&H0,&H8,&H0,&H28,&H10,&H8,&H4,&HA,&H0,&H8,&H0         ::Å┘+
-3044  DATA D,44,&H0,&H0,&H0,&H40,&H10,&H20,&H10,&H0,&H0,&H0,&H0       ::Å┘,
-3045  DATA A,45,&H0,&H8,&H0,&H8,&H0,&H8,&H0,&H8,&H0,&H0,&H0           ::Å┘-
-3046  DATA A,46,&H0,&H0,&H0,&H40,&H20,&H40,&H20,&H0,&H0,&H0,&H0       ::Å┘.
-3047  DATA A,47,&H0,&H0,&H40,&H20,&H10,&H8,&H4,&H2,&H1,&H0,&H0        ::Å┘/
-3048  DATA A,48,&H0,&H58,&H24,&H52,&H0,&H49,&H0,&H25,&H12,&HD,&H0     ::Å┘0
-3049  DATA A,49,&H0,&H0,&H40,&H0,&H60,&H12,&H48,&H6,&H1,&H0,&H0       ::Å┘1
-3050  DATA A,50,&H0,&H40,&H4,&H62,&H0,&H51,&H0,&H49,&H4,&H2,&H0       ::Å┘2
-3051  DATA A,51,&H0,&H20,&H40,&H1,&H48,&H1,&H4C,&H31,&H2,&H1,&H0      ::Å┘3
-3052  DATA A,52,&H0,&H0,&H10,&H8,&H10,&H44,&H30,&HA,&H14,&H3,&H0      ::Å┘4
-3053  DATA A,53,&H0,&H0,&H20,&H44,&H2,&H45,&H0,&H45,&H20,&H19,&H0     ::Å┘5
-3054  DATA A,54,&H0,&H30,&H8,&H44,&H0,&H4A,&H0,&H49,&H20,&H10,&H0     ::Å┘6
-3055  DATA A,55,&H0,&H41,&H20,&H11,&H8,&H1,&H4,&H1,&H2,&H1,&H0        ::Å┘7
-3056  DATA A,56,&H0,&H20,&H14,&H42,&H8,&H41,&H8,&H21,&H14,&H2,&H0     ::Å┘8
-3057  DATA A,57,&H0,&H0,&H4,&H4A,&H0,&H29,&H0,&H11,&H8,&H6,&H0        ::Å┘9
-3058  DATA A,58,&H0,&H0,&H0,&H20,&H14,&H22,&H14,&H2,&H0,&H0,&H0       ::Å┘:
-3059  DATA D,59,&H0,&H0,&H40,&H14,&H22,&H14,&H2,&H0,&H0,&H0,&H0       ::Å┘;
-3060  DATA A,60,&H0,&H8,&H10,&H0,&H24,&H0,&H42,&H0,&H1,&H0,&H0        ::Å┘<
-3061  DATA A,61,&H0,&H10,&H0,&H14,&H0,&H14,&H0,&H14,&H0,&H4,&H0       ::Å┘=
-3062  DATA A,62,&H0,&H0,&H40,&H0,&H21,&H0,&H12,&H0,&H4,&H8,&H0        ::Å┘>
-3063  DATA A,63,&H0,&H0,&H2,&H40,&H1,&H10,&H1,&H8,&H1,&H6,&H0         ::Å┘?
-3064  DATA A,64,&H0,&H30,&H48,&H4,&H42,&H18,&H41,&H14,&H9,&H6,&H0     ::Å┘@
-3065  DATA A,65,&H0,&H60,&H18,&H4,&H12,&H1,&H10,&H41,&H32,&HC,&H0     ::Å┘A
-3066  DATA A,66,&H0,&H40,&H31,&HC,&H43,&H8,&H41,&H8,&H31,&H6,&H0      ::Å┘B
-3067  DATA A,67,&H0,&H30,&H4C,&H2,&H41,&H0,&H41,&H20,&H3,&H0,&H0      ::Å┘C
-3068  DATA A,68,&H0,&H40,&H31,&HC,&H43,&H0,&H41,&H20,&H19,&H6,&H0     ::Å┘D
-3069  DATA A,69,&H0,&H60,&H18,&H46,&H9,&H40,&H9,&H40,&H1,&H0,&H0      ::Å┘E
-3070  DATA A,70,&H0,&H60,&H18,&H6,&H9,&H0,&H9,&H0,&H1,&H0,&H0         ::Å┘F
-3071  DATA A,71,&H0,&H30,&H4C,&H2,&H41,&H8,&H41,&H28,&H13,&H8,&H0     ::Å┘G
-3072  DATA A,72,&H0,&H60,&H18,&H6,&H9,&H0,&H48,&H30,&HC,&H3,&H0       ::Å┘H
-3073  DATA A,73,&H0,&H0,&H40,&H0,&H61,&H18,&H47,&H0,&H1,&H0,&H0       ::Å┘I
-3074  DATA A,74,&H0,&H30,&H40,&H0,&H40,&H1,&H30,&HD,&H2,&H1,&H0       ::Å┘J
-3075  DATA A,75,&H0,&H60,&H18,&H6,&H9,&H0,&H14,&H60,&H2,&H1,&H0       ::Å┘K
-3076  DATA A,76,&H0,&H60,&H18,&H46,&H1,&H40,&H0,&H40,&H0,&H0,&H0      ::Å┘L
-3077  DATA A,77,&H0,&H60,&H1C,&H3,&H4,&H18,&H4,&H62,&H1C,&H3,&H0      ::Å┘M
-3078  DATA A,78,&H0,&H60,&H1C,&H3,&H4,&H8,&H10,&H60,&H1C,&H3,&H0      ::Å┘N
-3079  DATA A,79,&H0,&H30,&HC,&H42,&H0,&H41,&H0,&H21,&H18,&H6,&H0      ::Å┘O
-3080  DATA A,80,&H0,&H60,&H18,&H6,&H9,&H0,&H9,&H0,&H9,&H6,&H0         ::Å┘P
-3081  DATA A,81,&H0,&H30,&HC,&H42,&H0,&H41,&H10,&H21,&H58,&H6,&H0     ::Å┘Q
-3082  DATA A,82,&H0,&H60,&H18,&H6,&H9,&H10,&H9,&H20,&H49,&H6,&H0      ::Å┘R
-3083  DATA A,83,&H0,&H20,&H46,&H0,&H49,&H0,&H49,&H0,&H31,&H2,&H0      ::Å┘S
-3084  DATA A,84,&H0,&H0,&H0,&H1,&H60,&H19,&H6,&H1,&H0,&H1,&H0         ::Å┘T
-3085  DATA A,85,&H0,&H70,&HC,&H43,&H0,&H40,&H0,&H30,&HC,&H3,&H0       ::Å┘U
-3086  DATA A,86,&H0,&H8,&H16,&H21,&H40,&H0,&H20,&H10,&HC,&H3,&H0      ::Å┘V
-3087  DATA A,87,&H0,&H60,&H1C,&H23,&H10,&HC,&H10,&H60,&H1C,&H3,&H0    ::Å┘W
-3088  DATA A,88,&H0,&H40,&H20,&H11,&HA,&H4,&H8,&H72,&H1,&H0,&H0       ::Å┘X
-3089  DATA A,89,&H0,&H0,&H0,&H43,&H24,&H10,&H8,&H4,&H2,&H1,&H0        ::Å┘Y
-3090  DATA A,90,&H0,&H40,&H20,&H41,&H10,&H49,&H4,&H41,&H2,&H1,&H0     ::Å┘Z
-3091  DATA A,91,&H0,&H60,&H18,&H46,&H1,&H40,&H1,&H0,&H1,&H0,&H0       ::Å┘[
-3092  DATA A,92,&H0,&H0,&H0,&H1,&H2,&HC,&H30,&H40,&H0,&H0,&H0         ::Å┘/
-3093  DATA A,93,&H0,&H0,&H40,&H0,&H40,&H1,&H40,&H31,&HC,&H3,&H0       ::Å┘]
-3094  DATA A,94,&H0,&H4,&H0,&H2,&H0,&H1,&H2,&H4,&H0,&H0,&H0           ::Å┘^
-3095  DATA D,95,&H0,&H40,&H0,&H40,&H0,&H40,&H0,&H40,&H0,&H40,&H0      ::Å┘_
-3096  DATA A,96,&H0,&H0,&H0,&H0,&H1,&H2,&H1,&H4,&H0,&H0,&H0           ::Å┘`
-3097  DATA A,97,&H0,&H20,&H50,&H0,&H54,&H0,&H54,&H20,&H54,&H8,&H0     ::Å┘a
-3098  DATA A,98,&H0,&H60,&H18,&H6,&H41,&H4,&H40,&H4,&H20,&H18,&H0     ::Å┘b
-3099  DATA A,99,&H0,&H30,&H8,&H40,&H4,&H40,&H4,&H40,&H4,&H0,&H0       ::Å┘c
-3100  DATA A,100,&H0,&H30,&H48,&H0,&H44,&H0,&H44,&H30,&HC,&H3,&H0     ::Å┘d
-3101  DATA A,101,&H0,&H30,&H48,&H10,&H44,&H10,&H44,&H10,&H4,&H8,&H0   ::Å┘e
-3102  DATA A,102,&H0,&H0,&H0,&H44,&H30,&HC,&H2,&H5,&H0,&H1,&H0        ::Å┘f
-3103  DATA D,103,&H0,&H4C,&H2,&H50,&H1,&H50,&H21,&H18,&H7,&H0,&H0     ::Å┘g
-3104  DATA A,104,&H0,&H60,&H18,&H6,&H9,&H0,&H4,&H40,&H24,&H18,&H0     ::Å┘h
-3105  DATA A,105,&H0,&H0,&H40,&H0,&H64,&H10,&H4C,&H1,&H0,&H0,&H0      ::Å┘i
-3106  DATA D,106,&H0,&H0,&H20,&H40,&H0,&H40,&H20,&H11,&H8,&H7,&H0     ::Å┘j
-3107  DATA A,107,&H0,&H0,&H60,&H18,&H6,&H11,&H20,&H48,&H0,&H4,&H0     ::Å┘k
-3108  DATA A,108,&H0,&H40,&H0,&H60,&H19,&H46,&H1,&H0,&H0,&H0,&H0      ::Å┘l
-3109  DATA A,109,&H0,&H40,&H24,&H18,&H44,&H20,&H1C,&H40,&H24,&H18,&H0 ::Å┘m
-3110  DATA A,110,&H0,&H64,&H18,&H4,&H0,&H4,&H40,&H24,&H18,&H0,&H0     ::Å┘n
-3111  DATA A,111,&H0,&H30,&H48,&H4,&H40,&H4,&H40,&H24,&H18,&H0,&H0    ::Å┘o
-3112  DATA D,112,&H0,&H40,&H30,&HC,&H13,&H0,&H11,&H0,&H9,&H6,&H0      ::Å┘p
-3113  DATA D,113,&H0,&H0,&HC,&H12,&H1,&H50,&H21,&H58,&H7,&H0,&H0      ::Å┘q
-3114  DATA A,114,&H0,&H40,&H20,&H1C,&H0,&H8,&H4,&H0,&H4,&H8,&H0       ::Å┘r
-3115  DATA A,115,&H0,&H40,&H0,&H48,&H10,&H44,&H10,&H24,&H0,&H4,&H0    ::Å┘s
-3116  DATA A,116,&H0,&H0,&H4,&H30,&H4C,&H2,&H45,&H0,&H24,&H0,&H0      ::Å┘t
-3117  DATA A,117,&H0,&H0,&H30,&H48,&H4,&H40,&H0,&H60,&H18,&H44,&H0    ::Å┘u
-3118  DATA A,118,&H0,&H0,&H18,&H64,&H0,&H20,&H0,&H10,&H8,&H4,&H0      ::Å┘v
-3119  DATA A,119,&H0,&H60,&H1C,&H20,&H10,&H8,&H30,&H40,&H20,&H1C,&H0  ::Å┘w
-3120  DATA A,120,&H0,&H40,&H0,&H24,&H8,&H10,&H20,&H48,&H0,&H4,&H0     ::Å┘x
-3121  DATA D,121,&H0,&H40,&H0,&H46,&H29,&H10,&H8,&H4,&H2,&H1,&H0      ::Å┘y
-3122  DATA A,122,&H0,&H40,&H0,&H64,&H0,&H54,&H0,&H4C,&H0,&H4,&H0      ::Å┘z
-3123  DATA A,123,&H0,&H0,&H8,&H30,&H46,&H1,&H40,&H1,&H0,&H0,&H0       ::Å┘{
-3124  DATA A,124,&H0,&H40,&H20,&H10,&H0,&H4,&H2,&H1,&H0,&H0,&H0       ::Å┘|
-3125  DATA A,125,&H0,&H0,&H0,&H40,&H1,&H40,&H31,&H6,&H8,&H0,&H0       ::Å┘}
-3126  DATA A,126,&H0,&H2,&H1,&H0,&H1,&H2,&H4,&H0,&H4,&H2,&H0          ::Å┘~
+3032  DATA A,32,&H0,&H0,&H0,&H0,&H0,&H0,&H0,&H0,&H0,&H0,&H0           :'space
+3033  DATA A,33,&H0,&H0,&H40,&H0,&H8,&H4,&H2,&H1,&H0,&H0,&H0          :'!
+3034  DATA A,34,&H0,&H0,&H4,&H2,&H1,&H0,&H4,&H2,&H1,&H0,&H0           :'quote
+3035  DATA A,35,&H0,&H54,&H20,&H1C,&H2,&H55,&H20,&H1C,&H2,&H15,&H0    :'#
+3036  DATA A,36,&H0,&H0,&H24,&H48,&H32,&HC,&H22,&H9,&H12,&H0,&H0      :'$
+3037  DATA A,37,&H0,&H0,&H42,&H21,&H12,&H49,&H24,&H42,&H21,&H0,&H0    :'%
+3038  DATA A,38,&H0,&H30,&H0,&H4A,&H1,&H4C,&H11,&H22,&H50,&H8,&H0     :'&
+3039  DATA A,39,&H0,&H0,&H0,&H4,&H1,&H2,&H1,&H0,&H0,&H0,&H0           :''
+3040  DATA A,40,&H0,&H0,&H0,&H18,&H24,&H42,&H0,&H1,&H0,&H0,&H0        :'(
+3041  DATA A,41,&H0,&H0,&H0,&H40,&H0,&H21,&H12,&HC,&H0,&H0,&H0        :')
+3042  DATA A,42,&H0,&H8,&H20,&H18,&H2,&H1C,&H20,&HC,&H2,&H8,&H0       :'*
+3043  DATA A,43,&H0,&H8,&H0,&H28,&H10,&H8,&H4,&HA,&H0,&H8,&H0         :'+
+3044  DATA D,44,&H0,&H0,&H0,&H40,&H10,&H20,&H10,&H0,&H0,&H0,&H0       :',
+3045  DATA A,45,&H0,&H8,&H0,&H8,&H0,&H8,&H0,&H8,&H0,&H0,&H0           :'-
+3046  DATA A,46,&H0,&H0,&H0,&H40,&H20,&H40,&H20,&H0,&H0,&H0,&H0       :'.
+3047  DATA A,47,&H0,&H0,&H40,&H20,&H10,&H8,&H4,&H2,&H1,&H0,&H0        :'/
+3048  DATA A,48,&H0,&H58,&H24,&H52,&H0,&H49,&H0,&H25,&H12,&HD,&H0     :'0
+3049  DATA A,49,&H0,&H0,&H40,&H0,&H60,&H12,&H48,&H6,&H1,&H0,&H0       :'1
+3050  DATA A,50,&H0,&H40,&H4,&H62,&H0,&H51,&H0,&H49,&H4,&H2,&H0       :'2
+3051  DATA A,51,&H0,&H20,&H40,&H1,&H48,&H1,&H4C,&H31,&H2,&H1,&H0      :'3
+3052  DATA A,52,&H0,&H0,&H10,&H8,&H10,&H44,&H30,&HA,&H14,&H3,&H0      :'4
+3053  DATA A,53,&H0,&H0,&H20,&H44,&H2,&H45,&H0,&H45,&H20,&H19,&H0     :'5
+3054  DATA A,54,&H0,&H30,&H8,&H44,&H0,&H4A,&H0,&H49,&H20,&H10,&H0     :'6
+3055  DATA A,55,&H0,&H41,&H20,&H11,&H8,&H1,&H4,&H1,&H2,&H1,&H0        :'7
+3056  DATA A,56,&H0,&H20,&H14,&H42,&H8,&H41,&H8,&H21,&H14,&H2,&H0     :'8
+3057  DATA A,57,&H0,&H0,&H4,&H4A,&H0,&H29,&H0,&H11,&H8,&H6,&H0        :'9
+3058  DATA A,58,&H0,&H0,&H0,&H20,&H14,&H22,&H14,&H2,&H0,&H0,&H0       :':
+3059  DATA D,59,&H0,&H0,&H40,&H14,&H22,&H14,&H2,&H0,&H0,&H0,&H0       :';
+3060  DATA A,60,&H0,&H8,&H10,&H0,&H24,&H0,&H42,&H0,&H1,&H0,&H0        :'<
+3061  DATA A,61,&H0,&H10,&H0,&H14,&H0,&H14,&H0,&H14,&H0,&H4,&H0       :'=
+3062  DATA A,62,&H0,&H0,&H40,&H0,&H21,&H0,&H12,&H0,&H4,&H8,&H0        :'>
+3063  DATA A,63,&H0,&H0,&H2,&H40,&H1,&H10,&H1,&H8,&H1,&H6,&H0         :'?
+3064  DATA A,64,&H0,&H30,&H48,&H4,&H42,&H18,&H41,&H14,&H9,&H6,&H0     :'@
+3065  DATA A,65,&H0,&H60,&H18,&H4,&H12,&H1,&H10,&H41,&H32,&HC,&H0     :'A
+3066  DATA A,66,&H0,&H40,&H31,&HC,&H43,&H8,&H41,&H8,&H31,&H6,&H0      :'B
+3067  DATA A,67,&H0,&H30,&H4C,&H2,&H41,&H0,&H41,&H20,&H3,&H0,&H0      :'C
+3068  DATA A,68,&H0,&H40,&H31,&HC,&H43,&H0,&H41,&H20,&H19,&H6,&H0     :'D
+3069  DATA A,69,&H0,&H60,&H18,&H46,&H9,&H40,&H9,&H40,&H1,&H0,&H0      :'E
+3070  DATA A,70,&H0,&H60,&H18,&H6,&H9,&H0,&H9,&H0,&H1,&H0,&H0         :'F
+3071  DATA A,71,&H0,&H30,&H4C,&H2,&H41,&H8,&H41,&H28,&H13,&H8,&H0     :'G
+3072  DATA A,72,&H0,&H60,&H18,&H6,&H9,&H0,&H48,&H30,&HC,&H3,&H0       :'H
+3073  DATA A,73,&H0,&H0,&H40,&H0,&H61,&H18,&H47,&H0,&H1,&H0,&H0       :'I
+3074  DATA A,74,&H0,&H30,&H40,&H0,&H40,&H1,&H30,&HD,&H2,&H1,&H0       :'J
+3075  DATA A,75,&H0,&H60,&H18,&H6,&H9,&H0,&H14,&H60,&H2,&H1,&H0       :'K
+3076  DATA A,76,&H0,&H60,&H18,&H46,&H1,&H40,&H0,&H40,&H0,&H0,&H0      :'L
+3077  DATA A,77,&H0,&H60,&H1C,&H3,&H4,&H18,&H4,&H62,&H1C,&H3,&H0      :'M
+3078  DATA A,78,&H0,&H60,&H1C,&H3,&H4,&H8,&H10,&H60,&H1C,&H3,&H0      :'N
+3079  DATA A,79,&H0,&H30,&HC,&H42,&H0,&H41,&H0,&H21,&H18,&H6,&H0      :'O
+3080  DATA A,80,&H0,&H60,&H18,&H6,&H9,&H0,&H9,&H0,&H9,&H6,&H0         :'P
+3081  DATA A,81,&H0,&H30,&HC,&H42,&H0,&H41,&H10,&H21,&H58,&H6,&H0     :'Q
+3082  DATA A,82,&H0,&H60,&H18,&H6,&H9,&H10,&H9,&H20,&H49,&H6,&H0      :'R
+3083  DATA A,83,&H0,&H20,&H46,&H0,&H49,&H0,&H49,&H0,&H31,&H2,&H0      :'S
+3084  DATA A,84,&H0,&H0,&H0,&H1,&H60,&H19,&H6,&H1,&H0,&H1,&H0         :'T
+3085  DATA A,85,&H0,&H70,&HC,&H43,&H0,&H40,&H0,&H30,&HC,&H3,&H0       :'U
+3086  DATA A,86,&H0,&H8,&H16,&H21,&H40,&H0,&H20,&H10,&HC,&H3,&H0      :'V
+3087  DATA A,87,&H0,&H60,&H1C,&H23,&H10,&HC,&H10,&H60,&H1C,&H3,&H0    :'W
+3088  DATA A,88,&H0,&H40,&H20,&H11,&HA,&H4,&H8,&H72,&H1,&H0,&H0       :'X
+3089  DATA A,89,&H0,&H0,&H0,&H43,&H24,&H10,&H8,&H4,&H2,&H1,&H0        :'Y
+3090  DATA A,90,&H0,&H40,&H20,&H41,&H10,&H49,&H4,&H41,&H2,&H1,&H0     :'Z
+3091  DATA A,91,&H0,&H60,&H18,&H46,&H1,&H40,&H1,&H0,&H1,&H0,&H0       :'[
+3092  DATA A,92,&H0,&H0,&H0,&H1,&H2,&HC,&H30,&H40,&H0,&H0,&H0         :'/
+3093  DATA A,93,&H0,&H0,&H40,&H0,&H40,&H1,&H40,&H31,&HC,&H3,&H0       :']
+3094  DATA A,94,&H0,&H4,&H0,&H2,&H0,&H1,&H2,&H4,&H0,&H0,&H0           :'^
+3095  DATA D,95,&H0,&H40,&H0,&H40,&H0,&H40,&H0,&H40,&H0,&H40,&H0      :'_
+3096  DATA A,96,&H0,&H0,&H0,&H0,&H1,&H2,&H1,&H4,&H0,&H0,&H0           :'`
+3097  DATA A,97,&H0,&H20,&H50,&H0,&H54,&H0,&H54,&H20,&H54,&H8,&H0     :'a
+3098  DATA A,98,&H0,&H60,&H18,&H6,&H41,&H4,&H40,&H4,&H20,&H18,&H0     :'b
+3099  DATA A,99,&H0,&H30,&H8,&H40,&H4,&H40,&H4,&H40,&H4,&H0,&H0       :'c
+3100  DATA A,100,&H0,&H30,&H48,&H0,&H44,&H0,&H44,&H30,&HC,&H3,&H0     :'d
+3101  DATA A,101,&H0,&H30,&H48,&H10,&H44,&H10,&H44,&H10,&H4,&H8,&H0   :'e
+3102  DATA A,102,&H0,&H0,&H0,&H44,&H30,&HC,&H2,&H5,&H0,&H1,&H0        :'f
+3103  DATA D,103,&H0,&H4C,&H2,&H50,&H1,&H50,&H21,&H18,&H7,&H0,&H0     :'g
+3104  DATA A,104,&H0,&H60,&H18,&H6,&H9,&H0,&H4,&H40,&H24,&H18,&H0     :'h
+3105  DATA A,105,&H0,&H0,&H40,&H0,&H64,&H10,&H4C,&H1,&H0,&H0,&H0      :'i
+3106  DATA D,106,&H0,&H0,&H20,&H40,&H0,&H40,&H20,&H11,&H8,&H7,&H0     :'j
+3107  DATA A,107,&H0,&H0,&H60,&H18,&H6,&H11,&H20,&H48,&H0,&H4,&H0     :'k
+3108  DATA A,108,&H0,&H40,&H0,&H60,&H19,&H46,&H1,&H0,&H0,&H0,&H0      :'l
+3109  DATA A,109,&H0,&H40,&H24,&H18,&H44,&H20,&H1C,&H40,&H24,&H18,&H0 :'m
+3110  DATA A,110,&H0,&H64,&H18,&H4,&H0,&H4,&H40,&H24,&H18,&H0,&H0     :'n
+3111  DATA A,111,&H0,&H30,&H48,&H4,&H40,&H4,&H40,&H24,&H18,&H0,&H0    :'o
+3112  DATA D,112,&H0,&H40,&H30,&HC,&H13,&H0,&H11,&H0,&H9,&H6,&H0      :'p
+3113  DATA D,113,&H0,&H0,&HC,&H12,&H1,&H50,&H21,&H58,&H7,&H0,&H0      :'q
+3114  DATA A,114,&H0,&H40,&H20,&H1C,&H0,&H8,&H4,&H0,&H4,&H8,&H0       :'r
+3115  DATA A,115,&H0,&H40,&H0,&H48,&H10,&H44,&H10,&H24,&H0,&H4,&H0    :'s
+3116  DATA A,116,&H0,&H0,&H4,&H30,&H4C,&H2,&H45,&H0,&H24,&H0,&H0      :'t
+3117  DATA A,117,&H0,&H0,&H30,&H48,&H4,&H40,&H0,&H60,&H18,&H44,&H0    :'u
+3118  DATA A,118,&H0,&H0,&H18,&H64,&H0,&H20,&H0,&H10,&H8,&H4,&H0      :'v
+3119  DATA A,119,&H0,&H60,&H1C,&H20,&H10,&H8,&H30,&H40,&H20,&H1C,&H0  :'w
+3120  DATA A,120,&H0,&H40,&H0,&H24,&H8,&H10,&H20,&H48,&H0,&H4,&H0     :'x
+3121  DATA D,121,&H0,&H40,&H0,&H46,&H29,&H10,&H8,&H4,&H2,&H1,&H0      :'y
+3122  DATA A,122,&H0,&H40,&H0,&H64,&H0,&H54,&H0,&H4C,&H0,&H4,&H0      :'z
+3123  DATA A,123,&H0,&H0,&H8,&H30,&H46,&H1,&H40,&H1,&H0,&H0,&H0       :'{
+3124  DATA A,124,&H0,&H40,&H20,&H10,&H0,&H4,&H2,&H1,&H0,&H0,&H0       :'|
+3125  DATA A,125,&H0,&H0,&H0,&H40,&H1,&H40,&H31,&H6,&H8,&H0,&H0       :'}
+3126  DATA A,126,&H0,&H2,&H1,&H0,&H1,&H2,&H4,&H0,&H4,&H2,&H0          :'~
 3127  DATA A,127,&H0,&H40,&H8,&H60,&H18,&H46,&H9,&H40,&H1,&H42,&H0
 3128 '*** above character is British pound sign
 ```

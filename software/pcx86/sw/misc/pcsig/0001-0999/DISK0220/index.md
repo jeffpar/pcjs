@@ -205,7 +205,7 @@ machines:
 1440 READ PRTSC%(X)                     'read data statement
 1450 NEXT X                             'loop until done
 1460 RETURN                             'done, so return
-1470 DATA &H8955,&HCDE5,&H5D05,&H00CB:  :Å┘interface code
+1470 DATA &H8955,&HCDE5,&H5D05,&H00CB:  'interface code
 1480 '
 1490 '****************** CALL INTERFACE TO PRINT_SCREEN **********************
 1500 '
@@ -309,7 +309,7 @@ machines:
 870 READ PRTSC%(X)                              'read data statement
 880 NEXT X                                      'loop until odne
 890 RETURN                                      'done. so return
-900 DATA &H8955,&HCDE5,&H5D05,&H00CB:           :Å┘interface code
+900 DATA &H8955,&HCDE5,&H5D05,&H00CB:           'interface code
 910 '
 920 '********************* CALL PRINT_SCREEN INTERFACE ************************
 930 '

@@ -1741,65 +1741,65 @@ machines:
 1010 P = 56
 1020 FOR J=1 TO P
 1030 READ AA$(J),N(J)
-1040 DATA "ALPHAHEX.BAS",1:     Å LN  2000
-1050 DATA "BLUEBERY.BAS",2:     Å     2010
-1060 DATA "BLUEBERY.DOC",3:     Å     2020
-1070 DATA "BLUEBRY2.DOC",4:     Å     2030
-1080 DATA "BLUEMENU.BAS",5:     Å     2040
-1090 DATA "BOXINBOX.BAS",6:     Å LN  2050
-1100 DATA "BOXINPUT.BAS",7:     Å     2060
-1110 DATA "BUSCHECK.BAS",8:     Å     2070
-1120 DATA "CALULATE.BAS",9:     Å     2080
-1130 DATA "CHEKFORM.BAS",10:    Å     2090
-1140 DATA "CHR$PRNT.BAS",11:    Å LN  2100
-1150 DATA "CIRCLE  .GRA",12:    Å     2110
-1160 DATA "COLORSEE.CLR",13:    Å     2120
-1170 DATA "COMPOUND.BAS",14:    Å     2130
-1180 DATA "D&CFORM .BAS",15:    Å     2140
-1190 DATA "EASYRITE.BAS",16:    Å     2145
-1200 DATA "EASYWORD.BAS",17:    Å LN  2150
-1210 DATA "EPSONSET.BAS",18:    Å     2160
-1220 DATA "ESCKEY  .BAS",19:    Å     2170
-1230 DATA "FILEDATE.BAS",20:    Å     2180
-1240 DATA "GASFORM .BAS",21:    Å     2190
-1250 DATA "GENLEGER.BAS",22:    Å     2195
-1260 DATA "GLEGER.DAT  ",23:    Å     2197
-1270 DATA "HEADCLN .BAS",24:    Å LN  2200
-1280 DATA "HEXPRINT.BAS",25:    Å     2210
-1290 DATA "HEXSAY  .BAS",26:    Å     2220
-1300 DATA "IBMLABEL.BAS",27:    Å     2230
-1310 DATA "KEYSET  .BAS",28:    Å     2240
-1320 DATA "LABLFILE.BAS",29:    Å LN  2250
-1330 DATA "LISTSKIP.10P",30:    Å     2252
-1340 DATA "LISTSKIP,17P",31:    Å     2255
-1350 DATA "LPT12SET.BAS",32:    Å     2260
-1360 DATA "MENUPRNT.BAS",33:    Å     2270
-1370 DATA "NICELIST.BAS",34:    Å     2290
-1380 DATA "PC-COLOR.BAS",35:    Å LN  2300
-1390 DATA "PCADD   .GRA",36:    Å     2310
-1400 DATA "PEEKPRNT.BAS",37:    Å     2320
-1410 DATA "PRNTCALL.BAS",38:    Å     2330
-1420 DATA "PROGHEAD.BAS",39:    Å     2340
-1430 DATA "QUICKBOX.CLR",40:    Å LN  2350
-1440 DATA "RANDSEED.BAS",41:    Å     2360
-1450 DATA "SAVINGS .BAS",42:    Å     2380
-1460 DATA "SHOWBOX .BAS",43:    Å     2390
-1470 DATA "SIXBOXES.BAS",44:    Å LN  2400
-1480 DATA "STARTUP .BAS",45:    Å     2410
-1490 DATA "STARTUP .CLR",46:    Å     2420
-1500 DATA "TASKLIST.BAS",47:    Å     2430
-1510 DATA "TESTWRIT.BAS",48:    Å     2462
-1520 DATA "TESTWRIT.DOC",49:    Å     2464
-1530 DATA "TIMESHOW.BAS",50:    Å     2460
-1540 DATA "WEIGHTFM.BAS",51:    Å     2470
-1550 DATA "YESORNO .BAS",52:    Å     2480
-1560 DATA "YOURMENU.BAS",53:    Å     2510
-1570 DATA "ZIPCLEAR.BAS",54:    Å     2520
-1580 DATA "   README   ",55:    Å     2530
-1590 DATA "     GO     ",56:    Å     2540
-1600 DATA "--------.BAS",57:    Å LN  2550
-1610 DATA "--------.BAS",58:    Å     2560
-1620 DATA "--------.BAS",59:    Å     2590
+1040 DATA "ALPHAHEX.BAS",1:     REM LN  2000
+1050 DATA "BLUEBERY.BAS",2:     REM     2010
+1060 DATA "BLUEBERY.DOC",3:     REM     2020
+1070 DATA "BLUEBRY2.DOC",4:     REM     2030
+1080 DATA "BLUEMENU.BAS",5:     REM     2040
+1090 DATA "BOXINBOX.BAS",6:     REM LN  2050
+1100 DATA "BOXINPUT.BAS",7:     REM     2060
+1110 DATA "BUSCHECK.BAS",8:     REM     2070
+1120 DATA "CALULATE.BAS",9:     REM     2080
+1130 DATA "CHEKFORM.BAS",10:    REM     2090
+1140 DATA "CHR$PRNT.BAS",11:    REM LN  2100
+1150 DATA "CIRCLE  .GRA",12:    REM     2110
+1160 DATA "COLORSEE.CLR",13:    REM     2120
+1170 DATA "COMPOUND.BAS",14:    REM     2130
+1180 DATA "D&CFORM .BAS",15:    REM     2140
+1190 DATA "EASYRITE.BAS",16:    REM     2145
+1200 DATA "EASYWORD.BAS",17:    REM LN  2150
+1210 DATA "EPSONSET.BAS",18:    REM     2160
+1220 DATA "ESCKEY  .BAS",19:    REM     2170
+1230 DATA "FILEDATE.BAS",20:    REM     2180
+1240 DATA "GASFORM .BAS",21:    REM     2190
+1250 DATA "GENLEGER.BAS",22:    REM     2195
+1260 DATA "GLEGER.DAT  ",23:    REM     2197
+1270 DATA "HEADCLN .BAS",24:    REM LN  2200
+1280 DATA "HEXPRINT.BAS",25:    REM     2210
+1290 DATA "HEXSAY  .BAS",26:    REM     2220
+1300 DATA "IBMLABEL.BAS",27:    REM     2230
+1310 DATA "KEYSET  .BAS",28:    REM     2240
+1320 DATA "LABLFILE.BAS",29:    REM LN  2250
+1330 DATA "LISTSKIP.10P",30:    REM     2252
+1340 DATA "LISTSKIP,17P",31:    REM     2255
+1350 DATA "LPT12SET.BAS",32:    REM     2260
+1360 DATA "MENUPRNT.BAS",33:    REM     2270
+1370 DATA "NICELIST.BAS",34:    REM     2290
+1380 DATA "PC-COLOR.BAS",35:    REM LN  2300
+1390 DATA "PCADD   .GRA",36:    REM     2310
+1400 DATA "PEEKPRNT.BAS",37:    REM     2320
+1410 DATA "PRNTCALL.BAS",38:    REM     2330
+1420 DATA "PROGHEAD.BAS",39:    REM     2340
+1430 DATA "QUICKBOX.CLR",40:    REM LN  2350
+1440 DATA "RANDSEED.BAS",41:    REM     2360
+1450 DATA "SAVINGS .BAS",42:    REM     2380
+1460 DATA "SHOWBOX .BAS",43:    REM     2390
+1470 DATA "SIXBOXES.BAS",44:    REM LN  2400
+1480 DATA "STARTUP .BAS",45:    REM     2410
+1490 DATA "STARTUP .CLR",46:    REM     2420
+1500 DATA "TASKLIST.BAS",47:    REM     2430
+1510 DATA "TESTWRIT.BAS",48:    REM     2462
+1520 DATA "TESTWRIT.DOC",49:    REM     2464
+1530 DATA "TIMESHOW.BAS",50:    REM     2460
+1540 DATA "WEIGHTFM.BAS",51:    REM     2470
+1550 DATA "YESORNO .BAS",52:    REM     2480
+1560 DATA "YOURMENU.BAS",53:    REM     2510
+1570 DATA "ZIPCLEAR.BAS",54:    REM     2520
+1580 DATA "   README   ",55:    REM     2530
+1590 DATA "     GO     ",56:    REM     2540
+1600 DATA "--------.BAS",57:    REM LN  2550
+1610 DATA "--------.BAS",58:    REM     2560
+1620 DATA "--------.BAS",59:    REM     2590
 1630 NEXT J
 1640 RETURN
 1650 GOTO 210
@@ -7228,70 +7228,70 @@ machines:
 1010 P = 60
 1020 FOR J=1 TO P
 1030 READ AA$(J),N(J)
-1040 DATA "--------.---",1:     Å LN  2000
-1050 DATA "--------.---",2:     Å     2010
-1060 DATA "--------.---",3:     Å     2020
-1070 DATA "--------.---",4:     Å     2030
-1080 DATA "--------.---",5:     Å     2040
-1090 DATA "--------.---",6:     Å LN  2050
-1100 DATA "--------.---",7:     Å     2060
-1110 DATA "--------.---",8:     Å     2070
-1120 DATA "--------.---",9:     Å     2080
-1130 DATA "--------.---",10:    Å     2090
-1140 DATA "--------.---",11:    Å LN  2100
-1150 DATA "--------.---",12:    Å     2110
-1160 DATA "--------.---",13:    Å     2120
-1170 DATA "--------.---",14:    Å     2130
-1180 DATA "--------.---",15:    Å     2140
-1190 DATA "--------.---",16:    Å LN  2150
-1200 DATA "--------.---",17:    Å     2160
-1210 DATA "--------.---",18:    Å     2170
-1220 DATA "--------.---",19:    Å     2180
-1230 DATA "--------.---",20:    Å     2190
-1240 DATA "--------.---",21:    Å LN  2200
-1250 DATA "--------.---",22:    Å     2210
-1260 DATA "--------.---",23:    Å     2220
-1270 DATA "--------.---",24:    Å     2230
-1280 DATA "--------.---",25:    Å     2240
-1290 DATA "--------.---",26:    Å LN  2250
-1300 DATA "--------.---",27:    Å     2260
-1310 DATA "--------.---",28:    Å     2270
-1320 DATA "--------.---",29:    Å     2280
-1330 DATA "--------.---",30:    Å     2290
-1340 DATA "--------.---",31:    Å     2300
-1350 DATA "--------.---",32:    Å     2310
-1360 DATA "--------.---",33:    Å     2320
-1370 DATA "--------.---",34:    Å     2330
-1380 DATA "--------.---",35:    Å     2340
-1390 DATA "--------.---",36:    Å LN  2350
-1400 DATA "--------.---",37:    Å     2360
-1410 DATA "--------.---",38:    Å     2370
-1420 DATA "--------.---",39:    Å     2380
-1430 DATA "--------.---",40:    Å     2390
-1440 DATA "--------.---",41:    Å LN  2400
-1450 DATA "--------.---",42:    Å     2410
-1460 DATA "--------.---",43:    Å     2420
-1470 DATA "--------.---",44:    Å     2430
-1480 DATA "--------.---",45:    Å     2440
-1490 DATA "--------.---",46:    Å LN  2450
-1500 DATA "--------.---",47:    Å     2460
-1510 DATA "--------.---",48:    Å     2470
-1520 DATA "--------.---",49:    Å     2480
-1530 DATA "--------.---",50:    Å     2490
-1540 DATA "--------.---",51:    Å LN  2500
-1550 DATA "--------.---",52:    Å     2510
-1560 DATA "--------.---",53:    Å     2520
-1570 DATA "--------.---",54:    Å     2530
-1580 DATA "--------.---",55:    Å     2540
-1590 DATA "--------.---",56:    Å LN  2550
-1600 DATA "--------.---",57:    Å     2560
-1610 DATA "--------.---",58:    Å     2570
-1620 DATA "--------.---",59:    Å     2580
-1630 DATA "--------.---",60:    Å     2590
-1640 DATA "--------.---",61:    Å LN  2600
-1650 DATA "--------.---",62:    Å     2610
-1660 DATA "--------.---",63:    Å     2620
-1670 DATA "--------.---",64:    Å     2630
+1040 DATA "--------.---",1:     REM LN  2000
+1050 DATA "--------.---",2:     REM     2010
+1060 DATA "--------.---",3:     REM     2020
+1070 DATA "--------.---",4:     REM     2030
+1080 DATA "--------.---",5:     REM     2040
+1090 DATA "--------.---",6:     REM LN  2050
+1100 DATA "--------.---",7:     REM     2060
+1110 DATA "--------.---",8:     REM     2070
+1120 DATA "--------.---",9:     REM     2080
+1130 DATA "--------.---",10:    REM     2090
+1140 DATA "--------.---",11:    REM LN  2100
+1150 DATA "--------.---",12:    REM     2110
+1160 DATA "--------.---",13:    REM     2120
+1170 DATA "--------.---",14:    REM     2130
+1180 DATA "--------.---",15:    REM     2140
+1190 DATA "--------.---",16:    REM LN  2150
+1200 DATA "--------.---",17:    REM     2160
+1210 DATA "--------.---",18:    REM     2170
+1220 DATA "--------.---",19:    REM     2180
+1230 DATA "--------.---",20:    REM     2190
+1240 DATA "--------.---",21:    REM LN  2200
+1250 DATA "--------.---",22:    REM     2210
+1260 DATA "--------.---",23:    REM     2220
+1270 DATA "--------.---",24:    REM     2230
+1280 DATA "--------.---",25:    REM     2240
+1290 DATA "--------.---",26:    REM LN  2250
+1300 DATA "--------.---",27:    REM     2260
+1310 DATA "--------.---",28:    REM     2270
+1320 DATA "--------.---",29:    REM     2280
+1330 DATA "--------.---",30:    REM     2290
+1340 DATA "--------.---",31:    REM     2300
+1350 DATA "--------.---",32:    REM     2310
+1360 DATA "--------.---",33:    REM     2320
+1370 DATA "--------.---",34:    REM     2330
+1380 DATA "--------.---",35:    REM     2340
+1390 DATA "--------.---",36:    REM LN  2350
+1400 DATA "--------.---",37:    REM     2360
+1410 DATA "--------.---",38:    REM     2370
+1420 DATA "--------.---",39:    REM     2380
+1430 DATA "--------.---",40:    REM     2390
+1440 DATA "--------.---",41:    REM LN  2400
+1450 DATA "--------.---",42:    REM     2410
+1460 DATA "--------.---",43:    REM     2420
+1470 DATA "--------.---",44:    REM     2430
+1480 DATA "--------.---",45:    REM     2440
+1490 DATA "--------.---",46:    REM LN  2450
+1500 DATA "--------.---",47:    REM     2460
+1510 DATA "--------.---",48:    REM     2470
+1520 DATA "--------.---",49:    REM     2480
+1530 DATA "--------.---",50:    REM     2490
+1540 DATA "--------.---",51:    REM LN  2500
+1550 DATA "--------.---",52:    REM     2510
+1560 DATA "--------.---",53:    REM     2520
+1570 DATA "--------.---",54:    REM     2530
+1580 DATA "--------.---",55:    REM     2540
+1590 DATA "--------.---",56:    REM LN  2550
+1600 DATA "--------.---",57:    REM     2560
+1610 DATA "--------.---",58:    REM     2570
+1620 DATA "--------.---",59:    REM     2580
+1630 DATA "--------.---",60:    REM     2590
+1640 DATA "--------.---",61:    REM LN  2600
+1650 DATA "--------.---",62:    REM     2610
+1660 DATA "--------.---",63:    REM     2620
+1670 DATA "--------.---",64:    REM     2630
 1700 NEXT J
 1710 RETURN
 1900 '****************** PROGRAM SELECTION RUN STATEMENTS *********************
