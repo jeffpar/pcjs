@@ -17,10 +17,16 @@ machines:
 
 ### Directory of PC-SIG Library Disk #2063
 
-     Volume in drive A has no label
+     Volume in drive A is DISK2063
      Directory of A:\
 
-    GO       BAT        40   8-12-87   2:52a
-    NOTE     TXT       289  10-24-88   8:21a
-            2 file(s)        329 bytes
-                          159232 bytes free
+    FILE2063 TXT      2887   2-21-90   7:06a
+    GO       BAT        38  12-31-80   5:37p
+    GO       TXT       771   2-21-90   7:06a
+    SST02            65400   6-09-88   8:54a
+    SST03            65400   6-09-88   9:11a
+    SST04            65400   6-09-88   9:23a
+    SST05            65400   6-09-88   9:35a
+    SST06            65400   6-09-88   9:45a
+            8 file(s)     330696 bytes
+                           29696 bytes free

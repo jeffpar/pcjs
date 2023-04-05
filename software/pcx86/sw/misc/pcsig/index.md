@@ -32,6 +32,15 @@ Also, the following disks were apparently "double-zipped":
   - DISK0316.ZIP contained DISKO316.ZIP (note the letter 'O')
   - DISK0912.ZIP contained DISK0912.ZIP
 
+THe following disks were "back-filled" from the 8th Edition (Apr 1990) CD-ROM (spanning disks 1-2121), since they
+had been removed from the 9th Edition:
+
+  - DISK0126, DISK0232, DISK0395, DISK0601, DISK0623, DISK0624, DISK0626, DISK0712, DISK0757, DISK0758
+  - DISK0792, DISK0914, DISK0969, DISK1024, DISK1036, DISK1061, DISK1119, DISK1137, DISK1185, DISK1195
+  - DISK1213, DISK1257, DISK1272, DISK1355, DISK1363, DISK1413, DISK1414, DISK1493, DISK1555, DISK1583
+  - DISK1608, DISK1649, DISK1707, DISK1708, DISK1710, DISK1752, DISK1780, DISK1813, DISK1863, DISK1908
+  - DISK1915, DISK1916, DISK1969, DISK1979, DISK1980, DISK1981, DISK2000, DISK2030, DISK2063
+
 Disks 2486-2804 were initially populated from the 10th Edition (Sep 1991) CD-ROM.
 
 Disks 2805-3404 were initially populated from the 12th Edition (Mar 1993) CD-ROM, which was missing the following disks:

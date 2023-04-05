@@ -17,10 +17,16 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1363
 
-     Volume in drive A has no label
+     Volume in drive A is DISK1363
      Directory of A:\
 
-    GO       BAT        40   8-12-87   2:52a
-    NOTE     TXT       289  10-24-88   8:21a
-            2 file(s)        329 bytes
-                          159232 bytes free
+    FAAREGUL DTA    107576  12-21-87   3:00a
+    FILE1363 TXT       759   4-27-89   9:10a
+    GO       BAT        38   4-24-89   9:39a
+    GO       TXT       540   4-27-89   9:09a
+    PHYSACFT DTA    129272  12-21-87   3:00a
+    READ     BAT        39   4-27-89   9:07a
+    READ     ME        403  12-31-80   4:08p
+    WEATHERQ DTA    102152  12-21-87   3:00a
+            8 file(s)     340779 bytes
+                           16384 bytes free

@@ -17,10 +17,16 @@ machines:
 
 ### Directory of PC-SIG Library Disk #0626
 
-     Volume in drive A has no label
+     Volume in drive A is DISK0626
      Directory of A:\
 
-    GO       BAT        40   8-12-87   2:52a
-    NOTE     TXT       289  10-24-88   8:21a
-            2 file(s)        329 bytes
-                          159232 bytes free
+    DOC      BAT       247  12-01-84   1:50a
+    FILES626 TXT      1024   1-01-80   7:09a
+    GO       BAT       509   1-05-98   9:43a
+    JR-DIAL  COM     41590  12-01-84   1:50a
+    PC-DIAL  COM     41242  12-01-84   1:51a
+    PC-DIAL  DOC     49985  12-01-84   1:50a
+    PC-DIAL  PRO       286  12-01-84   1:50a
+    READ     ME       1098  12-01-84   1:50a
+            8 file(s)     135981 bytes
+                           22528 bytes free

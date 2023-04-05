@@ -3,9 +3,9 @@ layout: page
 title: "PC-SIG Library Disk #1413"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1413/
 machines:
-  - id: ibm5150
+  - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
@@ -13,7 +13,7 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-{% include machine.html id="ibm5150" %}
+{% include machine.html id="ibm5170" %}
 
 {% comment %}info_begin{% endcomment %}
 
@@ -38,10 +38,28 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1413
 
-     Volume in drive A has no label
+     Volume in drive A is DISK1413
      Directory of A:\
 
-    GO       BAT        40   8-12-87   2:52a
-    NOTE     TXT       289  10-24-88   8:21a
-            2 file(s)        329 bytes
-                          159232 bytes free
+    ALBUMS   REC      6000   1-20-88   4:12a
+    ARTIST   LST      4240   5-02-87   2:46p
+    FILE1413 TXT      1985   6-01-89   2:37a
+    GO       BAT        38   4-24-89   9:39a
+    GO       TXT       694   6-01-89   2:51a
+    LABEL    LST      1065   4-29-87   5:07a
+    MANUAL   BAT       147   6-01-89   2:54a
+    PAGE     COM       325   1-06-87   8:21a
+    README   DOC     51466   7-09-88   9:23a
+    RNT      000      5888   1-20-88   4:06a
+    RNT      001      5376   1-20-88   4:06a
+    RNT      002     29952   1-20-88   4:07a
+    RNT      COM     38386   1-20-88   4:07a
+    SETUP    COL        72  12-31-80   5:35p
+    SETUP    COM     29143   7-11-88   4:29a
+    SETUP    DAT        72   7-09-88   8:53a
+    SONGS    REC      9900   1-20-88   4:12a
+    SORT     LST      3692   1-20-88   4:14a
+    START    COM     13710   1-03-88   6:35a
+    VIEW     BAT        42   6-01-89   2:53a
+           20 file(s)     202193 bytes
+                          107520 bytes free

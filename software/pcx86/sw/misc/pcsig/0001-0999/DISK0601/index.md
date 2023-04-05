@@ -17,10 +17,13 @@ machines:
 
 ### Directory of PC-SIG Library Disk #0601
 
-     Volume in drive A has no label
+     Volume in drive A is DISK0601
      Directory of A:\
 
-    GO       BAT        40   8-12-87   2:52a
-    NOTE     TXT       289  10-24-88   8:21a
-            2 file(s)        329 bytes
-                          159232 bytes free
+    DREAM3   ARC    194187   1-15-87   5:13p
+    FILES601 TXT      1313   2-04-87   3:03a
+    INSTFLPY BAT       359   1-14-87   9:21a
+    INSTHARD BAT       440   1-14-87   9:23a
+    PKXARC   COM      9984   9-11-86   5:00p
+            5 file(s)     206283 bytes
+                          113664 bytes free

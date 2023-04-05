@@ -29,10 +29,16 @@ machines:
 
 ### Directory of PC-SIG Library Disk #0623
 
-     Volume in drive A has no label
+     Volume in drive A is DISK0623
      Directory of A:\
 
-    GO       BAT        40   8-12-87   2:52a
-    NOTE     TXT       289  10-24-88   8:21a
-            2 file(s)        329 bytes
-                          159232 bytes free
+    ASSOC    EXE     62000  12-17-88   2:31a
+    FILE0623 TXT      1407  12-12-89   9:03a
+    FREQ     EXE     43840  12-17-88   5:26a
+    GO       BAT        29  12-12-89   7:26a
+    GO       TXT       961  12-12-89   7:38a
+    NONPARA  EXE     57728  12-17-88   2:27a
+    PARATEST EXE     86144  12-17-88   2:23a
+    REGRESS  EXE     74352  12-17-88   3:34a
+            8 file(s)     326461 bytes
+                           31744 bytes free

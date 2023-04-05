@@ -17,10 +17,28 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1024
 
-     Volume in drive A has no label
+     Volume in drive A is DISK1024
      Directory of A:\
 
-    GO       BAT        40   8-12-87   2:52a
-    NOTE     TXT       289  10-24-88   8:21a
-            2 file(s)        329 bytes
-                          159232 bytes free
+    CONFIG   FX         49   3-15-88   8:50a
+    FILE1024 TXT      1300   8-24-89   2:33a
+    INSTALL  BAT       292   3-16-88   1:24a
+    TIMETRAK FOX     62888   6-26-89   2:11a
+    TTAR     DBF       512   8-05-87  12:26p
+    TTAR1    NDX      1024   3-15-88   9:28a
+    TTAR2    NDX      1024   3-15-88   9:28a
+    TTCASH   DBF       389   8-05-87  12:26p
+    TTCASH1  NDX      1024   3-15-88   9:28a
+    TTCASH2  NDX      1024   3-15-88   9:28a
+    TTCLNT   DBF       481   3-15-88   2:46a
+    TTCLNT1  NDX      1024   3-15-88   9:28a
+    TTHELP   DBF     13713   5-23-89   3:25p
+    TTHELP   NDX      6144   5-23-89   3:34p
+    TTNOTES  DBF       512   8-06-87   1:14a
+    TTNOTES1 NDX      1024   3-15-88   9:28a
+    TTSYS    DBF       386   3-15-88   9:59a
+    TTWORK   DBF       417   3-15-88   2:46a
+    TTWORK1  NDX      1024   3-15-88   9:29a
+    TTWORK2  NDX      1024   3-15-88   9:29a
+           20 file(s)      95275 bytes
+                           63488 bytes free

@@ -3,9 +3,9 @@ layout: page
 title: "PC-SIG Library Disk #1257"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1257/
 machines:
-  - id: ibm5150
+  - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
@@ -13,7 +13,7 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-{% include machine.html id="ibm5150" %}
+{% include machine.html id="ibm5170" %}
 
 {% comment %}info_begin{% endcomment %}
 
@@ -51,10 +51,17 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1257
 
-     Volume in drive A has no label
+     Volume in drive A is DISK1257
      Directory of A:\
 
-    GO       BAT        40   8-12-87   2:52a
-    NOTE     TXT       289  10-24-88   8:21a
-            2 file(s)        329 bytes
-                          159232 bytes free
+    DISKWIZ  ARC     83573   2-13-89   4:00p
+    DISKWIZ  COM     35926   2-13-89   4:00p
+    DWIZDEMO COM     39096   7-28-88   5:00p
+    DWMANUAL DOC     56019   7-28-88   5:00p
+    FILE1257 TXT      2296   2-27-89   8:27a
+    GO       BAT        38  10-19-87   8:56a
+    GO       TXT      1002   2-24-89   4:57a
+    MANUAL   BAT       147   1-19-89   1:21a
+    README   DOC      5446   2-13-89   4:00p
+            9 file(s)     223543 bytes
+                           93184 bytes free
