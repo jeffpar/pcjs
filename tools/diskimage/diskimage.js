@@ -310,14 +310,18 @@ function getTarget(sTarget)
 /**
  * isText(data)
  *
+ * It can be hard to differentiate between a binary file and a text file that's using
+ * lots of IBM PC graphics characters.  Control characters are often red flags, but they
+ * can also be interpreted as graphics characters.
+ *
  * @param {string} data
- * @return {boolean} true if sData is entirely ASCII (ie, no bytes with bit 7 set) *or* UTF-8
+ * @return {boolean} true if sData is entirely non-NULL 7-bit ASCII and/or valid CP437 characters
  */
 function isText(data)
 {
     for (let i = 0; i < data.length; i++) {
         let b = data.charCodeAt(i);
-        if ((b & 0x80) && !CharSet.isCP437(data[i])) {
+        if (b == 0 || b >= 0x80 && !CharSet.isCP437(data[i])) {
             return false;
         }
     }

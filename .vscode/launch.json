@@ -858,7 +858,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=pcsig/1000-1999",
+        "--collection=pcsig",
         "--checkpage",
         "--rebuild"
       ],
