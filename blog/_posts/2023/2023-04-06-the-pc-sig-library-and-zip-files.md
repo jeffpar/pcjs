@@ -140,15 +140,17 @@ Although I prefer original disk images, ZIP files are the next best thing, and w
  2. DOS file attributes and file modification dates and times are not always accurately preserved by modern operating systems.
  3. DOS filenames containing special characters from the IBM PC character set (ie, Code Page 437) are almost always mangled in the process.
 
-For all those reasons, I decided to update `DiskImage` with a new `--zip` option.  It can now read the contents of an entire ZIP file into memory and then create a disk image, preserving the order of files, as well as the original attributes, dates, times, and filenames.
+For all those reasons, I decided to update `DiskImage` with a new `--zip` option.  It can now read and *decompress* the contents of an entire ZIP file into memory and then create a disk image, preserving the order of files, as well as the original attributes, dates, times, and filenames.
 
-Next, I updated DiskImage's `--extract` option to automatically convert CP437 filenames to UTF-8 filenames, so by combining `--zip` and `--extract`, you can effectively "unzip" a ZIP file into your file system *and* not get mangled filenames -- even if they include PC graphics characters.
+Next, I updated DiskImage's `--extract` option to automatically convert CP437 filenames to UTF-8 filenames, so by combining `--zip` and `--extract`, you can effectively "unzip" a ZIP file into your file system and not get mangled filenames -- even if they included PC graphics characters.
+
+I also decided to "expand" on that feature with a new `--expand` option, so that any `.ZIP` files *inside* a ZIP file can be decompressed, too.  For example, if you have a `BACKUP.ZIP` that contains a `DOCS.ZIP`, the `--expand` option (in conjunction with `--extract`) will create a directory named `DOCS.ZIP` containing the decompressed contents of the `DOCS` ZIP file.  This feature should work for any number of nested ZIP files.
 
 ### Extracting BASIC Program Listings
 
-Last but not least, the PC-SIG collection contained a large number of **BASIC** programs, which I thought would be nice to include listings of on the individual PC-SIG diskette pages.  Unfortunately, in those days, `.BAS` files were usually stored in tokenized (non-ASCII) format, since that was `BASIC`'s default `SAVE` behavior *and* the files were slightly smaller.
+Last but not least, the PC-SIG collection contained a large number of **BASIC** programs, which I thought would be nice to include listings of on the individual PC-SIG diskette pages.  Unfortunately, in those days, `.BAS` files were usually stored in tokenized (non-ASCII) format, since that was `BASIC`'s default `SAVE` behavior and the files were slightly smaller.
 
-So, I added yet another `DiskImage` option (`--normalize`) to automatically convert tokenized `.BAS` files to CP437 text files (or UTF-8 files if extracting to your local file system).  As an added bonus, I included to ability to detect "protected" (encrypted) `.BAS` files and "de-protect" them in the process.
+So, I added yet another `DiskImage` option (`--normalize`) to automatically convert tokenized `.BAS` files to CP437 text files (or UTF-8 files if extracting to your local file system).  As an added bonus, I included the ability to detect "protected" (encrypted) `.BAS` files and "de-protect" them in the process.
 
 These "de-tokenization" and "de-protection" processes seemed straight-forward at first, thanks to several useful online resources that I credit in the source code (eg, [https://github.com/rwtodd/bascat](https://github.com/rwtodd/bascat) and [https://slions.net](https://slions.net/threads/deciphering-gw-basic-basica-protected-programs.50/)), but de-tokenization is actually a bit trickier than most people realize, in part because they didn't know how inventive BASIC programmers were in the early days of the IBM PC.
 
