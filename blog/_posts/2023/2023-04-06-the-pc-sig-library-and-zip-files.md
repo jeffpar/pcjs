@@ -142,6 +142,8 @@ For all those reasons, I decided to update `DiskImage` with a new `--zip` option
 
 Next, I updated DiskImage's `--extract` option to automatically convert CP437 filenames to UTF-8 filenames, so by combining `--zip` and `--extract`, you can effectively "unzip" a ZIP file into your file system *and* not get mangled filenames -- even if they include PC graphics characters.
 
+### Extracting BASIC Program Listings
+
 Last but not least, the PC-SIG collection contained a large number of **BASIC** programs, which I thought would be nice to include listings of on the individual PC-SIG diskette pages.  Unfortunately, in those days, `.BAS` files were usually stored in tokenized (non-ASCII) format, since that was `BASIC`'s default `SAVE` behavior *and* the files were slightly smaller.
 
 So, I added yet another `DiskImage` option (`--normalize`) to automatically convert tokenized `.BAS` files to CP437 text files (or UTF-8 files if extracting to your local file system).  As an added bonus, I included to ability to detect "protected" (encrypted) `.BAS` files and "de-protect" them in the process.
@@ -149,5 +151,25 @@ So, I added yet another `DiskImage` option (`--normalize`) to automatically conv
 These "de-tokenization" and "de-protection" processes seemed straight-forward at first, thanks to several useful online resources that I credit in the source code (eg, [https://github.com/rwtodd/bascat](https://github.com/rwtodd/bascat) and [https://slions.net](https://slions.net/threads/deciphering-gw-basic-basica-protected-programs.50/)), but de-tokenization is actually a bit trickier than most people realize, in part because they didn't know how inventive BASIC programmers were in the early days of the IBM PC.
 
 For example, some programmers liked to include PC graphics characters inside their strings, comments, and DATA statements -- which BASIC was perfectly fine with.  However, all the de-tokenization code and pseudo-code I saw would misidentify those characters as BASIC tokens.  There were also a few other tricky details, like rendering floating-point constants with the correct precision, appending '#' to double-precision constants, etc.
+
+Here's just one example of the use of non-ASCII characters inside strings and comments, from PC-SIG [Disk #241](/software/pcx86/sw/misc/pcsig/0001-0999/DISK0241/):
+
+```bas
+3300 REM ▬ OTHER OTHELLO BOARD
+3310 CLS:LOCATE 1,10:PRINT "O T H E L L O"
+3320 LOCATE 3,5:PRINT"1   2   3   4   5   6   7   8"
+3330 FOR N=1 TO 8:LOCATE 3+2*N,1:PRINT CHR$(N+64):NEXT
+3340 LOCATE 4,3  :PRINT"╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗":FOR N=1 TO 13STEP 2
+3350 LOCATE 4+N,3:PRINT"║   ║   ║   ║   ║   ║   ║   ║   ║"
+3360 LOCATE 5+N,3:PRINT"╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣":NEXT
+3370 LOCATE 4+N,3:PRINT"║   ║   ║   ║   ║   ║   ║   ║   ║"
+3380 LOCATE 5+N,3:PRINT"╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝"
+3390 FOR I= 1TO 8
+3400 FOR J= 1 TO 8:LOCATE 2* J+ 3,4* I+ 1:FACE= (A(I,J)+ 3)/2
+3410 IF FACE = 1.5 THEN PRINT" " ELSE PRINT CHR$(FACE)
+3420 NEXT J,I
+3430 GOSUB 3250
+3440 RETURN
+```
 
 In short, the collection of PC-SIG `.ZIP` and `.BAS` files provided an excellent set of test cases for ZIP decompression and BASIC de-tokenization, and the PCjs [DiskImage](https://github.com/jeffpar/pcjs/tree/master/tools/diskimage) utility now has some handy new capabilities.
