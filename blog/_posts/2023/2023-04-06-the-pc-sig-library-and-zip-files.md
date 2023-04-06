@@ -128,7 +128,9 @@ But I wanted to do something better -- something more comprehensive and user-fri
 
 So I've added the [PC-SIG Diskette Library: The (Almost) Complete Collection](/software/pcx86/sw/misc/pcsig/), featuring over 4000 diskettes from all the available CD-ROMs, and supplemented with diskette images of *actual* PC-SIG diskettes where available.
 
-Every disk now has its own page, and the [main page](/software/pcx86/sw/misc/pcsig/) offers a *very* rudimentary search capability to help you find the program or diskette you're looking for.  I've also started adding PC-SIG documentation for each diskette to the individual pages.  Work on both search and documentation is on-going.
+[![PC-SIG Library Diskette]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/0001-0999/DISK0147/DISK0147.jpg)](/software/pcx86/sw/misc/pcsig/)
+
+Every disk now has its own page, and the [PC-SIG Diskette Library](/software/pcx86/sw/misc/pcsig/) page offers a *very* rudimentary search capability to help you find the program or diskette you're looking for.  I've also started adding PC-SIG documentation for each diskette to the individual pages.  Work on both search and documentation is on-going.
 
 ### Creating Disk Images from ZIP Files
 
