@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #1287"
+title: "PC-SIG Diskette Library (Disk #1287)"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1287/
 preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/1000-1999/DISK1287/DISK1287.jpg
 machines:

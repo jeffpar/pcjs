@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #2533"
+title: "PC-SIG Diskette Library (Disk #2533)"
 permalink: /software/pcx86/sw/misc/pcsig/2000-2999/DISK2533/
 preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/2000-2999/DISK2533/DISK2533.jpg
 machines:

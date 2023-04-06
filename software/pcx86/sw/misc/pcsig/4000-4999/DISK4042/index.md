@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #4042"
+title: "PC-SIG Diskette Library (Disk #4042)"
 permalink: /software/pcx86/sw/misc/pcsig/4000-4999/DISK4042/
 machines:
   - id: ibm5150

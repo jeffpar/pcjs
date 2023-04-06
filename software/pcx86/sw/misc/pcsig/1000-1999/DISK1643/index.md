@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #1643"
+title: "PC-SIG Diskette Library (Disk #1643)"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1643/
 preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/1000-1999/DISK1643/DISK1643.jpg
 machines:

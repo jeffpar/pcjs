@@ -17,7 +17,7 @@ and more classic machines, such as [Minicomputers](/machines/dec/pdp11/), [Progr
 To learn more or contribute to these very modest preservation efforts, visit the [PCjs]({{ site.github.repository_url }})
 open-source project on [GitHub]({{ site.github.owner_url }}).
 
-{% include highlights.html %}
+{% include web/highlights.html %}
 
 Thanks for visiting!  
 --<a rel="me" href="https://mastodon.sdf.org/@jeffpar">Jeff</a>

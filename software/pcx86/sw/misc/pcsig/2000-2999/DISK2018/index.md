@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #2018"
+title: "PC-SIG Diskette Library (Disk #2018)"
 permalink: /software/pcx86/sw/misc/pcsig/2000-2999/DISK2018/
 preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/2000-2999/DISK2018/DISK2018.jpg
 machines:

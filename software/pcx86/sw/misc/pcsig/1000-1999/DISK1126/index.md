@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #1126"
+title: "PC-SIG Diskette Library (Disk #1126)"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1126/
 machines:
   - id: ibm5170

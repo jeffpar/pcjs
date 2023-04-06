@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #988"
+title: "PC-SIG Diskette Library (Disk #988)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0988/
 machines:
   - id: ibm5170
@@ -9,7 +9,7 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0988"
+      B: "PC-SIG Library Disk #0988"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 

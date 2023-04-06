@@ -495,7 +495,14 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "PC-SIG Library Disk #1",
+      "name": "PC-SIG Diskette Library",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sw/misc/pcsig/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "PC-SIG Diskette Library (Disk #1)",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sw/misc/pcsig/0001-0999/DISK0001/",
@@ -565,7 +572,7 @@
       "program": "${workspaceFolder}/tools/misc/old/diskettes.js",
       "args": [
         "/disks/pcsigdisks",
-        "--folders",
+        "--folders=json",
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}",
