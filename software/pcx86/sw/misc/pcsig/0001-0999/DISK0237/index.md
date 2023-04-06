@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #237"
+title: "PC-SIG Diskette Library (Disk #237)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0237/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0237"
+      B: "PC-SIG Library Disk #0237"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-GENERAL LEDGER"
 
@@ -27,8 +29,10 @@ machines:
     
     The program is easy to use and can be set up and running in less than 15
     minutes.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0237
+
+### Directory of PC-SIG Library Disk #0237
 
      Volume in drive A has no label
      Directory of A:\

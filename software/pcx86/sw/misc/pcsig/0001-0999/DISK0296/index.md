@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #296"
+title: "PC-SIG Diskette Library (Disk #296)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0296/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0296"
+      B: "PC-SIG Library Disk #0296"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "EAMON 1 OF 4 (ALSO 297, 1038, 1039)"
 
@@ -33,8 +35,10 @@ machines:
     and will keep you on the edge of your chair.  The monsters are very
     mean and give up their lives to stop you from getting any further in
     your quest!
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0296
+
+### Directory of PC-SIG Library Disk #0296
 
      Volume in drive A has no label
      Directory of A:\

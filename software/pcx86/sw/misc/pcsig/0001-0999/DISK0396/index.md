@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #396"
+title: "PC-SIG Diskette Library (Disk #396)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0396/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0396"
+      B: "PC-SIG Library Disk #0396"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PDS*BASE 1 OF 2 (ALSO 1025)"
 
@@ -29,8 +31,10 @@ machines:
     
     This is the database management system for anyone who doesn't want to
     go to the expense and trouble of learning a new programming language.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0396
+
+### Directory of PC-SIG Library Disk #0396
 
      Volume in drive A has no label
      Directory of A:\

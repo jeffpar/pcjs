@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #710"
+title: "PC-SIG Diskette Library (Disk #710)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0710/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0710"
+      B: "PC-SIG Library Disk #0710"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "INSTACALC"
 
@@ -28,8 +30,10 @@ machines:
     file, or cutting and pasting with other programs.  You can import and
     export from Lotus 1-2-3, dBASE, and .DIF files.  PC Magazine made
     INSTACALC an Editor's Choice among low cost spreadsheets.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0710
+
+### Directory of PC-SIG Library Disk #0710
 
      Volume in drive A has no label
      Directory of A:\

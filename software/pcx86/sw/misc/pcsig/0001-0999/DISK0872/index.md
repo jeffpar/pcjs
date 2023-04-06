@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #872"
+title: "PC-SIG Diskette Library (Disk #872)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0872/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0872"
+      B: "PC-SIG Library Disk #0872"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "AMPLE NOTICE APPOINTMENT CALANDER"
 
@@ -37,8 +39,10 @@ machines:
     activities for business purposes.  Searching for a given appointment
     (future or past) is fast and easy.  Also included is a program for
     addressing envelopes sideways from data on the screen or from a file.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0872
+
+### Directory of PC-SIG Library Disk #0872
 
      Volume in drive A has no label
      Directory of A:\

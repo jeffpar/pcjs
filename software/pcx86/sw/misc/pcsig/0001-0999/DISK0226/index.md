@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #226"
+title: "PC-SIG Diskette Library (Disk #226)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0226/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0226"
+      B: "PC-SIG Library Disk #0226"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FREECOPY"
 
@@ -41,8 +43,10 @@ machines:
     FREECOPY ASM  Source code for FREECOPY.COM
     FREECOPY MAP  Assembler map listing
     FREECOPY REF  Assembler reference listing
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0226
+
+### Directory of PC-SIG Library Disk #0226
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #34"
+title: "PC-SIG Diskette Library (Disk #34)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0034/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0034"
+      B: "PC-SIG Library Disk #0034"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SORTED DIRECTORY"
 
@@ -50,8 +52,10 @@ machines:
     VDISK2   COM  Executable program file
     VOLSER   COM  Program to write 2.0 volume labels on diskettes
     PC3SC    MRG  Adds split screen capability to PC-Talk III
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0034
+
+### Directory of PC-SIG Library Disk #0034
 
      Volume in drive A has no label
      Directory of A:\

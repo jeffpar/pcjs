@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #550"
+title: "PC-SIG Diskette Library (Disk #550)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0550/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0550"
+      B: "PC-SIG Library Disk #0550"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LETUS A-B-C #13"
 
@@ -45,8 +47,10 @@ machines:
     
     BYTE85B  ???  BYTE Magazine Second Quarter 1985 reference files.
     PCWK85B  ???  PC Week Second Quarter 1985 reference files (4 files)
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0550
+
+### Directory of PC-SIG Library Disk #0550
 
      Volume in drive A has no label
      Directory of A:\

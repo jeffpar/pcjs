@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #632"
+title: "PC-SIG Diskette Library (Disk #632)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0632/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0632"
+      B: "PC-SIG Library Disk #0632"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FAMILY HISTORY 2 OF 3 (ALSO 361, 2291)"
 
@@ -35,8 +37,10 @@ machines:
     
     Research your roots and know where you came from.  A great gift for the
     next generation.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0632
+
+### Directory of PC-SIG Library Disk #0632
 
      Volume in drive A has no label
      Directory of A:\

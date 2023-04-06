@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #715"
+title: "PC-SIG Diskette Library (Disk #715)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0715/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0715"
+      B: "PC-SIG Library Disk #0715"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "NEWSBASE"
 
@@ -36,8 +38,10 @@ machines:
     investigative reporter hot on a story, a bewildered publisher/editor
     needing to keep track of materials, or a student struggling on a term
     paper -- NEWSBASE will help you stay on top of the information heap.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0715
+
+### Directory of PC-SIG Library Disk #0715
 
      Volume in drive A has no label
      Directory of A:\

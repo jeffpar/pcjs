@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #131"
+title: "PC-SIG Diskette Library (Disk #131)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0131/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0131"
+      B: "PC-SIG Library Disk #0131"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PASCAL TOOLS VOL 2"
 
@@ -38,8 +40,10 @@ machines:
     UNROTATE EXE  Formats lines for a KWIC index
     UNIQUE   EXE  Deletes adjacent duplicate lines
     TRANSLIT EXE  Transliterate characters
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0131
+
+### Directory of PC-SIG Library Disk #0131
 
      Volume in drive A has no label
      Directory of A:\

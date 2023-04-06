@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #122"
+title: "PC-SIG Diskette Library (Disk #122)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0122/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0122"
+      B: "PC-SIG Library Disk #0122"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LETUS A-B-C VOL 2"
 
@@ -34,8 +36,10 @@ machines:
     LETUS    BAT  Batch file for starting Letus
     PCAGE83  ???  PC Age 1983 magazine reference files (4 files)
     PLOGO83  COM  Prints out LETUS A-B-C documentation
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0122
+
+### Directory of PC-SIG Library Disk #0122
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #421"
+title: "PC-SIG Diskette Library (Disk #421)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0421/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0421"
+      B: "PC-SIG Library Disk #0421"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DOS UTILITIES #20"
 
@@ -67,8 +69,10 @@ machines:
     FILES    PAS  Pascal source code
     FILES    DOC  Documentation file
     FILES    COM  Intellegent DIR command
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0421
+
+### Directory of PC-SIG Library Disk #0421
 
      Volume in drive A has no label
      Directory of A:\

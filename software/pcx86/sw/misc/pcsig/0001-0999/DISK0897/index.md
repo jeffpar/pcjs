@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #897"
+title: "PC-SIG Diskette Library (Disk #897)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0897/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0897"
+      B: "PC-SIG Library Disk #0897"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PROMAN  PROGRAM MANAGEMENT"
 
@@ -42,8 +44,10 @@ machines:
     INSTALL  BAT  Batch file for installation.
     FILES    COM  Creates files used by the program.
     ENCRYPT  COM  Encryption file.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0897
+
+### Directory of PC-SIG Library Disk #0897
 
      Volume in drive A has no label
      Directory of A:\

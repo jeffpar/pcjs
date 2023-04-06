@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #542"
+title: "PC-SIG Diskette Library (Disk #542)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0542/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0542"
+      B: "PC-SIG Library Disk #0542"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "POLYGLOT AND LETTERFALL  (EDUCATIONAL)"
 
@@ -52,8 +54,10 @@ machines:
     POLY005  DIC  A Polyglot dictionary for vocabulary set five.
     POLY004  DIC  A Polyglot dictionary for vocabulary set four.
     SCORE    DTA  Data file to retain scores
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0542
+
+### Directory of PC-SIG Library Disk #0542
 
      Volume in drive A has no label
      Directory of A:\

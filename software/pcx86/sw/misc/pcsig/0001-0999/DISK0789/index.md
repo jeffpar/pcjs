@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #789"
+title: "PC-SIG Diskette Library (Disk #789)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0789/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0789"
+      B: "PC-SIG Library Disk #0789"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CARD TRAK, EGA SCREEN SAVE, AND MORE"
 
@@ -33,8 +35,10 @@ machines:
     screen of games.  The Illinois and Missouri lottos are menued for the
     basic games, but other states' games can be easily configured with the
     program by setting that game's maximum high number (6 to 255).
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0789
+
+### Directory of PC-SIG Library Disk #0789
 
      Volume in drive A has no label
      Directory of A:\

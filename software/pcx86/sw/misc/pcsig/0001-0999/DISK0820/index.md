@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #820"
+title: "PC-SIG Diskette Library (Disk #820)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0820/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0820"
+      B: "PC-SIG Library Disk #0820"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SEEKEASY"
 
@@ -32,8 +34,10 @@ machines:
     SEEKEASY EXE  This is the SEEKEASY program.
     ASC2SEEK COM  Converts ASCII data files into SEEKEASY format.
     PC-SIG   DAT  PC-SIG library of shareware.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0820
+
+### Directory of PC-SIG Library Disk #0820
 
      Volume in drive A has no label
      Directory of A:\

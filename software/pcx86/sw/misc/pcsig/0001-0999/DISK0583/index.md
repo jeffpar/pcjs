@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #583"
+title: "PC-SIG Diskette Library (Disk #583)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0583/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0583"
+      B: "PC-SIG Library Disk #0583"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LOTUS WHITEROCK"
 
@@ -26,8 +28,10 @@ machines:
     worksheets.  Supported by clever screen graphics, the WHITEROCK
     ALTERNATIVE applications are a pleasure to use.  A library of 1-2-3
     macros is also included.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0583
+
+### Directory of PC-SIG Library Disk #0583
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #270"
+title: "PC-SIG Diskette Library (Disk #270)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0270/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0270"
+      B: "PC-SIG Library Disk #0270"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-SIG D.O.D. 1 OF 5 (271,400,605,805)"
 
@@ -67,8 +69,10 @@ machines:
     PC_SIG   TXT  Information on PC-SIG.
     ORDER    TXT  Order information.
     SUBMIT   TXT  Software submission information.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0270
+
+### Directory of PC-SIG Library Disk #0270
 
      Volume in drive A has no label
      Directory of A:\

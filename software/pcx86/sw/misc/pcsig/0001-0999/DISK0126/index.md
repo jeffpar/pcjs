@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #126"
+title: "PC-SIG Diskette Library (Disk #126)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0126/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0126"
+      B: "PC-SIG Library Disk #0126"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DBASE II PROGRAMS"
 
@@ -57,13 +59,67 @@ machines:
     ML2      DBF  Part of dBASE II mailing label manager
     ???      NDX  Index files used by programs
     ???      DBF  Database files used by programs
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0126
 
-     Volume in drive A has no label
+### Directory of PC-SIG Library Disk #0126
+
+     Volume in drive A is DISK0126
      Directory of A:\
 
-    GO       BAT        40   8-12-87   2:52a
-    NOTE     TXT       289  10-24-88   8:21a
-            2 file(s)        329 bytes
-                          159232 bytes free
+    ADDSUB   PRG      1024   1-01-10   9:38a
+    BACKUP   PRG      2048   1-01-10   9:38a
+    BLANK    PRG      9728   1-01-10   9:38a
+    CRC      TXT      3003  11-09-84   7:06a
+    CRCK4    COM      1536  10-21-82  12:54p
+    DOC      TXT       640  12-27-83   9:36a
+    ENTER    PRG      1920   1-01-10   9:38a
+    GUIDE    PRG      2560   1-01-10   9:38a
+    MAIL     DBF      2048   1-01-10   9:38a
+    MAIL     PRG      1536   1-01-10   9:38a
+    MAILENTR PRG      1024   1-01-10   9:38a
+    MAILFMT  FMT       640   1-01-10   9:38a
+    MAILINFO PRG      1152   1-01-10   9:38a
+    MAILLAB  PRG       896   1-01-10   9:38a
+    MAILLTTR PRG      1664   1-01-10   9:38a
+    MIS      DBF      1024   1-01-10   9:38a
+    ML2      DBF      1024   1-01-10   9:38a
+    ML2      DOC      1152   1-01-10   9:38a
+    ML2      PRG      1152   1-01-10   9:38a
+    ML2A     PRG       256   1-01-10   9:38a
+    ML2EDIT  PRG       896   1-01-10   9:38a
+    ML2ENTR  PRG       768   1-01-10   9:38a
+    ML2INFO  PRG       384   1-01-10   9:38a
+    ML2LAB   PRG      3584   1-01-10   9:38a
+    ML2LAB1  PRG       256   1-01-10   9:38a
+    ML2LAB2  PRG       256   1-01-10   9:38a
+    ML2LAB4  PRG       384   1-01-10   9:38a
+    ML2LIST  PRG      1920   1-01-10   9:38a
+    ML2LST1  PRG       256   1-01-10   9:38a
+    ML2LTTR  PRG       896   1-01-10   9:38a
+    ML2MULTI PRG      1792   1-01-10   9:38a
+    ML2REC   PRG       256   1-01-10   9:38a
+    ML2SORT  PRG       896   1-01-10   9:38a
+    ML2ZIPCT PRG       768   1-01-10   9:38a
+    MLABEL5  PRG      1536   1-01-10   9:38a
+    NAMEBRK  PRG      2688   1-01-10   9:38a
+    PRINT    TXT      7168   1-01-10   9:38a
+    REFDEX   NDX      1024   1-01-10   9:39a
+    REFERALS DBF      1024   1-01-10   9:39a
+    REFS     PRG       512   1-01-10   9:39a
+    SEARCH   PRG      1408   1-01-10   9:39a
+    SHOWFIL  PRG       384   1-01-10   9:39a
+    SOME     DBF      1024   1-01-10   9:39a
+    SORTED   DBF      1024   1-01-10   9:39a
+    STATEX   NDX      1024   1-01-10   9:39a
+    STATEZIP DBF      1024   1-01-10   9:39a
+    STATEZIP PRG      3328   1-01-10   9:39a
+    STRINGS  DBF      1024   1-01-10   9:39a
+    SUBDEX   NDX      1024   1-01-10   9:39a
+    SUBJECTS DBF      1024   1-01-10   9:39a
+    SUBS     PRG       384   1-01-10   9:39a
+    SUPERBAK PRG      2944   1-01-10   9:39a
+    XXX               2944   1-15-84   2:54p
+    XXX      BAK      3072  12-27-83   9:38a
+           54 file(s)      84923 bytes
+                           68608 bytes free

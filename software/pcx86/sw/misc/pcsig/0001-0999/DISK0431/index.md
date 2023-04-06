@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #431"
+title: "PC-SIG Diskette Library (Disk #431)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0431/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0431"
+      B: "PC-SIG Library Disk #0431"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ANALYTICALC 2 OF 3 (ALSO 430, 432)"
 
@@ -146,8 +148,10 @@ machines:
     SETUP    CMD  How to configure ANSI.SYS for aux keypad definitions
     ANNOT    NOT  Cell annotation instructions
     README   1ST  Notes from author
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0431
+
+### Directory of PC-SIG Library Disk #0431
 
      Volume in drive A has no label
      Directory of A:\

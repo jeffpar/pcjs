@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #246"
+title: "PC-SIG Diskette Library (Disk #246)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0246/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0246"
+      B: "PC-SIG Library Disk #0246"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "STOCK CHARTING SYSTEM 1 OF 2 (1354 ALSO)"
 
@@ -34,8 +36,10 @@ machines:
     SMENTRY2 EXE  Data entry and graphics program.
     SMTRANS2 EXE  ASCII conversion program.
     BRUN30   EXE  QuickBASIC run-time routines.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0246
+
+### Directory of PC-SIG Library Disk #0246
 
      Volume in drive A has no label
      Directory of A:\

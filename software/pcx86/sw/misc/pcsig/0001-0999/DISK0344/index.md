@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #344"
+title: "PC-SIG Diskette Library (Disk #344)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0344/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0344"
+      B: "PC-SIG Library Disk #0344"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-KEY DRAW 1 OF 4 (ALSO 345,1032,1124)"
 
@@ -80,8 +82,10 @@ machines:
     project scheduling, cataloging, process diagraming, and much more.
     There is also a full interactive tutorial that uses the linked screens
     of HYPERDRAW to teach the basic drawing commands of PC-KEY DRAW.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0344
+
+### Directory of PC-SIG Library Disk #0344
 
      Volume in drive A has no label
      Directory of A:\

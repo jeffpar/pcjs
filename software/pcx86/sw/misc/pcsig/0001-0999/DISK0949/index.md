@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #949"
+title: "PC-SIG Diskette Library (Disk #949)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0949/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0949"
+      B: "PC-SIG Library Disk #0949"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "STATISTICAL CONSULTANT"
 
@@ -28,8 +30,10 @@ machines:
     
     The program assumes a level of technical knowledge greater than that
     offered in a first course in statistics.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0949
+
+### Directory of PC-SIG Library Disk #0949
 
      Volume in drive A has no label
      Directory of A:\

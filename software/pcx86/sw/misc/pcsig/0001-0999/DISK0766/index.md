@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #766"
+title: "PC-SIG Diskette Library (Disk #766)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0766/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0766"
+      B: "PC-SIG Library Disk #0766"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "THE BIBLE 1OF7 (767,768,769,770,771,772)"
 
@@ -69,8 +71,10 @@ machines:
     FLOPPY   BAT  Installation batch file for floppy systems.
     BIBLE7   ARC  Archived files from THE BIBLE.
     ARCE     COM  Unarchiving program.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0766
+
+### Directory of PC-SIG Library Disk #0766
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #498"
+title: "PC-SIG Diskette Library (Disk #498)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0498/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0498"
+      B: "PC-SIG Library Disk #0498"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DOS-A-MATIC"
 
@@ -29,8 +31,10 @@ machines:
     DOSAMATC DOC  Documentation for DOSAMATC.COM.
     DOSAMATC HLP  Help screen information used with DOSAMATC.COM.
     DOSAMATC COM  DOSAMATIC program.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0498
+
+### Directory of PC-SIG Library Disk #0498
 
      Volume in drive A has no label
      Directory of A:\

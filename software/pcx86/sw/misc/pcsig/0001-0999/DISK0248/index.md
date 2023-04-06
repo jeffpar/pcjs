@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #248"
+title: "PC-SIG Diskette Library (Disk #248)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0248/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0248"
+      B: "PC-SIG Library Disk #0248"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PASCAL MATH LIBRARY"
 
@@ -32,8 +34,10 @@ machines:
     PRINTER    PAS   Source code for PRINTER.COM
     FUNCTION   PAS   Additional functions for Turbo Pascal
     FUNCTION   DOC   Documentation for FUNCTION.PAS
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0248
+
+### Directory of PC-SIG Library Disk #0248
 
      Volume in drive A has no label
      Directory of A:\

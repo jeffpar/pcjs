@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #619"
+title: "PC-SIG Diskette Library (Disk #619)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0619/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0619"
+      B: "PC-SIG Library Disk #0619"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HOTBOOT AND INSULTS"
 
@@ -30,8 +32,10 @@ machines:
     
     INSULTS can randomly generate 22 million insults on the unsuspecting PC
     user -- some of them even make sense.  Not for the weak-stomached.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0619
+
+### Directory of PC-SIG Library Disk #0619
 
      Volume in drive A has no label
      Directory of A:\

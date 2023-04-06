@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #309"
+title: "PC-SIG Diskette Library (Disk #309)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0309/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0309"
+      B: "PC-SIG Library Disk #0309"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ASSEMBLY UTILITIES NO 3"
 
@@ -70,8 +72,62 @@ machines:
     TEXT     EXE  Several text conversion options.
     UPDIR    ASM  Moves the user up one directory level.
     UPPATCH  ASM  Patch of another program.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0309
+{% comment %}samples_begin{% endcomment %}
+
+## DISASM.BAS
+
+```bas
+1 REM Program by Ross H. Cobb
+2 REM 8540 SW 163 Terr
+3 REM Miami, FL  33157
+4 REM (305) 233-7458
+10 CLEAR 32767 : DIM O$(512) : KEY OFF : CLS
+15 PRINT "Loading opcodes..."
+20 OPEN "A:OPCODES" FOR INPUT AS 1
+25 IF EOF(1) THEN 50
+30 LINE INPUT #1,O$(X) : X=X+1 : GOTO 25
+50 CLOSE 1 : LINE INPUT "Source file name (HEX file only ? ";FL$
+55 PRINT "Output device may be a disk file, com port or screen."
+56 PRINT "Default is SCRN:"
+57 LINE INPUT "Device ? ";D$
+58 IF D$="" THEN D$="SCRN:"
+59 OPEN D$ FOR OUTPUT AS 2
+60 OPEN FL$ FOR INPUT AS 1
+70 IF EOF(1) THEN 5000
+80 A$=INPUT$(2,1)
+85 B1$="":W1$="":W2$=""
+90 Z=VAL ("&H"+A$)
+95 HC$=A$
+100 OP$=O$(Z)
+110 W=INSTR(OP$,"@")
+120 IF W THEN 500
+130 B=INSTR(OP$,"#")
+140 IF B THEN 2000
+141 NN$=OP$:GOSUB 1000
+145 AD=AD+1
+150 GOTO 70
+500 W1$=INPUT$(2,1):W2$=INPUT$(2,1):WW$=W2$+W1$
+550 NN$=LEFT$(OP$,W-1)+WW$+RIGHT$(OP$,LEN(OP$)-W)
+560 GOSUB 1000 : AD=AD+2 :GOTO 145
+1000 AD$=HEX$(AD):AD$=STRING$(4-LEN(AD$),"0")+AD$
+1100 IF W THEN 1200
+1101 IF B THEN 1300
+1102 HX$=HC$:GOTO 1400
+1200 HX$=HC$+W1$+W2$:GOTO 1400
+1300 HX$=HC$+B1$:GOTO 1400
+1400 PRINT #2,AD$,HX$,NN$
+1500 RETURN
+2000 B1$=INPUT$(2,1)
+2010 NN$=LEFT$(OP$,B-1)+B1$+RIGHT$(OP$,LEN(OP$)-B)
+2020 GOSUB 1000 : AD=AD+1 : GOTO 145
+5000 PRINT "End of file...." : CLOSE : STOP
+```
+
+{% comment %}samples_end{% endcomment %}
+
+### Directory of PC-SIG Library Disk #0309
 
      Volume in drive A has no label
      Directory of A:\

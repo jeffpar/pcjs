@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #877"
+title: "PC-SIG Diskette Library (Disk #877)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0877/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0877"
+      B: "PC-SIG Library Disk #0877"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BARCODE, HYDE, AND DOVETAIL III"
 
@@ -48,8 +50,10 @@ machines:
     IIIDOVE  EXE  Compiled version of the main program.
     SAMPL*** WS   Sample file written with WORDSTAR (3 files).
     UNWS     EXE  Utility file to remove WORDSTAR buried commands.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0877
+
+### Directory of PC-SIG Library Disk #0877
 
      Volume in drive A has no label
      Directory of A:\

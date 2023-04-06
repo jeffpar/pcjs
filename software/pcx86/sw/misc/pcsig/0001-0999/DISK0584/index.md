@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #584"
+title: "PC-SIG Diskette Library (Disk #584)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0584/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0584"
+      B: "PC-SIG Library Disk #0584"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MISCELLANEOUS 123 WORKSHEETS"
 
@@ -54,8 +56,10 @@ machines:
     VENDOC   WKS  Documentation for VENDORS.WKS
     WEEKRPT  WKS  Time management/Job logging utility.
     VENDORS  WKS  Macro driven data base of suppliers for business.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0584
+
+### Directory of PC-SIG Library Disk #0584
 
      Volume in drive A has no label
      Directory of A:\

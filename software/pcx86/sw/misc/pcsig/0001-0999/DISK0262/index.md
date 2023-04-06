@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #262"
+title: "PC-SIG Diskette Library (Disk #262)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0262/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0262"
+      B: "PC-SIG Library Disk #0262"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-GOLF"
 
@@ -29,8 +31,10 @@ machines:
     
     Improved player performance is the focus so let your PC do the analysis
     while you concentrate on your game.  And keep your head down!
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0262
+
+### Directory of PC-SIG Library Disk #0262
 
      Volume in drive A has no label
      Directory of A:\

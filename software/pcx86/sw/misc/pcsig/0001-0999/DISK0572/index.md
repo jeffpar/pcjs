@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #572"
+title: "PC-SIG Diskette Library (Disk #572)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0572/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0572"
+      B: "PC-SIG Library Disk #0572"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FBLCC - BUILDING LIFE CYCLE COST PROGRAM"
 
@@ -29,8 +31,10 @@ machines:
     the Federal Building Life-Cycle Cost Computer Program.'' April, 1976.
     This program should not be used without the referenced user's guide
     available from the U.S. Department of Energy.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0572
+
+### Directory of PC-SIG Library Disk #0572
 
      Volume in drive A has no label
      Directory of A:\

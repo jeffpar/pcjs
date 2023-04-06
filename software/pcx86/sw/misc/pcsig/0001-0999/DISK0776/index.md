@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #776"
+title: "PC-SIG Diskette Library (Disk #776)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0776/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0776"
+      B: "PC-SIG Library Disk #0776"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PSEUDOSAM CROSS ASSEMBLER 18 AND 65"
 
@@ -33,8 +35,10 @@ machines:
     although no attempt is made to teach 1802 or 6502 programming.  You
     should have a good understanding of machine language programming and
     also be familiar with basic DOS functions.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0776
+
+### Directory of PC-SIG Library Disk #0776
 
      Volume in drive A has no label
      Directory of A:\

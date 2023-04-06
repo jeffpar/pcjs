@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #988"
+title: "PC-SIG Diskette Library (Disk #988)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0988/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0988"
+      B: "PC-SIG Library Disk #0988"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MESSAGE MASTER AND ADDRESS BOOK"
 
@@ -33,8 +35,10 @@ machines:
     edit and delete your addresses, and a printer menu to print any or all
     of your addresses.  Keep track of your personal and business address and
     telephone lists with ease.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0988
+
+### Directory of PC-SIG Library Disk #0988
 
      Volume in drive A has no label
      Directory of A:\

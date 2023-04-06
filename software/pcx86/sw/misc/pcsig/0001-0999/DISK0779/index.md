@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #779"
+title: "PC-SIG Diskette Library (Disk #779)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0779/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0779"
+      B: "PC-SIG Library Disk #0779"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PROMENU AND PATCH AND OTHER UTILITIES"
 
@@ -60,8 +62,10 @@ machines:
     KYLOCK blanks your screen and locks the keyboard from others.  When the
     keyboard is locked, not even a Ctrl-Alt-Del routine reboots the
     computer.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0779
+
+### Directory of PC-SIG Library Disk #0779
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #293"
+title: "PC-SIG Diskette Library (Disk #293)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0293/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0293"
+      B: "PC-SIG Library Disk #0293"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ARCADE SERIES 3"
 
@@ -33,8 +35,10 @@ machines:
     FORTUNE  EXE  Word game like Wheel of Fortune (mono).
     PYRAMID  EXE  Climb the pyramid and the blocks change color.
     PITFALL  EXE  Diving down a long pit but don't touch the walls (mono).
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0293
+
+### Directory of PC-SIG Library Disk #0293
 
      Volume in drive A has no label
      Directory of A:\

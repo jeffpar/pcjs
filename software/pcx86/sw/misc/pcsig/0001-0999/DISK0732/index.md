@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #732"
+title: "PC-SIG Diskette Library (Disk #732)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0732/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0732"
+      B: "PC-SIG Library Disk #0732"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TRACKER AND CATCHER FOR THE BLIND"
 
@@ -27,8 +29,10 @@ machines:
     falling characters with a paddle at the bottom of the screen.  The twist
     is the program was written for visually-impaired people and is designed
     for use with a speech synthesizer.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0732
+
+### Directory of PC-SIG Library Disk #0732
 
      Volume in drive A has no label
      Directory of A:\

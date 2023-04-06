@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #494"
+title: "PC-SIG Diskette Library (Disk #494)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0494/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0494"
+      B: "PC-SIG Library Disk #0494"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "WORLD DIGITIZED 1 OF 3 (ALSO 495, 496)"
 
@@ -35,8 +37,10 @@ machines:
     transform the data for Mercator projection.
     
     It really is a small world and now you can have it all.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0494
+
+### Directory of PC-SIG Library Disk #0494
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #966"
+title: "PC-SIG Diskette Library (Disk #966)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0966/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0966"
+      B: "PC-SIG Library Disk #0966"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ASTROL95 - ASTROLOGY PROGRAM"
 
@@ -34,8 +36,10 @@ machines:
     between charts.
     
     So, what's your sign?
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0966
+
+### Directory of PC-SIG Library Disk #0966
 
      Volume in drive A has no label
      Directory of A:\

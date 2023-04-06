@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #292"
+title: "PC-SIG Diskette Library (Disk #292)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0292/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0292"
+      B: "PC-SIG Library Disk #0292"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SPACEWARS AND OTHER GAMES"
 
@@ -100,8 +102,10 @@ machines:
     TRACK    BAS  BASIC demo.
     TYPE     BAS  Mini typing test (may have bugs).
     VACATION BAS  Mini vacation demo.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0292
+
+### Directory of PC-SIG Library Disk #0292
 
      Volume in drive A has no label
      Directory of A:\

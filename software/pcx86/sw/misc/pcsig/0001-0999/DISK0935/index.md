@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #935"
+title: "PC-SIG Diskette Library (Disk #935)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0935/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0935"
+      B: "PC-SIG Library Disk #0935"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MSPANTOC, BIBLIO, AND LIST-MRG"
 
@@ -79,8 +81,10 @@ machines:
     BIBLIO   EXE  The BIBLIO main program.
     BIBLIO   REF  The reference sample file to use with the BIBLIO program.
     BIBLIO   TXT  Introduction file.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0935
+
+### Directory of PC-SIG Library Disk #0935
 
      Volume in drive A has no label
      Directory of A:\

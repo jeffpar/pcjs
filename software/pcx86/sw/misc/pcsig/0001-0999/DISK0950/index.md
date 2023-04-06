@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #950"
+title: "PC-SIG Diskette Library (Disk #950)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0950/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0950"
+      B: "PC-SIG Library Disk #0950"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DOC MASTER"
 
@@ -26,8 +28,10 @@ machines:
     lets you set the left margin, specify the lines per page, print a
     selected page-range, select a header with auto page numbering, and
     select either single-sheet or continuous-feed paper.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0950
+
+### Directory of PC-SIG Library Disk #0950
 
      Volume in drive A has no label
      Directory of A:\

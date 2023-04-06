@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #144"
+title: "PC-SIG Diskette Library (Disk #144)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0144/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0144"
+      B: "PC-SIG Library Disk #0144"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FABULA DISK 1 OF 2  (#145 SECOND DISK)"
 
@@ -71,8 +73,10 @@ machines:
     WRTE     COM  Erases read-only attribute from a file
     WRTP     COM  Sets read-only attribute of a file
     XREF     BAS  BASIC program
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0144
+
+### Directory of PC-SIG Library Disk #0144
 
      Volume in drive A has no label
      Directory of A:\

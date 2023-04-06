@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #428"
+title: "PC-SIG Diskette Library (Disk #428)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0428/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0428"
+      B: "PC-SIG Library Disk #0428"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TURBO PASCAL #10"
 
@@ -50,8 +52,10 @@ machines:
     STRNGLIB DOC  Description of STRNGLIB.INC
     SCROLL   PAS  Scroll portion or all of screen up or down
     SAMPPATH PAS  Example of how to use PATHS.PAS
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0428
+
+### Directory of PC-SIG Library Disk #0428
 
      Volume in drive A has no label
      Directory of A:\

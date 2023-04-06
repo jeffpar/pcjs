@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #786"
+title: "PC-SIG Diskette Library (Disk #786)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0786/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0786"
+      B: "PC-SIG Library Disk #0786"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HARD DISK MANAGEMENT"
 
@@ -51,8 +53,10 @@ machines:
     anyone to touch, there is the LOCK program.  This protects your data
     safely from accidental (or deliberate and unauthorized) viewing or
     editing.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0786
+
+### Directory of PC-SIG Library Disk #0786
 
      Volume in drive A has no label
      Directory of A:\

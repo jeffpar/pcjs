@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #827"
+title: "PC-SIG Diskette Library (Disk #827)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0827/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0827"
+      B: "PC-SIG Library Disk #0827"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "T-REF"
 
@@ -27,8 +29,10 @@ machines:
     words in the lister along with line numbers, lexical and block-level
     numbering; cross-reference selection by object type and usage; error
     analysis; procedural table of contents; and much, much more.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0827
+
+### Directory of PC-SIG Library Disk #0827
 
      Volume in drive A has no label
      Directory of A:\

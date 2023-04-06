@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #857"
+title: "PC-SIG Diskette Library (Disk #857)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0857/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0857"
+      B: "PC-SIG Library Disk #0857"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LEDGER EXPRESS, REQUIRES LOTUS 1-2-3"
 
@@ -45,8 +47,10 @@ machines:
     MANUAL   BAT  Prints manual.
     PKXARC   COM  Unarchiving program.
     INSTALL  BAT  Install files to hard drive.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0857
+
+### Directory of PC-SIG Library Disk #0857
 
      Volume in drive A has no label
      Directory of A:\

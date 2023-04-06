@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #233"
+title: "PC-SIG Diskette Library (Disk #233)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0233/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0233"
+      B: "PC-SIG Library Disk #0233"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "NEWBASE II"
 
@@ -56,8 +58,10 @@ machines:
     ~ Numeric accuracy to 16 digits
     
     ~ Report and form library
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0233
+
+### Directory of PC-SIG Library Disk #0233
 
      Volume in drive A has no label
      Directory of A:\

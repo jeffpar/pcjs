@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #439"
+title: "PC-SIG Diskette Library (Disk #439)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0439/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0439"
+      B: "PC-SIG Library Disk #0439"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "COMMUNICATION #3"
 
@@ -50,8 +52,10 @@ machines:
     SIOBIOS  A86  Source for an example CP/M-86 custom serial I/O BIOS.
     SIOBIOS  MAC  Source for an example MS(PC)-DOS custom serial I/O BIOS.
     UNSQZ    COM  Decodes squeezed files.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0439
+
+### Directory of PC-SIG Library Disk #0439
 
      Volume in drive A has no label
      Directory of A:\

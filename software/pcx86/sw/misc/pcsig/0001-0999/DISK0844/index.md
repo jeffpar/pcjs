@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #844"
+title: "PC-SIG Diskette Library (Disk #844)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0844/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0844"
+      B: "PC-SIG Library Disk #0844"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ABC FUN KEYS, EDUCATIONAL FOR CHILDREN"
 
@@ -47,8 +49,10 @@ machines:
     
     ABC FUN KEYS is educational and designed to make learning as fun and
     stimulating as possible.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0844
+
+### Directory of PC-SIG Library Disk #0844
 
      Volume in drive A has no label
      Directory of A:\

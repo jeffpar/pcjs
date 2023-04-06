@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #585"
+title: "PC-SIG Diskette Library (Disk #585)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0585/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0585"
+      B: "PC-SIG Library Disk #0585"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DOS EXTENSIONS 1 OF 2 (ALSO 586)"
 
@@ -61,8 +63,10 @@ machines:
     PRNT     EXE  DOS extension -- output selected text lines of files.
     MV       EXE  DOS extension -- move files.
     MERGE    EXE  DOS extension -- merge text lines from multiple files.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0585
+
+### Directory of PC-SIG Library Disk #0585
 
      Volume in drive A has no label
      Directory of A:\

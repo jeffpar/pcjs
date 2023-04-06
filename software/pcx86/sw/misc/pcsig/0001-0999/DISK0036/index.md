@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #36"
+title: "PC-SIG Diskette Library (Disk #36)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0036/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0036"
+      B: "PC-SIG Library Disk #0036"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PASCAL COLLECTION #1"
 
@@ -76,8 +78,10 @@ machines:
     TABSET2  PAS  Simular to tabset1 but treats printer as binary file.
     TIMI     PAS  Illustrates concept of PASCAL unit  (interface)
     TIMU     PAS  Illustrates concept of PASCAL unit  (unit).
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0036
+
+### Directory of PC-SIG Library Disk #0036
 
      Volume in drive A has no label
      Directory of A:\

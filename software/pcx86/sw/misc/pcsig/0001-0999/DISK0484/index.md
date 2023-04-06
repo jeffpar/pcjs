@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #484"
+title: "PC-SIG Diskette Library (Disk #484)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0484/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0484"
+      B: "PC-SIG Library Disk #0484"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "GRAPHICS FONT DESIGN"
 
@@ -63,8 +65,10 @@ machines:
     ???CHARS ???  Part of NEWFONTS.COM
     MEWPROC  INC  Part of NEWFONTS.COM
     ADDENDA  DOC  Additions to documentation
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0484
+
+### Directory of PC-SIG Library Disk #0484
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #120"
+title: "PC-SIG Diskette Library (Disk #120)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0120/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0120"
+      B: "PC-SIG Library Disk #0120"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-CHESS"
 
@@ -26,8 +28,10 @@ machines:
     The graphics of the game only appear on systems using either EGA or CGA
     adapter cards. The program uses ASCII characters to depict the chess
     pieces on a monochrome or Hercules graphics systems.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0120
+
+### Directory of PC-SIG Library Disk #0120
 
      Volume in drive A has no label
      Directory of A:\

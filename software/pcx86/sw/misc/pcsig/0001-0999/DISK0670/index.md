@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #670"
+title: "PC-SIG Diskette Library (Disk #670)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0670/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0670"
+      B: "PC-SIG Library Disk #0670"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "GRAPHTIME II 2 OF 2 (ALSO 669)"
 
@@ -46,8 +48,10 @@ machines:
     override.  A macro facility is included for commonly-used
     command sequences and to control slide shows.  Macros can also be
     created by recording a sequence of commands as they are used.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0670
+
+### Directory of PC-SIG Library Disk #0670
 
      Volume in drive A has no label
      Directory of A:\

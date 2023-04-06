@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #967"
+title: "PC-SIG Diskette Library (Disk #967)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0967/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0967"
+      B: "PC-SIG Library Disk #0967"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ADVENTURE AND MUSIC COLLECTION"
 
@@ -40,8 +42,10 @@ machines:
     The dulcimer tuning program helps beginners learn to tune their
     instruments with an electronic tuner.  Instructions are included in the
     program, and tones can be repeated if desired.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0967
+
+### Directory of PC-SIG Library Disk #0967
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #871"
+title: "PC-SIG Diskette Library (Disk #871)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0871/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0871"
+      B: "PC-SIG Library Disk #0871"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FILE FRIEND AND FANCY LABEL MAKER"
 
@@ -49,8 +51,10 @@ machines:
     can use either 3-1/2" x 15/16" labels, on which you can print up to
     five lines, or 4" x 7/16" labels, on which you can print up to eight
     lines per label.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0871
+
+### Directory of PC-SIG Library Disk #0871
 
      Volume in drive A has no label
      Directory of A:\

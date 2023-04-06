@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #849"
+title: "PC-SIG Diskette Library (Disk #849)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0849/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0849"
+      B: "PC-SIG Library Disk #0849"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "GRAPHICS COACH FOR RUNNERS"
 
@@ -25,8 +27,10 @@ machines:
     Monthly and yearly graphs and tables display the runner's pace, average
     speed, and total distance run.  A practical, useful program for any
     runner who wants to improve and pace his/her running ability.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0849
+
+### Directory of PC-SIG Library Disk #0849
 
      Volume in drive A has no label
      Directory of A:\

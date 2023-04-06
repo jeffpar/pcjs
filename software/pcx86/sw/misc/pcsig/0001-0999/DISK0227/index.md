@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #227"
+title: "PC-SIG Diskette Library (Disk #227)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0227/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0227"
+      B: "PC-SIG Library Disk #0227"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FINANCIAL PROGRAMS"
 
@@ -34,8 +36,10 @@ machines:
     
     FINANCE  DOC  Documentation.
     FINANCE  EXE  Main program
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0227
+
+### Directory of PC-SIG Library Disk #0227
 
      Volume in drive A has no label
      Directory of A:\

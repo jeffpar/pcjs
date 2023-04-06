@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #700"
+title: "PC-SIG Diskette Library (Disk #700)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0700/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0700"
+      B: "PC-SIG Library Disk #0700"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MEALMATE"
 
@@ -36,8 +38,10 @@ machines:
     operated and presents nutritional information on many common foods.
     
     Pass the salad, please.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0700
+
+### Directory of PC-SIG Library Disk #0700
 
      Volume in drive A has no label
      Directory of A:\

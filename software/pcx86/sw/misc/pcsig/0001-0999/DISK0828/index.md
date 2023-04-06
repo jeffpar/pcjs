@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #828"
+title: "PC-SIG Diskette Library (Disk #828)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0828/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0828"
+      B: "PC-SIG Library Disk #0828"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "EDRAW"
 
@@ -27,8 +29,10 @@ machines:
     drawing electronic circuits as well as lines, boxes, circles, and other
     icons. EDRAW is a must for anyone who has specific drawing or graphic
     needs.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0828
+
+### Directory of PC-SIG Library Disk #0828
 
      Volume in drive A has no label
      Directory of A:\

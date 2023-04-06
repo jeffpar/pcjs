@@ -305,7 +305,14 @@ function processFolders(sDir, argv)
 
     if (sDir.indexOf("pcx86") < 0) sDir = path.join(sDir, "pcx86", "**");
 
-    let diskettesPath = path.join(rootDir, sDir, "archive", "*.{IMG,ZIP,img,zip}");
+    let diskettesPath, verifyJSON = false, trimJSON = false;
+    if (argv['folders'] == "json") {
+        verifyJSON = true;
+        if (argv['trim']) trimJSON = true;
+        diskettesPath = path.join(rootDir, sDir, "*.json");
+    } else {
+        diskettesPath = path.join(rootDir, sDir, "archive", "*.{IMG,ZIP,img,zip}");
+    }
     let prefixDir = diskettesPath.slice(0, diskettesPath.indexOf("pcx86") + 6);
 
     printf("scanning %s...\n", diskettesPath.slice(rootDir.length));
@@ -337,13 +344,13 @@ function processFolders(sDir, argv)
             return;
         }
         let imgParts = imgPath.split(path.sep);
-        if (imgParts[imgParts.length-2] != "archive") {
+        if (!verifyJSON && imgParts[imgParts.length-2] != "archive") {
             return;
         }
         if (imgParts[imgParts.length-1].indexOf('_') == 0) {
             return;
         }
-        if (imgParts[imgParts.length-1] == "kryoflux") {
+        if (imgParts[imgParts.length-1] == "kryoflux" || imgPath == "diskettes.json" || imgPath == "diskettesDetail.json") {
             return;
         }
 
@@ -372,7 +379,7 @@ function processFolders(sDir, argv)
         let media, mediaName, archiveType, photoType;
 
         for (i = 0; i < imgParts.length; i++) {
-            if (imgParts[i] != "archive") {
+            if (imgParts[i] != "archive" && !imgParts[i].endsWith(".json")) {
                 let obj = diskObj[imgParts[i]];
                 if (!obj) {
                     let versions = diskObj['@versions'];
@@ -414,14 +421,18 @@ function processFolders(sDir, argv)
                 }
                 diskObj = null;
                 if (media) {
-                    mediaName = imgParts[++i];
+                    if (!imgParts[i].endsWith(".json")) {
+                        mediaName = imgParts[++i];
+                    } else {
+                        mediaName = imgParts[i].slice(0, -5);
+                    }
                     jsonName = mediaName;
                     let photoName = mediaName;
                     iExt = jsonName.lastIndexOf('.');
                     if (iExt < 0) {
                         jsonName += ".json";
                         photoName += ".jpg";
-                        archiveType = "folder";
+                        if (!verifyJSON) archiveType = "folder";
                     } else {
                         mediaName = mediaName.slice(0, iExt);
                         photoName = mediaName + ".jpg";
@@ -489,9 +500,47 @@ function processFolders(sDir, argv)
                             }
                         }
 
-                        if (diskDB && diskDB[mediaName]) {
-                            diskObj['@diskInfo'] = diskDB[mediaName];
-                            diskettesUpdated = true;
+                        if (verifyJSON && !diskObj['@fileList']) {
+                            let json = JSON.parse(fs.readFileSync(imgFile, {encoding: "utf8"}));
+                            if (json && json.fileTable) {
+                                let sFileList = "";
+                                for (let f = 0; f < json.fileTable.length; f++) {
+                                    if (sFileList) sFileList += '|';
+                                    sFileList += json.fileTable[f].path;
+                                }
+                                diskObj['@fileList'] = sFileList;
+                                diskettesUpdated = true;
+                            }
+                        }
+
+                        if (trimJSON) {
+                            let diskInfo = diskObj['@diskInfo'];
+                            if (diskInfo) {
+                                let diskTitle = diskInfo['diskTitle'];
+                                if (diskTitle) {
+                                    diskObj['@diskTitle'] = diskTitle;
+                                }
+                                let summary = "";
+                                let diskSummary = diskInfo['diskSummary'];
+                                if (diskSummary) {
+                                    for (let line of diskSummary) {
+                                        if (!line) break;
+                                        if (summary) summary += ' ';
+                                        summary += line;
+                                    }
+                                }
+                                if (summary) {
+                                    diskObj['@diskSummary'] = summary;
+                                }
+                                delete diskObj['@diskInfo'];
+                                diskettesUpdated = true;
+                            }
+                        }
+                        else {
+                            if (diskDB && diskDB[mediaName]) {
+                                diskObj['@diskInfo'] = diskDB[mediaName];
+                                diskettesUpdated = true;
+                            }
                         }
                     }
                 }
@@ -577,17 +626,6 @@ function processFolders(sDir, argv)
             fs.writeFileSync(diskettesFile, JSON.stringify(diskettes, null, 2) + "\n");
         }
     }
-}
-
-/**
- * processPCSIG(sDir, argv)
- *
- * @param {string} sDir
- * @param {Object} argv
- * @returns {Object}
- */
-function processPCSIG(sDir, argv)
-{
 }
 
 /**
@@ -814,9 +852,14 @@ if (args.argc < 2) {
         }
     }
     else if (argv['folders']) {
+        /*
+         * "--folders" was originally intended to look for .IMG and .ZIP files that might be missing from a collection;
+         * however, you can also use "--folders=json" to look at JSON diskettes that have already been added to the collection,
+         * and then do things like extract their fileInfo table and add it to the collection's "diskettes.json" file.
+         *
+         * Use "--trim" along with "--folders=json" to trim @diskInfo objects.
+         */
         processFolders(sDir, argv);
-    } else if (argv['pcsig']) {
-        processPCSIG(argv['pcsig'], argv);
     } else {
         printf("nothing to do\n");
     }

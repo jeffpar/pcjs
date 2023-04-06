@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #842"
+title: "PC-SIG Diskette Library (Disk #842)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0842/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0842"
+      B: "PC-SIG Library Disk #0842"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BOX (PROGRAMMERS UTILITY)"
 
@@ -35,8 +37,10 @@ machines:
     instantly on the monitor from a Pascal or C program.  This disk also
     contains all the source code routines that you need to incorporate BOX
     in your Turbo Pascal programs.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0842
+
+### Directory of PC-SIG Library Disk #0842
 
      Volume in drive A has no label
      Directory of A:\

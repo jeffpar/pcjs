@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #760"
+title: "PC-SIG Diskette Library (Disk #760)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0760/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0760"
+      B: "PC-SIG Library Disk #0760"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MINIGEN"
 
@@ -34,8 +36,10 @@ machines:
     
     This program is primarily for intermediate to experienced users, and not
     the novice.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0760
+
+### Directory of PC-SIG Library Disk #0760
 
      Volume in drive A has no label
      Directory of A:\

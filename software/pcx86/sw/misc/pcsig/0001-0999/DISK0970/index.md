@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #970"
+title: "PC-SIG Diskette Library (Disk #970)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0970/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0970"
+      B: "PC-SIG Library Disk #0970"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MSFORMS 1 OF 2 (ALSO 1453)"
 
@@ -32,8 +34,10 @@ machines:
     program, along with other information, including matrix type and
     dilution factors. MSFORMS processes it and prints an analysis form
     suitable for delivery to a client.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0970
+
+### Directory of PC-SIG Library Disk #0970
 
      Volume in drive A has no label
      Directory of A:\

@@ -495,7 +495,14 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "PC-SIG Library Disk #1",
+      "name": "PC-SIG Diskette Library",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sw/misc/pcsig/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "PC-SIG Diskette Library (Disk #1)",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sw/misc/pcsig/0001-0999/DISK0001/",
@@ -565,7 +572,7 @@
       "program": "${workspaceFolder}/tools/misc/old/diskettes.js",
       "args": [
         "/disks/pcsigdisks",
-        "--folders",
+        "--folders=json",
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}",
@@ -597,8 +604,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--all='/Volumes/PCSIG_13B/**/*.ZIP'",
-        "PCSIG_13B"
+        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/1000-1999/DISK1000/archive/DISK1000.ZIP'",
+        "--output=%d/..",
+        "--type=json"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -664,8 +672,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--zip=/Volumes/PC_SIG_12_90/701_800/DISK0798/DISK0798.ZIP",
-        "--output=tmp/DISK0798.json",
+        "--zip=tmp/DISK0798.ZIP",
+        "--output=%f/DISK0798.json",
         "--overwrite",
         "--list=sorted",
         "--verbose"
@@ -683,11 +691,31 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "DISK0212.ZIP",
+        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0478/archive/DISK0478.ZIP'",
         "--extract",
         "--expand",
+        "--normalize",
         "--overwrite",
-        "--verbose"
+        "--quiet1",
+        "--extdir=%d"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskimage.js --extract --normalize",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "~/Downloads/DISK0217.img",
+        "--extract",
+        "--normalize",
+        "--overwrite"
       ],
       "cwd": "${workspaceFolder}/tmp",
       "stopOnEntry": false,
@@ -702,7 +730,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--verbose",
+        "-v",
         "tmp/posts.zip"
       ],
       "cwd": "${workspaceFolder}",
@@ -770,10 +798,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--disk=/pcsig8a-disks/pcx86/shareware/pcsig08/archive/DISK0798.img",
-        "--output=tmp/DISK0798.json",
-        "--list",
-        "--overwrite"
+        "--disk=/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0798/DISK0798.json",
+        "--list"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -822,7 +848,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=0001-0999/DISK0798",
+        "--collection=pcsig/0001-0999/DISK0147",
         "--checkdisk",
         "--rebuild"
       ],
@@ -839,7 +865,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=disks/pcsig0",
+        "--collection=pcsig",
         "--checkpage",
         "--rebuild"
       ],

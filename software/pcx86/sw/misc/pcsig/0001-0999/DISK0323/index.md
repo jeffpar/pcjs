@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #323"
+title: "PC-SIG Diskette Library (Disk #323)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0323/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0323"
+      B: "PC-SIG Library Disk #0323"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TRANSTOK"
 
@@ -42,8 +44,10 @@ machines:
     STOKCHEK  DJI  Sample data file.
     UNISTOX   DJI  Sample data file.
     UNISTOX   DJC  Sample data file.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0323
+
+### Directory of PC-SIG Library Disk #0323
 
      Volume in drive A has no label
      Directory of A:\

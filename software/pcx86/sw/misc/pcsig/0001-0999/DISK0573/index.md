@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #573"
+title: "PC-SIG Diskette Library (Disk #573)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0573/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0573"
+      B: "PC-SIG Library Disk #0573"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "XASM CROSSASSEMBLER"
 
@@ -44,8 +46,10 @@ machines:
     XASM     EXE  Macro configured Cross-assembler.
     README   1ST  Information on APL workspace files.
     APLDEMO  AWS  APL workspace file - 115 public domain utility functions.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0573
+
+### Directory of PC-SIG Library Disk #0573
 
      Volume in drive A has no label
      Directory of A:\

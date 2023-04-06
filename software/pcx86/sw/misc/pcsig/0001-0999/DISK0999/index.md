@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #999"
+title: "PC-SIG Diskette Library (Disk #999)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0999/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0999"
+      B: "PC-SIG Library Disk #0999"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PCJR SURVIVAL KIT"
 
@@ -64,8 +66,31 @@ machines:
     PATCH    COM  Patch program for the jr.
     KEY      BAS  BASIC program.
     JRTELE   DOC  Documentation for JRTELE.COM.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0999
+{% comment %}samples_begin{% endcomment %}
+
+## KEY.BAS
+
+```bas
+0 REM: This program is a variation on one in The Fully Powered PC, p. 179.
+10 COLOR 0,2,2
+1000 KEY 1,CHR$(27)+"LIST "
+1010 KEY 2,CHR$(27)+"RUN  "+CHR$(13)
+1020 KEY 3,CHR$(27)+"LOAD"+CHR$(34)
+1030 KEY 4,CHR$(27)+"SAVE"+CHR$(34)
+1040 KEY 5,CHR$(27)+"CONT "+CHR$(13)
+1050 KEY 6,","+CHR$(34)+"LPT1:"+CHR$(34)
+1060 KEY 7,CHR$(27)+"TRON "+CHR$(13)
+1070 KEY 8,CHR$(27)+"TROFF"+CHR$(13)
+1080 KEY 9,CHR$(27)+"KEY "
+1090 KEY 10,CHR$(27)+"SCREEN 0,0,0"+CHR$(13)
+1100 KEY ON
+```
+
+{% comment %}samples_end{% endcomment %}
+
+### Directory of PC-SIG Library Disk #0999
 
      Volume in drive A has no label
      Directory of A:\

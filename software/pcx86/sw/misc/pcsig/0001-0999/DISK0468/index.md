@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #468"
+title: "PC-SIG Diskette Library (Disk #468)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0468/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0468"
+      B: "PC-SIG Library Disk #0468"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CPA LEDGER 2 OF 2 (ALSO 466)"
 
@@ -30,8 +32,10 @@ machines:
     with total values of up to $999,999,999.99. A very powerful system.
     Some knowledge of double-entry bookkeeping is necessary to operate this
     package.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0468
+
+### Directory of PC-SIG Library Disk #0468
 
      Volume in drive A has no label
      Directory of A:\

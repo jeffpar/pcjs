@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #328"
+title: "PC-SIG Diskette Library (Disk #328)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0328/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0328"
+      B: "PC-SIG Library Disk #0328"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TRIVIA 2 OF 2 (ALSO 327)"
 
@@ -37,8 +39,10 @@ machines:
     TM       FNT  Support file for trivia game
     CATEGORY D    Mixed Bag trivia questions
     CATEGORY B    Sports and Recreation trivia questions
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0328
+
+### Directory of PC-SIG Library Disk #0328
 
      Volume in drive A has no label
      Directory of A:\

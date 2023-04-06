@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #617"
+title: "PC-SIG Diskette Library (Disk #617)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0617/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0617"
+      B: "PC-SIG Library Disk #0617"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CORBIN HANDBOOK 2 OF 2 (ALSO 616)"
 
@@ -74,8 +76,10 @@ machines:
     ST       DOC  Documentation for ST.COM
     ST       COM  Text display utility
     FKEY     BAT  Function key batch file to set utility function
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0617
+
+### Directory of PC-SIG Library Disk #0617
 
      Volume in drive A has no label
      Directory of A:\

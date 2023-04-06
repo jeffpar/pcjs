@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #207"
+title: "PC-SIG Diskette Library (Disk #207)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0207/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0207"
+      B: "PC-SIG Library Disk #0207"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LOTUS WORKSHEETS #1"
 
@@ -40,8 +42,10 @@ machines:
     TREND123 MAC  Version 1.0 (John Dannenfeldt) - Curve fitting macro
     TREND123 DOC  Documentation
     PAD      WKS  Version 1.2 (Frank Girard) - Desktop-like template
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0207
+
+### Directory of PC-SIG Library Disk #0207
 
      Volume in drive A has no label
      Directory of A:\

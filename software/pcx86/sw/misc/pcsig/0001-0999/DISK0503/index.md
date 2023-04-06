@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #503"
+title: "PC-SIG Diskette Library (Disk #503)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0503/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0503"
+      B: "PC-SIG Library Disk #0503"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "RELIANCE MAILING LIST"
 
@@ -24,8 +26,10 @@ machines:
     Print mailing labels four-across, select groups of people from the
     database by specifying up to eight criteria and create a mailmerge
     file.  Handle as many records as you have disk space for.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0503
+
+### Directory of PC-SIG Library Disk #0503
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #815"
+title: "PC-SIG Diskette Library (Disk #815)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0815/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0815"
+      B: "PC-SIG Library Disk #0815"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MODULA-2 TUTORIAL 2 OF 2 (ALSO 814)"
 
@@ -29,8 +31,10 @@ machines:
     Parts II and III teach those features that are new in MODULA-2 --
     advanced topics and features that allow the programmer to use the full
     power of the language and write larger and more complex programs. File
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0815
+
+### Directory of PC-SIG Library Disk #0815
 
      Volume in drive A has no label
      Directory of A:\

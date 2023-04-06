@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #718"
+title: "PC-SIG Diskette Library (Disk #718)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0718/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0718"
+      B: "PC-SIG Library Disk #0718"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LQ PRINTER UTILITY"
 
@@ -49,8 +51,10 @@ machines:
     letterheads.  LETHEAD is a graphics editor that works with LQ to
     produce high-resolution letterheads consisting of 1" x 1" pictures and
     up to four lines of accompanying text.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0718
+
+### Directory of PC-SIG Library Disk #0718
 
      Volume in drive A has no label
      Directory of A:\

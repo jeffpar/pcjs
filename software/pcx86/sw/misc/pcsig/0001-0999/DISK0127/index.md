@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #127"
+title: "PC-SIG Diskette Library (Disk #127)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0127/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0127"
+      B: "PC-SIG Library Disk #0127"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-MUSICIAN"
 
@@ -24,8 +26,10 @@ machines:
     Playback is on the one voice of the computer.  This program is more for
     the aspiring musician than for the technically-proficient
     musician/computer operator.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0127
+
+### Directory of PC-SIG Library Disk #0127
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #551"
+title: "PC-SIG Diskette Library (Disk #551)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0551/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0551"
+      B: "PC-SIG Library Disk #0551"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LETUS A-B-C #14"
 
@@ -42,8 +44,10 @@ machines:
     your selection.
     
     Suggested Registration:  $10.00 per disk.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0551
+
+### Directory of PC-SIG Library Disk #0551
 
      Volume in drive A has no label
      Directory of A:\

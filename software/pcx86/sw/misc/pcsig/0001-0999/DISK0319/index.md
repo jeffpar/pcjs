@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #319"
+title: "PC-SIG Diskette Library (Disk #319)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0319/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0319"
+      B: "PC-SIG Library Disk #0319"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DOS UTILITIES NO 16"
 
@@ -80,8 +82,65 @@ machines:
     WHEREII  DOC  Documentation for WHEREII.
     WHEREII  COM  Finds directory path for all copies of a file on a disk.
     READ     ME   Notes on DB Screen.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0319
+{% comment %}samples_begin{% endcomment %}
+
+## DRVTEST.BAS
+
+```bas
+
+
+10  'DISK DRIVE TEST
+20  'JOE McDERMOTT - DECEMBER 1982
+25  'NORTH JERSEY IBM PC CLUB
+30  '
+40  'THE PROGRAM CREATES A SERIES OF SEQUENTIAL FILES
+50  'IT WRITES DATA TO THEM AND READS IT BACK FOR VERIFICATION
+60  'FINALLY THE TEST FILES ARE ERASED/
+70  'THE FILES ARE OF THE FORM "XXX.TST" WHERE "XXX" ARE THREE LETTERS
+80  'CHOSEN AT RANDOM, E.G. "EBG.TST","CXU.TST"
+90  '
+100  NUMFILES=40        'NUMBER OF FILES THAT WILL BE CREATED
+110  DIM FS$(NUMFILES)  'ARRAY FOR STORING FILESPECS
+120  FTYPE$=".TST"      'FILE EXTENSION USED IN THE TEST
+130  INPUT"DRIVE TO BE TESTED ";DD$
+140  DD$=DD$+":"
+150  '
+160  INPUT"*** INSERT DISK AND PRESS `ENTER' ***",Z$
+170  '
+180  '   ---------- CREATE FILES ----------
+190  FOR I=1 TO NUMFILES
+200    FILENAME$ = CHR$(RND*26+64)+CHR$(RND*26+64)+CHR$(RND*26+64)
+205    FS$(I)=DD$+FILENAME$+FTYPE$
+210    PRINT"CREATING: ";FS$(I);" #";I
+220    OPEN "O",1,FS$(I)           'CREATE DIRECTORY ENTRY
+230    PRINT#1,STRING$(255,"*")    'WRITE DATA TO FILE
+240    PRINT#1,STRING$(255,"*")
+250    PRINT#1,STRING$(255,"*")
+260    CLOSE 1
+270  NEXT I
+280  '   ---------- READ BACK FILES -----------
+290  FOR I=1 TO NUMFILES
+300    PRINT"READING: ";FS$(I);" #";I
+310    OPEN "I",1,FS$(I)
+320    INPUT#1,L$:PRINT LEFT$(L$,75)
+330    INPUT#1,L$:PRINT LEFT$(L$,75)
+335    INPUT#1,L$:PRINT LEFT$(L$,75)
+340    CLOSE 1
+350  NEXT I
+360  '   ---------- ERASE FILES ----------
+370  FOR I=1 TO NUMFILES
+380    PRINT"ERASING: ";FS$(I)
+390    KILL FS$(I)
+400  NEXT I
+410  END  'OF PROGRAM
+
+```
+
+{% comment %}samples_end{% endcomment %}
+
+### Directory of PC-SIG Library Disk #0319
 
      Volume in drive A has no label
      Directory of A:\

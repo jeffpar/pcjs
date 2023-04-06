@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #858"
+title: "PC-SIG Diskette Library (Disk #858)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0858/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0858"
+      B: "PC-SIG Library Disk #0858"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ARE YOU READY FOR CALCULUS, TUTOR"
 
@@ -36,8 +38,10 @@ machines:
     
     If you want to take calculus next quarter or semester, this program is
     for you.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0858
+
+### Directory of PC-SIG Library Disk #0858
 
      Volume in drive A has no label
      Directory of A:\

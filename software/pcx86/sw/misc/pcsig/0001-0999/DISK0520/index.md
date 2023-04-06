@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #520"
+title: "PC-SIG Diskette Library (Disk #520)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0520/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0520"
+      B: "PC-SIG Library Disk #0520"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BUDGETRAK 2 OF 2 (ALSO 519)"
 
@@ -34,8 +36,10 @@ machines:
     budgeting purposes, than waiting to record an actual expense.
     BUDGETRAK handles single and double-entry bookkeeping and has a built-in
     password system.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0520
+
+### Directory of PC-SIG Library Disk #0520
 
      Volume in drive A has no label
      Directory of A:\

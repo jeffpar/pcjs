@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #253"
+title: "PC-SIG Diskette Library (Disk #253)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0253/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0253"
+      B: "PC-SIG Library Disk #0253"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "3X5 CARD 1 OF 2 (1298)"
 
@@ -76,8 +78,10 @@ machines:
     REF      REF  Data file.
     REFSTYLE IFS  Data file.
     REFSTYLE RFS  Data file.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0253
+
+### Directory of PC-SIG Library Disk #0253
 
      Volume in drive A has no label
      Directory of A:\

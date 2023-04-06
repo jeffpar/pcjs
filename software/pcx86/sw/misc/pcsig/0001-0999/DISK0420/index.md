@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #420"
+title: "PC-SIG Diskette Library (Disk #420)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0420/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0420"
+      B: "PC-SIG Library Disk #0420"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FILE UTILITIES #2"
 
@@ -77,8 +79,10 @@ machines:
     FCOMPARE EXE  Good file compare program
     ARC      DOC  Documentation file
     ARC      EXE  Combine and squeeze files in one pass
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0420
+
+### Directory of PC-SIG Library Disk #0420
 
      Volume in drive A has no label
      Directory of A:\

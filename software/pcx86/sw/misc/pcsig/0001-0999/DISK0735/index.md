@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #735"
+title: "PC-SIG Diskette Library (Disk #735)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0735/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0735"
+      B: "PC-SIG Library Disk #0735"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CHECKBOOKS AND BUDGETS"
 
@@ -52,8 +54,10 @@ machines:
     ~ Quick and easy bank statement reconciliation system
     
     ~ Financial and loan calculations
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0735
+
+### Directory of PC-SIG Library Disk #0735
 
      Volume in drive A has no label
      Directory of A:\

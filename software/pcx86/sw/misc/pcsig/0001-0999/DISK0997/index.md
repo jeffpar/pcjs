@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #997"
+title: "PC-SIG Diskette Library (Disk #997)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0997/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0997"
+      B: "PC-SIG Library Disk #0997"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "OPUS 1 BRAIN TEASERS TRIVIA GAME"
 
@@ -28,8 +30,10 @@ machines:
     The game is played much like you would play Charades, with the clues
     brought up as a graphic clue.  For example, The Graduate has the clue
     ``GRADUUUUUUUU'' (Grad + eight U's = Grad-u-eight).  Have fun!
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0997
+
+### Directory of PC-SIG Library Disk #0997
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,0 +1,57 @@
+---
+layout: page
+title: "PC-SIG Diskette Library (Disk #1501)"
+permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1501/
+machines:
+  - id: ibm5150
+    type: pcx86
+    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
+    autoGen: true
+    autoMount:
+      B: "PC-SIG Library Disk #1501"
+    autoType: $date\r$time\rB:\rDIR\r
+---
+
+{% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
+
+## Information about "WISDOM OF THE AGES 4 OF 4 (1598-1501)"
+
+    Find out how to attract success, wealth, power, happiness, friendship,
+    and fame; how to avoid danger, fear, failure, ruin, pain, and sorrow;
+    see what's been said about non-being, the eternal, creation, thought,
+    soul and time and other important issues perplexing or ruling your
+    life!
+    
+    WISDOM OF THE AGES brings you the insightful thoughts and advice of the
+    most significant philosophers, artists, scientists, writers, and
+    leaders in history.  In this four disk set, you are provided a
+    capsulized collection of mankind's wisdom spanning over 2,000 years,
+    covering subjects of endless fascination and importance.
+    
+    If you are a writer or public speaker, you'll glory in a fountainhead
+    of adages, aphorisms, and unforgettable sayings of 1,000 of the
+    world's greatest minds.  Perk up your writing and speaking and get your
+    creative juices flowing with powerful ideas, quips, and insights from
+    ancient civilizations to modern writers.  Tap into the priceless
+    treasures of the greatest thinkers of all time.
+    
+    Organized in 81 subject areas, each subject is further divided into
+    seven sections including: positive, negative, and advice.  Easy-to-use
+    menus let you dive into any subject area.  You can also filter your
+    selections to be limited to sayings from ancient times, short
+    selections, Americans only, and other parameters.
+{% comment %}info_end{% endcomment %}
+
+
+### Directory of PC-SIG Library Disk #1501
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    FILE1501 TXT       572   8-01-89   1:08p
+    FLOPPY3  DAT    356422   2-04-88  12:32a
+            2 file(s)     356994 bytes
+                            4096 bytes free

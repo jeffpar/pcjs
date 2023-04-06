@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #719"
+title: "PC-SIG Diskette Library (Disk #719)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0719/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0719"
+      B: "PC-SIG Library Disk #0719"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LETTERWRITER"
 
@@ -42,8 +44,10 @@ machines:
     SAMPLE        Sample file.
     CHECK    COM  Checks your copy of LETTERWRITER.
     CHECK    TXT  Description of check.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0719
+
+### Directory of PC-SIG Library Disk #0719
 
      Volume in drive A has no label
      Directory of A:\

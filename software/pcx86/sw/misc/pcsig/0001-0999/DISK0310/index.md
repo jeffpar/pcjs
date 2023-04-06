@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #310"
+title: "PC-SIG Diskette Library (Disk #310)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0310/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0310"
+      B: "PC-SIG Library Disk #0310"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "QMODEM SST 1 OF 5 (1022,1023,1483,1484)"
 
@@ -30,8 +32,10 @@ machines:
     and Televideo 925 ensure further flexibility.  LOG allows you to
     maintain usage records -- who called, time called, time online and a
     Date/Time stamp for each log entry.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0310
+
+### Directory of PC-SIG Library Disk #0310
 
      Volume in drive A has no label
      Directory of A:\

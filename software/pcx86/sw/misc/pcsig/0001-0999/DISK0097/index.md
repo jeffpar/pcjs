@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #97"
+title: "PC-SIG Diskette Library (Disk #97)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0097/
 machines:
   - id: ibm5150
@@ -9,13 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0097"
+      B: "PC-SIG Library Disk #0097"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk 0097
+### Directory of PC-SIG Library Disk #0097
 
      Volume in drive A has no label
      Directory of A:\

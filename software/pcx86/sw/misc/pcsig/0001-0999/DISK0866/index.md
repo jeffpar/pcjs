@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #866"
+title: "PC-SIG Diskette Library (Disk #866)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0866/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0866"
+      B: "PC-SIG Library Disk #0866"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DEEP SPACE 3-D   1 OF 2 (ALSO 867)"
 
@@ -48,8 +50,10 @@ machines:
     reliable guide to observational astronomy. For centuries man has gazed
     at the night-time sky and wondered what was out there. DEEP SPACE will
     help answer some of those questions.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0866
+
+### Directory of PC-SIG Library Disk #0866
 
      Volume in drive A has no label
      Directory of A:\

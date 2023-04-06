@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #521"
+title: "PC-SIG Diskette Library (Disk #521)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0521/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0521"
+      B: "PC-SIG Library Disk #0521"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FREE FILE"
 
@@ -27,8 +29,10 @@ machines:
     has on-line help and two tutorials. It allows 10 indexes per database,
     2 billion records, 1000 characters per record, and 100 fields per
     record.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0521
+
+### Directory of PC-SIG Library Disk #0521
 
      Volume in drive A has no label
      Directory of A:\

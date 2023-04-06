@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #906"
+title: "PC-SIG Diskette Library (Disk #906)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0906/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0906"
+      B: "PC-SIG Library Disk #0906"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MISC. UTILITIES"
 
@@ -57,8 +59,10 @@ machines:
     PKFIND11 EXE  Locate files on hard disk.
     PCKWKPAT ARC  Patch for shareware PC-Kwik.
     PKXARC   COM  Archiving utility.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0906
+
+### Directory of PC-SIG Library Disk #0906
 
      Volume in drive A has no label
      Directory of A:\

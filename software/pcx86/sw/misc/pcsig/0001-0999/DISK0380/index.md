@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #380"
+title: "PC-SIG Diskette Library (Disk #380)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0380/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0380"
+      B: "PC-SIG Library Disk #0380"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "GLUDRAW"
 
@@ -41,8 +43,10 @@ machines:
     DRAW4    EXE  Part of GLUDRAW.EXE
     DRAW???? HLP  Part of on-line help system (32 Files)
     BASRUN   BAS  BASIC runtime program
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0380
+
+### Directory of PC-SIG Library Disk #0380
 
      Volume in drive A has no label
      Directory of A:\

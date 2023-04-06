@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #952"
+title: "PC-SIG Diskette Library (Disk #952)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0952/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0952"
+      B: "PC-SIG Library Disk #0952"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SUPERNOVA - A TEXT ADVENTURE GAME"
 
@@ -33,8 +35,10 @@ machines:
     when you are well and truly stuck.
     
     Now, if you're going to save a civilization, you'd better get started!
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0952
+
+### Directory of PC-SIG Library Disk #0952
 
      Volume in drive A has no label
      Directory of A:\

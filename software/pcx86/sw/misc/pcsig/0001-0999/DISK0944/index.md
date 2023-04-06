@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #944"
+title: "PC-SIG Diskette Library (Disk #944)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0944/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0944"
+      B: "PC-SIG Library Disk #0944"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DOS CONTROLLER AND MR. MENU"
 
@@ -40,8 +42,10 @@ machines:
     program or command is done.  A configuration function lets you
     change the colors, default drive and directory, and opening screen
     titles.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0944
+
+### Directory of PC-SIG Library Disk #0944
 
      Volume in drive A has no label
      Directory of A:\

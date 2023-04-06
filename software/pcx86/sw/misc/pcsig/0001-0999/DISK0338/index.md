@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #338"
+title: "PC-SIG Diskette Library (Disk #338)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0338/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0338"
+      B: "PC-SIG Library Disk #0338"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SYSCOMM"
 
@@ -57,8 +59,10 @@ machines:
     MLREAD   ME   How to expand the manual files using EXPAND.BAT
     MANUAL?  !!!  Manual part 1 compressed (3 files)
     MAKEMAN  COM  Expands compressed manual files
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0338
+
+### Directory of PC-SIG Library Disk #0338
 
      Volume in drive A has no label
      Directory of A:\

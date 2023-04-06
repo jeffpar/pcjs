@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #507"
+title: "PC-SIG Diskette Library (Disk #507)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0507/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0507"
+      B: "PC-SIG Library Disk #0507"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-SPRINT"
 
@@ -50,8 +52,10 @@ machines:
     WARMBOOT COM  Program to set "warm boot" flag
     SCHEMATC      Electronic circuit diagram
     PCSPRINT DOC  Description & construction info
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0507
+
+### Directory of PC-SIG Library Disk #0507
 
      Volume in drive A has no label
      Directory of A:\

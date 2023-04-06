@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #759"
+title: "PC-SIG Diskette Library (Disk #759)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0759/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0759"
+      B: "PC-SIG Library Disk #0759"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "WRITER'S HEAVEN AND MOREPERFECT"
 
@@ -36,8 +38,10 @@ machines:
     forward or backward--without moving your hands from the letter keys!
     MOREPERFECT can double your editing speed, yet it's easy to learn and
     use.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0759
+
+### Directory of PC-SIG Library Disk #0759
 
      Volume in drive A has no label
      Directory of A:\

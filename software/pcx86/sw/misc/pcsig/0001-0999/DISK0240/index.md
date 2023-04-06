@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #240"
+title: "PC-SIG Diskette Library (Disk #240)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0240/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0240"
+      B: "PC-SIG Library Disk #0240"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FAMILY TREE GENEALOGY"
 
@@ -30,8 +32,10 @@ machines:
     
     The chart function uses the database to make reports by pedigree,
     ancestors, family groups, decendants, and relationships.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0240
+
+### Directory of PC-SIG Library Disk #0240
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #855"
+title: "PC-SIG Diskette Library (Disk #855)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0855/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0855"
+      B: "PC-SIG Library Disk #0855"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FASTBUCKS 1 OF 2 (ALSO 1296)"
 
@@ -46,8 +48,10 @@ machines:
     file path, and expense categories as desired. FASTBUCKS presently
     supports 141 printers and a user configuration, if your printer is not
     presently supported.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0855
+
+### Directory of PC-SIG Library Disk #0855
 
      Volume in drive A has no label
      Directory of A:\

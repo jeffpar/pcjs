@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #359"
+title: "PC-SIG Diskette Library (Disk #359)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0359/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0359"
+      B: "PC-SIG Library Disk #0359"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MOONBEAM"
 
@@ -36,8 +38,10 @@ machines:
     STAR     REC  Star data file used by moonbeam to plot stars
     MOONBEAM COM  Main program for moonbeam system
     MOONBEAM V1   Source code for MOONBEAM
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0359
+
+### Directory of PC-SIG Library Disk #0359
 
      Volume in drive A has no label
      Directory of A:\

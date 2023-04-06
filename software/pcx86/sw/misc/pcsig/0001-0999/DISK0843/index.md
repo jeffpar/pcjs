@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #843"
+title: "PC-SIG Diskette Library (Disk #843)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0843/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0843"
+      B: "PC-SIG Library Disk #0843"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "OMEGA-LINK"
 
@@ -37,8 +39,10 @@ machines:
     protocols include: ASCII, XMODEM and YMODEM.  If these aren't enough,
     there is an external protocol handler that allows you to add
     additional protocols such as ZMODEM, WXMODEM and KERMIT.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0843
+
+### Directory of PC-SIG Library Disk #0843
 
      Volume in drive A has no label
      Directory of A:\

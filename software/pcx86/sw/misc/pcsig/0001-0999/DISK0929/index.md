@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #929"
+title: "PC-SIG Diskette Library (Disk #929)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0929/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0929"
+      B: "PC-SIG Library Disk #0929"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LOTTO FEVER"
 
@@ -27,8 +29,10 @@ machines:
     NOTE: The program will not display your lotto numbers on a monochrome
     monitor. If your system has a monochrome monitor,  you must have a
     printer in order to see your numbers.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0929
+
+### Directory of PC-SIG Library Disk #0929
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #635"
+title: "PC-SIG Diskette Library (Disk #635)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0635/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0635"
+      B: "PC-SIG Library Disk #0635"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MUSES 1 OF 2 (ALSO 636)"
 
@@ -25,8 +27,10 @@ machines:
     publisher at any time. Mail merge the address in the files with
     appropriate form letters and print letters on one printer and
     envelopes on another.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0635
+
+### Directory of PC-SIG Library Disk #0635
 
      Volume in drive A has no label
      Directory of A:\

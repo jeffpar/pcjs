@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #132"
+title: "PC-SIG Diskette Library (Disk #132)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0132/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0132"
+      B: "PC-SIG Library Disk #0132"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PASCAL TOOLS VOL 3"
 
@@ -36,8 +38,10 @@ machines:
     *        DCL  Procedure definition files
     CMDFILE  BAT  Batch files used to create utilities (3 files)
     ???      BAT  PASCAL batch file utilities
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0132
+
+### Directory of PC-SIG Library Disk #0132
 
      Volume in drive A has no label
      Directory of A:\

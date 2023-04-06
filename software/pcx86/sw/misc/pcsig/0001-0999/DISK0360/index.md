@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #360"
+title: "PC-SIG Diskette Library (Disk #360)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0360/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0360"
+      B: "PC-SIG Library Disk #0360"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PFROI, PORTFOLIO MANAGEMENT WITH ROI"
 
@@ -31,8 +33,10 @@ machines:
     stock data.  A demonstration data file is included.
     
     Manage an extensive portfolio and plan and prepare your taxes.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0360
+
+### Directory of PC-SIG Library Disk #0360
 
      Volume in drive A has no label
      Directory of A:\

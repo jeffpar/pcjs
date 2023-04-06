@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #279"
+title: "PC-SIG Diskette Library (Disk #279)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0279/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0279"
+      B: "PC-SIG Library Disk #0279"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PIANOMAN & PLAYER PIANO"
 
@@ -33,8 +35,10 @@ machines:
     Create lovely music with this versatile composition tool.  Record your
     songs on disk and send music to your friends.  They'll smile when you
     sit down at the computer!
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0279
+
+### Directory of PC-SIG Library Disk #0279
 
      Volume in drive A has no label
      Directory of A:\

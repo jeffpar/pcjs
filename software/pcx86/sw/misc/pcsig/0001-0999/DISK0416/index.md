@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #416"
+title: "PC-SIG Diskette Library (Disk #416)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0416/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0416"
+      B: "PC-SIG Library Disk #0416"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ROFF4"
 
@@ -72,8 +74,10 @@ machines:
     ROFF4    DOC  19 pages of documentation
     ROFF4    EXE  Executable form of formatter
     ROFF4    C    Main source module
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0416
+
+### Directory of PC-SIG Library Disk #0416
 
      Volume in drive A has no label
      Directory of A:\

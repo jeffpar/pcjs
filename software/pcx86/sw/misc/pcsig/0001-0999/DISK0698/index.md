@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #698"
+title: "PC-SIG Diskette Library (Disk #698)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0698/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0698"
+      B: "PC-SIG Library Disk #0698"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "THE FRONT OFFICE 2 OF 3 (ALSO 697, 2311)"
 
@@ -34,8 +36,10 @@ machines:
     flexible prospect tracking and follow-up.  Call reports include
     telephone time, sales forecasts, and potential sales volume for
     management analysis and sales support.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0698
+
+### Directory of PC-SIG Library Disk #0698
 
      Volume in drive A has no label
      Directory of A:\

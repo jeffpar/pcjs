@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #755"
+title: "PC-SIG Diskette Library (Disk #755)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0755/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0755"
+      B: "PC-SIG Library Disk #0755"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CANTONESE TUTOR"
 
@@ -26,8 +28,10 @@ machines:
     study, since it does not provide actual spoken Cantonese as an example.
     The documentation can be somewhat difficult to follow at times, but has
     all the needed information to run the program.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0755
+
+### Directory of PC-SIG Library Disk #0755
 
      Volume in drive A has no label
      Directory of A:\

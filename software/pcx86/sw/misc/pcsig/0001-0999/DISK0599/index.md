@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #599"
+title: "PC-SIG Diskette Library (Disk #599)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0599/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0599"
+      B: "PC-SIG Library Disk #0599"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DREAM 1 OF 2 (600 ALSO IN THIS SET)"
 
@@ -54,8 +56,10 @@ machines:
     ~ ASCII file format and portability of data.
     ~ Five levels of user expertise.
     ~ Electronic note pad.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0599
+
+### Directory of PC-SIG Library Disk #0599
 
      Volume in drive A has no label
      Directory of A:\

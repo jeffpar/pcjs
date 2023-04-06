@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #919"
+title: "PC-SIG Diskette Library (Disk #919)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0919/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0919"
+      B: "PC-SIG Library Disk #0919"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "POTPOURRI MENUING PROGRAM"
 
@@ -36,8 +38,10 @@ machines:
     INSTALL  BAT  Automatic installation batch file.
     INSTALL  TXT  Installation explanation text file.
     OGHAM    <DIR>Subdirectory.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0919
+
+### Directory of PC-SIG Library Disk #0919
 
      Volume in drive A has no label
      Directory of A:\

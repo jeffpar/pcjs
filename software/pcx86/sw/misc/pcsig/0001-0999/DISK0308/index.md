@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #308"
+title: "PC-SIG Diskette Library (Disk #308)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0308/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0308"
+      B: "PC-SIG Library Disk #0308"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ASSEMBLY UTILITIES NO 2"
 
@@ -80,8 +82,120 @@ machines:
     VW-TO-WS ASM  Volkswriter to Wordstar conversion
     WHEREIS  ASM  Find a file on a hard disk drive
     WS-TO-VW ASM  Wordstar to Volkswriter conversion
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0308
+{% comment %}samples_begin{% endcomment %}
+
+## UASM-LST.BAS
+
+```bas
+1  '------------------------------------------------------------------------
+2  '-               UASMLST.BAS    VER 1.0     07/02/83                    -
+3  '-                                                                      -
+4  '-        REMOVES ADDRESSES FROM FILES CREATED FROM DEBUG UN-           -
+5  '-        ASSEMBLE SCRIPT FILES (DOS 2.0 ONLY) AND INSERTS LABELS.      -
+6  '-        A SCRIPT FILE (ASCII PLEASE ) IS CREATED WITH THE             -
+7  '-        DEBUG INSTRUCTIONS (I.E.:                                     -
+8  '-                           U ADR1 ADR2                                -
+9  '-                           U ADR3 ADR4                                -
+10 '-                           Q                                          -
+11 '-        AND THEN PROCESSED AS FOLLOWS FROM THE DOS PROMPT:            -
+12 '-         A>DEBUG D:MYFILE.EXT <SCRIPT >UNASM.TXT                      -
+13 '-        ALL OUTPUT THAT WOULD NORMALLY GO TO THE SCREEN IS PIPED      -
+14 '-        TO THE FILE UNASM.TXT.                                        -
+15 '-                                                                      -
+16 '-        UNASM.TXT IS THEN SUBMITTED TO UASMLST FOR PROCESSING.        -
+17 '-                                                                      -
+18 '-        DEBUG PIPED OUTPUT IS FORMATTED AS FOLLOWS:                   -
+19 '-        POSITION            DATA                                      -
+20 '-        --------            ----                                      -
+21 '-        1 -  4              DEFAULT SEGMENT                           -
+22 '-             5              CONSTANT :                                -
+23 '-        6 -  9              OFFSET VALUE                              -
+24 '-            10              BLANK                                     -
+25 '-       11 - 24              HEX VALUE OF CONTENTS                     -
+26 '-       25 - 32              MNEMONIC                                  -
+27 '-       33 -  -              OPERAND                                   -
+28 '-                                                                      -
+29 '-                                                                      -
+30 '------------------------------------------------------------------------
+100 CLS
+110 KEY OFF
+120 DEFINT A-Z
+130 DIM ADDR.REF$(2000),JUMP$(25)
+140 JUMPNUMBER=21
+150     FOR I = 1 TO JUMPNUMBER
+160         READ JUMP$(I)
+170     NEXT
+180 DATA "JMP ","JMPS","JZ  ","JNZ ","LOOP","CALL","JCXZ","JB  ","JBE ","JNB ","JA  "
+190 DATA "JG  ","JGE ","JL  ","JLE ","JNO ","JPO ","JNS ","JO  ","JPE ","JS  "
+200 '--------------------------------------------
+210 '         GET FILE NAME                     -
+220 '--------------------------------------------
+230 LOCATE 2,7:PRINT "UASMLST VERSION 1.0"
+240 LOCATE 4,12:INPUT "ENTER NAME OF INPUT FILE: ",INPUTFILE$   'DEBUG OUTPUT
+250 LOCATE 5,12:INPUT "ENTER NAME OF OUTPUT FILE: ",OUTPUTFILE$ 'UASMLST OUTPUT
+260 LOCATE 6,12:PRINT "WORKING........."
+270 '--------------------------------------------
+280 '          PARSE FILE                       -
+290 '--------------------------------------------
+300 OPEN INPUTFILE$ FOR INPUT AS #1
+310 OPEN OUTPUTFILE$ FOR OUTPUT AS #2
+320 IF EOF(1) THEN 390
+330 LINE INPUT #1,UNASSEMBLE$:IF LEN(UNASSEMBLE$)<28 THEN 320 ELSE UNASMINSTR$=MID$(UNASSEMBLE$,25,4)
+340 FOR COUNTER = 1 TO JUMPNUMBER:IF UNASMINSTR$<>JUMP$(COUNTER) THEN NEXT:GOTO 320
+350 IF MID$(UNASSEMBLE$,33,1)="[" THEN 320
+360 IF MID$(UNASSEMBLE$,33,3)="FAR" THEN 320
+370 IF MID$(UNASSEMBLE$,37,1)=":" THEN 320
+380 ADDR.REF=ADDR.REF+1:ADDR.REF$(ADDR.REF)=MID$(UNASSEMBLE$,33,4):GOTO 320
+390 CLOSE #1:OPEN INPUTFILE$ FOR INPUT AS #1
+400 LOCATE 20,13:PRINT "SORTING ........."
+410 '---------------------------------------------------
+420 '              SHELL SORT                          -
+430 '---------------------------------------------------
+440 D=2^INT(LOG(ADDR.REF)/LOG(2))-1
+450 FOR COUNTER = 1 TO ADDR.REF-D
+460 IF ADDR.REF$(COUNTER)<=ADDR.REF$(COUNTER+D) THEN 520 ELSE T$=ADDR.REF$(COUNTER+D):ADDR.REF$(COUNTER+D)=ADDR.REF$(COUNTER)
+470 IF COUNTER<=D THEN ADDR.REF$(COUNTER)=T$:GOTO 520
+480 FOR J=COUNTER-D TO 1 STEP -D
+490 IF T$>=ADDR.REF$(J) THEN 510 ELSE ADDR.REF$(J+D)=ADDR.REF$(J)
+500 NEXT J
+510 ADDR.REF$(J+D)=T$
+520 NEXT COUNTER
+530 D=INT(D/2):IF D>0 THEN 450 ELSE COUNTER = 1
+540 IF COUNTER=ADDR.REF THEN 600
+550 IF ADDR.REF$(COUNTER)=ADDR.REF$(COUNTER+1) THEN FOR J = COUNTER TO ADDR.REF:ADDR.REF$(J)=ADDR.REF$(J+1):NEXT:ADDR.REF=ADDR.REF-1 ELSE COUNTER = COUNTER+1
+560 GOTO 540
+570 '-----------------------------------------------------
+580 '-      NOW SORTED, GOT THRU AND INSERT LABELS       -
+590 '----------------------------------------------------
+600 L=1         'L = LABEL REFERENCE
+610 IF NOT EOF(1) THEN 650 ELSE IF L>ADDR.REF THEN 640
+620 PRINT "ERROR: REFERENCED CODE AT ";ADDR.REF$(L);" WAS NOT FOUND."
+630 PRINT "THE FOLLOWING REFERENCE(S) ARE NOT INCLUDED:":FOR COUNTER =L TO ADDR.REF:PRINT ADDR.REF$(COUNTER),:NEXT
+640 CLOSE:END 'OF PROGRAM
+650 LINE INPUT #1,UNASSEMBLE$:IF LEN(UNASSEMBLE$)<28 THEN 610
+660 IF MID$(UNASSEMBLE$,6,4)<ADDR.REF$(L) THEN MID$(UNASSEMBLE$,6,4)="     ":GOTO 710
+670 IF MID$(UNASSEMBLE$,6,4)=ADDR.REF$(L) THEN 690
+680 IF L>ADDR.REF THEN MID$(UNASSEMBLE$,6,4)="     ":GOTO 710 ELSE 620
+690 L$=STR$(L):L$="L"+RIGHT$(L$,LEN(L$)-1)
+700 L$=L$+":"+STRING$(4-LEN(L$)," "):MID$(UNASSEMBLE$,6,5)=L$:L=L+1
+710 UNASMINSTR$=MID$(UNASSEMBLE$,25,4):FOR COUNTER = 1 TO JUMPNUMBER:IF UNASMINSTR$<>JUMP$(COUNTER) THEN NEXT:GOTO 780
+720 IF MID$(UNASSEMBLE$,33,1)="[" THEN 780
+730 IF MID$(UNASSEMBLE$,33,3)="FAR" THEN 780
+740 IF MID$(UNASSEMBLE$,37,1)=":" THEN 780
+750 REF$=MID$(UNASSEMBLE$,33,4):FOR COUNTER = 1 TO ADDR.REF:IF REF$<>ADDR.REF$(COUNTER) THEN NEXT
+760 L$=STR$(COUNTER):L$="L"+RIGHT$(L$,LEN(L$)-1)
+770 MID$(UNASSEMBLE$,33,4)=L$+STRING$(4-LEN(L$)," ")
+780 UNASSEMBLE$=MID$(UNASSEMBLE$,6,5)+" "+RIGHT$(UNASSEMBLE$,LEN(UNASSEMBLE$)-23)
+790 FOR COUNTER = LEN(UNASSEMBLE$) TO 2 STEP -1:IF MID$(UNASSEMBLE$,COUNTER,1)=" " THEN NEXT
+800 UNASSEMBLE$=LEFT$(UNASSEMBLE$,COUNTER)
+810 PRINT UNASSEMBLE$:PRINT #2,UNASSEMBLE$:GOTO 610
+```
+
+{% comment %}samples_end{% endcomment %}
+
+### Directory of PC-SIG Library Disk #0308
 
      Volume in drive A has no label
      Directory of A:\

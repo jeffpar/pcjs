@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #963"
+title: "PC-SIG Diskette Library (Disk #963)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0963/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0963"
+      B: "PC-SIG Library Disk #0963"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PAY-TIME PAYROLL SYSTEM (ALSO 1034)"
 
@@ -27,8 +29,10 @@ machines:
     the person's name, mailing address, employee ID, Social Security number,
     and payroll status. Once all the information for the tax files are
     entered, you can edit, display, add, delete, and print the records.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0963
+
+### Directory of PC-SIG Library Disk #0963
 
      Volume in drive A has no label
      Directory of A:\

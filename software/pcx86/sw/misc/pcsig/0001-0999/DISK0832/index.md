@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #832"
+title: "PC-SIG Diskette Library (Disk #832)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0832/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0832"
+      B: "PC-SIG Library Disk #0832"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BEYOND THE TITANIC (KROZ ON 2001 NOW)"
 
@@ -27,8 +29,10 @@ machines:
     If you've played any of Infocom's games, you'll notice the similarity in
     style.  To add to the realism, a 16-color display and sound effects are
     used throughout the game.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0832
+
+### Directory of PC-SIG Library Disk #0832
 
      Volume in drive A has no label
      Directory of A:\

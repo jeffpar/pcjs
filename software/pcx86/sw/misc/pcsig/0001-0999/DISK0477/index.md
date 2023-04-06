@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #477"
+title: "PC-SIG Diskette Library (Disk #477)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0477/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0477"
+      B: "PC-SIG Library Disk #0477"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "NAMEGRAM"
 
@@ -30,8 +32,10 @@ machines:
     NAMEGRAM takes a name or phrase, of up to 40 characters, and, using each
     letter only once, creates anagrams.  The output, 1 to 16 letters each,
     are real English words.  A curious, but fascinating exercise.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0477
+
+### Directory of PC-SIG Library Disk #0477
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #796"
+title: "PC-SIG Diskette Library (Disk #796)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0796/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0796"
+      B: "PC-SIG Library Disk #0796"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HOME INSURANCE"
 
@@ -42,8 +44,10 @@ machines:
     learn and simple to use.  Three user-selectable levels of operation and
     user-customized field names let you modify HOME INSURANCE to meet
     individual requirements.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0796
+
+### Directory of PC-SIG Library Disk #0796
 
      Volume in drive A has no label
      Directory of A:\

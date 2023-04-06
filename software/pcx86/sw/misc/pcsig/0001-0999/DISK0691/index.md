@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #691"
+title: "PC-SIG Diskette Library (Disk #691)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0691/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0691"
+      B: "PC-SIG Library Disk #0691"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BEST-PLAN 2 OF 3 (690,1105 ALSO IN SET)"
 
@@ -65,8 +67,10 @@ machines:
     The Third Disk Contains:
     DATA     <DIR>Subdirectory containing sample data files (36 files).
     HELP     <DIR>Subdirectory containing help files (81 files).
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0691
+
+### Directory of PC-SIG Library Disk #0691
 
      Volume in drive A has no label
      Directory of A:\

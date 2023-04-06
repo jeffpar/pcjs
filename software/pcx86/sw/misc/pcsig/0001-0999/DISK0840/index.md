@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #840"
+title: "PC-SIG Diskette Library (Disk #840)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0840/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0840"
+      B: "PC-SIG Library Disk #0840"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SHORTCUT (DOS SHELL)"
 
@@ -29,8 +31,10 @@ machines:
     
     SHORTCUT has simple menus, with optional on-line help.  Once you exit
     to DOS, it will remain in memory until you need it again.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0840
+
+### Directory of PC-SIG Library Disk #0840
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #782"
+title: "PC-SIG Diskette Library (Disk #782)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0782/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0782"
+      B: "PC-SIG Library Disk #0782"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "GT POWER 1 OF 4 (ALSO 783, 1549, 1550)"
 
@@ -69,8 +71,10 @@ machines:
     ~ Support for the non-standard COM ports: 3 and 4.
     
     A comprehensive Help menu is available at any time.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0782
+
+### Directory of PC-SIG Library Disk #0782
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #324"
+title: "PC-SIG Diskette Library (Disk #324)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0324/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0324"
+      B: "PC-SIG Library Disk #0324"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TURBO PASCAL #1"
 
@@ -80,8 +82,10 @@ machines:
     TYPEFILE PAS  Do line-oriented file I/O in TURBO PASCAL (same as NEW)
     NEW      PAS  How to do line-oriented file I/O in TURBO PASCAL
     TURBOTST PAS  Test TURBO PASCAL version 2.0 for math errors
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0324
+
+### Directory of PC-SIG Library Disk #0324
 
      Volume in drive A has no label
      Directory of A:\

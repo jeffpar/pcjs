@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #980"
+title: "PC-SIG Diskette Library (Disk #980)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0980/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0980"
+      B: "PC-SIG Library Disk #0980"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "VANILLA SNOBOL4"
 
@@ -28,8 +30,10 @@ machines:
     textbooks.  Source programs for SNOBOL4 are typically 5 to 10 times
     smaller than equivalent C or Pascal programs.  A 150-page language
     tutorial and reference manual are included.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0980
+
+### Directory of PC-SIG Library Disk #0980
 
      Volume in drive A has no label
      Directory of A:\

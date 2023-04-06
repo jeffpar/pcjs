@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #493"
+title: "PC-SIG Diskette Library (Disk #493)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0493/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0493"
+      B: "PC-SIG Library Disk #0493"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DISK DRIVE-IN THEATER (VCR DBASE)"
 
@@ -27,8 +29,10 @@ machines:
     tape.  Print two differently configured labels for your tape library.
     With all these features and a database controller faster than most, it
     is a clearly superior video library manager.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0493
+
+### Directory of PC-SIG Library Disk #0493
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #528"
+title: "PC-SIG Diskette Library (Disk #528)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0528/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0528"
+      B: "PC-SIG Library Disk #0528"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "NEW YORK WORD"
 
@@ -23,8 +25,10 @@ machines:
     features automatic table of contents, automatic index generation,
     automatic hyphenation, and mail merge.  This shareware package is more
     powerful than some retail word processors.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0528
+
+### Directory of PC-SIG Library Disk #0528
 
      Volume in drive A has no label
      Directory of A:\

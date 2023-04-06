@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #31"
+title: "PC-SIG Diskette Library (Disk #31)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0031/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0031"
+      B: "PC-SIG Library Disk #0031"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MVP-FORTH"
 
@@ -23,8 +25,10 @@ machines:
     book ``Starting Forth,'' by Leo Brodie.  This program is an
     interpreter, not a compiler and, as such, will not create stand alone
     EXE files.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0031
+
+### Directory of PC-SIG Library Disk #0031
 
      Volume in drive A has no label
      Directory of A:\

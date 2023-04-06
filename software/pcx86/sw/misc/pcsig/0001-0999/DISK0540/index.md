@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #540"
+title: "PC-SIG Diskette Library (Disk #540)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0540/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0540"
+      B: "PC-SIG Library Disk #0540"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TINY PASCAL COMPILER"
 
@@ -53,8 +55,10 @@ machines:
     TU       DOC  Tutorial on creating a Tiny Pascal compiler
     STDIO    HDR  Standard assembly IO routines needed for Tiny Pascal
     STDIO    HDR  Standard assembly IO routines needed for Tiny Pascal
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0540
+
+### Directory of PC-SIG Library Disk #0540
 
      Volume in drive A has no label
      Directory of A:\

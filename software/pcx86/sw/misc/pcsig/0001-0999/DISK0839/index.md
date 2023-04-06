@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #839"
+title: "PC-SIG Diskette Library (Disk #839)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0839/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0839"
+      B: "PC-SIG Library Disk #0839"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "GREETINGWARE CHRISTMAS AND BIRTHDAY"
 
@@ -30,8 +32,10 @@ machines:
     Each card plays six songs, which your family and friends can sing along
     with. The program will put the words on the screen and then... just
     follow the bouncing ball.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0839
+
+### Directory of PC-SIG Library Disk #0839
 
      Volume in drive A has no label
      Directory of A:\

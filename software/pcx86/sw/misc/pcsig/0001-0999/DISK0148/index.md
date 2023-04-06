@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #148"
+title: "PC-SIG Diskette Library (Disk #148)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0148/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0148"
+      B: "PC-SIG Library Disk #0148"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "XLISP"
 
@@ -25,8 +27,10 @@ machines:
     
     This package represents an inexpensive opportunity to begin to tackle
     programming in the field of artificial intelligence.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0148
+
+### Directory of PC-SIG Library Disk #0148
 
      Volume in drive A has no label
      Directory of A:\

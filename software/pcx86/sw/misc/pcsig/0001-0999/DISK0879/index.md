@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #879"
+title: "PC-SIG Diskette Library (Disk #879)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0879/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0879"
+      B: "PC-SIG Library Disk #0879"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BIORHYTHM MONTHLY SCHEDULE PROGRAM"
 
@@ -32,8 +34,10 @@ machines:
     
     BIOCOMP.EXE compares the biorhythms of two persons, and will display
     the percentage of compatibility for each cycle.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0879
+
+### Directory of PC-SIG Library Disk #0879
 
      Volume in drive A has no label
      Directory of A:\

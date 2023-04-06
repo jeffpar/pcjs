@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #713"
+title: "PC-SIG Diskette Library (Disk #713)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0713/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0713"
+      B: "PC-SIG Library Disk #0713"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "COMPUTER CONTRACT BRIDGE"
 
@@ -28,8 +30,10 @@ machines:
     can learn how to win.  This particular version of the program is meant
     for the novice bridge player.  Though it is a game and not a tutorial,
     you will definitely learn a lot by playing it.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0713
+
+### Directory of PC-SIG Library Disk #0713
 
      Volume in drive A has no label
      Directory of A:\

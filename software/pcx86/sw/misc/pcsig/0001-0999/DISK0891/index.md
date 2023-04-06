@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #891"
+title: "PC-SIG Diskette Library (Disk #891)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0891/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0891"
+      B: "PC-SIG Library Disk #0891"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "WHEEL OF MISFORTUNE AND SOLITAIRE"
 
@@ -44,8 +46,10 @@ machines:
     may not want to use, such as peeking at the first overturned card in
     each stack.  On-line help is available to the player throughout the
     game.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0891
+
+### Directory of PC-SIG Library Disk #0891
 
      Volume in drive A has no label
      Directory of A:\

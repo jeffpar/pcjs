@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #531"
+title: "PC-SIG Diskette Library (Disk #531)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0531/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0531"
+      B: "PC-SIG Library Disk #0531"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ALAN'S TEXT EDITOR"
 
@@ -51,8 +53,10 @@ machines:
     SHEET1   AC   Sample Spreadsheet File - Linked Work Sheet #1 for Summary
     README        Author's Introduction to files on disk.
     XYZCO    AC   Sample Spreadsheet File - Financial Data, XYZCO
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0531
+
+### Directory of PC-SIG Library Disk #0531
 
      Volume in drive A has no label
      Directory of A:\

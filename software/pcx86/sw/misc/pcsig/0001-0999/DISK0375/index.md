@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #375"
+title: "PC-SIG Diskette Library (Disk #375)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0375/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0375"
+      B: "PC-SIG Library Disk #0375"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TURBO PASCAL SET #7"
 
@@ -84,8 +86,10 @@ machines:
     TURBO-UT DOC  Documentation for TURBO-UT.PAS
     TURBO-UT DEM  Demo file for TURBO-UT.PAS
     TURBO-UT COM  Compiled version of TURBO-UT.PAS
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0375
+
+### Directory of PC-SIG Library Disk #0375
 
      Volume in drive A has no label
      Directory of A:\

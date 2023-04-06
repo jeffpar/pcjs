@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #506"
+title: "PC-SIG Diskette Library (Disk #506)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0506/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0506"
+      B: "PC-SIG Library Disk #0506"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BUSINESS AND MORAL VALUE (ALSO 1018)"
 
@@ -27,8 +29,10 @@ machines:
     toxic chemicals and water pollution), worker issues (discrimination,
     sexual harassment, whistle blowing, etc.), privacy, distribution of
     wealth, third world issues and more.  An incredible resource!
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0506
+
+### Directory of PC-SIG Library Disk #0506
 
      Volume in drive A has no label
      Directory of A:\

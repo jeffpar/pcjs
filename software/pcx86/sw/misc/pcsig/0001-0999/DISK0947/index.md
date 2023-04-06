@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #947"
+title: "PC-SIG Diskette Library (Disk #947)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0947/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0947"
+      B: "PC-SIG Library Disk #0947"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "KINETICS"
 
@@ -30,8 +32,10 @@ machines:
     
     These programs should be used by a clinical pharmacist or a physician
     with training in pharmacokinetic dosing of drugs.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0947
+
+### Directory of PC-SIG Library Disk #0947
 
      Volume in drive A has no label
      Directory of A:\

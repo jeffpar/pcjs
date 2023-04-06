@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #86"
+title: "PC-SIG Diskette Library (Disk #86)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0086/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0086"
+      B: "PC-SIG Library Disk #0086"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SCREEN"
 
@@ -57,8 +59,10 @@ machines:
     PRTLPT2  BAT  Batch file to copy documentation to lpt2:
     STRIPPER EXE  Strips out Tabs and replaces with spaces
     SAMPLE   TXT  Sample text for SCREEN.EXE
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0086
+
+### Directory of PC-SIG Library Disk #0086
 
      Volume in drive A has no label
      Directory of A:\

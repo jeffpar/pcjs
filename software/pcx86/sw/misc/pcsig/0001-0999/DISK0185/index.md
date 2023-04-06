@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #185"
+title: "PC-SIG Diskette Library (Disk #185)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0185/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0185"
+      B: "PC-SIG Library Disk #0185"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DOS UTILITIES NO 10"
 
@@ -51,8 +53,10 @@ machines:
     ZUSQ     EXE  Unsquishes a squished file.
     ZSQ-ZUSQ DOC  Documentation.
     ZSQ      EXE  Squishes a file.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0185
+
+### Directory of PC-SIG Library Disk #0185
 
      Volume in drive A has no label
      Directory of A:\

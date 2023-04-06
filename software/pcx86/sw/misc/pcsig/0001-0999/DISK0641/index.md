@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #641"
+title: "PC-SIG Diskette Library (Disk #641)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0641/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0641"
+      B: "PC-SIG Library Disk #0641"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MAHJONG"
 
@@ -39,8 +41,10 @@ machines:
     developing an "instinct" rarely seen in other games.  Three levels of
     play are provided: beginner, advanced and professional.  An entertaining
     game for the whole family.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0641
+
+### Directory of PC-SIG Library Disk #0641
 
      Volume in drive A has no label
      Directory of A:\

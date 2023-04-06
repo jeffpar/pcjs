@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #629"
+title: "PC-SIG Diskette Library (Disk #629)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0629/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0629"
+      B: "PC-SIG Library Disk #0629"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-ART"
 
@@ -41,8 +43,10 @@ machines:
     ~ Image library to store and later retrieve drawn figures
     
     ~ Easy-to-use window panels to select functions, colors, etc
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0629
+
+### Directory of PC-SIG Library Disk #0629
 
      Volume in drive A has no label
      Directory of A:\

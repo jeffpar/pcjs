@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #692"
+title: "PC-SIG Diskette Library (Disk #692)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0692/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0692"
+      B: "PC-SIG Library Disk #0692"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ACE 1 OF 2 (ALSO #693)"
 
@@ -40,8 +42,10 @@ machines:
     to magnitude 2.00, and 100 prominent double stars, with detailed
     commentary on nearly 400 of these objects. Objects can be searched on
     the basis of one criterion or by a combination.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0692
+
+### Directory of PC-SIG Library Disk #0692
 
      Volume in drive A has no label
      Directory of A:\

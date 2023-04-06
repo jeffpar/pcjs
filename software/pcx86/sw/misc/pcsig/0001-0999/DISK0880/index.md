@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #880"
+title: "PC-SIG Diskette Library (Disk #880)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0880/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0880"
+      B: "PC-SIG Library Disk #0880"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PROGRAMMER'S EDITOR"
 
@@ -31,8 +33,10 @@ machines:
     You can execute commands by using a function key menu at the bottom line
     of the screen, or use control-key sequences from the keyboard.  On-line
     help is available.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0880
+
+### Directory of PC-SIG Library Disk #0880
 
      Volume in drive A has no label
      Directory of A:\

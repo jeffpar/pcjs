@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #545"
+title: "PC-SIG Diskette Library (Disk #545)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0545/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0545"
+      B: "PC-SIG Library Disk #0545"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LETUS A-B-C #8"
 
@@ -55,8 +57,10 @@ machines:
     PNUT84C  ???  PEANUT Magazine 3rd Quarter 1984 reference files (4 files)
     LETUS    BAT  Batch file to generate logo
     LOGO84N8 COM  Executable file to generate Letus logo
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0545
+
+### Directory of PC-SIG Library Disk #0545
 
      Volume in drive A has no label
      Directory of A:\

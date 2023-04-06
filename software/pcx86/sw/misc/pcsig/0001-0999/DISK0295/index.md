@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #295"
+title: "PC-SIG Diskette Library (Disk #295)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0295/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0295"
+      B: "PC-SIG Library Disk #0295"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TAX-FILE"
 
@@ -113,8 +115,10 @@ machines:
     DATABASE BAT  Batch file to setup data files on drive B for dual floppy
     SETPRINT PRG  Program to set up printer
     TAXDATA  MEM  Memory variable for tax year
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0295
+
+### Directory of PC-SIG Library Disk #0295
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #451"
+title: "PC-SIG Diskette Library (Disk #451)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0451/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0451"
+      B: "PC-SIG Library Disk #0451"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CAVEQUEST"
 
@@ -23,8 +25,10 @@ machines:
     
     This is a rich and complex adventure with hundreds of hours of
     first-class entertainment in store for you. Onward!
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0451
+
+### Directory of PC-SIG Library Disk #0451
 
      Volume in drive A has no label
      Directory of A:\

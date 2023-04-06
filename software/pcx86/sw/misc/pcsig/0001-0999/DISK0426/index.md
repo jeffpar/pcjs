@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #426"
+title: "PC-SIG Diskette Library (Disk #426)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0426/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0426"
+      B: "PC-SIG Library Disk #0426"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TURBO PASCAL #8"
 
@@ -48,8 +50,10 @@ machines:
     PTOOLWI3 DOC  Description of PTOOLWI3.INC
     TURBHERC PAS  Collection of procedures for Hercules graphics support
     PTOOLWI3 PAS  Demo program for PTOOLWI3.INC
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0426
+
+### Directory of PC-SIG Library Disk #0426
 
      Volume in drive A has no label
      Directory of A:\

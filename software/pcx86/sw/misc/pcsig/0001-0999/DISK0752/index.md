@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #752"
+title: "PC-SIG Diskette Library (Disk #752)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0752/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0752"
+      B: "PC-SIG Library Disk #0752"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "THE BRAIN"
 
@@ -34,8 +36,10 @@ machines:
     to use it, and know how to program your modem.  The manual has a
     glossary of commands (with detailed descriptions and brief examples of
     each) and a sample command file.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0752
+
+### Directory of PC-SIG Library Disk #0752
 
      Volume in drive A has no label
      Directory of A:\

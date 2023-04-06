@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #884"
+title: "PC-SIG Diskette Library (Disk #884)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0884/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0884"
+      B: "PC-SIG Library Disk #0884"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BOWLING LEAGUE SECRETARY'S SYSTEM"
 
@@ -28,8 +30,10 @@ machines:
     The system can handle 40 teams, up to ten bowlers per team
     (400 total), and up to a 50-week season.  BOWLING LEAGUE SECRETARY is
     menu-driven and has on-line help.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0884
+
+### Directory of PC-SIG Library Disk #0884
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #407"
+title: "PC-SIG Diskette Library (Disk #407)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0407/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0407"
+      B: "PC-SIG Library Disk #0407"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "VIDEO CHEM"
 
@@ -56,8 +58,10 @@ machines:
     VIDEO1   DAT  Data file used by program
     VCHEM    EXE  A program file
     VCHEM    DOC  Text file of instructions
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0407
+
+### Directory of PC-SIG Library Disk #0407
 
      Volume in drive A has no label
      Directory of A:\

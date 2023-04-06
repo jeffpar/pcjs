@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #751"
+title: "PC-SIG Diskette Library (Disk #751)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0751/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0751"
+      B: "PC-SIG Library Disk #0751"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ASEASYAS"
 
@@ -30,8 +32,10 @@ machines:
     goalseeking, spreadsheet linking, and a full complement of macro
     commands.  There is also a linked calculation sequence that saves
     considerable time when recalculating.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0751
+
+### Directory of PC-SIG Library Disk #0751
 
      Volume in drive A has no label
      Directory of A:\

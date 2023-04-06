@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #733"
+title: "PC-SIG Diskette Library (Disk #733)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0733/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0733"
+      B: "PC-SIG Library Disk #0733"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "VRS PLUS"
 
@@ -46,8 +48,10 @@ machines:
     VVRS     EXE  Create/change files program.
     GO       BAT  Batch file to start program.
     File Descriptions:
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0733
+
+### Directory of PC-SIG Library Disk #0733
 
      Volume in drive A has no label
      Directory of A:\

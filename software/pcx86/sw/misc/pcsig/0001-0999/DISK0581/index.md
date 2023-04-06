@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #581"
+title: "PC-SIG Diskette Library (Disk #581)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0581/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0581"
+      B: "PC-SIG Library Disk #0581"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "WORDWORKER 1 OF 2 (ALSO 582)"
 
@@ -26,8 +28,10 @@ machines:
     on-line help, bookmarks, speed reading, word use and 14,800 references
     to research works. WORDWORKER also has a complete editor to create
     letters, sermons or other text with the information in the database.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0581
+
+### Directory of PC-SIG Library Disk #0581
 
      Volume in drive A has no label
      Directory of A:\

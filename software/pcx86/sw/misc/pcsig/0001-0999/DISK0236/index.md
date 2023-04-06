@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #236"
+title: "PC-SIG Diskette Library (Disk #236)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0236/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0236"
+      B: "PC-SIG Library Disk #0236"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PRINTER UTILITIES"
 
@@ -56,8 +58,10 @@ machines:
     COPYALL  BAT  Makes diskcopy of Volkswriter printer tables
     PC-SIG   DOC  Notes on BPRINT, FPRINT, etc.
     COPYINST BAT  Copies *.fmt files to second diskette
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0236
+
+### Directory of PC-SIG Library Disk #0236
 
      Volume in drive A has no label
      Directory of A:\

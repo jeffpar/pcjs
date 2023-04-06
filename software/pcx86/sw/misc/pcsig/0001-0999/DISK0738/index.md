@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #738"
+title: "PC-SIG Diskette Library (Disk #738)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0738/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0738"
+      B: "PC-SIG Library Disk #0738"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "EASYMENU 1 OF 3 (ALSO 739, 740)"
 
@@ -69,8 +71,10 @@ machines:
     PRINTER  MHH  Printer control help.
     PASSWORD EXE  Password program.
     OPTIONS  EXE  Control program.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0738
+
+### Directory of PC-SIG Library Disk #0738
 
      Volume in drive A has no label
      Directory of A:\

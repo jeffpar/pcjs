@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #711"
+title: "PC-SIG Diskette Library (Disk #711)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0711/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0711"
+      B: "PC-SIG Library Disk #0711"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "GET LUCKY!"
 
@@ -26,8 +28,10 @@ machines:
     performing a task, telling a joke, or trying to say a tongue twister --
     all of which can be considered optional... or mandatory, depending upon
     the players.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0711
+
+### Directory of PC-SIG Library Disk #0711
 
      Volume in drive A has no label
      Directory of A:\

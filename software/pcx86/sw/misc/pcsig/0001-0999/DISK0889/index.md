@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #889"
+title: "PC-SIG Diskette Library (Disk #889)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0889/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0889"
+      B: "PC-SIG Library Disk #0889"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FAMTRAK AND DOS-PRO"
 
@@ -50,8 +52,10 @@ machines:
     explain it to you. DOS-PRO's menu occupies only one screen, and is
     divided into directory commands, format commands, and other DOS
     commands.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0889
+
+### Directory of PC-SIG Library Disk #0889
 
      Volume in drive A has no label
      Directory of A:\

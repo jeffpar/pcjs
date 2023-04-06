@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #596"
+title: "PC-SIG Diskette Library (Disk #596)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0596/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0596"
+      B: "PC-SIG Library Disk #0596"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SYMPHONY WORKSHEETS #3"
 
@@ -36,8 +38,10 @@ machines:
     5YEAR    WRK  Five year business plan macro
     0_DESCR  WRK  Description of macros on this disk
     PROJECT  WRK  Project oriented company planner macro
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0596
+
+### Directory of PC-SIG Library Disk #0596
 
      Volume in drive A has no label
      Directory of A:\

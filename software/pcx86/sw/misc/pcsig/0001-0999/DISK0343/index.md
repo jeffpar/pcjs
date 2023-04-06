@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #343"
+title: "PC-SIG Diskette Library (Disk #343)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0343/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0343"
+      B: "PC-SIG Library Disk #0343"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CHILDREN'S WORD"
 
@@ -27,8 +29,10 @@ machines:
     intimidating and easier for the little ones to read. The on-line help
     function takes only a few moments to master. Well-written and
     thorough documentation completes the package for the budding author.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0343
+
+### Directory of PC-SIG Library Disk #0343
 
      Volume in drive A has no label
      Directory of A:\

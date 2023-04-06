@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #234"
+title: "PC-SIG Diskette Library (Disk #234)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0234/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0234"
+      B: "PC-SIG Library Disk #0234"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TPNCALC"
 
@@ -29,8 +31,10 @@ machines:
     File Descriptions:
     TPNDOC        Documentaion  (14K)
     TPNCALC  EXE  Main program
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0234
+
+### Directory of PC-SIG Library Disk #0234
 
      Volume in drive A has no label
      Directory of A:\

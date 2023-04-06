@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #709"
+title: "PC-SIG Diskette Library (Disk #709)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0709/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0709"
+      B: "PC-SIG Library Disk #0709"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-CRYP2, DISKMASTER, & INSTACALENDAR"
 
@@ -32,8 +34,10 @@ machines:
     from 1600 to 2050 A.D.  You can print the calendar or show it on the
     screen.  The documentation is brief but gives all the help needed to use
     the program.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0709
+
+### Directory of PC-SIG Library Disk #0709
 
      Volume in drive A has no label
      Directory of A:\

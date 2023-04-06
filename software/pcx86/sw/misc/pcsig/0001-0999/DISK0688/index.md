@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #688"
+title: "PC-SIG Diskette Library (Disk #688)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0688/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0688"
+      B: "PC-SIG Library Disk #0688"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "IN-CONTROL 2 OF 2 (ALSO 687)"
 
@@ -36,8 +38,10 @@ machines:
     IN-CONTROL requires registration after you have placed 50 records in
     the Prospect file.  If not registered, this program will lock you out
     from access to the program, though the data files are always intact.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0688
+
+### Directory of PC-SIG Library Disk #0688
 
      Volume in drive A has no label
      Directory of A:\

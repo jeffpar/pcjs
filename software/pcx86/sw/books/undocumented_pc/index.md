@@ -97,4 +97,4 @@ A directory listing of *The Undocumented PC* diskette that accompanied the book 
 
 <!-- Documentation -->
 
-{% include embed.html src="https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2136982&authkey=AGBgodjA3pTpptQ&em=2" %}
+{% include web/embed.html src="https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2136982&authkey=AGBgodjA3pTpptQ&em=2" %}

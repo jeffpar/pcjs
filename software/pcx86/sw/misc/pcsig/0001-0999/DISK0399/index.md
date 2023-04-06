@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #399"
+title: "PC-SIG Diskette Library (Disk #399)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0399/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0399"
+      B: "PC-SIG Library Disk #0399"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PCLOAN5"
 
@@ -29,8 +31,10 @@ machines:
     Use PCLOAN 5 functions to project just what a loan is going to cost and
     when.  Know what you're getting into, financially, before you take that
     final plunge.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0399
+
+### Directory of PC-SIG Library Disk #0399
 
      Volume in drive A has no label
      Directory of A:\

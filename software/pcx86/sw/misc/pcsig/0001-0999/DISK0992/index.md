@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #992"
+title: "PC-SIG Diskette Library (Disk #992)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0992/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0992"
+      B: "PC-SIG Library Disk #0992"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "|STAT 3 OF 4 (ALSO 990, 991, 2292)"
 
@@ -30,8 +32,10 @@ machines:
     are independent programs, the output from one program can be used as
     input to another.  A solid knowledge of statistics and computers is
     assumed.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0992
+
+### Directory of PC-SIG Library Disk #0992
 
      Volume in drive A has no label
      Directory of A:\

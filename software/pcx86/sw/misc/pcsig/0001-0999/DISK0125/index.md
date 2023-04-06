@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #125"
+title: "PC-SIG Diskette Library (Disk #125)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0125/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0125"
+      B: "PC-SIG Library Disk #0125"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HOST-III PUBLIC BBS"
 
@@ -54,8 +56,10 @@ machines:
     HOSTCL2X EXE  Program that initiates telephone calls...Part 2
     RACKET   BBS  Example of BBS SIG
     README        Information about HOST-III use & other programs available
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0125
+
+### Directory of PC-SIG Library Disk #0125
 
      Volume in drive A has no label
      Directory of A:\

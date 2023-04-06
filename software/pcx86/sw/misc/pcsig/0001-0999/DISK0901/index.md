@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #901"
+title: "PC-SIG Diskette Library (Disk #901)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0901/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0901"
+      B: "PC-SIG Library Disk #0901"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-BOOKS - FINANCIAL SOFTWARE"
 
@@ -25,8 +27,10 @@ machines:
     statements and general ledgers, are simple to produce.  The number of
     accounts and transactions are limited only by disk space and each
     transaction can have up to 14 accounts.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0901
+
+### Directory of PC-SIG Library Disk #0901
 
      Volume in drive A has no label
      Directory of A:\

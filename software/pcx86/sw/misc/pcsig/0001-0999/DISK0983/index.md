@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #983"
+title: "PC-SIG Diskette Library (Disk #983)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0983/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0983"
+      B: "PC-SIG Library Disk #0983"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "NATIONAL BUREAU OF STANDARDS LIFE-CYCLE"
 
@@ -34,8 +36,10 @@ machines:
     data and assumptions, advises you when entries appear improper, lets
     you make changes to input data files, and allows you to move by menu
     selection.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0983
+
+### Directory of PC-SIG Library Disk #0983
 
      Volume in drive A has no label
      Directory of A:\

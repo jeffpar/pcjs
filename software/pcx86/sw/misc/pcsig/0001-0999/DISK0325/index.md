@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #325"
+title: "PC-SIG Diskette Library (Disk #325)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0325/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0325"
+      B: "PC-SIG Library Disk #0325"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LOGON AND LOGOFF"
 
@@ -54,8 +56,32 @@ machines:
     END      BAS  BASICA version of end log program
     ONTIME   EXE  Part of TIMEKEEP utility
     OFFTIME  EXE  Part of TIMEKEEP utility
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0325
+{% comment %}samples_begin{% endcomment %}
+
+## END.BAS
+
+```bas
+20 OPEN "A:TIMES" FOR APPEND AS #1
+30 PRINT #1, "End:   ";DATE$;"   ";TIME$;
+32 INPUT "Comment about session: ",X$
+34 PRINT #1, "   ";X$:PRINT #1,
+40 CLOSE #1: SYSTEM
+```
+
+## START.BAS
+
+```bas
+10 '================START================
+20 OPEN "A:TIMES" FOR APPEND AS #1 ' ACCUMULATE ALL TIMES
+30 PRINT #1, "Start: ";DATE$;"   ";TIME$  'THIS DOES THE RECORDING
+40 CLOSE #1: SYSTEM  'WRAP-UP;RETURN TO DOS
+```
+
+{% comment %}samples_end{% endcomment %}
+
+### Directory of PC-SIG Library Disk #0325
 
      Volume in drive A has no label
      Directory of A:\

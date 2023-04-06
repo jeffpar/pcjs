@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #685"
+title: "PC-SIG Diskette Library (Disk #685)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0685/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0685"
+      B: "PC-SIG Library Disk #0685"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "NEW FIG FORTH"
 
@@ -44,8 +46,10 @@ machines:
     FORTH    ARC  Archived file
     README        Introductory text file
     UNPACK   BAT  Batch file to unpcak FORTH.ARC
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0685
+
+### Directory of PC-SIG Library Disk #0685
 
      Volume in drive A has no label
      Directory of A:\

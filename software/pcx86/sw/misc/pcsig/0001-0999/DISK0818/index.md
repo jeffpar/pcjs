@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #818"
+title: "PC-SIG Diskette Library (Disk #818)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0818/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0818"
+      B: "PC-SIG Library Disk #0818"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DFSTICKL"
 
@@ -44,8 +46,10 @@ machines:
     you if that is the program you wish to execute. When using a hard disk
     and thousands of programs, XCUTE will do the work of finding your
     program and will even execute it for you.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0818
+
+### Directory of PC-SIG Library Disk #0818
 
      Volume in drive A has no label
      Directory of A:\

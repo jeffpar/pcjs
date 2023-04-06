@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #606"
+title: "PC-SIG Diskette Library (Disk #606)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0606/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0606"
+      B: "PC-SIG Library Disk #0606"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "POLYMATH"
 
@@ -40,8 +42,10 @@ machines:
     Included are a few dictionaries and application programs.  A review of
     these programs will be very helpful when learning the language.  It
     also features full graphics to round out the package.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0606
+
+### Directory of PC-SIG Library Disk #0606
 
      Volume in drive A has no label
      Directory of A:\

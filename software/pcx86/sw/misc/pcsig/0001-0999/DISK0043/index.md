@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #43"
+title: "PC-SIG Diskette Library (Disk #43)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0043/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0043"
+      B: "PC-SIG Library Disk #0043"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "EXIDY WORD PROCESSOR"
 
@@ -45,8 +47,10 @@ machines:
     STUDENT  BAT  Used to turn on tutorial mode
     EXELOAD  EXE  Part of Exidy system
     ????     EDX  Exidy text, help, and config files
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0043
+
+### Directory of PC-SIG Library Disk #0043
 
      Volume in drive A has no label
      Directory of A:\

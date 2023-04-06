@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #900"
+title: "PC-SIG Diskette Library (Disk #900)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0900/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0900"
+      B: "PC-SIG Library Disk #0900"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ESL WRITER 2 OF 2 (ALSO 899)"
 
@@ -59,8 +61,10 @@ machines:
     PREWRITE  COM  Main program.
     READ      ME   Introduction.
     TOPIC     000  Overlay file.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0900
+
+### Directory of PC-SIG Library Disk #0900
 
      Volume in drive A has no label
      Directory of A:\

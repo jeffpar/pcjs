@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #614"
+title: "PC-SIG Diskette Library (Disk #614)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0614/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0614"
+      B: "PC-SIG Library Disk #0614"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "NEW YORK ADVENTURE"
 
@@ -35,8 +37,10 @@ machines:
     -------- ---  -  New York (v1.0)
     NEWYORK  DOC  Documentation for NEWYORK.BAS
     DOC      TXT  Documentation files
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0614
+
+### Directory of PC-SIG Library Disk #0614
 
      Volume in drive A has no label
      Directory of A:\

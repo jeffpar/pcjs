@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #311"
+title: "PC-SIG Diskette Library (Disk #311)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0311/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0311"
+      B: "PC-SIG Library Disk #0311"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "THE MOVIE DATABASE 1 OF 2 (ALSO 774)"
 
@@ -22,8 +24,10 @@ machines:
     each entry by title, MPPA rating, major cast members, writer, director,
     and other information.  As you add to your collection, you can add new
     movies to the list with a wordprocessor or text editor.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0311
+
+### Directory of PC-SIG Library Disk #0311
 
      Volume in drive A has no label
      Directory of A:\

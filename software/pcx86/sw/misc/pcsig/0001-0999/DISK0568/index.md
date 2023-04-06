@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #568"
+title: "PC-SIG Diskette Library (Disk #568)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0568/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0568"
+      B: "PC-SIG Library Disk #0568"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LOTUS UTILITIES"
 
@@ -50,8 +52,10 @@ machines:
     CLRJET   ARC  Archived file - IBM Color Jet Printer Drivers
     TRYVM123 DOC  Documentation for  TRYVM123
     WKS-FRMT TXT  Worksheet files format
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0568
+
+### Directory of PC-SIG Library Disk #0568
 
      Volume in drive A has no label
      Directory of A:\

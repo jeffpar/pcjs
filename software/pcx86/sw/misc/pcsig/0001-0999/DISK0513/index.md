@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #513"
+title: "PC-SIG Diskette Library (Disk #513)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0513/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0513"
+      B: "PC-SIG Library Disk #0513"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "B MENU AND MENUGET"
 
@@ -68,8 +70,10 @@ machines:
     REGIS    FRM  Program registration form.
     VERSION  DOC  BMENU Version history.
     WORDS         Data file for HANGMAN.EXE.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0513
+
+### Directory of PC-SIG Library Disk #0513
 
      Volume in drive A has no label
      Directory of A:\

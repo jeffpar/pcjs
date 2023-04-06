@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #579"
+title: "PC-SIG Diskette Library (Disk #579)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0579/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0579"
+      B: "PC-SIG Library Disk #0579"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PASCAL TUTOR 1 OF 2 (ALSO 580)"
 
@@ -27,8 +29,10 @@ machines:
     3.0, 4.0, and 5.0.  Version 5.5 is also supported through two additional
     chapters covering object oriented programming.  The Pascal source code
     used for examples throughout the tutorial is included.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0579
+
+### Directory of PC-SIG Library Disk #0579
 
      Volume in drive A has no label
      Directory of A:\

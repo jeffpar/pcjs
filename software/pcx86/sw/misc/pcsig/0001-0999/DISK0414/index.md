@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #414"
+title: "PC-SIG Diskette Library (Disk #414)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0414/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0414"
+      B: "PC-SIG Library Disk #0414"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PROTECT AND UNPROTECT"
 
@@ -104,8 +106,10 @@ machines:
     PROKEY30 UNP  Procedure to unprotect PROKEY v3.0.
     PROKEY   COM  Program referred to as part of procedure in PRODWN.TXT.
     PRODWN   TXT  Patches to allow PROKEY v3.0 to run with SIDEKICK.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0414
+
+### Directory of PC-SIG Library Disk #0414
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #631"
+title: "PC-SIG Diskette Library (Disk #631)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0631/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0631"
+      B: "PC-SIG Library Disk #0631"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HDM IV: HARD DISK MENU SYSTEM"
 
@@ -39,8 +41,10 @@ machines:
     printed manual is an additional fifteen dollars.  HDM IV offers all of
     the features of DIRECT ACCESS, a commercial hard disk menuing program,
     and a good deal more; a substantial value for your dollar!
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0631
+
+### Directory of PC-SIG Library Disk #0631
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #792"
+title: "PC-SIG Diskette Library (Disk #792)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0792/
 machines:
   - id: ibm5150
@@ -9,18 +9,33 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0792"
+      B: "PC-SIG Library Disk #0792"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
 
-### Directory of PC-SIG Library Disk 0792
+### Directory of PC-SIG Library Disk #0792
 
-     Volume in drive A has no label
+     Volume in drive A is DISK0792
      Directory of A:\
 
-    GO       BAT        40   8-12-87   2:52a
-    NOTE     TXT       289  10-24-88   8:21a
-            2 file(s)        329 bytes
-                          159232 bytes free
+    BRUN30   EXE     70680   4-07-87   3:48a
+    CALC     EXE     49713  12-02-88   8:19p
+    FILES792 TXT      4367  10-19-89  10:35a
+    FINANCE  DOC     41088  12-02-88   8:40p
+    FINANCE  EXE     32577  12-02-88   8:11p
+    GO       BAT        38  12-31-80   5:56p
+    GO       TXT       848  10-19-89  11:37a
+    HL       EXE      9249  12-02-88   8:04p
+    INTRO    DOC      7424  12-02-88   8:31p
+    LOAN     HLP      5888  12-02-88  12:15p
+    MENU     OVL       150  12-06-88   2:05a
+    NAME     DAT       480  12-02-88   8:44p
+    OTHER    DOC      6400  10-09-88   9:39a
+    PRINT    BAT       384  12-02-88   8:33p
+    READ     ME        512  10-29-88   2:44p
+    SETUP    EXE      7025  12-02-88   8:10p
+    VALUE    DAT       360   5-30-87   2:51p
+           17 file(s)     237183 bytes
+                           74752 bytes free

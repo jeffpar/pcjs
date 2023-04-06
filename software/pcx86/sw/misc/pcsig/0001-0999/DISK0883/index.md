@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #883"
+title: "PC-SIG Diskette Library (Disk #883)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0883/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0883"
+      B: "PC-SIG Library Disk #0883"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "XXXPERT"
 
@@ -30,8 +32,10 @@ machines:
     Then you enter questions into a file. Both rules and questions are
     compiled and then executed by the CONSULT program. This lets a person
     answer questions and make decisions.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0883
+
+### Directory of PC-SIG Library Disk #0883
 
      Volume in drive A has no label
      Directory of A:\

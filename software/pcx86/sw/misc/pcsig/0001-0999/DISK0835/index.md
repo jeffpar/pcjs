@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #835"
+title: "PC-SIG Diskette Library (Disk #835)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0835/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0835"
+      B: "PC-SIG Library Disk #0835"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MULTIFILE"
 
@@ -34,8 +36,10 @@ machines:
     
     MULTIFILE handles up to 500 records in memory and prints standard 3.5"
     one-across labels. You can also define the print format for odd sized
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0835
+
+### Directory of PC-SIG Library Disk #0835
 
      Volume in drive A has no label
      Directory of A:\

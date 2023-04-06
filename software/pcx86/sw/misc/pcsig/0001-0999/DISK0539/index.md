@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #539"
+title: "PC-SIG Diskette Library (Disk #539)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0539/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0539"
+      B: "PC-SIG Library Disk #0539"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ADVENTURE SOLUTIONS"
 
@@ -48,8 +50,10 @@ machines:
     ADAMS    ARC  An archive file containing soulutions for ADAMS games.
     INFOCOM  ARC  An archived file containing soulutions for INFOCOM games.
     ARC      EXE  Program to unarchive the solutions.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0539
+
+### Directory of PC-SIG Library Disk #0539
 
      Volume in drive A has no label
      Directory of A:\

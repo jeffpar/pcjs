@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #404"
+title: "PC-SIG Diskette Library (Disk #404)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0404/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0404"
+      B: "PC-SIG Library Disk #0404"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "EZ-FORMS EXECUTIVE"
 
@@ -83,8 +85,10 @@ machines:
     ~ Basic Laser Fonts now included. 10 soft fonts (which include the line
     drawing characters not usually available in soft fonts) for the
     HP-LaserJet Plus.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0404
+
+### Directory of PC-SIG Library Disk #0404
 
      Volume in drive A has no label
      Directory of A:\

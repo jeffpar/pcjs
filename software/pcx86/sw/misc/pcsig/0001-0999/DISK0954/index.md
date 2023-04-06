@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #954"
+title: "PC-SIG Diskette Library (Disk #954)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0954/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0954"
+      B: "PC-SIG Library Disk #0954"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MINISTER ASSIGN PROGRAM"
 
@@ -30,8 +32,10 @@ machines:
     Schedule an additional minister-type schedule of your own definition.
     Display and print labels, phone lists for substitutes, or the entire
     database.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0954
+
+### Directory of PC-SIG Library Disk #0954
 
      Volume in drive A has no label
      Directory of A:\

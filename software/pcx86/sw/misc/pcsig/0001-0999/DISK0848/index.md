@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #848"
+title: "PC-SIG Diskette Library (Disk #848)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0848/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0848"
+      B: "PC-SIG Library Disk #0848"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "JUDY THE MEMORY RESIDENT CALENDAR"
 
@@ -28,8 +30,10 @@ machines:
     computer's memory, does her job, leaves and then returns her space to
     the memory pool.  She even wishes you ``Happy Birthday'' when that day
     rolls around.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0848
+
+### Directory of PC-SIG Library Disk #0848
 
      Volume in drive A has no label
      Directory of A:\

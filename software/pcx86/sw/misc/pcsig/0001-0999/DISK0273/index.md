@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #273"
+title: "PC-SIG Diskette Library (Disk #273)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0273/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0273"
+      B: "PC-SIG Library Disk #0273"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BEST UTILITIES"
 
@@ -50,8 +52,10 @@ machines:
     VDEL     COM  Selective delete utility -- prompts to delete each file.
     WHEREIS  DOC  Documentation for WHEREIS.COM.
     WHEREIS  COM  Find a file in any subdirectory.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0273
+
+### Directory of PC-SIG Library Disk #0273
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #781"
+title: "PC-SIG Diskette Library (Disk #781)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0781/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0781"
+      B: "PC-SIG Library Disk #0781"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BIBLE MEN"
 
@@ -35,8 +37,10 @@ machines:
     on without affecting your score; scoring occurs only when you type an
     answer. BIBLE MEN displays your score as tries, wrong, right, and
     percent. Did you know the answer to the above example?
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0781
+
+### Directory of PC-SIG Library Disk #0781
 
      Volume in drive A has no label
      Directory of A:\

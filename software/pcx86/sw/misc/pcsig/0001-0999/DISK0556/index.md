@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #556"
+title: "PC-SIG Diskette Library (Disk #556)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0556/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0556"
+      B: "PC-SIG Library Disk #0556"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FORTRAN AND ASSEMBLY"
 
@@ -68,8 +70,10 @@ machines:
     MAZE     FOR  Maze generator source code
     SSPLIB   FOR  Linear least squares program source code
     RND      FOR  Random numbers generator source code
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0556
+
+### Directory of PC-SIG Library Disk #0556
 
      Volume in drive A has no label
      Directory of A:\

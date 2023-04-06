@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #892"
+title: "PC-SIG Diskette Library (Disk #892)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0892/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0892"
+      B: "PC-SIG Library Disk #0892"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "COLLEGE FOOTBALL POOL"
 
@@ -31,8 +33,10 @@ machines:
     event of ties, the player who was the closest in guessing the total
     number of points scored in the last game on the selection sheet is
     declared the winner.  Up to 300 players can be handled by this program.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0892
+
+### Directory of PC-SIG Library Disk #0892
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #231"
+title: "PC-SIG Diskette Library (Disk #231)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0231/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0231"
+      B: "PC-SIG Library Disk #0231"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "REFLIST"
 
@@ -29,8 +31,10 @@ machines:
     different format expected by another publisher -- all quickly and
     easily. In addition, REFLIST has instructions for quick integration
     into WordPerfect, PC-Write, or any ASCII-based wordprocessor.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0231
+
+### Directory of PC-SIG Library Disk #0231
 
      Volume in drive A has no label
      Directory of A:\

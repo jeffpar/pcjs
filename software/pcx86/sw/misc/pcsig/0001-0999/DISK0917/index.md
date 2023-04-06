@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #917"
+title: "PC-SIG Diskette Library (Disk #917)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0917/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0917"
+      B: "PC-SIG Library Disk #0917"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TODO (MR. LABEL NOW ON DISK 1673)"
 
@@ -26,8 +28,10 @@ machines:
     program and stores any changes you make on the list.  When you finish,
     TODO sorts your items by due date first, then by priority, then by key.
     If this sort pattern does not fit your needs, you can customize it.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0917
+
+### Directory of PC-SIG Library Disk #0917
 
      Volume in drive A has no label
      Directory of A:\

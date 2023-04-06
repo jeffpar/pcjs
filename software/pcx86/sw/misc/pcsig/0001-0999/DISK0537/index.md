@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #537"
+title: "PC-SIG Diskette Library (Disk #537)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0537/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0537"
+      B: "PC-SIG Library Disk #0537"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DBS-KAT FILE LIBRARIAN PACKAGE"
 
@@ -40,8 +42,10 @@ machines:
     can start thinking of your disks as being as hard disk subdirectories,
     for you will be able to find out directory information about any file
     you have worked on.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0537
+
+### Directory of PC-SIG Library Disk #0537
 
      Volume in drive A has no label
      Directory of A:\

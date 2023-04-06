@@ -19,4 +19,4 @@ the problem is.
 
 ### Handwritten Notes on OSI BASIC Enhancements
 
-{% include embed.html src="https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194615&authkey=AFxwcIRAEP3PbX8&em=2" %}
+{% include web/embed.html src="https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%2194615&authkey=AFxwcIRAEP3PbX8&em=2" %}

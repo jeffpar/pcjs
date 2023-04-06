@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #931"
+title: "PC-SIG Diskette Library (Disk #931)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0931/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0931"
+      B: "PC-SIG Library Disk #0931"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SPEEDY MAILER JR. MAILING LIST"
 
@@ -56,8 +58,10 @@ machines:
     ???????? NTX  Used by main program (9 files).
     ???????? DBF  Data files created by smail (3 files).
     ???????? LBL  Used by main program (12 files).
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0931
+
+### Directory of PC-SIG Library Disk #0931
 
      Volume in drive A has no label
      Directory of A:\

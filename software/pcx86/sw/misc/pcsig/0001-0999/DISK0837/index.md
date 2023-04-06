@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #837"
+title: "PC-SIG Diskette Library (Disk #837)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0837/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0837"
+      B: "PC-SIG Library Disk #0837"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HOME MONEY MANAGER"
 
@@ -28,8 +30,10 @@ machines:
     help you organize your records at tax time or just report on where and
     how much money was spent and on what. On-line help screens are provided
     to guide you as you use the program.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0837
+
+### Directory of PC-SIG Library Disk #0837
 
      Volume in drive A has no label
      Directory of A:\

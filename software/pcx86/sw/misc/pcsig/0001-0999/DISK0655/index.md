@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #655"
+title: "PC-SIG Diskette Library (Disk #655)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0655/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0655"
+      B: "PC-SIG Library Disk #0655"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "KWIKSTAT 2 OF 2 (ALSO 654)"
 
@@ -36,8 +38,10 @@ machines:
     
     ~ STAT4   -- Deal with various methods to analyze categorical data, as
     opposed to measured data.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0655
+
+### Directory of PC-SIG Library Disk #0655
 
      Volume in drive A has no label
      Directory of A:\

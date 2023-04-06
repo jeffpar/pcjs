@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #628"
+title: "PC-SIG Diskette Library (Disk #628)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0628/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0628"
+      B: "PC-SIG Library Disk #0628"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BIBLEQ"
 
@@ -27,8 +29,10 @@ machines:
     Gospels. Players can choose the category and difficulty level of the
     question. Combine with WORDWORKER (PC-SIG disk #'s 581, 582) and you
     have the foundation for an excellent on-line scripture study system.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0628
+
+### Directory of PC-SIG Library Disk #0628
 
      Volume in drive A has no label
      Directory of A:\

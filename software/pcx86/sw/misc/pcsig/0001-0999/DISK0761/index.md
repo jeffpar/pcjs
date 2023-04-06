@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #761"
+title: "PC-SIG Diskette Library (Disk #761)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0761/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0761"
+      B: "PC-SIG Library Disk #0761"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "THE IMP SHELL"
 
@@ -35,8 +37,10 @@ machines:
     architecture for applications that need a well-defined sequence of
     complex steps -- applications such as cost estimation or equipment
     configuration. These should be done on a forward-chaining shell.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0761
+
+### Directory of PC-SIG Library Disk #0761
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #161"
+title: "PC-SIG Diskette Library (Disk #161)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0161/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0161"
+      B: "PC-SIG Library Disk #0161"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC FIRING ISSUE #2A"
 
@@ -45,8 +47,10 @@ machines:
     XXXXXXXX XX3  Data file.
     XXXXXXXX XX4  Data file.
     XXXXXXXX XX5  Data file.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0161
+
+### Directory of PC-SIG Library Disk #0161
 
      Volume in drive A has no label
      Directory of A:\

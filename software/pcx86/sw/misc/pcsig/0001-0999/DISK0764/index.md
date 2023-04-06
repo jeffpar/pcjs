@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #764"
+title: "PC-SIG Diskette Library (Disk #764)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0764/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0764"
+      B: "PC-SIG Library Disk #0764"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "COMPASS DESKTOP MANAGER"
 
@@ -52,8 +54,10 @@ machines:
     COMPASS is the perfect program for the lap-top computer user on the go.
     It is easy to use, runs from one floppy disk, and is completely self-
     contained. Great for beginners!
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0764
+
+### Directory of PC-SIG Library Disk #0764
 
      Volume in drive A has no label
      Directory of A:\

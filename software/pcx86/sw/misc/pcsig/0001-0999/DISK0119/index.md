@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #119"
+title: "PC-SIG Diskette Library (Disk #119)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0119/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0119"
+      B: "PC-SIG Library Disk #0119"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ABC DATABASE"
 
@@ -55,8 +57,32 @@ machines:
     NUMSAM1  NDX  Sample program
     SAMPLE1  NDX  Sample program
     SAMPLE   NUM  Part of sample program
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0119
+{% comment %}samples_begin{% endcomment %}
+
+## ABCONVRT.BAS
+
+```bas
+10 '****************************************************************************
+20 '********   Copywrite 1984  DND Enterprises  All rights reserved     ********
+30 '********  Program to convert files delimited with ", to ABC-FILE    ********
+40 '****************************************************************************
+50 ON ERROR GOTO 130:KEY OFF:CLS:FLDNUM=0
+60 LOCATE 5,5:INPUT "ENTER FILENAME TO IMPORT TO ABC-FILE:";OLDFILE$:IF LEN(OLDFILE$)>12 THEN BEEP:GOTO 60:ELSE IF OLDFILE$="" THEN CLOSE:SYSTEM
+70 OPEN OLDFILE$ FOR INPUT AS #1:GOSUB 140
+80 LOCATE 7,5:INPUT "ENTER ABC-FILE TO CREATE (NEW FILE):";NEWFILE$:IF INSTR(NEWFILE$,".")>0 OR LEN(NEWFILE$)>8 THEN LOCATE 25,5:BEEP:PRINT "MAX LEN=8, NO EXTENSION!";:GOTO 80
+90 GOSUB 140:OPEN NEWFILE$+".IMP" FOR OUTPUT AS #2:WHILE NOT EOF(1):FLDNUM=FLDNUM+1:INPUT #1,A$:LOCATE 10,5:PRINT "WORKING,FIELD #"FLDNUM;:PRINT #2,A$;CHR$(13);:WEND:CLOSE
+100 PRINT:PRINT:PRINT TAB(5) "Your  file has been written to disk in ABC-FILE  format ,":PRINT:PRINT TAB(5) "PRESS [RETURN]"
+110 NXT$=INKEY$:IF NXT$=CHR$(13) THEN 120 ELSE GOTO 110
+120 CLS:SYSTEM
+130 IF ERR=53 THEN LOCATE 25,5:BEEP:PRINT "FILE NOT FOUND";:RESUME 60:ELSE LOCATE 25,5:BEEP:PRINT "SORRY, UNDEFINEABLE ERROR, RE-TRY";:SYSTEM
+140 LOCATE 25,5:PRINT SPACE$(40);:RETURN
+```
+
+{% comment %}samples_end{% endcomment %}
+
+### Directory of PC-SIG Library Disk #0119
 
      Volume in drive A has no label
      Directory of A:\

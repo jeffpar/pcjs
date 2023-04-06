@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #470"
+title: "PC-SIG Diskette Library (Disk #470)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0470/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0470"
+      B: "PC-SIG Library Disk #0470"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MR. BILL 2 OF 2 (ALSO 469)"
 
@@ -32,8 +34,10 @@ machines:
     Prepare itemized invoices/bills and generate a bevy of summary and in-
     depth reports including account aging and an excellent audit trail. The
     28-page manual is adequate for experienced clerks.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0470
+
+### Directory of PC-SIG Library Disk #0470
 
      Volume in drive A has no label
      Directory of A:\

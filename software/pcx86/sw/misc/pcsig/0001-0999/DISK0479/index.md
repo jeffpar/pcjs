@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #479"
+title: "PC-SIG Diskette Library (Disk #479)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0479/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0479"
+      B: "PC-SIG Library Disk #0479"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "AM-TAX 1990"
 
@@ -29,8 +31,10 @@ machines:
     or calculated for a supporting form is automatically transferred to the
     appropriate line it supports.  All the forms can be printed and
     filed directly with the IRS.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0479
+
+### Directory of PC-SIG Library Disk #0479
 
      Volume in drive A has no label
      Directory of A:\

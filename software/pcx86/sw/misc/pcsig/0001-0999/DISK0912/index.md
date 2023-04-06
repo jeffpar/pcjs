@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #912"
+title: "PC-SIG Diskette Library (Disk #912)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0912/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0912"
+      B: "PC-SIG Library Disk #0912"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FLODRAW 1 OF 3 (ALSO 913, 2020)"
 
@@ -27,8 +29,10 @@ machines:
     FLODRAW has symbol libraries for flowcharts, HIPO charts, and electric
     diagrams.  Design your own symbols, save them, and combine them into new
     libraries, or add them to an existing library.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0912
+
+### Directory of PC-SIG Library Disk #0912
 
      Volume in drive A has no label
      Directory of A:\

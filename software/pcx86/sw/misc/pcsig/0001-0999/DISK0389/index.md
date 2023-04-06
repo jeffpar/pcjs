@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #389"
+title: "PC-SIG Diskette Library (Disk #389)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0389/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0389"
+      B: "PC-SIG Library Disk #0389"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HOME BUDGET WORK SHEETS"
 
@@ -36,8 +38,10 @@ machines:
     AUTOEXP  WKS  Keep track of auto expenses, gas milage, etc.
     ????EXP  WKS  Expense template for each month (12 files)
     DOCUMENT WKS  Documentation template.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0389
+
+### Directory of PC-SIG Library Disk #0389
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #151"
+title: "PC-SIG Diskette Library (Disk #151)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0151/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0151"
+      B: "PC-SIG Library Disk #0151"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FINANCE MANAGER II"
 
@@ -40,8 +42,10 @@ machines:
     ~ Listing a current Chart of Accounts to be run after changes
     
     ~ Listing of budgeted income or expense accounts
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0151
+
+### Directory of PC-SIG Library Disk #0151
 
      Volume in drive A has no label
      Directory of A:\

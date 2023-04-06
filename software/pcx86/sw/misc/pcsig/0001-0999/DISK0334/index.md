@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #334"
+title: "PC-SIG Diskette Library (Disk #334)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0334/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0334"
+      B: "PC-SIG Library Disk #0334"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "RBBS-PC 2 OF 5 (ALSO 212,621,622,2092)"
 
@@ -29,8 +31,10 @@ machines:
     context-sensitive help. It also can run as a local application on a
     network, use any field or define a new field to identify callers, and
     individualize callers having the same ID. The source code is included.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0334
+
+### Directory of PC-SIG Library Disk #0334
 
      Volume in drive A has no label
      Directory of A:\

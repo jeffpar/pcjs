@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #106"
+title: "PC-SIG Diskette Library (Disk #106)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0106/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0106"
+      B: "PC-SIG Library Disk #0106"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DISKCAT"
 
@@ -54,8 +56,10 @@ machines:
     DC4-SAMP DTA  Sample data file for DISKCAT
     DC4-SAMP DT2  Sample data file for DISKCAT
     DC4-READ EXE  Program to read & catalog disk files
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0106
+
+### Directory of PC-SIG Library Disk #0106
 
      Volume in drive A has no label
      Directory of A:\

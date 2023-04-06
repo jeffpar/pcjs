@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #422"
+title: "PC-SIG Diskette Library (Disk #422)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0422/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0422"
+      B: "PC-SIG Library Disk #0422"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SCREENWRIGHT PROFESSIONAL"
 
@@ -65,8 +67,10 @@ machines:
     DWASC    EXE  Converts DisplayWrite documents to ASCIII.
     TCOUNT   COM  Counts characters, words, lines and pages.
     TCOUNT   DOC  Documentation file (7K).
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0422
+
+### Directory of PC-SIG Library Disk #0422
 
      Volume in drive A has no label
      Directory of A:\

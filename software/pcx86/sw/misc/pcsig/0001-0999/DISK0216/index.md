@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #216"
+title: "PC-SIG Diskette Library (Disk #216)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0216/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0216"
+      B: "PC-SIG Library Disk #0216"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "C UTILITIES NO 2"
 
@@ -59,8 +61,10 @@ machines:
     MENCON   C    Function to open menu file and display it on screen.
     ???      BAT  Batch files to emulate UNIX commands (9 files).
     IBMTTY   C    Terminal emulation program with file upload & download.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0216
+
+### Directory of PC-SIG Library Disk #0216
 
      Volume in drive A has no label
      Directory of A:\

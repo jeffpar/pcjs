@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #860"
+title: "PC-SIG Diskette Library (Disk #860)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0860/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0860"
+      B: "PC-SIG Library Disk #0860"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "REIPS, THE SIMPLE BOOKKEEPER, TYPERITE"
 
@@ -45,8 +47,10 @@ machines:
     Turn your PC and its printer into an electric typewriter.  TYPERITE is
     simple, straight-forward and faster than using a wordprocessor for some
     day-to-day jobs.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0860
+
+### Directory of PC-SIG Library Disk #0860
 
      Volume in drive A has no label
      Directory of A:\

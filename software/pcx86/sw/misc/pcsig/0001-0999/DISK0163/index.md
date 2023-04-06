@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #163"
+title: "PC-SIG Diskette Library (Disk #163)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0163/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0163"
+      B: "PC-SIG Library Disk #0163"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FILTERS"
 
@@ -24,8 +26,10 @@ machines:
     like.  DBSCREEN also lets you modify and print dBase II, III, and III+ s
     formats. Other programs let you modify character strings, change tabs
     into spaces, and encrypt/decrypt your files.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0163
+
+### Directory of PC-SIG Library Disk #0163
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #845"
+title: "PC-SIG Diskette Library (Disk #845)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0845/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0845"
+      B: "PC-SIG Library Disk #0845"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "COST EFFECTIVE TRACKING SYSTEM"
 
@@ -31,8 +33,10 @@ machines:
     The program is fully menu-driven and there are help screens available at
     any point in the program. You will find COST EFFECTIVE a great asset
     your company if raw materials are a part of your productions.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0845
+
+### Directory of PC-SIG Library Disk #0845
 
      Volume in drive A has no label
      Directory of A:\

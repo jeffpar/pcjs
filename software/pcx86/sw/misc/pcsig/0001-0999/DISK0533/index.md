@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #533"
+title: "PC-SIG Diskette Library (Disk #533)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0533/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0533"
+      B: "PC-SIG Library Disk #0533"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PDS*QUOTE"
 
@@ -24,8 +26,10 @@ machines:
     financial data, this could be a great help.  A very professional package
     for small to medium-sized businesses needing analysis and projection
     tools.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0533
+
+### Directory of PC-SIG Library Disk #0533
 
      Volume in drive A has no label
      Directory of A:\

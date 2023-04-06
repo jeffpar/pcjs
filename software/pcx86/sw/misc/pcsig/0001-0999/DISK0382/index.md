@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #382"
+title: "PC-SIG Diskette Library (Disk #382)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0382/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0382"
+      B: "PC-SIG Library Disk #0382"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-CONVERT AND PC-SWEEP"
 
@@ -40,8 +42,10 @@ machines:
     PC-SWEEP DOC  Documentation for PC-SWEEP.COM
     PCONVERT EXE  Main program PC-CONVERT
     PCONVDOC      Documentation for PCONVERT.EXE
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0382
+
+### Directory of PC-SIG Library Disk #0382
 
      Volume in drive A has no label
      Directory of A:\

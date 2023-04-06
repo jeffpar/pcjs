@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #618"
+title: "PC-SIG Diskette Library (Disk #618)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0618/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0618"
+      B: "PC-SIG Library Disk #0618"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MAKEMYDAY"
 
@@ -34,8 +36,10 @@ machines:
     and provides the necessary documentation when you need it.  Attorneys,
     accountants, consultants and other service professionals will appreciate
     it.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0618
+
+### Directory of PC-SIG Library Disk #0618
 
      Volume in drive A has no label
      Directory of A:\

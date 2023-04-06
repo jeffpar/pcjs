@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #123"
+title: "PC-SIG Diskette Library (Disk #123)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0123/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0123"
+      B: "PC-SIG Library Disk #0123"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LETUS A-B-C VOL 3"
 
@@ -35,8 +37,10 @@ machines:
     PCTEC83  ???  PC Tech Journal 1983 magazine reference files (4 files)
     PCMAG83B ???  PC Magazine 2nd 6 months 1983 reference files (4 files)
     PCW83    ???  PC World 1983 magazine reference files (4 files)
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0123
+
+### Directory of PC-SIG Library Disk #0123
 
      Volume in drive A has no label
      Directory of A:\

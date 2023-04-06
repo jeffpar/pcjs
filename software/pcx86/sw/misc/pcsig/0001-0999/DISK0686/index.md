@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #686"
+title: "PC-SIG Diskette Library (Disk #686)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0686/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0686"
+      B: "PC-SIG Library Disk #0686"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HELPDOS"
 
@@ -33,8 +35,10 @@ machines:
     When you select a category from the hint menu, HelpDOS will show you a
     menu of the DOS features relating to that category. The hints
     function is a unique and powerful aspect of HELPDOS.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0686
+
+### Directory of PC-SIG Library Disk #0686
 
      Volume in drive A has no label
      Directory of A:\

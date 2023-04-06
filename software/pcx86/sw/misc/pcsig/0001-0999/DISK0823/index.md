@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #823"
+title: "PC-SIG Diskette Library (Disk #823)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0823/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0823"
+      B: "PC-SIG Library Disk #0823"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "INTERACTIVE MATRIX CALCULATOR"
 
@@ -35,8 +37,10 @@ machines:
     made for residual analysis since no data is stored.  This is a serious
     limitation of the program in terms of modern regression analysis
     procedures.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0823
+
+### Directory of PC-SIG Library Disk #0823
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #278"
+title: "PC-SIG Diskette Library (Disk #278)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0278/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0278"
+      B: "PC-SIG Library Disk #0278"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "QSYS DOS MENU 2 OF 2 (#118 FIRST DISK)"
 
@@ -55,8 +57,10 @@ machines:
     MAKEDOC  BAT  Batch file to print documentation
     READ     ME!  Read this first ________
     Q_*      DOC  Documentation files (17 files)
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0278
+
+### Directory of PC-SIG Library Disk #0278
 
      Volume in drive A has no label
      Directory of A:\

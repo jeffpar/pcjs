@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #499"
+title: "PC-SIG Diskette Library (Disk #499)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0499/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0499"
+      B: "PC-SIG Library Disk #0499"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PROCOMM"
 
@@ -43,8 +45,10 @@ machines:
     
     There are a host of additional features in this top-rated program,
     including keyboard macros, disk and printer logging, and many others.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0499
+
+### Directory of PC-SIG Library Disk #0499
 
      Volume in drive A has no label
      Directory of A:\

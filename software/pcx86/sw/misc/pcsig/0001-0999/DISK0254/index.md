@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #254"
+title: "PC-SIG Diskette Library (Disk #254)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0254/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0254"
+      B: "PC-SIG Library Disk #0254"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-DOS HELP"
 
@@ -24,8 +26,10 @@ machines:
     How do you get there from here? Just type HELP, followed by the DOS
     command you are unsure of, and PC-DOS HELP shows you its proper usage
     and leads you back into the light.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0254
+
+### Directory of PC-SIG Library Disk #0254
 
      Volume in drive A has no label
      Directory of A:\

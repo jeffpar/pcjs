@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #650"
+title: "PC-SIG Diskette Library (Disk #650)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0650/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0650"
+      B: "PC-SIG Library Disk #0650"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FANSI-CONSOLE 2 OF 2 (ALSO 356)"
 
@@ -30,8 +32,10 @@ machines:
     specific keys to perform complex series of keystokes.  Reconfigure your
     keyboard however you wish -- even a Dvorak layout.  Experiment with
     different drivers.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0650
+
+### Directory of PC-SIG Library Disk #0650
 
      Volume in drive A has no label
      Directory of A:\

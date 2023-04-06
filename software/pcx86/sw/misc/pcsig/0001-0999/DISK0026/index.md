@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #26"
+title: "PC-SIG Diskette Library (Disk #26)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0026/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0026"
+      B: "PC-SIG Library Disk #0026"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BOOK INDEX BUILDER"
 
@@ -44,8 +46,10 @@ machines:
     SORT     PAS  Pascal source code for Book Indexing Program
     MERGE    PAS  Pascal source code for Book Indexing Program
     BUILD    PAS  Pascal source code for Book Indexing Program
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0026
+
+### Directory of PC-SIG Library Disk #0026
 
      Volume in drive A has no label
      Directory of A:\

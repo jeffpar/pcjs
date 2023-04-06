@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #704"
+title: "PC-SIG Diskette Library (Disk #704)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0704/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0704"
+      B: "PC-SIG Library Disk #0704"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DANCAD 3D 4 OF 4 (ALSO 701,702,703)"
 
@@ -49,8 +51,10 @@ machines:
     layout drawing. Use this close-up to confirm the fit of moving parts.
     Produce an animated perspective view of the entire assembly with all of
     the parts in motion.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0704
+
+### Directory of PC-SIG Library Disk #0704
 
      Volume in drive A has no label
      Directory of A:\

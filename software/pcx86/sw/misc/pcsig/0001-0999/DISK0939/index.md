@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #939"
+title: "PC-SIG Diskette Library (Disk #939)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0939/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0939"
+      B: "PC-SIG Library Disk #0939"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FLIGHT PLANNING (ALSO 1476 )"
 
@@ -38,8 +40,10 @@ machines:
     sent.  MORSE also sends individual random letters well spaced in time
     and reads text files prepared by your wordprocessor in capitals, then
     sends the text line-by-line.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0939
+
+### Directory of PC-SIG Library Disk #0939
 
      Volume in drive A has no label
      Directory of A:\

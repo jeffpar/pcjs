@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #304"
+title: "PC-SIG Diskette Library (Disk #304)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0304/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0304"
+      B: "PC-SIG Library Disk #0304"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LOTUS WORKSHEETS #5"
 
@@ -49,8 +51,10 @@ machines:
     RAR      WKS  Ratio analyzer.
     QGN      WKS  Quote generator - form and tracker.
     QAM      WKS  Queue analysis (multi-station service facility).
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0304
+
+### Directory of PC-SIG Library Disk #0304
 
      Volume in drive A has no label
      Directory of A:\

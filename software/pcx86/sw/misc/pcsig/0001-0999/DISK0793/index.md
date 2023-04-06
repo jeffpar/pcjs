@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #793"
+title: "PC-SIG Diskette Library (Disk #793)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0793/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0793"
+      B: "PC-SIG Library Disk #0793"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TYPING BY RYSOFT"
 
@@ -29,8 +31,10 @@ machines:
     minute.  The nice thing about TYPING is you can either type from
     the screen or print the test file and type from that.  You can
     also supply your own file to type if you want.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0793
+
+### Directory of PC-SIG Library Disk #0793
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #902"
+title: "PC-SIG Diskette Library (Disk #902)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0902/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0902"
+      B: "PC-SIG Library Disk #0902"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HEBREW QUIZ AND TUTORIAL"
 
@@ -31,8 +33,10 @@ machines:
     section that tracks your scores.  Hebrew words are shown one at a time
     with an English translation.  A menu on the screen displays all the
     options available.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0902
+
+### Directory of PC-SIG Library Disk #0902
 
      Volume in drive A has no label
      Directory of A:\

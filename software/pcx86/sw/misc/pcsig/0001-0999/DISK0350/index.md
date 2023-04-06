@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #350"
+title: "PC-SIG Diskette Library (Disk #350)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0350/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0350"
+      B: "PC-SIG Library Disk #0350"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LETUS A-B-C VOL 6"
 
@@ -49,8 +51,10 @@ machines:
     PLOGO82  COM  generates LETUS logo part 2
     LOGO84N6 COM  generates LETUS logo part 1
     LETUS    DOC  information about LETUS
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0350
+
+### Directory of PC-SIG Library Disk #0350
 
      Volume in drive A has no label
      Directory of A:\

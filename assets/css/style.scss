@@ -51,11 +51,11 @@ li.pcjs-explorer-item:before {
   border: 1px solid black;
   border-radius: 5px;
   background-color: slategray;
-}
-.pcjs-gallery-image img {
-  margin: 0;
-  max-width: 100%;
-  vertical-align: middle;
+  img {
+    margin: 0;
+    max-width: 100%;
+    vertical-align: middle;
+  }
 }
 div.pcjs-gallery-image a {
     color: black;
@@ -79,4 +79,29 @@ div.pcjs-gallery-image a {
 }
 .pcjs-picture-caption {
   font-size: x-small;
+}
+.pcjs-search {
+  width: 100%;
+  input {
+    margin: auto;
+    display: block;
+    margin-bottom: 16px;
+  }
+}
+.pcjs-results {
+  overflow: scroll;
+  max-height: 500px;
+  margin-bottom: 16px;
+  p {
+    margin: auto;
+    display: block;
+    text-align: center;
+  }
+  ul {
+    list-style-type: none;
+    padding-right: 40px;
+    li {
+      padding-bottom: 8px;
+    }
+  }
 }

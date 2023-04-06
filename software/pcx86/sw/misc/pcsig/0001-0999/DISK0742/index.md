@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #742"
+title: "PC-SIG Diskette Library (Disk #742)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0742/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0742"
+      B: "PC-SIG Library Disk #0742"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CHURCH MEMBERSHIP SYSTEM"
 
@@ -23,8 +25,10 @@ machines:
     special or important dates. Some of the handy features include:
     modify/delete, browsing, and making multiple reports. Menu-driven and
     user-friendly.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0742
+
+### Directory of PC-SIG Library Disk #0742
 
      Volume in drive A has no label
      Directory of A:\

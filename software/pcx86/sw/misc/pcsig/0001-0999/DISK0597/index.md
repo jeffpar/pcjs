@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #597"
+title: "PC-SIG Diskette Library (Disk #597)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0597/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0597"
+      B: "PC-SIG Library Disk #0597"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SYMPHONY WORKSHEETS #4"
 
@@ -39,8 +41,10 @@ machines:
     CHEKBOOK WRK  Check Book Macro
     0_README WRK  Details about new revisions and location of files
     0_HIGHLT WRK  Instructions on where to find details
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0597
+
+### Directory of PC-SIG Library Disk #0597
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #478"
+title: "PC-SIG Diskette Library (Disk #478)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0478/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0478"
+      B: "PC-SIG Library Disk #0478"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HARD DISK UTILITIES"
 
@@ -78,8 +80,155 @@ machines:
     READ_ME  1ST  Introductory text file for DIARY.COM.
     PASSWORD DOC  Documentation file for PASSWORD.EXE.
     PASSWORD EXE  Protect your system with a password.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0478
+{% comment %}samples_begin{% endcomment %}
+
+## UNDO.BAS
+
+```bas
+10 KEY OFF
+20 CLS
+30 COLOR 0,7
+40 LOCATE 5,33
+50 PRINT " UNDO-128.BAS "
+60 LOCATE 7,31
+70 PRINT " By Rich Schinnell "
+80 LOCATE 8,26,1
+90 PRINT " Rockville, MD (301) 949-8848 "
+100 COLOR 7,0
+110 PRINT
+120 PRINT
+130 PRINT "A program for IBM  DOS 2.0/2.1 Fixed Disk owners , ie XT's and"
+140 PRINT "expansion chassis's who use the IBM DOS 2.0 BACKUP.COM utility and"
+150 PRINT "want to access files from their backup disks without Restore."
+160 PRINT "All files are restored up to the next 128 Byte boundry."
+170 PRINT "This cause absolutely no problems as DOS always reserves"
+180 PRINT "space in blocks of 512 for SS disks and 1024 for DS disks."
+190 PRINT "Press <ENTER> to quit... Now Enter  SINGLE Letter Drive  for"
+200 DEFINT A-Z
+210 FALSE% = 0
+220 TRUE% = NOT FALSE%
+230 ON ERROR GOTO 1310
+240 ZZZ! = 1
+250 PRINT:LOCATE ,,1
+260 PRINT"Backup disk Location ";
+270 DR$=INKEY$:IF LEN(DR$)<1 THEN 270
+280 IF ASC(DR$) = 13 THEN 1290
+290 DR$ = DR$ + ":"
+300 OPEN DR$+"BACKUPID.@@@" FOR INPUT AS #1
+310 CLOSE #1
+320 FILES DR$ + "*.*"
+330 PRINT
+340 PRINT
+350 INPUT "File name to Recover (no Drive Designation) ";INFILE$
+360 IF LEN(INFILE$) < 1 THEN 1290
+370 CLOSE #1
+380 OPEN DR$+INFILE$ FOR INPUT AS #1
+390 CLOSE 1
+400 CLOSE #1
+410 OPEN DR$+"BACKUPID.@@@" AS #1 LEN=128
+420 FIELD #1,128 AS G$
+430 GET #1
+440 CLOSE #1
+450 N$ = STR$( ASC( MID$(G$,3,1))) + STR$( ASC( MID$(G$,2,1)))
+460 N=VAL(N$)
+470 DTE$=STR$(ASC(MID$(G$,7,1)))+"-"+STR$(ASC(MID$(G$,6,1)))+"-"
+480 DTE$=DTE$+STR$(ASC(MID$(G$,4,1))+1792)
+490 PRINT "This is your backup disk #"; N;" Dated ";DTE$
+500 CLOSE #1
+510 OPEN DR$+INFILE$ AS #1 LEN=128
+520 C$ = ""
+530 D$ = ""
+540 FIELD #1,128 AS A$
+550 A# = LOF(1)
+560 PRINT "Input file has";A# - 128;" Bytes in it"
+570 GET #1
+580 C$ = A$
+590 FOR I% = 1 TO 128
+600   IF ASC( MID$(C$,I%,1)) < 33 THEN 620
+610   D$ = D$ + MID$(C$,I%,1)
+620 NEXT I%
+630 IF ASC(MID$(C$,2,1)) = 1 THEN 660
+640 PRINT "This is Part 2 of";D$;" You must start with the first part"
+650 BEEP:GOTO 330
+660 IF ASC(MID$(C$,1,1)) =255 THEN ONLY.ONE%=-1:GOTO 690
+670 PRINT:COLOR 23,0:PRINT "File on two Disks ,Insert backup disk #";
+680 PRINT N+1;" When Instructed" : COLOR 7,0 : BEEP
+690 PRINT
+700 PRINT CHR$(34); MID$(D$,1,40); CHR$(34);" Was the file name when backed up"
+710 INPUT "What do you want to name the output file ";OUTFILE$
+720 IF LEN(OUTFILE$) < 1 THEN 330
+730 OPEN OUTFILE$ FOR INPUT AS #2
+740 CLOSE 2
+750 PRINT "File ";OUTFILE$;" already exists, <O>verwrite ";
+760 INPUT ": ";WELL$
+770 IF WELL$ = "O" OR WELL$ = "o" THEN 780  ELSE 710
+780 CLOSE #2
+790 OPEN OUTFILE$ FOR OUTPUT AS #2
+800 CLOSE #2
+810 OPEN OUTFILE$ AS #2 LEN=128
+820 FIELD #2,128 AS B$
+830 COLOR 23,0
+840 PRINT "Working ....";
+850 COLOR 7,0
+860 FOR I! = 2 TO INT((A#-128)/128)+2
+870   GET #1,I!
+880   LSET B$ = A$
+890   PUT #2,ZZZ!
+900   ZZZ! = ZZZ! + 1
+910   PRINT CHR$(15);
+920 NEXT I!
+930 IF ONLY.ONE% THEN 1260
+940 PRINT
+950 PRINT "Insert Backup Disk #";N +1;" in drive ";DR$;
+960 PRINT " and press <ENTER> or <Q>uit ":BEEP
+970 R$ = INKEY$
+980 IF R$ = "" THEN 970
+990 IF R$ = "Q" OR R$ = "q" THEN CLOSE  : KEY ON  : END
+1000 CLOSE #1
+1010 OPEN DR$+"BACKUPID.@@@" AS #1 LEN=128
+1020 FIELD #1,128 AS G$
+1030 GET #1
+1040 CLOSE #1
+1050 N1$ = STR$( ASC( MID$(G$,3,1))) + STR$( ASC( MID$(G$,2,1)))
+1060 N1=VAL(N1$)
+1070 IF N1 = N + 1 THEN 1090
+1080 PRINT "WRONG DISK, TRY AGAIN You put in disk #"; N1 : GOTO 930
+1090 CLOSE #1
+1100 OPEN DR$+INFILE$ FOR INPUT AS #1
+1110 CLOSE 1
+1120 OPEN DR$+INFILE$ AS #1 LEN=128
+1130 FIELD #1,128 AS A$
+1140 C$ = ""
+1150 D$ = ""
+1160 A# = LOF(1)
+1170 PRINT "Input file has";A# - 128;" Bytes in it"
+1180   GET #1
+1190   C$ = A$
+1200 FOR I% = 1 TO 128
+1210   IF ASC( MID$(C$,I%,1)) < 33 THEN 1230
+1220   D$ = D$ + MID$(C$,I%,1)
+1230 NEXT I%
+1240 ONLY.ONE% = - 1
+1250 GOTO 860
+1260 CLOSE
+1270 PRINT
+1280 PRINT "File ";OUTFILE$;" created  Size="; STR$((ZZZ!-1)*128);" Bytes
+1290 KEY ON
+1300 END
+1310 IF ERL=300 THEN DR$="":PRINT " Not a Valid Backup Disk":BEEP:RESUME 250
+1320 IF ERL=380 THEN PRINT DR$;INFILE$;" NOT FOUND ":CLOSE #1:RESUME 250
+1330 IF ERL=730 THEN RESUME 780
+1340 IF ERL=890 THEN PRINT "disk is Probably full, check the disk":RESUME 1290
+1350 IF ERL=1100 THEN PRINT "Not found " : RESUME 940
+1360 PRINT "Error"; ERR ;" has occured in line #"; ERL
+1370 RESUME 1290
+```
+
+{% comment %}samples_end{% endcomment %}
+
+### Directory of PC-SIG Library Disk #0478
 
      Volume in drive A has no label
      Directory of A:\

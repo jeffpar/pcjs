@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #667"
+title: "PC-SIG Diskette Library (Disk #667)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0667/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0667"
+      B: "PC-SIG Library Disk #0667"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "THE WRITERS TOOL KIT"
 
@@ -63,8 +65,10 @@ machines:
     NL       EXE  Line numbering filter.
     MEMO     EXE  Display memos that have the system date.
     WRITERS  TXT  Writer's Toolkit information.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0667
+
+### Directory of PC-SIG Library Disk #0667
 
      Volume in drive A has no label
      Directory of A:\

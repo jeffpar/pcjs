@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #429"
+title: "PC-SIG Diskette Library (Disk #429)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0429/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0429"
+      B: "PC-SIG Library Disk #0429"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ELEMENTARY C"
 
@@ -74,8 +76,10 @@ machines:
     M_SOLVE  C    Matrix linear equations.
     M_READ   C    Read into matrix.
     M_MULTIP C    Multiply matrix 1 x matrix 2.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0429
+
+### Directory of PC-SIG Library Disk #0429
 
      Volume in drive A has no label
      Directory of A:\

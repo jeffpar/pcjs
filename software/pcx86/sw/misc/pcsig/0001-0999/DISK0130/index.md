@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #130"
+title: "PC-SIG Diskette Library (Disk #130)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0130/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0130"
+      B: "PC-SIG Library Disk #0130"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PASCAL TOOLS VOL 1"
 
@@ -40,8 +42,10 @@ machines:
     *        MAN  Documentation  (17 files)
     *        FNT  Printer setup files (4 files)
     MAN      IM   Macros for manual page
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0130
+
+### Directory of PC-SIG Library Disk #0130
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #934"
+title: "PC-SIG Diskette Library (Disk #934)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0934/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0934"
+      B: "PC-SIG Library Disk #0934"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TICKLEX - TICKLER PROGRAM"
 
@@ -32,8 +34,10 @@ machines:
     features -- find the day of the week for any date in the next half
     century, set up to 20 alarms for any day, and drag unmet deadlines (to-
     do's) forward from one day to the next.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0934
+
+### Directory of PC-SIG Library Disk #0934
 
      Volume in drive A has no label
      Directory of A:\

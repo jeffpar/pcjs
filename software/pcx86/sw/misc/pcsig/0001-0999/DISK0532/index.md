@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #532"
+title: "PC-SIG Diskette Library (Disk #532)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0532/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0532"
+      B: "PC-SIG Library Disk #0532"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-MONEY"
 
@@ -32,8 +34,10 @@ machines:
     a number of different ways. All operations are selected by menus that
     are easy to use. All account data is entered via fill-in forms with
     editing capabilities.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0532
+
+### Directory of PC-SIG Library Disk #0532
 
      Volume in drive A has no label
      Directory of A:\

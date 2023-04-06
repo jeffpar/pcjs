@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #873"
+title: "PC-SIG Diskette Library (Disk #873)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0873/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0873"
+      B: "PC-SIG Library Disk #0873"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "THE WINDOW BOSS 1 OF 2 (ALSO 1113)"
 
@@ -30,8 +32,10 @@ machines:
     windows, super titles, and graphics character text input.  The Window
     Boss now supports Microsoft, Borland, Lattice, Watcom, Mix Power C,
     Computer Innovations, Datalight, and Aztec C!
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0873
+
+### Directory of PC-SIG Library Disk #0873
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #393"
+title: "PC-SIG Diskette Library (Disk #393)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0393/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0393"
+      B: "PC-SIG Library Disk #0393"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CHECKBOOK MANAGEMENT 1 OF 2 (ALSO 2049)"
 
@@ -33,8 +35,10 @@ machines:
     budget classification. This flexible program lets you change these
     designations as needed. At last, you'll be able to find out just where
     it all goes!
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0393
+
+### Directory of PC-SIG Library Disk #0393
 
      Volume in drive A has no label
      Directory of A:\

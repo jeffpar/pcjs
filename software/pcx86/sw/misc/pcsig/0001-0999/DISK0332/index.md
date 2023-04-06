@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #332"
+title: "PC-SIG Diskette Library (Disk #332)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0332/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0332"
+      B: "PC-SIG Library Disk #0332"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "KLP DTA AND MUA"
 
@@ -56,8 +58,10 @@ machines:
     -------- ---  KINETICS LINEAR PROGRAMMING SYSTEM     (version 1.9)
     MUMSG    KEY  Message file
     MUDATA   S-1  Sample data file
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0332
+
+### Directory of PC-SIG Library Disk #0332
 
      Volume in drive A has no label
      Directory of A:\

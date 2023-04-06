@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #821"
+title: "PC-SIG Diskette Library (Disk #821)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0821/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0821"
+      B: "PC-SIG Library Disk #0821"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HDP ACCOUNTS RECEIVABLES"
 
@@ -34,8 +36,10 @@ machines:
     not require you to pay a registration fee to use it. If you like it and
     want to upgrade up to the commercial version, you then need to purchase
     the program.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0821
+
+### Directory of PC-SIG Library Disk #0821
 
      Volume in drive A has no label
      Directory of A:\

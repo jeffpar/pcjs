@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #642"
+title: "PC-SIG Diskette Library (Disk #642)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0642/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0642"
+      B: "PC-SIG Library Disk #0642"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MENU-MASTER"
 
@@ -30,8 +32,10 @@ machines:
     context sensitive HELP Function, and the configuration page may be
     password protected to avoid unauthorized changes.  The menu name
     itself is user-defined, as is the sub-function menu.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0642
+
+### Directory of PC-SIG Library Disk #0642
 
      Volume in drive A has no label
      Directory of A:\

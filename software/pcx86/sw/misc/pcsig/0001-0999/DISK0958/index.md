@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #958"
+title: "PC-SIG Diskette Library (Disk #958)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0958/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0958"
+      B: "PC-SIG Library Disk #0958"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "STOCK INVENTORY CONTROL"
 
@@ -27,8 +29,10 @@ machines:
     an order level. The program was written in dBase III+, compiled and
     runs directly from DOS. For those who know dBase, and like to tinker,
     the source code is provided.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0958
+
+### Directory of PC-SIG Library Disk #0958
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #435"
+title: "PC-SIG Diskette Library (Disk #435)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0435/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0435"
+      B: "PC-SIG Library Disk #0435"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TURBO PASCAL SET #11"
 
@@ -69,8 +71,10 @@ machines:
     POWERI   PAS  Exponentiation of real to integer power
     TESTINVT PAS  Demo of inverse central T distribution
     UTIL     PAS  More than 50 utility routines
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0435
+
+### Directory of PC-SIG Library Disk #0435
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #348"
+title: "PC-SIG Diskette Library (Disk #348)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0348/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0348"
+      B: "PC-SIG Library Disk #0348"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LETUS A-B-C VOL 4"
 
@@ -51,8 +53,10 @@ machines:
     LOGO84A  COM  generates LETUS logo part 1
     SOFT84A  ???  SOFTALK Magazine Jan-Mar 1984 reference files (4 files)
     BYTE84A  ???  Database files for Byte Magazine
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0348
+
+### Directory of PC-SIG Library Disk #0348
 
      Volume in drive A has no label
      Directory of A:\

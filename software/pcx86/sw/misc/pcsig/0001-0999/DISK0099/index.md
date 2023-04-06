@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #99"
+title: "PC-SIG Diskette Library (Disk #99)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0099/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0099"
+      B: "PC-SIG Library Disk #0099"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PUBLIC BBS AND MORE"
 
@@ -36,8 +38,10 @@ machines:
     S-BBS         List of public BBS from THE SOURCE.
     TBBS-NOS      List of public BBS from a St. Louis local BBS.
     README        Text file.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0099
+
+### Directory of PC-SIG Library Disk #0099
 
      Volume in drive A has no label
      Directory of A:\

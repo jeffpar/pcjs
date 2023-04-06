@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #566"
+title: "PC-SIG Diskette Library (Disk #566)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0566/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0566"
+      B: "PC-SIG Library Disk #0566"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SURVEYSOFT"
 
@@ -55,8 +57,10 @@ machines:
     FILES    TXT  File with list of package files
     RUN      BAT  Execution program (Copy of GO.BAT)
     READ_ME  BAT  Instructions file
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0566
+
+### Directory of PC-SIG Library Disk #0566
 
      Volume in drive A has no label
      Directory of A:\

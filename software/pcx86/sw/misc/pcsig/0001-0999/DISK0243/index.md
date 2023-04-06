@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #243"
+title: "PC-SIG Diskette Library (Disk #243)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0243/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0243"
+      B: "PC-SIG Library Disk #0243"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SAGE CALENDAR AND TAG"
 
@@ -42,8 +44,10 @@ machines:
     TAG      HLP  On line help for Sage Tag
     TAGINST  BAT  Batch program to make working copy
     TAG      PRN  Documentation for Sage Tag
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0243
+
+### Directory of PC-SIG Library Disk #0243
 
      Volume in drive A has no label
      Directory of A:\

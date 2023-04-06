@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #959"
+title: "PC-SIG Diskette Library (Disk #959)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0959/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0959"
+      B: "PC-SIG Library Disk #0959"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FLOPCAT - DISK CATALOGING SYSTEM"
 
@@ -39,8 +41,10 @@ machines:
     New features include pop-up command windows, choice of file date
     record or comments, disk label path mask (allows labels to be printed
     only for selected drives), and expanded search functions.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0959
+
+### Directory of PC-SIG Library Disk #0959
 
      Volume in drive A has no label
      Directory of A:\

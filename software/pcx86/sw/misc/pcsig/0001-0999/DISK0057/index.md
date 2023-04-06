@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #57"
+title: "PC-SIG Diskette Library (Disk #57)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0057/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0057"
+      B: "PC-SIG Library Disk #0057"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TEXT TOOLS 1 OF 2  (#58 SECOND DISK)"
 
@@ -35,8 +37,10 @@ machines:
     DEFINE   EXE  STRING REPLACEMENT MACROPROCESSOR
     MACRO    EXE  EXPANDS MACROS WITH ARGUMENTS
     EDIT     EXE  TEXT EDITOR
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0057
+
+### Directory of PC-SIG Library Disk #0057
 
      Volume in drive A has no label
      Directory of A:\

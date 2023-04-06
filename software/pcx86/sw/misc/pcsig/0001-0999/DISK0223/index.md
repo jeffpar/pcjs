@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #223"
+title: "PC-SIG Diskette Library (Disk #223)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0223/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0223"
+      B: "PC-SIG Library Disk #0223"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ASSEMBLY AND PASCAL"
 
@@ -78,8 +80,10 @@ machines:
     PREVIEW  COM  Additional version of PREVIEW.EXE
     SETP     COM  Program to setup Epson printer to skip perforations
     ADDENDA  TXT  Notes on program improvements
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0223
+
+### Directory of PC-SIG Library Disk #0223
 
      Volume in drive A has no label
      Directory of A:\

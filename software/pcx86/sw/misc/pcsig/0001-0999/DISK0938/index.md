@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #938"
+title: "PC-SIG Diskette Library (Disk #938)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0938/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0938"
+      B: "PC-SIG Library Disk #0938"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CHEMICAL MOLECULAR MODELING"
 
@@ -31,8 +33,10 @@ machines:
     
     Included is CHEMVIEW (an EGA-only function), a companion program that
     shows three-dimensional animation of the models made with CHEMICAL.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0938
+
+### Directory of PC-SIG Library Disk #0938
 
      Volume in drive A has no label
      Directory of A:\

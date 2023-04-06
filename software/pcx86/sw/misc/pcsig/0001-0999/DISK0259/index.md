@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #259"
+title: "PC-SIG Diskette Library (Disk #259)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0259/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0259"
+      B: "PC-SIG Library Disk #0259"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "C ADVENTURE"
 
@@ -26,8 +28,10 @@ machines:
     the hackers can change things to suit themselves.  Features a good
     English language parser.  Games can be saved in progress and restored
     for later playing.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0259
+
+### Directory of PC-SIG Library Disk #0259
 
      Volume in drive A has no label
      Directory of A:\

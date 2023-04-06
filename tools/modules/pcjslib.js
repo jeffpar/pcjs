@@ -30,14 +30,26 @@ export default class PCJSLib {
      * getArgs(s)
      *
      * @this {PCJSLib}
-     * @param {string} [s]
+     * @param {string|object} [s]
      * @returns {Array} [argc, argv]
      */
     getArgs(s)
     {
         if (s) {
-            let args = s.split(' ');
-            return this.parseArgs(args, 0);
+            if (typeof s == "string") {
+                let args = s.split(' ');
+                return this.parseArgs(args, 0);
+            }
+            /*
+             * If a map of option aliases is provided, then we copy any aliased options as needed.
+             */
+            for (let arg in s) {
+                if (s.hasOwnProperty(arg)) {
+                    if (this.argv[arg] !== undefined && this.argv[s[arg]] === undefined) {
+                        this.argv[s[arg]] = this.argv[arg];
+                    }
+                }
+            }
         }
         return [this.argc, this.argv];
     }

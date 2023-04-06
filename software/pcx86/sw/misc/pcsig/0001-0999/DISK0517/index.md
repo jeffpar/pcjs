@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #517"
+title: "PC-SIG Diskette Library (Disk #517)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0517/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0517"
+      B: "PC-SIG Library Disk #0517"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "IMAGEPRINT 1 OF 2 (ALSO 2062)"
 
@@ -46,8 +48,10 @@ machines:
     TUTOR_1  TXT  Simple IMAGEPRINT demonstration.
     TUTOR_2  TXT  Detailed IMAGEPRINT demonstration.
     UTILS    DOC  Documentation for CONTROL and ENHANCE.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0517
+
+### Directory of PC-SIG Library Disk #0517
 
      Volume in drive A has no label
      Directory of A:\

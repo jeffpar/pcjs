@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #975"
+title: "PC-SIG Diskette Library (Disk #975)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0975/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0975"
+      B: "PC-SIG Library Disk #0975"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "COLLAGE"
 
@@ -22,8 +24,10 @@ machines:
     slides, and present the created and combined slides as a show on your
     computer screen.  COLLAGE also lets you create and maintain text files
     (upper ASCII included) with several good editing and block features.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0975
+
+### Directory of PC-SIG Library Disk #0975
 
      Volume in drive A has no label
      Directory of A:\

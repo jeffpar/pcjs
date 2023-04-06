@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #331"
+title: "PC-SIG Diskette Library (Disk #331)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0331/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0331"
+      B: "PC-SIG Library Disk #0331"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MEDLIN ACCOUNTING"
 
@@ -37,8 +39,10 @@ machines:
     supported accounts quoted above are based on at least 512K RAM. Less
     RAM will allow the modules to run but will support a smaller number of
     accounts.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0331
+
+### Directory of PC-SIG Library Disk #0331
 
      Volume in drive A has no label
      Directory of A:\

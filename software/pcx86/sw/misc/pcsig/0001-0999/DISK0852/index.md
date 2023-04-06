@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #852"
+title: "PC-SIG Diskette Library (Disk #852)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0852/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0852"
+      B: "PC-SIG Library Disk #0852"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ASTRONOMY STAR CATALOGUE 2 OF 2 (851)"
 
@@ -43,8 +45,10 @@ machines:
     CONSTELLATION NAMES lists (surprise!) the names of the constellations,
     and ASTRONOMY CONVERSIONS contains information about different systems
     of distance, temperature, and time.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0852
+
+### Directory of PC-SIG Library Disk #0852
 
      Volume in drive A has no label
      Directory of A:\

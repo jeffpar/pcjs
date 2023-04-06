@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #170"
+title: "PC-SIG Diskette Library (Disk #170)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0170/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0170"
+      B: "PC-SIG Library Disk #0170"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SPREADSHEETS"
 
@@ -62,8 +64,25 @@ machines:
     COPYPAD  BAT  Part of PC-PAD
     MINICALC DOC  Documentation for MINICALC.EXE
     MINICALC EXE  Small compiled spreadsheet
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0170
+{% comment %}samples_begin{% endcomment %}
+
+## ROWCOL.BAS
+
+```bas
+10000   '----------ROWCOL.BAS - sample row-column sum instructions-----------
+10010   ON ERROR GOTO 5000 'this prevents disabling of error trapping
+10020   NROW0=FNV(2,6):NCOL0=FNV(3,6):NROW=FNV(4,6):NCOL=FNV(5,6)  'read table
+10030   GOSUB 9630                                                 'form sums
+10040   I=NROW0+NROW: J=NCOL0-1: X$="Column Totals"   : GOSUB 9920 'label row
+10050   I=NROW0-2: J=NCOL0+NCOL: X$="Row Totals"      : GOSUB 9920 'label col
+10060   GOTO 450           'this exits to the View Function
+```
+
+{% comment %}samples_end{% endcomment %}
+
+### Directory of PC-SIG Library Disk #0170
 
      Volume in drive A has no label
      Directory of A:\

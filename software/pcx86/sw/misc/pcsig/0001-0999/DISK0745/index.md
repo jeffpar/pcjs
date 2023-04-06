@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #745"
+title: "PC-SIG Diskette Library (Disk #745)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0745/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0745"
+      B: "PC-SIG Library Disk #0745"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "WILDCAT BBS 1 OF 2 (ALSO 746)"
 
@@ -29,8 +31,10 @@ machines:
     rates up to 19,200 are supported. WILDCAT! lets you install an
     operational BBS and get a real feel for the power of the commercial
     multi-line/LAN release.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0745
+
+### Directory of PC-SIG Library Disk #0745
 
      Volume in drive A has no label
      Directory of A:\

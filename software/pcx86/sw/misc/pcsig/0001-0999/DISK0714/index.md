@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #714"
+title: "PC-SIG Diskette Library (Disk #714)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0714/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0714"
+      B: "PC-SIG Library Disk #0714"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "COMPUTER DRAW POKER"
 
@@ -33,8 +35,10 @@ machines:
     sophistication and will bet high or low, as well as bluff, at random.
     When you can consistently beat the computer, you are playing with a
     good deal of skill.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0714
+
+### Directory of PC-SIG Library Disk #0714
 
      Volume in drive A has no label
      Directory of A:\

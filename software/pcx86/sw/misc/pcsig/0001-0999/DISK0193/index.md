@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #193"
+title: "PC-SIG Diskette Library (Disk #193)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0193/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0193"
+      B: "PC-SIG Library Disk #0193"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FREEWILL"
 
@@ -52,8 +54,10 @@ machines:
     PAGEVII  ASC  Explanation text.
     PAGEVIII ASC  Explanation text.
     DISCLAIM      Disclaimer for Freewill program.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0193
+
+### Directory of PC-SIG Library Disk #0193
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #30"
+title: "PC-SIG Diskette Library (Disk #30)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0030/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0030"
+      B: "PC-SIG Library Disk #0030"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PASCAL I/O"
 
@@ -41,8 +43,10 @@ machines:
     IOSTUFF  PAS  Source for IOSTUFF object
     PRIME    PAS  Source for DEMO
     SAMPLE   PAS  Source for DEMO
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0030
+
+### Directory of PC-SIG Library Disk #0030
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #834"
+title: "PC-SIG Diskette Library (Disk #834)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0834/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0834"
+      B: "PC-SIG Library Disk #0834"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "GRAPHTIME II 2 OF 2 (HERCULES) ALSO 833"
 
@@ -28,8 +30,10 @@ machines:
     
     This version will plot 24 data points and will print "paint" files or
     save them to disk.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0834
+
+### Directory of PC-SIG Library Disk #0834
 
      Volume in drive A has no label
      Directory of A:\

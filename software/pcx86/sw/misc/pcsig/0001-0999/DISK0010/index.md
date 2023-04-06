@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #10"
+title: "PC-SIG Diskette Library (Disk #10)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0010/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0010"
+      B: "PC-SIG Library Disk #0010"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CHASM  (CHEAP ASSEMBLER)"
 
@@ -25,8 +27,10 @@ machines:
     CHASM is a compiler only and there is no editor included.  You use an
     ASCII word processor to create your source code file, then use CHASM to
     compile it.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0010
+
+### Directory of PC-SIG Library Disk #0010
 
      Volume in drive A has no label
      Directory of A:\

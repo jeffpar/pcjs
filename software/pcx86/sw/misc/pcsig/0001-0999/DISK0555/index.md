@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #555"
+title: "PC-SIG Diskette Library (Disk #555)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0555/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0555"
+      B: "PC-SIG Library Disk #0555"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LINPACK DRIVERS"
 
@@ -56,8 +58,10 @@ machines:
     SUD      LNK  An undocumented link list.
     ST       LNK  The link list of binaries for the single precision
     SSV      LNK  The link list of binaries for the single precision
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0555
+
+### Directory of PC-SIG Library Disk #0555
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #909"
+title: "PC-SIG Diskette Library (Disk #909)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0909/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0909"
+      B: "PC-SIG Library Disk #0909"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BILLING MANAGER 1 OF 2 (ALSO 910)"
 
@@ -36,8 +38,10 @@ machines:
     description is 35 characters and spaces, about average for this type of
     information, and with ``extended description lines,'' you may expand
     this description by up to 99 lines of 60 characters and spaces.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0909
+
+### Directory of PC-SIG Library Disk #0909
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #979"
+title: "PC-SIG Diskette Library (Disk #979)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0979/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0979"
+      B: "PC-SIG Library Disk #0979"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "VIRTUAL LIBRARY - BOOK ON A DISK"
 
@@ -26,8 +28,10 @@ machines:
     which might develop from an easily-accessed databank: how research is
     done, how academic and scientific findings are published and read, how
     knowledge is transmitted, and how people relate to each other.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0979
+
+### Directory of PC-SIG Library Disk #0979
 
      Volume in drive A has no label
      Directory of A:\

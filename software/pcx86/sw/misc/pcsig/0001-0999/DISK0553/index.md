@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #553"
+title: "PC-SIG Diskette Library (Disk #553)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0553/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0553"
+      B: "PC-SIG Library Disk #0553"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LLSQ"
 
@@ -32,8 +34,10 @@ machines:
     PROG?    FOR  Test drivers for the various modules
     LINK?    BAT  Batch files to properly link the various modules
     ???????? FOR  LLSQ FORTRAN source code modules
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0553
+
+### Directory of PC-SIG Library Disk #0553
 
      Volume in drive A has no label
      Directory of A:\

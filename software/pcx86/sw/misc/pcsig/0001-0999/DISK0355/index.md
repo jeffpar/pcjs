@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #355"
+title: "PC-SIG Diskette Library (Disk #355)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0355/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0355"
+      B: "PC-SIG Library Disk #0355"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-ZAP"
 
@@ -32,8 +34,10 @@ machines:
     
     PC-ZAP20 EXE  Executable PC-ZAP program
     PC-ZAP20 DOC  Documentation for PC-ZAP.  Only prints on IBM/EPSON or
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0355
+
+### Directory of PC-SIG Library Disk #0355
 
      Volume in drive A has no label
      Directory of A:\

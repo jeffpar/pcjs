@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #103"
+title: "PC-SIG Diskette Library (Disk #103)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0103/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0103"
+      B: "PC-SIG Library Disk #0103"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "COMPUSERVE AND BBS UTILITIES"
 
@@ -40,8 +42,10 @@ machines:
     EMC80    BBS  Sample from a TRS80 St. Louis public BBS
     MIDWEST  BBS  Instructions for sex-oriented St. Louis public BBS
     README        Listing of included files
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0103
+
+### Directory of PC-SIG Library Disk #0103
 
      Volume in drive A has no label
      Directory of A:\

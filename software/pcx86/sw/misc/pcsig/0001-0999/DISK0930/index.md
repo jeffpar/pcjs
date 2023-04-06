@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #930"
+title: "PC-SIG Diskette Library (Disk #930)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0930/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0930"
+      B: "PC-SIG Library Disk #0930"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "POINT & SHOOT HARD DISK MANAGER"
 
@@ -26,8 +28,10 @@ machines:
     program includes DOS access, floppy disk formatting, multiple hard
     drive support, mouse support, file and subdirectory undelete,
     passwords and time logging, text search, and much more.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0930
+
+### Directory of PC-SIG Library Disk #0930
 
      Volume in drive A has no label
      Directory of A:\

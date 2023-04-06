@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #841"
+title: "PC-SIG Diskette Library (Disk #841)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0841/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0841"
+      B: "PC-SIG Library Disk #0841"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MANDELBROT MAGIC"
 
@@ -34,8 +36,10 @@ machines:
     intensive computational task and can easily take from three to 16 hours,
     but an 8087 math coprocessor will reduce the generation time by a factor
     of 10.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0841
+
+### Directory of PC-SIG Library Disk #0841
 
      Volume in drive A has no label
      Directory of A:\

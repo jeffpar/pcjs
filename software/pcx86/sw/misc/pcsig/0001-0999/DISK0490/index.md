@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #490"
+title: "PC-SIG Diskette Library (Disk #490)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0490/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0490"
+      B: "PC-SIG Library Disk #0490"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MICROCOMPUTER"
 
@@ -48,8 +50,10 @@ machines:
     SDIR     COM  Sorted directory
     ???????? DOC  Documentation files for programs by the same name
     WHEREIS  COM  Find a file in any subdirectory, on floppy or hard disk
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0490
+
+### Directory of PC-SIG Library Disk #0490
 
      Volume in drive A has no label
      Directory of A:\

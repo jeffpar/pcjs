@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #413"
+title: "PC-SIG Diskette Library (Disk #413)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0413/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0413"
+      B: "PC-SIG Library Disk #0413"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DOS UTILITIES #19"
 
@@ -74,8 +76,10 @@ machines:
     Please note: the POPALARM program, which is listed as being on this
     disk in the 4th edition of the PC-SIG Library Directory, has been
     withdrawn from the author.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0413
+
+### Directory of PC-SIG Library Disk #0413
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #923"
+title: "PC-SIG Diskette Library (Disk #923)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0923/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0923"
+      B: "PC-SIG Library Disk #0923"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PROFESSIONAL REAL ESTATE ANALYST"
 
@@ -28,8 +30,10 @@ machines:
     
     The 130-page manual includes menu maps.  You don't need to know Lotus to
     use this program.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0923
+
+### Directory of PC-SIG Library Disk #0923
 
      Volume in drive A has no label
      Directory of A:\

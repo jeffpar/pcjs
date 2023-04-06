@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #780"
+title: "PC-SIG Diskette Library (Disk #780)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0780/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0780"
+      B: "PC-SIG Library Disk #0780"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "BRIDGEPAL THE GAME OF CONTRACT BRIDGE"
 
@@ -27,8 +29,10 @@ machines:
     position.  If your team wins the bidding, you get to play both the north
     and south hands; otherwise, you play defense with east or west as dummy.
     Optional besthand feature increases your chances for offensive play.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0780
+
+### Directory of PC-SIG Library Disk #0780
 
      Volume in drive A has no label
      Directory of A:\

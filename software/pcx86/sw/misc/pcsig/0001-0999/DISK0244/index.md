@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #244"
+title: "PC-SIG Diskette Library (Disk #244)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0244/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0244"
+      B: "PC-SIG Library Disk #0244"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SLIDE GENERATION"
 
@@ -22,8 +24,10 @@ machines:
     program.  Overhead transparencies are produced by photocopying the
     printed output onto transparent material.  Photographic slides are
     produced by photographing the display or printed output.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0244
+
+### Directory of PC-SIG Library Disk #0244
 
      Volume in drive A has no label
      Directory of A:\

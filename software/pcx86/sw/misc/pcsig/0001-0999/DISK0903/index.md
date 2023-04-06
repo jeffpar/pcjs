@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #903"
+title: "PC-SIG Diskette Library (Disk #903)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0903/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0903"
+      B: "PC-SIG Library Disk #0903"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "VAR GRADE 1 OF 3 (ALSO 1357, 2099)"
 
@@ -29,8 +31,10 @@ machines:
     correlation of two exams; and the ability to sum, average, or take the
     percentage of any combination of exams.  Plot the exam results on your
     printer.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0903
+
+### Directory of PC-SIG Library Disk #0903
 
      Volume in drive A has no label
      Directory of A:\

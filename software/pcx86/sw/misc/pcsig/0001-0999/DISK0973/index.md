@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #973"
+title: "PC-SIG Diskette Library (Disk #973)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0973/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0973"
+      B: "PC-SIG Library Disk #0973"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PEOPLESYSTEMS 2 OF 2 (ALSO 972)"
 
@@ -30,8 +32,10 @@ machines:
     Peoplesystems (PS) are simple patterns of people events that guide,
     control or affect our daily lives.  This book shows how to create better
     Peoplesystems that will free us from old fashioned ideas.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0973
+
+### Directory of PC-SIG Library Disk #0973
 
      Volume in drive A has no label
      Directory of A:\

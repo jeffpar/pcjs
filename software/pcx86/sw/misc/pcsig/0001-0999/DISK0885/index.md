@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #885"
+title: "PC-SIG Diskette Library (Disk #885)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0885/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0885"
+      B: "PC-SIG Library Disk #0885"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MISC. UTILITIES FOR PROGRAMMERS"
 
@@ -62,8 +64,10 @@ machines:
     hand-optimized.  The C-WINDOWING TOOLBOX (C-WINDOW) programs on this
     disk perform the same function for the programming language C (Lattice C
     or Microsoft C version 3 or 4).
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0885
+
+### Directory of PC-SIG Library Disk #0885
 
      Volume in drive A has no label
      Directory of A:\

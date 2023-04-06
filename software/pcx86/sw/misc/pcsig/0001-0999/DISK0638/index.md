@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #638"
+title: "PC-SIG Diskette Library (Disk #638)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0638/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0638"
+      B: "PC-SIG Library Disk #0638"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SUPERSTAT 1 OF 2 (ALSO 639)"
 
@@ -57,8 +59,10 @@ machines:
     FILEMAN  EXE  The file management module
     CODEMAN  EXE  The code entry module
     SST      DOC  The short form of the SST Manual
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0638
+
+### Directory of PC-SIG Library Disk #0638
 
      Volume in drive A has no label
      Directory of A:\

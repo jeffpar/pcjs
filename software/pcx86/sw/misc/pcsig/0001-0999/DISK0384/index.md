@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #384"
+title: "PC-SIG Diskette Library (Disk #384)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0384/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0384"
+      B: "PC-SIG Library Disk #0384"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CONDEN"
 
@@ -43,8 +45,10 @@ machines:
     DELO3    DOC  Documentation for DELO3.EXE
     DELO2C   EXE  Slower version of DELO2B.EXE
     DELO2B   EXE  Checks for duplication
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0384
+
+### Directory of PC-SIG Library Disk #0384
 
      Volume in drive A has no label
      Directory of A:\

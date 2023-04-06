@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #512"
+title: "PC-SIG Diskette Library (Disk #512)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0512/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0512"
+      B: "PC-SIG Library Disk #0512"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PROGRAMS FROM THE COMPLETE TURBO PASCAL"
 
@@ -79,8 +81,10 @@ machines:
     OVLTEST  001  Overlay file for example program
     OVLTEST  000  Overlay file for example program
     MOUSE    SRC  Turbo Pascal source function/procedure
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0512
+
+### Directory of PC-SIG Library Disk #0512
 
      Volume in drive A has no label
      Directory of A:\

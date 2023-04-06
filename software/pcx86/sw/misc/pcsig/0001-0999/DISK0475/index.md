@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #475"
+title: "PC-SIG Diskette Library (Disk #475)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0475/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0475"
+      B: "PC-SIG Library Disk #0475"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TUNE TRIVIA"
 
@@ -22,8 +24,10 @@ machines:
     TUNE TRIVIA plays songs on your PC so you can try to guess the
     songs' titles.  Once you've answered correctly, you are then challenged
     with trivia questions about musical history.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0475
+
+### Directory of PC-SIG Library Disk #0475
 
      Volume in drive A has no label
      Directory of A:\

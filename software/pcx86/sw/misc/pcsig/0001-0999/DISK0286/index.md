@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #286"
+title: "PC-SIG Diskette Library (Disk #286)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0286/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0286"
+      B: "PC-SIG Library Disk #0286"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-VT"
 
@@ -60,8 +62,10 @@ machines:
     READ     ME   Authors note
     PC-VT    DOC  Documentation for PC-VT (aprox. 100 pages)
     PC-VT    EXE  Main PC-VT program
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0286
+
+### Directory of PC-SIG Library Disk #0286
 
      Volume in drive A has no label
      Directory of A:\

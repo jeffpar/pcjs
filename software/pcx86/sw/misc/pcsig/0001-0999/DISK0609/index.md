@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #609"
+title: "PC-SIG Diskette Library (Disk #609)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0609/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0609"
+      B: "PC-SIG Library Disk #0609"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DISK SPOOL II & UNARCHIVING PROGRAMS"
 
@@ -38,8 +40,10 @@ machines:
     A collection of file archiving utilities. Use the space on your disks
     more efficiently. Because file compatibility can change with
     different versions of "ARC," four different versions are included.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0609
+
+### Directory of PC-SIG Library Disk #0609
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #968"
+title: "PC-SIG Diskette Library (Disk #968)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0968/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0968"
+      B: "PC-SIG Library Disk #0968"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "QCHECK3 CHECK ACCOUNT MANAGEMENT SYSTEM"
 
@@ -37,8 +39,10 @@ machines:
     for "pay to" entries, user-defined printer set-up strings, a handy
     calendar function for date look-up, and checks for adequate disk space
     prior to actions requiring more space.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0968
+
+### Directory of PC-SIG Library Disk #0968
 
      Volume in drive A has no label
      Directory of A:\

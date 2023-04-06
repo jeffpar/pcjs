@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #806"
+title: "PC-SIG Diskette Library (Disk #806)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0806/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0806"
+      B: "PC-SIG Library Disk #0806"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "REMARKABLE GENERAL LEDGER 1 OF 2 (807)"
 
@@ -61,8 +63,10 @@ machines:
     CONFIG   SYS  Sample configuration file.
     ???????? DBF  Data file (12 files).
     READ     ME   General information about the disk.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0806
+
+### Directory of PC-SIG Library Disk #0806
 
      Volume in drive A has no label
      Directory of A:\

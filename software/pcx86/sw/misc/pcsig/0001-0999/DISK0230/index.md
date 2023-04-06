@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #230"
+title: "PC-SIG Diskette Library (Disk #230)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0230/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0230"
+      B: "PC-SIG Library Disk #0230"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "THE CONFIDANT"
 
@@ -44,8 +46,10 @@ machines:
     TUTORIAL DOC  A step-by-step tutorial  (69K)
     TYPE     ME   How to list documentation
     REFER    DOC  A technical reference manual  (60K)
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0230
+
+### Directory of PC-SIG Library Disk #0230
 
      Volume in drive A has no label
      Directory of A:\

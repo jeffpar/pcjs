@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #744"
+title: "PC-SIG Diskette Library (Disk #744)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0744/
 machines:
   - id: ibm5170
@@ -9,19 +9,23 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0744"
+      B: "PC-SIG Library Disk #0744"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PRTLABEL"
 
     PRTLABEL prints multiple copies of a single label or single labels with
     a new address each time.  It prints as many labels as you like in a
     given run, up to six labels across, 10 lines per label.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0744
+
+### Directory of PC-SIG Library Disk #0744
 
      Volume in drive A has no label
      Directory of A:\

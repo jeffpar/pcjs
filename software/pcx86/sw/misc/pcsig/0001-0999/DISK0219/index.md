@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #219"
+title: "PC-SIG Diskette Library (Disk #219)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0219/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0219"
+      B: "PC-SIG Library Disk #0219"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MAPMAKER"
 
@@ -55,8 +57,10 @@ machines:
     MM1      EXE  Main program for color system
     MM2      EXE  Main program for color and/or monochrome system
     USA-MSA       Statistical data - subject unknown
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0219
+
+### Directory of PC-SIG Library Disk #0219
 
      Volume in drive A has no label
      Directory of A:\

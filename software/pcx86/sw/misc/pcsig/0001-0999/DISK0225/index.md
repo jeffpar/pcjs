@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #225"
+title: "PC-SIG Diskette Library (Disk #225)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0225/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0225"
+      B: "PC-SIG Library Disk #0225"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-FONT"
 
@@ -42,8 +44,10 @@ machines:
     PC-FONT2 PRN  Manual  (70K bytes)
     DESCRIPT TXT  Brief program description
     README        How to print manual
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0225
+
+### Directory of PC-SIG Library Disk #0225
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #471"
+title: "PC-SIG Diskette Library (Disk #471)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0471/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0471"
+      B: "PC-SIG Library Disk #0471"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PRESENT"
 
@@ -97,8 +99,10 @@ machines:
     SWEEP    PIC  Present slide picture file
     SQUEEZE  PIC  Present slide picture file
     SNOOPY04 PIC  Present slide picture file
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0471
+
+### Directory of PC-SIG Library Disk #0471
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #957"
+title: "PC-SIG Diskette Library (Disk #957)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0957/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0957"
+      B: "PC-SIG Library Disk #0957"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-FLOW - BUDGETING SYSTEM"
 
@@ -30,8 +32,10 @@ machines:
     transactions by ID, frequency or ending date. There are three cash-flow
     reports: daily transaction detail; daily, weekly, monthly, or yearly
     cash-flow summaries; and breakdown by transaction classification.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0957
+
+### Directory of PC-SIG Library Disk #0957
 
      Volume in drive A has no label
      Directory of A:\

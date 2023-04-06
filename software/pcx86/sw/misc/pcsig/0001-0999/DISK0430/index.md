@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #430"
+title: "PC-SIG Diskette Library (Disk #430)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0430/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0430"
+      B: "PC-SIG Library Disk #0430"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ANALYTICALC 1 OF 3 (ALSO 431, 432)"
 
@@ -146,8 +148,59 @@ machines:
     SETUP    CMD  How to configure ANSI.SYS for aux keypad definitions
     ANNOT    NOT  Cell annotation instructions
     README   1ST  Notes from author
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0430
+{% comment %}samples_begin{% endcomment %}
+
+## PIE.BAS
+
+```bas
+300 DIM R(100),A$(100)
+500 LINE INPUT "Saved sheet filename>";LFNM$
+1000 KEY OFF
+1010 WIDTH 40:CLS
+1410 FOR I=1 TO 30
+1412 R(I)=0:A$(I)=" "
+1414 NEXT I
+1420 SCREEN 1,0:COLOR 0,7
+1440 LR=50:SR=44
+1444 OPEN LFNM$ FOR INPUT AS #1
+1450 LINE INPUT #1,T$
+1451 T$=LEFT$(T$,40)
+1452 ON ERROR GOTO 1470
+1454 N=1:M=1:S=1.000000e-9
+1456 INPUT #1,I1$,I2
+1457 LINE INPUT #1,L$
+1458 INPUT #1,TP,F$,TY
+1460 IF TP < 0 THEN A$(N)=LEFT$(L$,8):N=N+1 ELSE R(M)=VAL(L$):M=M+1
+1462 GOTO 1456
+1470 IF M > N THEN N=M
+1480 FOR I=1 TO N
+1500 S=S+R(I)
+1510 NEXT I
+1515 N=N-1
+1520 FOR I=1 TO N:R(I)=R(I)/S:NEXT
+1530 A2=0
+1550 LOCATE 2,1:PRINT T$
+1570 FOR C=1 TO N
+1580 A1=A2:A2=A2+R(C)*2*3.1415926#
+1590 AA=(A1+A2)/2
+1600 CX=160+COS(AA)*(LR-SR)
+1610 CY=100-SIN(AA)*(LR-SR)
+1620 CIRCLE (CX,CY),SR,1,-A1-0.001,-A2,5/6
+1630 IF N < 8 THEN PAINT (CX+COS(AA)*0.8*SR,CY-SIN(AA)*0.8*SR),C MOD 4,1
+1640 LX=CX+COS(AA)*(16+SR)-4*LEN(A$(C)):LY=CY-SIN(AA)*(SR+16)
+1650 LOCATE 1+(LY\8),1+(LX\8):PRINT A$(C);
+1660 LINE ((LX\8)*8,8*((LY\8)+1))-((LX\8)*8+8*LEN(A$(C)),8*((LY\8)+1)),1
+1670 NEXT C
+1680 LOCATE 22,1:PRINT "Total=";S
+1700 LOCATE 23,1
+1750 END
+```
+
+{% comment %}samples_end{% endcomment %}
+
+### Directory of PC-SIG Library Disk #0430
 
      Volume in drive A has no label
      Directory of A:\

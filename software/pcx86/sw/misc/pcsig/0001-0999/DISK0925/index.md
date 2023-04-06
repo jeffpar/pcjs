@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #925"
+title: "PC-SIG Diskette Library (Disk #925)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0925/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0925"
+      B: "PC-SIG Library Disk #0925"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LSTSQR"
 
@@ -27,8 +29,10 @@ machines:
     deviation and the 95% confidence interval.  The program also graphs and
     prints the fit if desired.  You can input data by keyboard or from data
     files.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0925
+
+### Directory of PC-SIG Library Disk #0925
 
      Volume in drive A has no label
      Directory of A:\

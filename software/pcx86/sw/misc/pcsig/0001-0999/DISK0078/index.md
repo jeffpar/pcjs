@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #78"
+title: "PC-SIG Diskette Library (Disk #78)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0078/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0078"
+      B: "PC-SIG Library Disk #0078"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PC-WRITE 1 OF 3 (ALSO 627, 1235)"
 
@@ -40,8 +42,10 @@ machines:
     supports for laser printers, including Postscript.  It also accepts most
     WordStar commands and converts WordStar files.  The  pop-up menus make
     most tasks easier and the user guide is included on-disk.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0078
+
+### Directory of PC-SIG Library Disk #0078
 
      Volume in drive A has no label
      Directory of A:\

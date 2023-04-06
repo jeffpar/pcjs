@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #587"
+title: "PC-SIG Diskette Library (Disk #587)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0587/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0587"
+      B: "PC-SIG Library Disk #0587"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SYMPHONY MACROS AND WORDPROS. TIPS"
 
@@ -60,8 +62,10 @@ machines:
     USERTIPS DOC  Protocols for use of some of these capabilities.
     ORD_ENT  WRK  Uses almost all Symphony commands for order-entry program.
     MOVIE    WRK  Use Symphony to display moving graphics.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0587
+
+### Directory of PC-SIG Library Disk #0587
 
      Volume in drive A has no label
      Directory of A:\

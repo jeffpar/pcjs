@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #510"
+title: "PC-SIG Diskette Library (Disk #510)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0510/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0510"
+      B: "PC-SIG Library Disk #0510"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "VISIBLE-PASCAL"
 
@@ -33,8 +35,10 @@ machines:
     VISBUG   EXE  Part of compiler
     VISED    EXE  Part of compiler
     VISPAS   EXE  Part of compiler
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0510
+
+### Directory of PC-SIG Library Disk #0510
 
      Volume in drive A has no label
      Directory of A:\

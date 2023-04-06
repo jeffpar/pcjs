@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #671"
+title: "PC-SIG Diskette Library (Disk #671)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0671/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0671"
+      B: "PC-SIG Library Disk #0671"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FREEWAY 1 OF 3 (ALSO 672, 673)"
 
@@ -46,8 +48,10 @@ machines:
     entry of pay data, only these employees will have the variables entered.
     Calculation of pay and deductions is very flexible,
     permitting recalculation if necessary.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0671
+
+### Directory of PC-SIG Library Disk #0671
 
      Volume in drive A has no label
      Directory of A:\

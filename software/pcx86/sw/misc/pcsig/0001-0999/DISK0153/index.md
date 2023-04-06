@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #153"
+title: "PC-SIG Diskette Library (Disk #153)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0153/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0153"
+      B: "PC-SIG Library Disk #0153"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HANGMAN"
 
@@ -23,8 +25,10 @@ machines:
     from getting boring through repetition.  You play against
     yourself, so at least you know the quality of the competition, although
     some players have been known to be surprised even then.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0153
+
+### Directory of PC-SIG Library Disk #0153
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #349"
+title: "PC-SIG Diskette Library (Disk #349)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0349/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0349"
+      B: "PC-SIG Library Disk #0349"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LETUS A-B-C VOL 5"
 
@@ -46,8 +48,10 @@ machines:
     LETUS    BAT  Batch file for starting LETUS A-B-C
     FILES    TXT  Description of LETUS A-B-C
     PCW84B   ???  PC WORLD Magazine Apr-Jun 1984 reference files (4 files)
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0349
+
+### Directory of PC-SIG Library Disk #0349
 
      Volume in drive A has no label
      Directory of A:\

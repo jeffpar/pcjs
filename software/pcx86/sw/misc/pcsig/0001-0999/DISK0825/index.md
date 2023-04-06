@@ -1,7 +1,8 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #825"
+title: "PC-SIG Diskette Library (Disk #825)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0825/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/0001-0999/DISK0825/DISK0825.jpg
 machines:
   - id: ibm5170
     type: pcx86
@@ -9,11 +10,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0825"
+      B: "PC-SIG Library Disk #0825"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TIME TRAKER"
 
@@ -30,10 +33,12 @@ machines:
     to worry about is keeping track of your expenses. Moreover, it will let
     you know where you stand in terms of accounts receivable, income, and
     unbilled hours, at any time.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0825
 
-     Volume in drive A has no label
+### Directory of PC-SIG Library Disk #0825
+
+     Volume in drive A is #0825 S2.4
      Directory of A:\
 
     GO       BAT       192   8-11-87   9:55a
@@ -61,3 +66,5 @@ machines:
     FILE0825 TXT      1013   4-21-90   1:29a
            23 file(s)     320787 bytes
                            31744 bytes free
+
+![PC-SIG Library Disk #0825]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/0001-0999/DISK0825/DISK0825.jpg)

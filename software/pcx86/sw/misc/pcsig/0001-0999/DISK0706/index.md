@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #706"
+title: "PC-SIG Diskette Library (Disk #706)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0706/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0706"
+      B: "PC-SIG Library Disk #0706"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "NAMEPAL"
 
@@ -26,8 +28,10 @@ machines:
     performs other handy tasks, like printing mailing labels, Rolodex card
     files, and full-page rosters.  NAMEPAL is also completely menu-driven,
     and has on-line help screens.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0706
+
+### Directory of PC-SIG Library Disk #0706
 
      Volume in drive A has no label
      Directory of A:\

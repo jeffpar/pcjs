@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #419"
+title: "PC-SIG Diskette Library (Disk #419)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0419/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0419"
+      B: "PC-SIG Library Disk #0419"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "QPARSER PLUS"
 
@@ -23,8 +25,10 @@ machines:
     with a top limit of 25 production/parsing rules.  QPARSER is an
     excellent way to experiment with language design and compiler
     development.  Very useful for computer science students.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0419
+
+### Directory of PC-SIG Library Disk #0419
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #462"
+title: "PC-SIG Diskette Library (Disk #462)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0462/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0462"
+      B: "PC-SIG Library Disk #0462"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "CK SYSTEM"
 
@@ -28,8 +30,10 @@ machines:
     Prepare a month-by-month year-end summary of all your income and
     expenses for up to nine separate accounts. Draw up bar charts on
     income/expenses. Detailed documentation is provided for the new user.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0462
+
+### Directory of PC-SIG Library Disk #0462
 
      Volume in drive A has no label
      Directory of A:\

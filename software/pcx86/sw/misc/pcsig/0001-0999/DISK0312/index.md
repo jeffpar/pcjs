@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #312"
+title: "PC-SIG Diskette Library (Disk #312)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0312/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0312"
+      B: "PC-SIG Library Disk #0312"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SCREEN DESIGN AID"
 
@@ -64,8 +66,49 @@ machines:
     READ     ME   Listing of files that are a part of FORMS
     SDA      EXE  SDA comptession utility
     IMAGE    DOC  Documentation on SDA.EXE
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0312
+{% comment %}samples_begin{% endcomment %}
+
+## DEMO.BAS
+
+```bas
+	REM
+	REM	THIS BASIC PROGRAM DEMONSTRATES	THE SCREEN DESIGN AID
+	REM
+
+	DEF SEG=&H40
+	POKE &H10,(PEEK(&H10) AND &H0CF) OR &H10
+	DEF SEG
+	SCREEN	0,1,0,0
+	WIDTH 40
+	LOCATE	1,1,1,6,7
+100	CMD%=0:FLD%=1:PRM$="       "
+	GOSUB 200
+	FLD%=1
+	CMD%=2
+	GOSUB 200
+	FLD%=ASC(LEFT$(PRM$,1))-48
+	IF FLD%	<0 OR FLD% >3 THEN 100
+	IF FLD%=0 THEN 1000
+	FLD%=FLD%+1
+	CMD%=0
+	GOSUB 200
+	FLD%=1
+	CMD%=2
+	GOSUB 200
+	GOTO 100
+
+200	CALL	BASSCR(CMD%,FLD%,PRM$)
+	RETURN
+
+1000	SCREEN 0,0
+	END
+```
+
+{% comment %}samples_end{% endcomment %}
+
+### Directory of PC-SIG Library Disk #0312
 
      Volume in drive A has no label
      Directory of A:\

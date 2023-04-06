@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #65"
+title: "PC-SIG Diskette Library (Disk #65)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0065/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0065"
+      B: "PC-SIG Library Disk #0065"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DESKTOP 2 OF 2  (#64 FIRST DISK)"
 
@@ -40,8 +42,10 @@ machines:
     The Second Disk Contains:
     DESK     DOC  Documentation for DESKTOP.
     INSTRUCT WKS  DESKTOP instruction worksheet.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0065
+
+### Directory of PC-SIG Library Disk #0065
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #276"
+title: "PC-SIG Diskette Library (Disk #276)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0276/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0276"
+      B: "PC-SIG Library Disk #0276"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "COLLIST"
 
@@ -26,8 +28,37 @@ machines:
     START      TXT   Part of COLLIST
     START      EXE   This is the program to start the decoding, type "start"
     ??????     ???   Part of COLLIST (17 more files)
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0276
+{% comment %}samples_begin{% endcomment %}
+
+## LISTER.BAS
+
+```bas
+10 DEFINT A-Z: TRUE=-1: FALSE=0:SPAC$="      "
+20 CLS: INPUT "What is the name of the file to be listed?", A$: OPEN A$ FOR INPUT AS #1
+30 CLS : LOCATE 3,30: PRINT "Select printer for output."
+40 LOCATE 5,10: PRINT"1. LPT1: parallel printer port 1.":LOCATE 7,10: PRINT"2. LPT2: parallel printer port 2."
+50 LOCATE 9,10: PRINT"3. COM:  serial printer port.":LOCATE 24,1: PRINT"If you are not sure, try 1 first(Jr users, try 3).";
+60 LOCATE 11,30: INPUT "Enter 1, 2 or 3 ", A#: IF A#<1 OR A#>3 GOTO 30
+70 ON A# GOSUB 170,180, 190: OPEN A$ FOR OUTPUT AS #2
+80 CLS: INPUT "Do you wish a pause between pages (Y or N)?",A$: I=INSTR("YyNn", A$): IF I=0 THEN GOTO 80
+90 IF I<3 THEN PPAUSE=TRUE ELSE PPAUSE=FALSE
+100 LIN=0: WHILE NOT EOF(1): B$="": A$=""
+110 IF LIN=0 AND PPAUSE THEN INPUT "Type <Return> for next page.", X$
+120 WHILE A$ <> CHR$(13): B$=B$+A$: A$=INPUT$(1,1): WEND: PRINT #2, SPAC$ B$
+130 A$=INPUT$(1,1): IF A$<>CHR$(10) THEN B$=B$+A$: GOTO 120
+140 LIN=LIN+1 : IF LIN =55 THEN PRINT #2, CHR$(12);: LIN=0
+150 WEND: IF LIN <> 0 THEN PRINT #2, CHR$(12)
+160 CLOSE: SYSTEM
+170 A$="lpt1:":RETURN
+180 A$="lpt2:":RETURN
+190 A$="com1:":RETURN
+```
+
+{% comment %}samples_end{% endcomment %}
+
+### Directory of PC-SIG Library Disk #0276
 
      Volume in drive A has no label
      Directory of A:\

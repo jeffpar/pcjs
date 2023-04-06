@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #948"
+title: "PC-SIG Diskette Library (Disk #948)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0948/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0948"
+      B: "PC-SIG Library Disk #0948"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "FORA COMMUNICATIONS SOFTWARE"
 
@@ -27,8 +29,10 @@ machines:
     toll-free.  FORA has extensive documentation with guidelines on finding
     a location for your system, purchasing the hardware needed, and
     installing it into your system.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0948
+
+### Directory of PC-SIG Library Disk #0948
 
      Volume in drive A has no label
      Directory of A:\

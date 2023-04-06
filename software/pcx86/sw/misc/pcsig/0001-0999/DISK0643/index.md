@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #643"
+title: "PC-SIG Diskette Library (Disk #643)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0643/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0643"
+      B: "PC-SIG Library Disk #0643"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "TASM"
 
@@ -28,8 +30,10 @@ machines:
     programming.  The source code is available.  Customize TASM to produce
     codes for other processors by creating a proper instruction definition
     table for the target chip.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0643
+
+### Directory of PC-SIG Library Disk #0643
 
      Volume in drive A has no label
      Directory of A:\

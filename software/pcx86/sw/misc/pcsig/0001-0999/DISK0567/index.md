@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #567"
+title: "PC-SIG Diskette Library (Disk #567)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0567/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0567"
+      B: "PC-SIG Library Disk #0567"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DUNGEONS OF THE NECROMANCER'S DOMAIN"
 
@@ -32,8 +34,10 @@ machines:
     choose to be, this is a game that will test all of your game playing
     skills.  Registration of the program includes a copy of "The Domain
     Master" for creating and editing both characters and dungeons.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0567
+
+### Directory of PC-SIG Library Disk #0567
 
      Volume in drive A has no label
      Directory of A:\

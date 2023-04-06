@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #694"
+title: "PC-SIG Diskette Library (Disk #694)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0694/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0694"
+      B: "PC-SIG Library Disk #0694"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SLEUTH"
 
@@ -31,8 +33,10 @@ machines:
     needs only the keyboard for input.
     
     And the killer is . . .
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0694
+
+### Directory of PC-SIG Library Disk #0694
 
      Volume in drive A has no label
      Directory of A:\

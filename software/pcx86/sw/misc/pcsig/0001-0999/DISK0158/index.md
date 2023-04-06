@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #158"
+title: "PC-SIG Diskette Library (Disk #158)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0158/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0158"
+      B: "PC-SIG Library Disk #0158"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "IBM USERS GROUP #3"
 
@@ -31,8 +33,10 @@ machines:
     PCUGNEWS TOC  Information file.
     TESTTAB  PAS  Pascal program to expand tabs.
     WEBER    SCR  Article from the author.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0158
+
+### Directory of PC-SIG Library Disk #0158
 
      Volume in drive A has no label
      Directory of A:\

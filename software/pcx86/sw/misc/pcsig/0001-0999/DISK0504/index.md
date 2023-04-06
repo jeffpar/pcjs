@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #504"
+title: "PC-SIG Diskette Library (Disk #504)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0504/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0504"
+      B: "PC-SIG Library Disk #0504"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "DOS UTILITIES #21"
 
@@ -61,8 +63,10 @@ machines:
     MAILLIST DOC  MAILLIST documentation
     FATDUMP  COM  Lists disk files allocation table
     FATDUMP  DOC  FATDUMP documentation
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0504
+
+### Directory of PC-SIG Library Disk #0504
 
      Volume in drive A has no label
      Directory of A:\

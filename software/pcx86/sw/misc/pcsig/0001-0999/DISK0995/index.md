@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #995"
+title: "PC-SIG Diskette Library (Disk #995)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0995/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0995"
+      B: "PC-SIG Library Disk #0995"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "H&P CALENDAR"
 
@@ -26,8 +28,10 @@ machines:
     DOS ``GRAPHICS.COM.''  A database is included to save the data to disk.
     The data for a particular month may be printed before filling in the
     boxes.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0995
+
+### Directory of PC-SIG Library Disk #0995
 
      Volume in drive A has no label
      Directory of A:\

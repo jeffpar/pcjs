@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #524"
+title: "PC-SIG Diskette Library (Disk #524)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0524/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0524"
+      B: "PC-SIG Library Disk #0524"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "EXPRESSCALC 1 OF 2 (ALSO 525)"
 
@@ -26,8 +28,10 @@ machines:
     option to configure the package to specific systems.  EXPRESSCALC
     supports spreadsheets up to 64 columns by 256 lines.  Each column can
     be up to 75 characters long.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0524
+
+### Directory of PC-SIG Library Disk #0524
 
      Volume in drive A has no label
      Directory of A:\

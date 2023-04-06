@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #775"
+title: "PC-SIG Diskette Library (Disk #775)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0775/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0775"
+      B: "PC-SIG Library Disk #0775"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "PSEUDOSAM CROSS ASSEMBLER 68 AND 685"
 
@@ -34,8 +36,10 @@ machines:
     understand, although no attempt is made to teach 6800 or 6805
     programming.  The user should have a good understanding of machine
     language programming and also be familiar with basic DOS functions.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0775
+
+### Directory of PC-SIG Library Disk #0775
 
      Volume in drive A has no label
      Directory of A:\

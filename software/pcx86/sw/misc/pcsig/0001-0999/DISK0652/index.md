@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #652"
+title: "PC-SIG Diskette Library (Disk #652)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0652/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0652"
+      B: "PC-SIG Library Disk #0652"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "HI-RES RAINBOW"
 
@@ -43,8 +45,10 @@ machines:
     HIRES    EXE  The HI-RES drawing program
     README   1ST  Documentation file
     QUICKEYS COM  Program to speed up program use while in keyboard mode
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0652
+
+### Directory of PC-SIG Library Disk #0652
 
      Volume in drive A has no label
      Directory of A:\

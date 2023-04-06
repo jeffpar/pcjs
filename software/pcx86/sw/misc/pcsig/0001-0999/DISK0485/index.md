@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #485"
+title: "PC-SIG Diskette Library (Disk #485)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0485/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0485"
+      B: "PC-SIG Library Disk #0485"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "ICON MAKER & FXMATRIX"
 
@@ -40,8 +42,10 @@ machines:
     JX dot matrix printers.  These created characters can then be used from
     any word processor, even if your word processor resets the
     printer upon execution.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0485
+
+### Directory of PC-SIG Library Disk #0485
 
      Volume in drive A has no label
      Directory of A:\

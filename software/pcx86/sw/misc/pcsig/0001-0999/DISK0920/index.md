@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #920"
+title: "PC-SIG Diskette Library (Disk #920)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0920/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0920"
+      B: "PC-SIG Library Disk #0920"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MAPTAB WORLD CULTURE DATABASE"
 
@@ -27,8 +29,10 @@ machines:
     incidence of aggression, climatic information, and types of marriage
     customs.  In addition to these items, the documented societies range in
     time from 1750 B.C. to the present.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0920
+
+### Directory of PC-SIG Library Disk #0920
 
      Volume in drive A has no label
      Directory of A:\

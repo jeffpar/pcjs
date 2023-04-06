@@ -128,7 +128,7 @@ Here's an example of `--zip` in action:
 
 The `--verbose` option generates the `PKZIP`-style file listing, displaying the individual file names, compressed and uncompressed file sizes, compression ratio, etc.
 
-In fact, creating a disk image is entirely optional; you can use **DiskImage** to simply examine the contents of `zip` file:
+In fact, creating a disk image is entirely optional; you can use **DiskImage** to simply examine the contents of `ZIP` file:
 
     node diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --verbose
 
@@ -136,13 +136,23 @@ To simplify dealing with large collections of files, I also added an `--all` opt
 
     node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --verbose
 
-That command will locate *all* matching `zip` files and automatically display their contents.  `--all` also supports file extensions `JSON` and `IMG`; the `--zip` option is implied for any file ending with a `ZIP` extension.
+That command will locate *all* matching `ZIP` files and automatically display their contents.  `--all` also supports file extensions `JSON` and `IMG`; the `--zip` option is implied for any file ending with a `ZIP` extension.
 
 If you want to create a disk image for every `ZIP` file:
 
     node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --output=tmp --type=img
 
-`--output` specifies the output folder and `--type` specifies the output file type (either `img` or `json`).  Each output file will have the same basename as the `zip` file.
+`--output` specifies the output folder and `--type` specifies the output file type (either `IMG` or `JSON`).  Each output file will have the same basename as the `ZIP` file.
+
+Last but not least, any `ZIP` files *inside* disk images can be automatically expanded during disk image processing as well; just add the new `--expand` option.  Each `ZIP` file will be replaced with a folder of the same name, and that folder will contain the entire uncompressed contents of the archive; the original `ZIP` file will *not* be included in the disk image:
+
+    node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --expand --output=tmp
+
+Finally, if you just want to extract the expanded contents of a set of `ZIP` files to your current directory, instead of creating disk images, you can do that, too:
+
+    node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --expand --extract
+
+The contents of each `ZIP` file will be extracted to a folder with a matching name.  Internally, diskimage.js will still be creating disk images from each `ZIP` file, and performing `--expand` and `--extract` operations on those disk images, but since no output is specified, no disk images will be saved at the end of those operations.
 
 ### Examining PCjs Disk Images
 
@@ -161,7 +171,7 @@ the server mapping.  The list of implicit paths for PC disks currently includes 
   - [/disks/diskettes](https://diskettes.pcjs.org)
   - [/disks/gamedisks](https://gamedisks.pcjs.org)
   - [/disks/miscdisks](https://miscdisks.pcjs.org)
-  - [/disks/pcsig0](https://pcsig0.pcjs.org)
+  - [/disks/pcsigdisks](https://pcsigdisks.pcjs.org)
   - [/disks/harddisks](https://harddisks.pcjs.org)
   - [/disks/cdroms/cds001](https://cds001.pcjs.org)
 
@@ -173,7 +183,7 @@ To get a DOS-compatible directory listing of a disk image:
 
     node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list
 
-To display all the unused bytes of a disk image:
+To display all the unused bytes of a disk image (JSON-encoded disk images only):
 
     node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --list=unused
 
@@ -191,6 +201,10 @@ To extract all the files from a disk image:
 To extract a specific file from a disk image:
 
     node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract=COMMAND.COM
+
+To extract files from a disk image into a specific directory (eg, tmp):
+
+    node diskimage.js /diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract --extdir=tmp
 
 To dump a specific (C:H:S) sector from a disk image:
 

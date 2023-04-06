@@ -38,13 +38,18 @@ function printError(err, filename)
 }
 
 /*
+ * List of archive file types to expand when "--expand" is specified.  ".ARC" is currently
+ * disabled but it retains its place in the table for the day when StreamZip supports it (TBD).
+ */
+let asARCFileExts = [".ARC-TBD", ".ZIP"];       // order must match StreamZip.TYPE_* constants
+
+/*
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
  * A warning is always displayed when we replace line endings in any file being copied to a disk image.
  *
  * NOTE: Some files, like ".BAS" files, aren't always ASCII, which is why we now call isText() on all
  * these file contents first.
  */
-let asARCFileExts = [".ARC", ".ZIP"];       // order must match StreamZip.TYPE_* constants
 let asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".LRF", ".MAK", ".TXT", ".XML"];
 
 /**
@@ -135,6 +140,9 @@ function createDisk(diskFile, diskette, argv, done)
         di = readDir(sArchiveFile, arcType, label, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
     } else {
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
+        if (di && done) {
+            done(di);
+        }
     }
     return di;
 }
@@ -255,7 +263,7 @@ function getFullPath(sFile)
  */
 function getDiskServer(diskFile)
 {
-    let match = diskFile.match(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|pcsig[0-9]|pcsig[0-9]*[a-z]*-disks|harddisks|decdisks|cdroms|private)\//);
+    let match = diskFile.match(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9]*[a-z]*-disks|cdroms|private)\//);
     return match && (match[1] + match[2]);
 }
 
@@ -271,7 +279,7 @@ function getServerPath(sFile)
      * In addition to disk server paths, we had to add /machines (for diskette config files) and /software (for Markdown files
      * containing supplementary copy-protection disk data).
      */
-    let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|pcsig[0-9]|pcsig[0-9]*[a-z]*-disks|harddisks|decdisks|cdroms|private)(\/.*)$/);
+    let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9]*[a-z]*-disks|cdroms|private)(\/.*)$/);
     if (match) {
         sFile = path.join(rootDir, (match[2] == "machines" || match[2] == "software"? "" : "disks"), match[2], match[3]);
     }
@@ -302,14 +310,20 @@ function getTarget(sTarget)
 /**
  * isText(data)
  *
+ * It can be hard to differentiate between a binary file and a text file that's using
+ * lots of IBM PC graphics characters.  Control characters are often red flags, but they
+ * can also be interpreted as graphics characters.
+ *
  * @param {string} data
- * @return {boolean} true if sData is entirely ASCII (ie, no bytes with bit 7 set) *or* UTF-8
+ * @return {boolean} true if sData is entirely non-NULL 7-bit ASCII and/or valid CP437 characters
  */
 function isText(data)
 {
     for (let i = 0; i < data.length; i++) {
         let b = data.charCodeAt(i);
-        if ((b & 0x80) && !CharSet.isCP437(data[i])) return false;
+        if (b == 0 || b >= 0x80 && !CharSet.isCP437(data[i])) {
+            return false;
+        }
     }
     return true;
 }
@@ -354,22 +368,27 @@ function isTextFile(sFile)
 }
 
 /**
- * normalizeForHost(db)
+ * normalizeForHost(db, fAssumeText)
  *
  * If DataBuffer is text, "normalize" for the host.
  *
  * @param {DataBuffer} db
+ * @param {boolean} [fAssumeText]
  * @return {DataBuffer}
  */
-function normalizeForHost(db)
+function normalizeForHost(db, fAssumeText)
 {
-    let s = db.toString();
-    if (isText(s)) {
+    /*
+     * Either the caller tells us the data is text, or we at least make sure the first 4 bytes look like text.
+     */
+    if (fAssumeText || isText(db.toString("utf8", 0, 4))) {
+        let s = CharSet.fromCP437(db.buffer, false);
         s = s.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-        if (s.charCodeAt(s.length - 1) == 0x1A) {
-            s = s.slice(0, s.length - 1);
+        let i = s.indexOf(String.fromCharCode(0x1A));
+        if (i >= 0) {
+            s = s.slice(0, i);
         }
-        db = new DataBuffer(CharSet.fromCP437(s, false));
+        db = new DataBuffer(s);
     }
     return db;
 }
@@ -388,7 +407,7 @@ function normalizeForHost(db)
  */
 function convertBASICFile(sPath, db, fNormalize)
 {
-    let i = 0, s = "", quoted = false, lineWarning = 0;
+    let i = 0, s = "", quote = false, comment = false, data = false, lineWarning = 0;
 
     const tokens = {
         0x11:   "0",
@@ -709,32 +728,31 @@ function convertBASICFile(sPath, db, fNormalize)
     let getToken = function(line) {
         let token = null;                               // null will signal end of tokens for the line
         let v = readU8();
-        if (v >= 0xFD) {
-            v = (v << 8) | readU8();
-        }
         if (v) {
             /*
              * The original code failed to account for programs that include IBM PC drawing characters
-             * inside strings, and those characters can be (almost) any 8-bit value, which is why we must
-             * track the "quoted" state of the text stream and decode accordingly.
+             * inside strings or comments or DATA statements, and those characters can be (almost) any 8-bit
+             * value, which is why we must track the "quote" and "comment" and "data" states of the text
+             * stream and decode accordingly.
              *
-             * I say "almost" because there are a few control characters (below 0x20) that you can't use
+             * I say "almost" because there are a few control characters (below 0x20) that you can't embed
              * inside strings.  But many can be.  For example, you can use the IBM PC's "Alt Num Keypad"
-             * trick to enter decimal character 16 and a "►" will appear.  And while I could be paranoid
-             * and try to nail down the exact set of usable control characters, I don't think it's worth the
-             * effort.  Let the chips fall where they may.
+             * trick to enter decimal character 16 and a "►" will appear.
              *
-             * For text that's not quoted, we still have to handle 0x3A (colon) elsewhere, because it's a
-             * weird one; see the 'default' case below.
+             * For text that's not quoted or commented, we still have to handle 0x3A (colon) elsewhere,
+             * because it's a weird one; see the 'default' case below.
              */
-            if (quoted && v < 0xFD || v >= 0x20 && v <= 0x7E && v != 0x3A) {
+            if ((comment || quote || data && v != 0x3A) && v < 0xFF || v >= 0x20 && v <= 0x7E && v != 0x3A) {
                 token = String.fromCharCode(v);
-                if (fNormalize) {
+                if (fNormalize && v != 0x09) {          // normalize all characters except TAB
                     token = CharSet.fromCP437(token, true);
                 }
-                if (v == 0x22) quoted = !quoted;
+                if (v == 0x22 && !comment) quote = !quote;
             }
             else {
+                if (v >= 0xFD) {
+                    v = (v << 8) | readU8();
+                }
                 switch (v) {
                 case 0x0B:
                     token = "&O" + readU16().toString(8);
@@ -766,10 +784,12 @@ function convertBASICFile(sPath, db, fNormalize)
                         }
                         if (peekU16(0x8F, 0xD9)) {
                             token = "'";
+                            comment = true;
                             skip(2);
                             break;
                         }
                         token = String.fromCharCode(v);
+                        data = false;                   // unlike REM, other colon-separated statements CAN appear after a DATA statement
                         break;
                     }
                     if (v == 0xB1 && peekU8(0xE9)) {
@@ -778,15 +798,39 @@ function convertBASICFile(sPath, db, fNormalize)
                         break;
                     }
                     token = tokens[v];
+                    if (token == "REM") {
+                        comment = true;
+                    }
+                    else if (token == "DATA") {
+                        data = true;
+                    }
                     break;
                 }
                 if (!token) {
-                    let t = "<0x" + v.toString(16) + ">";
-                    if (lineWarning != line) {
-                        printf("warning: %s contains unexpected tokens (eg, %s on line %d)\n", path.basename(sPath), t, line);
-                        lineWarning = line;     // one such warning per line is enough...
+                    if (v == 0x09) {                    // we'll pass TABs through
+                        token = String.fromCharCode(v);
+                    } else if (v == 0x0A) {
+                        token = "";                     // and we'll ignore embedded LFs
+                    } else {
+                        /*
+                         * I've seen DATA statements with embedded non-ASCII characters, so at this point,
+                         * we pretty much have to encode anything else as raw text.  But first, we must un-read
+                         * any extra byte we fetched above.
+                         */
+                        let u = v;
+                        if (v >= 0xFD00) {
+                            i--;                        // un-read the extra byte
+                            v >>= 8;                    // and shift the value back to 8 bits
+                        }
+                        token = String.fromCharCode(v);
+                        if (fNormalize) {
+                            token = CharSet.fromCP437(token, true);
+                        }
+                        if (lineWarning != line) {
+                            printf("warning: %s contained unusual bytes (eg, %#x on line %d)\n", sPath, u, line);
+                            lineWarning = line;         // one such warning per line is enough...
+                        }
                     }
-                    token = "";                 // we're going to return an empty token instead of whatever "t" is...
                 }
             }
         }
@@ -798,30 +842,31 @@ function convertBASICFile(sPath, db, fNormalize)
     let b = readU8();
     if (b == 0xFF) {
         while (!EOF()) {
-            let t;
             /*
              * Every line in the file begins with two 16-bit values: the offset of the *next* line,
-             * the line number of the *current* line.  The offset value can be used as a sanity check
-             * (eg, for file integrity) but we're not going to bother; all we'll check for here is
+             * and the line number of the *current* line.  The offset can be used as a sanity check
+             * (eg, for file integrity) but we're not going to bother; all we check for here is
              * an offset of ZERO, which effectively means end-of-program, and it's normally followed
-             * by an EOF byte (0x1A) (and which we'll pass along, *unless* we're normalizing the text).
+             * by an EOF byte (0x1A) (and which we'll pass along, *unless* we're "normalizing" the text).
              */
             let off = readU16();
             if (!off) {
                 if (peekU8(0x1A)) {
                     if (!fNormalize) s += String.fromCharCode(0x1A);
-                } else {
-                    printf("warning: %s contains invalid EOF at offset %#x\n", path.basename(sPath), i);
+                } else if (!EOF()) {
+                    printf("warning: %s contains non-EOF at offset %#x (%#x)\n", sPath, i, readU8());
                 }
                 break;
             }
+            let t;
             let line = readU16();
             s += line + " ";        // BASIC defaults to one space between line number and first token
             while ((t = getToken(line)) !== null) {
                 s += t;
             }
             s += (fNormalize? "\n" : "\r\n");
-            quoted = false;         // if you end a line with an open quote, BASIC automatically "closes" it
+            quote = false;          // if you end a line with an open quote, BASIC automatically "closes" it
+            comment = data = false; // ditto for comments and DATA statements
         }
         db = new DataBuffer(s);
     }
@@ -874,41 +919,13 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
     } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
         let fPrinted = false;
         let fQuiet = argv['quiet'];
-        if (!argv['collection']) {
-            if (!fQuiet) printf("extracting: %s\n", sFile);
-        } else {
-            // let sArchive = checkArchive(sPath, true);
-            // if (sArchive) {
-            //     let fExtracted;
-            //     if (existsFile(sPath)) {
-            //         if (!fQuiet) {
-            //             printf("extracted: %s\n", sFile);
-            //             fPrinted = true;
-            //         }
-            //     }
-            //     if (!existsFile(sArchive)) {
-            //         fExtracted = false;
-            //     } else {
-            //         let aArchiveFiles = glob.sync(path.join(sArchive, "**"));
-            //         if (!aArchiveFiles.length) {
-            //             fExtracted = false;
-            //             printf("warning: empty archive folder: %s\n", sArchive);
-            //         } else if (!fQuiet) {
-            //             aArchiveFiles.forEach((sArchiveFile) => {
-            //                 printf("expanded:  %s\n", sArchiveFile.substr(extractDir.length));
-            //             });
-            //         }
-            //     }
-            //     if (fExtracted === false) {
-            //         // printf("unar -o %s -d \"%s\"\n", path.dirname(sArchive), sPath);
-            //     }
-            // }
+        if (argv['collection']) {
             if (existsFile(sPath)) {
                 if (!fPrinted && !fQuiet) printf("extracted: %s\n", sFile);
                 return true;
             }
-            printf("extracting: %s\n", sFile);
         }
+        if (!fQuiet) printf("extracting: %s\n", sFile);
         if (argv['expand']) {
             let arcType = isARCFile(sFile);
             if (arcType) {
@@ -981,12 +998,13 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
  * mapDiskToServer(diskFile)
  *
  * @param {string} diskFile
+ * @param {boolean} [fRemote] (true to return remote address)
  * @returns {string}
  */
-function mapDiskToServer(diskFile)
+function mapDiskToServer(diskFile, fRemote)
 {
-    if (useServer || !existsFile(getFullPath(diskFile))) {
-        diskFile = diskFile.replace(/^\/disks\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsig[0-9]|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$1.pcjs.org/");
+    if (useServer || !existsFile(getFullPath(diskFile)) || fRemote) {
+        diskFile = diskFile.replace(/^\/disks\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$1.pcjs.org/").replace(/^\/disks\/cdroms\/([^/]*)\//, "https://$1.pcjs.org/");
     }
     return diskFile;
 }
@@ -1141,6 +1159,12 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     if (argv['extract']) {
+        let extractDir = argv['extdir'];
+        if (typeof extractDir != "string") {
+            extractDir = "";
+        } else {
+            extractDir = extractDir.replace("%d", path.dirname(diskFile));
+        }
         let manifest = di.getFileManifest(null, false);             // pass true for sorted manifest
         manifest.forEach(function extractDiskFile(desc) {
             /*
@@ -1165,16 +1189,16 @@ function processDisk(di, diskFile, argv, diskette)
             let contents = desc[DiskInfo.FILEDESC.CONTENTS] || [];
             let db = new DataBuffer(contents);
             device.assert(size == db.length);
-            let extractDir = typeof argv['extract'] != "string"? di.getName() : "";
-            if (extractDir || name == argv['extract']) {
+            let extractFolder = (typeof argv['extract'] != "string")? di.getName() : "";
+            if (extractFolder || name == argv['extract']) {
                 let fSuccess = false;
                 if (argv['collection']) {
-                    extractDir = getFullPath(path.join(path.dirname(diskFile), "archive", extractDir));
+                    extractFolder = getFullPath(path.join(path.dirname(diskFile), "archive", extractFolder));
                     if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
-                        extractDir = extractDir.replace("/disks/archive", "/archive");
+                        extractFolder = extractFolder.replace("/disks/archive", "/archive");
                     }
                 }
-                extractFile(extractDir, "", sPath, attr, date, db, argv);
+                extractFile(path.join(extractDir, extractFolder), "", sPath, attr, date, db, argv);
             }
         });
     }
@@ -1218,13 +1242,13 @@ function processDisk(di, diskFile, argv, diskette)
             createDisk(diskFile, diskette, argv, function(diTemp) {
                 let sTempJSON = path.join(rootDir, "tmp", path.basename(diskFile).replace(/\.[a-z]+$/, "") + ".json");
                 diTemp.setArgs(sprintf("%s --output %s%s", diskette.command, sTempJSON, diskette.args));
-                writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, false, undefined, diskette.source);
+                writeDisk(sTempJSON, diTemp, argv['legacy'], 0, true, true, undefined, diskette.source);
                 let warning = false;
                 if (diskette.archive.endsWith(".img")) {
                     let json = diTemp.getJSON();
                     diTemp.buildDiskFromJSON(json);
                     let sTempIMG = sTempJSON.replace(".json",".img");
-                    writeDisk(sTempIMG, diTemp, true, 0, true, false, undefined, diskette.source);
+                    writeDisk(sTempIMG, diTemp, true, 0, true, true, undefined, diskette.source);
                     if (!compareDisks(sTempIMG, diskette.archive)) {
                         printf("warning: %s unsuccessfully rebuilt\n", diskette.archive);
                         warning = true;
@@ -1268,7 +1292,7 @@ function processDisk(di, diskFile, argv, diskette)
         if (!sListing) return;
         let sIndex = "", sIndexNew = "", sAction = "";
         let sHeading = "\n### Directory of " + diskette.name + "\n";
-        let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|pcsig[0-9]|pcsig[0-9a-z-]*-disks|private)\//, "/software/")), "index.md");
+        let sIndexFile = path.join(path.dirname(diskFile.replace(/\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|pcsigdisks|pcsig[0-9a-z-]*-disks|private)\//, "/software/")), "index.md");
         if (existsFile(sIndexFile)) {
             sIndex = sIndexNew = readFile(sIndexFile);
             sAction = "updated";
@@ -1379,7 +1403,7 @@ function processDisk(di, diskFile, argv, diskette)
                     let sDiskettes = "";
                     let diskMatch = diskFile.match(/\/pcsig\/([0-9])[0-9]+-/);
                     if (diskMatch) {
-                        sDiskettes = "    diskettes: /machines/pcx86/diskettes.json,/disks/pcsig" + diskMatch[1] + "/pcx86/diskettes.json\n";
+                        sDiskettes = "    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json\n";
                     }
                     if (diskette.bootable) {
                         bootDisk = demoDisk;
@@ -1427,6 +1451,23 @@ function processDisk(di, diskFile, argv, diskette)
             if (sDiskServer) {
                 sListing += "\n![" + diskette.name + "]({{ site.software." + sDiskServer.replace("disks/", "") + ".server }}" + sDiskPic.slice(sDiskServer.length + 1) + ")\n";
             }
+            /*
+             * Let's rematch the page header and see if the page also needs a preview image.
+             */
+            matchFrontMatter = sIndexNew.match(/^(---\n[\s\S]*?\n---\n)/);
+            if (matchFrontMatter) {
+                let sFrontMatter = matchFrontMatter[1];
+                let match = sFrontMatter.match(/\npreview:.*\n/);
+                if (!match) {
+                    match = sFrontMatter.match(/\npermalink:.*\n/);
+                    if (match) {
+                        let n = match.index + match[0].length;
+                        sDiskPic = mapDiskToServer(sDiskPic, true);
+                        sFrontMatter = sFrontMatter.slice(0, n) + "preview: " + sDiskPic + "\n" + sFrontMatter.slice(n);
+                        sIndexNew = sFrontMatter + sIndexNew.slice(matchFrontMatter[0].length);
+                    }
+                }
+            }
         }
         if (diskette.source && !diskette.source.indexOf("http")) {
             sListing += "\n[[Source](" + diskette.source + ")]\n";
@@ -1466,25 +1507,73 @@ function processDisk(di, diskFile, argv, diskette)
         }
 
         /*
-         * Step 3: If a generated machine needs to be embedded, put it ahead of the first directory listing
-         * (which is why we waited until now).  Also, any available 'info' summary lines should be embedded as well.
+         * Step 3: If a generated machine needs to be embedded, put it just ahead of the first directory listing (which
+         * is why we waited until now); if there are any diskette 'info' summary lines, we want it just ahead of those, too.
          */
-        let sDiskInfo = ""
+        let info = ""
         if (diskette.info) {
             let i;
-            sDiskInfo += "\n## Information about \"" + diskette.info.diskTitle + "\"\n\n";
+            info += "\n## Information about \"" + diskette.info.diskTitle + "\"\n\n";
             for (i = 0; i < diskette.info.diskSummary.length; i++) {
-                sDiskInfo += "    " + diskette.info.diskSummary[i] + "\n";
+                info += "    " + diskette.info.diskSummary[i] + "\n";
             }
         }
-        let sInsert = sMachineEmbed;
-        if (sIndexNew.indexOf(sDiskInfo) < 0) {
-            sInsert += sDiskInfo;
+
+        /*
+         * Along with any diskette info, see if there are any files in the decompressed archive folder that we might want
+         * to include in the index, too.
+         */
+        let samples = "";
+        let sampleSpec = path.join(path.dirname(getFullPath(diskette.path)), "archive", "**", "*.BAS");
+        let sampleFiles = glob.sync(sampleSpec);
+        for (let sampleFile of sampleFiles) {
+            let sample = readFile(sampleFile);
+            if (sample) {
+                if (isText(sample)) {
+                    if (sample[sample.length-1] != '\n') sample += '\n';
+                    sample = "```bas\n" + sample /* .replace(/([^\n]*\n)/g, '    $1\n') */ + "```\n";
+                    samples += "\n## " + path.basename(sampleFile) + "\n\n" + sample;
+                } else {
+                    printf("warning: ignoring non-text file '%s'\n", sampleFile);
+                }
+            }
         }
+
+        /*
+         * Clean out any old info and then add any new info.  It should be bracketed by 'info_begin'/'info_end' comments.
+         */
+        let sInsert = sMachineEmbed;
+        let match = sIndexNew.match(/\n\{% comment %\}info_begin\{% endcomment %\}[\S\s]*\{% comment %\}info_end\{% endcomment %\}\n\n/);
+        if (match) {
+            sIndexNew = sIndexNew.slice(0, match.index) + sIndexNew.slice(match.index + match[0].length);
+        } else {
+            let i = sIndexNew.indexOf(info);            // look for (old) unbracketed info, too (probably don't need this anymore)
+            if (i >= 0) {
+                sIndexNew = sIndexNew.slice(0, i) + sIndexNew.slice(i + info.length);
+            }
+        }
+        if (info) {
+            sInsert += "\n{% comment %}info_begin{% endcomment %}\n" + info + "{% comment %}info_end{% endcomment %}\n\n";
+        }
+
+        /*
+         * Clean out any old samples and then add any new samples.  They should be bracketed by 'samples_begin'/'samples_end' comments.
+         */
+        match = sIndexNew.match(/\{% comment %\}samples_begin\{% endcomment %\}[\S\s]*\{% comment %\}samples_end\{% endcomment %\}\n/);
+        if (match) {
+            sIndexNew = sIndexNew.slice(0, match.index) + sIndexNew.slice(match.index + match[0].length);
+        }
+        if (samples) {
+            sInsert += "{% comment %}samples_begin{% endcomment %}\n" + samples + "\n{% comment %}samples_end{% endcomment %}\n";
+        }
+
         if (sInsert) {
             matchDirectory = sIndexNew.match(/\n(##+)\s+Directory of /);
             if (matchDirectory) {
-                sIndexNew = sIndexNew.replace(matchDirectory[0], sInsert + matchDirectory[0]);
+                /*
+                 * WARNING: This is another place where we need to work around JavaScript's handling of '$' in the replacement string.
+                 */
+                sIndexNew = sIndexNew.replace(matchDirectory[0], sInsert.replace(/\$/g, "$$$$") + matchDirectory[0]);
             } else {
                 sIndexNew += sInsert;
             }
@@ -1524,11 +1613,15 @@ function processDisk(di, diskFile, argv, diskette)
         if (argv['boot']) {
             di.updateBootSector(readFile(argv['boot'], null));
         }
-        let output = argv['output'] || argv[1];
+        let output = argv['output'];
+        if (!output || typeof output == "boolean") {
+            output = argv[1];
+        }
         if (output) {
             if (typeof output == "string") output = [output];
             output.forEach((outputFile) => {
-                writeDisk(outputFile, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], argv['quiet'], argv['writable'], argv['source']);
+                let file = outputFile.replace("%d", path.dirname(diskFile));
+                writeDisk(file, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], argv['quiet'], argv['writable'], argv['source']);
             });
         }
     }
@@ -1581,7 +1674,7 @@ function addMetaData(di, sDir, sPath)
 function readCollection(argv)
 {
     let family = "pcx86";
-    let asServers = ["diskettes", "gamedisks", "miscdisks", "pcsig0", "pcsig8a-disks", "pcsig8b-disks", "private"];
+    let asServers = ["diskettes", "gamedisks", "miscdisks", "pcsigdisks", "pcsig8a-disks", "pcsig8b-disks", "private"];
     let cCollections = 0, cDisks = 0;
     let asCollections = [];
     asServers.forEach((server) => {
@@ -2093,7 +2186,7 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
                 printf("%s not written, no data\n", diskName);
             }
         } else {
-            if (!fQuiet) printf("%s exists, use --overwrite to replace\n", diskFile);
+            if (!fQuiet) printf("warning: %s exists, use --overwrite to replace\n", diskFile);
         }
     }
     catch(err) {
@@ -2128,7 +2221,7 @@ function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
                 if (fReadOnly) fs.chmodSync(sFile, 0o444);
                 return true;
             }
-            if (!fQuiet) printf("%s exists, use --overwrite to replace\n", sFile);
+            if (!fQuiet) printf("warning: %s exists, use --overwrite to replace\n", sFile);
         } catch(err) {
             printError(err);
         }
@@ -2229,9 +2322,12 @@ function processAll(all, argv)
 {
     if (all && typeof all == "string") {
         let max = +argv['max'] || 0;
-        let asFiles = glob.sync(all);
+        let asFiles = glob.sync(getFullPath(all));
         if (asFiles.length) {
-            let outdir = argv['output'] || argv[1];     // if specified, --output is assumed to be a directory
+            let outdir = argv['output'];                // if specified, --output is assumed to be a directory
+            if (!outdir || typeof outdir == "boolean") {
+                outdir = argv[1];
+            }
             let type =  argv['type'] || "json";         // if specified, --type should be a known file extension
             if (type[0] != '.') type = '.' + type;
             let filter = argv['filter'];
@@ -2239,8 +2335,10 @@ function processAll(all, argv)
             for (let sFile of asFiles) {
                 if (filter && !filter.test(sFile)) continue;
                 let args = [argv[0], sFile];
-                if (outdir) args['output'] = path.join(outdir, path.parse(sFile).name + type);
-                for (let arg of ['list', 'extract', 'overwrite', 'quiet', 'verbose']) {
+                if (outdir) {
+                    args['output'] = path.join(outdir.replace("%d", path.dirname(sFile)), path.parse(sFile).name + type);
+                }
+                for (let arg of ['list', 'expand', 'extract', 'extdir', 'normalize', 'overwrite', 'quiet', 'verbose']) {
                     if (argv[arg] !== undefined) args[arg] = argv[arg];
                 }
                 processFile(args);
@@ -2276,8 +2374,16 @@ function processFile(argv)
                 *
                 * This only affects the 'name' property in 'imageInfo', which is of limited interest anyway.
                 */
-                let name = argv['output'] || argv[1];
+                let name = argv['output'];
+                if (!name || typeof name == "boolean") {
+                    name = argv[1];
+                }
                 if (name) {
+                    /*
+                     * If name isn't a string, then it must be an array (because the user specified multiple
+                     * outputs), which is allowed in case you want to create, for example, both IMG and JSON
+                     * disk images with a single command.
+                     */
                     if (typeof name != "string") name = name[0];
                     di.setName(path.basename(name));
                 }
@@ -2286,14 +2392,34 @@ function processFile(argv)
         }
     };
 
+    /*
+     * Checking each --dir, --files, etc, for a boolean value allows the user to specify a value
+     * without an equal sign (ie, a small convenience).
+     */
     let input = argv['dir'];
     if (input) {
         fDir = true;                // if --dir, the directory should end with a trailing slash (but we'll make sure)
-        if (!input.endsWith(path.sep)) input += path.sep;
+        if (typeof input == "boolean") {
+            input = argv[1];
+            if (input) {
+                argv.splice(1, 1);
+            } else {
+                fDir = false;
+            }
+        }
+        if (input && !input.endsWith(path.sep)) input += path.sep;
     } else {
         input = argv['files'];
         if (input) {                // if --files, the list of files should be separated with commas (and NO trailing slash)
             fDir = fFiles = true;
+            if (typeof input == "boolean") {
+                input = argv[1];
+                if (input) {
+                    argv.splice(1, 1);
+                } else {
+                    fDir = fFiles = false;
+                }
+            }
         } else {
             input = argv['arc'];
             if (input) {
@@ -2302,21 +2428,21 @@ function processFile(argv)
                 input = argv['zip'];
                 if (input) {
                     arcType = 2;
-                } else {
-                    input = argv[1];
+                }
+            }
+            if (!input || typeof input == "boolean") {
+                input = argv[1];
+                if (input) {
                     argv.splice(1, 1);
-                    if (input) {
+                    if (!arcType) {
                         if (input.endsWith(path.sep)) {
                             fDir = true;
                         } else {
-                            let ext = path.extname(input).toLowerCase();
-                            if (ext == ".arc") {
-                                arcType = 1;
-                            } else if (ext == ".zip") {
-                                arcType = 2;
-                            }
+                            arcType = isARCFile(input);
                         }
                     }
+                } else {
+                    arcType = 0
                 }
             }
         }
@@ -2378,7 +2504,7 @@ function main(argc, argv)
     useServer = !!argv['server'];
 
     if (!argv['quiet']) {
-        printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("options: %s", options) : ""));
+        printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s", options) : ""));
     }
 
     if (Device.DEBUG) {
@@ -2386,6 +2512,48 @@ function main(argc, argv)
     }
 
     device.setMessages(Device.MESSAGE.DISK + Device.MESSAGE.WARN + Device.MESSAGE.ERROR, true);
+
+    if (argv['help']) {
+        let optionsInput = {
+            "--all=[filespec]":         "process all matching disk images",
+            "--disk=[diskimage]":       "read disk image (.img or .json)",
+            "--dir=[directory]":        "read all files in a directory",
+            "--files=[filelist]":       "read all files in a comma-separated list",
+            "--zip=[zipfile]\t":        "read all files in an archive"
+        };
+        let optionsOutput = {
+            "--extdir=[directory]":     "write extracted files to directory",
+            "--output=[diskimage]":     "write disk image (.img or .json)",
+            "--target=[nK|nM]":         "set target disk size to nK or nM (eg, \"360K\", \"10M\")"
+        };
+        let optionsAction = {
+            "--dump=[C:H:S:N]":         "dump N sectors starting at sector C:H:S",
+            "--expand (-x)\t":          "expand all archives in disk image(s)",
+            "--extract (-e)\t":         "extract all files in disk image(s)",
+            "--extract[=filename]":     "extract specified file in disk image(s)",
+            "--label=[label]\t":        "set volume label",
+            "--list (-l)\t":            "display directory listings of disk image(s)",
+            "--list=unused\t":          "display unused space in disk image(s) (.json only)",
+            "--normalize\t":            "change line endings and character encodings of text files",
+            "--quiet (-q)\t":           "minimum messages",
+            "--verbose (-v)\t":         "maximum messages (eg, display archive contents)"
+        };
+        let optionGroups = {
+            "Input options:":           optionsInput,
+            "Output options:":          optionsOutput,
+            "Action options:":          optionsAction
+        }
+        printf("\nUsage:\n\n\tnode diskimage.js [input diskimage] [output diskimage] [options]\n");
+        for (let group in optionGroups) {
+            printf("\n%s\n\n", group);
+            for (let option in optionGroups[group]) {
+                printf("\t%s\t%s\n", option, optionGroups[group][option]);
+            }
+        }
+        printf("\nOptions --extdir and --output support \"%d\", which will be replaced with the input disk directory.\n");
+        printf("Option values can be enclosed in single or double quotes (eg, if they contain whitespace or wildcards).\n");
+        return;
+    }
 
     if (argv['collection']) {
         readCollection(argv);
@@ -2397,8 +2565,14 @@ function main(argc, argv)
         /*
          * If you use --disk to specify a disk image, then I call the experimental async function.
          */
-        processDiskAsync(input, argv);
-        return;
+        if (typeof input == "boolean") {
+            input = argv[1];
+            if (input) argv.splice(1, 1);
+        }
+        if (input) {
+            processDiskAsync(input, argv);
+            return;
+        }
     }
 
     if (processAll(argv['all'], argv) || processFile(argv)) {
@@ -2408,4 +2582,11 @@ function main(argc, argv)
     printf("nothing to do\n");
 }
 
-main(...pcjslib.getArgs());
+main(...pcjslib.getArgs({
+    '?': "help",
+    'e': "extract",
+    'l': "list",
+    'q': "quiet",
+    'v': "verbose",
+    'x': "expand"
+}));

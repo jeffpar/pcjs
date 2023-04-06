@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #853"
+title: "PC-SIG Diskette Library (Disk #853)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0853/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0853"
+      B: "PC-SIG Library Disk #0853"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "SPORTS LOG TRACKING SYSTEM"
 
@@ -52,8 +54,10 @@ machines:
     LINEFILE KEY  Data file.
     PITCHERS      Data file.
     PITCHERS KEY  Data file.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0853
+
+### Directory of PC-SIG Library Disk #0853
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #762"
+title: "PC-SIG Diskette Library (Disk #762)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0762/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0762"
+      B: "PC-SIG Library Disk #0762"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "QUEST-3D"
 
@@ -29,8 +31,10 @@ machines:
     image you are drawing. QUEST-3D also lets you scale each axis
     independently, so images can be stretched or condensed in height,
     width, or length.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0762
+
+### Directory of PC-SIG Library Disk #0762
 
      Volume in drive A has no label
      Directory of A:\

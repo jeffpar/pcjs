@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #563"
+title: "PC-SIG Diskette Library (Disk #563)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0563/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0563"
+      B: "PC-SIG Library Disk #0563"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "MAX - EMACS EDITOR"
 
@@ -55,8 +57,10 @@ machines:
     
     ???           Various information files
     AUTOEXEC BAT  Special program to configure system at bootup
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0563
+
+### Directory of PC-SIG Library Disk #0563
 
      Volume in drive A has no label
      Directory of A:\

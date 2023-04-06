@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #648"
+title: "PC-SIG Diskette Library (Disk #648)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0648/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0648"
+      B: "PC-SIG Library Disk #0648"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "WALMYR PROGRAMS 1 OF 2 (ALSO 649)"
 
@@ -81,8 +83,10 @@ machines:
     README        How to get started
     WTA     <DIR> Directory containing all files for Teaching Assistant
     ITA     <DIR> Directory containing all files for Index of Teaching Abili
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0648
+
+### Directory of PC-SIG Library Disk #0648
 
      Volume in drive A has no label
      Directory of A:\

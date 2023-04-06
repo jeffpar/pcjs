@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #847"
+title: "PC-SIG Diskette Library (Disk #847)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0847/
 machines:
   - id: ibm5150
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0847"
+      B: "PC-SIG Library Disk #0847"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5150" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "LOTUS LEARNING SYSTEM (ALSO 846)"
 
@@ -28,8 +30,10 @@ machines:
     retrieving, saving, columns, and more in a look and feel simulation of
     Lotus 1-2-3.  A 130-page workbook comes with registration.  A must for
     anyone about to buy, or who already has, LOTUS 1-2-3.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0847
+
+### Directory of PC-SIG Library Disk #0847
 
      Volume in drive A has no label
      Directory of A:\

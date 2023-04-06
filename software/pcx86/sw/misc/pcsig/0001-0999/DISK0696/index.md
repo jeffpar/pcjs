@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #696"
+title: "PC-SIG Diskette Library (Disk #696)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0696/
 machines:
   - id: ibm5170
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0696"
+      B: "PC-SIG Library Disk #0696"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5170" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "UPDATED ALL FILES ON #2321"
 
@@ -25,8 +27,10 @@ machines:
     worksheet can be rotated to allow you to view, enter, or manipulate your
     data from any of its six faces.  PC Magazine made it an Editor's Choice
     among low cost spreadsheets.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0696
+
+### Directory of PC-SIG Library Disk #0696
 
      Volume in drive A has no label
      Directory of A:\

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "PC-SIG Library Disk #210"
+title: "PC-SIG Diskette Library (Disk #210)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0210/
 machines:
   - id: ibm5160
@@ -9,11 +9,13 @@ machines:
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
-      B: "PC-SIG Library Disk 0210"
+      B: "PC-SIG Library Disk #0210"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
 {% include machine.html id="ibm5160" %}
+
+{% comment %}info_begin{% endcomment %}
 
 ## Information about "GAME SERIES NO 15"
 
@@ -37,8 +39,10 @@ machines:
     CASTLE   EXE  Main program
     PACKGAL  COM  Travel trough a maze eating dots and avoiding ghosts
     SPACEVAD EXE  Save the world from the extra-terrestrial invaders.
+{% comment %}info_end{% endcomment %}
 
-### Directory of PC-SIG Library Disk 0210
+
+### Directory of PC-SIG Library Disk #0210
 
      Volume in drive A has no label
      Directory of A:\
