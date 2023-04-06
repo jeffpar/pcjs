@@ -3,7 +3,7 @@ layout: post
 title: The PC-SIG Library and ZIP Files
 date: 2023-04-06 10:00:00
 permalink: /blog/2023/04/06/
-preview: /blog/images/pcsig-8th-edition-1990-04.jpg
+preview: /software/pcx86/sw/misc/pcsig/CD-ROM.jpg
 ---
 
 The PC Software Interest Group, aka PC-SIG, began advertising a directory of public domain software for the IBM PC in early 1983.  A year later, their collection featured over 135 diskettes, which you could purchase for $6 per diskette, plus $4 per order for shipping.  Each diskette was numbered, to make it easy to specify which diskettes you wanted.  By 1986, PC-SIG was one of the most prominent advertisers of user-supported software ("shareware"), sold annual memberships, and had a collection of nearly 500 diskettes.
