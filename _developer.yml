@@ -41,16 +41,8 @@ software:
     server: /disks/harddisks
   miscdisks:
     server: /disks/miscdisks
-  pcsig0:
-    server: /disks/pcsig0
-  pcsig1:
-    server: /disks/pcsig1
-  pcsig2:
-    server: /disks/pcsig2
-  pcsig3:
-    server: /disks/pcsig3
-  pcsig4:
-    server: /disks/pcsig4
+  pcsigdisks:
+    server: /disks/pcsigdisks
   pcsig8a-disks:
     server: /disks/pcsig8a-disks
   pcsig8b-disks:
