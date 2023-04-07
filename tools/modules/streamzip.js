@@ -11,7 +11,7 @@ import events from 'events';
 import zlib from 'zlib';
 import stream from 'stream';
 import Structure from './structure.js';
-import LegacyZip from './legacyzip.js';
+import {ARC, LegacyZip} from './legacyzip.js';
 
 /**
  * @typedef {Object} Config
@@ -53,7 +53,7 @@ export default class StreamZip extends events.EventEmitter {
         .field('method',        Structure.UINT16)       // compression method
         .field('time',          Structure.UINT16)       // modification time
         .field('date',          Structure.UINT16)       // modification date
-        .field('crc',           Structure.UINT32)       // uncompressed file CRC-32 value
+        .field('crc',           Structure.INT32)        // uncompressed file CRC-32 value
         .field('compressedSize',Structure.UINT32)       // compressed size
         .field('size',          Structure.UINT32)       // uncompressed size
         .field('fnameLen',      Structure.UINT16)       // filename length
@@ -64,7 +64,7 @@ export default class StreamZip extends events.EventEmitter {
         .field('signature',     Structure.UINT32, {
             'EXTSIG': 0x08074b50                        // "PK\007\008" (data descriptor signature)
         })
-        .field('crc',           Structure.UINT32)       // uncompressed file CRC-32 value
+        .field('crc',           Structure.INT32)        // uncompressed file CRC-32 value
         .field('compressedSize',Structure.UINT32)       // compressed size
         .field('size',          Structure.UINT32)       // uncompressed size
         .verifySize(16);
@@ -79,7 +79,7 @@ export default class StreamZip extends events.EventEmitter {
         .field('method',        Structure.UINT16)       // compression method
         .field('time',          Structure.UINT16)       // modification time
         .field('date',          Structure.UINT16)       // modification date
-        .field('crc',           Structure.UINT32)       // uncompressed file CRC-32 value
+        .field('crc',           Structure.INT32)        // uncompressed file CRC-32 value
         .field('compressedSize',Structure.UINT32)       // compressed size
         .field('size',          Structure.UINT32)       // uncompressed size
         .field('fnameLen',      Structure.UINT16)       // filename length
@@ -756,9 +756,18 @@ export default class StreamZip extends events.EventEmitter {
             if (dst.length !== entry.size) {
                 entry.error("expected " + entry.size + " bytes, received " + dst.length + " (method " + entry.method + ")");
             }
-            if (this.canVerifyCRC(entry)) {
-                const verify = new CRCVerify(entry);
-                verify.data(dst);
+            else {
+                if (this.arcType == StreamZip.TYPE_ARC) {
+                    let crc = ARC.getCRC(dst);
+                    if (crc != entry.crc) {
+                        this.entry.error("expected CRC 0x" + entry.crc.toString(16) + ", received 0x" + crc.toString(16));
+                    }
+                } else {
+                    if (this.canVerifyCRC(entry)) {
+                        const verify = new CRCVerify(entry);
+                        verify.data(dst);
+                    }
+                }
             }
         } else if (dst === undefined) {
             entry.error("decompression failure (" + entry.method + ")");
@@ -837,7 +846,8 @@ export default class StreamZip extends events.EventEmitter {
      */
     dataOffset(entry)
     {
-        return entry.offset + StreamZip.LocalHeader.getSize() + entry.fnameLen + entry.extraLen;
+        let sizeHeader = (this.arcType == StreamZip.TYPE_ARC? StreamZip.ArcHeader.getSize() : StreamZip.LocalHeader.getSize());
+        return entry.offset + sizeHeader + entry.fnameLen + entry.extraLen;
     }
 
     /**
@@ -1687,14 +1697,11 @@ class CRCVerify
         this.state.crc = crc;
         this.state.size += data.length;
         if (this.state.size >= this.entry.size) {
-            const buf = Buffer.alloc(4);
-            buf.writeInt32LE(~this.state.crc & 0xffffffff, 0);
-            crc = buf.readUInt32LE(0);
-            if (crc !== this.entry.crc) {
-                this.entry.error("expected CRC 0x" + this.entry.crc.toString(16) + ", received 0x" + crc.toString(16));
-            }
             if (this.state.size !== this.entry.size) {
-                this.entry.error("expected size " + this.entry.size + ", received " + this.state.size);
+                this.entry.error("expected " + this.entry.size + " bytes, received " + this.state.size);
+            }
+            else if (~this.state.crc !== this.entry.crc) {
+                this.entry.error("expected CRC 0x" + this.entry.crc.toString(16) + ", received 0x" + crc.toString(16));
             }
         }
     }
@@ -1704,7 +1711,6 @@ class CRCVerify
         let crcTable = CRCVerify.crcTable;
         if (!crcTable) {
             CRCVerify.crcTable = crcTable = [];
-            const b = Buffer.alloc(4);
             for (let n = 0; n < 256; n++) {
                 let c = n;
                 for (let k = 8; --k >= 0; ) {
@@ -1713,10 +1719,6 @@ class CRCVerify
                     } else {
                         c = c >>> 1;
                     }
-                }
-                if (c < 0) {
-                    b.writeInt32LE(c, 0);
-                    c = b.readUInt32LE(0);
                 }
                 crcTable[n] = c;
             }
