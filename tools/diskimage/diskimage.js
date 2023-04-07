@@ -97,7 +97,9 @@ function createDisk(diskFile, diskette, argv, done)
         if (diskette.archive[0] == '/') {
             sArchiveFile = path.sep + diskette.archive.slice(1);
         } else if (diskette.archive[0] == '.') {
-            sArchiveFile = sArchiveFile.replace(".img", diskette.archive.toUpperCase());
+            if (diskette.archive != ".img") {
+                sArchiveFile = sArchiveFile.replace(".img", diskette.archive.toUpperCase());
+            }
         } else if (diskette.archive == "folder") {
             sArchiveFile = sArchiveFile.replace(".img", path.sep);
         } else {
@@ -2516,6 +2518,7 @@ function main(argc, argv)
     if (argv['help']) {
         let optionsInput = {
             "--all=[filespec]":         "process all matching disk images",
+            "--boot=[bootfile]":        "replace boot sector with specified file",
             "--disk=[diskimage]":       "read disk image (.img or .json)",
             "--dir=[directory]":        "read all files in a directory",
             "--files=[filelist]":       "read all files in a comma-separated list",

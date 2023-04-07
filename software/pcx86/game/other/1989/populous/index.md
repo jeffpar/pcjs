@@ -2,6 +2,7 @@
 layout: page
 title: "Populous (1989)"
 permalink: /software/pcx86/game/other/1989/populous/
+preview: https://gamedisks.pcjs.org/pcx86/game/other/1989/populous/POPULOUS-1989.jpg
 machines:
   - id: ibm5170-pop
     type: pcx86

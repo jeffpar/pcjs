@@ -104,3 +104,7 @@ machines:
     DISK4    EXE   1042748   1-18-93   3:59p
             1 file(s)    1042748 bytes
                           414720 bytes free
+
+<!-- Documentation -->
+
+{% include gallery/documents.html width="200" height="260" %}
