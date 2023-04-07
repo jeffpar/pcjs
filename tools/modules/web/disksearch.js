@@ -96,6 +96,18 @@ export default class DiskSearch {
     }
 
     /**
+     * containsFile(list, re)
+     *
+     * @param {string} list
+     * @param {RegExp} re
+     * @returns {boolean}
+     */
+    containsFile(list, re)
+    {
+        return !!(list && list.match(re));
+    }
+
+    /**
      * containsText(obj, props, re)
      *
      * @param {object} obj
@@ -120,18 +132,17 @@ export default class DiskSearch {
     getMatches(text)
     {
         let matches = [];
-        let textRE = new RegExp(text.replace(/ /g, '.*'), 'i');
-        let textUpper = text.toUpperCase().trim();
-        let isFileName = (textUpper.length <= 12 && textUpper.indexOf('.') > 0 && textUpper.indexOf(' ') < 0);
+        text = text.trim();
+        let reText = new RegExp(text.replace(/ /g, '.*'), 'i');
+        let isFileName = (text.length <= 12 && text.indexOf('.') > 0 && text.indexOf(' ') < 0);
+        let reFileName = (isFileName? new RegExp("/" + text + "(||$)", 'i') : null);
         for (let i = 0; i < this.media.length; i++) {
             let media = this.media[i];
-            if (isFileName) {
-                if (media['@fileList'].indexOf(textUpper) > 0) {
-                    matches.push(i);
-                }
+            if (this.containsFile(media['@fileList'], reFileName)) {
+                matches.push(i);
                 continue;
             }
-            if (this.containsText(media, ['@diskTitle', '@diskSummary'], textRE)) {
+            if (this.containsText(media, ['@diskTitle', '@diskSummary'], reText)) {
                 matches.push(i);
             }
         }
@@ -168,7 +179,7 @@ export default class DiskSearch {
                             title = "";
                         }
                         if (!title) {
-                            title = media['@diskette'].slice(-5);
+                            title = media['@diskette'].slice(0, -5);
                         }
                         let j = summary.indexOf('.');
                         if (j > 0 && j < summary.length-1) {
