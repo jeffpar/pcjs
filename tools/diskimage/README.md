@@ -84,7 +84,7 @@ specify a different target size (in Kb) using `--target=N`, where N is 160, 180,
 example, if your diskette *must* work with PC DOS 1.0, use `--target=160`.
 
 Another useful option is `--normalize`, which will transform the line-endings in all recognized text files from LF to CR/LF;
-a recognized text file is any file ending with one of these extensions (.md, .me, .bas, .bat, .asm, .lrf, .mak, .txt, or .xml)
+a recognized text file is any file ending with one of these extensions (.MD, .ME, .BAS, .BAT, .ASM, .LRF, .MAK, .TXT, OR .XML)
 AND which contains only 7-bit ASCII characters -- since some files, like .bas files, can contain either ASCII or non-ASCII
 data.  The list of recognized text file extensions is likely to grow over time.
 
@@ -142,17 +142,37 @@ If you want to create a disk image for every `ZIP` file:
 
     node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --output=tmp --type=img
 
-`--output` specifies the output folder and `--type` specifies the output file type (either `IMG` or `JSON`).  Each output file will have the same basename as the `ZIP` file.
+`--output` specifies the output folder and `--type` specifies the output file type (either `IMG` or `JSON`).  Each output file will have the same basename as the `ZIP` file.  You can use also "%d" anywhere in the `--output` value to represent the directory of the corresponding input file (eg, `--output=%d`, `--output=%d/tmp`, etc).
 
 Last but not least, any `ZIP` files *inside* disk images can be automatically expanded during disk image processing as well; just add the new `--expand` option.  Each `ZIP` file will be replaced with a folder of the same name, and that folder will contain the entire uncompressed contents of the archive; the original `ZIP` file will *not* be included in the disk image:
 
     node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --expand --output=tmp
 
-Finally, if you just want to extract the expanded contents of a set of `ZIP` files to your current directory, instead of creating disk images, you can do that, too:
+### Extracting Files from PCjs Disk Images
 
-    node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --expand --extract
+You can extract the contents of a single disk image to your current directory or to a specific directory:
 
-The contents of each `ZIP` file will be extracted to a folder with a matching name.  Internally, diskimage.js will still be creating disk images from each `ZIP` file, and performing `--expand` and `--extract` operations on those disk images, but since no output is specified, no disk images will be saved at the end of those operations.
+    node diskimage.js DISK0001.IMG --extract
+    node diskimage.js DISK0001.IMG --extract --extdir=tmp
+
+You can also extract the contents of an entire collection of disk images, placing the contents of each either in the same directory as the original disk image or in a specific directory:
+
+    node diskimage.js --all="*.IMG" --extract --extdir=%d
+    node diskimage.js --all="*.IMG" --extract --extdir=tmp
+
+You can also expand any `ZIP` files during the extraction process, by including the `--expand` option:
+
+    node diskimage.js --all="*.IMG" --extract --expand --extdir=tmp
+
+Also, while the `--normalize` option was originally created to "normalize" files *read* from the host, it can also be used during extraction, when files are being *written* to the host.
+
+For example, if you want any filenames with CP437 characters to be created properly on the host, or you want the contents of any CP437 text files, BASIC files, etc, to be stored in readable form on the host, use the `--normalize` option along with the `--extract` option; eg:
+
+    node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --extract --expand --normalize --extdir=tmp
+
+In addition to converting line-endings back from CR/LF to LF, `--normalize` will also convert any tokenized `.BAS` files to plain-text UTF-8 files on the host, as well as decrypt any `.BAS` files that have been "protected" by `BASIC` with the `P` option of the `SAVE` command.
+
+The `--output` option is available with all of the above commands as well, but remember that that option controls where disk images will be created.  If you don't want any disk images created as part of the extraction process, don't use `--output`.
 
 ### Examining PCjs Disk Images
 
