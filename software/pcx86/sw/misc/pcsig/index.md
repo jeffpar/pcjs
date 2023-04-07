@@ -17,13 +17,17 @@ module_initialization:
 ---
 
 The PC Software Interest Group, aka PC-SIG, began distributing public domain software and shareware on 5.25-inch diskettes
-in the mid-1980s, and over the next 10 years or so, the collection grew to thousands of diskettes.
+in the early 1980s, and over the next 10 years or so, the collection grew to thousands of diskettes.
+
+To search the collection, try the new [Search](#search-the-pc-sig-collection) feature below.  For some background information
+on this collection, see the [blog post](/blog/2023/04/06/).
 
 {% include machine.html id="ibm5160" %}
 
 ### Search the PC-SIG Collection
 
 You can search this entire PC-SIG collection for a filename or a keyword, using the *very* simplistic search function provided below.
+Our PC-SIG "database" doesn't include descriptions of all the disks yet, so results will be incomplete.  Stay tuned.
 
 {% include web/search.html input="diskSearch" output="diskResults" %}
 
