@@ -11,9 +11,13 @@ machines:
     config: /machines/pcx86/ibm/5160/ega/512kb/pcsig08/machine.xml
 ---
 
+NOTE: This collection is being replaced with the [PC-SIG Diskette Library: The (Almost) Complete Collection](../pcsig/) and
+will probably be removed in the near future, since the new collection contains all these disks and more.
+
+---
+
 The machine below has access to all 2,121 diskette images from the
 [PC-SIG Library 8th Edition CD-ROM (April 1990)](http://cd.textfiles.com/pcsig08).
-
 Preceding each directory listing is a **Load Disk** button that will automatically load the corresponding disk into
 the machine's drive A.  Make sure the machine has finished booting before loading any disks.
 
