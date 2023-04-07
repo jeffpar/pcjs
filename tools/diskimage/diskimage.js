@@ -41,7 +41,7 @@ function printError(err, filename)
  * List of archive file types to expand when "--expand" is specified.  ".ARC" is currently
  * disabled but it retains its place in the table for the day when StreamZip supports it (TBD).
  */
-let asARCFileExts = [".ARC-TBD", ".ZIP"];       // order must match StreamZip.TYPE_* constants
+let asArchiveFileExts = [".ARC-TBD", ".ZIP"];   // order must match StreamZip.TYPE_* constants
 
 /*
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
@@ -331,15 +331,15 @@ function isText(data)
 }
 
 /**
- * isARCFile(sFile)
+ * isArchiveFile(sFile)
  *
  * @param {string} sFile
  * @return {number} StreamZip TYPE value, or 0 if not an archive file
  */
-function isARCFile(sFile)
+function isArchiveFile(sFile)
 {
     let sExt = path.parse(sFile).ext.toUpperCase();
-    return asARCFileExts.indexOf(sExt) + 1;
+    return asArchiveFileExts.indexOf(sExt) + 1;
 }
 
 /**
@@ -929,7 +929,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
         }
         if (!fQuiet) printf("extracting: %s\n", sFile);
         if (argv['expand']) {
-            let arcType = isARCFile(sFile);
+            let arcType = isArchiveFile(sFile);
             if (arcType) {
                 let zip = new StreamZip({
                     file: sFile,
@@ -940,7 +940,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
                     printfDebug: printf,
                     logErrors: true
                 }).on('ready', () => {
-                    let aFileData = getARCFiles(zip, argv['verbose']);
+                    let aFileData = getArchiveFiles(zip, argv['verbose']);
                     for (let file of aFileData) {
                         extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, file.files);
                     }
@@ -1794,7 +1794,7 @@ function readDir(sDir, arcType, sLabel, fNormalize, kbTarget, nMax, fVerbose, do
     try {
         nMaxInit = nMaxCount = nMax || nMaxDefault;
         if (arcType) {
-            readARCFiles(sDir, arcType, sLabel, fVerbose, readDone);
+            readArchiveFiles(sDir, arcType, sLabel, fVerbose, readDone);
         } else {
             di = readDone(readDirFiles(sDir, sLabel, fNormalize, 0));
         }
@@ -1925,13 +1925,13 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
 }
 
 /**
- * getARCFiles(zip, fVerbose)
+ * getArchiveFiles(zip, fVerbose)
  *
  * @param {StreamZip} zip
  * @param {boolean} fVerbose
  * @returns {Array.<FileData>}
  */
-function getARCFiles(zip, fVerbose)
+function getArchiveFiles(zip, fVerbose)
 {
     let aFileData = [];
     let aDirectories = [];
@@ -2029,18 +2029,18 @@ function getARCFiles(zip, fVerbose)
 }
 
 /**
- * readARCFiles(sARC, arcType, sLabel, fVerbose, done)
+ * readArchiveFiles(sArchive, arcType, sLabel, fVerbose, done)
  *
- * @param {string} sARC (ARC/ZIP filename)
+ * @param {string} sArchive (ARC/ZIP filename)
  * @param {number} arcType (1 for ARC, 2 for ZIP)
  * @param {boolean|null} sLabel (optional volume label)
  * @param {boolean} fVerbose (true to display verbose output, false to display minimal output)
  * @param {function(Array.<FileData>)} done
  */
-function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
+function readArchiveFiles(sArchive, arcType, sLabel, fVerbose, done)
 {
     let zip = new StreamZip({
-        file: sARC,
+        file: sArchive,
         arcType: arcType,
         storeEntries: true,
         nameEncoding: "ascii",
@@ -2048,12 +2048,12 @@ function readARCFiles(sARC, arcType, sLabel, fVerbose, done)
         logErrors: true
     });
     zip.on('ready', () => {
-        let aFileData = getARCFiles(zip, fVerbose);
+        let aFileData = getArchiveFiles(zip, fVerbose);
         zip.close()
         done(aFileData);
     });
     zip.on('error', (err) => {
-        printError(err, sARC);
+        printError(err, sArchive);
     });
 }
 
@@ -2394,7 +2394,7 @@ function processFile(argv)
             processDisk(di, input, argv);
             return true;
         }
-        if (input) printf("warning: %s does not appear to be a supported disk image\n", input);
+        if (input) printf("warning: %s is not a supported disk image\n", input);
         return false;
     };
 
@@ -2444,7 +2444,7 @@ function processFile(argv)
                         if (input.endsWith(path.sep)) {
                             fDir = true;
                         } else {
-                            arcType = isARCFile(input);
+                            arcType = isArchiveFile(input);
                         }
                     }
                 } else {
