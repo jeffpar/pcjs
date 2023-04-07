@@ -5413,7 +5413,20 @@
 					"@title": "The Oregon Trail (1990)",
 					"@media": [
 						{
-							"@title": "Oregon Trail 2.1 (1990)",
+							"@title": "Oregon Trail 2.0 (1990)",
+							"@diskette": "OREGON_TRAIL-200.json",
+							"@format": "PC720K",
+							"@photo": "jpg"
+						}
+					],
+					"@author": "MECC",
+					"@version": "2.0"
+				},
+				"1991/oregon_trail": {
+					"@title": "The Oregon Trail (1991)",
+					"@media": [
+						{
+							"@title": "Oregon Trail 2.1 (1991)",
 							"@diskette": "OREGON_TRAIL-210.json",
 							"@format": "PC720K"
 						}

@@ -29,17 +29,17 @@ machines:
      Directory of A:\
 
     CP           <DIR>      12-02-90  10:17a
-    INSTALL  EXE*    63778  12-02-90  12:00a
-    MIKE_DUF FY *     4608   2-12-55  12:00a
-    LD2_1    TZF*   105305  12-02-90  12:00a
-    DI1      QPZ*        4  12-02-90  12:00a
+    INSTALL  EXE*    63778  12-02-90
+    MIKE_DUF FY *     4608   2-12-55
+    LD2_1    TZF*   105305  12-02-90
+    DI1      QPZ*        4  12-02-90
             5 file(s)     173695 bytes
 
      Directory of A:\CP
 
     .            <DIR>      12-02-90  10:17a
     ..           <DIR>      12-02-90  10:17a
-    HOSPITAL RSC*   129800  12-02-90  12:00a
+    HOSPITAL RSC*   129800  12-02-90
             3 file(s)     129800 bytes
 
     Total files listed:
@@ -54,23 +54,23 @@ machines:
      Directory of A:\
 
     CP           <DIR>      11-29-90   3:28p
-    DI2      QPZ*        0  11-29-90  12:00a
+    DI2      QPZ*        0  11-29-90
             2 file(s)          0 bytes
 
      Directory of A:\CP
 
     .            <DIR>      11-29-90   3:28p
     ..           <DIR>      11-29-90   3:28p
-    HIMAGES  EGA*   189727  11-29-90  12:00a
-    HIMAGES  VGA*   352635  11-29-90  12:00a
-    DIMAGES  EGA*   196333  11-29-90  12:00a
-    DIMAGES  VGA*   342761  11-29-90  12:00a
-    CLASS    EGA*    20078  11-29-90  12:00a
-    CLASS    VGA*    25618  11-29-90  12:00a
-    MC       EGA*      230  11-29-90  12:00a
-    MC       VGA*      232  11-29-90  12:00a
-    TITLE    EGA*    13014  11-29-90  12:00a
-    TITLE    VGA*    20286  11-29-90  12:00a
+    HIMAGES  EGA*   189727  11-29-90
+    HIMAGES  VGA*   352635  11-29-90
+    DIMAGES  EGA*   196333  11-29-90
+    DIMAGES  VGA*   342761  11-29-90
+    CLASS    EGA*    20078  11-29-90
+    CLASS    VGA*    25618  11-29-90
+    MC       EGA*      230  11-29-90
+    MC       VGA*      232  11-29-90
+    TITLE    EGA*    13014  11-29-90
+    TITLE    VGA*    20286  11-29-90
            12 file(s)    1160914 bytes
 
     Total files listed:
@@ -85,19 +85,19 @@ machines:
      Directory of A:\
 
     CP           <DIR>      11-29-90   3:31p
-    LD2_2    TZF*    86154  11-29-90  12:00a
-    DI3      QPZ*        0  11-29-90  12:00a
+    LD2_2    TZF*    86154  11-29-90
+    DI3      QPZ*        0  11-29-90
             3 file(s)      86154 bytes
 
      Directory of A:\CP
 
     .            <DIR>      11-29-90   3:31p
     ..           <DIR>      11-29-90   3:31p
-    ANIM     EGA*    85450  11-29-90  12:00a
-    ANIM     VGA*   136645  11-29-90  12:00a
-    OP_SOUND RES*    59382  11-29-90  12:00a
-    OP_IMAGE EGA*   224661  11-29-90  12:00a
-    OP_IMAGE VGA*   348079  11-29-90  12:00a
+    ANIM     EGA*    85450  11-29-90
+    ANIM     VGA*   136645  11-29-90
+    OP_SOUND RES*    59382  11-29-90
+    OP_IMAGE EGA*   224661  11-29-90
+    OP_IMAGE VGA*   348079  11-29-90
             7 file(s)     854217 bytes
 
     Total files listed:
