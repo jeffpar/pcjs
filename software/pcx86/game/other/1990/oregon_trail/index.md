@@ -19,7 +19,7 @@ machines:
 ---
 
 NOTE: There are now *two* versions of "The Oregon Trail" on PCjs.  This is Version 2.0 from 1990, and the machine below
-has been modified to save your progress.  Version 2.1 from 1991 has moved [here](../../1991/oregon_trail).
+has been modified to save your progress.  Version 2.1 from 1991 has moved [here](../../1991/oregon_trail/).
 
 {% include machine.html id="ibm5170-oregon20" %}
 
