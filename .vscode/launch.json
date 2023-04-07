@@ -588,8 +588,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "posts.img",
-        "posts.json"
+        "CHASM.ARC",
+        "--verbose"
       ],
       "cwd": "${workspaceFolder}/tmp",
       "stopOnEntry": false,

@@ -1300,7 +1300,7 @@ class Entry
 
 class ArcEntry extends Entry
 {
-    ArcHeader(data, offset, length)
+    getArcHeader(data, offset, length)
     {
         StreamZip.ArcHeader.setData(data, offset, length);
         /*

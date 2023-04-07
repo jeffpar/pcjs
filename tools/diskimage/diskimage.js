@@ -1940,6 +1940,7 @@ function getARCFiles(zip, fVerbose)
         printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
         printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
     }
+    let errors = "";
     let entries = Object.values(zip.entries());
     for (let entry of entries) {
 
@@ -1988,9 +1989,7 @@ function getARCFiles(zip, fVerbose)
             file.data = data;
         }
         if (entry.errors) {
-            for (let error of entry.errors) {
-                printf("%s\n", error);
-            }
+            for (let error of entry.errors) errors += error + "\n";
         }
         let d, sDir = path.dirname(file.path) + path.sep;
         for (d = 0; d < aDirectories.length; d++) {
@@ -2021,10 +2020,11 @@ function getARCFiles(zip, fVerbose)
             }
             let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
             let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
-            printf("%-14s %7d   %-9s %7d   %3d%%   %T   %08x\n",
-                filename, filesize, method, entry.compressedSize, ratio, file.date, entry.crc);
+            printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
+                filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc);
         }
     }
+    if (errors) printf("%s", errors);
     return aFileData;
 }
 
@@ -2364,6 +2364,7 @@ function processAll(all, argv)
  */
 function processFile(argv)
 {
+    let input;
     let fDir = false, fFiles = false, arcType = 0;
 
     let done = function(di)
@@ -2391,14 +2392,17 @@ function processFile(argv)
                 }
             }
             processDisk(di, input, argv);
+            return true;
         }
+        if (input) printf("warning: %s does not appear to be a supported disk image\n", input);
+        return false;
     };
 
     /*
      * Checking each --dir, --files, etc, for a boolean value allows the user to specify a value
      * without an equal sign (ie, a small convenience).
      */
-    let input = argv['dir'];
+    input = argv['dir'];
     if (input) {
         fDir = true;                // if --dir, the directory should end with a trailing slash (but we'll make sure)
         if (typeof input == "boolean") {
@@ -2459,10 +2463,11 @@ function processFile(argv)
         readDir(input, arcType, argv['label'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
         return true;
     }
+
     if (input) {
-        done(readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData'])));
-        return true;
+        return done(readDisk(input, argv['forceBPB'], argv['sectorID'], argv['sectorError'], readFile(argv['suppData'])));
     }
+
     return false;
 }
 
