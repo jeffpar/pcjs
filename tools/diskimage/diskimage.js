@@ -2004,7 +2004,7 @@ function getArchiveFiles(zip, fVerbose)
         }
         if (fVerbose) {
             let methodsARC = [
-                "Unpacked"
+                "Store", "Method3", "Squeeze", "Method5", "Method6", "Method7", "Crunch", "Squash"
             ];
             let methodsZIP = [
                 "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"

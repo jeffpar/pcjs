@@ -656,8 +656,7 @@
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--arc=tmp/CHASM.ARC",
-        "--output=tmp/CHASM.json",
-        "--overwrite"
+        "--verbose"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
