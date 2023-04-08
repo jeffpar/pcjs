@@ -11,7 +11,7 @@ import events from 'events';
 import zlib from 'zlib';
 import stream from 'stream';
 import Structure from './structure.js';
-import {ARC, LegacyZip} from './legacyzip.js';
+import {LegacyArc, LegacyZip} from './legacyzip.js';
 
 /**
  * @typedef {Object} Config
@@ -726,6 +726,12 @@ export default class StreamZip extends events.EventEmitter {
         case StreamZip.ZIP_STORE:
             dst = src;
             break;
+        case StreamZip.ARC_NR:
+            dst = LegacyArc.repeatSync(src, entry.size).getOutput();
+            break;
+        case StreamZip.ARC_HS:
+            dst = LegacyArc.relaxSync(src, entry.size).getOutput();
+            break;
         case StreamZip.ZIP_SHRINK:
             dst = LegacyZip.stretchSync(src, entry.size).getOutput();
             break;
@@ -758,7 +764,7 @@ export default class StreamZip extends events.EventEmitter {
             }
             else {
                 if (this.arcType == StreamZip.TYPE_ARC) {
-                    let crc = ARC.getCRC(dst);
+                    let crc = LegacyArc.getCRC(dst);
                     if (crc != entry.crc) {
                         this.entry.error("expected CRC 0x" + entry.crc.toString(16) + ", received 0x" + crc.toString(16));
                     }
