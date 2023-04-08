@@ -138,13 +138,13 @@ export default class StreamZip extends events.EventEmitter {
             'ARC_END':  0x00,                           // end of archive
             'ARC_OLD':  0x01,                           // old archive header (unpacked, no 'size' field)
             'ARC_UNP':  0x02,                           // new archive header (unpacked, 'size' == 'compressedSize')
-            'ARC_NR':   0x03,                           // non-repeat packing
-            'ARC_HS':   0x04,                           // Huffman squeezing
+            'ARC_NR':   0x03,                           // non-repeat packing ("pack")
+            'ARC_HS':   0x04,                           // Huffman squeezing ("squeeze")
             'ARC_LZ':   0x05,                           // LZ compression
             'ARC_LZNR': 0x06,                           // LZ non-repeat compression
             'ARC_LZH':  0x07,                           // LZ with new hash
-            'ARC_LZD':  0x08,                           // LZ dynamic
-            'ARC_SQSH': 0x09                            // "squashing"
+            'ARC_LZC':  0x08,                           // LZ dynamic ("crunch")
+            'ARC_LZS':  0x09                            // LZ dynamic ("squash")
         })
         .field('name',          13)                     // filename (null terminated)
         .field('compressedSize',Structure.UINT32)       // compressed size
@@ -156,13 +156,13 @@ export default class StreamZip extends events.EventEmitter {
 
     /* Compression methods */
     static ARC_UNP              = -2;                   // unpacked (no compression)
-    static ARC_NR               = -3;                   // non-repeat packing
-    static ARC_HS               = -4;                   // Huffman squeezing
+    static ARC_NR               = -3;                   // non-repeat packing ("pack")
+    static ARC_HS               = -4;                   // Huffman squeezing ("squeeze")
     static ARC_LZ               = -5;                   // LZ compression
     static ARC_LZNR             = -6;                   // LZ non-repeat compression
     static ARC_LZH              = -7;                   // LZ with new hash
-    static ARC_LZD              = -8;                   // LZ dynamic
-    static ARC_SQSH             = -9;                   // "squashing"
+    static ARC_LZC              = -8;                   // LZ dynamic ("crunch")
+    static ARC_LZS              = -9;                   // LZ dynamic ("squash")
 
     static ZIP_STORE            = 0;                    // no compression
     static ZIP_SHRINK           = 1;                    // shrink
@@ -727,10 +727,16 @@ export default class StreamZip extends events.EventEmitter {
             dst = src;
             break;
         case StreamZip.ARC_NR:
-            dst = LegacyArc.repeatSync(src, entry.size).getOutput();
+            dst = LegacyArc.unpackSync(src, entry.size).getOutput();
             break;
-        case StreamZip.ARC_HS:
-            dst = LegacyArc.relaxSync(src, entry.size).getOutput();
+        case StreamZip.ARC_HS:          // aka "squeeze"
+            dst = LegacyArc.unsqueezeSync(src, entry.size).getOutput();
+            break;
+        case StreamZip.ARC_LZC:         // aka "crunch"
+            dst = LegacyArc.unscrunchSync(src, entry.size, false).getOutput();
+            break;
+        case StreamZip.ARC_LZS:         // aka "squash"
+            dst = LegacyArc.unscrunchSync(src, entry.size, true).getOutput();
             break;
         case StreamZip.ZIP_SHRINK:
             dst = LegacyZip.stretchSync(src, entry.size).getOutput();
