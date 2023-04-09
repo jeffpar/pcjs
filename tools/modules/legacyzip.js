@@ -6,8 +6,11 @@
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  *
- * Stretch(), Expand(), and Explode() functionality adapted from https://www.hanshq.net/files/hwzip/hwzip-2.1.zip
- * Released into the public domain by Hans Wennborg; see https://www.hanshq.net/zip2.html for more details.
+ * Stretch(), Expand(), and Explode() functionality adapted from https://www.hanshq.net/files/hwzip/hwzip-2.1.zip,
+ * as released into the public domain by Hans Wennborg; see https://www.hanshq.net/zip2.html for more details.
+ *
+ * ARC decompression code adapted from ARC source code (C) Copyright 1985-87 by System Enhancement Associates
+ * and Thom Henderson, as released under the terms of the GPL at https://github.com/hyc/arc/blob/master/LICENSE
  *
  * Blast() functionality adapted from https://github.com/madler/zlib/tree/master/contrib/blast
  * Copyright (C) 2003, 2012, 2013 Mark Adler
@@ -18,7 +21,56 @@ import { Buffer } from 'node:buffer';
 const DEBUG = true;
 
 /**
- * Legacy ARC Support
+ * Legacy ARC Support (decompression only)
+ *
+ * Programming notes (from ARC.C v5.21q):
+ *
+ *      ARC Version 2 differs from version 1 in that archive entries
+ *      are automatically compressed when they are added to the archive,
+ *      making a separate compression step unnecessary. The nature of the
+ *      compression is indicated by the header version number placed in
+ *      each archive entry, as follows:
+ *
+ *      1 = Old style, no compression
+ *      2 = New style, no compression
+ *      3 = Compression of repeated characters only
+ *      4 = Compression of repeated characters plus Huffman SQueezing
+ *      5 = Lempel-Zev packing of repeated strings (old style)
+ *      6 = Lempel-Zev packing of repeated strings (new style)
+ *      7 = Lempel-Zev Williams packing with improved hash function
+ *      8 = Dynamic Lempel-Zev packing with adaptive reset
+ *      9 = Dynamic Lempel-Zev packing, larger hash table
+ *
+ *      Type 5, Lempel-Zev packing, was added as of version 4.0
+ *
+ *      Type 6 is Lempel-Zev packing where runs of repeated characters
+ *      have been collapsed, and was added as of version 4.1
+ *
+ *      Type 7 is a variation of Lempel-Zev using a different hash
+ *      function which yields speed improvements of 20-25%, and was
+ *      added as of version 4.6
+ *
+ *      Type 8 is a different implementation of Lempel-Zev, using a
+ *      variable code size and an adaptive block reset, and was added
+ *      as of version 5.0
+ *
+ *      Type 9 is a slight modification of type 8, first used by Phil
+ *      Katz in his PKARC utilities. The primary difference is the use
+ *      of a hash table twice as large as for type 8, and that this
+ *      algorithm called Squashing, doesn't perform run-length encoding
+ *      on the input data.
+ *
+ *      Version 4.3 introduced a temporary file for holding the result
+ *      of the first crunch pass, thus speeding up crunching.
+ *
+ *      Version 4.4 introduced the ARCTEMP environment string, so that
+ *      the temporary crunch file may be placed on a ramdisk. Also
+ *      added was the distinction between Adding a file in all cases,
+ *      and Updating a file only if the disk file is newer than the
+ *      corresponding archive entry.
+ *
+ *      The compression method to use is determined when the file is
+ *      added, based on whichever method yields the smallest result.
  *
  * @class LegacyArc
  */
@@ -72,7 +124,7 @@ export class LegacyArc
      *
      * @param {Buffer} src (crunched or squashed data)
      * @param {number} dst_len
-     * @param {boolean} squashed
+     * @param {boolean} squashed (false if crunched, true if squashed)
      * @returns {Decompress}
      */
     static unscrunchSync(src, dst_len, squashed)
@@ -140,7 +192,7 @@ export class LegacyArc
 }
 
 /**
- * Legacy ZIP Support
+ * Legacy ZIP Support (decompression only)
  *
  * @class LegacyZip
  */
@@ -932,7 +984,7 @@ class Decompress
     getOutput()
     {
         if (this.dst) {
-            // assert(this.dst_pos == this.dst.length);
+            assert(this.dst_pos == this.dst.length);
             if (this.dst_pos < this.dst.length) {
                 this.dst = this.dst.slice(0, this.dst_pos);
             }
@@ -1029,10 +1081,22 @@ class ArcUnpack extends Decompress
     /**
      * putBytes(data, len)
      *
-     * Put NCR coded bytes.
+     * @this {ArcUnpack}
+     * @param {Array} data
+     * @param {number} len
+     */
+    putBytes(data, len)
+    {
+        for (let i = 0; i < len; i++) {
+            this.writeOutput(data[i]);
+        }
+    }
+
+    /**
+     * unpackBytes(data, len)
      *
-     * This routine is used to decode non-repeat (packed) compression.  Bytes
-     * are passed one at a time in coded format, and are written out uncoded.
+     * This routine is used to decode non-repeat (packed) compression streams.
+     * Bytes are passed one at a time in coded format, and are written out uncoded.
      * The data is stored normally, except that runs of more than two characters
      * are represented as:
      *
@@ -1045,7 +1109,7 @@ class ArcUnpack extends Decompress
      * @param {Array} data
      * @param {number} len
      */
-    putBytes(data, len)
+    unpackBytes(data, len)
     {
         for (let i = 0; i < len; i++) {
             if (this.state == LegacyArc.INREP) {
@@ -1082,7 +1146,7 @@ class ArcUnpack extends Decompress
     {
         this.init(src, dst_len);
         let data = Array.from(this.src);
-        this.putBytes(data, data.length);
+        this.unpackBytes(data, data.length);
         return true;
     }
 }
@@ -1094,9 +1158,9 @@ class ArcUnpack extends Decompress
  */
 class ArcUnsqueeze extends ArcUnpack
 {
-    static SPEOF = 256;         // special endfile token
-    static NUMVALS = 257        // 256 data values plus SPEOF
-    static MYDATA = 32766;      // size of data[]
+    static SPEOF = 256;                 // special endfile token
+    static NUMVALS = 257                // 256 data values plus SPEOF
+    static MYDATA = 32766;              // size of data[]
 
     /**
      * init(src, dst_len)
@@ -1109,6 +1173,7 @@ class ArcUnsqueeze extends ArcUnpack
     {
         super.init(src, dst_len);
         this.data = new Array(ArcUnsqueeze.MYDATA);
+
         /*
          * Initialize Huffman unsqueezing (from init_usq() in arcusq.c)
          */
@@ -1116,6 +1181,7 @@ class ArcUnsqueeze extends ArcUnpack
         if (this.numNodes >= ArcUnsqueeze.NUMVALS) {
             throw new Error("invalid decode tree");
         }
+
         /*
          * Initialize for possible empty tree (SPEOF only)
          *
@@ -1123,12 +1189,12 @@ class ArcUnsqueeze extends ArcUnpack
          */
         this.node = new Array(this.numNodes);
         this.node[0] = {child: [-(ArcUnsqueeze.SPEOF + 1), -(ArcUnsqueeze.SPEOF + 1)]};
+
         /*
          * Get decoding tree from file
          *
-         * NOTE: The 16-bit values being pulled from the bit stream (child[0] and child[1]) are signed;
-         * bits() zeroes all the bits above the number requested, so a 16-bit value will never be signed,
-         * and so we must extend the sign bit ourselves.
+         * NOTE: The 16-bit values being pulled from the bit stream (child[0] and child[1]) are signed,
+         * so we must fetch them using bitsSigned() instead of bits().
          */
         for (let i = 0; i < this.numNodes; ++i) {
             this.node[i] = {child: [this.bs.bitsSigned(16, true), this.bs.bitsSigned(16, true)]};
@@ -1146,12 +1212,12 @@ class ArcUnsqueeze extends ArcUnpack
     getBytes(data)
     {
         let j;
-        let o = 0;              // data index
+        let o = 0;                      // data index
         for (j = 0; j < data.length; j++) {
             /*
              * Follow bit stream in tree to a leaf
              */
-            let i;              // tree index
+            let i;                      // tree index
             for (i = 0; i >= 0;) {
                 /*
                  * Work down(up?) from root
@@ -1189,7 +1255,7 @@ class ArcUnsqueeze extends ArcUnpack
         this.init(src, dst_len);
         do {
             len = this.getBytes(this.data);
-            this.putBytes(this.data, len);
+            this.unpackBytes(this.data, len);
         } while (len == ArcUnsqueeze.MYDATA);
         return true;
     }
@@ -1202,9 +1268,30 @@ class ArcUnsqueeze extends ArcUnpack
  */
 class ArcUnscrunch extends ArcUnpack
 {
-    static SPEOF = 256;         // special endfile token
-    static NUMVALS = 257        // 256 data values plus SPEOF
-    static MYDATA = 32766;      // size of data[]
+    /*
+     * Definitions for the new dynamic Lempel-Zev crunching
+     */
+    static CRBITS   = 12;               // maximum bits per code
+    static CRHSIZE  = 5003;             // 80% occupancy
+    static CRGAP    = 2048;             // ratio check interval
+    static SQBITS   = 13;               // Squash values of above
+    static SQHSIZE  = 10007;
+    static SQGAP    = 10000;
+    static INIT_BITS = 9;               // initial number of bits/code
+
+    /*
+     * The next two codes should not be changed lightly, as they must not lie
+     * within the contiguous general code space.
+     */
+    static FIRST    = 257;              // first free entry
+    static CLEAR    = 256;              // table clear output code
+
+    static RMASK = [                    // right side masks
+        0x00, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff
+    ];
+    static LMASK = [                    // left side masks (merely for completeness)
+        0xff, 0xfe, 0xfc, 0xf8, 0xf0, 0xe0, 0xc0, 0x80, 0x00
+    ];
 
     /**
      * init(src, dst_len, squashed)
@@ -1212,11 +1299,132 @@ class ArcUnscrunch extends ArcUnpack
      * @this {ArcUnscrunch}
      * @param {Buffer} src
      * @param {number} dst_len
-     * @param {boolean} squashed
+     * @param {boolean} squashed (false if crunched, true if squashed)
      */
     init(src, dst_len, squashed)
     {
         super.init(src, dst_len);
+        this.data = new Array(ArcUnsqueeze.MYDATA);
+
+        this.suffix = /* (u_char *) */ new Array(ArcUnscrunch.SQHSIZE /* * sizeof(u_char)*4 */);
+        this.prefix = /* (u_short *) */ new Array(ArcUnscrunch.SQHSIZE /* * sizeof(u_short) */);
+        this.stack = new Array(2048);               // TODO: figure out the minimum size
+        if (squashed) {
+            this.maxBits = ArcUnscrunch.SQBITS;
+            this.output = this.putBytes.bind(this);
+        } else {
+            this.maxBits = ArcUnscrunch.CRBITS;
+            this.output = this.unpackBytes.bind(this);
+            let code = this.bs.bits(8, true);
+            if (code != this.maxBits) {
+                throw new Error("file packed with " + code + " bits (maximum is " + this.maxBits + ")");
+            }
+        }
+
+        this.max_maxcode = 1 << this.maxBits;       // largest possible code (+1)
+        this.clear_flg = 0;
+        this.n_bits = ArcUnscrunch.INIT_BITS;       // number of bits/code
+        this.maxcode = this.maxCode(this.n_bits);
+        this.free_ent = ArcUnscrunch.FIRST;
+        this.offset = this.size = 0;
+        this.buf = new Array(ArcUnscrunch.SQBITS);
+
+        /*
+         * Initialize the first 256 entries in the tables.
+         */
+        this.prefix.fill(0, 0, 256);
+        for (let code = 255; code >= 0; code--) this.suffix[code] = code;
+    }
+
+    /**
+     * maxCode(nBits)
+     *
+     * @this {ArcUnscrunch}
+     * @param {number} nBits
+     * @returns {number}
+     */
+    maxCode(nBits)
+    {
+        return (1 << nBits) - 1;        // maximum code calculation
+    }
+
+    /**
+     * getCode()
+     *
+     * @this {ArcUnscrunch}
+     * @returns {number}
+     */
+    getCode()
+    {
+        let code, r_off, bits, bp = 0;
+
+        if (this.clear_flg > 0 || this.offset >= this.size || this.free_ent > this.maxcode) {
+            /*
+             * If the next entry will be too big for the current code
+             * size, then we must increase the size. This implies reading
+             * a new buffer full, too.
+             */
+            if (this.free_ent > this.maxcode) {
+                this.n_bits++;
+                if (this.n_bits == this.maxBits) {
+                    this.maxcode = this.max_maxcode;
+                } else {
+                    this.maxcode = this.maxCode(this.n_bits);
+                }
+            }
+            if (this.clear_flg > 0) {
+                this.maxcode = this.maxCode(this.n_bits = ArcUnscrunch.INIT_BITS);
+                this.clear_flg = 0;
+            }
+            for (this.size = 0; this.size < this.n_bits; this.size++) {
+                if (this.bs.empty()) {
+                    code = -1;
+                    break;
+                }
+                code = this.bs.bits(8, true);
+                this.buf[this.size] = code;
+            }
+            if (this.size <= 0) {
+                return -1;
+            }
+            this.offset = 0;
+            /*
+             * Round size down to integral number of codes
+             */
+            this.size = (this.size << 3) - (this.n_bits - 1);
+        }
+        r_off = this.offset;
+        bits = this.n_bits;
+
+        /*
+         * Get to the first byte.
+         */
+        bp += (r_off >> 3);
+        r_off &= 7;
+
+        /*
+         * Get first part (low order bits)
+         */
+        code = (this.buf[bp++] >> r_off);
+        bits -= 8 - r_off;
+        r_off = 8 - r_off;
+
+        /*
+         * Get any 8 bit parts in the middle (<=1 for up to 16 bits).
+         */
+        if (bits >= 8) {
+            code |= this.buf[bp++] << r_off;
+            r_off += 8;
+            bits -= 8;
+        }
+
+        /*
+         * Get high order bits.
+         */
+        code |= (this.buf[bp] & ArcUnscrunch.RMASK[bits]) << r_off;
+        this.offset += this.n_bits;
+
+        return code & this.maxCode(this.maxBits);
     }
 
     /**
@@ -1224,15 +1432,103 @@ class ArcUnscrunch extends ArcUnpack
      *
      * Decompresses a crunched or squashed stream.
      *
+     * This routine adapts to the codes in the file, building the string table on-the-fly,
+     * requiring no table to be stored in the compressed file.
+     *
      * @this {ArcUnscrunch}
      * @param {Buffer} src
      * @param {number} dst_len
-     * @param {boolean} squashed
+     * @param {boolean} squashed (false if crunched, true if squashed)
      * @returns {boolean|null}
      */
     decomp(src, dst_len, squashed)
     {
         this.init(src, dst_len, squashed);
+
+        if (this.bs.empty()) {
+            return false;
+        }
+
+        let chunks = 0;
+
+        let o = 0;                      // data index
+        let p = 0;                      // stack pointer
+        let code, oldcode, incode;
+        let finchar = oldcode = this.getCode();
+
+        if (oldcode == -1) {            // EOF?
+            return false;               // get out
+        }
+        this.data[o++] = finchar;       // first code is char
+
+        while ((code = this.getCode()) > -1) {
+            if (code == ArcUnscrunch.CLEAR) {
+                /*
+                 * Reset string table.
+                 */
+                this.prefix.fill(0, 0, 256);
+                this.clear_flg = 1;
+                this.free_ent = ArcUnscrunch.FIRST - 1;
+                code = this.getCode();
+                if (code == -1) {       // O, untimely death! */
+                    break;
+                }
+            }
+            let incode = code;
+
+            /*
+             * Special case for KwKwK string.
+             */
+            if (code >= this.free_ent) {
+                if (code > this.free_ent) {
+                    throw new Error("corrupted compressed file (code " + code + ", max " + this.free_ent + ")");
+                }
+                this.stack[p++] = finchar;
+                code = oldcode;
+            }
+
+            /*
+             * Generate output characters in reverse order
+             */
+            while (code >= 256) {
+                this.stack[p++] = this.suffix[code];
+                code = this.prefix[code];
+            }
+            this.stack[p++] = finchar = this.suffix[code];
+
+            /*
+             * And put them out in forward order
+             */
+            do {
+                this.data[o++] = this.stack[--p];
+                if (o == this.data.length) {
+                    this.output(this.data, o);
+                    o = 0;
+                    chunks++;
+                }
+            } while (p > 0);
+
+            if (chunks == 5) {
+                break;
+            }
+
+            /*
+             * Generate the new entry.
+             */
+            if ((code = this.free_ent) < this.max_maxcode) {
+                this.prefix[code] = oldcode;
+                this.suffix[code] = finchar;
+                this.free_ent = code + 1;
+            }
+
+            /*
+             * Remember previous code.
+             */
+            oldcode = incode;
+        }
+        if (o > 0) {
+            this.output(this.data, o);
+        }
         return true;
     }
 }

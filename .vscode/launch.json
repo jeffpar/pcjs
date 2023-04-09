@@ -655,10 +655,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--arc=tmp/CHASM.ARC",
-        "--verbose"
+        "--arc=CHASM.ARC",
+        "--verbose=CHASM.DOC",
+        "--extract=CHASM.DOC",
+        "--overwrite"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/tmp",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

@@ -906,7 +906,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
     }
 
     sPath = path.join(sDir, subDir, sPath);
-    let sFile = sPath.substr(sDir.length? sDir.length + 1 : 0);
+    let sFile = sPath.substr(sDir != '.' && sDir.length? sDir.length + 1 : 0);
 
     let fSuccess = false;
     let dir = path.dirname(sPath);
@@ -1966,9 +1966,9 @@ function getArchiveFiles(zip, fVerbose)
             aDirectories.push(file);
         } else {
             let data;
-            if (fVerbose == "nodata") {
+            if (typeof fVerbose == "string" && (fVerbose == "skip" || fVerbose != entry.name)) {
                 /*
-                 * HACK to skip decompression (--verbose=nodata)
+                 * HACK to skip decompression for all entries (--verbose=nodata) or all entries except the named entry.
                  */
                 data = new DataBuffer(entry.size);
             }
