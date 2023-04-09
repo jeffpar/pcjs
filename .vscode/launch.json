@@ -655,10 +655,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--arc=CHASM.ARC",
-        "--verbose=CHASM.DOC",
-        "--extract=CHASM.DOC",
-        "--overwrite"
+        "--arc=CUE.ARC",
+        "--verbose"
       ],
       "cwd": "${workspaceFolder}/tmp",
       "stopOnEntry": false,

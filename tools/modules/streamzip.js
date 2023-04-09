@@ -16,6 +16,7 @@ import {LegacyArc, LegacyZip} from './legacyzip.js';
 /**
  * @typedef {Object} Config
  * @property {string} file (filename; required, unless fd is specified)
+ * @property {string} password (decryption password; optional)
  * @property {Buffer} buffer (buffer; optional, and if present, used instead of file/fd)
  * @property {boolean} arcType (ARC file if 1, ZIP file if 2 or undefined; added for PCjs)
  * @property {boolean} storeEntries (default is true; ie, always store entries)
@@ -233,6 +234,7 @@ export default class StreamZip extends events.EventEmitter {
         this.ready = false;
         this.#entries = config.storeEntries !== false? {} : null,
         this.fileName = config.file,
+        this.password = typeof config.password == "string"? config.password.toUpperCase() : null;
         this.buffer = config.buffer;
         this.arcType = config.arcType || StreamZip.TYPE_ZIP;
         this.textDecoder = config.nameEncoding? new TextDecoder(config.nameEncoding) : null;
@@ -720,59 +722,106 @@ export default class StreamZip extends events.EventEmitter {
             }
         }
         let dst;
-        let largeWindow, literalTree;
-        switch(entry.method) {
-        case StreamZip.ARC_UNP:
-        case StreamZip.ZIP_STORE:
-            dst = src;
-            break;
-        case StreamZip.ARC_NR:
-            dst = LegacyArc.unpackSync(src, entry.size).getOutput();
-            break;
-        case StreamZip.ARC_HS:          // aka "squeeze"
-            dst = LegacyArc.unsqueezeSync(src, entry.size).getOutput();
-            break;
-        case StreamZip.ARC_LZC:         // aka "crunch"
-            dst = LegacyArc.unscrunchSync(src, entry.size, false).getOutput();
-            break;
-        case StreamZip.ARC_LZS:         // aka "squash"
-            dst = LegacyArc.unscrunchSync(src, entry.size, true).getOutput();
-            break;
-        case StreamZip.ZIP_SHRINK:
-            dst = LegacyZip.stretchSync(src, entry.size).getOutput();
-            break;
-        case StreamZip.ZIP_REDUCE1:
-        case StreamZip.ZIP_REDUCE2:
-        case StreamZip.ZIP_REDUCE3:
-        case StreamZip.ZIP_REDUCE4:
-            dst = LegacyZip.expandSync(src, entry.size, entry.method - StreamZip.ZIP_REDUCE1 + 1).getOutput();
-            break;
-        case StreamZip.ZIP_IMPLODE:
-            largeWindow = !!(entry.flags & StreamZip.LocalHeader.flags.COMP1);
-            literalTree = !!(entry.flags & StreamZip.LocalHeader.flags.COMP2);
-            dst = LegacyZip.explodeSync(src, entry.size, largeWindow, literalTree).getOutput();
-            break;
-        case StreamZip.ZIP_IMPLODE_DCL:
-            dst = LegacyZip.blastSync(src).getOutput();
-            break;
-        case StreamZip.ZIP_DEFLATE:
-        case StreamZip.ZIP_DEFLATE64:
-            dst = zlib.inflateRawSync(src);
-            break;
-        default:
-            entry.error("unsupported compression method (" + entry.method + ")");
-            dst = null;
-            break;
+        /*
+         * The actual decompression is now inside a loop AND a try/catch block, to automatically retry
+         * decryption in case 1) a password was supplied but not actually required (the ARC file doesn't tell
+         * us one way or the other) or 2) the ARC contains a mixture of encrypted and unencrypted files.
+         *
+         * With ARC files, our only clue that no password (or a different password) is required is when
+         * decompression fails, and failure can take almost any form, since we're feeding the decompressor
+         * garbage.
+         *
+         * In the rare case where we do make a 2nd attempt, re-running the password code will restore the
+         * src data to its original state, and entry.reset() will clear any logged errors from the 1st attempt.
+         */
+        let attempts = 2;                       // maximum of two attempts
+        while (attempts--) {
+            try {
+                if (this.arcType != StreamZip.TYPE_ARC || !this.password) {
+                    attempts = 0;               // only one attempt for the normal case
+                } else {
+                    /*
+                     * TODO: decryption of password-protected files is limited to ARC archives, because
+                     * the ARC implementation is simple and I haven't looked into how PKZIP implemented it yet.
+                     */
+                    for (let off = 0; off < src.length; off++) {
+                        src.writeUInt8(src.readUInt8(off) ^ this.password.charCodeAt(off % this.password.length), off);
+                    }
+                    /*
+                     * ARC file headers don't have a "flags" field, but we still include a flags field in the entry object,
+                     * and we borrow the "ENC" flag from the ZIP file header definition to track whether this particular file
+                     * was encrypted.
+                     */
+                    if (attempts) {
+                        entry.flags |= StreamZip.LocalHeader.flags.ENC;
+                    } else {
+                        entry.reset();          // clear any errors from the previous attempt
+                        entry.flags &= ~StreamZip.LocalHeader.flags.ENC;
+                    }
+                }
+                let largeWindow, literalTree;
+                switch(entry.method) {
+                case StreamZip.ARC_UNP:
+                case StreamZip.ZIP_STORE:
+                    dst = src;
+                    break;
+                case StreamZip.ARC_NR:          // aka "pack"
+                    dst = LegacyArc.unpackSync(src, entry.size).getOutput();
+                    break;
+                case StreamZip.ARC_HS:          // aka "squeeze"
+                    dst = LegacyArc.unsqueezeSync(src, entry.size).getOutput();
+                    break;
+                case StreamZip.ARC_LZC:         // aka "crunch"
+                    dst = LegacyArc.unscrunchSync(src, entry.size, false).getOutput();
+                    break;
+                case StreamZip.ARC_LZS:         // aka "squash"
+                    dst = LegacyArc.unscrunchSync(src, entry.size, true).getOutput();
+                    break;
+                case StreamZip.ZIP_SHRINK:
+                    dst = LegacyZip.stretchSync(src, entry.size).getOutput();
+                    break;
+                case StreamZip.ZIP_REDUCE1:
+                case StreamZip.ZIP_REDUCE2:
+                case StreamZip.ZIP_REDUCE3:
+                case StreamZip.ZIP_REDUCE4:
+                    dst = LegacyZip.expandSync(src, entry.size, entry.method - StreamZip.ZIP_REDUCE1 + 1).getOutput();
+                    break;
+                case StreamZip.ZIP_IMPLODE:
+                    largeWindow = !!(entry.flags & StreamZip.LocalHeader.flags.COMP1);
+                    literalTree = !!(entry.flags & StreamZip.LocalHeader.flags.COMP2);
+                    dst = LegacyZip.explodeSync(src, entry.size, largeWindow, literalTree).getOutput();
+                    break;
+                case StreamZip.ZIP_IMPLODE_DCL:
+                    dst = LegacyZip.blastSync(src).getOutput();
+                    break;
+                case StreamZip.ZIP_DEFLATE:
+                case StreamZip.ZIP_DEFLATE64:
+                    dst = zlib.inflateRawSync(src);
+                    break;
+                default:
+                    entry.error("unsupported compression method (" + entry.method + ")");
+                    dst = null;
+                    attempts = 0;
+                    break;
+                }
+                if (dst) break;
+            } catch(e) {
+                entry.error(e.message);
+            }
         }
         if (dst) {
             if (dst.length !== entry.size) {
                 entry.error("expected " + entry.size + " bytes, received " + dst.length + " (method " + entry.method + ")");
             }
             else {
+                /*
+                 * If the sizes didn't match, then it's pretty much a given that the CRCs won't match either,
+                 * so let's cut down on unnecessary errors.
+                 */
                 if (this.arcType == StreamZip.TYPE_ARC) {
                     let crc = LegacyArc.getCRC(dst);
                     if (crc != entry.crc) {
-                        this.entry.error("expected CRC 0x" + entry.crc.toString(16) + ", received 0x" + crc.toString(16));
+                        entry.error("expected CRC 0x" + entry.crc.toString(16) + ", received 0x" + crc.toString(16));
                     }
                 } else {
                     if (this.canVerifyCRC(entry)) {
@@ -781,8 +830,6 @@ export default class StreamZip extends events.EventEmitter {
                     }
                 }
             }
-        } else if (dst === undefined) {
-            entry.error("decompression failure (" + entry.method + ")");
         }
         return dst;
     }
@@ -1284,6 +1331,12 @@ class Entry
         if (streamZip.config.logErrors) {
             this.errors = [];
         }
+        this.flags = 0;
+    }
+
+    reset()
+    {
+        if (this.errors) this.errors = [];
     }
 
     error(msg, type = "error")
