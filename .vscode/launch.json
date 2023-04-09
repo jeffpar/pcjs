@@ -655,7 +655,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--arc=CUE.ARC",
+        "--arc=123EGA.ARC",
+        "--extract",
+        "--overwrite",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}/tmp",

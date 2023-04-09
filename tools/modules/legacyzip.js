@@ -1145,7 +1145,7 @@ class ArcUnpack extends Decompress
     decomp(src, dst_len)
     {
         this.init(src, dst_len);
-        let data = Array.from(this.src);
+        let data = Array.from(src);
         this.unpackBytes(data, data.length);
         return true;
     }
