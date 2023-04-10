@@ -143,7 +143,7 @@ export default class StreamZip extends events.EventEmitter {
             'ARC_HS':   0x04,                           // Huffman squeezing ("squeeze")
             'ARC_LZ':   0x05,                           // LZ compression
             'ARC_LZNR': 0x06,                           // LZ non-repeat compression
-            'ARC_LZH':  0x07,                           // LZ with new hash
+            'ARC_LZNH': 0x07,                           // LZ with new hash
             'ARC_LZC':  0x08,                           // LZ dynamic ("crunch")
             'ARC_LZS':  0x09                            // LZ dynamic ("squash")
         })
@@ -161,7 +161,7 @@ export default class StreamZip extends events.EventEmitter {
     static ARC_HS               = -4;                   // Huffman squeezing ("squeeze")
     static ARC_LZ               = -5;                   // LZ compression
     static ARC_LZNR             = -6;                   // LZ non-repeat compression
-    static ARC_LZH              = -7;                   // LZ with new hash
+    static ARC_LZNH             = -7;                   // LZ with new hash
     static ARC_LZC              = -8;                   // LZ dynamic ("crunch")
     static ARC_LZS              = -9;                   // LZ dynamic ("squash")
 
@@ -728,7 +728,7 @@ export default class StreamZip extends events.EventEmitter {
          * us one way or the other) or 2) the ARC contains a mixture of encrypted and unencrypted files.
          *
          * With ARC files, our only clue that no password (or a different password) is required is when
-         * decompression fails, and failure can take almost any form, since we're feeding the decompressor
+         * decompression fails, and failure can take almost any form, since we may be feeding the decompressor
          * garbage.
          *
          * In the rare case where we do make a 2nd attempt, re-running the password code will restore the
@@ -765,17 +765,26 @@ export default class StreamZip extends events.EventEmitter {
                 case StreamZip.ZIP_STORE:
                     dst = src;
                     break;
-                case StreamZip.ARC_NR:          // aka "pack"
+                case StreamZip.ARC_NR:          // aka "Pack"
                     dst = LegacyArc.unpackSync(src, entry.size).getOutput();
                     break;
-                case StreamZip.ARC_HS:          // aka "squeeze"
+                case StreamZip.ARC_HS:          // aka "Squeeze" (technically, Huffman squeezing)
                     dst = LegacyArc.unsqueezeSync(src, entry.size).getOutput();
                     break;
-                case StreamZip.ARC_LZC:         // aka "crunch"
-                    dst = LegacyArc.unscrunchSync(src, entry.size, false).getOutput();
+                case StreamZip.ARC_LZ:          // aka "Crunch5" (LZ compression)
+                    dst = LegacyArc.uncrunchSync(src, entry.size, 0).getOutput();
                     break;
-                case StreamZip.ARC_LZS:         // aka "squash"
-                    dst = LegacyArc.unscrunchSync(src, entry.size, true).getOutput();
+                case StreamZip.ARC_LZNR:        // aka "Crunch6" (LZ non-repeat compression)
+                    dst = LegacyArc.uncrunchSync(src, entry.size, 1).getOutput();
+                    break;
+                case StreamZip.ARC_LZNH:        // aka "Crunch7" (LZ with new hash)
+                    dst = LegacyArc.uncrunchSync(src, entry.size, 2).getOutput();
+                    break;
+                case StreamZip.ARC_LZC:         // aka "Crush" (dynamic LZW)
+                    dst = LegacyArc.uncrushSync(src, entry.size, false).getOutput();
+                    break;
+                case StreamZip.ARC_LZS:         // aka "Squash"
+                    dst = LegacyArc.uncrushSync(src, entry.size, true).getOutput();
                     break;
                 case StreamZip.ZIP_SHRINK:
                     dst = LegacyZip.stretchSync(src, entry.size).getOutput();
@@ -799,8 +808,6 @@ export default class StreamZip extends events.EventEmitter {
                     dst = zlib.inflateRawSync(src);
                     break;
                 default:
-                    entry.error("unsupported compression method (" + entry.method + ")");
-                    dst = null;
                     attempts = 0;
                     break;
                 }
@@ -829,6 +836,10 @@ export default class StreamZip extends events.EventEmitter {
                         verify.data(dst);
                     }
                 }
+            }
+        } else {
+            if (!entry.errors || entry.errors && !entry.errors.length) {
+                entry.error("unsupported compression method (" + entry.method + ")");
             }
         }
         return dst;

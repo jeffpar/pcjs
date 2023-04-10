@@ -120,20 +120,37 @@ export class LegacyArc
     }
 
     /**
-     * unscrunchSync(src, dst_len, squashed)
+     * uncrunchSync(src, dst_len, type)
      *
-     * @param {Buffer} src (crunched or squashed data)
+     * @param {Buffer} src (crunched data)
      * @param {number} dst_len
-     * @param {boolean} squashed (false if crunched, true if squashed)
+     * @param {number} type (0 for unpacked, 1 for packed, 2 for packed w/new hash)
      * @returns {Decompress}
      */
-    static unscrunchSync(src, dst_len, squashed)
+    static uncrunchSync(src, dst_len, type)
     {
-        let unscrunch = new ArcUnscrunch();
-        if (!unscrunch.decomp(src, dst_len, squashed)) {
-            delete unscrunch.dst;
+        let uncrunch = new ArcUncrunch(type);
+        if (!uncrunch.decomp(src, dst_len)) {
+            delete uncrunch.dst;
         }
-        return unscrunch;
+        return uncrunch;
+    }
+
+    /**
+     * uncrushSync(src, dst_len, squashed)
+     *
+     * @param {Buffer} src (crushed or squashed data)
+     * @param {number} dst_len
+     * @param {boolean} squashed (false if crushed, true if squashed)
+     * @returns {Decompress}
+     */
+    static uncrushSync(src, dst_len, squashed)
+    {
+        let uncrush = new ArcUncrush();
+        if (!uncrush.decomp(src, dst_len, squashed)) {
+            delete uncrush.dst;
+        }
+        return uncrush;
     }
 
     static crctab = [   // CRC lookup table
@@ -1064,6 +1081,8 @@ class Decompress
  */
 class ArcUnpack extends Decompress
 {
+    static MYDATA = 32766;              // size of data[]
+
     /**
      * init(src, dst_len)
      *
@@ -1160,7 +1179,6 @@ class ArcUnsqueeze extends ArcUnpack
 {
     static SPEOF = 256;                 // special endfile token
     static NUMVALS = 257                // 256 data values plus SPEOF
-    static MYDATA = 32766;              // size of data[]
 
     /**
      * init(src, dst_len)
@@ -1172,7 +1190,7 @@ class ArcUnsqueeze extends ArcUnpack
     init(src, dst_len)
     {
         super.init(src, dst_len);
-        this.data = new Array(ArcUnsqueeze.MYDATA);
+        this.data = new Array(ArcUnpack.MYDATA);
 
         /*
          * Initialize Huffman unsqueezing (from init_usq() in arcusq.c)
@@ -1256,20 +1274,70 @@ class ArcUnsqueeze extends ArcUnpack
         do {
             len = this.getBytes(this.data);
             this.unpackBytes(this.data, len);
-        } while (len == ArcUnsqueeze.MYDATA);
+        } while (len == ArcUnpack.MYDATA);
         return true;
     }
 }
 
 /**
- * @class ArcUnscrunch
+ * @class ArcUncrunch
  *
- * ArcUnscrunch is used to decompress crunched or squashed streams.
+ * ArcUncrunch is used to decompress crunched streams.
  */
-class ArcUnscrunch extends ArcUnpack
+class ArcUncrunch extends ArcUnpack
+{
+    /**
+     * constructor(type)
+     *
+     * @this {ArcUncrunch}
+     * @param {number} type
+     */
+    constructor(type)
+    {
+        super();
+        this.type = type;
+    }
+
+    /**
+     * init(src, dst_len)
+     *
+     * @this {ArcUncrunch}
+     * @param {Buffer} src
+     * @param {number} dst_len
+     */
+    init(src, dst_len)
+    {
+        super.init(src, dst_len);
+        this.data = new Array(ArcUnpack.MYDATA);
+    }
+
+    /**
+     * decomp(src, dst_len)
+     *
+     * Decompresses a crunched stream.
+     *
+     * @this {ArcUncrunch}
+     * @param {Buffer} src
+     * @param {number} dst_len
+     * @returns {boolean|null}
+     */
+    decomp(src, dst_len)
+    {
+        this.init(src, dst_len);
+
+        return false;
+    }
+}
+
+/**
+ * @class ArcUncrush
+ *
+ * ArcUncrush is used to decompress crushed or squashed streams.
+ */
+class ArcUncrush extends ArcUnpack
 {
     /*
-     * Definitions for the new dynamic Lempel-Zev crunching
+     * Definitions for the new dynamic Lempel-Zev crunch (herein referred to as "crush")
      */
     static CRBITS   = 12;               // maximum bits per code
     static CRHSIZE  = 5003;             // 80% occupancy
@@ -1296,24 +1364,24 @@ class ArcUnscrunch extends ArcUnpack
     /**
      * init(src, dst_len, squashed)
      *
-     * @this {ArcUnscrunch}
+     * @this {ArcUncrush}
      * @param {Buffer} src
      * @param {number} dst_len
-     * @param {boolean} squashed (false if crunched, true if squashed)
+     * @param {boolean} squashed (false if crushed, true if squashed)
      */
     init(src, dst_len, squashed)
     {
         super.init(src, dst_len);
-        this.data = new Array(ArcUnsqueeze.MYDATA);
+        this.data = new Array(ArcUnpack.MYDATA);
 
-        this.suffix = /* (u_char *) */ new Array(ArcUnscrunch.SQHSIZE /* * sizeof(u_char)*4 */);
-        this.prefix = /* (u_short *) */ new Array(ArcUnscrunch.SQHSIZE /* * sizeof(u_short) */);
+        this.suffix = /* (u_char *) */ new Array(ArcUncrush.SQHSIZE /* * sizeof(u_char)*4 */);
+        this.prefix = /* (u_short *) */ new Array(ArcUncrush.SQHSIZE /* * sizeof(u_short) */);
         this.stack = new Array(2048);               // TODO: figure out the minimum size
         if (squashed) {
-            this.maxBits = ArcUnscrunch.SQBITS;
+            this.maxBits = ArcUncrush.SQBITS;
             this.output = this.putBytes.bind(this);
         } else {
-            this.maxBits = ArcUnscrunch.CRBITS;
+            this.maxBits = ArcUncrush.CRBITS;
             this.output = this.unpackBytes.bind(this);
             let code = this.bs.bits(8, true);
             if (code != this.maxBits) {
@@ -1323,11 +1391,11 @@ class ArcUnscrunch extends ArcUnpack
 
         this.max_maxcode = 1 << this.maxBits;       // largest possible code (+1)
         this.clear_flg = 0;
-        this.n_bits = ArcUnscrunch.INIT_BITS;       // number of bits/code
+        this.n_bits = ArcUncrush.INIT_BITS;       // number of bits/code
         this.maxcode = this.maxCode(this.n_bits);
-        this.free_ent = ArcUnscrunch.FIRST;
+        this.free_ent = ArcUncrush.FIRST;
         this.offset = this.size = 0;
-        this.buf = new Array(ArcUnscrunch.SQBITS);
+        this.buf = new Array(ArcUncrush.SQBITS);
 
         /*
          * Initialize the first 256 entries in the tables.
@@ -1339,7 +1407,7 @@ class ArcUnscrunch extends ArcUnpack
     /**
      * maxCode(nBits)
      *
-     * @this {ArcUnscrunch}
+     * @this {ArcUncrush}
      * @param {number} nBits
      * @returns {number}
      */
@@ -1351,7 +1419,7 @@ class ArcUnscrunch extends ArcUnpack
     /**
      * getCode()
      *
-     * @this {ArcUnscrunch}
+     * @this {ArcUncrush}
      * @returns {number}
      */
     getCode()
@@ -1373,7 +1441,7 @@ class ArcUnscrunch extends ArcUnpack
                 }
             }
             if (this.clear_flg > 0) {
-                this.maxcode = this.maxCode(this.n_bits = ArcUnscrunch.INIT_BITS);
+                this.maxcode = this.maxCode(this.n_bits = ArcUncrush.INIT_BITS);
                 this.clear_flg = 0;
             }
             for (this.size = 0; this.size < this.n_bits; this.size++) {
@@ -1421,7 +1489,7 @@ class ArcUnscrunch extends ArcUnpack
         /*
          * Get high order bits.
          */
-        code |= (this.buf[bp] & ArcUnscrunch.RMASK[bits]) << r_off;
+        code |= (this.buf[bp] & ArcUncrush.RMASK[bits]) << r_off;
         this.offset += this.n_bits;
 
         return code & this.maxCode(this.maxBits);
@@ -1430,15 +1498,15 @@ class ArcUnscrunch extends ArcUnpack
     /**
      * decomp(src, dst_len, squashed)
      *
-     * Decompresses a crunched or squashed stream.
+     * Decompresses a crushed or squashed stream.
      *
      * This routine adapts to the codes in the file, building the string table on-the-fly,
      * requiring no table to be stored in the compressed file.
      *
-     * @this {ArcUnscrunch}
+     * @this {ArcUncrush}
      * @param {Buffer} src
      * @param {number} dst_len
-     * @param {boolean} squashed (false if crunched, true if squashed)
+     * @param {boolean} squashed (false if crushed, true if squashed)
      * @returns {boolean|null}
      */
     decomp(src, dst_len, squashed)
@@ -1462,13 +1530,13 @@ class ArcUnscrunch extends ArcUnpack
         this.data[o++] = finchar;       // first code is char
 
         while ((code = this.getCode()) > -1) {
-            if (code == ArcUnscrunch.CLEAR) {
+            if (code == ArcUncrush.CLEAR) {
                 /*
                  * Reset string table.
                  */
                 this.prefix.fill(0, 0, 256);
                 this.clear_flg = 1;
-                this.free_ent = ArcUnscrunch.FIRST - 1;
+                this.free_ent = ArcUncrush.FIRST - 1;
                 code = this.getCode();
                 if (code == -1) {       // O, untimely death! */
                     break;

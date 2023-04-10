@@ -2003,11 +2003,17 @@ function getArchiveFiles(zip, fVerbose)
              *
              * I've not yet seen any examples of Method5 or Method7 "in the wild", but I have seen Method6
              * (see PC-SIG DISK0568: 123EGA.ARC), which PKXARC.EXE called "crunched" (with a lower-case "c"),
-             * distinct from Method8 which it called "Crunched" (with an upper-case "C").  That's not very
-             * clear, so I think I'll continue to display Method6 as, um, "Method6" instead.
+             * distinct from Method8 which it called "Crunched" (with an upper-case "C").
+             *
+             * Technically, yes, methods 5-7 and method 8 were all called "crunching", but 5-7 performed LZW
+             * compression (with unpacked (5), packed (6), and "new hash" (7) variants) while method 8 performed
+             * "dynamic" LZW compression.
+             *
+             * To distinguish the methods better, I'm going call 5-7 "Crunch" and 8 "Crush", placing method 8
+             * squarely between "Crunch" and "Squash".
              */
             let methodsARC = [
-                "Store", "Pack", "Squeeze", "Method5", "Method6", "Method7", "Crunch", "Squash"
+                "Store", "Pack", "Squeeze", "Crunch5", "Crunch", "Crunch7", "Crush", "Squash"
             ];
             let methodsZIP = [
                 "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
@@ -2549,6 +2555,7 @@ function main(argc, argv)
             "--list (-l)\t":            "display directory listings of disk image(s)",
             "--list=unused\t":          "display unused space in disk image(s) (.json only)",
             "--normalize\t":            "change line endings and character encodings of text files",
+            "--password=[string]":      "use password for decompression (ARC files only)",
             "--quiet (-q)\t":           "minimum messages",
             "--verbose (-v)\t":         "maximum messages (eg, display archive contents)"
         };
