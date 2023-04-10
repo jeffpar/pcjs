@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Decompression Depression
+title: The Joys of Old ARC and ZIP Files
 date: 2023-03-07 10:00:00
 permalink: /blog/2023/03/07/
 preview: /blog/images/pkarc-1988-04.jpg

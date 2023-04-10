@@ -6,30 +6,14 @@
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  *
- * Stretch(), Expand(), and Explode() functionality adapted from https://www.hanshq.net/files/hwzip/hwzip-2.1.zip
- * Released into the public domain by Hans Wennborg; see https://www.hanshq.net/zip2.html for more details.
+ * Stretch(), Expand(), and Explode() functionality adapted from https://www.hanshq.net/files/hwzip/hwzip-2.1.zip,
+ * as released into the public domain by Hans Wennborg; see https://www.hanshq.net/zip2.html for more details.
+ *
+ * ARC decompression code adapted from ARC source code (C) Copyright 1985-87 by System Enhancement Associates
+ * and Thom Henderson, as released under the terms of the GPL at https://github.com/hyc/arc/blob/master/LICENSE
  *
  * Blast() functionality adapted from https://github.com/madler/zlib/tree/master/contrib/blast
  * Copyright (C) 2003, 2012, 2013 Mark Adler
- *
- * Testing Notes
- *
- *   1. Some examples of bad "implode" data can be found in "/Volumes/PC_SIG_12_90/401_500/DISK0442/DISK0442.ZIP"
- *      (see "SPAWN.DOC", "PWARN.PAS") and "/Volumes/PC_SIG_12_90/1301_400/DISK1322/DISK1322.ZIP" (see "NCRISK.BRD").
- *
- *      I suspect this is a boring example of ZIP corruption, because "SPAWN.DOC" seems to have impossibly small
- *      compressed data (1525 bytes) relative to the uncompressed file size (140719 bytes), yielding 99% compression.
- *      There's an older uncompressed version of "SPAWN.DOC" in "/Volumes/PC_SIG_4_90/401_500/DISK0442/", and `zip`
- *      can only compress it by 68%.
- *
- *      Originally, I thought these might be examples of the PKZIP 1.01/1.02 "implode" bug, but it now appears not.
- *      I'm still looking for one of those.
- *
- *   2. For some reason, on the same CD-ROM, there are several zero-length ZIP files; nothing bad happens, but perhaps
- *      the error could be more helpful/less scary.  The files are:
- *
- *          /Volumes/PC_SIG_12_90/401_500/DISK0411/DISK0411.ZIP: Archive read error
- *          /Volumes/PC_SIG_12_90/901_1000/DISK0941/DISK0941.ZIP: Archive read error
  */
 
 import { Buffer } from 'node:buffer';
@@ -37,99 +21,122 @@ import { Buffer } from 'node:buffer';
 const DEBUG = true;
 
 /**
- * @class LegacyZip
- */
-export class LegacyZip
-{
-    /**
-     * stretchSync(src, dst_len)
-     *
-     * @param {Buffer} src (SHRINK data)
-     * @param {number} dst_len
-     * @returns {Stretch}
-     */
-    static stretchSync(src, dst_len)
-    {
-        let stretch = new Stretch();
-        if (!stretch.decomp(src, dst_len)) {
-            delete stretch.dst;
-        }
-        return stretch;
-    }
-
-    /**
-     * expandSync(src, dst_len, comp_factor)
-     *
-     * @param {Buffer} src (REDUCE data)
-     * @param {number} dst_len
-     * @param {number} comp_factor
-     * @returns {Expand}
-     */
-    static expandSync(src, dst_len, comp_factor)
-    {
-        let expand = new Expand();
-        if (!expand.decomp(src, dst_len, comp_factor)) {
-            delete expand.dst;
-        }
-        return expand;
-    }
-
-    /**
-     * explodeSync(src, dst_len, large_wnd, lit_tree)
-     *
-     * Decompress (explode) the data in src. The uncompressed data is dst_len
-     * bytes long. large_wnd is true if a large window was used for compression,
-     * and lit_tree is true if literals were Huffman coded.
-     *
-     * Returns an Explode object.  Call getBytesRead() to get the number of source
-     * bytes read, and getOutput() to the destination data.
-     *
-     * @param {Buffer} src (IMPLODE data)
-     * @param {number} dst_len
-     * @param {boolean} large_wnd
-     * @param {boolean} lit_tree
-     * @returns {Explode}
-     */
-    static explodeSync(src, dst_len, large_wnd, lit_tree)
-    {
-        let explode = new Explode();
-        if (!explode.decomp(src, dst_len, large_wnd, lit_tree, false) || explode.getBytesRead() != src.length) {
-            if (!explode.decomp(src, dst_len, large_wnd, lit_tree, true) || explode.getBytesRead() != src.length) {
-                delete explode.dst;
-            } else {
-                assert(false, "explodeSync() recovered");   // would like to catch just one example of that "PKZIP 1.01/1.02" bug
-            }
-        }
-        return explode;
-    }
-
-    /**
-     * blastSync(src)
-     *
-     * @param {Buffer} src (IMPLODE_DCL data)
-     * @returns {Blast}
-     */
-    static blastSync(src)
-    {
-        let blast = new Blast();
-
-        // let test = Buffer.from([0x00, 0x04, 0x82, 0x24, 0x25, 0x8f, 0x80, 0x7f]);
-        // blast.decomp(test);
-
-        blast.decomp(src);
-        return blast;
-    }
-}
-
-/**
- * ARC Support Functions (from arcsvc.c)
+ * Legacy ARC Support (decompression only)
  *
- * The logic for this method of calculating the CRC 16 bit polynomial is taken
- * from an article by David Schwaderer in the April 1985 issue of PC Tech Journal.
+ * Programming notes (from ARC.C v5.21q):
+ *
+ *      ARC Version 2 differs from version 1 in that archive entries
+ *      are automatically compressed when they are added to the archive,
+ *      making a separate compression step unnecessary. The nature of the
+ *      compression is indicated by the header version number placed in
+ *      each archive entry, as follows:
+ *
+ *      1 = Old style, no compression
+ *      2 = New style, no compression
+ *      3 = Compression of repeated characters only
+ *      4 = Compression of repeated characters plus Huffman SQueezing
+ *      5 = Lempel-Zev packing of repeated strings (old style)
+ *      6 = Lempel-Zev packing of repeated strings (new style)
+ *      7 = Lempel-Zev Williams packing with improved hash function
+ *      8 = Dynamic Lempel-Zev packing with adaptive reset
+ *      9 = Dynamic Lempel-Zev packing, larger hash table
+ *
+ *      Type 5, Lempel-Zev packing, was added as of version 4.0
+ *
+ *      Type 6 is Lempel-Zev packing where runs of repeated characters
+ *      have been collapsed, and was added as of version 4.1
+ *
+ *      Type 7 is a variation of Lempel-Zev using a different hash
+ *      function which yields speed improvements of 20-25%, and was
+ *      added as of version 4.6
+ *
+ *      Type 8 is a different implementation of Lempel-Zev, using a
+ *      variable code size and an adaptive block reset, and was added
+ *      as of version 5.0
+ *
+ *      Type 9 is a slight modification of type 8, first used by Phil
+ *      Katz in his PKARC utilities. The primary difference is the use
+ *      of a hash table twice as large as for type 8, and that this
+ *      algorithm called Squashing, doesn't perform run-length encoding
+ *      on the input data.
+ *
+ *      Version 4.3 introduced a temporary file for holding the result
+ *      of the first crunch pass, thus speeding up crunching.
+ *
+ *      Version 4.4 introduced the ARCTEMP environment string, so that
+ *      the temporary crunch file may be placed on a ramdisk. Also
+ *      added was the distinction between Adding a file in all cases,
+ *      and Updating a file only if the disk file is newer than the
+ *      corresponding archive entry.
+ *
+ *      The compression method to use is determined when the file is
+ *      added, based on whichever method yields the smallest result.
+ *
+ * @class LegacyArc
  */
-export class ARC
+export class LegacyArc
 {
-    static crctab =	[   // CRC lookup table
+    /*
+     * Stuff for repeat unpacking
+     */
+    static DLE = 0x90;          // repeat byte flag
+
+    /*
+     * Repeat unpacking states
+     */
+    static NOHIST = 0;          // no relevant history
+    static INREP = 1;           // sending a repeated value
+
+    /**
+     * unpackSync(src, dst_len)
+     *
+     * @param {Buffer} src (packed data)
+     * @param {number} dst_len
+     * @returns {Decompress}
+     */
+    static unpackSync(src, dst_len)
+    {
+        let unpack = new ArcUnpack();
+        if (!unpack.decomp(src, dst_len)) {
+            delete unpack.dst;
+        }
+        return unpack;
+    }
+
+    /**
+     * unsqueezeSync(src, dst_len)
+     *
+     * @param {Buffer} src (squeezed data)
+     * @param {number} dst_len
+     * @returns {Decompress}
+     */
+    static unsqueezeSync(src, dst_len)
+    {
+        let unsqueeze = new ArcUnsqueeze();
+        if (!unsqueeze.decomp(src, dst_len)) {
+            delete unsqueeze.dst;
+        }
+        return unsqueeze;
+    }
+
+    /**
+     * unscrunchSync(src, dst_len, squashed)
+     *
+     * @param {Buffer} src (crunched or squashed data)
+     * @param {number} dst_len
+     * @param {boolean} squashed (false if crunched, true if squashed)
+     * @returns {Decompress}
+     */
+    static unscrunchSync(src, dst_len, squashed)
+    {
+        let unscrunch = new ArcUnscrunch();
+        if (!unscrunch.decomp(src, dst_len, squashed)) {
+            delete unscrunch.dst;
+        }
+        return unscrunch;
+    }
+
+    static crctab = [   // CRC lookup table
         0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241,
         0xC601, 0x06C0, 0x0780, 0xC741, 0x0500, 0xC5C1, 0xC481, 0x0440,
         0xCC01, 0x0CC0, 0x0D80, 0xCD41, 0x0F00, 0xCFC1, 0xCE81, 0x0E40,
@@ -169,15 +176,105 @@ export class ARC
     *
     * Calculate CRC for the given ARC data.
     *
+    * The logic for this method of calculating the CRC 16 bit polynomial is taken
+    * from an article by David Schwaderer in the April 1985 issue of PC Tech Journal.
+    *
     * @param {Buffer} buf
     * @param {number} [crc] (running CRC value, if any)
     */
     static getCRC(buf, crc = 0)
     {
         for (let i = 0; i < buf.length; i++) {
-            crc = ((crc >> 8) & 0xff) ^ ARC.crctab[(crc ^ buf.readUInt8(i)) & 0xff];
+            crc = ((crc >> 8) & 0xff) ^ LegacyArc.crctab[(crc ^ buf.readUInt8(i)) & 0xff];
         }
         return crc;
+    }
+}
+
+/**
+ * Legacy ZIP Support (decompression only)
+ *
+ * @class LegacyZip
+ */
+export class LegacyZip
+{
+    /**
+     * stretchSync(src, dst_len)
+     *
+     * @param {Buffer} src (SHRINK data)
+     * @param {number} dst_len
+     * @returns {Decompress}
+     */
+    static stretchSync(src, dst_len)
+    {
+        let stretch = new ZipStretch();
+        if (!stretch.decomp(src, dst_len)) {
+            delete stretch.dst;
+        }
+        return stretch;
+    }
+
+    /**
+     * expandSync(src, dst_len, comp_factor)
+     *
+     * @param {Buffer} src (REDUCE data)
+     * @param {number} dst_len
+     * @param {number} comp_factor
+     * @returns {Decompress}
+     */
+    static expandSync(src, dst_len, comp_factor)
+    {
+        let expand = new ZipExpand();
+        if (!expand.decomp(src, dst_len, comp_factor)) {
+            delete expand.dst;
+        }
+        return expand;
+    }
+
+    /**
+     * explodeSync(src, dst_len, large_wnd, lit_tree)
+     *
+     * Decompress (explode) the data in src. The uncompressed data is dst_len
+     * bytes long. large_wnd is true if a large window was used for compression,
+     * and lit_tree is true if literals were Huffman coded.
+     *
+     * Returns a Decompress object.  Call getBytesRead() to get the number of source
+     * bytes read, and getOutput() to the destination data.
+     *
+     * @param {Buffer} src (IMPLODE data)
+     * @param {number} dst_len
+     * @param {boolean} large_wnd
+     * @param {boolean} lit_tree
+     * @returns {Decompress}
+     */
+    static explodeSync(src, dst_len, large_wnd, lit_tree)
+    {
+        let explode = new ZipExplode();
+        if (!explode.decomp(src, dst_len, large_wnd, lit_tree, false) || explode.getBytesRead() != src.length) {
+            if (!explode.decomp(src, dst_len, large_wnd, lit_tree, true) || explode.getBytesRead() != src.length) {
+                delete explode.dst;
+            } else {
+                assert(false, "explodeSync() recovered");   // would like to catch just one example of that "PKZIP 1.01/1.02" bug
+            }
+        }
+        return explode;
+    }
+
+    /**
+     * blastSync(src)
+     *
+     * @param {Buffer} src (IMPLODE_DCL data)
+     * @returns {ZipBlast}
+     */
+    static blastSync(src)
+    {
+        let blast = new ZipBlast();
+
+        // let test = Buffer.from([0x00, 0x04, 0x82, 0x24, 0x25, 0x8f, 0x80, 0x7f]);
+        // blast.decomp(test);
+
+        blast.decomp(src);
+        return blast;
     }
 }
 
@@ -196,13 +293,14 @@ class BitStream
      *
      * Well, this version reads 32 bits at a time, because while there is now BigInt
      * support in JavaScript, it's faster sticking with 32-bit values.  Unfortunately,
-     * setting MIN_BITS to (32 - 7) triggered assertions that the caller (Explode.decomp())
+     * setting MIN_BITS to (32 - 7) triggered assertions that the caller (ZipExplode.decomp())
      * was using more than 25 bits from a single bits() call, which was risky.
      *
      * So now we set MIN_BITS to 32, and at the same time, whenever bit_pos isn't on a
      * byte boundary, we pad the result with more bits from the stream instead of zeros;
-     * it may often be unnecessary, but since we can't predict the caller's needs,
-     * we have no choice.
+     * it may often be unnecessary, but if we can't predict the caller's needs, then
+     * we have no choice.  Callers that specify how many bits they need will not pay that
+     * penalty.
      */
     static MIN_BITS = 32;
 
@@ -218,6 +316,19 @@ class BitStream
         this.end = src.length;
         this.bit_pos = 0;
         this.bit_end = this.end * 8;
+        this.cachePos = -1;
+        this.cacheBits = 0;
+    }
+
+    /**
+     * empty()
+     *
+     * @this {BitStream}
+     * @returns {boolean} (true if no more bits available)
+     */
+    empty()
+    {
+        return (this.bit_pos >= this.bit_end);
     }
 
     /**
@@ -239,21 +350,33 @@ class BitStream
         let next = (this.bit_pos >> 3);
         let bit_off = this.bit_pos % 8;
 
-        assert(next <= this.end, "bits() reading past end of stream");
+        assert(!lsb || lsb <= BitStream.MIN_BITS);
+        assert(next <= this.end, "reading past end of BitStream");
 
         let bytesAvail = this.end - next;
         if (bytesAvail >= 4) {
-            bits = this.src.readUInt32LE(next);
+            if (next == this.cachePos) {
+                bits = this.cacheBits;
+            } else {
+                bits = this.cacheBits = this.src.readUInt32LE(next);
+                this.cachePos = next;
+            }
             next += 4;
+            bytesAvail = 4;
         } else {
             bits = 0;
             for (let i = 0; i < bytesAvail; i++) {
-                bits |= this.src.readUInt8(next++) << (i * 8);
+                bits |= this.src.readUInt8(next++) << (i << 3);
             }
         }
         if (bit_off) {
             bits >>>= bit_off;
-            if (BitStream.MIN_BITS == 32 && next < this.end) {
+            let bitsAvail = (bytesAvail << 3) - bit_off;
+            /*
+             * If we're not sure how many bits the caller wants (because lsb is zero), or
+             * the caller wants more bits than we just read, then try to read one more byte.
+             */
+            if ((!lsb && BitStream.MIN_BITS == 32 || lsb > bitsAvail) && next < this.end) {
                 let b = this.src.readUInt8(next) << (32 - bit_off);
                 bits |= b;
             }
@@ -261,6 +384,25 @@ class BitStream
         if (lsb) {
             bits &= (1 << lsb) - 1;
             if (fAdvance) this.advance(lsb);
+        }
+        return bits;
+    }
+
+    /**
+     * bitsSigned(lsb, fAdvance)
+     *
+     * Identical to bits(), but the highest requested bit is treated as a sign bit,
+     * so if that bit is set, then it is propagated to the sign bit of our return value.
+     *
+     * @this {BitStream}
+     * @param {number} [lsb] (optional number of least significant bits)
+     * @param {boolean} [fAdvance] (true to advance the bit position by lsb bits)
+     */
+    bitsSigned(lsb = 0, fAdvance = false)
+    {
+        let bits = this.bits(lsb, fAdvance);
+        if (lsb > 0 && lsb < 32 && (bits & (1 << (lsb - 1)))) {
+            bits |= -1 << lsb;
         }
         return bits;
     }
@@ -453,7 +595,7 @@ class HuffmanDecoder
     {
         assert(len <= HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
 
-        codeword = reverse16(codeword, len);    // Make it LSB-first
+        codeword = HuffmanDecoder.reverse16(codeword, len);     // Make it LSB-first
         let pad_len = HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS - len;
         /*
          * Pad the pad_len upper bits with all bit combinations
@@ -495,7 +637,7 @@ class HuffmanDecoder
         /*
          * Then do canonical decoding with the bits in MSB-first order
          */
-        bits = reverse16(bits, HuffmanDecoder.MAX_HUFFMAN_BITS);
+        bits = HuffmanDecoder.reverse16(bits, HuffmanDecoder.MAX_HUFFMAN_BITS);
         for (let l = HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS + 1; l <= HuffmanDecoder.MAX_HUFFMAN_BITS; l++) {
             if (bits < this.sentinel_bits[l]) {
                 bits >>= HuffmanDecoder.MAX_HUFFMAN_BITS - l;
@@ -506,6 +648,291 @@ class HuffmanDecoder
         }
         return {sym: -1, used: 0};
     }
+
+    /**
+     * reverse16(x, n)
+     *
+     * Reverse the n least significant bits of x.
+     * The (16 - n) most significant bits of the result will be zero.
+     *
+     * @param {number} x
+     * @param {number} n
+     * @returns {number}
+     */
+    static reverse16(/* uint16_t */ x, /* int */ n)
+    {
+        let /* uint16_t */ lo, hi;
+        let /* uint16_t */ reversed;
+
+        assert(n > 0);
+        assert(n <= 16);
+
+        lo = x & 0xff;
+        hi = x >> 8;
+
+        reversed = ((HuffmanDecoder.reverse8_tbl[lo] << 8) | HuffmanDecoder.reverse8_tbl[hi]) & 0xffff;
+
+        return reversed >> (16 - n);
+    }
+
+    static /* uint8_t */ reverse8_tbl = [
+        /* 0x00 */ 0x00,
+        /* 0x01 */ 0x80,
+        /* 0x02 */ 0x40,
+        /* 0x03 */ 0xc0,
+        /* 0x04 */ 0x20,
+        /* 0x05 */ 0xa0,
+        /* 0x06 */ 0x60,
+        /* 0x07 */ 0xe0,
+        /* 0x08 */ 0x10,
+        /* 0x09 */ 0x90,
+        /* 0x0a */ 0x50,
+        /* 0x0b */ 0xd0,
+        /* 0x0c */ 0x30,
+        /* 0x0d */ 0xb0,
+        /* 0x0e */ 0x70,
+        /* 0x0f */ 0xf0,
+        /* 0x10 */ 0x08,
+        /* 0x11 */ 0x88,
+        /* 0x12 */ 0x48,
+        /* 0x13 */ 0xc8,
+        /* 0x14 */ 0x28,
+        /* 0x15 */ 0xa8,
+        /* 0x16 */ 0x68,
+        /* 0x17 */ 0xe8,
+        /* 0x18 */ 0x18,
+        /* 0x19 */ 0x98,
+        /* 0x1a */ 0x58,
+        /* 0x1b */ 0xd8,
+        /* 0x1c */ 0x38,
+        /* 0x1d */ 0xb8,
+        /* 0x1e */ 0x78,
+        /* 0x1f */ 0xf8,
+        /* 0x20 */ 0x04,
+        /* 0x21 */ 0x84,
+        /* 0x22 */ 0x44,
+        /* 0x23 */ 0xc4,
+        /* 0x24 */ 0x24,
+        /* 0x25 */ 0xa4,
+        /* 0x26 */ 0x64,
+        /* 0x27 */ 0xe4,
+        /* 0x28 */ 0x14,
+        /* 0x29 */ 0x94,
+        /* 0x2a */ 0x54,
+        /* 0x2b */ 0xd4,
+        /* 0x2c */ 0x34,
+        /* 0x2d */ 0xb4,
+        /* 0x2e */ 0x74,
+        /* 0x2f */ 0xf4,
+        /* 0x30 */ 0x0c,
+        /* 0x31 */ 0x8c,
+        /* 0x32 */ 0x4c,
+        /* 0x33 */ 0xcc,
+        /* 0x34 */ 0x2c,
+        /* 0x35 */ 0xac,
+        /* 0x36 */ 0x6c,
+        /* 0x37 */ 0xec,
+        /* 0x38 */ 0x1c,
+        /* 0x39 */ 0x9c,
+        /* 0x3a */ 0x5c,
+        /* 0x3b */ 0xdc,
+        /* 0x3c */ 0x3c,
+        /* 0x3d */ 0xbc,
+        /* 0x3e */ 0x7c,
+        /* 0x3f */ 0xfc,
+        /* 0x40 */ 0x02,
+        /* 0x41 */ 0x82,
+        /* 0x42 */ 0x42,
+        /* 0x43 */ 0xc2,
+        /* 0x44 */ 0x22,
+        /* 0x45 */ 0xa2,
+        /* 0x46 */ 0x62,
+        /* 0x47 */ 0xe2,
+        /* 0x48 */ 0x12,
+        /* 0x49 */ 0x92,
+        /* 0x4a */ 0x52,
+        /* 0x4b */ 0xd2,
+        /* 0x4c */ 0x32,
+        /* 0x4d */ 0xb2,
+        /* 0x4e */ 0x72,
+        /* 0x4f */ 0xf2,
+        /* 0x50 */ 0x0a,
+        /* 0x51 */ 0x8a,
+        /* 0x52 */ 0x4a,
+        /* 0x53 */ 0xca,
+        /* 0x54 */ 0x2a,
+        /* 0x55 */ 0xaa,
+        /* 0x56 */ 0x6a,
+        /* 0x57 */ 0xea,
+        /* 0x58 */ 0x1a,
+        /* 0x59 */ 0x9a,
+        /* 0x5a */ 0x5a,
+        /* 0x5b */ 0xda,
+        /* 0x5c */ 0x3a,
+        /* 0x5d */ 0xba,
+        /* 0x5e */ 0x7a,
+        /* 0x5f */ 0xfa,
+        /* 0x60 */ 0x06,
+        /* 0x61 */ 0x86,
+        /* 0x62 */ 0x46,
+        /* 0x63 */ 0xc6,
+        /* 0x64 */ 0x26,
+        /* 0x65 */ 0xa6,
+        /* 0x66 */ 0x66,
+        /* 0x67 */ 0xe6,
+        /* 0x68 */ 0x16,
+        /* 0x69 */ 0x96,
+        /* 0x6a */ 0x56,
+        /* 0x6b */ 0xd6,
+        /* 0x6c */ 0x36,
+        /* 0x6d */ 0xb6,
+        /* 0x6e */ 0x76,
+        /* 0x6f */ 0xf6,
+        /* 0x70 */ 0x0e,
+        /* 0x71 */ 0x8e,
+        /* 0x72 */ 0x4e,
+        /* 0x73 */ 0xce,
+        /* 0x74 */ 0x2e,
+        /* 0x75 */ 0xae,
+        /* 0x76 */ 0x6e,
+        /* 0x77 */ 0xee,
+        /* 0x78 */ 0x1e,
+        /* 0x79 */ 0x9e,
+        /* 0x7a */ 0x5e,
+        /* 0x7b */ 0xde,
+        /* 0x7c */ 0x3e,
+        /* 0x7d */ 0xbe,
+        /* 0x7e */ 0x7e,
+        /* 0x7f */ 0xfe,
+        /* 0x80 */ 0x01,
+        /* 0x81 */ 0x81,
+        /* 0x82 */ 0x41,
+        /* 0x83 */ 0xc1,
+        /* 0x84 */ 0x21,
+        /* 0x85 */ 0xa1,
+        /* 0x86 */ 0x61,
+        /* 0x87 */ 0xe1,
+        /* 0x88 */ 0x11,
+        /* 0x89 */ 0x91,
+        /* 0x8a */ 0x51,
+        /* 0x8b */ 0xd1,
+        /* 0x8c */ 0x31,
+        /* 0x8d */ 0xb1,
+        /* 0x8e */ 0x71,
+        /* 0x8f */ 0xf1,
+        /* 0x90 */ 0x09,
+        /* 0x91 */ 0x89,
+        /* 0x92 */ 0x49,
+        /* 0x93 */ 0xc9,
+        /* 0x94 */ 0x29,
+        /* 0x95 */ 0xa9,
+        /* 0x96 */ 0x69,
+        /* 0x97 */ 0xe9,
+        /* 0x98 */ 0x19,
+        /* 0x99 */ 0x99,
+        /* 0x9a */ 0x59,
+        /* 0x9b */ 0xd9,
+        /* 0x9c */ 0x39,
+        /* 0x9d */ 0xb9,
+        /* 0x9e */ 0x79,
+        /* 0x9f */ 0xf9,
+        /* 0xa0 */ 0x05,
+        /* 0xa1 */ 0x85,
+        /* 0xa2 */ 0x45,
+        /* 0xa3 */ 0xc5,
+        /* 0xa4 */ 0x25,
+        /* 0xa5 */ 0xa5,
+        /* 0xa6 */ 0x65,
+        /* 0xa7 */ 0xe5,
+        /* 0xa8 */ 0x15,
+        /* 0xa9 */ 0x95,
+        /* 0xaa */ 0x55,
+        /* 0xab */ 0xd5,
+        /* 0xac */ 0x35,
+        /* 0xad */ 0xb5,
+        /* 0xae */ 0x75,
+        /* 0xaf */ 0xf5,
+        /* 0xb0 */ 0x0d,
+        /* 0xb1 */ 0x8d,
+        /* 0xb2 */ 0x4d,
+        /* 0xb3 */ 0xcd,
+        /* 0xb4 */ 0x2d,
+        /* 0xb5 */ 0xad,
+        /* 0xb6 */ 0x6d,
+        /* 0xb7 */ 0xed,
+        /* 0xb8 */ 0x1d,
+        /* 0xb9 */ 0x9d,
+        /* 0xba */ 0x5d,
+        /* 0xbb */ 0xdd,
+        /* 0xbc */ 0x3d,
+        /* 0xbd */ 0xbd,
+        /* 0xbe */ 0x7d,
+        /* 0xbf */ 0xfd,
+        /* 0xc0 */ 0x03,
+        /* 0xc1 */ 0x83,
+        /* 0xc2 */ 0x43,
+        /* 0xc3 */ 0xc3,
+        /* 0xc4 */ 0x23,
+        /* 0xc5 */ 0xa3,
+        /* 0xc6 */ 0x63,
+        /* 0xc7 */ 0xe3,
+        /* 0xc8 */ 0x13,
+        /* 0xc9 */ 0x93,
+        /* 0xca */ 0x53,
+        /* 0xcb */ 0xd3,
+        /* 0xcc */ 0x33,
+        /* 0xcd */ 0xb3,
+        /* 0xce */ 0x73,
+        /* 0xcf */ 0xf3,
+        /* 0xd0 */ 0x0b,
+        /* 0xd1 */ 0x8b,
+        /* 0xd2 */ 0x4b,
+        /* 0xd3 */ 0xcb,
+        /* 0xd4 */ 0x2b,
+        /* 0xd5 */ 0xab,
+        /* 0xd6 */ 0x6b,
+        /* 0xd7 */ 0xeb,
+        /* 0xd8 */ 0x1b,
+        /* 0xd9 */ 0x9b,
+        /* 0xda */ 0x5b,
+        /* 0xdb */ 0xdb,
+        /* 0xdc */ 0x3b,
+        /* 0xdd */ 0xbb,
+        /* 0xde */ 0x7b,
+        /* 0xdf */ 0xfb,
+        /* 0xe0 */ 0x07,
+        /* 0xe1 */ 0x87,
+        /* 0xe2 */ 0x47,
+        /* 0xe3 */ 0xc7,
+        /* 0xe4 */ 0x27,
+        /* 0xe5 */ 0xa7,
+        /* 0xe6 */ 0x67,
+        /* 0xe7 */ 0xe7,
+        /* 0xe8 */ 0x17,
+        /* 0xe9 */ 0x97,
+        /* 0xea */ 0x57,
+        /* 0xeb */ 0xd7,
+        /* 0xec */ 0x37,
+        /* 0xed */ 0xb7,
+        /* 0xee */ 0x77,
+        /* 0xef */ 0xf7,
+        /* 0xf0 */ 0x0f,
+        /* 0xf1 */ 0x8f,
+        /* 0xf2 */ 0x4f,
+        /* 0xf3 */ 0xcf,
+        /* 0xf4 */ 0x2f,
+        /* 0xf5 */ 0xaf,
+        /* 0xf6 */ 0x6f,
+        /* 0xf7 */ 0xef,
+        /* 0xf8 */ 0x1f,
+        /* 0xf9 */ 0x9f,
+        /* 0xfa */ 0x5f,
+        /* 0xfb */ 0xdf,
+        /* 0xfc */ 0x3f,
+        /* 0xfd */ 0xbf,
+        /* 0xfe */ 0x7f,
+        /* 0xff */ 0xff
+    ];
 }
 
 /**
@@ -513,7 +940,7 @@ class HuffmanDecoder
  * @property {BitStream} bs
  * @property {Buffer} dst
  *
- * Decompress is the base class for Stretch, Expand, and Explode classes.
+ * Decompress is the base class for ArcUnpack, ArcUnsqueeze, ZipStretch, ZipExpand, and ZipExplode classes.
  */
 class Decompress
 {
@@ -631,13 +1058,489 @@ class Decompress
 }
 
 /**
- * @class Stretch
+ * @class ArcUnpack
  *
- * Stretch is used to decompress SHRINK streams.
- *
- * NOTE: Stretch is what most other implementations call "unshrink", which isn't very imaginative.
+ * ArcUnpack is used to decompress packed streams.
  */
-class Stretch extends Decompress
+class ArcUnpack extends Decompress
+{
+    /**
+     * init(src, dst_len)
+     *
+     * @this {ArcUnpack}
+     * @param {Buffer} src
+     * @param {number} dst_len
+     */
+    init(src, dst_len)
+    {
+        super.init(src, dst_len);
+        this.state = LegacyArc.NOHIST;  // repeat unpacking state
+        this.lastc = -1;
+    }
+
+    /**
+     * putBytes(data, len)
+     *
+     * @this {ArcUnpack}
+     * @param {Array} data
+     * @param {number} len
+     */
+    putBytes(data, len)
+    {
+        for (let i = 0; i < len; i++) {
+            this.writeOutput(data[i]);
+        }
+    }
+
+    /**
+     * unpackBytes(data, len)
+     *
+     * This routine is used to decode non-repeat (packed) compression streams.
+     * Bytes are passed one at a time in coded format, and are written out uncoded.
+     * The data is stored normally, except that runs of more than two characters
+     * are represented as:
+     *
+     *      <char> <DLE> <count>
+     *
+     * With a special case that a count of zero indicates a DLE as data, not as a
+     * repeat marker.
+     *
+     * @this {ArcUnpack}
+     * @param {Array} data
+     * @param {number} len
+     */
+    unpackBytes(data, len)
+    {
+        for (let i = 0; i < len; i++) {
+            if (this.state == LegacyArc.INREP) {
+                if (data[i]) {
+                    while (--data[i]) {
+                        assert(this.lastc >= 0);
+                        this.writeOutput(this.lastc)
+                    }
+                } else {
+                    this.writeOutput(LegacyArc.DLE);
+                }
+                this.state = LegacyArc.NOHIST;
+            } else {
+                if (data[i] != LegacyArc.DLE) {
+                    this.writeOutput(this.lastc = data[i]);
+                } else {
+                    this.state = LegacyArc.INREP;
+                }
+            }
+        }
+    }
+
+    /**
+     * decomp(src, dst_len)
+     *
+     * Decompresses a packed stream.
+     *
+     * @this {ArcUnpack}
+     * @param {Buffer} src
+     * @param {number} dst_len
+     * @returns {boolean|null}
+     */
+    decomp(src, dst_len)
+    {
+        this.init(src, dst_len);
+        let data = Array.from(src);
+        this.unpackBytes(data, data.length);
+        return true;
+    }
+}
+
+/**
+ * @class ArcUnsqueeze
+ *
+ * ArcUnsqueeze is used to decompress squeezed streams.
+ */
+class ArcUnsqueeze extends ArcUnpack
+{
+    static SPEOF = 256;                 // special endfile token
+    static NUMVALS = 257                // 256 data values plus SPEOF
+    static MYDATA = 32766;              // size of data[]
+
+    /**
+     * init(src, dst_len)
+     *
+     * @this {ArcUnsqueeze}
+     * @param {Buffer} src
+     * @param {number} dst_len
+     */
+    init(src, dst_len)
+    {
+        super.init(src, dst_len);
+        this.data = new Array(ArcUnsqueeze.MYDATA);
+
+        /*
+         * Initialize Huffman unsqueezing (from init_usq() in arcusq.c)
+         */
+        this.numNodes = this.bs.bits(16, true);
+        if (this.numNodes >= ArcUnsqueeze.NUMVALS) {
+            throw new Error("invalid decode tree");
+        }
+
+        /*
+         * Initialize for possible empty tree (SPEOF only)
+         *
+         * Each node entry contain two child entries: child[0] aka "left", and child[1] aka "right".
+         */
+        this.node = new Array(this.numNodes);
+        this.node[0] = {child: [-(ArcUnsqueeze.SPEOF + 1), -(ArcUnsqueeze.SPEOF + 1)]};
+
+        /*
+         * Get decoding tree from file
+         *
+         * NOTE: The 16-bit values being pulled from the bit stream (child[0] and child[1]) are signed,
+         * so we must fetch them using bitsSigned() instead of bits().
+         */
+        for (let i = 0; i < this.numNodes; ++i) {
+            this.node[i] = {child: [this.bs.bitsSigned(16, true), this.bs.bitsSigned(16, true)]};
+        }
+    }
+
+    /**
+     * getBytes(data)
+     *
+     * Get bytes from squeezed file (see getb_usq() in arcusq.c)
+     *
+     * @this {ArcUnsqueeze}
+     * @param {Array} data
+     */
+    getBytes(data)
+    {
+        let j;
+        let o = 0;                      // data index
+        for (j = 0; j < data.length; j++) {
+            /*
+             * Follow bit stream in tree to a leaf
+             */
+            let i;                      // tree index
+            for (i = 0; i >= 0;) {
+                /*
+                 * Work down(up?) from root
+                 */
+                if (this.bs.empty()) {
+                    return j;
+                }
+                let b = this.bs.bits(1, true);
+                i = this.node[i].child[b];
+            }
+            /*
+             * Decode fake node index to original data value
+             */
+            i = -(i + 1) | 0;
+            assert(i >= 0 && i <= ArcUnsqueeze.SPEOF);
+            if (i == ArcUnsqueeze.SPEOF) break;
+            this.data[o++] = i;
+        }
+        return j;
+    }
+
+    /**
+     * decomp(src, dst_len)
+     *
+     * Decompresses a squeezed stream.
+     *
+     * @this {ArcUnsqueeze}
+     * @param {Buffer} src
+     * @param {number} dst_len
+     * @returns {boolean|null}
+     */
+    decomp(src, dst_len)
+    {
+        let len;
+        this.init(src, dst_len);
+        do {
+            len = this.getBytes(this.data);
+            this.unpackBytes(this.data, len);
+        } while (len == ArcUnsqueeze.MYDATA);
+        return true;
+    }
+}
+
+/**
+ * @class ArcUnscrunch
+ *
+ * ArcUnscrunch is used to decompress crunched or squashed streams.
+ */
+class ArcUnscrunch extends ArcUnpack
+{
+    /*
+     * Definitions for the new dynamic Lempel-Zev crunching
+     */
+    static CRBITS   = 12;               // maximum bits per code
+    static CRHSIZE  = 5003;             // 80% occupancy
+    static CRGAP    = 2048;             // ratio check interval
+    static SQBITS   = 13;               // Squash values of above
+    static SQHSIZE  = 10007;
+    static SQGAP    = 10000;
+    static INIT_BITS = 9;               // initial number of bits/code
+
+    /*
+     * The next two codes should not be changed lightly, as they must not lie
+     * within the contiguous general code space.
+     */
+    static FIRST    = 257;              // first free entry
+    static CLEAR    = 256;              // table clear output code
+
+    static RMASK = [                    // right side masks
+        0x00, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff
+    ];
+    static LMASK = [                    // left side masks (merely for completeness)
+        0xff, 0xfe, 0xfc, 0xf8, 0xf0, 0xe0, 0xc0, 0x80, 0x00
+    ];
+
+    /**
+     * init(src, dst_len, squashed)
+     *
+     * @this {ArcUnscrunch}
+     * @param {Buffer} src
+     * @param {number} dst_len
+     * @param {boolean} squashed (false if crunched, true if squashed)
+     */
+    init(src, dst_len, squashed)
+    {
+        super.init(src, dst_len);
+        this.data = new Array(ArcUnsqueeze.MYDATA);
+
+        this.suffix = /* (u_char *) */ new Array(ArcUnscrunch.SQHSIZE /* * sizeof(u_char)*4 */);
+        this.prefix = /* (u_short *) */ new Array(ArcUnscrunch.SQHSIZE /* * sizeof(u_short) */);
+        this.stack = new Array(2048);               // TODO: figure out the minimum size
+        if (squashed) {
+            this.maxBits = ArcUnscrunch.SQBITS;
+            this.output = this.putBytes.bind(this);
+        } else {
+            this.maxBits = ArcUnscrunch.CRBITS;
+            this.output = this.unpackBytes.bind(this);
+            let code = this.bs.bits(8, true);
+            if (code != this.maxBits) {
+                throw new Error("file packed with " + code + " bits (maximum is " + this.maxBits + ")");
+            }
+        }
+
+        this.max_maxcode = 1 << this.maxBits;       // largest possible code (+1)
+        this.clear_flg = 0;
+        this.n_bits = ArcUnscrunch.INIT_BITS;       // number of bits/code
+        this.maxcode = this.maxCode(this.n_bits);
+        this.free_ent = ArcUnscrunch.FIRST;
+        this.offset = this.size = 0;
+        this.buf = new Array(ArcUnscrunch.SQBITS);
+
+        /*
+         * Initialize the first 256 entries in the tables.
+         */
+        this.prefix.fill(0, 0, 256);
+        for (let code = 255; code >= 0; code--) this.suffix[code] = code;
+    }
+
+    /**
+     * maxCode(nBits)
+     *
+     * @this {ArcUnscrunch}
+     * @param {number} nBits
+     * @returns {number}
+     */
+    maxCode(nBits)
+    {
+        return (1 << nBits) - 1;        // maximum code calculation
+    }
+
+    /**
+     * getCode()
+     *
+     * @this {ArcUnscrunch}
+     * @returns {number}
+     */
+    getCode()
+    {
+        let code, r_off, bits, bp = 0;
+
+        if (this.clear_flg > 0 || this.offset >= this.size || this.free_ent > this.maxcode) {
+            /*
+             * If the next entry will be too big for the current code
+             * size, then we must increase the size. This implies reading
+             * a new buffer full, too.
+             */
+            if (this.free_ent > this.maxcode) {
+                this.n_bits++;
+                if (this.n_bits == this.maxBits) {
+                    this.maxcode = this.max_maxcode;
+                } else {
+                    this.maxcode = this.maxCode(this.n_bits);
+                }
+            }
+            if (this.clear_flg > 0) {
+                this.maxcode = this.maxCode(this.n_bits = ArcUnscrunch.INIT_BITS);
+                this.clear_flg = 0;
+            }
+            for (this.size = 0; this.size < this.n_bits; this.size++) {
+                if (this.bs.empty()) {
+                    code = -1;
+                    break;
+                }
+                code = this.bs.bits(8, true);
+                this.buf[this.size] = code;
+            }
+            if (this.size <= 0) {
+                return -1;
+            }
+            this.offset = 0;
+            /*
+             * Round size down to integral number of codes
+             */
+            this.size = (this.size << 3) - (this.n_bits - 1);
+        }
+        r_off = this.offset;
+        bits = this.n_bits;
+
+        /*
+         * Get to the first byte.
+         */
+        bp += (r_off >> 3);
+        r_off &= 7;
+
+        /*
+         * Get first part (low order bits)
+         */
+        code = (this.buf[bp++] >> r_off);
+        bits -= 8 - r_off;
+        r_off = 8 - r_off;
+
+        /*
+         * Get any 8 bit parts in the middle (<=1 for up to 16 bits).
+         */
+        if (bits >= 8) {
+            code |= this.buf[bp++] << r_off;
+            r_off += 8;
+            bits -= 8;
+        }
+
+        /*
+         * Get high order bits.
+         */
+        code |= (this.buf[bp] & ArcUnscrunch.RMASK[bits]) << r_off;
+        this.offset += this.n_bits;
+
+        return code & this.maxCode(this.maxBits);
+    }
+
+    /**
+     * decomp(src, dst_len, squashed)
+     *
+     * Decompresses a crunched or squashed stream.
+     *
+     * This routine adapts to the codes in the file, building the string table on-the-fly,
+     * requiring no table to be stored in the compressed file.
+     *
+     * @this {ArcUnscrunch}
+     * @param {Buffer} src
+     * @param {number} dst_len
+     * @param {boolean} squashed (false if crunched, true if squashed)
+     * @returns {boolean|null}
+     */
+    decomp(src, dst_len, squashed)
+    {
+        this.init(src, dst_len, squashed);
+
+        if (this.bs.empty()) {
+            return false;
+        }
+
+        let chunks = 0;
+
+        let o = 0;                      // data index
+        let p = 0;                      // stack pointer
+        let code, oldcode, incode;
+        let finchar = oldcode = this.getCode();
+
+        if (oldcode == -1) {            // EOF?
+            return false;               // get out
+        }
+        this.data[o++] = finchar;       // first code is char
+
+        while ((code = this.getCode()) > -1) {
+            if (code == ArcUnscrunch.CLEAR) {
+                /*
+                 * Reset string table.
+                 */
+                this.prefix.fill(0, 0, 256);
+                this.clear_flg = 1;
+                this.free_ent = ArcUnscrunch.FIRST - 1;
+                code = this.getCode();
+                if (code == -1) {       // O, untimely death! */
+                    break;
+                }
+            }
+            let incode = code;
+
+            /*
+             * Special case for KwKwK string.
+             */
+            if (code >= this.free_ent) {
+                if (code > this.free_ent) {
+                    throw new Error("corrupted compressed file (code " + code + ", max " + this.free_ent + ")");
+                }
+                this.stack[p++] = finchar;
+                code = oldcode;
+            }
+
+            /*
+             * Generate output characters in reverse order
+             */
+            while (code >= 256) {
+                this.stack[p++] = this.suffix[code];
+                code = this.prefix[code];
+            }
+            this.stack[p++] = finchar = this.suffix[code];
+
+            /*
+             * And put them out in forward order
+             */
+            do {
+                this.data[o++] = this.stack[--p];
+                if (o == this.data.length) {
+                    this.output(this.data, o);
+                    o = 0;
+                    chunks++;
+                }
+            } while (p > 0);
+
+            if (chunks == 5) {
+                break;
+            }
+
+            /*
+             * Generate the new entry.
+             */
+            if ((code = this.free_ent) < this.max_maxcode) {
+                this.prefix[code] = oldcode;
+                this.suffix[code] = finchar;
+                this.free_ent = code + 1;
+            }
+
+            /*
+             * Remember previous code.
+             */
+            oldcode = incode;
+        }
+        if (o > 0) {
+            this.output(this.data, o);
+        }
+        return true;
+    }
+}
+
+/**
+ * @class ZipStretch
+ *
+ * ZipStretch is used to decompress SHRINK streams.
+ *
+ * NOTE: Stretch is what other implementations would call "unshrink".
+ */
+class ZipStretch extends Decompress
 {
     static OK = true;                   // decompression successful
     static FULL = false;                // not enough room in the output buffer
@@ -646,7 +1549,7 @@ class Stretch extends Decompress
     static CHAR_BIT = 8;
     static MIN_CODE_SIZE = 9;
     static MAX_CODE_SIZE = 13;
-    static MAX_CODE = ((1 << Stretch.MAX_CODE_SIZE) - 1);
+    static MAX_CODE = ((1 << ZipStretch.MAX_CODE_SIZE) - 1);
     static INVALID_CODE = 0xffff;
     static CONTROL_CODE = 256;
     static INC_CODE_SIZE = 1;
@@ -672,7 +1575,7 @@ class Stretch extends Decompress
      *
      * Initialize buffers and decompression state.
      *
-     * @this {Stretch}
+     * @this {ZipStretch}
      * @param {Buffer} src
      * @param {number} dst_len
      */
@@ -690,12 +1593,12 @@ class Stretch extends Decompress
     /**
      * allocCodeTable()
      *
-     * @this {Stretch}
+     * @this {ZipStretch}
      * @returns {CodeTable}
      */
     allocCodeTable()
     {
-        let table = /** @type {Array.<Code>} */ new Array(Stretch.MAX_CODE + 1);
+        let table = /** @type {Array.<Code>} */ new Array(ZipStretch.MAX_CODE + 1);
         /*
          * Codes for literal bytes.  Set a phony prefix_code so they're valid.
          */
@@ -706,7 +1609,7 @@ class Stretch extends Decompress
             table[i] = {prefix_code, ext_byte, len}
         }
         for (; i < table.length; i++) {
-            let prefix_code = Stretch.INVALID_CODE;
+            let prefix_code = ZipStretch.INVALID_CODE;
             let ext_byte, len;      // undefined
             table[i] = {prefix_code, ext_byte, len};
         }
@@ -716,7 +1619,7 @@ class Stretch extends Decompress
     /**
      * updateCodeTable(i, prev_code)
      *
-     * @this {Stretch}
+     * @this {ZipStretch}
      * @param {number} i
      * @param {number} prev_code
      */
@@ -731,24 +1634,24 @@ class Stretch extends Decompress
     /**
      * allocCodeQueue()
      *
-     * @this {Stretch}
+     * @this {ZipStretch}
      * @returns {CodeQueue}
      */
     allocCodeQueue()
     {
         let queue = {
             next_idx: 0,
-            codes: new Array(Stretch.MAX_CODE - Stretch.CONTROL_CODE + 1)
+            codes: new Array(ZipStretch.MAX_CODE - ZipStretch.CONTROL_CODE + 1)
         };
         let code_queue_size = 0;
-        for (let code = Stretch.CONTROL_CODE + 1; code <= Stretch.MAX_CODE; code++) {
+        for (let code = ZipStretch.CONTROL_CODE + 1; code <= ZipStretch.MAX_CODE; code++) {
             queue.codes[code_queue_size++] = code;
         }
         assert(code_queue_size < queue.codes.length);
         /*
          * Add an end-of-queue marker
          */
-        queue.codes[code_queue_size] = Stretch.INVALID_CODE;
+        queue.codes[code_queue_size] = ZipStretch.INVALID_CODE;
         return queue;
     }
 
@@ -757,7 +1660,7 @@ class Stretch extends Decompress
      *
      * Returns the next code in the queue, or INVALID_CODE if the queue is empty.
      *
-     * @this {Stretch}
+     * @this {ZipStretch}
      * @returns {number}
      */
     getCodeQueueNext()
@@ -771,13 +1674,13 @@ class Stretch extends Decompress
      *
      * Returns and removes the next code from the queue, or returns INVALID_CODE if the queue is empty.
      *
-     * @this {Stretch}
+     * @this {ZipStretch}
      * @returns {number}
      */
     removeCodeQueueNext()
     {
         let /* uint16_t */ code = this.getCodeQueueNext();
-        if (code != Stretch.INVALID_CODE) {
+        if (code != ZipStretch.INVALID_CODE) {
             this.codequeue.next_idx++;
         }
         return code;
@@ -786,12 +1689,12 @@ class Stretch extends Decompress
     /**
      * readCode()
      *
-     * @this {Stretch}
+     * @this {ZipStretch}
      * @returns {boolean}
      */
     readCode()
     {
-        assert(/* sizeof(code) */ 2 * Stretch.CHAR_BIT >= this.code_size);
+        assert(/* sizeof(code) */ 2 * ZipStretch.CHAR_BIT >= this.code_size);
 
         let /* uint16_t */ code = this.bs.bits(this.code_size);
         if (!this.bs.advance(this.code_size)) {
@@ -800,7 +1703,7 @@ class Stretch extends Decompress
         /*
          * Handle regular codes (the common case)
          */
-        if (code != Stretch.CONTROL_CODE) {
+        if (code != ZipStretch.CONTROL_CODE) {
             this.curr_code = code;
             return true;
         }
@@ -809,38 +1712,38 @@ class Stretch extends Decompress
          */
         let /* uint16_t */ control_code = this.bs.bits(this.code_size);
         if (!this.bs.advance(this.code_size)) {
-            this.curr_code = Stretch.INVALID_CODE;
+            this.curr_code = ZipStretch.INVALID_CODE;
             return true;
         }
 
-        if (control_code == Stretch.INC_CODE_SIZE && this.code_size < Stretch.MAX_CODE_SIZE) {
+        if (control_code == ZipStretch.INC_CODE_SIZE && this.code_size < ZipStretch.MAX_CODE_SIZE) {
             this.code_size++;
             return this.readCode();
         }
 
-        if (control_code == Stretch.PARTIAL_CLEAR) {
+        if (control_code == ZipStretch.PARTIAL_CLEAR) {
             this.clearPartial();
             return this.readCode();
         }
 
-        this.curr_code = Stretch.INVALID_CODE;
+        this.curr_code = ZipStretch.INVALID_CODE;
         return true;
     }
 
     /**
      * clearPartial()
      *
-     * @this {Stretch}
+     * @this {ZipStretch}
      */
     clearPartial()
     {
-        let is_prefix = new Array(Stretch.MAX_CODE + 1).fill(false);
+        let is_prefix = new Array(ZipStretch.MAX_CODE + 1).fill(false);
 
         /*
          * Scan for codes that have been used as a prefix.
          */
-        for (let i = Stretch.CONTROL_CODE + 1; i <= Stretch.MAX_CODE; i++) {
-            if (this.codetable[i].prefix_code != Stretch.INVALID_CODE) {
+        for (let i = ZipStretch.CONTROL_CODE + 1; i <= ZipStretch.MAX_CODE; i++) {
+            if (this.codetable[i].prefix_code != ZipStretch.INVALID_CODE) {
                 is_prefix[this.codetable[i].prefix_code] = true;
             }
         }
@@ -849,13 +1752,13 @@ class Stretch extends Decompress
          * Clear "non-prefix" codes in the table; populate the code queue.
          */
         let code_queue_size = 0;
-        for (let i = Stretch.CONTROL_CODE + 1; i <= Stretch.MAX_CODE; i++) {
+        for (let i = ZipStretch.CONTROL_CODE + 1; i <= ZipStretch.MAX_CODE; i++) {
             if (!is_prefix[i]) {
-                this.codetable[i].prefix_code = Stretch.INVALID_CODE;
+                this.codetable[i].prefix_code = ZipStretch.INVALID_CODE;
                     this.codequeue.codes[code_queue_size++] = i;
             }
         }
-        this.codequeue.codes[code_queue_size] = Stretch.INVALID_CODE;   // end-of-queue marker
+        this.codequeue.codes[code_queue_size] = ZipStretch.INVALID_CODE;   // end-of-queue marker
         this.codequeue.next_idx = 0;
     }
 
@@ -866,14 +1769,14 @@ class Stretch extends Decompress
      * Returns OK on success, and also updates first_byte and len with the
      * first byte and length of the output string, respectively.
      *
-     * @this {Stretch}
+     * @this {ZipStretch}
      * @param {number} prev_code
      * @returns {boolean}
      */
     outputCode(prev_code)
     {
         let code = this.curr_code;
-        assert(code <= Stretch.MAX_CODE && code != Stretch.CONTROL_CODE);
+        assert(code <= ZipStretch.MAX_CODE && code != ZipStretch.CONTROL_CODE);
         assert(this.dst_pos < this.dst.length);
 
         if (code <= 0xff) {
@@ -884,56 +1787,56 @@ class Stretch extends Decompress
             this.first_byte = code;
             this.len = 1;
             this.writeOutput(code, false);
-            return Stretch.OK;
+            return ZipStretch.OK;
         }
-        if (this.codetable[code].prefix_code == Stretch.INVALID_CODE || this.codetable[code].prefix_code == code) {
+        if (this.codetable[code].prefix_code == ZipStretch.INVALID_CODE || this.codetable[code].prefix_code == code) {
             /*
              * Reject invalid codes. Self-referential codes may exist in the table but cannot be used.
              */
-            return Stretch.ERR;
+            return ZipStretch.ERR;
         }
-        if (this.codetable[code].len != Stretch.UNKNOWN_LEN) {
+        if (this.codetable[code].len != ZipStretch.UNKNOWN_LEN) {
             /*
              * Output string with known length (the common case).
              */
             if (this.dst.length - this.dst_pos < this.codetable[code].len) {
-                return Stretch.FULL;
+                return ZipStretch.FULL;
             }
             this.copyBytes(this.dst_pos, this.codetable[code].last_dst_pos, this.codetable[code].len);
             this.first_byte = this.dst[this.dst_pos];
             this.len = this.codetable[code].len;
-            return Stretch.OK;
+            return ZipStretch.OK;
         }
         /*
          * Output a string of unknown length. This happens when the prefix was invalid
          * (due to partial clearing) when the code was inserted into the table. The prefix
          * can then become valid when it's added to the table at a later point.
          */
-        assert(this.codetable[code].len == Stretch.UNKNOWN_LEN);
+        assert(this.codetable[code].len == ZipStretch.UNKNOWN_LEN);
         let /* uint16_t */ prefix_code = this.codetable[code].prefix_code;
-        assert(prefix_code > Stretch.CONTROL_CODE);
+        assert(prefix_code > ZipStretch.CONTROL_CODE);
 
         if (prefix_code == this.getCodeQueueNext()) {
             /*
              * The prefix code hasn't been added yet, but we were just about to: the KwKwK case.
              * Add the previous string extended with its first byte.
              */
-            assert(this.codetable[prev_code].prefix_code != Stretch.INVALID_CODE);
+            assert(this.codetable[prev_code].prefix_code != ZipStretch.INVALID_CODE);
             this.updateCodeTable(prefix_code, prev_code);
             this.writeOutput(this.first_byte, false);
         }
-        else if (this.codetable[prefix_code].prefix_code == Stretch.INVALID_CODE) {
+        else if (this.codetable[prefix_code].prefix_code == ZipStretch.INVALID_CODE) {
             /*
              * The prefix code is still invalid.
              */
-            return Stretch.ERR;
+            return ZipStretch.ERR;
         }
         /*
          * Output the prefix string, then the extension byte.
          */
         this.len = this.codetable[prefix_code].len + 1;
         if (this.dst.length - this.dst_pos < this.len) {
-            return Stretch.FULL;
+            return ZipStretch.FULL;
         }
         this.copyBytes(this.dst_pos, this.codetable[prefix_code].last_dst_pos, this.codetable[prefix_code].len);
         this.writeByte(this.codetable[code].ext_byte, this.dst_pos + this.len - 1);
@@ -945,7 +1848,7 @@ class Stretch extends Decompress
         this.codetable[code].len = this.len & 0xffff;
         this.codetable[code].last_dst_pos = this.dst_pos;
 
-        return Stretch.OK;
+        return ZipStretch.OK;
     }
 
     /**
@@ -953,7 +1856,7 @@ class Stretch extends Decompress
      *
      * Decompresses a SHRINK stream.
      *
-     * @this {Stretch}
+     * @this {ZipStretch}
      * @param {Buffer} src
      * @param {number} dst_len
      * @returns {boolean|null}
@@ -961,19 +1864,19 @@ class Stretch extends Decompress
     decomp(src, dst_len)
     {
         this.init(src, dst_len);
-        this.code_size = Stretch.MIN_CODE_SIZE;
+        this.code_size = ZipStretch.MIN_CODE_SIZE;
         /*
          * Handle the first code separately since there is no previous code.
          */
         if (!this.readCode()) {
-            return Stretch.OK;
+            return ZipStretch.OK;
         }
-        assert(this.curr_code != Stretch.CONTROL_CODE);
+        assert(this.curr_code != ZipStretch.CONTROL_CODE);
         if (this.curr_code > 0xff) {
-            return Stretch.ERR;                 // the first code must be a literal
+            return ZipStretch.ERR;                 // the first code must be a literal
         }
         if (this.dst_pos == /* dst_len */ this.dst.length) {
-            return Stretch.FULL;
+            return ZipStretch.FULL;
         }
         this.first_byte = this.curr_code & 0xff;
         this.codetable[this.curr_code].last_dst_pos = this.dst_pos;
@@ -981,21 +1884,21 @@ class Stretch extends Decompress
 
         let prev_code = this.curr_code;
         while (this.readCode()) {
-            if (this.curr_code == Stretch.INVALID_CODE) {
-                return Stretch.ERR;
+            if (this.curr_code == ZipStretch.INVALID_CODE) {
+                return ZipStretch.ERR;
             }
             if (this.dst_pos == /* dst_len */ this.dst.length) {
-                return Stretch.FULL;
+                return ZipStretch.FULL;
             }
             /*
              * Handle KwKwK: next code used before being added.
              */
             if (this.curr_code == this.getCodeQueueNext()) {
-                if (this.codetable[prev_code].prefix_code == Stretch.INVALID_CODE) {
+                if (this.codetable[prev_code].prefix_code == ZipStretch.INVALID_CODE) {
                     /*
                      * The previous code is no longer valid.
                      */
-                    return Stretch.ERR;
+                    return ZipStretch.ERR;
                 }
                 /*
                  * Extend the previous code with its first byte.
@@ -1009,7 +1912,7 @@ class Stretch extends Decompress
              * Output the string represented by the current code.
              */
             let s = this.outputCode(prev_code);
-            if (s !== Stretch.OK) {
+            if (s !== ZipStretch.OK) {
                 return s;
             }
             /*
@@ -1026,15 +1929,15 @@ class Stretch extends Decompress
              * previous code's string extended with the first byte of the current code's string.
              */
             let new_code = this.removeCodeQueueNext();
-            if (new_code != Stretch.INVALID_CODE) {
+            if (new_code != ZipStretch.INVALID_CODE) {
                 assert(this.codetable[prev_code].last_dst_pos < this.dst_pos);
                 this.updateCodeTable(new_code, prev_code);
-                if (this.codetable[prev_code].prefix_code == Stretch.INVALID_CODE) {
+                if (this.codetable[prev_code].prefix_code == ZipStretch.INVALID_CODE) {
                     /*
                      * prev_code was invalidated in a partial clearing.  Until that code is re-used,
                      * the string represented by new_code is indeterminate.
                      */
-                    this.codetable[new_code].len = Stretch.UNKNOWN_LEN;
+                    this.codetable[new_code].len = ZipStretch.UNKNOWN_LEN;
                 }
                 /*
                  * If prev_code was invalidated in a partial clearing, it's possible that new_code == prev_code,
@@ -1045,18 +1948,18 @@ class Stretch extends Decompress
             this.dst_pos += this.len;
             prev_code = this.curr_code;
         }
-        return Stretch.OK;
+        return ZipStretch.OK;
     }
 }
 
 /**
- * @class Expand
+ * @class ZipExpand
  * @property {Buffer} src
  * @property {Buffer} dst
  *
- * Expand is used to decompress REDUCE streams.
+ * ZipExpand is used to decompress REDUCE streams.
  */
-class Expand extends Decompress
+class ZipExpand extends Decompress
 {
     static DLE_BYTE = 0x90;                         // "distance-length encoding" marker
     static FOLLOWER_SETS = 256;
@@ -1076,7 +1979,7 @@ class Expand extends Decompress
      *
      * Initialize buffers.
      *
-     * @this {Expand}
+     * @this {ZipExpand}
      * @param {Buffer} src
      * @param {number} dst_len
      * @param {number} comp_factor
@@ -1093,7 +1996,7 @@ class Expand extends Decompress
      *
      * Allocates memory for n follower sets and then reads that number of sets from the input stream.
      *
-     * @this {Expand}
+     * @this {ZipExpand}
      * @param {number} nSets
      * @param {number} nFollowers
      * @returns {boolean}
@@ -1109,7 +2012,7 @@ class Expand extends Decompress
             let followers = new Array(size);
             this.fsets[i] = {
                 size,
-                idx_bw: Expand.getBitWidth(size),
+                idx_bw: ZipExpand.getBitWidth(size),
                 followers
             };
             for (let j = 0; j < size; j++) {
@@ -1144,7 +2047,7 @@ class Expand extends Decompress
     /**
      * getMaxLen()
      *
-     * @this {Expand}
+     * @this {ZipExpand}
      * @returns {number}
      */
     getMaxLen()
@@ -1159,7 +2062,7 @@ class Expand extends Decompress
     /**
      * getMaxDist()
      *
-     * @this {Expand}
+     * @this {ZipExpand}
      * @returns {number}
      */
     getMaxDist()
@@ -1179,7 +2082,7 @@ class Expand extends Decompress
      *
      * Returns true on success and false on bad data or end of input.
      *
-     * @this {Expand}
+     * @this {ZipExpand}
      * @returns {boolean}
      */
     readNextByte()
@@ -1216,7 +2119,7 @@ class Expand extends Decompress
     /**
      * decomp(src, dst_len, comp_factor)
      *
-     * @this {Expand}
+     * @this {ZipExpand}
      * @param {number} dst_len
      * @param {number} comp_factor (1-4)
      * @returns {boolean}
@@ -1225,7 +2128,7 @@ class Expand extends Decompress
     {
         this.init(src, dst_len, comp_factor);
 
-        if (!this.readFollowerSets(Expand.FOLLOWER_SETS, Expand.FOLLOWERS_PER_SET)) {
+        if (!this.readFollowerSets(ZipExpand.FOLLOWER_SETS, ZipExpand.FOLLOWERS_PER_SET)) {
             return false;
         }
 
@@ -1246,7 +2149,7 @@ class Expand extends Decompress
             if (!this.readNextByte()) {
                 return false;
             }
-            if (this.curr_byte != Expand.DLE_BYTE) {
+            if (this.curr_byte != ZipExpand.DLE_BYTE) {
                 /*
                  * Output a literal byte.
                  */
@@ -1263,7 +2166,7 @@ class Expand extends Decompress
                 /*
                  * Output a literal DLE byte.
                  */
-                this.writeOutput(Expand.DLE_BYTE)
+                this.writeOutput(ZipExpand.DLE_BYTE)
                 continue;
             }
             let v = this.curr_byte;
@@ -1312,18 +2215,18 @@ class Expand extends Decompress
 }
 
 /**
- * @class Explode
+ * @class ZipExplode
  *
- * Explode is used to decompress IMPLODE streams.
+ * ZipExplode is used to decompress IMPLODE streams.
  */
-class Explode extends Decompress
+class ZipExplode extends Decompress
 {
     /**
      * init(src, dst_len)
      *
      * Initializes buffers and allocates the Huffman decoders.
      *
-     * @this {Explode}
+     * @this {ZipExplode}
      * @param {Buffer} src
      * @param {number} dst_len
      */
@@ -1340,7 +2243,7 @@ class Explode extends Decompress
      *
      * Decompresses an IMPLODE stream.
      *
-     * @this {Explode}
+     * @this {ZipExplode}
      * @param {Buffer} src
      * @param {number} dst_len
      * @param {boolean} large_wnd
@@ -1460,7 +2363,7 @@ class Explode extends Decompress
      * Initialize Huffman decoder with num_lens codeword lengths.
      * Returns false if the input is invalid.
      *
-     * @this {Explode}
+     * @this {ZipExplode}
      * @param {number} num_lens
      * @param {HuffmanDecoder} decoder
      */
@@ -1520,7 +2423,7 @@ class Explode extends Decompress
 }
 
 /**
- * @class Blast
+ * @class ZipBlast
  * @property {Buffer} src       // (replaces infun and inhow)
  * @property {number} in        // next input location
  * @property {number} left      // available input at in
@@ -1531,12 +2434,12 @@ class Explode extends Decompress
  * @property {boolean} first    // true to check distances (for first 4K)
  * @property {Uint8Array} out   // output array and sliding window
  *
- * Blast is used to decompress DCL_IMPLODE streams.
+ * ZipBlast is used to decompress DCL_IMPLODE streams.
  *
  * Sadly, DCL_IMPLODE streams differ from the IMPLODE streams found in PKZIP files,
  * so this was a bit of a waste for my purposes, but perhaps someone else will find it useful. -JP
  */
-class Blast
+class ZipBlast
 {
     static MAXBITS  = 13;       // maximum code length
     static MAXWIN   = 4096;     // maximum window size
@@ -1568,22 +2471,22 @@ class Blast
     /**
      * constructor()
      *
-     * @this {Blast}
+     * @this {ZipBlast}
      */
     constructor()
     {
-        if (!Blast.litcode) {
-            Blast.litcode = Blast.constructHuffman(Blast.MAXBITS, 256,
+        if (!ZipBlast.litcode) {
+            ZipBlast.litcode = ZipBlast.constructHuffman(ZipBlast.MAXBITS, 256,
                 [11, 124, 8, 7, 28, 7, 188, 13, 76, 4, 10, 8, 12, 10, 12, 10, 8, 23, 8,
                  9, 7, 6, 7, 8, 7, 6, 55, 8, 23, 24, 12, 11, 7, 9, 11, 12, 6, 7, 22, 5,
                  7, 24, 6, 11, 9, 6, 7, 22, 7, 11, 38, 7, 9, 8, 25, 11, 8, 11, 9, 12,
                  8, 12, 5, 38, 5, 38, 5, 11, 7, 5, 6, 21, 6, 10, 53, 8, 7, 24, 10, 27,
                  44, 253, 253, 253, 252, 252, 252, 13, 12, 45, 12, 45, 12, 61, 12, 45, 44, 173]
              );
-             Blast.lencode = Blast.constructHuffman(Blast.MAXBITS, 16, [2, 35, 36, 53, 38, 23]);
-             Blast.distcode = Blast.constructHuffman(Blast.MAXBITS, 64, [2, 20, 53, 230, 247, 151, 248]);
+             ZipBlast.lencode = ZipBlast.constructHuffman(ZipBlast.MAXBITS, 16, [2, 35, 36, 53, 38, 23]);
+             ZipBlast.distcode = ZipBlast.constructHuffman(ZipBlast.MAXBITS, 64, [2, 20, 53, 230, 247, 151, 248]);
         }
-        this.out = new Uint8Array(Blast.MAXWIN);
+        this.out = new Uint8Array(ZipBlast.MAXWIN);
     }
 
     /**
@@ -1591,7 +2494,7 @@ class Blast
      *
      * Initialize buffers.
      *
-     * @this {Blast}
+     * @this {ZipBlast}
      * @param {Buffer} src
      */
     init(src)
@@ -1609,7 +2512,7 @@ class Blast
      *
      * Get the output buffer.
      *
-     * @this {Blast}
+     * @this {ZipBlast}
      * @returns {Buffer}
      */
     getOutput()
@@ -1654,7 +2557,7 @@ class Blast
      * ignoring whether the length is greater than the distance or not implements
      * this correctly.
      *
-     * @this {Blast}
+     * @this {ZipBlast}
      * @param {Buffer} src
      * @returns {number}
      */
@@ -1684,8 +2587,8 @@ class Blast
                 /*
                  * Get length
                  */
-                symbol = this.decode(Blast.lencode);
-                len = Blast.base[symbol] + this.bits(Blast.extra[symbol]);
+                symbol = this.decode(ZipBlast.lencode);
+                len = ZipBlast.base[symbol] + this.bits(ZipBlast.extra[symbol]);
                 if (len == 519) {
                     break;              // end code
                 }
@@ -1693,7 +2596,7 @@ class Blast
                  * Get distance
                  */
                 symbol = len == 2? 2 : dict;
-                dist = this.decode(Blast.distcode) << symbol;
+                dist = this.decode(ZipBlast.distcode) << symbol;
                 dist += this.bits(symbol);
                 dist++;
                 if (this.first && dist > this.next) {
@@ -1705,7 +2608,7 @@ class Blast
                 do {
                     to = this.next;
                     from = to - dist;
-                    copy = Blast.MAXWIN;
+                    copy = ZipBlast.MAXWIN;
                     if (this.next < dist) {
                         from += copy;
                         copy = dist;
@@ -1717,7 +2620,7 @@ class Blast
                     do {
                         this.out[to++] = this.out[from++];
                     } while (--copy);
-                    if (this.next == Blast.MAXWIN) {
+                    if (this.next == ZipBlast.MAXWIN) {
                         if (!this.flush(this.next)) return 1;
                         this.next = this.first = 0;
                     }
@@ -1727,9 +2630,9 @@ class Blast
                 /*
                  * Get literal and write it
                  */
-                symbol = lit? this.decode(Blast.litcode) : this.bits(8);
+                symbol = lit? this.decode(ZipBlast.litcode) : this.bits(8);
                 this.out[this.next++] = symbol;
-                if (this.next == Blast.MAXWIN) {
+                if (this.next == ZipBlast.MAXWIN) {
                     if (!this.flush(this.next)) return 1;
                     this.next = this.first = 0;
                 }
@@ -1765,7 +2668,7 @@ class Blast
      * this ordering, the bits pulled during decoding are inverted to apply the
      * more "natural" ordering starting with all zeros and incrementing.
      *
-     * @this {Blast}
+     * @this {ZipBlast}
      * @param {BlastHuffman} h
      * @returns {number}
      */
@@ -1801,10 +2704,10 @@ class Blast
                 code <<= 1;
                 len++;
             }
-            left = (Blast.MAXBITS+1) - len;
+            left = (ZipBlast.MAXBITS+1) - len;
             if (left == 0) break;
             if (this.left == 0) {
-                throw new Error("Blast.decode(): out of input");
+                throw new Error("ZipBlast.decode(): out of input");
             }
             bitbuf = this.src[this.in++];
             this.left--;
@@ -1818,7 +2721,7 @@ class Blast
      *
      * Flush the output buffer (up to length bytes) to the destination buffer.
      *
-     * @this {Blast}
+     * @this {ZipBlast}
      * @param {number} length
      * @returns {boolean}
      */
@@ -1843,7 +2746,7 @@ class Blast
      * buffer, using shift right, and new bytes are appended to the top of the
      * bit buffer, using shift left.
      *
-     * @this {Blast}
+     * @this {ZipBlast}
      * @param {number} need
      * @returns {number}
      */
@@ -1857,7 +2760,7 @@ class Blast
         val = this.bitbuf;
         while (this.bitcnt < need) {
             if (this.left == 0) {
-                throw new Error("Blast.bits(): out of input");
+                throw new Error("ZipBlast.bits(): out of input");
             }
             /*
              * Load eight more bits
@@ -1995,288 +2898,3 @@ function assert(exp, msg)
         }
     }
 }
-
-/**
- * reverse16(x, n)
- *
- * Reverse the n least significant bits of x.
- * The (16 - n) most significant bits of the result will be zero.
- *
- * @param {number} x
- * @param {number} n
- * @returns {number}
- */
-function reverse16(/* uint16_t */ x, /* int */ n)
-{
-    let /* uint16_t */ lo, hi;
-    let /* uint16_t */ reversed;
-
-    assert(n > 0);
-    assert(n <= 16);
-
-    lo = x & 0xff;
-    hi = x >> 8;
-
-    reversed = ((reverse8_tbl[lo] << 8) | reverse8_tbl[hi]) & 0xffff;
-
-    return reversed >> (16 - n);
-}
-
-const /* uint8_t */ reverse8_tbl = [
-    /* 0x00 */ 0x00,
-    /* 0x01 */ 0x80,
-    /* 0x02 */ 0x40,
-    /* 0x03 */ 0xc0,
-    /* 0x04 */ 0x20,
-    /* 0x05 */ 0xa0,
-    /* 0x06 */ 0x60,
-    /* 0x07 */ 0xe0,
-    /* 0x08 */ 0x10,
-    /* 0x09 */ 0x90,
-    /* 0x0a */ 0x50,
-    /* 0x0b */ 0xd0,
-    /* 0x0c */ 0x30,
-    /* 0x0d */ 0xb0,
-    /* 0x0e */ 0x70,
-    /* 0x0f */ 0xf0,
-    /* 0x10 */ 0x08,
-    /* 0x11 */ 0x88,
-    /* 0x12 */ 0x48,
-    /* 0x13 */ 0xc8,
-    /* 0x14 */ 0x28,
-    /* 0x15 */ 0xa8,
-    /* 0x16 */ 0x68,
-    /* 0x17 */ 0xe8,
-    /* 0x18 */ 0x18,
-    /* 0x19 */ 0x98,
-    /* 0x1a */ 0x58,
-    /* 0x1b */ 0xd8,
-    /* 0x1c */ 0x38,
-    /* 0x1d */ 0xb8,
-    /* 0x1e */ 0x78,
-    /* 0x1f */ 0xf8,
-    /* 0x20 */ 0x04,
-    /* 0x21 */ 0x84,
-    /* 0x22 */ 0x44,
-    /* 0x23 */ 0xc4,
-    /* 0x24 */ 0x24,
-    /* 0x25 */ 0xa4,
-    /* 0x26 */ 0x64,
-    /* 0x27 */ 0xe4,
-    /* 0x28 */ 0x14,
-    /* 0x29 */ 0x94,
-    /* 0x2a */ 0x54,
-    /* 0x2b */ 0xd4,
-    /* 0x2c */ 0x34,
-    /* 0x2d */ 0xb4,
-    /* 0x2e */ 0x74,
-    /* 0x2f */ 0xf4,
-    /* 0x30 */ 0x0c,
-    /* 0x31 */ 0x8c,
-    /* 0x32 */ 0x4c,
-    /* 0x33 */ 0xcc,
-    /* 0x34 */ 0x2c,
-    /* 0x35 */ 0xac,
-    /* 0x36 */ 0x6c,
-    /* 0x37 */ 0xec,
-    /* 0x38 */ 0x1c,
-    /* 0x39 */ 0x9c,
-    /* 0x3a */ 0x5c,
-    /* 0x3b */ 0xdc,
-    /* 0x3c */ 0x3c,
-    /* 0x3d */ 0xbc,
-    /* 0x3e */ 0x7c,
-    /* 0x3f */ 0xfc,
-    /* 0x40 */ 0x02,
-    /* 0x41 */ 0x82,
-    /* 0x42 */ 0x42,
-    /* 0x43 */ 0xc2,
-    /* 0x44 */ 0x22,
-    /* 0x45 */ 0xa2,
-    /* 0x46 */ 0x62,
-    /* 0x47 */ 0xe2,
-    /* 0x48 */ 0x12,
-    /* 0x49 */ 0x92,
-    /* 0x4a */ 0x52,
-    /* 0x4b */ 0xd2,
-    /* 0x4c */ 0x32,
-    /* 0x4d */ 0xb2,
-    /* 0x4e */ 0x72,
-    /* 0x4f */ 0xf2,
-    /* 0x50 */ 0x0a,
-    /* 0x51 */ 0x8a,
-    /* 0x52 */ 0x4a,
-    /* 0x53 */ 0xca,
-    /* 0x54 */ 0x2a,
-    /* 0x55 */ 0xaa,
-    /* 0x56 */ 0x6a,
-    /* 0x57 */ 0xea,
-    /* 0x58 */ 0x1a,
-    /* 0x59 */ 0x9a,
-    /* 0x5a */ 0x5a,
-    /* 0x5b */ 0xda,
-    /* 0x5c */ 0x3a,
-    /* 0x5d */ 0xba,
-    /* 0x5e */ 0x7a,
-    /* 0x5f */ 0xfa,
-    /* 0x60 */ 0x06,
-    /* 0x61 */ 0x86,
-    /* 0x62 */ 0x46,
-    /* 0x63 */ 0xc6,
-    /* 0x64 */ 0x26,
-    /* 0x65 */ 0xa6,
-    /* 0x66 */ 0x66,
-    /* 0x67 */ 0xe6,
-    /* 0x68 */ 0x16,
-    /* 0x69 */ 0x96,
-    /* 0x6a */ 0x56,
-    /* 0x6b */ 0xd6,
-    /* 0x6c */ 0x36,
-    /* 0x6d */ 0xb6,
-    /* 0x6e */ 0x76,
-    /* 0x6f */ 0xf6,
-    /* 0x70 */ 0x0e,
-    /* 0x71 */ 0x8e,
-    /* 0x72 */ 0x4e,
-    /* 0x73 */ 0xce,
-    /* 0x74 */ 0x2e,
-    /* 0x75 */ 0xae,
-    /* 0x76 */ 0x6e,
-    /* 0x77 */ 0xee,
-    /* 0x78 */ 0x1e,
-    /* 0x79 */ 0x9e,
-    /* 0x7a */ 0x5e,
-    /* 0x7b */ 0xde,
-    /* 0x7c */ 0x3e,
-    /* 0x7d */ 0xbe,
-    /* 0x7e */ 0x7e,
-    /* 0x7f */ 0xfe,
-    /* 0x80 */ 0x01,
-    /* 0x81 */ 0x81,
-    /* 0x82 */ 0x41,
-    /* 0x83 */ 0xc1,
-    /* 0x84 */ 0x21,
-    /* 0x85 */ 0xa1,
-    /* 0x86 */ 0x61,
-    /* 0x87 */ 0xe1,
-    /* 0x88 */ 0x11,
-    /* 0x89 */ 0x91,
-    /* 0x8a */ 0x51,
-    /* 0x8b */ 0xd1,
-    /* 0x8c */ 0x31,
-    /* 0x8d */ 0xb1,
-    /* 0x8e */ 0x71,
-    /* 0x8f */ 0xf1,
-    /* 0x90 */ 0x09,
-    /* 0x91 */ 0x89,
-    /* 0x92 */ 0x49,
-    /* 0x93 */ 0xc9,
-    /* 0x94 */ 0x29,
-    /* 0x95 */ 0xa9,
-    /* 0x96 */ 0x69,
-    /* 0x97 */ 0xe9,
-    /* 0x98 */ 0x19,
-    /* 0x99 */ 0x99,
-    /* 0x9a */ 0x59,
-    /* 0x9b */ 0xd9,
-    /* 0x9c */ 0x39,
-    /* 0x9d */ 0xb9,
-    /* 0x9e */ 0x79,
-    /* 0x9f */ 0xf9,
-    /* 0xa0 */ 0x05,
-    /* 0xa1 */ 0x85,
-    /* 0xa2 */ 0x45,
-    /* 0xa3 */ 0xc5,
-    /* 0xa4 */ 0x25,
-    /* 0xa5 */ 0xa5,
-    /* 0xa6 */ 0x65,
-    /* 0xa7 */ 0xe5,
-    /* 0xa8 */ 0x15,
-    /* 0xa9 */ 0x95,
-    /* 0xaa */ 0x55,
-    /* 0xab */ 0xd5,
-    /* 0xac */ 0x35,
-    /* 0xad */ 0xb5,
-    /* 0xae */ 0x75,
-    /* 0xaf */ 0xf5,
-    /* 0xb0 */ 0x0d,
-    /* 0xb1 */ 0x8d,
-    /* 0xb2 */ 0x4d,
-    /* 0xb3 */ 0xcd,
-    /* 0xb4 */ 0x2d,
-    /* 0xb5 */ 0xad,
-    /* 0xb6 */ 0x6d,
-    /* 0xb7 */ 0xed,
-    /* 0xb8 */ 0x1d,
-    /* 0xb9 */ 0x9d,
-    /* 0xba */ 0x5d,
-    /* 0xbb */ 0xdd,
-    /* 0xbc */ 0x3d,
-    /* 0xbd */ 0xbd,
-    /* 0xbe */ 0x7d,
-    /* 0xbf */ 0xfd,
-    /* 0xc0 */ 0x03,
-    /* 0xc1 */ 0x83,
-    /* 0xc2 */ 0x43,
-    /* 0xc3 */ 0xc3,
-    /* 0xc4 */ 0x23,
-    /* 0xc5 */ 0xa3,
-    /* 0xc6 */ 0x63,
-    /* 0xc7 */ 0xe3,
-    /* 0xc8 */ 0x13,
-    /* 0xc9 */ 0x93,
-    /* 0xca */ 0x53,
-    /* 0xcb */ 0xd3,
-    /* 0xcc */ 0x33,
-    /* 0xcd */ 0xb3,
-    /* 0xce */ 0x73,
-    /* 0xcf */ 0xf3,
-    /* 0xd0 */ 0x0b,
-    /* 0xd1 */ 0x8b,
-    /* 0xd2 */ 0x4b,
-    /* 0xd3 */ 0xcb,
-    /* 0xd4 */ 0x2b,
-    /* 0xd5 */ 0xab,
-    /* 0xd6 */ 0x6b,
-    /* 0xd7 */ 0xeb,
-    /* 0xd8 */ 0x1b,
-    /* 0xd9 */ 0x9b,
-    /* 0xda */ 0x5b,
-    /* 0xdb */ 0xdb,
-    /* 0xdc */ 0x3b,
-    /* 0xdd */ 0xbb,
-    /* 0xde */ 0x7b,
-    /* 0xdf */ 0xfb,
-    /* 0xe0 */ 0x07,
-    /* 0xe1 */ 0x87,
-    /* 0xe2 */ 0x47,
-    /* 0xe3 */ 0xc7,
-    /* 0xe4 */ 0x27,
-    /* 0xe5 */ 0xa7,
-    /* 0xe6 */ 0x67,
-    /* 0xe7 */ 0xe7,
-    /* 0xe8 */ 0x17,
-    /* 0xe9 */ 0x97,
-    /* 0xea */ 0x57,
-    /* 0xeb */ 0xd7,
-    /* 0xec */ 0x37,
-    /* 0xed */ 0xb7,
-    /* 0xee */ 0x77,
-    /* 0xef */ 0xf7,
-    /* 0xf0 */ 0x0f,
-    /* 0xf1 */ 0x8f,
-    /* 0xf2 */ 0x4f,
-    /* 0xf3 */ 0xcf,
-    /* 0xf4 */ 0x2f,
-    /* 0xf5 */ 0xaf,
-    /* 0xf6 */ 0x6f,
-    /* 0xf7 */ 0xef,
-    /* 0xf8 */ 0x1f,
-    /* 0xf9 */ 0x9f,
-    /* 0xfa */ 0x5f,
-    /* 0xfb */ 0xdf,
-    /* 0xfc */ 0x3f,
-    /* 0xfd */ 0xbf,
-    /* 0xfe */ 0x7f,
-    /* 0xff */ 0xff
-];

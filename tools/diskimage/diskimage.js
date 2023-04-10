@@ -136,10 +136,11 @@ function createDisk(diskFile, diskette, argv, done)
     printf("checking archive: %s\n", sArchiveFile);
     if (fDir || arcType) {
         let label = diskette.label || argv['label'];
+        let password = argv['password'];
         let normalize = diskette.normalize || argv['normalize'];
         let target = getTarget(diskette.format);
         let verbose = argv['verbose'];
-        di = readDir(sArchiveFile, arcType, label, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
+        di = readDir(sArchiveFile, arcType, label, password, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
     } else {
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
         if (di && done) {
@@ -906,7 +907,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
     }
 
     sPath = path.join(sDir, subDir, sPath);
-    let sFile = sPath.substr(sDir.length? sDir.length + 1 : 0);
+    let sFile = sPath.substr(sDir != '.' && sDir.length? sDir.length + 1 : 0);
 
     let fSuccess = false;
     let dir = path.dirname(sPath);
@@ -933,6 +934,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
             if (arcType) {
                 let zip = new StreamZip({
                     file: sFile,
+                    password: argv['password'],
                     buffer: db.buffer,
                     arcType: arcType,
                     storeEntries: true,
@@ -1744,11 +1746,12 @@ function readCollection(argv)
 }
 
 /**
- * readDir(sDir, arcType, sLabel, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
+ * readDir(sDir, arcType, sLabel, sPassword, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
  *
  * @param {string} sDir (directory name)
  * @param {number} [arcType] (1 if ARC file, 2 if ZIP file, otherwise 0)
  * @param {string} [sLabel] (if not set with --label, then basename(sDir) will be used instead)
+ * @param {string} [sPassword] (password; for encrypted ARC files only at this point)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
@@ -1759,7 +1762,7 @@ function readCollection(argv)
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
  * @returns {DiskInfo|null}
  */
-function readDir(sDir, arcType, sLabel, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
+function readDir(sDir, arcType, sLabel, sPassword, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
 {
     let di;
     let diskName = path.basename(sDir);
@@ -1794,7 +1797,7 @@ function readDir(sDir, arcType, sLabel, fNormalize, kbTarget, nMax, fVerbose, do
     try {
         nMaxInit = nMaxCount = nMax || nMaxDefault;
         if (arcType) {
-            readArchiveFiles(sDir, arcType, sLabel, fVerbose, readDone);
+            readArchiveFiles(sDir, arcType, sLabel, sPassword, fVerbose, readDone);
         } else {
             di = readDone(readDirFiles(sDir, sLabel, fNormalize, 0));
         }
@@ -1966,22 +1969,14 @@ function getArchiveFiles(zip, fVerbose)
             aDirectories.push(file);
         } else {
             let data;
-            if (fVerbose == "nodata") {
-                /*
-                 * HACK to skip decompression (--verbose=nodata)
-                 */
+            /*
+             * HACK to skip decompression for all entries (--verbose=skip) or all entries except a named entry.
+             */
+            if (typeof fVerbose == "string" && (fVerbose == "skip" || fVerbose != entry.name)) {
                 data = new DataBuffer(entry.size);
             }
             else {
-                try {
-                    data = zip.entryDataSync(entry.name);
-                } catch(err) {
-                    if (entry.error) {
-                        entry.error(err.message);
-                    } else {
-                        printError(err);
-                    }
-                }
+                data = zip.entryDataSync(entry.name);
                 data = new DataBuffer(data || 0);
             }
             file.attr = DiskInfo.ATTR.ARCHIVE;
@@ -2003,8 +1998,16 @@ function getArchiveFiles(zip, fVerbose)
             aFileData.push(file);
         }
         if (fVerbose) {
+            /*
+             * Notes regarding ARC compression method "naming conventions":
+             *
+             * I've not yet seen any examples of Method5 or Method7 "in the wild", but I have seen Method6
+             * (see PC-SIG DISK0568: 123EGA.ARC), which PKXARC.EXE called "crunched" (with a lower-case "c"),
+             * distinct from Method8 which it called "Crunched" (with an upper-case "C").  That's not very
+             * clear, so I think I'll continue to display Method6 as, um, "Method6" instead.
+             */
             let methodsARC = [
-                "Store", "Method3", "Squeeze", "Method5", "Method6", "Method7", "Crunch", "Squash"
+                "Store", "Pack", "Squeeze", "Method5", "Method6", "Method7", "Crunch", "Squash"
             ];
             let methodsZIP = [
                 "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
@@ -2019,6 +2022,7 @@ function getArchiveFiles(zip, fVerbose)
                 filename += "/";
             }
             let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
+            if (entry.encrypted) method += '*';
             let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
             printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
                 filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc);
@@ -2029,18 +2033,20 @@ function getArchiveFiles(zip, fVerbose)
 }
 
 /**
- * readArchiveFiles(sArchive, arcType, sLabel, fVerbose, done)
+ * readArchiveFiles(sArchive, arcType, sLabel, sPassword, fVerbose, done)
  *
  * @param {string} sArchive (ARC/ZIP filename)
  * @param {number} arcType (1 for ARC, 2 for ZIP)
- * @param {boolean|null} sLabel (optional volume label)
+ * @param {string} sLabel (optional volume label)
+ * @param {string} sPassword (optional password)
  * @param {boolean} fVerbose (true to display verbose output, false to display minimal output)
  * @param {function(Array.<FileData>)} done
  */
-function readArchiveFiles(sArchive, arcType, sLabel, fVerbose, done)
+function readArchiveFiles(sArchive, arcType, sLabel, sPassword, fVerbose, done)
 {
     let zip = new StreamZip({
         file: sArchive,
+        password: sPassword,
         arcType: arcType,
         storeEntries: true,
         nameEncoding: "ascii",
@@ -2460,7 +2466,7 @@ function processFile(argv)
          * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
          * equivalent to 10240K).
          */
-        readDir(input, arcType, argv['label'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
+        readDir(input, arcType, argv['label'], argv['password'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
         return true;
     }
 
