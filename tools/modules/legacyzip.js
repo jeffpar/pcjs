@@ -6,11 +6,12 @@
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  *
+ * Unpack(), Unsqueeze(), Uncrunch(), and Uncrush() decompression code adapted from ARC source code
+ * (C) Copyright 1985-87 by System Enhancement Associates and Thom Henderson, as released under the terms
+ * of the GPL at https://github.com/hyc/arc/blob/master/LICENSE
+ *
  * Stretch(), Expand(), and Explode() functionality adapted from https://www.hanshq.net/files/hwzip/hwzip-2.1.zip,
  * as released into the public domain by Hans Wennborg; see https://www.hanshq.net/zip2.html for more details.
- *
- * ARC decompression code adapted from ARC source code (C) Copyright 1985-87 by System Enhancement Associates
- * and Thom Henderson, as released under the terms of the GPL at https://github.com/hyc/arc/blob/master/LICENSE
  *
  * Blast() functionality adapted from https://github.com/madler/zlib/tree/master/contrib/blast
  * Copyright (C) 2003, 2012, 2013 Mark Adler
@@ -129,8 +130,8 @@ export class LegacyArc
      */
     static uncrunchSync(src, dst_len, type)
     {
-        let uncrunch = new ArcUncrunch(type);
-        if (!uncrunch.decomp(src, dst_len)) {
+        let uncrunch = new ArcUncrunch();
+        if (!uncrunch.decomp(src, dst_len, type >= 1, type == 2)) {
             delete uncrunch.dst;
         }
         return uncrunch;
@@ -335,6 +336,18 @@ class BitStream
         this.bit_end = this.end * 8;
         this.cachePos = -1;
         this.cacheBits = 0;
+    }
+
+    /**
+     * avail(n)
+     *
+     * @this {BitStream}
+     * @param {number} n
+     * @returns {boolean} (true if at least n bits are available)
+     */
+    avail(n)
+    {
+        return (this.bit_pos + n <= this.bit_end);
     }
 
     /**
@@ -957,7 +970,9 @@ class HuffmanDecoder
  * @property {BitStream} bs
  * @property {Buffer} dst
  *
- * Decompress is the base class for ArcUnpack, ArcUnsqueeze, ZipStretch, ZipExpand, and ZipExplode classes.
+ * Decompress is the base class for ArcUnpack, ZipStretch, ZipExpand, and ZipExplode classes.
+ *
+ * ArcUnpack, in turn, is the base class for ArcUnsqueeze, ArcUncrunch, and ArcUncrush classes.
  */
 class Decompress
 {
@@ -1084,27 +1099,37 @@ class ArcUnpack extends Decompress
     static MYDATA = 32766;              // size of data[]
 
     /**
-     * init(src, dst_len)
+     * init(src, dst_len, packed)
      *
      * @this {ArcUnpack}
      * @param {Buffer} src
      * @param {number} dst_len
+     * @param {boolean} [packed]
      */
-    init(src, dst_len)
+    init(src, dst_len, packed)
     {
         super.init(src, dst_len);
+
         this.state = LegacyArc.NOHIST;  // repeat unpacking state
         this.lastc = -1;
+
+        this.data = new Array(ArcUnpack.MYDATA);
+
+        if (!packed) {
+            this.putBytes = this.moveBytes.bind(this);
+        } else {
+            this.putBytes = this.unpackBytes.bind(this);
+        }
     }
 
     /**
-     * putBytes(data, len)
+     * moveBytes(data, len)
      *
      * @this {ArcUnpack}
      * @param {Array} data
      * @param {number} len
      */
-    putBytes(data, len)
+    moveBytes(data, len)
     {
         for (let i = 0; i < len; i++) {
             this.writeOutput(data[i]);
@@ -1163,9 +1188,9 @@ class ArcUnpack extends Decompress
      */
     decomp(src, dst_len)
     {
-        this.init(src, dst_len);
+        this.init(src, dst_len, true);
         let data = Array.from(src);
-        this.unpackBytes(data, data.length);
+        this.putBytes(data, data.length);
         return true;
     }
 }
@@ -1189,8 +1214,7 @@ class ArcUnsqueeze extends ArcUnpack
      */
     init(src, dst_len)
     {
-        super.init(src, dst_len);
-        this.data = new Array(ArcUnpack.MYDATA);
+        super.init(src, dst_len, true);
 
         /*
          * Initialize Huffman unsqueezing (from init_usq() in arcusq.c)
@@ -1270,10 +1294,10 @@ class ArcUnsqueeze extends ArcUnpack
     decomp(src, dst_len)
     {
         let len;
-        this.init(src, dst_len);
+        this.init(src, dst_len, true);
         do {
             len = this.getBytes(this.data);
-            this.unpackBytes(this.data, len);
+            this.putBytes(this.data, len);
         } while (len == ArcUnpack.MYDATA);
         return true;
     }
@@ -1282,50 +1306,303 @@ class ArcUnsqueeze extends ArcUnpack
 /**
  * @class ArcUncrunch
  *
- * ArcUncrunch is used to decompress crunched streams.
+ * ArcUncrunch is used to decompress crunched (LZW) streams.
  */
 class ArcUncrunch extends ArcUnpack
 {
     /**
-     * constructor(type)
-     *
-     * @this {ArcUncrunch}
-     * @param {number} type
+     * @typedef {Object} st_entry               // string table entry
+     * @property {number} used                  // true when this entry is in use (char)
+     * @property {number} follower              // char following string (u_char)
+     * @property {number} next                  // ptr to next in collision list (u_short)
+     * @property {number} predecessor           // code for preceding string (u_short)
      */
-    constructor(type)
-    {
-        super();
-        this.type = type;
-    }
+
+    static TABSIZE  = 4096;                     // string table size
+    static STKSIZE  = 4096;                     // stack size (TODO: figure out the minimum size)
+    static NO_PRED  = 0xFFFF;
+    static EMPTY    = 0xFFFF;
+    static NOT_FND  = 0xFFFF;
 
     /**
-     * init(src, dst_len)
+     * init(src, dst_len, packed, newHash)
      *
      * @this {ArcUncrunch}
      * @param {Buffer} src
      * @param {number} dst_len
+     * @param {boolean} packed
+     * @param {boolean} newHash
      */
-    init(src, dst_len)
+    init(src, dst_len, packed, newHash)
     {
-        super.init(src, dst_len);
-        this.data = new Array(ArcUnpack.MYDATA);
+        super.init(src, dst_len, packed);
+        if (!newHash) {
+            this.getHash = this.oldHash.bind(this);
+        } else {
+            this.getHash = this.newHash.bind(this);
+        }
+        this.string_tab = new Array(ArcUncrunch.TABSIZE);
+        for (let i = 0; i < this.string_tab.length; i++) {
+            this.string_tab[i] = {used: 0, follower: 0, next: 0, predecessor: 0};
+        }
+        for (let i = 0; i < 256; i++) {
+            this.updateTable(ArcUncrunch.NO_PRED, i);
+        }
+        this.sp = 0;
+        this.stack = new Array(ArcUncrunch.STKSIZE);
+        this.code_count = ArcUncrunch.TABSIZE - 256;    // note space left in table
+        this.inflag = 0;
+        this.oldcode = this.getCode();
+        this.finchar = this.string_tab[this.oldcode].follower;
+        this.o = 0;
+        this.data[this.o++] = this.finchar;
     }
 
     /**
-     * decomp(src, dst_len)
+     * oldHash(pred, foll)
+     *
+     * Calculates a hash value by taking the middle twelve bits of the square of the key.
+     *
+     * @this {ArcUncrunch}
+     * @param {number} pred     // code for preceding string (u_short)
+     * @param {number} foll     // value of following char (u_char)
+     * @returns {number}        // hash value (u_short)
+     */
+    oldHash(pred, foll)
+    {
+        let local = ((pred + foll) | 0x0800) & 0xFFFF;  // create the hash key
+        local *= local;                                 // square it
+        return (local >> 6) & (ArcUncrunch.TABSIZE-1);  // return the middle 12 bits
+    }
+
+    /**
+     * newHash(pred, foll)
+     *
+     * Works somewhat differently from oldHash() and was tried because it makes ARC about
+     * 23% faster.  This approach was abandoned because dynamic Lempel-Zev works as well, and
+     * packs smaller also.  However, inadvertent release of a developmental copy forces us
+     * to leave this in.
+     *
+     * @this {ArcUncrunch}
+     * @param {number} pred     // code for preceding string (u_short)
+     * @param {number} foll     // value of following char (u_char)
+     * @returns {number}        // hash value (u_short)
+     */
+    newHash(pred, foll)
+    {
+        return (((pred + foll) & 0xFFFF) * 15073) & (ArcUncrunch.TABSIZE-1);
+    }
+
+    /**
+     * eolist(index)
+     *
+     * Trace down a list of entries with duplicate keys until the last duplicate is found.
+     *
+     * @this {ArcUncrunch}
+     * @param {number} index
+     * @returns {number}
+     */
+    eolist(index)
+    {
+        let temp;
+        while ((temp = this.string_tab[index].next)) {
+            index = temp;
+        }
+        return index;
+    }
+
+    /**
+     * hash(pred, foll)
+     *
+     * The hash() routine is used to find a spot in the hash table for a new
+     * entry.  It performs a "hash and linear probe" lookup, using getHash() to
+     * calculate the starting hash value and eolist() to perform the linear probe.
+     *
+     * This routine DOES NOT detect a table full condition.  That MUST be checked
+     * for elsewhere.
+     *
+     * @this {ArcUncrunch}
+     * @param {number} pred     // code for preceding string (u_short)
+     * @param {number} foll     // char following char (u_char)
+     * @returns {number}
+     */
+    hash(pred, foll)
+    {
+        let ep, local, next;                    // scratch storage
+
+        local = this.getHash(pred, foll);       // get initial hash value
+
+        if (!this.string_tab[local].used) {     // if that spot is free
+            return local;	                    // then that's all we need
+        }
+        /*
+         * Collision has occurred
+         */
+        local = this.eolist(local);             // move to last duplicate
+
+        /*
+         * We must find an empty spot. We start looking 101 places
+         * down the table from the last duplicate.
+         */
+        next = (local + 101) & 0x0FFF;
+        ep = this.string_tab[next];             // initialize pointer
+
+        while (ep.used) {	                    // while empty spot not found
+            if (++next == ArcUncrunch.TABSIZE) {
+                next = 0;                       // wrap to beginning of table
+                ep = this.string_tab[0];
+            } else {
+                ep = this.string_tab[next];     // point to next element in table
+            }
+        }
+
+        /*
+         * local still has the pointer to the last duplicate, while
+         * next has the pointer to the spot we found.  We use this to
+         * maintain the chain of pointers to duplicates.
+         */
+        this.string_tab[local].next = next;
+        return next;
+    }
+
+    /**
+     * updateTable(pred, foll)
+     *
+     * Add an entry to the string table.  As previously stated, no checks are made to ensure
+     * that the table has any room.  This must be done elsewhere.
+     *
+     * @this {ArcUncrunch}
+     * @param {number} pred     // code for preceding string (u_short)
+     * @param {number} foll     // character which follows string (u_short)
+     */
+    updateTable(pred, foll)
+    {
+        let ep = this.string_tab[this.hash(pred, foll)];
+        ep.used = true;         // this spot is now in use
+        ep.next = 0;            // no duplicates after this yet
+        ep.predecessor = pred;  // note code of preceding string
+        ep.follower = foll;     // note char after string
+    }
+
+    /**
+     * getCode()
+     *
+     * Get the next 12-bit code from the input stream.
+     *
+     * @this {ArcUncrunch}
+     * @returns {number}
+     */
+    getCode()
+    {
+        let x;
+        if ((this.inflag ^= 1)) {
+            x = (this.bs.bits(8, true) << 4) | (this.bs.bits(8) >> 4);
+            // x = (*inbeg++ << 4); x |= (*inbeg >> 4);
+        }
+        else {
+            x = ((this.bs.bits(8, true) & 0x0f) << 8) | this.bs.bits(8, true);
+            // x = (*inbeg++ & 0x0f) << 8; x |= (*inbeg++);
+        }
+        return x;
+    }
+
+    /**
+     * push(c)
+     *
+     * @this {ArcUncrunch}
+     * @param {number} c
+     */
+    push(c)
+    {
+        this.stack[this.sp] = c;
+        if (++this.sp >= ArcUncrunch.STKSIZE) {
+            throw new Error("stack overflow");
+        }
+    }
+
+    /**
+     * pop()
+     *
+     * @this {ArcUncrunch}
+     * @returns {number}
+     */
+    pop()
+    {
+        return (this.sp > 0? this.stack[--this.sp] : ArcUncrunch.EMPTY);
+    }
+
+    /**
+     * getBytes(data)
+     *
+     * Get bytes from crunched file (see getb_ucr() in arclzw.c)
+     *
+     * @this {ArcUncrunch}
+     * @param {Array} data
+     */
+    getBytes(data)
+    {
+        let code, newcode, len, ep;
+        do {
+            if (!this.sp) {                     // if stack is empty
+                if (!this.bs.avail(12)) {
+                    break;                      // insufficient bits remaining
+                }
+                newcode = this.getCode();
+                code = newcode;
+                ep = this.string_tab[code];     // initialize string_tab pointer
+
+                if (!ep.used) {                 // if code isn't known
+                    code = this.oldcode;
+                    ep = this.string_tab[code]; // re-initialize pointer
+                    this.push(this.finchar);
+                }
+                while (ep.predecessor != ArcUncrunch.NO_PRED) {
+                    this.push(ep.follower);	    // decode string backwards
+                    code = ep.predecessor;
+                    ep = this.string_tab[code];
+                }
+                this.finchar = ep.follower;
+                this.push(this.finchar);        // save first character also */
+
+                /*
+                 * The above loop will terminate, one way or another, with
+                 * string_tab[code].follower equal to the first character in
+                 * the string.
+                 */
+                if (this.code_count) {          // if room left in string table
+                    this.updateTable(this.oldcode, this.finchar);
+                    --this.code_count;
+                }
+                this.oldcode = newcode;
+            }
+            this.data[this.o++] = this.pop();
+        } while (this.o < this.data.length);
+        len = this.o;
+        this.o = 0;
+        return len;
+    }
+
+    /**
+     * decomp(src, dst_len, packed, newHash)
      *
      * Decompresses a crunched stream.
      *
      * @this {ArcUncrunch}
      * @param {Buffer} src
      * @param {number} dst_len
+     * @param {boolean} packed
+     * @param {boolean} newHash
      * @returns {boolean|null}
      */
-    decomp(src, dst_len)
+    decomp(src, dst_len, packed, newHash)
     {
-        this.init(src, dst_len);
-
-        return false;
+        let len;
+        this.init(src, dst_len, packed, newHash);
+        do {
+            len = this.getBytes(this.data);
+            this.putBytes(this.data, len);
+        } while (len == ArcUnpack.MYDATA);
+        return true;
     }
 }
 
@@ -1343,13 +1620,13 @@ class ArcUncrush extends ArcUnpack
     static CRHSIZE  = 5003;             // 80% occupancy
     static CRGAP    = 2048;             // ratio check interval
     static SQBITS   = 13;               // Squash values of above
-    static SQHSIZE  = 10007;
+    static SQHSIZE  = 10007;            // TODO: figure out the minimum sizes for the suffix and prefix arrays
+    static STKSIZE  = 4096;             // stack size (TODO: figure out the minimum size)
     static SQGAP    = 10000;
     static INIT_BITS = 9;               // initial number of bits/code
 
     /*
-     * The next two codes should not be changed lightly, as they must not lie
-     * within the contiguous general code space.
+     * The next two codes should not be changed lightly, as they must not lie within the contiguous general code space.
      */
     static FIRST    = 257;              // first free entry
     static CLEAR    = 256;              // table clear output code
@@ -1371,27 +1648,24 @@ class ArcUncrush extends ArcUnpack
      */
     init(src, dst_len, squashed)
     {
-        super.init(src, dst_len);
-        this.data = new Array(ArcUnpack.MYDATA);
+        super.init(src, dst_len, !squashed);
 
-        this.suffix = /* (u_char *) */ new Array(ArcUncrush.SQHSIZE /* * sizeof(u_char)*4 */);
+        this.suffix = /* (u_char *) */ new Array(ArcUncrush.SQHSIZE /* * sizeof(u_long) */);
         this.prefix = /* (u_short *) */ new Array(ArcUncrush.SQHSIZE /* * sizeof(u_short) */);
-        this.stack = new Array(2048);               // TODO: figure out the minimum size
+        this.stack = new Array(ArcUncrush.STKSIZE);
         if (squashed) {
             this.maxBits = ArcUncrush.SQBITS;
-            this.output = this.putBytes.bind(this);
         } else {
             this.maxBits = ArcUncrush.CRBITS;
-            this.output = this.unpackBytes.bind(this);
             let code = this.bs.bits(8, true);
             if (code != this.maxBits) {
                 throw new Error("file packed with " + code + " bits (maximum is " + this.maxBits + ")");
             }
         }
 
-        this.max_maxcode = 1 << this.maxBits;       // largest possible code (+1)
         this.clear_flg = 0;
-        this.n_bits = ArcUncrush.INIT_BITS;       // number of bits/code
+        this.max_maxcode = 1 << this.maxBits;   // largest possible code (+1)
+        this.n_bits = ArcUncrush.INIT_BITS;     // number of bits/code
         this.maxcode = this.maxCode(this.n_bits);
         this.free_ent = ArcUncrush.FIRST;
         this.offset = this.size = 0;
@@ -1570,7 +1844,7 @@ class ArcUncrush extends ArcUnpack
             do {
                 this.data[o++] = this.stack[--p];
                 if (o == this.data.length) {
-                    this.output(this.data, o);
+                    this.putBytes(this.data, o);
                     o = 0;
                     chunks++;
                 }
@@ -1595,7 +1869,7 @@ class ArcUncrush extends ArcUnpack
             oldcode = incode;
         }
         if (o > 0) {
-            this.output(this.data, o);
+            this.putBytes(this.data, o);
         }
         return true;
     }
