@@ -361,7 +361,7 @@ Getting back to those `CUE.ARC` archives that I couldn't decompress, `PKXARC` ve
 	-----           ------             ------  -----
 	0060            441863             237170   47%
 
-However, neither `PKXARC` 3.5 nor any other version I've tried so far is able to extract all the files; an "archive integrity" test using `-t` reports the same failures, and it doesn't seem to matter if the files were "squashed", "crunched", or just "stored":
+However, neither `PKXARC` 3.5 nor any other version I tried could extract all the files; an "archive integrity" test using `-t` reported the same failures, and it didn't seem to matter if the files were "squashed", "crunched", or just "stored":
 
 	C:\TMP>PKXARC -T CUE
 
@@ -432,11 +432,7 @@ However, neither `PKXARC` 3.5 nor any other version I've tried so far is able to
 
 I could chalk up the errors in *one* `CUE.ARC` file to possible disk corruption, but I had *three* different `CUE.ARC` archives, made at different times, and stored on *three* different diskettes.  Why would they *all* be plagued by similar decompression errors?
 
-At this point, I don't really know, because resolving this problem is going to require some debugging.  But there's an important lesson here to my 1980s' self: don't archive files you care about without also testing the integrity of that archive!
-
-### UPDATE (March 8, 2023)
-
-Issue resolved!  Here's what happened.
+### Not Corrupted, Just "Garbled"
 
 After more digging, I found a set of *unarchived* files that had timestamps similar to those in the "corrupted" archive, and when I looked at the first two files in the archive:
 
@@ -518,6 +514,14 @@ and all it did was sequentially XOR every byte in the buffer with bytes from the
 
 I'm still not sure why I would have bothered password-protecting *any* of the files in the archive, let alone only *some* of them.  `ARC` will clearly let you do that, but the result is a mess, because any unprotected files will appear corrupt if you supply *any* password, and any password-protected files will appear corrupt if you don't supply the *right* password.  And there's no hint in either case that you should -- or should not -- supply a password.
 
-In retrospect, `ARC` probably should have had an "encrypted" indicator in each file header, so that it could simply bypass any encrypted files when no password was provided, as well as some means of verifying a compressed stream after unencrypting it (before attempting to decompress it).  `ARC` would usually halt and report a cryptic error when decoding an invalid data stream, but the error would be unpredictable, with no indication of what the real problem was -- not a very user-friendly result.
+Here's an excerpt from the **ARC** [manual](https://raw.githubusercontent.com/hyc/arc/master/Arc521.doc) regarding this feature, known as the "Garble" option:
+
+> This is not a particularly sophisticated means of encryption, and it is theoretically possible to crack. Still, since it is performed on the packed data, the result should be quite sufficient for casual use.
+> 
+> You can, if you wish, use different passwords for different files in an archive, but we advise against it.  If you are going to encrypt an archive, we suggest you use the same password for every file, and give the password whenever you do anything at all with the archive.  It is possible to list the entries in an encrypted archive using the "L" and "V" commands without giving the password, but nothing else will work properly.
+> 
+> We advise that you use this option sparingly, if at all.  If you should forget or mistype your password, it is highly unlikely that you will ever recover your data.
+
+In retrospect, `ARC` probably should have had an "encrypted" indicator in each file header, so that it could simply bypass any encrypted files when no password was provided, as well as some means of verifying a compressed stream after unencrypting it (before attempting to decompress it).  `ARC` would usually halt and report a cryptic error when decoding an invalid ("garbled") data stream, but the error would be unpredictable, with no indication of what the real problem was -- not a very user-friendly result.
 
 Anyway, to celebrate, I've added the entire contents of that weird `CUE.ARC` to a new [Cue](https://github.com/jeffpar/cue) repository, so that everyone can enjoy all that crusty, now-useless code from 1988.  **Cue** was a popular in-house OS/2 utility back in the day, but like so many other tools we used to use at Microsoft (**Z**, **WZMAIL**, etc), it's faded into oblivion.
