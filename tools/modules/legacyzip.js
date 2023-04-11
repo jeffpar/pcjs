@@ -353,6 +353,8 @@ class BitStream
     /**
      * empty()
      *
+     * Equivalent to !avail(0)
+     *
      * @this {BitStream}
      * @returns {boolean} (true if no more bits available)
      */
@@ -1433,7 +1435,7 @@ class ArcUncrunch extends ArcUnpack
         local = this.getHash(pred, foll);       // get initial hash value
 
         if (!this.string_tab[local].used) {     // if that spot is free
-            return local;	                    // then that's all we need
+            return local;                       // then that's all we need
         }
         /*
          * Collision has occurred
@@ -1447,7 +1449,7 @@ class ArcUncrunch extends ArcUnpack
         next = (local + 101) & 0x0FFF;
         ep = this.string_tab[next];             // initialize pointer
 
-        while (ep.used) {	                    // while empty spot not found
+        while (ep.used) {                       // while empty spot not found
             if (++next == ArcUncrunch.TABSIZE) {
                 next = 0;                       // wrap to beginning of table
                 ep = this.string_tab[0];
@@ -1557,7 +1559,7 @@ class ArcUncrunch extends ArcUnpack
                     this.push(this.finchar);
                 }
                 while (ep.predecessor != ArcUncrunch.NO_PRED) {
-                    this.push(ep.follower);	    // decode string backwards
+                    this.push(ep.follower);     // decode string backwards
                     code = ep.predecessor;
                     ep = this.string_tab[code];
                 }

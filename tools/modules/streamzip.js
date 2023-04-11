@@ -497,9 +497,10 @@ export default class StreamZip extends events.EventEmitter {
         this.op = {
             win: new FileWindowBuffer(this, "readArcEntries"),
             pos: 0,
-            chunkSize: this.chunkSize, // StreamZip.ArcHeader.getSize(),
+            chunkSize: this.chunkSize,  // StreamZip.ArcHeader.getSize(),
             entriesLeft: -1
         };
+        this.entryTotal = 0;            // used as a sanity check to make sure we didn't miss any entries
         this.op.win.read(this.op.pos, Math.min(this.op.chunkSize, this.fileSize - this.op.pos), this.readArcEntriesCallback.bind(this));
     }
 
@@ -515,14 +516,22 @@ export default class StreamZip extends events.EventEmitter {
         }
         const buffer = this.op.win.buffer;
         let bufferPos = this.op.pos - this.op.win.position;
-        let bufferAvail = Math.min(bytesRead, buffer.length - bufferPos);
+        let bufferAvail = Math.min(this.op.win.avail + bytesRead, buffer.length - bufferPos);
+        const headerLen = StreamZip.ArcHeader.getSize();
         try {
             while (this.op.entriesLeft != 0) {
                 let entry = new ArcEntry(this, this.config.logErrors);
-                const headerLen = StreamZip.ArcHeader.getSize();
                 if (!entry.getArcHeader(buffer, bufferPos, bufferPos + bufferAvail)) {
+                    /*
+                     * Too many ARC files are padded with garbage to enable this sanity check....
+                     *
+                     *  if (this.entryTotal + 2 < this.fileSize) {
+                     *      this.emit('error', new Error("ARC entry total (" + this.entryTotal + ") does not match ARC size (" + this.fileSize + ")"));
+                     *  }
+                     */
                     break;
                 }
+                let entrySize = headerLen + entry.compressedSize;
                 entry.offset = this.op.win.position + bufferPos;
                 if (!this.config.skipEntryNameValidation) {
                     entry.validateName();
@@ -530,10 +539,11 @@ export default class StreamZip extends events.EventEmitter {
                 if (this.#entries) {
                     this.#entries[entry.name] = entry;
                 }
+                this.entryTotal += entrySize;
                 this.emit('entry', entry);
                 if (!--this.op.entriesLeft) break;
-                this.op.pos += headerLen + entry.compressedSize;
-                bufferPos += headerLen + entry.compressedSize;
+                this.op.pos += entrySize;
+                bufferPos += entrySize;
                 if (bufferPos + headerLen > buffer.length) {
                     this.op.win.moveRight(bufferPos, this.readArcEntriesCallback.bind(this));
                     this.op.move = true;
@@ -1388,6 +1398,13 @@ class ArcEntry extends Entry
 {
     getArcHeader(data, offset, length)
     {
+        /*
+         * Normally, the final header in an ARC will contain at least 2 bytes (ARC_SIG followed
+         * by ARC_END), but if we don't even have 2 bytes, give up now.
+         */
+        if (length < 2) {
+            return false;
+        }
         StreamZip.ArcHeader.setData(data, offset, length);
         /*
          * verifyField() will throw an exception if 1) 'signature' does not match the specified
@@ -1595,8 +1612,8 @@ class FileWindowBuffer
         this.fd = streamZip.fd;
         this.position = 0;
         this.buffer = Buffer.alloc(0);
+        this.avail = 0;
         this.fsOp = null;
-        this.debug = true;
     }
 
     checkOp()
@@ -1662,12 +1679,12 @@ class FileWindowBuffer
     moveRight(shift, callback)
     {
         this.checkOp();
-        let nCopied;
+        this.avail = 0;
         if (shift && shift < this.buffer.length) {
             /*
              * Copy all the bytes in this.buffer from shift onward to this.buffer at offset 0.
              */
-            nCopied = this.buffer.copy(this.buffer, 0, shift);
+            this.avail = this.buffer.copy(this.buffer, 0, shift);
         }
         this.position += shift;
         if (shift > this.buffer.length) {
