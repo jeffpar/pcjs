@@ -38,10 +38,9 @@ function printError(err, filename)
 }
 
 /*
- * List of archive file types to expand when "--expand" is specified.  ".ARC" is currently
- * disabled but it retains its place in the table for the day when StreamZip supports it (TBD).
+ * List of archive file types to expand when "--expand" is specified.
  */
-let asArchiveFileExts = [".ARC-TBD", ".ZIP"];   // order must match StreamZip.TYPE_* constants
+let asArchiveFileExts = [".ARC", ".ZIP"];       // order must match StreamZip.TYPE_* constants
 
 /*
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
@@ -2535,26 +2534,27 @@ function main(argc, argv)
     if (argv['help']) {
         let optionsInput = {
             "--all=[filespec]":         "process all matching disk images",
+            "--arc=[arcfile]\t":        "read all files in an ARC archive",
             "--boot=[bootfile]":        "replace boot sector with specified file",
-            "--disk=[diskimage]":       "read disk image (.img or .json)",
             "--dir=[directory]":        "read all files in a directory",
+            "--disk=[diskimage]":       "read disk image (.img or .json)",
             "--files=[filelist]":       "read all files in a comma-separated list",
-            "--zip=[zipfile]\t":        "read all files in an archive"
+            "--zip=[zipfile]\t":        "read all files in a ZIP archive"
         };
         let optionsOutput = {
             "--extdir=[directory]":     "write extracted files to directory",
+            "--extract (-e)\t":         "extract all files in disks or archives",
+            "--extract[=filename]":     "extract specified file in disks or archives",
             "--output=[diskimage]":     "write disk image (.img or .json)",
             "--target=[nK|nM]":         "set target disk size to nK or nM (eg, \"360K\", \"10M\")"
         };
-        let optionsAction = {
+        let optionsOther = {
             "--dump=[C:H:S:N]":         "dump N sectors starting at sector C:H:S",
-            "--expand (-x)\t":          "expand all archives in disk image(s)",
-            "--extract (-e)\t":         "extract all files in disk image(s)",
-            "--extract[=filename]":     "extract specified file in disk image(s)",
-            "--label=[label]\t":        "set volume label",
-            "--list (-l)\t":            "display directory listings of disk image(s)",
-            "--list=unused\t":          "display unused space in disk image(s) (.json only)",
-            "--normalize\t":            "change line endings and character encodings of text files",
+            "--expand (-x)\t":          "expand all archives inside disk or archive",
+            "--label=[label]\t":        "set volume label of output disk image",
+            "--list (-l)\t":            "display directory listings of disk or archive",
+            "--list=unused\t":          "display unused space in disk image (.json only)",
+            "--normalize\t":            "convert line endings and character encoding of text files",
             "--password=[string]":      "use password for decompression (ARC files only)",
             "--quiet (-q)\t":           "minimum messages",
             "--verbose (-v)\t":         "maximum messages (eg, display archive contents)"
@@ -2562,7 +2562,7 @@ function main(argc, argv)
         let optionGroups = {
             "Input options:":           optionsInput,
             "Output options:":          optionsOutput,
-            "Action options:":          optionsAction
+            "Other options:":           optionsOther
         }
         printf("\nUsage:\n\n\tnode diskimage.js [input diskimage] [output diskimage] [options]\n");
         for (let group in optionGroups) {
