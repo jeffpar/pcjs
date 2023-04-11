@@ -1791,8 +1791,6 @@ class ArcUncrush extends ArcUnpack
             return false;
         }
 
-        let chunks = 0;
-
         let o = 0;                      // data index
         let p = 0;                      // stack pointer
         let code, oldcode, incode;
@@ -1846,13 +1844,8 @@ class ArcUncrush extends ArcUnpack
                 if (o == this.data.length) {
                     this.putBytes(this.data, o);
                     o = 0;
-                    chunks++;
                 }
             } while (p > 0);
-
-            if (chunks == 5) {
-                break;
-            }
 
             /*
              * Generate the new entry.

@@ -655,10 +655,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--arc=123EGA.ARC",
-        "--extract",
-        "--overwrite",
-        "--verbose"
+        "--arc=KBD01.ARC",
+        "--verbose=KBDSUBS.ASM",
+        "--extract=KBDSUBS.ASM",
+        "--extdir=KBD01",
+        "--overwrite"
       ],
       "cwd": "${workspaceFolder}/tmp",
       "stopOnEntry": false,
