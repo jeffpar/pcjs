@@ -260,9 +260,10 @@ export class LegacyZip
         if (!explode.decomp(src, dst_len, large_wnd, lit_tree, false) || explode.getBytesRead() != src.length) {
             if (!explode.decomp(src, dst_len, large_wnd, lit_tree, true) || explode.getBytesRead() != src.length) {
                 delete explode.dst;
-            } else {
-                assert(false, "explodeSync() recovered");   // would like to catch just one example of that "PKZIP 1.01/1.02" bug
             }
+            // else {
+            //     assert(false, "explodeSync() recovered");   // would like to catch just one example of that "PKZIP 1.01/1.02" bug
+            // }
         }
         return explode;
     }
@@ -685,8 +686,7 @@ class HuffmanDecoder
         let /* uint16_t */ lo, hi;
         let /* uint16_t */ reversed;
 
-        assert(n > 0);
-        assert(n <= 16);
+        assert(n > 0 && n <= 16);
 
         lo = x & 0xff;
         hi = x >> 8;
@@ -2612,7 +2612,7 @@ class ZipExplode extends Decompress
                 bits >>>= 1;
                 if (lit_tree) {
                     ({ sym, used } = this.lit_decoder.decode(~bits));
-                    assert(sym >= 0, `huffman lit decode unsuccessful (${sym})`);
+                    assert(sym >= 0, `huffman literal decode unsuccessful (${sym})`);
                     if (!this.bs.advance(1 + used)) {
                         return false;
                     }
@@ -2645,19 +2645,19 @@ class ZipExplode extends Decompress
                 used_tot += 6;
             }
             /*
-             * Read the Huffman-encoded high dist bits
+             * Read the Huffman-encoded high distance bits
              */
             ({ sym, used } = this.dist_decoder.decode(~bits));
-            assert(sym >= 0, `huffman dist decode unsuccessful (${sym})`);
+            assert(sym >= 0, `huffman distance decode unsuccessful (${sym})`);
             used_tot += used;
             bits >>>= used;
             dist |= sym << (large_wnd ? 7 : 6);
             dist += 1;
             /*
-             * Read the Huffman-encoded len
+             * Read the Huffman-encoded length
              */
             ({ sym, used } = this.len_decoder.decode(~bits));
-            assert(sym >= 0, `huffman len decode unsuccessful (${sym})`);
+            assert(sym >= 0, `huffman length decode unsuccessful (${sym})`);
             used_tot += used;
             len = (sym + min_len);
             /*
