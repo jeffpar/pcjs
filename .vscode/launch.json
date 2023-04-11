@@ -655,10 +655,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--arc=123EGA.ARC",
+        "--arc=CSRC.ARC",
+        "--verbose",
         "--extract",
-        "--overwrite",
-        "--verbose"
+        "--extdir=CSRC",
+        "--overwrite"
       ],
       "cwd": "${workspaceFolder}/tmp",
       "stopOnEntry": false,

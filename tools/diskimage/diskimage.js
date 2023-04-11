@@ -38,10 +38,9 @@ function printError(err, filename)
 }
 
 /*
- * List of archive file types to expand when "--expand" is specified.  ".ARC" is currently
- * disabled but it retains its place in the table for the day when StreamZip supports it (TBD).
+ * List of archive file types to expand when "--expand" is specified.
  */
-let asArchiveFileExts = [".ARC-TBD", ".ZIP"];   // order must match StreamZip.TYPE_* constants
+let asArchiveFileExts = [".ARC", ".ZIP"];       // order must match StreamZip.TYPE_* constants
 
 /*
  * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
@@ -2003,11 +2002,17 @@ function getArchiveFiles(zip, fVerbose)
              *
              * I've not yet seen any examples of Method5 or Method7 "in the wild", but I have seen Method6
              * (see PC-SIG DISK0568: 123EGA.ARC), which PKXARC.EXE called "crunched" (with a lower-case "c"),
-             * distinct from Method8 which it called "Crunched" (with an upper-case "C").  That's not very
-             * clear, so I think I'll continue to display Method6 as, um, "Method6" instead.
+             * distinct from Method8 which it called "Crunched" (with an upper-case "C").
+             *
+             * Technically, yes, methods 5-7 and method 8 were all called "crunching", but 5-7 performed LZW
+             * compression (with unpacked (5), packed (6), and "new hash" (7) variants) while method 8 performed
+             * "dynamic" LZW compression.
+             *
+             * To distinguish the methods better, I'm going call 5-7 "Crunch" and 8 "Crush", placing method 8
+             * squarely between "Crunch" and "Squash".
              */
             let methodsARC = [
-                "Store", "Pack", "Squeeze", "Method5", "Method6", "Method7", "Crunch", "Squash"
+                "Store", "Pack", "Squeeze", "Crunch5", "Crunch", "Crunch7", "Crush", "Squash"
             ];
             let methodsZIP = [
                 "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
@@ -2529,33 +2534,35 @@ function main(argc, argv)
     if (argv['help']) {
         let optionsInput = {
             "--all=[filespec]":         "process all matching disk images",
+            "--arc=[arcfile]\t":        "read all files in an ARC archive",
             "--boot=[bootfile]":        "replace boot sector with specified file",
-            "--disk=[diskimage]":       "read disk image (.img or .json)",
             "--dir=[directory]":        "read all files in a directory",
+            "--disk=[diskimage]":       "read disk image (.img or .json)",
             "--files=[filelist]":       "read all files in a comma-separated list",
-            "--zip=[zipfile]\t":        "read all files in an archive"
+            "--zip=[zipfile]\t":        "read all files in a ZIP archive"
         };
         let optionsOutput = {
             "--extdir=[directory]":     "write extracted files to directory",
+            "--extract (-e)\t":         "extract all files in disks or archives",
+            "--extract[=filename]":     "extract specified file in disks or archives",
             "--output=[diskimage]":     "write disk image (.img or .json)",
             "--target=[nK|nM]":         "set target disk size to nK or nM (eg, \"360K\", \"10M\")"
         };
-        let optionsAction = {
+        let optionsOther = {
             "--dump=[C:H:S:N]":         "dump N sectors starting at sector C:H:S",
-            "--expand (-x)\t":          "expand all archives in disk image(s)",
-            "--extract (-e)\t":         "extract all files in disk image(s)",
-            "--extract[=filename]":     "extract specified file in disk image(s)",
-            "--label=[label]\t":        "set volume label",
-            "--list (-l)\t":            "display directory listings of disk image(s)",
-            "--list=unused\t":          "display unused space in disk image(s) (.json only)",
-            "--normalize\t":            "change line endings and character encodings of text files",
+            "--expand (-x)\t":          "expand all archives inside disk or archive",
+            "--label=[label]\t":        "set volume label of output disk image",
+            "--list (-l)\t":            "display directory listings of disk or archive",
+            "--list=unused\t":          "display unused space in disk image (.json only)",
+            "--normalize\t":            "convert line endings and character encoding of text files",
+            "--password=[string]":      "use password for decompression (ARC files only)",
             "--quiet (-q)\t":           "minimum messages",
             "--verbose (-v)\t":         "maximum messages (eg, display archive contents)"
         };
         let optionGroups = {
             "Input options:":           optionsInput,
             "Output options:":          optionsOutput,
-            "Action options:":          optionsAction
+            "Other options:":           optionsOther
         }
         printf("\nUsage:\n\n\tnode diskimage.js [input diskimage] [output diskimage] [options]\n");
         for (let group in optionGroups) {

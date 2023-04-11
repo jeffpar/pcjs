@@ -143,7 +143,7 @@ export default class StreamZip extends events.EventEmitter {
             'ARC_HS':   0x04,                           // Huffman squeezing ("squeeze")
             'ARC_LZ':   0x05,                           // LZ compression
             'ARC_LZNR': 0x06,                           // LZ non-repeat compression
-            'ARC_LZH':  0x07,                           // LZ with new hash
+            'ARC_LZNH': 0x07,                           // LZ with new hash
             'ARC_LZC':  0x08,                           // LZ dynamic ("crunch")
             'ARC_LZS':  0x09                            // LZ dynamic ("squash")
         })
@@ -161,7 +161,7 @@ export default class StreamZip extends events.EventEmitter {
     static ARC_HS               = -4;                   // Huffman squeezing ("squeeze")
     static ARC_LZ               = -5;                   // LZ compression
     static ARC_LZNR             = -6;                   // LZ non-repeat compression
-    static ARC_LZH              = -7;                   // LZ with new hash
+    static ARC_LZNH             = -7;                   // LZ with new hash
     static ARC_LZC              = -8;                   // LZ dynamic ("crunch")
     static ARC_LZS              = -9;                   // LZ dynamic ("squash")
 
@@ -497,9 +497,10 @@ export default class StreamZip extends events.EventEmitter {
         this.op = {
             win: new FileWindowBuffer(this, "readArcEntries"),
             pos: 0,
-            chunkSize: this.chunkSize, // StreamZip.ArcHeader.getSize(),
+            chunkSize: this.chunkSize,  // StreamZip.ArcHeader.getSize(),
             entriesLeft: -1
         };
+        this.entryTotal = 0;            // used as a sanity check to make sure we didn't miss any entries
         this.op.win.read(this.op.pos, Math.min(this.op.chunkSize, this.fileSize - this.op.pos), this.readArcEntriesCallback.bind(this));
     }
 
@@ -515,14 +516,22 @@ export default class StreamZip extends events.EventEmitter {
         }
         const buffer = this.op.win.buffer;
         let bufferPos = this.op.pos - this.op.win.position;
-        let bufferAvail = Math.min(bytesRead, buffer.length - bufferPos);
+        let bufferAvail = Math.min(this.op.win.avail + bytesRead, buffer.length - bufferPos);
+        const headerLen = StreamZip.ArcHeader.getSize();
         try {
             while (this.op.entriesLeft != 0) {
                 let entry = new ArcEntry(this, this.config.logErrors);
-                const headerLen = StreamZip.ArcHeader.getSize();
                 if (!entry.getArcHeader(buffer, bufferPos, bufferPos + bufferAvail)) {
+                    /*
+                     * Too many ARC files are padded with garbage to enable this sanity check....
+                     *
+                     *  if (this.entryTotal + 2 < this.fileSize) {
+                     *      this.emit('error', new Error("ARC entry total (" + this.entryTotal + ") does not match ARC size (" + this.fileSize + ")"));
+                     *  }
+                     */
                     break;
                 }
+                let entrySize = headerLen + entry.compressedSize;
                 entry.offset = this.op.win.position + bufferPos;
                 if (!this.config.skipEntryNameValidation) {
                     entry.validateName();
@@ -530,10 +539,11 @@ export default class StreamZip extends events.EventEmitter {
                 if (this.#entries) {
                     this.#entries[entry.name] = entry;
                 }
+                this.entryTotal += entrySize;
                 this.emit('entry', entry);
                 if (!--this.op.entriesLeft) break;
-                this.op.pos += headerLen + entry.compressedSize;
-                bufferPos += headerLen + entry.compressedSize;
+                this.op.pos += entrySize;
+                bufferPos += entrySize;
                 if (bufferPos + headerLen > buffer.length) {
                     this.op.win.moveRight(bufferPos, this.readArcEntriesCallback.bind(this));
                     this.op.move = true;
@@ -728,7 +738,7 @@ export default class StreamZip extends events.EventEmitter {
          * us one way or the other) or 2) the ARC contains a mixture of encrypted and unencrypted files.
          *
          * With ARC files, our only clue that no password (or a different password) is required is when
-         * decompression fails, and failure can take almost any form, since we're feeding the decompressor
+         * decompression fails, and failure can take almost any form, since we may be feeding the decompressor
          * garbage.
          *
          * In the rare case where we do make a 2nd attempt, re-running the password code will restore the
@@ -765,17 +775,26 @@ export default class StreamZip extends events.EventEmitter {
                 case StreamZip.ZIP_STORE:
                     dst = src;
                     break;
-                case StreamZip.ARC_NR:          // aka "pack"
+                case StreamZip.ARC_NR:          // aka "Pack"
                     dst = LegacyArc.unpackSync(src, entry.size).getOutput();
                     break;
-                case StreamZip.ARC_HS:          // aka "squeeze"
+                case StreamZip.ARC_HS:          // aka "Squeeze" (technically, Huffman squeezing)
                     dst = LegacyArc.unsqueezeSync(src, entry.size).getOutput();
                     break;
-                case StreamZip.ARC_LZC:         // aka "crunch"
-                    dst = LegacyArc.unscrunchSync(src, entry.size, false).getOutput();
+                case StreamZip.ARC_LZ:          // aka "Crunch5" (LZ compression)
+                    dst = LegacyArc.uncrunchSync(src, entry.size, 0).getOutput();
                     break;
-                case StreamZip.ARC_LZS:         // aka "squash"
-                    dst = LegacyArc.unscrunchSync(src, entry.size, true).getOutput();
+                case StreamZip.ARC_LZNR:        // aka "Crunch6" (LZ non-repeat compression)
+                    dst = LegacyArc.uncrunchSync(src, entry.size, 1).getOutput();
+                    break;
+                case StreamZip.ARC_LZNH:        // aka "Crunch7" (LZ with new hash)
+                    dst = LegacyArc.uncrunchSync(src, entry.size, 2).getOutput();
+                    break;
+                case StreamZip.ARC_LZC:         // aka "Crush" (dynamic LZW)
+                    dst = LegacyArc.uncrushSync(src, entry.size, false).getOutput();
+                    break;
+                case StreamZip.ARC_LZS:         // aka "Squash"
+                    dst = LegacyArc.uncrushSync(src, entry.size, true).getOutput();
                     break;
                 case StreamZip.ZIP_SHRINK:
                     dst = LegacyZip.stretchSync(src, entry.size).getOutput();
@@ -799,8 +818,6 @@ export default class StreamZip extends events.EventEmitter {
                     dst = zlib.inflateRawSync(src);
                     break;
                 default:
-                    entry.error("unsupported compression method (" + entry.method + ")");
-                    dst = null;
                     attempts = 0;
                     break;
                 }
@@ -829,6 +846,10 @@ export default class StreamZip extends events.EventEmitter {
                         verify.data(dst);
                     }
                 }
+            }
+        } else {
+            if (!entry.errors || entry.errors && !entry.errors.length) {
+                entry.error("unsupported compression method (" + entry.method + ")");
             }
         }
         return dst;
@@ -1377,6 +1398,13 @@ class ArcEntry extends Entry
 {
     getArcHeader(data, offset, length)
     {
+        /*
+         * Normally, the final header in an ARC will contain at least 2 bytes (ARC_SIG followed
+         * by ARC_END), but if we don't even have 2 bytes, give up now.
+         */
+        if (length < 2) {
+            return false;
+        }
         StreamZip.ArcHeader.setData(data, offset, length);
         /*
          * verifyField() will throw an exception if 1) 'signature' does not match the specified
@@ -1584,8 +1612,8 @@ class FileWindowBuffer
         this.fd = streamZip.fd;
         this.position = 0;
         this.buffer = Buffer.alloc(0);
+        this.avail = 0;
         this.fsOp = null;
-        this.debug = true;
     }
 
     checkOp()
@@ -1651,12 +1679,12 @@ class FileWindowBuffer
     moveRight(shift, callback)
     {
         this.checkOp();
-        let nCopied;
+        this.avail = 0;
         if (shift && shift < this.buffer.length) {
             /*
              * Copy all the bytes in this.buffer from shift onward to this.buffer at offset 0.
              */
-            nCopied = this.buffer.copy(this.buffer, 0, shift);
+            this.avail = this.buffer.copy(this.buffer, 0, shift);
         }
         this.position += shift;
         if (shift > this.buffer.length) {
