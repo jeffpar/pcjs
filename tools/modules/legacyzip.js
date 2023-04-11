@@ -77,17 +77,6 @@ const DEBUG = true;
  */
 export class LegacyArc
 {
-    /*
-     * Stuff for repeat unpacking
-     */
-    static DLE = 0x90;          // repeat byte flag
-
-    /*
-     * Repeat unpacking states
-     */
-    static NOHIST = 0;          // no relevant history
-    static INREP = 1;           // sending a repeated value
-
     /**
      * unpackSync(src, dst_len)
      *
@@ -1098,7 +1087,17 @@ class Decompress
  */
 class ArcUnpack extends Decompress
 {
-    static MYDATA = 32766;              // size of data[]
+    /*
+     * Stuff for repeat unpacking
+     */
+    static DLE = 0x90;          // repeat byte flag
+
+    /*
+     * Repeat unpacking states
+     */
+    static NOHIST = 0;          // no relevant history
+    static INREP = 1;           // sending a repeated value
+    static MYDATA = 32766;      // size of data[]
 
     /**
      * init(src, dst_len, packed)
@@ -1112,7 +1111,7 @@ class ArcUnpack extends Decompress
     {
         super.init(src, dst_len);
 
-        this.state = LegacyArc.NOHIST;  // repeat unpacking state
+        this.state = ArcUnpack.NOHIST;
         this.lastc = -1;
 
         this.data = new Array(ArcUnpack.MYDATA);
@@ -1158,21 +1157,21 @@ class ArcUnpack extends Decompress
     unpackBytes(data, len)
     {
         for (let i = 0; i < len; i++) {
-            if (this.state == LegacyArc.INREP) {
+            if (this.state == ArcUnpack.INREP) {
                 if (data[i]) {
                     while (--data[i]) {
                         assert(this.lastc >= 0);
                         this.writeOutput(this.lastc)
                     }
                 } else {
-                    this.writeOutput(LegacyArc.DLE);
+                    this.writeOutput(ArcUnpack.DLE);
                 }
-                this.state = LegacyArc.NOHIST;
+                this.state = ArcUnpack.NOHIST;
             } else {
-                if (data[i] != LegacyArc.DLE) {
+                if (data[i] != ArcUnpack.DLE) {
                     this.writeOutput(this.lastc = data[i]);
                 } else {
-                    this.state = LegacyArc.INREP;
+                    this.state = ArcUnpack.INREP;
                 }
             }
         }
