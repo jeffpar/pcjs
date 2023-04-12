@@ -674,13 +674,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--zip=tmp/DISK0798.ZIP",
-        "--output=%f/DISK0798.json",
-        "--overwrite",
-        "--list=sorted",
+        "--zip=PKZ204G.EXE",
         "--verbose"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/tmp",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
