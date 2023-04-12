@@ -16,6 +16,10 @@ machines:
     autoType: \r\rB:\rOREGON\r
 ---
 
+NOTE: This is Version 2.1 from 1991.
+
+The Oregon Trail [Version 2.0](../../1990/oregon_trail/) from 1990 is also available.
+
 {% include machine.html id="ibm5170-oregon21" %}
 
 ### Directory of Oregon Trail 2.1 (1991)

@@ -18,10 +18,18 @@ machines:
     resume: 1
 ---
 
-NOTE: There are now *two* versions of "The Oregon Trail" on PCjs.  This is Version 2.0 from 1990, and the machine below
-has been modified to save your progress.  Version 2.1 from 1991 has moved [here](../../1991/oregon_trail/).
+NOTE: This is Version 2.0 from 1990.
+
+The Oregon Trail [Version 2.1](../../1991/oregon_trail/) from 1991 is also available.
 
 {% include machine.html id="ibm5170-oregon20" %}
+
+The machine above has been configured to save your state, as long as you use the same browser on the same computer.
+Press the `Reset` button if the machine hangs or you simply want a fresh start.
+
+![Oregon Trail 2.0 (Box Front)]({{ site.software.gamedisks.server }}/pcx86/game/other/1990/oregon_trail/OREGON_TRAIL-200-Box1.jpg)
+
+![Oregon Trail 2.0 (Box Back)]({{ site.software.gamedisks.server }}/pcx86/game/other/1990/oregon_trail/OREGON_TRAIL-200-Box2.jpg)
 
 ### Directory of Oregon Trail 2.0 (1990)
 
