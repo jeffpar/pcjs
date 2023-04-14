@@ -493,15 +493,30 @@ export default class StreamZip extends events.EventEmitter {
      *
      * @this {StreamZip}
      */
-    readArcEntries() {
+    readArcEntries()
+    {
+        let win;
+        if (this.buffer) {
+            win = {                     // fake FileWindowBuffer
+                buffer: this.buffer,
+                position: 0,
+                avail: this.buffer.length
+            };
+        } else {
+            win = new FileWindowBuffer(this, "readArcEntries");
+        }
         this.op = {
-            win: new FileWindowBuffer(this, "readArcEntries"),
+            win,
             pos: 0,
             chunkSize: this.chunkSize,  // StreamZip.ArcHeader.getSize(),
             entriesLeft: -1
         };
         this.entryTotal = 0;            // used as a sanity check to make sure we didn't miss any entries
-        this.op.win.read(this.op.pos, Math.min(this.op.chunkSize, this.fileSize - this.op.pos), this.readArcEntriesCallback.bind(this));
+        if (this.buffer) {
+            this.readArcEntriesCallback(null, 0);
+        } else {
+            this.op.win.read(this.op.pos, Math.min(this.op.chunkSize, this.fileSize - this.op.pos), this.readArcEntriesCallback.bind(this));
+        }
     }
 
     /**
@@ -521,7 +536,7 @@ export default class StreamZip extends events.EventEmitter {
         try {
             while (this.op.entriesLeft != 0) {
                 let entry = new ArcEntry(this, this.config.logErrors);
-                if (!entry.getArcHeader(buffer, bufferPos, bufferPos + bufferAvail)) {
+                if (!entry.getArcHeader(buffer, bufferPos, bufferAvail)) {
                     /*
                      * Too many ARC files are padded with garbage to enable this sanity check....
                      *
@@ -544,10 +559,13 @@ export default class StreamZip extends events.EventEmitter {
                 if (!--this.op.entriesLeft) break;
                 this.op.pos += entrySize;
                 bufferPos += entrySize;
+                bufferAvail -= entrySize;
                 if (bufferPos + headerLen > buffer.length) {
-                    this.op.win.moveRight(bufferPos, this.readArcEntriesCallback.bind(this));
-                    this.op.move = true;
-                    return;
+                    if (this.op.win.moveRight) {
+                        this.op.win.moveRight(bufferPos, this.readArcEntriesCallback.bind(this));
+                        this.op.move = true;
+                        return;
+                    }
                 }
             }
             this.emit('ready');
@@ -778,7 +796,7 @@ export default class StreamZip extends events.EventEmitter {
                 case StreamZip.ARC_NR:          // aka "Pack"
                     dst = LegacyArc.unpackSync(src, entry.size).getOutput();
                     break;
-                case StreamZip.ARC_HS:          // aka "Squeeze" (technically, Huffman squeezing)
+                case StreamZip.ARC_HS:          // aka "Squeeze" (Huffman squeezing)
                     dst = LegacyArc.unsqueezeSync(src, entry.size).getOutput();
                     break;
                 case StreamZip.ARC_LZ:          // aka "Crunch5" (LZ compression)
@@ -847,8 +865,11 @@ export default class StreamZip extends events.EventEmitter {
                     }
                 }
             }
-        } else {
-            if (!entry.errors || entry.errors && !entry.errors.length) {
+        }
+        else if (!entry.errors) {
+            if (dst !== undefined) {
+                entry.error("decompression failure");
+            } else {
                 entry.error("unsupported compression method (" + entry.method + ")");
             }
         }
@@ -1350,30 +1371,37 @@ class Entry
     {
         this.streamZip = streamZip;
         if (streamZip.config.logErrors) {
-            this.errors = [];
+            this.messages = [];
         }
         this.flags = 0;
+        this.errors = 0;
     }
 
     reset()
     {
-        if (this.errors) this.errors = [];
+        if (this.messages) this.messages = [];
     }
 
-    error(msg, type = "error")
+    message(msg, type = "")
     {
-        msg = type + ": " + path.basename(this.streamZip.fileName) + "/" + (this.name? this.name + ": " : "")  + msg;
-        if (!this.errors) {
+        msg = (type? type + ": " : "") + path.basename(this.streamZip.fileName) + "/" + (this.name? this.name + ": " : "")  + msg;
+        if (!this.messages && type == "error") {
             throw new Error(msg);
         }
         if (this.name) {
-            this.errors.push(msg);
+            this.messages.push(msg);
         }
+    }
+
+    error(msg)
+    {
+        this.message(msg, "error");
+        this.errors++;
     }
 
     warning(msg)
     {
-        this.error(msg, "warning");
+        this.message(msg, "warning");
     }
 
     validateName()

@@ -139,20 +139,20 @@ export default class Structure {
     }
 
     /**
-     * setData(buf, offset, maxOffset)
+     * setData(buf, offset, length)
      *
      * Sets the buffer to be used by getField() and its siblings.
      *
      * @this {Structure}
      * @param {Buffer} buf
      * @param {number} [offset]
-     * @param {number} [maxOffset]
+     * @param {number} [length]
      */
-    setData(buf, offset = 0, maxOffset = buf.length)
+    setData(buf, offset = 0, length = buf.length - offset)
     {
         this._buf = buf;
         this._bufOffset = offset;
-        this._maxOffset = maxOffset;
+        this._maxOffset = offset + length;
         /*
          * The buffer may be partially valid, and the caller may only access those fields that are valid,
          * so we perform a similar bounds check in getField() instead.

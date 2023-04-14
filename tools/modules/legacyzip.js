@@ -1002,7 +1002,7 @@ class Decompress
      * Get the output buffer.
      *
      * @this {Decompress}
-     * @returns {Buffer}
+     * @returns {Buffer|null}
      */
     getOutput()
     {
@@ -1012,7 +1012,7 @@ class Decompress
                 this.dst = this.dst.slice(0, this.dst_pos);
             }
         }
-        return this.dst;
+        return this.dst || null;
     }
 
     /**

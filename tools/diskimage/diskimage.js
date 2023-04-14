@@ -205,7 +205,28 @@ function checkArchive(sPath, fExt)
 }
 
 /**
+ * existsDir(sDir, fError)
+ *
+ * @param {string} sDir
+ * @param {boolean} [fError]
+ * @returns {boolean}
+ */
+function existsDir(sDir, fError = true)
+{
+    try {
+        sDir = getFullPath(sDir);
+        let stat = fs.statSync(sDir);
+        return stat.isDirectory();
+    } catch(err) {
+        if (fError) printError(err);
+    }
+    return false;
+}
+
+/**
  * existsFile(sFile, fError)
+ *
+ * This is really "existsFileOrDir()"; if you need to know which, call existsDir() afterward.
  *
  * @param {string} sFile
  * @param {boolean} [fError]
@@ -367,6 +388,42 @@ function isTextFile(sFile)
         if (sFileUC.endsWith(asTextFileExts[i])) return true;
     }
     return false;
+}
+
+/**
+ * makeDir(sDir, recursive, deleteFile)
+ *
+ * The deleteFile parameter is never true unless '--overwrite' was specified; it is only intended
+ * to come into play when using '--expand' along with '--extract', because if any earlier '--extract'
+ * did NOT use '--expand', then any archives inside the source disk/archive will have been extracted
+ * as a file rather than a directory -- in which case, we must delete the file before we can create
+ * a directory.
+ *
+ * @param {string} sDir
+ * @param {boolean} [recursive]
+ * @param {boolean} [deleteFile] (delete any existing file with the same name as the directory)
+ * @returns {boolean} true if successful (or the directory already exists), false if error
+ */
+function makeDir(sDir, recursive = false, deleteFile = false)
+{
+    let success = true;
+    if (existsFile(sDir, false) && !existsDir(sDir, false) && deleteFile) {
+        try {
+            fs.unlinkSync(sDir);
+        } catch(err) {
+            printError(err);
+            success = false;
+        }
+    }
+    if (success && !existsFile(sDir, false)) {
+        try {
+            fs.mkdirSync(sDir, {recursive});
+        } catch(err) {
+            printError(err);
+            success = false;
+        }
+    }
+    return success;
 }
 
 /**
@@ -910,14 +967,9 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
 
     let fSuccess = false;
     let dir = path.dirname(sPath);
-    if (!existsFile(dir)) {
-        fs.mkdirSync(dir, {recursive: true});
-    }
+    makeDir(dir, true, argv['overwrite']);
     if (attr & DiskInfo.ATTR.SUBDIR) {
-        if (!existsFile(sPath)) {
-            fs.mkdirSync(sPath);
-        }
-        fSuccess = true;
+        fSuccess = makeDir(sPath, true);
     } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
         let fPrinted = false;
         let fQuiet = argv['quiet'];
@@ -1942,7 +1994,7 @@ function getArchiveFiles(zip, fVerbose)
         printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
         printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
     }
-    let errors = "";
+    let messages = "";
     let entries = Object.values(zip.entries());
     for (let entry of entries) {
 
@@ -1982,8 +2034,8 @@ function getArchiveFiles(zip, fVerbose)
             file.size = data.length;
             file.data = data;
         }
-        if (entry.errors) {
-            for (let error of entry.errors) errors += error + "\n";
+        if (entry.messages && entry.messages.length) {
+            for (let message of entry.messages) messages += message + "\n";
         }
         let d, sDir = path.dirname(file.path) + path.sep;
         for (d = 0; d < aDirectories.length; d++) {
@@ -2033,7 +2085,7 @@ function getArchiveFiles(zip, fVerbose)
                 filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc);
         }
     }
-    if (errors) printf("%s", errors);
+    if (messages) printf("%s", messages);
     return aFileData;
 }
 
@@ -2191,7 +2243,7 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
                 if (!fQuiet) printf("writing %s...\n", diskFile);
                 diskFile = getFullPath(diskFile);
                 let sDir = path.dirname(diskFile);
-                if (!existsFile(sDir)) fs.mkdirSync(sDir, {recursive: true});
+                makeDir(sDir, true);
                 if (fExists) fs.unlinkSync(diskFile);
                 fs.writeFileSync(diskFile, data);
                 if (diskFileLC.endsWith(".img") && !fWritable) fs.chmodSync(diskFile, 0o444);
@@ -2227,7 +2279,7 @@ function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
             }
             if (fCreateDir) {
                 let sDir = path.dirname(sFile);
-                if (!existsFile(sDir)) fs.mkdirSync(sDir, {recursive: true});
+                makeDir(sDir, true);
             }
             if (!existsFile(sFile) || fOverwrite) {
                 fs.writeFileSync(sFile, data);
