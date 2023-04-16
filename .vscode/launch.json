@@ -758,10 +758,12 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "/disks/pcsig8a-disks/pcx86/shareware/pcsig08/DISK0798.json",
+        "--arc=PK361.EXE",
+        "--offset=13138",
+        "--verbose",
         "--extract"
       ],
-      "cwd": "${workspaceFolder}/tmp",
+      "cwd": "${workspaceFolder}/tmp/arcs",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

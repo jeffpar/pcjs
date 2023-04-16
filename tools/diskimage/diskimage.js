@@ -134,12 +134,13 @@ function createDisk(diskFile, diskette, argv, done)
     diskette.archive = sArchiveFile;
     printf("checking archive: %s\n", sArchiveFile);
     if (fDir || arcType) {
+        let arcOffset = +argv['offset'] || 0;
         let label = diskette.label || argv['label'];
         let password = argv['password'];
         let normalize = diskette.normalize || argv['normalize'];
         let target = getTarget(diskette.format);
         let verbose = argv['verbose'];
-        di = readDir(sArchiveFile, arcType, label, password, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
+        di = readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
     } else {
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
         if (di && done) {
@@ -1797,10 +1798,11 @@ function readCollection(argv)
 }
 
 /**
- * readDir(sDir, arcType, sLabel, sPassword, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
+ * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
  *
  * @param {string} sDir (directory name)
  * @param {number} [arcType] (1 if ARC file, 2 if ZIP file, otherwise 0)
+ * @param {number} [arcOffset] (0 if none)
  * @param {string} [sLabel] (if not set with --label, then basename(sDir) will be used instead)
  * @param {string} [sPassword] (password; for encrypted ARC files only at this point)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
@@ -1813,7 +1815,7 @@ function readCollection(argv)
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
  * @returns {DiskInfo|null}
  */
-function readDir(sDir, arcType, sLabel, sPassword, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
+function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
 {
     let di;
     let diskName = path.basename(sDir);
@@ -1848,7 +1850,7 @@ function readDir(sDir, arcType, sLabel, sPassword, fNormalize, kbTarget, nMax, f
     try {
         nMaxInit = nMaxCount = nMax || nMaxDefault;
         if (arcType) {
-            readArchiveFiles(sDir, arcType, sLabel, sPassword, fVerbose, readDone);
+            readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, fVerbose, readDone);
         } else {
             di = readDone(readDirFiles(sDir, sLabel, fNormalize, 0));
         }
@@ -2090,21 +2092,23 @@ function getArchiveFiles(zip, fVerbose)
 }
 
 /**
- * readArchiveFiles(sArchive, arcType, sLabel, sPassword, fVerbose, done)
+ * readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, fVerbose, done)
  *
  * @param {string} sArchive (ARC/ZIP filename)
  * @param {number} arcType (1 for ARC, 2 for ZIP)
+ * @param {number} arcOffset (0 if none)
  * @param {string} sLabel (optional volume label)
  * @param {string} sPassword (optional password)
  * @param {boolean} fVerbose (true to display verbose output, false to display minimal output)
  * @param {function(Array.<FileData>)} done
  */
-function readArchiveFiles(sArchive, arcType, sLabel, sPassword, fVerbose, done)
+function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, fVerbose, done)
 {
     let zip = new StreamZip({
         file: sArchive,
         password: sPassword,
         arcType: arcType,
+        arcOffset: arcOffset,
         storeEntries: true,
         nameEncoding: "ascii",
         // printfDebug: printf,
@@ -2523,7 +2527,7 @@ function processFile(argv)
          * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
          * equivalent to 10240K).
          */
-        readDir(input, arcType, argv['label'], argv['password'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
+        readDir(input, arcType, +argv['offset'] || 0, argv['label'], argv['password'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
         return true;
     }
 

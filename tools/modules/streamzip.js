@@ -237,6 +237,7 @@ export default class StreamZip extends events.EventEmitter {
         this.password = typeof config.password == "string"? config.password.toUpperCase() : null;
         this.buffer = config.buffer;
         this.arcType = config.arcType || StreamZip.TYPE_ZIP;
+        this.arcOffset = config.arcOffset || 0;
         this.textDecoder = config.nameEncoding? new TextDecoder(config.nameEncoding) : null;
         this.printfDebug = config.printfDebug || function() {};
 
@@ -499,15 +500,15 @@ export default class StreamZip extends events.EventEmitter {
         if (this.buffer) {
             win = {                     // fake FileWindowBuffer
                 buffer: this.buffer,
-                position: 0,
-                avail: this.buffer.length
+                position: this.arcOffset,
+                avail: this.buffer.length - this.arcOffset
             };
         } else {
             win = new FileWindowBuffer(this, "readArcEntries");
         }
         this.op = {
             win,
-            pos: 0,
+            pos: this.arcOffset,
             chunkSize: this.chunkSize,  // StreamZip.ArcHeader.getSize(),
             entriesLeft: -1
         };
