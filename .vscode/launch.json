@@ -759,7 +759,6 @@
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "--arc=PK361.EXE",
-        "--offset=13138",
         "--verbose",
         "--extract"
       ],

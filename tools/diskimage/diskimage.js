@@ -138,7 +138,7 @@ function createDisk(diskFile, diskette, argv, done)
         let label = diskette.label || argv['label'];
         let password = argv['password'];
         let normalize = diskette.normalize || argv['normalize'];
-        let target = getTarget(diskette.format);
+        let target = getTargetValue(diskette.format);
         let verbose = argv['verbose'];
         di = readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
     } else {
@@ -311,12 +311,16 @@ function getServerPath(sFile)
 }
 
 /**
- * getTarget(sTarget)
+ * getTargetValue(sTarget)
+ *
+ * Target is normally a number in Kb (eg, 360 for a 360K diskette); you can also add a suffix (eg, K or M).
+ * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
+ * equivalent to 10240K).
  *
  * @param {string} sTarget
  * @returns {number} (target Kb for disk image, 0 if no target)
  */
-function getTarget(sTarget)
+function getTargetValue(sTarget)
 {
     let target = 0;
     if (sTarget) {
@@ -2092,6 +2096,64 @@ function getArchiveFiles(zip, fVerbose)
 }
 
 /**
+ * getArchiveOffset(sArchive, arcType, sOffset)
+ *
+ * There were some ARC archives embedded in EXE files (eg, old self-extracting archives) produced by PKware, before they
+ * started using ZIP archives.  Examples include:
+ *
+ *      PKX35A35.EXE
+ *      PK361.EXE
+ *      PKFIND11.EXE
+ *
+ * They can be detected by a 32-bit signature near the end of the file ("PK\xAA\x55" or 0x55aa4b50) followed by a 32-bit
+ * archive size.  The beginning of the archive can be found by subtracting the archive size from the file size (ie, the file
+ * size up to and including the 32-bit archive size), and then subtracting another 40 (0x28) bytes from that value.
+ *
+ * TODO: Determine what that final 40-byte offset represents.
+ *
+ * However, since this is an expensive operation, we perform this search ONLY if 1) the caller doesn't provide an explicit
+ * offset, 2) the caller explicitly set the archive type to TYPE_ARC, and 3) the input file is an EXE file.
+ *
+ * There were self-extracting ARC archives produced by SEA (System Enhancement Associates) as well (eg, ARC602.EXE from 1989),
+ * but those used a different format; this function does not yet support those files.
+ *
+ * Self-extracting ZIP archives don't need any help locating the archive offset, because the ZIP file format specifically
+ * allows for prepended files (eg, EXE files).
+ *
+ * @param {string} sArchive
+ * @param {number} arcType
+ * @param {string} sOffset
+ * @returns {number} (the specified --offset value, if any, else the offset of the embedded ARC archive, if any; -1 if none)
+ */
+function getArchiveOffset(sArchive, arcType, sOffset)
+{
+    let offset = 0;
+    if (sOffset) {
+        offset = +sOffset || 0;
+    } else {
+        if (arcType == StreamZip.TYPE_ARC && sArchive.toUpperCase().endsWith(".EXE")) {
+            offset = -1
+            let data = readFile(sArchive, null);
+            if (data) {
+                let sizeArc = -1, sizeFile;
+                let max = 512;      // limit the search to the last 512 bytes of the file
+                for (let o = data.length - 8; o >= 0 && max--; o--) {
+                    if (data.readUInt32LE(o) == 0x55aa4b50) {
+                        sizeArc = data.readUInt32LE(o + 4);
+                        sizeFile = o + 8;
+                        break;
+                    }
+                }
+                if (sizeArc > 0 && sizeArc < sizeFile) {
+                    offset = sizeFile - sizeArc - 40;
+                }
+            }
+        }
+    }
+    return offset;
+}
+
+/**
  * readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, fVerbose, done)
  *
  * @param {string} sArchive (ARC/ZIP filename)
@@ -2522,12 +2584,12 @@ function processFile(argv)
     }
 
     if (fDir || arcType) {
-        /*
-         * Target is normally a number in Kb (eg, 360 for a 360K diskette); you can also add a suffix (eg, K or M).
-         * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
-         * equivalent to 10240K).
-         */
-        readDir(input, arcType, +argv['offset'] || 0, argv['label'], argv['password'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
+        let offset = getArchiveOffset(input, arcType, argv['offset']);
+        if (offset < 0) {
+            printf("error: %s is not a supported archive file\n", input);
+            return true;
+        }
+        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
         return true;
     }
 
