@@ -649,14 +649,20 @@ export default class StreamZip extends events.EventEmitter {
     }
 
     /**
-     * checkEntriesExist()
+     * checkEntriesExist(callback)
      *
      * @this {StreamZip}
+     * @param {function} callback
      */
-    checkEntriesExist()
+    checkEntriesExist(callback)
     {
         if (!this.#entries) {
-            throw new Error('storeEntries disabled');
+            let err = new Error('storeEntries disabled');
+            if (callback) {
+                callback(err);
+                return;
+            }
+            throw err;
         }
     }
 
@@ -899,7 +905,7 @@ export default class StreamZip extends events.EventEmitter {
     openEntry(entry, callback, sync)
     {
         if (typeof entry === 'string') {
-            this.checkEntriesExist();
+            this.checkEntriesExist(callback);
             entry = this.#entries[entry];
             if (!entry) {
                 return callback(new Error('entry not found'));

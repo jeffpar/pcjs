@@ -82,4 +82,23 @@ export default class CharSet {
     {
         return CharSet.CP437.indexOf(c) >= 0;
     }
+
+    /**
+     * toUpperCaseASCII(s)
+     *
+     * @param {string} s
+     * @return {string}
+     */
+    static toUpperCaseASCII(s)
+    {
+        let u = "";
+        for (let i = 0; i < s.length; i++) {
+            let c = s.charCodeAt(i);
+            if (c >= 0x61 && c <= 0x7a) {
+                c -= 0x20;
+            }
+            u += String.fromCharCode(c);
+        }
+        return u;
+    }
 }

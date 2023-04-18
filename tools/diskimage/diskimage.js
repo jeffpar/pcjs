@@ -941,7 +941,7 @@ function convertBASICFile(sPath, db, fNormalize)
 }
 
 /**
- * extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
+ * extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
  *
  * @param {string} sDir
  * @param {string} subDir
@@ -950,9 +950,10 @@ function convertBASICFile(sPath, db, fNormalize)
  * @param {Date} date
  * @param {Buffer} db
  * @param {Object} argv
+ * @param {boolean} [noExpand]
  * @param {Array.<fileData>} [files]
  */
-function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
+function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
 {
     /*
      * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
@@ -984,10 +985,21 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
                 return true;
             }
         }
-        if (!fQuiet) printf("extracting: %s\n", sFile);
-        if (argv['expand']) {
+        if (argv['expand'] && !noExpand) {
             let arcType = isArchiveFile(sFile);
             if (arcType) {
+                if (!fQuiet) printf("expanding: %s\n", sFile);
+                if (arcType == StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
+                    /*
+                     * How often does this happen?  I don't know, but look at CCTRAN.ZIP on PC-SIG DISK2631. #ZipAnomalies
+                     */
+                    arcType = StreamZip.TYPE_ARC;
+                    printf("warning: overriding %s as type ARC (%d)\n", sFile, arcType);
+                }
+                if (arcType == StreamZip.TYPE_ZIP && db.readUInt32LE(0) == 0x08074B50) {
+                    // db = db.slice(0, db.length - 4);
+                    printf("warning: ZIP extended header signature detected (%#08x)\n", 0x08074B50);
+                }
                 let zip = new StreamZip({
                     file: sFile,
                     password: argv['password'],
@@ -1000,11 +1012,16 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
                 }).on('ready', () => {
                     let aFileData = getArchiveFiles(zip, argv['verbose']);
                     for (let file of aFileData) {
-                        extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, file.files);
+                        extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, false, file.files);
                     }
                     zip.close();
                 }).on('error', (err) => {
                     printError(err, sFile);
+                    /*
+                     * Since this implies a failure to extract anything from the archive, we'll call ourselves
+                     * back with noExpand set to true, so that we simply extract the archive without expanding it.
+                     */
+                    extractFile(sDir, subDir, sFile, attr, date, db, argv, true);
                 });
                 zip.open();
                 /*
@@ -1014,6 +1031,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
                 return true;
             }
         }
+        if (!fQuiet) printf("extracting: %s\n", sFile);
         /*
          * Originally, "normalize" was just an import option (to fix line endings of known text files on
          * disks we created); however, I'm going to make it an export option as well, and not just to revert
@@ -1044,7 +1062,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
         fs.utimesSync(getFullPath(sPath), date, date);
         if (files) {
             for (let file of files) {
-                if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, file.files)) {
+                if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, false, file.files)) {
                     fSuccess = false;
                     break;
                 }
@@ -1120,7 +1138,7 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     if (!argv['quiet']) {
-        printf("processing %s: %d bytes (checksum %d, hash %s)\n", di.getName(), di.getSize(), di.getChecksum(), di.getHash());
+        printf("processing: %s (%d bytes, checksum %d, hash %s)\n", di.getName(), di.getSize(), di.getChecksum(), di.getHash());
     }
 
     let sFindName = argv['file'];
@@ -1802,7 +1820,7 @@ function readCollection(argv)
 }
 
 /**
- * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
+ * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, done, sectorIDs, sectorErrors, suppData)
  *
  * @param {string} sDir (directory name)
  * @param {number} [arcType] (1 if ARC file, 2 if ZIP file, otherwise 0)
@@ -1812,14 +1830,14 @@ function readCollection(argv)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
- * @param {boolean} [fVerbose] (true for verbose output)
+ * @param {boolean} [verbose] (true for verbose output)
  * @param {function(DiskInfo)} [done] (optional function to call on completion)
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
  * @returns {DiskInfo|null}
  */
-function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
+function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, done, sectorIDs, sectorErrors, suppData)
 {
     let di;
     let diskName = path.basename(sDir);
@@ -1854,7 +1872,7 @@ function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarg
     try {
         nMaxInit = nMaxCount = nMax || nMaxDefault;
         if (arcType) {
-            readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, fVerbose, readDone);
+            readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, verbose, readDone);
         } else {
             di = readDone(readDirFiles(sDir, sLabel, fNormalize, 0));
         }
@@ -1985,18 +2003,18 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
 }
 
 /**
- * getArchiveFiles(zip, fVerbose)
+ * getArchiveFiles(zip, verbose)
  *
  * @param {StreamZip} zip
- * @param {boolean} fVerbose
+ * @param {boolean} verbose
  * @returns {Array.<FileData>}
  */
-function getArchiveFiles(zip, fVerbose)
+function getArchiveFiles(zip, verbose)
 {
     let aFileData = [];
     let aDirectories = [];
-    if (fVerbose) {
-        printf("\n%s\n", zip.fileName);
+    if (verbose) {
+        printf("\nreading: %s\n", zip.fileName);
         printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
         printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
     }
@@ -2029,7 +2047,7 @@ function getArchiveFiles(zip, fVerbose)
             /*
              * HACK to skip decompression for all entries (--verbose=skip) or all entries except a named entry.
              */
-            if (typeof fVerbose == "string" && (fVerbose == "skip" || fVerbose != entry.name)) {
+            if (typeof verbose == "string" && (verbose == "skip" || verbose != entry.name)) {
                 data = new DataBuffer(entry.size);
             }
             else {
@@ -2041,7 +2059,9 @@ function getArchiveFiles(zip, fVerbose)
             file.data = data;
         }
         if (entry.messages && entry.messages.length) {
-            for (let message of entry.messages) messages += message + "\n";
+            for (let message of entry.messages) {
+                messages += message + "\n";
+            }
         }
         let d, sDir = path.dirname(file.path) + path.sep;
         for (d = 0; d < aDirectories.length; d++) {
@@ -2054,7 +2074,7 @@ function getArchiveFiles(zip, fVerbose)
         if (d == aDirectories.length) {
             aFileData.push(file);
         }
-        if (fVerbose) {
+        if (verbose) {
             /*
              * Notes regarding ARC compression method "naming conventions":
              *
@@ -2087,6 +2107,7 @@ function getArchiveFiles(zip, fVerbose)
             let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
             if (entry.encrypted) method += '*';
             let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
+            if (entry.errors) filesize = -1;
             if (!Device.DEBUG) {
                 printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
                     filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc);
@@ -2159,17 +2180,17 @@ function getArchiveOffset(sArchive, arcType, sOffset)
 }
 
 /**
- * readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, fVerbose, done)
+ * readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbose, done)
  *
  * @param {string} sArchive (ARC/ZIP filename)
  * @param {number} arcType (1 for ARC, 2 for ZIP)
  * @param {number} arcOffset (0 if none)
  * @param {string} sLabel (optional volume label)
  * @param {string} sPassword (optional password)
- * @param {boolean} fVerbose (true to display verbose output, false to display minimal output)
+ * @param {boolean} verbose (true to display verbose output, false to display minimal output)
  * @param {function(Array.<FileData>)} done
  */
-function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, fVerbose, done)
+function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbose, done)
 {
     let zip = new StreamZip({
         file: sArchive,
@@ -2182,8 +2203,8 @@ function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, fVerb
         holdErrors: true
     });
     zip.on('ready', () => {
-        let aFileData = getArchiveFiles(zip, fVerbose);
-        zip.close()
+        let aFileData = getArchiveFiles(zip, verbose);
+        zip.close();
         done(aFileData);
     });
     zip.on('error', (err) => {

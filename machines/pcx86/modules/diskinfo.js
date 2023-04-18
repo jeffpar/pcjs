@@ -1336,7 +1336,7 @@ export default class DiskInfo {
      */
     buildShortName(sFile, fLabel=false, uniqueID=0, encoding="utf8")
     {
-        let sName = sFile.toUpperCase();
+        let sName = (encoding == "utf8")? sFile.toUpperCase() : CharSet.toUpperCaseASCII(sFile);
         if (fLabel) {
             /*
              * Character validation is disabled for labels; I'm not sure what the limitations are on label characters,
