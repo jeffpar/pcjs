@@ -657,7 +657,29 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--zip=PKZ204G.EXE",
+        "/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0666/archive/DISK0666.ZIP",
+        "--extract",
+        "--expand",
+        "--extdir=%d",
+        "--overwrite",
+        "--verbose"
+      ],
+      "cwd": "${workspaceFolder}/tmp",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskimage.js --zip --expand",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "--zip=/pcsigdisks/pcx86/sw/misc/pcsig/DISK2623.ZIP",
+        "--extract",
+        "--expand",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}/tmp",

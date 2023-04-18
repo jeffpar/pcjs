@@ -24,7 +24,7 @@ import {LegacyArc, LegacyZip} from './legacyzip.js';
  * @property {string} nameEncoding (default is "utf8"; undocumented)
  * @property {number} fd (file descriptor; undocumented as normally we open our own file descriptor)
  * @property {number} chunkSize (size of internal file buffer, default is generally 1024; undocumented)
- * @property {boolean} logErrors (log errors instead of throwing them; added for PCjs and LegacyZip support)
+ * @property {boolean} holdErrors (hold errors instead of throwing them; added for PCjs and LegacyZip support)
  * @property {function()} printfDebug (optional debug logging function; added for PCjs)
  */
 
@@ -324,7 +324,7 @@ export default class StreamZip extends events.EventEmitter {
     readCentralDirectoryCallback(err, bytesRead)
     {
         if (err || !bytesRead) {
-            return this.emit('error', err || new Error('Archive read failed'));
+            return this.emit('error', err || new Error('archive read failure'));
         }
         let pos = this.op.lastPos;
         let bufferPosition = pos - this.op.win.position;
@@ -342,12 +342,12 @@ export default class StreamZip extends events.EventEmitter {
             }
         }
         if (pos === minPos) {
-            return this.emit('error', new Error('Bad archive'));
+            return this.emit('error', new Error('bad archive'));
         }
         this.op.lastPos = pos + 1;
         this.op.chunkSize *= 2;
         if (pos <= minPos) {
-            return this.emit('error', new Error('Bad archive'));
+            return this.emit('error', new Error('bad archive'));
         }
         const expandLength = Math.min(this.op.chunkSize, pos - minPos);
         this.op.win.expandLeft(expandLength, this.readCentralDirectoryCallback.bind(this));
@@ -536,7 +536,7 @@ export default class StreamZip extends events.EventEmitter {
         const headerLen = StreamZip.ArcHeader.getSize();
         try {
             while (this.op.entriesLeft != 0) {
-                let entry = new ArcEntry(this, this.config.logErrors);
+                let entry = new ArcEntry(this, this.config.holdErrors);
                 if (!entry.getArcHeader(buffer, bufferPos, bufferAvail)) {
                     /*
                      * Too many ARC files are padded with garbage to enable this sanity check....
@@ -615,7 +615,7 @@ export default class StreamZip extends events.EventEmitter {
         try {
             while (this.op.entriesLeft > 0) {
                 if (!entry) {
-                    entry = new ZipEntry(this, this.config.logErrors);
+                    entry = new ZipEntry(this, this.config.holdErrors);
                     entry.getCentralHeader(buffer, bufferPos);
                     entry.headerOffset = this.op.win.position + bufferPos;
                     this.op.entry = entry;
@@ -721,12 +721,22 @@ export default class StreamZip extends events.EventEmitter {
     /**
      * entryDataSync()
      *
+     * We now call entry.error() instead of throwing errors ourselves, to accommodate callers who want to
+     * hold errors instead of catching them.  This also makes it possible for the caller to process as many
+     * GOOD entries as possible, even if some of them are BAD.  Treating all errors as equally fatal is not
+     * the best design and is something this entire library should probably revisit.  It's not clear what
+     * mixture of try/catch and emit error handlers the caller is supposed to use, because relying just on
+     * the emit 'error' handler means that any problem with a single entry can halt processing of the entire
+     * archive.
+     *
      * @public
      * @this {StreamZip}
      * @param {ZipEntry} entry
+     * @returns {Buffer}
      */
     entryDataSync(entry)
     {
+        let dst;
         let err = null;
         this.openEntry(
             entry,
@@ -737,7 +747,11 @@ export default class StreamZip extends events.EventEmitter {
             true
         );
         if (err) {
-            throw err;
+            if (!entry) {
+                throw err;
+            }
+            entry.error(err);
+            return dst;
         }
         let src = Buffer.alloc(entry.compressedSize);
         if (this.buffer) {
@@ -747,10 +761,10 @@ export default class StreamZip extends events.EventEmitter {
                 err = e;
             }).read(true);
             if (err) {
-                throw err;
+                entry.error(err);
+                return dst;
             }
         }
-        let dst;
         /*
          * The actual decompression is now inside a loop AND a try/catch block, to automatically retry
          * decryption in case 1) a password was supplied but not actually required (the ARC file doesn't tell
@@ -842,7 +856,7 @@ export default class StreamZip extends events.EventEmitter {
                 }
                 if (dst) break;
             } catch(e) {
-                entry.error(e.message);
+                entry.error(e);
             }
         }
         if (dst) {
@@ -888,11 +902,11 @@ export default class StreamZip extends events.EventEmitter {
             this.checkEntriesExist();
             entry = this.#entries[entry];
             if (!entry) {
-                return callback(new Error('Entry not found'));
+                return callback(new Error('entry not found'));
             }
         }
         if (!entry.isFile) {
-            return callback(new Error('Entry is not file'));
+            return callback(new Error('entry is not file'), entry);
         }
         if (this.arcType == StreamZip.TYPE_ARC) {
             /*
@@ -910,31 +924,31 @@ export default class StreamZip extends events.EventEmitter {
                 /*
                  * If we're using a buffer, we can simply use the buffer's data as the local header.
                  */
+                let err = null;
                 try {
                     entry.getLocalHeader(this.buffer, entry.offset);
                     if (entry.encrypted) {
-                        return callback(new Error('Entry encrypted'));
-                    }
-                } catch (e) {
-                    return callback(e);
-                }
-                return callback(null, entry);
-            }
-            if (!this.fd) {
-                return callback(new Error('Archive closed'));
-            }
-            const buffer = Buffer.alloc(StreamZip.LocalHeader.getSize());
-            new FsRead(this, "openEntry", buffer, 0, buffer.length, entry.offset, (err) => {
-                if (err) {
-                    return callback(err);
-                }
-                try {
-                    entry.getLocalHeader(buffer, 0);
-                    if (entry.encrypted) {
-                        err = new Error('Entry encrypted');
+                        err = new Error('entry encrypted');
                     }
                 } catch (e) {
                     err = e;
+                }
+                return callback(err, entry);
+            }
+            if (!this.fd) {
+                return callback(new Error('archive closed'), entry);
+            }
+            const buffer = Buffer.alloc(StreamZip.LocalHeader.getSize());
+            new FsRead(this, "openEntry", buffer, 0, buffer.length, entry.offset, (err) => {
+                if (!err) {
+                    try {
+                        entry.getLocalHeader(buffer, 0);
+                        if (entry.encrypted) {
+                            err = new Error('entry encrypted');
+                        }
+                    } catch (e) {
+                        err = e;
+                    }
                 }
                 callback(err, entry);
             }).read(sync);
@@ -1371,26 +1385,30 @@ class Entry
     constructor(streamZip)
     {
         this.streamZip = streamZip;
-        if (streamZip.config.logErrors) {
-            this.messages = [];
-        }
+        this.messages = [];
         this.flags = 0;
         this.errors = 0;
+        this.holdErrors = streamZip.config.holdErrors;
     }
 
     reset()
     {
-        if (this.messages) this.messages = [];
+        this.messages = [];
     }
 
-    message(msg, type = "")
+    message(err, type = "")
     {
-        msg = (type? type + ": " : "") + path.basename(this.streamZip.fileName) + "/" + (this.name? this.name + ": " : "")  + msg;
-        if (!this.messages && type == "error") {
-            throw new Error(msg);
+        let msg;
+        if (typeof err == "string") {
+            msg = err;
+            err = null;
+        } else {
+            msg = err.message;
         }
-        if (this.name) {
-            this.messages.push(msg);
+        msg = (type? type + ": " : "") + path.basename(this.streamZip.fileName) + "/" + (this.name? this.name + ": " : "") + msg;
+        this.messages.push(msg);
+        if (!this.holdErrors && type == "error") {
+            throw new Error(msg);
         }
     }
 
@@ -1648,7 +1666,7 @@ class FileWindowBuffer
     checkOp()
     {
         if (this.fsOp && this.fsOp.waiting) {
-            throw new Error('Operation in progress');
+            throw new Error('operation in progress');
         }
     }
 

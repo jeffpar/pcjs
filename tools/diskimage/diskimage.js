@@ -972,9 +972,9 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
 
     let fSuccess = false;
     let dir = path.dirname(sPath);
-    makeDir(dir, true, argv['overwrite']);
+    makeDir(getFullPath(dir), true, argv['overwrite']);
     if (attr & DiskInfo.ATTR.SUBDIR) {
-        fSuccess = makeDir(sPath, true);
+        fSuccess = makeDir(getFullPath(sPath), true);
     } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
         let fPrinted = false;
         let fQuiet = argv['quiet'];
@@ -996,7 +996,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
                     storeEntries: true,
                     nameEncoding: "ascii",
                     printfDebug: printf,
-                    logErrors: true
+                    holdErrors: true
                 }).on('ready', () => {
                     let aFileData = getArchiveFiles(zip, argv['verbose']);
                     for (let file of aFileData) {
@@ -1038,10 +1038,10 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
                 db = normalizeForHost(db);
             }
         }
-        fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
+        fSuccess = writeFile(getFullPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
     }
     if (fSuccess) {
-        fs.utimesSync(sPath, date, date);
+        fs.utimesSync(getFullPath(sPath), date, date);
         if (files) {
             for (let file of files) {
                 if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, file.files)) {
@@ -2087,8 +2087,13 @@ function getArchiveFiles(zip, fVerbose)
             let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
             if (entry.encrypted) method += '*';
             let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
-            printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
-                filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc);
+            if (!Device.DEBUG) {
+                printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
+                    filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc);
+            } else {
+                printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %#08x\n",
+                    filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc, entry.offset);
+            }
         }
     }
     if (messages) printf("%s", messages);
@@ -2174,7 +2179,7 @@ function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, fVerb
         storeEntries: true,
         nameEncoding: "ascii",
         // printfDebug: printf,
-        logErrors: true
+        holdErrors: true
     });
     zip.on('ready', () => {
         let aFileData = getArchiveFiles(zip, fVerbose);
