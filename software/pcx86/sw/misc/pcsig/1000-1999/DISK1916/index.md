@@ -20,13 +20,13 @@ machines:
      Volume in drive A is DISK1916
      Directory of A:\
 
-    FILE1916 TXT      1481  12-28-89  11:45a
-    GO       BAT        38  12-31-80   5:37p
-    GO       TXT       540  12-31-80   4:12p
-    HAMLOG   DOC      8439  11-09-89   6:52a
-    HAMLOG   EXE    193695  11-09-89   8:11a
-    HAMLOG   HLP     10798  11-09-89   2:37a
-    PRODUCTS DOC      2422  11-09-89   8:18a
-    REGISTER FRM      1285  11-09-89   8:00a
+    FILE1916 TXT      1481  12-28-89   7:45p
+    GO       BAT        38   1-01-80   1:37a
+    GO       TXT       540   1-01-80  12:12a
+    HAMLOG   DOC      8439  11-09-89   2:52p
+    HAMLOG   EXE    193695  11-09-89   4:11p
+    HAMLOG   HLP     10798  11-09-89  10:37a
+    PRODUCTS DOC      2422  11-09-89   4:18p
+    REGISTER FRM      1285  11-09-89   4:00p
             8 file(s)     218698 bytes
                            98304 bytes free

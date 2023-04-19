@@ -20,13 +20,13 @@ machines:
      Volume in drive A is DISK1363
      Directory of A:\
 
-    FAAREGUL DTA    107576  12-21-87   3:00a
-    FILE1363 TXT       759   4-27-89   9:10a
-    GO       BAT        38   4-24-89   9:39a
-    GO       TXT       540   4-27-89   9:09a
-    PHYSACFT DTA    129272  12-21-87   3:00a
-    READ     BAT        39   4-27-89   9:07a
-    READ     ME        403  12-31-80   4:08p
-    WEATHERQ DTA    102152  12-21-87   3:00a
+    FAAREGUL DTA    107576  12-21-87  11:00a
+    FILE1363 TXT       759   4-27-89   4:10p
+    GO       BAT        38   4-24-89   4:39p
+    GO       TXT       540   4-27-89   4:09p
+    PHYSACFT DTA    129272  12-21-87  11:00a
+    READ     BAT        39   4-27-89   4:07p
+    READ     ME        403   1-01-80  12:08a
+    WEATHERQ DTA    102152  12-21-87  11:00a
             8 file(s)     340779 bytes
                            16384 bytes free

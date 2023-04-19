@@ -54,14 +54,14 @@ machines:
      Volume in drive A is DISK1257
      Directory of A:\
 
-    DISKWIZ  ARC     83573   2-13-89   4:00p
-    DISKWIZ  COM     35926   2-13-89   4:00p
-    DWIZDEMO COM     39096   7-28-88   5:00p
-    DWMANUAL DOC     56019   7-28-88   5:00p
-    FILE1257 TXT      2296   2-27-89   8:27a
-    GO       BAT        38  10-19-87   8:56a
-    GO       TXT      1002   2-24-89   4:57a
-    MANUAL   BAT       147   1-19-89   1:21a
-    README   DOC      5446   2-13-89   4:00p
+    DISKWIZ  ARC     83573   2-14-89  12:00a
+    DISKWIZ  COM     35926   2-14-89  12:00a
+    DWIZDEMO COM     39096   7-29-88  12:00a
+    DWMANUAL DOC     56019   7-29-88  12:00a
+    FILE1257 TXT      2296   2-27-89   4:27p
+    GO       BAT        38  10-19-87   3:56p
+    GO       TXT      1002   2-24-89  12:57p
+    MANUAL   BAT       147   1-19-89   9:21a
+    README   DOC      5446   2-14-89  12:00a
             9 file(s)     223543 bytes
                            93184 bytes free

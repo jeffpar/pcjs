@@ -38,23 +38,23 @@ machines:
      Volume in drive A is DISK1863
      Directory of A:\
 
-    BIGPOLY2 MPD      1947   4-30-89  11:30p
-    FILE1863 TXT      2295  12-22-89   6:52a
-    FOURAMP  FRD       768   8-04-88  11:30p
-    FOURSQR  FRD       512   8-04-88  11:30p
-    FPLSINX  MPD       261   4-28-89  11:30p
-    GO       BAT        38  12-31-80   5:37p
-    GO       TXT       540  12-31-80   6:16p
-    INVOICE  TXT       565   6-08-89  11:30p
-    MANUAL   TXT     77059   5-08-89  11:30p
-    MATHPLOT EXE    133120   6-18-89  11:30p
-    MATRIX2  INV       128   8-04-88  11:30p
-    MATRIX3  INV       128   8-04-88  11:30p
-    POLY2    MPD       128   8-04-88  11:30p
-    POLY3    MPD       130   8-04-88  11:30p
-    POLY5    MPD       213   8-04-88  11:30p
-    SIMEQ2   SIM       128   8-04-88  11:30p
-    SIMEQ4   SIM       128   8-04-88  11:30p
-    SIMEQ6   SIM       109   8-04-88  11:30p
+    BIGPOLY2 MPD      1947   5-01-89   6:30a
+    FILE1863 TXT      2295  12-22-89   2:52p
+    FOURAMP  FRD       768   8-05-88   6:30a
+    FOURSQR  FRD       512   8-05-88   6:30a
+    FPLSINX  MPD       261   4-29-89   6:30a
+    GO       BAT        38   1-01-80   1:37a
+    GO       TXT       540   1-01-80   2:16a
+    INVOICE  TXT       565   6-09-89   6:30a
+    MANUAL   TXT     77059   5-09-89   6:30a
+    MATHPLOT EXE    133120   6-19-89   6:30a
+    MATRIX2  INV       128   8-05-88   6:30a
+    MATRIX3  INV       128   8-05-88   6:30a
+    POLY2    MPD       128   8-05-88   6:30a
+    POLY3    MPD       130   8-05-88   6:30a
+    POLY5    MPD       213   8-05-88   6:30a
+    SIMEQ2   SIM       128   8-05-88   6:30a
+    SIMEQ4   SIM       128   8-05-88   6:30a
+    SIMEQ6   SIM       109   8-05-88   6:30a
            18 file(s)     218197 bytes
                            92160 bytes free

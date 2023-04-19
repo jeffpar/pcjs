@@ -67,59 +67,59 @@ machines:
      Volume in drive A is DISK0126
      Directory of A:\
 
-    ADDSUB   PRG      1024   1-01-10   9:38a
-    BACKUP   PRG      2048   1-01-10   9:38a
-    BLANK    PRG      9728   1-01-10   9:38a
-    CRC      TXT      3003  11-09-84   7:06a
-    CRCK4    COM      1536  10-21-82  12:54p
-    DOC      TXT       640  12-27-83   9:36a
-    ENTER    PRG      1920   1-01-10   9:38a
-    GUIDE    PRG      2560   1-01-10   9:38a
-    MAIL     DBF      2048   1-01-10   9:38a
-    MAIL     PRG      1536   1-01-10   9:38a
-    MAILENTR PRG      1024   1-01-10   9:38a
-    MAILFMT  FMT       640   1-01-10   9:38a
-    MAILINFO PRG      1152   1-01-10   9:38a
-    MAILLAB  PRG       896   1-01-10   9:38a
-    MAILLTTR PRG      1664   1-01-10   9:38a
-    MIS      DBF      1024   1-01-10   9:38a
-    ML2      DBF      1024   1-01-10   9:38a
-    ML2      DOC      1152   1-01-10   9:38a
-    ML2      PRG      1152   1-01-10   9:38a
-    ML2A     PRG       256   1-01-10   9:38a
-    ML2EDIT  PRG       896   1-01-10   9:38a
-    ML2ENTR  PRG       768   1-01-10   9:38a
-    ML2INFO  PRG       384   1-01-10   9:38a
-    ML2LAB   PRG      3584   1-01-10   9:38a
-    ML2LAB1  PRG       256   1-01-10   9:38a
-    ML2LAB2  PRG       256   1-01-10   9:38a
-    ML2LAB4  PRG       384   1-01-10   9:38a
-    ML2LIST  PRG      1920   1-01-10   9:38a
-    ML2LST1  PRG       256   1-01-10   9:38a
-    ML2LTTR  PRG       896   1-01-10   9:38a
-    ML2MULTI PRG      1792   1-01-10   9:38a
-    ML2REC   PRG       256   1-01-10   9:38a
-    ML2SORT  PRG       896   1-01-10   9:38a
-    ML2ZIPCT PRG       768   1-01-10   9:38a
-    MLABEL5  PRG      1536   1-01-10   9:38a
-    NAMEBRK  PRG      2688   1-01-10   9:38a
-    PRINT    TXT      7168   1-01-10   9:38a
-    REFDEX   NDX      1024   1-01-10   9:39a
-    REFERALS DBF      1024   1-01-10   9:39a
-    REFS     PRG       512   1-01-10   9:39a
-    SEARCH   PRG      1408   1-01-10   9:39a
-    SHOWFIL  PRG       384   1-01-10   9:39a
-    SOME     DBF      1024   1-01-10   9:39a
-    SORTED   DBF      1024   1-01-10   9:39a
-    STATEX   NDX      1024   1-01-10   9:39a
-    STATEZIP DBF      1024   1-01-10   9:39a
-    STATEZIP PRG      3328   1-01-10   9:39a
-    STRINGS  DBF      1024   1-01-10   9:39a
-    SUBDEX   NDX      1024   1-01-10   9:39a
-    SUBJECTS DBF      1024   1-01-10   9:39a
-    SUBS     PRG       384   1-01-10   9:39a
-    SUPERBAK PRG      2944   1-01-10   9:39a
-    XXX               2944   1-15-84   2:54p
-    XXX      BAK      3072  12-27-83   9:38a
+    ADDSUB   PRG      1024
+    BACKUP   PRG      2048
+    BLANK    PRG      9728
+    CRC      TXT      3003  11-09-84   3:06p
+    CRCK4    COM      1536  10-21-82   7:54p
+    DOC      TXT       640  12-27-83   5:36p
+    ENTER    PRG      1920
+    GUIDE    PRG      2560
+    MAIL     DBF      2048
+    MAIL     PRG      1536
+    MAILENTR PRG      1024
+    MAILFMT  FMT       640
+    MAILINFO PRG      1152
+    MAILLAB  PRG       896
+    MAILLTTR PRG      1664
+    MIS      DBF      1024
+    ML2      DBF      1024
+    ML2      DOC      1152
+    ML2      PRG      1152
+    ML2A     PRG       256
+    ML2EDIT  PRG       896
+    ML2ENTR  PRG       768
+    ML2INFO  PRG       384
+    ML2LAB   PRG      3584
+    ML2LAB1  PRG       256
+    ML2LAB2  PRG       256
+    ML2LAB4  PRG       384
+    ML2LIST  PRG      1920
+    ML2LST1  PRG       256
+    ML2LTTR  PRG       896
+    ML2MULTI PRG      1792
+    ML2REC   PRG       256
+    ML2SORT  PRG       896
+    ML2ZIPCT PRG       768
+    MLABEL5  PRG      1536
+    NAMEBRK  PRG      2688
+    PRINT    TXT      7168
+    REFDEX   NDX      1024
+    REFERALS DBF      1024
+    REFS     PRG       512
+    SEARCH   PRG      1408
+    SHOWFIL  PRG       384
+    SOME     DBF      1024
+    SORTED   DBF      1024
+    STATEX   NDX      1024
+    STATEZIP DBF      1024
+    STATEZIP PRG      3328
+    STRINGS  DBF      1024
+    SUBDEX   NDX      1024
+    SUBJECTS DBF      1024
+    SUBS     PRG       384
+    SUPERBAK PRG      2944
+    XXX               2944   1-15-84  10:54p
+    XXX      BAK      3072  12-27-83   5:38p
            54 file(s)      84923 bytes
                            68608 bytes free

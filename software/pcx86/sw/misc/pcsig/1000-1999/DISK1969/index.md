@@ -20,14 +20,14 @@ machines:
      Volume in drive A is DISK1969
      Directory of A:\
 
-    FILE1969 TXT      2836   1-25-90   8:51a
-    GO       BAT        38  12-31-80   5:37p
-    GO       TXT       540   1-25-90   8:46a
-    INSTALL  EXE     35158   8-30-89   4:19a
-    PACKING  LST       281   8-10-89   1:37a
-    PASMENU  DOC     14519   7-27-89   3:12a
-    PASMENU  EXE     58204   7-27-89   3:12a
-    PASMENU  PRO      2121   7-27-89   3:12a
-    USAGE    EXE     26922   7-27-89   3:12a
+    FILE1969 TXT      2836   1-25-90   4:51p
+    GO       BAT        38   1-01-80   1:37a
+    GO       TXT       540   1-25-90   4:46p
+    INSTALL  EXE     35158   8-30-89  11:19a
+    PACKING  LST       281   8-10-89   8:37a
+    PASMENU  DOC     14519   7-27-89  10:12a
+    PASMENU  EXE     58204   7-27-89  10:12a
+    PASMENU  PRO      2121   7-27-89  10:12a
+    USAGE    EXE     26922   7-27-89  10:12a
             9 file(s)     140619 bytes
                            16896 bytes free

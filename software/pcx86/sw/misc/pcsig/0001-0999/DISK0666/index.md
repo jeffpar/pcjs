@@ -37,6 +37,16 @@ machines:
     feature index.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## LOADPIC.BAS
+
+```bas
+10 CLS:BLOAD "PICTURE.R":BLOAD "PICTURE.G":BLOAD "PICTURE.B"
+20 GOTO 20
+```
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0666
 

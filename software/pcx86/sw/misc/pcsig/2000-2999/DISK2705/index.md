@@ -21,10 +21,10 @@ machines:
      Directory of A:\
 
     REGISTER FRM       821   8-30-90   8:15p
-    x                    0   8-31-90   4:41p
+                         0   8-31-90   4:41p
     SQ       EXE     49568   8-29-90   9:09p
     SQ       DOC      4469   8-31-90   9:50p
-    xx                   0   8-31-90   4:41p
+                         0   8-31-90   4:41p
     MEMORY   EXE     49280   8-30-90   3:23p
     MEMORY   DOC      4852   8-30-90   9:27p
     MEMORY   1        4635   8-18-89   9:25p

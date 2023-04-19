@@ -17,7 +17,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1608
 
-     Volume in drive A is DISK1608
+     Volume in drive A has no label
      Directory of A:\
 
     @DIR     HLP      2622   7-09-88   7:51p

@@ -31,8 +31,8 @@ machines:
      Directory of A:\
 
     ▄▄▄▄▄▄▄▄ ▄▄▄         0   8-11-90   7:35a
-    █┌ENTER» GO█         0   8-11-90   7:35a
-    SSSSSSSS SSS         0   8-11-90   7:35a
+    █·ENTER» GO█         0   8-11-90   7:35a
+    ▀▀▀▀▀▀▀▀ ▀▀▀         0   8-11-90   7:35a
     INSTALL  901      2870  10-02-90  11:15p
     READ     ME       7900  10-02-90   2:48p
     VIEW     COM      2432   8-11-90   9:47a

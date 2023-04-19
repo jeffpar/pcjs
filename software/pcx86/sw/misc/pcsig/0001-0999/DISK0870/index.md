@@ -75,6 +75,45 @@ machines:
 410	END
 ```
 
+## HGCTEST.BAS
+
+```bas
+100	' Emulation Test Program Version 2.01
+102	'
+105	DIM VERT%(120)
+110	INPUT "Test 200x320 or 200x640 (1 or 2)";RES%
+120	IF RES% <> 1 AND RES% <> 2 THEN CLS: GOTO 110 ELSE SCREEN RES%:CLS
+130	ASPECT = RES% * .5
+140	RES% = RES% * 320
+150	KEY OFF
+160	CLS
+170	INPUT "enter radius (10-100)";R
+180	INPUT "enter number of vertices (3-50)";V
+190	CLS
+200	X0=(RES%/2)+R*2*ASPECT:Y0=100
+210	PSET(X0,Y0)
+220	THETA=6.28319/V:N=V-1
+230	FOR I=1 TO N
+240		VERT%(2*I-1)=R*2*ASPECT*COS(THETA*I)+(RES%/2)
+250		VERT%(2*I)=R*SIN(THETA*I)+100
+260		PSET(VERT%(2*I-1),VERT%(2*I)),1
+270	NEXT I
+280	N0=N
+290	FOR J=1 TO N
+300		FOR I= 1 TO N0
+310			XN=VERT%(2*I-1):YN=VERT%(2*I)
+320			LINE(X0,Y0)-(XN,YN)
+330		NEXT I
+340		X0=XN:Y0=YN:N0=N0-1
+350	NEXT J
+360	LOCATE 1,1
+370	INPUT "Try another (Y/N)"; A$
+380	CLS
+390	SCREEN 0:WIDTH 80
+400	IF A$="Y" OR A$="y" GOTO 110
+410	END
+```
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0870

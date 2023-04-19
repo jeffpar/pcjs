@@ -20,12 +20,12 @@ machines:
      Volume in drive A is DISK1272
      Directory of A:\
 
-    FILE1272 TXT      1076  12-14-89   1:42a
-    GO       BAT        38  10-19-87   8:56a
-    GO       TXT       694  12-14-89   1:33a
-    INSTALL  BAT       128   2-23-89  12:28p
-    INSTRSCH BAT      2532   6-01-89   3:20a
-    README   DOC       579  12-14-89   1:28a
-    RSCH     EXE    163392   7-14-89   7:49a
+    FILE1272 TXT      1076  12-14-89   9:42a
+    GO       BAT        38  10-19-87   3:56p
+    GO       TXT       694  12-14-89   9:33a
+    INSTALL  BAT       128   2-23-89   8:28p
+    INSTRSCH BAT      2532   6-01-89  10:20a
+    README   DOC       579  12-14-89   9:28a
+    RSCH     EXE    163392   7-14-89   2:49p
             7 file(s)     168439 bytes
                           149504 bytes free

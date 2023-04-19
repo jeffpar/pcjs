@@ -20,20 +20,20 @@ machines:
      Volume in drive A is DISK1908
      Directory of A:\
 
-    CASTLE   BIN     43040  10-24-89   3:16a
-    CASTLE   DAT     10567  10-24-89   3:16a
-    CASTLE   DOC     14175  10-24-89   3:16a
-    CASTLE   EXE     33996  10-24-89   3:16a
-    CASTLE   LST       769  10-24-89   3:17a
-    CASTLE   MON     63040  10-24-89   3:17a
-    CASTLE   PRO      1931  10-24-89   3:16a
-    CASTLE   TIP      3481  10-24-89   3:17a
-    CASTLE1  EXE    132599  10-24-89   3:16a
-    FILE1908 TXT      1999  12-28-89  11:16a
-    GO       BAT        38  12-31-80   5:37p
-    GO       TXT       540  12-31-80   8:29p
-    MONO     DAT     10567  10-24-89   3:17a
-    SCORE    DAT      2600  11-14-89   4:09a
-    USR      DAT      2600  11-14-89   4:09a
+    CASTLE   BIN     43040  10-24-89  10:16a
+    CASTLE   DAT     10567  10-24-89  10:16a
+    CASTLE   DOC     14175  10-24-89  10:16a
+    CASTLE   EXE     33996  10-24-89  10:16a
+    CASTLE   LST       769  10-24-89  10:17a
+    CASTLE   MON     63040  10-24-89  10:17a
+    CASTLE   PRO      1931  10-24-89  10:16a
+    CASTLE   TIP      3481  10-24-89  10:17a
+    CASTLE1  EXE    132599  10-24-89  10:16a
+    FILE1908 TXT      1999  12-28-89   7:16p
+    GO       BAT        38   1-01-80   1:37a
+    GO       TXT       540   1-01-80   4:29a
+    MONO     DAT     10567  10-24-89  10:17a
+    SCORE    DAT      2600  11-14-89  12:09p
+    USR      DAT      2600  11-14-89  12:09p
            15 file(s)     321942 bytes
                            32768 bytes free

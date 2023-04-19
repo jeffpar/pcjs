@@ -20,13 +20,13 @@ machines:
      Volume in drive A is DISK1813
      Directory of A:\
 
-    DIARY    DOC      8131   8-18-89  10:46a
-    DIARY    EXE    259970   9-05-89   2:12a
-    DIARY    HLP      3073   8-31-89   9:15p
-    FILE1813 TXT      1925  12-20-89   8:27a
-    GO       BAT        38  12-31-80   5:37p
-    GO       TXT       540   1-01-80  12:27a
-    PRODUCTS DOC      1917   9-18-89  11:08a
-    REGISTER FRM      1284   8-18-89  10:56a
+    DIARY    DOC      8131   8-18-89   5:46p
+    DIARY    EXE    259970   9-05-89   9:12a
+    DIARY    HLP      3073   9-01-89   4:15a
+    FILE1813 TXT      1925  12-20-89   4:27p
+    GO       BAT        38   1-01-80   1:37a
+    GO       TXT       540   1-01-80   8:27a
+    PRODUCTS DOC      1917   9-18-89   6:08p
+    REGISTER FRM      1284   8-18-89   5:56p
             8 file(s)     276878 bytes
                            41984 bytes free

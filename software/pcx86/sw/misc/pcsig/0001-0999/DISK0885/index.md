@@ -66,6 +66,34 @@ machines:
     or Microsoft C version 3 or 4).
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## $ENVED.BAS
+
+```bas
+10 F$="\$ENVED.DAT": REM Must agree with .DAT file name in ENVED.BAT
+20 B$="\$ENVED$.BAT": REM Must agree with .BAT file name in ENVED.BAT
+30 OPEN "I",1,F$
+40 OPEN "O",2,B$
+50 I=0
+60 I=I+1: X$=ENVIRON$(I): IF X$="" THEN GOTO 140
+70 IF LEFT$(X$,7)="PROMPT=" THEN PRINT# 2, "PROMPT": GOTO 60
+80 IF LEFT$(X$,5)="PATH=" THEN GOTO 60
+90 IF LEFT$(X$,8)="COMSPEC=" THEN GOTO 60
+100 J=2
+110 IF MID$(X$,J,1) <> "=" THEN J=J+1: GOTO 110
+120 PRINT#2, "SET "+LEFT$(X$,J)
+130 GOTO 60
+140 INPUT#1, X$
+150 IF LEFT$(X$,5)<>"PATH=" AND LEFT$(X$,7)<>"PROMPT=" THEN PRINT#2, "SET ";
+160 PRINT#2, X$
+170 IF NOT EOF(1) THEN GOTO 140
+180 CLOSE 1
+190 CLOSE 2
+200 SYSTEM
+```
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0885
 

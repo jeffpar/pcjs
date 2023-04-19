@@ -114,3 +114,30 @@ machines:
     SAMPLE   BAS      2873  11-02-84   3:00a
            19 file(s)     314509 bytes
                                0 bytes free
+
+### Directory of PC-SIG Library Disk #0624
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    DOC      BAT       249  11-02-84   3:00a
+    PC-DEF   EXE     12288  11-02-84   3:01a
+    PC-EXPOR EXE     16512  11-02-84   3:00a
+    PC-FILE  EXE     33408  11-02-84   3:00a
+    PC-FILE  PRO       128  11-02-84   3:00a
+    PC-FILE  DOC    108505  11-02-84   3:00a
+    PC-FIX   EXE     14080  11-02-84   3:01a
+    PC-IMPOR EXE     15104  11-02-84   3:00a
+    PC-LABEL EXE      8960  11-02-84   3:00a
+    PC-OVL   EXE     21376  11-02-84   3:00a
+    PC-PRINT EXE     28672  11-02-84   3:01a
+    PC-SETUP EXE     10368  11-02-84   3:01a
+    PC-SORT  EXE     18432  11-02-84   3:00a
+    PC-UTIL  EXE     18816  11-02-84   3:00a
+    SAMPLE   BAS      2873  11-02-84   3:00a
+    CRC      TXT      1285   1-01-80   1:28a
+    CRCK4    COM      1536  10-21-82   5:50p
+    GO       BAT       381   6-11-90   8:48a
+    FILES624 TXT      1536   1-01-80   7:03a
+           19 file(s)     314509 bytes
+                               0 bytes free

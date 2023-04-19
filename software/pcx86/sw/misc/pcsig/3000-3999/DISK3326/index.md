@@ -25,7 +25,7 @@ machines:
     MUST USE THE         0   9-27-90   5:12p
     INSTALLA ION         0   9-27-90   5:12p
     DISKETTE 1ST         0   9-27-90   5:12p
-    SSSSSSSS SSS         0   9-27-90   5:12p
+    ▀▀▀▀▀▀▀▀ ▀▀▀         0   9-27-90   5:12p
     AV       999       412  10-16-91   2:44a
             7 file(s)      87192 bytes
                            72704 bytes free

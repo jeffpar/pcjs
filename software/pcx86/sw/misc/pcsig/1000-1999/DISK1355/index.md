@@ -20,22 +20,22 @@ machines:
      Volume in drive A is DISK1355
      Directory of A:\
 
-    BIDLIST  DBF        90   3-26-88   4:59a
-    CREW     NDX      1024   7-12-88   5:09a
-    DESCRIP  DBF      2018   2-19-89  10:41a
-    FILE1355 TXT      1056   3-08-89   7:57a
-    FUELNO   NDX      9216   8-14-88   1:32a
-    FUELS    DBF     16124   7-12-88  12:29a
-    GO       BAT        38  10-19-87   8:56a
-    GO       TXT       925   3-02-89   1:07a
-    LICENSE  NDX      1024   7-12-88   5:08a
-    NUMBER   NDX      1024   7-12-88   5:08a
-    OPERATOR NDX      1024   7-12-88   5:08a
-    REPAIRS  DBF     27469   8-13-88  12:42p
-    REPAIRS  NDX      4608   8-14-88   1:32a
-    SCHEDIV  NDX      1024   8-14-88   1:33a
-    SCHEDULE DBF       640   8-14-88   7:49a
-    SCHEDULE NDX      1024   8-14-88   1:33a
-    VIN      NDX      1024   7-12-88   5:08a
+    BIDLIST  DBF        90   3-26-88  12:59p
+    CREW     NDX      1024   7-12-88  12:09p
+    DESCRIP  DBF      2018   2-19-89   6:41p
+    FILE1355 TXT      1056   3-08-89   3:57p
+    FUELNO   NDX      9216   8-14-88   8:32a
+    FUELS    DBF     16124   7-12-88   7:29a
+    GO       BAT        38  10-19-87   3:56p
+    GO       TXT       925   3-02-89   9:07a
+    LICENSE  NDX      1024   7-12-88  12:08p
+    NUMBER   NDX      1024   7-12-88  12:08p
+    OPERATOR NDX      1024   7-12-88  12:08p
+    REPAIRS  DBF     27469   8-13-88   7:42p
+    REPAIRS  NDX      4608   8-14-88   8:32a
+    SCHEDIV  NDX      1024   8-14-88   8:33a
+    SCHEDULE DBF       640   8-14-88   2:49p
+    SCHEDULE NDX      1024   8-14-88   8:33a
+    VIN      NDX      1024   7-12-88  12:08p
            17 file(s)      69352 bytes
                            88576 bytes free

@@ -42,6 +42,70 @@ machines:
     also work with OVL.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## BNEST1.BAS
+
+```bas
+sub nest1(i) static
+	print:print"in nest1";i;
+	for j=0 to 1
+		call nest2(j)
+	next j
+end sub
+```
+
+## BNEST2.BAS
+
+```bas
+sub nest2(i) static
+	print:print"in nest2";i;
+	for j=0 to 1
+		call nest3(j)
+	next j
+end sub
+```
+
+## BNEST3.BAS
+
+```bas
+sub nest3(i) static
+	print:print"in nest3";i;
+	for j=0 to 1
+		call nest4(j)
+	next j
+end sub
+```
+
+## BNEST4.BAS
+
+```bas
+common shared b
+
+sub nest4(i) static
+	print:print"in nest4";i;
+	print:print "Value of b variable is "b;
+	b=b+1
+end sub
+```
+
+## QBNEST.BAS
+
+```bas
+common shared b
+
+print:print "in main";
+
+b=1
+
+for i=0 to 1
+	print:print "Value of b variable is "b;
+	call nest1(i)
+next
+print:print fre(""),fre(0),fre(-1),fre(-2)
+```
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1933
 

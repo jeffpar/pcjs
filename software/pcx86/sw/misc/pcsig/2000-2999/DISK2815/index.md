@@ -20,9 +20,9 @@ machines:
      Volume in drive A has no label
      Directory of A:\
 
-    ▄█SSSSSS             0   8-07-91  12:23p
+    ▄█▀▀▀▀█▄             0   8-07-91  12:23p
     ▌ DAYO ▐ TJS         0   8-07-91  12:23p
-    SS█▄▄▄▄█ LAB         0   8-07-91  12:23p
+    ▀█▄▄▄▄█▀ LAB         0   8-07-91  12:23p
     DAYOSE   EXE    200308   8-07-91  12:23p
     README            4642   8-07-91  12:23p
     REGISTER          3148   8-07-91  12:23p

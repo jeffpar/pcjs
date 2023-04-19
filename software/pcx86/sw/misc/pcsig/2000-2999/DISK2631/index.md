@@ -173,6 +173,250 @@ def seg
 end sub
 ```
 
+## COCOTRAN.BAS
+
+```bas
+defint a-z
+dim tok$(128:224)
+dim extok$(128:167)
+tok$(128)=" FOR "
+tok$(129)=" GO"
+tok$(130)=" REM "
+tok$(131)=" '"
+tok$(132)=" ELSE "
+tok$(133)=" IF "
+tok$(134)=" DATA "
+tok$(135)=" PRINT "
+tok$(136)=" ON "
+tok$(137)=" INPUT "
+tok$(138)=" END "
+tok$(139)=" NEXT "
+tok$(140)=" DIM "
+tok$(141)=" READ "
+tok$(142)=" RUN "
+tok$(143)=" RESTORE "
+tok$(144)=" RETURN "
+tok$(145)=" STOP "
+tok$(146)=" POKE "
+tok$(147)=" CONT "
+tok$(148)=" LIST "
+tok$(149)=" CLEAR "
+tok$(150)=" NEW "
+tok$(151)=" CLOAD "
+tok$(152)=" CSAVE "
+tok$(153)=" OPEN "
+tok$(154)=" CLOSE "
+tok$(155)=" LLIST "
+tok$(156)=" SET "
+tok$(157)=" RESET "
+tok$(158)=" CLS "
+tok$(159)=" MOTOR "
+tok$(160)=" SOUND "
+tok$(161)=" AUDIO "
+tok$(162)=" EXEC "
+tok$(163)=" SKIPF "
+tok$(164)=" TAB("
+tok$(165)=" TO "
+tok$(166)="SUB "
+tok$(167)=" THEN "
+tok$(168)=" NOT "
+tok$(169)=" STEP "
+tok$(170)=" OFF "
+tok$(171)="+"
+tok$(172)="-"
+tok$(173)="*"
+tok$(174)="/"
+tok$(175)="^"
+tok$(176)=" AND "
+tok$(177)=" OR "
+tok$(178)=">"
+tok$(179)="="
+tok$(180)="<"
+tok$(181)=" DEL "
+tok$(182)=" EDIT "
+tok$(183)=" TRON "
+tok$(184)=" TROFF "
+tok$(185)=" DEF"
+tok$(186)=" LET "
+tok$(187)=" LINE "
+tok$(188)=" PCLS "
+tok$(189)=" PSET "
+tok$(190)=" PRESET "
+tok$(191)=" SCREEN "
+tok$(192)=" PCLEAR "
+tok$(193)=" COLOR "
+tok$(194)=" CIRCLE"
+tok$(195)=" PAINT"
+tok$(196)=" GET "
+tok$(197)=" PUT "
+tok$(198)=" DRAW "
+tok$(199)=" PCOPY "
+tok$(200)=" PMODE "
+tok$(201)=" PLAY "
+tok$(202)=" DLOAD "
+tok$(203)=" RENUM "
+tok$(204)=" FN "
+tok$(205)=" USING "
+tok$(206)=" DIR "
+tok$(207)=" DRIVE "
+tok$(208)=" FIELD "
+tok$(209)=" FILES "
+tok$(210)=" KILL "
+tok$(211)=" LOAD"
+tok$(212)=" LSET "
+tok$(213)=" MERGE "
+tok$(214)=" RENAME "
+tok$(215)=" RSET"
+tok$(216)=" SAVE"
+tok$(217)=" WRITE "
+tok$(218)=" VERIFY "
+tok$(219)=" UNLOAD "
+tok$(220)=" DSKINI "
+tok$(221)=" BACKUP "
+tok$(222)=" COPY "
+tok$(223)=" DSKI$ "
+tok$(224)=" DSKO$ "
+
+extok$(128)=" SGN"
+extok$(129)=" INT"
+extok$(130)=" ABS"
+extok$(131)=" USR"
+extok$(132)=" RND"
+extok$(133)=" SIN"
+extok$(134)=" PEEK"
+extok$(135)=" LEN"
+extok$(136)=" STR$"
+extok$(137)=" VAL"
+extok$(138)=" ASC"
+extok$(139)=" CHR$"
+extok$(140)=" EOF"
+extok$(141)=" JOYSTK"
+extok$(142)=" LEFT$"
+extok$(143)=" RIGHT$"
+extok$(144)=" MID$"
+extok$(145)=" POINT"
+extok$(146)=" INKEY$"
+extok$(147)=" MEM"
+extok$(148)=" ATN"
+extok$(149)=" COS"
+extok$(150)=" TAN"
+extok$(151)=" EXP"
+extok$(152)=" FIX"
+extok$(152)=" LOG"
+extok$(154)=" POS"
+extok$(155)=" SQR"
+extok$(156)=" HEX$"
+extok$(157)=" VARPTR"
+extok$(158)=" INSTR"
+extok$(159)=" TIMER"
+extok$(160)=" PPOINT"
+extok$(161)=" STRING$"
+extok$(162)=" CVN "
+extok$(163)=" FREE "
+extok$(164)=" LOC "
+extok$(165)=" LOF "
+extok$(166)=" MKN$ "
+extok$(167)=" AS "
+
+if command$="" then
+  input "File to translate: ";inf$
+else
+  sploc = instr(command$," ")
+  if sploc > 0 then
+    inf$ = left$(command$, sploc -1)
+    outf$ = mid$(command$,sploc + 1, len(command$) - sploc)
+  else
+    inf$ = command$
+    dot = instr(inf$,".")
+    outf$ = left$(inf$,dot)
+    outf$ = outf$ + "trn"
+  end if
+end if
+'input "Output file name: ";outf$
+open inf$ for binary as 1
+get$ #1, 1, x$
+if ascii(x$) <> 255 then
+  print "'";inf$;"' is not a binary Color Computer BASIC file"
+  close
+  end
+end if
+cls
+print "Translating '";inf$;"' to ASCII.  Output will be in '";outf$;"'"
+open outf$ for output as 2
+'open "c:\tmp\ok.txt" for append as 3
+'print #3, inf$
+'close 3
+get$ #1, 1, x$
+bytecount = 256 * ascii(x$)
+get$ #1, 1, x$
+bytecount = bytecount + ascii(x$)
+print "Approximate source file size is";bytecount;"bytes."
+bytesread = 0
+while not eof(1)
+  if csrlin > 22 then
+    cls
+    print "Translating '";inf$;"' to ASCII.  Output will be in '";outf$;"'"
+  end if
+  tline$ = ""
+  call getline
+  print tline$
+  print #2, tline$
+wend
+close
+end
+
+
+SUB getline
+  SHARED tok$(), extok$(), tline$, bytecount, inf$
+  STATIC oldline&, linenum&, bytesread
+  if linenum& > oldline& then oldline& = linenum&
+  get$ #1, 1, x$                     'get hi byte of load address
+  incr bytesread
+  if bytesread > bytecount then end
+  startaddr& = 256 * ascii(x$)        'compute
+  get$ #1, 1, x$                     'get lo byte
+  incr bytesread
+  if bytesread > bytecount then end
+  startaddr& = startaddr& + ascii(x$)  'compute
+  get$ #1, 1, x$                     'get hi byte of line number
+  incr bytesread
+  if bytesread > bytecount then end
+  linenum& = 256 * ascii(x$)         'compute
+  get$ #1, 1, x$                     'get lo byte
+  incr bytesread
+  if bytesread > bytecount then end
+  linenum& = linenum& + ascii(x$)    'compute
+  if linenum& < oldline& then        'binary data at end of file
+    print
+    print "Found unknown bytes in '";inf$;"' at location";bytesread -2
+    print
+    close
+    end
+  end if
+  tline$ = str$(linenum&) + " "      'start building string
+  while 1 > 0                        'do forever
+    get$ #1, 1, x$                   'read byte
+    incr bytesread
+    if bytesread > bytecount then exit loop
+    x = ascii(x$)                    'get value
+    if x = 0 then exit loop          'exit on null (end of line)
+    if x < 128 then                  'if not a token
+      tline$ = tline$ + x$           'append to string
+    else                             'otherwise process token
+      if x = 255 then                'if two byte token
+	get$ #1, 1, x$               'get next byte
+	incr bytesread
+	if bytesread > bytecount then exit loop
+	x = ascii(x$)                'convert
+	tline$ = tline$ + extok$(x)  'get string equivalent and add it
+      else                           'otherwise
+	tline$ = tline$ + tok$(x)    'get string equivalent and add it
+      end if
+    end if
+  wend                               'end of loop
+END SUB 'getline
+```
+
 ## EMSFRM.BAS
 
 ```bas
