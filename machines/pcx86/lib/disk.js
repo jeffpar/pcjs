@@ -631,9 +631,9 @@ class Disk extends Component {
             this.nSectors = diskFormat[2];
             this.cbSector = (diskFormat[3] || 512);
 
-            let cdw = this.cbSector >> 2, dwPattern = 0, dwChecksum = 0;
             let ib = 0;
             let dv = new DataView(buffer, 0, cbDiskData);
+            let cdw = this.cbSector >> 2, dwPattern = 0, dwChecksum = 0;
 
             this.aDiskData = new Array(this.nCylinders);
             for (let iCylinder = 0; iCylinder < this.aDiskData.length; iCylinder++) {

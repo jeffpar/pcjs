@@ -1412,7 +1412,9 @@ class Entry
             msg = err.message;
         }
         msg = (type? type + ": " : "") + path.basename(this.streamZip.fileName) + "/" + (this.name? this.name + ": " : "") + msg;
-        this.messages.push(msg);
+        if (this.name) {
+            this.messages.push(msg);
+        }
         if (!this.holdErrors && type == "error") {
             throw new Error(msg);
         }

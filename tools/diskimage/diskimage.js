@@ -2014,7 +2014,7 @@ function getArchiveFiles(zip, verbose)
     let aFileData = [];
     let aDirectories = [];
     if (verbose) {
-        printf("\nreading: %s\n", zip.fileName);
+        printf("reading: %s\n", zip.fileName);
         printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
         printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
     }
