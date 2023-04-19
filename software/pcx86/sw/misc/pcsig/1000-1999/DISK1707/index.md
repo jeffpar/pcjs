@@ -32,12 +32,12 @@ machines:
      Volume in drive A is DISK1707
      Directory of A:\
 
-    CORRMAT  EXE     52240  12-17-88   2:02a
-    FILE1707 TXT      1407   3-28-90   4:20a
-    GO       BAT        29  12-12-89   7:26a
-    GO       TXT       961  12-12-89   7:42a
-    MULREG   EXE     73616  12-17-88   2:16a
-    POTPOURI EXE     70112  12-17-88  12:35a
-    SUMSTAT  EXE     43392  12-17-88   3:07a
+    CORRMAT  EXE     52240  12-17-88  10:02a
+    FILE1707 TXT      1407   3-28-90  12:20p
+    GO       BAT        29  12-12-89   3:26p
+    GO       TXT       961  12-12-89   3:42p
+    MULREG   EXE     73616  12-17-88  10:16a
+    POTPOURI EXE     70112  12-17-88   8:35a
+    SUMSTAT  EXE     43392  12-17-88  11:07a
             7 file(s)     241757 bytes
                            76800 bytes free

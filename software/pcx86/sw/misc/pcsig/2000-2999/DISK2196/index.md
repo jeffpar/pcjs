@@ -50,7 +50,7 @@ machines:
     MUST USE THE         0   9-27-90   5:12p
     INSTALLA ION         0   9-27-90   5:12p
     DISKETTE 1ST         0   9-27-90   5:12p
-    SSSSSSSS SSS         0   9-27-90   5:12p
+    ▀▀▀▀▀▀▀▀ ▀▀▀         0   9-27-90   5:12p
     GO       BAT       958  11-16-90   4:53a
             7 file(s)     362430 bytes
                                0 bytes free

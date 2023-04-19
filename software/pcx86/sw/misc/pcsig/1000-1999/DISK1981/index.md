@@ -20,18 +20,18 @@ machines:
      Volume in drive A is DISK1981
      Directory of A:\
 
-    FILE1981 TXT      4589   1-04-90   3:53a
-    FILES_5  DOC       507   2-12-89   3:23a
-    GO       BAT        38  12-31-80   5:37p
-    GO       TXT       771  12-31-80   7:40p
-    HELP     TXT      2762   9-21-87   6:25p
-    MANUAL   DOC      6345   2-12-89   5:07a
-    MESSAGE  1         178  12-31-80   4:51p
-    NEC      COM     19049  12-31-80   5:51p
-    RUN      BAT        64  12-31-80   4:47p
-    SBMIO    COM     11291   9-21-87   6:25p
-    SBMSIO   CHN     27209   9-21-87   6:25p
-    THREXFMR CHN     23128  12-31-80   4:35p
-    YOURSYS  COM     26516   9-21-87   6:25p
+    FILE1981 TXT      4589   1-04-90  11:53a
+    FILES_5  DOC       507   2-12-89  11:23a
+    GO       BAT        38   1-01-80   1:37a
+    GO       TXT       771   1-01-80   3:40a
+    HELP     TXT      2762   9-22-87   1:25a
+    MANUAL   DOC      6345   2-12-89   1:07p
+    MESSAGE  1         178   1-01-80  12:51a
+    NEC      COM     19049   1-01-80   1:51a
+    RUN      BAT        64   1-01-80  12:47a
+    SBMIO    COM     11291   9-22-87   1:25a
+    SBMSIO   CHN     27209   9-22-87   1:25a
+    THREXFMR CHN     23128   1-01-80  12:35a
+    YOURSYS  COM     26516   9-22-87   1:25a
            13 file(s)     122447 bytes
                            33792 bytes free

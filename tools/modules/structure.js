@@ -139,20 +139,20 @@ export default class Structure {
     }
 
     /**
-     * setData(buf, offset, maxOffset)
+     * setData(buf, offset, length)
      *
      * Sets the buffer to be used by getField() and its siblings.
      *
      * @this {Structure}
      * @param {Buffer} buf
      * @param {number} [offset]
-     * @param {number} [maxOffset]
+     * @param {number} [length]
      */
-    setData(buf, offset = 0, maxOffset = buf.length)
+    setData(buf, offset = 0, length = buf.length - offset)
     {
         this._buf = buf;
         this._bufOffset = offset;
-        this._maxOffset = maxOffset;
+        this._maxOffset = offset + length;
         /*
          * The buffer may be partially valid, and the caller may only access those fields that are valid,
          * so we perform a similar bounds check in getField() instead.
@@ -180,7 +180,7 @@ export default class Structure {
         let off = f._off + this._bufOffset;
         let len = f._len;
         if (off + len > this._maxOffset) {
-            throw new Error("field " + name + " exceeds buffer size (" + (off + len) + " > " + this._maxOffset + ")");
+            throw new Error("field " + name + " limit exceeds buffer limit (" + (off + len) + " > " + this._maxOffset + ")");
         }
         switch(f._type) {
         case Structure.INT8:
@@ -276,6 +276,12 @@ export default class Structure {
             expected = this[name][value];
             if (v == expected) return v;
         }
-        throw new Error("field " + name + " (" + v + ") does not match " + (value === undefined? "any defined values" : (value + " (" + expected + ")")));
+        if (typeof v == "number") {
+            v = "0x" + (v >>> 0).toString(16);
+        }
+        if (typeof expected == "number") {
+            expected = "0x" + (expected >>> 0).toString(16);
+        }
+        throw new Error("field " + name + " (" + v + ") does not match " + (value === undefined? "any defined values" : "expected value (" + expected + ")"));
     }
 }

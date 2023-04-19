@@ -20,24 +20,24 @@ machines:
      Volume in drive A is DISK1980
      Directory of A:\
 
-    DCMOTFIX CHN      9178  12-31-80   5:32p
-    FILE1980 TXT      4589   1-04-90   3:52a
-    FILES_4  DOC       671   2-12-89   3:22a
-    FRAMEFIX CHN     10317  12-31-80   5:06p
-    GO       BAT        38  12-31-80   5:37p
-    GO       TXT       771  12-31-80   7:39p
-    INSTALL4 BAT       103   2-12-89   3:50a
-    INSTALL5 BAT        98   2-12-89   3:51a
-    NEMAFIX  CHN     11755  12-31-80   4:08p
-    RECOVER  CHN      7667  12-31-80   4:53p
-    SINGAFIX CHN      8277  12-31-80   5:12p
-    SINGLFIX CHN      8301  12-31-80   4:41p
-    SINXFFIX CHN      9394  12-31-80   4:43p
-    THREAFIX CHN      8275  12-31-80   4:48p
-    THREEFIX CHN      9191  12-31-80   4:56p
-    THRESFIX CHN      8297  12-31-80   5:09p
-    THREWFIX CHN      9174  12-31-80   5:32p
-    THREXFIX CHN      9394  12-31-80   6:31p
-    WIREFIX  CHN      9381  12-31-80   4:37p
+    DCMOTFIX CHN      9178   1-01-80   1:32a
+    FILE1980 TXT      4589   1-04-90  11:52a
+    FILES_4  DOC       671   2-12-89  11:22a
+    FRAMEFIX CHN     10317   1-01-80   1:06a
+    GO       BAT        38   1-01-80   1:37a
+    GO       TXT       771   1-01-80   3:39a
+    INSTALL4 BAT       103   2-12-89  11:50a
+    INSTALL5 BAT        98   2-12-89  11:51a
+    NEMAFIX  CHN     11755   1-01-80  12:08a
+    RECOVER  CHN      7667   1-01-80  12:53a
+    SINGAFIX CHN      8277   1-01-80   1:12a
+    SINGLFIX CHN      8301   1-01-80  12:41a
+    SINXFFIX CHN      9394   1-01-80  12:43a
+    THREAFIX CHN      8275   1-01-80  12:48a
+    THREEFIX CHN      9191   1-01-80  12:56a
+    THRESFIX CHN      8297   1-01-80   1:09a
+    THREWFIX CHN      9174   1-01-80   1:32a
+    THREXFIX CHN      9394   1-01-80   2:31a
+    WIREFIX  CHN      9381   1-01-80  12:37a
            19 file(s)     124871 bytes
                            30208 bytes free

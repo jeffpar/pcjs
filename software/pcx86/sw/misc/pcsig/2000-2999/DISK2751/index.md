@@ -21,9 +21,9 @@ machines:
      Directory of A:\
 
     CONFIG   EXE    210870   7-08-91  12:52p
-    ▄█SSSSSS             0   7-08-91  12:52p
+    ▄█▀▀▀▀█▄             0   7-08-91  12:52p
     ▌ DAYO ▐ TJS         0   7-08-91  12:52p
-    SS█▄▄▄▄█ LAB         0   7-08-91  12:52p
+    ▀█▄▄▄▄█▀ LAB         0   7-08-91  12:52p
     SETUP    EXE     93202   7-08-91  12:52p
     INSTALL  BAT        69   7-08-91  12:52p
     GO       BAT        38   7-23-91   2:37a

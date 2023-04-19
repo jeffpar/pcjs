@@ -47,17 +47,17 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1915
 
-     Volume in drive A is DISK1915
+     Volume in drive A has no label
      Directory of A:\
 
     $README  1ST      5096   4-01-89   2:34p
     APLT11   EXE     98230   1-24-89   6:29p
     BROW32   EXE     73450   3-27-89   5:57p
     CMDP62   EXE     94354   6-26-89   9:17p
+    INSTALL  BAT     10922   5-18-89   1:57p
+    PRESRLSE TXT      2912   5-18-89  12:51p
     FILE1915 TXT      2369  12-28-89   3:43p
     GO       BAT        38   1-01-80   1:37a
     GO       TXT       540  12-28-89   3:57p
-    INSTALL  BAT     10922   5-18-89   1:57p
-    PRESRLSE TXT      2912   5-18-89  12:51p
             9 file(s)     287911 bytes
                            30720 bytes free

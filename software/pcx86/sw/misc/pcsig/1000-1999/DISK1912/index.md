@@ -58,7 +58,7 @@ machines:
     NEW      DOC      1939  11-18-89  11:06a
     CRAZY    BAT        19  10-02-89   9:35a
     CRAZYDOS DOC      4456  10-06-89   4:31p
-    DOS▌     COM     22658  10-06-89   4:53p
+    DOS²     COM     22658  10-06-89   4:53p
     COMMANDS TXT       481   9-28-89  11:00p
     FILE1912 TXT      3109  12-29-89   9:38a
     GO       TXT       848  12-29-89   9:48a

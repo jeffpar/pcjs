@@ -566,23 +566,6 @@
       ]
     },
     {
-      "name": "Node: diskettes.js pcsigdisks",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/old/diskettes.js",
-      "args": [
-        "/disks/pcsigdisks",
-        "--folders=json",
-        "--overwrite"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
       "name": "Node: diskimage.js",
       "type": "node",
       "request": "launch",
@@ -604,9 +587,13 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/1000-1999/DISK1000/archive/DISK1000.ZIP'",
-        "--output=%d/..",
-        "--type=json"
+        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/*/DISK*/archive/DISK*.ZIP'",
+        "--extract",
+        "--expand",
+        "--normalize",
+        "--overwrite",
+        "--verbose",
+        "--extdir=%d",
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -674,7 +661,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--zip=PKZ204G.EXE",
+        "/pcsigdisks/pcx86/sw/misc/pcsig/2000-2999/DISK2620/archive/DISK2620.ZIP",
+        "--extract",
+        "--overwrite",
         "--verbose"
       ],
       "cwd": "${workspaceFolder}/tmp",
@@ -685,36 +674,15 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --extract --expand",
+      "name": "Node: diskimage.js --zip --expand",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0478/archive/DISK0478.ZIP'",
+        "--zip=/pcsigdisks/pcx86/sw/misc/pcsig/DISK2623.ZIP",
         "--extract",
         "--expand",
-        "--normalize",
-        "--overwrite",
-        "--quiet1",
-        "--extdir=%d"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
-      "name": "Node: diskimage.js --extract --normalize",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
-      "args": [
-        "~/Downloads/DISK0217.img",
-        "--extract",
-        "--normalize",
-        "--overwrite"
+        "--verbose"
       ],
       "cwd": "${workspaceFolder}/tmp",
       "stopOnEntry": false,
@@ -729,10 +697,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "-v",
-        "tmp/posts.zip"
+        "arcs/nesttest.zip",
+        "--extract",
+        "--overwrite"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/tmp",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -813,10 +782,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "/disks/pcsig8a-disks/pcx86/shareware/pcsig08/DISK0798.json",
+        "--arc=PK361.EXE",
+        "--verbose",
         "--extract"
       ],
-      "cwd": "${workspaceFolder}/tmp",
+      "cwd": "${workspaceFolder}/tmp/arcs",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -835,6 +805,47 @@
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}/tmp",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskimage.js --extract --expand",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0478/archive/DISK0478.ZIP'",
+        "--extract",
+        "--expand",
+        "--overwrite",
+        "--quiet",
+        "--verbose",
+        "--extdir=%d"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskimage.js --extract --expand --normalize",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/*/DISK*/archive/DISK*.ZIP'",
+        "--extract",
+        "--expand",
+        "--normalize",
+        "--overwrite",
+        "--extdir=%d"
+      ],
+      "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -953,6 +964,41 @@
         "--file=machines/palm/pilot/roms/pilot.rom",
         "--format=bytes",
         "--decimal"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskettes.js pcsigdisks",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/misc/old/diskettes.js",
+      "args": [
+        "/disks/pcsigdisks",
+        "--folders=json",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskettes.js private",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/misc/old/diskettes.js",
+      "args": [
+        "/disks/private",
+        "--folders",
+        "--filter=group12",
+        "--verbose"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,

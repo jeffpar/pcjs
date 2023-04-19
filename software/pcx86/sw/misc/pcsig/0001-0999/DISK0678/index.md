@@ -51,7 +51,7 @@ machines:
     REC      DAT      1532   1-31-87  12:43p
     SETUP    COM     22893   5-29-87   5:07p
     T        DAT      1000   1-31-87  12:43p
-    VERxxxx1 2          38   1-09-90   1:34p
+    VER    1 2          38   1-09-90   1:34p
     WOMBAT   EXE    174832   4-19-88   8:07a
     WOMBAT   MAN     29166  11-03-88  12:11p
     GO       BAT        28  11-27-86  12:31p

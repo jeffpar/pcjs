@@ -20,9 +20,9 @@ machines:
      Volume in drive A has no label
      Directory of A:\
 
-    ▄█SSSSSS             0   2-24-91   5:35p
+    ▄█▀▀▀█▄              0   2-24-91   5:35p
     ▌BRAIN▐  TJS         0   2-24-91   5:35p
-    SS█▄▄▄█S LAB         0   2-24-91   5:35p
+    ▀█▄▄▄█▀  LAB         0   2-24-91   5:35p
     BRAIN2   EXE    232733   2-24-91   5:36p
     README             362   2-24-91   5:36p
     GO       TXT      1002   5-01-91  12:43a

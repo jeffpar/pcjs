@@ -20,16 +20,16 @@ machines:
      Volume in drive A is DISK1710
      Directory of A:\
 
-    CATALOG  DOC     20518  11-17-89   1:26a
-    DOC      DOC       853  11-09-89   4:24a
-    FILE1710 TXT      1777   1-04-90   6:47a
-    FIRST    DBF     12658  11-11-88   2:46p
-    FIX      DOC       650  11-18-89   1:42p
-    GO       BAT        38   4-24-89   9:39a
-    GO       TXT       540  12-14-89   4:39a
-    LAST     DBF      7846  11-11-88   2:41p
-    PENDOC   COM      4759  10-31-89   2:35a
-    PENNAME  EXE    188482  11-12-89  10:08a
-    POSS     DBF        67  11-11-88   2:41p
+    CATALOG  DOC     20518  11-17-89   9:26a
+    DOC      DOC       853  11-09-89  12:24p
+    FILE1710 TXT      1777   1-04-90   2:47p
+    FIRST    DBF     12658  11-11-88  10:46p
+    FIX      DOC       650  11-18-89   9:42p
+    GO       BAT        38   4-24-89   4:39p
+    GO       TXT       540  12-14-89  12:39p
+    LAST     DBF      7846  11-11-88  10:41p
+    PENDOC   COM      4759  10-31-89  10:35a
+    PENNAME  EXE    188482  11-12-89   6:08p
+    POSS     DBF        67  11-11-88  10:41p
            11 file(s)     238188 bytes
                            77824 bytes free

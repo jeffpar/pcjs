@@ -4,11 +4,9 @@ title: PCjs DiskImage Utility
 permalink: /tools/diskimage/
 ---
 
-## DiskImage Utility for PCjs
-
 [DiskImage](diskimage.js) is a Node command-line application that reads/writes PCjs v2 disk images,
 using the [DiskInfo](../../machines/pcx86/modules/diskinfo.js) PCx86 machine module to parse the data, and it supersedes
-the older PCjs v1 [DiskDump](../misc/old/diskdump/lib/diskdump.js) utility.
+the older PCjs v1 [DiskDump](../misc/old/diskdump/) utility.
 
 ### PCjs Disk Images
 
@@ -136,7 +134,7 @@ To simplify dealing with large collections of files, I also added an `--all` opt
 
     node diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --verbose
 
-That command will locate *all* matching `ZIP` files and automatically display their contents.  `--all` also supports file extensions `JSON` and `IMG`; the `--zip` option is implied for any file ending with a `ZIP` extension.
+That command will locate *all* matching `ZIP` files and process each one with any other options you specify (eg, `--verbose` to display their contents).  `--all` also supports file extensions `JSON` and `IMG`; `--disk` is assumed for any file ending with one of those extensions, whereas `--zip` is assumed for any file ending with a `ZIP` extension.
 
 If you want to create a disk image for every `ZIP` file:
 
@@ -152,7 +150,7 @@ Finally, support for the ARC file format (ZIP's predecessor) is now available.  
 
 ### Extracting Files from PCjs Disk Images
 
-You can extract the contents of a single disk image to your current directory or to a specific directory:
+You can extract the contents of a single disk image to your current directory, or to a specific directory using `--extdir`:
 
     node diskimage.js DISK0001.IMG --extract
     node diskimage.js DISK0001.IMG --extract --extdir=tmp
@@ -166,7 +164,7 @@ You can also expand any `ZIP` files during the extraction process, by including 
 
     node diskimage.js --all="*.IMG" --extract --expand --extdir=tmp
 
-Also, while the `--normalize` option was originally created to "normalize" files *read* from the host, it can also be used during extraction, when files are being *written* to the host.
+Also, while the `--normalize` option was originally created to "normalize" files *read* from the host (eg, to convert LF to CR/LF in text files), it can also be used during extraction now, when files are being *written* to the host.
 
 For example, if you want any filenames with CP437 characters to be created properly on the host, or you want the contents of any CP437 text files, BASIC files, etc, to be stored in readable form on the host, use the `--normalize` option along with the `--extract` option; eg:
 
@@ -174,7 +172,7 @@ For example, if you want any filenames with CP437 characters to be created prope
 
 In addition to converting line-endings back from CR/LF to LF, `--normalize` will also convert any tokenized `.BAS` files to plain-text UTF-8 files on the host, as well as decrypt any `.BAS` files that have been "protected" by `BASIC` with the `P` option of the `SAVE` command.
 
-The `--output` option is available with all of the above commands as well, but remember that that option controls where disk images will be created.  If you don't want any disk images created as part of the extraction process, don't use `--output`.
+The `--output` option is available with all of the above commands as well, but that option only affects disk image creation, not file extraction.  If you don't want any disk images created at the same time, don't use `--output`.
 
 ### Examining PCjs Disk Images
 

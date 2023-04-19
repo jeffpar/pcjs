@@ -20,13 +20,13 @@ machines:
      Volume in drive A is DISK1780
      Directory of A:\
 
-    APPOINTS DOC      7656   1-19-89   6:28a
-    APPOINTS EXE    231104   1-19-89   6:16a
-    APPOINTS HLP      3415   1-19-89   5:59a
-    FILE1780 TXT      2073   3-10-90   8:41a
-    GO       BAT        38  12-31-80   5:37p
-    GO       TXT       540  12-20-89   5:01a
-    PRODUCTS DOC      2860   1-19-89   6:36a
-    REGISTER FRM      1293   1-19-89   6:30a
+    APPOINTS DOC      7656   1-19-89   2:28p
+    APPOINTS EXE    231104   1-19-89   2:16p
+    APPOINTS HLP      3415   1-19-89   1:59p
+    FILE1780 TXT      2073   3-10-90   4:41p
+    GO       BAT        38   1-01-80   1:37a
+    GO       TXT       540  12-20-89   1:01p
+    PRODUCTS DOC      2860   1-19-89   2:36p
+    REGISTER FRM      1293   1-19-89   2:30p
             8 file(s)     248979 bytes
                            68608 bytes free

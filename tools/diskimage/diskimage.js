@@ -134,12 +134,13 @@ function createDisk(diskFile, diskette, argv, done)
     diskette.archive = sArchiveFile;
     printf("checking archive: %s\n", sArchiveFile);
     if (fDir || arcType) {
+        let arcOffset = +argv['offset'] || 0;
         let label = diskette.label || argv['label'];
         let password = argv['password'];
         let normalize = diskette.normalize || argv['normalize'];
-        let target = getTarget(diskette.format);
+        let target = getTargetValue(diskette.format);
         let verbose = argv['verbose'];
-        di = readDir(sArchiveFile, arcType, label, password, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
+        di = readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, done, sectorIDs, sectorErrors, suppData);
     } else {
         di = readDisk(sArchiveFile, false, sectorIDs, sectorErrors, suppData);
         if (di && done) {
@@ -205,7 +206,28 @@ function checkArchive(sPath, fExt)
 }
 
 /**
+ * existsDir(sDir, fError)
+ *
+ * @param {string} sDir
+ * @param {boolean} [fError]
+ * @returns {boolean}
+ */
+function existsDir(sDir, fError = true)
+{
+    try {
+        sDir = getFullPath(sDir);
+        let stat = fs.statSync(sDir);
+        return stat.isDirectory();
+    } catch(err) {
+        if (fError) printError(err);
+    }
+    return false;
+}
+
+/**
  * existsFile(sFile, fError)
+ *
+ * This is really "existsFileOrDir()"; if you need to know which, call existsDir() afterward.
  *
  * @param {string} sFile
  * @param {boolean} [fError]
@@ -289,12 +311,16 @@ function getServerPath(sFile)
 }
 
 /**
- * getTarget(sTarget)
+ * getTargetValue(sTarget)
+ *
+ * Target is normally a number in Kb (eg, 360 for a 360K diskette); you can also add a suffix (eg, K or M).
+ * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
+ * equivalent to 10240K).
  *
  * @param {string} sTarget
  * @returns {number} (target Kb for disk image, 0 if no target)
  */
-function getTarget(sTarget)
+function getTargetValue(sTarget)
 {
     let target = 0;
     if (sTarget) {
@@ -367,6 +393,42 @@ function isTextFile(sFile)
         if (sFileUC.endsWith(asTextFileExts[i])) return true;
     }
     return false;
+}
+
+/**
+ * makeDir(sDir, recursive, deleteFile)
+ *
+ * The deleteFile parameter is never true unless '--overwrite' was specified; it is only intended
+ * to come into play when using '--expand' along with '--extract', because if any earlier '--extract'
+ * did NOT use '--expand', then any archives inside the source disk/archive will have been extracted
+ * as a file rather than a directory -- in which case, we must delete the file before we can create
+ * a directory.
+ *
+ * @param {string} sDir
+ * @param {boolean} [recursive]
+ * @param {boolean} [deleteFile] (delete any existing file with the same name as the directory)
+ * @returns {boolean} true if successful (or the directory already exists), false if error
+ */
+function makeDir(sDir, recursive = false, deleteFile = false)
+{
+    let success = true;
+    if (existsFile(sDir, false) && !existsDir(sDir, false) && deleteFile) {
+        try {
+            fs.unlinkSync(sDir);
+        } catch(err) {
+            printError(err);
+            success = false;
+        }
+    }
+    if (success && !existsFile(sDir, false)) {
+        try {
+            fs.mkdirSync(sDir, {recursive});
+        } catch(err) {
+            printError(err);
+            success = false;
+        }
+    }
+    return success;
 }
 
 /**
@@ -879,7 +941,7 @@ function convertBASICFile(sPath, db, fNormalize)
 }
 
 /**
- * extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
+ * extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
  *
  * @param {string} sDir
  * @param {string} subDir
@@ -888,9 +950,10 @@ function convertBASICFile(sPath, db, fNormalize)
  * @param {Date} date
  * @param {Buffer} db
  * @param {Object} argv
+ * @param {boolean} [noExpand]
  * @param {Array.<fileData>} [files]
  */
-function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
+function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
 {
     /*
      * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
@@ -910,14 +973,9 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
 
     let fSuccess = false;
     let dir = path.dirname(sPath);
-    if (!existsFile(dir)) {
-        fs.mkdirSync(dir, {recursive: true});
-    }
+    makeDir(getFullPath(dir), true, argv['overwrite']);
     if (attr & DiskInfo.ATTR.SUBDIR) {
-        if (!existsFile(sPath)) {
-            fs.mkdirSync(sPath);
-        }
-        fSuccess = true;
+        fSuccess = makeDir(getFullPath(sPath), true);
     } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
         let fPrinted = false;
         let fQuiet = argv['quiet'];
@@ -927,10 +985,21 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
                 return true;
             }
         }
-        if (!fQuiet) printf("extracting: %s\n", sFile);
-        if (argv['expand']) {
+        if (argv['expand'] && !noExpand) {
             let arcType = isArchiveFile(sFile);
             if (arcType) {
+                if (!fQuiet) printf("expanding: %s\n", sFile);
+                if (arcType == StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
+                    /*
+                     * How often does this happen?  I don't know, but look at CCTRAN.ZIP on PC-SIG DISK2631. #ZipAnomalies
+                     */
+                    arcType = StreamZip.TYPE_ARC;
+                    printf("warning: overriding %s as type ARC (%d)\n", sFile, arcType);
+                }
+                if (arcType == StreamZip.TYPE_ZIP && db.readUInt32LE(0) == 0x08074B50) {
+                    // db = db.slice(0, db.length - 4);
+                    printf("warning: ZIP extended header signature detected (%#08x)\n", 0x08074B50);
+                }
                 let zip = new StreamZip({
                     file: sFile,
                     password: argv['password'],
@@ -939,15 +1008,20 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
                     storeEntries: true,
                     nameEncoding: "ascii",
                     printfDebug: printf,
-                    logErrors: true
+                    holdErrors: true
                 }).on('ready', () => {
                     let aFileData = getArchiveFiles(zip, argv['verbose']);
                     for (let file of aFileData) {
-                        extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, file.files);
+                        extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, false, file.files);
                     }
                     zip.close();
                 }).on('error', (err) => {
                     printError(err, sFile);
+                    /*
+                     * Since this implies a failure to extract anything from the archive, we'll call ourselves
+                     * back with noExpand set to true, so that we simply extract the archive without expanding it.
+                     */
+                    extractFile(sDir, subDir, sFile, attr, date, db, argv, true);
                 });
                 zip.open();
                 /*
@@ -957,6 +1031,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
                 return true;
             }
         }
+        if (!fQuiet) printf("extracting: %s\n", sFile);
         /*
          * Originally, "normalize" was just an import option (to fix line endings of known text files on
          * disks we created); however, I'm going to make it an export option as well, and not just to revert
@@ -981,13 +1056,13 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, files)
                 db = normalizeForHost(db);
             }
         }
-        fSuccess = writeFile(sPath, db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
+        fSuccess = writeFile(getFullPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
     }
     if (fSuccess) {
-        fs.utimesSync(sPath, date, date);
+        fs.utimesSync(getFullPath(sPath), date, date);
         if (files) {
             for (let file of files) {
-                if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, file.files)) {
+                if (!extractFile(sDir, subDir, file.path, file.attr, file.date, file.data, argv, false, file.files)) {
                     fSuccess = false;
                     break;
                 }
@@ -1063,7 +1138,7 @@ function processDisk(di, diskFile, argv, diskette)
     }
 
     if (!argv['quiet']) {
-        printf("processing %s: %d bytes (checksum %d, hash %s)\n", di.getName(), di.getSize(), di.getChecksum(), di.getHash());
+        printf("processing: %s (%d bytes, checksum %d, hash %s)\n", di.getName(), di.getSize(), di.getChecksum(), di.getHash());
     }
 
     let sFindName = argv['file'];
@@ -1745,23 +1820,24 @@ function readCollection(argv)
 }
 
 /**
- * readDir(sDir, arcType, sLabel, sPassword, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
+ * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, done, sectorIDs, sectorErrors, suppData)
  *
  * @param {string} sDir (directory name)
  * @param {number} [arcType] (1 if ARC file, 2 if ZIP file, otherwise 0)
+ * @param {number} [arcOffset] (0 if none)
  * @param {string} [sLabel] (if not set with --label, then basename(sDir) will be used instead)
  * @param {string} [sPassword] (password; for encrypted ARC files only at this point)
  * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
  * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
  * @param {number} [nMax] (maximum number of files to read; default is 256)
- * @param {boolean} [fVerbose] (true for verbose output)
+ * @param {boolean} [verbose] (true for verbose output)
  * @param {function(DiskInfo)} [done] (optional function to call on completion)
  * @param {Array|string} [sectorIDs]
  * @param {Array|string} [sectorErrors]
  * @param {string} [suppData] (eg, supplementary disk data that can be found in such files as: /software/pcx86/app/microsoft/word/1.15/debugger/index.md)
  * @returns {DiskInfo|null}
  */
-function readDir(sDir, arcType, sLabel, sPassword, fNormalize, kbTarget, nMax, fVerbose, done, sectorIDs, sectorErrors, suppData)
+function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, done, sectorIDs, sectorErrors, suppData)
 {
     let di;
     let diskName = path.basename(sDir);
@@ -1796,7 +1872,7 @@ function readDir(sDir, arcType, sLabel, sPassword, fNormalize, kbTarget, nMax, f
     try {
         nMaxInit = nMaxCount = nMax || nMaxDefault;
         if (arcType) {
-            readArchiveFiles(sDir, arcType, sLabel, sPassword, fVerbose, readDone);
+            readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, verbose, readDone);
         } else {
             di = readDone(readDirFiles(sDir, sLabel, fNormalize, 0));
         }
@@ -1927,22 +2003,22 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
 }
 
 /**
- * getArchiveFiles(zip, fVerbose)
+ * getArchiveFiles(zip, verbose)
  *
  * @param {StreamZip} zip
- * @param {boolean} fVerbose
+ * @param {boolean} verbose
  * @returns {Array.<FileData>}
  */
-function getArchiveFiles(zip, fVerbose)
+function getArchiveFiles(zip, verbose)
 {
     let aFileData = [];
     let aDirectories = [];
-    if (fVerbose) {
-        printf("\n%s\n", zip.fileName);
+    if (verbose) {
+        printf("reading: %s\n", zip.fileName);
         printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
         printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
     }
-    let errors = "";
+    let messages = "";
     let entries = Object.values(zip.entries());
     for (let entry of entries) {
 
@@ -1971,7 +2047,7 @@ function getArchiveFiles(zip, fVerbose)
             /*
              * HACK to skip decompression for all entries (--verbose=skip) or all entries except a named entry.
              */
-            if (typeof fVerbose == "string" && (fVerbose == "skip" || fVerbose != entry.name)) {
+            if (typeof verbose == "string" && (verbose == "skip" || verbose != entry.name)) {
                 data = new DataBuffer(entry.size);
             }
             else {
@@ -1982,8 +2058,10 @@ function getArchiveFiles(zip, fVerbose)
             file.size = data.length;
             file.data = data;
         }
-        if (entry.errors) {
-            for (let error of entry.errors) errors += error + "\n";
+        if (entry.messages && entry.messages.length) {
+            for (let message of entry.messages) {
+                messages += message + "\n";
+            }
         }
         let d, sDir = path.dirname(file.path) + path.sep;
         for (d = 0; d < aDirectories.length; d++) {
@@ -1996,7 +2074,7 @@ function getArchiveFiles(zip, fVerbose)
         if (d == aDirectories.length) {
             aFileData.push(file);
         }
-        if (fVerbose) {
+        if (verbose) {
             /*
              * Notes regarding ARC compression method "naming conventions":
              *
@@ -2029,38 +2107,104 @@ function getArchiveFiles(zip, fVerbose)
             let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
             if (entry.encrypted) method += '*';
             let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
-            printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
-                filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc);
+            if (entry.errors) filesize = -1;
+            if (!Device.DEBUG) {
+                printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
+                    filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc);
+            } else {
+                printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %#08x\n",
+                    filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == StreamZip.TYPE_ARC? 4 : 8, entry.crc, entry.offset);
+            }
         }
     }
-    if (errors) printf("%s", errors);
+    if (messages) printf("%s", messages);
     return aFileData;
 }
 
 /**
- * readArchiveFiles(sArchive, arcType, sLabel, sPassword, fVerbose, done)
+ * getArchiveOffset(sArchive, arcType, sOffset)
+ *
+ * There were some ARC archives embedded in EXE files (eg, old self-extracting archives) produced by PKware, before they
+ * started using ZIP archives.  Examples include:
+ *
+ *      PKX35A35.EXE
+ *      PK361.EXE
+ *      PKFIND11.EXE
+ *
+ * They can be detected by a 32-bit signature near the end of the file ("PK\xAA\x55" or 0x55aa4b50) followed by a 32-bit
+ * archive size.  The beginning of the archive can be found by subtracting the archive size from the file size (ie, the file
+ * size up to and including the 32-bit archive size), and then subtracting another 40 (0x28) bytes from that value.
+ *
+ * TODO: Determine what that final 40-byte offset represents.
+ *
+ * However, since this is an expensive operation, we perform this search ONLY if 1) the caller doesn't provide an explicit
+ * offset, 2) the caller explicitly set the archive type to TYPE_ARC, and 3) the input file is an EXE file.
+ *
+ * There were self-extracting ARC archives produced by SEA (System Enhancement Associates) as well (eg, ARC602.EXE from 1989),
+ * but those used a different format; this function does not yet support those files.
+ *
+ * Self-extracting ZIP archives don't need any help locating the archive offset, because the ZIP file format specifically
+ * allows for prepended files (eg, EXE files).
+ *
+ * @param {string} sArchive
+ * @param {number} arcType
+ * @param {string} sOffset
+ * @returns {number} (the specified --offset value, if any, else the offset of the embedded ARC archive, if any; -1 if none)
+ */
+function getArchiveOffset(sArchive, arcType, sOffset)
+{
+    let offset = 0;
+    if (sOffset) {
+        offset = +sOffset || 0;
+    } else {
+        if (arcType == StreamZip.TYPE_ARC && sArchive.toUpperCase().endsWith(".EXE")) {
+            offset = -1
+            let data = readFile(sArchive, null);
+            if (data) {
+                let sizeArc = -1, sizeFile;
+                let max = 512;      // limit the search to the last 512 bytes of the file
+                for (let o = data.length - 8; o >= 0 && max--; o--) {
+                    if (data.readUInt32LE(o) == 0x55aa4b50) {
+                        sizeArc = data.readUInt32LE(o + 4);
+                        sizeFile = o + 8;
+                        break;
+                    }
+                }
+                if (sizeArc > 0 && sizeArc < sizeFile) {
+                    offset = sizeFile - sizeArc - 40;
+                }
+            }
+        }
+    }
+    return offset;
+}
+
+/**
+ * readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbose, done)
  *
  * @param {string} sArchive (ARC/ZIP filename)
  * @param {number} arcType (1 for ARC, 2 for ZIP)
+ * @param {number} arcOffset (0 if none)
  * @param {string} sLabel (optional volume label)
  * @param {string} sPassword (optional password)
- * @param {boolean} fVerbose (true to display verbose output, false to display minimal output)
+ * @param {boolean} verbose (true to display verbose output, false to display minimal output)
  * @param {function(Array.<FileData>)} done
  */
-function readArchiveFiles(sArchive, arcType, sLabel, sPassword, fVerbose, done)
+function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbose, done)
 {
     let zip = new StreamZip({
         file: sArchive,
         password: sPassword,
         arcType: arcType,
+        arcOffset: arcOffset,
         storeEntries: true,
         nameEncoding: "ascii",
         // printfDebug: printf,
-        logErrors: true
+        holdErrors: true
     });
     zip.on('ready', () => {
-        let aFileData = getArchiveFiles(zip, fVerbose);
-        zip.close()
+        let aFileData = getArchiveFiles(zip, verbose);
+        zip.close();
         done(aFileData);
     });
     zip.on('error', (err) => {
@@ -2191,7 +2335,7 @@ function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite = false
                 if (!fQuiet) printf("writing %s...\n", diskFile);
                 diskFile = getFullPath(diskFile);
                 let sDir = path.dirname(diskFile);
-                if (!existsFile(sDir)) fs.mkdirSync(sDir, {recursive: true});
+                makeDir(sDir, true);
                 if (fExists) fs.unlinkSync(diskFile);
                 fs.writeFileSync(diskFile, data);
                 if (diskFileLC.endsWith(".img") && !fWritable) fs.chmodSync(diskFile, 0o444);
@@ -2227,7 +2371,7 @@ function writeFile(sFile, data, fCreateDir, fOverwrite, fReadOnly, fQuiet)
             }
             if (fCreateDir) {
                 let sDir = path.dirname(sFile);
-                if (!existsFile(sDir)) fs.mkdirSync(sDir, {recursive: true});
+                makeDir(sDir, true);
             }
             if (!existsFile(sFile) || fOverwrite) {
                 fs.writeFileSync(sFile, data);
@@ -2466,12 +2610,12 @@ function processFile(argv)
     }
 
     if (fDir || arcType) {
-        /*
-         * Target is normally a number in Kb (eg, 360 for a 360K diskette); you can also add a suffix (eg, K or M).
-         * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
-         * equivalent to 10240K).
-         */
-        readDir(input, arcType, argv['label'], argv['password'], argv['normalize'], getTarget(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
+        let offset = getArchiveOffset(input, arcType, argv['offset']);
+        if (offset < 0) {
+            printf("error: %s is not a supported archive file\n", input);
+            return true;
+        }
+        readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], done);
         return true;
     }
 

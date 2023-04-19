@@ -44,7 +44,7 @@ machines:
     MUST USE THE         0   8-25-90   8:11a
     INSTALLA ION         0   8-25-90   8:11a
     DISKETTE 1ST         0   8-25-90   8:11a
-    SSSSSSSS SSS         0   8-25-90   8:11a
+    ▀▀▀▀▀▀▀▀ ▀▀▀         0   8-25-90   8:11a
     GO       BAT       958  11-16-90   5:01a
             7 file(s)     362430 bytes
                                0 bytes free

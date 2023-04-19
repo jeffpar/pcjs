@@ -36,14 +36,14 @@ machines:
      Volume in drive A is DISK2030
      Directory of A:\
 
-    CONFIG   SYS        22   2-04-89  10:28a
-    FILE2030 TXT      2295   1-15-90  10:21a
-    FLOPPY              37   5-05-89   8:15a
-    GO       BAT        38  12-31-80   5:37p
-    GO       TXT       694   1-16-90   3:52a
-    INSTALL  DOC      1563   5-14-89   4:39a
-    INSTALL  EXE     18096   5-14-89   3:44a
-    MAS      ZIP    180728   6-08-89  11:47a
-    PKUNZIP  EXE     18208   3-05-89   4:00p
+    CONFIG   SYS        22   2-04-89   6:28p
+    FILE2030 TXT      2295   1-15-90   6:21p
+    FLOPPY              37   5-05-89   3:15p
+    GO       BAT        38   1-01-80   1:37a
+    GO       TXT       694   1-16-90  11:52a
+    INSTALL  DOC      1563   5-14-89  11:39a
+    INSTALL  EXE     18096   5-14-89  10:44a
+    MAS      ZIP    180728   6-08-89   6:47p
+    PKUNZIP  EXE     18208   3-06-89
             9 file(s)     221681 bytes
                            95232 bytes free

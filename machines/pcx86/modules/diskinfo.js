@@ -1336,7 +1336,7 @@ export default class DiskInfo {
      */
     buildShortName(sFile, fLabel=false, uniqueID=0, encoding="utf8")
     {
-        let sName = sFile.toUpperCase();
+        let sName = (encoding == "utf8")? sFile.toUpperCase() : CharSet.toUpperCaseASCII(sFile);
         if (fLabel) {
             /*
              * Character validation is disabled for labels; I'm not sure what the limitations are on label characters,
@@ -3035,9 +3035,9 @@ export default class DiskInfo {
         cdw = adw.length < cdw? adw.length - 1 : adw.length;
         let dwChecksum = 0;
         for (let idw = 0; idw < cdw; idw++) {
-            dwChecksum = (dwChecksum + adw[idw]) & (0xffffffff|0);
+            dwChecksum = (dwChecksum + adw[idw]) & 0xffffffff;
         }
-        this.dwChecksum = (this.dwChecksum + dwChecksum) & (0xffffffff|0);
+        this.dwChecksum = ((this.dwChecksum + dwChecksum) & 0xffffffff) >>> 0;
         if (this.fWritable) {
             /*
              * If this disk is writable (ie, will be loaded into a machine with a read/write drive),

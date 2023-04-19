@@ -554,10 +554,10 @@ function processFolders(sDir, argv)
              * Add a new entry...
              */
             let groupName = imgParts[0].toUpperCase()
-            // let i = imgPath.indexOf('-');
-            // if (i >= 0) {
-            //     groupName = imgPath.slice(0, i).toUpperCase();
-            // }
+            let i = imgPath.indexOf('-');
+            if (i >= 0) {
+                groupName = imgPath.slice(0, i).toUpperCase();
+            }
             if (media) {
                 if (!title || title == groupName) {
                     title = groupName + ' ' + mediaName;

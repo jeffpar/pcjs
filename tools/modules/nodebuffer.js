@@ -66,15 +66,17 @@ export default class DataBuffer {
     }
 
     /**
-     * copy(dbTarget, offTarget)
+     * copy(dbTarget, offTarget, offSource, offSourceEnd)
      *
      * @this {DataBuffer}
      * @param {DataBuffer} dbTarget
      * @param {number} offTarget
+     * @param {number} [offSource]
+     * @param {number} [offSourceEnd]
      */
-    copy(dbTarget, offTarget)
+    copy(dbTarget, offTarget, offSource, offSourceEnd)
     {
-        this.buffer.copy(dbTarget.buffer, offTarget);
+        this.buffer.copy(dbTarget.buffer, offTarget, offSource, offSourceEnd);
     }
 
     /**
@@ -144,7 +146,7 @@ export default class DataBuffer {
     }
 
     /**
-     * readUInt8(b)
+     * readUInt8(off)
      *
      * @this {DataBuffer}
      * @param {number} off
