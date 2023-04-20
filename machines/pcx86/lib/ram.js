@@ -652,7 +652,7 @@ CompaqController.RAMSETUP = {
 };
 
 CompaqController.BUFFER = [null, 0];
-CompaqController.ACCESS = [CompaqController.readByte, null, null, CompaqController.writeByte, null, null];
+CompaqController.ACCESS = [CompaqController.readByte, CompaqController.writeByte];
 
 /*
  * Initialize all the RAM modules on the page.
