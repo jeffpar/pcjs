@@ -5,7 +5,7 @@
 		<control type="textarea" binding="print" width="100%" height="260px" pos="relative" padBottom="4px" style="resize:vertical;"/>
 		<control type="container" width="100%">
 			<control type="text" binding="debugInput" width="auto"/>
-			<control type="button" binding="debugEnter">Enter</control>
+			<control type="button" binding="debugEnter" padLeft="4px">Enter</control>
 			<control type="button" binding="clear">Clear</control>
 			<control type="button" binding="run" padLeft="16px">Run</control>
 			<control type="button" binding="step">Step</control>
