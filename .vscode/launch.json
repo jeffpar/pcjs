@@ -26,6 +26,20 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "COMPAQ DeskPro 386, 2Mb RAM, IBM EGA [Debugger]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/ega/2048kb/debugger/machine.xml",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "COMPAQ DeskPro 386, 2Mb RAM, IBM EGA [Debugger] (Uncompiled)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/ega/2048kb/debugger/uncompiled/machine.xml",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "COMPAQ DeskPro 386, 2Mb RAM, IBM VGA [Debugger]",
       "type": "chrome",
       "request": "launch",

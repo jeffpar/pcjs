@@ -1,17 +1,17 @@
-<ul class="pcjs-explorer-top">
-  <li id="pcjs-documents" class="pcjs-explorer-fixed">Documents
-    <ul>
+          <ul class="pcjs-explorer-top">
+            <li id="pcjs-documents" class="pcjs-explorer-fixed">Documents
+              <ul>
     {%- for group in site.data.documents -%}
       {%- if site.developer %}
-      <!-- group: {{ group[0] }} -->
+                <!-- group: {{ group[0] }} -->
       {%- endif -%}
       {%- capture group_type -%}{{ group[0] }}{%- endcapture -%}
       {%- capture docs_path1 -%}/{{ group[0] }}{%- endcapture %}
-      <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ group[1]['@title'] }}
-        <ul>
+                <li class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)">{{ group[1]['@title'] }}
+                  <ul>
         {%- for category in group[1] -%}
           {%- if site.developer %}
-          <!-- category: {{ category[0] }} -->
+                    <!-- category: {{ category[0] }} -->
           {%- endif -%}
           {%- if category[0] == "@instances" -%}
             {%- assign subcategories = group[1] -%}
@@ -23,12 +23,12 @@
             {%- capture docs_path2 -%}/{{ category[0] }}{%- endcapture -%}
             {%- capture docs_url -%}{{ docs_path1 }}{{ docs_path2 }}{%- endcapture -%}
             {%- capture attrs -%}id="documents-{{ docs_url | remove_first: "/" | replace: "/", "-" }}" class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)"{%- if category[1]['@desc'] %} title="{{ category[1]['@desc'] }}"{%- endif -%}{%- endcapture %}
-          <li {{ attrs }}>{{ category[1]['@title'] }}
-            <ul>
+                    <li {{ attrs }}>{{ category[1]['@title'] }}
+                      <ul>
           {%- endif -%}
           {%- for subcategory in subcategories -%}
             {%- if site.developer %}
-              <!-- subcategory: {{ subcategory[0] }} -->
+                        <!-- subcategory: {{ subcategory[0] }} -->
             {%- endif -%}
             {%- if subcategory[0] == "@instances" -%}
               {%- capture docs_path3 -%}{%- endcapture -%}
@@ -42,12 +42,12 @@
               {%- capture docs_path3 -%}/{{ subcategory[0] }}{%- endcapture -%}
               {%- capture docs_url -%}{{ docs_path1 }}{{ docs_path2 }}{{ docs_path3 }}{%- endcapture -%}
               {%- capture attrs -%}id="documents-{{ docs_url | remove_first: "/" | replace: "/", "-" }}" class="pcjs-explorer-closed" onclick="pcjsExplorerClick(this, event)"{%- if subcategory[1]['@desc'] %} title="{{ subcategory[1]['@desc'] }}"{%- endif -%}{%- endcapture %}
-              <li {{ attrs }}>{{ subcategory[1]['@title'] }}
-                <ul>
+                        <li {{ attrs }}>{{ subcategory[1]['@title'] }}
+                          <ul>
             {%- endif -%}
             {%- for instance in subcategory[1] -%}
               {%- if site.developer %}
-                  <!-- instance: {{ instance[0] }} -->
+                            <!-- instance: {{ instance[0] }} -->
               {%- endif -%}
               {%- if instance[0] contains '@' -%}{%- continue -%}{%- endif -%}
               {%- capture docs_path4 -%}{%- endcapture -%}
@@ -66,21 +66,21 @@
               {%- capture docs_id -%}documents{{ docs_url | replace: "/", "-" }}{%- endcapture -%}
               {%- if docs_id == "documents" -%}{%- assign docs_id = "library" -%}{%- endif -%}
               {%- capture attrs -%}id="{{ docs_id }}" class="pcjs-explorer-item"{%- if instance[1]['@desc'] %} title="{{ instance[1]['@desc'] }}"{%- endif -%}{%- endcapture %}
-                  <li {{ attrs }}>{{ docs_item }}</li>
+                            <li {{ attrs }}>{{ docs_item }}</li>
             {%- endfor -%}
             {%- if subcategory[0] != "@instances" %}
-                </ul>
-              </li>
+                          </ul>
+                        </li>
             {%- endif -%}
           {%- endfor -%}
           {%- if category[0] != "@instances" %}
-            </ul>
-          </li>
+                      </ul>
+                    </li>
           {%- endif -%}
         {%- endfor %}
-        </ul>
-      </li>
+                  </ul>
+                </li>
     {%- endfor %}
-    </ul>
-  </li>
-</ul>
+              </ul>
+            </li>
+          </ul>
