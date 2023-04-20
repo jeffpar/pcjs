@@ -3,6 +3,9 @@ layout: page
 title: "PC-SIG Diskette Library: The (Almost) Complete Collection"
 permalink: /software/pcx86/sw/misc/pcsig/
 preview: /software/pcx86/sw/misc/pcsig/CD-ROM.jpg
+redirect_from:
+  - /software/pcx86/sw/misc/pcsig08/
+  - /disks/pcx86/shareware/pcsig08/
 machines:
   - id: ibm5160
     type: pcx86
@@ -54,7 +57,7 @@ Also, the following disks were apparently "double-zipped":
   - DISK0316.ZIP contained DISKO316.ZIP ('O' instead of '0')
   - DISK0912.ZIP contained DISK0912.ZIP
 
-The following disks were then "back-filled" from the [8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/),
+The following disks were then "back-filled" from the [8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/0001/),
 spanning disks 1-2121, since they had been removed from the 9th Edition:
 
   - DISK0126, DISK0232, DISK0395, DISK0601, DISK0623, DISK0624, DISK0626, DISK0712
@@ -65,7 +68,7 @@ spanning disks 1-2121, since they had been removed from the 9th Edition:
   - DISK1915, DISK1916, DISK1969, DISK1979, DISK1980, DISK1981, DISK2000, DISK2030
   - DISK2063
 
-Why didn't we simply start with the [8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/)
+Why didn't we simply start with the [8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/0001/)
 and then fill in additions from subsequent editions?  Because the 8th Edition did not preserve the diskettes as well
 as later editions; the 9th and later editions used ZIP files to preserve diskettes, whereas the 8th Edition only did
 so in a few cases (eg, if filenames used characters that weren't allowed on CD-ROM).
