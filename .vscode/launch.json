@@ -526,7 +526,7 @@
       "name": "PC-SIG Library 8th Edition CD-ROM (April 1990)",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/software/pcx86/sw/misc/pcsig08/",
+      "url": "http://localhost:4000/software/pcx86/sw/misc/pcsig08/0001/",
       "webRoot": "${workspaceFolder}"
     },
     {

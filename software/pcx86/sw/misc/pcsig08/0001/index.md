@@ -1,8 +1,7 @@
 ---
 layout: page
 title: PC-SIG Library 8th Edition CD-ROM (April 1990)
-permalink: /software/pcx86/sw/misc/pcsig08/
-redirect_from: /disks/pcx86/shareware/pcsig08/
+permalink: /software/pcx86/sw/misc/pcsig08/0001/
 preview: /software/pcx86/sw/misc/pcsig/CD-ROM.jpg
 machines:
   - id: pcsig08
@@ -11,7 +10,7 @@ machines:
     config: /machines/pcx86/ibm/5160/ega/512kb/pcsig08/machine.xml
 ---
 
-NOTE: This collection is being replaced with the [PC-SIG Diskette Library: The (Almost) Complete Collection](../pcsig/) and
+NOTE: This collection has been replaced with the [PC-SIG Diskette Library: The (Almost) Complete Collection](../../pcsig/) and
 will probably be removed in the near future, since the new collection contains all these disks and more.
 
 ---
@@ -22,9 +21,9 @@ Preceding each directory listing is a **Load Disk** button that will automatical
 the machine's drive A.  Make sure the machine has finished booting before loading any disks.
 
 - Disks [PCSIG08: DISK0001](#directory-of-pcsig08-disk0001) through [DISK0500](#directory-of-pcsig08-disk0500) 
-- Disks [PCSIG08: DISK0501](0501/) through [DISK1000](0501/#directory-of-pcsig08-disk1000) 
-- Disks [PCSIG08: DISK1001](1001/) through [DISK1500](1001/#directory-of-pcsig08-disk1500) 
-- Disks [PCSIG08: DISK1501](1501/) through [DISK2121](1501/#directory-of-pcsig08-disk2121) 
+- Disks [PCSIG08: DISK0501](../0501/) through [DISK1000](../0501/#directory-of-pcsig08-disk1000) 
+- Disks [PCSIG08: DISK1001](../1001/) through [DISK1500](../1001/#directory-of-pcsig08-disk1500) 
+- Disks [PCSIG08: DISK1501](../1501/) through [DISK2121](../1501/#directory-of-pcsig08-disk2121) 
 
 {% include machine.html id="pcsig08" %}
 

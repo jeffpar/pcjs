@@ -122,7 +122,7 @@ Later CD-ROM editions didn't bother including folders or ZIP files for removed o
 
 ### Putting the PC-SIG Library Online
 
-Some years ago, I added part of the PC-SIG Library to PCjs; specifically, the [PC-SIG Library 8th Edition CD-ROM (April 1990)](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/).  That process involved recreating 2121 diskette images from folders, and then producing four web pages, each with an IBM PC and directory listings for 500+ diskettes, along with buttons to load the desired diskette into the PC.
+Some years ago, I added part of the PC-SIG Library to PCjs; specifically, the [PC-SIG Library 8th Edition CD-ROM (April 1990)](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/0001/).  That process involved recreating 2121 diskette images from folders, and then producing four web pages, each with an IBM PC and directory listings for 500+ diskettes, along with buttons to load the desired diskette into the PC.
 
 But I wanted to do something better -- something more comprehensive and user-friendly.
 
