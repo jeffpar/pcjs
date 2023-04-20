@@ -96,26 +96,38 @@ export default class DiskSearch {
     }
 
     /**
-     * containsFile(list, re)
+     * containsText(item, text)
+     *
+     * @param {string} item
+     * @param {string} text
+     * @returns {boolean}
+     */
+    containsText(item, text)
+    {
+        return item && text && item.indexOf(text) >= 0 || false;
+    }
+
+    /**
+     * matchesFile(list, re)
      *
      * @param {string} list
      * @param {RegExp} re
      * @returns {boolean}
      */
-    containsFile(list, re)
+    matchesFile(list, re)
     {
         return !!(list && list.match(re));
     }
 
     /**
-     * containsText(obj, props, re)
+     * matchesText(obj, props, re)
      *
      * @param {object} obj
      * @param {Array} props
      * @param {RegExp} re
      * @returns {boolean}
      */
-    containsText(obj, props, re)
+    matchesText(obj, props, re)
     {
         for (let prop of props) {
             if (obj[prop] && obj[prop].match(re)) return true;
@@ -133,16 +145,22 @@ export default class DiskSearch {
     {
         let matches = [];
         text = text.trim();
+        let match = text.match(/^DISK\s*([0-9]+)$/i);
+        let diskName = match? "DISK" + ("000" + match[1]).slice(-4) : "";
         let reText = new RegExp(text.replace(/ /g, '.*'), 'i');
         let isFileName = (text.length <= 12 && text.indexOf('.') > 0 && text.indexOf(' ') < 0);
         let reFileName = (isFileName? new RegExp("/" + text + "(||$)", 'i') : null);
         for (let i = 0; i < this.media.length; i++) {
             let media = this.media[i];
-            if (this.containsFile(media['@fileList'], reFileName)) {
+            if (diskName && this.containsText(media['@diskette'], diskName)) {
                 matches.push(i);
                 continue;
             }
-            if (this.containsText(media, ['@diskTitle', '@diskSummary'], reText)) {
+            if (this.matchesFile(media['@fileList'], reFileName)) {
+                matches.push(i);
+                continue;
+            }
+            if (!diskName && this.matchesText(media, ['@diskTitle', '@diskSummary'], reText)) {
                 matches.push(i);
             }
         }

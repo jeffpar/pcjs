@@ -11,9 +11,9 @@ machines:
     autoMount:
       B: "PC-SIG Library Disk #0001"
     autoType: $date\r$time\rB:\rDIR\r
-module_initialization:
-  - import DiskSearch from '/tools/modules/web/disksearch.js';
-  - new DiskSearch('https://pcsigdisks.pcjs.org/pcx86/diskettes.json', 'diskSearch', 'diskResults');
+modules_init:
+  - import DiskSearch from "/tools/modules/web/disksearch.js";
+  - new DiskSearch("https://pcsigdisks.pcjs.org/pcx86/diskettes.json", "diskSearch", "diskResults");
 ---
 
 The PC Software Interest Group, aka PC-SIG, began distributing public domain software and shareware on 5.25-inch diskettes
