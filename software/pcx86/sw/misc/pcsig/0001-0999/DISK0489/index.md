@@ -34,8 +34,35 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES489.TXT
+
+{% raw %}
+```
+ 
+------------------------------------------------------------------------
+Disk No  489  JESUS SAYS                                             v2
+------------------------------------------------------------------------
+    JESUS SAYS is a interactive program that carries on a "conversation"
+with the user.  It has an adjustable reading speed for slower readers.
+The user is prompted to enter a sentance and the program respondes
+with a quote from the Bible.  Then the user is given a chance to exit
+the program or continue, if the program is exited, another phrase is
+printed out. Then the program ends.
+ 
+JESUS   EXE   Main Program (Mode 40)
+JESUS   BAS   Basic program used by JESUS.EXE
+ 
+PC-SIG
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) copyright 1986,87 PC-SIG
+```
+{% endraw %}
+
 ## JESUS.BAS
 
+{% raw %}
 ```bas
 10 REM                 ****************************
 20 REM                 *        JESUS SAYS        *
@@ -259,6 +286,7 @@ machines:
 2200 DATA" ...Dost thou believe on the Son of God?                                                                      JOHN 9:35 "
 2210 DATA" ......If I honor myself, my honor is   nothing;......                                                        JOHN 8:54 "
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

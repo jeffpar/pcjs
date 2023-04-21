@@ -39,6 +39,56 @@ machines:
     listed on screen.  The registered version offers a print option.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1659.TXT
+
+{% raw %}
+```
+Disk No: 1659                                                           
+Disk Title: Fish-n-Log                                                  
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Fish-N-Log                                               
+Author Version: 1.5                                                     
+Author Registration: $9.95                                              
+Special Requirements: None.                                             
+                                                                        
+Want to catch a lot more fish?  Want your fishing                       
+excursions to be more productive today and far more productive          
+tomorrow?  The serious angler will find this computerized               
+fisherman's logbook the answer to an empty creel.                       
+                                                                        
+FISH-N-LOG lets you log important facts about your fishing trip by      
+answering questions asked by the program.  You are queried in           
+detail about each fishing trip as to weather conditions, water          
+levels and conditions, moon phase, feeding times, ``hot spots'',        
+methods used, lures or bait used, depth and much more.  Angling         
+sophisitcates who use solunar time as a means of predicting when        
+fish bite will find FISH-N-LOG very helpful.  With this information     
+you'll be able to duplicate successful fishing trips in the future.     
+                                                                        
+You can enter an "endless narrative" regarding situations you want      
+to detail.  Reports to refresh your memory of previous trips are        
+recalled by location, month, or location and month with the results     
+listed on screen.  The registered version offers a print option.        
+                                                                        
+File Descriptions:                                                      
+                                                                        
+FNLSW    ARC  Archived program.                                         
+PKUNPAK  EXE  Unpacks archive.                                          
+UNPAKFNL BAT  Batch file to unarchive main program.                     
+PC-SIG   TXT  User information.                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1659
 

@@ -31,8 +31,472 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## ARCE.DOC
+
+{% raw %}
+```
+
+
+  ARCE Command                                          Version 3.1b
+  ------------                                          Sep 16, 1987
+
+
+  Purpose:  Use ARCE to extract files from an ARC archive file.
+
+  Format:
+
+        ARCE  [d:][path]filename.ext  [filespecs...] [d:outpath]
+                                      [/R]
+                                      [/Q]
+                                      [/P]
+                                      [/T]
+                                      [/Gpassword]
+
+  Remarks:
+
+        The drive and path names are optional.  If omitted, the  current
+        drive and path name is used.
+
+        The filename must be  supplied.  The extension defaults  to ARC.
+        All files matching the supplied filename are processed.  The ARC
+        filename may contain the * and ? wildcard characters.
+
+        If  no  filespecs  are   supplied,  all  files  are   extracted.
+        Otherwise, only those ARC members  which match one of the  up to
+        16 filespecs are extracted.
+
+        The extracted files  may be placed  on another drive,  and/or in
+        another subdirectory by following the optional filespecs with  a
+        drive designator and/or path name.
+
+        If  the  file  being  extracted  already  exists,  you are asked
+        whether or not you want to over-write it.  You may use the |  /R
+        option to bypass this prompt.  Use a Y followed by the |  return
+        key to over-write the file.
+
+        Use the /Q option to suppress alarm sounds, beeps, and bells.
+
+        Use  the  /P  option  to  write  the  extracted files to the DOS
+        standard output  file.  With  /P, you  may pipe  or redirect the
+        output.  An initial line feed  is added to the beginning  of the
+        output file.
+
+        Use the /T option to test the archive's integrity. No files will
+        be extracted.
+
+        If the file was encrypted, use the /G option to supply the  same
+        password as was used to create the file, e.g. /GSECRET.
+
+
+
+
+
+        ARCE 3.1b, Copyright (c) 1986-87, Wayne Chin and Vernon D. Buerg.
+        ALL RIGHTS RESERVED.
+
+
+
+ARCE Command                                            Version 3.1b
+------------                                            Sep 16, 1987
+
+
+
+                        Examples
+                        --------
+
+        o  Extract all file from TEST.ARC onto the current drive:
+
+              ARCE TEST
+
+        o  Extract only file with  an extension of .ASM from the archive
+           SOURCE.ARC on drive B and in subdirectory SAVE:
+
+              ARCE B:\SAVE\SOURCE *.ASM
+
+        o  Extract  all  files  from  all  ARC files in the subdirectory
+           called TEST on drive C:
+
+              ARCE C:\TEST\*
+
+        o  Extract  all  files  from  PROGA.ARC  and  place the files in
+           subdirectory OLD on drive B:
+
+              ARCE PROGA.ARC B:\OLD
+
+        o  Extract all files with an extension of .COM and .EXE from the
+           archive PROGS.ARC in directory NEW\WORK on drive B, and place
+           the  them  in  subdirectory  SAVE\TEST  on  drive  A; replace
+           existing file:
+
+              ARCE B:\NEW\WORK\PROGS *.COM *.EXE A:\SAVE\TEST /R
+
+        o  Extract  the  file  READ.ME  from  the  archive GIZMO.ARC and
+           display it on the console instead of writing it to a file:
+
+              ARCE GIZMO READ.ME /P
+
+        o  Same as above, except  pass the extracted READ.ME file to the
+           LIST file viewer:
+
+              ARCE GIZMO READ.ME /P | LIST /S
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ARCE Command                                            Version 3.1b
+------------                                            Sep 16, 1987
+
+                        Error Messages
+                        --------------
+
+      'filename - premature EOF reading '
+
+        Data  is  missing  from  the  archive  file.   The  program   is
+        terminated.
+
+
+      'filename - unable to set file datestamp'
+
+        The file datestamp is set to the current date and time, and  the
+        next archive member is processed.
+
+
+      'filename - WARNING: file CRC does not match!'
+
+        The extracted member  is left on  the output disk,  and the next
+        archive member is processed.   The file is probably  invalid but
+        is left on the disk for your examination.
+
+
+      'Invalid filespec(s)'
+
+        The filespec syntax is incorrect.  The filename part may be from
+        1  to  eight  characters,  and  may  include the ? or * wildcard
+        characters.  The extension may be none to three characters,  and
+        may  include  wildcards.   There  is  a  maximum of 16 filespecs
+        allowed.  The program terminates.
+
+
+      'filename - file already exists. Overwrite it? (y/N) '
+
+        The member being extracted already  exists.  If you are using  a
+        data  path  utility,  the  file  may  not  actually  be  in  the
+        subdirectory be used for output.   Respond with the letter Y  to
+        over-write the existing  file, or respond  with the letter  N to
+        skip this member and continue to the next.
+
+
+      'Abort: Stack overflow'
+
+        The member  being extracted  has invalid  data.  The  program is
+        terminated.
+
+
+      'filename - invalid decode tree count'
+
+        The member  being extracted  has invalid  data.  The  program is
+        terminated.
+
+
+
+
+
+
+
+ARCE Command                                            Version 3.1b
+------------                                            Sep 16, 1987
+
+                        Error Messages (cont'd)
+                        --------------
+
+
+      'filename - new archive format 7 not yet supported'
+
+        Format 7 is a special file compression method used internally by
+        SEA,  the  authors  of  ARC.  Processing continues with the next
+        archive member.
+
+
+      'Unable to open archive > arcname'
+
+        The  specified  ARC   archive  file  was   not  found,  or   was
+        inaccessible.  The program terminates.
+
+
+      'CREATE failed > filename'
+
+        There was insufficient directory  space, or a failure  accessing
+        the output disk.  The program terminates.
+
+
+        'Invalid archive format!'
+
+        The archive file data is invalid.  The program terminates.
+
+
+      'Incorrect DOS version'
+
+        Version  2.0  or  later  of  PC  DOS  must be used.  The program
+        terminates
+
+
+      'Not enough memory.'
+
+        A minimum  of 112k  bytes of  memory is  required.  The  program
+        terminates.
+
+
+      'I/O error reading from arcname'
+
+        An incorrectable error occurred attempting to read data from the
+        archive file.  The program terminates.
+
+
+      'I/O error writing or disk full > filename'
+
+        There was not  enough disk space  to write the  complete archive
+        member.   The  partially  extracted  file  is  scratched and the
+        program terminates.
+
+
+
+
+
+
+ARCE Command                                            Version 3.1b
+------------                                            Sep 16, 1987
+
+                        Error Messages (cont'd)
+                        --------------
+
+
+      'No matching file(s) found'
+
+        No archive files were  found that matched the  supplied filename
+        specifications.  The program terminates.
+
+
+
+      'filename - ERROR: invalid file codes'
+
+        An error was detected while attempting to decode a crunched
+        file. Either some data bytes are invalid, there are extra
+        bytes, or there are bytes missing. The archive is invalid.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ARCE Command                                            Version 3.1b
+------------                                            Sep 16, 1987
+
+                        Version history
+                        ---------------
+
+        1.1 - 1/13/86   -initial release
+
+        2.00, 04/08/86  - fine tuning of I/O buffering
+
+        2.01-2.05, 4-20 thru 9/9/86
+                        - improve unsq, correct disk full message
+        2.06, 9/17/86   - release from testing
+        2.07, from 9/19 - not released
+        2.08, 12/31/86 - added /P, /Q; fixed /R with redirection
+        2.09, 1/5/87   - correct closing of output if /P used; require return
+                         (enter key) for over-write prompt
+                       - add more validity checking of member headers
+        2.10, 1/6/87   - correct use out output file specification
+        2.11, 1/24/87  - some cosmetics, wrong banner version and date
+
+        3.0a, 3/16/87  - added /G for password encryption
+                       - added /T for integrity checking only
+                       - correct loop in command line parsing
+                       - internal optimization
+                       - make intergity checking more robust
+
+        3.0c, 3/23/87  - improve extracting with file selection
+                       - minor fixes and cosmetic changes
+
+        3.0d, 3/29/87  - correction to unsqueeze
+
+        3.0e, 4/02/87  - correct loop with invalid archives
+                       - insure errorlevel non-zero if any errors
+                       - correct loop in command line processing
+
+        3.0f, 5/31/87  - correct false 'disk full' error message when
+                         using /p (piping) option
+                       - correct failure to extract all files from a
+                         garbled (/g) archive
+
+        3.1a, 9/10/87  - cosmetic changes
+
+|       3.1b, 9/16/87  - unsquashing version released
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ARCE Command                                            Version 3.1b
+------------                                            Sep 16, 1987
+
+
+
+                        Notices
+                        -------
+
+        ARCE (c) Copyright 1986-1987 by Wayne Chin and Vernon D. Buerg
+        ALL RIGHTS RESERVED.
+
+        ARCE is free, but it is a copyrighted work and may be distributed only
+        pursuant to this license.
+
+        Permission is hereby granted to reproduce and disseminate ARCE so long
+        as:
+
+           (1)  No remuneration of any kind is received in exchange; and
+
+           (2)  Distribution is without ANY modification to the contents of
+                ARCE.COM and all accompanying documentation and/or support
+                files, including the copyright notice and this license.
+
+        No copy of ARCE may be distributed without including a copy of this
+        license.
+
+        Any other use is prohibited without express, written permission in
+        advance.
+
+
+
+                Vernon D. Buerg
+                456 Lakeshire Drive
+                Daly City, CA  94015
+
+                CompuServe: 70007,1212
+                Data/BBS:   415-994-2944
+
+
+
+
+        For use by corporations, institutions, or for profit, contact
+        System Enhancement Associates for licensing information.
+
+                   System Enhancement Associates
+                   21 New Street
+                   Wayne, NJ 07470
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         ----------------end-of-author's-documentation---------------
+
+                        Software Library Information:
+
+                   This disk copy provided as a service of
+
+                        The Public (Software) Library
+
+         Disks in the P(s)L are updated monthly, so if you did not get
+         this disk  directly from the P(s)L,  you should be aware that
+         the files in this set may no longer be the current versions.
+         For a copy of the latest monthly software library newsletter
+         and a list of the 800+ disks in the library, call or write
+
+                        The Public (Software) Library
+                              P.O.Box 35705 - F
+                           Houston, TX 77235-5705
+                      (713) 721-6104 or (713) 721-5205
+
+         We are not the authors of this program, nor are we associated
+         with the author in any way other than as a distributor of the
+         program in accordance with the author's terms of distribution.
+
+         Please direct shareware payments and specific questions about
+         this program to the author of the program, whose name appears
+         elsewhere in  this documentation. If you have trouble getting
+         in touch with the author,  we will do whatever we can to help
+         you with your questions. All programs have been tested and do
+         run.  To report problems,  please use the form that is in the
+         file PROBLEM.DOC on many of our disks or in other written for-
+         mat with screen printouts, if possible.
+
+
+```
+{% endraw %}
+
 ## BASLISTI.BAS
 
+{% raw %}
 ```bas
 1 REM This program allows a "PRETTY" listing of BASIC programs that
 2 REM are stored in ASCII format.  Although designed to be used primarily
@@ -224,9 +688,11 @@ machines:
 8410 GOTO 8000
 9000 END
 ```
+{% endraw %}
 
 ## CURVEFIT.BAS
 
+{% raw %}
 ```bas
 3 KEY OFF
 5 DEFDBL A,B,C,S,R,X,Y,V:MONITOR2$="Y"
@@ -1255,9 +1721,11 @@ machines:
 64035 NEXT J9
 64040 RETURN
 ```
+{% endraw %}
 
 ## CURVEQB4.BAS
 
+{% raw %}
 ```bas
 3 KEY OFF: REM Found Line for Crashing QB4 and TB1 Line 13180 calculating EXP
 5 DEFDBL A,B,C,S,R,X,Y:MONITOR2$="Y"
@@ -2254,6 +2722,230 @@ machines:
 64035 NEXT J9
 64040 RETURN
 ```
+{% endraw %}
+
+## FILES707.TXT
+
+{% raw %}
+```
+Disk No:  707
+Program Title: CURVEFIT version 2.12A and 2.20B
+PC-SIG version: 2.2
+
+CURVEFIT performs a least squares curve fit on X, Y data.  Curves for 25
+equations are fitted.  Equation coefficients, Correlation Coefficient,
+and Best Fit are computed.  For any of the 25 equations, predictions for
+Y can be calculated.
+
+Usage:  Mathematical.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00
+
+File Descriptions:
+
+ARCE     COM  Unarchiving utility.
+ARCE     DOC  Manual for ARCE.COM.
+CURVEFIT ARC  Archived files.
+OTHRPGMS DOC  Advertisement file.
+PROGRAM  DOC  Text file.
+README   DOC  Introductory text file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## OTHRPGMS.DOC
+
+{% raw %}
+```
+For anyone that might be interested, I have available the program 
+ON-LINE BIBLE.  This 9 disk set contains the entire text of the KJV
+version of the BIBLE including both Old and New Testaments.  The program
+has the capability of searching for words or phrases over a user selectable
+range.  Selected verses may be saved to a disk file.  Any portion of
+scripture may be printed or saved to a disk file.
+
+Search routine is extremely fast.
+
+Program requires a hard disk as all 3 megabytes of files must be available.
+
+I am not the author of this excellent program, but have author's permission
+to distribute program 'far and wide.'  The program is available from me for
+the duplication cost of $10.00.  That includes first class postage to 
+anywhere in USA.  To receive a copy send a check in the amount of $10 to
+
+	Thomas S. Cox
+	102 Evergreen Street
+	Easley, SC  29640
+
+I have found program to be an excellent one and would like to see it get
+wide circulation.
+```
+{% endraw %}
+
+## PROGRAM.DOC
+
+{% raw %}
+```
+CURVEFIT is a compiled BASIC program for computing the goodness of fit of 25
+equations to sets of X, Y data (up to 255 data pairs).  The coefficients of
+the equations are computed along with the Coefficient of Determination for
+each of the applicable equations.
+
+Routines in CURVEFIT allow easy addition, changes, or deletions to data.
+
+The program can select the curve of best fit, based on the value of 
+Coefficient of Determination.  
+
+Display of residual values (Entered value of Y minus value calculated for
+selected equation) is supported.
+
+Data can be stored to disk (X and Y data pairs).  Also, the predicted values
+for Y and the associated X values can be stored to disk.
+
+Data are stored to disk in a format that may easily be imported by 1-2-3
+or compatible programs.  
+
+CURVEFIT does not have graphing capabilities.  Instead, import the data into
+your favorite Spreadsheet or graph program.  This will work better than 
+having a low resolution graph capability in CURVEFIT.
+
+See the file README.DOC on this disk for further details on CURVEFIT.  The
+CURVEFIT.DOC file is included in the CURVEFIT.ARC archive.  CURVEFIT.DOC
+gives the most detailed description of the program.
+
+The full source code for CURVFIT is included in the CURVEFIT archive.
+
+CURVEFIT 2.20B was last updated 2/8/89.
+
+Suggested registration fee for this SHAREWARE program is $10.  Registered
+users will receive a copy of the latest version by return mail.  There is
+not a printed manual.  Print the file CURVEFIT.DOC as manual.
+
+The author of CURVEFIT is:
+
+	Thomas S. Cox
+	102 Evergreen Street
+	Easley, SC  29640
+
+============================== End of File ====================================   
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+CURVEFIT 2.20-B 02/03/89 Thomas S. Cox  102 Evergreen St. Easley, SC  29640
+===============================================================================
+This disk contains the program CURVEFIT compiled using TURBO BASIC 1.1
+Source code is supplied as a standard ASCII file, CURVEFIT.BAS
+
+This version of CURVEFIT is 2.20-B, created on 02/03/89
+
+CURVEFIT.BAS is too large to be run under the BASICA interpreter.  Neither will
+it compile as a single module using QUICK BASIC, any version up to 4.5
+
+Because the full-featured version of CURVEFIT 2.20 crashes on some data sets
+(See the Data File EXCRASH.DAT in the CURVEFIT archive) I have also included
+a less than full featured version of CURVEFIT, CURVEQB4.EXE that does not 
+allow one to enter specific values for Predicting Y.  It only shows the
+calculated values of Y for the entered values of X.  In any case, CURVEQB4
+appears to work properly with the data set EXCRASH.DAT.
+
+Note that CURVEQB4.BAS is small enough to function with BASICA.  Please note
+however that when used as an interpreted program, it is not possible to use
+the FUNCTION keys to select the options.  Instead, the arrow keys must be
+used to move cursor to the selected option.
+
+In order to squeeze all of this information onto one disk, it was necessary
+to ARCHIVE the CURVEFIT files.  They are found in the CURVEFIT archive.  Also
+included in the archive is the source code for the full-featured CURVEFIT and
+for CURVEQB4.  The unarchiving program ARCE and documentation for it are 
+included on this disk in the files ARCE.COM and ARCE.DOC
+
+Assume that you only wish to unarchive the files CURVEFIT.EXE, CURVEFIT.BAS,
+and CURVEFIT.DOC from the CURVEFIT archive.  Also assume that the distribution
+disk is in drive A: and the destination disk is drive B:  
+
+Log to drive A:, and enter the command: ARCE CURVEFIT CURVEFIT.* B:
+
+File List: 
+----------
+CUURVEFIT.ARC                   CURVEFIT.BAS   Source Code
+                                CURVEQB4.BAS   Source Code
+                                CURVEFIT.DOC   Documentation for CURVEFIT
+                                CURVEFIT.EXE   Turbo Basic 1.1 Compiled
+                                CURVEQB4.EXE   Quick Basic 4.5 Compiled
+                                       *.DAT   Example Data Files                      
+                                BASLISTI.BAS   Pretty Lister Program     
+                                BASLISTI.EXE   Compiled Using Quick Basic 4.5
+
+Files not in CURVEFIT.ARC         README.DOC   This File (Brief Descriptions)
+                                    ARCE.COM   Unarchiving Program
+                                    ARCE.DOC   Documentation for ARCE
+                                OTHRPGMS.DOC   Info about another Program
+
+SHAREWARE:
+----------
+This program is SHAREWARE.  A donation of $10 to the author at the following
+address would be most appreciated.
+
+                       Thomas S. Cox
+                       102 Evergreen Street
+                       Easley, SC  29640
+==============================================================================
+2/3/89 Version 2.20-B is essentially identical to version 2.20-A except that
+a text string in the PREDICTION area that was supposed to be cleared was
+not being cleared.  This very minor bug was corrected and is the only change
+between 2.20-A and 2.20-B.
+
+11/25/88  The latest version (2.20) has modified the program so it is
+now possible to see the RESIDUAL values (Actual value of Y compared to
+the value calculated using the coefficients of the selected equation).
+In addition, the RESIDUAL routine shows the sum of the absolute values of
+the residuals.  This is sometimes helpful in determining the best fitting
+equation.
+
+The PREDICTION routine allows entry of a range of X values to calculate
+predicted values of Y.  Note that it is not statistically valid to try to
+predict values of Y for a range of X values outside the data entry range.
+For example if X ranges from 1 to 10 in the input data set, trying to predict
+Y for a range of 11 to 20 is not statistically reliable.  Program won't 
+prevent you from doing this.
+ 
+===============================================================================
+Brief note about BASLISTI.BAS.  See also compiled version BASLISTI.EXE
+
+This is the source code of a BASIC program, stored as a straight ASCII file,
+for making a 'PRETTY' listing of a BASIC program that is stored as an ASCII
+file.  It has options for controlling:
+
+	1. Number of characters per line
+	2. One Statement per line
+	3. Control of Epson type printer for Compressed, Elite, or Pica
+	4. Indention for left margin
+	5. Ability to strip high bit from files created with Wordstar
+           (Document Mode)
+
+The BASLISTI program is Public Domain.  No registration fee.  Duplicate freely.
+
+I have found that this program is very useful for keeping hard copies of
+BASIC source code in a notebook.
+
+ 
+===============================================================================    
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

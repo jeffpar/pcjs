@@ -30,6 +30,68 @@ machines:
     macros is also included.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES583.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  583  LOTUS 123 - THE WHITEROCK ALTERNATIVE                v1 DS2
+---------------------------------------------------------------------------
+A user-friendly file link front end to Lotus to allow easier access and
+use of worksheet files.  Several applications working under this environment
+are provided.
+ 
+AUTO123  WKS  Auto-run file - Whiterock Alternative Menu & File Driver.
+LIBRARY  WKS  Library of LOTUS 123 Macros
+CHEKBOOK WKS  Checkbook ledger worksheet
+LOANTABL WKS  Installment loan amortizer worksheet
+MAILLIST WKS  Mailing list maintenance worksheet
+WEEKRPT  WKS  Jobcosting time management worksheet
+ 
+PC-SIG  (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+## NOTES583.TXT
+
+{% raw %}
+```
+Program name: LOTUS 123 - THE WHITEROCK ALTERNATIVE
+ 
+Author name:  Whiterock Alternative
+Address:      P.O. Box 45458
+              Seattle WA, 98145
+
+Suggested Donation: $15.00 for the shell.  Other applications driven by the 
+shell have separate compensation structures.
+ 
+Program Description:
+ 
+The Whiterock alternative is a Macro-based, menu-driven front end for LOTUS 123
+designed to make 123 easier to use, and to provide worksheets derived for this
+environment with a common user interface.  It is designed to boot up automa-
+tically when the Whiterock Alternative is placed in the drive after LOTUS 123
+is powered up.  The Whiterock shell takes over, and the user runs his appli-
+cations under the new environment.
+
+This disk also contains several worksheets designed to run under the Whiterock
+environment, including a library of useful macros that can be exported to use 
+in new worksheets, an installment loan analyzer, a menu-driven mailing list 
+database, a checkbook ledger with on-line budget cross-auditing, and a file to
+in job-costing by keeping track of hours spent on particular tasks.
+
+System requirements are an IBM PC or compatible with at least 256K (some appli-
+cations will require more memory that) and LOTUS 123.  A printer is optional,
+but recommended, as is a second disk drive.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0583
 

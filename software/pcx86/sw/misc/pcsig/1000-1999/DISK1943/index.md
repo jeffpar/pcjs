@@ -41,6 +41,51 @@ machines:
     and advanced.  The system is thorough.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1943.TXT
+
+{% raw %}
+```
+Disk No: 1943                                                           
+Disk Title: RootDirectory - TREES #3 (1941, 1942)                       
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: RootDirectory - TREES Knowledge Base                     
+Author Version: 1.2B                                                    
+Author Registration: $39.95                                             
+Special Requirements: 640K RAM, EGA, and a hard drive.                  
+                                                                        
+Successful gardening is no longer dependent on the luck of a green      
+thumb.  With ROOTDIRECTORY, even inexperienced gardeners can produce    
+beautiful, lush trees, flowers and shrubs, ideally suited to the        
+environment.                                                            
+                                                                        
+ROOTDIRECTORY is a new kind of communications tool.  Using hypertext    
+(hot buttons) and expert knowledge, it lets the personal computer       
+speedily communicate the ideas and information the user choosers.       
+                                                                        
+The uses for ROOTDIRECTORY are many.  For example, in a nursery, complex
+gardening information can be effectively communicated to customers and  
+new employees:  plant material, pest control, sales aid and staff       
+training are a few of the areas that can benefit from ROOTDIRECTORY.    
+                                                                        
+For individuals, ROOTDIRECTORY offers an exciting new possibility.  Now 
+a person doesn't have to decipher complex information in gardening      
+books.  With ROOTDIRECTORY you can landscape your own yard or create    
+picture perfect gardens without professional help or months of research.
+The information, while accessible to beginners, can get very technical  
+and advanced.  The system is thorough.                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1943
 

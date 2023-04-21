@@ -14,6 +14,47 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2566.TXT
+
+{% raw %}
+```
+Disk No: 2566                                                           
+Disk Title: PC-Type 4 of 4 (455, 681, 682 also)                         
+PC-SIG Version: S4                                                      
+                                                                        
+Program Title: PC-Type                                                  
+Author Version: 4                                                       
+Author Registration: $69.95                                             
+Special Requirements: Hard disk or two high density floppy drives, and D
+                                                                        
+PC-TYPE II, Jim Button's supercharged new version of PC-TYPE, comes     
+equipped to help you easily create impressive documents.                
+                                                                        
+Not just a simple wordprocessor anymore, PC-TYPE II now comes equipped  
+with all the standard wordprocessing functions, plus many advanced      
+features.  These include a mail merge that works hand-in-hand with PC-  
+File databases, WordStar files, and straight ASCII files; a 100,000-    
+word fault finder that checks for misspellings; and a ``whoops'' key to 
+recover up to 15 lost or deleted lines.  Automatically reformat files.  
+You can also create multiple column, newspaper-style documents.         
+                                                                        
+You can graph your data within PC-TYPE II by creating bar or pie charts 
+and scatter diagrams.  Also, multiple variables can be graphed and      
+accumulated.  Save up to 25 macros per file to eliminate repetitive     
+keystrokes.  An extensive on-line help system provides all the support  
+you need to produce professional work.                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989-1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2566
 

@@ -34,8 +34,118 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #157, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  AUTOEXEC.BAT         CRC = 67 E7
+
+--> FILE:  MASTHEAD.            CRC = D7 6C
+
+--> FILE:  CRL     .COM         CRC = 8A 4B
+
+--> FILE:  CRS     .COM         CRC = 9F D8
+
+--> FILE:  NEWS    .EXE         CRC = 0D 7E
+
+--> FILE:  PCUGNEWS.TOC         CRC = 3E 9A
+
+--> FILE:  EDITOR  .PIC         CRC = 49 FD
+
+--> FILE:  UGOS    .PIC         CRC = B7 0C
+
+--> FILE:  NPANN   .PIC         CRC = 86 A0
+
+--> FILE:  VANDR   .PIC         CRC = 23 5D
+
+--> FILE:  TANDT   .PIC         CRC = F4 5F
+
+--> FILE:  FONS    .PIC         CRC = 29 20
+
+--> FILE:  UGASK   .PIC         CRC = B2 09
+
+--> FILE:  CURUGS  .PIC         CRC = 7D 9B
+
+--> FILE:  NEWSLOGO.PIC         CRC = B4 A6
+
+--> FILE:  EDTORIAL.NL          CRC = 15 85
+
+--> FILE:  PASCAL  .NL          CRC = 4D BC
+
+--> FILE:  FORTRAN .NL          CRC = 05 7D
+
+--> FILE:  COBRUN  .NL          CRC = 3E B8
+
+--> FILE:  SORT    .NL          CRC = 84 B4
+
+--> FILE:  BASRUN  .NL          CRC = BF 9C
+
+--> FILE:  SORTREDI.NL          CRC = A1 EF
+
+--> FILE:  PLANNER .NL          CRC = 70 60
+
+--> FILE:  COMM    .NL          CRC = 06 3E
+
+--> FILE:  ROHDE   .NL          CRC = CA EA
+
+--> FILE:  SCHNELL .NL          CRC = 8E C4
+
+--> FILE:  YOUNG   .NL          CRC = E0 51
+
+--> FILE:  ADDRESS .NL          CRC = 71 BF
+
+--> FILE:  WEBER   .NL          CRC = B3 16
+
+--> FILE:  SCHNELL1.NL          CRC = 02 41
+
+--> FILE:  JEWELL  .NL          CRC = 32 C7
+
+--> FILE:  WATKINS .NL          CRC = A1 CD
+
+--> FILE:  METZGER .NL          CRC = 45 F2
+
+--> FILE:  CORTESI .NL          CRC = 6B 1D
+
+--> FILE:  HERZFELD.NL          CRC = 70 D7
+
+--> FILE:  PUPGRADE.NL          CRC = B9 9F
+
+--> FILE:  JORDAN  .NL          CRC = D9 AE
+
+--> FILE:  NIEHOFF .NL          CRC = 17 24
+
+--> FILE:  CRL     .BAS         CRC = 2B ED
+
+--> FILE:  FUPGRADE.NL          CRC = A5 AA
+
+ ---------------------> SUM OF CRCS = 3A 47
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## CRL.BAS
 
+{% raw %}
 ```bas
 10 'CRL.BAS by John R. Herzfeld, P. O. Box 159, Mercer Island, WA 98040
 20 '
@@ -91,6 +201,7 @@ machines:
 1140 DATA &HDF,&H31,&HC0,&H88,&HD6,&HC3
 1150 DATA &H29E5
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

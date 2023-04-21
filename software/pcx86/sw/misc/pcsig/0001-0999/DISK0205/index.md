@@ -56,8 +56,341 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## BROWSE.DOC
+
+{% raw %}
+```
+                           BROWSE.COM
+
+     Usage: At the DOS prompt, type BROWSE filespec.
+
+     Browse is very similar to the VM/CMS browse command.  It 
+allows full screen viewing of any file.  Use the arrow keys to 
+scroll up, down, left and right.  Home takes you to the top left 
+corner of the file, End goes to the bottom left.  Press Esc to 
+exit browse.
+
+     Note: Browse is not an editor.  It can only be used to VIEW 
+a file, not change it.
+
+```
+{% endraw %}
+
+## CMD185.DOC
+
+{% raw %}
+```
+
+COMMAND.COM 1.85
+by AN IBMer who cared about us IBM-PCers
+
+Run the BASIC program called CMD185.BAS and it will create you
+a .COM program called CMD185.COM  then rename it COMMAND.COM
+AND IT WILL BE YOUR NEW COMMAND.COM, COPY IT TO OTHER DISKS AND
+YOU WILL BE AMAZED AT WHAT IT CAN DO FOR YOU. JUST TYPE THE WORD
+COMMAND AND IT WILL BOOT ITSELF, IT WILL REMAIN RESIDENT AT ALL TIMES
+AND HAS LOTS OF NEW COMMANDS IMBEDED IN IT.. GOOD LUCK......
+P.S. You have to del your other COMMAND.COM for this to work
+as it is a new replacement and is not an official DOS.
+
+NEW OR MODIFIED INTERNAL COMMANDS
+
+These are modifications made to COMMAND.COM 1.10.
+Compatibility has been preserved with DOS and BIOS version 1.10.
+Either version of COMMAND.COM is compatible with DOS and BIOS 1.10
+and also 1.82 which supports 40 or 80 track single or double sided
+drives in any combination, 1.84 which is an enhanced version of
+1.82 that supports a simulated drive in memory and 1.85 which is an
+enhanced version of 1.84 that supports a Winchester drive.
+Unlike command 1.83, there is no transient version and the entire
+program remains resident in low memory.
+This eliminates the occasional prompts for a DOS disk in drive "A"
+but some systems with very little memory might not run some large
+programs and utilities such as DISKCOPY might not run very efficiently.
+
+The principal enhancements of 1.85 over 1.84 are:
+
+ 1. User defined aliases.
+ 2. Keyboard stack.
+ 3. User code area.
+ 4. Hardware reset support.
+ 5. Date and time display.
+ 6. Form feed command for printer.
+ 7. Peek ahead on batch files (compatible with BAT.COM).
+ 8. A second alternate drive.
+ 9. Full screen pauses for the type command.
+10. Switch to toggle the keyboard stack on and off.
+       (compatible with FULISTPC.COM).
+
+
+KEYBOARD STACK
+
+A circular stack of 256 bytes stores all new or edited commands that
+are entered from the keyboard. One or two character commands are not
+saved.
+See the stack command.
+The up and down arrows are used to cycle through the stack in either
+direction. The currently displayed command line is executed when enter
+is pressed.
+After executing a command, the stack pointer is set between the current
+command and the next one. Therefore the previous command can always be
+recalled by pressing the up arrow. If the current command is new, it
+is placed at the end of the stack and the stack pointer points between
+the last command and the first one entered. The 1st command may be lost
+if the stack has filled up and wrapped around to the beginning.
+At the DOS prompt, the input/browse mode (as opposed to the edit mode)
+is active. When any non character key is pressed such as the F1 thru
+F10 on the left or the horizontal arrow keys on the right, the edit
+mode becomes active.
+Once in the edit mode, the stack is not accessible until you hit enter.
+A quick exit from the edit mode is ESC and enter. The stack is then
+ready for cycling.
+
+
+BAT.COM COMPATIBILITY
+
+The batch variables have been moved to the lowest part of CMD185.
+This provides continuous support for Frank Canova's batch processor
+as they will remain in the same locations in subsequent releases of
+CMD18X and will remain compatible with BAT.COM if it has been
+patched for CMD185.
+The incompatability that was introduced with the batch look ahead
+feature of 1.84 has been resolved in 1.85.
+My apologies to those who were inconvenienced.
+
+
+ALIAS newname oldname
+
+Any internal or external command name may be changed to an alias of
+the user's choice. The newname may be 1 to 8 characters in length.
+Any of the legal characters as defined for file names and extensions
+may be used.
+The old name may be any internal command or a file specification
+which may include a drive designator and file extension.
+Note that trailing parameters cannot be part of the new name.
+Note also that some previous aliases have been retired and that
+the standard DOS 1.1 aliases of DEL and REN are built in.
+
+A few examples:
+	    ALIAS DB DEBUG
+	    ALIAS FORMAT FMT184.COM
+	    ALIAS DC  B:DISKCOPY
+	    ALIAS DBB B:DEBUG.COM
+	    ALIAS D DIR
+	    ALIAS H HELP
+	    ALIAS AKA ALIAS
+
+The alias list is built in memory just above command and
+may be any length.
+Because of this length flexibility, all aliases must be defined
+prior to the installation of resident extensions. After a program
+uses INT 27H to terminate but stay resident, the ALIAS command
+is no longer available.
+If ALIAS is not displayed by the HELP command, it is not available.
+Once an alias has been defined, there is no quick way to cancel it.
+It is convenient to define the aliases in an AUTOEXEC.BAT file.
+
+
+ALT [d1:][,d2:]
+
+A provision is made for defining 1 or 2 alternate default drives.
+When this option is active, the alternate default drives are searched
+for any command that DOS receives from either the keyboard or a batch
+file, if it cannot be found on the current default drive.
+The alternates are searched in the order in which they were specified.
+Do not specify the same drive twice as either current or alternate.
+This only applies to .COM, .EXE or .BAT files that are to be
+executed and not to files that are included as parameters of a command.
+The default is no alternate drives. The ALT command may be followed
+by 0, 1 or 2 drive designators. If 0, the currently defined alternates
+are nullified.
+
+
+BOOT
+
+This initiates the same function as CNTL-ALT-DEL except power-on
+diagnostics are bypassed and date and time are retained.
+If the date is found to be non zero, the DATE$ command is executed
+instead of the DATE and TIME commands.
+A hardware reset is also supported which senses the generation
+of simultaneous parity checks for the I/O channel and the system
+board. If either parity check is active by itself, the normal action
+is taken, i.e. the system hangs with an error message on the screen.
+If both are active together, the BOOT command is executed.
+This is advantageous to programmers who often hang up their machines
+while debugging new code. This reboot method will fail if the
+non maskable interrupt enable latch at I/O port A0H has been reset.
+The CNTL-ALT-DEL combination, on the other hand will fail whenever
+the processor hangs in a loop with interrupts disabled.
+The hardware modification will be published in a separate document.
+
+
+COLOR [40]
+
+Switches the display to the color graphics monitor if attached.
+The display width defaults to 80 columns.
+
+
+VM/CTS will shutdown at 1200 noon. They should be down no more than 15 minutes. CN(01)
+CLS [any command]
+Clears the display screen.
+This can be issued as an independent command or as a prefix to any
+other command. When used as a prefix, the screen is cleared prior to
+the execution of the command. e.g. CLS DIR.
+
+
+DATE$
+
+This command displays the current date and time on the screen.
+There is no pause for new information.
+
+
+DIR [filespec]
+
+Syntax is the same as the DOS 1.1 DIR command except
+the /W and /P switches are not used. The display format is similar
+to the SDIR directory display program by D. Dievendorf with 2
+alphabetized columns showing the name, extension, size, date and time.
+If a color graphics adapter card is installed and set for 40 columns,
+a single column alphabetized list is produced. There is a pause when
+the screen is filled and the display continues when any key is pressed.
+Subsequent pauses leave 6 lines visible from the previous full screen
+display.
+
+
+HDIR [filespec]
+
+Same as DIR but includes hidden files.
+
+
+SDIR [filespec]
+
+Same as DIR but files are listed in single column format.
+
+
+DO BATCHNAME
+
+When a file name is received as a command, 3 sequential searches are
+conducted on the current drive, followed by 3 similar searches on the
+alternate drives, if active. The order of the searches is for .COM,
+.EXE and then .BAT type files. The delay preceeding the execution of
+a batch file can be quite long if the current drive has space for a
+large number of files, and about 2 or 3 times as long if the batch
+file is on one of the alternate default drives.
+The DO command bypasses the first 2 searches and reduces the initial
+delay by a large factor.
+The batch processor now peeks ahead 1 byte so that the batch disk need
+not be reinserted in order to continue after the last batch command
+has been processed just to read the end of file marker.
+
+
+FF
+
+A carriage return is sent to the printer followed by a form feed
+to advance the paper to the next page boundary.
+
+
+FILENAME.COM
+
+When an .COM filename is specified with it's extension, the .EXE and
+.BAT searches are bypassed and produces a speedup in those cases
+where the subject file is on the alternate drive.
+
+
+FILENAME.EXE
+
+When an .EXE filename is specified with it's extension, the .COM
+search is bypassed and produces a speedup similar to the DO command.
+An abbreviated extension of .E has the same effect.
+
+
+HELP
+
+This command produces a horizontally alphabetized list of all internal
+commands followed by a list of all aliases in the order in which
+they were defined.
+
+
+MONO
+
+Switches the display to the monochrome monitor if attached.
+The monochrome display width is always 80 columns.
+
+
+NAME d:DISKETTE NAME
+
+The diskette name is written on the diskette in
+drive d:.
+The drive must be designated.
+The name includes all text following the colon, including leading
+blanks and other separators.
+The name appears at the top of the directory display produced by
+the DIR command.
+It can also be accessed by a short machine code routine that can
+be included in basic and other high level languages that are
+compatible with PCDOS.
+The name is stored at the end of the file allocation table.
+The maximum length of the name is determined by DOS and is
+dependent on the drive capacity, the sector length and the
+number of sectors per allocation unit (cluster).
+The maximum for DOS 1.10 ,1.83, 1.84 and 1.85 is about 36
+characters.
+
+
+PRINT FILESPEC
+
+This is the same as the TYPE command except the output is sent to
+the printer. Tabs are intercepted by this routine and defined at
+every 8th column. No output appears on the display screen.
+
+
+STACK
+
+Toggles the stack switch on and off. If the stack is disabled
+before the command is issued, it is enabled and vice-versa.
+If FULISTPC.COM is to be run, the stack must be disabled to
+allow FULISTPC to intercept commands.
+The status of the switch is displayed each time the command is
+invoked.
+
+
+TYPE [/P] FILESPEC
+
+The TYPE command is enhanced to include the /P switch for pauses
+when the screen is full. Six lines from the previous screen are
+retained on the screen at the pause. No pauses occur if the /P
+switch does not preceed the file specification.
+
+
+USER ROUTINES
+
+Space has been set aside so that users of CMD185 can insert there
+own machine code routines. Two contiguous areas have been defined.
+Their vectors can be found in the internal command list near 1800H.
+The byte following the command name should be any non zero value if
+you want the command interpreter to check for valid drive specifiers
+following the command name otherwise zero. The next word is the vector
+to the command code. The routine should end with a near return.
+Each area has 128 bytes available. They may be used as 2
+separate routines or combined into a single larger routine.
+The vectors in the internal command table must be set appropriately.
+
+Thanks to GENE PLANTZ for having this on his CHICAGO BBS and making
+it available..
+Capital PC User Group Software EXchange  (301) 949-8848 for IBMPC use only
+4-22-83 RMS
+
+
+
+BBS and making
+it available..
+Capital PC 
+```
+{% endraw %}
+
 ## EDLIN.BAS
 
+{% raw %}
 ```bas
 10  REM Program EDLIN. Describes functions of DOS's EDLIN program
 20 REM save "edlin"
@@ -114,9 +447,11 @@ machines:
 520 ON ERROR GOTO 0
 530 RESUME
 ```
+{% endraw %}
 
 ## FILELIST.BAS
 
+{% raw %}
 ```bas
 
 
@@ -189,9 +524,37 @@ machines:
 67 END
 
 ```
+{% endraw %}
+
+## FILES205.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No  205   Batch and Misc DOS Utilities                     v1.1 DS2
+------------------------------------------------------------------------
+BAT      COM  V2.0 Extended Batch Language
+BAT2DEMO BAT  BAT.COM demonstration
+BAT2DOC  BAT  BAT.COM documentation and demonstrations
+BROWSE   COM  View file contents - similar to CMS BROWSE command
+BROWSE   DOC  Documentation
+CGCLOCK2 COM  Color display clock, beeps every 15 minutes
+CGCLOCK2 DOC  Documentation
+CMD185   COM  Creates resident COMMAND.COM with good internal commands
+CMD185   DOC  Documentation
+CURSOR   COM  Changes cursor shape - enter "cursor8" for block shape
+CV2      COM  Changes diskette labels under DOS2.0
+EDLIN    BAS  Better documentation for EDLIN (Mel Rothman)
+FILELIST BAS  Displays text files with pause for each full screen
+KEY      BAS  Something like simple Prokey for DOS 2.0
+NDOSEDIT COM  VM style editor for DOS commands, with command stack
+NDOSEDIT DOC  Documentation
+```
+{% endraw %}
 
 ## KEY.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-Z:DIM CC$(31),EC$(132):REM CR$=CHR$(13)+CHR$(10)
 20 ERA$=CHR$(29)+" "+CHR$(29):GOSUB 430
@@ -253,6 +616,7 @@ machines:
 580 IF A>50 THEN K$=EC$(A):RETURN
 590 K$="Alt-"+EC$(A):RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -40,6 +40,74 @@ machines:
     self-employed and small businesses everywhere.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## REGISTER.TXT
+
+{% raw %}
+```
+
+                                  INVOICE
+
+
+   Remit to:                                     From:
+                                                 __________________________
+   Painless Accounting
+   Kendall B. Pierce                             __________________________
+   4401 Birdsong
+   Plano, TX 75075                               __________________________
+
+                                                 __________________________
+
+                                                 Phone: (   )    -
+
+   Qty                                                  Unit Price    Total
+
+   ___     Painless Accounting Version 4.0/Registration  $99.95      _____
+             (includes 200+ page printed manual)
+
+   ___     Painless Accounting Companion/Registration    $39.95      _____
+           (Custom Graph/Report/Export generator for
+            Painless Accounting Version 4.0)
+
+   ___     Painless Accounting Home Version/Registration $64.95      _____
+             (includes 100+ page printed manual)
+
+   ___     Painless Accounting Menu Manager/Registration $19.95      _____
+
+   ___     Painless Accounting Version 4.0/Shareware     $ 7.50      _____
+
+   ___     Painless Accounting Companion/Shareware       $ 5.00      _____
+           (Custom Graph/Report/Export generator for
+            Painless Accounting Version 4.0)
+
+   ___     Painless Accounting Home Version/Shareware    $ 7.50      _____
+
+   ___     Painless Accounting Menu Manager/Shareware    $ 5.00      _____
+
+              Texas Residents please add current applicable tax      _____
+
+                                                          Total      _____
+
+   -----------------------------------------------------------------------
+   [ ] Check  [ ] Money Order  [ ] Cashier Check [ ] American Express
+
+   Credit Card Orders may be made by phone - (214)596-9164
+                           or via PASS BBS - (409)273-3112
+
+   Credit Card #: ___________________________ Exp. Date: ______________
+
+   Note that Painless Accounting has been delivered and accepted by the
+   customer. Upon receipt of this paid invoice, a copy of the latest
+   version of the registered program will be sent, and the user will
+   be notified of all updates, and new Painless Accounting products.
+
+   Thank you for your order.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2059
 

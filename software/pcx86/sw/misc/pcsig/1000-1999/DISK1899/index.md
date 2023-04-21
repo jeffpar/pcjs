@@ -35,6 +35,45 @@ machines:
     only a single key away!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1899.TXT
+
+{% raw %}
+```
+Disk No: 1899                                                           
+Disk Title: DFM                                                         
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: DFM                                                      
+Author Version: 2.1                                                     
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+Here's a DOS shell that gives you more than filenames and key commands. 
+You can now include an English description with a file; and DFM will    
+keep track of it for you, even if you copy the file or change its name. 
+The added description is very useful for remembering what is really in a
+file, yet it does not get in the way of quick command operation from the
+DFM shell.                                                              
+                                                                        
+DFM provides easy to remember single keystroke activities for the most  
+common file maintenance operations (editing, copying, renaming,         
+printing, and deleting), as well as providing convenient features that  
+cannot be found in many similar directory management tools.  No longer  
+will you fight through hard to understand DOS manuals trying to find the
+syntax of a command -- just point to a file and your operation is only a
+single key away!                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1899
 

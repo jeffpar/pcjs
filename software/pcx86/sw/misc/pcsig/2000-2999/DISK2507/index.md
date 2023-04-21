@@ -14,6 +14,73 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## ORDER.DOC
+
+{% raw %}
+```
+          TopWare Series Order Form
+
+          To:  Micro Mart Computer Center
+               792 Hamilton Street
+               Somerset, NJ  08873
+
+
+          Name: _________________________________________________
+
+          Address:  _____________________________________________
+
+                    _____________________________________________
+
+                    _____________________________________________
+
+          =======================================================
+          Indicate the Product and Quantity to Order:
+
+          Product                                  Qty         Price
+          -------                                  ---         -----
+          TopWare (2-User, Arcnet) v4.1x @ $19     ___      ________
+                  (For PC/MS DOS v4.xx)
+                  (Note: Shareware Version 3.52)
+
+          TopWare (4-User, Arcnet & Ethernet)      ___      ________
+                   @ $295.00
+
+          TopWare (8-User up  with Keycard)        ___        CALL
+
+          8-Bit Arcnet Interface Card @ $100.00    ___      ________
+
+
+
+          Shipping & Handling ($3)                 ___      ________
+            ($10 outside US/Canada)
+
+          Tax (New Jersey Residents add 6%)                 ________
+
+          TOTAL.......................................      ________
+
+          ==========================================================
+          Payment by:
+
+          [ ] Check/MO    [ ] VISA    [ ] MasterCard    [ ] COD (Add $3.3)
+
+          (Make Checks Payable to Micro-Mart)
+
+          Credit Card Number __________________________________
+
+          Expires __________
+
+          Name on the Card ____________________________________
+
+          ======================================================
+          YOU MAY ALSO ORDER BY CALLING   (908) 247-7699 or
+          Fax (908) 297-7399.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2507
 

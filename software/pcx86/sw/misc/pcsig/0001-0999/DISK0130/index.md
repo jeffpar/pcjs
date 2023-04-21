@@ -44,6 +44,100 @@ machines:
     MAN      IM   Macros for manual page
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #130, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  README1 .            CRC = AB AA
+
+--> FILE:  ARCHIVE .EXE         CRC = 4C 79
+
+--> FILE:  CHANGE  .EXE         CRC = FA F0
+
+--> FILE:  CHARCNT .EXE         CRC = FE 02
+
+--> FILE:  ECHOARG .EXE         CRC = F1 5B
+
+--> FILE:  FINDP   .EXE         CRC = 68 EA
+
+--> FILE:  FMT     .EXE         CRC = 3B 64
+
+--> FILE:  CITOH   .FNT         CRC = 97 6C
+
+--> FILE:  FMT     .FNT         CRC = 19 B1
+
+--> FILE:  MX80    .FNT         CRC = 19 B1
+
+--> FILE:  KWIC    .EXE         CRC = 81 45
+
+--> FILE:  MAN     .IM          CRC = F5 B5
+
+--> FILE:  ARCHIVE .MAN         CRC = C4 A2
+
+--> FILE:  CHANGE  .MAN         CRC = 10 F5
+
+--> FILE:  CHARCNT .MAN         CRC = C6 57
+
+--> FILE:  ECHOARG .MAN         CRC = 36 CC
+
+--> FILE:  FINDP   .MAN         CRC = 06 C4
+
+--> FILE:  FMT     .MAN         CRC = 9E 34
+
+--> FILE:  KWIC    .MAN         CRC = 1F CD
+
+--> FILE:  LINECNT .MAN         CRC = 37 A3
+
+--> FILE:  MACRO   .MAN         CRC = 66 73
+
+--> FILE:  PRINTF  .MAN         CRC = 57 24
+
+--> FILE:  SORTF   .MAN         CRC = C5 09
+
+--> FILE:  TED     .MAN         CRC = EA F9
+
+--> FILE:  TOOLS   .MAN         CRC = B5 18
+
+--> FILE:  TRANSLIT.MAN         CRC = C6 DF
+
+--> FILE:  UNIQUE  .MAN         CRC = 71 EB
+
+--> FILE:  UNROTATE.MAN         CRC = E0 5B
+
+--> FILE:  WORDCNT .MAN         CRC = 67 1A
+
+--> FILE:  CRC     .TXT         CRC = 0B 13
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+ ---------------------> SUM OF CRCS = 02 CD
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0130
 

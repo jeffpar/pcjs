@@ -71,6 +71,7 @@ machines:
 
 ## ACRS.BAS
 
+{% raw %}
 ```bas
 10 REM -- ACRS PROGRAM
 20 REM -- BY L. AND S. BROUDY
@@ -178,9 +179,23 @@ machines:
 990 GOTO 310
 7507 50 INPUT #1,IT$(I),BP(I),S$(I),B(I),C(I)
 ```
+{% endraw %}
+
+## ACRS.DOC
+
+{% raw %}
+```
+
+Accelerated depreciation calculation program.
+
+To run, load BASIC and type RUN"ACRS" <-'
+
+```
+{% endraw %}
 
 ## CALCULA.BAS
 
+{% raw %}
 ```bas
 40   REM COPYRIGHT 1983-RALPH JACKSON.
 50   REM PRINTING - INDICATING CALCULATION PROGRAM: CALC
@@ -328,9 +343,345 @@ machines:
 756  LOCATE M,46,0: PRINT USING "\\######.##  #######.##  #######.##";OPER$,NUMBER, TOTAL, TSUB
 758  GOTO 110
 ```
+{% endraw %}
+
+## FILES313.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 313  Msc. Business                                           v1.1
+------------------------------------------------------------------------
+ 
+ACRS     BAS  Depreciation Calculating Program
+ACRS     DOC  Documentation for ACRS
+CALCULA  BAS  Large Screen Calculator
+IPM      COM  Ivy League Project Manager
+IPM      DOC  Documentation for IPM
+KEITH2   CPM  Sample data file file IPM.COM
+KEYPAD   BAS  Keypad Practice Typing Program
+PCYEARBK DOC  Day Month and Year Calendar Program
+PCYEARBK EXE  Documentation for PCYEARBK
+PERT3    BAS  PERT/Path Critical Scheduling Program
+PRGTIM   EXE  Computer Utilization Program
+PRGTIM   BAS  Utility Program for PRGTIM
+PRGTIM   DOC  Documentation for PRGTIM
+RPTUSE   BAS  Utility Program for PRGTIM
+TMSTRT   BAS  Utility Program for PRGTIM
+TMSTRT   EXE  Utility Program for PRGTIM
+USE-TIME DOC  General Documentation for TMSTRT and PRGTIM
+TAXDEDCT BAS  Income Tax Deduction Recording Program
+USERLOG  COM  Maintains Disk-Based File of Computer Usage
+USERLOG  DOC  Documentation for USERLOG
+ 
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+## IPM.DOC
+
+{% raw %}
+```
+IPM.PAS & IPM.COM - Version 1.07B- November, 1986
+(c) 1984, 1986 by Edward V. Dong, All Rights Reserved.
+
+
+                         Programmed by:
+                         Edward V.  Dong
+                     12205 Alexandria Place
+                         Chino, CA 91710
+
+1.0   GENERAL
+
+IPM.COM  is  a  Critical  Path  Method  Project  Scheduler.   The
+Critical  Path  Method  is  a  methodology  for  determining  the
+critical  tasks  that,  if  not  accomplished  by a certain time,
+contribute  directly  to  the  delay  of  the whole project.  You
+should refer to various books on the subject.
+
+This version was prompted as a result  of  some  bug  reports  on
+version  1.06a.  A version 1.07 was previously distributed;  this
+version  1.07b  is  a MINOR update and bug fix.  The bug was that
+SLACK was not computed properly.
+
+1.1  RIGHT  TO  USE THIS SOFTWARE.  The software, IPM.COM, may be
+used as is, by anyone  for  private  purposes  only.   Commercial
+users  should contact the address above for the right to use this
+software.  No claim is made for the veracity  of  this  software,
+and  no warranty, guarantee or other bond is expressed or implied
+about the use of this software.  No user may sell  this  software
+in  any  form,  other than for the cost of materials and mailing,
+without the express, written consent of Edward V.  Dong.
+
+This  software  and  documentation is copyright (c) 1984, 1986 by
+Edward V. Dong, all rights reserved.
+
+You are encouraged to share and  copy  this  software  otherwise.
+Contributions  ($15  for example) and comments should be directed
+to the above address.
+
+1.2 REQUIREMENTS.  IPM will run in a minimum of 128K,  under  DOS
+2.X,  and  3.1.   Originally  written  in  Turbo Pascal 1.0 (this
+version compiled, however, under Turbo 3.0), IPM requires an  IBM
+PC,  XT,  PC-3270,  or AT, or a close PC compatible that supports
+IBM BIOS ROM calls.  It  should  run  with  or  without  a  color
+graphics board.
+
+The  maximum  number  of  activities  that it will handle, is 100
+(actually 99), determined by the constant MaxValue in the  source
+code IPM.PAS.
+
+Various calculations and plots can be printed to an  EPSON  or  a
+compatible  printer,  by first outputing them to a disk file, and
+then  printing  those  files.   Basic  calculation  data  can  be
+exported as a .PRN file to Lotus 1-2-3.
+
+1.3  THEORY  OF  OPERATIONS.   Briefy,  the  CPM theory is that a
+project is composed of tasks or activities that are arranged in a
+pattern  or  network,  where  some  tasks  may  be  performed  in
+parallel.
+
+If two tasks are being performed in parallel, then the  one  that
+takes  longer  to  do,  is  termed "critical".  It is "critical",
+because a delay in that task directly contributes to the delay of
+the whole project.  A delay in the other task -- as long as it is
+completed before the longer task -- does not.  The difference  in
+completion time is called "slack".
+
+The idea in project scheduling and management is to arrange these
+tasks, and to monitor them,  so  that  the  time  for  the  whole
+project is kept as short as possible, or the resources needed for
+the project is "levelled".  That is, you  don't  want  to  spend,
+say, 6 men for 2 weeks on one part of the project, and only use 1
+man for the remaining 12 weeks of  the  project;   rather,  as  a
+manager,  you want to spread your manpower (or other resource) as
+evenly as possible, because it becomes easier to manage.
+
+1.4  BACKGROUND.   IPM was originally coded because of, first, an
+admiration  for  the  Harvard  Project  Scheduler,  and,  second,
+certain  deficiencies  in  the  HPM.   IPM indeed stands for "Ivy
+League Project Manager".  While most features found  in  HPM  are
+incorporated  into  IPM,  IPM  however  does  not have a calendar
+function nor a project-tracking function.   These  may  be  added
+later.
+
+IPM  is  an  evolutionary  outgrowth  of  an  earlier  scheduling
+program, written  by  E.   Dong,  called  CPM.COM.   CPM.COM  was
+originally  coded  18  Sept  83  by  E.  Dong, based on the BASIC
+version, 'Hard Hat Management:  Two On-Site  Tools',  by  Richard
+Parry,  INTERFACE  AGE,  February, 1981.  It was first translated
+into CIC86 'C', and then retranslated into Turbo Pascal, with the
+last update on 24-Mar-84.
+
+The  current  program, IPM.COM, was adapted from PRACTICAL PASCAL
+PROGRAMS, Osborne/McGraw-Hill, by  Greg  Davidson,  (c)  1982  by
+McGraw-Hill,  Inc.   However,  this  was extensively modified, as
+this book did not address the creation of GANTT or PERT charts.
+
+The algorithm for IPM's GANTT charts is based on that created for
+CPM.COM,  while  the  algorithm  for  IPM's PERT charts was newly
+created (in three days of intensive development).  A  semi-screen
+editor was also created for IPM.COM.
+
+2.0   STARTING IPM
+
+Starting IPM is, after it has  been  copied  to  the  appropriate
+disk,  to  type  IPM.   When  it  pops  up on the screen, it will
+display a copyright logo, a brief text indicating  the  reference
+to  Greg Davidson's book, and a brief description of how to enter
+commands.
+
+IPM is arranged so that line 25 (and occasionally, also line  24)
+shows the current available commands.  You execute these commands
+by typing the first letter (which should be high-lighted) and  no
+carriage return.
+
+Initially,  the  only  options  you have at startup are:  F(ile),
+Q(uit), and H(elp).  QUIT returns you to DOS;  in some cases,  it
+will  return  you  to  a  previous  command  menu  instead.  HELP
+generates a quick summary of the basic commands  only.   FILE  is
+the  command  that  you must enter first, in order to do anything
+with IPM.
+
+FILE allows you to specify the method of data  entry.   That  is,
+you  can enter project data interactively at the console, or from
+a file.  If you're using IPM for the first time, generally  there
+would  be  no  files  for  IPM  to  use,  so  you must enter data
+initially at the console directly.  FILE will prompt you for your
+option.
+
+You  should  have  a  minimum of four tasks to use IPM;  anything
+else, would be a waste of time with IPM.
+
+NOTE:   CPM  theory  works best if the number of tasks is GREATER
+than the number of nodes.  A start node points to a  task,  which
+points  to  another node, until the end node is reached.  Between
+any two nodes, there may be any number of PARALLEL tasks.
+
+Entering  necessary  input  data  is as follows.  First, IPM will
+prompt:
+
+Input from Console? (Y/N)
+
+    Either an upper- or lower-case "y" or "n" may be entered.  If
+    you  enter  "N",  then IPM will ask for the name of the file.
+    This file must be in  the  current  subdirectory,  if  you're
+    using DOS 2.0 or higher;  IPM isn't smart enough (right now!)
+    to access across subdirectories.
+
+    If you answer "Y", then IPM will ask:
+
+Enter Project Title/Description:
+
+    You can enter a  60-character  description  of  the  project.
+    This  title  or  description  will  appear  at the top of the
+    screen to let you know what project IPM is working on.
+
+    Then, IPM will prompt for the number of tasks  that  comprise
+    this project:
+
+Enter Number of Tasks on this network:
+
+    As  was  said before, you should have a minimum of four tasks
+    to use IPM;  anything else, would be a  waste  of  time  with
+    IPM.   Then the screen will clear, and display something like
+    the following:
+
+PROJECT: Sample -- Editing
+----------------------------------------------------------------
+Task Start  End
+      Node Node  Duration  Cost Name/Description
+    1    0    0    0.00   0.00    Task01
+    2    0    0    0.00   0.00    Task02
+    3    0    0    0.00   0.00    Task03
+    4    0    0    0.00   0.00    Task04
+
+    where "Sample" here is  the  project  title/description  that
+    you've entered.  IPM tells you that you are in editing  mode,
+    and  will have supplied a generic task name for the number of
+    tasks you've indicated, such as "Task01".
+
+    At this point, you will see a double command line (lines 24 &
+    25).  You can use the command options (remember,  enter  only
+    the  first or high-lighted letter of the option) to alter and
+    enter the task data.
+
+You should do the following:
+
+    o IPM  assumes  that the first node is numbered "1", and that
+      the last possible node is a number less than  or  equal  to
+      the  total  number  of  tasks.  Therefore, you must specify
+      "Start" and "End" nodes for each task.
+
+    o "Duration" refers to the expected length of time  that  the
+      task  should take.  No units are used, so you can use days,
+      hours, minutes, or even seconds if you want.  However,  you
+      should use the SAME unit of time (days, weeks, or whatever)
+      for all entries.
+
+To edit a line in the display, you must first enter  the  Taskno.
+When  you  have done so, the line in the display will high-light.
+Then you can change Duration, Task title, Task description,  etc.
+The Task Title, however, is limited to 8 characters only.
+
+You  can  insert either a new Task or a new Node.  If you enter a
+new Node, you MUST specify a current Task number to go with  that
+new Node.
+
+To  finish  the editing, enter the command Q(uit).  IPM will then
+prompt you if you want to save it to disk, and if so,  what  name
+should it give the file.  If the file exists, IPM will ask you if
+you want to overwrite (reuse) the file.
+
+3.0  OPERATING IPM
+
+Once you have entered the task data, you then have the following
+options:
+
+    CALCSHEET:  Calculate critical path, total project  duration,
+    and cost.  You MUST run this option before doing...
+
+    GANTT:  Build a GANTT chart on the console.  If the CalcSheet
+    option was not exercised, then you will be prompted to do so.
+    The GANTT chart is normalized, that  is,  the  time  line  is
+    scaled to fit the CRT display.  The scaling is indicated.
+
+    PLOT:   Build  a PERT network chart of the project.  Here you
+    will see the tasks going from Node to Node, in  the  sequence
+    that  you've  entered.  Since many managers and professionals
+    need to see a PERT chart first, this option has the suboption
+    of  Editing  as  well.   Then  you  will  go through the same
+    editing as before, except that the Edit screen appears in the
+    lower  half  of  the  CRT display, so you can see the current
+    PERT network.  When you have  finished  editing,  the  screen
+    will flicker once or twice, and then paint the new PERT chart
+    that is the result of your editing.
+
+    EDIT:  Edit tasks, as described above.
+
+    FILE:  Once you have entered data (either from the console or
+    from  disk), the next time you request F(ile), it will ask if
+    you want to do a N(ew project) or to O(utput to  file).   See
+    Section 4.0 below.
+
+    QUIT:   Return  to  DOS.  IPM will NOT ask you if you want to
+    save the current file, so be warned.
+
+4.0  ADVANCED IPM FILE OPTIONS
+
+After you have first entered data via F(ile), the next time (and
+thereafter) you enable F(ile), it will ask you if you want to do
+a N(ew project), O(utput to file), or Q(uit to main menu).
+
+    N(ew project):  This is the same as if you were entering data
+    for the first time to IPM.
+
+    O(utput  to File):  When you select this option, you will see
+    a new command menu line of C(alcSheet), G(antt), P(lot),  and
+    L(otus).  For C, G, and P, you will first be prompted for the
+    filename to send the output to;  this can be "LPT1:" for  the
+    printer, but this is NOT encouraged.  (Save to file first, so
+    you can use your text editor to modify the file for  whatever
+    purpose.)
+
+    L(otus):   This  option  outputs  the results of calculations
+    into a file, which should be called  with  extension  ".PRN".
+    Then  you  can  use Lotus 1-2-3 to IMPORT the file (using the
+    NUMBERS option in Lotus), and  thus  generate  a  .WKS  file.
+    Once  you've  done  that,  you  can now use the full power of
+    Lotus on it.
+
+    Q(uit):  Returns you to the main menu display.
+
+The  file/printer  output  of the G(antt) and P(lot) options will
+differ from the CRT display.  The reason for this, is  to  enable
+the  use of any ASCII-supported printer;  except for IBM printers
+and EPSON FX printers (with the  appropriate  fonts  downloaded),
+the  IBM  display characters above ASCII code 128 decimal are not
+uniformly supported.
+
+5.0  USEFUL TIPS
+
+IPM uses a normalized time scale.  That is, IPM does not  attempt
+to   allocate  tasks  to  a  calendar  schedule,  although  this,
+obviously,  is  a  prime  objective.   Thus,   you   should   use
+"normalized"  time  units,  such as hours, days, or minutes;  you
+should use minutes, for example, if you are using  this  to  plan
+activities  that will span an eight-hour day or less;  hours, for
+projects under a week;  and days for longer-lived projects.
+
+
+```
+{% endraw %}
 
 ## KEYPAD.BAS
 
+{% raw %}
 ```bas
 11 'Written by Kurt Riegel, March 1983. Telephone 703-522-5427.
 12 'Keypad practice program, to develop proficiency in using keypad.
@@ -351,9 +702,299 @@ machines:
 27 IF INKEY$="" THEN 27
 28 LOCATE 10,1:FOR I=1 TO 5:PRINT STRING$(79," "):NEXT:GOTO 19 'last statement
 ```
+{% endraw %}
+
+## PCYEARBK.DOC
+
+{% raw %}
+```
+
+
+PC YEARBOOK is a calendar/appointment schedule program written in C
+using the De Smet C Compiler. PC Yearbook turns the PC into an
+electronic appointment book. Appointments can be scheduled from
+8:00 am to 6:30 pm in half-hour increments. There is also a Note Pad
+to record other information.
+
+
+The program as been tested on a PC with 128K, color monitor, and 
+with both DOS 1.1 and 2.0. The program should run on a 64K PC 
+with DOS 1.1 but may not run under 2.0 due to the operating system
+overhead. I have not tested the program on a monochrome display 
+except very briefly but the program makes no use of special color
+commands and should have no difficulity with the monochrome display.
+
+
+You are encouraged to copy and distribute this program. If you find
+this program useful, a contribution of $15 would be appreaciated. I
+am especially interested in suggested improvements,bugs,comments,etc.
+These may be mailed to:
+
+                         
+                         Ulderic F. Racine
+                         2520 South East Alexander Drive
+                         Topeka, Kansas 66605
+
+
+or you may leave a message on the HAWKEYE Bulletin Board, 319-363-3314
+or the CUE, 913-267-1903.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                   -1-
+
+
+
+
+PC Yearbook                                                          Page 2.
+
+Running the program:
+
+Before running PC Yearbook, you should check the system date. Be sure 
+that it is the current date as the program utliizes that date to display
+the initial calendar and to store the appointment data files. If you
+forget, you should exit the program and start over again. 
+
+To run the program, type PCYEARBK and press <Return>.
+
+
+
+Calendar Function:
+
+
+Each time the program is run, it will dispaly a calendar of the month
+contained in the system date. Thus if you initialize the program and
+have entered a date of 04-23-84, a calendar for April 1984 will be 
+displayed at the top left of the screen with the 23rd highlighted in
+reverse video. The date will also be printed to the right of the calendar
+as Monday April 23, 1984. The appointment times will be displayed below
+the calendar and a lightbar will indicate the first appointment at 8:00
+am.
+
+The keys used to manipulate the calendar are:
+
+
+<Cursor> keys are used to move the highlighted day on the calendar. The
+         Right/Left arrow keys move the date one day. The Up/Down arrow
+         keys move to the same day in the previous or next week. The
+         appointment schedule will be updated as the date is moved.
+
+
+<F1>     displays the month previous to the month currently displayed.
+         All appointment data from the currently displayed month will be
+         saved to disk and the data from the previous month (if any) will
+         be loaded into memory from disk.
+
+
+<F2>     displays the next month after the month currently displayed.
+         All appointment data from the currently displayed month will be
+         saved to disk and the data from the previous month (if any) will
+         be loaded into memory from disk. 
+
+
+<F3>     will display the month and highlight the day/date that first
+         appeared when the program was run during the current session.
+         This allows you to return to the current date from any other 
+         month. All appointment data from the currently displayed month
+         will be saved to disk and the data from the previous month (if
+         any) will be loaded into memory from disk.
+
+
+<F4>     printout appointments - See Appointment function.
+
+
+<F5>     accesses the Note Pad - See Note Pad function.
+
+
+<F10>    to exit PC Yearbook and return to DOS. All appointment data
+         from the currently displayed month and notes in the Note Pad
+         will be saved to disk.
+
+
+                  
+PC Yearbook                                                          Page 3.
+
+Appointment Schedule Function:
+
+
+The appointment schedule allows appointments from 8:00 am to 6:30 pm
+for each day. Each appointment may be up to 32 characters of text and
+is active whenever the calendar is displayed.
+
+The keys to use the appointment function are:
+
+
+<Spacebar> moves the highlighted bar beginning at 8:00 am to the next
+         appointment. The highlighted bar indicates the current cursor
+         position for adding or deleting an appointment.
+
+
+<Ins>    opens an appointment time at the current position of the
+         highlighted bar for input of appointment text. The text is
+         limited to a maximum of 32 characters. If you use all 32
+         characters, the program will generate an automatic carriage
+         return and will turn off the cursor otherwise you must press
+         <Return> to terminate the entry of the text.
+
+
+<Del>    deletes any appointment text at the current position of the
+         highlighted bar.
+
+
+<Return> terminates the entry of appointment text if the text is less
+         than 32 characters.
+
+
+<Backspace> or the left arrow key will delete the previous character
+         of text during entry of appointment text.
+
+
+<F4>     allows you to printout a specific date or the entire month of     
+         the appointment schedule. When this key is pressed, the days
+         of the current month will be displayed over the appointment
+         schedule in three columns. Use the <Spacebar> to move the 
+         cursor. Pressing the <Return> will select the day for printing.   
+         A small graphic block will appear in place of the cursor 
+         indicating that the day has been selected. If the day has 
+         already been slected, pressing <Return> will erase the 
+         selection. Pressing the <Spacebar> on a day will not alter the    
+         selection. When your selections have been made, press <Esc> to    
+         printout the appointment schedule for the days selected. If no    
+         days are selected, the program returns to the calendar/schedule   
+         function. The printout will contain a maximum of four days per    
+         page in date order regardless of the order of selection.
+
+
+
+Appointment Data Files:
+
+
+Appointment data is stored on the disk in the default drive. A file is 
+created for each month using the naming format of MMMYYAPT.DAT with the 
+first three characters being the first three in the name of the month and 
+the next two the last two digits of the year. Thus data for April 1984 
+would be stored in a file named APR84APT.DAT.
+
+
+
+PC Yearbook                                                          Page 4.
+
+The amount of disk space required to store a month's data is dependent 
+upon the number of appointments scheduled. The maximum size is about 23K 
+which would represent an appointment scheduled for each half-hour for the 
+entire month. A 320K diskette should have no problems containing an 
+entire year of data.
+
+
+
+Note Pad Function:
+
+The Note Pad provides four pages of fifteen lines to store notes and 
+other textual information that you do not wish to put on the appointment 
+schedule. Each line can be up to 70 characters long.
+
+The Note Pad is always resident and available. It is not date dependent.
+         
+The keys to use the Note Pad function are:
+
+         
+<PgUp>   displays the previous page in the Note Pad. If you are on page 
+         1, it will wrap around to page 4.
+
+
+<PgDn>   displays the next page in the Note Pad. If you are on page 4, it 
+         will wrap around to page 1.
+
+
+<Spacebar> moves the lighlighted bar on the Note Pad. It indicates the 
+         cursor position for adding or deleting a note.
+
+
+<Ins>    opens a Note Pad line at the current position of the highlighted
+         bar for input of note text. The text is limited to a maximum of 
+         70 characters. If you use all 70 characters, the program will 
+         generate an automatic carriage return and will turn off the cursor
+         otherwise you must press <Return> to terminate the entry of the
+         text.
+
+
+<Del>    deletes a line of text on the Note Pad at the current position
+         of the highlighted bar.
+
+
+<Return> terminates the entry of Note Pad text if the text is less than
+         70 characters.
+
+
+<Backspace> or the left arrow key will delete the previous character
+         of text during entry of Note Pad text.
+
+
+<Esc>    exits the Note Pad and returns to the calendar/appointment 
+         functions.
+
+
+<F5>     printouts out the Note Pad. On the printout, the notes are 
+         printed from 1 to 60 without page indications as they are 
+         displayed on the screen.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        This disk copy was originally provided by "The Public Library",
+        the software library of the Houston Area League of PC Users.
+ 
+        Programs are available from the Public Library at $2 per disk
+        on user-provided disks.  To get a listing of the disks in the
+        Public Library, send a self-addressed, stamped envelope to
+
+             Nelson Ford,  P.O.Box 61565,  Houston, TX 77208.
+
+```
+{% endraw %}
 
 ## PERT3.BAS
 
+{% raw %}
 ```bas
 5 COLOR 7,0,0
 10 '     PROGRAM: ENHANCED PERT          SOURCE: BYTE, MAY, 1982, PG. 469ff.
@@ -611,9 +1252,11 @@ machines:
 30000 GOTO 20070
 30010 RETURN
 ```
+{% endraw %}
 
 ## PRGTIM.BAS
 
+{% raw %}
 ```bas
 10 '**************************************************************************
 20 '*                            PRGTIM.BAS                                  *
@@ -700,9 +1343,83 @@ machines:
 840 LOCATE 19,2:PRINT CHR$(192):FOR C=3 TO 77 : LOCATE 19,C:PRINT CHR$(196):        NEXT : LOCATE 19,78:PRINT CHR$(217)
 850 RETURN
 ```
+{% endraw %}
+
+## PRGTIM.DOC
+
+{% raw %}
+```
+
+	   PRGTIM.BAS / PRGTIM.HEX / TMSTRT.BAS / TMSTRT.HEX / RPTUSE.BAS
+
+    The first four programs are UTILITIES, to be included in a BATCH file.
+They calculate the amount of time spent by someone using the computer, and they
+permit apportionment of the time between BUSINESS and NON-BUSINESS use.
+
+    "RPTUSE.BAS" provides a PRINT-OUT of data saved by PRGTIM in "PRGTIM.DTA."
+
+    "PRGTIM.HEX" and "TMSTRT.HEX" can be converted into "PRGTIM.EXE" and
+"TMSTRT.EXE", respectively, using the utility, HC.COM (found in one of the PC
+SIG'S XA files).  The .EXE format permits faster access by the BATCH file, and
+does NOT require one to load BASIC.  I therefore recommend this method, and I
+have only included the BASIC programs so one can study and modify the source
+listings.
+
+ The programs are used as follows:
+
+    1. The program, `TMSTRT' is first invoked by the BATCH file. This records
+the starting time in a file, "TMSTRT.DTA"
+
+    2. You then run whatever application programs you wish.   When  you exit
+from the application program, the BATCH file then invokes `PRGTIM.'
+
+    3. `PRGTIM' asks the user for his name (or initials), for  the name of the
+application program just used, and permits up to  twenty-four characters of
+comments.
+
+    4. `PRGTIM' then calculates the elapsed time, and asks the user to indicate
+how much of that use time was for business purposes.
+
+    5. The program then writes, to the file "PRGTIM.DTA", the date, the user's
+name, the name of the application program, the starting time, and the number of
+hours & minutes of business and of non-business use.  This file is constantly
+appended, providing  a continuous record of use.
+
+    6. The data in the file "PRGTIM.DTA" can easily be printed out as a report,
+using a simple BASIC program. (Please see the program, "RPTUSE.BAS" which can
+do this.)
+
+    In writing the AUTOEXEC.BAT file, it is important for `PRGTIM' to be able
+to find "TMSTRT.DTA". In a two drive system, making B: the default, and putting
+PRGTIM and TMSTRT in B: accomplishes this end.
+
+    The AUTOEXEC.BAT would look  something like this:
+
+ECHO off
+PAUSE	 Be sure that disk with PRGTIM and TMSTRT is in DRIVE B:
+B:
+TMSTRT
+....	    '(application program goes here, such as ` WS ')
+PAUSE	 Be sure that disk with PRGTIM and TMSTRT.DTA is in DRIVE B:
+PRGTIM
+A:
+
+    If one were to use the BASIC form of the programs, then one would need to
+have BASIC.COM available on the disk, and the BATCH file  would need to contain
+the command, `BASIC' preceding `TMSTRT' and also preceding `PRGTIM'.
+
+    To print out a report, just load BASIC, and  RUN "RPTUSE" .
+
+					  Steve Kent
+					CIS # 72406,504
+
+
+```
+{% endraw %}
 
 ## RPTUSE.BAS
 
+{% raw %}
 ```bas
 100 '**************************************************************************
 110 '*                           RPTUSE.BAS                                   *
@@ -761,9 +1478,11 @@ machines:
 640 LPRINT TAB(51);"TOTAL PERSONAL USE = " ;: LPRINT TAB(72);:                      LPRINT USING"#####"; TNBH;: LPRINT TAB(77); ":" + TNBM$
 650 KEY ON : END
 ```
+{% endraw %}
 
 ## TAXDEDCT.BAS
 
+{% raw %}
 ```bas
 1000 '>>>THIS PROGRAM RECORDS INCOME TAX DEDUCTIONS
 1100 '>>>HARRY G. FRIEDMAN
@@ -1006,9 +1725,11 @@ machines:
 24800 '
 24900 CLOSE:KEY ON:CLS
 ```
+{% endraw %}
 
 ## TMSTRT.BAS
 
+{% raw %}
 ```bas
 10 '***************************************************************************
 20 '*                             TMSTRT.BAS                                  *
@@ -1034,6 +1755,942 @@ machines:
 220 WRITE #1, DAT$, STARTTIME$, STARTTIME
 230 CLS : SYSTEM
 ```
+{% endraw %}
+
+## USE-TIME.DOC
+
+{% raw %}
+```
+
+       PRGTIM.EXE/(BAS)  //   TMSTRT.EXE/(BAS)   //    RPTUSE.BAS
+
+    The first two programs are UTILITIES, to be included in a BATCH file. 
+They calculate the amount of time spent by someone using the computer, and
+they permit apportionment of the time between BUSINESS and NON-BUSINESS use.
+
+    The .EXE format permits faster access by the BATCH file, then the .BAS
+programs, and does NOT require one to load BASIC.  I therefore recommend this
+method, and I have only included the BASIC programs so one can study and
+modify the source listings.
+
+    "RPTUSE.BAS" provides a PRINT-OUT of data saved by PRGTIM in "PRGTIM.DTA." 
+It can be modified to sort the data, or data can first be sorted using
+a data-base program, such as PC-FILE.
+
+    The programs are used as follows:
+
+         1. The program, `TMSTRT' is first invoked by the BATCH file. This 
+records the starting time in a file, "TMSTRT.DTA"
+
+         2. You then run whatever application programs you wish.   When you 
+exit from the application program, the BATCH file then invokes `PRGTIM.'
+
+         3. `PRGTIM' asks the user for his name (or initials), for the name 
+of the application program just used, and permits up to twenty-four characters 
+of comments (which can be skipped).
+		  
+         4. `PRGTIM' then calculates the elapsed time, and asks the user to
+indicate how much of that use time was for non-business purposes.  Hitting
+<enter> twice will mark ALL of the use for BUSINESS.
+
+         5. The program then writes, to the file "PRGTIM.DTA", the date, the 
+user's name, the name of the application program, the starting time, and the 
+number of hours & minutes of business and of non-business use.  This file is
+constantly appended, providing  a continuous record of use.  
+
+         6. The data in the file "PRGTIM.DTA" can easily be printed out as a
+report, using a simple BASIC program. (Please see the program, "RPTUSE.BAS"
+which can do this.)
+
+    In writing the batch (.BAT) file, it is important for `PRGTIM' to be able
+to find "TMSTRT.DTA". In a two drive system, making B: the default, and
+putting PRGTIM and TMSTRT in B: accomplishes this end.
+
+    Assuming a two drive system, with floppy diskettes, the AUTOEXEC.BAT or
+(PRG.BAT) would look  something like this:
+
+PAUSE    Be sure that disk with PRGTIM and TMSTRT is in DRIVE B:
+B:    
+TMSTRT
+....           '  (application program goes here, such as ` WS ')
+PAUSE    Be sure that disk with PRGTIM and TMSTRT.DTA is in DRIVE B:
+B:             '  B: is the default drive now so the data files can be found.
+PRGTIM
+A:
+
+    If one were to use the BASIC form of the programs, then one would need to
+have BASIC.COM available on the disk, and the BATCH file  would need to
+contain the command, `BASIC' preceding `TMSTRT' and also preceding `PRGTIM'.
+
+    To print out a report, just load BASIC, and  RUN "RPTUSE" .
+
+					             Steve Kent
+                                Marin PC-User's Group 
+```
+{% endraw %}
+
+## USERLOG.DOC
+
+{% raw %}
+```
+   
+   
+   
+   NOTE:
+   
+   This manual has been formatted such that, if cut into
+   sheets that measure 8.5" x 5.5", it will fit into your DOS
+   manual or another similarly sized binder.
+   
+                                            - CEL
+   
+   (This page may be discarded)
+   
+   
+   
+   
+   
+   
+   
+                   =====================
+                  ||                   ||
+    ==============||   U s e r L o g   ||==============
+   ||                                                 ||
+    ===================================================
+   
+   
+                            by
+   
+                     Chris E. Lindberg
+   
+                          v1.00
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   Copyright(c) 1985                All Rights Reserved
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                       COPYRIGHT 1985
+   
+                             BY
+   
+                      CHRIS E. LINDBERG
+   
+   This software product and manual is copyrighted.  All
+   rights are reserved by Chris E. Lindberg.
+   
+   
+                   USER SUPPORTED SOFTWARE
+   I am distributing this software using the "freeware"
+   concept because I believe that software should be usable
+   AND affordable.  Therefore, if you are using this soft-
+   ware and find it to be of value, please fill out the
+   registration card on last page of this manual and return
+   it with $25.00 to 
+   
+                      Chris E. Lindberg
+                   5221 W. Washington Blvd.
+                    Milwaukee, WI   53208
+   
+   Registration of your ownership of this software program
+   and manual will entitle you to notification of any
+   updates and free upgrades (excluding diskette and postage).
+   
+   A one-time fee of $25.00 is required to register this soft-
+   ware and manual.  This registration fee is tax deductible
+   for business-users of personal computers.
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -i-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                     TABLE OF CONTENTS
+   
+   
+   INTRODUCTION TO USERLOG .............................1
+   
+   SYSTEM REQUIREMENTS..................................2
+   
+   BEFORE YOU BEGIN.....................................3
+   
+   INSTALLING USERLOG...................................4
+   
+   USING USERLOG........................................5
+   
+   THE USERLOG LOG ENTRY SCREEN.........................8
+   
+   CREATING A NEW LOG FILE (/N).........................9
+   
+   LOGGING IN (/I).....................................10
+   
+   LOGGING OUT (/O)....................................11
+   
+   BROWSING LOG ENTRIES (/B)...........................12
+   
+   LISTING LOG ENTRIES (/L)............................13
+   
+   USING USERLOG IN BATCH FILES........................14
+   
+   USERLOG REGISTRATION FORM...........................16
+   
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -ii-
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                  INTRODUCTION TO USERLOG
+   
+   USERLOG is a system utility designed to maintain a 
+   disk-based file of computer usage.  As such, it may
+   be used in lieu of a written log to record and monitor
+   the business and personal use for which your personal
+   computer is being used.
+   
+   The main features of USERLOG are:
+   
+        -  the utility is simple to use
+        -  it is invoked directly from the PC-DOS command
+           level.
+        -  it can be used in batch files or with keyboard
+           enhancement programs.
+        -  all entries are automatically time and date
+           stamped using your system's clock/calendar.
+        -  elapsed times for each entry are calculated
+           automatically and stored with each log entry
+        -  the browsing and listing features permit you
+           to selectively display or print log entries
+        -  listings of log entries show the number of
+           hours the computer was used for personal and for
+           business use.
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -1-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                   SYSTEM REQUIREMENTS
+   
+   USERLOG has the following minimal system requirements
+   
+        -  IBM Personal Computer PC/XT/AT
+        -  64K RAM
+        -  One floppy disk drive
+        -  Monochrome or color monitor
+        -  printer port configured as LPT1
+        -  printer
+        -  PC-DOS version 1.0 or greater
+   
+   While optional, the use of a battery-powered clock/
+   calendar that automatically sets your system clock and
+   calendar is highly recommended.
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -2-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                      BEFORE YOU BEGIN
+   
+   Before you put USERLOG to work for you, it is a good
+   idea to create a working copy of your USERLOG program
+   file.  First, you will need a blank, formatted diskette.
+   Place your DOS diskette into drive A and next to the
+   DOS prompt type
+   
+   FORMAT A:
+   
+   Follow the instructions on the screen to complete the
+   diskette formatting process.
+   
+   Once the formatting process has been completed, a 
+   working copy of USERLOG can be made by entering next 
+   to the DOS prompt
+   
+   DISKCOPY A: A:    (if you have  1 disk drive)
+   
+     or
+   
+   DISKCOPY A: B:    (if you have 2 disk drives)
+   
+   Again, follow the directions on the screen to complete
+   the copying process.
+   
+   Once a working copy of USERLOG has been made, store the
+   original USERLOG diskette in a safe place.  Use the
+   working copy of USERLOG to transfer the program file or
+   maintain the log data file.
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -3-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                     INSTALLING USERLOG
+   
+   Floppy Drive Systems
+   
+   USERLOG.COM should be transferred to a blank and
+   formatted diskette (See BEFORE YOU BEGIN and USING
+   USERLOG IN BATCH FILES).  Because USERLOG records
+   log entries in the same directory in which USERLOG.COM
+   resides, the log file will be maintained on the same
+   diskette.  The number of log entries that can be
+   written to a diskette depends on the free space
+   available.  A blank double-sided, double-density
+   diskette formatted at 9 tracks per inch containing
+   USERLOG.COM will have approximately 336 kilobytes of
+   free storage available.  Since each log entry consumes
+   63 bytes of storage, approximately 5300 log entries
+   can be stored on the diskette.  This means you can
+   record approximately 14 log entries per day.
+   
+   Hard Disk Systems
+   
+   USERLOG maintains the log file in the same directory
+   in which USERLOG.COM resides.  As a result, USERLOG.COM
+   can be installed in any directory or subdirectory on
+   a hard disk.  However, unless you make extensive use
+   of batch files or keyboard enhancement programs (e.g.
+   PROKEY) to run applications, we recommend that
+   USERLOG.COM reside in the root directory.
+   
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -4-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                       USING USERLOG
+   
+   USERLOG is a system utility that is invoked at the
+   DOS command level i.e. next to the DOS prompt.  To
+   run USERLOG, the following syntax must be used
+   
+   d:USERLOG/[p]
+   
+   where "d" designates the physical drive in which 
+   USERLOG resides and "p" (short for parameter) instructs
+   USERLOG which function to perform.  The following
+   table lists the parameters that USERLOG recognizes,
+   their functions and the page number of this manual
+   where each function is described in greater detail.
+   
+   PARAMETER           FUNCTION               PAGE
+   ---------   -------------------------     ------
+      /N       Create a new log file            9
+      /I       Log in                          10
+      /O       Log out                         11
+      /B       Browse log entries              12
+      /L       List log entries                13
+   
+   NOTE:  USERLOG will accept a parameter in either upper-
+   case or lowercase letters.
+   
+   For example, suppose you are going to begin analyzing
+   last year's sales figures with your favorite spread-
+   sheet program and wish to enter the activity into your
+   log file.  To "log in", next to the DOS prompt you
+   would type
+   
+   USERLOG /I
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -5-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+   If USERLOG resides on a drive other than the default
+   drive, you would type
+   
+   d:USERLOG /I
+   
+   where "d:" specifies the physical drive in which
+   USERLOG exists.
+   
+   For systems equipped with a hard disk drive, a path
+   name must be specified if USERLOG.COM is not in the
+   current directory.  For example, if USERLOG.COM resides
+   in a directory named MYLOG, to log in you would enter
+   next to the DOS prompt
+   
+   \MYLOG\USERLOG /I
+   
+   All parameters are invoked in an identical fashion.
+   If no parameters are specified or the parameter is not
+   recognized, USERLOG will inform you that an error has
+   occurred and give you the option of selecting the 
+   correct parameter or returning to DOS.  Thus, USERLOG
+   can be invoked at the DOS command level by including
+   the parameter, or by entering USERLOG next to the
+   command prompt and selecting an option.
+   
+   With the exception of logging an entry out (/O), you
+   may escape from USERLOG at any time simply by pressing
+   the [ESC] key.
+   
+   To insure the integrity of the log file and, therefore,
+   your records, no means for editing log entries have
+   been provided.  Attempts to edit the log file with a
+   text editor will probably cause irreparable damage to
+   the contents of the file.
+   
+   
+   -------------------------------------------------------
+   
+                             -6-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                         IMPORTANT
+                   ---------------------
+   
+   If your computer is not equipped with a battery-
+   powered clock/calendar that automatically sets the
+   computer time and date when started, then be sure to
+   set the correct system time and date when starting
+   the computer.  USERLOG assumes that the system time 
+   and date are correct.
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -7-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                THE USERLOG LOG ENTRY SCREEN
+   
+   When USERLOG is invoked correctly, your display screen
+   will clear and the log entry data screen will appear.
+   The purpose and contents of each field in the screen
+   are described below.
+   
+         FIELD              DESCRIPTION
+       ----------   --------------------------------------
+        User         1 to 3 characters can be entered
+                     in this field to identify the user
+                     (e.g. your initials).
+        Category     The number 1 or  2 is entered in
+                     this field to identify whether the
+                     task is (1) business-oriented or
+                     (2) for personal use.
+        Task         Up to 24 characters may be used to
+                     describe the activity.
+        In           The time the USER logged in
+        Out          The time the USER logged out
+        Date         The date the USER logged in or out.
+        E. Hours     The elapsed hours between logging in
+                     and out.
+        Entry        The log entry number.
+        Status Area  User prompts or the status of the
+                     current operation is displayed in
+                     this area.
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -8-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                CREATING A NEW LOG FILE (/N)
+   
+   When first installing USERLOG, or at the beginning of
+   each new calendar year, a new log file must be created
+   before any entries can be made.
+   
+   To create a new log file, next to the DOS prompt type
+   
+   USERLOG /N
+   
+   USERLOG will ask you to enter the serial number of
+   your system unit in the status area of the USERLOG
+   log entry screen.  Once you have supplied the serial
+   number, USERLOG will record the current system date
+   and create a data file in the current directory with
+   the name "USERLOG.yy" where the extension "yy" corre-
+   sponds to the last two digits of the year held by the
+   system clock/calendar (e.g. USERLOG.85).
+   
+   If you attempt to use USERLOG before a log file has
+   been created, or if the calendar year changes, USERLOG
+   will indicate that USERLOG.yy cannot be found and
+   should be created by using the /N parameter.
+   
+   USERLOG will not create a new log file if one already
+   exists in the current directory that corresponds to
+   the current settings of your system's clock/calendar.
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -9-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                      LOGGING IN (/I)
+   
+   Each time you begin a new activity on your computer,
+   you should create a new log entry in your file using
+   the /I parameter.  Invoking USERLOG with the /I
+   parameter causes the USERLOG log entry screen to
+   appear on your display.  To create the new entry,
+   USERLOG requires that you fill three field with the
+   following information 
+   
+   FIELD                    YOU ENTER
+   -------    ------------------------------------------
+   USER        1 to 3 characters that identifies the
+               user(e.g. your initials)
+   CAT         Enter "1" if the activity is business
+               related or "2" if it is for personal use.
+   TASK        Up to 24 characters may be entered in
+               this field to describe the activity.
+   
+   Once you filled in the three field with the appropriate
+   information, USERLOG time and date stamps the entry
+   with the current settings of your system clock/calendar
+   then exits to DOS.
+   
+   If the last log entry is still open, USERLOG will auto-
+   matically close that entry and display its contents
+   before creating a new log entry (See LOGGING OUT (/O)).
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -10-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                      LOGGING OUT (/O)
+   
+   After logging in and completing an activity on your
+   computer, you must "log out" the entry using the /O
+   parameter.  Invoking USERLOG with the /O parameter
+   causes the USERLOG log entry screen to appear contain-
+   ing the information from the last open entry.  Logging
+   out is automatic feature of USERLOG.  Therefore, the
+   "Out" field is automatically stamped with your system's
+   current time, the hours that have elapsed since logging
+   in are calculated and displayed in the field marked
+   "E. Hours", the log file is updated, and control is
+   returned to DOS.
+   
+   If the last log entry has already been logged out,
+   USERLOG will inform you of such and will exit to DOS.
+   
+   If you are moving from one application to another
+   and wish to enter each activity into your log file,
+   you may "shortcut" the process of logging in and out
+   by using only the /I parameter between activities.
+   Invoking the /I parameter with the last entry still
+   open causes USERLOG to automatically log out and
+   display the contents of the last entry before creating
+   a new entry (See LOGGING IN (/I)).
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -11-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                 BROWSING LOG ENTRIES (/B)
+   
+   A facility for browsing forwards and backwards through
+   your log file one entry at a time has been provided
+   for in USERLOG.  When USERLOG is invoked with the /B
+   parameter, USERLOG will ask for the beginning date in
+   the status area of the log entry screen.  Once the
+   date has been entered in a mm/dd format, USERLOG will
+   scan the log file and display on the screen the first
+   log entry whose date is greater than or equal to the
+   date you supplied.  If the dates of all the log entries
+   fall before the date you specified, then the last log
+   entry is displayed.
+   
+   After a log entry has been displayed, certain keys on
+   the keyboard can be used to browse through the log
+   file.  The following table lists the keys and their
+   respective functions:
+   
+             KEY             FUNCTION
+           --------   -------------------------
+            [->]       Show next log entry
+            [<-]       Show prior log entry
+            [Home]     Show first log entry
+            [End]      Show last log entry
+            [Esc]      Exit USERLOG
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -12-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                  LISTING LOG ENTRIES (/L)
+   
+   USERLOG can provide you with a listing of all or
+   selected log entries through the use of the /L para-
+   meter.  When USERLOG is invoked with the /L parameter,
+   you will be asked to supply a beginning date in a
+   mm/dd format and whether you want only (1) business,
+   (2) personal, or (3) both types of log entries listed.
+   USERLOG will scan your entire log file searching for
+   the first log entry that satisfies the criteria you
+   specified.  If no matches are found, USERLOG will
+   inform you of such and exit to DOS.  Otherwise USERLOG
+   will ask which device to list the log entries to.
+   Pressing the [S] key causes the output to be printed
+   on the display screen whereas pressing the [P] key
+   causes it to be listed on the printer attached to
+   your computer.  You may exit USERLOG at this time by
+   pressing the [Esc] key.  If the log entries are to be
+   listed on the printer, be sure the printer is turned
+   on and that the printer top-of-form has been set.
+   
+   The log entries are listed in detail in the order in
+   which they were made.  As each log entry is printed,
+   the number of hours the computer was used for business
+   and for personal purposes are accumulated and printed
+   on the bottom of each page.  The percentage of time
+   your computer has been used for business-related 
+   activities is calculated and printed also.
+   
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -13-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                USING USERLOG IN BATCH FILES
+   
+   In order to keep accurate records of computer usage,
+   users should be 'forced' to log in and out between
+   applications.  Fortunately, the batch language facil-
+   ities of PC-DOS provides a very convenient means for
+   doing so.  The following example shows how to create
+   a batch file that will log a user in, run a program
+   named MYPROGRAM and log the user out after exiting
+   the program.
+   
+   
+   A>COPY CON: MYPROGRAM.BAT
+   CLS
+   PAUSE -----> INSERT LOG FILE DISKETTE INTO DRIVE A
+   USERLOG /I
+   PAUSE -----> INSERT MYPROGRAM DISKETTE INTO DRIVE A
+   MYPROGRAM
+   PAUSE -----> INSERT LOG FILE DISKETTE INTO DRIVE A
+   USERLOG /O
+   ^Z                   (press the F6 key)
+   1 file copied
+   
+   
+   If your system has a hard disk drive, then the PAUSE
+   statements can be eliminated.  However, the path to
+   the directory containing USERLOG.COM must be named.
+   For example, if USERLOG.COM resides in the directory
+   named MYLOG, then then following batch program will
+   log a user in and out.
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -14-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+   C>COPY CON: MYPROGRAM.BAT
+   CLS
+   PATH \MYLOG 
+   USERLOG /I
+   MYPROGRAM
+   PATH \MYLOG
+   USERLOG /O
+   ^Z                   (press the F6 key)
+   1 file copied
+   
+   
+   Programs written in interpretive BASIC can be executed
+   from batch files as well by either including BASIC.COM
+   in the directory which contains the BASIC program or
+   by extending the search path to include the directory
+   that contains BASIC.COM.
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -15-
+   
+                                            U s e r L o g
+   -------------------------------------------------------
+   
+   
+                 USERLOG REGISTRATION FORM
+   
+   
+     I have enclosed $25.00 with this registration form.
+     Registration entitles me to notification of updates
+     to USERLOG and free upgrades (excluding diskette and
+     postage).  Please add me to your list of registered
+     users of USERLOG.
+   
+     Mail To:         Chris E. Lindberg
+                   5221 W. Washington Blvd.
+                    Milwaukee, WI   53208
+   
+    Please supply the following information:
+   
+   
+     Name _____________________________________________
+   
+     Company __________________________________________
+   
+     Street ___________________________________________
+   
+     City _____________________________________________
+   
+     State ______   Zip __________  Phone _____________
+   
+     How did you obtain a copy of USERLOG _____________
+   
+     __________________________________________________
+   
+   Comments/Problems:
+   
+   
+   
+   
+   -------------------------------------------------------
+   
+                             -16-
+
+
+
+        This disk copy was originally provided by "The Public Library",
+        the software library of the Houston Area League of PC Users.
+ 
+        Programs are available from the Public Library at $2 per disk
+        on user-provided disks.  To get a listing of the disks in the
+        Public Library, send a self-addressed, stamped envelope to
+
+             Nelson Ford,  P.O.Box 61565,  Houston, TX 77208.
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

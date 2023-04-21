@@ -14,6 +14,45 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2976.TXT
+
+{% raw %}
+```
+Disk No: 2976
+Disk Title: Carpenter's Dream
+PC-SIG Version: S1.0
+
+Program Title: Carpenter's Dream
+Author Version: 2.11
+Author Registration: $25.00
+Special Requirements: 640K RAM and DOS 3.0. Graphics card and math
+                      co-processor recommended.
+
+CARPENTER'S DREAM is the construction program for contractors,
+carpenters, and homeowners. Use it to measure concrete, liquids needed,
+truck loads, deck material, spacing between posts and railings, stairs,
+windows, cross corner lengths, estimate for easy to complex roofs, math
+calculations and conversions, etc. In short, CARPENTER'S DREAM has
+everything for residential construction as well as commercial and heavy
+industrial applications. Measurements are expressed in feet, inches, and
+fractions of an inch; and angles as pitch.
+
+Stan Veit in Computer Shopper Magazine says about CARPENTER'S DREAM, "No
+doubt this software system will do for home owners and the
+home-construction industry what VisiCalc did for accountants and
+business people."
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2976
 

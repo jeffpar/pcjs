@@ -34,6 +34,44 @@ machines:
     had typed them at the keyboard.  It works with all programs.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2236.TXT
+
+{% raw %}
+```
+Disk No: 2236                                                           
+Disk Title: ZAPCODE                                                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Zapcode                                                  
+Author Version: 3.2                                                     
+Author Registration: Single-user license = $19.95.                      
+Special Requirements: None.                                             
+                                                                        
+Get it while it's hot!!  The ultimate printer control utility that burns
+them all away.  Use ZAPCODE to select fonts, reset the printer, change  
+margins, advance the page, and anything else your printer is capable of 
+doing.  Memory resident pop-up or stand-alone running.  Supports all    
+types of printers: laser, dot- matrix, ink-jet, and even plotters!      
+Drivers included for all the popular printers.  The printer driver      
+editor allows you to easily customize or create your own.  Author will  
+create yours for you free.  Supports LPT1 to LPT3, COM1 to COM4.  No    
+longer must you hunt for your printer manual to look up control strings.
+Simply pop-up ZAPCODE, select the desired printer option(s), and then   
+let ZAPCODE enter the control strings for you, just as if you had typed 
+them at the keyboard - works with all programs.  Outstanding program!   
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2236
 

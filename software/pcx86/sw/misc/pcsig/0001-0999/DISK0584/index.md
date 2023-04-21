@@ -58,6 +58,73 @@ machines:
     VENDORS  WKS  Macro driven data base of suppliers for business.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES584.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  584  MISCELLANEOUS LOTUS 123 WORKSHEETS                    v1 DS2
+---------------------------------------------------------------------------
+An immense variety of LOTUS 123 workssheets can be found on this disk, ranging
+from printing utilities to financial applications, scientifically oriented
+spreadsheets to perform polynomial regressions and triangle problems. There are
+also worksheets for time management, mailing lists and many more.
+ 
+ASCIIUSE WKS  How to use CHARS2 worksheet.
+CHARS2   WKS  File of ASCII characters not directly accessible by LOTUS 123.
+CHEKBOOK WKS  Personal checkbook ledger.
+CODESAMP WKS  Printer driver for specialized fonts.
+CONTENTS WKS  Toolkit Shell and ASCII driver.
+LOAN     WKS  Loan analysis worksheet.
+LOANTABL WKS  Installment loan analyzer.
+MAILLIST WKS  Mailing list database.
+NEWCOLOR IN   Redirect output for DEBUG program to change LOTUS 123 colors.
+NEWCOLOR WKS  Instructions for NEWCOLOR.IN.
+POLREG   WKS  Calculate polynomial regressions.
+PRTGRAPH WKS  Instructions for using PRTGRAPH.COM for special fonts.
+TITLES   WKS  Prepare chronological dates as titles for columns.
+TRIANGLE WKS  Solve for triangles given sides.
+VENDOC   WKS  Documentation for VENDORS.WKS
+VENDORS  WKS  Macro driven data base of suppliers for business.
+WEEKRPT  WKS  Time management/Job logging utility.
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+## NOTES584.TXT
+
+{% raw %}
+```
+Program name:  MISCELLANEOUS LOTUS 123 WORKSHEETS  
+ 
+Author names:  NEW YORK LOTUS SOFTWARE LIBRARY
+ 
+Program Descriptions:
+
+An immense variety of LOTUS 123 workssheets can be found on this disk.  There 
+are printing utilities to embed ASCII characters, scientific symbols, shading
+characters and others in worksheet applications.  Included is a utility to re-
+configure the default LOTUS 123 colors to the user's tastes, two loan analysis
+worksheets, and two databases: one for mailing lists, and one for vendors.
+Scientific applications are represented by one to perform polynomial regress-
+ions and one to solve triangle problems. There is also a worksheet to perform
+time management, and one to manage a personal checkbook ledger.
+
+System requirements are an IBM or compatible PC with 256K, a monochrome or
+Color Board, the LOTUS 123 program disk, and, optionally, an IBM compatible 80
+column printer.
+ 
+ 
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0584
 

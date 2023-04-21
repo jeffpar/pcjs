@@ -62,6 +62,77 @@ machines:
     FAMTOPIC TOP  Overlay file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1088.TXT
+
+{% raw %}
+```
+Disk No  1088
+Program Title: THE BOOK REPORT PROGRAM & 1001 TOPICS FOR COMPOSITION
+PC-SIG version 1
+
+    1001 TOPICS FOR COMPOSITION is an educational aid to help you choose a
+topic for writing English compositions and essays. The program has 1358
+topics in 21 different categories to choose from. Categories include such
+subjects as personal reminiscences and reactions, familiar essay topics,
+sports, national and international news, science, the arts and
+entertainment, philosophy, education, specific literary topics, and more.
+Besides having several different subject areas there are categories for
+different writing styles, such as comparison and contrast, persuasion,
+argumentative exposition, and description. The program first presents a
+list of main categories, and once you indicate your general line of
+interest, several suggested topics are listed on the screen which you can
+scroll through. 1001 TOPICS FOR COMPOSITION can be used as a study aid for
+choosing a main topic for your written paper, or it can be used as an
+educational tool for pre-writing exercises.
+
+    THE BOOK REPORT PROGRAM asks you several main questions on a book that
+you read to help you write a book report. Questions are asked about the
+basic library information of the book, the setting, the main character, the
+supporting character, the main scene, and your own feelings and reactions
+about the book. The advantage of using THE BOOK REPORT PROGRAM is that it
+organizes the basic information of the book into simple categories so that
+it can be easily incorporated into your final book report. Once you finish
+answering the questions, you can print the information or save it to disk.
+Once saved to a disk file, the information can be easily changed with an
+ASCII wordprocessor to suit your own format.
+
+Usage: Educational Writing Assistance
+
+System Requirements: 128K memory and one floppy disk drive (printer is
+optional)
+
+How to Start: Type TOPIC (press enter) to start the 1001 TOPICS,
+BOOK (press enter) to start the BOOK REPORT.
+
+Suggested Registration: $15-20 for each program.
+
+File Descriptions:
+
+------------  1001 Topics for Composistion
+TOPIC    COM  Main program.
+TOPIC    000  Overlay file.
+README        Documentation for TOPICS.
+CCTOPIC  TOP  Overlay file.
+FAMTOPIC TOP  Overlay file.
+------------  The Book Report program
+AUTOEXEC BAT  Batch file for start up.
+BOOK     COM  Main program.
+POINT    INV  Data overlay file.
+RANDDOT  COM  Utility program.
+READ     ME   Documentation the BOOK REPORT.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1088
 

@@ -45,8 +45,40 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES612.TXT
+
+{% raw %}
+```
+-----------------------------------------------------------------------------
+Disk No  612  Languages                                            v1   DS2
+-----------------------------------------------------------------------------
+Languages is foreign langauge tutor (foreign meaning non-English) which
+includes French, Spanish, German, Italian, and Hebrew.  Most of the files
+on this disk are archived.  The unarchiving file is included on this disk.
+ 
+ARC      EXE  Unarchiving program
+FRENCH1  ARC  French lesson 1
+FRENCH2  ARC  French lesson 2
+GERMAN1  ARC  German lesson 1
+GERMAN2  ARC  German lesson 2
+HEBREW   EXE  Hewbrew lesson executable form
+ITALIAN  ARC  Italian lesson
+LANGUAGE TXT  Documentation file
+SPANISH1 ARC  Spanish lesson 1
+SPANISH2 ARC  Spanish lesson 2
+GO       BAT  Start up batch file
+FILES612 TXT  This file
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## TEACHER.BAS
 
+{% raw %}
 ```bas
 10 'Version 1.1
 20 KEY OFF:CLS:SCREEN 0,0,0:WIDTH 80:LOCATE 1,1,0:FOR I=1 TO 10:KEY I,"":NEXT:DEF SEG:POKE 106,0
@@ -394,9 +426,135 @@ machines:
 3170 RESUME 3180
 3180 LOCATE 25,26:COLOR 23:PRINT L$;:COLOR 7:FOR DE=1 TO 5999:NEXT:LOCATE 25,26:PRINT SPC(50);:ON ERROR GOTO 0:PR$="":GOTO 2130
 ```
+{% endraw %}
+
+## TEACHER.TXT
+
+{% raw %}
+```
+                                LANGUAGE TEACHER
+
+                              by Andrew Bartorillo
+                      Distributed by Micro Tutor Products
+                         103 Baughmans Lane, Suite 303
+                              Frederick, Md. 21701
+                  Copyright 1982-Released to the Public Domain
+
+     LANGUAGE TEACHER is a series of menu-driven language tutorial programs 
+designed to be run on the IBM PC/XT/AT/jr or any compatible clone. Each program 
+in the series contains hundreds of word combinations and verb conjugation 
+forms. A line printer can be used with LANGUAGE TEACHER to take advantage of 
+its versatility.
+     Also included is the capability to select language-to-English or English-
+to-language combinations, choose multiple choice answers, be retested on 
+misses, print a multiple choice test, and to run a full quiz diagnostic routine 
+with line printer output. Of particular interest to non-English students is the 
+capability to select the direction of the combinations.
+     All word, phrase, and verb conjugation selections are done randomly by the 
+program the the user being unable to predict what the next selection will be. 
+The program package is not designed to teach conversational language or 
+pronunciation but, instead, to provide practice drills in order to increase 
+your working vocabulary and to enhance your use of the conjugation forms.
+
+     The LANGUAGE TEACHER series was originally published by Acorn Software 
+Products, Inc. of Washington, DC. Since then the company has gone out of 
+business and the author is releasing the series to the Public Domain. If you 
+find any of the programs in the series to be usefull, a suitable payment ($5 to 
+$10) would be appreciated so more programs of this quality can be developed.  
+
+PROGRAM SPECIFICATIONS:
+
+     Minimum system configuration: LANGUAGE TEACHER is written in Microsoft 
+Basic and requires a minimum of 64K bytes of RAM and Advanced Basic, one disk 
+drive and a suitable high resolution monitor. Preferred monitors are the IBM 
+Monochrome Display attached to the IBM Monochrome Display and Printer Adapter 
+or a green screen or "direct drive" RGB monitor attached to the Color/Graphics 
+Monitor Adapter. In most cases, only a high quality color monitor or green 
+screen will provide the resolution necessary to display the special chaaracters 
+used with LANGUAGE TEACHER. All other program functions will be suitable, 
+though, if a low quality color composite monitor is used.
+     Optional equipment includes an 80 column line printer.
+
+LOADING INSTRUCTIONS:
+
+     Power up your system with a DOS diskette containing BASICA in disk drive 
+"A". Load BASICA into memory and remove your DOS diskette from the disk drive. 
+Insert your copy of LANGUAGE TEACHER into disk drive "A", type RUN'TEACHER" and 
+press the Enter key.
+     NOTE: Due to the large amount of string space used, your computer will 
+occasionally seem to "hang up" or "go to sleep". This is due to Microsoft's 
+Basic string manipulation (better known as "garbage collection") and is not a 
+machine or program malfunction. The time rarely exceeds 8-10 seconds. The 
+occurrence of this phenomenon decreases in systems having more than 64K RAM.
+
+SPECIAL CHARACTER SET:
+
+     LANGUAGE TEACHER utilizes the special function keys to input the special 
+characters used in the language. These keys are active only when a non-multiple 
+choice drill is selected in which you must enter the direct equivalent of the 
+required answer. The 25th line of the screen will display which function key is 
+associated with which foreign character.
+     NOTE: Due to the inability of the average line printer to be able to 
+recognize these special characters, programming is implemented to convert these 
+special characters to their "normal" letters before being output to the line 
+printer. Once you have obtained your printout, insert the special marks by 
+hand.
+
+MISCELLANEOUS:
+
+     If a multiple choice type quiz has been selected, you will only be given 
+15 seconds (25 seconds for verb conjugation) to input your answer. If the time 
+expires before you make your choice, you will be credited with an incorrect 
+answer. NOTE: If the computer performs its "garbage collection" routine while 
+timing is in progress, program coding is implemented to prevent your time 
+remaining from falling to zero.
+     If you have not chosen a multiple choice type of quiz, you will have to 
+type in the exact answer. In the case of being quizzed with a noun, you must 
+also type in the definite article ("the") that proceeds the noun.
+     If your original option was the verb conjugation drill, no retesting can 
+be performed. Also, the diagnostic display will let you know how many of each 
+person and tense you missed. If you missed more than 3 of any person/tense, an 
+"*" is displayed beside the applicable person/tense, indicating you need more 
+practice.
+
+ADDITIONAL NOTES:
+
+     The extent of the vocabulary of each program is given below. Since the 
+program randomly selects from its contents in each option, you truly have a 
+thorough drill in each language!
+     SPANISH I: 750 Spanish/English word combinations, 1488 verb conjugations 
+and 150 Spanish/English phrase combinations.
+     SPANISH II: 800 Spanish/English word combinations and 2108 verb 
+conjugation forms.
+     FRENCH I: 784 French/English word combinations, 1600 verb conjugations 
+and 196 French/English phrase combinations.
+     FRENCH II: 864 French/English word combinations and 1600 verb 
+conjugation forms.
+     GERMAN I: 800 German/English word combinations, 1860 verb conjugations 
+and 160 German/English phrase combinations.
+     GERMAN II: 800 German/English word combinations and 2015 verb 
+conjugation forms.
+     ITALIAN: 816 Italian/English word combinations, 1500 verb conjugations 
+and 114 Italian/English phrase combinations.
+
+
+We hope that you have many enjoyable and informative hours working with your 
+LANGUAGE TEACHER program. If you have any suggestions or problems with using 
+LANGUAGE TEACHER, feel free to correspond with the author using the address 
+listed below. Please make your comments as specific as possible and enclose a 
+self-addressed stamped envelope:
+
+                          Andrew P. Bartorillo
+                          c/o Micro Tutor Products
+                          103 Baughmans Lane, Suite 303
+                          Frederick, MD 21701
+
+```
+{% endraw %}
 
 ## TEACHER.BAS
 
+{% raw %}
 ```bas
 10 'Version 1.1
 20 KEY OFF:CLS:SCREEN 0,0,0:WIDTH 80:LOCATE 1,1,0:FOR I=1 TO 10:KEY I,"":NEXT:DEF SEG:POKE 106,0
@@ -747,9 +905,135 @@ machines:
 3170 RESUME 3180
 3180 LOCATE 25,26:COLOR 23:PRINT L$;:COLOR 7:FOR DE=1 TO 5999:NEXT:LOCATE 25,26:PRINT SPC(50);:ON ERROR GOTO 0:PR$="":GOTO 2130
 ```
+{% endraw %}
+
+## TEACHER.TXT
+
+{% raw %}
+```
+                                LANGUAGE TEACHER
+
+                              by Andrew Bartorillo
+                      Distributed by Micro Tutor Products
+                         103 Baughmans Lane, Suite 303
+                              Frederick, Md. 21701
+                  Copyright 1982-Released to the Public Domain
+
+     LANGUAGE TEACHER is a series of menu-driven language tutorial programs 
+designed to be run on the IBM PC/XT/AT/jr or any compatible clone. Each program 
+in the series contains hundreds of word combinations and verb conjugation 
+forms. A line printer can be used with LANGUAGE TEACHER to take advantage of 
+its versatility.
+     Also included is the capability to select language-to-English or English-
+to-language combinations, choose multiple choice answers, be retested on 
+misses, print a multiple choice test, and to run a full quiz diagnostic routine 
+with line printer output. Of particular interest to non-English students is the 
+capability to select the direction of the combinations.
+     All word, phrase, and verb conjugation selections are done randomly by the 
+program the the user being unable to predict what the next selection will be. 
+The program package is not designed to teach conversational language or 
+pronunciation but, instead, to provide practice drills in order to increase 
+your working vocabulary and to enhance your use of the conjugation forms.
+
+     The LANGUAGE TEACHER series was originally published by Acorn Software 
+Products, Inc. of Washington, DC. Since then the company has gone out of 
+business and the author is releasing the series to the Public Domain. If you 
+find any of the programs in the series to be usefull, a suitable payment ($5 to 
+$10) would be appreciated so more programs of this quality can be developed.  
+
+PROGRAM SPECIFICATIONS:
+
+     Minimum system configuration: LANGUAGE TEACHER is written in Microsoft 
+Basic and requires a minimum of 64K bytes of RAM and Advanced Basic, one disk 
+drive and a suitable high resolution monitor. Preferred monitors are the IBM 
+Monochrome Display attached to the IBM Monochrome Display and Printer Adapter 
+or a green screen or "direct drive" RGB monitor attached to the Color/Graphics 
+Monitor Adapter. In most cases, only a high quality color monitor or green 
+screen will provide the resolution necessary to display the special chaaracters 
+used with LANGUAGE TEACHER. All other program functions will be suitable, 
+though, if a low quality color composite monitor is used.
+     Optional equipment includes an 80 column line printer.
+
+LOADING INSTRUCTIONS:
+
+     Power up your system with a DOS diskette containing BASICA in disk drive 
+"A". Load BASICA into memory and remove your DOS diskette from the disk drive. 
+Insert your copy of LANGUAGE TEACHER into disk drive "A", type RUN'TEACHER" and 
+press the Enter key.
+     NOTE: Due to the large amount of string space used, your computer will 
+occasionally seem to "hang up" or "go to sleep". This is due to Microsoft's 
+Basic string manipulation (better known as "garbage collection") and is not a 
+machine or program malfunction. The time rarely exceeds 8-10 seconds. The 
+occurrence of this phenomenon decreases in systems having more than 64K RAM.
+
+SPECIAL CHARACTER SET:
+
+     LANGUAGE TEACHER utilizes the special function keys to input the special 
+characters used in the language. These keys are active only when a non-multiple 
+choice drill is selected in which you must enter the direct equivalent of the 
+required answer. The 25th line of the screen will display which function key is 
+associated with which foreign character.
+     NOTE: Due to the inability of the average line printer to be able to 
+recognize these special characters, programming is implemented to convert these 
+special characters to their "normal" letters before being output to the line 
+printer. Once you have obtained your printout, insert the special marks by 
+hand.
+
+MISCELLANEOUS:
+
+     If a multiple choice type quiz has been selected, you will only be given 
+15 seconds (25 seconds for verb conjugation) to input your answer. If the time 
+expires before you make your choice, you will be credited with an incorrect 
+answer. NOTE: If the computer performs its "garbage collection" routine while 
+timing is in progress, program coding is implemented to prevent your time 
+remaining from falling to zero.
+     If you have not chosen a multiple choice type of quiz, you will have to 
+type in the exact answer. In the case of being quizzed with a noun, you must 
+also type in the definite article ("the") that proceeds the noun.
+     If your original option was the verb conjugation drill, no retesting can 
+be performed. Also, the diagnostic display will let you know how many of each 
+person and tense you missed. If you missed more than 3 of any person/tense, an 
+"*" is displayed beside the applicable person/tense, indicating you need more 
+practice.
+
+ADDITIONAL NOTES:
+
+     The extent of the vocabulary of each program is given below. Since the 
+program randomly selects from its contents in each option, you truly have a 
+thorough drill in each language!
+     SPANISH I: 750 Spanish/English word combinations, 1488 verb conjugations 
+and 150 Spanish/English phrase combinations.
+     SPANISH II: 800 Spanish/English word combinations and 2108 verb 
+conjugation forms.
+     FRENCH I: 784 French/English word combinations, 1600 verb conjugations 
+and 196 French/English phrase combinations.
+     FRENCH II: 864 French/English word combinations and 1600 verb 
+conjugation forms.
+     GERMAN I: 800 German/English word combinations, 1860 verb conjugations 
+and 160 German/English phrase combinations.
+     GERMAN II: 800 German/English word combinations and 2015 verb 
+conjugation forms.
+     ITALIAN: 816 Italian/English word combinations, 1500 verb conjugations 
+and 114 Italian/English phrase combinations.
+
+
+We hope that you have many enjoyable and informative hours working with your 
+LANGUAGE TEACHER program. If you have any suggestions or problems with using 
+LANGUAGE TEACHER, feel free to correspond with the author using the address 
+listed below. Please make your comments as specific as possible and enclose a 
+self-addressed stamped envelope:
+
+                          Andrew P. Bartorillo
+                          c/o Micro Tutor Products
+                          103 Baughmans Lane, Suite 303
+                          Frederick, MD 21701
+
+```
+{% endraw %}
 
 ## TEACHER.BAS
 
+{% raw %}
 ```bas
 10 'Version 1.1
 20 KEY OFF:CLS:SCREEN 0,0,0:WIDTH 80:LOCATE 1,1,0:FOR I=1 TO 10:KEY I,"":NEXT:DEF SEG:POKE 106,0
@@ -1073,9 +1357,135 @@ machines:
 3170 RESUME 3180
 3180 LOCATE 25,26:COLOR 23:PRINT L$;:COLOR 7:FOR DE=1 TO 5999:NEXT:LOCATE 25,26:PRINT SPC(50);:ON ERROR GOTO 0:PR$="":GOTO 2130
 ```
+{% endraw %}
+
+## TEACHER.TXT
+
+{% raw %}
+```
+                                LANGUAGE TEACHER
+
+                              by Andrew Bartorillo
+                      Distributed by Micro Tutor Products
+                         103 Baughmans Lane, Suite 303
+                              Frederick, Md. 21701
+                  Copyright 1982-Released to the Public Domain
+
+     LANGUAGE TEACHER is a series of menu-driven language tutorial programs 
+designed to be run on the IBM PC/XT/AT/jr or any compatible clone. Each program 
+in the series contains hundreds of word combinations and verb conjugation 
+forms. A line printer can be used with LANGUAGE TEACHER to take advantage of 
+its versatility.
+     Also included is the capability to select language-to-English or English-
+to-language combinations, choose multiple choice answers, be retested on 
+misses, print a multiple choice test, and to run a full quiz diagnostic routine 
+with line printer output. Of particular interest to non-English students is the 
+capability to select the direction of the combinations.
+     All word, phrase, and verb conjugation selections are done randomly by the 
+program the the user being unable to predict what the next selection will be. 
+The program package is not designed to teach conversational language or 
+pronunciation but, instead, to provide practice drills in order to increase 
+your working vocabulary and to enhance your use of the conjugation forms.
+
+     The LANGUAGE TEACHER series was originally published by Acorn Software 
+Products, Inc. of Washington, DC. Since then the company has gone out of 
+business and the author is releasing the series to the Public Domain. If you 
+find any of the programs in the series to be usefull, a suitable payment ($5 to 
+$10) would be appreciated so more programs of this quality can be developed.  
+
+PROGRAM SPECIFICATIONS:
+
+     Minimum system configuration: LANGUAGE TEACHER is written in Microsoft 
+Basic and requires a minimum of 64K bytes of RAM and Advanced Basic, one disk 
+drive and a suitable high resolution monitor. Preferred monitors are the IBM 
+Monochrome Display attached to the IBM Monochrome Display and Printer Adapter 
+or a green screen or "direct drive" RGB monitor attached to the Color/Graphics 
+Monitor Adapter. In most cases, only a high quality color monitor or green 
+screen will provide the resolution necessary to display the special chaaracters 
+used with LANGUAGE TEACHER. All other program functions will be suitable, 
+though, if a low quality color composite monitor is used.
+     Optional equipment includes an 80 column line printer.
+
+LOADING INSTRUCTIONS:
+
+     Power up your system with a DOS diskette containing BASICA in disk drive 
+"A". Load BASICA into memory and remove your DOS diskette from the disk drive. 
+Insert your copy of LANGUAGE TEACHER into disk drive "A", type RUN'TEACHER" and 
+press the Enter key.
+     NOTE: Due to the large amount of string space used, your computer will 
+occasionally seem to "hang up" or "go to sleep". This is due to Microsoft's 
+Basic string manipulation (better known as "garbage collection") and is not a 
+machine or program malfunction. The time rarely exceeds 8-10 seconds. The 
+occurrence of this phenomenon decreases in systems having more than 64K RAM.
+
+SPECIAL CHARACTER SET:
+
+     LANGUAGE TEACHER utilizes the special function keys to input the special 
+characters used in the language. These keys are active only when a non-multiple 
+choice drill is selected in which you must enter the direct equivalent of the 
+required answer. The 25th line of the screen will display which function key is 
+associated with which foreign character.
+     NOTE: Due to the inability of the average line printer to be able to 
+recognize these special characters, programming is implemented to convert these 
+special characters to their "normal" letters before being output to the line 
+printer. Once you have obtained your printout, insert the special marks by 
+hand.
+
+MISCELLANEOUS:
+
+     If a multiple choice type quiz has been selected, you will only be given 
+15 seconds (25 seconds for verb conjugation) to input your answer. If the time 
+expires before you make your choice, you will be credited with an incorrect 
+answer. NOTE: If the computer performs its "garbage collection" routine while 
+timing is in progress, program coding is implemented to prevent your time 
+remaining from falling to zero.
+     If you have not chosen a multiple choice type of quiz, you will have to 
+type in the exact answer. In the case of being quizzed with a noun, you must 
+also type in the definite article ("the") that proceeds the noun.
+     If your original option was the verb conjugation drill, no retesting can 
+be performed. Also, the diagnostic display will let you know how many of each 
+person and tense you missed. If you missed more than 3 of any person/tense, an 
+"*" is displayed beside the applicable person/tense, indicating you need more 
+practice.
+
+ADDITIONAL NOTES:
+
+     The extent of the vocabulary of each program is given below. Since the 
+program randomly selects from its contents in each option, you truly have a 
+thorough drill in each language!
+     SPANISH I: 750 Spanish/English word combinations, 1488 verb conjugations 
+and 150 Spanish/English phrase combinations.
+     SPANISH II: 800 Spanish/English word combinations and 2108 verb 
+conjugation forms.
+     FRENCH I: 784 French/English word combinations, 1600 verb conjugations 
+and 196 French/English phrase combinations.
+     FRENCH II: 864 French/English word combinations and 1600 verb 
+conjugation forms.
+     GERMAN I: 800 German/English word combinations, 1860 verb conjugations 
+and 160 German/English phrase combinations.
+     GERMAN II: 800 German/English word combinations and 2015 verb 
+conjugation forms.
+     ITALIAN: 816 Italian/English word combinations, 1500 verb conjugations 
+and 114 Italian/English phrase combinations.
+
+
+We hope that you have many enjoyable and informative hours working with your 
+LANGUAGE TEACHER program. If you have any suggestions or problems with using 
+LANGUAGE TEACHER, feel free to correspond with the author using the address 
+listed below. Please make your comments as specific as possible and enclose a 
+self-addressed stamped envelope:
+
+                          Andrew P. Bartorillo
+                          c/o Micro Tutor Products
+                          103 Baughmans Lane, Suite 303
+                          Frederick, MD 21701
+
+```
+{% endraw %}
 
 ## TEACHER.BAS
 
+{% raw %}
 ```bas
 10 'Version 1.1
 20 KEY OFF:CLS:SCREEN 0,0,0:WIDTH 80:LOCATE 1,1,0:FOR I=1 TO 10:KEY I,"":NEXT:DEF SEG:POKE 106,0
@@ -1402,9 +1812,135 @@ machines:
 3170 RESUME 3180
 3180 LOCATE 25,26:COLOR 23:PRINT L$;:COLOR 7:FOR DE=1 TO 5999:NEXT:LOCATE 25,26:PRINT SPC(50);:ON ERROR GOTO 0:PR$="":GOTO 2130
 ```
+{% endraw %}
+
+## TEACHER.TXT
+
+{% raw %}
+```
+                                LANGUAGE TEACHER
+
+                              by Andrew Bartorillo
+                      Distributed by Micro Tutor Products
+                         103 Baughmans Lane, Suite 303
+                              Frederick, Md. 21701
+                  Copyright 1982-Released to the Public Domain
+
+     LANGUAGE TEACHER is a series of menu-driven language tutorial programs 
+designed to be run on the IBM PC/XT/AT/jr or any compatible clone. Each program 
+in the series contains hundreds of word combinations and verb conjugation 
+forms. A line printer can be used with LANGUAGE TEACHER to take advantage of 
+its versatility.
+     Also included is the capability to select language-to-English or English-
+to-language combinations, choose multiple choice answers, be retested on 
+misses, print a multiple choice test, and to run a full quiz diagnostic routine 
+with line printer output. Of particular interest to non-English students is the 
+capability to select the direction of the combinations.
+     All word, phrase, and verb conjugation selections are done randomly by the 
+program the the user being unable to predict what the next selection will be. 
+The program package is not designed to teach conversational language or 
+pronunciation but, instead, to provide practice drills in order to increase 
+your working vocabulary and to enhance your use of the conjugation forms.
+
+     The LANGUAGE TEACHER series was originally published by Acorn Software 
+Products, Inc. of Washington, DC. Since then the company has gone out of 
+business and the author is releasing the series to the Public Domain. If you 
+find any of the programs in the series to be usefull, a suitable payment ($5 to 
+$10) would be appreciated so more programs of this quality can be developed.  
+
+PROGRAM SPECIFICATIONS:
+
+     Minimum system configuration: LANGUAGE TEACHER is written in Microsoft 
+Basic and requires a minimum of 64K bytes of RAM and Advanced Basic, one disk 
+drive and a suitable high resolution monitor. Preferred monitors are the IBM 
+Monochrome Display attached to the IBM Monochrome Display and Printer Adapter 
+or a green screen or "direct drive" RGB monitor attached to the Color/Graphics 
+Monitor Adapter. In most cases, only a high quality color monitor or green 
+screen will provide the resolution necessary to display the special chaaracters 
+used with LANGUAGE TEACHER. All other program functions will be suitable, 
+though, if a low quality color composite monitor is used.
+     Optional equipment includes an 80 column line printer.
+
+LOADING INSTRUCTIONS:
+
+     Power up your system with a DOS diskette containing BASICA in disk drive 
+"A". Load BASICA into memory and remove your DOS diskette from the disk drive. 
+Insert your copy of LANGUAGE TEACHER into disk drive "A", type RUN'TEACHER" and 
+press the Enter key.
+     NOTE: Due to the large amount of string space used, your computer will 
+occasionally seem to "hang up" or "go to sleep". This is due to Microsoft's 
+Basic string manipulation (better known as "garbage collection") and is not a 
+machine or program malfunction. The time rarely exceeds 8-10 seconds. The 
+occurrence of this phenomenon decreases in systems having more than 64K RAM.
+
+SPECIAL CHARACTER SET:
+
+     LANGUAGE TEACHER utilizes the special function keys to input the special 
+characters used in the language. These keys are active only when a non-multiple 
+choice drill is selected in which you must enter the direct equivalent of the 
+required answer. The 25th line of the screen will display which function key is 
+associated with which foreign character.
+     NOTE: Due to the inability of the average line printer to be able to 
+recognize these special characters, programming is implemented to convert these 
+special characters to their "normal" letters before being output to the line 
+printer. Once you have obtained your printout, insert the special marks by 
+hand.
+
+MISCELLANEOUS:
+
+     If a multiple choice type quiz has been selected, you will only be given 
+15 seconds (25 seconds for verb conjugation) to input your answer. If the time 
+expires before you make your choice, you will be credited with an incorrect 
+answer. NOTE: If the computer performs its "garbage collection" routine while 
+timing is in progress, program coding is implemented to prevent your time 
+remaining from falling to zero.
+     If you have not chosen a multiple choice type of quiz, you will have to 
+type in the exact answer. In the case of being quizzed with a noun, you must 
+also type in the definite article ("the") that proceeds the noun.
+     If your original option was the verb conjugation drill, no retesting can 
+be performed. Also, the diagnostic display will let you know how many of each 
+person and tense you missed. If you missed more than 3 of any person/tense, an 
+"*" is displayed beside the applicable person/tense, indicating you need more 
+practice.
+
+ADDITIONAL NOTES:
+
+     The extent of the vocabulary of each program is given below. Since the 
+program randomly selects from its contents in each option, you truly have a 
+thorough drill in each language!
+     SPANISH I: 750 Spanish/English word combinations, 1488 verb conjugations 
+and 150 Spanish/English phrase combinations.
+     SPANISH II: 800 Spanish/English word combinations and 2108 verb 
+conjugation forms.
+     FRENCH I: 784 French/English word combinations, 1600 verb conjugations 
+and 196 French/English phrase combinations.
+     FRENCH II: 864 French/English word combinations and 1600 verb 
+conjugation forms.
+     GERMAN I: 800 German/English word combinations, 1860 verb conjugations 
+and 160 German/English phrase combinations.
+     GERMAN II: 800 German/English word combinations and 2015 verb 
+conjugation forms.
+     ITALIAN: 816 Italian/English word combinations, 1500 verb conjugations 
+and 114 Italian/English phrase combinations.
+
+
+We hope that you have many enjoyable and informative hours working with your 
+LANGUAGE TEACHER program. If you have any suggestions or problems with using 
+LANGUAGE TEACHER, feel free to correspond with the author using the address 
+listed below. Please make your comments as specific as possible and enclose a 
+self-addressed stamped envelope:
+
+                          Andrew P. Bartorillo
+                          c/o Micro Tutor Products
+                          103 Baughmans Lane, Suite 303
+                          Frederick, MD 21701
+
+```
+{% endraw %}
 
 ## TEACHER.BAS
 
+{% raw %}
 ```bas
 10 'Version 1.1
 20 KEY OFF:CLS:SCREEN 0,0,0:WIDTH 80:LOCATE 1,1,0:FOR I=1 TO 10:KEY I,"":NEXT:DEF SEG:POKE 106,0
@@ -1751,9 +2287,272 @@ machines:
 3170 RESUME 3180
 3180 LOCATE 25,26:COLOR 23:PRINT L$;:COLOR 7:FOR DE=1 TO 5999:NEXT:LOCATE 25,26:PRINT SPC(50);:ON ERROR GOTO 0:PR$="":GOTO 2130
 ```
+{% endraw %}
+
+## TEACHER.TXT
+
+{% raw %}
+```
+                                LANGUAGE TEACHER
+
+                              by Andrew Bartorillo
+                      Distributed by Micro Tutor Products
+                         103 Baughmans Lane, Suite 303
+                              Frederick, Md. 21701
+                  Copyright 1982-Released to the Public Domain
+
+     LANGUAGE TEACHER is a series of menu-driven language tutorial programs 
+designed to be run on the IBM PC/XT/AT/jr or any compatible clone. Each program 
+in the series contains hundreds of word combinations and verb conjugation 
+forms. A line printer can be used with LANGUAGE TEACHER to take advantage of 
+its versatility.
+     Also included is the capability to select language-to-English or English-
+to-language combinations, choose multiple choice answers, be retested on 
+misses, print a multiple choice test, and to run a full quiz diagnostic routine 
+with line printer output. Of particular interest to non-English students is the 
+capability to select the direction of the combinations.
+     All word, phrase, and verb conjugation selections are done randomly by the 
+program the the user being unable to predict what the next selection will be. 
+The program package is not designed to teach conversational language or 
+pronunciation but, instead, to provide practice drills in order to increase 
+your working vocabulary and to enhance your use of the conjugation forms.
+
+     The LANGUAGE TEACHER series was originally published by Acorn Software 
+Products, Inc. of Washington, DC. Since then the company has gone out of 
+business and the author is releasing the series to the Public Domain. If you 
+find any of the programs in the series to be usefull, a suitable payment ($5 to 
+$10) would be appreciated so more programs of this quality can be developed.  
+
+PROGRAM SPECIFICATIONS:
+
+     Minimum system configuration: LANGUAGE TEACHER is written in Microsoft 
+Basic and requires a minimum of 64K bytes of RAM and Advanced Basic, one disk 
+drive and a suitable high resolution monitor. Preferred monitors are the IBM 
+Monochrome Display attached to the IBM Monochrome Display and Printer Adapter 
+or a green screen or "direct drive" RGB monitor attached to the Color/Graphics 
+Monitor Adapter. In most cases, only a high quality color monitor or green 
+screen will provide the resolution necessary to display the special chaaracters 
+used with LANGUAGE TEACHER. All other program functions will be suitable, 
+though, if a low quality color composite monitor is used.
+     Optional equipment includes an 80 column line printer.
+
+LOADING INSTRUCTIONS:
+
+     Power up your system with a DOS diskette containing BASICA in disk drive 
+"A". Load BASICA into memory and remove your DOS diskette from the disk drive. 
+Insert your copy of LANGUAGE TEACHER into disk drive "A", type RUN'TEACHER" and 
+press the Enter key.
+     NOTE: Due to the large amount of string space used, your computer will 
+occasionally seem to "hang up" or "go to sleep". This is due to Microsoft's 
+Basic string manipulation (better known as "garbage collection") and is not a 
+machine or program malfunction. The time rarely exceeds 8-10 seconds. The 
+occurrence of this phenomenon decreases in systems having more than 64K RAM.
+
+SPECIAL CHARACTER SET:
+
+     LANGUAGE TEACHER utilizes the special function keys to input the special 
+characters used in the language. These keys are active only when a non-multiple 
+choice drill is selected in which you must enter the direct equivalent of the 
+required answer. The 25th line of the screen will display which function key is 
+associated with which foreign character.
+     NOTE: Due to the inability of the average line printer to be able to 
+recognize these special characters, programming is implemented to convert these 
+special characters to their "normal" letters before being output to the line 
+printer. Once you have obtained your printout, insert the special marks by 
+hand.
+
+MISCELLANEOUS:
+
+     If a multiple choice type quiz has been selected, you will only be given 
+15 seconds (25 seconds for verb conjugation) to input your answer. If the time 
+expires before you make your choice, you will be credited with an incorrect 
+answer. NOTE: If the computer performs its "garbage collection" routine while 
+timing is in progress, program coding is implemented to prevent your time 
+remaining from falling to zero.
+     If you have not chosen a multiple choice type of quiz, you will have to 
+type in the exact answer. In the case of being quizzed with a noun, you must 
+also type in the definite article ("the") that proceeds the noun.
+     If your original option was the verb conjugation drill, no retesting can 
+be performed. Also, the diagnostic display will let you know how many of each 
+person and tense you missed. If you missed more than 3 of any person/tense, an 
+"*" is displayed beside the applicable person/tense, indicating you need more 
+practice.
+
+ADDITIONAL NOTES:
+
+     The extent of the vocabulary of each program is given below. Since the 
+program randomly selects from its contents in each option, you truly have a 
+thorough drill in each language!
+     SPANISH I: 750 Spanish/English word combinations, 1488 verb conjugations 
+and 150 Spanish/English phrase combinations.
+     SPANISH II: 800 Spanish/English word combinations and 2108 verb 
+conjugation forms.
+     FRENCH I: 784 French/English word combinations, 1600 verb conjugations 
+and 196 French/English phrase combinations.
+     FRENCH II: 864 French/English word combinations and 1600 verb 
+conjugation forms.
+     GERMAN I: 800 German/English word combinations, 1860 verb conjugations 
+and 160 German/English phrase combinations.
+     GERMAN II: 800 German/English word combinations and 2015 verb 
+conjugation forms.
+     ITALIAN: 816 Italian/English word combinations, 1500 verb conjugations 
+and 114 Italian/English phrase combinations.
+
+
+We hope that you have many enjoyable and informative hours working with your 
+LANGUAGE TEACHER program. If you have any suggestions or problems with using 
+LANGUAGE TEACHER, feel free to correspond with the author using the address 
+listed below. Please make your comments as specific as possible and enclose a 
+self-addressed stamped envelope:
+
+                          Andrew P. Bartorillo
+                          c/o Micro Tutor Products
+                          103 Baughmans Lane, Suite 303
+                          Frederick, MD 21701
+
+```
+{% endraw %}
+
+## LANGUAGE.TXT
+
+{% raw %}
+```
+                                LANGUAGE TEACHER
+ 
+                              by Andrew Bartorillo
+                      Distributed by Micro Tutor Products
+                         103 Baughmans Lane, Suite 303
+                              Frederick, Md. 21701
+                  Copyright 1982-Released to the Public Domain
+ 
+     LANGUAGE TEACHER is a series of menu-driven language tutorial programs
+designed to be run on the IBM PC/XT/AT/jr or any compatible clone. Each program
+in the series contains hundreds of word combinations and verb conjugation
+forms. A line printer can be used with LANGUAGE TEACHER to take advantage of
+its versatility.
+     Also included is the capability to select language-to-English or English-
+to-language combinations, choose multiple choice answers, be retested on
+misses, print a multiple choice test, and to run a full quiz diagnostic routine
+with line printer output. Of particular interest to non-English students is the
+capability to select the direction of the combinations.
+     All word, phrase, and verb conjugation selections are done randomly by the
+program the the user being unable to predict what the next selection will be.
+The program package is not designed to teach conversational language or
+pronunciation but, instead, to provide practice drills in order to increase
+your working vocabulary and to enhance your use of the conjugation forms.
+ 
+     The LANGUAGE TEACHER series was originally published by Acorn Software
+Products, Inc. of Washington, DC. Since then the company has gone out of
+business and the author is releasing the series to the Public Domain. If you
+find any of the programs in the series to be usefull, a suitable payment ($5 to
+$10) would be appreciated so more programs of this quality can be developed.
+ 
+PROGRAM SPECIFICATIONS:
+ 
+     Minimum system configuration: LANGUAGE TEACHER is written in Microsoft
+Basic and requires a minimum of 64K bytes of RAM and Advanced Basic, one disk
+drive and a suitable high resolution monitor. Preferred monitors are the IBM
+Monochrome Display attached to the IBM Monochrome Display and Printer Adapter
+or a green screen or "direct drive" RGB monitor attached to the Color/Graphics
+Monitor Adapter. In most cases, only a high quality color monitor or green
+screen will provide the resolution necessary to display the special chaaracters
+used with LANGUAGE TEACHER. All other program functions will be suitable,
+though, if a low quality color composite monitor is used.
+     Optional equipment includes an 80 column line printer.
+ 
+LOADING INSTRUCTIONS:
+ 
+     Power up your system with a DOS diskette containing BASICA in disk drive
+"A". Load BASICA into memory and remove your DOS diskette from the disk drive.
+Insert your copy of LANGUAGE TEACHER into disk drive "A", type RUN'TEACHER" and
+press the Enter key.
+     NOTE: Due to the large amount of string space used, your computer will
+occasionally seem to "hang up" or "go to sleep". This is due to Microsoft's
+Basic string manipulation (better known as "garbage collection") and is not a
+machine or program malfunction. The time rarely exceeds 8-10 seconds. The
+occurrence of this phenomenon decreases in systems having more than 64K RAM.
+ 
+SPECIAL CHARACTER SET:
+ 
+     LANGUAGE TEACHER utilizes the special function keys to input the special
+characters used in the language. These keys are active only when a non-multiple
+choice drill is selected in which you must enter the direct equivalent of the
+required answer. The 25th line of the screen will display which function key is
+associated with which foreign character.
+     NOTE: Due to the inability of the average line printer to be able to
+recognize these special characters, programming is implemented to convert these
+special characters to their "normal" letters before being output to the line
+printer. Once you have obtained your printout, insert the special marks by
+hand.
+ 
+MISCELLANEOUS:
+ 
+     If a multiple choice type quiz has been selected, you will only be given
+15 seconds (25 seconds for verb conjugation) to input your answer. If the time
+expires before you make your choice, you will be credited with an incorrect
+answer. NOTE: If the computer performs its "garbage collection" routine while
+timing is in progress, program coding is implemented to prevent your time
+remaining from falling to zero.
+     If you have not chosen a multiple choice type of quiz, you will have to
+type in the exact answer. In the case of being quizzed with a noun, you must
+also type in the definite article ("the") that proceeds the noun.
+     If your original option was the verb conjugation drill, no retesting can
+be performed. Also, the diagnostic display will let you know how many of each
+person and tense you missed. If you missed more than 3 of any person/tense, an
+"*" is displayed beside the applicable person/tense, indicating you need more
+practice.
+ 
+ADDITIONAL NOTES:
+ 
+     The extent of the vocabulary of each program is given below. Since the
+program randomly selects from its contents in each option, you truly have a
+thorough drill in each language!
+     SPANISH I: 750 Spanish/English word combinations, 1488 verb conjugations
+and 150 Spanish/English phrase combinations.
+     SPANISH II: 800 Spanish/English word combinations and 2108 verb
+conjugation forms.
+     FRENCH I: 784 French/English word combinations, 1600 verb conjugations
+and 196 French/English phrase combinations.
+     FRENCH II: 864 French/English word combinations and 1600 verb
+conjugation forms.
+     GERMAN I: 800 German/English word combinations, 1860 verb conjugations
+and 160 German/English phrase combinations.
+     GERMAN II: 800 German/English word combinations and 2015 verb
+conjugation forms.
+     ITALIAN: 816 Italian/English word combinations, 1500 verb conjugations
+and 114 Italian/English phrase combinations.
+ 
+ 
+We hope that you have many enjoyable and informative hours working with your
+LANGUAGE TEACHER program. If you have any suggestions or problems with using
+LANGUAGE TEACHER, feel free to correspond with the author using the address
+listed below. Please make your comments as specific as possible and enclose a
+self-addressed stamped envelope:
+ 
+                          Andrew P. Bartorillo
+                          c/o Micro Tutor Products
+                          103 Baughmans Lane, Suite 303
+                          Frederick, MD 21701
+ 
+French/English phrase combinations.
+     FRENCH II: 864 French/English word combinations and 1600 verb
+conjugation forms.
+     GERMAN I: 800 German/English word combinations, 1860 verb conjugations
+and 160 German/English phrase combinations.
+     GERMAN II: 800 German/English word combinations and 2015 verb
+conjugation forms.
+     ITALIAN: 816 Italian/English word combinations, 1500 verb conjugations
+and 114 Italian/English phrase combinations.
+ 
+ 
+We hope that you have many enjoyable and informative hours working with your
+LANGUAGE TEACHER program.
+```
+{% endraw %}
 
 ## TEACHER.BAS
 
+{% raw %}
 ```bas
 10 'Version 1.2---10/1/83
 20 KEY OFF:CLS:SCREEN 0,0,0:WIDTH 80:LOCATE 1,1,0:FOR I=1 TO 10:KEY I,"":NEXT:DEF SEG:POKE 106,0
@@ -2085,9 +2884,135 @@ machines:
 3170 RESUME 3180
 3180 LOCATE 25,26:COLOR 23:PRINT L$;:COLOR 7:FOR DE=1 TO 5999:NEXT:LOCATE 25,26:PRINT SPC(50);:ON ERROR GOTO 0:PR$="":GOTO 2130
 ```
+{% endraw %}
+
+## TEACHER.TXT
+
+{% raw %}
+```
+                                LANGUAGE TEACHER
+
+                              by Andrew Bartorillo
+                      Distributed by Micro Tutor Products
+                         103 Baughmans Lane, Suite 303
+                              Frederick, Md. 21701
+                  Copyright 1982-Released to the Public Domain
+
+     LANGUAGE TEACHER is a series of menu-driven language tutorial programs 
+designed to be run on the IBM PC/XT/AT/jr or any compatible clone. Each program 
+in the series contains hundreds of word combinations and verb conjugation 
+forms. A line printer can be used with LANGUAGE TEACHER to take advantage of 
+its versatility.
+     Also included is the capability to select language-to-English or English-
+to-language combinations, choose multiple choice answers, be retested on 
+misses, print a multiple choice test, and to run a full quiz diagnostic routine 
+with line printer output. Of particular interest to non-English students is the 
+capability to select the direction of the combinations.
+     All word, phrase, and verb conjugation selections are done randomly by the 
+program the the user being unable to predict what the next selection will be. 
+The program package is not designed to teach conversational language or 
+pronunciation but, instead, to provide practice drills in order to increase 
+your working vocabulary and to enhance your use of the conjugation forms.
+
+     The LANGUAGE TEACHER series was originally published by Acorn Software 
+Products, Inc. of Washington, DC. Since then the company has gone out of 
+business and the author is releasing the series to the Public Domain. If you 
+find any of the programs in the series to be usefull, a suitable payment ($5 to 
+$10) would be appreciated so more programs of this quality can be developed.  
+
+PROGRAM SPECIFICATIONS:
+
+     Minimum system configuration: LANGUAGE TEACHER is written in Microsoft 
+Basic and requires a minimum of 64K bytes of RAM and Advanced Basic, one disk 
+drive and a suitable high resolution monitor. Preferred monitors are the IBM 
+Monochrome Display attached to the IBM Monochrome Display and Printer Adapter 
+or a green screen or "direct drive" RGB monitor attached to the Color/Graphics 
+Monitor Adapter. In most cases, only a high quality color monitor or green 
+screen will provide the resolution necessary to display the special chaaracters 
+used with LANGUAGE TEACHER. All other program functions will be suitable, 
+though, if a low quality color composite monitor is used.
+     Optional equipment includes an 80 column line printer.
+
+LOADING INSTRUCTIONS:
+
+     Power up your system with a DOS diskette containing BASICA in disk drive 
+"A". Load BASICA into memory and remove your DOS diskette from the disk drive. 
+Insert your copy of LANGUAGE TEACHER into disk drive "A", type RUN'TEACHER" and 
+press the Enter key.
+     NOTE: Due to the large amount of string space used, your computer will 
+occasionally seem to "hang up" or "go to sleep". This is due to Microsoft's 
+Basic string manipulation (better known as "garbage collection") and is not a 
+machine or program malfunction. The time rarely exceeds 8-10 seconds. The 
+occurrence of this phenomenon decreases in systems having more than 64K RAM.
+
+SPECIAL CHARACTER SET:
+
+     LANGUAGE TEACHER utilizes the special function keys to input the special 
+characters used in the language. These keys are active only when a non-multiple 
+choice drill is selected in which you must enter the direct equivalent of the 
+required answer. The 25th line of the screen will display which function key is 
+associated with which foreign character.
+     NOTE: Due to the inability of the average line printer to be able to 
+recognize these special characters, programming is implemented to convert these 
+special characters to their "normal" letters before being output to the line 
+printer. Once you have obtained your printout, insert the special marks by 
+hand.
+
+MISCELLANEOUS:
+
+     If a multiple choice type quiz has been selected, you will only be given 
+15 seconds (25 seconds for verb conjugation) to input your answer. If the time 
+expires before you make your choice, you will be credited with an incorrect 
+answer. NOTE: If the computer performs its "garbage collection" routine while 
+timing is in progress, program coding is implemented to prevent your time 
+remaining from falling to zero.
+     If you have not chosen a multiple choice type of quiz, you will have to 
+type in the exact answer. In the case of being quizzed with a noun, you must 
+also type in the definite article ("the") that proceeds the noun.
+     If your original option was the verb conjugation drill, no retesting can 
+be performed. Also, the diagnostic display will let you know how many of each 
+person and tense you missed. If you missed more than 3 of any person/tense, an 
+"*" is displayed beside the applicable person/tense, indicating you need more 
+practice.
+
+ADDITIONAL NOTES:
+
+     The extent of the vocabulary of each program is given below. Since the 
+program randomly selects from its contents in each option, you truly have a 
+thorough drill in each language!
+     SPANISH I: 750 Spanish/English word combinations, 1488 verb conjugations 
+and 150 Spanish/English phrase combinations.
+     SPANISH II: 800 Spanish/English word combinations and 2108 verb 
+conjugation forms.
+     FRENCH I: 784 French/English word combinations, 1600 verb conjugations 
+and 196 French/English phrase combinations.
+     FRENCH II: 864 French/English word combinations and 1600 verb 
+conjugation forms.
+     GERMAN I: 800 German/English word combinations, 1860 verb conjugations 
+and 160 German/English phrase combinations.
+     GERMAN II: 800 German/English word combinations and 2015 verb 
+conjugation forms.
+     ITALIAN: 816 Italian/English word combinations, 1500 verb conjugations 
+and 114 Italian/English phrase combinations.
+
+
+We hope that you have many enjoyable and informative hours working with your 
+LANGUAGE TEACHER program. If you have any suggestions or problems with using 
+LANGUAGE TEACHER, feel free to correspond with the author using the address 
+listed below. Please make your comments as specific as possible and enclose a 
+self-addressed stamped envelope:
+
+                          Andrew P. Bartorillo
+                          c/o Micro Tutor Products
+                          103 Baughmans Lane, Suite 303
+                          Frederick, MD 21701
+
+```
+{% endraw %}
 
 ## TEACHER.BAS
 
+{% raw %}
 ```bas
 10 'Version 1.2---10/1/83
 20 KEY OFF:CLS:SCREEN 0,0,0:WIDTH 80:LOCATE 1,1,0:FOR I=1 TO 10:KEY I,"":NEXT:DEF SEG:POKE 106,0
@@ -2422,6 +3347,131 @@ machines:
 3170 RESUME 3180
 3180 LOCATE 25,26:COLOR 23:PRINT L$;:COLOR 7:FOR DE=1 TO 5999:NEXT:LOCATE 25,26:PRINT SPC(50);:ON ERROR GOTO 0:PR$="":GOTO 2130
 ```
+{% endraw %}
+
+## TEACHER.TXT
+
+{% raw %}
+```
+                                LANGUAGE TEACHER
+
+                              by Andrew Bartorillo
+                      Distributed by Micro Tutor Products
+                         103 Baughmans Lane, Suite 303
+                              Frederick, Md. 21701
+                  Copyright 1982-Released to the Public Domain
+
+     LANGUAGE TEACHER is a series of menu-driven language tutorial programs 
+designed to be run on the IBM PC/XT/AT/jr or any compatible clone. Each program 
+in the series contains hundreds of word combinations and verb conjugation 
+forms. A line printer can be used with LANGUAGE TEACHER to take advantage of 
+its versatility.
+     Also included is the capability to select language-to-English or English-
+to-language combinations, choose multiple choice answers, be retested on 
+misses, print a multiple choice test, and to run a full quiz diagnostic routine 
+with line printer output. Of particular interest to non-English students is the 
+capability to select the direction of the combinations.
+     All word, phrase, and verb conjugation selections are done randomly by the 
+program the the user being unable to predict what the next selection will be. 
+The program package is not designed to teach conversational language or 
+pronunciation but, instead, to provide practice drills in order to increase 
+your working vocabulary and to enhance your use of the conjugation forms.
+
+     The LANGUAGE TEACHER series was originally published by Acorn Software 
+Products, Inc. of Washington, DC. Since then the company has gone out of 
+business and the author is releasing the series to the Public Domain. If you 
+find any of the programs in the series to be usefull, a suitable payment ($5 to 
+$10) would be appreciated so more programs of this quality can be developed.  
+
+PROGRAM SPECIFICATIONS:
+
+     Minimum system configuration: LANGUAGE TEACHER is written in Microsoft 
+Basic and requires a minimum of 64K bytes of RAM and Advanced Basic, one disk 
+drive and a suitable high resolution monitor. Preferred monitors are the IBM 
+Monochrome Display attached to the IBM Monochrome Display and Printer Adapter 
+or a green screen or "direct drive" RGB monitor attached to the Color/Graphics 
+Monitor Adapter. In most cases, only a high quality color monitor or green 
+screen will provide the resolution necessary to display the special chaaracters 
+used with LANGUAGE TEACHER. All other program functions will be suitable, 
+though, if a low quality color composite monitor is used.
+     Optional equipment includes an 80 column line printer.
+
+LOADING INSTRUCTIONS:
+
+     Power up your system with a DOS diskette containing BASICA in disk drive 
+"A". Load BASICA into memory and remove your DOS diskette from the disk drive. 
+Insert your copy of LANGUAGE TEACHER into disk drive "A", type RUN'TEACHER" and 
+press the Enter key.
+     NOTE: Due to the large amount of string space used, your computer will 
+occasionally seem to "hang up" or "go to sleep". This is due to Microsoft's 
+Basic string manipulation (better known as "garbage collection") and is not a 
+machine or program malfunction. The time rarely exceeds 8-10 seconds. The 
+occurrence of this phenomenon decreases in systems having more than 64K RAM.
+
+SPECIAL CHARACTER SET:
+
+     LANGUAGE TEACHER utilizes the special function keys to input the special 
+characters used in the language. These keys are active only when a non-multiple 
+choice drill is selected in which you must enter the direct equivalent of the 
+required answer. The 25th line of the screen will display which function key is 
+associated with which foreign character.
+     NOTE: Due to the inability of the average line printer to be able to 
+recognize these special characters, programming is implemented to convert these 
+special characters to their "normal" letters before being output to the line 
+printer. Once you have obtained your printout, insert the special marks by 
+hand.
+
+MISCELLANEOUS:
+
+     If a multiple choice type quiz has been selected, you will only be given 
+15 seconds (25 seconds for verb conjugation) to input your answer. If the time 
+expires before you make your choice, you will be credited with an incorrect 
+answer. NOTE: If the computer performs its "garbage collection" routine while 
+timing is in progress, program coding is implemented to prevent your time 
+remaining from falling to zero.
+     If you have not chosen a multiple choice type of quiz, you will have to 
+type in the exact answer. In the case of being quizzed with a noun, you must 
+also type in the definite article ("the") that proceeds the noun.
+     If your original option was the verb conjugation drill, no retesting can 
+be performed. Also, the diagnostic display will let you know how many of each 
+person and tense you missed. If you missed more than 3 of any person/tense, an 
+"*" is displayed beside the applicable person/tense, indicating you need more 
+practice.
+
+ADDITIONAL NOTES:
+
+     The extent of the vocabulary of each program is given below. Since the 
+program randomly selects from its contents in each option, you truly have a 
+thorough drill in each language!
+     SPANISH I: 750 Spanish/English word combinations, 1488 verb conjugations 
+and 150 Spanish/English phrase combinations.
+     SPANISH II: 800 Spanish/English word combinations and 2108 verb 
+conjugation forms.
+     FRENCH I: 784 French/English word combinations, 1600 verb conjugations 
+and 196 French/English phrase combinations.
+     FRENCH II: 864 French/English word combinations and 1600 verb 
+conjugation forms.
+     GERMAN I: 800 German/English word combinations, 1860 verb conjugations 
+and 160 German/English phrase combinations.
+     GERMAN II: 800 German/English word combinations and 2015 verb 
+conjugation forms.
+     ITALIAN: 816 Italian/English word combinations, 1500 verb conjugations 
+and 114 Italian/English phrase combinations.
+
+
+We hope that you have many enjoyable and informative hours working with your 
+LANGUAGE TEACHER program. If you have any suggestions or problems with using 
+LANGUAGE TEACHER, feel free to correspond with the author using the address 
+listed below. Please make your comments as specific as possible and enclose a 
+self-addressed stamped envelope:
+
+                          Andrew P. Bartorillo
+                          c/o Micro Tutor Products
+                          103 Baughmans Lane, Suite 303
+                          Frederick, MD 21701
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

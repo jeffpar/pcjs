@@ -45,6 +45,64 @@ machines:
     SYSTEM   RC   Sample macro file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1429.TXT
+
+{% raw %}
+```
+Disk No: 1429
+Program Title:  JOVE (Disk 1 of 3)
+PC-SIG version: 1
+
+JOVE stands for Jonathan's Own Version of EMACS, the popular word
+processor for programers used on the big mainframes.  This PC version
+packs all the word processing functionality of its mainframe relative
+with some interactive PC niceties.
+
+Experienced users will enjoy the convenience of using the same editor
+they use with UNIX.  JOVE provides simple insertion and deletion,
+multiple buffers and files, virtually unlimited file size, on-line help,
+file encryption and more.  An extensive built-in macro command language
+and the complete C source code is also included for further
+customization.  JOVE goes beyond EMACS with a LISP programers' mode,
+added document functionality, and operating system interaction.  On-disk
+documentation is backed up by a tutorial.
+
+Synopsis: PC-version of EMACS, the mainframe programers' text processor,
+with most of the same functions plus a LISP programers' mode and
+operating system interaction.
+
+Usage:  Editor for Programmers/LISP.
+
+Special Requirements:  512K memory.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+COMPRESS EXE  File compression utility.
+COMPRESS MAN  Manual for COMPRESS.
+CONTENTS      File descriptions.
+EXAMPLE  RC   Sample macro file.
+JOVE     D    EMACS Tutorial.
+JOVE     DXZ  Data file.
+JOVE     EXE  Program executable.
+README   DOS  MS-DOS version notes.
+SYSTEM   RC   Sample macro file.
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1429
 

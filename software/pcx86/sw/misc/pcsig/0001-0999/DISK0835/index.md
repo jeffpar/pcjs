@@ -38,6 +38,45 @@ machines:
     one-across labels. You can also define the print format for odd sized
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0835.TXT
+
+{% raw %}
+```
+Disk No:  835                                                           
+Disk Title: Multifile                                                   
+PC-SIG Version: S2.8                                                    
+                                                                        
+Program Title: Multifile                                                
+Author Version: 2.6                                                     
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+MULTIFILE is a memory-resident database program designed specifically   
+for mailing labels, membership files, or small inventories.             
+                                                                        
+It is a menu-driven utility that arranges your data into one to six     
+equally-spaced columns which can then be used for lists, mailing labels,
+envelopes, or printouts on paper for windowed envelopes.  Columns can be
+sorted so data will appear in alphabetical or numerical order.  The     
+totals for each column can be calculated and printed.  Other            
+corresponding columns can be sorted by one particular column.           
+                                                                        
+You can delete, edit, or search for a particular entry.  Each file can  
+be saved or loaded from the disk.  Two sample files are included to help
+you become familiar with the program.                                   
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989, 1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0835
 

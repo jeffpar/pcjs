@@ -41,6 +41,70 @@ machines:
     ~ A user-defined plotter driver routine is included.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FORM1.DOC
+
+{% raw %}
+```
+
+               CURVE DIGITIZER REGISTRATION AND SUPPORT ORDER FORM
+
+    Return this form to West Coast Consultants with a check, money order or
+    charge card information for the option you choose. We also accept credit
+    card phone orders at 619-565-1266. For C.O.D. orders, please add $5.
+
+    California residents please add 7.0% sales tax. For overseas orders,
+    please add $20 shipping.
+
+    If you are considering purchasing multiple copies of Curve Digitizer, your
+    company, school, or agency should contact West Coast Consultants about our
+    quantity discounts and our corporate support program. Dealer inquiries are
+    also welcome.
+
+
+
+
+	 FULL REGISTRATION and SUPPORT (includes TECH. REF.)...$149 ________
+
+	 80-page USER'S GUIDE for Shareware Version.............$15 ________
+
+	 SALES TAX 7.0% ( CA residents only )...................... ________
+
+	 SHIPPING & HANDLING ...................................... __$3.00_
+
+	 UPS (C.O.D.)............................................$5 ________
+        
+	 TOTAL .................................................... ________
+
+
+
+  NAME________________________________________________________________________
+
+  COMPANY_____________________________________________________________________
+
+  ADDRESS_____________________________________________________________________
+
+  CITY, STATE, ZIP____________________________________________________________
+
+  DAYTIME PHONE (_______)________-_________________
+
+                VIDEO CARD TYPE:  EGA/CGA_______HERCULES MONO_______
+
+      VISA/MC NUMBER_________________________________________EXPIRES________
+
+      SIGNATURE_____________________________________________________________
+
+    MAIL TO:        W E S T   C O A S T   C O N S U L T A N T S
+                     1 1 2 7 2   P A B E L L O N   C I R C L E
+                        S A N   D I E G O,  C A.   9 2 1 2 4
+                                  (619)-565-1266
+  
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2068
 

@@ -61,6 +61,82 @@ machines:
     ZACCTRCV ZRX  Special-purpose accounting racks.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1291.TXT
+
+{% raw %}
+```
+Disk No: 1291
+Program Title:  SMALL BUSINESS ACCOUNTING KIT for ZOOMRACKS
+PC-SIG version: 1.1
+
+Whether you find accounting procedures confusing or, on the contrary,
+are an accounting professional but would like to save time and effort,
+the SMALL BUSINESS ACCOUNTING KIT used as a template to ZOOMRACKS may be
+the answer.
+
+This is a strong general accounting package that has built itself around
+the advantages of ZOOMRACKS, the award winning "rack & card" database.
+
+Templates are included for: accounts receivable, accounts payable,
+general business transactions, trial balance, income (profit and loss)
+statement, balance sheet, payroll, adjusting entries, calendar, cash
+journal, notes payable/receivable, check register.  Each template comes
+with field descriptions, usage notes, pre-designed report formats and
+more.  All of these individual templates combined, form a complete
+accounting system.
+
+Macros have been included to simplify recording accounts receivable and
+accounts payable transactions, performing balance sheet and income
+statement computations, calculating gross profit, calculating working
+capital, taking the trial balance, posting payroll payments, and
+printing checks.  Each macro comes with a description of how to use it.
+
+Usage:  Accounting.
+
+Special Requirements:  ZOOMRACKS program on disk #1291.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $49.95
+
+File Descriptions:
+
+ACCKIT   ZRX  A list of all the racks in this kit.
+ACHECKS  ZRX  Collection of checks to be printed.
+ADJUSTS  ZRX  Rack of adjusting entry cards.
+AFORMS   ZRX  Rack of output forms to use with this kit.
+BALBLANK ZRX  Company balance sheet--blank.
+BALSHEET ZRX  Company balance sheet--sample.
+DIALY88  ZRX  Calendar for 1988.
+LDGRACTS ZRX  List of ledger accounts and account numbers.
+MACACC   ZRX  Macros used in this kit.
+NOTEPAY  ZRX  Notes payable register.
+NOTERCV  ZRX  Notes receivable register.
+PANDL    ZRX  Profit and loss (income) statement--sample.
+PAYABLES ZRX  List of payables (purchase orders and payments).
+PAYROLL  ZRX  Payroll records.
+PLBLNAK  ZRX  P and L (income) statement, blank plus usage instructions.
+SALES    ZRX  List of invoices, sales orders, and backorders.
+TRIALBAL ZRX  Trial balance.
+USEAKIT  ZRX  Rack of notes on using this kit.
+USINGSRX ZRX  Rack of hints and suggestions on using Zoomracks.
+X8086    ZRX  Sample archived transactions for June 1986.
+XACTS    ZRX  Simplest form of recording business transactions.
+ZACCTPAY ZRX  Special-purpose accounting racks.
+ZACCTRCV ZRX  Special-purpose accounting racks.
+ZCASH    ZRX  Special-purpose accounting racks.
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale, CA 94086
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1291
 

@@ -35,6 +35,44 @@ machines:
     players and budding cryptogram pundits.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2435.TXT
+
+{% raw %}
+```
+Disk No: 2435                                                           
+Disk Title: WordFind 2 of 2 (#2434 also)                                
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Wordfind                                                 
+Author Version: 5.2S                                                    
+Author Registration: $15.00                                             
+Special Requirements: None                                              
+                                                                        
+What's an eight letter word that starts with a "W" and means "a terrific
+puzzle-helper"?  If you haven't guessed, the answer is WORDFIND, a      
+sensational program for anyone who loves puzzles but doesn't always have
+all the answers.  WORDFIND assists you in finding words for crossword   
+puzzles and other types of word puzzles such as acrostics.  All you do  
+is type in the word with a wild card symbol for the letters you don't   
+know.  WORDFIND searches its files and tells you every word that meets  
+the letter requirements.  You still get to decide which word meets the  
+crossword's definition.                                                 
+                                                                        
+WORDFIND contains a dictionary full of words, from two letters to 20    
+letters long.  This program is perfect for frustrated crossword players 
+and budding cryptogram pundits.                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2435
 

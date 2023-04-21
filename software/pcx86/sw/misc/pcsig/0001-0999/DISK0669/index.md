@@ -52,8 +52,136 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILE0669.TXT
+
+{% raw %}
+```
+Disk No:  669                                                           
+Disk Title: Graphtime II 1 of 2 (670 2nd disk)  (Disk 1 of 2)           
+PC-SIG Version: S3.3                                                    
+                                                                        
+Program Title: Graphtime II                                             
+Author Version: 3.00                                                    
+Author Registration: $49.95                                             
+Special Requirements: 512K RAM, CGA or EGA graphics.                    
+                                                                        
+GRAPHTIME II is a business-presentation graphics program.  GRAPHTIME II 
+does various line, column and pie charts.  The charts can be printed or 
+plotted, viewed individually, or set up to run as an unattended ``slide 
+show'' on the monitor.  It accepts data from dBase II/III, Multiplan,   
+and Lotus 1-2-3, or you can enter data directly.  It has a font editor, 
+macro editor and math functions including moving averages.  There is    
+even an ``undo'' function.  A Microsoft mouse (or compatible) is        
+recommended.                                                            
+                                                                        
+This version will plot 24 data points and will print ``paint''          
+files, but will not save them.                                          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## FUNGEN.DOC
+
+{% raw %}
+```
+------------------------------------------------------------------------
+							   April 2, 1990
+                GRAPHTIME-II Function data generation.
+
+The  Function  generator system operates independently of the  other
+GRAPHTIME-II programs.  When the function(s) have been  entered and the
+data  created, this data file is then  loaded with the normal FL command
+in the GRAPH program.
+
+INSTALLATION.
+
+a. Floppy disk:
+Copy the Startup disk (#1) to a new floppy disk. e.g. A:> COPY *.*  B:<Ent>
+Label this disk "Function Generator".
+Delete any Help files from this disk: DEL *.GTH<Ent>
+
+IBM  PC: Copy the BASICA interpreter from your system disk in drive A:
+onto the Function Generator disk in drive B:
+e.g. A:> COPY BASICA.*  B:<Ent>
+     or
+IBM  Compatibles:  Copy the  GWBASIC interpreter onto the Function Generator
+disk: e.g. A:> COPY GWBASIC.*  B:<Ent>
+
+b. Hard disk:
+
+1.  Copy  BASICA.* or GWBASIC.* to the GT subdirectory.
+   e.g. C:\GT> COPY A:BASICA.* <Ent>
+	C:\GT> COPY A:GWBASIC.* <Ent>
+
+OPERATION.
+
+From  either  drive A:>  (Floppy system)
+ or   subdirectory  C:\GT>  (Hard disk), enter:
+
+GTF <Ent>    (with GWBASIC installed)
+
+or
+
+GTFB <Ent>   (with BASICA installed)
+
+This  will run the Function Generator program. One or two functions
+may be entered.
+Single function: e.g. A(X)=X*SIN(X)
+Where  A  is  the function  name.  X is the argument  and  will  be
+specified as a range of values.
+X-axis will be the X range specified (e.g. -10 to 10).
+Y-axis will be the function of X. (e.g. X*SIN(X) )
+
+Double function: e.g. Funct1: A(X)=SIN(X) and Funct2: B(X)=COS(X)
+
+X-axis will be Funct1(X).
+Y-axis will be Funct2(X).
+
+                                   2.
+
+When the functions have been entered the program will request:
+
+Function Title:                 (To accept the title shown, press
+Y-axis Title:                    <Ent> or type in your new title.
+X-axis Title:                    These will appear on the graph.)
+
+A  new  program  will  be  generated  and run  to  request  further
+information:
+(Note: On a PC-XT this process will take approximately 30 seconds.)
+
+Output File name:___________/   (The name may include drive. eg B:
+                                 Do not add an extension as .GTD
+                                 is added.)
+Number of points:____/          (Maximum for GRAPHTIME is 1024)
+Minimum argument:________/      (May be + or -)
+Maximum argument:________/      (Must be higher than minimum.)
+
+The increment will calculated and displayed.
+If the entry is OK press Y or <Ent>.
+The  X and Y data pairs will be calculated and written to the  data
+file.
+You  may then press <Esc> to return to system (DOS) level, or press
+SPACE  to  create  another  file  of the same function(s)  using  a
+different numbers of points and argument range.
+
+When  the  file(s) have  been created, startup GRAPHTIME-II in  the
+usual way: GT<Ent> or GO<Ent> then select G for Graph.
+Use FL name<Ent> to load the data into memory.
+The data is in Random format and may be edited, printed or graphed.
+
+ _________________________________________________________________
+
+```
+{% endraw %}
+
 ## GTFLP.BAS
 
+{% raw %}
 ```bas
 10 'SAVE"GTFLP" 'Rene Rojas for Computer Performance 13-10-87
 20 REM
@@ -63,6 +191,73 @@ machines:
 60 LOCATE 2,10:COLOR 14,1:PRINT "G R A P H T I M E - I I   F U N C T I O N    G E N E R A T I O N ";:LOCATE 11,36:COLOR 16,7:PRINT "LOADING";:COLOR 14,1
 70 RUN "GTFG"
 ```
+{% endraw %}
+
+## GTPRINT.DOC
+
+{% raw %}
+```
+------------------------------------------------------------------
+
+GRAPHTIME-II                                  2 April 1990
+
+GTPRINT.EXE   (Available with registered version.)
+
+This  is a program to convert a plotter  file
+(name.GTG) to output high resolution graphs onto a standard
+EPSON/compatible graphics printer.
+
+Operation:
+
+Load  the plotter  driver  (from  DRAW or GRAPH) and  create  a
+plotter file of a diagram or graph. During the setup stage,
+select Printer instead of Plotter. (Do not use Direct mode.)
+When the plotter file is Run [PR], the HPGL printer driver is loaded.
+When the file  name  is  requested,  enter  the  plotter  file  name
+previously created. (Do not include the .GTG extension.)
+
+Three  resolutions are possible.  Normally use the 960  dot
+resolution. (Usually only the text size is affected.) The higher
+the resolution, the slower the printing speed.
+To abort printing, press <ESC>. It may take up to minute to respond.
+You will then be asked for another filename. Press <ESC> to exit.
+
+NOTES: Complex graphs or drawings can take up to 45 minutes on a
+       normal XT. An 80286 or faster processor is desirable.
+       Pattern fill is limited to that of an HPGL plotter.
+
+John D. Newman
+Computer Performance.
+```
+{% endraw %}
+
+## LINE.DOC
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+			    GRAPHTIME-II
+
+Program: GTLINE
+
+This program is called from the DRAW program with the GL command.
+It provides an alternative diagram drawing facility by making use of the
+IBM/EPSON graphics character set. This allows lines and frames to be drawn
+in two thicknesses and many additional text symbols are available.
+
+Blocks of the screen can be moved or copied.
+
+Up to four screens can be joined to form a single larger diagram.
+Screens can be saved to and loaded from disk.
+
+When printing, text can use printer attributes such as bold or condensed.
+For more details, press F1 key when LINE is loaded.
+
+April 2, 1990
+
+---------------------------------------------------------------------------
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

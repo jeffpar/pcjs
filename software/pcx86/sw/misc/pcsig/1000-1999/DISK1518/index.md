@@ -41,6 +41,83 @@ machines:
     Let the games begin!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1518.TXT
+
+{% raw %}
+```
+Disk No: 1518
+Program Title:  PC-ARENA OTHELLO, PC-ARENA CHESS
+PC-SIG version 1
+
+Want play chess against a Russian in the Soviet Union?  Or how about a
+game of Othello against an Italian in Nice?  Better yet, how'd you like
+to do it without even leaving home?
+
+PC-ARENA OTHELLO(tm) and PC-ARENA CHESS(tm) let you go up against fellow
+gamers with a PC and a modem anywhere in the world--limited only by your
+credit with the phone company!
+
+PC-ARENA(TM) Chess play is governed by the International Chess
+Federation Laws of Chess.  The gaming system validates all moves
+according to the rules of chess, supports castling, piece promotion and
+en passant capture.
+
+Othello, invented around 1888 and popularized in the local pubs, is
+played on a draughtsboard using sixty-four stone or wooden pieces.
+PC-ARENA(TM) Othello, developed in 1985 and popularized on electronic
+bulletin board systems and thru user group libraries, is played on an
+IBM compatible personal computer equipped with a modem.
+
+Let the games begin!
+
+Usage:  Games/Board/TeleGaming/Modem.
+
+Special Requirements:  A modem.
+
+How to Start:  Type GO (press enter)
+
+Suggested Registration:  $9.95
+
+Author: Mike Sunderman, James Bittner, Mike & Jim Co.
+
+File Descriptions:
+
+PCOTHELL EXE  PC-ARENA OTHELLO.
+PCOTHELL PN1  Program file.
+PCOTHELL PN2  Program file.
+PCOTHELL DOC  Documentation.
+PCCHESS  EXE  PC-ARENA CHESS.
+PCCHESS  PN1  Program file.
+PCCHESS  PN2  Program file.
+PCCHESS  DOC  Documentation.
+READ-ME  DOC  How to read the documentation.
+
+The PC-SIG Library
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## READ-ME.DOC
+
+{% raw %}
+```
+
+  Please use the DOS (2.0 or later) MORE command to display the instruction
+  files PCOTHELL.DOC and PCCHESS.DOC.
+ 
+  The format of the command is:  MORE <PCOTHELL.DOC
+ 
+  If the MORE command is not available, use:   TYPE PCOTHELL.DOC
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1518
 

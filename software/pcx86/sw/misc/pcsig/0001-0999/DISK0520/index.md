@@ -38,6 +38,195 @@ machines:
     password system.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES519.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  519  BUDGETRAK  Version 1.21   (DISK 1 of 2)                v3
+---------------------------------------------------------------------------
+BUDGETRAK is an excellent Encumbrance accounting package that would be of
+interest to people working in the department of a large company who have a
+desire to track their own budget and expenses more closely than possible
+using the general information generally contained in a central accounting
+system.  Encumbrance accounting tracks obligations and planned expenses
+rather than actual expenses.  This is the first of a two disk set.
+ 
+This package differs from a more standard accounting system in that when an
+expense is anticipated, the estimated amount or encumbrance is entered.  The
+entry is reflected in the remaining budget.  When the actual expense is known,
+it is entered and the encumbrance amount and budget are updated.  This gives a
+more accurate picture, for budgeting purposes, than waiting to record an
+actual expense.
+ 
+The system will handle both single and double entry systems and also produce
+a 12 month spreadsheet.  Five balances are maintained: Budget, Variance,
+Encumbrance, YTD Variance and Actual.  The coding reflects the program's intelligent design: 2 digit company code, 7 digit sub department and a 6
+digit account code.  It can handle up to 999 master records and up to 12000
+transactions per month.  The package has a password system and comes with a
+set of utility programs and good documentation.  A high capacity floppy drive
+or a hard disk is recommended for this package.
+ 
+BUDGDOC       Documentation for BUDG.EXE
+BUDPASWD EXE  Password Program
+BINT     EXE  Initialization program
+BUDG     EXE  Budget set up program
+BMST     EXE  Master file set up program
+BTRN     EXE  Transaction creation program
+READ     ME   Introduction to BUDG.EXE
+BRIEFDOC      Short documentation to get you up and running quickly
+CONVERT  DOC  Conversion documentation
+BUDPASS       Program used by BUDPASWD.EXE
+GCTL86DD      Program used by BUDG.EXE
+GIND86DD      Program used by BUDG.EXE
+GNAM86DD      Program used by BUDG.EXE
+JUL86DD1      Program used by BUDG.EXE
+JUN86DD1      Program used by BUDG.EXE
+SOFFSET       Program used by BUDG.EXE
+READ     ME   Readme file for Quick Start up
+ 
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1986,87 PC-SIG
+```
+{% endraw %}
+
+## FILES520.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  520  BUDGETRAK  Version 1.21   (DISK 2 of 2)                v3
+---------------------------------------------------------------------------
+ 
+BUDGETRAK is an excellent Encumbrance accounting package that would be of
+interest to people working in the department of a large company who have a
+desire to track their own budget and expenses more closely than possible
+using the general information generally contained in a central accounting
+system. Encumbrance accounting tracks obligations and planned expenses
+rather than actual expenses. This is the second of a two disk set.
+ 
+This package differs from a more standard accounting system in that when an
+expense is anticipated, the estimated amount or encumbrance is entered. The
+entry is reflected in the remaining budget. When the actual expense is
+known, it is entered and the encumbrance amount and budget are updated.
+This gives a more accurate picture, for budgeting purposes, than waiting to
+record an actual expense.
+ 
+The system will handle both single and double entry systems and also
+produce a 12 month spreadsheet. Five balances are maintained: Budget,
+Variance, Encumbrance, YTD Variance and Actual. The coding reflects the
+program's intelligent design: 2 digit company code, 7 digit sub department
+and a 6 digit account code. It can handle up to 999 master records and up
+to 12000 transactions per month. The package has a password system and
+comes with a set of utility programs and good documentation. A high
+capacity floppy drive or a hard disk is recommended for this package.
+ 
+README        Brief notes on using BUDGETRAK
+BPRN     EXE  Print transaction file with summaries
+BSPR     EXE  12 month spreadsheet program
+B3MO     EXE  3 month spreadsheet program
+BSRT     EXE  Sorts transaction file and master file
+BBAL     EXE  Audit transaction file balances
+BCON     EXE  Conversion program
+AUG86DD1      Data files
+GLMS86DD      Data files
+ 
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1986,87 PC-SIG
+```
+{% endraw %}
+
+## NOTES519.TXT
+
+{% raw %}
+```
+Program name:         BUDGETRAK         Version 1.2
+ 
+Author name:          Software Associates Laboratories
+Address:              1747 N.Valencia, San Bernardino, CA 92404
+ 
+Suggested Donation:   $ 49.00
+ 
+Program Description:
+ 
+BUDGETRAK is an excellent Encumberance Accounting package of interest to
+those people working in departments of larger organizations and interested
+in tracking their own budgets and expenses more closely than possible with
+the central accounting system.
+ 
+Briefly how this differs from a regular accounting system is that when an
+expense is anticipated, the estimated amount or encumberance is entered.
+This is reflected in the budget remaining. When the actual expense is known
+later then that is entered and the encumberance amount and budget are
+updated. This gives a much more accurate picture than waiting for the
+actual expense before recording it.
+ 
+The system will handle both single and double entry systems and also
+produce a 12 month spreadsheet.Five balances are maintained: Budget,
+Variance, Encumberance, YTD Variance, Actual
+ 
+The coding reflects the good design: 2 digit company code, 7 digit sub
+department and a 6 digit account code. It can handle upto 999 master
+records and upto 12000 transactions per month !
+ 
+The package has a password system and comes with a set of utility programs
+and good documentation.
+ 
+You would most probably need a high capacity floppy drive or a hard disk to
+effectively use this package.
+```
+{% endraw %}
+
+## NOTES520.TXT
+
+{% raw %}
+```
+Program name:         BUDGETRAK         Version 1.2
+ 
+Author name:          Software Associates Laboratories
+Address:              1747 N.Valencia, San Bernardino, CA 92404
+ 
+Suggested Donation:   $ 49.00
+ 
+Program Description:
+ 
+BUDGETRAK is an excellent Encumberance Accounting package of interest to
+those people working in departments of larger organizations and interested
+in tracking their own budgets and expenses more closely than possible with
+the central accounting system.
+ 
+Briefly how this differs from a regular accounting system is that when an
+expense is anticipated, the estimated amount or encumberance is entered.
+This is reflected in the budget remaining. When the actual expense is known
+later then that is entered and the encumberance amount and budget are
+updated. This gives a much more accurate picture than waiting for the
+actual expense before recording it.
+ 
+The system will handle both single and double entry systems and also
+produce a 12 month spreadsheet.Five balances are maintained: Budget,
+Variance, Encumberance, YTD Variance, Actual.
+ 
+The coding reflects the good design: 2 digit company code, 7 digit sub
+department and a 6 digit account code. It can handle upto 999 master
+records and upto 12000 transactions per month !
+ 
+The package has a password system and comes with a set of utility programs
+and good documentation.
+ 
+You would most probably need a high capacity floppy drive or a hard disk to
+effectively use this package.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0520
 

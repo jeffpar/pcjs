@@ -34,6 +34,105 @@ machines:
     with training in pharmacokinetic dosing of drugs.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES947.TXT
+
+{% raw %}
+```
+Disk No:  947
+Program Title: KINETICS version 3.6b
+PC-SIG version: 2.1
+
+KINETICS calculates dosages of several commonly-used drugs such as
+Aminoglycosides, Theophylline, Aminophylline, and Vancomycin.  Dosage
+calculations for Digoxin and Phenytoin are available in the registered
+version of the program.  With this program, you can estimate initial
+doses based on calculated lean body weight, body surface area, and/or
+creatinine clearance.  You can also calculate individualized maintenance
+dosage based on serum-level data.
+
+Also included are general drug-dosing recommendations for seventy-eight
+drugs which require dosage reduction in patients with diminished renal
+function.  All programs will print a chart-ready dosing consultation.
+These programs are meant to be used by either a clinical pharmacist or a
+physician with training in pharmacokinetic dosing of drugs.
+
+Users that register this program receive a registered version of
+KINETICS with an expanded data-base and a complete user's manual.
+
+Usage:  Pharmokinetic Dosing.
+
+Special Requirements:  CGA graphics or better.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $100.00
+
+File Descriptions:
+
+??            Drug tables (85 files).
+BYDATE   PAR  Parameter file for Cheapsort.
+BYDOC    PAR  Parameter file for Cheapsort.
+BYDRUG   PAR  Parameter file for Cheapsort.
+BYNAME   PAR  Parameter file for Cheapsort.
+BYRPH    PAR  Parameter file for Cheapsort.
+CSORT    BAT  Batch file to start Cheapsort.
+CSORT    DAT  Parameter file for Cheapsort.
+CSORT3   EXE  Cheapsort 3 sorting utility.
+DELETE   COM  PC Magazine delete program.
+GO       BAT  Batch file to type how to start the program.
+KINETICS EXE  Main program.
+KN       BAT  Batch file to start up program.
+LPRINT   BAT  Batch file to print drug table to printer.
+MANUAL        Program Documentation.
+NOECHO   COM  Sub-program.
+PRINT    BAT  Batch file to print drug table to screen.
+PRINTMAN BAT  Batch file to print user's manual.
+README   1    Warning screen.
+README   TXT  How to start the program.
+REPORT   DAT  Data file.
+REPORT   NDX  Index file for Cheapsort.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## README.TXT
+
+{% raw %}
+```
+         Please head all warnings, disclaimers, and limitations.
+ 
+         You must make a working copy before doing anything else!!
+         1.   Format a blank floppy using the /s switch:
+              A>FORMAT B: /s
+         2.   Copy all files from this disk:
+              A>COPY *.* B:
+ 
+         To print the user's manual, enter PRINTMAN at the DOS prompt:
+              A>PRINTMAN
+ 
+         To start the program, enter KN at the DOS prompt:
+              A>KN
+ 
+         To obtain a registered version of KINETICS with an expanded
+         data-base and a complete user's manual, please send $ 100.00
+         and the name you want printed on your customized consultation
+         form to:
+ 
+              Rick Tharp
+              1712 E. 9th St.
+              Trenton, MO  64683
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0947
 

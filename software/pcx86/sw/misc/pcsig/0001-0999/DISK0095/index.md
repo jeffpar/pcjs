@@ -32,8 +32,82 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #95, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ANSI    .SYS         CRC = E6 47
+
+--> FILE:  TUTOR   .BAS         CRC = CE 1C
+
+--> FILE:  INSTR   .BAS         CRC = 33 A4
+
+--> FILE:  SETUP   .BAS         CRC = CC 94
+
+--> FILE:  MATH    .BAS         CRC = 06 C6
+
+--> FILE:  GRD1    .            CRC = E6 A0
+
+--> FILE:  GRD2    .            CRC = C2 C9
+
+--> FILE:  GRD3    .            CRC = 61 AD
+
+--> FILE:  GRD4    .            CRC = 22 31
+
+--> FILE:  GRD5    .            CRC = AE A3
+
+--> FILE:  GRD6    .            CRC = 3F 67
+
+--> FILE:  SAV1    .            CRC = BE FB
+
+--> FILE:  SAV2    .            CRC = 91 51
+
+--> FILE:  SAV3    .            CRC = B5 89
+
+--> FILE:  SAV4    .            CRC = 24 55
+
+--> FILE:  SAV5    .            CRC = C1 10
+
+--> FILE:  SAV6    .            CRC = 05 45
+
+--> FILE:  TDATA   .            CRC = 57 41
+
+--> FILE:  MIS     .            CRC = 14 3A
+
+--> FILE:  READ    .ME          CRC = 0A AD
+
+--> FILE:  CRC     .TXT         CRC = B3 06
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+ ---------------------> SUM OF CRCS = AD 81
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## INSTR.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 LOCATE 2,10,0:PRINT"Instructions for?"
@@ -175,9 +249,11 @@ machines:
 1380 LOCATE 13,11,0:PRINT"One moment, please!"
 1390 CHAIN "a:tutor"
 ```
+{% endraw %}
 
 ## MATH.BAS
 
+{% raw %}
 ```bas
 10 OPEN "I",#1,"tdata"
 20 INPUT#1,SV1$,SV2$,SV3$,SV4$,SV5$,SV6$
@@ -1049,9 +1125,11 @@ machines:
 8670 BNDA=9999:BNDB=999:BNDC=24:BNDD=24:BNDE=24
 8680 RETURN
 ```
+{% endraw %}
 
 ## SETUP.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 LOCATE 12,1,1:PRINT"Change a saved program? (y/n) ";
@@ -1523,9 +1601,11 @@ machines:
 4680 LOCATE 13,11,0:PRINT"One moment, please!"
 4690 CHAIN "A:tutor"
 ```
+{% endraw %}
 
 ## TUTOR.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 20 KEY 1,""
@@ -1575,6 +1655,7 @@ machines:
 460 END
 470 430
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

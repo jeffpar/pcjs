@@ -38,6 +38,46 @@ machines:
     EMACS is a two disk set, the second disk is #1455.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1455.TXT
+
+{% raw %}
+```
+Disk No: 1455
+Program Title:  MICRO-EMACS (Disk 2 of 2)
+PC-SIG version: 1
+
+MICRO-EMACS is a two disk set the first in this set is #1431, please
+refer to the first disk for a full description of the program.
+
+Synopsis:  A PC version of EMACS, the mainframe word processor for
+programmers.
+
+Usage:  Programming editor.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+COMPRESS EXE  File compression utility.
+COMPRSD <DIR> Subdirectory containing source code.
+README        Information about program.
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1455
 

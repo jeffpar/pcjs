@@ -101,6 +101,7 @@ machines:
 
 ## BATMAN.BAS
 
+{% raw %}
 ```bas
 10 'BATMAN.BAS -- Copyright M-SQUARED SYSTEMS, Inc. -1982
 20 '
@@ -171,9 +172,80 @@ machines:
 670 IF ERL<>280 THEN ON ERROR GOTO 0: STOP
 680 RESUME 280
 ```
+{% endraw %}
+
+## BATMAN.DOC
+
+{% raw %}
+```
+
+Adding "MENU" Processing to DOS
+    by William B. Malthouse
+
+    The attached program, BATMAN.BAS, and the file
+SHELL.BAT, show one possible way to enhance DOS to make it
+appear that DOS 1.10 knows how to process a "MENU" to select
+the next program to be executed, regardless of whether that
+next "program" is a ".COM," ".EXE," ".BAS," or built in DOS
+command. As the professors always tell us, "Suitable
+extensions of this basic technique are left to the reader as
+an exercise..."
+
+    The key to the technique is that DOS processes a .BAT
+file one line at a time, and while executing a program
+invoked in LINE 1, DOS is completely unaware that that
+program might change LINE 2 before DOS regains control! DOS
+always re-reads the .BAT file after every  command, and does
+not process the ORIGINAL version.
+
+    Our sample program, BATMAN.BAS, invoked in line 1 of the
+file "SHELL.BAT," will illustrate the technique. BATMAN
+simply reads  the entire "SHELL.BAT" file, extracts the
+"MENU" information from line 5 on, and presents the
+(formatted) menu to the user.
+
+    When the user completes his menu choice, BATMAN simply
+rewrites the entire "SHELL.BAT" file, but REPLACES LINE 2
+with the text of the command chosen by the user from the
+menu! BATMAN then  simply closes up shop and returns to DOS.
+
+    On return from BATMAN, DOS re-reads the (altered)
+"SHELL.BAT," and continues executing at LINE 2, thereby
+executing the program chosen by the user and placed there by
+BATMAN. The process will then continue until line 4 (SHELL)
+is reached, at which point DOS goes back to the top and
+invokes BATMAN again for another choice, etc!
+    NOTE: Since the file "SHELL.BAT" is read and re-written
+every time through the cycle, it would be appropriate to
+place it (and "BATMAN" on a "fast" electronic disk for
+efficiency.
+
+    *******************   SHELL.BAT   *********************
+
+    BASICA BATMAN.BAS  %0 %1 %2 %3 %4 %5 %6 %7 %8 %9 /s:512
+       beep
+    PAUSE - About to Restart SHELL.BAT -
+    SHELL
+    01 beep - sound beeper
+    02 cls  - clear screen
+    03 sd   - directory for default drive
+    04 sd a: - directory for drive A
+    05 sd b: - directory for drive B
+    06 sd c: - directory for drive C
+    07 sd d: - directory for drive D
+    08 sd e: - directory for electronic drive
+    09 beep  - sound the beeper (again)
+    10 basica mons - Run monitor switch program
+    11 basica - Enter BASIC
+    12 ff - clear the line printer
+
+
+```
+{% endraw %}
 
 ## BSR.BAS
 
+{% raw %}
 ```bas
 10 CLEAR ,27848
 20 CLS:BSR%=0:THREE%=3:Z%=1:KEY OFF
@@ -194,9 +266,11 @@ machines:
 170 NEXT I
 180 GOTO 80
 ```
+{% endraw %}
 
 ## CALLGRAF.BAS
 
+{% raw %}
 ```bas
 1 ' GRAFTRAX as a subroutine  9/21/84
 10 DEFINT A-Z
@@ -251,9 +325,95 @@ machines:
 340 CIRCLE (160,100),50,3 : CIRCLE (160,100),75,3 : PAINT (160,100),1,3 : PAINT(160,40),2,3 ' draw some graphics
 350 RETURN
 ```
+{% endraw %}
+
+## CALLGRAF.TXT
+
+{% raw %}
+```
+1 ' GRAFTRAX as a subroutine  9/21/84
+10 DEFINT A-Z
+20 GOSUB 300	' draw some graphics for demo. not needed in your program.
+30 ' Make sure variables used in this routine are defined BEFORE they are used,
+32 '    in other words, put lines 60-110 in early in your program.
+34 ' Integer variable descriptors, i.e. variable% should be used
+36 ' if a DEFINT statement is not present.
+38 '
+40 ' ****************** SETUP **** use lines 60-120 in your program.
+42 '
+60 DATA &h55,&H8b,&Hec,&H8b,&H76,&H06,&H8b,&H1c,&H8b
+70 DATA &He3,&Hcd,&H05,&H8b,&He5,&H5d,&Hca,&H02,&H00
+80 X%=0 : Y%=0 : Z%=0 : GRAFTRAX%=0 : GRSEG!=0 : A$=""
+90 DIM STACK%(50),CG%(10)
+100 DEF SEG : Y% = VARPTR(CG%(0))
+110 FOR X% = 0 TO 17 : READ Z% : POKE X% + Y% ,Z% : NEXT ' poke into an array
+120 DEF SEG=0 : X%=PEEK(&H16) : Y%=PEEK(&H17) : DEF SEG : GRSEG!=X%+(256*Y%)
+121 '
+122 '     GRSEG is the segment where DOS put GRAFTRAX.COM
+123 '
+124 ' ***************** END of SETUP ********************************
+125 '
+130 INPUT "(s)mall or (L)ARGE or (e)nd";A$ : A$=LEFT$(A$,1) : IF A$="" THEN END
+135 IF A$="e" OR A$="E" THEN COLOR 7,0 : END
+140 IF A$="l" OR A$="L" OR A$="2" THEN X% = 2 ELSE X% = 1
+145 GOSUB 160 : GOTO 130
+147 '
+150 ' ******** ACTUAL ROUTINE - use in your program. **********
+151 '
+152 '    This is the code to use GRAFTRAX as a subroutine.
+153 '
+154 '   The POKE in 170 sets which routine to do, can be POKEd once and
+155 '   left alone until a different size picture is needed.
+156 '
+160 DEF SEG = GRSEG!
+170  POKE &H10D,X%     ' X%=1 for small, 2 for LARGE.
+175 ' %H10d is a variable in GRAFTRAX.COM
+180 DEF SEG
+190 GRAFTRAX% = VARPTR(CG%(0)) : Y% = VARPTR(STACK%(50)) ' stack builds DOWN.
+200 CALL GRAFTRAX%(Y%) ' y% is a pointer to a temporary stack,
+205 '                    since BASIC only leaves 16 bytes.
+210 RETURN
+222 '
+224 ' *************************************************************
+226 '
+300 ' Get some graphics going for demo.
+305 '
+310 KEY OFF
+320 SCREEN 1,0
+330 COLOR 1,0 : CLS
+340 CIRCLE (160,100),50,3 : CIRCLE (160,100),75,3 : PAINT (160,100),1,3 : PAINT(160,40),2,3 ' draw some graphics
+350 RETURN
+```
+{% endraw %}
+
+## DCPATCH.DOC
+
+{% raw %}
+```
+If you are using a RAM disk you may want to copy your DOS disk to the
+RAM disk on bootup.  The following patch will remove the keyboard input
+waits from diskcopy.  This is for Ver. 2.0.
+-
+         A>COPY DISKCOPY.COM DC.COM
+         A>DEBUG DC.COM
+         -F 5D1 L 3 90
+         -E 649
+         XXXX:0649  01.6E   0C.00   CD.90   21.90
+         -W
+         Writing 098C bytes
+         -Q
+         A>
+-
+Good Luck,
+Tom Hall - TCM644
+           72155,1114
+
+```
+{% endraw %}
 
 ## DIR.BAS
 
+{% raw %}
 ```bas
 10 '     *** DIR.BAS *** IBM Version 2.0 ***
 20 '     *** March                  1983 ***
@@ -750,9 +910,2066 @@ machines:
 11140 CLS
 11150 SYSTEM
 ```
+{% endraw %}
+
+## DIR.DOC
+
+{% raw %}
+```
+DIR.DOC   ---   This is the documentation for DIR.BAS (such as it is).
+
+
+DIR.BAS is a BASIC program that helps the user keep track of all his/her
+disk files. The program is menu driven and is easy to operate. The program
+will compile without modification.
+
+Entries to the programs may be made from the keyboard or the program can read
+a disk's directory directly. Entries made be individually deleted or deleted
+via deletion of the data for an entire disk.
+
+The data can be displayed either on the CRT or the printer sorted alphabetically
+or numerically by disk number. This sort routine takes a while if using the
+program in BASIC, but really moves along in the compiled version.
+
+An individual entry may be found (ie., it's disk #'s) and, if it has the .BAS
+extension, may be run directly from DIR.BAS.Leave a note to me on the SIG board if you have any questions.
+        Wes Meier 70215,1017
+
+```
+{% endraw %}
+
+## DOTABLE.ASM
+
+{% raw %}
+```
+; dot table
+; xlat table first, then offsets
+
+extable	label	word
+
+	db	0,1,2,3,4,5,6,7
+	db	0,0,0,8,9,0,0,0
+	db	0,10,0,11,175,0,0,0
+	db	0,0,12,0,0,0,0,0
+	db	0,13,14,15,16,17,18,19
+	db	20,0,0,0,0,0,0,0
+	db	0,0,0,0,0,0,0,0
+	db	0,0,0,0,0,0,0,0
+	db	0,0,0,0,0,0,0,0
+	db	0,0,0,0,0,0,0,0
+	db	0,0,0,0,0,0,0,0
+	db	0,0,0,0,0,0,0,0
+	db	0,0,0,0,0,0,0,0
+	db	0,0,0,0,0,0,0,0
+	db	0,0,0,0,0,0,0,0
+	db	0,0,0,0,0,0,0,0
+	db	21,184,187,22,182,23,0,162
+	db	24,25,189,26,27,28,177,0
+	db	29,0,0,30,183,31,32,33
+	db	34,178,179,180,163,176,0,191
+	db	35,36,37,38,39,40,0,0
+	db	41,42,43,174,172,44,45,46
+	db	47,48,49,50,51,52,53,54
+	db	55,56,57,58,59,60,61,62
+	db	63,64,65,66,67,68,69,70
+	db	71,72,73,74,75,76,77,78
+	db	79,80,81,82,83,84,85,86
+	db	87,88,89,90,91,92,93,94
+	db	0,185,0,95,96,0,0,0
+	db	0,97,0,0,0,0,0,0
+	db	98,99,100,101,0,0,102,0
+	db	0,0,0,0,0,0,0,0
+extoffset	dw	0
+	dw	L1
+	dw	L2
+	dw	L3
+	dw	L4
+	dw	L5
+	dw	L6
+	dw	L7
+	dw	L11
+	dw	L12
+	dw	L17
+	dw	L19
+	dw	L26
+	dw	L33
+	dw	L34
+	dw	L35
+	dw	L36
+	dw	L37
+	dw	L38
+	dw	L39
+	dw	L40
+	dw	L128
+	dw	L131
+	dw	L133
+	dw	L136
+	dw	L137
+	dw	L139
+	dw	L140
+	dw	L141
+	dw	L144
+	dw	L147
+	dw	L149
+	dw	L150
+	dw	L151
+	dw	L152
+	dw	L160
+	dw	L161
+	dw	L162
+	dw	L163
+	dw	L164
+	dw	L165
+	dw	L168
+	dw	L169
+	dw	L170
+	dw	L173
+	dw	L174
+	dw	L175
+	dw	L176
+	dw	L177
+	dw	L178
+	dw	L179
+	dw	L180
+	dw	L181
+	dw	L182
+	dw	L183
+	dw	L184
+	dw	L185
+	dw	L186
+	dw	L187
+	dw	L188
+	dw	L189
+	dw	L190
+	dw	L191
+	dw	L192
+	dw	L193
+	dw	L194
+	dw	L195
+	dw	L196
+	dw	L197
+	dw	L198
+	dw	L199
+	dw	L200
+	dw	L201
+	dw	L202
+	dw	L203
+	dw	L204
+	dw	L205
+	dw	L206
+	dw	L207
+	dw	L208
+	dw	L209
+	dw	L210
+	dw	L211
+	dw	L212
+	dw	L213
+	dw	L214
+	dw	L215
+	dw	L216
+	dw	L217
+	dw	L218
+	dw	L219
+	dw	L220
+	dw	L221
+	dw	L222
+	dw	L223
+	dw	L227
+	dw	L228
+	dw	L233
+	dw	L240
+	dw	L241
+	dw	L242
+	dw	L243
+	dw	L246
+```
+{% endraw %}
+
+## DOTDATA.ASM
+
+{% raw %}
+```
+L246	db	72	; ÷
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,1,0,0
+	db	0,2,0,0
+	db	0,1,0,0
+	db	0,34,2,0
+	db	1,17,5,0
+	db	2,34,10,0
+	db	1,17,5,0
+	db	2,34,10,0
+	db	1,1,4,0
+	db	0,2,0,0
+	db	0,1,0,0
+	db	0,2,0,0
+	db	0,1,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L243	db	72	; ≤
+	db	0,0,0,0
+	db	0,0,0,32
+	db	0,0,0,16
+	db	0,4,0,32
+	db	0,10,0,16
+	db	0,21,0,32
+	db	0,42,32,16
+	db	1,17,16,32
+	db	2,32,40,16
+	db	5,0,20,32
+	db	10,0,10,16
+	db	20,0,4,32
+	db	8,0,2,16
+	db	0,0,0,32
+	db	0,0,0,16
+	db	0,0,0,32
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L242	db	72	; ≥
+	db	0,0,0,0
+	db	0,0,0,32
+	db	0,0,0,16
+	db	0,0,0,32
+	db	0,0,0,16
+	db	8,0,2,32
+	db	20,0,4,16
+	db	10,0,10,32
+	db	5,0,20,16
+	db	2,32,40,32
+	db	1,17,16,16
+	db	0,42,32,32
+	db	0,21,0,16
+	db	0,10,0,32
+	db	0,4,0,16
+	db	0,0,0,32
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L12	db	72	; 
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,1,0
+	db	0,21,2,0
+	db	0,42,33,0
+	db	1,0,18,0
+	db	2,0,9,20
+	db	1,0,22,40
+	db	2,0,9,0
+	db	1,0,18,0
+	db	2,32,33,0
+	db	1,21,2,0
+	db	0,42,1,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L11	db	72	; 
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,10,32
+	db	0,0,21,16
+	db	0,0,32,32
+	db	0,1,0,16
+	db	0,2,0,32
+	db	0,1,0,16
+	db	2,6,0,32
+	db	1,9,1,16
+	db	2,22,42,32
+	db	1,40,21,0
+	db	2,16,0,0
+	db	1,36,0,0
+	db	2,26,0,0
+	db	0,0,0,0
+	db	0
+L6	db	72	; 
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,12,0,0
+	db	0,19,0,0
+	db	0,44,48,0
+	db	1,19,0,48
+	db	2,44,51,0
+	db	5,19,12,48
+	db	2,44,51,0
+	db	1,19,0,48
+	db	0,44,48,0
+	db	0,19,0,0
+	db	0,12,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L5	db	72	; 
+	db	0,0,0,0
+	db	0,3,0,0
+	db	0,12,48,0
+	db	0,0,0,0
+	db	0,15,48,0
+	db	3,0,0,0
+	db	12,60,48,48
+	db	0,3,3,0
+	db	15,48,12,48
+	db	0,3,3,0
+	db	12,60,48,48
+	db	3,0,0,0
+	db	0,15,48,0
+	db	0,0,0,0
+	db	0,12,48,0
+	db	0,3,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L241	db	72	; ±
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,8,0,32
+	db	0,0,0,0
+	db	0,8,0,32
+	db	0,0,0,0
+	db	0,8,0,32
+	db	0,0,0,0
+	db	15,63,60,32
+	db	0,0,0,0
+	db	0,8,0,32
+	db	0,0,0,0
+	db	0,8,0,32
+	db	0,0,0,0
+	db	0,8,0,32
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L170	db	72	; ¬
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,0,0
+	db	0,3,63,0
+	db	0,0,0,0
+	db	0
+L169	db	72	; ⌐
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,3,63,0
+	db	0,2,0,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L175	db	72	; »
+	db	0,0,0,0
+	db	0,0,0,0
+	db	2,0,0,8
+	db	1,0,0,16
+	db	0,32,0,32
+	db	0,16,1,0
+	db	2,8,2,8
+	db	1,4,4,16
+	db	0,34,8,32
+	db	0,17,17,0
+	db	0,8,34,0
+	db	0,4,4,0
+	db	0,2,8,0
+	db	0,1,16,0
+	db	0,0,32,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L174	db	72	; «
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,32,0
+	db	0,1,16,0
+	db	0,2,8,0
+	db	0,4,4,0
+	db	0,8,34,0
+	db	0,17,17,0
+	db	0,34,8,32
+	db	1,4,4,16
+	db	2,8,2,8
+	db	0,16,1,4
+	db	0,32,0,32
+	db	1,0,0,16
+	db	2,0,0,8
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L168	db	72	; ¿
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,16
+	db	0,0,0,8
+	db	0,0,0,4
+	db	0,0,0,8
+	db	4,0,0,4
+	db	10,16,0,8
+	db	4,8,0,4
+	db	0,4,0,8
+	db	0,4,0,4
+	db	0,2,0,8
+	db	0,1,32,24
+	db	0,0,25,32
+	db	0,0,6,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L173	db	72	; ¡
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	10,21,21,16
+	db	4,10,42,32
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L19	db	72	; 
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	10,42,40,40
+	db	5,21,20,16
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	5,21,20,40
+	db	10,42,40,16
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L7	db	72	; 
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,5,16,0
+	db	0,10,32,0
+	db	0,5,16,0
+	db	0,10,32,0
+	db	0,5,16,0
+	db	0,10,32,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L4	db	72	; 
+	db	0,0,0,0
+	db	0,0,16,0
+	db	0,0,40,0
+	db	0,1,20,0
+	db	0,2,42,0
+	db	0,5,21,0
+	db	0,10,42,32
+	db	0,21,21,16
+	db	0,42,42,40
+	db	0,21,21,16
+	db	0,10,42,32
+	db	0,5,21,0
+	db	0,2,42,0
+	db	0,1,20,0
+	db	0,0,40,0
+	db	0,0,16,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L3	db	72	; 
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,7,32,0
+	db	0,10,48,0
+	db	0,21,28,0
+	db	0,42,46,0
+	db	0,53,21,32
+	db	0,26,42,48
+	db	0,5,21,24
+	db	0,10,42,44
+	db	0,21,21,24
+	db	0,58,42,48
+	db	0,53,23,0
+	db	0,26,44,0
+	db	0,13,48,0
+	db	0,7,32,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L128	db      3,'C',8,',',0 ; Ç
+L131	db      3,'a',8,'^',0 ; â
+L133	db      3,'a',8,164,0 ; à
+L136	db      3,'e',8,'^',0 ; ê
+L137	db      3,'e',8,190,0 ; ë
+L139	db      3,'i',8,190,0 ; ï
+L140	db      3,'i',8,'^',0 ; î
+L141	db      3,'i',8,164,0 ; ì
+L144	db      3,'E',8,160,0 ; É
+L147	db      3,'o',8,'^',0 ; ô
+L149	db      3,'o',8,164,0 ; ò
+L150	db      3,'u',8,'^',0 ; û
+L151	db      3,'u',8,164,0 ; ù
+L152	db      3,'y',8,190,0 ; ÿ
+L160	db      3,'a',8,160,0 ; á
+L161	db      3,'i',8,160,0 ; í
+L162	db      3,'o',8,160,0 ; ó
+L163	db      3,'u',8,160,0 ; ú
+L164	db      7,'n',8,27,'D',181,27,'U',0 ; ñ
+L165	db      7,'N',8,27,'D',181,27,'U',0 ; Ñ
+L233	db      3,'O',8,'-',0 ; Θ
+L26	db	72	; arrow
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,1,0,0
+	db	0,1,0,0
+	db	0,1,0,0
+	db	0,1,0,0
+	db	0,1,0,0
+	db	0,1,0,0
+	db	0,1,0,0
+	db	0,1,0,0
+	db	0,1,0,0
+	db	0,17,4,0
+	db	0,9,8,0
+	db	0,5,16,0
+	db	0,3,32,0
+	db	0,1,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L228	db	72	; Σ
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	12,0,1,32
+	db	10,0,2,32
+	db	9,0,4,32
+	db	8,32,8,32
+	db	8,16,16,32
+	db	8,8,32,32
+	db	8,5,0,32
+	db	8,2,0,32
+	db	8,0,0,32
+	db	8,0,0,32
+	db	8,0,0,32
+	db	12,0,1,32
+	db	4,0,1,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L240	db	72	; ≡
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,34,2,0
+	db	1,1,4,0
+	db	0,34,2,0
+	db	1,1,4,0
+	db	0,34,2,0
+	db	1,1,4,0
+	db	0,34,2,0
+	db	1,1,4,0
+	db	0,34,2,0
+	db	1,1,4,0
+	db	0,34,2,0
+	db	1,1,4,0
+	db	0,34,2,0
+	db	1,1,4,0
+	db	0,0,0,0
+	db	0
+L227	db	72	; π
+	db	0,0,0,0
+	db	0,0,0,0
+	db	2,0,0,0
+	db	4,0,1,0
+	db	10,42,42,0
+	db	5,21,20,0
+	db	8,0,0,0
+	db	4,0,0,0
+	db	8,0,0,0
+	db	4,0,0,0
+	db	8,0,0,0
+	db	4,0,0,0
+	db	10,42,42,0
+	db	5,21,21,0
+	db	8,0,0,0
+	db	4,0,0,0
+	db	8,0,0,0
+	db	0,0,0,0
+	db	0
+L17	db	72	; 
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,1,0,0
+	db	0,2,32,0
+	db	0,5,16,0
+	db	0,10,40,0
+	db	0,21,20,0
+	db	0,42,42,0
+	db	1,21,21,0
+	db	2,42,42,32
+	db	5,21,21,16
+	db	10,42,42,40
+	db	21,21,21,20
+	db	42,42,37,20
+	db	26,42,42,40
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L2	db	72	; 
+	db	0,0,0,0
+	db	0,0,0,0
+	db	1,42,42,32
+	db	2,53,21,16
+	db	5,26,42,40
+	db	10,5,17,20
+	db	5,6,40,40
+	db	10,5,20,20
+	db	5,42,8,40
+	db	10,21,4,20
+	db	5,42,8,40
+	db	10,5,20,20
+	db	5,6,40,40
+	db	10,5,16,20
+	db	5,29,17,40
+	db	2,42,42,40
+	db	1,21,21,16
+	db	0,0,0,0
+	db	0
+L1	db	72	; 
+	db	0,0,0,0
+	db	0,0,0,0
+	db	1,21,21,16
+	db	2,42,42,40
+	db	4,0,0,20
+	db	8,0,0,8
+	db	4,48,8,4
+	db	8,48,4,8
+	db	4,3,4,4
+	db	8,3,4,8
+	db	4,3,4,4
+	db	8,48,4,8
+	db	4,48,8,4
+	db	8,0,0,8
+	db	4,0,0,24
+	db	2,42,42,32
+	db	1,21,21,0
+	db	0,0,0,0
+	db	0
+L40	db	72	; (
+	db	0,2,40,0
+	db	0,0,0,0
+	db	0,5,20,0
+	db	0,0,0,0
+	db	0,2,40,0
+	db	0,0,0,0
+	db	0,5,20,0
+	db	0,0,0,0
+	db	0,2,40,0
+	db	0,0,0,0
+	db	0,5,20,0
+	db	0,0,0,0
+	db	0,2,40,0
+	db	0,0,0,0
+	db	0,5,20,0
+	db	0,0,0,0
+	db	0,2,40,0
+	db	0,0,0,0
+	db	0
+L39	db	72	; '
+	db	0,2,8,0
+	db	0,0,0,0
+	db	0,4,16,0
+	db	0,1,4,0
+	db	0,0,0,0
+	db	0,0,32,0
+	db	0,2,8,0
+	db	0,0,0,0
+	db	0,4,16,0
+	db	0,1,4,0
+	db	0,0,0,0
+	db	0,0,32,0
+	db	0,2,8,0
+	db	0,0,0,0
+	db	0,4,16,0
+	db	0,1,4,0
+	db	0,0,0,0
+	db	0,0,32,0
+	db	0
+L38	db	72	; &
+	db	0,2,0,0
+	db	0,0,8,0
+	db	0,0,0,0
+	db	0,9,0,0
+	db	0,0,4,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,8,0
+	db	0,0,0,0
+	db	0,9,0,0
+	db	0,0,4,0
+	db	0,0,0,0
+	db	0,2,0,0
+	db	0,0,8,0
+	db	0,0,0,0
+	db	0,9,0,0
+	db	0,0,4,0
+	db	0,0,0,0
+	db	0
+L37	db	72	; %
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0
+L36	db	72	; $
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L35	db	72	; #
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0
+L34	db	72	; "
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L33	db	72	; !
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,2,40,0
+	db	0,5,20,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L176	db	72	; ░
+	db	32,0,32,0
+	db	2,0,2,0
+	db	0,8,0,8
+	db	16,0,16,0
+	db	1,0,1,0
+	db	0,4,0,4
+	db	32,0,32,0
+	db	2,0,2,0
+	db	0,8,0,8
+	db	16,0,16,0
+	db	1,0,1,0
+	db	0,4,0,4
+	db	32,0,32,0
+	db	2,0,2,0
+	db	0,8,0,8
+	db	16,0,16,0
+	db	1,0,1,0
+	db	0,4,0,4
+	db	6
+L177	db	72	; ▒
+	db	34,8,34,8
+	db	0,32,8,2
+	db	4,1,0,16
+	db	17,4,17,4
+	db	0,16,4,1
+	db	8,2,0,32
+	db	34,8,34,8
+	db	0,32,8,2
+	db	4,1,0,16
+	db	17,4,17,4
+	db	0,16,4,1
+	db	8,2,0,32
+	db	34,8,34,8
+	db	0,32,8,2
+	db	4,1,0,16
+	db	17,4,17,4
+	db	0,16,4,1
+	db	8,2,0,32
+	db	7
+L178	db	72	; ▓
+	db	42,42,42,42
+	db	0,0,0,0
+	db	21,21,21,21
+	db	0,0,0,0
+	db	42,42,42,42
+	db	0,0,0,0
+	db	21,21,21,21
+	db	0,0,0,0
+	db	42,42,42,42
+	db	0,0,0,0
+	db	21,21,21,21
+	db	0,0,0,0
+	db	42,42,42,42
+	db	0,0,0,0
+	db	21,21,21,21
+	db	0,0,0,0
+	db	42,42,42,42
+	db	0,0,0,0
+	db	8
+L223	db	72	; ▀
+	db	42,42,32,0
+	db	21,21,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	0
+L222	db	72	; ▐
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	5
+L221	db	72	; ▌
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	4
+L220	db	72	; ▄
+	db	0,0,10,42
+	db	0,0,5,21
+	db	0,0,10,42
+	db	0,0,5,21
+	db	0,0,10,42
+	db	0,0,5,21
+	db	0,0,10,42
+	db	0,0,5,21
+	db	0,0,10,42
+	db	0,0,5,21
+	db	0,0,10,42
+	db	0,0,5,21
+	db	0,0,10,42
+	db	0,0,5,21
+	db	0,0,10,42
+	db	0,0,5,21
+	db	0,0,10,42
+	db	0,0,5,21
+	db	3
+L219	db	72	; █
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	42,42,42,42
+	db	21,21,21,21
+	db	3
+L182	db	72	; ╢
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	2
+L181	db	72	; ╡
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	1
+L180	db	72	; ┤
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	1
+L179	db	72	; │
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	1
+L218	db	72	; ┌
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,42,42
+	db	0,0,21,21
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	1
+L217	db	72	; ┘
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L216	db	72	; ╪
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	1
+L215	db	72	; ╫
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,32,0
+	db	0,0,16,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	2
+L214	db	72	; ╓
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,42,42
+	db	0,0,21,21
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,42,42
+	db	0,0,21,21
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	2
+L213	db	72	; ╒
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,2,42,42
+	db	0,1,21,21
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	1
+L212	db	72	; ╘
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,44,0
+	db	21,21,20,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0
+L211	db	72	; ╙
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,48,0
+	db	21,21,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0
+L210	db	72	; ╥
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,42,42
+	db	0,0,21,21
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,42,42
+	db	0,0,21,21
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	2
+L209	db	72	; ╤
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,10,42
+	db	0,1,5,21
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	1
+L208	db	72	; ╨
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0
+L207	db	72	; ╧
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	42,42,8,0
+	db	21,21,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0
+L206	db	72	; ╬
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	42,42,10,42
+	db	21,21,13,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,43,10,42
+	db	21,21,5,21
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	2
+L205	db	72	; ═
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0
+L204	db	72	; ╠
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,43,10,42
+	db	21,21,5,21
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	2
+L203	db	72	; ╦
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,10,42
+	db	0,1,13,21
+	db	0,2,0,0
+	db	0,1,0,0
+	db	0,2,10,42
+	db	0,1,5,21
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	2
+L202	db	72	; ╩
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	42,42,8,0
+	db	21,21,4,0
+	db	0,0,8,0
+	db	0,0,4,0
+	db	42,43,8,0
+	db	21,21,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0
+L201	db	72	; ╔
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,2,42,42
+	db	0,1,21,21
+	db	0,2,0,0
+	db	0,1,0,0
+	db	0,2,10,42
+	db	0,1,5,21
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	2
+L200	db	72	; ╚
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,44,0
+	db	21,21,20,0
+	db	0,0,8,0
+	db	0,0,4,0
+	db	42,43,8,0
+	db	21,21,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0
+L199	db	72	; ╟
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	2
+L198	db	72	; ╞
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	1
+L197	db	72	; ┼
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	1
+L196	db	72	; ─
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0
+L195	db	72	; ├
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	1
+L194	db	72	; ┬
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,42,42
+	db	0,0,21,21
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	1
+L193	db	72	; ┴
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0
+L192	db	72	; └
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,48,0
+	db	21,21,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0
+L191	db	72	; ┐
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,42,42
+	db	0,0,53,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	1
+L190	db	72	; ╛
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	42,42,40,0
+	db	21,21,20,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L189	db	72	; ╜
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	42,42,32,0
+	db	21,21,16,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L188	db	72	; ╝
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	42,42,8,0
+	db	21,21,4,0
+	db	0,0,8,0
+	db	0,0,4,0
+	db	42,42,40,0
+	db	21,21,20,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0
+L187	db	72	; ╗
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,10,42
+	db	0,1,13,21
+	db	0,2,0,0
+	db	0,1,0,0
+	db	0,2,42,42
+	db	0,3,21,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	2
+L186	db	72	; ║
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	2
+L185	db	72	; ╣
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	42,42,10,42
+	db	21,21,13,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	42,42,42,42
+	db	21,21,21,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	2
+L184	db	72	; ╕
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,8,0
+	db	0,1,4,0
+	db	0,2,42,42
+	db	0,3,21,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	1
+L183	db	72	; ╖
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,42,42
+	db	0,0,21,21
+	db	0,0,32,0
+	db	0,0,16,0
+	db	0,0,42,42
+	db	0,0,53,21
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	0,0,0,0
+	db	2
+```
+{% endraw %}
+
+## FILES33.TXT
+
+{% raw %}
+```
+Disk No  33
+Program Title: DOS and PRINTER UTILITIES
+PC-SIG version 1.2
+ 
+    A host of useful system enhancements. Do a graphic dump to an Epson or
+C.Itoh printer (in two sizes), turn off printer bell, change print pitch,
+and others. This disk also contains some patches to existing DOS routines,
+and simplify or speedup some operations. In addition to the DOS and printer
+utilities, there are some simple (but useful) communication utilities.
+ 
+Usage: Enhance Printer Functions and some DOS commands.
+ 
+System Requirements: 128K memory, one disk drive, some programs require
+color graphics.
+ 
+How to Start: To run an EXE or COM program, simply type its name and press
+<ENTER>.  To print a documentation file, type: COPY filename.ext PRN (press
+enter) where filename is the name of the file, and ext is the extension
+(TXT or DOC).
+ 
+File Descriptions:
+ 
+CALLGRAF BAS  Program to call GRAFTRAX from Basic
+CALLGRAF TXT  ASCII version of CALLGRAF
+COPYGRAF BAT  Batch file to copy GRAFTRAX files to disk
+DOTABLE  ASM  Data file used by Graftrax
+DOTDATA  ASM  Data file used by Graftrax
+DOTS     DAT  Data file used by Graftrax
+DOTS     PRO  Data file used by Graftrax
+GDEMO    BAS  Graphics demo program
+GRAFTRAX ASM  Source code for Graftrax
+GRAFTRAX BAS  Basic code for Graftrax
+GRAFTRAX COM  Compiled version of Graftrax
+GRAFTRAX DOC  Documentation for Graftrax
+GRCITOH  COM  C-ITOH version of Graftrax
+MAKEDOTS BAS  Graphics display utility
+NECGRAF  COM  NEC version of Graftrax
+NEWT     ASM  Source code for enhanced Toshiba Graftrax version
+NEWT     COM  Compiled Toshiba Graphtrax program
+OKIGRAF  ASM  Source code for Okidata Graftrax program
+OKIGRAF  COM  Compiled version of Okidata Graphtrax
+READ     ME   Author's notes on Graftrax routines
+TOSHIBA  ASM  Source code for original Toshiba Graftrax program
+TOSHIBA  COM  Compiled version of Toshiba Graftrax
+TOSHIBA  DOC  Documentation for Toshiba Graftrax programs
+BATMAN   BAS  Sample menu/batch manager program; requires SHELL.BAT
+BATMAN   DOC  Documentation file
+BSR      BAS  Simple program to drive ABM/BSR controller
+BSR      DAT  Data file for BSR.BAS
+BUZOFF   COM  Turn off paper out buzzer on Epson
+COMPRS   COM  Enables compressed print on Epson
+CVTHEX   EXE  Binary/hex conversion for files larger than 32K
+DCPATCH  DOC  Patch for DISKCOPY.COM 2.0
+DIAL     COM  Dials Hayes Smartmodem
+DIR      BAS+ Disk cataloging program - very colorful
+DIR      DAT  Sample data file
+DIR      DOC  Documentation file
+FK203    ASM  Source code for FK203.EXE
+FK203    EXE  Function key reassignment program for DOS 2.0
+HANG     COM  Hangs up Hayes Smartmodem
+HOST     BAS  Communication program for remote access
+HOST     DOC  Documentation file for HOST.BAS
+PEPATCH  DOC  Patch to IBM's Personal Editor
+POSTER   BAS  Prints large character posters
+PRTFIX   COM  Corrects "DEVICE TIMEOUT" errors with printer
+PRTFIX   DOC  Documentation file
+QD       COM  Quadram RAMDRIVE program - FOR QUADRAM BOARD ONLY
+QD       DOC  Documentation file
+SCROLL   ASM  Scrolls specified area of display screen
+SCROLL   BLD  Program file to "BLOAD" from BASIC
+SCROLL   DOC  Documentation file
+SCROLL1  BAS  Sample program
+SCROLL2  BAS  Sample program
+SHELL    BAT  Bat file used with BATMAN.BAS
+SOUNDS   BAS  Generates different sounds - contains documentation
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+## FK203.ASM
+
+{% raw %}
+```
+TITLE FK203 - ASSEMBLER PROGRAM TO SET FUNCTION KEYS IN DOS 2.0
+;
+;
+;               Version 1.3 03/31/83
+;        Version 1.3 moves the DOS 'copy previous' (F3) to the
+;              'end' key on the numeric/cursor keypad
+;
+;
+; Assemble with MASM
+; Then LINK it with   LINK FK203; (or whatever you want to call it)
+; Either include FK20x in an autoexec file or just type FK20x.
+;
+;**                 Important Note                  **
+;  For this routine to work, you must create a file called
+;
+;                      Config.Sys
+;
+; with Edlin or from the console and put the statement DEVICE=ANSI in
+; it. The DOS 2.0 file ANSI.SYS should be on your boot disk. This will
+; cause the file ANSI.SYS to be loaded when the system is booted.
+;
+SUBTTL DESCRIPTION OF THE STACK SEGMENT
+STACK   SEGMENT PARA STACK 'STACK'
+        db      'foo'
+        stack ends
+        PAGE
+SUBTTL DESCRIPTION OF THE DATA SEGMENT
+;
+subttl desciption of dos interfaces
+cseg    segment para public 'CODE'
+start   proc    far
+        assume cs:cseg,ds:cseg,es:nothing
+        push    ds                      ;set up starting linkage as per example
+        sub     ax,ax                   ;zero this and place on stack
+        push    ax                      ;so that when we do a RET we go to
+        push    cs                      ;move the workarea address into DS
+        pop     ds
+; ******           Start screen display           ****
+        mov     dx,offset clear
+        mov     ah,9
+        int     21h
+        mov     dx,offset k1
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k2
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k3
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k4
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k5
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k6
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k7
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k8
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k9
+        mov     ah,9                    ;funtion 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k10
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+; ***            Start key assignments                ***
+        mov     dx,offset mvf3          ;move F3 to END key
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f1            ;Assign F1 - F10
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f2
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f3
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f4
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f5
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f6
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f7
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f8
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f9
+        mov     ah,9                    ;funtion 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f10
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+; The next section of code set ups the parameters for each function
+; key. To make a key 'hot' add the following after the string ending
+; quote - ;13p$'  The 13 is decimal for a carrage return.
+;
+;
+exit:   ret
+clear   db      27,'[2J                   $'
+mvf3    db      27,'[0;79;0;61p           $'
+f1      db      27,'[0;59;" A:"p          $'
+f2      db      27,'[0;60;" B:"p          $'
+f3      db      27,'[0;61;" C:"p          $'
+f4      db      27,'[0;62;"CHKDSK "p      $'
+f5      db      27,'[0;63;"COPY "p        $'
+f6      db      27,'[0;64;"*.* "p         $'
+f7      db      27,'[0;65;"DISKCOPY "p    $'
+f8      db      27,'[0;66;"BASICA "p      $'
+f9      db      27,'[0;67;"DIR "p         $'
+f10     db      27,'[0;68;"TYPE "p        $'
+k1      db      'F1 = " A:"     $'
+k2      db      'F2 = " B:"     $'
+k3      db      'F3 = " C:"     $'
+k4      db      'F4 = "CHKDSK " $'
+k5      db      'F5 = "COPY "   $'
+k6      db      'F6 = "*.* "    $'
+k7      db      'F7 = "DISKCOPY "$'
+k8      db      'F8 = "BASICA " $'
+k9      db      'F9 = "DIR "    $'
+k10     db      'F10= "TYPE "   $'
+start   endp
+;
+;
+cseg    ends
+        end     start
+```
+{% endraw %}
 
 ## GDEMO.BAS
 
+{% raw %}
 ```bas
 1 ' test pattern.bas
 2 ' marty smith
@@ -776,9 +2993,1025 @@ machines:
 1010 WHILE INKEY$="" : WEND
 1020 RETURN
 ```
+{% endraw %}
+
+## GRAFTRAX.ASM
+
+{% raw %}
+```
+	PAGE  60,132
+	TITLE	EPSON MX-GRAFTRAX PrtSc, V 3.3
+; GRAF.COM  2/10/85
+; Interrupt replacement for print screen function on ibmpc(tm)
+;	Please send problem reports and suggestions to:
+;		Marty Smith
+;		310 Cinnamon Oak Lane
+;		Houston, Texas	77079
+;		Compuserve 72155,1214
+;		(713) 464-6737
+;
+;    Create GRAF.COM with MASM*, LINK* and EXE2BIN* as follows:
+;
+;	masm graf,graf,graf;
+;
+;	link graf;    (ignor the error message about no stack segment,
+;			  that's taken care of in the next step.)
+;	exe2bin graf.exe graf.com
+;
+;  *  MASM is the MicroSoft(tm) Macro Assembler v. 3.0
+;	or IBM(tm) Macro Assembler v. 1.0
+;     LINK and EXE2BIN are PC-DOS(tm) utilities.
+;
+;  This program originally designed for Epson-MX(tm) series printers
+;  with Graftrax80(tm) and Graftrax+(tm) bit-plot graphic capabilites.
+;  ======> Now modified with conditional compilation and macros for
+;  ======> c.itoh(tm) model 8510a and other printers.
+;
+;	CHANGE HISTORY:
+;	9/18/82 - Buffer in routine for a line of bit-plot bytes to allow for
+;  checking for blank lines replaced by pre-scan routine, saving space.
+;	1/24/83 - Modifications for conditional assembly with other printers
+;  and C.ITOH 8510a.
+;	1/24/83 - Improved error checking for out-of-paper and I/O errors
+;  involving printer.
+;	1/24/83 - Bug in error check corrected, occuring when routine does
+;  error exit and is then called again, resulting in bit-plot data sent in
+;  regular mode.
+;	3/12/83 - Allow calling as a subroutine. i.e. no shift key depressed.
+;  Defaults to small print mode. Can be set to LARGE.
+;	2/4/84	- Allow correct printing of 640x200 mode.
+;	3/18/84 - Use int 31h for dos 2.+ terminate process.
+;	3/24/84 - Use BIOS for keyboard scan, in case screen is printed
+;		from DOS.
+;	4/21/84 - -OTHER- section complete for changes from 640 mode.
+;	9/22/84 - Add code to set lines back in 6/inch order, so CR's
+;		can advance to TOF.
+;	9/22/84 - Jump to other print screen routine instead of reassigning
+;		it to int f1h. Only luck has kept this vector from being used
+;		by someone else.
+;	10/20/84- Add check for already installed, don't reinstall.
+;	10/20/84- Compatibility with MASM 1.0 reestablished, FAR call to old
+;		routine caused 'fixup error' from EXE2BIN. 
+;	10/20/84- CALLGRAF now points to common address variable for default
+;		mode, is now the same for all versions of program.  Demo now
+;		works!
+;
+;	Features:
+;  Accepts ESC key exit, prescans to test for blank line
+;  left shift prtsc = small graphics, right shift prtsc = big
+;  Runs as a .COM type program under dos
+;     resident until power down or reset.
+;   1 = screen sent horiz. 320 bits in 480 mode
+;   2 = screen sent vert. 400 bits double printed in 480 mode
+; **************  1 mode **********************
+;	DL = masking character
+;	DH = count of 25 (physical lines)
+;	CX = counter for each line (80)
+;	DS = used to index screen at 'b8000'
+;   These regs must be preserved during routine
+;	  (increment each line by adding '14' hex to ds: for paragraph
+;		boundary of 320 bytes 0x'140')
+; **************  2 mode *********************
+;	DH = count of 40 (physical lines)
+;	CX = counter for each line (100)
+;	SI = index to screen via ds:
+;   These regs must be preserved during routine
+;	all output to printer is done from routine -send2-, which uses
+;	bios routine int 17h, and provides safe error exit.
+;
+;  GRAF.COM is designed with the idea that the user's main program is the
+;  primary function and GRAF.COM should not cause problems of its own.
+;
+; =======================================================
+; =		USER MODIFICATION SECTION.		=
+; =	If your printer can treat a byte of data to	=
+; =	control the wires on the dot-matrix head you	=
+; =	can probably get this working with your printer =
+; =	unless it is an IDS type, which treats bit plot =
+; =	a lot differently than the EPSON.		=
+; =	If you have Epson Graftrax or a C.Itoh 8510a,	=
+; =	just set the two equates indicated to -true-	=
+; =	and compile. Otherwise get out your manual	=
+; =	and put the code indicated in one of the printer=
+; =	sections.					=
+; =	**>	The title message starts at label	=
+; =	**>	-buffer-. If you set for another	=
+; =	**>	printer you should change the		=
+; =	**>	greeting to indicate which printer	=
+; =	===> ONLY SET *ONE* CONDITION TO -TRUE- or you	=
+; =	will have a real mess!		marty smith	=
+; =======================================================
+
+TRUE	equ	1	; DON'T CHANGE THESE!
+FALSE	equ	0
+
+escape	equ	27	; for printer
+CR	equ	13
+LF	equ	10
+
+; ===============>  A L L  U S E R S  <===================
+; ====> SET ONE AND ONLY ONE OF THE FOLLOWING THREE <=====
+
+EPSON	EQU	TRUE
+CITOH	EQU	FALSE	; citoh and nec 8023 use similar codes.
+NEC	EQU	FALSE
+OTHER	EQU	FALSE
+
+; Each bit of a byte is mapped to the wire head of the printer.
+; If the Epson MX is sent 80h (bit 7), the TOP wire makes a dot.
+; If the C.ITOH is sent   01h (bit 0), the TOP wire makes a dot.
+; ===============>  A L L  U S E R S  <===================
+; =====> SET ONE AND ONLY ONE OF THE FOLLOWING TWO <======
+
+BIT7	EQU	TRUE
+BIT0	EQU	FALSE
+
+; BIT7 is TRUE for EPSON
+; BIT0 is TRUE for CITOH,NEC8023
+
+print	macro	char
+	mov	al,char
+	call	SEND2
+	endm
+
+; *****************************
+; *  START of -OTHER- SECTION *
+; *****************************
+;
+; ALL routines must set either BIT7 or BIT0.
+;   above. If your printer can't see bit 7 or 0 as the top wire, you
+;   will probably have quite a time getting this routine to work.
+;
+; OLINE Resets line spacing so that the print head
+; will make a continuous line DOWN the page.
+; This is the sequence to set the EPSON for this. (ESC A 8)
+; SEND2 sends the byte in AL to the printer for ALL routines.
+; It uses the INT 17h routine in order to avoid DOS's extra line
+; feeds and CR's. Set for LPT1: Change SEND2 to redirect. DX=0=LPT1,1=LPT2
+OLINE	MACRO
+	print	escape
+	print	'A'
+	print	 8
+	ENDM
+
+; ORLINE restores the printer to normal line spacing
+; Example is for EPSON (ESC 2)
+ORLINE	MACRO
+	print	escape
+	print	'2'
+	ENDM
+
+; ORESET reinitializes the printer to default settings, spacings,
+; current line becomes Top of Form.
+; Is used by LARGE print to allow a series to be printed
+; on separate pages. It can be modified by getting rid of label
+; TOF: up to but not including	 JMP DONE, which is the exit from
+; the whole routine. Example is for EPSON. (ESC @)
+ORESET	MACRO
+	print	escape
+	print	'@'
+	ENDM
+
+; BP1 initiates bit-plot graphics. It tells the printer
+; that the next xxx bytes are to be considered bit-plots and not
+; regular characters. The small print routine sends 320 bit plot bytes
+; to the printer. On the EPSON this is:
+;	  ESC K 64 1   hex 1b 4b 40 1  > 1*256+64=320
+; --> the first part indents the page with ordinary spaces
+; --> to find spaces take TOTAL_DOTS_PER_LINE - 320. Then / BITS_PER_CHARACTER
+; --> Divide this by two and you have the spaces to indent
+; BP1 also needs to be able to handle the case of 640 mode, which will
+; double the output of dots.
+;    The example below is the code to do this on the EPSON/IBM.
+BP1	MACRO
+	mov	cx,13	; PICTURE ( we've got 320 dots and 480 to work with
+inlop:	print	20H	; 480-320=160 / 6 dots per char. = 26.67 extra
+	loop	inlop
+
+; ESC K 64 1  = 256+64=320 bit plot type bytes on the way
+
+	cmp	cs:mode640,TRUE
+	jz	ind10
+	print	escape 	; SEQUENCE TO SET UP 320
+		   	; BIT PLOTS IN 480 MODE
+	print	'K' 	; OF MX-80
+		   	; This is the set-up for the small print
+	print	64
+	print	 1
+	jmp short indend
+
+ind10:
+	print	escape
+	print	'L'  	; 640 dots in 960 mode
+	print	128
+	print	2
+
+indend:
+	ENDM
+
+; BP2.
+; The LARGE print sends 400 bit plot bytes to the printer. On the EPSON:
+; ESC K 144 1  hex 1b 4b 90 1  > 1*256+144=400
+; FIND YOUR INDENT FOR 400 BITS
+BP2	MACRO
+	mov	cx,6	; EPSON ( we've got 400 dots and 480 to work with
+inlop2: print	20H	; 480-400=80 / 6 dots per char. = 13.33 extra
+			; so indent the picture 6 spaces to center
+	loop	inlop2
+	print	escape
+	print	'K'
+	print	144
+	print	1
+	ENDM
+
+; ****************************
+; *   END OF -OTHER- SECTION *
+; ****************************
+
+;  ***************> START OF ACTUAL CODE <*****************
+
+cseg	segment 'code'
+	assume cs:cseg
+	org	100h		; set up for .com conversion
+init	proc
+	jmp	initial 	; so we have to set up first
+init	endp
+gowait	dw	0
+wheresi dw	0
+ptflag	db	0
+oneor2	db	0
+dstor	dw	0
+mode640 dw	0
+
+; **** the 1 below is the POKE to use in CALLing from another program. ****
+;
+default_routine dw	1	;  1 for small, 2 for LARGE.		  *
+;
+; *************************************************************************
+
+old_print_routine  dd	0	; address of former print screen routine.
+
+do_old	proc	near
+; jump to old routine
+	pop	bp
+	pop	si
+	pop	di
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ax
+	pop	ds
+	jmp	cs:old_print_routine
+
+do_old	endp
+
+; --->	ACTUAL INTERRUPT ROUTINE STARTS HERE  <---
+start	proc	far	; Start of main routine--Shift Prt.Sc hit.
+	assume cs:cseg
+	sti		; This follows ROM routine real close
+	push	ds
+	push	ax	;SAVE REGS
+	push	bx
+	push	cx
+	push	dx
+	push	di
+	push	si
+	push	bp
+	mov	bp,sp		; Save in case of error for reset
+	mov	ax,50h		; Check here first to see if
+	mov	ds,ax		; routine is already in progress
+	mov	si,0		; otherwise it will be a mess.
+	mov	al,01h		; if [si]=1 then there is a 
+	cmp	[si],al		; print screen already in progress.
+	jnz	nxts		; if not we're go for routine
+	jmp	exit		; otherwise go back home.
+nxts:	mov	[si],al 	; 
+	mov	ah,15		; Get the current video state.
+	int	10h		; from the ROM routine,
+	mov	cs:mode640,FALSE
+	cmp	al,4		; AL=4-6 are all graphics so we're OK
+	jz	graphic
+	cmp	al,5
+	jz	graphic
+	cmp	al,6
+	jnz	nxts10
+	mov	cs:mode640,TRUE ; special case
+	jmp	short graphic
+nxts10:
+	mov	al,0	; else reset and go to ROM routine.
+	mov	[si],al
+	jmp	do_old	; this is where we stored the ROM routine entry.
+;	jmp	exit	; Do the ROM routine but come back here to leave.
+graphic:
+	mov	ax,40h	; Get the keyboard shift flag
+	mov	ds,ax	; segment
+	mov	si,17h	; and address
+	mov	ax,[si] ; pick it up
+	and	ax,3	; get rid of other stuff
+	or	ax,ax	; Mod. to create default small
+	jnz	gr1	; for case where routine is called as a subroutine.
+	mov	ax,cs:default_routine
+gr1:	mov	cs:oneor2,al	; store for later
+	push	ax	; also here
+	xor	al,al	; make sure this starts out as NO print.
+	mov	cs:ptflag,al
+	xor	dl,dl	; These bits indicate whether R or L Shift is down
+	mov	dh,19h	; 25 lines of graphic dots at 8 dots per line
+	mov	ax,0b800h ; stored in DX
+	mov	ds,ax	;SET UP FOR SCREEN PEEK
+; Printer setup section to change line spacing to 8/72" for continuous dots
+
+; line spacing routine - All Epson Graftrax and IBM Graphics should
+; accept esc 'A' 8  or  esc '3' 24 for line spacing, but IBM Graphics only
+; recognizes esc '3' 24
+	IF	EPSON
+	print	escape
+	print	'3'     ; A
+	print	24	; 8
+	ENDIF
+
+	IF	CITOH	; ESC T 16
+	print	escape
+	print	'T'     ; T
+	print	'1'     ; 1
+	print	'6'     ; 6
+	print	escape
+
+	IF	NEC
+	print	'['     ; Set printer to unidirectional for dot alignment
+	ELSE
+	print	'>'
+	ENDIF
+
+	ENDIF
+
+	IF	OTHER
+	OLINE
+	ENDIF
+	pop	ax	; get back which routine
+	cmp	al,2	; Left Shift Prt Sc means LARGE graphic print
+	jnz	gr2
+	jmp	main2	; so hop over there if so.
+gr2:
+	cmp	cs:mode640,TRUE
+	jnz	MAIN
+	jmp	m640
+
+; START OF small GRAPHICS PRINT ROUTINE.
+; This routine scans across the screen from left to right,
+; building an EPSON bit plot byte out of IBM screen dots.
+; EPSON wire head		IBM screen color dots
+; TOP	 o  128  80h bit 7	| 00 | 01 | 10 | 11 | = 4 dots, one byte
+;	 o   64  40h  "  6
+; one	 o   32  20h  "  5      ibm dots go one raster line then the next
+; bit	 o   16  10h  "  4      EVEN line, ie 0, 2, 4 etc.
+; plot	 o    8  08h  "  3
+; byte	 o    4  04h  "  2      then you go back and do 1, 3, 5 etc.
+;	 o    2  02h  "  1
+; BOTTOM o    1  01h  "  0      At loc. 0000h are 4 dots, 0,0|0,1|0,2|0,3
+;				At loc. 2000h are 4 dots, 1,0|1,1|1,2|1,3
+;
+main:	mov	cx,80	; 80 x 4 = 320 dots.
+mloop:	mov	dl,0c0h ; 11000000b
+	call	tst4	; see if this comes back <> 0
+	mov	al,ah	; we are testing bit patterns for one screen byte
+	call	send	; don't send to printer unless something to send
+	mov	dl,30h	; 00110000b
+	call	tst4	; each byte is 4 dots
+	mov	al,ah	; so we test for each dot in a byte
+	call	send	; send sets PTFLAG if there is a dot on the line
+	mov	dl,0ch	; 00001100b
+	call	tst4	; then resets to start of line and starts printing
+	mov	al,ah	; AL is the bit plot byte being built
+	call	send	; This keeps us from printing a line of '0's.
+	mov	dl,03h	; 00000011b
+	call	tst4	; TST4 scans down 8 screen dot lines each time called
+	mov	al,ah
+	call	send
+	loop	mloop	; 80 bytes make 320 dots
+	call	lfcr	; this is a good old regular line feed/carriage return
+	call	break?	; someone hit ESC key? so take early exit
+	or	al,al
+	dec	dh	; DL is line counter
+	cmp	dh,0	; when it goes 0 we're through
+	jz	done	; reset everything and do an IRET
+	mov	ax,ds	; otherwise bump the SEGMENT reg so that location
+	add	ax,14h	; 0 is the start of the next line
+	mov	ds,ax	; X'140' = 320
+	jmp	main	; and do this 80 times (80x4=320)
+done:	mov	ax,0
+; This is the common exit for both routines, Printer is restored.
+done1:	push	ax	; save AX cause it has error exit flag
+; EPSON command to reset printer to 6 lines/in. = ESC 2 (1b 32)
+	IF	EPSON
+	print	escape
+	print	'3'
+	print	12	; add 12/216 to reset line spacing
+	print	CR
+	print	LF
+	print	escape ; RESET PRINTER, RESTORE REGS
+	print	'2'
+	ENDIF
+; FOR CITOH MAKE SURE BIDIRECTIONAL PRINTING IS RESTORED
+	IF	CITOH
+	print	escape
+	print	'A'
+	print	escape
+
+	IF	NEC
+	print	']'
+	ELSE
+	print	'<'
+	ENDIF
+
+	ENDIF
+
+	IF	OTHER
+	ORLINE
+	ENDIF
+edone:	mov	ax,50h	; Set end of PrtSc indication
+	mov	ds,ax	; OK to come back and do again
+	mov	si,0
+	pop	ax
+	mov	[si],al
+exit:	pop	bp
+	pop	si	; restore regs and return to caller
+	pop	di
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ax
+	pop	ds
+	iret		; were an interrupt routine so we IRET
+
+; START OF LARGE PRINT ROUTINE
+; +-------------+
+; | ^ ^ 	|  This time we scan from 199,0 to 0,0
+; | ^ ^ 	|  and go across
+; | ^ ^ 	|  o  o    x  x    o  x    x  x   These are representations
+; | | | 	|  o  o    o  o    x  o    x  x   of one color dot.
+; +-------------+    0	     1	     2	     3	   Palettes
+
+main2:	mov	dh,80	; we have 80 colunms x 25 lines here
+	mov	cs:wheresi,3ef0h ; si is our index
+	mov	si,cs:wheresi
+main2a: mov	cx,64h	; 100
+mloop2: mov	al,[si] ; idea is to get a byte starting at screen BOTTOM
+	IF	BIT0
+	call	reverse ; Bits have to be reversed on wire 0 type
+	ENDIF
+	call	send	; send it since these resemble bit plot bytes
+	cmp	cs:mode640,TRUE
+	jz	ml10
+	call	flipflop ; then reverse(sort of) this byte and send it
+ml10:
+	call	send	; again.
+	mov	cs:gowait,si ; store SI for next EVEN raster line
+	sub	si,2000h ; subtract 2000h for the next ODD raster line
+	mov	al,[si] ; and do the same here
+	IF	BIT0
+	call	reverse
+	ENDIF
+	call	send
+	cmp	cs:mode640,TRUE
+	jz	ml20
+	call	flipflop
+ml20:
+	call	send
+	mov	si,cs:gowait ; get back the EVEN line
+	sub	si,80	; advance UP the screen one line (say 199,0 to 197,0)
+	loop	mloop2	; and do this 100 times
+	call	lfcr	; finished with one line we send normal line-end
+	call	break?	; check for an ESC if we want to abort
+	or	al,al	; clear flags
+	dec	dh	; DH is our line counter,
+	cmp	dh,0	; when it goes 0 we're done.
+	jz	tof	; so we'll try to reset Top of Form and exit
+	inc	cs:wheresi	; else go to the next byte location
+	mov	si,cs:wheresi	; store
+	jmp	main2a		; and do again
+tof:	mov	cx,19	; tof restores page to 11 inches from where it started
+tofl:	print	13	; send a bunch of cr's and lf's
+	print	10
+	call	break?	; check for early exit
+	loop	tofl	; on and on.
+; This restores the EPSON to 6 lines per inch
+; ESC @ = Restore all settings to default
+	IF	EPSON
+	print	escape
+	print	'@'
+	ENDIF
+;	IF	CITOH	; No equivalent to Epson ESC @
+;	MOV	AL,escape ; for CITOH
+;	CALL	SEND2	; so just reset line feed pitch
+;	MOV	AL,'A'  ; this is done by DONE anyway
+;	CALL	SEND2	; so leave open if someone wants to patch
+;	ENDIF
+	IF	OTHER
+	ORESET
+	ENDIF
+	jmp	done	; clean up and back to caller.
+start	endp
+send2	proc	near	; BIOS routine to print the character in AL
+	push	ax
+	mov	ah,00h	; 0=print, 1=initialize port, 2=read status to AH
+	push	dx
+	mov	dx,0	; DX specifies printer 0 (LPT1:)
+	int	17h	; BIOS used instead of DOS because DOS sends
+	pop	dx	; CR/LF's in the middle of the bit-plots
+	test	ah,29h	; check for timeout or errors or out-of-paper
+	pop	ax
+	jnz	erret
+	ret
+erret:	mov	ax,00ffh ; Flag for printer foulup
+	mov	sp,bp
+	push	ax
+	jmp	edone	; special abort
+send2	endp
+
+; EPSON bit plots operate at 480 or 960 dots across the page
+; called by ESC K 'low byte';'high byte'
+;  i.e.  300 dots would be 256+44 or 012CH
+;  This is sent to the EPSON as --> 1b 4b 2c 01
+;		or in decimal	--> 27 75 44 1
+
+indent	proc	near
+	push	cx	; 13 spaces in to center
+	IF	EPSON
+	mov	cx,13	; PICTURE ( we've got 320 dots and 480 to work with
+inlop:	print	20h	; 480-320=160 / 6 dots per char. = 26.67 extra
+			; so indent the picture 13 spaces to center
+	loop	inlop
+; ESC K 64 1  = 256+64=320 bit plot type bytes on the way
+	cmp	cs:mode640,TRUE
+	jz	ind10
+	print	escape	; SEQUENCE TO SET UP 320
+			; BIT PLOTS IN 480 MODE
+	print	'K'	; OF MX-80
+			; This is the set-up for the small print
+	print	64
+	print	1
+	jmp	short indend
+
+ind10:
+	print	escape
+	print	'L'     ; 640 dots in 960 mode
+	print	128
+	print	2
+
+indend:
+	ENDIF
+	IF	CITOH
+	print	escape	; ESC N = Pica pitch
+	print	'N'
+	cmp	cs:mode640,TRUE
+	jz	ind10
+	mov	cx,20	; PICTURE ( we've got 320 dots and 640 to work with )
+inlop:	print	20h	; 640-320=320 / 8 dots per char. = 40 extra
+			; so indent the picture 13 spaces to center
+	loop	inlop
+	jmp	ind20
+
+ind10:
+	print	escape
+	print	'S'
+	print	'0'
+	print	'6'
+	print	'4'
+	print	'0'
+	jmp	ind30
+ind20:
+; ESC S 0320 = 320 bit plot type bytes on the way
+	print	escape	; SEQUENCE TO SET UP 320 BIT PLOTS IN 640 MODE
+	print	'S'     ; OF CITOH  This is the set-up for the small print
+	print	'0'     ; Would love to try to use all 640 bits here
+	print	'3'
+	print	'2'
+	print	'0'
+
+ind30:
+	ENDIF
+	IF	OTHER
+	BP1
+	ENDIF
+	pop	cx
+	ret
+indent	endp
+; This is indent for LARGE print
+; This time we have 400 bit plots to send (200 lines x 2)
+; 480-400=80 / 6 = 13.3 extra
+indent2 proc	near
+	push	cx
+	IF	EPSON
+	mov	cx,6	; so indent 6 character type spaces
+inlop2: print	20h
+	loop	inlop2
+; ESC 27 K 144 1 = 256+144=400 bit-plots
+	print	escape
+	print	'K'
+	print	144
+	print	1
+	ENDIF
+; 640-400=240 / 8 = 30 EXTRA characters
+	IF	CITOH
+	print	escape ; ESC N = Pica pitch
+	print	'N'
+	mov	cx,15	; PICTURE ( we've got 400 dots and 640 to work with
+inlop2: print	20h	; 640-400 / 8 dots per char. = 30 extra so indent
+			; the picture 15 spaces to center
+	loop	inlop2
+; ESC S 0400 = 400 bit plot type bytes on the way
+	print	escape	; SEQUENCE TO SET UP 400 BIT PLOTS IN 640 MODE
+	print	'S'     ; OF CITOH
+	print	'0'
+	print	'4'
+	print	'0'
+	print	'0'
+	ENDIF
+	IF	OTHER
+	BP2
+	ENDIF
+	pop	cx
+	ret
+indent2 endp
+
+m640	proc	near
+m6ain:	mov	cx,80	; 80 x 4 = 320 dots.
+m6loop: mov	dl,80h ; 10000000b
+	call	tst4	; see if this comes back <> 0
+	mov	al,ah	; we are testing bit patterns for one screen byte
+	call	send	; don't send to printer unless something to send
+	mov	dl,40h	; 01000000b
+	call	tst4	; each byte is 4 dots
+	mov	al,ah	; so we test for each dot in a byte
+	call	send	; send sets PTFLAG if there is a dot on the line
+	mov	dl,20h	; 00100000b
+	call	tst4	; then resets to start of line and starts printing
+	mov	al,ah	; AL is the bit plot byte being built
+	call	send
+	mov	dl,10h	; 00010000b
+	call	tst4	; TST4 scans down 8 screen dot lines each time called
+	mov	al,ah
+	call	send
+	mov	dl,08h ; 00001000b
+	call	tst4	; see if this comes back <> 0
+	mov	al,ah	; we are testing bit patterns for one screen byte
+	call	send	; don't send to printer unless something to send
+	mov	dl,04h	; 00000100b
+	call	tst4	; each byte is 4 dots
+	mov	al,ah	; so we test for each dot in a byte
+	call	send	; send sets PTFLAG if there is a dot on the line
+	mov	dl,02h	; 00000010b
+	call	tst4	; then resets to start of line and starts printing
+	mov	al,ah	; AL is the bit plot byte being built
+	call	send
+	mov	dl,01h	; 00000001b
+	call	tst4	; TST4 scans down 8 screen dot lines each time called
+	mov	al,ah
+	call	send
+	loop	m6loop	; 80 bytes make 320 dots
+	call	lfcr	; this is a good old regular line feed/carriage return
+	call	break?	; see if someone hit ESC key. If so take early exit
+	or	al,al
+	dec	dh	; DL is line counter
+	cmp	dh,0	; when it goes 0 we're through
+	jz	d6one	; reset everything and do an IRET
+	mov	ax,ds	; otherwise bump the SEGMENT reg so that location
+	add	ax,14h	; 0 is the start of the next line
+	mov	ds,ax	; X'140' = 320
+	jmp	m6ain	; and do this 80 times (80x4=320)
+d6one:	mov	ax,0
+	jmp	done1
+
+m640	endp
+
+tst4	proc	near	;  This routine builds ONE bit plot byte
+	mov	ax,80	;  by testing a dot with the mask sent
+	sub	ax,cx	;  from MLOOP.
+	mov	si,ax	;  First it does the ODD row then the EVEN
+	mov	ah,0	;  since alternate lines are offset 2000h
+	mov	al,[si] ;  from each other in memory.
+	and	al,dl	;  DL has the mask
+	cmp	al,0	;  SI the location
+	jz	no7	;  AL the memory byte
+	call	set7	;  AH is the byte being built
+no7:	add	si,80	; +80 gets us from say 0,0 to 2,0
+	mov	al,[si] ; get the memory byte ( 4 dots )
+	and	al,dl	; get rid of dots we aren't testing now
+	cmp	al,0	; see if its COLOR 0
+	jz	no5	; if yes, go on
+	call	set5	; otherwise set that bit
+no5:	add	si,80	; continue 7 5 3 1
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	no3
+	call	set3
+no3:	add	si,80
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	no1
+	call	set1
+no1:	push	ax
+	mov	ax,80
+	sub	ax,cx	; CX counts our screen position
+	add	ax,2000h ; add 2000h for the EVEN rows
+	mov	si,ax	; with seg set to B800h we can use SI like an
+	pop	ax	; array pointer ( AH has our byte so don't lose )
+	mov	al,[si] ; and continue with the same idea for 6 4 2 0
+	and	al,dl
+	cmp	al,0
+	jz	no6
+	call	set6
+no6:	add	si,80
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	no4
+	call	set4
+no4:	add	si,80
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	no2
+	call	set2
+no2:	add	si,80
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	no0
+	call	set0
+no0:	ret
+; where's my Z80 now
+; reverse this table if your bit plots use bit 0 for the top wire
+	IF	BIT7
+set7:	or	ah,80h	; top wire - bit 7
+	ret
+set6:	or	ah,40h	; bit 6
+	ret
+set5:	or	ah,20h	; bit 5
+	ret
+set4:	or	ah,10h	; bit 4
+	ret
+set3:	or	ah,08h	; bit 3
+	ret
+set2:	or	ah,04h	; bit 2
+	ret
+set1:	or	ah,02h	; bit 1
+	ret
+set0:	or	ah,01h	; bit 0
+	ret
+	ENDIF
+	IF	BIT0
+set7:	or	ah,01h	; top wire - bit 0
+	ret
+set6:	or	ah,02h	; bit 1
+	ret
+set5:	or	ah,04h	; bit 2
+	ret
+set4:	or	ah,08h	; bit 3
+	ret
+set3:	or	ah,10h	; bit 4
+	ret
+set2:	or	ah,20h	; bit 5
+	ret
+set1:	or	ah,40h	; bit 6
+	ret
+set0:	or	ah,80h	; bit 7
+	ret
+	ENDIF
+tst4	endp
+; This routine pre-scans a line to see if in fact there are any bit
+; plots to send. The main routine will keep sending bytes here
+; If a whole line of 0's are sent we avoid going through the
+; set-up for bit-plot (i.e. slower movement) graphics when a CR/LF
+; would take care of everything.
+; If there IS something to send, PTFLAG is set, the current line
+; position is set to 0, bit-plot is init., and bits are really sent to printer.
+send	proc	near
+	push	ax	; save the character
+	push	ds	; DS saved cause it points to lines
+	mov	ax,cs	; set seg for here
+	mov	ds,ax	; This was some of my first stuff with the 8088
+	pop	ax	; and I see some needless complexity here now
+	mov	cs:dstor,ax	; but it works and if I mess with it
+	cmp	cs:ptflag,0ffh	; its back to DEBUG.
+	jnz	nosend	; if PTFLAG isn't FFh we are still scanning
+	pop	ax	; else get the char. in AL and print it
+	call	send2	; this is the real out to printer routine
+	jmp	short noset ; restore DS and return
+nosend: pop	ax	; This is the SCAN routine
+	cmp	al,0	; get the char. > test for 0 > if so reset and go back
+	jz	noset
+	mov	al,0ffh ; if <> 0
+	mov	cs:ptflag,al ; set PTFLAG to go
+	pop	ax	;DISCARD RETURN
+	cmp	cs:oneor2,1 ; check which (small or LARGE)
+	jnz	two	; indent 6 or 13 depending on which routine
+	cmp	cs:mode640,TRUE
+	jz	nos10
+	call	indent	; indent also sets up bit-plot mode
+	call	noset	; NOSET will restore DS to right pos.
+	jmp	main	; and do the line for real.
+nos10:
+	call	indent
+	call	noset
+	jmp	m6ain
+two:	call	indent2 ; init. for LARGE
+	mov	si,cs:wheresi	; SI set back to start of line
+	call	noset	; get right DS
+	jmp	main2a	; back to beginning
+noset:	push	ax	; routine to restore DS
+	mov	ax,cs:dstor
+	mov	ds,ax
+	pop	ax
+	ret
+send	endp
+lfcr	proc	near	; send a regular CR/LF combo
+	print	13
+	print	10
+	mov	ax,0
+	mov	cs:ptflag,al ; reset PTFLAG for next line
+	mov	ax,cs:dstor  ; restore DS
+	mov	ds,ax
+	ret		; onward
+lfcr	endp
+break?	proc	near	; Test for early exit
+	push	ax	; don't lose any regs. here
+	push	dx
+	mov	ah,01h	; call direct keyboard io (constat) by BIOS
+	int	16h
+	jnz	goback? ; if zero flag clear we have a character
+bcont:	pop	dx	; no char. return
+	pop	ax
+	ret
+goback?:
+	mov	ah,0
+	int	16h
+	cmp	al,1bh	; ESC
+	jz	back	; so go back, else return
+	jmp	short bcont	; no ESC exit
+back:	pop	dx	; ESC exit This doesn't check for Ctrl-Break
+	pop	ax	; so if it is hit we save it for the caller to handle
+	pop	ax	;DISCARD RETURN
+	jmp	done	; and go back to orig. caller
+break?	endp
+flipflop	proc near	; This creates different combinations
+	push	cx	; of a box of four bit-plot dots for one color dot.
+	push	bx	; Don't lose any variables or loop counters
+	push	ax
+	mov	cl,2	; AL has present bit-plot finished byte
+	mov	bx,0
+	and	al,3	; 00000011b
+	call	flip
+	ror	bl,cl	; 11000000b
+	pop	ax	; basically rotate bits around for
+	push	ax	; o x
+	call	r2	; x o	color 1
+	and	al,3	; and
+	call	flip	; o x
+	ror	bl,cl	; o x	color 2
+	pop	ax	; instead of
+	push	ax	; x o
+	call	r4	; x o	color 1
+	and	al,3	; and
+	call	flip	; o x
+	ror	bl,cl	; o x	color 2
+	pop	ax	; which aren't to convincing as
+	call	r6	; two different patterns
+	and	al,3
+	call	flip
+	ror	bl,cl
+	mov	al,bl
+	pop	bx
+	pop	cx
+	ret
+r6:	ror	al,cl
+r4:	ror	al,cl
+r2:	ror	al,cl
+	ret
+flip:	cmp	al,3	; make sure there are two dots for color 1 and 2
+	jnz	flip2
+	or	bl,3
+flip2:	cmp	al,2
+	jnz	flip3
+	or	bl,1
+flip3:	cmp	al,1
+	jnz	flip4
+	or	bl,1
+flip4:	ret
+flipflop	endp
+reverse proc	near	; take AL and make bit 0 bit 7 , 1 - 6, etc
+	push	dx	; Save our counters and masks
+	push	cx
+	mov	dl,01h	; 00000001B
+	mov	dh,80h	; 10000000B
+	mov	ah,00h	; start out blank
+	mov	cx,8	; set counter for 8 times through
+rev1:	test	al,dl	; see if bit is set
+	jz	rev2	; if not skip next step
+	or	ah,dh	; else set bit in AH
+rev2:	shl	dl,1	; shift left test bit
+	shr	dh,1	; shift right mask bit (pad other bits with 0)
+	loop	rev1	; do this 8 times
+	mov	al,ah	; and we have a reversed character.
+	pop	cx	; get back these
+	pop	dx
+	ret		; and back to caller
+reverse endp
+last	dw	0
+buffer	db	'          GRAFTRAX.COM v3.4',10,13
+	if	EPSON
+	db	'EPSON/IBM GRAFTRAX(tm) Screen Printer.',13,10
+	else
+	db	'       Graphics Screen Printer',13,10
+	endif
+	db	'   Left Shift PrtSc = LARGE GRAPHICS',13,10
+	db	'  Right Shift PrtSc = small graphics',13,10
+	db	' Text mode uses regular print routine.',13,10
+	db	'   ESCape will exit GRAPHICS print.',13,10,'$'
+werehere db	' ** GRAF.COM is already resident **',13,10,10
+	db	' There is no need to reinstall.',13,10,'$'
+initr	proc	far
+initial:
+	mov	ax,0	; get addr of
+	mov	ds,ax	; print screen routine
+	mov	si,14h	; in rom
+	mov	ax,[si] ; from interrupt table in ram
+	inc	si
+	inc	si
+	mov	dx,[si]
+
+	mov	word ptr cs:old_print_routine,ax
+	mov	word ptr cs:old_print_routine+2,dx
+	mov	cx,offset last-offset start
+	mov	di,ax
+	mov	si,offset start
+	cmp	dx,0efffh	; if routine points to ROM, ours is not it.
+	ja	initok
+	cmp	si,di
+	jne	initok		; if start location not same, it can't be ours.
+
+	; otherwise check to see if this routine is
+
+	mov	es,dx		; already in memory, and don't reinstall if so.
+	mov	ax,cs
+	mov	ds,ax
+	repe	cmpsb
+
+
+	or	cx,cx		; cx=0 means there is a copy of this at the
+	jnz	initok		; other address.
+	mov	dx,offset werehere
+	mov	ah,9		; so we print a message and
+	int	21h		; abort.
+	int	20h
+initok:
+
+;	 mov	 ds,ax
+;	 mov	 al,0f1h ; move it to
+;	 mov	 ah,25h
+;	 int	 21h	 ; int f1h described in tech. manual as unused vector
+	mov	ax,cs	; reset int 5
+	mov	ds,ax	; to point to
+	mov	ax,offset start ; this routine
+	mov	dx,ax
+	mov	al,5
+	mov	ah,25h	; dos routine to reset int. vector
+	int	21h
+	mov	ax,offset buffer
+	mov	dx,ax
+	mov	ah,9
+	int	21h	; print greeting
+	mov	ax,3000h  ; get dos version
+	int	21h
+	or	al,al
+	jz	dos1
+	mov	ax,offset last
+	mov	cx,16
+	xor	dx,dx
+	div	cx
+	inc	ax	; make number of paragraphs
+	mov	dx,ax
+	mov	al,0	; exit code
+	mov	ah,31h	; terminate process, keep resident
+	int	21h
+
+dos1:
+	mov	dx,offset last	; last address here
+	inc	dx
+	int	27h	; terminate but stay resident
+initr	endp
+cseg	ends
+	end	init
+
+```
+{% endraw %}
 
 ## GRAFTRAX.BAS
 
+{% raw %}
 ```bas
 1 ' GRAFTRAX as a subroutine  3/12/83
 9 ' *********** Get some graphics going for this demo *******************
@@ -817,9 +4050,66 @@ machines:
 65110 SCREEN 0:WIDTH 40:WIDTH 80:LOCATE ,,1,12,13
 65120 RETURN
 ```
+{% endraw %}
+
+## GRAFTRAX.DOC
+
+{% raw %}
+```
+****************************************************************************
+*		         -- GRAFTRAX.COM v3.4 --			   *
+****************************************************************************
+
+GRAFTRAX.COM is for printing IBM-PC graphics on bit-plot printers.  
+The program as delivered works with EPSON GRAFTRAX (tm) and IBM GRAPHICS(tm) 
+printers, but can be modified to work with others, such as the C.ITOH 8510a,
+and NEC 8023a.  OKIGRAF.(ASM, COM) is a special version for 7-bit graphics
+printers and works with the Okidata 84, 92 and 93.
+
+GRAFTRAX represents the latest version of the program.  It does everthing
+the old one does and now does high-res. graphics much more clearly.
+This version has some small changes, including some to insure compatibility 
+with future versions of DOS, but the main improvement is correct handling 
+of the high-resolution 640x200 graphics mode.	GRAFTRAX originally was 
+created to reproduce medium resolution color graphics.
+
+If you have other memory resident programs you load when you start up your
+system you know that sometimes they must be loaded in a certain order to 
+work properly.  This is not the case with GRAFTRAX, the only time you 
+should not load it for the first time is from another program.  
+
+GRAFTRAX.COM is created by running the program from DOS. GRAFTRAX
+announces itself and will remain a part of your system until reset or
+power down.  Once run, the Shift+PrtSc keys will work as always with text
+on the screen, sending it to the printer.  If you have graphics running 
+on the screen and GRAFTRAX in your printer, the screen can be sent to the 
+printer in two ways.  A small (5 1/4 x 3 1/4) print with the 
+RIGHT-Shift+PrtSc keys, and LARGE (almost a full 8 1/2 x 11 page) print 
+with the LEFT- Shift+PrtSc keys.
+
+CALLGRAF.BAS is a demo program showing how to call GRAFTRAX.COM from a
+BASIC program.
+
+GRAFTRAX.ASM is the source code for GRAFTRAX.COM.  With the IBM MACRO-
+ASSEMBLER(tm) it will produce GRAFTRAX.EXE.  Use the EXE2BIN command to
+create GRAFTRAX.COM.  Conditional compilation allows easy assembly for 
+the C.ITOH 8510a or other printers with bit-plot capabilties.  The first 
+part of the listing explains the history of the program and explains how 
+to assemble for other printers.
+
+     Program by:
+Marty Smith       COMPUSERVE 72155,1214
+310 Cinnamon Oak Lane
+Houston, Texas	77079
+(713) 464-6737 (Home)
+3/18/85
+
+```
+{% endraw %}
 
 ## HOST.BAS
 
+{% raw %}
 ```bas
 100 ' HOST.BAS                                                    VERSION 1.00
 110 '
@@ -1188,9 +4478,26 @@ machines:
 9998 ' **********************************************************************
 9999 END
 ```
+{% endraw %}
+
+## HOST.DOC
+
+{% raw %}
+```
+PROGRAM NAME: HOST.BAS
+ABSTRACT: This program allows you to access an IBM PC from a remote location
+for the purpose of transmitting or receiving an ASCII file. Upon receiving
+a carrier from the remote location, the program requests a password for file
+protection.
+REQUIRES: IBM PC, ASYNC Communication board, Hayes Smartmodem
+Instructions: Contained in the program body.
+
+```
+{% endraw %}
 
 ## MAKEDOTS.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-W : DEFSTR X-Z
 20 XON=CHR$(2) : XOFF=CHR$(1)                                             
@@ -1204,9 +4511,2951 @@ machines:
 150 NEXT
 160 LOCATE 1,1
 ```
+{% endraw %}
+
+## NEWT.ASM
+
+{% raw %}
+```
+	PAGE  60,132
+	TITLE	TOSHIBA P1351 Graphics, v 1.0
+
+	comment #
+
+ tgraf.COM  7/4/85
+Interrupt replacement for print screen function on ibmpc(tm)
+	Please send problem reports and suggestions to:
+		Marty Smith
+		310 Cinnamon Oak Lane
+		Houston, Texas	77079
+		Compuserve 72155,1214
+		(713) 464-6737
+
+    Create tgraf.COM with MASM*, LINK* and EXE2BIN* as follows:
+
+	masm tgraf,tgraf,tgraf;
+
+	link tgraf;    (ignor the error message about no stack segment,
+			  that's taken care of in the next step.)
+	exe2bin tgraf.exe tgraf.com
+
+  *  MASM is the MicroSoft(tm) Macro Assembler v. 3.0
+	or IBM(tm) Macro Assembler v. 1.0
+     LINK and EXE2BIN are PC-DOS(tm) utilities.
+
+  This program originally designed for Epson-MX(tm) series printers
+  with Graftrax80(tm) and Graftrax+(tm) bit-plot graphic capabilites.
+  ======> Now modified with conditional compilation and macros for
+  ======> c.itoh(tm) model 8510a and other printers.
+
+	CHANGE HISTORY:
+	9/18/82 - Buffer in routine for a line of bit-plot bytes to allow for
+  checking for blank lines replaced by pre-scan routine, saving space.
+	1/24/83 - Modifications for conditional assembly with other printers
+  and C.ITOH 8510a.
+	1/24/83 - Improved error checking for out-of-paper and I/O errors
+  involving printer.
+	1/24/83 - Bug in error check corrected, occuring when routine does
+  error exit and is then called again, resulting in bit-plot data sent in
+  regular mode.
+	3/12/83 - Allow calling as a subroutine. i.e. no shift key depressed.
+  Defaults to small print mode. Can be set to LARGE.
+	2/4/84	- Allow correct printing of 640x200 mode.
+	3/18/84 - Use int 31h for dos 2.+ terminate process.
+	3/24/84 - Use BIOS for keyboard scan, in case screen is printed
+		from DOS.
+	4/21/84 - -OTHER- section complete for changes from 640 mode.
+	9/22/84 - Add code to set lines back in 6/inch order, so CR's
+		can advance to TOF.
+	9/22/84 - Jump to other print screen routine instead of reassigning
+		it to int f1h. Only luck has kept this vector from being used
+		by someone else.
+	10/20/84- Add check for already installed, don't reinstall.
+	10/20/84- Compatibility with MASM 1.0 reestablished, FAR call to old
+		routine caused 'fixup error' from EXE2BIN.
+	10/20/84- CALLGRAF now points to common address variable for default
+		mode, is now the same for all versions of program.  Demo now
+		works!
+	4/15/84 - Toshiba P1351 added to list.	This is a higher resolution
+		printer with a 24 pin dot head, and is another special edition
+		of the program, like the Okidata with its 7 dot graphics.
+
+	Features:
+  Accepts ESC key exit, prescans to test for blank line
+  left shift prtsc = small graphics, right shift prtsc = big
+  Runs as a .COM type program under dos
+     resident until power down or reset.
+   1 = screen sent horiz. 320 bits in 480 mode
+   2 = screen sent vert. 400 bits double printed in 480 mode
+ **************  1 mode **********************
+	DL = masking character
+	DH = count of 25 (physical lines)
+	CX = counter for each line (80)
+	DS = used to index screen at 'b8000'
+   These regs must be preserved during routine
+	  (increment each line by adding '14' hex to ds: for paragraph
+		boundary of 320 bytes 0x'140')
+ **************  2 mode *********************
+	DH = count of 40 (physical lines)
+	CX = counter for each line (100)
+	SI = index to screen via ds:
+   These regs must be preserved during routine
+	all output to printer is done from routine -send2-, which uses
+	bios routine int 17h, and provides safe error exit.
+
+  GRAF.COM is designed with the idea that the user's main program is the
+  primary function and GRAF.COM should not cause problems of its own.
+
+
+	#
+
+TRUE	equ	-1	; DON'T CHANGE THESE!
+FALSE	equ	0
+
+escape	equ	27	; for printer
+CR	equ	13
+LF	equ	10
+
+; ===============>  A L L  U S E R S  <===================
+; ====> SET ONE AND ONLY ONE OF THE FOLLOWING THREE <=====
+; don't set citoh to true! not operable with this version.
+
+TOSHIBA EQU	TRUE
+; citoh and nec are left in here to allow for other 24 pin printers, and
+; should NOT be set true at present.
+CITOH	EQU	FALSE	; citoh and nec 8023 use similar codes.
+NEC	EQU	FALSE
+
+DEBUG	equ	FALSE
+
+
+NO_EXT	equ	1	; print extended chars as dots
+
+; Each bit of a byte is mapped to the wire head of the printer.
+; If the Epson MX is sent 80h (bit 7), the TOP wire makes a dot.
+; If the C.ITOH is sent   01h (bit 0), the TOP wire makes a dot.
+; ===============>  A L L  U S E R S  <===================
+; =====> SET ONE AND ONLY ONE OF THE FOLLOWING TWO <======
+
+BIT7	EQU	TRUE
+BIT0	EQU	FALSE
+
+; BIT7 is TRUE for TOSHIBA
+; BIT0 is TRUE for CITOH,NEC8023
+
+print	macro	char
+	mov	al,char
+	call	SEND2
+	endm
+
+
+;  ***************> START OF ACTUAL CODE <*****************
+
+cseg	segment 'code'
+	assume cs:cseg
+	org	100h		; set up for .com conversion
+; publics here for debugging.
+
+	comment #
+	public	BCONT,BIT0,BIT7,BREAK?,BUFFER,D6ONE
+	public	DEFAULT_ROUTINE
+	public	DONE,DONE1,DOS1,DO_OLD,DSTOR,EDONE,ERRET,ESCAPE,EXIT
+	public	GOBACK?,GOWAIT,GR1,GR2,GRAPHIC,IND10,INDEND
+	public	INDENT,INDENT2,INIT,INITIAL,INITOK,INITR,INL640,INLOP
+	public	INLOP2,LAST,LFCR,LOOP_COUNT,M640,M6AIN,M6LOOP,MAIN
+	public	MAIN2,MAIN2A,ML10,ML10A,ML10B,ML20,MLOOP,MLOOP2,MODE640
+	public	NO0,NO1,NO2,NO3,NO4,NO5,NO6,NO7,NOS10,NOSEND
+	public	NOSET,NXTS,NXTS10,OLD_PRINT_ROUTINE,ONEOR2,PTFLAG,S310
+	public	S320,S330,S340,S350,S360,S370,S380,S390,SEB10,SEB20,SEB30
+	public	SEBLOOP1,SEBLOOP2,SEC10,SEC20,SEC25,SEC30,SECLOOP1
+	public	SECLOOP2,SEND,SEND2,SEND3,SENDTWO,SEND_BIG_BW
+	public	SEND_BIG_COLOR,SEND_LOOP1,SEND_LOOP2,SEND_LOOP3,SEND_ONE
+	public	SEND_THREE,SEND_TWO,START,STWO1,STWO10,STWO2,STWO20
+	public	STWO30,STWO40,TO0,TO1,TO2,TO3,TO4,TO5,TO6,TO7
+	public	TOF,TOFL,TS0A,TS1A,TS2A,TS3A,TS4A,TS5A
+	public	TS6A,TS7A,TST4,TST8,TWO,WEREHERE,WHERESI
+	#
+
+init	proc
+	jmp	initial 	; so we have to set up first
+init	endp
+;	debugvar dw	0
+gowait	dw	0
+wheresi dw	0
+ptflag	db	0
+oneor2	db	0
+dstor	dw	0
+mode640 dw	0
+
+; **** the 1 below is the POKE to use in CALLing from another program. ****
+;
+default_routine dw	1	;  1 for small, 2 for LARGE.		  *
+;
+; ****	 WARNING * add any new variables AFTER this to preserve POKE ******
+
+bigc1	db	001000b,100000b,000010b,001000b,100000b,000010b
+bigc2	db	100010b,010101b,101010b,010100b,0,0  ; patterns for big color
+bigc3	db	101010b,010101b,101010b,010101b,101010b,010101b
+
+data_byte db	0,0
+
+loop_count	db	0,0
+
+old_print_routine  dd	0	; address of former print screen routine.
+
+crt_cols	db	0
+video_page	db	0
+cursor_pos	dw	0
+tmode_flag	db	0
+max_lns 	db	25
+MAX_LINES equ	byte ptr cs:max_lns
+
+dot18		db	6,escape,';0018' ; string to send 18 dot lines
+half_crlf	db	3,escape,'U',13  ; half line feed, carriage return
+
+deline		db	0	; flag for extended line like │
+
+.xlist
+
+include dotdata.asm	; font data for extended characters
+
+include dotable.asm	; xlat table and offsets
+
+.list
+
+do_old	proc	near
+; jump to old routine
+	pop	bp
+	pop	si
+	pop	di
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ds
+	pop	es
+	pop	ax
+	jmp	cs:old_print_routine
+
+do_old	endp
+
+; --->	ACTUAL INTERRUPT ROUTINE STARTS HERE  <---
+start	proc	far	; Start of main routine--Shift Prt.Sc hit.
+	assume cs:cseg
+	sti		; This follows ROM routine real close
+	push	ax	;SAVE REGS
+	push	es
+	push	ds
+	push	bx
+	push	cx
+	push	dx
+	push	di
+	push	si
+	push	bp
+	mov	bp,sp		; Save in case of error for reset
+	mov	ax,50h		; Check here first to see if
+	mov	ds,ax		; routine is already in progress
+	mov	si,0		; otherwise it will be a mess.
+	mov	al,01h		; if [si]=1 then there is a
+	cmp	[si],al 	; print screen already in progress.
+	jnz	nxts		; if not we're go for routine
+	jmp	exit		; otherwise go back home.
+nxts:	mov	[si],al 	;
+	mov	ah,15		; Get the current video state.
+	int	10h		; from the ROM routine,
+	mov	cs:mode640,FALSE
+	cmp	al,4		; AL=4-6 are all graphics so we're OK
+	jz	graphic
+	cmp	al,5
+	jz	graphic
+	cmp	al,6
+	jnz	nxts10
+	mov	cs:mode640,TRUE ; special case
+	jmp	short graphic
+nxts10:
+	jmp	do_text_mode
+
+	mov	al,0	; else reset and go to ROM routine.
+	mov	[si],al
+	jmp	do_old	; this is where we stored the ROM routine entry.
+;	jmp	exit	; Do the ROM routine but come back here to leave.
+graphic:
+	mov	ax,40h	; Get the keyboard shift flag
+	mov	ds,ax	; segment
+	mov	si,17h	; and address
+	mov	ax,[si] ; pick it up
+	and	ax,3	; get rid of other stuff
+	or	ax,ax	; Mod. to create default small
+	jnz	gr1	; for case where routine is called as a subroutine.
+	mov	ax,cs:default_routine
+gr1:	mov	cs:oneor2,al	; store for later
+	push	ax	; also here
+	xor	al,al	; make sure this starts out as NO print.
+	mov	cs:ptflag,al
+	xor	dl,dl	; These bits indicate whether R or L Shift is down
+	mov	dh,19h	; 25 lines of graphic dots at 8 dots per line
+	mov	cs:loop_count,dh
+	mov	ax,0b800h ; stored in DX
+	mov	ds,ax	;SET UP FOR SCREEN PEEK
+; Printer setup section to change line spacing to 8/72" for continuous dots
+
+; line spacing routine - All Epson Graftrax and IBM Graphics should
+; accept esc 'A' 8  or  esc '3' 24 for line spacing, but IBM Graphics only
+; recognizes esc '3' 24
+	IF	TOSHIBA
+	print	escape
+	print	'L'     ; A
+	print	'0'     ; 8
+	print	'7'
+	ENDIF
+
+	IF	CITOH	; ESC T 16
+	print	escape
+	print	'T'     ; T
+	print	'1'     ; 1
+	print	'6'     ; 6
+	print	escape
+
+	IF	NEC
+	print	'['     ; Set printer to unidirectional for dot alignment
+	ELSE
+	print	'>'
+	ENDIF
+
+	ENDIF
+
+	pop	ax	; get back which routine
+	cmp	al,2	; Left Shift Prt Sc means LARGE graphic print
+	jnz	gr2
+	jmp	main2	; so hop over there if so.
+gr2:
+	cmp	cs:mode640,TRUE
+	jnz	MAIN
+	jmp	m640
+
+; START OF small GRAPHICS PRINT ROUTINE.
+; This routine scans across the screen from left to right,
+; building an TOSHIBA bit plot byte out of IBM screen dots.
+; TOSHIBA wire head		IBM screen color dots
+; TOP	 o  128  80h bit 7	| 00 | 01 | 10 | 11 | = 4 dots, one byte
+;	 o   64  40h  "  6
+; one	 o   32  20h  "  5      ibm dots go one raster line then the next
+; bit	 o   16  10h  "  4      EVEN line, ie 0, 2, 4 etc.
+; plot	 o    8  08h  "  3
+; byte	 o    4  04h  "  2      then you go back and do 1, 3, 5 etc.
+;	 o    2  02h  "  1
+; BOTTOM o    1  01h  "  0      At loc. 0000h are 4 dots, 0,0|0,1|0,2|0,3
+;				At loc. 2000h are 4 dots, 1,0|1,1|1,2|1,3
+;
+main:	mov	cx,80	; 80 x 4 = 320 dots.
+	mov	di,sp	; this is not very structured, but its 11:30pm
+
+	comment #
+
+ok, heres the idea, bp is already set for printer foulup abort.
+This printer has much finer resolution than the epson, humble beginning
+of this program.  all color modes do color translation here, b+w is yet
+another situation, carp, carp. The scan routine is set so that when material
+is found to be printed, the print line loop is reset to the top and only
+then is data actually sent. This allows for quicker printing of blank space.
+ A cr/lf is much faster than control codes and 2000 bytes.  A more
+complicated translation routine means more call nesting, and so register
+DI is used to allow movement without stack trouble (famous last words).
+If you make modifications to the program, please understand that changing
+register DI may make for some interesting side effects.
+
+	#
+
+mloop:	mov	dl,0c0h ; 11000000b
+	call	tst4	; see if this comes back <> 0
+;	mov	al,ah	; we are testing bit patterns for one screen byte
+	call	send3	; don't send to printer unless something to send
+	mov	dl,30h	; 00110000b
+	call	tst4	; each byte is 4 dots
+;	mov	al,ah	; so we test for each dot in a byte
+	call	send3	; send sets PTFLAG if there is a dot on the line
+	mov	dl,0ch	; 00001100b
+	call	tst4	; then resets to start of line and starts printing
+;	mov	al,ah	; AL is the bit plot byte being built
+	call	send3	; This keeps us from printing a line of '0's.
+	mov	dl,03h	; 00000011b
+	call	tst4	; TST4 scans down 8 screen dot lines each time called
+;	mov	al,ah
+	call	send3
+	loop	mloop	; 80 bytes make 320 dots
+	call	lfcr	; this is a good old regular line feed/carriage return
+	call	break?	; someone hit ESC key? so take early exit
+	mov	dh,cs:loop_count
+	dec	dh	; DL is line counter
+	or	dh,dh	; when it goes 0 we're through
+	jz	done	; reset everything and do an IRET
+	mov	cs:loop_count,dh
+	mov	ax,ds	; otherwise bump the SEGMENT reg so that location
+	add	ax,14h	; 0 is the start of the next line
+	mov	ds,ax	; X'140' = 320
+	jmp	main	; and do this 80 times (80x4=320)
+done:	mov	ax,0
+; This is the common exit for both routines, Printer is restored.
+done1:	push	ax	; save AX cause it has error exit flag
+; TOSHIBA command to reset printer to 6 lines/in. = ESC 2 (1b 32)
+	IF	TOSHIBA
+	print	escape
+	print	'L'
+	print	'0'     ; add 12/216 to reset line spacing
+	print	'8'
+	print	CR
+	print	LF
+	ENDIF
+; FOR CITOH MAKE SURE BIDIRECTIONAL PRINTING IS RESTORED
+	IF	CITOH
+	print	escape
+	print	'A'
+	print	escape
+
+	IF	NEC
+	print	']'
+	ELSE
+	print	'<'
+	ENDIF
+
+	ENDIF
+
+edone:	mov	ax,50h	; Set end of PrtSc indication
+	mov	ds,ax	; OK to come back and do again
+	mov	si,0
+	pop	ax
+	mov	[si],al
+exit:	pop	bp
+	pop	si	; restore regs and return to caller
+	pop	di
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ds
+	pop	es
+	pop	ax
+	iret		; were an interrupt routine so we IRET
+
+	comment #
+ START OF LARGE PRINT ROUTINE
++-------------+
+| ^ ^	      |  This time we scan from 199,0 to 0,0
+| ^ ^	      |   and go across
+| ^ ^	      |  These are representations
+| | |	      |   of one color dot.
++-------------+    0	     1	     2	     3	   Palettes
+		x x x x x x	x x x x x x
+     all o's    o o o o o o     x x x x x x     all x's
+		x x x x x x	x x x x x x
+		o o o o o o	o o o o o o	These patterns may be
+		x x x x x x	o o o o o o	changed if they don't
+		o o o o o o	o o o o o o	look convincing.
+color	00	     01 	     10 	11
+	 0	      1 	      2 	 3
+
+		for b+w:
+
+	dot on :  xxxxxx	oooooo	: dot off
+		  xxxxxx	oooooo
+		  xxxxxx	oooooo
+
+
+	#
+
+main2:	mov	dh,80	; we have 80 colunms x 25 lines here
+	mov	cs:loop_count,dh
+	mov	cs:wheresi,3ef0h ; si is our index
+	mov	si,cs:wheresi
+	mov	di,sp
+main2a: mov	cx,100
+mloop2: mov	al,[si] ; idea is to get a byte starting at screen BOTTOM
+	cmp	cs:mode640,TRUE
+	je	ml10
+
+	call	send_big_color
+
+	jmp	short ml10a
+ml10:
+	call	send_big_bw
+ml10a:
+	mov	cs:gowait,si ; store SI for next EVEN raster line
+	sub	si,2000h ; subtract 2000h for the next ODD raster line
+	mov	al,[si] ; and do the same here
+	cmp	cs:mode640,TRUE
+	je	ml10b
+
+	call	send_big_color
+
+	jmp	short ml20
+ml10b:
+	call	send_big_bw
+ml20:
+	mov	si,cs:gowait ; get back the EVEN line
+	sub	si,80	; advance UP the screen one line (say 199,0 to 197,0)
+	loop	mloop2	; and do this 100 times
+	call	lfcr	; finished with one line we send normal line-end
+	call	break?	; check for an ESC if we want to abort
+	or	al,al	; clear flags
+	dec	cs:loop_count
+	mov	dh,cs:loop_count ; DH is our line counter,
+	or	dh,dh	; when it goes 0 we're done.
+	jz	tof	; so we'll try to reset Top of Form and exit
+
+	inc	cs:wheresi	; else go to the next byte location
+	mov	si,cs:wheresi	; store
+	jmp	main2a		; and do again
+
+tof:
+	print	12	; send a form feed
+
+	jmp	done	; clean up and back to caller.
+
+start	endp
+
+send2	proc	near	; BIOS routine to print the character in AL
+
+IF	DEBUG
+	inc	cs:debugvar
+	ret
+	ELSE
+	push	ax
+	mov	ah,00h	; 0=print, 1=initialize port, 2=read status to AH
+	push	dx
+	mov	dx,0	; DX specifies printer 0 (LPT1:)
+	int	17h	; BIOS used instead of DOS because DOS sends
+	pop	dx	; CR/LF's in the middle of the bit-plots
+	test	ah,29h	; check for timeout or errors or out-of-paper
+	pop	ax
+	jnz	erret
+	ret
+
+erret:
+	cmp	cs:tmode_flag,TRUE
+	jne	erret10
+	call	reset_cursor
+erret10:
+	mov	ax,00ffh ; Flag for printer foulup
+	mov	sp,bp
+	push	ax
+	jmp	edone	; special abort
+	ENDIF
+send2	endp
+
+send_string	proc	near
+; send a string of chars to printer
+;	format	len,0,1,...,len-1
+; si points to first byte
+
+	push	cx
+
+	mov	cl,cs:[si]
+	or	cl,cl
+	jz	sstret
+	xor	ch,ch
+	cld
+sst_loop:
+	inc	si
+	mov	al,cs:[si]
+	call	send2
+	loop	sst_loop
+
+sstret:
+	pop	cx
+	ret
+
+send_string	endp
+
+; TOSHIBA bit plots operate at 180 dots per inch, or 1440 for an 8 inch line.
+; called by ESC ; 'xxxx' where xxxx is an ASCII number like '0010' or '1440'
+;  i.e.  300 dots would be ESC ; 0300
+;  This is sent to the TOSHIBA as --> 27 ';' '0300'
+
+indent	proc	near
+	push	cx	; 13 spaces in to center
+	IF	TOSHIBA
+	cmp	cs:mode640,TRUE
+	jz	ind10
+	mov	cx,13	; PICTURE ( we've got 960 dots and 1440 to work with
+inlop:	print	' '     ; 1440-960=480/18 spaces/char pica = 26.67 extra
+			; so indent the picture 13 spaces to center )
+	loop	inlop
+	print	escape	; SEQUENCE TO SET UP 960
+			; BIT PLOTS IN GRAPHIC MODE.
+	print	';'     ; OF P1351
+			; This is the set-up for the small print
+	print	'0'
+	print	'9'     ; 320*3=960 dots
+	print	'6'
+	print	'0'
+	jmp	short indend
+
+ind10:
+	mov	cx,5
+inl640: 		; 640x200 mode, 1440-1280=160/18 per char pica=8.89
+			; so indent 5
+	print	' '
+	loop	inl640
+	print	escape
+	print	';'     ; 640 dots * 2 = 1280
+	print	'1'
+	print	'2'
+	print	'8'
+	print	'0'
+
+indend:
+	ENDIF
+	IF	CITOH
+	print	escape	; ESC N = Pica pitch
+	print	'N'
+	cmp	cs:mode640,TRUE
+	jz	ind10
+	mov	cx,20	; PICTURE ( we've got 320 dots and 640 to work with )
+inlop:	print	20h	; 640-320=320 / 8 dots per char. = 40 extra
+			; so indent the picture 13 spaces to center
+	loop	inlop
+	jmp	ind20
+
+ind10:
+	print	escape
+	print	'S'
+	print	'0'
+	print	'6'
+	print	'4'
+	print	'0'
+	jmp	ind30
+ind20:
+; ESC S 0320 = 320 bit plot type bytes on the way
+	print	escape	; SEQUENCE TO SET UP 320 BIT PLOTS IN 640 MODE
+	print	'S'     ; OF CITOH  This is the set-up for the small print
+	print	'0'     ; Would love to try to use all 640 bits here
+	print	'3'
+	print	'2'
+	print	'0'
+
+ind30:
+	ENDIF
+	pop	cx
+	ret
+indent	endp
+; This is indent for LARGE print
+; This time we have 200*6=1200 bit plots to send
+; 1440-1200=240/18 =13.33 extra, so indent 6
+indent2 proc	near
+	push	cx
+	IF	TOSHIBA
+	mov	cx,6	; so indent 6 character type spaces
+inlop2: print	20h
+	loop	inlop2
+	print	escape	; 200*6=1200
+	print	';'
+	print	'1'
+	print	'2'
+	print	'0'
+	print	'0'
+	ENDIF
+; 640-400=240 / 8 = 30 EXTRA characters
+	IF	CITOH
+	print	escape ; ESC N = Pica pitch
+	print	'N'
+	mov	cx,15	; PICTURE ( we've got 400 dots and 640 to work with
+inlop2: print	20h	; 640-400 / 8 dots per char. = 30 extra so indent
+			; the picture 15 spaces to center
+	loop	inlop2
+; ESC S 0400 = 400 bit plot type bytes on the way
+	print	escape	; SEQUENCE TO SET UP 400 BIT PLOTS IN 640 MODE
+	print	'S'     ; OF CITOH
+	print	'0'
+	print	'4'
+	print	'0'
+	print	'0'
+	ENDIF
+	pop	cx
+	ret
+indent2 endp
+
+m640	proc	near
+m6ain:	mov	cx,80	; 80 x 4 = 320 dots.
+	mov	di,sp
+m6loop: mov	dl,80h ; 10000000b
+	call	tst8	; see if this comes back <> 0
+	mov	al,ah	; we are testing bit patterns for one screen byte
+	call	sendtwo ; don't send to printer unless something to send
+	mov	dl,40h	; 01000000b
+	call	tst8	; each byte is 4 dots
+	mov	al,ah	; so we test for each dot in a byte
+	call	sendtwo ; send sets PTFLAG if there is a dot on the line
+	mov	dl,20h	; 00100000b
+	call	tst8	; then resets to start of line and starts printing
+	mov	al,ah	; AL is the bit plot byte being built
+	call	sendtwo
+	mov	dl,10h	; 00010000b
+	call	tst8	; TST4 scans down 8 screen dot lines each time called
+	mov	al,ah
+	call	sendtwo
+	mov	dl,08h ; 00001000b
+	call	tst8	; see if this comes back <> 0
+	mov	al,ah	; we are testing bit patterns for one screen byte
+	call	sendtwo ; don't send to printer unless something to send
+	mov	dl,04h	; 00000100b
+	call	tst8	; each byte is 4 dots
+	mov	al,ah	; so we test for each dot in a byte
+	call	sendtwo ; send sets PTFLAG if there is a dot on the line
+	mov	dl,02h	; 00000010b
+	call	tst8	; then resets to start of line and starts printing
+	mov	al,ah	; AL is the bit plot byte being built
+	call	sendtwo
+	mov	dl,01h	; 00000001b
+	call	tst8	; TST4 scans down 8 screen dot lines each time called
+	mov	al,ah
+	call	sendtwo
+	loop	m6loop	; 80 bytes make 320 dots
+	call	lfcr	; this is a good old regular line feed/carriage return
+	call	break?	; see if someone hit ESC key. If so take early exit
+	or	al,al
+	mov	dh,cs:loop_count
+	dec	dh	; DL is line counter
+	cmp	dh,0	; when it goes 0 we're through
+	jz	d6one	; reset everything and do an IRET
+	mov	cs:loop_count,dh
+	mov	ax,ds	; otherwise bump the SEGMENT reg so that location
+	add	ax,14h	; 0 is the start of the next line
+	mov	ds,ax	; X'140' = 320
+	jmp	m6ain	; and do this 80 times (80x4=320)
+d6one:	mov	ax,0
+	jmp	done1
+
+m640	endp
+
+tst4	proc	near	;  This routine builds ONE bit plot byte
+	mov	bx,80	;  by testing a dot with the mask sent
+	sub	bx,cx	;  from MLOOP.
+	mov	si,bx	;  First it does the ODD rows then the EVEN,
+	xor	ax,ax	;  alternate lines are offset 2000h
+	mov	bl,[si] ;  from each other in memory.
+	and	bl,dl	;  DL has the mask
+	or	bl,bl	;  SI the location
+	jz	no7	;  BL the memory byte
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts7a
+	or	ah,80h	; if set, set on data word
+ts7a:
+	test	bl,dl	; odd bit
+	jz	no7
+	or	ah,40h
+no7:	add	si,80	; +80 gets us from say 0,0 to 2,0
+	mov	bl,[si] ; get the memory byte ( 4 dots )
+	and	bl,dl	; get rid of dots we aren't testing now
+	or	bl,bl	; see if its COLOR 0
+	jz	no5	; if yes, go on
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts5a
+	or	ah,8	; if set, set on data word
+ts5a:
+	test	bl,dl	; odd bit
+	jz	no5
+	or	ah,4
+no5:	add	si,80	; continue 7 5 3 1
+	mov	bl,[si] ;  xxxxxx
+	and	bl,dl	;
+	or	bl,bl	;  xxxxxx
+	jz	no3	;  xxxxxx
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts3a
+	or	al,80h	; if set, set on data word
+ts3a:
+	test	bl,dl	; odd bit
+	jz	no3
+	or	al,40h
+no3:	add	si,80	;  xxxxxx
+	mov	bl,[si] ;
+	and	bl,dl
+	or	bl,bl
+	jz	no1
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts1a
+	or	al,8	; if set, set on data word
+ts1a:
+	test	bl,dl	; odd bit
+	jz	no1
+	or	al,4
+no1:	push	ax
+	mov	ax,80
+	sub	ax,cx	; CX counts our screen position
+	add	ax,2000h ; add 2000h for the EVEN rows
+	mov	si,ax	; with seg set to B800h we can use SI like an
+	pop	ax	; array pointer ( AH has our byte so don't lose )
+	mov	bl,[si] ; and continue with the same idea for 6 4 2 0
+	and	bl,dl
+	or	bl,bl
+	jz	no6
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts6a
+	or	ah,20h	; if set, set on data word
+ts6a:
+	test	bl,dl	; odd bit
+	jz	no6
+	or	ah,10h
+;	call	set6
+no6:	add	si,80
+	mov	bl,[si]
+	and	bl,dl
+	or	bl,bl
+	jz	no4
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts4a
+	or	ah,2	; if set, set on data word
+ts4a:
+	test	bl,dl	; odd bit
+	jz	no4
+	or	ah,1
+;	call	set4
+no4:	add	si,80
+	mov	bl,[si]
+	and	bl,dl
+	or	bl,bl
+	jz	no2
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts2a
+	or	al,20h	; if set, set on data word
+ts2a:
+	test	bl,dl	; odd bit
+	jz	no2
+	or	al,10h
+;	call	set2
+no2:	add	si,80
+	mov	bl,[si]
+	and	bl,dl
+	or	bl,bl
+	jz	no0
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts0a
+	or	al,2	; if set, set on data word
+ts0a:
+	test	bl,dl	; odd bit
+	jz	no0
+	or	al,1
+;	call	set0
+
+no0:	ret
+
+	comment #
+; hopefully this can be left out, it all depends on the LQ1500
+; where's my Z80 now
+; reverse this table if your bit plots use bit 0 for the top wire
+	IF	BIT7
+set15:	or	ah,80h	; top wire - bit 7
+	ret
+set14:	or	ah,40h	; bit 6
+	ret
+set13:	or	ah,20h	; bit 5
+	ret
+set12:	or	ah,10h	; bit 4
+	ret
+set11:	or	ah,08h	; bit 3
+	ret
+set10:	or	ah,04h	; bit 2
+	ret
+set9:	or	ah,02h	; bit 1
+	ret
+set8:	or	ah,01h	; bit 0
+	ret
+set7:	or	al,80h	; top wire - bit 7
+	ret
+set6:	or	al,40h	; bit 6
+	ret
+set5:	or	al,20h	; bit 5
+	ret
+set4:	or	al,10h	; bit 4
+	ret
+set3:	or	al,08h	; bit 3
+	ret
+set2:	or	al,04h	; bit 2
+	ret
+set1:	or	al,02h	; bit 1
+	ret
+set0:	or	al,01h	; bit 0
+	ret
+	ENDIF
+	IF	BIT0
+set7:	or	ah,01h	; top wire - bit 0
+	ret
+set6:	or	ah,02h	; bit 1
+	ret
+set5:	or	ah,04h	; bit 2
+	ret
+set4:	or	ah,08h	; bit 3
+	ret
+set3:	or	ah,10h	; bit 4
+	ret
+set2:	or	ah,20h	; bit 5
+	ret
+set1:	or	ah,40h	; bit 6
+	ret
+set0:	or	ah,80h	; bit 7
+	ret
+	ENDIF
+
+	#
+
+tst4	endp
+
+; 640 mode is single bits, no color, so result is in AL.
+;
+tst8	proc	near	;  This routine builds ONE bit plot byte
+	mov	ax,80	;  by testing a dot with the mask sent
+	sub	ax,cx	;  from M6LOOP.  Used by 640 mode
+	mov	si,ax	;  First it does the ODD row then the EVEN
+	mov	ah,0	;  since alternate lines are offset 2000h
+	mov	al,[si] ;  from each other in memory.
+	and	al,dl	;  DL has the mask
+	cmp	al,0	;  SI the location
+	jz	to7	;  AL the memory byte
+	or	ah,80h	;  AH is the byte being built
+to7:	add	si,80	; +80 gets us from say 0,0 to 2,0
+	mov	al,[si] ; get the memory byte ( 4 dots )
+	and	al,dl	; get rid of dots we aren't testing now
+	cmp	al,0	; see if its COLOR 0
+	jz	to5	; if yes, go on
+	or	ah,20h
+;	call	set5	; otherwise set that bit
+to5:	add	si,80	; continue 7 5 3 1
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	to3
+	or	ah,8
+;	call	set3
+to3:	add	si,80
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	to1
+	or	ah,2
+;	call	set1
+to1:	push	ax
+	mov	ax,80
+	sub	ax,cx	; CX counts our screen position
+	add	ax,2000h ; add 2000h for the EVEN rows
+	mov	si,ax	; with seg set to B800h we can use SI like an
+	pop	ax	; array pointer ( AH has our byte so don't lose )
+	mov	al,[si] ; and continue with the same idea for 6 4 2 0
+	and	al,dl
+	cmp	al,0
+	jz	to6
+	or	ah,40h
+;	call	set6
+to6:	add	si,80
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	to4
+	or	ah,10h
+;	call	set4
+to4:	add	si,80
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	to2
+	or	ah,4
+;	call	set2
+to2:	add	si,80
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	to0
+	or	ah,1
+;	call	set0
+to0:	ret
+
+tst8	endp
+
+; This routine pre-scans a line to see if in fact there are any bit
+; plots to send. The main routine will keep sending bytes here
+; If a whole line of 0's are sent we avoid going through the
+; set-up for bit-plot (i.e. slower movement) graphics when a CR/LF
+; would take care of everything.
+; If there IS something to send, PTFLAG is set, the current line
+; position is set to 0, bit-plot is init., and bits are really sent to printer.
+send	proc	near
+;	push	ax	; save the character
+;	push	ds	; DS saved cause it points to lines
+;	pop	ax	; points to DS
+;	mov	cs:dstor,ax	; save
+	cmp	cs:ptflag,TRUE	; check for printing
+	jne	nosend	; if PTFLAG isn't TRUE we are still scanning
+;	pop	ax	; else get the char. in AL and print it
+	call	send2	; this is the real out to printer routine
+	ret
+;	jmp	short noset ; restore DS and return
+nosend:
+;	pop	ax	; This is the SCAN routine
+	or	al,al	; get the char. > test for 0 > if so reset and go back
+	jz	noset
+	mov	al,TRUE ; if <> 0
+	mov	cs:ptflag,al ; set PTFLAG to go
+	mov	sp,di	;DISCARD RETURN
+	cmp	cs:oneor2,1 ; check which (small or LARGE)
+	jnz	two	; indent 6 or 13 depending on which routine
+	cmp	cs:mode640,TRUE
+	jz	nos10
+	call	indent	; indent also sets up bit-plot mode
+;	call	noset	; NOSET will restore DS to right pos.
+	jmp	main	; and do the line for real.
+nos10:
+	call	indent
+;	call	noset
+	jmp	m6ain
+two:	call	indent2 ; init. for LARGE
+	mov	si,cs:wheresi	; SI set back to start of line
+;	call	noset	; get right DS
+	jmp	main2a	; back to beginning
+noset:
+;	push	ax	; routine to restore DS
+;	mov	ax,cs:dstor
+;	mov	ds,ax
+;	pop	ax
+	ret
+send	endp
+
+send3	proc	near
+; takes word length data and sends to printer
+;
+;  word reads left to right and has actual color values of eight
+;  vertical pixels
+;
+;  these will be sent to the printer as three sets of four bytes each,
+;  each set of four bytes controlling the 24 pins on the print head.
+;
+;  pixel box is 3x3.  colors represented:
+;
+;  color 0:  color 1:  color 2:  color 3:
+;   o o o     o o o	o x o	  x o x
+;   o o o     o x o	o x o	  o x o
+;   o o o     o o o	o x o	  x o x
+;    00        01	 10	   11
+;
+	push	bx
+	push	cx
+	push	dx
+	mov	dx,ax
+	mov	bx,ax
+	mov	cx,4
+
+send_loop1:			; first pattern
+
+	xor	al,al		; first column
+	mov	ah,dh
+	and	ah,11110000b	; just top two pixels
+	or	ah,ah		; check for zero
+	jz	send_one
+	test	ah,10000000b	; twos place
+	jz	s320
+;	or	al,00101000b	; 0-5 significant
+s310:
+	test	ah,01000000b	; ones place
+	jz	s320
+	or	al,00101000b
+s320:
+	test	ah,00100000b	; twos
+	jz	send_one
+;	or	al,00000101b
+s330:
+	test	ah,00010000b
+	jz	send_one
+	or	al,000101b
+send_one:
+	call	send
+	shl	dx,1
+	shl	dx,1
+	shl	dx,1
+	shl	dx,1
+	loop	send_loop1
+
+	mov	dx,bx		; restore char for next pattern
+	mov	cx,4
+send_loop2:
+	xor	al,al		; first column
+	mov	ah,dh
+	and	ah,11110000b	; just top two pixels
+	or	ah,ah		; check for zero
+	jz	send_two
+	test	ah,01000000b	; ones place
+	jz	s340
+	or	al,00010000b	; 0-5 significant
+s340:
+	test	ah,10000000b
+	jz	s350
+	or	al,00101000b	; only other
+s350:
+	test	ah,00010000b
+	jz	s360
+	or	al,00000010b
+s360:
+	test	ah,00100000b
+	jz	send_two
+	or	al,00000101b
+send_two:
+	call	send
+	shl	dx,1
+	shl	dx,1
+	shl	dx,1
+	shl	dx,1
+	loop	send_loop2
+
+	mov	dx,bx
+	mov	cx,4
+
+send_loop3:		; first pattern
+
+	xor	al,al	; first column
+	mov	ah,dh
+	and	ah,11110000b	; just top two pixels
+	or	ah,ah	; check for zero
+	jz	send_three
+	test	ah,10000000b	; twos place
+	jz	s380
+;	or	al,00101000b	; 0-5 significant
+s370:
+	test	ah,01000000b	; ones place
+	jz	s380
+	or	al,00101000b
+s380:
+	test	ah,00100000b
+	jz	send_three
+;	or	al,00000101b
+s390:
+	test	ah,00010000b
+	jz	send_three
+	or	al,00000101b
+send_three:
+	call	send
+	shl	dx,1
+	shl	dx,1
+	shl	dx,1
+	shl	dx,1
+	loop	send_loop3
+
+	pop	dx
+	pop	cx
+	pop	bx
+	ret
+
+send3	endp
+
+sendtwo proc	near
+; expands 640x200 mode byte in small mode
+;  bit is sent twice for 1280  3.56 x 3.33  7.11 x 6.66
+;
+;	byte is in AL.
+;
+;	on =  x o   off = o o
+;	      o x	  o o
+;	      x o	  o o
+
+	push	bx		; save some regs
+	push	cx
+	push	dx
+
+	mov	dx,ax		; copy data byte in al to dl,bl
+	mov	bx,ax
+
+	mov	cx,4		; do it with a loop
+
+stwo1:
+	xor	al,al		; start out blank
+	test	dl,10000000b	; check top bit
+	jz	stwo10		; not set, skip to next
+	mov	al,00101000b	; if set reflect in data
+stwo10:
+	test	dl,01000000b	; check next
+	jz	stwo20		; do again.
+	or	al,00000101b	; each byte is two verticle screen pixels
+stwo20:
+	call	send		; out to routine which prints or doesn't
+	shl	dl,1		; depending on line.
+	shl	dl,1		; now move data left
+
+	loop	stwo1		; and do it four times.
+
+	mov	dx,bx		; get back copy
+	mov	cx,4		; and send again
+stwo2:
+	xor	al,al
+	test	dl,10000000b
+	jz	stwo30
+	mov	al,00010000b
+stwo30:
+	test	dl,01000000b
+	jz	stwo40
+	or	al,00000010b
+stwo40:
+	call	send
+	shl	dl,1
+	shl	dl,1
+
+	loop	stwo2
+
+	pop	dx
+	pop	cx
+	pop	bx
+
+	ret
+
+sendtwo endp
+
+send_big_color	proc	near
+; take four pixel byte in al and expand to 24 x 6 to printer
+
+	push	bx
+	push	cx
+	push	dx
+
+	mov	dx,ax		; copy data byte
+	mov	cs:data_byte,al
+	xor	bx,bx
+	mov	cx,6		; basically send for six vertical dot firings
+
+secloop1:
+	push	cx		; two loops, save first counter
+
+	mov	dl,cs:data_byte ; get original data
+	xor	dh,dh		; blank top half
+	mov	cx,4		; set up inner loop
+secloop2:
+
+	xor	al,al		; clear printer byte
+	test	dl,11000000b	; see if its zero
+	jz	sec25
+
+	shl	dx,1		; move bits in question into lower dh
+	shl	dx,1
+	and	dh,3		; discard others    11 binary
+
+	cmp	dh,1		; is it a one?
+	jnz	sec10		; no, try another
+	mov	al,cs:bigc1[bx] ; else use pattern 1
+	jmp	short sec30	; and go print
+
+sec10:
+	cmp	dh,2		; is it a two?
+	jnz	sec20		; no, then must be 3
+	mov	al,cs:bigc2[bx] ; else use pattern 2
+	jmp	short sec30	; off to print.
+
+sec20:
+	mov	al,cs:bigc3[bx] ; determined to be 3
+	jmp	short sec30
+sec25:
+	shl	dx,1		; keep track of bits for zero case
+	shl	dx,1
+
+sec30:
+	call	send		; out to send routine
+
+	loop	secloop2	; do for each pixel
+
+	pop	cx		; get back other counter
+	inc	bx
+
+	loop	secloop1	; do six times
+
+	pop	dx		; and we are done.
+	pop	cx
+	pop	bx
+	ret
+
+send_big_color	endp
+
+
+send_big_bw	proc	near
+; take four pixel byte in al and expand to 24 x 6 to printer
+
+	push	bx
+	push	cx
+	push	dx
+
+	mov	dx,ax		; copy data byte
+	mov	cs:data_byte,al
+	mov	bl,010000b
+	mov	bh,000010b	; pattern
+	mov	cx,6		; basically send for six vertical dot firings
+
+sebloop1:
+	push	cx		; two loops, save first counter
+	xor	bx,11100111000b ; reverse pattern
+
+	mov	dl,cs:data_byte ; bl won't be changed
+	mov	cx,4		; set up inner loop
+sebloop2:
+
+	xor	al,al		; clear printer byte
+	test	dl,10000000b	; check top
+	jz	seb10
+
+	mov	al,bl		; else use pattern 1
+seb10:
+
+	test	dl,01000000b
+	jz	seb20
+	or	al,bh
+
+seb20:
+	shl	dl,1		; set up for next
+	shl	dl,1
+
+seb30:
+	call	send		; out to send routine
+
+	loop	sebloop2	; do for each pixel
+
+	pop	cx		; get back other counter
+
+	loop	sebloop1	; do six times
+
+	pop	dx		; and we are done.
+	pop	cx
+	pop	bx
+	ret
+
+send_big_bw	endp
+
+
+lfcr	proc	near	; send a regular CR/LF combo
+	print	13
+	print	10
+	mov	ax,0
+	mov	cs:ptflag,al ; reset PTFLAG for next line
+;	mov	ax,cs:dstor  ; restore DS
+;	mov	ds,ax
+	ret		; onward
+lfcr	endp
+
+break?	proc	near	; Test for early exit
+	push	ax	; don't lose any regs. here
+	push	dx
+	mov	ah,01h	; call direct keyboard io (constat) by BIOS
+	int	16h
+	jnz	goback? ; if zero flag clear we have a character
+bcont:	pop	dx	; no char. return
+	pop	ax
+	ret
+goback?:
+	mov	ah,0
+	int	16h
+	cmp	al,1bh	; ESC
+	jz	back	; so go back, else return
+	jmp	short bcont	; no ESC exit
+back:	pop	dx	; ESC exit This doesn't check for Ctrl-Break
+	pop	ax	; so if it is hit we save it for the caller to handle
+	pop	ax	;DISCARD RETURN
+	cmp	cs:tmode_flag,TRUE
+	jne	GB10
+	call	reset_cursor
+GB10:
+	jmp	done	; and go back to orig. caller
+break?	endp
+
+; text_mode
+
+; routines for text mode dump
+; 7/4/85
+; right shift will print with control chars and extended replaced by dots '.'
+; left shift will print graphics chars.
+
+
+read_line	proc	near
+; read line from screen into buffer, calculate length and put in first pos.
+
+	push	bp
+	mov	di,80h	; use default dta from original load
+	inc	di
+
+	mov	dh,loop_count
+	xor	dl,dl
+	mov	bh,video_page
+	mov	bl,crt_cols
+	cld		; set auto-increment
+
+rloop:
+	mov	ah,2	; set cursor
+	int	10h
+
+	mov	ah,8	; read att/char
+	int	10h
+
+	or	al,al	; replace 0 with space
+	jz	rtl20
+	cmp	al,0ffh ; and 255
+	je	rtl20
+rtl10:
+	stosb
+
+	inc	dl
+	cmp	dl,bl
+	jne	rloop
+
+	jmp	rtl_scan
+
+rtl20:
+	mov	al,' '  ; replace space type chars with spaces
+	jmp	rtl10
+
+rtl_scan:
+	dec	di	; set to last char
+	mov	si,80h	; length store
+	mov	cl,bl	; loop for length
+	xor	ch,ch
+	mov	al,' '  ; search for spaces
+	std		; set auto_decrement
+
+	repe	scasb	; search backwards until 0 or non-space
+
+	je	rtl30
+
+	inc	cl	; adjust for count of characters, else cl is zero
+rtl30:
+	mov	[si],cl
+	cld
+
+rtlret:
+	pop	bp
+	ret
+
+
+read_line	endp
+
+
+do_extended	proc	near
+
+	cmp	oneor2,NO_EXT	; do we want extended chars printed?
+	jne	do_ext_chars
+do_ext_dot:
+	mov	al,'.'
+do_ext_print:
+	call	send2
+	ret
+
+do_ext_chars:
+	mov	bx,offset extable
+	xlat
+	cmp	al,160		; 160 or above is printer character
+	jae	do_ext_print
+	or	al,al		; a zero means char not defined
+	jz	do_ext_dot
+
+	push	cx		; otherwise there is a character
+	push	si
+	xor	ah,ah		; xlat has position in offset table
+	shl	ax,1		; two bytes per offset
+	mov	si,offset extoffset
+	add	si,ax		; add to start
+	mov	ax,[si] 	; get offset to data table
+	mov	si,ax		; si now points to start of data
+	cld
+
+	lodsb			; first char in data is length
+	mov	cl,al
+	xor	ch,ch		; clear high
+	or	cx,cx		; if zero here we're in trouble
+	jnz	do_ext100
+	pop	cx
+	pop	si
+	jmp	do_ext_dot	; so just print a dot
+
+do_ext100:
+	cmp	cl,72		; this is an image print
+	jne	do_ext_loop	; else its a strategy print
+	push	si		; for image we need setup
+	mov	si,offset dot18 ; for 18 dot type lines
+	call	send_string
+	pop	si
+
+do_ext_loop:
+	lodsb
+	call	send2
+	loop	do_ext_loop
+
+	lodsb			; this char has possible continuation
+				; like box chars with extenders
+	; 0 = no ext
+	; 1 = single line ext
+	; 2 = double line
+	; 3 = fill box
+	; 4 = fill left side
+	; 5 = fill right side
+	; 6 = fill 1/4 of dots
+	; 7 = fill 1/2	  "
+	; 8 = fill 3/4	  "
+
+	or	al,al		; zero means done
+	jnz	de_more
+
+deret:
+	pop	si
+	pop	cx
+	ret
+
+de_more:
+	push	ax
+	cmp	deline,TRUE
+	je	de_200
+
+; fill line to store extenders for box drawing characters with spaces
+; this is set only when there is one to do.
+
+	xor	di,di
+	mov	al,[di+80h]	; get previously set length value
+	cld
+	stosb			; copy to this buffer.
+	mov	al,' '
+	mov	cx,80
+	rep	stosb
+	mov	deline,TRUE
+
+de_200:
+	pop	ax		; get back which method
+	pop	di		; this has character position +1
+	push	di
+	sub	di,81h		; main buffer at 80h, ext. at 0h
+	cld			; put character at same relative position.
+	add	al,' '          ; these patterns are stored in order starting
+	stosb			; after where a space would be stored.
+
+	jmp	deret
+
+do_extended	endp
+
+do_control	proc	near
+
+	mov	al,'.'
+	call	send2
+	ret
+
+do_control	endp
+
+
+print_line	proc	near
+; use info in buffer to print
+
+	mov	si,80h
+	lodsb		; get length
+	or	al,al
+	jnz	pl10
+plret:
+	ret
+pl10:
+	mov	cl,al
+	xor	ch,ch
+	cld
+ploop:
+	lodsb
+	cmp	al,127
+	ja	pl_extended
+	cmp	al,32
+	jb	pl_extended
+
+	call	send2
+plnext:
+	loop	ploop
+
+	jmp	plret
+
+pl_extended:
+	call	do_extended
+	jmp	plnext
+; pl_control:
+;	call	do_control
+;	jmp	plnext
+
+print_line	endp
+
+make_ext_line	proc	near
+; make the extended line characters
+
+	mov	si,offset half_crlf
+	call	send_string	; move down half line
+	xor	si,si		; buffer is at zero
+	cld
+	lodsb			; get length
+	or	al,al		; abort for no length
+	jz	mel_ret
+	mov	cl,al
+	xor	ch,ch
+meloop:
+	lodsb
+	cmp	al,' '
+	jne	mel100
+	call	send2
+mel10:
+	loop	meloop
+
+
+mel_ret:
+	mov	si,offset half_crlf
+	call	send_string
+	mov	deline,FALSE	; reset flag
+	ret
+
+mel100:
+	call	do_extended
+	jmp	mel10
+
+
+make_ext_line	endp
+
+
+do_text_mode	proc	near
+; comes in just after test for mode, but before shift key check
+
+	mov	cs:crt_cols,ah
+	mov	cs:video_page,bh
+	mov	cs:tmode_flag,TRUE
+	mov	cs:deline,FALSE
+	mov	ax,1130h	; get EGA info
+	mov	bh,0		; get int 1f pointer (not used here)
+	int	10h
+	inc	dx
+	mov	MAX_LINES,dl
+
+	mov	ax,40h	; Get the keyboard shift flag
+	mov	ds,ax	; segment
+	mov	si,17h	; and address
+	mov	ax,[si] ; pick it up
+	and	ax,3	; get rid of other stuff
+	or	ax,ax	; Mod. to create default small
+	jnz	tr1	; for case where routine is called as a subroutine.
+	mov	ax,cs:default_routine
+tr1:	mov	cs:oneor2,al	; store for later
+
+	mov	ax,cs
+	mov	ds,ax	; set data to here
+	mov	es,ax
+
+	mov	ah,3
+	int	10h	; read cursor pos.
+	mov	cursor_pos,dx ; save
+
+	mov	byte ptr loop_count,0
+tmode_loop:
+
+	call	read_line ; read in entire line
+	call	print_line ; send to printer
+	cmp	oneor2,NO_EXT
+	jne	dtm100
+
+dtm10:
+	call	lfcr
+dtm20:
+	call	break?
+
+	mov	al,loop_count
+	inc	al
+	mov	loop_count,al
+	cmp	al,MAX_LINES
+	jnz	tmode_loop
+
+	call	reset_cursor
+	jmp	done
+dtm100:
+	cmp	deline,TRUE ; if we are doing extended, are there any?
+	jne	dtm10
+	call	make_ext_line
+	jmp	dtm20
+
+reset_cursor:
+	mov	dx,cursor_pos	; restore cursor
+	mov	bh,video_page	; set as CALL so it can be used by
+	mov	ah,2		; the abort routines.
+	int	10h
+
+	mov	tmode_flag,FALSE
+
+	ret
+
+do_text_mode	endp
+
+
+last	dw	0	; this marks end of resident code.
+			; DON'T put anything below here you expect to use
+			; after initialization.
+
+buffer	db	'        TOSHIBA(tm) P1340, P1351, P351',13,10
+	db	'            Screen Printer  v 1.1',13,10,10
+	db	' ==>            Graphics Mode:',13,10
+	db	'      Right Shift PrtSc = small graphics',13,10
+	db	'      Left Shift PrtSc = LARGE GRAPHICS',13,10
+	db	' ==>              Text Mode:',13,10
+	db	'    Right Shift PrtSc = quick screen print',13,10
+	db	'Left Shift PrtSc = extended characters printed',13,10,10
+	db	'Hitting ESCape will stop print at end of line.',13,10,'$'
+werehere db	' ** TOSHIBA.COM is already resident **',13,10,10
+	db	' There is no need to reinstall.',13,10,'$'
+initr	proc	far
+initial:
+	mov	ax,0	; get addr of
+	mov	ds,ax	; print screen routine
+	mov	si,14h	; in rom
+	mov	ax,[si] ; from interrupt table in ram
+	inc	si
+	inc	si
+	mov	dx,[si]
+
+	mov	word ptr cs:old_print_routine,ax
+	mov	word ptr cs:old_print_routine+2,dx
+	mov	cx,offset last-offset start
+	mov	di,ax
+	mov	si,offset start
+	cmp	dx,0efffh	; if routine points to ROM, ours is not it.
+	ja	initok
+	cmp	si,di
+	jne	initok		; if start location not same, it can't be ours.
+
+	; otherwise check to see if this routine is
+
+	mov	es,dx		; already in memory, and don't reinstall if so.
+	mov	ax,cs
+	mov	ds,ax
+	repe	cmpsb
+
+
+	or	cx,cx		; cx=0 means there is a copy of this at the
+	jnz	initok		; other address.
+	mov	dx,offset werehere
+	mov	ah,9		; so we print a message and
+	int	21h		; abort.
+	int	20h
+initok:
+
+;	 mov	 ds,ax
+;	 mov	 al,0f1h ; move it to
+;	 mov	 ah,25h
+;	 int	 21h	 ; int f1h described in tech. manual as unused vector
+	mov	ax,cs	; reset int 5
+	mov	ds,ax	; to point to
+	mov	ax,offset start ; this routine
+	mov	dx,ax
+	mov	al,5
+	mov	ah,25h	; dos routine to reset int. vector
+	int	21h
+	mov	ax,offset buffer
+	mov	dx,ax
+	mov	ah,9
+	int	21h	; print greeting
+	mov	ax,3000h  ; get dos version
+	int	21h
+	or	al,al
+	jz	dos1
+	mov	ax,offset last
+	mov	cx,16
+	xor	dx,dx
+	div	cx
+	inc	ax	; make number of paragraphs
+	mov	dx,ax
+	mov	al,0	; exit code
+	mov	ah,31h	; terminate process, keep resident
+	int	21h
+
+dos1:
+	mov	dx,offset last	; last address here
+	inc	dx
+	int	27h	; terminate but stay resident
+initr	endp
+cseg	ends
+	end	init
+
+```
+{% endraw %}
+
+## OKIGRAF.ASM
+
+{% raw %}
+```
+	PAGE  60,132
+	TITLE	GRAFTRAX SCREEN PRINTER, V 3.4
+; OKIGRAF.COM  10/29/84
+; ****!****!****!****!****!****!****!****!****!****!
+; Special version for Okidata ML93,92 printers,    !
+; and others with 7-bit graphics.		   !
+; ****!****!****!****!****!****!****!****!****!****!
+; Interrupt replacement for print screen function on ibmpc(tm)
+;	Please send problem reports and suggestions to:
+;		Marty Smith
+;		310 Cinnamon Oak Lane
+;		Houston, Texas	77079
+;		Compuserve 72155,1214
+;		(713) 661-1241 office, (713) 464-6737, home.
+;
+;    Create GRAF.COM with MASM*, LINK* and EXE2BIN* as follows:
+;
+;	masm graf,graf,graf;
+;
+;	link graf;    (ignor the error message about no stack segment,
+;			  that's taken care of in the next step.)
+;	exe2bin graf.exe graf.com
+;
+;  *  MASM is the IBM(tm) MacroAssembler(tm),
+;     LINK and EXE2BIN are PC-DOS(tm) utilities.
+;
+;  This program originally designed for Epson-MX(tm) series printers
+;  with Graftrax80(tm) and Graftrax+(tm) bit-plot graphic capabilites.
+;  ======> Now modified with conditional compilation and macros for
+;  ======> c.itoh(tm) model 8510a and other printers.
+;
+;	CHANGE HISTORY:
+;	9/18/82 - Buffer in routine for a line of bit-plot bytes to allow for
+;  checking for blank lines replaced by pre-scan routine, saving space.
+;	1/24/83 - Modifications for conditional assembly with other printers
+;  and C.ITOH 8510a.
+;	1/24/83 - Improved error checking for out-of-paper and I/O errors
+;  involving printer.
+;	1/24/83 - Bug in error check corrected, occuring when routine does
+;  error exit and is then called again, resulting in bit-plot data sent in
+;  regular mode.
+;	3/12/83 - Allow calling as a subroutine. i.e. no shift key depressed.
+;  Defaults to small print mode. Can be set to LARGE.
+;	2/4/84	- Allow correct printing of 640x200 mode.
+;	3/18/84 - Use int 31h for dos 2.+ terminate process.
+;	3/24/84 - Use BIOS for keyboard scan, in case screen is printed
+;		from DOS.
+;	4/21/84 - -OTHER- section complete for changes from 640 mode.
+;	9/22/84 - Add code to set lines back in 6/inch order, so CR's
+;		can advance to TOF.
+;	9/22/84 - Jump to other print screen routine instead of reassigning
+;		it to int f1h. Only luck has kept this vector from being used
+;		by someone else.
+;      10/29/84 - Program goes to, god forgive me, two separate versions
+;		to cope with printers like the Oki and IDS with their 7-bit
+;		graphics and alternate calling conventions.
+;      11/07/84 - Routine added to prevent reinstalling routine if already
+;		resident.
+;
+;	Features:
+;  Accepts ESC key exit, prescans to test for blank line
+;  left shift prtsc = small graphics, right shift prtsc = big
+;  Runs as a .COM type program under dos
+;     resident until power down or reset.
+;   1 = screen sent horiz. 320 bits in 480 mode
+;   2 = screen sent vert. 400 bits double printed in 480 mode
+; **************  1 mode **********************
+;	DL = masking character
+;	DH = count of 25 (physical lines)
+;	CX = counter for each line (80)
+;	DS = used to index screen at 'b8000'
+;   These regs must be preserved during routine
+;	  (increment each line by adding '14' hex to ds for para
+;		boundary of 320 bytes '140')
+; **************  2 mode *********************
+;	DH = count of 40 (physical lines)
+;	CX = counter for each line (100)
+;	SI = index to screen via ds
+;   These regs must be preserved during routine
+;	all output to printer is done from routine -send2-, which uses
+;	bios routine int 17h, and provides safe error exit.
+;
+;  GRAF.COM is designed with the idea that the user's main program is the
+;  primary function and GRAF.COM should not cause problems of its own.
+;
+; =======================================================
+; =		USER MODIFICATION SECTION.		=
+; =	If your printer can treat a byte of data to	=
+; =	control the wires on the dot-matrix head you	=
+; =	can probably get this working with your printer =
+; =	unless it is an IDS type, which treats bit plot =
+; =	a lot differently than the EPSON.		=
+; =	If you have Epson Graftrax or a C.Itoh 8510a,	=
+; =	just set the two equates indicated to -true-	=
+; =	and compile. Otherwise get out your manual	=
+; =	and put the code indicated in one of the printer=
+; =	sections.					=
+; =	**>	The title message starts at label	=
+; =	**>	-buffer-. If you set for another	=
+; =	**>	printer you should change the		=
+; =	**>	greeting to indicate which printer	=
+; =	===> ONLY SET *ONE* CONDITION TO -TRUE- or you	=
+; =	will have a real mess!		marty smith	=
+; =======================================================
+
+TRUE	equ	1	; DON'T CHANGE THESE!
+FALSE	equ	0
+
+escape	equ	27	; for printer
+CR	equ	13
+LF	equ	10
+
+; ===============>  A L L  U S E R S  <===================
+; ====> SET ONE AND ONLY ONE OF THE FOLLOWING THREE <=====
+
+EPSON	EQU	FALSE
+OKI	EQU	TRUE
+
+; Each bit of a byte is mapped to the wire head of the printer.
+; If the Epson MX is sent 80h (bit 7), the TOP wire makes a dot.
+; If the C.ITOH is sent   01h (bit 0), the TOP wire makes a dot.
+; ===============>  A L L  U S E R S  <===================
+; =====> SET ONE AND ONLY ONE OF THE FOLLOWING TWO <======
+
+BIT7	EQU	FALSE
+BIT0	EQU	TRUE
+
+	; BIT7 is TRUE for EPSON
+	; BIT0 is TRUE for OKI
+
+print	macro	char
+	mov	al,char
+	call	SEND2
+	endm
+
+; **NOTE** This section applies to the 8bit versions, NOT implemented for
+; 7bit (Oki).  Use this as a reference to modify for other 7bit, like IDS
+; *****************************
+; *  START of -OTHER- SECTION *
+; *****************************
+;
+; ALL routines must set either BIT7 or BIT0.
+;   above. If your printer can't see bit 7 or 0 as the top wire, you
+;   will probably have quite a time getting this routine to work.
+;
+; OLINE Resets line spacing so that the print head
+; will make a continuous line DOWN the page.
+; This is the sequence to set the EPSON for this. (ESC A 8)
+; SEND2 sends the byte in AL to the printer for ALL routines.
+; It uses the INT 17h routine in order to avoid DOS's extra line
+; feeds and CR's. Set for LPT1: Change SEND2 to redirect. DX=0=LPT1,1=LPT2
+OLINE	MACRO
+	print	escape
+	print	65
+	print	 8
+	ENDM
+
+; ORLINE restores the printer to normal line spacing
+; Example is for EPSON (ESC 2)
+ORLINE	MACRO
+	print	escape
+	print	'2'
+	ENDM
+
+; ORESET reinitializes the printer to default settings, spacings,
+; current line becomes Top of Form.
+; Is used by LARGE print to allow a series to be printed
+; on separate pages. It can be modified by getting rid of label
+; TOF: up to but not including	 JMP DONE, which is the exit from
+; the whole routine. Example is for EPSON. (ESC @)
+ORESET	MACRO
+	print	escape
+	print	'@'
+	ENDM
+
+; BP1 initiates bit-plot graphics. It tells the printer
+; that the next xxx bytes are to be considered bit-plots and not
+; regular characters. The small print routine sends 320 bit plot bytes
+; to the printer. On the EPSON this is:
+;	  ESC K 64 1   hex 1b 4b 40 1  > 1*256+64=320
+; --> the first part indents the page with ordinary spaces
+; --> to find spaces take TOTAL_DOTS_PER_LINE - 320. Then / BITS_PER_CHARACTER
+; --> Divide this by two and you have the spaces to indent
+; BP1 also needs to be able to handle the case of 640 mode, which will
+; double the output of dots.
+;    The example below is the code to do this on the EPSON/IBM.
+BP1	MACRO
+	mov	cx,13	; PICTURE ( we've got 320 dots and 480 to work with
+inlop:	print	20H	; 480-320=160 / 6 dots per char. = 26.67 extra
+	loop	inlop
+; ESC K 64 1  = 256+64=320 bit plot type bytes on the way
+	cmp	cs:mode640,TRUE
+	jz	ind10
+	print	escape ; SEQUENCE TO SET UP 320
+		   ; BIT PLOTS IN 480 MODE
+	print	75 ; OF MX-80
+		   ; This is the set-up for the small print
+	print	64
+	print	 1
+	jmp short indend
+
+ind10:
+	print	escape
+	print	'L'  ; 640 dots in 960 mode
+	print	128
+	print	2
+
+indend:
+	ENDM
+
+; BP2.
+; The LARGE print sends 400 bit plot bytes to the printer. On the EPSON:
+; ESC K 144 1  hex 1b 4b 90 1  > 1*256+144=400
+; FIND YOUR INDENT FOR 400 BITS
+BP2	MACRO
+	mov	cx,6	; EPSON ( we've got 400 dots and 480 to work with
+inlop2: print	20H	; 480-400=80 / 6 dots per char. = 13.33 extra
+			; so indent the picture 6 spaces to center
+	loop	inlop2
+	print	escape
+	print	75
+	print	144
+	print	1
+	ENDM
+
+; ****************************
+; *   END OF -OTHER- SECTION *
+; ****************************
+
+;  ***************> START OF ACTUAL CODE <*****************
+
+cseg	segment 'code'
+	assume cs:cseg
+	org	100h		; set up for .com conversion
+init	proc
+	jmp	initial 	; so we have to set up first
+init	endp
+gowait	dw	0		; variables during routine
+wheresi dw	0
+ptflag	db	0
+oneor2	db	0
+dstor	dw	0
+mode640 dw	0
+; **** the 1 below is the POKE to use in CALLing from another program. ****
+default_routine dw	1	;  1 for small, 2 for LARGE.
+
+old_print_routine  dd	0	; address of former print screen routine.
+
+do_old	proc	near
+; jump to old routine
+	pop	bp
+	pop	si
+	pop	di
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ax
+	pop	ds
+	jmp	cs:old_print_routine
+
+do_old	endp
+
+; --->	ACTUAL INTERRUPT ROUTINE STARTS HERE  <---
+start	proc	far	; Start of main routine--Shift Prt.Sc hit.
+	assume cs:cseg
+	sti		; This follows ROM routine real close
+	push	ds	; runs with interrupts enabled.
+	push	ax	;SAVE REGS
+	push	bx
+	push	cx
+	push	dx
+	push	di
+	push	si
+	push	bp
+	mov	bp,sp	; Save in case of error for reset
+	mov	ax,50h	; Check here first to see if
+	mov	ds,ax	; routine is already in progress
+	mov	si,0	; otherwise it will be a mess.
+	mov	al,01h
+	cmp	[si],al
+	jnz	nxts	; if not we're go for routine
+	jmp	exit	; otherwise go back home.
+nxts:	mov	[si],al ; if we're go don't let us start again until done.
+	mov	ah,15	; Get the current video state.
+	int	10h	; from the ROM routine,
+	mov	cs:mode640,FALSE
+	cmp	al,4	; AL=4-6 are all graphics so we're OK
+	jz	graphic
+	cmp	al,5
+	jz	graphic
+	cmp	al,6
+	jnz	nxts10
+	mov	cs:mode640,TRUE ; special case
+	jmp	short graphic
+nxts10:
+	mov	al,0	; else reset and go to ROM routine.
+	mov	[si],al
+	jmp	do_old	; this is where we stored the ROM routine entry.
+			; used to use  int f1h.
+graphic:
+	mov	ax,40h	; Get the keyboard shift flag
+	mov	ds,ax	; segment
+	mov	si,17h	; and address
+	mov	ax,[si] ; pick it up
+	and	ax,3	; get rid of other stuff
+	or	ax,ax	; Mod. to create default small
+	jnz	gr1	; for case where routine is called as a subroutine.
+	mov	ax,cs:default_routine
+gr1:	mov	cs:oneor2,al	; store for later
+	push	ax	; also here
+	xor	al,al	; make sure this starts out as NO print.
+	mov	cs:ptflag,al
+	xor	dl,dl	; These bits indicate whether R or L Shift is down
+	mov	dh,29	; 29 lines of graphic dots at 7 dots per line
+	mov	ax,0b800h ; stored in DX, last line has 4 extra dots
+	mov	ds,ax	;SET UP FOR SCREEN PEEK
+	xor	bx,bx	; segment indexing dropped in 7bit version, bx instead
+; Printer setup section to change line spacing to 7/72" for continuous dots
+; ** 7 bit **
+
+	IF	EPSON
+	print	escape
+	print	'3'     ; A
+	print	21	; 7
+	ENDIF
+
+	IF	OKI
+	print	30	; set to 10 cpi
+	print	3	; set to graphics mode
+	ENDIF
+
+	pop	ax	; get back which routine
+	cmp	al,2	; Left Shift Prt Sc means LARGE graphic print
+	jnz	gr2
+	jmp	main2	; so hop over there if so.
+gr2:
+	cmp	cs:mode640,TRUE
+	jnz	MAIN
+
+	IF	OKI
+	print	3	; for 640x200, get out of graphics,
+	print	2
+	print	28	; set up for 12 cpi
+	print	3	; back to graphics
+	ENDIF
+
+	jmp	m640
+
+; START OF small GRAPHICS PRINT ROUTINE.
+; This routine scans across the screen from left to right,
+; building an EPSON bit plot byte out of IBM screen dots.
+; EPSON wire head		IBM screen color dots
+; TOP	 o  128  80h bit 7	| 00 | 01 | 10 | 11 | = 4 dots, one byte
+;	 o   64  40h  "  6
+; one	 o   32  20h  "  5      ibm dots go one raster line then the next
+; bit	 o   16  10h  "  4      EVEN line, ie 0, 2, 4 etc.
+; plot	 o    8  08h  "  3
+; byte	 o    4  04h  "  2      then you go back and do 1, 3, 5 etc.
+;	 o    2  02h  "  1
+; BOTTOM o    1  01h  "  0      At loc. 0000h are 4 dots, 0,0|0,1|0,2|0,3
+;				At loc. 2000h are 4 dots, 1,0|1,1|1,2|1,3
+;
+main:	mov	cx,80	; 80 x 4 = 320 dots.
+mloop:	mov	dl,0c0h ; 11000000b
+	call	tst4	; see if this comes back <> 0
+	mov	al,ah	; we are testing bit patterns for one screen byte
+	call	send	; don't send to printer unless something to send
+	mov	dl,30h	; 00110000b
+	call	tst4	; each byte is 4 dots
+	mov	al,ah	; so we test for each dot in a byte
+	call	send	; send sets PTFLAG if there is a dot on the line
+	mov	dl,0ch	; 00001100b
+	call	tst4	; then resets to start of line and starts printing
+	mov	al,ah	; AL is the bit plot byte being built
+	call	send
+	mov	dl,03h	; 00000011b
+	call	tst4	; TST4 scans down 8 screen dot lines each time called
+	mov	al,ah
+	call	send
+	loop	mloop	; 80 bytes make 320 dots
+	IF	EPSON
+	call	lfcr	; this is a good old regular line feed/carriage return
+	ENDIF
+	IF	OKI
+	call	lfcroki
+	ENDIF
+	call	break?	; someone hit ESC key? so take early exit
+	dec	dh	; DL is line counter
+	or	dh,dh	; when it goes 0 we're through
+	jz	done	; reset everything and do an IRET
+	test	dh,1	; otherwise check counter for odd/even
+	jz	mloop10 ; and adjust index (bx) accordingly
+	sub	bx,7872
+	jmp	short mloop20
+mloop10:
+	add	bx,8432
+mloop20:
+	jmp	main	; and do this 80 times (80x4=320)
+done:	mov	ax,0
+; This is the common exit for both routines, Printer is restored.
+done1:	push	ax	; save AX cause it has error exit flag
+; EPSON command to reset printer to 6 lines/in. = ESC 2 (1b 32)
+
+	IF	EPSON
+	print	escape
+	print	'3'
+	print	12	; add 12/216 to reset line spacing
+	print	CR
+	print	LF
+	print	escape ; RESET PRINTER, RESTORE REGS
+	print	'2'
+	ENDIF
+
+	IF	OKI
+	print	3	; graphics escape code
+	print	2	; exit graphics mode
+	ENDIF
+
+edone:	mov	ax,50h	; Set end of PrtSc indication
+	mov	ds,ax	; OK to come back and do again
+	mov	si,0
+	pop	ax
+	mov	[si],al
+exit:	pop	bp
+	pop	si	; restore regs and return to caller
+	pop	di
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ax
+	pop	ds
+	iret		; were an interrupt routine so we IRET
+
+; START OF LARGE PRINT ROUTINE
+; +-------------+
+; | ^ ^ 	|  This time we scan from 199,0 to 0,0
+; | ^ ^ 	|  and go across
+; | ^ ^ 	|  o  o    x  x    o  x    x  x   These are representations
+; | | | 	|  o  o    o  o    x  o    x  x   of one color dot.
+; +-------------+    0	     1	     2	     3	   Palettes
+
+main2:	mov	dh,92	; we have 80 colunms x 25 lines here
+	mov	dl,0
+	mov	cs:wheresi,3ef0h ; si is our index
+	mov	si,cs:wheresi
+main2a: mov	cx,64h	; 100
+mloop2:
+	call	m2_calc_send
+
+	mov	cs:gowait,si ; store SI for next EVEN raster line
+	sub	si,2000h ; subtract 2000h for the next ODD raster line
+
+	call	m2_calc_send
+
+	mov	si,cs:gowait ; get back the EVEN line
+	sub	si,80	; advance UP the screen one line (say 199,0 to 197,0)
+	loop	mloop2	; and do this 100 times
+
+	IF	EPSON
+	call	lfcr
+	ENDIF
+	IF	OKI
+	call	lfcroki ; finished with one line we send normal line-end
+	ENDIF
+	call	break?	; check for an ESC if we want to abort
+	dec	dh	; DH is our line counter,
+	or	dh,dh	; when it goes 0 we're done.
+	jz	tof	; so we'll try to reset Top of Form and exit
+	inc	dl
+	cmp	dl,7
+	je	ml_no_inc
+
+	inc	cs:wheresi	; else go to the next byte location
+				; except if at last circuit
+ml_no_inc:
+	and	dl,7		; 0-7 only, 8 byte circuit
+	mov	si,cs:wheresi	; store
+	jmp	main2a		; and do again
+tof:
+	mov	cx,19	; tof restores page to 11 inches from where it started
+	IF	OKI
+	print	3	; exit graphics mode
+	print	2
+	call	break?	; check for no do.
+	print	12	; form feed if ok.
+	jmp	short tofl_end
+	ENDIF
+tofl:
+	print	CR	; send a bunch of cr's and lf's
+	print	LF
+	call	break?	; check for early exit
+	loop	tofl	; and so on.
+; This restores the EPSON to 6 lines per inch
+; ESC @ = Restore all settings to default
+	IF	EPSON
+	print	escape
+	print	64   ; '@'
+	ENDIF
+tofl_end:
+	jmp	done	; clean up and back to caller.
+start	endp
+
+m2_calc_send	proc	near
+	mov	al,[si] ; idea is to get a byte starting at screen BOTTOM
+	mov	ah,[si-1] ; can't use a mov word instruction, since
+	or	dl,dl	; bits are read by least,most significant
+	jz	m2on	; which would be backwards in this case.
+	cmp	dl,7	; This down to m2on basically aligns the screen
+	je	m2on	; dots in a register depending on where we are in
+	cmp	dl,4	; an 8 step cycle.  With 7 bit graphics and an 8 bit
+	ja	m2o50	; byte width, it takes 8 steps for things to repeat.
+	shr	ax,1	; This involves lots of shifts and conditionals
+	shr	ax,1	; and this routine attemps to do this as efficiently
+	cmp	dl,3	; as possible.
+	jb	m2on	; ** one screen byte looks like this:
+	shr	ax,1	; | 7 6 | 5 4 | 3 2 | 1 0 |  #'s are bits, two make up
+	shr	ax,1	;			     a color pixel 00 01 10 11
+	jmp	short m2on ; this is sent twice for 620x200, or twice with some
+			; twidling to simulate color, and reversing of the
+m2o50:			; bits for wire 0 type printers, (Oki)
+	shl	ax,1	; This results in an image formed sideways with the
+	shl	ax,1	; bottom left corner of the screen in the top left
+	mov	al,ah	; corner on a page of paper.
+
+m2on:
+	mov	bh,al	; copy pattern for second
+	test	dl,1	; check for odd
+	jz	m2on10
+	shl	al,1	; if so, bump bit7
+
+m2on10:
+	call	reverse ; Bits have to be reversed on wire 0 type
+	and	al,7fh	; turn off bit7
+	cmp	dh,1	; last byte only 2 bits
+	jnz	m2on15
+	and	al,3	; so erase any extras.
+
+m2on15:
+	call	send	; send it since these resemble bit plot bytes
+	cmp	cs:mode640,TRUE
+	jz	ml10
+	mov	al,bh
+	call	flipflop ; then reverse(sort of) this byte and send it
+	test	dl,1	; check odd
+	jz	m2on20
+	shl	al,1	;  align if so
+
+m2on20:
+	call	reverse ; bit 7 becomes bit 0, etc.
+	and	al,7fh
+	cmp	dh,1
+	jnz	ml10
+	and	al,3
+ml10:
+	call	send	; again.
+
+	ret
+
+m2_calc_send	endp
+
+send2	proc	near	; BIOS routine to print the character in AL
+	push	ax
+	mov	ah,00h	; 0=print, 1=initialize port, 2=read status to AH
+	push	dx
+	mov	dx,0	; DX specifies printer 0 (LPT1:)
+	int	17h	; BIOS used instead of DOS because DOS sends
+	pop	dx	; CR/LF's in the middle of the bit-plots
+	test	ah,29h	; check for timeout or errors or out-of-paper
+	pop	ax
+	jnz	erret
+	ret
+erret:	mov	ax,00ffh ; Flag for printer foulup
+	mov	sp,bp
+	push	ax
+	jmp	edone	; special abort
+send2	endp
+
+; EPSON bit plots operate at 480 or 960 dots across the page
+; called by ESC K 'low byte';'high byte'
+;  i.e.  300 dots would be 256+44 or 012CH
+;  This is sent to the EPSON as --> 1b 4b 2c 01
+;		or in decimal	--> 27 75 44 1
+indent	proc	near
+	push	cx	; 13 spaces in to center
+	IF	EPSON
+	mov	cx,13	; PICTURE ( we've got 320 dots and 480 to work with
+inlop:	print	20h	; 480-320=160 / 6 dots per char. = 26.67 extra
+			; so indent the picture 13 spaces to center
+	loop	inlop
+; ESC K 64 1  = 256+64=320 bit plot type bytes on the way
+	cmp	cs:mode640,TRUE
+	jz	ind10
+	print	escape	; SEQUENCE TO SET UP 320
+			; BIT PLOTS IN 480 MODE
+	print	75	; OF MX-80
+			; This is the set-up for the small print
+	print	64
+	print	1
+	jmp	short indend
+
+ind10:
+	print	escape
+	print	'L'     ; 640 dots in 960 mode
+	print	128
+	print	2
+
+indend:
+	ENDIF
+	IF	OKI
+	cmp	cs:mode640,TRUE
+	jz	ind10
+	mov	cx,80	; PICTURE ( we've got 320 dots and 480 to work with
+inlop:	print	0	; 480-320=160
+			; 80 graphics spaces to center
+	loop	inlop
+
+ind10:			; oki doesn't have the resolution for 640 dots on 8x11
+	ENDIF
+
+	pop	cx
+	ret
+
+indent	endp
+
+; This is indent for LARGE print
+; This time we have 400 bit plots to send (200 lines x 2)
+; 480-400=80 / 6 = 13.3 extra
+
+indent2 proc	near
+	push	cx
+
+	IF	EPSON
+	mov	cx,6	; so indent 6 character type spaces
+inlop2: print	20h
+	loop	inlop2
+; ESC 27 K 144 1 = 256+144=400 bit-plots
+	print	escape
+	print	75
+	print	144
+	print	1
+	ENDIF
+
+
+	IF	OKI
+	mov	cx,40	; PICTURE ( we've got 400 dots and 480 to work with
+inlop2: print	0	; 480-400 = 80 so print 40 graphics spaces to center
+	loop	inlop2
+
+; ESC S 0400 = 400 bit plot type bytes on the way
+	ENDIF
+
+	pop	cx
+	ret
+
+indent2 endp
+
+m640	proc	near
+m6ain:	mov	cx,72	; 72 x 8 = 576 dots. OKI will lose last 10%
+m6loop: mov	dl,80h	; 10000000b
+	call	tst4	; see if this comes back <> 0
+	mov	al,ah	; we are testing bit patterns for one screen byte
+	call	send	; don't send to printer unless something to send
+	mov	dl,40h	; 01000000b
+	call	tst4	; each byte is 4 dots
+	mov	al,ah	; so we test for each dot in a byte
+	call	send	; send sets PTFLAG if there is a dot on the line
+	mov	dl,20h	; 00100000b
+	call	tst4	; then resets to start of line and starts printing
+	mov	al,ah	; AL is the bit plot byte being built
+	call	send
+	mov	dl,10h	; 00010000b
+	call	tst4	; TST4 scans down 8 screen dot lines each time called
+	mov	al,ah
+	call	send
+	mov	dl,08h	; 00001000b
+	call	tst4	; see if this comes back <> 0
+	mov	al,ah	; we are testing bit patterns for one screen byte
+	call	send	; don't send to printer unless something to send
+	mov	dl,04h	; 00000100b
+	call	tst4	; each byte is 4 dots
+	mov	al,ah	; so we test for each dot in a byte
+	call	send	; send sets PTFLAG if there is a dot on the line
+	mov	dl,02h	; 00000010b
+	call	tst4	; then resets to start of line and starts printing
+	mov	al,ah	; AL is the bit plot byte being built
+	call	send
+	mov	dl,01h	; 00000001b
+	call	tst4	; TST4 scans down 8 screen dot lines each time called
+	mov	al,ah
+	call	send
+	loop	m6loop	; 80 bytes make 320 dots
+	IF	EPSON
+	call	lfcr	; this is a good old regular line feed/carriage return
+	ENDIF
+	IF	OKI
+	call	lfcroki
+	ENDIF
+	call	break?	; see if someone hit ESC key. If so take early exit
+	dec	dh	; DL is line counter
+	or	dh,dh	; when it goes 0 we're through
+	jz	d6one	; reset everything and do an IRET
+	test	dh,1	; otherwise check counter for odd/even
+	jz	m6oop10 ; and adjust index (bx) accordingly
+	sub	bx,7872
+	jmp	short m6oop20
+m6oop10:
+	add	bx,8432
+m6oop20:
+	jmp	m6ain	; and do this 80 times (80x4=320)
+d6one:	mov	ax,0
+	jmp	done1
+
+m640	endp
+
+tst4	proc	near	;  This routine builds ONE bit plot byte
+	mov	ax,80	;  by testing a dot with the mask sent
+	cmp	cs:mode640,TRUE
+	jne	tst10
+	mov	ax,72
+tst10:
+	sub	ax,cx	;  from MLOOP.
+	mov	si,ax	;  si is added to an index value stored in
+	add	si,bx	;  bx, and then moved down the screen line by line.
+	xor	ah,ah	;  Alternate lines are offset 2000h in segment b800h
+	cmp	si,8192
+	jb	test_even ; if the current address is over 8192, the line
+	jmp	test_odd  ; start location is odd
+test_even:
+	mov	al,[si] ;  from each other in memory. |-----------------|screen
+	and	al,dl	;  DL has the mask	      | 0,0 0,1 0,2 etc |addr.
+	or	al,al	;  SI the location	      | 2,0 2,1 2,2	|0
+	jz	no7	;  AL the memory byte	      |-----------------|
+	IF	BIT7	;			      |-----------------|
+	or	ah,80h	;  AH is the byte being built | 1,0 1,1 1,2 etc |addr.
+	ELSE		;			      | 3,0 3,1 3,2	|8192
+	or	ah,01h	;  AH is the byte being built |-----------------|2000h
+	ENDIF
+no7:	add	si,8192 ;  get to next line down (odd lines are offset 2000h)
+	mov	al,[si] ; get the memory byte ( 4 dots )
+	and	al,dl	; get rid of dots we aren't testing now
+	or	al,al	; see if its COLOR 0
+	jz	no6	; if yes, go on
+	IF	BIT7
+	or	ah,40h
+	ELSE
+	or	ah,02h
+	ENDIF
+no6:	sub	si,8112
+	mov	al,[si]
+	and	al,dl
+	or	al,al
+	jz	no5
+	IF	BIT7
+	or	ah,20h
+	ELSE
+	or	ah,04h
+	ENDIF
+no5:
+	cmp	dh,1	; if dh=1 we are on the last line and don't need
+	jne	no5a	; the bottom four bits, so take early exit
+	ret		;
+no5a:
+	add	si,8192
+	mov	al,[si]
+	and	al,dl
+	or	al,al
+	jz	no4
+	IF	BIT7
+	or	ah,10h
+	ELSE
+	or	ah,08h
+	ENDIF
+no4:
+	sub	si,8112
+	mov	al,[si]
+	and	al,dl
+	or	al,al
+	jz	no3
+	IF	BIT7
+	or	ah,08h
+	ELSE
+	or	ah,10h
+	ENDIF
+no3:	add	si,8192
+	mov	al,[si]
+	and	al,dl
+	or	al,al
+	jz	no2
+	IF	BIT7
+	or	ah,04h
+	ELSE
+	or	ah,20h
+	ENDIF
+no2:	sub	si,8112
+	mov	al,[si]
+	and	al,dl
+	or	al,al
+	jz	no1
+	IF	BIT7
+	or	ah,02h
+	ELSE
+	or	ah,40h
+	ENDIF
+no1:
+
+no0:	ret
+
+test_odd:
+	mov	al,[si] ;  from each other in memory. |-----------------|screen
+	and	al,dl	;  DL has the mask	      | 0,0 0,1 0,2 etc |addr.
+	or	al,al	;  SI the location	      | 2,0 2,1 2,2	|0
+	jz	od7	;  AL the memory byte	      |-----------------|
+	IF	BIT7	;			      |-----------------|
+	or	ah,80h	;  AH is the byte being built | 1,0 1,1 1,2 etc |addr.
+	ELSE		;			      | 3,0 3,1 3,2	|8192
+	or	ah,01h	;  AH is the byte being built |-----------------|2000h
+	ENDIF
+od7:	sub	si,8112 ;  get to next line down (odd lines are offset 2000h)
+	mov	al,[si] ; get the memory byte ( 4 dots )
+	and	al,dl	; get rid of dots we aren't testing now
+	or	al,al	; see if its COLOR 0
+	jz	od6	; if yes, go on
+	IF	BIT7
+	or	ah,40h
+	ELSE
+	or	ah,02h
+	ENDIF
+od6:	add	si,8192
+	mov	al,[si]
+	and	al,dl
+	or	al,al
+	jz	od5
+	IF	BIT7
+	or	ah,20h
+	ELSE
+	or	ah,04h
+	ENDIF
+od5:
+	cmp	dh,1	; if dh=1 we are on the last line and don't need
+	jne	od5a	; the bottom four bits, so take early exit
+	ret		;
+od5a:
+	sub	si,8112
+	mov	al,[si]
+	and	al,dl
+	or	al,al
+	jz	od4
+	IF	BIT7
+	or	ah,10h
+	ELSE
+	or	ah,08h
+	ENDIF
+od4:
+	add	si,8192
+	mov	al,[si]
+	and	al,dl
+	or	al,al
+	jz	od3
+	IF	BIT7
+	or	ah,08h
+	ELSE
+	or	ah,10h
+	ENDIF
+od3:	sub	si,8112
+	mov	al,[si]
+	and	al,dl
+	or	al,al
+	jz	od2
+	IF	BIT7
+	or	ah,04h
+	ELSE
+	or	ah,20h
+	ENDIF
+od2:	add	si,8192
+	mov	al,[si]
+	and	al,dl
+	or	al,al
+	jz	od1
+	IF	BIT7
+	or	ah,02h
+	ELSE
+	or	ah,40h
+	ENDIF
+od1:
+od0:	ret
+
+tst4	endp
+
+; This routine pre-scans a line to see if in fact there are any bit
+; plots to send. The main routine will keep sending bytes here
+; If a whole line of 0's are sent we avoid going through the
+; set-up for bit-plot (i.e. slower movement) graphics when a CR/LF
+; would take care of everything.
+; If there IS something to send, PTFLAG is set, the current line
+; position is set to 0, bit-plot is init., and bits are really sent to printer.
+send	proc	near
+	push	ax	; save the character
+	push	ds	; DS saved cause it points to lines
+	mov	ax,cs	; set seg for here
+	mov	ds,ax	; This was some of my first stuff with the 8088
+	pop	ax	; and I see some needless complexity here now
+	mov	cs:dstor,ax	; but it works and if I mess with it
+	cmp	cs:ptflag,0ffh	; its back to DEBUG.
+	jnz	nosend	; if PTFLAG isn't FFh we are still scanning
+	pop	ax	; else get the char. in AL and print it
+	IF	OKI
+	cmp	al,3	; a 3 is the OKI graphics escape code, so to send
+	jnz	not_esc ; a graphics 3 you send it twice.
+	push	ax
+	call	send2
+	pop	ax
+not_esc:
+	ENDIF
+	call	send2	; this is the real out to printer routine
+	jmp	short noset ; restore DS and return
+nosend: pop	ax	; This is the SCAN routine
+	cmp	al,0	; get the char. > test for 0 > if so reset and go back
+	jz	noset
+	mov	al,0ffh ; if <> 0
+	mov	cs:ptflag,al ; set PTFLAG to go
+	pop	ax	;DISCARD RETURN
+	cmp	cs:oneor2,1 ; check which (small or LARGE)
+	jnz	two	; indent 6 or 13 depending on which routine
+	cmp	cs:mode640,TRUE
+	jz	nos10
+	call	indent	; indent also sets up bit-plot mode
+	call	noset	; NOSET will restore DS to right pos.
+	jmp	main	; and do the line for real.
+nos10:
+	call	indent
+	call	noset
+	jmp	m6ain
+two:	call	indent2 ; init. for LARGE
+	mov	si,cs:wheresi	; SI set back to start of line
+	call	noset	; get right DS
+	pop	ax	; discard return again (ml_calc_send)
+	jmp	main2a	; back to beginning
+noset:	push	ax	; routine to restore DS
+	mov	ax,cs:dstor
+	mov	ds,ax
+	pop	ax
+	ret
+send	endp
+
+lfcr	proc	near	; send a regular CR/LF combo
+	print	13
+	print	10
+	mov	ax,0
+	mov	cs:ptflag,al ; reset PTFLAG for next line
+	mov	ax,cs:dstor  ; restore DS
+	mov	ds,ax
+	ret		; onward
+lfcr	endp
+
+lfcroki proc	near
+	print	3	; graphics escape code
+	print	14	; advance one graphics line, return carriage
+	xor	al,al
+	mov	cs:ptflag,al	; restore ds no longer needed.
+	ret
+
+;	print	3
+;	print	14	; oki graphics cr/lf
+
+lfcroki endp
+
+break?	proc	near	; Test for early exit
+	push	ax	; don't lose any regs. here
+	push	dx
+	mov	ah,01h	; call direct keyboard io (constat) by BIOS
+	int	16h
+	jnz	goback? ; if zero flag clear we have a character
+bcont:	pop	dx	; no char. return
+	pop	ax
+	ret
+goback?:
+	mov	ah,0
+	int	16h
+	cmp	al,1bh	; ESC
+	jz	back	; so go back, else return
+	jmp	short bcont	; no ESC exit
+back:	pop	dx	; ESC exit This doesn't check for Ctrl-Break
+	pop	ax	; so if it is hit we save it for the caller to handle
+	pop	ax	;DISCARD RETURN
+	jmp	done	; and go back to orig. caller
+break?	endp
+flipflop	proc near	; This creates different combinations
+	push	cx	; of a box of four bit-plot dots for one color dot.
+	push	bx	; Don't lose any variables or loop counters
+	push	ax
+	mov	cl,2	; AL has present bit-plot finished byte
+	mov	bx,0
+	and	al,3	; 00000011b
+	call	flip
+	ror	bl,cl	; 11000000b
+	pop	ax	; basically rotate bits around for
+	push	ax	; o x
+	call	r2	; x o	color 1
+	and	al,3	; and
+	call	flip	; o x
+	ror	bl,cl	; o x	color 2
+	pop	ax	; instead of
+	push	ax	; x o
+	call	r4	; x o	color 1
+	and	al,3	; and
+	call	flip	; o x
+	ror	bl,cl	; o x	color 2
+	pop	ax	; which aren't to convincing as
+	call	r6	; two different patterns
+	and	al,3
+	call	flip
+	ror	bl,cl
+	mov	al,bl
+	pop	bx
+	pop	cx
+	ret
+r6:	ror	al,cl
+r4:	ror	al,cl
+r2:	ror	al,cl
+	ret
+flip:	cmp	al,3	; make sure there are two dots for color 1 and 2
+	jnz	flip2
+	or	bl,3
+flip2:	cmp	al,2
+	jnz	flip3
+	or	bl,1
+flip3:	cmp	al,1
+	jnz	flip4
+	or	bl,1
+flip4:	ret
+flipflop	endp
+reverse proc	near	; take AL and make bit 0 bit 7 , 1 - 6, etc
+	push	dx	; Save our counters and masks
+	push	cx
+	mov	dl,01h	; 00000001B
+	mov	dh,80h	; 10000000B
+	mov	ah,00h	; start out blank
+	mov	cx,8	; set counter for 8 times through
+rev1:	test	al,dl	; see if bit is set
+	jz	rev2	; if not skip next step
+	or	ah,dh	; else set bit in AH
+rev2:	shl	dl,1	; shift left test bit
+	shr	dh,1	; shift right mask bit (pad other bits with 0)
+	loop	rev1	; do this 8 times
+	mov	al,ah	; and we have a reversed character.
+	pop	cx	; get back these
+	pop	dx
+	ret		; and back to caller
+reverse endp
+last	dw	0
+buffer	db	'         GRAF.COM v3.4',10,13
+	if	OKI
+	db	'OKIDATA ML92 ML93 (tm) Screen Printer.',13,10
+	else
+	db	'     Graphics Screen Printer v3.2',13,10
+	endif
+	db	'   Left Sh. PrtSc. = LARGE GRAPHICS',13,10
+	db	'  Right Sh. PrtSc. = small graphics',13,10
+	db	' Text screen uses regular ROM routine.',13,10
+	db	'   ESCape will exit GRAPHICS print.',13,10,'$'
+werehere db	' ** GRAF.COM is already resident **',13,10,10
+	db	' There is no need to reinstall.',13,10,'$'
+initr	proc	far
+initial:
+	mov	ax,0	; get addr of
+	mov	ds,ax	; print screen routine
+	mov	si,14h	; in rom
+	mov	ax,[si] ; from interrupt table in ram
+	inc	si
+	inc	si
+	mov	dx,[si]
+
+	mov	word ptr cs:old_print_routine,ax
+	mov	word ptr cs:old_print_routine+2,dx
+	mov	cx,offset last-offset start
+	mov	di,ax
+	mov	si,offset start
+	cmp	dx,0efffh	; if routine points to ROM, ours is not it.
+	ja	initok
+	cmp	si,di
+	jne	initok		; if start location not same, it can't be ours.
+
+	; otherwise check to see if this routine is
+
+	mov	es,dx		; already in memory, and don't reinstall if so.
+	mov	ax,cs
+	mov	ds,ax
+	repe	cmpsb
+
+
+	or	cx,cx		; cx=0 means there is a copy of this at the
+	jnz	initok		; other address.
+	mov	dx,offset werehere
+	mov	ah,9		; so we print a message and
+	int	21h		; abort.
+	int	20h
+initok:
+
+;	 mov	 ds,ax
+;	 mov	 al,0f1h ; move it to
+;	 mov	 ah,25h
+;	 int	 21h	 ; int f1h described in tech. manual as unused vector
+	mov	ax,cs	; reset int 5
+	mov	ds,ax	; to point to
+	mov	ax,offset start ; this routine
+	mov	dx,ax
+	mov	al,5
+	mov	ah,25h	; dos routine to reset int. vector
+	int	21h
+	mov	ax,offset buffer
+	mov	dx,ax
+	mov	ah,9
+	int	21h	; print greeting
+	mov	ax,3000h  ; get dos version
+	int	21h
+	or	al,al
+	jz	dos1
+	mov	ax,offset last
+	mov	cx,16
+	xor	dx,dx
+	div	cx
+	inc	ax	; make number of paragraphs
+	mov	dx,ax
+	mov	al,0	; exit code
+	mov	ah,31h	; terminate process, keep resident
+	int	21h
+
+dos1:
+	mov	dx,offset last	; last address here
+	inc	dx
+	int	27h	; terminate but stay resident
+initr	endp
+cseg	ends
+	end	init
+
+```
+{% endraw %}
+
+## PEPATCH.DOC
+
+{% raw %}
+```
+The following patch to the Personal Editor will eleminate the need
+to input a RETURN on start-up.
+-
+         A>RENAME PE.EXE PE.XXX
+         A>DEBUG PE.XXX
+         -U D95
+         XXXX:0D95 FF3604F4     PUSH      [F404]
+         XXXX:0D99 FF3606F4     PUSH      [F406]
+         -E D95
+         XXXX:0D95 FF.EB   36.61   04.90
+         XXXX:0D98 F4.90
+         -U D95
+         XXXX:0D95 3B61         JMPS      0DF8
+         XXXX:0D97 90           NOP
+         XXXX:0D98 90           NOP
+         XXXX:0D99 FF3606F4     PUSH      [F406]
+         -W
+         Writing B280 bytes
+         -q
+         A>RENAME PE.XXX PE.EXE
+Good Luck,
+Tom Hall - TCM644; 72115,1114
+
+```
+{% endraw %}
 
 ## POSTER.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 A$=" ":X=2:Y=3:L$="YES":M$="CHAR":SCREEN 0,0,0:CLS:DEF SEG:WIDTH 80:KEY OFF
@@ -1314,9 +7563,327 @@ machines:
 1020 DATA .,001,001,129,449,129,001,001
 1030 END
 ```
+{% endraw %}
+
+## PRTFIX.DOC
+
+{% raw %}
+```
+This program was copied from the March issue of Softalk magazine. It
+corrects "DEVICE TIMEOUT" errors from the printer.
+
+```
+{% endraw %}
+
+## QD.DOC
+
+{% raw %}
+```
+typ qd.doc
+  
+          QuadRAM Drive Electronic Disk Software
+
+   This diskette includes a machine language program from the Quadram
+Corporation that is designed to create an ``electronic disk'', using
+the additional memory provided on the company's Quadboard expansion boards.
+
+   The program is designed for use with the Quadboard and cannot safely
+be used with other memory expansion boards, the company advises. Quadram
+Corporation has given the Capital PC group permission to reproduce the
+program for Quadboard purchasers who did not receive it with their boards.
+Note that this software is copyrighted by Quadram Corp. It is NOT public
+domain software and may not be further distributed without the company's
+permission.
+
+   The QuadRAM Drive is a simple, ``plain vanilla'' electronic drive. It
+creates a simulated disk drive in system RAM which can be used, in most
+respects just like a normal disk drive. You can copy files to it and run
+programs from it. The advantages of electronic drives are that:
+   
+   1. They run fast. Programs that involve frequent disk access will be
+speeded up when run from the RAM disk. Try copying your Volkswriter disk
+to the RAM drive and notice the improvement. Try booting BASIC from the
+RAM drive. Zip!
+
+   2. They run quietly. Disk access to the RAM disk occurs noiselessly,
+and with no wear and tear on your drives and diskettes.
+
+   The main disadvantages are that a RAM drive ties up quite a bit of
+system memory and disappears when the system is turned off. You have
+to copy files to the RAM disk to work with them and then recopy them
+to floppy disks to preserve any changes you have made.
+
+   The QuadRAM drive is designed to look as much like a normal disk
+drive as possible. This has the advantage of being compatible with most
+software. You can do a diskcopy to the QuadRAM drive, for example, which
+is not possible with some other electronic drives.
+
+   A disadvantage is that the program will only establish the RAM disk
+as one of the four drives (A: B: C: D:) that the IBM PC is configured
+for. This means that if you already have four floppy drives connected
+to your system, you will have to sacrifice the use of your D: drive when
+you are using the RAM disk.
+
+                   HOW TO MAKE IT GO. . . .
+
+   To use the QuadRAM Drive, you copy the program (QD.EXE) to your DOS
+or other program disk. After you boot DOS, you type in the command:
+ ``QD N''   . . . where N is a number from 1 to 10, representing the 
+number of 32k blocks of memory tobe assigned to the RAM disk. If you type
+``QD 5'', for example, the RAM disk will come up as a single-sided drive
+with 160k of available space. If you type in ``QD 10'' you will get a
+320k RAM disk in 2-sided format, provided you have that much extra
+system memory.
+
+   If you specify a number other than 5 or 10, the program will allocate
+some of the sectors in the electronic disk as ``bad sectors.'' For example,
+if you type ``QD 4'', the RAM disk will be a single-sided 160k disk with
+32k of bad sectors and 128k of available space.
+
+   Note that when using the DISKCOPY command you cannot copy a double
+sided floppy disk onto a RAM disk that is established in single-sided
+format.
+
+   When you run the QD program, the program creates and formats the
+RAM disk in high memory. If you only have one floppy drive, the RAM
+disk will be your B: drive. If you already have A: and B: drives, it will
+be the C: drive. If you have A:, B:, C:, and D: drives, the RAM disk
+will be the D: drive, and you will not be able to use your floppy D:
+drive.
+
+   You must have at least 96k of RAM in your system to use the QD program,
+since it will not use the 64k of memory on your main system board, but
+only works with expansion memory. 
+
+   The program updates the BIOS and DOS flags so that DOS (and programs
+run under DOS) will not try to use the memory space assigned to the RAM 
+disk. The program reboots the system to force DOS to recognize the changes.
+
+   Your first impulse, of course will be to include the QD command in an
+AUTOEXEC.BAT file, so that the electronic disk is created automatically
+when you boot DOS. Note, however, that, when the QD program reboots DOS,
+the AUTOEXEC file will also run again, creating a loop.
+
+   The program provides a solution to this problem. If you include the
+parameter ``/A'' with the QD command, the program will check to see if
+the RAM drive already has been installed. If the RAM drive is already
+present, the program will not run again, but will skip to the next item
+in the AUTOEXEC file.
+
+   For example, you could put the command ``QD 5/A'' as the first item
+in an AUTOEXEC file. The program will create the RAM disk, boot DOS again,
+and skip to the next AUTOEXEC command.
+
+                             -- END --
+
+will create the
+
+SIG/Access: 
+```
+{% endraw %}
+
+## SCROLL.ASM
+
+{% raw %}
+```
+NAME SCROLL
+PAGE ,132
+COMMENT*
+        THIS IS A FAR PROCEDURE TO BE USED WITH A BASIC PROGRAM TO PERFORM
+        SCROLLING OF THE SCREEN IN A SPECIFIED WINDOW.  THE ARGUMENTS FOR
+        THE CALL TO THE ROUTINE ARE:
+                ULR% - ROW NUMBER (1-25) OF UPPER LEFT CORNER OF WINDOW
+                ULC% - COL NUMBER (1-80) OF UPPER LEFT CORNER OF WINDOW
+                LRR% - ROW NUMBER (1-25) OF LOWER RIGHT CORNER
+                LRC% - COL NUMBER (1-80) OF LOWER RIGHT CORNER
+                ATTR% - ATTRIBUTE OF BLANKED LINE: &H07=NORMAL, &H70=REVERSE
+                        SEE TECH. REF. MANUAL PG. 2-51 FOR OTHERS
+                LNGTH% - NUMBER OF LINES TO SCROLL (0 BLANKS ENTIRE WINDOW)
+                         USE + NUMBER TO SCROLL UP
+                         USE - NUMBER TO SCROLL DOWN
+        NOTE !! -  THE ARGUMENTS ARE NOT VALUE CHECKED.
+
+        FROM BASIC: CALL SCROLL(ULR%,ULC%,LRR%,LRC%,ATTR%,LNGHT%)
+
+        PROGRAM BY: LEE M. BUCK
+        DATE: 3-16-83
+
+*
+
+CSEG SEGMENT PUBLIC 'CODE'
+                ASSUME CS:CSEG
+SCROLL PROC FAR
+                PUSH BP                 ;SAVE BP
+                MOV BP,SP               ;SET FRAME POINTER FOR ADDRESSING STACK
+                                        ;  PARAMETERS
+                MOV AH,6                ;SET DEFAULT TO SCROLL ACTIVE PAGE UP
+                                        ;  SWITCH TO 7 FOR DOWN
+                MOV SI,[BP+6]           ;GET ADDR OF LNGTH% OF SCROLL
+                MOV AL,[SI]             ;GET VALUE OF LNGTH% OF SCROLL
+                CMP AL,0                ;CHECK FOR LENGTH .GE. ZERO
+                JGE NO_CHANGE           ;MAKE NO CHANGE TO AH IF LNGHT% .GE. 0
+                MOV AH,7                ;RESET AH TO SCROLL DOWN
+                NEG AL                  ;USE POS. VALUE OF SCROLL LNGTH%
+NO_CHANGE:      MOV SI,[BP+8]           ;GET ADDR OF ATTR% FOR BLANKED LINE
+                MOV BH,[SI]             ;GET VALUE OF ATTR%
+                MOV SI,[BP+10]          ;GET ADDR OF LRC% OF WINDOW
+                MOV DL,[SI]             ;GET VALUE OF LRC%
+                MOV SI,[BP+12]          ;GET ADDR OF LRR% OF WINDOW
+                MOV DH,[SI]             ;GET VALUE OF LRR%
+                MOV SI,[BP+14]          ;GET ADDR OF URC% OF WINDOW
+                MOV CL,[SI]             ;GET VALUE OF URC%
+                MOV SI,[BP+16]          ;GET ADDR OF URR% OF WINDOW
+                MOV CH,[SI]             ;GET VALUE OF URR%
+                DEC CH                  ;DECREMENT WINDOW COORDINATES BY ONE
+                                        ;  TO ACCOUNT FOR FACT SYSTEM DEFINES
+                                        ;  SCREEN FROM 0-24 AND 0-79
+                DEC CL
+                DEC DH
+                DEC DL
+                INT 10H                 ;CALL BIOS VIDEO_IO
+                POP BP                  ;RESTORE ORIGINAL BP
+                RET 12                  ;RETURN AND INC SP BY 12 FOR 6 ARGS
+SCROLL ENDP
+CSEG ENDS
+END
+```
+{% endraw %}
+
+## SCROLL.DOC
+
+{% raw %}
+```
+SCROLL.BLD (CONVERT FROM SCROLL.HEX TO SCROLL.BLD)
+
+THIS  IS  AN  ASSY. LANG. SUBROUTINE TO BE USED WITH A BASIC PROGRAM TO
+PERFORM  SCROLLING  OF THE SCREEN IN A SPECIFIED WINDOW. THE SUBROUTINE
+WILL  SCROLL  THE  CONTENTS  OF THE WINDOW UP OR DOWN FILLING IN WITH A
+BLANK LINE OF SPECIFIED ATTRIBUTE (I.E., BLACK, WHITE, RED, ETC...) THE
+ROUTINE CAN ALSO BE USED TO CLEAR THE WINDOW
+
+THE ARGUMENTS FOR THE CALL TO THE ROUTINE ARE:
+        ULR% - ROW NUMBER (1-25) OF UPPER LEFT CORNER OF WINDOW
+        ULC% - COL NUMBER (1-80) OF UPPER LEFT CORNER OF WINDOW
+        LRR% - ROW NUMBER (1-25) OF LOWER RIGHT CORNER
+        LRC% - COL NUMBER (1-80) OF LOWER RIGHT CORNER
+        ATTR% - ATTRIBUTE OF BLANKED LINE: &H07=NORMAL, &H70=REVERSE
+                SEE TECH. REF. MANUAL PG. 2-51 FOR OTHERS
+                 NOTE  -  YOU  CAN  USE  0  (INSTEAD OF 7) AS THE
+                       ATTRIBUTE  FOR  TEXT  AND  GRAPHICS  MODE TO GET
+                       BLACK  BACKGROUND.  TRY  7  IN  HI-RES  GRAPHICS
+                       (SCREEN 2)...EVER SEE THAT WHEN YOU WENT BACK TO
+                       DOS FROM GRAPHICS MODE?
+        LNGTH% - NUMBER OF LINES TO SCROLL (0 BLANKS ENTIRE WINDOW)
+                 USE + NUMBER TO SCROLL UP
+                 USE - NUMBER TO SCROLL DOWN
+        NOTE !! -  THE ARGUMENTS ARE NOT VALUE CHECKED.
+
+FROM BASIC: CALL SCROLL(ULR%,ULC%,LRR%,LRC%,ATTR%,LNGHT%)
+
+PROGRAM BY: LEE M. BUCK
+DATE: 3-16-83
+
+
+THE  PROGRAM  IS  LOADED  USING THE BLOAD COMMAND. BELOW ARE TWO SAMPLE
+PROGRAMS  THAT  USE  THE ROUTINE. ONE USES A STRING VARIABLE WITHIN THE
+BASIC  PROGRAM  TO HOLD THE PROGRAM. THE OTHER RESERVES A FIXED SECTION
+OF MEMORY AT THE HIGH MEMORY AREA OF YOUR MACHINE.
+
+
+SAMPLE PROGRAM 1
+
+
+10 'TEST PROGRAM FOR SCROLL ROUTINE
+20 'USING STRING SPACE IN BASIC PROGRAM
+25 ' PROGRAM BY: LEE M. BUCK   --  3/17/83
+30 CLEAR
+40 CLS: KEY OFF
+50 '
+60 SCROLLPGM$=STRING$(&H39,"0")         'SET UP STRING SPACE TO HOLD PGM
+70                                      '&H39 IS SIZE OF MACHINE CODE PGM
+80 DEF SEG=VARPTR(SCROLLPGM$)           'GET THE SEGMENT LOCATION
+90 BLOAD "SCROLL.BLD",0       'LOAD INTO STRING (BE SURE TO INCLUDE 0 OFFSET)
+100 '
+110 ' FILL THE SCREEN WITH SOMETHING
+120 FOR ROW=1 TO 22
+130 FOR COL=1 TO 79
+140 PRINT CHR$(ROW+64);
+150 NEXT COL
+160 PRINT
+170 NEXT ROW
+180 'PROMPT FOR SUBROUTINE ARGUMENTS
+190 BEEP
+200 LOCATE 23,1
+210 INPUT "ULR,ULC,LRR,LRC,ATR,LEN";ULR%,ULC%,LRR%,LRC%,ATTR%,LNGTH%
+220 '
+230 DEF SEG=VARPTR(SCROLLPGM$)  'BE SURE SEGMENT IS SET TO STRING SPACE
+240 SCROLL=0    'SET THE OFFSET TO ZERO AND CALL THE PGM
+250 CALL SCROLL(ULR%,ULC%,LRR%,LRC%,ATTR%,LNGTH%)
+260 '
+270 SOUND 500,5: SOUND 700,5: SOUND 1000,5
+280 LOCATE 13,25: PRINT "SUCCESS !!"
+290 'PRESS 'ENTER' TO DO IT AGAIN; 'Esc' TO QUIT
+300 DEF SEG : POKE 106,0
+310 Q$=INKEY$ : IF Q$="" GOTO 310
+320 IF Q$=CHR$(13) THEN 190     'DO IT AGAIN WITH 'CARRIAGE RETURN' KEY PRESS
+330 IF Q$<>CHR$(27) THEN 300    'KEEP WAITING UNTILL 'Esc' KEY PRESS
+340 END
+
+
+SAMPLE PROGRAM 2
+
+
+10 'TEST PROGRAM FOR SCROLL ROUTINE
+20 'PROGRAM BY: LEE M. BUCK    --   3/17/83
+30 'PUT THE ROUTINE AS HIGH AS POSSIBLE IN MEMORY
+40 'IF TOTAL MEMORY IS 64K OR LESS SPACE MUST BE RESERVED WITHIN BASIC WORK
+50 'AREA.  RESERVE SPACE USING THE 'CLEAR' COMMAND AT THE BEGINNING OF PGM.
+60 'OR USE THE /M OPTION WHEN STARTING BASIC(A). (SEE THE BASIC MANUAL)
+70 CLS: KEY OFF
+80 ' PUT SOMETHING ON THE SCREEN
+90 FOR ROW=1 TO 22
+100 FOR COL=1 TO 79
+110 PRINT CHR$(ROW+64);
+120 NEXT COL
+130 PRINT
+140 NEXT ROW
+150 '
+160 'CALCULATE THE SEGMENT REQUIRED TO PUT ROUTINE AT HIGH MEMORY LOCATION
+170 '
+180 PGM.SIZE=&H39        'SIZE OF MACHINE LANGUAGE PROGRAM
+190 MEM.SIZE=160         'TOTAL K's OF MACHINE MEMORY (LESS RAMDISK MEMORY)
+200 SEGMENT=MEM.SIZE*64-CINT(PGM.SIZE/16)
+210 '
+220 DEF SEG=SEGMENT    'SET SEGMENT AT HIGH MEMORY LOCATION
+230 '
+240 'LOAD THE SUBROUTINE INTO MEMORY.  IT ONLY NEEDS TO BE DONE ONCE.
+250 BLOAD "SCROLL.BLD",0   'BE SURE TO SET THE OFFSET TO ZERO
+260 '
+270 'GET THE SUBROUTINE PARAMETERS
+280 BEEP
+290 LOCATE 23,1
+300 INPUT "ULR,ULC,LRR,LRC,ATR,LEN";ULR%,ULC%,LRR%,LRC%,ATTR%,LNGTH%
+310 '
+320 ' CALL THE SUBROUTINE
+330 DEF SEG=SEGMENT     'MAKE SURE SEGMENT IS SET
+340 SCROLL=0            'SET THE OFFSET
+350 CALL SCROLL(ULR%,ULC%,LRR%,LRC%,ATTR%,LNGTH%)
+360 '
+370 SOUND 500,5: SOUND 700,5: SOUND 1000,5
+380 LOCATE 12,25: PRINT " SUCCESS !! "
+390 'PRESS 'ENTER' TO DO IT AGAIN; 'Esc' TO QUIT
+400 DEF SEG : POKE 106,0
+410 Q$=INKEY$ : IF Q$="" GOTO 410
+420 IF Q$=CHR$(13) THEN 280     'DO IT AGAIN WITH 'CARRIAGE RETURN' KEY PRESS
+430 IF Q$<>CHR$(27) THEN 400    'KEEP WAITING UNTILL 'Esc' KEY PRESS
+440 END
+
+```
+{% endraw %}
 
 ## SCROLL1.BAS
 
+{% raw %}
 ```bas
 10 'TEST PROGRAM FOR SCROLL ROUTINE
 20 'USING STRING SPACE IN BASIC PROGRAM
@@ -1354,9 +7921,11 @@ machines:
 330 IF Q$<>CHR$(27) THEN 300    'KEEP WAITING UNTILL 'Esc' KEY PRESS
 340 END
 ```
+{% endraw %}
 
 ## SCROLL2.BAS
 
+{% raw %}
 ```bas
 10 'TEST PROGRAM FOR SCROLL ROUTINE
 20 'PROGRAM BY: LEE M. BUCK    --   3/17/83
@@ -1403,9 +7972,11 @@ machines:
 430 IF Q$<>CHR$(27) THEN 400    'KEEP WAITING UNTILL 'Esc' KEY PRESS
 440 END
 ```
+{% endraw %}
 
 ## SOUNDS.BAS
 
+{% raw %}
 ```bas
 10 '            SOUNDS.BAS
 20 '
@@ -1528,6 +8099,1592 @@ machines:
 1190 '          JMP     TOP
 1200 '
 ```
+{% endraw %}
+
+## TOSHIBA.ASM
+
+{% raw %}
+```
+	PAGE  60,132
+	TITLE	TOSHIBA P1351 Graphics, v 1.0
+	
+	comment #
+
+ tgraf.COM  7/4/85
+Interrupt replacement for print screen function on ibmpc(tm)
+	Please send problem reports and suggestions to:
+		Marty Smith
+		310 Cinnamon Oak Lane
+		Houston, Texas	77079
+		Compuserve 72155,1214
+		(713) 464-6737
+
+    Create tgraf.COM with MASM*, LINK* and EXE2BIN* as follows:
+
+	masm tgraf,tgraf,tgraf;
+
+	link tgraf;    (ignor the error message about no stack segment,
+			  that's taken care of in the next step.)
+	exe2bin tgraf.exe tgraf.com
+
+  *  MASM is the MicroSoft(tm) Macro Assembler v. 3.0
+	or IBM(tm) Macro Assembler v. 1.0
+     LINK and EXE2BIN are PC-DOS(tm) utilities.
+
+  This program originally designed for Epson-MX(tm) series printers
+  with Graftrax80(tm) and Graftrax+(tm) bit-plot graphic capabilites.
+  ======> Now modified with conditional compilation and macros for
+  ======> c.itoh(tm) model 8510a and other printers.
+
+	CHANGE HISTORY:
+	9/18/82 - Buffer in routine for a line of bit-plot bytes to allow for
+  checking for blank lines replaced by pre-scan routine, saving space.
+	1/24/83 - Modifications for conditional assembly with other printers
+  and C.ITOH 8510a.
+	1/24/83 - Improved error checking for out-of-paper and I/O errors
+  involving printer.
+	1/24/83 - Bug in error check corrected, occuring when routine does
+  error exit and is then called again, resulting in bit-plot data sent in
+  regular mode.
+	3/12/83 - Allow calling as a subroutine. i.e. no shift key depressed.
+  Defaults to small print mode. Can be set to LARGE.
+	2/4/84	- Allow correct printing of 640x200 mode.
+	3/18/84 - Use int 31h for dos 2.+ terminate process.
+	3/24/84 - Use BIOS for keyboard scan, in case screen is printed
+		from DOS.
+	4/21/84 - -OTHER- section complete for changes from 640 mode.
+	9/22/84 - Add code to set lines back in 6/inch order, so CR's
+		can advance to TOF.
+	9/22/84 - Jump to other print screen routine instead of reassigning
+		it to int f1h. Only luck has kept this vector from being used
+		by someone else.
+	10/20/84- Add check for already installed, don't reinstall.
+	10/20/84- Compatibility with MASM 1.0 reestablished, FAR call to old
+		routine caused 'fixup error' from EXE2BIN. 
+	10/20/84- CALLGRAF now points to common address variable for default
+		mode, is now the same for all versions of program.  Demo now
+		works!
+	4/15/84 - Toshiba P1351 added to list.  This is a higher resolution
+		printer with a 24 pin dot head, and is another special edition
+		of the program, like the Okidata with its 7 dot graphics.
+
+	Features:
+  Accepts ESC key exit, prescans to test for blank line
+  left shift prtsc = small graphics, right shift prtsc = big
+  Runs as a .COM type program under dos
+     resident until power down or reset.
+   1 = screen sent horiz. 320 bits in 480 mode
+   2 = screen sent vert. 400 bits double printed in 480 mode
+ **************  1 mode **********************
+	DL = masking character
+	DH = count of 25 (physical lines)
+	CX = counter for each line (80)
+	DS = used to index screen at 'b8000'
+   These regs must be preserved during routine
+	  (increment each line by adding '14' hex to ds: for paragraph
+		boundary of 320 bytes 0x'140')
+ **************  2 mode *********************
+	DH = count of 40 (physical lines)
+	CX = counter for each line (100)
+	SI = index to screen via ds:
+   These regs must be preserved during routine
+	all output to printer is done from routine -send2-, which uses
+	bios routine int 17h, and provides safe error exit.
+
+  GRAF.COM is designed with the idea that the user's main program is the
+  primary function and GRAF.COM should not cause problems of its own.
+
+
+	#
+
+TRUE	equ	-1	; DON'T CHANGE THESE!
+FALSE	equ	0
+
+escape	equ	27	; for printer
+CR	equ	13
+LF	equ	10
+
+; ===============>  A L L  U S E R S  <===================
+; ====> SET ONE AND ONLY ONE OF THE FOLLOWING THREE <=====
+; don't set citoh to true! not operable with this version.
+
+TOSHIBA	EQU	TRUE
+; citoh and nec are left in here to allow for other 24 pin printers, and
+; should NOT be set true at present.
+CITOH	EQU	FALSE	; citoh and nec 8023 use similar codes.
+NEC	EQU	FALSE
+
+DEBUG	equ	FALSE
+	
+MAX_LINES equ	25	; lines in a screen
+
+; Each bit of a byte is mapped to the wire head of the printer.
+; If the Epson MX is sent 80h (bit 7), the TOP wire makes a dot.
+; If the C.ITOH is sent   01h (bit 0), the TOP wire makes a dot.
+; ===============>  A L L  U S E R S  <===================
+; =====> SET ONE AND ONLY ONE OF THE FOLLOWING TWO <======
+
+BIT7	EQU	TRUE
+BIT0	EQU	FALSE
+
+; BIT7 is TRUE for TOSHIBA
+; BIT0 is TRUE for CITOH,NEC8023
+
+print	macro	char
+	mov	al,char
+	call	SEND2
+	endm
+
+
+;  ***************> START OF ACTUAL CODE <*****************
+
+cseg	segment 'code'
+	assume cs:cseg
+	org	100h		; set up for .com conversion
+; publics here for debugging.
+
+	comment #
+	public	BCONT,BIT0,BIT7,BREAK?,BUFFER,D6ONE
+	public	DEFAULT_ROUTINE
+	public	DONE,DONE1,DOS1,DO_OLD,DSTOR,EDONE,ERRET,ESCAPE,EXIT
+	public	GOBACK?,GOWAIT,GR1,GR2,GRAPHIC,IND10,INDEND
+	public	INDENT,INDENT2,INIT,INITIAL,INITOK,INITR,INL640,INLOP
+	public	INLOP2,LAST,LFCR,LOOP_COUNT,M640,M6AIN,M6LOOP,MAIN
+	public	MAIN2,MAIN2A,ML10,ML10A,ML10B,ML20,MLOOP,MLOOP2,MODE640
+	public	NO0,NO1,NO2,NO3,NO4,NO5,NO6,NO7,NOS10,NOSEND
+	public	NOSET,NXTS,NXTS10,OLD_PRINT_ROUTINE,ONEOR2,PTFLAG,S310
+	public	S320,S330,S340,S350,S360,S370,S380,S390,SEB10,SEB20,SEB30
+	public	SEBLOOP1,SEBLOOP2,SEC10,SEC20,SEC25,SEC30,SECLOOP1
+	public	SECLOOP2,SEND,SEND2,SEND3,SENDTWO,SEND_BIG_BW
+	public	SEND_BIG_COLOR,SEND_LOOP1,SEND_LOOP2,SEND_LOOP3,SEND_ONE
+	public	SEND_THREE,SEND_TWO,START,STWO1,STWO10,STWO2,STWO20
+	public	STWO30,STWO40,TO0,TO1,TO2,TO3,TO4,TO5,TO6,TO7
+	public	TOF,TOFL,TS0A,TS1A,TS2A,TS3A,TS4A,TS5A
+	public	TS6A,TS7A,TST4,TST8,TWO,WEREHERE,WHERESI
+	#
+
+init	proc
+	jmp	initial 	; so we have to set up first
+init	endp
+;	debugvar dw	0
+gowait	dw	0
+wheresi dw	0
+ptflag	db	0
+oneor2	db	0
+dstor	dw	0
+mode640 dw	0
+
+; **** the 1 below is the POKE to use in CALLing from another program. ****
+;
+default_routine dw	1	;  1 for small, 2 for LARGE.		  *
+;
+; ****   WARNING * add any new variables AFTER this to preserve POKE ******
+
+bigc1	db	001000b,100000b,000010b,001000b,100000b,000010b
+bigc2	db	100010b,010101b,101010b,010100b,0,0  ; patterns for big color
+bigc3	db	101010b,010101b,101010b,010101b,101010b,010101b
+
+data_byte db	0,0
+	
+loop_count	db	0,0
+
+old_print_routine  dd	0	; address of former print screen routine.
+
+crt_cols	db	0
+video_page	db	0
+cursor_pos	dw	0
+tmode_flag	db	0
+
+do_old	proc	near
+; jump to old routine
+	pop	bp
+	pop	si
+	pop	di
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ds
+	pop	es
+	pop	ax
+	jmp	cs:old_print_routine
+
+do_old	endp
+
+; --->	ACTUAL INTERRUPT ROUTINE STARTS HERE  <---
+start	proc	far	; Start of main routine--Shift Prt.Sc hit.
+	assume cs:cseg
+	sti		; This follows ROM routine real close
+	push	ax	;SAVE REGS
+	push	es
+	push	ds
+	push	bx
+	push	cx
+	push	dx
+	push	di
+	push	si
+	push	bp
+	mov	bp,sp		; Save in case of error for reset
+	mov	ax,50h		; Check here first to see if
+	mov	ds,ax		; routine is already in progress
+	mov	si,0		; otherwise it will be a mess.
+	mov	al,01h		; if [si]=1 then there is a 
+	cmp	[si],al		; print screen already in progress.
+	jnz	nxts		; if not we're go for routine
+	jmp	exit		; otherwise go back home.
+nxts:	mov	[si],al 	; 
+	mov	ah,15		; Get the current video state.
+	int	10h		; from the ROM routine,
+	mov	cs:mode640,FALSE
+	cmp	al,4		; AL=4-6 are all graphics so we're OK
+	jz	graphic
+	cmp	al,5
+	jz	graphic
+	cmp	al,6
+	jnz	nxts10
+	mov	cs:mode640,TRUE ; special case
+	jmp	short graphic
+nxts10:
+	jmp	do_text_mode
+
+	mov	al,0	; else reset and go to ROM routine.
+	mov	[si],al
+	jmp	do_old	; this is where we stored the ROM routine entry.
+;	jmp	exit	; Do the ROM routine but come back here to leave.
+graphic:
+	mov	ax,40h	; Get the keyboard shift flag
+	mov	ds,ax	; segment
+	mov	si,17h	; and address
+	mov	ax,[si] ; pick it up
+	and	ax,3	; get rid of other stuff
+	or	ax,ax	; Mod. to create default small
+	jnz	gr1	; for case where routine is called as a subroutine.
+	mov	ax,cs:default_routine
+gr1:	mov	cs:oneor2,al	; store for later
+	push	ax	; also here
+	xor	al,al	; make sure this starts out as NO print.
+	mov	cs:ptflag,al
+	xor	dl,dl	; These bits indicate whether R or L Shift is down
+	mov	dh,19h	; 25 lines of graphic dots at 8 dots per line
+	mov	cs:loop_count,dh
+	mov	ax,0b800h ; stored in DX
+	mov	ds,ax	;SET UP FOR SCREEN PEEK
+; Printer setup section to change line spacing to 8/72" for continuous dots
+
+; line spacing routine - All Epson Graftrax and IBM Graphics should
+; accept esc 'A' 8  or  esc '3' 24 for line spacing, but IBM Graphics only
+; recognizes esc '3' 24
+	IF	TOSHIBA
+	print	escape
+	print	'L'     ; A
+	print	'0'	; 8
+	print	'7'
+	ENDIF
+
+	IF	CITOH	; ESC T 16
+	print	escape
+	print	'T'     ; T
+	print	'1'     ; 1
+	print	'6'     ; 6
+	print	escape
+
+	IF	NEC
+	print	'['     ; Set printer to unidirectional for dot alignment
+	ELSE
+	print	'>'
+	ENDIF
+
+	ENDIF
+
+	pop	ax	; get back which routine
+	cmp	al,2	; Left Shift Prt Sc means LARGE graphic print
+	jnz	gr2
+	jmp	main2	; so hop over there if so.
+gr2:
+	cmp	cs:mode640,TRUE
+	jnz	MAIN
+	jmp	m640
+
+; START OF small GRAPHICS PRINT ROUTINE.
+; This routine scans across the screen from left to right,
+; building an TOSHIBA bit plot byte out of IBM screen dots.
+; TOSHIBA wire head		IBM screen color dots
+; TOP	 o  128  80h bit 7	| 00 | 01 | 10 | 11 | = 4 dots, one byte
+;	 o   64  40h  "  6
+; one	 o   32  20h  "  5      ibm dots go one raster line then the next
+; bit	 o   16  10h  "  4      EVEN line, ie 0, 2, 4 etc.
+; plot	 o    8  08h  "  3
+; byte	 o    4  04h  "  2      then you go back and do 1, 3, 5 etc.
+;	 o    2  02h  "  1
+; BOTTOM o    1  01h  "  0      At loc. 0000h are 4 dots, 0,0|0,1|0,2|0,3
+;				At loc. 2000h are 4 dots, 1,0|1,1|1,2|1,3
+;
+main:	mov	cx,80	; 80 x 4 = 320 dots.
+	mov	di,sp	; this is not very structured, but its 11:30pm
+
+	comment #
+
+ok, heres the idea, bp is already set for printer foulup abort.
+This printer has much finer resolution than the epson, humble beginning
+of this program.  all color modes do color translation here, b+w is yet
+another situation, carp, carp. The scan routine is set so that when material
+is found to be printed, the print line loop is reset to the top and only 
+then is data actually sent. This allows for quicker printing of blank space.
+ A cr/lf is much faster than control codes and 2000 bytes.  A more 
+complicated translation routine means more call nesting, and so register 
+DI is used to allow movement without stack trouble (famous last words).
+If you make modifications to the program, please understand that changing
+register DI may make for some interesting side effects.
+
+	#
+
+mloop:	mov	dl,0c0h ; 11000000b
+	call	tst4	; see if this comes back <> 0
+;	mov	al,ah	; we are testing bit patterns for one screen byte
+	call	send3	; don't send to printer unless something to send
+	mov	dl,30h	; 00110000b
+	call	tst4	; each byte is 4 dots
+;	mov	al,ah	; so we test for each dot in a byte
+	call	send3	; send sets PTFLAG if there is a dot on the line
+	mov	dl,0ch	; 00001100b
+	call	tst4	; then resets to start of line and starts printing
+;	mov	al,ah	; AL is the bit plot byte being built
+	call	send3	; This keeps us from printing a line of '0's.
+	mov	dl,03h	; 00000011b
+	call	tst4	; TST4 scans down 8 screen dot lines each time called
+;	mov	al,ah
+	call	send3
+	loop	mloop	; 80 bytes make 320 dots
+	call	lfcr	; this is a good old regular line feed/carriage return
+	call	break?	; someone hit ESC key? so take early exit
+	mov	dh,cs:loop_count
+	dec	dh	; DL is line counter
+	or	dh,dh	; when it goes 0 we're through
+	jz	done	; reset everything and do an IRET
+	mov	cs:loop_count,dh
+	mov	ax,ds	; otherwise bump the SEGMENT reg so that location
+	add	ax,14h	; 0 is the start of the next line
+	mov	ds,ax	; X'140' = 320
+	jmp	main	; and do this 80 times (80x4=320)
+done:	mov	ax,0
+; This is the common exit for both routines, Printer is restored.
+done1:	push	ax	; save AX cause it has error exit flag
+; TOSHIBA command to reset printer to 6 lines/in. = ESC 2 (1b 32)
+	IF	TOSHIBA
+	print	escape
+	print	'L'
+	print	'0'	; add 12/216 to reset line spacing
+	print	'8'
+	print	CR
+	print	LF
+	ENDIF
+; FOR CITOH MAKE SURE BIDIRECTIONAL PRINTING IS RESTORED
+	IF	CITOH
+	print	escape
+	print	'A'
+	print	escape
+
+	IF	NEC
+	print	']'
+	ELSE
+	print	'<'
+	ENDIF
+
+	ENDIF
+
+edone:	mov	ax,50h	; Set end of PrtSc indication
+	mov	ds,ax	; OK to come back and do again
+	mov	si,0
+	pop	ax
+	mov	[si],al
+exit:	pop	bp
+	pop	si	; restore regs and return to caller
+	pop	di
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ds
+	pop	es
+	pop	ax
+	iret		; were an interrupt routine so we IRET
+
+	comment	#
+ START OF LARGE PRINT ROUTINE
++-------------+
+| ^ ^ 	      |  This time we scan from 199,0 to 0,0
+| ^ ^ 	      |   and go across
+| ^ ^ 	      |  These are representations
+| | | 	      |   of one color dot.
++-------------+    0	     1	     2	     3	   Palettes
+		x x x x x x 	x x x x x x
+     all o's	o o o o o o	x x x x x x	all x's
+		x x x x x x	x x x x x x
+		o o o o o o	o o o o o o	These patterns may be
+		x x x x x x	o o o o o o	changed if they don't 
+		o o o o o o	o o o o o o	look convincing.
+color   00	     01		     10		11
+	 0	      1		      2		 3
+
+		for b+w:
+
+     	dot on :  xxxxxx	oooooo  : dot off
+		  xxxxxx	oooooo
+		  xxxxxx	oooooo			
+
+
+	#
+
+main2:	mov	dh,80	; we have 80 colunms x 25 lines here
+	mov	cs:loop_count,dh
+	mov	cs:wheresi,3ef0h ; si is our index
+	mov	si,cs:wheresi
+	mov	di,sp
+main2a: mov	cx,100
+mloop2: mov	al,[si] ; idea is to get a byte starting at screen BOTTOM
+	cmp	cs:mode640,TRUE
+	je	ml10
+	  
+	call	send_big_color
+
+	jmp	short ml10a
+ml10:
+	call	send_big_bw
+ml10a:
+	mov	cs:gowait,si ; store SI for next EVEN raster line
+	sub	si,2000h ; subtract 2000h for the next ODD raster line
+	mov	al,[si] ; and do the same here
+	cmp	cs:mode640,TRUE
+	je	ml10b
+
+	call	send_big_color
+
+	jmp	short ml20
+ml10b:
+	call	send_big_bw
+ml20:
+	mov	si,cs:gowait ; get back the EVEN line
+	sub	si,80	; advance UP the screen one line (say 199,0 to 197,0)
+	loop	mloop2	; and do this 100 times
+	call	lfcr	; finished with one line we send normal line-end
+	call	break?	; check for an ESC if we want to abort
+	or	al,al	; clear flags
+	dec	cs:loop_count
+	mov	dh,cs:loop_count ; DH is our line counter,
+	or	dh,dh	; when it goes 0 we're done.
+	jz	tof	; so we'll try to reset Top of Form and exit
+
+	inc	cs:wheresi	; else go to the next byte location
+	mov	si,cs:wheresi	; store
+	jmp	main2a		; and do again
+
+tof:
+	print	12	; send a form feed
+
+	jmp	done	; clean up and back to caller.
+
+start	endp
+
+send2	proc	near	; BIOS routine to print the character in AL
+
+IF	DEBUG
+	inc	cs:debugvar
+	ret
+	ELSE
+	push	ax
+	mov	ah,00h	; 0=print, 1=initialize port, 2=read status to AH
+	push	dx
+	mov	dx,0	; DX specifies printer 0 (LPT1:)
+	int	17h	; BIOS used instead of DOS because DOS sends
+	pop	dx	; CR/LF's in the middle of the bit-plots
+	test	ah,29h	; check for timeout or errors or out-of-paper
+	pop	ax
+	jnz	erret
+	ret
+
+erret:
+	cmp	cs:tmode_flag,TRUE
+	jne	erret10
+	call	reset_cursor
+erret10:
+	mov	ax,00ffh ; Flag for printer foulup
+	mov	sp,bp
+	push	ax
+	jmp	edone	; special abort
+	ENDIF
+send2	endp
+
+; TOSHIBA bit plots operate at 180 dots per inch, or 1440 for an 8 inch line.
+; called by ESC ; 'xxxx' where xxxx is an ASCII number like '0010' or '1440'
+;  i.e.  300 dots would be ESC ; 0300
+;  This is sent to the TOSHIBA as --> 27 ';' '0300'
+
+indent	proc	near
+	push	cx	; 13 spaces in to center
+	IF	TOSHIBA
+	cmp	cs:mode640,TRUE
+	jz	ind10
+	mov	cx,13	; PICTURE ( we've got 960 dots and 1440 to work with
+inlop:	print	' '	; 1440-960=480/18 spaces/char pica = 26.67 extra
+			; so indent the picture 13 spaces to center )
+	loop	inlop
+	print	escape	; SEQUENCE TO SET UP 960
+			; BIT PLOTS IN GRAPHIC MODE.
+	print	';'	; OF P1351
+			; This is the set-up for the small print
+	print	'0'	
+	print	'9'	; 320*3=960 dots	
+	print	'6'
+	print	'0'
+	jmp	short indend
+
+ind10:		   
+	mov	cx,5
+inl640:		      	; 640x200 mode, 1440-1280=160/18 per char pica=8.89
+			; so indent 5
+	print	' '
+	loop	inl640
+	print	escape
+	print	';'     ; 640 dots * 2 = 1280
+	print	'1'
+	print	'2'
+	print	'8'
+	print	'0'
+
+indend:
+	ENDIF
+	IF	CITOH
+	print	escape	; ESC N = Pica pitch
+	print	'N'
+	cmp	cs:mode640,TRUE
+	jz	ind10
+	mov	cx,20	; PICTURE ( we've got 320 dots and 640 to work with )
+inlop:	print	20h	; 640-320=320 / 8 dots per char. = 40 extra
+			; so indent the picture 13 spaces to center
+	loop	inlop
+	jmp	ind20
+
+ind10:
+	print	escape
+	print	'S'
+	print	'0'
+	print	'6'
+	print	'4'
+	print	'0'
+	jmp	ind30
+ind20:
+; ESC S 0320 = 320 bit plot type bytes on the way
+	print	escape	; SEQUENCE TO SET UP 320 BIT PLOTS IN 640 MODE
+	print	'S'     ; OF CITOH  This is the set-up for the small print
+	print	'0'     ; Would love to try to use all 640 bits here
+	print	'3'
+	print	'2'
+	print	'0'
+
+ind30:
+	ENDIF
+	pop	cx
+	ret
+indent	endp
+; This is indent for LARGE print
+; This time we have 200*6=1200 bit plots to send 
+; 1440-1200=240/18 =13.33 extra, so indent 6
+indent2 proc	near
+	push	cx
+	IF	TOSHIBA
+	mov	cx,6	; so indent 6 character type spaces
+inlop2: print	20h
+	loop	inlop2
+	print	escape	; 200*6=1200
+	print	';'
+	print	'1'
+	print	'2'
+	print	'0'
+	print	'0'
+	ENDIF
+; 640-400=240 / 8 = 30 EXTRA characters
+	IF	CITOH
+	print	escape ; ESC N = Pica pitch
+	print	'N'
+	mov	cx,15	; PICTURE ( we've got 400 dots and 640 to work with
+inlop2: print	20h	; 640-400 / 8 dots per char. = 30 extra so indent
+			; the picture 15 spaces to center
+	loop	inlop2
+; ESC S 0400 = 400 bit plot type bytes on the way
+	print	escape	; SEQUENCE TO SET UP 400 BIT PLOTS IN 640 MODE
+	print	'S'     ; OF CITOH
+	print	'0'
+	print	'4'
+	print	'0'
+	print	'0'
+	ENDIF
+	pop	cx
+	ret
+indent2 endp
+
+m640	proc	near
+m6ain:	mov	cx,80	; 80 x 4 = 320 dots.
+	mov	di,sp
+m6loop: mov	dl,80h ; 10000000b
+	call	tst8	; see if this comes back <> 0
+	mov	al,ah	; we are testing bit patterns for one screen byte
+	call	sendtwo	; don't send to printer unless something to send
+	mov	dl,40h	; 01000000b
+	call	tst8	; each byte is 4 dots
+	mov	al,ah	; so we test for each dot in a byte
+	call	sendtwo	; send sets PTFLAG if there is a dot on the line
+	mov	dl,20h	; 00100000b
+	call	tst8	; then resets to start of line and starts printing
+	mov	al,ah	; AL is the bit plot byte being built
+	call	sendtwo
+	mov	dl,10h	; 00010000b
+	call	tst8	; TST4 scans down 8 screen dot lines each time called
+	mov	al,ah
+	call	sendtwo
+	mov	dl,08h ; 00001000b
+	call	tst8	; see if this comes back <> 0
+	mov	al,ah	; we are testing bit patterns for one screen byte
+	call	sendtwo	; don't send to printer unless something to send
+	mov	dl,04h	; 00000100b
+	call	tst8	; each byte is 4 dots
+	mov	al,ah	; so we test for each dot in a byte
+	call	sendtwo	; send sets PTFLAG if there is a dot on the line
+	mov	dl,02h	; 00000010b
+	call	tst8	; then resets to start of line and starts printing
+	mov	al,ah	; AL is the bit plot byte being built
+	call	sendtwo
+	mov	dl,01h	; 00000001b
+	call	tst8	; TST4 scans down 8 screen dot lines each time called
+	mov	al,ah
+	call	sendtwo
+	loop	m6loop	; 80 bytes make 320 dots
+	call	lfcr	; this is a good old regular line feed/carriage return
+	call	break?	; see if someone hit ESC key. If so take early exit
+	or	al,al
+	mov	dh,cs:loop_count
+	dec	dh	; DL is line counter
+	cmp	dh,0	; when it goes 0 we're through
+	jz	d6one	; reset everything and do an IRET
+	mov	cs:loop_count,dh
+	mov	ax,ds	; otherwise bump the SEGMENT reg so that location
+	add	ax,14h	; 0 is the start of the next line
+	mov	ds,ax	; X'140' = 320
+	jmp	m6ain	; and do this 80 times (80x4=320)
+d6one:	mov	ax,0
+	jmp	done1
+
+m640	endp
+
+tst4	proc	near	;  This routine builds ONE bit plot byte
+	mov	bx,80	;  by testing a dot with the mask sent
+	sub	bx,cx	;  from MLOOP.
+	mov	si,bx	;  First it does the ODD rows then the EVEN,
+	xor	ax,ax	;  alternate lines are offset 2000h
+	mov	bl,[si] ;  from each other in memory.
+	and	bl,dl	;  DL has the mask
+	or	bl,bl	;  SI the location
+	jz	no7	;  BL the memory byte
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts7a
+	or	ah,80h	; if set, set on data word
+ts7a:
+	test	bl,dl	; odd bit
+	jz	no7
+	or	ah,40h
+no7:	add	si,80	; +80 gets us from say 0,0 to 2,0
+	mov	bl,[si] ; get the memory byte ( 4 dots )
+	and	bl,dl	; get rid of dots we aren't testing now
+	or	bl,bl	; see if its COLOR 0
+	jz	no5	; if yes, go on
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts5a
+	or	ah,8	; if set, set on data word
+ts5a:
+	test	bl,dl	; odd bit
+	jz	no5
+	or	ah,4
+no5:	add	si,80	; continue 7 5 3 1
+	mov	bl,[si]	;  xxxxxx
+	and	bl,dl	;        
+	or	bl,bl	;  xxxxxx
+	jz	no3	;  xxxxxx
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts3a
+	or	al,80h	; if set, set on data word
+ts3a:
+	test	bl,dl	; odd bit
+	jz	no3
+	or	al,40h
+no3:	add	si,80	;  xxxxxx
+	mov	bl,[si]	;
+	and	bl,dl
+	or	bl,bl
+	jz	no1
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts1a
+	or	al,8	; if set, set on data word
+ts1a:
+	test	bl,dl	; odd bit
+	jz	no1
+	or	al,4
+no1:	push	ax
+	mov	ax,80
+	sub	ax,cx	; CX counts our screen position
+	add	ax,2000h ; add 2000h for the EVEN rows
+	mov	si,ax	; with seg set to B800h we can use SI like an
+	pop	ax	; array pointer ( AH has our byte so don't lose )
+	mov	bl,[si] ; and continue with the same idea for 6 4 2 0
+	and	bl,dl
+	or	bl,bl
+	jz	no6
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts6a
+	or	ah,20h	; if set, set on data word
+ts6a:
+	test	bl,dl	; odd bit
+	jz	no6
+	or	ah,10h
+;	call	set6
+no6:	add	si,80
+	mov	bl,[si]
+	and	bl,dl
+	or	bl,bl
+	jz	no4
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts4a
+	or	ah,2	; if set, set on data word
+ts4a:
+	test	bl,dl	; odd bit
+	jz	no4
+	or	ah,1
+;	call	set4
+no4:	add	si,80
+	mov	bl,[si]
+	and	bl,dl
+	or	bl,bl
+	jz	no2
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts2a
+	or	al,20h	; if set, set on data word
+ts2a:
+	test	bl,dl	; odd bit
+	jz	no2
+	or	al,10h
+;	call	set2
+no2:	add	si,80
+	mov	bl,[si]
+	and	bl,dl
+	or	bl,bl
+	jz	no0
+	mov	bh,bl
+	and	bx,1010101001010101b ; separate components of two bits/pixel
+	test	bh,dl	; even bit
+	jz	ts0a
+	or	al,2	; if set, set on data word
+ts0a:
+	test	bl,dl	; odd bit
+	jz	no0
+	or	al,1
+;	call	set0
+
+no0:	ret
+
+	comment #
+; hopefully this can be left out, it all depends on the LQ1500
+; where's my Z80 now
+; reverse this table if your bit plots use bit 0 for the top wire
+	IF	BIT7
+set15:	or	ah,80h	; top wire - bit 7
+	ret
+set14:	or	ah,40h	; bit 6
+	ret
+set13:	or	ah,20h	; bit 5
+     	ret
+set12:	or	ah,10h	; bit 4
+	ret
+set11:	or	ah,08h	; bit 3
+	ret
+set10:	or	ah,04h	; bit 2
+	ret
+set9:	or	ah,02h	; bit 1
+	ret
+set8:	or	ah,01h	; bit 0
+	ret
+set7:	or	al,80h	; top wire - bit 7
+	ret
+set6:	or	al,40h	; bit 6
+	ret
+set5:	or	al,20h	; bit 5
+	ret
+set4:	or	al,10h	; bit 4
+	ret
+set3:	or	al,08h	; bit 3
+	ret
+set2:	or	al,04h	; bit 2
+	ret
+set1:	or	al,02h	; bit 1
+	ret
+set0:	or	al,01h	; bit 0
+	ret
+	ENDIF
+	IF	BIT0
+set7:	or	ah,01h	; top wire - bit 0
+	ret
+set6:	or	ah,02h	; bit 1
+	ret
+set5:	or	ah,04h	; bit 2
+	ret
+set4:	or	ah,08h	; bit 3
+	ret
+set3:	or	ah,10h	; bit 4
+	ret
+set2:	or	ah,20h	; bit 5
+	ret
+set1:	or	ah,40h	; bit 6
+	ret
+set0:	or	ah,80h	; bit 7
+	ret
+	ENDIF
+
+	#
+
+tst4	endp
+
+; 640 mode is single bits, no color, so result is in AL.
+;
+tst8	proc	near	;  This routine builds ONE bit plot byte
+	mov	ax,80	;  by testing a dot with the mask sent
+	sub	ax,cx	;  from M6LOOP.  Used by 640 mode
+	mov	si,ax	;  First it does the ODD row then the EVEN
+	mov	ah,0	;  since alternate lines are offset 2000h
+	mov	al,[si] ;  from each other in memory.
+	and	al,dl	;  DL has the mask
+	cmp	al,0	;  SI the location
+	jz	to7	;  AL the memory byte
+	or	ah,80h	;  AH is the byte being built
+to7:	add	si,80	; +80 gets us from say 0,0 to 2,0
+	mov	al,[si] ; get the memory byte ( 4 dots )
+	and	al,dl	; get rid of dots we aren't testing now
+	cmp	al,0	; see if its COLOR 0
+	jz	to5	; if yes, go on
+	or	ah,20h
+;	call	set5	; otherwise set that bit
+to5:	add	si,80	; continue 7 5 3 1
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	to3
+	or	ah,8
+;	call	set3
+to3:	add	si,80
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	to1
+	or	ah,2
+;	call	set1
+to1:	push	ax
+	mov	ax,80
+	sub	ax,cx	; CX counts our screen position
+	add	ax,2000h ; add 2000h for the EVEN rows
+	mov	si,ax	; with seg set to B800h we can use SI like an
+	pop	ax	; array pointer ( AH has our byte so don't lose )
+	mov	al,[si] ; and continue with the same idea for 6 4 2 0
+	and	al,dl
+	cmp	al,0
+	jz	to6
+	or	ah,40h
+;	call	set6
+to6:	add	si,80
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	to4
+	or	ah,10h
+;	call	set4
+to4:	add	si,80
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	to2
+	or	ah,4
+;	call	set2
+to2:	add	si,80
+	mov	al,[si]
+	and	al,dl
+	cmp	al,0
+	jz	to0
+	or	ah,1
+;	call	set0
+to0:	ret
+
+tst8	endp
+
+; This routine pre-scans a line to see if in fact there are any bit
+; plots to send. The main routine will keep sending bytes here
+; If a whole line of 0's are sent we avoid going through the
+; set-up for bit-plot (i.e. slower movement) graphics when a CR/LF
+; would take care of everything.
+; If there IS something to send, PTFLAG is set, the current line
+; position is set to 0, bit-plot is init., and bits are really sent to printer.
+send	proc	near
+;	push	ax	; save the character
+;	push	ds	; DS saved cause it points to lines
+;	pop	ax	; points to DS
+;	mov	cs:dstor,ax	; save
+	cmp	cs:ptflag,TRUE	; check for printing
+	jne	nosend	; if PTFLAG isn't TRUE we are still scanning
+;	pop	ax	; else get the char. in AL and print it
+	call	send2	; this is the real out to printer routine
+	ret
+;	jmp	short noset ; restore DS and return
+nosend:
+;	pop	ax	; This is the SCAN routine
+	or	al,al	; get the char. > test for 0 > if so reset and go back
+	jz	noset
+	mov	al,TRUE ; if <> 0
+	mov	cs:ptflag,al ; set PTFLAG to go
+	mov	sp,di	;DISCARD RETURN
+	cmp	cs:oneor2,1 ; check which (small or LARGE)
+	jnz	two	; indent 6 or 13 depending on which routine
+	cmp	cs:mode640,TRUE
+	jz	nos10
+	call	indent	; indent also sets up bit-plot mode
+;	call	noset	; NOSET will restore DS to right pos.
+	jmp	main	; and do the line for real.
+nos10:
+	call	indent
+;	call	noset
+	jmp	m6ain
+two:	call	indent2 ; init. for LARGE
+	mov	si,cs:wheresi	; SI set back to start of line
+;	call	noset	; get right DS
+	jmp	main2a	; back to beginning
+noset:
+;	push	ax	; routine to restore DS
+;	mov	ax,cs:dstor
+;	mov	ds,ax
+;	pop	ax
+	ret
+send	endp
+	
+send3	proc	near
+; takes word length data and sends to printer
+;
+;  word reads left to right and has actual color values of eight
+;  vertical pixels
+;
+;  these will be sent to the printer as three sets of four bytes each, 
+;  each set of four bytes controlling the 24 pins on the print head.
+;
+;  pixel box is 3x3.  colors represented:
+;  
+;  color 0:  color 1:  color 2:  color 3:
+;   o o o     o	o o	o x o     x o x
+;   o o	o     o x o	o x o     o x o
+;   o o	o     o o o	o x o     x o x
+;    00	       01	 10	   11
+;		  
+	push	bx
+	push	cx
+	push	dx
+	mov	dx,ax
+	mov	bx,ax
+	mov	cx,4
+
+send_loop1:			; first pattern
+
+	xor	al,al		; first column
+	mov	ah,dh
+	and	ah,11110000b	; just top two pixels
+	or	ah,ah		; check for zero
+	jz	send_one
+	test	ah,10000000b	; twos place
+	jz	s320
+;	or	al,00101000b	; 0-5 significant
+s310:
+	test	ah,01000000b	; ones place
+	jz	s320
+	or	al,00101000b
+s320:
+ 	test	ah,00100000b	; twos
+ 	jz	send_one
+; 	or	al,00000101b
+s330:
+	test	ah,00010000b
+	jz	send_one
+	or	al,000101b
+send_one:
+	call	send
+	shl	dx,1
+	shl	dx,1
+	shl	dx,1
+	shl	dx,1
+	loop	send_loop1
+
+	mov	dx,bx		; restore char for next pattern
+	mov	cx,4
+send_loop2:
+	xor	al,al		; first column
+	mov	ah,dh
+	and	ah,11110000b	; just top two pixels
+	or	ah,ah		; check for zero
+	jz	send_two
+	test	ah,01000000b	; ones place
+	jz	s340
+	or	al,00010000b	; 0-5 significant
+s340:		   
+	test	ah,10000000b
+	jz	s350
+	or	al,00101000b	; only other
+s350:
+	test	ah,00010000b
+	jz	s360
+	or	al,00000010b
+s360:
+	test	ah,00100000b
+	jz	send_two
+	or	al,00000101b
+send_two:
+	call	send
+	shl	dx,1
+	shl	dx,1
+	shl	dx,1
+	shl	dx,1
+	loop	send_loop2
+	
+	mov	dx,bx
+	mov	cx,4
+
+send_loop3:		; first pattern
+
+	xor	al,al	; first column
+	mov	ah,dh
+	and	ah,11110000b	; just top two pixels
+	or	ah,ah	; check for zero
+	jz	send_three
+	test	ah,10000000b	; twos place
+	jz	s380
+;	or	al,00101000b	; 0-5 significant
+s370:
+	test	ah,01000000b	; ones place
+	jz	s380
+	or	al,00101000b
+s380:
+	test	ah,00100000b
+	jz	send_three
+;	or	al,00000101b
+s390:
+	test	ah,00010000b
+	jz	send_three
+	or	al,00000101b
+send_three:
+	call	send
+	shl	dx,1
+	shl	dx,1
+	shl	dx,1
+	shl	dx,1
+	loop	send_loop3
+
+	pop	dx
+	pop	cx
+	pop	bx
+	ret
+
+send3	endp
+
+sendtwo	proc	near
+; expands 640x200 mode byte in small mode
+;  bit is sent twice for 1280  3.56 x 3.33  7.11 x 6.66
+;	
+;	byte is in AL.
+;
+;	on =  x o   off = o o
+;	      o	x	  o o
+;	      x o	  o o
+
+	push	bx		; save some regs
+	push	cx
+	push	dx
+	
+	mov	dx,ax		; copy data byte in al to dl,bl
+	mov	bx,ax
+	
+	mov	cx,4		; do it with a loop
+	
+stwo1:
+	xor	al,al		; start out blank
+	test	dl,10000000b	; check top bit
+	jz	stwo10		; not set, skip to next
+	mov	al,00101000b	; if set reflect in data
+stwo10:
+	test	dl,01000000b	; check next
+	jz	stwo20		; do again. 
+	or	al,00000101b	; each byte is two verticle screen pixels
+stwo20:
+	call	send		; out to routine which prints or doesn't
+	shl	dl,1		; depending on line.
+	shl	dl,1		; now move data left 
+	
+	loop	stwo1		; and do it four times.
+	
+	mov	dx,bx		; get back copy
+	mov	cx,4		; and send again
+stwo2:
+	xor	al,al
+	test	dl,10000000b
+	jz	stwo30
+	mov	al,00010000b
+stwo30:
+	test	dl,01000000b
+	jz	stwo40
+	or	al,00000010b
+stwo40:
+	call	send
+	shl	dl,1
+	shl	dl,1
+	
+	loop	stwo2
+	
+	pop	dx
+	pop	cx
+	pop	bx
+
+	ret
+
+sendtwo	endp
+
+send_big_color	proc	near
+; take four pixel byte in al and expand to 24 x 6 to printer
+
+	push	bx
+	push	cx
+	push	dx
+		
+	mov	dx,ax		; copy data byte
+	mov	cs:data_byte,al
+	xor	bx,bx
+	mov	cx,6		; basically send for six vertical dot firings
+
+secloop1:
+	push	cx		; two loops, save first counter
+
+	mov	dl,cs:data_byte	; get original data
+	xor	dh,dh		; blank top half
+	mov	cx,4		; set up inner loop 
+secloop2:
+
+	xor	al,al		; clear printer byte
+	test	dl,11000000b	; see if its zero
+	jz	sec25
+	
+	shl	dx,1		; move bits in question into lower dh
+	shl	dx,1
+	and	dh,3		; discard others    11 binary
+	
+	cmp	dh,1 		; is it a one?
+	jnz	sec10		; no, try another
+	mov	al,cs:bigc1[bx]	; else use pattern 1
+	jmp	short sec30	; and go print
+	
+sec10:
+	cmp	dh,2		; is it a two?
+	jnz	sec20 		; no, then must be 3
+	mov	al,cs:bigc2[bx]	; else use pattern 2
+	jmp	short sec30	; off to print.
+	
+sec20:
+	mov	al,cs:bigc3[bx]	; determined to be 3
+	jmp	short sec30
+sec25:
+	shl	dx,1		; keep track of bits for zero case
+	shl	dx,1
+	
+sec30:	
+	call	send		; out to send routine
+						     
+	loop	secloop2	; do for each pixel
+	
+	pop	cx		; get back other counter
+	inc	bx
+	
+	loop	secloop1	; do six times
+	
+	pop	dx		; and we are done.
+	pop	cx
+	pop	bx
+	ret
+
+send_big_color	endp
+	
+	
+send_big_bw	proc	near
+; take four pixel byte in al and expand to 24 x 6 to printer
+
+	push	bx
+	push	cx
+	push	dx
+		
+	mov	dx,ax		; copy data byte
+	mov	cs:data_byte,al
+	mov	bl,010000b
+	mov	bh,000010b	; pattern
+	mov	cx,6		; basically send for six vertical dot firings
+
+sebloop1:
+	push	cx		; two loops, save first counter
+	xor	bx,11100111000b	; reverse pattern
+
+	mov	dl,cs:data_byte	; bl won't be changed
+	mov	cx,4		; set up inner loop 
+sebloop2:
+
+	xor	al,al		; clear printer byte
+	test	dl,10000000b	; check top
+	jz	seb10
+	
+	mov	al,bl		; else use pattern 1
+seb10:	
+			 
+	test	dl,01000000b
+	jz	seb20
+	or	al,bh
+	
+seb20:
+	shl	dl,1		; set up for next
+	shl	dl,1
+	
+seb30:	
+	call	send		; out to send routine
+						     
+	loop	sebloop2	; do for each pixel
+	
+	pop	cx		; get back other counter
+	
+	loop	sebloop1	; do six times
+	
+	pop	dx		; and we are done.
+	pop	cx
+	pop	bx
+	ret
+
+send_big_bw	endp
+
+
+lfcr	proc	near	; send a regular CR/LF combo
+	print	13
+	print	10
+	mov	ax,0
+	mov	cs:ptflag,al ; reset PTFLAG for next line
+;	mov	ax,cs:dstor  ; restore DS
+;	mov	ds,ax
+	ret		; onward
+lfcr	endp
+
+break?	proc	near	; Test for early exit
+	push	ax	; don't lose any regs. here
+	push	dx
+	mov	ah,01h	; call direct keyboard io (constat) by BIOS
+	int	16h
+	jnz	goback? ; if zero flag clear we have a character
+bcont:	pop	dx	; no char. return
+	pop	ax
+	ret
+goback?:
+	mov	ah,0
+	int	16h
+	cmp	al,1bh	; ESC
+	jz	back	; so go back, else return
+	jmp	short bcont	; no ESC exit
+back:	pop	dx	; ESC exit This doesn't check for Ctrl-Break
+	pop	ax	; so if it is hit we save it for the caller to handle
+	pop	ax	;DISCARD RETURN
+	cmp	cs:tmode_flag,TRUE
+	jne	GB10
+	call	reset_cursor
+GB10:
+	jmp	done	; and go back to orig. caller
+break?	endp
+
+; text_mode
+	
+; routines for text mode dump
+; 7/4/85
+; right shift will print with control chars and extended replaced by dots '.'
+; left shift will print graphics chars.
+
+	
+read_line	proc	near
+; read line from screen into buffer, calculate length and put in first pos.
+	
+	push	bp
+	mov	di,80h	; use default dta from original load
+	inc	di
+	
+	mov	dh,loop_count
+	xor	dl,dl
+	mov	bh,video_page
+	mov	bl,crt_cols
+	cld		; set auto-increment
+	
+rloop:
+	mov	ah,2	; set cursor
+	int	10h
+
+	mov	ah,8	; read att/char
+	int	10h
+	
+	or	al,al	; replace 0 with space
+	jz	rtl20
+	cmp	al,0ffh ; and 255
+	je	rtl20
+rtl10:	
+	stosb
+	
+	inc	dl
+	cmp	dl,bl
+	jne	rloop
+	
+	jmp	rtl_scan
+
+rtl20:
+	mov	al,' '	; replace space type chars with spaces
+	jmp	rtl10
+	
+rtl_scan:
+	dec	di	; set to last char
+	mov	si,80h	; length store
+	mov	cl,bl	; loop for length
+	xor	ch,ch
+	mov	al,' '	; search for spaces
+	std		; set auto_decrement
+	
+	repe	scasb	; search backwards until 0 or non-space
+
+	je	rtl30
+
+	inc	cl	; adjust for count of characters, else cl is zero
+rtl30:	
+	mov	[si],cl
+	cld
+
+rtlret:		    
+	pop	bp
+	ret
+	
+	
+read_line	endp
+
+do_extended	proc	near
+
+	mov	al,'.'
+	call	send2
+	ret
+	
+do_extended	endp
+	
+do_control	proc	near
+	
+	mov	al,'.'
+	call	send2
+	ret
+	
+do_control	endp
+
+
+print_line	proc	near
+; use info in buffer to print
+
+	mov	si,80h
+	lodsb		; get length
+	or	al,al
+	jnz	pl10
+plret:	
+	ret
+pl10:
+	mov	cl,al
+	xor	ch,ch
+	cld
+ploop:
+	lodsb
+	cmp	al,127
+	ja	pl_extended
+	cmp	al,32
+	jb	pl_control
+
+	call	send2
+plnext:	
+	loop	ploop
+	
+	jmp	plret
+       
+pl_extended:
+	call	do_extended
+	jmp	plnext
+pl_control:
+	call	do_control
+	jmp	plnext
+
+print_line	endp
+	
+
+do_text_mode	proc	near
+; comes in just after test for mode, but before shift key check
+
+	mov	cs:crt_cols,ah
+	mov	cs:video_page,bh
+	mov	cs:tmode_flag,TRUE
+
+	mov	ax,40h	; Get the keyboard shift flag
+	mov	ds,ax	; segment
+	mov	si,17h	; and address
+	mov	ax,[si] ; pick it up
+	and	ax,3	; get rid of other stuff
+	or	ax,ax	; Mod. to create default small
+	jnz	tr1	; for case where routine is called as a subroutine.
+	mov	ax,cs:default_routine
+tr1:	mov	cs:oneor2,al	; store for later
+
+	mov	ax,cs
+	mov	ds,ax	; set data to here
+	mov	es,ax
+			 
+	mov	ah,3
+	int	10h	; read cursor pos.
+	mov	cursor_pos,dx ; save
+
+	mov	byte ptr loop_count,0	
+tmode_loop:
+	
+	call	read_line ; read in entire line
+	call	print_line ; send to printer
+	call	lfcr
+	call	break?
+			 
+	mov	al,loop_count
+	inc	al
+	mov	loop_count,al
+	cmp	al,MAX_LINES
+	jnz	tmode_loop
+
+	call	reset_cursor
+	jmp	done
+
+reset_cursor:	
+	mov	dx,cursor_pos	; restore cursor
+	mov	bh,video_page
+	mov	ah,2
+	int	10h
+	
+	mov	tmode_flag,FALSE
+
+	ret
+
+do_text_mode	endp
+
+
+last	dw	0	; this marks end of resident code.
+			; DON'T put anything below here you expect to use
+			; after initialization.
+
+buffer	db	'        TOSHIBA(tm) P1340, P1351, P351',13,10
+	db	'            Screen Printer  v 1.1',13,10,10
+	db	' ==>            Graphics Mode:',13,10
+	db	'      Right Shift PrtSc = small graphics',13,10
+	db	'      Left Shift PrtSc = LARGE GRAPHICS',13,10
+	db	' ==>              Text Mode:',13,10
+	db	'    Right Shift PrtSc = quick screen print',13,10
+	db	'Left Shift PrtSc = extended characters printed',13,10,10
+	db	'    ESCape will exit at the end of a line.',13,10,'$'
+werehere db	' ** TOSHIBA.COM is already resident **',13,10,10
+	db	' There is no need to reinstall.',13,10,'$'
+initr	proc	far
+initial:
+	mov	ax,0	; get addr of
+	mov	ds,ax	; print screen routine
+	mov	si,14h	; in rom
+	mov	ax,[si] ; from interrupt table in ram
+	inc	si
+	inc	si
+	mov	dx,[si]
+
+	mov	word ptr cs:old_print_routine,ax
+	mov	word ptr cs:old_print_routine+2,dx
+	mov	cx,offset last-offset start
+	mov	di,ax
+	mov	si,offset start
+	cmp	dx,0efffh	; if routine points to ROM, ours is not it.
+	ja	initok
+	cmp	si,di
+	jne	initok		; if start location not same, it can't be ours.
+
+	; otherwise check to see if this routine is
+
+	mov	es,dx		; already in memory, and don't reinstall if so.
+	mov	ax,cs
+	mov	ds,ax
+	repe	cmpsb
+
+
+	or	cx,cx		; cx=0 means there is a copy of this at the
+	jnz	initok		; other address.
+	mov	dx,offset werehere
+	mov	ah,9		; so we print a message and
+	int	21h		; abort.
+	int	20h
+initok:
+
+;	 mov	 ds,ax
+;	 mov	 al,0f1h ; move it to
+;	 mov	 ah,25h
+;	 int	 21h	 ; int f1h described in tech. manual as unused vector
+	mov	ax,cs	; reset int 5
+	mov	ds,ax	; to point to
+	mov	ax,offset start ; this routine
+	mov	dx,ax
+	mov	al,5
+	mov	ah,25h	; dos routine to reset int. vector
+	int	21h
+	mov	ax,offset buffer
+	mov	dx,ax
+	mov	ah,9
+	int	21h	; print greeting
+	mov	ax,3000h  ; get dos version
+	int	21h
+	or	al,al
+	jz	dos1
+	mov	ax,offset last
+	mov	cx,16
+	xor	dx,dx
+	div	cx
+	inc	ax	; make number of paragraphs
+	mov	dx,ax
+	mov	al,0	; exit code
+	mov	ah,31h	; terminate process, keep resident
+	int	21h
+
+dos1:
+	mov	dx,offset last	; last address here
+	inc	dx
+	int	27h	; terminate but stay resident
+initr	endp
+cseg	ends
+	end	init
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

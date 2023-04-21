@@ -35,6 +35,45 @@ machines:
     computer pay for itself in time, money, and ease of use.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2263.TXT
+
+{% raw %}
+```
+Disk No: 2263                                                           
+Disk Title: The Order Pro                                               
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: THE ORDER PRO                                            
+Author Version: 2.0                                                     
+Author Registration: $99.95                                             
+Special Requirements: 512K RAM, and a hard drive.                       
+                                                                        
+If you run a mail order business, you know how important it is to track 
+your daily operations.  Here's a menu-driven program that's specifically
+designed to completely automate the mail order business.  This program  
+is the successor the earlier OFFICE PRO.  It offers a complete range of 
+features including dBASE compatibility, order entry, inventory control, 
+mailing labels, invoices, packing slips, accounts receivable, vendor    
+tracking, financial reports, sales tracking reports, inventory reports  
+and back order reports.                                                 
+                                                                        
+The software comes with a succinct five page "getting started" manual.  
+It clearly directs the startup and walks you through the beginning      
+steps. Whether your business is seasoned or just getting started, THE   
+ORDER PRO can offer the kind of help that makes a computer pay for      
+itself in time, money and ease of use.                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2263
 

@@ -56,6 +56,64 @@ machines:
     PITCHERS KEY  Data file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES853.TXT
+
+{% raw %}
+```
+Disk No   853
+Program Title:  SPORTS LOG demo version
+PC-SIG version 1.1
+ 
+If you read the sports page every day avidly, you'll find that you'll
+never be able to figure out how you were unable to live without this
+PC-SIG disk!
+ 
+SPORTS LOG allows you to track games from the NFL, NBA, and many other
+sport leagues.  You enter the names of the teams in the game and the
+point spread, then your bet on the games.  Once this is done, you can
+enter the results of the games, and the program will figure out your
+accounts automatically and tell you whether you made or lost money in
+each account.
+ 
+SPORTS LOG also prints a profit-and-loss statement, and lets you entrust
+your gambling urges to a warning system that flags unsettling
+imbalances.  This version of the program is limited to one entry, or
+game, but is fully functional in that aspect.
+ 
+Usage:  Sports Tracking System.
+ 
+Special Requirements:  None.
+ 
+How to Start:  Type GO (press enter).
+ 
+Suggested Registration:  $25.00
+ 
+File Descriptions:
+ 
+CONFIG   SYS  Configuration file.
+DEMO     BAT  Starts demo.
+???????? INT  Data file (9 files).
+ISAM     EXE  Run-time module.
+RUNCOB   EXE  Run-time module.
+BOOKFILE      Data file.
+BOOKFILE KEY  Data file.
+LINEFILE      Data file.
+LINEFILE KEY  Data file.
+PITCHERS      Data file.
+PITCHERS KEY  Data file.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0853
 

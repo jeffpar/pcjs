@@ -14,6 +14,57 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1355.TXT
+
+{% raw %}
+```
+Disk No: 1355
+Program Title: TLC FOR TRUCKS version 2.1 (Disk 2 of 2)
+PC-SIG Version 1.2
+
+This is the second disk of TLC FOR TRUCKS, the first disk of this set is
+#1085.  You Both disks are required to run the program.  For a full
+description of the program, please refer to disk #1085.
+
+Usage:  Fleet Tracking/Database.
+
+Special Requirements:  320K memory and a printer for some reports. 640K
+and a hard drive are recommended for larger fleet applications.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $20.00
+
+File Descriptions:
+
+BIDLIST  DBF  Data file.
+CREW     NDX  Index file.
+DESCRIP  DBF  Data file.
+FUELNO   NDX  Index file.
+FUELS    DBF  Data file.
+LICENSE  NDX  Index file.
+NUMBER   NDX  Index file.
+OPERATOR NDX  Index file.
+REPAIRS  DBF  Data file.
+REPAIRS  NDX  Index file.
+SCHEDIV  NDX  Index file.
+SCHEDULE DBF  Data file.
+SCHEDULE NDX  Index file.
+VIN      NDX  Index file.
+
+PC-SIG
+1030-D East Duane Avenue
+Sunnyvale, CA 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1355
 

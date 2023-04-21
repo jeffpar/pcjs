@@ -15,6 +15,43 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2646.TXT
+
+{% raw %}
+```
+Disk No: 2646                                                           
+Disk Title: Mercury                                                     
+PC-SIG Version: 1.0                                                     
+                                                                        
+Program Title: Mercury                                                  
+Author Version: 2.0                                                     
+Author Registration: $49.00                                             
+Special Requirements: 640K RAM, hard drive, and graphics monitor.       
+                                                                        
+MERCURY is a program for solving equations similar to Borland's Eureka. 
+Easy to use, interactive, and powerful, MERCURY evaluates mathematical  
+expressions, solves for the roots of an equation, solves a system of    
+equations, and maximizes or minimizes a function, with or without       
+constraints. In addition, you can evaluate derivatives and definite     
+integrals, plot one or more functions, and print a report or a graph.   
+                                                                        
+MERCURY has a built-in editor, pull-down menus, online help, and all the
+conveniences necessary to make it accessible to computer novices.       
+                                                                        
+Find out why this program made the Top 10 Shareware list two months in a
+row!                                                                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2646
 

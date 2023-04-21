@@ -28,6 +28,61 @@ machines:
     instant retrieval.  Never miss another appointment because you "forgot."
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## APPT.TXT
+
+{% raw %}
+```
+1     4  Happy Birthday DOS!
+```
+{% endraw %}
+
+## FILE1792.TXT
+
+{% raw %}
+```
+Disk No: 1792                                                           
+Disk Title: APPTracker                                                  
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: APPTracker                                               
+Author Version: 1.6                                                     
+Author Registration: $20.00                                             
+Special Requirements: None.                                             
+                                                                        
+Keep track of all of your appointments whether they're this afternoon,  
+next month or next year.  Clean, crisp screens and a direct, effective  
+approach make this datebook a pleasure to use.                          
+                                                                        
+All of your commitments are available from one screen with on-line Help 
+a key-stroke away.  Save all of your datebooks for record-keeping and   
+instant retrieval.  Never miss another appointment because you "forgot".
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## TODO.TXT
+
+{% raw %}
+```
+
+
+
+
+
+
+
+1- Register APPTracker
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1792
 

@@ -15,6 +15,83 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2565.TXT
+
+{% raw %}
+```
+Disk No: 2565                                                           
+Disk Title: Dan Buerg Utilities                                         
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Dan Buerg Utilities (List)                               
+Author Version: 7.5F                                                    
+Author Registration: 20.00                                              
+Special Requirements: None.                                             
+                                                                        
+LIST lets you scroll up, down, left, and right through documentation or 
+data files.  Search for specific data.  LIST uses wildcards to let you  
+browse a series of related files with only one command.  LIST also has  
+hex display, screen wrap, strip high bits, split screen, rulers, and    
+much more.  Supports 43-line and 132-column modes on EGA.  Prints files 
+and has a phone dialer.                                                 
+                                                                        
+Other features include:                                                 
+                                                                        
+ ~ View contents of ZIP, ARC, and LZH files (including self-extracting  
+   files).  You need PKZIP, LHARC, and a hard disk to use this feature. 
+                                                                        
+ ~ A small file management utility to copy, delete, rename, etc.  Call  
+   your favorite text editor from this DIR listing.                     
+                                                                        
+ ~ Bookmark, DOS shell now callable from within the program.            
+                                                                        
+ ~ Supports mouses and LANs.                                            
+                                                                        
+ ~ Paste data from the file being viewed to another file.               
+                                                                        
+ ~ Execute programs from within LIST itself.                            
+                                                                        
+LIST also has the ability to search a group of files for hex data or    
+text strings. with one command.                                         
+                                                                        
+Other niceties are the split screen display, extensive documentation,   
+and the 3-program setup.  There are small, medium, and large versions   
+included.  Pick the one that has just enough features and a small enough
+.COM file size (from 9k to 20k) for you.                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║           <<<<  DISK #2565  DAN BUERG UTILITIES  >>>>         ║
+    ╠═══════════════════════════════════════════════════════════════╣
+    ║ To print the documentation for LIST, type:                    ║
+    ║                 COPY LIST.DOC PRN  (press Enter)              ║
+    ║                                                               ║
+    ║ To start List, type:  "LIST" (press Enter)                    ║
+    ║                                                               ║
+    ║ To print out the mailer form, type:  COPY MAILER PRN  (Enter) ║
+    ║                                                               ║
+    ║ To view update information, type:  TYPE WHATSNEW  (Enter)     ║
+    ║                                                               ║
+    ║                                                               ║
+    ║                              (c) Copyright 1991, PC-SIG Inc.  ║
+    ╚═══════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2565
 

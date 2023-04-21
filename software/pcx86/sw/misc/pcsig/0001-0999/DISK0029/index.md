@@ -50,6 +50,7 @@ machines:
 
 ## BALANCE.BAS
 
+{% raw %}
 ```bas
 10 PRINT "REMAINING BALANCE ON A LOAN"
 20 PRINT
@@ -78,9 +79,11 @@ machines:
 260 IF X=1 THEN 20
 270 END
 ```
+{% endraw %}
 
 ## BESTLINE.BAS
 
+{% raw %}
 ```bas
 240 CLS
 250 PRINT TAB(30)"LINEAR REGRESSION":PRINT :PRINT
@@ -126,9 +129,11 @@ machines:
 650 GOTO 590
 660 END
 ```
+{% endraw %}
 
 ## BOND.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -236,9 +241,11 @@ machines:
 1040 RETURN
 1050 END
 ```
+{% endraw %}
 
 ## BUDGET.BAS
 
+{% raw %}
 ```bas
 100 REM TYPED BY CONNIE FOSTER ,CORRECTED BY C.FOSTER ,PROG BY O.E.DIAL
 110 REM ALL REM STATEMENTS CAN BE CHANGED TO ALLOW USE OF TWO TERMINALS
@@ -459,9 +466,11 @@ machines:
 2240 REM
 2250 REM
 ```
+{% endraw %}
 
 ## COMPOUND.BAS
 
+{% raw %}
 ```bas
 10 CLS:DEFDBL A-Z
 20 KEY OFF
@@ -489,9 +498,72 @@ machines:
 240 IF Z$<>"N" AND Z$<>"n" THEN 210
 250 END
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #29, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  BUDGET  .BAS         CRC = 62 B8
+
+--> FILE:  BESTLINE.BAS         CRC = E7 3B
+
+--> FILE:  NUMERIC .BAS         CRC = F1 38
+
+--> FILE:  MEAN    .BAS         CRC = 60 F4
+
+--> FILE:  REGRESS .BAS         CRC = BF 0C
+
+--> FILE:  BALANCE .BAS         CRC = 62 C0
+
+--> FILE:  INCOME  .BAS         CRC = ED C7
+
+--> FILE:  TREASURY.BAS         CRC = 2E AB
+
+--> FILE:  BOND    .BAS         CRC = 35 E6
+
+--> FILE:  COMPOUND.BAS         CRC = 57 B4
+
+--> FILE:  LEASE   .BAS         CRC = DF 16
+
+--> FILE:  PVTAX   .BAS         CRC = E5 49
+
+--> FILE:  FUTURE  .BAS         CRC = 22 1A
+
+--> FILE:  NETPREST.BAS         CRC = D6 01
+
+--> FILE:  CRITICAL.BAS         CRC = 78 A3
+
+--> FILE:  PERT    .BAS         CRC = 7A E6
+
+ ---------------------> SUM OF CRCS = 17 FA
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## CRITICAL.BAS
 
+{% raw %}
 ```bas
 10 REM  CRITICAL PATH METHOD (CPM)
 20 REM  A()=START AND END NODES FOR EACH ACTIVITY
@@ -581,9 +653,11 @@ machines:
 860 GOTO 300
 870 END
 ```
+{% endraw %}
 
 ## FUTURE.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -622,9 +696,11 @@ machines:
 350 IF Z$<>"N" AND Z$<>"n" THEN 310
 360 END
 ```
+{% endraw %}
 
 ## INCOME.BAS
 
+{% raw %}
 ```bas
 10 REM  ///// INCOME AVERAGING /////
 20 REM  CLEAR SCREEN
@@ -970,9 +1046,11 @@ machines:
 3420 DATA 68,108300,87790,70,161300
 3430 END
 ```
+{% endraw %}
 
 ## LEASE.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -1059,9 +1137,11 @@ machines:
 830 IF Z$<>"N" AND Z$<>"n" THEN 790
 840 END
 ```
+{% endraw %}
 
 ## MEAN.BAS
 
+{% raw %}
 ```bas
 10 PRINT "MEAN, VARIANCE,  ";
 20 PRINT "STANDARD DEVIATION"
@@ -1105,9 +1185,11 @@ machines:
 390 INPUT S
 400 IF S=1 THEN 30
 ```
+{% endraw %}
 
 ## NETPREST.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -1155,9 +1237,11 @@ machines:
 440 IF Z$<>"N" AND Z$<>"n" THEN 400
 450 END
 ```
+{% endraw %}
 
 ## NUMERIC.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -1215,9 +1299,11 @@ machines:
 540 GOTO 90
 550 END
 ```
+{% endraw %}
 
 ## PERT.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -1321,9 +1407,11 @@ machines:
 1000 GOTO 840
 1010 END
 ```
+{% endraw %}
 
 ## PVTAX.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -1356,9 +1444,11 @@ machines:
 290 IF Z$<>"N" AND Z$<>"n" THEN 250
 300 END
 ```
+{% endraw %}
 
 ## REGRESS.BAS
 
+{% raw %}
 ```bas
 10 PRINT "LINEAR REGRESSION"
 20 PRINT
@@ -1401,9 +1491,11 @@ machines:
 440 GOTO 390
 450 END
 ```
+{% endraw %}
 
 ## TREASURY.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 20 CLS
@@ -1463,6 +1555,7 @@ machines:
 560 RETURN
 570 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

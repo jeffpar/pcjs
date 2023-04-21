@@ -34,6 +34,98 @@ machines:
     access to link file data.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1741.TXT
+
+{% raw %}
+```
+Disk No: 1741                                                           
+Disk Title: A2Z Disk 2 of 2 (also 1740)                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: A2Z                                                      
+Author Version: 4.0                                                     
+Author Registration: $25.00 individual  registration, $195.00 corporate 
+Special Requirements: None.                                             
+                                                                        
+A2Z is an unusual database manager with rudimentary relational          
+capabilities in that it is able to link files of related data in which  
+the data to be linked have a common record number.  It supports three   
+types of fields: 1) character fields, or combinations of texts and      
+numbers which are not to be acted on mathematically (added, subtracted, 
+multiplied, divided); 2) numeric fields, which are acted on             
+mathematically and may be carried out to four decimal places; and 3)    
+money fields, which are also acted on mathematically, but are carried   
+out to two decimal places.                                              
+                                                                        
+A2Z consists of a series of relatively small .COM files, which act upon 
+macro file modules to perform operations like creating, sorting,        
+viewing, etc.  Databases consist of a series of related files, each     
+containing the information required for the macro files to perform their
+respective tasks.  This enables A2Z to carry out database operations    
+very quickly.                                                           
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## TIPS.DOC
+
+{% raw %}
+```
+A2Z is one of the most flexible Data Base Management Systems.  With the
+VIEW task one can change the data dictionary view of the database.  With
+the NEXT task one can reset the next available record pointer at any time.
+With the ZOOM task on can expand your data base as necessary.
+
+However, one can AVOID considerable time re-engineering the data base if
+the following design TIPS are followed:
+
+1)  BEFORE entering real data, build a test data base of 25 records and
+    use this to test your application.  AFTER your application is TESTED,
+    then use ZOOM to expand the data base to the desired size
+
+2)  PROFILE NAMES need NOT be used unless the application requires
+    multiple reports
+
+3)  PLAN your data base with FUTURE needs in mind.  For example, make
+    ZIPCODE 9 characters to allow for expansion
+
+4)  SEPARATE data into the SMALLEST useable form.  For example, separate
+    name into LAST, FIRST, and MI
+
+5)  POSITION the MOST ACCESSED data fields at the FRONT of the RECORD
+    to avoid paging down to get to the field
+
+6)  FIELD NAMES also function as COLUMN NAMES.  Avoid OBSCURE names and
+    names which are LONGER than the FIELD
+
+7)  ANY field can be SORTED, but take care that the CONTENT of the field
+    is UNIFORM so that the sorted order is what is EXPECTED
+
+8)  NUMERIC or MONEY fields are for calculations or subtotals.  EVERYTHING
+    else should be CHARACTER
+
+9)  Avoid OVERFLOWs by making NUMERIC and MONEY fields as large as necessary
+
+9)  RELATE the DATA to the RECORD NUMBER.  FOR EXAMPLE, assign CUSTOMER or
+    PART numbers the REC number.  ALL records can then be DIRECTLY ACCESSED
+    by REC number!  In fact, A2Z uses the REC number to access MULTIPLE files
+    dynamically.  RELATED files must match the ROOT file REC for REC, for
+    example, REC 44 of the ROOT file and the LINKED file should contain
+    related data
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1741
 

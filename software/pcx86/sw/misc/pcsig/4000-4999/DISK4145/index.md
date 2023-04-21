@@ -14,6 +14,35 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## BBS&DIST.DOC
+
+{% raw %}
+```
+
+
+The EducAtlas programme may be distributed at the present conditions :
+
+- EducAtlas must be complete with ALL files !
+
+- EducAtlas (main programme and other files) must be intact without
+any modification.
+
+- you must not demand more than 10 US $ for the distribution of this programme.
+
+For more information :
+write to : F. Jarraud, 3 place Kennedy, 92130 ISSY, FRANCE
+
+E-mail : francois.jarraud@p2.f1.n320.z2.fidonet.org
+
+Join me on the parisian BBS "Modula" : (33) 140 43 01 24 & (33) 145 30 12 48
+                                       v22bis/v32/v32bis/v42/v42bis/HST
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #4145
 

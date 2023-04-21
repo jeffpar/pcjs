@@ -45,6 +45,7 @@ machines:
 
 ## ABC.BAS
 
+{% raw %}
 ```bas
 10 '                            A B C . B A S
 20 '                                            Modified 8/10/86 10:46 pm
@@ -189,9 +190,694 @@ machines:
 1410     PUT (X,Y),Y,PSET : RETURN
 1420     PUT (X,Y),Z,PSET : RETURN
 ```
+{% endraw %}
+
+## AMY.DOC
+
+{% raw %}
+```
+
+
+
+        
+                  A M Y ' S   F I R S T   P R I M E R
+        
+        
+        
+        
+                 Six delightful programs will give your 
+        
+                 child a head start in school, teaching
+        
+                              the alphabet
+        
+                                 numbers  
+        
+                                 shapes
+        
+                                 colors
+        
+                                counting
+        
+                                matching
+        
+                          pattern recognition
+        
+                          and problem solving.
+        
+        
+        
+        
+                        Recommended for ages 4-8.
+        
+        
+                     Requires an IBM PC, XT, or PCjr 
+               with 128K RAM, BASICA, color display or TV,
+           IBM color graphics adapter or EGA graphics adapter.
+        (Does not work with Hercules Monochrome Graphics Adapter)
+        
+               Authors:  Rob, Garth, and John Robinson
+        
+                Copyright 1985, Computing Specialties
+                                Orange City, IA 51041
+        
+
+
+
+        
+                          AMY'S FIRST PRIMER
+        
+                          Table of Contents
+        
+        
+                Introduction . . . . . . . . . . . .  1
+        
+                Starting Amy's First Primer. . . . .  2
+        
+                Stopping Amy's First Primer. . . . .  3
+        
+                The Keyboard . . . . . . . . . . . .  3
+        
+                The Menu . . . . . . . . . . . . . .  4
+        
+                The ABC Song . . . . . . . . . . . .  5
+        
+                Beary Fun Letters. . . . . . . . . .  6
+        
+                Bunny Letters. . . . . . . . . . . .  7
+        
+                Beary Fun Counting . . . . . . . . .  8
+        
+                Help the Froggy. . . . . . . . . . .  9
+        
+                Load the Truck . . . . . . . . . . . 10
+        
+                Preparing a New Disk . . . . . . . . 11
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+
+
+        
+                          AMY'S FIRST PRIMER
+        
+        
+                             INTRODUCTION
+        
+        Programs for young children are hard to find.  They 
+        must be extremely simple to use, very colorful and 
+        attractive, and they need to be fun and free of nega-
+        tive rewards.  Our own five year old Amy wouldn't 
+        spend five minutes with the programs her older 
+        brothers enjoyed.  She didn't like the idea of 
+        destroying things or being destroyed.  In addition to 
+        being frustrated with the family computer, Amy's 
+        birthday came on September 8, forcing her to wait 
+        almost a year longer than some of her friends before 
+        going to kindergarten.
+        
+        Amy's First Primer was written by her father and 
+        brothers to help her work on the things her kinder-
+        garten friends were doing.  After much testing and 
+        reprogramming, the programs finally met Amy's full 
+        approval.  We think your child will approve, too.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                
+                
+                                 Page 1    
+
+
+
+        
+                     STARTING AMY'S FIRST PRIMER
+        
+        If the disk is brand new, you should make a backup 
+        copy of the disk first for your own protection and 
+        then use that disk.  The section at the end of this 
+        guide on "Preparing a New Disk" will help you make a 
+        backup copy of the disk and place the DOS operating 
+        system on it.  Steps 1 and 2 below will only work if 
+        you have made a new disk with DOS on it.  Step 3 below 
+        will work even on the original disk.
+        
+        You may use one of the following steps to start Amy's 
+        disk:
+        
+        1.   If the computer power is off, just put Amy's disk 
+             in drive A and turn the power on.
+        
+                   or
+        
+        2.   If the power is already on, put Amy's disk in 
+             drive A and press the keys CTRL, ALT, and DEL 
+             simultaneously, causing a warm boot.
+        
+                   or
+        
+        3.   If you just want to see how the original disk 
+             works, Place a DOS disk with BASICA.COM in
+             drive A and boot the system.  Then place Amy's 
+             disk in drive B: and type:
+        
+                        B:
+                        A:BASICA START
+        
+             
+        
+        
+        
+        
+                
+                
+                                 Page 2    
+
+
+
+        
+                       STOPPING AMY'S FIRST PRIMER
+        
+        To quit playing with Amy's disk, perform one of the 
+        following:
+        
+             1.  Take the disk out and turn the computer off.
+        
+                      or
+        
+             2.  Press <CTRL/Break> and then type SYSTEM.
+        
+        
+        
+                             THE KEYBOARD
+        
+        There are a few important keys to learn for Amy's 
+        First Primer:
+        
+        ARROW KEYS - Used for moving objects on the screen.
+                     Up, down, right or left.
+        
+        ENTER      - or RETURN - used in the menu program to call 
+                     up the program that the arrow is pointing to.
+        
+        ESC        - Used at any time in any of the six 
+                     programs to quit and return to the menu.
+        
+        The behavior of the keys has been modified to suit the 
+        expectations that young children have.  When an arrow 
+        key is pressed, an object will move and continue to 
+        move until the key is released, then it will stop 
+        immediately.
+        
+        
+        
+        
+        
+        
+                
+                
+                                 Page 3    
+
+
+
+        
+                               THE MENU
+        
+        The menu displays the six titles for the programs 
+        along with pictures that will help your child 
+        recognize the programs.  Select a program by pressing
+        the up or down arrow keys until the big blue arrow
+        is pointing to the desired program, then press the
+        ENTER key to run the program.  The program titles are:
+        
+                          ABC Song
+                          Beary Fun Letters
+                          Bunny Letters
+                          Beary Fun Counting
+                          Help the Froggy
+                          Load the Truck
+        
+        If your child is just beginning to learn the alphabet, 
+        we suggest that you start with the ABC Song and move 
+        from there to Beary Fun Letters and Bunny Letters.  
+        The ABC Song will help to associate the letters with 
+        the pictures.
+        
+        Beary Fun Counting is used for number recognition and 
+        counting.  Help the Froggy is a delightful maze for 
+        problem solving, and Load the Truck is used for 
+        pattern recognition and matching.
+        
+        To quit playing with Amy's disk, perform one of the 
+        following:
+        
+             1.  Take the disk out and turn the computer off.
+        
+                       or
+        
+             2.  Press <CTRL/BREAK> and then type SYSTEM.
+        
+        
+        
+                
+                
+                                 Page 4    
+
+
+
+        
+                             THE ABC SONG
+        
+        The purpose of the ABC Song is to help associate the 
+        pictures with the letters.  The program will play the 
+        song over and over again, until the ESC key is 
+        pressed.  All other keys are ignored.  The ESC key 
+        will stop the song, and bring the menu back.
+        
+        Sing along with your child the first few times.  Even 
+        if your child already knows the ABC Song, she or he 
+        will start recognizing the individual letters as they 
+        are displayed.  I can remember wondering what an 
+        "eleminopee" was when I first started singing the ABC 
+        song.  Since a new picture is displayed with each 
+        letter, your child will actually start to realize that 
+        l, m, n, o and p are separate letters.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                
+                
+                                 Page 5    
+
+
+
+        
+                          BEARY FUN LETTERS
+        
+        Beary Fun Letters is used for learning the keyboard 
+        and the printed letters.  The program starts by 
+        displaying a picture on the screen.  It then waits 
+        until the proper key is pressed on the keyboard.  The 
+        proper key will be the first letter of the picture 
+        name in all cases.  The picture names are:
+        
+                  Apple          Jug            Snail
+                  Boat           Kite           Truck
+                  Car            Ladder         Umbrella
+                  Diamond        Moon           Violin
+                  Elephant       Number Nine    Wagon
+                  Fish           Owl            Xylophone
+                  Girl           Peanut         Yo-yo
+                  Hat            Queen          Zebra
+                  Ice cream      Ring
+                  
+        If the key isn't pressed after four seconds, the 
+        program will display both the lower and upper case 
+        form of the letter on the screen.  It will continue to 
+        wait until the key is pressed.  When the proper key is 
+        pressed, a happy bear face is placed on the border of 
+        the screen.  When the border is full, the game is over 
+        and the ABC song will be played.  The game will then 
+        be repeated.  The ESC key may be pressed at anytime to 
+        return to the menu.
+                  
+        You can help a lot, the first few times your child 
+        plays this game by saying the picture name and the 
+        first letter out loud.  For example, if a wagon is 
+        displayed, say "Wagon - W" and then help find the 
+        letter W on the keyboard.
+        
+        
+        
+        
+                
+                
+                                 Page 6    
+
+
+
+        
+                            BUNNY LETTERS
+        
+        Bunny Letters is a matching game.  It places four 
+        pictures on the left side of the screen and four 
+        letters (both lower and upper case) on the right side.  
+        The letters are not in the same order as the pictures.  
+        A bunny is placed next to the top picture.
+        
+        Use the arrow keys to move the bunny up, down, left or 
+        right toward the corresponding letter.  When the bunny 
+        reaches the proper letter, a blue line is drawn from 
+        the picture to the letter and the bunny is placed on 
+        the right side of the screen.
+        
+        A new bunny will be placed beside the next picture.  
+        When all pictures have been matched with their 
+        letters, a special bunny is placed at the top of the 
+        screen to indicate that a set of four matches has been 
+        completed.  The screen is then erased and a new set of 
+        four matches are displayed.  When five sets of matches 
+        are played, the game is over and the ABC song is 
+        played.
+        
+        The ESC key may be pressed at anytime to return to the 
+        menu.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                
+                
+                                 Page 7    
+
+
+
+        
+                          BEARY FUN COUNTING
+        
+        Beary Fun Counting works the same as Beary Fun 
+        Letters, except that it displays a set of fruit on 
+        the screen for the child to count.  It then waits 
+        patiently until the child presses the proper number.
+        
+        When the proper key is pressed, a happy bear face is 
+        placed on the border of the screen.  When the border 
+        is full, the game is over and a congratulations 
+        message is displayed.  The game will then be repeated.  
+        The ESC key may be pressed at any time to return to 
+        the menu.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                
+                
+                                 Page 8    
+
+
+
+        
+                           HELP THE FROGGY
+        
+        This is a hungry frog and she needs help finding her 
+        way to the lily pad.  Use the arrow keys to guide her 
+        through the maze to the lily pad.  Once on the lily 
+        pad, the frog is ready for dinner.  There's usually a 
+        fly buzzing close by and frogs love flies.  Each maze 
+        takes approximately one minute to generate, and since 
+        each one is built using a random number generator, 
+        there will be a new, unique maze each time.
+        
+        The song "Froggy Went a Courting" will be played while 
+        a new maze is being built.
+                  
+        Help the Froggy will be repeated until the ESC key is 
+        pressed to return to the menu.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                
+                
+                                 Page 9    
+
+
+
+        
+                            LOAD THE TRUCK
+        
+        Children have always liked playing with trucks and 
+        loaders, and Load the Truck is no exception.  The top 
+        right corner of the screen contains an order for four 
+        shapes.  Use the arrow keys to guide the loader around 
+        the screen.  The truck must be loaded so that it shows 
+        the same pattern as the order form.  
+        
+        Load the Truck is a carefully designed simulation.  
+        Just like the other programs, it never scolds the 
+        child or even complains about finding the wrong shape.  
+        It patiently waits until the loader scoop reaches the 
+        bottom of the right shape.  It then raises the hoist, 
+        picking up the shape.   Patience again is the rule, 
+        until the loader reaches the edge of the trailer.  
+        Then the loader slides the shape onto the truck and 
+        lowers the hoist, ready for finding a new shape.  All 
+        that the child has to do is use the arrow keys to 
+        guide the loader to the right spots in the proper 
+        sequence.  When all four shapes are on the truck, the 
+        loader must be moved back up the screen, so that it 
+        will be out of the way for the tractor.  As soon as 
+        the loader is out of the way, the tractor will back up 
+        and haul the load away.
+        
+        Load the Truck will be repeated until the ESC key is 
+        pressed to return to the menu.  A new random order
+        is generated for each game.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                
+                
+                                 Page 10  
+
+
+
+        
+                         PREPARING A NEW DISK
+        
+        Your first job with Amy's disk should be to make a 
+        backup copy of the disk.  Just follow these steps.
+        The steps assume that your PC has two floppy drives.  
+        
+        1.  Put a write protect tab on Amy's disk, so that any 
+            mistake in the steps below will not destroy it.
+        
+        2.  Put a DOS system disk in drive A and boot the 
+            system.
+        
+        3.  When the "A>" prompt appears, type the command:          
+        
+                                        FORMAT/S B:
+        
+        4.  The program will ask you to 
+             
+                Insert new diskette for drive B:
+                and strike any key when ready
+        
+            Make sure that it's asking you to put the disk in 
+            drive B:, then put a new blank disk in drive B:.  
+            and pick a key to press.  
+        
+        5.  After the disk is formatted, it will ask you:
+        
+                Format another (Y/N)?
+        
+            Press the letter N to return to the "A>" prompt.
+        
+        6.  Now type the command:
+        
+                                     COPY  A:BASICA.COM  B:
+        
+        
+        
+        
+                
+                
+                                 Page 11  
+
+
+
+        
+        7.  Remove the DOS disk from drive A: and place the 
+            original disk for Amy's First Primer in drive A:.
+            Now type the command:
+        
+                                     COPY  A:*.*   B:
+        
+        7.  When all files are copied, your disk will be ready.
+            It contains both DOS and Amy's First Primer.
+        
+        8.  To test your new disk, place it in drive A: and 
+            reboot the system by pressing the CTRL-ALT-DEL 
+            keys simultaneously.  The program should display 
+            an introductory screen and go on to the main menu.  
+            If it doesn't, try this process again.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                
+                
+                                 Page 12  
+
+
+
+        
+                             USER SUPPORT
+        
+        Amy's First Primer is a user-supported "shareware" 
+        program.  You may copy it for free and share it with 
+        your friends on a "try before you buy" basis.  If you 
+        or your child like the programs, and find them useful, 
+        we request that you purchase a license to the program 
+        by sending $15.00 to:
+        
+                         Rob Robinson
+                         523 Albany Avenue NE
+                         Orange City, IA 51041
+        
+        In appreciation, we'll send you another free disk (and 
+        the license to use it) containing the DRAW program 
+        that was used for the graphics on Amy's disk.  The 
+        DRAW program provides all 4 colors and two palettes on 
+        the screen.  Commands available for the DRAW program are 
+        Draw, Erase, Circle, Box, Line, Jump, Fill, Get, Put, 
+        Input, Output, Report, Foreground color, Background 
+        color, Wipe, and Quit.  DRAW doesn't require a joy-
+        stick, mouse, or lightpen.  All drawing is done with 
+        the keyboard.  The complete listable source code is 
+        included as well as some example game programs which 
+        show how to take graphics created by DRAW and use them 
+        in your own game programs.
+        
+        If you wish to only purchase a license to Amy's First 
+        Primer without the DRAW program, please send $10.00 to 
+        the above address.
+        
+        Thank you.
+        
+        
+        
+        
+        
+        
+                
+                
+                                 Page 13  
+
+```
+{% endraw %}
 
 ## BEAR123.BAS
 
+{% raw %}
 ```bas
 10 '                     B E A R 1 2 3 . B A S         8/10/86 11:20 pm
 20 '
@@ -303,9 +989,11 @@ machines:
 1080 GOTO 480
 1090 END
 ```
+{% endraw %}
 
 ## BEARABC.BAS
 
+{% raw %}
 ```bas
 10 '                     B E A R A B C . B A S    8/10/86 11:10 pm
 20 '
@@ -510,9 +1198,11 @@ machines:
 2010     PUT (X,Y),Y,PSET : RETURN
 2020     PUT (X,Y),Z,PSET : RETURN
 ```
+{% endraw %}
 
 ## BUNNY.BAS
 
+{% raw %}
 ```bas
 10 '                       B U N N Y . B A S
 20 '                                            Modified 8/10/86 11:18 pm
@@ -748,9 +1438,64 @@ machines:
 2320     PUT (X,Y),Y,PSET : RETURN
 2330     PUT (X,Y),Z,PSET : RETURN
 ```
+{% endraw %}
+
+## FILES646.TXT
+
+{% raw %}
+```
+Disk No  #646
+Program Title: Amy's First Primer (PC,XT,AT Version) version 1.2
+PC-SIG version 1.3
+ 
+Amy's First Primer is a collection of simple games for young children that
+help them with skills like counting, letter recognition, simple problem
+solving, pattern recognition and keyboard use.
+ 
+Usage: Educational
+ 
+System Requirements: IBM PC or close compatible with Color graphics
+                     adapter, 1 disk drive, Dos 2.0 or later and a version
+                     of BASIC.
+ 
+How to Start: type GO to start
+ 
+Suggested Registration: $15.00
+ 
+File Descriptions:
+ 
+README        Quick instructions for a fast start. type:type  readme
+AMY      DOC  15 page user's guide to print out.
+GO       BAT  Batch file to start the programs.    type:  go
+AUTOEXEC BAT  Batch file for auto-startup.
+COPYRITE BAS+ Copyright program to display initial information screen.
+MENU     BAS+ Menu program to provide access to the other programs.
+ABC      BAS+ Abc song musical program for picture/word/letter association.
+BEARABC  BAS+ Beary fun abc's program to learn keyboard and printed letters.
+BUNNY    BAS+ Bunny letters program to learn alphabet.
+BEAR123  BAS+ Beary fun counting program to learn counting and numbers.
+FROG     BAS+ Help the froggy maze program for problem solving.
+TRUCK    BAS+ Load the truck program for shapes, colors..
+MENU1    PIC  Picture screen for menu program
+ABC1     PIC  Picture screen for abc program
+BEARABC1 PIC  Picture screen for bearabc program
+BUNNY1   PIC  Picture screen for bunny program
+BEAR1231 PIC  Picture screen for bear123 program
+FROG1    PIC  Picture screen for frog program
+TRUCK1   PIC  Picture screen for truck program
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
 
 ## FROG.BAS
 
+{% raw %}
 ```bas
 10 '             F R O G . B A S          8/10/86 11:21 PM
 20 '
@@ -946,9 +1691,11 @@ machines:
 1910 LS=LS+1 : IF LS=4 THEN LS=1
 1920 RETURN
 ```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 10 '                   M E N U . B A S                 5/25/87 11:49 am
 20 '
@@ -1037,9 +1784,11 @@ machines:
 850 RUN"TRUCK"
 860 END
 ```
+{% endraw %}
 
 ## START.BAS
 
+{% raw %}
 ```bas
 10 '                    C O P Y R I T E . B A S          8/10/86
 20 '
@@ -1076,9 +1825,11 @@ machines:
 330 WHILE INKEY$="" : WEND
 340 RUN "menu"
 ```
+{% endraw %}
 
 ## TRUCK.BAS
 
+{% raw %}
 ```bas
 10 '                            T R U C K . B A S          5/25/87 11:14 am
 20 '
@@ -1289,6 +2040,7 @@ machines:
 2070 PUT (XS,YS),SIRCLE : RETURN
 2080 FOR I=1 TO 300 : NEXT I : RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

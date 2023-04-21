@@ -37,6 +37,37 @@ machines:
     PITFALL  EXE  Diving down a long pit but don't touch the walls (mono).
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES293.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  293  Arcade Games                                        v1.1 DS2
+---------------------------------------------------------------------------
+This disk contains an assortment of excellent arcade type games.  The list
+below gives an idea of what they are like.
+ 
+3-DEMON  EXE+ Three-D Packman type game
+3-DEMON  HI1  High Score file for 3-DEMON.EXE
+BRICKS   EXE+ Break through a brick wall using ball and paddle
+FORTUNE  EXE  Sophisticated version of Hangman
+KONG     EXE+ Avoid the barrels while rescuing the fair maiden
+PANGO    EXE+ Don't get stung in the garden
+PANGO    HGH  High Score file for PANGO.EXE
+PC-GOLF  EXE+ Golf game for the PC
+PITFALL  EXE  Exciting arcade game for the monochrom monitor
+PYRAMID  EXE+ Hop from square to square but beware of the snakes and springs
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0293
 

@@ -26,6 +26,36 @@ machines:
     movies to the list with a wordprocessor or text editor.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0774.TXT
+
+{% raw %}
+```
+Disk No:  774                                                           
+Disk Title: The Movie DataBase 2 of 2 (311 1st disk)  (Disk 2 of 2)     
+PC-SIG Version: S2.5                                                    
+                                                                        
+Program Title: Movie Database, The                                      
+Author Version: 3.1                                                     
+Author Registration: $15.00                                             
+Special Requirements: A word processor to add data.                     
+                                                                        
+Old movie buffs and videotape collectors -- here's database of nearly   
+2,000 older movie titles now available on videotape.  You can search    
+each entry by title, MPPA rating, major cast members, writer, director, 
+and other information.  As you add to your collection, you can add new  
+movies to the list with a wordprocessor or text editor.                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0774
 

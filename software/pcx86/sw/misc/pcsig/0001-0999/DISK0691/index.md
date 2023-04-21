@@ -69,6 +69,113 @@ machines:
     HELP     <DIR>Subdirectory containing help files (81 files).
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1105.TXT
+
+{% raw %}
+```
+Disk No  1105
+Program Title: BEST-PLAN PLANNING SYSTEM (Disk 3 of 3)
+PC-SIG version 2
+
+    BEST-PLAN is a mathematical modeling package that simplifies analysis
+by having a built-in modeling language, a report writer and multiple
+analyses of "what-if."
+
+    The general goal of designing a linear programming planning system like
+BEST-PLAN was to put the most analytical power into the hands of people
+directly concerned with the problem, to require only a minimum of
+specialized knowledge or experience on the part of the user, and at the
+same time give him the advantages of mathematical modeling for planning.
+
+    LIMITATIONS in the DEMO PACKAGE: Systems operations are intended for
+demonstrations ONLY! Limitations are incorporated. The user is allowed only
+to execute the supplied samples. In summary:
+
+   o  The user CANNOT create a NEW problem/model.
+   o  The user CANNOT Optimize a master PLAN.
+   o  The user CANNOT modify the  BEST-PLAN  environment
+      file  (BP-ENV.CON) other than change screen  color
+      and disk assignments.
+   o  The problem size has been limited to 6,000 elements
+      elements (no. of rows) * (2 * no. of rows + no. of columns)
+
+Usage: Business Planning
+
+System Requirements: 512K memory and a hard drive.
+
+How to Start: Insert disk #690 and type DOC (press enter).
+
+Suggested Registration: $199.00
+
+File Descriptions:
+
+DATA    <DIR> Subdirectory containing sample data files (36 files).
+HELP    <DIR> Subdirectory containing help files (81 files).
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## FILES691.TXT
+
+{% raw %}
+```
+Disk No  691
+Program Title: BEST-PLAN PLANNING SYSTEM (Disk 2 of 3)
+PC-SIG version 2
+
+    BEST-PLAN is a mathematical modeling package which simplifys analysis
+with a build-in modeling language, a report writer and multiple
+analyses "what-if" capability thru a build-in database management system.
+
+    The general goal of designing a linear programming planning system like
+BEST-PLAN was to put maximum analytical power into the hands of the people
+directly concerned with the problem, with only a minimum of specialized
+knowledge or experience on the part of the user, and at the same time give
+him the advantages of mathematical modeling for planning.
+
+    LIMITATIONs in the DEMO PACKAGE: Systems operations are intended for
+demonstrations ONLY! Limitations are incorporated. The user is allowed only
+to execute the supplied samples. In summary:
+
+   o  The user CANNOT create a NEW problem/model.
+   o  The user CANNOT Optimize a master PLAN.
+   o  The user CANNOT modify the  BEST-PLAN  environment
+      file  (BP-ENV.CON) other than change screen  color
+      and disk assignments.
+   o  The problem size has been limited to 6,000 elements
+      elements=(no. of rows) * (2 * no. of rows + no. of columns)
+
+Usage: Business Planning
+
+System Requirements: 512K memory and a hard drive.
+
+How to Start: Insert disk #690 and type DOC (press enter)
+
+Suggested Donation: $199.00
+
+File Descriptions:
+
+???????  BAT  Batch file (4 files)
+???????  EXE  Sub program (12 files)
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987, 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0691
 

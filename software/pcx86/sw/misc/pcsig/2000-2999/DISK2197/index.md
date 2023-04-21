@@ -39,6 +39,49 @@ machines:
     make ON-LINE BIBLE a powerful tool.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2197.TXT
+
+{% raw %}
+```
+Disk No: 2197                                                           
+Disk Title: Online Bible 7 of 7 (2191-2197 also)                        
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: Online Bible                                             
+Author Version: 5.00                                                    
+Author Registration: None.                                              
+Special Requirements: Hard drive & ONLINE BIBLE INSTALL. DISK (#2482).  
+                                                                        
+Did you ever wish that there was an easier and faster way to find words 
+or phrases in the Bible? The ONLINE BIBLE is a full-function search and 
+retrieval program for Bible students.                                   
+                                                                        
+Search facilities include word, phrase, and multiple words.  You can    
+add notes of any size to a verse using the supplied text processor.     
+Cross-reference information may be stored in the notes for automatic    
+recall.  Verses may be printed or saved in ASCII format, and from there 
+you can customize them with your favorite wordprocessor.                
+                                                                        
+Using the ONLINE BIBLE is a breeze with adjustable window size for      
+viewing verses, drop down menus, and context sensitive help screens.    
+                                                                        
+Furthermore, visually challenged individuals can now use screen reader  
+hardware to use the Online Bible screens.  These characteristics, plus  
+the coupling of ONLINE BIBLE with the Greek and Hebrew Lexicon          
+(#220-2206, #2485) and Online Bible Cross References (#2483-#2484),     
+make ON-LINE BIBLE a powerful tool.                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2197
 

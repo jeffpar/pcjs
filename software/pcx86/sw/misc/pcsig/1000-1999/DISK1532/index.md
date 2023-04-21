@@ -37,6 +37,63 @@ machines:
     inventory tracking!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1532.TXT
+
+{% raw %}
+```
+Disk No: 1532
+Program Title: TEXTBOOK INVENTORY CONTROL SYSTEM version 1.0
+PC-SIG version 1
+
+TEXTBOOK INVENTORY CONTROL SYSTEM is designed to keep track of books
+issued to students but it can be easily adapted for use by businesses
+that check out reference materials to employees, or in your own library
+to help you recall who borrowed that favorite book of yours!  Completely
+menu-driven and extremely easy to use, the program allows you to update
+existing book records, record books returned, print all book inventory
+records, or print the records for books not yet returned.
+
+The data base record format for each textbook consists of: file name,
+book title, author's name, book cost - new, book code, book condition,
+student name, student identification number, date book issued, and date
+book returned.  On-disk, a sample of a book checkout form is included
+for hardcopy input.  In all, an excellent method for handling small
+library inventory tracking!
+
+Synopsis: Keep track of textbooks issued to students, references checked
+out to employees, or books you've loaned others from your personal
+library.
+
+Usage:  Library/Book Inventory Tracking/Education.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $50.00
+
+Author:  Barry Alpern
+
+File Descriptions:
+
+TICS      EXE Main program.
+TICS      DOC Documentation file.
+README    BAT Small text file.
+USHIST    ??? Data and index files (5 files).
+CONSTI    ??? Data abd index files (5 files).
+
+The PC-SIG Library
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1532
 

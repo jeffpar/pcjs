@@ -36,6 +36,136 @@ machines:
     MEGACAD -- A software package for people who are serious about CAD.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## BESTELL.TXT
+
+{% raw %}
+```
+M E G A C A D
+
+We would be happy if you decide, because of your positive experience with the 
+shareware-version, to update to the registrated version. MegaCad as registered 
+version is available in three variations.
+
+Base-version for DM 298,-- includes:
+
+* MegaCad construction and painting program
+  (without paging, i.e. the size of a drawing is restricted by the available 
+  RAM of your computer)
+* Printed output to all current printers in high resolution up to DIN A4
+* Support of Hercules- and EGA-graphics
+* English written manual with about 380 pages
+  (includes description for extension levels I and II)
+* Installation program
+
+
+Extension level I for DM 598,-- includes:
+
+* All components of the base-version
+* Extensive print- and plot-program for all current printers and plotters in 
+  high resolution from DIN A4 up to DIN A0. Also impact-, laser- an color-
+  printers. 
+* Combination of drawings and cuttingzooms for the printout. Changes in the 
+  MegaCad construction- and painting-program ar automatically transferred to 
+  the combined drawings of the print- and plot-program.
+
+Extension level II for DM 2.280,-- includes:
+
+* All components of the base version and extension level I
+* Paging on the harddisk, i.e. in very large constructions parts, of the RAM 
+  will be dispersed to the harddisk.
+* Communication-program to other CAD-systems. Output of MegaCad drawings to 
+  other CAD-systems by DXF-files and reading of CAD-drawings from other CAD-
+  systems (e.g. Autocad 10.0)
+* Interface to NC-systems by export of coordinates or geometrical elements.
+* Support of high resolution graphic cards.
+* Output-program to DTP-systems (e.g. Ventura or Pagemaker) with HPGL-files.
+
+
+In addition there are available:
+
+Libraries with standard parts for
+
+Electrical engineering                       1100 parts          DM 298,--
+Electronics                                   550 parts          DM 298,--
+Architecture                                  850 parts          DM 298,--
+Junction elements for mechanical engineering  800 parts          DM 298,--
+
+IGES-interface
+
+UNIX-version (available by July 1990)        for the price please contact us
+
+There is no question, that the extension levels are harmonized one to another. 
+Controlling of the program is identical in all levels. By purchasing MegaCad 
+in several units, already payed fees will be credited. For example if you are 
+beginning with the base version and later want to update to the extension 
+level I you will only have to pay the difference of DM 300,--. Fees for demo 
+or shareware versions will not be credited.
+
+Release: 20. of June, 1990
+
+All prices include the legal VAT
+Former prices are no more valid
+
+Please address your orders to: 
+                     
+Kirschbaum Software GmbH
+Kronau 15
+
+D-8091 Emmering b. Wbg.
+
+Phone. germany 08067 / 1016
+Fax.   germany 08067 / 1053
+
+```
+{% endraw %}
+
+## TASTEN.DOC
+
+{% raw %}
+```
+ "a-1"  : Note zoom 1
+ "a-2"  : Note zoom 2
+ "a-3"  : Note zoom 3
+ "a-4"  : Note zoom 4
+ "a-5"  : Note zoom 5
+ "a-b"  : MODE meet point 1/2
+ "a-s"  : MODE intersection point 1/2
+ "a-l"  : MODE entity distance
+ "a-e"  : MODE end point
+ "a-r"  : Round
+ "a-p"  : Zoom pan
+ "a-t"  : Trim 1
+ "c-t"  : Trim 2
+ "T"    : Trim 3
+ "c"    : Delete
+ "w"    : Zoom window
+ "t"    : Divide
+ "h"    : Zoom factor 0.5 (Halve)
+ "r"    : New character (Redraw)
+ "a"    : Zoom automatic
+ "0"    : Zoom 0 ( 1:1 )
+ "1"    : Zoom 1
+ "2"    : Zoom 2
+ "3"    : Zoom 3
+ "4"    : Zoom 4
+ "5"    : Zoom 5
+ " "    : MODE - Selection
+ "S"    : STYLE - Selection
+ "f"    : MODE Free
+ "g"    : MODE Grid
+ "p"    : MODE Point
+ "s"    : MODE Intersection point
+ "m"    : MODE Centre point
+ "b"    : MODE Meet point
+ "l"    : MODE Entity
+ "e"    : MODE End point
+ "k"    : MODE Keyboard
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2250
 

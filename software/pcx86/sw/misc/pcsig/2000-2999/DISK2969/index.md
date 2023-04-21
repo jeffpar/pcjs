@@ -14,6 +14,83 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## DOTMATRI.DOC
+
+{% raw %}
+```
+This font is brought to you by Acute Systems. This font cannot be sold, it
+is freeware. It can be distrubuted if accompanied by this readme file.
+
+                            ACUTE SYSTEMS
+                              PO Box 37
+                         Algonquin, IL 60102
+
+We have a Windows 3.0 utility called Wrefont. With this program you can:
+1) Convert MAC type1 fonts to PC type1 (PFB) fonts.
+2) Create PFM files from AFM files or PFB files.
+3) Create AFM files from PFB files.
+4) Create ASCII downloadable files.
+The price is only $20.00 to the above address.
+```
+{% endraw %}
+
+## DOTMATRX.DOC
+
+{% raw %}
+```
+This font is brought to you by Acute Systems. This font cannot be sold, it
+is freeware. It can be distrubuted if accompanied by this readme file.
+
+                            ACUTE SYSTEMS
+                              PO Box 37
+                         Algonquin, IL 60102
+
+We have a Windows 3.0 utility called Wrefont. With this program you can:
+1) Convert MAC type1 fonts to PC type1 (PFB) fonts.
+2) Create PFM files from AFM files or PFB files.
+3) Create AFM files from PFB files.
+4) Create ASCII downloadable files.
+The price is only $20.00 to the above address.
+
+```
+{% endraw %}
+
+## FILE2969.TXT
+
+{% raw %}
+```
+Disk No: 2969
+Disk Title: Fonts Galore #9
+PC-SIG Version: S1.0
+
+Program Title: Fonts Galore #9
+Special Requirements: Windows 3.0 and Adobe Type Manger.
+
+A collection of ten diskettes full of fonts to be used with Windows and
+Adobe-type Manager installed. They can be used by Postcript and LaserJet
+printers. Fonts included with this disk are: Lemiesz, LoopDeLoop,
+MaidStoneScript, Middleton, PCOrnaments, RansomNote, ReliefDeco.
+
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1992 PC-SIG, Inc.
+```
+{% endraw %}
+
+## FRANKTIM.DOC
+
+{% raw %}
+```
+About FrankTimesFrankTimes font is my first real font production project.  It's a Type 1 serif font, somewhat like the traditional Times font, but with a different attitude and effect.       It carries a nearly complete character set.  It works well as either a text font or a headline font.     The font is named for The Franklin Times, the newspaper that allowed me the lattitude to expand my career in desktop publishing.  Many thanks to them.		 Please Distribute this font among family and friends, but be sure to enclose this "Read Me" with it.  This font is shareware... please help support future productions by mailing a check to:Jim Pearson101 Sterling CourtFranklinton, NC  27525Comments are appreciated:  America OnLine Address: UrsaBearThanks To Altsys, for their wonderful Fontographer application.... The manual is well written, and the tutorial is good for beginners and old hands alike.Coming soon to a billboard near you.....   an engraved font named "WakeWeek".Thanks.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2969
 

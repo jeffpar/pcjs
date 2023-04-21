@@ -43,6 +43,31 @@ machines:
     property manager.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2349.TXT
+
+{% raw %}
+```
+Disk No: 2349                                                           
+Disk Title: Easy-Manage 2 of 2 (2348 also)                              
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Easy-Manage                                              
+Author Version: 2.0                                                     
+Author Registration: $99.00                                             
+Special Requirements: 512K RAM. A hard drive recommended.               
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2349
 

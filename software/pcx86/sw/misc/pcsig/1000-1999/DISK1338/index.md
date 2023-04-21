@@ -37,6 +37,69 @@ machines:
     more.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FINISHED.TXT
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+The installation process has been completed.  You should have a
+sub-directory on the hard drive named WORDPTUT.  All of the files
+for running The WordPerfect Learning System have been transferred to
+the hard drive and you are ready to use the tutorial.
+
+Change your current drive to C:
+
+Change your current directory to c:\WORDPTUT
+
+Type in the command Go and press <ENTER>
+
+
+```
+{% endraw %}
+
+## INSTALL.TXT
+
+{% raw %}
+```
+ 
+ 
+
+
+This will install The Learning System Tutorial on your hard drive
+
+This will create a sub-directory called WORDPTUT and copy all the
+files from the floppy diskette to the sub-directory.  
+
+When you are ready to run The WordPerfect LEARNING SYSTEM make the
+WORDPTUT sub-directory your current directory.  
+
+The type in the command GO and press <ENTER>.
+
+NOTE! If you are going to run The WordPerfect Learning System on a
+floppy diskette system and NOT on a hard drive.....
+
+          PRESS <CTRL> AND <BREAK>
+
+If you are going to use the hard drive to run The WordPerfect 
+Learning System, press <ANY KEY> to continue.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1338
 

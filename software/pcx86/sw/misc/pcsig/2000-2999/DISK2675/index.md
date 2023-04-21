@@ -14,6 +14,43 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2675.TXT
+
+{% raw %}
+```
+Disk No: 2675
+Disk Title: Pro Football Picks
+PC-SIG Version: S1.0
+
+Program Title: Pro Football Picks
+Author Version: 3.0
+Author Registration: $28.00
+Special Requirements: None.  Mouse supported.
+
+Attention football fanatics!  PRO FOOTBALL PICKS (PFP) is a football
+handicapping program that takes into account the `Betting Spread'
+(Points) to predict winning teams.  Data required to use PFP is readily
+obtained from the daily newspapers.
+
+According to the author, it has been used for five years with an
+accuracy of up to 73%!  For those preferring under/over betting, the
+probable points scored is also provided.  PFP is compatible with all
+1991 season changes.  All relevant statistics from the 1990 season are
+included to improve accuracy.  Additional information, such as 1991 team
+schedules and a database of how each team performed vs. the spread over
+the past three years, are just a few keystrokes away.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2675
 

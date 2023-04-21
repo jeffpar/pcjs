@@ -38,6 +38,65 @@ machines:
     EMACS is a two disk set, the second disk is #1455.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1431.TXT
+
+{% raw %}
+```
+Disk No: 1431
+Program Title:  MICRO-EMACS (Disk 1 of 2)
+PC-SIG version: 1
+
+MICRO-EMACS is the baby brother of the powerful mainframe word processor
+EMACS.  Experienced EMACS users will enjoy the convenience of using the
+same editor that they use on mainframes.  This PC version packs all the
+functionality of its bigger relative with some PC niceties like 43 line
+EGA mode.
+
+MICRO-EMACS has several facilities that go beyond simple editing tasks
+like insertion and deletion.  These include multiple buffers and files,
+virtually unlimited file size, on-line help, file encryption, wild card
+search/replace, and many modes of operation on files, such as read-only
+viewing, C-mode for programmers working on source code, or wrap-mode for
+documents.  The system is extremely flexible due to an extensive
+built-in macro command language which allows the experienced user to
+create or re-map any command.  The complete C source code to the program
+is also provided.
+
+EMACS is a two disk set, the second disk is #1455.
+
+Synopsis:  A PC version of EMACS, the mainframe word processor for
+programmers.
+
+Usage:  Programming editor.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+COMPRESS EXE  File compression utility.
+EMACS    EXE  Program executable.
+EMACS    HLP  Help for EMACS.
+EMACS    RC   Initial macro file.
+MANUAL  <DIR> Subdirectory containing program documentation.
+README        Information about the program.
+TOOLS   <DIR> Tools for EMACS.
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1431
 

@@ -27,6 +27,44 @@ machines:
     Leo Brodie.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #264, version v1 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  META86  .BLK         CRC = 2D A1
+
+--> FILE:  KERNEL86.BLK         CRC = A9 51
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+ ---------------------> SUM OF CRCS = 94 14
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0264
 

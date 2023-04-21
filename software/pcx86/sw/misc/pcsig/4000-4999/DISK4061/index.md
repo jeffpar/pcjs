@@ -14,6 +14,47 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## DESCRIPT.TXT
+
+{% raw %}
+```
+Medical Terminology Tutor is a self-paced educational program which teaches 
+the basis of medical terminology as required in University and other school
+endeavors. Meditutor will remember the progress of multiple students, and
+allow them to each restart their lessons anytime later at the point where the
+student left off. Each new student name creates a 60 byte file for recalling
+the restart information.
+  
+The areas of studies range from medical stems, prefixes, suffixes, and 
+thirteen areas of physical disorders. The last area of study, Abbreviations,
+is supplied with registration of the program. 
+ 
+Medical Terminology Tutor will run on any IBM compatible pc, with mono or
+CGA, or VGA screen, using less than 100kb of memory. 
+ 
+The price for registration is $30US.
+
+```
+{% endraw %}
+
+## FILES.TXT
+
+{% raw %}
+```
+             File                        Description
+
+	d1.dat through d13.dat          Data for 'Disorders'
+	Abbrev.dat			Data for 'Abbreviations'
+	Prfixes.dat			Data for 'Prefixes'
+	Stems.dat			Data for 'Stems'
+	Suffixs.dat			Data for 'Suffixes'
+	Medical.exe			Meditutor executable
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #4061
 

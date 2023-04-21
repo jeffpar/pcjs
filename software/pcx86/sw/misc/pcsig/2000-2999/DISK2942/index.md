@@ -14,6 +14,45 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2942.TXT
+
+{% raw %}
+```
+Disk No: 2942                                                           
+Disk Title: Pro-Play BlackJack                                          
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Pro-Play Blackjack                                       
+Author Version: 1.0                                                     
+Author Registration: $12.00                                             
+Special Requirements: 512K RAM and CGA.                                 
+                                                                        
+You have a King and a seven and the dealers has a nine showing.  What do
+you do?  I'll take another card!  "Never hit hard 17 or more."  That's  
+something the advanced blackjack player knows and that something that   
+PRO-PLAY BLACKJACK will remind you of.  Have fun and learn the advanced 
+concepts of blackjack with PRO-PLAY BLACKJACK; a blackjack simulation   
+with great graphics.                                                    
+                                                                        
+If you have a basic understanding of blackjack, but want to take the    
+next step and play like a "pro," here's your chance.  PRO-PLAY includes 
+all the help screens and the tables of strategies you'll need. PRO-PLAY 
+uses the rules found in most casinos on the Las Vegas Strip to teach you
+concepts of hard/soft hands, splitting, double downing, and more.  Once 
+you have skills improved, invite six other friends to play and PRO-PLAY 
+will keep the score.                                                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1992 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2942
 

@@ -59,6 +59,71 @@ machines:
     primarily of lines and curves.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2151.TXT
+
+{% raw %}
+```
+Disk No: 2151                                                           
+Disk Title: TurboDraw                                                   
+PC-SIG Version: 3.0                                                     
+                                                                        
+Program Title: TURBODRAW                                                
+Author Version: 3.0                                                     
+Author Registration: $69.00                                             
+Special Requirements: Hercules graphics, CGA, EGA, VGA, or MCGA.        
+                                                                        
+An entry-level CAD program that combines an easy point-and-click user   
+interface and the ability to generate user symbol libraries.            
+TURBODRAW produces professional quality drawings for electrical,        
+architectural, and mechanical engineers, as well as dataflow, program   
+flow and structural charts for programmers, systems analysts, and       
+database managers.                                                      
+                                                                        
+The menu access system and the spooling capability are two convenient   
+features.  Redirect output to a file instead of to a device and print   
+or plot output at a more convenient time or from a PC that is           
+connected to the proper printer or plotter.                             
+                                                                        
+Unique features:                                                        
+                                                                        
+~  Symbols can be generated and incorporated into symbol libraries      
+   by the user                                                          
+                                                                        
+~  Pop-up menus                                                         
+                                                                        
+~  Automatic undo/delete, unlimited depth                               
+                                                                        
+~  Pattern fill                                                         
+                                                                        
+~  Supports all plotters, dot matrix printers, LaserJet with 512KB or   
+   1.5MB                                                                
+                                                                        
+~  Supports Hercules mono, CGA, EGA, VGA or MCGA                        
+                                                                        
+~  Mouse driver included                                                
+                                                                        
+~  300dpi output, suitable for presentation artwork                     
+                                                                        
+~  .TIF, .PCX, .PLT output for desktop publishing/wordprocessing.       
+                                                                        
+                                                                        
+TURBODRAW doesn't handle bit-mapped images like some other painting/    
+drawing programs and is best used to create technical drawings that     
+consist primarily of lines and curves.                                  
+data in mail list format so you never have to generate mail list        
+output--it's already there!                                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2151
 

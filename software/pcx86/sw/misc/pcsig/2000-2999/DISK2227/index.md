@@ -30,6 +30,55 @@ machines:
     16 colors!  Also supports HERCULES, CGA, EGA and VGA 640x480.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2227.TXT
+
+{% raw %}
+```
+Disk No: 2227                                                           
+Disk Title: Moraff's Blast I                                            
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Moraff's Blast I                                         
+Author Version: 1.0                                                     
+Author Registration: Varies.                                            
+Special Requirements: Graphics card.                                    
+                                                                        
+This is a bricks, balls and paddles type of game.  It contains 21       
+levels, and allows up to 14 balls in play at once!  Many of the bricks  
+have special effects like changing the size of the paddle, splitting    
+the ball into four, faster play, slower play, and zoom to the next      
+level!                                                                  
+                                                                        
+MORAFF'S BLAST I The first game ever to support SUPER-VGA 800x600 in 16 
+colors! This game also supports HERCULES, CGA, EGA and VGA 640x480!     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## FILELIST.TXT
+
+{% raw %}
+```
+README   BAT       12   5-05-89   1:14p
+README           1508   4-11-90   9:59a
+BLAST    EXE   133948   4-09-90   9:25a
+FILELIST TXT      370   4-11-90  11:36p
+HERC     BGI     6125   8-29-88   2:00a
+CGA      BGI     6253   8-29-88   2:00a
+NECPARMS COM    11730  10-27-88   2:10a
+7        BIN     6384   3-17-90  12:27p
+FILE     BIN     2080   CHANGES  --:---
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2227
 

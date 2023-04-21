@@ -92,8 +92,548 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## EQUATOR.TXT
+
+{% raw %}
+```
+
+     Welcome to the EQUATOR! The EQUATOR is an equation learning aid.                          
+The purpose of this product is to help you the student learn the function,
+use and application of various general purpose formulas used in the fields of 
+Math, Finance, and Science.
+
+     The EQUATOR is a user-supported program. User-supported software is 
+based on the following concepts:
+     1)  The value and usefulness of software is best determined by the
+         user on his own system
+     2)  The creation of software can and should be supported by the user
+         community.
+     3)  The copying of sofware should be encouraged and not restricted.
+    
+     Any user that finds this program useful is asked for a $20 donation.
+This donation is strictly optional. All users are encouraged to copy and
+distribute this program to other IBM PC users free of charge. Anyone sending
+a blank formatted disk along with a stamped return envelope will recieve a
+free copy of the EQUATOR and its documentaion. Remember, you the user will
+determine how valuable this program is. You the user can contribute to the
+quality of this program by offering suggestions for improvement. And you the
+user will be the critic and advertiser we depend on.
+
+     This product consists of 35 equations divided equally among the three 
+subjects. Each equation appears on its own screen or worksheet. The EQUATOR 
+is designed to allow you to experiment with each equation as much as you like.
+The more you work with an equation, the easier it will be for you to under-
+stand it, remember it, and use it at home or at school. As the actual equation
+is shown on your screen, you can type in your numbers and let the EQUATOR 
+compute the right answer. Entering the numbers is easy and telling the EQUATOR
+to compute the answer is even easier. Everything you need to know about using
+the EQUATOR is on the screen at all times.
+
+     To use this manual with the EQUATOR do the following:
+1) First spend some time reading it on your own. If you come to a part that 
+   you can't understand, skip it. Just get a feel for what the EQUATOR can
+   do for you.
+
+2) Next start the EQUATOR as described below. Each time you see a new screen
+   or menu, read the manual to see what you can do. You will find the manual
+   easier to understand now that you are actually using the EQUATOR.
+
+3) When you begin to feel comfortable with the EQUATOR, put down the manual 
+   and try using the EQUATOR by itself. Keep the manual close by just in case.
+   The EQUATOR is simple to use so take your time and enjoy.
+
+     The requirements for using the EQUATOR Version 1.2 are:
+ 1) IBM PC (or compatible) with at least 64K of internal memory
+ 2) PC-DOS 2.0 (or later) operating system
+ 3) 1 disk drive
+ 4) A printer 
+ 
+     The following files should be on your diskette when you buy the EQUATOR:
+ 1) EQ.EXE       (EQUATOR Main menu program file)
+ 2) MATH.EXE     (Math equations program file)
+ 3) SCIENCE.EXE  (Science equations program file)
+ 4) FINANCE.EXE  (Finance equations program file)
+ 5) EQUATOR.TXT  (EQUATOR manual)
+ 6) PRT.BAT      (Batch file to print EQUATOR.TXT)
+ 
+     The first thing that you should do when you buy the EQUATOR is to make a
+backup copy of it. The instructions on how to do this can be found in your DOS
+2.0 manual starting on page 3-10.
+
+     To start the EQUATOR, do the following: 
+ 1) Boot up Your IBM PC with DOS 2.0
+ 2) Insert your diskette containing the EQUATOR files into your default disk
+    drive. This will usually be your "A:" disk drive.
+ 3) Type EQ after the "A>" prompt and press the RETURN key.
+
+     The Equator is menu-driven. This means the screen you are working with    
+will always contain information on what actions you can take next. These 
+actions will include ending the program, computing the next answer, or going
+to another screen. So there is no need for you, the user, to memorize a series
+of long and confusing commands. There are three kinds of screens in this pro-
+duct: the Main Menu, the Subject Menus, and the Equation Worksheets.
+
+     The first screen that you will see is the Main Menu. This menu will list
+for you the three subjects that are covered by this product. Your choices on
+this menu can be typed in lower or upper case. If you type in a key that is
+not a correct choice, you will hear a short beep noise from the computer. If
+you type in a correct choice and the EQUATOR can't find one of the program
+files then the error message:
+
+       "You must have all your .EXE files on the default disk drive."
+       "Bring all your .EXE files together and try again."
+
+will tell you to check and make sure that all the EQUATOR files are together
+on the default drive. Typing in a correct choice from this menu will bring you
+to one of three Subject Menus. The EXIT choice on this Menu will end the pro-
+gram and clear the screen.
+
+     Each Subject Menu is handled in the same way as the Main Menu. A list of
+all the equations available under the subject will be shown to you.  
+Your choices on any menu can be typed in lower or upper case. If you type
+in a key that is not a correct choice, you will hear a short beep noise from
+the computer. if you type in a correct choice and the EQUATOR can't find one
+of the program files then the error message:
+
+       "You must have all your .EXE files on the default disk drive."
+       "Bring all your .EXE files together and try again."
+
+will tell you to check and make sure that all the EQUATOR files are together
+on the default drive. Typing in a correct choice from any menu will bring you
+to one of the Equation Worksheets. The EXIT choice on these Menus will bring
+you back to the Main Menu.
+
+     The following equations are in the Math Menu of the EQUATOR:
+                                         
+     1. Area of a square of rectangle.
+     2. Area of a circle.
+     3. Area of a triangle.
+     4. Hypotenuse of a right triangle.
+     5. Circumference of a circle.
+     6. Volume of a cylinder.
+     7. Surface area of a cylinder.
+     8. Volume of a cone.
+     9. Surface area of a cone.
+    10. Surface area of a sphere.
+    11. Volume of a sphere.
+    12. Distance between two points.
+
+     The following equations are in the Finance Menu of the EQUATOR:
+                                         
+     1. Simple interest.                
+     2. Compound interest.
+     3. Years to double investment.
+     4. Return needed to keep up with inflation.
+     5. Equivalent taxable return of a non-taxed investment.
+     6. Monthly mortgage payments.
+     7. Annual simple interest rate on loans.
+     8. Payoff balance on a loan.
+     9. Gross profit margin.    
+    10. Net profit margin.           
+    11. Earnings per share.   
+    12. Price / Earnings ratio.         
+
+     The following equations are in the Science Menu of the EQUATOR:
+                                         
+     1. Celsius to Farhrenheit.         
+     2. Farhrenheit to Celsius.
+     3. Density Ratio.                 
+     4. Average velocity.
+     5. Metric to English.
+     6. English to Metric.
+     7. Acceleration.
+     8. Force.
+     9. Work.
+    10. Power.
+    11. Pressure.
+
+     The Escape(ESC) key used from the Main Menu or Subject Menus will 
+immediately end the program and clear the screen. This key is good for anyone
+who likes to finish up quickly no matter what menu or screen he is on.
+
+     The screens that you will be working with most are the equation work-
+sheets. These worksheets will consist of two parts. The upper portion of the
+worksheet will describe the actual equation that you will be working with.
+  
+    For Example:    Area = Width * Length
+
+This area of the worksheet will never contain a long desciption of an equation. 
+But, the variables in each equation will be spelled out. This is a key aid in 
+helping you learn to use each equation. The following math symbols will be 
+used throughout the EQUATOR:
+
+    *     multiplication               [ or (    left parenthesis
+    /     division                     ] or )    right parenthesis
+    +     addition                     ^         exponentiation 
+    -     subtaction or minus sign     =         equal sign
+    ?     square root                  %         percent sign
+    $     dollars sign                 ?         PI constant
+    .     decimal point                .XX       percent in decimal form
+
+     The bottom portion of each equation worksheet is your work area. This area 
+will contain the variable names of the equation and a place or field for you
+to enter in your numbers. These fields are called value fields.
+ 
+     For Example:   Width = __________
+
+Your place in a value field will always be marked by the cursor. The cursor is
+the moving(sometimes blinking) marker of light on the screen that indicates
+your current position on the screen. Each time you come to a new equation
+worksheet, the cursor will be in the first position of the first value field.
+
+When you are at this point in the EQUATOR, there are only certain keys that you
+can use. They are as follows.
+
+The Escape(Esc) key:
+     This key is found in the upper left hand area of the IBM PC keyboard.
+This key will end the EQUATOR program immediately and clear the screen.
+It doesnt matter what you are doing, even if you are in the middle of
+entering a number, the Esc key will get you out of it.     
+
+The Backspace key:
+     This key is found in the upper right hand area of the IBM PC keyboard.
+It looks like a large left arrow. This key  will move the screen cursor one
+position to the left. It will not erase any numbers as it moves to the left.
+If the cursor is already in the leftmost position of a field, the Backspace 
+key will cause the cursor to appear in the rightmost position of the field.
+This is called cursor wraparound.
+
+The Space Bar:
+     This key is found on the bottom of the IBM PC keyboard. It is a large 
+key. This key  will move the screen cursor one position to the right. It will
+not erase any numbers as it moves to the right. If the cursor is already in
+the rightmost position of a field, the Space Bar will cause the cursor to
+appear in the leftmost position of the field. This is called cursor wraparound.
+
+The Insert(Ins) key:
+     This key is found in the lower right hand area of the IBM PC key-
+board. Its purpose is to allow you to insert numbers in between numbers
+that you have already entered on a value field. To make room for a number
+in this way you must do the following. First position the cursor exactly
+where you want the new number to be in the field. Next, press the Ins key.
+You will notice the cursor change shape. This means that you are in insert
+mode and can now enter the new numbers. You will notice that as you enter a
+number, all numbers to the right of the cursor will shift to the right.     
+If you attempt to insert more numbers than there is room for, a short beep 
+will sound telling you that no more numbers can be inserted. To get out of 
+insert mode you must press the Ins key again. You will see the cursor change 
+back to its original shape.
+
+The Delete(Del) key:
+     This key is found in the lower right hand area of the IBM PC keyboard.
+This key will do the exact opposite of the Insert key. It will delete a  
+number on a value field where the cursor is positioned at. When this 
+happens, all numbers to the right of the cursor will shift to the left to
+fill the gap. The cursor itself will not move.
+ 
+The Enter key:
+     This key is found on the right hand area of the IBM PC keyboard. It is
+just under the Backspace key. The symbol on it looks almost like the backspace
+symbol. This key is sometimes called the Return or Carraige Return key.
+Pressing this key will move the screen cursor to the next value field.
+The cursor will be on the first position of that field.
+
+The Control-End Key:
+     This key is actually two separate keys pressed together at the same 
+time. The first is the Control(Ctrl) key which is on the lower left hand
+area of the keyboard. The second is the End key which is on the lower right 
+hand area of the keyboard. Pressing these keys together at the same time,
+will cause all the numbers from the current position of the cursor to the
+end of the value field to be erased. This key combination can be used
+instead of pressing the Delete key many times. If the cursor is at the 
+beginning of a value field, then pressing Control-End will cause the 
+entire field to be erased.
+
+The Print Screen(PrtSc) Key:
+     This key is found in the lower right hand area of the keyboard. It is
+upper case asterisk(*). To use Prt-Sc, press the upper case key and the 
+asterisk(*) at the same time. Pressing this key will cause the entire screen to
+be printed out on the printer. This key will allow you to save your work. if
+your printer is not on or if you do not have a printer connected to your
+IBM PC, pressing this key will stop the EQUATOR for a few seconds(its busy
+looking for a printer that isnt there) and then let you continue. The PrtSc
+key is of no use to you if you have no printer connected to your PC.
+
+The Function Keys:
+      There are 10 Function keys(F1 to F10) located on the left side of the
+keyboard. The EQUATOR uses only F1, F2, and F3. 
+      Pressing F1 will cause the EQUATOR to calculate or compute the answer 
+to the equation you are currently working on using the values you have been
+typing in. If you left any of the value fields blank, the EQUATOR will use
+zero for that value. When the EQUATOR is finished with its calculations, it
+will display you the answer near your value fields.
+
+     For Example:     Length = 1_________
+
+                       Width = 9_________
+
+                        Area =  9
+
+A number of the equations used by the EQUATOR use division. If you leave a
+value field blank that will cause a division by zero, a short beep will
+sound telling you that you must enter in a number in that value field.     
+If the answer to the equation is very large or very small, it will be dis-    
+played by the EQUATOR in scientific notation. For example, 23E-9 is equal to
+.000000023 and 23E+9 is equal to 23000000000.
+The F1 key will be your most often used key.    
+
+     Pressing the F2 key will start you over on the equation worksheet. All
+numbers in all the value fields will be erased. This will save you from using
+the Control-End key many times to erase all value fields.
+
+     Pressing the F3 key will exit you from the equation worksheet that you
+are working on to its subject menu. For example, if you were working on the
+Area equation, F3 will take you back to the Math Menu. From the Math Menu you
+can go on to another equation. This key is similar to the Escape key.
+
+     In the value fields themselves, any number from 0 to 9 can be typed in
+from the keyboard. These keys are lined up across the top of the keyboard and
+on the right hand side of the keyboard. In addition, you can use a decimal
+point(.) and a minus sign(-) in any value field.
+
+     Here is a quick reference guide to the above mentioned keys. Use this 
+information while you are working with an equation worksheet.
+
+     Press ESC to quit the program.
+     Press ENTER to move to the next value field.
+     Press BACKSPACE to move the cursor one position to the left.
+     Press SPACE BAR to move the cursor one position to the right.
+     Press DEL to delete a number.
+     Press INS to insert a number.
+     Press CNTL-END to delete the rest of the value field.
+     Press 0 through 9, "-", or "." for the numbers.
+
+    And now for some usage tips on the equation worksheets. Use these tips
+while you are working with the equations themselves.
+
+1. Area of a square of rectangle.
+
+     Area is the amount of space inside the square or rectangle.
+     It doesn't matter which side of the shape is used for width or length in
+     this equation.
+     This screen can also be used to learn and practice multiplication.
+     
+2. Area of a circle.
+
+     The actual value of PI used in the computation is 3.141, not 3.1428571
+     or 22/7.
+     The radius is the distance between the center of the circle and the edge
+     of the circle.
+
+3. Area of a triangle.
+
+     If the triangle shape was standing up, the base would be the bottom line.
+
+4. Hypotenuse of a right triangle.
+
+     A right triangle has one 90 degree corner.
+     In a right triangle, the hypotenuse is the longest side and the side
+     opposite the 90 degree corner.
+
+5. Circumference of a circle.
+
+     Circumference is the length around the edge of the circle.
+
+6. Volume of a cylinder.
+     
+     Volume is the amount of space inside the solid shape.
+
+7. Surface area of a cylinder.
+
+     Surface area is the amount of space on the outside of the solid shape.
+     You only have to type in the radius value once, not twice!
+
+8. Volume of a cone.
+
+9. Surface area of a cone.
+
+     The slant height is the length of the crooked side of the cone.
+     You only have to type in the radius value once, not twice!
+
+10. Surface area of a sphere.
+
+11. Volume of a sphere.
+
+12. Distance between two points.
+
+     If you leave any coordinate blank, a zero will be used for that coordi-
+     nate during the calculations.
+
+1. Simple interest.                
+
+     Principal is the original amount, leave out the commas and dollar signs.
+     Leave out the percent(%) symbol when typing in the interest rate.
+     Years can be typed in whole or partial amounts.
+
+2. Compound interest.
+
+     The "Times per Year" value cannot be 0, and need only be typed in once
+     not twice!
+     This equation is what banks use on your savings account. 
+
+3. Years to double investment.
+
+     The Annual Rate of Return value cannot be 0. 
+     This equation can also be called "How to Double your money!" 
+
+4. Return needed to keep up with inflation.
+
+     All values are shown as percent figures.
+     The higher your tax bracket, the bigger return you need to keep up with
+     inflation.
+
+5. Equivalent taxable return of a non-taxed investment.
+
+     This equation will answer the question: should you invest in Savings 
+     Bonds or in a Money Market?
+     The higher your tax bracket, the greater your taxable return.
+
+6. Monthly mortgage payments.
+
+     The Interest Rate value cannot be 0.
+     The Number of Monthly Payments value cannot be 0.
+     Balance Owed is the amount of money you currently owe the bank or 
+     mortgage company.
+     This equation can be used to calculate monthly payments on any kind of
+     loan (student, car, etc.).
+     This is a complex equation!
+
+7. Annual simple interest rate on loans.
+
+     The Principal value cannot be 0.
+     This equation doesn't work for compound interest rate problems.
+
+8. Payoff balance on a loan.
+
+     The Interest Rate value cannot be 0.
+     Use this equation to payoff that car or student loan!
+
+9. Gross profit margin.    
+
+     The Net Sales value cannot be 0.
+     Cost of Goods Sold is the cost to make those goods you sold.
+     Depreciation is how much the unsold goods lost in value by just sitting
+     around.
+
+10. Net profit margin.           
+ 
+     The Net Sales value cannot be 0. 
+     This equation can also be used to learn and practice division problems.
+
+11. Earnings per share.   
+
+     The Shares outstanding value cannot be 0.   
+     Preferred Dividends is money given to preferred stockholders.
+
+12. Price / Earnings ratio.         
+
+     The Earnings per Share value cannot be 0.
+
+1. Celsius to Farhrenheit.         
+
+     If you add 273 degrees to the Celsius answer, you get the degrees in
+     Kelvin.
+
+2. Farhrenheit to Celsius.
+
+3. Density Ratio.                 
+
+     The Volume value cannot be 0.
+     The unit of measure for most science equations is metric.
+
+4. Average velocity.
+
+     This equation is for average velocity, not instantaneous velocity.
+     The Time value cannot be 0.
+
+5. Metric to English.
+
+     The first "Meters =" value field will give you Feet.
+     The second "Meters =" value field will give you Yards.
+     You don't have to fill in all the fields to get an answer.
+
+6. English to Metric.
+
+7. Acceleration.
+
+     The Time value cannot be 0.
+     Change in velocity is the difference between the starting velocity and
+     the ending velocity.
+
+8. Force.
+
+     Newtons (after Isaac Newton) are the units of measure for Force.
+
+9. Work.
+
+     Joules (after James Prescott Joule) are the units of measure for Work.
+
+10. Power.
+
+     The Time value cannot be 0.
+     Watts (after James Watt) are the units of measure for Power.
+
+11. Pressure.
+
+     The Area value cannot be 0.
+     Pascals (after Blaise Pascal) are the units of measure for Pressure.
+
+     Here are some final tips on using the EQUATOR:
+ 
+1.   Save your work! Use the Prt-Sc key!
+2.   Make sure all your .EXE files are on the default disk drive.
+3.   The Esc key will get you out of the EQUATOR no matter where you are.
+4.   Make a backup copy of the EQUATOR.
+5.   Use the PRT.BAT file to print this user manual.
+6.   Read the user manual!
+7.   If we can be of any service to you concerning the EQUATOR, write:
+
+                  Larry Fernandez
+                  Fernandez Enterprises
+                  3062 King Estates
+                  San Jose, California   95135
+```
+{% endraw %}
+
+## FILES249.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No  249  Equator/PC-TOUCH Educational Programs                  v2.1
+------------------------------------------------------------------------
+There are some excellent educational programs on this disk.  Equator is
+a user-supported educational system for teaching math, science, and
+finance.  It uses a novel non-drill exploratory approach.  PC-TOUCH is a
+typing tutor which lets you go at your own pace and keeps track of how
+well you are doing.  UTMP is a math drill program.
+ 
+------------  EQUATOR 1.1 (u-s)
+EQ       EXE  Main program - start by typing "EQ"
+SCIENCE  EXE  Science lessons
+MATH     EXE  Math lessons
+PRT      BAT  To print documentation type: "PRT"
+EQUATOR  TXT  Documentation  (20K)
+FINANCE  EXE  Finance lessons
+------------  PC-TOUCH Touch typing tutor (u-s)
+PC-TOUCH BAS  Source code for PC-TOUCH.EXE
+PC-TOUCH FIL  Part of PC-TOUCH
+PC-TOUCH EXE  Compiled version - type "PC-TOUCH" to start
+PC-TOUCH DOC  Documentation  (4K)
+------------
+UTMP     BAS  Math drill program
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
 ## PC-TOUCH.BAS
 
+{% raw %}
 ```bas
 100 '
 200 ' PC-TOUCH ---- Program to help you practice touch-typing,
@@ -499,9 +1039,129 @@ machines:
 40200 NEXT X
 40300 SYSTEM
 ```
+{% endraw %}
+
+## PC-TOUCH.DOC
+
+{% raw %}
+```
+
+                                P C - T O U C H
+
+
+
+            (C) Copyright 1983, 1984, 1985, 1986 by Dean Hannotte
+                                                    318 East Sixth Street
+                                                    New York, NY 10003
+
+     PC-TOUCH is a simple program with  a simple purpose: to help you  practice
+touch-typing.
+
+     PC-TOUCH will display  on the screen  lines of text  for you to  type. You
+can't correct mistakes as you go  along, because that won't help you  learn how
+not to  make them  in the  first place.  Just do  the best  you can, and as you
+continue you will find yourself making fewer and fewer errors.
+
+     As you are  typing, PC-TOUCH will  update statistics along  the bottom two
+rows of the screen. On the left you will see the total number of keystrokes and
+the total number of erroneous keystrokes. On the right you will see your typing
+accuracy as the percentage of keystrokes which have been correct, and your typ-
+ing speed in words per minute. The statistics on the left are updated  whenever
+you press any key, while those on the right are updated whenever you get to the
+end of a line.  Remember that when you  are just learning to  type, accuracy is
+more important than speed.
+
+
+     To use PC-TOUCH, just key in:
+
+          [d:]pc-touch<enter>
+
+          where:  [d:]              is the optional drive specification,
+                                    a single letter from a to h.
+
+                  pc-touch          is the name of the program DOS will run.
+
+                  <enter>           means press the ENTER key.
+
+
+     PC-TOUCH starts  by giving  you instructions  on how  to use  the program.
+Aside from the keys you will use to type the lines of text displayed, there are
+only three special keys recognized:
+
+          ENTER -- Press this key when you get to the end of each
+                   line.
+
+          ESC ---- Press this key when you are done with the program.
+
+          F1 ----- Press this key when you want to stop typing for a
+                   while (for example, to answer the phone) and don't
+                   want to lose credit for the elapsed time during
+                   which nothing will be typed.  (When you are ready
+                   to restart, just press F1 a second time.)
+
+     PC-TOUCH doesn't recognize any other special keys because the idea was  to
+practice touch-typing in a way that would be valid for ANY keyboard,  including
+ancient office typewriters you may be stranded with once in a while. (If enough
+people ask for more  sensitivity to the special  keys on the IBM/PC  [like INS,
+DEL and the cursor control keys], I'll be glad to include this in a future  re-
+lease.) PC-TOUCH should  work with any  display device that  supports 80-column
+output.
+
+
+     PC-TOUCH is distributed as four files:
+
+          PC-TOUCH.DOC -- this file, containing documentation. The
+                          program doesn't need this file to operate, so
+                          you can ERASE, RENAME, or archive it.
+
+          PC-TOUCH.EXE -- the compiled version of the program. You will
+                          need this because the interpreted version
+                          (PC-TOUCH.BAS) is not fast enough.
+
+          PC-TOUCH.FIL -- the lines of text that you will type. The
+                          program needs this file to operate, so you must
+                          leave it in a drive addressed by one of the
+                          letters from A through H. PC-TOUCH will chose
+                          the first copy it finds if you have more than
+                          one. This file is an ordinary ASCII file, so
+                          you can change the material I've selected or
+                          replace it entirely using any ordinary text
+                          editor. Don't make any line longer than 79
+                          characters. After you've typed through the
+                          entire file, PC-TOUCH goes back to the
+                          beginning and you start over.
+
+          PC-TOUCH.BAS -- the source program. You can use this to make
+                          your own modifications to the program, or just
+                          to get some ideas about how this kind of
+                          program is written. It cannot be used by itself
+                          (as an operand of BASICA), though, because it
+                          isn't fast enough.
+
+
+     Only the first three of these files are necessary. The source program  can
+be used  to make  your own  modifications, but  you will  have to compile it in
+order to get a version that's fast enough for typing. (If you got PC-TOUCH from
+a bulletin board and they  gave you the .BAS file  but not the .EXE file,  just
+let them know that they're packaging the program incorrectly.)
+
+     PC-TOUCH has been  given free of  charge and "as  is" to the  New York IBM
+Personal Computer User Group (NYPC). Please share it with as many people as you
+like. If you'd like to suggest enhancements,  or just want to talk about it,  I
+can be reached at  (212) 674-5848 between 9AM  and 9PM. I hope  you enjoy using
+PC-TOUCH, and that it helps improve your typing speed.
+
+
+                                        Sincerely,
+
+                                        Dean Hannotte
+
+```
+{% endraw %}
 
 ## UTMP.BAS
 
+{% raw %}
 ```bas
 1 KEY OFF
 10 WIDTH 40
@@ -678,6 +1338,7 @@ machines:
 20002 B=INT(RND*(9999)+1)
 20003 IF B>A GOTO 20001 ELSE RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

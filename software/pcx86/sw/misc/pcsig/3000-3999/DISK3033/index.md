@@ -14,6 +14,96 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE3033.TXT
+
+{% raw %}
+```
+Disk No: 3033                                                           
+Disk Title: DOS-Joke                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: DOS-Joke                                                 
+Author Version: 1.7                                                     
+Author Registration: $14.90                                             
+Special Requirements: Graphics monitor (EGA/VGA recommended). Hard drive
+                                                                        
+It sure looks like a usual computer with the DOS "C:" prompt on the     
+screen, but it sounds as if it has flatulence! This is no normal        
+computer; it's a computer with DOS-JOKE installed. Once you run         
+DOS-JOKE, it displays the standard DOS prompt, but it's ready for fun.  
+As with other DOS prompt practical joke programs, it displays           
+smart-aleck remarks when the user types something in. DOS-JOKE is unique
+because it uses your built-in speaker to also "speak" the jokes. It     
+includes remarks, music, noises (a phone ringing), and noises of a      
+deeply personal nature-but those are probably the things that practical 
+jokers enjoy the most. You can even set it to go off at regular         
+intervals during your absence. It's a wacky program, but be warned that 
+some people may be offended by some of its actions. You have to decide  
+if that's good or bad.                                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+* UNREGISTERED COPY *
+
+			 PC-TALK  (THE SPEECH LIBRARY)              Vers 2.1
+			 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  PC-TALK (THE SPEECH LIBRARY) is a NEW product for business and personal
+  applications. The library consist of several words/phrases that can be
+  used in all sorts of applications. There is no special hardware need to
+  use the SPEECH LIBRARY (excellent speech quality that works thru your PC
+  speaker).  The speech commands can be put in any batch file (*.bat) and
+  added to your programs/menus. This package is very easy to use, you simply
+  need to type PC-TALK at the dos prompt, followed by the words/phrases you
+  would like to say (example: to say HELLO WELCOME, type in "PC-TALK HELLO
+  WELCOME"). Also included in this package is PCX display program that you
+  can use to create your own TALKING SLIDESHOW for PRESENTATIONS, PRODUCT
+  DEMO'S and TUTORIALS.  When you register, you will receive a complete
+  speech library with over 1,000,000 bytes(3 disk) of speech, music and
+  sound effects .
+
+
+	* A SPEECH LIBRARY with a real HUMAN VOICE.
+
+        * SYSTEM REQUIREMENTS:  256K memory,  one floppy
+          disk and any  monitor. (hard disk recommended)
+
+        * Designed to work on any IBM-PC Compatible.
+
+	* Type "RUNME" to start the TUTORIAL program.
+
+        * NOW THE PC CAN TALK.
+          ~~~~~~~~~~~~~~~~~~~
+        * Please register your shareware by sending $29.50 to:
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                     CREATIVE SOFTWARE SOUNDS INC.
+                              C.S.S.  Inc.
+                           3005 Glenmore Ave.
+			  Baltimore, MD 21214
+			    (410) 665-0193                     ASP MEMBER
+
+
+	   CALL toll free  1-800-847-0309  for CREDIT CARD ORDERS.
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3033
 

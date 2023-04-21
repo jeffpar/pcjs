@@ -52,6 +52,7 @@ machines:
 
 ## COLOR.BAS
 
+{% raw %}
 ```bas
 5 'SAVE "CB"
 100 KEY OFF: CLS
@@ -59,9 +60,54 @@ machines:
 210 WIDTH  40: LOCATE ,,1,6,7
 220 SYSTEM
 ```
+{% endraw %}
+
+## FILES013.TXT
+
+{% raw %}
+```
+Disk No 13
+Program Title: PDRAW
+PC-SIG version 1
+ 
+Usage: entertainment
+ 
+System Requirements: IBM PC or close compatible with Color graphics
+                     adapter, 2 disk drives, printer, and Dos 2.0 or later
+                     and a version of BASIC.
+ 
+File Descriptions:
+ 
+STARTREK BAS  Starship Enterprise - space war with sound effects
+STARTREK HOW  Screens of instructions - invoked by basic program
+STARTREK DUM  Data file used by program
+PDRAW    DOC  Comprehensive documentation of PDRAW package  (15k)
+PDRAW    BAS+ Drawing program
+COLOR    BAS+ Color sub-program
+MONO     BAS+ Monochrome sub-program
+COLOR    BAT+ Batch files used by PDRAW
+RUNCOLOR BAT+ "
+SETCOLOR BAT+ "
+MONO     BAT+ "
+DEMO     PIC+ Pictures used by PDRAW
+HELP1    PIC+ "
+HELP2    PIC+ "
+USASTATE PIC+ "
+USATEMP  PIC+ "
+USA      PIC+ "
+IBMSONG  BAS  IBM rally song - lyrics & bouncing ball - 80 screen
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## IBMSONG.BAS
 
+{% raw %}
 ```bas
 4 WIDTH 80
 5 ON ERROR GOTO 9500
@@ -204,9 +250,11 @@ machines:
 9510 PRINT "This program requires ADVANCED BASIC; Please reload, using BASICA"
 9520 END
 ```
+{% endraw %}
 
 ## MONO.BAS
 
+{% raw %}
 ```bas
 5 'SAVE "BB"
 100 KEY OFF: CLS
@@ -214,9 +262,11 @@ machines:
 210 WIDTH  80: LOCATE ,,1,12,13
 220 SYSTEM
 ```
+{% endraw %}
 
 ## PDRAW.BAS
 
+{% raw %}
 ```bas
 1000 GOTO 5000
 1010 C$=INKEY$: IF C$="" GOTO 1010
@@ -396,9 +446,518 @@ machines:
 5210 FOR I=1 TO 10: KEY I,"": NEXT
 5220 RETURN
 ```
+{% endraw %}
+
+## PDRAW.DOC
+
+{% raw %}
+```
+                            ** DRAW **
+                                BY
+                           DAVID MORRILL
+  
+
+
+ INTRODUCTION
+---------------
+    DRAW is an excellent program to demonstrate the color graphics
+capability of the IBM PERSONAL COMPUTER.  DRAW was written entirely in
+the IBM DOS ADVANCED BASIC (BASICA) and uses the 320 by 200 pixel
+color graphics mode.  DRAW provides an easy way to set colors, draw
+or sketch points, lines, boxes, and circles, paint figures, and load or
+save screen pictures.
+
+IBM PERSONAL COMPUTER REQUIREMENTS
+-----------------------------------
+
+    DRAW requires the following features:
+       
+       1. 64k
+       2. one diskette drive
+       3. color monitor
+       4. printer (only for a hardcopy list of DRAW'S functions)
+       
+Draw Learning Guide
+--------------------
+
+     This learning guide provides an organized way of understanding
+DRAW's function and how to use them.  
+
+    
+A.  Getting The DRAW Program Started
+      
+         The DRAW program itself comes on demo diskette A.  Picture
+    screens can be saved to or loaded from the second diskette.  The 
+    program diskette also contains procedures to change display modes
+    between the Monochromatic and the Color Monitor Display.
+
+              Note:  COLOR.BAT      (from monochrome to color)
+                     B&W.BAT        (from color to monochrome)
+
+    1.  Boot system from DOS diskette.
+      
+    2.  Place demo diskettes into diskette drives.
+   
+    3.  Type "COLOR".
+   
+    4.  Type "BASICA PDRAW".
+      
+        <A blue screen with a centered cursor will appear.>
+
+    
+                       ******Set-Up Is Complete******
+
+   
+B.  Cursor Movement
+                          
+         The numeric key pad is used to move the cursor on the 
+    screen.  Eight directions are possible.  The following keys are
+    to be used to move in the corresponding eight directions.
+
+                     Home  / \  PgUp
+                            |
+                      <----    ---->
+                            |
+                      End  \ / PgDn
+  
+    1.  Press the (<--) key and hold down.
+
+             <The cursor will move to the left.  The cursor will 
+              continue to move until it reaches the left most side of 
+              the screen, then the system will beep.  The cursor will
+              remain at the left most position.>
+
+    2.  Press the (^) key and hold.
+
+             <The cursor will move up until it reaches the top most 
+              position, then the system will beep.  The cursor should
+              now appear at the left most position.>
+
+    3.  Try all the direction keys until you feel comfortable with
+        their functions and locations.
+
+    4.  Press the number 3 key on top of the key board then use the 
+        numeric key pad direction keys to move the cursor.
+
+        Note:  You have just told the cursor to move three spaces 
+               for each key pressed.  Try all the numbers except
+               0 (zero will be explained later).
+
+        Note:  The cursor moves slower than the keys can be entered,
+               for this reason a small key buffer is maintained.  
+               When this buffer fills, the system will beep telling
+               you that you are ahead of the cursor and no keys are
+               being stored.  Just release the key to allow the cursor
+               to catch up.
+
+
+C.  Set Background Color
+
+    1.  Press the alternate key down then press F7.
+
+             <Nothing will happen.>
+
+    2.  Press the space bar once.
+
+             <Screen will change color.>
+
+    3.  Press the space bar until the screen color is the color you
+        desire for the background.  Then press enter.  
+
+
+D.  Set Palette of Colors
+
+    Note:  The 320 x 200 pixel color graphics feature allows the user
+           to pick one of two sets of three colors.  One set is light 
+           blue, violet, and white, and the other set is green, red,
+           and yellow.
+
+    1.  Press the alternate key concurrently with the F8 key.
+
+             <System will display the set of three colors that are 
+              presently active.>
+
+    2.  Press the space bar again.
+
+             <System now has activated the other set of three colors.>
+
+    3.  Press the enter key, when selected colors are displayed.
+
+
+E.  Select the Drawing Color
+
+    1.  Press the F8 key.
+
+             <A color bar will appear.  This bar is the color of the 
+              current drawing color.>   
+
+    2.  Press the space bar.
+
+             <The color bar will change colors.  This color is now the
+              current drawing color.>
+
+        Note:  The drawing color can be the background color selected
+               in section C or any of the three colors selected in 
+               section D (the palette choice).
+
+   3.  Press the space bar until your selected drawing color appears.
+       Then press enter (<--).
+
+
+F.  The Help Screen
+
+    1.  With the control key depressed, press the F5 key.
+
+             <The light on diskette drive B will come on.  The DRAW 
+              program is now saving the present screen image on diskette
+              B and when finished will load a screen which contains the
+              available functions.>
+
+    2.  Hit Enter.
+            
+             <The screen saved in step 1 is now loaded from diskette 
+              drive B into memory and will be displayed.>
+
+        Note:  The Help Screen can be used at any time without losing 
+               the contents of the screen you are using.  
+
+   
+G.  Printing A Help Function Sheet
+
+    1.  With the alternate key depressed, press the F6 key.
+
+             <The printer will print the Help Screen.  Remove this
+              function list from the printer and refer to it as we
+              proceed.>
+
+    
+H.  Drawing Points, Lines, And Clearing The Screen
+
+    1.  Center the cursor.
+
+    2.  Press the F1 key.
+
+             <The system will place a dot on the screen at the      
+              cursor's center.>
+
+    3.  Move the cursor 27 spaces left.  (9,<--, <--, <--)
+
+    4.  Press F4.
+
+             <The system has drawn a line from the new cursor 
+              position to the position where the point was previously
+              drawn.>
+     
+    5.  Move the cursor up 27 spaces (9, ^, ^, ^).
+    
+    6.  Press F4.
+
+             <Again the system has drawn a line from the current cursor
+              position to the last point drawn.>
+
+    7.  Move the cursor to the right 54 spaces.  (9, -->, -->,  -->,  
+        -->, -->, -->).
+
+    8.  Press F4.
+
+             <Again the system has drawn a line from the current cursor
+              position to the last point drawn.>
+
+    9.  Practise drawing lines.  Notice that whenever a point is drawn
+        this now becomes the new end point for the lines drawn.
+
+   10.  When completed above, press the control key and hold while
+        pressing the F10 key.  
+
+             <The system has cleared the screen.>
+          
+      
+I.  Continuous Line Drawing
+
+    1.  Center the cursor.
+
+    2.  Draw a point (press the F1 key).
+
+    3.  Move cursor 18 spaces to the left (9, <--, <--).
+
+    4.  Press F3 key.
+
+             <The system has drawn a line from the current position to
+              the previously drawn point just as in the previous
+              section.>
+      
+    5.  Move cursor up 18 spaces.  (9, ^, ^).
+
+    6.  Press F3 key.
+
+             <The system has now drawn a line from the current cursor
+              position to the last cursor position rather than the last
+              point drawn as in the previous section.>
+
+    7.  Move cursor and practise using F3, the continuous line drawing
+        function.  
+
+    8.  Clear screen (Control F10).
+
+   
+J.  Drawing Circles
+
+    1.  Center cursor.
+
+    2.  Draw a point - F1.
+
+        Note:  This point now becomes the refernece point (in this case
+               the center point of the circles we will draw).
+
+    3.  Move cursor left 5 spaces (5,<--).
+
+    4.  Press F2.  
+
+             <The system has now drawn a circle through the current
+              cursor position established above in step 2.>
+
+    5.  Move cursor left another 5 spaces then press F2.  
+
+             <The system has drawn another circle through the new 
+              current cursor position whose center is again the last
+              point drawn.>
+
+    6.  Practise this, then clear the screen (control/F10).
+
+     
+K.  Drawing Boxes
+
+    1.  Center cursor.
+
+    2.  Draw a point (F1).
+
+    3.  Move 10 spaces diagonally (top/left)(5, Home, Home)
+
+    4.  Press F6.
+
+             <The system has drawn a box.  The box has been drawn with
+              the current cursor position at the top/left corner and
+              the last drawn point at the opposite corner.>
+    
+    5.  Move 10 more spaces diagonally (5, Home, Home).  
+
+    6.  Press F6.
+
+             <The system has duplicated step 4 above.>
+
+    7.  Practise drawing boxes then clear the screen (control/F10).
+
+   
+L.  Painting Drawn Figures
+
+    1.  Center the cursor.
+
+    2.  Draw a box (F1, 5, Home, Home, F6).  
+
+    3.  Move cursor inside box (PgDn).
+
+    4.  Select paint color.  Press F7.
+
+             <A bar will appear with the current paint color, press the
+              space bar until you have the color you wish, then press
+              return.  The color bar will disappear.>
+        
+    5.  Press F5.
+
+             <The box has been painted with the color you have 
+              selected.>
+    
+     
+M.  Erasing Points, Lines, Boxes, Or Circles
+   
+    1.  Clear screen and center cursor.
+
+    2.  Draw a line (F1, 5, Home, Home, F4).
+
+    3.  Erase line (control/F4).
+
+             <The system has erased the drawn line.>
+
+    4.  Clear screen and center cursor (PgDn, PgDn).  
+
+    5.  Draw a box (F1, 5, Home, Home, F6).
+
+    6.  Erase the box (control/F6).
+
+    7.  Redraw above box (5, PgDn, PgDn, F1, Home, Home, F6).
+
+    8.  Paint box (PgDn, F5).
+   
+    9.  Erase painted box (F7, space until color bar is the background
+        color then center)   
+        (press F5) - erases paint.
+        (Home, control/F6) - erases box.
+
+   10.  Practise drawing and erasing figures.
+
+    
+N.  Sketching:  Points, Lines, Circles & Boxes
+
+    Note:  Sketching is the same as drawing except that the DRAW program  
+           draws a point, line, circle, or box everytime you move the
+           cursor.
+
+    1.  Center cursor and clear screen.
+
+    2.  Establish a reference point (F1).
+
+    3.  Tell DRAW you want to sketch a circle (shift/F2).
+
+    4.  Press #3 key on top of key board.
+    
+    5.  Press (<--) key once.
+
+             <System draws a circle.>
+
+    6.  Press (<--) key once.
+
+             <System draws another circle.>
+
+    7.  Press (<--) key and hold down.
+
+             <System continues to draw circles whose centers are the
+              last drawn point through the current cursor position each
+              time the cursor moves.  Turn off sketching with (shift/
+               F7) or (shift/F10).>
+
+    8.  Practise with boxes, lines, points, and painting.
+
+   
+O.  More Objects (GET/PUT)
+
+    1.  Create a box (F1, 5, Home, F6).
+
+    2.  Press F10.  Draw will store the box.
+
+    3.  Press #0 at the top of the keyboard.
+
+             <This tells DRAW to move the cursor the number of spaces
+              equal to the size of the box.>
+
+    4.  Press Home then F9.
+
+             <System created another box.>
+
+    5.  Press (-->,-->, F9).
+
+        Note:  The GET/PUT functions work for rectangular screen 
+               images only.
+
+        Note:  DRAW provides different ways to PUT the objects that
+               have been gotten.  The stored rectangle can be "and'ed,"
+               "or'ed,"  "xor'ed,"  or "Pset,"  with the contents of the
+               screen where the resulting image will go.  To set "and,"
+               "or,"  "xor,"  or "Pset,"  press the alternate and F9 
+               keys concurrently, then press the space bar until the
+               desired method is displayed.  Next press the return key.
+                                                                       
+               Try painting an image using the different methods to see
+               their effects.  (For more information see the BASIC 
+               manuals, pages 4-200 through 4-202).
+   
+    
+P.  Clear A Section Of The Screen (Clear Box)
+
+    1.  Set reference point for one corner of the rectangular section of 
+        the screen you want to clear (F1).
+
+    2.  Move cursor to opposite corner of a rectangular area.  Then 
+        press the control and F8 keys simultaneously.
+    
+             <This will clear the contents of the rectangular area
+              to the color currently used to paint.>
+    
+    
+Q.  Writing Text On The Screen
+
+    1.  Press alternate and F10 keys simultaneously.
+
+             <Then keyboard will work as if in text mode and text can be
+              displayed on the screen.>
+
+        Note:  Can be used to label or title a screen picture.  The 
+               enter key will end text mode and return to graphics mode. 
+                      
+    
+R.  List Stored Pictures
+
+    1.  Press the alternate and F4 keys simultaneously.
+
+             <System asks which diskette drive to look at.>
+
+    2.  Enter B then press the enter key.
+
+             <System then lists all the pictures on drive B.>    
+
+        Note:  Format of listing of pictures is as follows:
+
+               NAME1   .PIC     NAME4   .PIC     NAME7   .PIC
+               NAME2   .PIC     NAME5   .PIC     NAME8   .PIC
+               NAME3   .PIC     NAME6   .PIC     NAME9   .PIC
+
+               To load any picture enter the name, [.PIC] is 
+               unnecessary.
+
+  
+S.  Load a Stored Picture
+
+    1.  Press alternate and F2 keys concurrently.
+
+             <System asks for the name of picture to be loaded.>
+
+    2.  Type the name of any saved picture.
+
+             <System asks you to enter which diskette drive the picture
+              is on.>
+
+    3.  Enter B then press the enter key.
+
+             <System loads picture.>
+
+    
+T.  Save A Picture
+
+    1.  Create a screen.
+
+    2.  Press the alternate and F1 keys concurrently.
+
+             <System will ask you to enter the name of your picture.>
+
+    3.  Enter name of picture (up to 8 characters) and press enter.
+
+             <System will ask you which drive (A or B) you want to save
+              the picture on.>
+
+    4.  Enter B then press the enter key.
+
+             <System saves picture on diskette in drive B.>
+
+
+
+
+
+          
+     
+    
+  
+   
+   
+    
+   
+   
+***********************************FIN**********************************
+
+```
+{% endraw %}
 
 ## STARTREK.BAS
 
+{% raw %}
 ```bas
 100 CLS
 105 RANDOMIZE (VAL(MID$(TIME$,7,2)))
@@ -1009,6 +1568,7 @@ machines:
 6980 RETURN
 50000 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

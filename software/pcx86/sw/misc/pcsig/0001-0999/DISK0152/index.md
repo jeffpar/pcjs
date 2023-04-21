@@ -63,8 +63,26 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## -README-.DOC
+
+{% raw %}
+```
+Recommend you read the rbbs-pc.doc file first.....
+Just copy the file to your printer or in DOS
+A:TYPE RBBS-PC.DOC  (press Ctrl and PrtSc) at the same time
+and then press enter and you will get the documentation on
+your printer... Good luck......
+to set up the disks for operation
+format 2 Diskettes (1 with system and 1 for DATA only)
+copy BASICA.COM to the 2nd DISKETTE (which you have formatted for data only)
+and then Type B:STARTUP with CPC-11 (DISK-18) in "B"  drive......
+
+```
+{% endraw %}
+
 ## CONFIG.BAS
 
+{% raw %}
 ```bas
 1 ' WARNING !!! DO NOT CHANGE, BYPASS OR REMOVE LINES 25-44
 2 ' CONFIG.BAS (RBBS-PC ver. CPC12.1)
@@ -889,9 +907,11 @@ machines:
 58000 IF FNTI!<IWAIT! THEN GOTO 58000
 58100 RETURN
 ```
+{% endraw %}
 
 ## FIXFILES.BAS
 
+{% raw %}
 ```bas
 100 'FIXFILES.BAS   -  Cleans up CALLERS file & ADDS A NEW FIELD TO USERS.
 101 ' by Jon Martin       12/08/83.
@@ -947,9 +967,11 @@ machines:
 680 PRINT "CONVERSION OF USERS FILE ENDED AT ";TIME$
 1000 END
 ```
+{% endraw %}
 
 ## RBBS-PC.BAS
 
+{% raw %}
 ```bas
 3 REM $linesize: 132
 25 SCREEN 0,1,0:WIDTH 80:CLS:KEY OFF:LOCATE,,0:PRINT TAB(60)"tm":PRINT TAB(16)STRING$(15,205)" U S E R W A R E "STRING$(15,205):PRINT:PRINT TAB(17)"Capital PC User Group User-Supported Software":PRINT:PRINT TAB(7)CHR$(214)STRING$(62,196)CHR$(183)
@@ -1898,9 +1920,1558 @@ machines:
 62530 Q=SQ:B$=SB$:LI=SLI:L=SL:NOSTOP=NS:R=SR:KILLMSG=0:REPLY=0:GOSUB 1575:RETURN
 63000 'CPC12 - *** END OF PROGRAM ***
 ```
+{% endraw %}
+
+## RBBS-PC.DOC
+
+{% raw %}
+```
+REMOTE BULLETIN BOARD SYSTEM
+
+	   for the
+
+    IBM Personal Computer
+
+       Version CPC12.1
+
+       Copyright 1983, 1984
+
+	     by
+
+       D. Thomas Mack
+       10210 Oxfordshire Road
+       Great Falls, Virginia 22066
+       VOICE -- (703) 759-4357
+       DATA  -- (703) 759-5049
+
+	     AND
+
+       Jon Martin
+       4396 N. Prairie Willow Ct.
+       Concord, California 94521
+       DATA  -- (415) 689-2090
+
+       January 29, 1984
+
+
+      TABLE OF CONTENTS
+
+
+ 1.0  INTRODUCTION
+      1.1  The Capital PC User Group
+      1.2  The "contribution" requested for RBBS-PC
+      1.3  The "history" behind RBBS-PC
+      1.4  RBBS-PC Update Conventions
+      1.5  What's new with CPC12.1
+
+ 2.0  RECOMMENDED MINIMUM SYSTEM CONFIGURATION
+
+ 3.0  MODEM CONTROLS
+
+ 4.0  MODEM CABLE REQUIREMENTS
+
+ 5.0  OPERATING SYSTEM REQUIREMENTS
+
+ 6.0  INSTALLING RBBS-PC CPC12
+
+ 7.0  USING THE "CONFIG" UTILITY TO CONFIGURE RBBS-PC CPC12
+
+7.1   SYSOP's name and password for remote access.
+7.2   Ring-back Feature.
+7.3   Drive Available for Uploading.
+7.4   Drives Available for Downloading.
+7.5   Drive with RBBS-PC System Files.
+7.6   RBBS-PC Files on the Default Drive.
+7.7   Summary of RBBS-PC System Files.
+7.8   Name of Directory to Update for Uploads
+7.9   Prompt Sounds
+7.10  Maximum Time on System.
+7.11  Maximum Number of Messages Allowed.
+7.12  Months of Inactivity before a User is Deleted.
+7.13  Number of System Bulletins.
+7.14  Echo User Sessions On Screen (SNOOP).
+7.15  Execution Type
+7.16  Communication Port to be Used
+7.17  Selecting Alternate CONFIG Screens
+7.18  RBBS-PC Text File Drive and File Names
+7.19  Version of DOS RBBS-PC Will Run Under
+7.20  RBBS-PC System File Drive and File Names
+7.21  Making System Bulletins "Optional"
+7.22  Color Monitor's Foreground/Background/Border
+7.23  Selecting the Modem Speaker On or Off
+7.24  Reminding Users of Messages They Left
+7.25  Indicating .BAS Files Are Binary
+7.26  Providing the Name of the .BAT file for RBBS-PC
+7.27  Providing the Name of the .BAT file for CTTY
+7.28  Omitting First Level Directory in "New" Command
+7.29  Omitting Upload Directory in "New" Command
+7.30  Making System "Welcome" Interruptable
+7.31  RBBS-PC Menu Text File Drive and File Names
+7.32  Graphic Menus
+7.33  Remind Users of Uploads and Downloads
+7.34  Default User Page Length
+8.0  COMMUNICATION BUFFER
+9.0  USING MULTIPLE FILE DIRECTORIES
+10.0  SETTING UP ".BAT" FILES FOR RBBS-PC
+11.0  GETTING A "FREE" TELEPHONE LINE FROM MA BELL
+12.0  SYSOP FUNCTIONS
+13.0  UPLOADED FILE TIPS
+14.0  COMPILING AND LINKING RBBS-PC
+15.0  LIMITED LICENSE
+16.0  LIMITED WARRANTY
+17.0  RBBS-PC UTILITY PROGRAMS
+18.0  RBBS-PC FUTURE DIRECTIONS
+APPENDIX A -- Running RBBS-PC CPC12.1 Under MultiLink
+1.0 INTRODUCTION
+
+ The RBBS-PC software is the result of many thousands of man-hours of effort
+by members of the Capital PC Users group.  This work was done in the interest
+of introducing as many people as possible to the communications capabilities
+of the IBM PC family of personal computers.  As each new RBBS-PC system goes
+on-line across the U.S., there will be more unattended communications systems
+available for IBM PC users to call.  The source code also provides a
+tremendous education in unattended communications software design.
+
+ A new system operator is often frustrated because the system does not get
+much activity at first.  This is especially true for hobbyists.  Some
+operators get so frustrated that they shut down the system before it really
+gets started.  This is unfortunate because it usually takes time for a new
+system telephone number to get into circulation.  Most systems only receive a
+few calls during the first two months of operation.  For system operators that
+get beyond this "break in period", however, there are new experiences in
+store.	You will begin to see the opportunities for new experiences as you
+read further.
+
+1.1 The Capital PC Users Group
+
+The Capital PC User Group is a Maryland Corporation whose "legal
+name" is the Capital PC User Group Inc.   The purpose of the
+CPCUG is as follows:
+
+ a.  To provide a forum for member of the IBM PC community for their mutual
+benefit, increased understanding, and utilization of the IBM PC.
+ b.  To encourage experimentation and research in the current and potential
+use of the IBM PC.
+ c.  To provide an opportunity for all users of the IBM PC to exchange ideas,
+knowledge, and experience for the enrichment of all concerned.
+ d.  To provide an opportunity for both formal and informal education in
+computer applications, hardware, and software technologies.
+ e.  To provide a medium of communication with user groups in other areas
+(location and orientation).
+ f.  To provide an opportunity for the formation of special interest groups.
+ g.  To provide a medium for the software exchange of public domain and
+contributed programs.  The illegal copying, use, or distribution of software
+is specifically prohibited.
+h.  To assist members in acquiring computer hardware and software.
+
+ The CPCUG is a non-profit organization according to Section 501C4, Social
+Welfare, of federal law.  All revenues are re-invested in and applied to the
+CPCUG education programs.
+
+1.2  The "contributions" requested for RBBS-PC
+
+ The "logo" of RBBS-PC requests contributions.  This is because the RBBS-PC
+may be perceived as an advantage to user-groups, businesses, or government
+agencies.  It is hard to put a value on the RBBS-PC as it varies from
+organization to organization and from time-frame to time-frame.
+
+ The first and most desirable level of "contribution" is public domain
+software sent to the Capital PC Software Exchange (P.O.  Box 6128, Silver
+Spring, MD 20906).  This requires that you or your organization take the time
+and trouble to document whatever you wish to share.  I would advise you to be
+prepared to convince your organization's legal department that IBM PC
+utilities, "peeks/pokes", etc.  are shareable with the world in general.
+Often these are perceived as "proprietary" and lawyers tend to view software
+contributions to the "public domain" as the needless jeopardizing of your
+organization's technical dominance.  This legal myopia overlooks the fact that
+"public domain" software can be used to establish your organization's
+technical dominance.  If you have a new PC hardware product, a "public domain"
+software that demonstrates it's potential may be just the marketing strategy
+to create a demand for the product.  If you are a consulting organization,
+your technical reputation may be widely spread through "public domain"
+software.
+
+ Independent of whether you can donate public domain software, If you wish to
+become a member of CPCUG, simply send your name, address, home/work phone
+numbers along with $25 to CPCUG, P.O.  Box 3189, Gaithersburg, MD 20878.
+
+If in the final analysis you feel that you can do none of the
+above,
+
+     o remember those who have,
+     o enjoy what they have nurtured, and
+     o keep the faith with those who have gone before you.
+
+1.3 The "history" behind RBBS-PC
+
+ This version of the Remote Bulletin Board System RBBS-PC contains some
+revisions and new features, but the basic structure of the program is the same
+as it was originally written by Russ Lane and modified by Brad Hanson.	Brad
+Hanson found it on the Dallas R/CPM\CBBS system and added many fixes and
+modifications.	Capital PC Communication SIG members have added several other
+enhancements beyond those added by Brad.  Contributors to the RBBS-PC software
+and to this documentation are:
+
+Jim Fry 	Larry Jordan	   Wes Meier
+Kent Galbraith	Robert Jueneman    Rich Schinnell
+Ken Goosens	Scott Loftesness   Dorn Stickle
+Gary Horwith	Harry Logan	   Terry Steichen
+Read Gilgen	Jon Martin	   Arnold Thomsen
+Loren Jones	Tom Mack	   Clark Walker
+Sidney Markowitz
+
+
+
+To those whose names have not been mentioned -- apologies are
+extended.  Take comfort in knowing that you live on in the work
+that you have wrought.
+
+ I first obtained RBBS-PC from Rich Schinnell in late June of 1983.  It was
+Larry Jordan's CPC 9.0 and I subsequently made it compilable (CPC10.0) in July
+of 1983.  In August of 1983, I put out CPC11.0 which included the use of the
+CONFIG.BAS utility that created a separate "definition" file with the SYSOP's
+predilections for RBBS-PC parameters -- this allowed the RBBS-PC.EXE to be
+downloadable without revealing the SYSOP's passwords.  After that the releases
+where as follows:
+
+Release Date  Version Number  Significant Enhancements
+
+  09/15/83	CPC11.1       1.  Contains UTSPACE.OBJ to
+			       determine the amount of space
+			       available for uploading.
+			      2.  Gives a "busy" signal when the
+			       SYSOP is on.
+  10/01/83	CPC11.2       3.  A complete re-write of RBBS-PC
+			       error recovery (line numbers 13xxx)
+			       that I screwed up when I made
+			       RBBS-PC "compilable."
+			      4.  All references to the
+			       communications are made symbolic
+			       so that either COM1 or COM2 can
+			       be used for RBBS-PC.
+  10/28/83	CPC12.0       5.  RBBS-PC is enhanced to know
+	   (formerly CPC11.3)  when it is operating under Multi-
+			       Link and dynamically adjusts its
+			       activities accordingly.
+			      6.  Callers file becomes a random
+			       file and the callers log is listed
+			       beginning with the latest one.
+			      7.  RBBS-PC can have an unlimited
+			       number of file directories.
+  12/18/83	CPC12.1       8.  RBBS-PC will allow the SYSOP
+			       to drop into DOS via the CTTY
+			       command when he logs on remotely.
+			      9.  Provides a "New" command to
+			       allow a user to find out what is on
+			       the download directories since the
+			       last time he was on.
+
+ Jon Martin was the primary author of CPC12.0 and my co-author of CPC12.1
+Obviously the follow-on to CPC12.0 and CPC12.1 would be the same thing under a
+multi-tasking DOS (3.0).  However, Multi-Link is the only thing currently
+available and, depending on how DOS 3.0 is priced/marketed, may always be the
+"poor man's multi-user DOS." It is because of this that I went ahead with
+CPC12.0 and CPC12.1.
+
+ All the above changes have been "ADDITIVE." By that I mean CPC12.1 will run
+in the same environment and in the same way as CPC11.0.  I felt that users
+should not be forced to choose between features (i.e.  I can run either the
+features on CPC11.2 or the features on CPC12.1).
+
+1.4  RBBS-PC Updates Conventions
+
+ As you know RBBS-PC is the work of many hands.  The quality of the source
+code ranges from the elegant to the primitive.	In a very real sense it is a
+"patchwork quilt." As RBBS-PC continues to evolve and be "debugged" the
+following coding conventions have been helpful in the past and you are
+requested to observe them in the future:
+
+     --  Updates consist of two ASCII files.  One called
+     xxxxxx.MRG which are the BASIC source statements to be
+     merged into CPC12.1 as released by the Capital PC Software
+     exchange.	The second file is called xxxxxx.DOC  which
+     groups each line number in xxxxx.MRG into the specific
+     functions added and describes the general feature added
+     or bug that was fixed.  Obviously xxxxxx can be anything
+     you wish to name it.  The second file will help the poor
+     soul that must integrate several .MRG files and resolve
+     whatever conflicts that may exist.
+
+     --  Naming conventions of CPCxx.x are roughly as follows:
+
+     1.  If a "bug" is being fixed CPCxx.x will be given a .MRG
+     file name such as CPC12-1B.MRG with a corresponding
+     CPC12-1B.DOC file describing the changes on a line number
+     by line number basis.  The first version of CPCxx.x is always
+     "A".  When you logon to RBBS-PC the version will be
+     displayed.
+
+     2.  If a new feature or enhancement is added the last digit
+     in the CPCxx.x will be incremented by one (i.e. CPC12.0 was
+     followed by CPC12.1).
+
+     3.  If a significant change to source code or logic occurs,
+     the first two digits of the release level will change (i.e.
+     CPC11.2 was followed by CPC12.0)
+
+ The purpose of these conventions is to allow everyone to know what RBBS-PC
+level they are running under (users as well as SYSOP's) and understand the
+logic behind the changes/fixes as they occur so each SYSOP can evaluate them
+for his own needs.  If you have comments or fixes please let us know so that
+they can be reflected in the RBBS-PC program and shared with all other users.
+You can do that by sending your changes by mail to:
+
+		   Capital PC Software Exchange
+			  PO Box 6128
+		      Silver Spring MD 20906
+
+or uploading the changes to the CPCUG's Software Exchange's BBS
+maintained by Rich Schinnell at (301) 949-8848. PASSWORD ="IBMPC"
+
+While comments and suggestions are always welcome, those that are
+accompanied by the RBBS-PC source code changes that implement
+them  carry a lot more weight than those that don't.
+
+1.5  What's New With CPC12.1
+
+CPC12.1 represents several incremental enhancements to earlier
+version of RBBS-PC.  The new features are:
+
+ - One major accomplishment for RBBS-PC CPC12.1 was a correction to the random
+CALLERS file.  In CPC12.0 the callers file used 128 bytes to store a 64 byte
+record.  This was caused by an inconsistency in the way DOS 1.1 and DOS 2.0
+keep track of bytes in use for random files.
+
+ Before installing CPC12.1 the sysop must run a conversion program
+(FIXFILES.BAS) to correct the oversized CALLERS file and eliminate all the
+extra records.	Alternatively, the CALLERS file may simply be deleted.
+
+ - Another major accomplishment for RBBS-PC CPC12.1 was a new SYSOP function,
+12.  This allows SYSOPS that logon remotely to drop into DOS 2.0 to do system
+maintenance from their remote terminals.  This feature requires that RBBS-PC
+be started via a "batch" file that contains an "IF" statement that checks for
+the dynamically built "batch" file for option 12 and which then executes it if
+it exists.
+
+-  Callers can be reminded of messages they have left for
+others, and asked to kill those that are no longer needed.
+This option is provided for in CONFIG.
+
+-  COM, EXE & OBJ files have always required XMODEM
+transmission.  A new option in CONFIG will prompt callers that
+BAS programs also require XMODEM.  RBBS-PC will not allow any
+"binary" files to be downloaded unless XMODEM is used.
+
+ - A new function has been added to the files menu to allow a list new
+function (N).  The user may stack the DIR files or may list them one at a
+time.  The user may also request "ALL" to display new filenames on "all" dir
+files.	The conversion program mentioned earlier (FIXFILES.BAS) initializes
+each record in the USERS file for the new function and should be run against
+your old users file.  Additionally three HELP files had to be changed to
+include a description of this new user function -- HELP02, HELP05, and HELP07.
+You should replace the old HELP files with these new ones.
+
+ - Callers using the O)perator option outside of normal office hours will be
+presented with the sysops' normal available hours.
+
+ - The hours, minutes & seconds a caller is logged on during each session has
+been added to the caller record written to the CALLERS file.  This information
+will be useful to those SYSOP's that want to show the telephone company the
+amount of revenue that their board is generating for them from long distance
+phone calls.
+
+ - The maximum input field length has been expanded from 32 bytes maximum to
+64 bytes maximum (this especially useful when nesting multiple commands such
+as reading multiple directories.
+
+-  Selected error messages will now be sent to the CALLERS
+file.
+
+-  All timing loops have been modified to use the clock
+for time keeping purposes instead of loop counts to allow
+for consistent times whether running compiled or interpretive.
+
+-  When "packing" the USER file, users that have been "locked out"
+will not be purged.
+
+ - Correct the time of day function to show 5 minutes after noon as 12:05PM.
+
+ - Prevents the use of DOS 2.0 "global" file names for downloading or
+uploading.
+
+-  The SYSOP can grant a user SYSOP privileges for the duration of
+the users session.
+
+-  All RBBS-PC menus have been made external to RBBS-PC.  They are
+text files that can be tailored to the SYSOP's tastes.
+
+ - The RBBS-PC menus as well as the WELCOME and BULLETIN text files can
+contain graphics characters.  These files are recognized by RBBS as being the
+same name as the non-graphics text file appended by a "G".  These graphics
+files are displayed instead of the non-graphics files when a user logs on with
+no parity/8 data bits, requests graphics and the SYSOP has indicated that the
+graphics files are available in the RBBS-PC.DEF file via the CONFIG.BAS
+program.
+
+ - The SYSOP can elect to remind users of the number of uploads and downloads
+that they have done.  To use an existing USERS file, the SYSOP must run the
+utility USRINIT1.BAS to zero out the counters for each user in the USERS file.
+To obtain the counts of the uploads prior to release CPC12.1F, the SYSOP must
+run the utility USRINIT2.  BAS against all CPC12.1 CALLERS files.  This
+utility will update the counts in the USERS file based on the activity
+recorded in the CALLERS file.  USRINIT2.BAS should not be run again as
+CPC12-1F keeps a dynamic count of upload and download activity.
+
+-  When files are listed, the MORE prompt allows both YES (the default),
+NO, or NS (Non-stop listing) as responses.
+
+ - When reading or scanning messages, a user can elect not only NS when he
+gets the MORE prompt, but also RE (to enter a message in response to the
+current message), and K (to kill the current message).	Additionally the user
+can scan or read messages only to or from him by entering the command R;M.
+
+
+
+2.0 RECOMMENDED MINIMUM SYSTEM CONFIGURATION
+
+For RBBS-PC CPC12 the following equipment and software is
+recommended:
+IBM PC or IBM PC XT
+80 column monitor
+Asynchronous communications adapter (serial port)
+Hayes Smartmodem 300, 1200, or 1200b or Rixon PC212A
+Voice grade telephone connection for modem
+25 pin RS-232-C modem cable (for stand alone modem)
+128K RAM
+Two double sided drives
+Printer
+PC-DOS 2.0
+BASICA 2.0
+
+It is possible to run RBBS-PC CPC12.1 under DOS1.1.  Also
+you may choose to run it on only a single double sided drive or
+two single sided drives.  However the less disk space available
+the more file maintenance the SYSOP must do.
+
+Note: You do not need a data grade line for operation of this
+RBBS-PC. If you have a second telephone installed specifically
+for RBBS-PC, ask for a second voice grade telephone line. Data
+lines are very expensive and are not necessary.
+
+3.0 MODEM CONTROLS
+
+The program requires the use of a Hayes Smartmodem 300 or 1200 in
+order to function properly.  The switch settings on the modem are
+important and are described in the first few lines.  The settings
+are as follows:
+
+	      switch -- 12345678
+	      setting - UUDDDUUD
+
+ NOTE!	-- Setting switch 1 down was a requirement for CPC12-1A through
+CPC12-1E only!	With the release of CPC12-1F switch 1 can be in the up
+position (as it had been for all previous version of RBBS-PC earlier than
+CPC12-1A).  CPC12-1F does not depend on the escape sequence of the HAYES modem
+to maintain carrier when dropping into DOS2.0.
+
+ These switch settings do not have to be changed for most other communications
+software packages.  (You can leave the switches set as shown above if you use
+PC-TALK for your smart terminal communications.  However, you will be advised
+to give the modem an "ATZ" command before using PC-TALK in order to reset the
+registers correctly.) The modem cards now available for the IBM PC can be used
+without changing any of their switch settings as long as they have a Hayes
+compatible command mode.  Be sure you put the modem card in the Hayes mode
+before you boot up RBBS-PC or the software will not work.  The Hayes 1200b and
+the Rixon PC212A have been tested successfully with RBBS-PC using the standard
+card switch settings.
+
+ RBBS-PC should only be used with versions 123 and above of the Hayes
+Smartmodem 1200.  Earlier versions do not answer the telephone properly.  The
+ATI command will cause the Smartmodem to tell you its version.	(ATI is
+available on 1200 and 1200B only.)
+
+ The answering portion of RBBS-PC is done internal to the program; it
+'watches' for the ring in on the modem and then issues an 'A' to answer the
+phone.	This was due to the original coding of a ringback feature.  If the
+line is not a dedicated data line, a ring-back value of 6 or greater should be
+entered when configuring RBBS-PC using the "CONFIG" utility (see parameter
+number 7.) The RBBS will answer the phone at the ring number specified or will
+answer on the first ring if the telephone is allowed to ring only once then
+the call is placed again within 50 seconds.
+
+ Callers who come in at even parity and 7 data bits, then try to change to no
+parity and 8 data bits to use XMODEM may have a problem if they are using
+PC-TALK and a Hayes Smartmodem.  Switch 1 has to be down (the factory default
+position) or the carrier will be dropped when the communication parameters are
+switched.  To avoid this the PC-TALK caller will have to enter the escape code
+(factory setting "+++"), reset the modem parameters with Alt-P and/or Alt-F,
+and then return to the "connect" state with the command "ATO." Callers who
+wish to communicate at 450 baud have to call in at 300 baud then switch to 450
+using the N)ew baud selection from the main menu.
+
+4.0 MODEM CABLE REQUIREMENTS
+
+ For the program to be activated, you have to have PIN 22 hooked up on the
+RS-232-C cable (that runs between the modem and the computer).	If you do not
+have PIN 22 hooked up between the modem and the computer, then you will get a
+loop in lines 275 and 277 of the RBBS program, and even though the modem
+answers the phone,the program will never respond due to the fact that it is
+not aware that the phone has rung and the modem has answered.  PIN 22 is the
+ring indicator coming from the modem going to the computer.
+
+ The most common problem that I have been called about is that RBBS-PC "won't
+answer the phone." The universal solution for each and every caller has been
+to tell him to trade in his $55 12-pin Computerland RS232 cable for about $8
+in parts from Radio Shack and put together you own RS232 cable with all the
+pins connected.
+
+5.0 OPERATING SYSTEM REQUIREMENTS
+
+ Under the basic interpreter RBBS-PC uses the FILES function to determine the
+amount of free space available on the disks for comments, messages, uploads,
+and the SYSOP.	Under DOS1.1's BASICA this FILES function does not return the
+amount of free space or file sizes and, hence, this information is
+unavailable.  Under the compiler available free space is returned by the use
+of an assembler subroutine (UTSPACE).
+
+6.0 INSTALLING RBBS-PC CPC12
+
+ RBBS-PC can be obtained from the Capital PC Software Exchange, P.O.  Box
+6128, Silver Spring MD 20906 by sending a check for $6.  RBBS-PC is
+distributed on one double-sided, 8-sector, diskette with a batch file,
+SETUP.BAT, to install the system.  Prior to installation or running of
+SETUP.BAT, a user should have formatted one double-sided diskette with his
+operating system on it (DOS 1.1 or DOS 2.0).  This first diskette is referred
+to as disk RBBS-SYS.  Also prior to installation or running of SETUP.BAT, a
+user should have formatted a second double-sided diskette with BASICA.COM on
+it.  This second diskette is referred to as disk RBBS-DATA01.
+
+ To install RBBS-PC, first load your operating system into your PC.  Place the
+RBBS-PC distribution diskette, labeled RBBS-PC, in the B drive of your system.
+Place RBBS-SYS in the A drive of your system.  With the default drive as the A
+drive, execute the batch utility for installing RBBS-PC by issuing the
+following command:
+
+		B:SETUP.BAT
+
+The batch utility will tell you when to place the second diskette
+in the A drive of your system and will automatically invoke the
+"CONFIG" utility.  The distribution diskette for RBBS-PC CPC12
+contain the following 33 files as shown:
+
+RBBS-PC.EXE  CONFIG.BAS
+DIR	     REMREM.BAS
+BULLET1      ADDLF.BAS
+SETUP.BAT    UNWS.BAS
+WELCOME      FC.BAS
+HELP01	     RBBS-PC.DOC
+HELP02	     DIR
+HELP03	     RBBS.BAS
+HELP04	     UTSPACE.OBJ
+HELP05	     FIXFILES.BAS
+HELP06	     USRINIT1.BAS
+HELP07	     USRINIT2.BAS
+NEWUSER      MENU1
+BULLETIN     MENU1G
+MENU2	     MENU3
+MENU2G	     MENU3G
+WELCOMEG
+
+ The exigencies of RBBS-PC software releases may mean that diskette 18
+contains an earlier version of RBBS-PC than CPCxx.x (either you bought
+diskette 18 awhile ago or there has been not enough time for diskette 18 to be
+updated to this most current version).	Not to fear!  Your $6 has not been
+wasted.  At least two bulletin boards keep the most current copies of RBBS-PC
+CPCxx.x for downloading.  They are:
+
+(703) 759-5049 -- East Coast (Great Falls, Virginia), and
+(415) 689-2090 -- West Coast (Concord, California).
+
+All the files on diskette 18 (even if it has an earlier version
+than CPC12.1) are usable with CPC12.1 with the exception of:
+
+RBBS-PC.BAS   -- The BASIC source code for RBBS-PC CPC12.1
+RBBS-PC.REM   -- The remarks file that can be "merged" into
+		 RBBS-PC.BAS to document the program's flow/routines
+CONFIG.BAS    -- The BASIC source code for the configuration
+		 utility that is required for CPC12.1 (note:
+		 CPC12.1 will not run with earlier versions of
+		 CONFIG.BAS)
+ USRINIT1.BAS -- Utility to zero up/download counters in the USERS
+		 file.
+ USRINIT2.BAS -- Utility to scan existing CPC12.1 CALLERS files and
+		 update the USERS file with up/download activity.
+ MENU1	      -- Menu of commands for SYSOP's only.
+ MENU1G       -- Graphics version of MENU1
+ MENU2	      -- Main message subsystem menu of commands
+ MENU2G       -- Graphics version of MENU2
+ MENU3	      -- File subsystem menu of commands
+ MENU3G       -- Graphics version of MENU3
+ WELCOMEG     -- Graphics version of WELCOME
+
+ If you don't have these three files on your diskette 18, feel free to
+download them from the above two RBBS-PC bulletin boards.  Alternatively, you
+can wait until CPC12.1 is on diskette 18.  Generally speaking, diskette 18 is
+one to three months behind the "latest" release of RBBS-PC.  This is because
+the Software Exchange prefers to wait until the RBBS-PC software has survived
+on more than the two or three bulletin boards that are involved in "beta"
+testing RBBS-PC for the Capital PC Users Group.  Additionally, it also takes
+time to "package" each new diskette 18 and make sure that it "works".  To all
+of this is the added delay of making multiple copies of diskette 18.  As you
+can see a one to three month "delay" in getting new releases onto diskette 18
+isn't all that long a time to squeeze all this activity into (especially for
+an all-volunteer organization!).
+
+7.0 USING THE "CONFIG" UTILITY TO CONFIGURE RBBS-PC CPC12
+
+ The RBBS-PC.DEF file you get (which, if you don't have it originally, is
+created for you by the CONFIG.BAS program) contains the program's default
+operating parameters and values.  When you run the Config.bas program to
+either create RBBS-PC.DEF or to update it, you can change many of these
+parameters to meet your needs.	Certain parameters which control critical
+operations of the programs are embedded in the RBBS program and should not be
+normally be changed by the system operator.  Unless a value or parameter is
+noted here, it should be changed only with great forethought and caution.  The
+CONFIG utility is invoked by placing the RBBS system files in the default
+drive (which is assumed here to be A:  -- this is important because when the
+configuration process is finished, the program will write the RBBS-PC.DEF file
+to the RBBS disk) and invoking the command:
+
+		  BASICA  B:CONFIG
+
+7.1 SYSOP's name and password for remote access.
+
+ Parameters 1-4 request the RBBS system operator's (SYSOP) name and dual
+passwords.  When logging onto the system remotely, SYSOP can log on using
+Password #1 for his first name and Password #2 for his last name,in which case
+the system will recognize him as SYSOP and allow him to perform all the SYSOP
+functions even as a remote user.
+
+ Parameter 5 sets the system operator's sign-on mode as EXPERT or NOVICE.
+Unless you a very familiar with the RBBS-PC CPC12's command structure, the
+SYSOP's sign-on mode should be NOVICE.  Parameter 6 is the SYSOP's "office
+hours" (i.e.  when he can be paged by a user).  The IBM PC's bell is rather
+insistent, and these hours should be set to match when you will be within
+ear-shot of the RBBS-PC.  The times are set using a 24-hour military clock
+(i.e.  10:00 P.M.  is 2200 hours).  NOTE:  These hours can be overridden by
+activating the page bell (F4).
+
+7.2 Ring-back Feature
+
+ Parameter 7 specifies the number of rings to answer the phone on after a
+caller rings once and then calls back within 50 seconds.  This is normally of
+use on non-dedicated lines.  In a non-dedicated line situation, the line is
+used for both voice and the RBBS-PC.  Therefore if someone wants to logon to
+the RBBS-PC, he calls and lets the phone ring once.  Then he calls back within
+50 seconds and the RBBS-PC CPC12 software will answer the phone after the
+number rings specified in this parameter.  This is a very shakey feature of
+RBBS-PC CPC12 and anyone who is considering seriously using RBBS-PC CPC12
+should consider a separate voice grade telephone line dedicated just to the
+RBBS-PC.
+
+7.3 Drive Available for Uploading
+ Parameter 8 specifies the letter of the single drive available for uploading
+files to.  When a file is uploaded, the DIR file, specified by CONFIG
+parameter 11, will be automatically updated with the file name, file size,
+date of upload, and short description as specified by the user.
+
+7.4 Drives Available for Downloading
+ Parameter 9 specifies the letter of the drives from which files can be
+downloaded.  The order in which they are specified is the order in which the
+drives will be searched.  If the order is BAC, then drive B will be searched
+first for the file, then drive A, and finally drive C.	While there can be
+duplicate files on each of the drives, the first file found, will be the one
+downloaded to the user.
+
+7.5 Drive with RBBS-PC System Files
+Parameter 10 (like parameter 41, discussed below) specifies the
+letter of the drive which is to contain the RBBS-PC system files.
+The RBBS-PC system files are:
+
+USERS
+USERS.BAK (backup of users file)
+MESSAGES
+MESSAGES.BAK (backup of messages file)
+CALLERS
+COMMENTS
+LONGCALR
+
+These files can not be downloaded by anyone and are described as
+follows:
+
+ USERS - The users file is a random access file that has a record for each
+user that used the system.  The record contains a profile for the user that
+includes the users name, password, city, state, type of machine, the last time
+and date signed on, the last message read, the number of times signed on, the
+state of the expert, line feed, prompt, sysop and lockout flags, and page
+length.  The records are 128 bytes in length and are automatically maintained
+by RBBS-PC.  The SYSOP can do some limited editing using function 8.  To
+initialize the system simply ERASE this file.  If RBBS-PC does not find the
+file on the system it will create it.  Because of the fixed length records in
+this file, it should not be created or edited outside RBBS-PC.	When the SYSOP
+"packs" the user file, the file USERS.BAK is created to hold the old users in
+case the "pack" is unsuccessful (i.e not enough space to duplicate the users
+file).	If the disk fills up during the pack function RBBS-PC will recover the
+USER file with USERS.BAK.
+
+ MESSAGES - This file is a random file that contains the message text for the
+RBBS-PC system.  The first record in the file contains the number of the last
+message entered, the name of the last caller, the sysop available flag, the
+printer active flag, the sysop-next flag and the operator page on/off flag.
+It is used to find the next message number when a new message is added to the
+system.  The rest of the file consists of message header records which are
+followed by the message text for that header.The headers are linked through
+forward relative record pointers that are also used to determine the number of
+text records for the message.  The header contains the message number, from,
+to, subject, password (^READ^ if a private message - which can be entered by a
+user as a password!), date, status and pointer.  The status can be either
+active or killed.  Killed messages are retained until either they are
+recovered or the file is packed by the SYSOP.  If RBBS-PC does not find the
+MESSAGES file it will create it and initialize it with no messages.  Because
+of the fixed length records in this file, it should not be created or edited
+outside RBBS-PC.  When the SYSOP "packs" the message file, the file
+MESSAGES.BAK is created to hold the old messages in case the "pack" is
+unsuccessful (i.e.  not enough space to duplicate the message file).  If the
+disk fills up during the pack function RBBS-PC will recover the message file
+using MESSAGES.BAK.
+
+ CALLERS - This file is a random file that contains a log of all callers as
+they sign-on the system along with callers city and state, the date and the
+time.  The names are added to the end of the file as well as are the names of
+the files uploaded/downloaded by the caller.  If the file is not found RBBS-PC
+will create a new one.	The file should be ERASED to clear the log.
+
+ COMMENTS - This file is a sequential file that contains any comments that
+have been left by users for the SYSOP.	The file can be scanned by a SYSOP
+function or it can be TYPEd or edited outside the RBBS system.	A SYSOP
+function is available to delete this file, or it can be emptied outside of
+DOS.  While the file will be created by RBBS-PC if it is not found, it is
+recommended that an empty file be present at all times.
+
+ LONGCALR - Contains a log of any caller whose session was longer than Maximum
+Time On System.  (CONFIG Utility parameter # 13) This file is appended to and
+will be created if not found on the system.
+
+7.6  Drive with RBBS-PC Text Files
+ Only RBBS-PC.DEF is automatically assumed to be located on the default system
+drive (drive A is suggested).  Parameter 21 specifies the letter of the drive
+which is to contain the main RBBS-PC text files.  The main RBBS-PC text files
+are:
+
+WELCOME
+WELCOMEG
+BULLETIN (see description below)
+BULLET1
+BULLET2
+BULLET3
+BULLET4
+BULLET5
+BULLET6
+NEWUSERS
+HELP01
+HELP02
+HELP03
+HELP04
+HELP05
+HELP06
+HELP07
+DIR
+
+Additionally the menus for the various commands and subsystems
+are also RBBS-PC text files external to RBBS-PC.  They are:
+
+MENU1
+MENU1G
+MENU2
+MENU2G
+MENU3
+MENU3G
+
+Parameter 61 specifies the letter of the drive which is to contain
+the menu text files.  It is recommended that these be place on an
+electronic disk drive (i.e. RAM) rather than on diskettes.
+
+Except for RBBS-PC.DEF, these files can be downloaded by anyone
+and are described as follows:
+
+WELCOME - This is a text file that is printed when a user first
+enters the system.  It must be present, and it should be modified
+to identify your system.
+
+WELCOMEG - This is a text file that is printed in lieu of WELCOME
+if the SYSOP has indicated via parameter 67 of CONFIG.BAS that
+graphics are available.  It should contain the same information
+as WELCOME.
+
+ BULLETIN - This is a text menu file that is printed following the WELCOME
+file when a user first enters the system.  It must be present, if "CONFIG
+Utility parameter # 16" is greater than 1.  It can also be called from the
+main menu with the <B>ulletins command.  If the SYSOP has indicated via
+parameter 67 of CONFIG.BAS that graphics are available AND the name for this
+file given by the SYSOP via parameter 22 of CONFIG.BAS is less than 8
+characters long, a G will be appended to this file name when someone logs on
+8/N and requests graphics.  The file name with the G appended to it should
+contain the same information as the file name without the G.
+
+BULLET1 - This is the first bulletin file referenced in the BULLETIN file.
+BULLET2 - This is the second bulletin file referenced in the  BULLETIN file.
+BULLET3 - This is the 3rd bulletin file referenced in the BULLETIN file.
+BULLET4 - This is the 4th bulletin file referenced in the  BULLETIN file.
+BULLET5 - This is the 5th bulletin file referenced in the BULLETIN file.
+BULLET6 - This is the 6th bulletin file referenced in the BULLETIN file.
+NEWUSERS - This is a text file that is displayed for new users
+just before going to the main message menu and prompt.
+HELP01 - text file that is printed when <H>elp is requested on
+the main function prompt.  It contains	command information.
+HELP02 - text file that is printed when a <?> is entered on the main function
+prompt.  It is also printed following the NEWUSER file for new users and tells
+users what functions the RBBS supports.
+HELP03 - text file that describes the message protection options
+when <?> is entered after the message <E>nter command is executed
+at the main message menu.
+HELP04 - text file that describes the message entry subfunctions
+when <?> is entered at the subfunction prompt.
+HELP05 - text file that is printed when <H>elp is entered in the
+filing subsystem function prompt.
+HELP06 - text file that is printed when a <?> is entered in the
+filing subsystem function prompt.
+HELP07 - text file printed when <H>elp is requested at the message read prompt.
+
+ DIR - Option 38 specifies the name of the text file describing the names of
+the directory files that contain the description of the files available for
+downloading.  At least one DIR file has to be present on one of the diskettes
+available for downloading.  Sub directories should be numbered and should be
+reflected in the DIR file.
+
+ RBBS-PC.DEF - This is an ASCII text file created as output by the CONFIG.BAS
+file.  It contains the configuration parameters for the RBBS.  It is read by
+RBBS to determine the configuration settings tailored to your RBBS-PC.
+
+7.7 Summary of RBBS-PC CPC12 System Files
+
+The following table shows the status of the RBBS-PC CPC12 system
+and text files (system files are automatically created):
+
+File Name	    Resides on		      File Type
+USERS	     CONFIG specified drive    RBBS-PC system file
+USERS.BAK	      /|\	       RBBS-PC system file
+MESSAGES	       |	       RBBS-PC system file
+MESSAGES.BAK	       |	       RBBS-PC system file
+CALLERS 	       |	       RBBS-PC system file
+COMMENTS	       |	       RBBS-PC system file
+LONGCALR	       |	       RBBS-PC system file
+WELCOME 	       |	       text file
+WELCOMEG	       |		   /|\
+MENU1		       |		    |
+MENU1G		       |		    |
+MENU2		       |		    |
+MENU2G		       |		    |
+MENU3		       |		    |
+MENU3G		       |		    |
+BULLETIN	       |		    |
+BULLET1 	       |		    |
+BULLET2 	       |		    |
+BULLET3 	       |		    |
+BULLET4 	       |		    |
+BULLET5 	       |		    |
+BULLET6 	       |		    |
+NEWUSER 	       |		    |
+HELP01		       |		    |
+HELP02		       |		    |
+HELP03		       |		    |
+HELP04		       |		    |
+HELP05		       |		    |
+HELP06		       |		    |
+HELP07		      \|/		    |
+DIR	     CONFIG specified drive	   \|/
+RBBS-PC.DEF  default system drive      text file
+
+7.8 Name of Directory to Update for Uploads
+ Parameter # 11 of the CONFIG program asks for the name of the directory into
+which they want to record the file name, file size, and file description of
+files they upload to RBBS-PC.  The default name is DIR99 and it must be a text
+file on one of the diskettes available for uploading.
+
+7.9 Prompt Sounds (can be changed by SYSOP from keyboard, too)
+Parameter # 12 is the SYSOP'S preference for prompt sounds when
+input is required.  This applies to remote and local.
+
+7.10 Maximum Time on System
+ Parameter # 13 of the CONFIG program asks for the maximum amount of time each
+user is to be allowed on the system.  Set the number of minutes to whatever
+you are comfortable with, but 72 minutes is a good setting for starting up.
+Subsequently you may have to lower this number once your number of callers
+increases, in order to keep callers' waiting times reasonable.
+
+7.11 Maximum Number of Messages Allowed
+ Parameter # 14 lets you set the maximum number of messages on the system that
+you will allow.  The number will have to based on the size of the average
+message on your bulletin board.  Most messages require about 600 bytes on the
+average.  The absolute upper limit of number of messages is 250.  If you
+specify 250 messages, you can expect that the MESSAGES file could grow to 160K
+before the maximum number of messages was exceeded.
+
+7.12 Months of Inactivity Before a User is Deleted
+ Parameter # 15 sets the number of months inactivity that must elapse before a
+user is deleted from the USERS file when the SYSOP "packs" the user file (see
+function 10 under section 9).
+
+7.13 Number of System Bulletins
+ Parameter # 16 indicates the number of system bulletins that are available to
+the users.  The maximum number is six.	For each bulletin there should be a
+description of it associated with it's number in the text file BULLETIN.  For
+each bulletin (1->6) there is an associated text file (i.e.  BULLET1 for
+bulletin # 1).
+
+7.14 Echo User Sessions on Screen (SNOOP)
+ Parameter # 17 indicates whether to "SNOOP" on the RBBS-PC users by echoing
+what they see on you PC's screen.  For the start up of a RBBS-PC, it is a good
+idea to "SNOOP" in order to see how users use the system.  This function can
+also be changed at keyboard.
+
+7.15 Execution Type
+Parameter # 18 informs RBBS-PC as to whether to use BASICA or
+Compiler Basic constructs for determining space available.
+
+7.16 Communication Port to be Used
+Parameter # 19 requests the user to specify the communication port
+that RBBS-PC will be using in order to determine if it is device
+COM1 or device COM2 (the later is valid only for DOS 2.0).
+
+7.17 Selecting Alternate CONFIG Screens
+ The configuration program, beginning with CPC12.0, consists of multiple
+screens of parameters.	The last parameter on each of the screens (20, 40, and
+60) allow the user to switch to any one of the other screens.  In this way a
+SYSOP can "browse" through and change literally any RBBS-PC parameter until he
+is satisfied that his RBBS-PC definition file is tailored to his system.
+
+7.18 RBBS-PC Text File Drive and File Names
+ Parameters 21 through 38, on the second screen, allow the SYSOP to specify
+the diskette his text files are going to be located on (see section 7.6 for a
+description of these files).  Additionally, these files may be given any valid
+DOS 2.0 file name.
+
+7.19 Version of DOS RBBS-PC Will Run Under
+ Parameter 39 on the second allows the SYSOP to specify the version of DOS
+that RBBS-PC will be running under.  When RBBS-PC is running this is the ONLY
+indicator used by RBBS-PC when it has to determine what level of DOS it is
+running under.	The correctness of this parameter will is very significant
+when RBBS-PC options are invoked using commands specific to DOS 2.0 (i.e.  the
+CTTY command).
+
+7.20 RBBS-PC System File Drive and File Names
+ Parameter 41 performs the identical function performed by parameter 10, which
+is to specify the drive in which the system files will be located.  Parameters
+42 through 47, also on the third screen, allow the SYSOP to change the names
+of the system files.  If not used, the files revert to the default filenames
+described in section 7.5.  The SYSOP may use any valid DOS 2.0 filename for
+these files.
+
+7.21 Making System Bulletins "Optional"
+Parameter 48, is intended to allow the SYSOP to indicate if the
+system bulletins are to be an option for users when they log on.
+
+7.22 Color Monitor's Foreground/Background/Border
+ Parameters 49 through 51 on the third screen allow the SYSOP to specify the
+colors he wishes for the foreground, background, and border.  When specifying
+these options the BASIC manual's section describing the COLOR command in text
+mode should be consulted.  This is useful when running under a multi-tasking
+DOS and you want the RBBS-PC screen to be different when you call it up.
+
+7.23 Selecting the Modem Speaker On or Off
+ There are times when the SYSOP no longer wants the speaker to be activated
+when a user logs on.  The noise can drive anyone nutty on a busy RBBS-PC
+bulletin board (especially late at night).  Option 52 allows the SYSOP to keep
+the Hayes speaker turned off at all times.
+
+7.24 Reminding Users of Messages They Left
+ Option 53 allows the SYSOP to remind users not only of the messages that
+might be for them but also messages that they may have left.  This should be
+enough of a nuisance to insure that users do delete some of the message that
+they have left and help to keep the MESSAGES file to a minimum.
+
+7.25 Indicating .BAS Files Are Binary
+ Option 54 allows the SYSOP to tell RBBS-PC that files ending in binary files
+to be downloaded unless the user selects XMODEM.  This will hopefully
+eliminate some user problems before they occur.  IBM's BASIC interpreter's
+default to the SAVE command is to save the files 'tokenized' because they
+require much less disk space.
+
+7.26 Providing the Name of the .BAT file for RBBS-PC
+ Option 55 requests the name of the batch file that RBBS is to re-invoked with
+after the SYSOP who has signed on remotely and dropped into DOS 2.0 exits DOS
+2.0.  Section 10.0 has a further description of these files and how they
+interact.
+
+7.27 Providing the Name of the .BAT file for CTTY
+ Option 56 requests the name of the batch file that RBBS is to build
+dynamically when the SYSOP who has signed on remotely requests to drop into
+DOS 2.0.  See section 10.0 for a complete discussion of these files.
+
+7.28 Omitting First Level Directory in "New" Command
+ Option 57 allows the SYSOP to exclude the primary directory (DIR) from the
+search done by the New command.  If you have multiple directories (i.e.  DIR1
+through DIR20), any dates in the primary directory would not be of files.  The
+"New" command (as in "What new files have been put on the download directories
+since I was last on?") search each line of each file beginning with DIR for a
+date field.
+
+7.29 Omitting Upload Directory in "New" Command
+ Option 58 allows the SYSOP to exclude the directory on which users place the
+information on their uploads (i.e.  DIR99) from the "New" command.  As some
+SYSOP's wish to preview or otherwise keep private the uploads before putting
+them on the other download directories, this acts as a further insurance
+against unauthorized access of a "private" upload directory.
+
+7.30 Making System Welcome Interruptable
+ Option 59 allows the SYSOP to make the system WELCOME file interruptable.
+The default is that YES it is interruptable.  However, if the SYSOP feels too
+many people are bypassing it and it contains essential information, the SYSOP
+can set this parameter to NO (i.e.  the user can not suspend or cancel the
+listing of this file at his terminal with a CTRL S or CTRL K).
+
+7.31 RBBS-PC Menu Text File Drive and File Names
+ Parameters 61 through 64, on the fourth screen, allow the SYSOP to specify
+the disk drive for the RBBS-PC menus (a RAM disk is highly recommended) to be
+found on.  Additionally these files may be up to 7 characters long.  If
+graphics is indicated in parameter 67, a "G" is appended to these file names
+when displaying the RBBS-PC menus.
+
+7.32 Graphic Menus
+ Parameter 67 allows the SYSOP to indicate that graphic menus are available
+for those users who logon as 8/n/1 and request graphics.  They should be on
+the drive indicated in parameter 61.
+
+7.33 Remind Users of Uploads and Downloads
+ Parameter 68 allows the SYSOP to elect to remind users of how many files that
+they have downloaded and uploaded.  In conjunction with this option a user who
+has an existing USERS file that is at the CPC12.x level must run USRINIT1.BAS
+in order to zero out the counters in his existing USERS file.  Additionally,
+if you have a CALLERS file at the CPC12.1x level, the utility USRINIT2.BAS
+will count the upload/download activity in the CALLERS file and record it on
+the USERS file.  USRINIT.BAS and USRINIT2.BAS should not have to be run after
+installing CPC12-1F as CPC12-1F will dynamically keep the up/download counts
+current.
+
+7.34 Default User Page Length
+ Parameter 69 allows the SYSOP to establish a default page length for users
+when they logon.  A 23 line page length is the default, but the SYSOP can set
+it to a number between 0 and 255.  If set to 0, the user will set continuous
+output.
+
+NOTE! -- Parameters 65, 66, and 70 are included to accomodate future
+RBBS-PC features and are not utilized by CPC12-1F or it's early versions.
+
+
+8.0 COMMUNICATION BUFFER
+ RBBS-PC should be operated with a 4096 byte communications receive buffers.
+It will run at 300 baud with a smaller buffer, but 450 and 1200 baud operation
+requires 4096, especially for uploads of large files to the system.  The BASIC
+command to execute RBBS is as follows:
+
+   BASICA RBBS-PC /C:4096
+
+When compiling RBBS-PC CPC12, the compiler command is as follows:
+
+   BASCOM RBBS.BAS /E/V/C:4096/S/O;
+
+Operation with a smaller buffer may result in communication
+buffer overflows and loss of data except in the XMODEM mode.
+
+XMODEM use only requires only a 256 byte buffer because of the
+handshake file transfer technique employed.
+
+ When setting up the communications buffer, be sure you leave enough free
+memory for string manipulation.  BASICA needs at least 2048 bytes free to
+operate properly with this program.  Anything less may cause the program to
+run out of string space, especially when a message is being written.  When
+specifying the size of the communications buffer, remember that the amount of
+memory that will be reserved will be the number specified times the total
+number of communication ports.	Therefore if you have a system with two
+communications ports and specify 4096, 4096 bytes will be allocated for EACH
+communications port even though RBBS-PC CPC12.1 only uses one communications
+port.  Thus, the total reduction in string space will be 8K and not the 4K you
+might have expected.
+
+9.0  USING MULTIPLE FILE DIRECTORIES
+ With the advent of CPC12.0, multiple file directories for downloads were
+possible.  A file directory is simply a text file that the SYSOP has created
+that has a one-line entry for each file available for downloading in the
+format:
+
+file name   extension  mm-dd-yy  x,xxx	description
+
+ that associates a date, size and description for each file name/extension.
+Their has been great effort made to not force any rigid naming conventions or
+format on the file directories on the theory that each SYSOP should be free to
+tailor his RBBS-PC to his own tasks.  However, there are a few conventions
+regarding download directories.  They are as follows:
+
+o  The file directories must be text files.
+o  The file directories must have the first three characters
+   of their name designation equal to DIR (the remaining
+   suffix can be anything you want as long as it is a valid
+   DOS file name.
+o  Their is only one file directory for uploads and it
+   must be on the disk drive designated for uploads.
+
+Most SYSOP's tend to organize their file directories according to
+subject.  The primary file directory usually tells how you list
+the other directories.	Logically, it looks like a tree structure
+as follows:
+
+			      DIR
+			       |
+			       |
+  --------------------------------------------------------------
+  |	  |	   |	   |	  |	  |	 |	 |     |
+DIRaa	DIRbb  .............................................DIRzz
+
+ The suffixes aa through bb can be anything you want.  Most uses use numbers
+(i.e.  DIR1, DIR2, etc.).  The command L;2 would list directory 2.
+
+ The SYSOP has the option of letting his users know the name of the file
+directory for uploads.	Some SYSOPS do and some don't.  You may exclude both
+the primary directory and the upload directory from the list new function (N)
+within the file subsystem.
+
+10.0  SETTING UP ".BAT" FILES FOR RBBS-PC
+ Many SYSOPS have set up batch files to automatically invoke RBBS-PC and to
+re-invoke RBBS-PC should their be a power outage.  These files range from the
+simple to the sublime in terms of complexity.  The new SYSOP option 12 which
+allows a SYSOP who is signed on remotely to drop into DOS 2.0 requires that:
+
+1.  RBBS-PC be executed from a batch file.
+2.  That the batch file which is executing RBBS-PC contain
+    an "IF" statement that checks for the existence of the
+    batch file which RBBS-PC CPC12.1 dynamically builds when
+    the SYSOP function 12 is invoked.
+3.  Within the "IF" statement, the logic exists such that the
+    batch file dynamically built by RBBS-PC for function
+    12 will be invoked if it exists.
+
+As a very simple example, let us assume
+
+1.  that the batch file that invokes RBBS-PC is named RBBS.BAT,
+    and
+2.  that the name of the batch file that RBBS-PC will build
+    dynamically for SYSOP function 12 is RCTTY.BAT
+3.  the compiled version of CPC12.1 is being executed and is
+    named RBBS-PC.EXE.
+
+Then RBBS.BAT would contain the following:
+
+IF EXIST RCTTY.BAT DEL RCTTY.BAT
+RBBS-PC.EXE
+IF EXIST RCTTY.BAT RCTTY.BAT
+RBBS.BAT
+
+Obviously the RBBS.BAT file could be as complex as you wanted it
+to be, but at the very least it would need the "IF" statement.
+
+11.0  GETTING A "FREE" TELEPHONE LINE FROM MA BELL
+Sorry this section removed for space reduction-
+
+12.0 SYSOP FUNCTIONS
+ The SYSOP functions are not described in the HELP files, so the following
+narrative will shed some light on these functions.  The SYSOP functions are
+available at the main system function prompt.  These functions are not
+available to the general user, and it should be noted that the SYSOP should
+not use some of the user functions either because the code will not work right
+if called from the main console, or the function is not for use by the SYSOP.
+Such functions are the <O>perator, <N>ewbaud, <PW> password, and file
+upload/download using XMODEM.  File download using ASCII can be used to "type"
+files available for download so they scroll across your screen.  File upload
+enables you to create files from the keyboard.
+
+SYSOP Mode
+
+ To enter the SYSOP mode press the ESC key locally or enter the special 'pass'
+and 'word' first and last name from a remote terminal.  The following
+operations can then be performed by entering a number only at the command
+prompt:
+
+1 - Type comments file.  The contents of the COMMENTS file is
+displayed.  This file can also be inspected using a TYPE command
+from DOS.  It is a ASCII sequential text file.
+
+ 2 - Type CALLERS file.  A log is maintained of all persons who have called
+the system.  This function will list the file showing the users name and the
+date and time signed on as well as the files he upload/downloads.  This is a
+random access file of 64 byte records.
+
+ 3 - Pack MESSAGES file.  The message file contains all messages for the
+RBBS-PC system.  As messages are killed they are only flagged as inactive.
+This function should be used periodically to recover the space occupied by the
+killed messages.  A summary of the space recovered will be printed when the
+pack is complete.  After completion, only the text of active messages will be
+present and the old file will remain on the system with the name of
+MESSAGES.BAK.  Also, you will need enough free disk space for the MESSAGES and
+MESSAGES.BAK files when packing the MESSAGES file or the packing cannot be
+performed; if enough space is not found the packing will abnormally terminate
+and the MESSAGES file will be recovered.
+
+ 4 - Renumber the messages.  This function permits messages to be renumbered
+sequentially starting from a specified message using whatever starting number
+you wish.  Please note that there is not much error checking to be sure that
+the new numbers do not duplicate those of lower numbered active messages.
+When complete, the next message to be created will be the next higher number
+from the resequence.
+
+ 5 - Resurrect a message.  This function will return a message that has been
+killed to an inactive state.  If function 3 has been used, the killed messages
+are no longer recoverable.  The function will ask for the message number to be
+recovered.
+
+ 6 - Print message headers.  This function will display the message headers of
+all messages, active and killed, that are present in the message file.	This
+is useful to obtain the message number for use with function 5.
+
+ 7 - Erase the comments file.  This function will erase the comments file by
+creating an empty file.  This could also be done from DOS by a:  'COPY CON:
+COMMENTS' command followed by a 'F6' key to create a empty file.
+
+ 8 - USERS file maintenance.  The users file contains entries for each user
+registered with the system.  This function permits the SYSOP to list the file
+on the display, print the file on the printer (LPT1:) or to perform limited
+editing of the user file records.
+
+In <M>odify mode the following subfunctions are available:
+M - Return to the <M>ain menu or function prompt.
+P - Toggle the printer flag to print entries on the printer.
+L - Toggle user lockout.  This will toggle the status of
+the lockout flag for the particular user.  If the
+lockout is set the user will be logged off the system as
+soon as the user name is checked.  A second <L> will
+clear the lockout flag.
+N - New password.  Permits the SYSOP to change the
+password for the user.
+F - Find User.	Permits the SYSOP to locate a user by
+entering the users name.
+S - Toggle SYSOP clearance.  This option grants SYSOP
+privileges to the user specified.
+ In <M>odify mode a record will be displayed followed by a subfunction prompt
+for action.  To get to a specific record the record number can be entered at
+the prompt and if valid that record will be displayed.	If the record number
+is invalid or an empty c/r is entered then the next record in the file will be
+displayed.
+
+9 - Toggles the operator page bell on/off.
+
+ 10 - Pack USERS file.	This removes deleted users and users who have not been
+on the system for over one month.  You should have enough free disk space for
+USERS and USERS.BAK or the packing will abnormally terminate (the USERS file
+will be restored).
+
+ 11 - SYSOP can view all file specifications.  This operates correctly only
+under the BASICA interpreter of DOS 2.0 as it uses the FILES function to
+obtain the file specifications.  FILES under the compiler or DOS1.1's BASICA
+does not function like DOS 2.0 and hence this does not function when running
+under either DOS1.1 or the RBBS-PC.EXE compiled version.
+
+12 - If the SYSOP has logged on remotely and is running on DOS 2.0
+or greater, this function will dynamically setup a batch file to
+assign the SYSOPS terminal as the main console.  It then returns
+to DOS 2.0 and if
+
+      a.  RBBS was invoked via a batch file and
+      b.  that batch file is checking for the batch
+	  file is dynamically setup by option 12 and
+      c.  that batch file executes the batch file dynamically
+	  created by option 12, then
+
+the SYSOP will see the DOS 2.0 prompt at his terminal and can do
+whatever functions he chooses.
+
+ Two areas of caution are advised when using option 12 under DOS 2.0.  First,
+each SYSOP should test what he can do remotely.  Software that directly reads
+and writes to the video BIOS and does other things that bypass the standard
+input and output of DOS 2.0 simply won't function correctly.  Second, you
+should be aware that you are in DOS 2.0 and can only return to RBBS by issuing
+the EXIT command.  This will return to the dynamically built batch file that
+was built by RBBS-PC.  This file will then continue executing and is designed
+to reassigned the keyboard as the console and then re-invoke RBBS-PC.  If you
+get disconnected while in DOS 2.0, you system will be locked up.  The console
+will be assigned to your communication port and your Hayes modem will have
+dropped the line and will have been set not to auto-answer.  The only way to
+re-boot the system is a manual power on/off sequence.
+
+This problem is solved when a function is added to DOS that:
+
+  1.  Checks to see if the standard input and output console
+      have been assigned to an auxiliary console such as a
+      communication port.
+  2.  If condition 1 is true, checks to see if the carrier
+      detect signal is lost by intercepting each interrupt
+      from the communication port the auxiliary console
+      has been assigned to.
+  3.  If BOTH conditions 1 and 2 are true, this function would
+      cause DOS to switch back to the standard screen and keyboard
+      for its operations AND then continue processing whatever
+      batch file that had been executing (if one was).
+
+ This function (or device driver) would provide a "fail safe" feature to the
+CTTY command that would greatly enhance the future options of RBBS-PC.	With
+it future RBBS-PC CPCxx.x releases might allow users to exit RBBS-PC to use
+whatever other software the SYSOP chose to make available (i.e.  relation
+databases for complex inquiries -- bibliographic, sports, games, etc.).
+
+ The following function keys (ten keys on left side of keyboard) are designed
+to give the SYSOP special local controls that can be actuated without entering
+the SYSOP mode (using the ESC entry key).
+
+F1 - Return to DOS.  This will terminate a session if a caller is
+     on-line.
+
+F2 - Return to BASIC.  This will also terminate a session.
+     This returns to DOS under the compiled version.
+
+F3 - Printer toggle on/off.  This changes the printer on-line
+     status.  When on-line the printer will print callers names
+     and file names uploaded/downloaded.  It will also print all
+     error messages except the ERROR 68 used to check that a file
+     exists. This function should match the condition of the printer.
+     If the printer is going to be left off, the PRINTER toggle
+     should be left off.
+
+F4 - Operator page toggle.  This changes the status of operator
+     annoy and records the change to the top of the MESSAGES
+     file.  This is set by the CONFIG program parameter # 6
+     which establishes the SYSOP's office hours.
+F5 - Forces a ring back system to answer the phone.
+F6 - Sysop available toggle.  This changes the status of operator
+     available and records the change to the top of the MESSAGES
+     file.  Off returns "Sysop not available" to the caller.
+
+F7 - SYSOP gets control of the system after current user is off
+
+F8 - Allows the SYSOP to grant an on-line user temporary SYSOP
+     privileges.  This is a toggle on/off switch.
+
+F9 - SNOOP toggle.  This changes the SNOOP from the default value
+     the first time it is pressed and toggles it on/off
+     thereafter. SNOOP off clears the screen and turns the cursor off.
+     It also keeps the download beeps from sounding.  The SNOOP
+     should be left off for normal use to keep the system startup
+     screen from "burning into" the monitor.  If the SNOOP is
+     left on, the monitor should be physically turned off except
+     when you are observing the RBBS in action.  Leaving the monitor
+     off will not affect performance of the RBBS.
+
+F10 - This is the forced chat switch.  It announces your forced
+     chat and who you are before turning the keyboard over to you
+     and the caller.  Along with the ESC key (which ends the chat
+     mode) this is the same key you use to answer a page.
+
+ ?  - The ? key is the special SYSOP key.  It allows the SYSOP
+     to takeover for system maintenance when no one is on-line.
+     It also allows the SYSOP to answer a page.
+
+ The SYSOP can also enter commands on the command prompt line while a caller
+is on-line.  The command entered will cause the system to respond just as it
+would had the caller entered the command.  This should be used with caution
+because it could confuse a new system user -- users are often timid enough
+without knowing that big brother is actually watching them!  Let the caller
+page you then tell him that you can assist with commands if he gets into
+trouble.
+
+13.0 UPLOADED FILE TIPS
+ If someone uploads a BASIC file to you, and it will not list on your screen
+using the DOS TYPE command, you should go into BASIC, load the file, list it,
+then resave it using the same name.  If you get a `Direct Statement In File'
+error printed on the screen when you load the file, that means that you
+downloaded a text statement with the file (one that has no line number, one
+that was edited on a word processor which created a carriage return without a
+linefeed -- thus overwriting two lines and giving the appearance of a direct
+statement in the file).  This will not interfere with the resaving of the file
+unless the direct statement is at the beginning of the file; if the file lists
+ok, then the direct statement is at the end of the file.  If the file does not
+list properly, then the direct statement is at the beginning of the file and
+has to be removed using a text editor (Edlin) before the program can be loaded
+and run.
+
+ Do not attempt to save a BASIC file after getting the `Direct Statement In
+File' error during loading without listing the program first; you will destroy
+the file otherwise.  If you wish to load an uploaded file (a BASIC program or
+any other text file) into a text editor to change the content of the file, you
+will have to first add line feeds to the end of each line (after each carriage
+return) using the BASIC program ADDLF.BAS (see the section on utility
+programs).
+
+14.0 COMPILING AND LINKING RBBS-PC (CPC12)
+Because of the size of the RBBS.BAS (version CPC12) the BASIC
+compiler command should be:
+
+     BASCOM  RBBS-PC.BAS,, /E/V/C:4096/S/O;
+
+ NOTE:
+ With this version of RBBS-PC (CPC12-1E) it is necessary to use the "V" option
+when compiling.  This is different from all previous versions of RBBS-PC and
+is necessary in order to trap "device timeout" (as well as other errors) on a
+statement basis rather than simply a line number basis.  Otherwise, with
+multiple I/O's on a single line to a device, when a device timeout error
+occurs and subsequent I/O's are done to that device prior to trapping and
+handling the error, the .EXE version will return to the next higher level that
+called it -- either DOS or the .BAT file that invoked RBBS-PC.
+
+The output will be RBBS-PC.OBJ with a size of about 161,726
+bytes.
+
+Remember to include IBMCOM.OBJ & UTSPACE.OBJ when linking RBBS.
+The sequence of statements that I used when linking RBBS-PC.OBJ
+was as follows (my inputs are underlined):
+
+ B>
+ LINK
+ IBM Personal Computer Linker
+ Version 2.00 (C) Copyright IBM Corp 1982, 1983
+ Object Modules (.OBJ): RBBS-PC+IBMCOM+UTSPACE
+
+ Run File (RBBS-PC.EXE): /MAP
+			-----
+ List File (NUL.MAP): RBBS-PC.MAP /line
+
+  Libraries (.LIB): A:
+
+The floppy disk in drive A contained only the following BASIC
+compiler libraries:
+
+   BASRUN.EXE
+   BASCOM.LIB
+
+The output will be RBBS-PC.EXE with a size of about 109,952 bytes
+(or about 107K). It runs very, very fast.
+15.0 LIMITED LICENSE
+The software is copyrighted but A LIMITED LICENSE IS GRANTED
+and you are free to use and share it under the following
+conditions:
+
+1. RBBS-PC CPC12 is not distributed in modified form,
+2. No fee or other consideration is charged, and
+3. Reference to the authors is retained.
+
+ Please distribute the original version (or update thereof) of the program.
+If you have changes either add a new file with that copy or supply a file to
+be MERGED with the original to create it.  This is done so that future
+revisions can be easily added to the system without requiring the entire
+program.
+
+ Please do NOT resequence the program.	All revisions will be as files that
+can be MERGED with the base program or update thereof to incorporate the new
+fixes and enhancements.
+
+16.0 LIMITED WARRANTY
+ The RBBS-PC CPC12 program is provided "as is" without warranty of any kind,
+either expressed or implied, including, but not limited to the implied
+warranties of merchantability and fitness for a particular purpose.  The
+entire risk as to the the quality and performance of the program is with the
+user and should the program prove defective the user and not the authors will
+assume the entire cost of all necessary remedies.  None of the authors warrant
+that the functions contained in the program will meet any users requirements
+or that the operation of the program will be uninterrupted or error free.  In
+any case, each author's entire liability will be limited to the total amount
+of money the individual user paid directly and explicitly to each author for
+the use of RBBS-PC.
+
+17.0 RBBS-PC UTILITY PROGRAMS
+Three utility programs are supplied with RBBS-PC CPC12:
+
+1.  FIXFILES.BAS  -  Reads CALLERS files generated by
+		  RBBS-PC level CPC12.0 and removes the
+		  "extra" records that were inadvertently
+		  written to it (cuts the size by about
+		  50%).
+2.  USRINIT1.BAS  -  Read the USERS file and zeroes out the
+		  counts for the numbers of uploads and
+		  downloads.  CPC12-1 automatically increments
+		  these counts whenever a user does an upload
+		  or download.
+3.  USRINIT2.BAS  -  Reads the file CALLERS.DAT (presumably a
+		  copy of an existing CPC12-x level CALLERS
+		  file) and counts the number of uploads and
+		  downloads that a user did.  It then updates
+		  the cumulative counts in the USERS file.  It
+		  assumes that USRINIT1.bas was already run
+		  against the USERS file.
+
+18.0 RBBS-PC FUTURE DIRECTIONS
+ RBBS-PC CPC12 can be a lot of fun to operate and can be a useful tool for
+information exchange.  Pass copies of it along to others, so more of these
+systems will spring up all over the country!  RBBS-PC seems to be meeting a
+need within the IBM-compatible PC user community.  As you can see from the
+brief history of RBBS-PC CPCxx.x outlined in section 1.3, it has had a rapid
+evolution in the past year of it's existence.  However, their are some future
+directions that I see for it and I would like to share them with you.
+
+ ADDITIONAL PROTOCOLS -- there is at least one additional protocol that should
+be added to RBBS-PC.  It is one that makes use of CRC16 (cyclic redundancy
+check).  A "public domain" one exists for the IBM PC in "C" and in Macro
+Assembler Language called KERMIT.  KERMIT presently exists for IBM's VM/CMS
+and DEC's VAX and UNIX and adds a error correction protocol that doesn't rely
+on control character sequences being exchanged.  I expect it to be
+incorporated into RBBS-PC in BASIC.
+
+ MARKING DATE AND TIME MESSAGES ARE LAST READ -- If the date and time a
+message was last read was included in the message header for each message, a
+SYSOP command could be written to purge messages based on this information
+(i.e.  purge all messages that have never been read and are over 30 days old).
+
+ MAKING RBBS-PC FILES A "FIXED" SIZE -- All the RBBS-PC files that are
+"random" files would each have a "fixed" size set by the SYSOP that they could
+not exceed.  When they reached that size they would either issue a "disk full"
+message or "wrap around" on themselves.  For those without 10MB hard disks or
+trying to run RBBS-PC on a single disk drive, this would prevent RBBS-PC from
+filling up the disk (i.e.  the callers log, etc.) and RBBS-PC could be left
+for even longer periods unattended.
+
+ CONVERTING RBBS-PC TO GW-BASIC -- GW-BASIC seems to have been adopted for the
+IBM-compatible PC's as a standard.  Rearranging the RBBS-PC source to be both
+compatible with IBM's BASIC and GW-BASIC would further widen the use RBBS-PC
+CPCxx.x
+
+CONVERTING RBBS-PC TO "C" --  This would bring RBBS-PC almost
+full  circle back to it's beginnings.  I believe that this
+conversion is  already under way by Lynn Long, et. al.
+
+These are only just a few of the ideas that come to mind for
+RBBS-PC in 1984.  It will be interesting to see how it evolves.
+
+ Appendix A -- Running RBBS-PC CPC12.1 Under MultiLink If you wish to receive
+a copy of this section, Please write the following individual and enclose a
+formatted disk and a Mailer with sufficient postage (at least $.54) in stamps,
+All requests without this mailer,disk and postage will not be honored.	and
+probably thrown away as we do not have the facilities to copy and pay for your
+disk...
+
+D. Thomas Mack
+10201 Oxfordshire Road
+Great Falls, Virginia 22066
+Voice: (703) 759-4357
+Data:  (703) 759-5049
+
+or:   Capital PC Software Exchange
+      PO Box 6128
+      Silver Spring MD 20906
+      (ATTN: Multilink Documentation)
+
+ Note:	MultiLink is a software product of The Software Link, Incorporated
+located at 6700 23-B Roswell Road, Atlanta, GA 30328.  Their voice phone is
+(404) 255-1254 and their data phone is (404) 252-9438.	All discussions in
+this appendix relate to Release 2.0.4 of MultiLink.
+
+ Certain Portions of this documentation were removed in order to get all the
+files required on a dos 1.1 disk.  Sorry if something which you desired was
+removed.  Much effort was expended to keep the size down.  Rich Schinnell,
+Capital PC Software Exchange.
+========E N D	O F   CPC 12.1	 D O C U M E N T A T I O N========
+
+
+```
+{% endraw %}
 
 ## USRINIT1.BAS
 
+{% raw %}
 ```bas
 100 'USRINIT.BAS   -  CLEARS THE USER FILE DOWNLOAD/UPLOAD COUNTS
 101 ' by Jon Martin       12/19/83.
@@ -1925,9 +3496,11 @@ machines:
 680 PRINT "CONVERSION OF USERS FILE ENDED AT ";TIME$
 700 END
 ```
+{% endraw %}
 
 ## USRINIT2.BAS
 
+{% raw %}
 ```bas
 100 'USRINIT2.BAS  -  Reads the CALLERS fileand updates dl/ul info on user file
 101 ' by Jon Martin       12/19/83.
@@ -1980,6 +3553,7 @@ machines:
 710 PRINT "USRINIT2 RUN ENDED AT ";TIME$
 720 CLOSE:END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

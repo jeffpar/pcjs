@@ -42,6 +42,57 @@ machines:
     become a family tradition!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FIL2094.TXT
+
+{% raw %}
+```
+Disk No: 2094                                                           
+Disk Title: FAMILY TREE JOURNAL 2 OF 2 (1535 also)                      
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: Family Tree Journal                                      
+Author Version: 7.0                                                     
+Author Registration: $39.00                                             
+Special Requirements: Printer.                                          
+                                                                        
+Imagine having a book that chronicles the history of your family,       
+going back generations!  Here's your opportunity to create such a book  
+for your great, great,...great grandchildren.  Go do it!                
+                                                                        
+FAMILY TREE JOURNAL provides a convenient means of collecting and       
+compiling genealogical and biographical information.  The output of     
+this program is a formatted book with information about a virtually     
+infinite family history.  Just think, if you could locate the           
+information about even just your direct ancestors (not including any    
+sisters, brothers, aunts, uncles, nieces, nephews, or cousins) for      
+only 20 generations, you would find that you are descended from well    
+over 1,000,000 people and over 500,000 of them would be your great,     
+great, great,...grandparents and each one of them would probably have   
+over 500,000 other descendants not counting you.  They ALL are your     
+relatives!                                                              
+                                                                        
+FAMILY TREE JOURNAL takes the information you uncover about your        
+relatives and builds and prints a document (book) that will allow       
+others to study the history without the need of a computer.  FAMILY     
+TREE provides easy data entry and collates the information through      
+various sort and merge routines into a very informative family          
+reference.  This book could be the object of conversation at family     
+reunions, holidays, weddings, etc.  Copies may be used as unique gifts  
+and become active catalysts for correspondence between relatives.  An   
+annual update of the book based on new information accumulated          
+throughout the year could become a family tradition!                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2094
 

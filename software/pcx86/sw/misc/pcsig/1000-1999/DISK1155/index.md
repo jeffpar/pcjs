@@ -14,6 +14,51 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1155.TXT
+
+{% raw %}
+```
+Disk No  1155
+Program Title:  AUTOMOBILE GAS AND MAINTENANCE version 1.2 (Disk 2 of 2)
+PC-SIG version 1.4
+
+This is the second disk of a two-disk set, #733 and #1155.  For a full
+description of the program, refer to disk #733.
+
+Usage:  Database.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $20.00
+
+File Descriptions:
+
+GO       BAT  Batch file to display READ files.
+READ???       Information file (14 files).
+VRS      DOC  Text file containing system documentation.
+VRSDEMO  CTL  Control file for running the demo and tutorial.
+TRUCK1   GAS  Sample data file for the fuel-log.
+TRUCK1   MNT  Sample data file for the maintenance-log.
+DEMO     BAT  Used to run DEMO.
+ORDER         Registration order form.
+TUTOR    BAT  Used to run TUTORIAL.
+VRS      CTL  Control file - vehicle defaults.
+VRS20?        Documentation (5 files).
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1155
 

@@ -14,6 +14,56 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2753.TXT
+
+{% raw %}
+```
+Disk No: 2753
+Disk Title: ShareDebate International #4
+PC-SIG Version: S1
+
+Program Title: ShareDebate International #4
+Author Version: 1/91
+Author Registration: Multiple registration plans from $5 through $25.
+Special Requirements: 384K RAM.
+
+Issue 4's Headlines:
+
+                     6 GUEST AUTHORS & 7 NEW DEBATES!
+
+                Jerry Pournelle, Milton Friedman, Ben Bova,
+             George Gilder, J. Neil Schulman, Murray Rothbard
+
+              On NASA, Laws that do harm, Future of Science,
+           Freedom & High Technology, Natural law & Copyrights,
+               Economic Spin Doctors & Future Voting Methods
+
+ShareDebate International, a ShareWare diskette magazine, is a
+quarterly debate forum for computer users concerned about the present &
+future carried by 544 to 1,444 BBSs or Shareware Dealers.  Issue 4
+includes material by InfoWorld's & Byte's Jerry Pournelle, Ben Bova
+(President, Science Fiction Writers of America), Nobel Laureate Milton
+Friedman, Prometheus-winner J. Neil Schulman, Economists George Gilder
+& Murray Rothbard, & futurist R.H. Martin. 7 more debate topics are
+added to the 12 previous topics.  The full text of a recent law
+authorizing the government to get involved with Shareware & Public
+Domain Software is also included.
+
+A unique commission/subscription feature is built into ShareDebate
+International to encourage people to distribute, participate, and profit
+from the disk-based magazine.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2753
 

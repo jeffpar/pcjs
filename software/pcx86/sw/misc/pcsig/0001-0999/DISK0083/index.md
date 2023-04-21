@@ -61,6 +61,7 @@ machines:
 
 ## 15PUZZLE.BAS
 
+{% raw %}
 ```bas
 100 REM                 The 15 Puzzle
 101 REM                         by Dale Dewey
@@ -180,9 +181,11 @@ machines:
 1190 PAINT (45+32*X0,37+24*Y0),C0,3
 1200 RETURN
 ```
+{% endraw %}
 
 ## COM2ASM.BAS
 
+{% raw %}
 ```bas
 10 'COM2ASM.BAS Ver 1.1, by Richard Winkel
 20 'For free distribution only; not for sale
@@ -239,9 +242,65 @@ machines:
 540 DATA "JMP ","JZ  ","JNZ ","LOOP","CALL","JCXZ","JB  ","JBE ","JNB ","JA  "
 550 DATA "JG  ","JGE ","JL  ","JLE ","JNO ","JPO ","JNS ","JO  ","JPE ","JS  "
 ```
+{% endraw %}
+
+## COM2ASM.DOC
+
+{% raw %}
+```
+DOCUMENTATION FOR COM2ASM.BAS PROGRAM
+DOS 2.0 Unassembly Program
+by Rich Winkel, Columbus, MO
+
+I use this program whenever I want to convert a COM file to assembler source
+code, for subsequent modification and re-assembly.  Here's how it works:
+
+Get into Debug with the COM file you're working with, and locate the areas
+containing the code.  (Stay away from the data areas.)  Write down the starting
+and ending addresses for all the code areas in the file, and quit.  Back in DOS,create a file to be piped into the standard input of the Debug program,
+containing the commands necessary to unassemble the program in the sequence
+in which it resides in RAM.  The easiest way to do this is to use the Copy
+command.
+
+   A>copy con file1
+   u addr1 addr2  <--unassemble the file
+   u addr3 addr4
+   .   (etc.)
+   .
+   q              <--DON'T FORGET THIS!
+   ^Z
+
+   1 File(s) copied
+
+   A>
+Now, type
+     DEBUG (filename).COM <FILE1 >FILE2
+
+This will (given enough time) generate a file called FILE2 containing the
+result of the above commands to Debug.  Now run the COM2ASM.BAS program, enter
+FILE2 in response to the "Input file?" prompt, and some other (new) file name
+for the output file prompt.  The program will then read FILE2, get rid of the
+hex addresses on the left and the op code, label the intra-segment jumps and
+calls and their destinations with labels of the form "Ln", where 0<n<999, and
+send the results to the other (new) file.  The result is compatible (as far as
+it goes) with the IBM Assembler.
+
+If you get "Error: Referenced code not found," it means that a jump or call
+was not found in the input file.  At this point, processing stops and the
+address of the missing code is printed out, followed by the addresses of
+referenced code not yet processed.
+
+When this happens, it either means you missed portions of the code, you got
+"unsynchronized" during the unassembly (perhaps you started unassembling in
+the middle of an instruction), you got into data areas, or (possibly) the code
+modifies itself during execution.
+
+```
+{% endraw %}
 
 ## DISKMDF2.BAS
 
+{% raw %}
 ```bas
 100 'diskmodf v1.2
 110 GOTO 280
@@ -353,9 +412,67 @@ machines:
 1630 LOCATE 2,1:FOR A=BUF TO BUF+511 STEP 24:FOR B=A TO A+23:PRINT HX$(PEEK(B));:NEXT B:PRINT TAB(51);:FOR B=A TO A+23:PRINT AS$(PEEK(B));:NEXT B:PRINT:NEXT A
 1640 LOCATE 23,17:PRINT "                                ";:LOCATE 23,59:PRINT "                ";:RETURN
 ```
+{% endraw %}
+
+## FILES83.TXT
+
+{% raw %}
+```
+Disk No  83
+Program Title: WORMCITY AND OTHERS
+PC-SIG version 1.2
+
+    For all of you who can't afford the ticket to the planet Arrakis of
+Dune fame, here is Wormcity, home of another voracious creature. Among the
+other fun BASIC games here are the Towers of Hanoi, the 15Puzzle and
+TARGET, a really decent arcade shoot-em-up (which requires a monochrome
+graphics system). Rouning out the disk are several utilities, the best of
+which is a program for taking a compiled file back to Assembly (COM2ASM)
+and Keyflags, which lets you track your use of NumLock and ScrollLock in
+the upper right-hand corner of your screen.
+
+Usage: Various
+
+System Requirements: 128K memory, one disk drive, and a version of BASIC.
+
+How to Start: Consult your BASIC manual for instructions on how to run
+BASIC programs for your computer.
+
+Suggested Registration: None
+
+File Descriptions:
+
+15PUZZLE BAS+ Well known puzzle, arrange 15 numbered pieces in order
+COM2ASM  BAS  Adds labels to debug's unassemble, aids modification of asm code
+COM2ASM  DOC  Documentation for COM2ASM
+DISKMDF2 BAS  Diskmdf upgraded for DOS 2.0's nine sector tracks
+GRPH64K  BAS  Sample register settings as used with GRPH64K board modification
+GRPH64K  DOC  How to convert IBM color board for higher resolution
+HANOI    BAS  Towers of Hanoi - standard programming exercise, nicely done
+KEYFLAGS ASM  Source for KEYFLAGS.COM
+KEYFLAGS COM  Display @ and # in corner of screen to show capslock & numlock
+LANDER   BAS+ Simple, but not easy "land on the pad" game
+MENU2    BAS  Menu program to load and run .BAS programs  (DOS 2.0 version)
+NWCLOCK  BAS  Displays time in very large hh:mm:ss format
+PCGLOBE  BAS+ Globe of PC World's premier issue, page 220
+STARMAP  BAS  Starmap for any date/time
+TARGET   BAS+ Arcade aim and shoot game
+TARGET   DOC  Documentation for TARGET.BAS
+TARGET   PIC  Data file for TARGET.BAS
+WORMCITY BAS+ Help the worm eat an apple, escape maze
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## GRPH64K.BAS
 
+{% raw %}
 ```bas
 10 'GRPH64K.BAS  --  some 6845 setups for upgraded Color/Graphics card
 20 ' 20 JAN 83
@@ -400,9 +517,142 @@ machines:
 1270 DATA 47,40,41,6,87,6,87,87,3,3,0,0,16,0
 1300 ' See GRPH64K.DOC for memory maps
 ```
+{% endraw %}
+
+## GRPH64K.DOC
+
+{% raw %}
+```
+Notes on upgrading Color/Graphics card to 64K RAMs      20 JAN 83
+
+Features:  
+
+  -- compatible with all software written for IBM 16K board
+  -- allows 640 x 700 (interlaced) or 640 x 350 (non-interlaced)
+         graphics on IBM monchrome monitor
+  -- allows 640 x 400 interlaced color display on TV
+  -- allows 44 line character mode display on monochrome monitor
+
+Warnings:
+
+  Removing the 16K RAMs which come in the card is NOT easy, as
+the leads are clinched over before soldering and the pads are
+extremely delicate.  Be careful!  Also be prepared to rewire any
+traces or pads you might damage.
+
+  I suggest that you have a copy of the IBM technical reference
+manual so that you can understand what is being changed and fix
+it if it goes wrong.
+
+  Although the upgrade is compatible, it is not supported by IBM,
+so you must write your own driver for your application.  I'll
+maintain a library of routines written for the upgrade and
+submitted to me for distribution.  (Send me a floppy and return
+postage for its mailer and I'll add your routine to the library
+and return a copy of the current library to you.)
+
+  IBM will likely use the graphics memory space in a different
+way (but you'll have a jump on high resolution software).
+
+  To use the upgrade, you must reprogram the 6845 registers.  If 
+done improperly this can cause a monitor to burn up.  Be extremely 
+careful!
+ 
+  The upgrade works on Color/Graphics adapters with schematics
+approximately as shown in the August 1981 edition of the Technical
+Reference manual.  If the U numbers on your board don't seem to 
+match the IC types given, STOP! and let me know so I can update
+this writeup.  Note that the XT Technical Reference manual correctly
+shows bit 3 of the Status Register (3DA) as Vertical Sync (very
+useful for synchronizing display updates).
+ 
+Upgrade Procedure:
+
+-- Carefully remove the 8 16K RAMs (2118s U50 thru U57) and
+replace with 16 pin sockets.
+
+-- Connect pin 9 of U50 thru U57 and then to pin 19 of U58, U59,
+U60 and U61.
+
+-- Connect pin 18 of U58 (LS374) to pin 17 of U38 (6845 MA13).
+
+-- Connect pin 18 of U59 (LS374) to U15 (LS00) pin 6.
+
+-- Connect pin 18 of U60 (LS374) to P5 pin A15 (+A16).
+
+-- Connect pin 18 of U61 (LS374) to P5 pin A17 (+A14).
+
+-- Connect pin 5 of U15 to U38 pin 37 (RA1).
+
+-- Connect pin 4 of U15 to pin 12 of U15 (640x200 mode).
+
+-- Cut connection to pin 2 of U19 (+A16).
+
+-- Connect pin 2 of U19 to pin 16 of U19 (+5V).
+
+-- Install 150 ns 2164s in sockets U50 thru U57.
+
+Now the Color/Graphics memory will look as follows:
+
+Character modes:
+
+B8000 to BFFFF:  16K character/attribute pairs
+   (can scroll by setting R12 and R13 of 6845)
+A8000 to AFFFF:  32K general purpose buffer memory.
+
+Graphics modes:
+
+B8000 to B9FFF and BC000 to BDFFF:  lines with RA=0
+BA000 to BBFFF and BE000 to BFFFF:  lines with RA=1
+A8000 to A9FFF and AC000 to ADFFF:  lines with RA=2
+AA000 to ABFFF and AE000 to AFFFF:  lines with RA=3
+
+To use extended resolution modes, set 6845 R12 to 10H.  (This
+sets MA12 high so that MA13 goes high at the proper point.)
+
+To use RA=2 and 3 (for 640 x 700 mode) set 6845 R9 (Max Scan Line)
+to 3.
+
+
+Connection to IBM monochrome display:
+
+-- Connect a 22 ohm resistor from the emmitter of Q1 (2N3904 -
+composite video) to pin 7 of the 9 pin D connector (video out)
+
+-- Install a subminiature DPDT switch thru the back of the RFI
+shield.  (To allow switching back to a normal monitor.)
+
+-- Cut trace to U67 pin 13 (LS244 - VSYNC) and make this connection
+thru the switch instead (U67 pin 13 to pole A). 
+
+-- Connect U65 pin 13 (LS02) to the other throw of pole A.
+
+-- Cut trace to U67 pin 11 (HSYNC) and make this connection thru
+the switch instead (U67 pin 11 to pole B).
+
+-- Connect U65 pin 6 (+HSYNCDLY) to the other throw of pole B.
+
+-- Connect U65 pin 9 to U65 pins 11 and 12 (+VSYNCDLY).
+
+This provides the proper (inverted) vertical sync and non-serrated
+horizontal sync to the IBM monitor.
+
+
+Sample 6845 register settings are given in the BASIC program:
+
+GRPH64K.BAS
+
+
+Hal Sampson
+501-D Vandell Way
+Campbell, CA  95008
+
+```
+{% endraw %}
 
 ## HANOI.BAS
 
+{% raw %}
 ```bas
 1  '
 2  '***********************************
@@ -486,9 +736,195 @@ machines:
 65110 WIDTH 80: LOCATE ,,1,12,13:SCREEN 0,0,0
 65120 RETURN
 ```
+{% endraw %}
+
+## KEYFLAGS.ASM
+
+{% raw %}
+```
+TITLE TFR24C70.ASM
+PAGE 60 ,132
+;
+;   This program intercepts the ROM KB interrupt 09H (Tech
+;   Manual, A-25, line 1784) and tests every KB entry to see
+;   whether CapsLock or NumLock has been toggled.  If CapsLock was
+;   toggled it displays the sysbol @ , and if NumLock was toggled
+;   it displays the symbol #, both in enhanced video.  The location
+;   of the display is determined by the Equates for row and
+;   columns respectively for the two flags, and the display
+;   format is determined by the equate DF for the attribute.
+;   The status is determined from the flag KB_FLAG of the ROM
+;   (TM, A-2, line 69 is the location).
+;
+;   Refer to: PC World, Oct. '83, pg 266.  Does not mix well with
+;    Lotus 1-2-3 or Scrollk; with ProKey install after ProKey.
+;
+;   This version displays flags after every KB use at row 00, col 78.
+;
+;          ***  Define Constants Used by Program ***
+;
+KB_DATA EQU     060H    ;8259 Port with KB scancode
+KB_CTL  EQU     061H    ;8259 Port with control data for port
+ROWCAPS EQU     00      ;Row for Caps Display (0-24)
+COLCAPS EQU     78      ;Column for Caps Display (0-79)
+ROWNUMS EQU     00      ;Row for Nums display
+COLNUMS EQU     79      ;Column for Nums display
+DF      EQU     15      ;Normal Intensified Display format
+;
+;              *********  Macro Section  *********
+        IF1
+CSR_SET MACRO   ROW,COL ;Sets CSR Pos. on PGE 0
+        MOV     DH,ROW  ;Sets row
+        MOV     DL,COL  ;Sets col
+        MOV     BH,0    ;Sets pge
+        MOV     AH,2    ;ROM BIOS VIDEO function
+        INT     010H    ;ROM BIOS VIDEO interrupt
+        ENDM
+CSR_GET MACRO           ;Return CSR Pos. on PGE 0
+        MOV     BH,0    ;(DH,DL)=ROW,COL returned
+        MOV     AH,3    ;Function in ROM BIOS Video
+        INT     010H    ;ROM BIOS VIDEO Interrupt
+        ENDM
+ROMVIDEO        MACRO   CHR,NO_TIMES,ATTR       ;INT 10,FN.10,Disp.Char.at
+        MOV     BH,0    ;Current cursor pos.BH=Page
+        MOV     AL,CHR          ;Char. to be displayed
+        MOV     CX,NO_TIMES     ;Char. count
+        MOV     BL,ATTR ;Screen attribute,7 normal, 15 enhanced
+        MOV     AH,9    ;Function call
+        INT     10H     ;ROM VIDEO Interrupt
+        ENDM            ;MACRO End
+        ENDIF
+;
+DATA    SEGMENT AT 40H  ;ROM DATA, TM, A-2, line 59
+        ORG     17H     ;Location in ROM of
+KB_FLAG LABEL   BYTE    ;KB_FLAG(see A-2 of Tech.Man.)
+DATA    ENDS
+;
+CSEG    SEGMENT
+        ASSUME  CS:CSEG,DS:DATA
+;
+        ORG     100H
+;
+; The block of code below directs interrupt 9H to 5CH in Program Prefix
+; rather than the usual location in ROM
+;
+START:  MOV     DX,5CH          ;Set DS:DX to locn 5CH in program prefix
+        MOV     AL,9H           ;Set the KB interrupt (9H=9)
+        MOV     AH,25H          ;DOS function call for interrupt
+        INT     21H             ;DOS interrupt for service
+        MOV     DI,DX           ;Move KB routine down so it starts
+        MOV     SI,KB_ADDR      ;At locn 5CH in program prefix
+        MOV     CX,KB_LNTH      ;This sets count in CX for MOVSB at FINISH
+        JMP     FINISH          ;to include just operative code resident.
+;
+; KB Interrupt routine. Copy beginning of ROM routine to allow easy
+; jump to later ROM code.  Copy code from TM, A-25, line 1788(line 1787
+; is inserted just before ports are sampled) to line 1808.
+;
+KB:     PUSH    AX              ;Save registers used
+        PUSH    BX
+        PUSH    CX
+        PUSH    DX
+        PUSH    SI
+        PUSH    DI
+        PUSH    DS
+        PUSH    ES
+        CLD
+        MOV     AX,DATA
+        MOV     DS,AX
+        STI
+        IN      AL,KB_DATA      ;Get key code
+        PUSH    AX
+        IN      AL,KB_CTL       ;Restore KB
+        MOV     AH,AL
+        OR      AL,80H
+        OUT     KB_CTL,AL
+        XCHG    AH,AL
+        OUT     KB_CTL,AL
+        POP     AX
+        MOV     AH,AL           ;Save key code
+;
+; End of copied ROM code.  Start own code. (The part of ROM code that follows
+; this is just that part which handles the KB interrupt 10H, which is what
+; the DOS KB interrupts use.)
+;
+        CMP     AL,0FFH         ;Overrun? Line 1812 of ROM
+        JZ      INTERIM         ;Resting place for Near Jump
+;          *********  Start of Operable Code  *********
+;
+; ****  Routine to Test for Caps Lock and Num Lock Toggle  ****
+        PUSH    AX              ;Save registers not saved by Video Int.
+        PUSH    DI
+        PUSH    SI
+        MOV     BL,KB_FLAG      ;Status to BL
+        AND     BL,60H          ;Sets bits for both on
+        CSR_GET                 ;Need to save cursor
+        MOV     CS:ROWSAVED,DH  ;Save cursor locations
+        MOV     CS:COLSAVED,DL
+        CMP     BL,60H          ;See if both on, if not then
+        JNE     TRY1            ;to test for CAPS only on
+        CSR_SET ROWCAPS,COLCAPS ;both on display
+        ROMVIDEO        '@',1,DF
+        CSR_SET ROWNUMS,COLNUMS
+        ROMVIDEO        '#',1,DF ;both now displayed
+        JMP     HOME            ;Exit
+INTERIM:JMP     ROM_KB          ;Needed for near JZ above
+TRY1:   CMP     BL,40H          ;Is Caps alone on?
+        JNE     TRY2            ;If not, test for Nums only
+        CSR_SET ROWCAPS,COLCAPS ;Display just Caps only
+        ROMVIDEO        '@',1,DF
+        CSR_SET ROWNUMS,COLNUMS ;and blanks for nums
+        ROMVIDEO        ' ',1,DF
+        JMP     HOME            ;Exit
+TRY2:   CMP     BL,20H          ;See if just Nums on
+        JNE     BOTH_OFF        ;if not, both off
+        CSR_SET ROWCAPS,COLCAPS ;Blank for caps
+        ROMVIDEO        ' ',1,DF
+        CSR_SET ROWNUMS,COLNUMS ;and Nums is on alone here
+        ROMVIDEO        '#',1,DF
+        JMP     HOME            ;Exit
+BOTH_OFF:       CSR_SET ROWCAPS,COLCAPS
+        ROMVIDEO        ' ',1,DF ;Blank Caps spaces
+        CSR_SET ROWNUMS,COLNUMS  ;Blank Nums spaces
+        ROMVIDEO        ' ',1,DF
+HOME:   CSR_SET CS:ROWSAVED,CS:COLSAVED
+home0:                          ;No change if here, exit
+        POP     SI              ;Restore registers
+        POP     DI
+        POP     AX
+;
+ROM_KB: MOV     AH,AL
+        JMP     FAR PTR ROM_ADR ;To ROM for processing
+;
+FINISH: REP     MOVSB
+        MOV     DX,DI           ;End program but leave KB resident
+        INT     27H             ;DOS call for stay resident
+;
+; *******  Memory for CS must go here and be addressed CS:  *********
+;
+ROWSAVED        DB      ?       ;Row position from DH
+COLSAVED        DB      ?       ;Col position from DL
+;
+KB_END:
+;
+CSEG    ENDS
+;
+ROM     SEGMENT AT 0F000H       ;ROM BIOS KB entry points
+        ASSUME  CS:ROM
+        ORG     0E9A8H          ;This is line 1812 on A-26 of T.M.
+ROM_ADR LABEL   FAR             ;Perform all but initial processing
+ROM     ENDS
+;
+KB_ADDR EQU     (OFFSET KB-OFFSET START)+100H
+KB_LNTH EQU     (OFFSET KB_END-OFFSET KB)
+;
+        END     START
+```
+{% endraw %}
 
 ## LANDER.BAS
 
+{% raw %}
 ```bas
 130 KEY OFF:CLS:SCREEN 1:COLOR 1,0:CL%=2
 140 DIM CUR%(20)
@@ -533,9 +969,11 @@ machines:
 485 LOCATE 24,10:PRINT "Time          Fuel";
 490 RETURN
 ```
+{% endraw %}
 
 ## MENU2.BAS
 
+{% raw %}
 ```bas
 1 KEY(2) ON:ON KEY(2) GOSUB 65140
 10 DIM PROG$(64)
@@ -570,9 +1008,11 @@ machines:
 65160 RUN"A:TRANSFER
 65170 SYSTEM
 ```
+{% endraw %}
 
 ## NWCLOCK.BAS
 
+{% raw %}
 ```bas
 0 '************************************************************
 1 '*                                                          *
@@ -990,9 +1430,11 @@ machines:
 10160 NEXT II
 10170 RETURN
 ```
+{% endraw %}
 
 ## PCGLOBE.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1                           'PC WORLD
 20 CLS:KEY  OFF                       'Karl Koessel
@@ -1115,9 +1557,11 @@ machines:
 1190 SCREEN 0,0,0,0:KEY  ON
 1200 END
 ```
+{% endraw %}
 
 ## STARMAP.BAS
 
+{% raw %}
 ```bas
 10 DEF SEG=&H40:POKE &H17,(PEEK(&H17)AND &HFFBF)+64
 20 KEY OFF:CLS:WIDTH 40
@@ -1289,9 +1733,11 @@ machines:
 1680 CIRCLE(X,Y),1:IF C$="SUN"THEN CIRCLE(X,Y),2:RETURN
 1690 RETURN
 ```
+{% endraw %}
 
 ## TARGET.BAS
 
+{% raw %}
 ```bas
 10 '###########################################################################
 20 '#                                                                        ##
@@ -1434,9 +1880,42 @@ machines:
 1390 CLOSE
 1400 RETURN
 ```
+{% endraw %}
+
+## TARGET.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+                           TARGET
+
+     TARGET is an arcade-type shooting game. You control your sights
+     with the key pad and shoot with the space bar. You can speed up
+     the target ship to increase the difficulty of play.
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## WORMCITY.BAS
 
+{% raw %}
 ```bas
 0 GOTO 55000 ' WORMCITY.109 10/4/82   T.W.PERKINS
 1 ' EDOT4  8/24/82    EAT  DOT #4  (CIRCLE)
@@ -1883,6 +2362,7 @@ machines:
 61110 GOSUB 57500
 61120 GOTO 30000
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

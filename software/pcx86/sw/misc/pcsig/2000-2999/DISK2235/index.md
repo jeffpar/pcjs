@@ -38,6 +38,61 @@ machines:
     of the mandatory end-of-month reports with a single keystroke.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2235.TXT
+
+{% raw %}
+```
+Disk No: 2235                                                           
+Disk Title: General Ledger II                                           
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: General Ledger II                                        
+Author Version: 3.6                                                     
+Author Registration: $50.00                                             
+Special Requirements: Two floppy drives, and a 132 column printer.      
+                                                                        
+If you are a professional in need of a basic, "no whistles and bells"   
+accounting system to handle your billable time, then GENERAL LEDGER II  
+is for you.                                                             
+                                                                        
+GENERAL LEDGER II can handle up to 300 accounts, which can be grouped   
+into 32 different categories.  You define both the account names and    
+category names.  The number of vouchers (groups of account postings)    
+that can be handled is determined by available disk storage. .          
+Transaction entry is simplified in that it lets you call for accounts by
+name (or partial name) as well as by account number.  Standard,         
+pre-established, report formats eliminate the need for you to design    
+reports.  A check register feature automatically captures data on all   
+checking account activity.  A cash journal feature lets you create a    
+doubly-posted petty cash journal with just a single entry for each      
+transaction. Journaling contains a pre-posting list feature that lets   
+you see what the posting results will be, and to make corrections if you
+want to, before final posting.  The Reports Menu includes a selection   
+that lets you print all of the mandatory end-of-month reports with a    
+single keystroke.                                                       
+                                                                        
+                                                                        
+GENERAL LEDGER II has a locked-in audit trail.  You can't make direct   
+changes to the balances in any of your accounts.  In order to change    
+a value, you must make entries through the journal and print a posting  
+report that shows what happened.  Serial voucher numbers are generated  
+automatically and if something is missing, chances are you'll know it.  
+In addition, GENERAL LEDGER II won't allow you to close an accounting   
+period until you've printed at least a transaction report, an income    
+statement, and a balance sheet.  Three levels of password protection    
+is also provided.                                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2235
 

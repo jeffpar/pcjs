@@ -35,6 +35,232 @@ machines:
     SUCCESS  DOC  Documentation for SUCCESS.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES392.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 392   Compiled PASCAL Routines Library                  v1 DS
+------------------------------------------------------------------------
+Library of Pascal routines to be used when linking Pascal object files.
+ 
+WHEELS   LBR  Library of routines for use with Pascal compiler which
+              includes :
+ 
+ ALLFILES  EXISTFIL  GETINTGR  KAVAIL    MOVEFILE  REBOOT    SUCCESS
+ CIRCLE    EXTENDIO  GETKEYS   KEYBOARD  NEWINT9   RECTANGL  TITLES
+ CURSOR    FANCYKEY  GETSECTR  KEYCHART  NOSOUND   REGPACK   WINDOWS
+ DISKMOD   FILEATTR  GETSETDD  LABEL     NUMDISKS  SAFEWRIT
+ DISKTYP   FILENAME  GRFXTABL  LESSRAM   PARAMETR  SCANCODE
+ EQUIPMNT  GETFILE   GTSETDIR  MKRMDIR   POPSCREN  SCREEN
+ ERRMESSG  GETFREE   HEXFUNCT  MONITOR   QUEUE     SCREENS
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## SUCCESS.DOC
+
+{% raw %}
+```
+        ||================================================================||
+        ||                                                                ||
+        ||   THIS IS N*O*T A DESCRIPTION OF THE FILES ON T*H*I*S DISK.    ||
+        ||   MR. TODD'S ROUTINES ARE AVAILABLE FOR $20. FROM THE ADDRESS  ||
+        ||   BELOW.  THERE IS A CERTAIN AMOUNT OF OVERLAP BETWEEN HIS     ||
+        ||   ROUTINES AND MINE, BUT ENOUGH DIFFERENCES TO MAKE IT WORTH   ||
+        ||   GETTING HIS DISK.                                            ||
+        ||                   Neil J. Rubenking                            ||
+        ||                                                                ||
+        ||================================================================||
+
+
+
+        The Success Press          Box 2795  Des Plaines, Illinois 60018
+        ================================================================
+
+
+                    Procedures and Functions For Turbo Pascal
+
+                                  Version 1.07
+
+                          (C) Copyright 1984 W. E. Todd
+
+
+
+                              - Batch Programming -
+
+        Seterrlv         Allows  a  program  to  set  the  DOS errorlevel
+                         variable  upon  termination.  The errorlevel can
+                         be  tested  using the batch IF statement to find
+                         out   if   the   program   terminated  normally.
+                         Requires DOS 2.00 or later.
+
+
+                               - System Services -
+
+        Cursrsiz.inc     Set the cursor size.
+
+        Dosrelnm.inc     Gets  the DOS release number.  Requires DOS 2.00
+                         or later.
+
+        Getdefdr.inc     Gets the letter of the default disk drive.
+
+        Setdefdr.inc     Sets the default disk drive.
+
+        Getdate.inc      Gets the system date.
+
+        Setdate.inc      Sets the system date.
+
+        Gettime.inc      Gets the system time.
+
+        Settime.inc      Sets the system time.
+
+        Setverfy.inc     Turns disk write verification on or off.
+
+        Togglkey.inc     Turns    Insert,    Caps-Lock,    Num-Lock   and
+                         Scroll-Lock on or off.
+
+        Numprntr.inc     Returns  the number of parallel printer ports on
+                         the system.
+
+        NumRS232.inc     Returns  the number of RS232 serial ports on the
+                         system.
+
+
+                                  - Diskettes -
+
+        Chngattr.inc     Sets  or clears the read only, hidden, system or
+                         archive attributes of a disk file.
+
+        Diskdir.inc      Reads and writes the diskette directory.
+
+        Diskspac.inc     Gets  the  amount  of  free space on a diskette. 
+                         Requires DOS 2.00 or later.
+
+        Disktype.inc     Tells  if the diskette is single or double sided
+                         and 8 or 9 sectors per track.
+
+        Chdir.inc        Change  the  current  directory.    Requires DOS
+                         2.00 or later.
+
+        Mkdir.inc        Create  a  subdirectory.    Requires DOS 2.00 or
+                         later.
+
+        Rmdir.inc        Remove  a  subdirectory.    Requires DOS 2.00 or
+                         later.
+
+
+                                - Input/Output -
+
+        Initcomm.inc     Initializes   an   RS-232  communications  port. 
+                         Similar to the OPEN COM statement in BASIC.
+
+        Statcomm.inc     Returns  the communications port line status and
+                         modem status bits.
+
+        Cmdparam.inc     Gets  the  parameters following the program name
+                         on  the  command  line,  converts  them to upper
+                         case  and  separates them into the elements of a
+                         string array.
+
+        Dispmode.inc     Gets the current video display mode.
+
+        Getscrch.inc     Gets   the   character  at  the  current  cursor
+                         position on the screen.
+
+        Getscrat.inc     Gets  the attribute byte of the character at the
+                         current cursor position.
+
+        Inkey.inc        Works  like  the  BASIC INKEY$ statement.  Waits
+                         for  a keyboard key to be struck and returns the
+                         corresponding  character  in  a  string.  If the
+                         key  has  a  two  byte  extended code a two byte
+                         string  is returned containing both bytes of the
+                         extended code.
+
+        Inkeyclr.inc     Clears  the  keyboard buffer, waits for a key to
+                         be  struck  and returns the key in a string.  By
+                         clearing   the  keyboard  buffer  this  function
+                         forces  the  program  to  wait  for  a key to be
+                         struck after the function is executed.
+
+        Readpixl.inc     In  graphics mode returns the value of the pixel
+                         at the specified location.
+
+        Spc.inc          Returns  the  specified  number of spaces.  This
+                         can  be  used  like  the  BASIC  SPC function to
+                         insert spaces in an output record.
+
+        Tab.inc          Tabs  to  the  specified  column when writing to
+                         the screen.
+
+        Drawabox.inc     Draws  a box of any size on the screen.  You can
+                         specify  the  character(s)  to be used.  This is
+                         handy  for  outlining  windows or other text for
+                         emphasis.
+
+        Textbord.inc     Sets the vidio display border color.
+
+
+                                   - Printer -
+
+        Printscr.inc     Invokes   the  print  screen  function  just  as
+                         though you had typed Shift-PrtSc.
+
+        Resetptr.inc     Resets  the printer using the BIOS printer reset
+                         routine.   This not only resets the printer, but
+                         if  the printer is off line it will be placed on
+                         line.
+
+        Statptr.inc      Returns  the  printer  status word.  This allows
+                         you  to tell if the printer is on line or out of
+                         paper.
+
+
+                              - Bit Manipulation -
+
+        Clr-bits.inc     Clears  any  string  of  consecutive  bits  in a
+                         word.
+
+        Set-bits.inc     Sets any string of consecutive bits in a word.
+
+        Ext-bits.inc     Extracts  any  string of consecutive bits from a
+                         word and returns their value as an integer.
+
+        Ins-bits.inc     Inserts  the  string  of  bits  representing  an
+                         integer at any location in a word.
+
+
+                                    - Math -
+
+        Dectohex.inc     Converts  an  integer  to  a  hex  string.   For
+                         example, 10 is converted to $000A.
+
+        Hextodec.inc     Converts  a  one to four character hex string to
+                         an integer.  For example, $FFFF returns -1.
+
+        Ipower.inc       Raises an integer to an integer power.
+
+        Power.inc        Raises a real number to a real power.
+
+        Cendate.inc      Provides  three  routines to do date arithmetic.
+                         One  converts  Gregorian date to day of century,
+                         another  converts  day  of  century to Gregorian
+                         date  and  the  third  determines the day of the
+                         week from day of century.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0392
 

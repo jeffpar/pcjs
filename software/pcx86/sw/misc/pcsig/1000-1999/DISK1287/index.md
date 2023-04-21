@@ -65,6 +65,151 @@ machines:
     included. Works great with or without a mouse.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1287.TXT
+
+{% raw %}
+```
+Disk No: 1287
+Program Title:  ZOOMRACKS
+PC-SIG version: 1.2
+
+Organize everything--home or business--with one of the premier
+information management systems in all the IBM PC world, ZOOMRACKS.  More
+than a great database, ZOOMRACKS uses its patented card and rack
+metaphor to allow you to organize everything from business letters, to
+your finances.  Whole businesses are running on ZOOMRACKS alone.
+
+ZOOMRACKS is based on a simple, real world object: Racks which contain
+cards that have information on them.  Imagine a rack hanging on the door
+of a doctor's examining room that holds cards containing the patients'
+medical records.  The top of every card is visible when looking at the
+entire rack, so you look for the desired patient's record then pull that
+card and view it.  Essentially, this is how ZOOMRACKS operates on your
+computer.
+
+This simple idea makes ZOOMRACKS one of the fastest and easiest
+databases to use, according to COMPUTE!  MAGAZINE which bestowed its
+1989 Choice award on ZOOMRACKS as one of the 13 best products of the
+year, and the best database.  With full text searching, a powerful macro
+language, online help and the multi-talents of database and word
+processor---as well as many of the functions of a spreadsheet---there
+should be little wonder why ZOOMRACKS is zooming into both homes and
+businesses as the "do all" program everyone wants.
+
+Unlike a traditional database where you are limited by the fields
+specified, ZOOMRACKS gives you have the option of putting anything you
+want on a card, including information into preset fields.  If you want
+to write a letter, go to a card and start writing.  Word processing is
+an integral part of ZOOMRACKS.  If you want to organize class notes,
+maintain records of all business correspondence with your clients, or
+manage you home budget, ZOOMRACKS is a powerful solution.
+
+Like a spreadsheet, ZOOMRACKS uses templates.  You define what kind of
+information you will be storing in a rack by defining a rack template.
+You can change the format of any rack at any time.  You can add fields,
+sort fields, rearrange and move fields, perform mathematical functions,
+change the names or the widths of fields, even change the name of the
+rack, if you like.  You can easily build your own templates or use
+pre-designed templates, which are also available from PC-SIG, for home
+management, general business and accounting.
+
+Many will see a similarity between ZOOMRACKS' ability to zoom-in on a
+part of the screen and pull up additional information, even pictures, to
+that of the "HyperCard" concept.  Interestingly, ZOOMRACKS was actually
+developed before HyperCard.
+
+This program does take a little time to learn the initial commands, but
+is very convenient to use once learned.  Works great with or without a
+mouse.
+
+Usage:  Database/General Multiuse Computing Platform.
+
+Special Requirements:  384K memory.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $89.95
+
+File Descriptions:
+
+ZR       EXE  Main program file to start ZOOMRACKS.
+F1HELP   ZRX  A rack of help for use within ZOOMRACKS.
+KEYHELP  ZRX  More help in the form of a rack.
+MACDEMO  ZRX  A rack of macros to be loaded for use with QDEMO.
+PCSIG    ZRX  A rack with program information.
+QCHECKS  ZRX  A sample rack of checkbook entries.
+QDEMO    ZBK  File used with ZRX.
+QDEMO    ZRX  A rack to demonstrate the capabilities of ZOOMRACKS.
+QFORMS   ZRX  A sample rack of output formats from ZOOMRACKS.
+QINVOICE ZRX  A sample rack of invoices.
+QLETTERS ZRX  A sample rack of letters.
+QNAMES   ZRX  A sample rack of names and addresses.
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale, CA 94086
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## LICENSE.TXT
+
+{% raw %}
+```
+License Agreement
+
+Copyright 1985-1988, by Quickview Systems for this software, the
+software documentation and the user interface.  Patents no.
+4,736,308 and 4,486,857 also apply.
+
+Quickview Systems grants a license to reproduce, distribute, and
+use copies of this shareware version of Zoomracks including the
+on-disk documentation under the express condition you do not
+receive payment, commercial benefit, or other consideration for
+such reproduction or distribution or change this license
+agreement or copyright notice.
+
+The commercial and non-commercial distribution of information
+along with the shareware version of Zoomracks as a supporting
+platform is encouraged and permitted; as is the use of Zoomracks
+as a supporting platform for non-commercial applications.
+
+However, the distribution or use of Zoomracks as the platform for
+commercial applications which, in the sole opinion of Quickview
+Systems, are not primarily for information distribution or
+non-commercial are not permitted under this license.
+
+Users are encouraged to use Zoomracks at no charge for (a) general
+evaluation and (b) accessing, searching, distributing, and printing
+information provided by others in Zoomracks format.
+
+After an intial evaluation, Users who use Zoomracks for the entry,
+organization, or modification of information, are required to register
+their copy of Zoomracks.  Registered users are provided with a copy of
+Zoomracks including a manual, technical support, and are put on a
+mailing list to be notified of updates and Zoomracks based products.
+
+Quickview Systems reserves the right to terminate or modify the rights
+granted to any or all parties by this license provided it gives one
+years notice by registered letter to any parties concerned or by a
+public announcement.
+
+ZOOMRACKS IS DISTRIBUTED AND LICENSED "AS IS." ALL
+WARRANTIES,EITHER EXPRESSOR IMPLIED, ARE DISCLAIMED AS TO THE
+SOFTWARE AND ITS QUALITY, PERFORMANCE, OR FITNESS FOR ANY
+PARTICULAR PURPOSE.  YOU,THE CONSUMER, BEAR THE ENTIRE RISK
+RELATING TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE.  IN NO
+EVENT WILL QUICKVIEW OR HYPERRACKS BE LIABLE FOR DIRECT,
+INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES RESULTING FROM ANY
+DEFECT IN THE SOFTWARE.  IF THE SOFTWARE PROVES TO HAVE DEFECTS,
+YOU ASSUME THE COST OF ANY NECESSARY SERVICING OR REPAIRS.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1287
 

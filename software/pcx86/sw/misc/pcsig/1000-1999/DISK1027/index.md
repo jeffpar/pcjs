@@ -28,6 +28,38 @@ machines:
     Loan Calculator
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1027.TXT
+
+{% raw %}
+```
+Disk No: 1027                                                           
+Disk Title: Amortization Table                                          
+PC-SIG Version: S3                                                      
+                                                                        
+Program Title: Amortization Table                                       
+Author Version: 3.5                                                     
+Author Registration: $15.00 plus $5.00 for manual.                      
+Special Requirements: None.                                             
+                                                                        
+AMOR is an amortization table that calculates monthly payments,         
+interest, and principal for each month on a loan with a duration of one 
+to forty years.  One of the better amortization table calculators that  
+PC-SIG offers.                                                          
+                                                                        
+KEYWORDS                                                                
+Loan Calculator                                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1027
 

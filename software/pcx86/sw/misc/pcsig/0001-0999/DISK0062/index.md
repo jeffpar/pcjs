@@ -53,6 +53,7 @@ machines:
 
 ## CASHACC.BAS
 
+{% raw %}
 ```bas
 15 REM ****************************************
 20 REM *  CASH ACCOUNTS PROGRAM, VERSION 1.0  *
@@ -530,9 +531,11 @@ machines:
 8530 IF (ERR=70) OR (ERR=71) THEN INPUT "Check disk, then hit ENTER to return to MAIN MENU ";S:RESUME 300
 8540 IF (ERR=61) THEN PRINT "Disk is full":RESUME 8200 ELSE INPUT "UNKNOWN ERROR, Hit ENTER to return to MAIN MENU";S: RESUME 300
 ```
+{% endraw %}
 
 ## CHARS2.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 20 PRINT CHR$(12)
@@ -566,9 +569,63 @@ machines:
 300 KEY ON
 310 END
 ```
+{% endraw %}
+
+## FILES62.TXT
+
+{% raw %}
+```
+Disk No: 62
+Program Title: INVENTORY PROGRAM
+PC-SIG version: 1.2
+
+PERSONAL HOME INVENTORY lets you add, change, or delete inventory
+entries.  It prints out the completed inventory file to either the
+screen or printer.  The cash/checkbook accounting program lets you input
+data, add, delete, edit, and print reports of the transactions.  The
+mailing list in a database program that lets you add, change, or delete
+names.  It can do a search via the last name, city, or state.  It
+alphabetize entries, prints a roster, can do mailing labels, and more.
+
+These programs are fun to work with, and a great way to become familiar
+with database programs.  All programs are written in BASIC, are menu
+driven, and use screen inputs for data entries.
+
+Usage:  Utilities.
+
+Special Requirements:  A version of BASIC.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None
+
+File Descriptions:
+
+CHARS2   BAS  Displays ASCII character set in octal, hex or decimal.
+LINREGRS BAS  Calculates multiple linear regression coefficients.
+WB-UPTLE BAS  Addition to PC-TALK 2.0 to allow file transmission
+              while using host computers editor.
+MAILIST2 BAS  Mailing list program - with search and alphabetic sort.
+INVENTRY BAS  Helps to keep list of possessions on computer.
+INVENTRY DAT  Data file for INVENTRY.BAS.
+INVENTRY DOC  Few notes for INVENTRY.BAS - very short.
+CASHACC  BAS  Simple cash accounting system.
+REMCACC  BAS  Remark lines which may be merged with CASHACC.BAS.
+TESTDATA ACC  Part of CASHACC.BAS.
+MONTHS   HBW  Data file.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1985,86,87,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## INVENTRY.BAS
 
+{% raw %}
 ```bas
 10 'CLS:INPUT "CHANGE LINE 1020 TO YOUR NAME AND ADDRESS. THEN DELETE LINE 10. PRESS ENTER TO    CONTINUE",DUMMY$
 20 '***********************************************************************
@@ -773,9 +830,42 @@ machines:
 2010 KILL "TEMP.DAT"
 2020 GOTO 1800
 ```
+{% endraw %}
+
+## INVENTRY.DOC
+
+{% raw %}
+```
+
+
+
+
+                HOME INVENTORY PROGRAM
+
+     This program allows you to keep a list of your possesions on your
+computer. It is completely menu driven and used easy screen input for
+data entry. It prints the inventory on an Epson MX-80 (or equivalent)
+printer.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## LINREGRS.BAS
 
+{% raw %}
 ```bas
 10 REM*************************************************************************
 20 REM******--  Multiple Linear Regression                             --******
@@ -1060,9 +1150,11 @@ machines:
 2810 ON ERROR GOTO 0
 2820 RESUME
 ```
+{% endraw %}
 
 ## MAILIST2.BAS
 
+{% raw %}
 ```bas
 100 REM     MAILING LABEL PROGRAM FOR 'Business Mailing Labels'
 200 REM     MAILING LABEL PROGRAM FOR 'Business Mailing Labels'
@@ -1430,9 +1522,11 @@ machines:
 32800 CLOSE
 32900 RETURN 2000
 ```
+{% endraw %}
 
 ## REMCACC.BAS
 
+{% raw %}
 ```bas
 35 ' Remarks program for CASHACC                     6/19/82
 36 ' MERGE this program with CASHACC for a complete listing.
@@ -1567,9 +1661,11 @@ machines:
 8205 ' This date is the current date entered at the beginning of the program runor else the last time changes were made to both files if no changes were done this
 8206 ' time.
 ```
+{% endraw %}
 
 ## WB-UPTLE.BAS
 
+{% raw %}
 ```bas
 1 '***************** MODIFICATION FOR PC-TALK, VERSION 2.0 ******************
 2 '
@@ -1631,6 +1727,7 @@ machines:
 4217 IF EOF(1) THEN 4217
 4218 FOR J=1 TO 1000: NEXT J
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

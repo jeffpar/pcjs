@@ -64,6 +64,7 @@ machines:
 
 ## BASTODOS.BAS
 
+{% raw %}
 ```bas
 10 '*
 15 '*************************************************************************
@@ -1610,9 +1611,106 @@ machines:
 7617 RESTORE
 7618 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #108, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  BASTODOS.BAS         CRC = ED 82
+
+--> FILE:  BATMENU .COM         CRC = C8 D3
+
+--> FILE:  BATMENU .DOC         CRC = 57 38
+
+--> FILE:  DEPRE___.APL         CRC = 44 24
+
+--> FILE:  DISKTYPE.DOC         CRC = 8F 54
+
+--> FILE:  DISKTYPE.EXE         CRC = 62 C0
+
+--> FILE:  FORECAST.APL         CRC = F9 51
+
+--> FILE:  MATH____.APL         CRC = DC AF
+
+--> FILE:  MUSIC   .BAS         CRC = EF 35
+
+--> FILE:  MUSIC   .DOC         CRC = 42 50
+
+--> FILE:  NOECHO  .DOC         CRC = 0C 6D
+
+--> FILE:  PEPATCHS.DOC         CRC = 69 E0
+
+--> FILE:  PMODE   .ASM         CRC = 22 53
+
+--> FILE:  PMODE   .COM         CRC = 54 B5
+
+--> FILE:  PRTSCFX .ASM         CRC = FD C9
+
+--> FILE:  PRTSCFX .COM         CRC = F7 6F
+
+--> FILE:  UTILITY_.APL         CRC = 8E 3F
+
+--> FILE:  READ    .ME          CRC = A2 0A
+
+--> FILE:  UNDOC   .DOC         CRC = AF EA
+
+--> FILE:  PRTSCFX .DOC         CRC = CB 01
+
+ ---------------------> SUM OF CRCS = D9 0B
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## DISKTYPE.DOC
+
+{% raw %}
+```
+0 '===START OF FILE=== 			DISKTYPE.EXE
+
+	  Duncan.Ray.  1983.  The Right to Assemble.
+          Softalk.  11:203-209
+
+This utility is a handy one to have when you're not sure of the
+format of a particular diskette.  When invoked, it reports whether
+the diskette in question is single-sided or double-sided and for-
+matted to hold 320 KB or 360 KB worth of data.
+
+The command syntax is:
+
+	A>disktype [d:]
+
+		where d: = drive id
+
+Use it....it comes in handy!!
+
+65529 '===END OF FILE=== comm
+```
+{% endraw %}
 
 ## MUSIC.BAS
 
+{% raw %}
 ```bas
 10 REM DSNAME = MUSIC.BAS
 20 REM This version completed on 6/20/82.  For comments and suggestions,
@@ -1833,6 +1931,969 @@ machines:
 2160 FOR I=50+I1 TO 110+I1 STEP 60:PUT(WHERE+4,I),FOUR%,OR:NEXT I:RETURN
 2170 FOR I=50+I1 TO 110+I1 STEP 60:PUT(WHERE+4,I),EIGHT%,OR:NEXT I:RETURN
 ```
+{% endraw %}
+
+## MUSIC.DOC
+
+{% raw %}
+```
+"     The MUSIC package is a"
+"preliminary attempt to provide some"
+"easy keyboard-access to the built-in"
+"IBM PC 'PLAY' command.  The package"
+"allows you to enter one 'voice' (note)"
+"at a time, letting you select the"
+"note on a regular music-sheet-type"
+"display."
+"     You may have whole, half, quarter,"
+"eighth, or sixteenth notes or rests."
+"They may be natural, sharp, or flat."
+"You can set the key before beginning"
+"as well as the measure (e.g. 4/4) as"
+"well as the tempo (quarter notes per"
+"second).  You can also change any of"
+"these within the piece itself.  The"
+"piece can be saved and recalled at any"
+"time."
+"     Some cautions:"
+"* When you want a note to be tied,"
+"  dotted, or made flat, sharp, or"
+"  natural, you must indicate this by"
+"  pressing the proper key before"
+"  entering the note itself."
+"* You must select notes that fit within"
+"  the measure selected.  Since thirty-"
+"  second notes are not allowed, you"
+"  would be wise to avoid unpaired"
+"  dotted sixteenth notes."
+"* The routine plays the notes with"
+"  the 'music background' option ('MB'"
+"  in the PLAY command).  This was done"
+"  to avoid awkward pauses while"
+"  playing the tune."
+"  This does, however, result in the"
+"  music occasionally being played out"
+"  of synch with what's being drawn."
+"     Changes due in later revisions:"
+"* Editing.  At the moment, once you"
+"  enter a note, you're stuck with it."
+"* Repeats.  You have to manually re-"
+"  enter every note over again to do a"
+"  repeat now."
+ote, you're stuck with it."
+"* Repeats.  You have to manually re-"
+"  enter every note over again t
+```
+{% endraw %}
+
+## PMODE.ASM
+
+{% raw %}
+```
+	name	pmode
+	page	55,80
+	title	'PMODE - set printing mode directly from DOS
+;	
+;	PMODE utility to set printing modes directly from DOS for LPT1
+;
+;	by	Chris Lindberg
+;
+;	Uncopyright 1982
+;
+;	Command syntax is 
+;
+;		A>pmode [c,c,c...]
+;
+;			and c is one or more characters
+;			in upper or lower case
+;			from the following list:
+;
+;			I = Italics on
+;			C = Compressed on
+;			E = Emphasized on
+;			X = Expanded on
+;			D = Double strike on
+;
+;			Pmode without any arguments resets the printer
+;			to a cold start setting.
+;
+;		PMODE is a simple assembly language program that sends 
+;		escape sequences to the printer for the various print
+;		modes available.  This version is set up for the IBM
+;		equivalents of the MX-80 and MX-100.  It should work as
+;		well for the MX-80, MX-100 and other Epson models.  If
+;		your printer uses other escape sequences, I've provided
+;		the assembler listing so that you can make the necessary
+;		changes.  If you don't have an assembler, you can use
+;		DEBUG to change the program.  The escape sequences used
+;		in this program are:
+;
+;					CODES SENT
+;		MODE		HEXADECIMAL		DECIMAL
+;		---------	-----------           -----------
+;
+;		Italics on	  1b + 34		27 + 52
+;		Compressed on	  1b + 50		27 + 80
+;		Expanded on	  1b + 53		27 + 83
+;		Emphasized on	  1b + 45		27 + 69
+;		Double strike on  1b + 47		27 + 71
+;
+;
+;	The actual code segment star4s here:
+;
+	input	equ	08h	;command tail line buffer address
+	cr	equ	0dh	;ASCII carraige return
+;
+	cseg	segment	byte
+		assume	cs:cseg,ds:cseg
+;
+		org	0100h	;since this will be a .COM file
+;
+	reset:	mov	al,0	;reset the printer to a cold
+		mov	ah,1	;start setting
+		mov	dx,0
+		int	17h
+;
+		mov	si,offset input
+		cld		;get address of command tail and...
+		lodsb		;move it forward.  Check length
+		or 	al,al	;of buffer.  
+		jz	done 	;If zero, then we're done
+;
+	read:	lodsb		;get next byte of buffer
+		cmp	al,cr	;Is it a CR?
+		je	done	;if it is, then we're done
+		or	al,20h	;otherwise, fold it to lower case
+		cmp	al,'a'  ;make sure it's between 'a'
+		jb	read
+		cmp	al,'z'	;and 'z'
+		ja	read	;otherwise, skip it.
+;
+		cmp	al,'i'	;Is it 'iú
+		jne	emph	;if it isn't, go on
+		mov	al,1bh	;send escape sequence...
+		call 	print	;...to printer
+		mov	al,34h	;and send code for italics...
+		call 	print	;.... to printer
+		jmp	short read
+;
+	emph:	cmp	al,'e'	;is it 'e'?
+		jne	double
+		mov	al,1bh
+		call	print
+		mov	al,45h
+		call	print
+		jmp	short read
+;
+	double:	cmp	al,'d'	;is it 'd'?
+		jne	compr
+		mov	al,1bh
+		call	print
+		mov	al,47h
+		call	print
+		jmp	short read
+;
+	compr:	cmp	al,'c'	;is it a 'c'?
+		jne	expan	
+		mov	al,1bh
+		call	print
+		mov	al,50h
+		call	print
+		jmp	short read
+;
+	expan:	cmp	al,'x'	;is it a 'x'?
+		jne	read	
+		mov	al,1bh
+		call	print
+		mov	al,53h
+		call	print
+		jmp	sh/rt read
+;
+	done:	int	20h	;all done...return to DOS
+;
+	print	proc	near	;routine to send contents of 
+		push	dx	;al to printer
+		mov	dx,0
+		mov	ah,0
+		int	17h
+		pop	dx
+		ret
+	print	endp
+;
+	cseg	ends
+;
+```
+{% endraw %}
+
+## PRTSCFX.ASM
+
+{% raw %}
+```
+	page	60,132
+
+	title	PrtScFX  - FX-80 monochrome graphics print screen patch
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Written by:	Michael Geary					    ;;
+;;		Software Wizards				    ;;
+;;		P.O. Box 1479					    ;;
+;;		Los Gatos, CA 95031				    ;;
+;;		(408) 354-4400					    ;;
+;;								    ;;
+;; This program is placed in the public domain without restriction. ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; character codes
+CR	equ	13
+LF	equ	10
+ESC	equ	27
+
+; interrupt numbers
+PrtSc	equ	05h
+video	equ	10h
+keyboard equ	16h
+time	equ	1Ah
+
+; interrupt vector locations in absolute zero segment
+absSeg	segment at 0
+	org	PrtSc * 4
+PrtScIntOffset	dw	?
+PrtScIntSeg	dw	?
+	org	500h
+statusByte	db	?
+absSeg	endS
+
+; screen addresses & stuff
+monoSeg     equ     0B000h
+graphSeg    equ     0B800h
+row25offset equ     24 * 160
+
+monoBigCrs  equ     000Dh
+graphBigCrs equ     0007h
+
+monoNrmCrs  equ     0C0Dh
+graphNrmCrs equ     0607h
+
+codeSeg segment para public 'code'
+
+	extrn	cgData:byte
+
+theEnd	equ	offset cgData + 4096
+
+	org	100h
+
+printScreen	proc	far
+
+	assume	cs:codeSeg, ds:codeSeg, ss:codeSeg, es:absSeg
+
+	xor	ax, ax
+	mov	es, ax
+
+	mov	ax, theEnd + 512
+	mov	sp, ax
+
+	mov	ax, PrtScIntOffset
+	mov	SaveIntOffset, ax
+	mov	ax, PrtScIntSeg
+	mov	SaveIntSeg, ax
+
+	mov	PrtScIntOffset, offset doPrint
+	push	cs
+	pop	PrtScIntSeg
+
+	mov	dx, theEnd
+	int	27h
+
+
+scrSeg		dw	?	; B000 or B800 screen segment
+pageNo		db	?	; BIOS's page #
+
+crsPos		dw	?	; user's cursor row & column
+crsType 	dw	?	; user's cursor type (size)
+
+bigCrs		dw	?	; our big cursor
+
+saveInt 	label	dword	; holds the "other" PrtSc interrupt vector
+SaveIntOffset	dw	?
+SaveIntSeg	dw	?
+
+paper216ths	db	?	; paper advance after pass (12/216 or 24/216 ")
+dotsPerPass	db	?	; # dot rows covered in a pass (4 or 8)
+
+lastCol 	db	?	; last nonblank char col in this print row
+
+prompt		db	' G = text graphics dump, D = darker grap'
+		db	'hics, SPACE = normal dump, Esc = cancel '
+
+save25		dw	80 dup (?)
+
+; PrtSc entry point
+
+doPrint:
+	assume	cs:codeSeg, ds:nothing, ss:nothing, es:nothing
+
+	sti
+	push	ds
+	push	es
+	push	ax
+	push	bx
+	push	cx
+	push	dx
+	push	si
+	push	di
+	push	bp
+
+	xor	dx, dx
+	mov	es, dx
+	cmp	es:statusByte, 1	; check for PrtSc already in progress
+	jne	notBusy
+	  jmp	exit
+notBusy:
+	mov	es:statusByte, 1
+
+	mov	ah, 15
+	int	video			; get CRT mode in AL
+	mov	pageNo, bh
+	mov	dx, monoSeg
+	mov	cx, monoBigCrs
+	mov	si, monoNrmCrs
+	cmp	al, 7			; must be monochrome
+	je	newDump
+	mov	dx, graphSeg
+	xor	bl, bl
+	add	dx, bx			; (current page segment)
+	mov	cx, graphBigCrs
+	mov	si, graphNrmCrs
+	and	al, 0FEh
+	cmp	al, 2			; or 80 column text mode (2 or 3)
+	je	newDump
+	  jmp	oldDump
+newDump:
+	mov	scrSeg, dx
+	mov	bigCrs, cx
+	mov	crsType, si
+
+	mov	ah, 3
+	int	video			; save cursor
+	mov	crsPos, dx
+	cmp	cx, 0067h		; avoid weird bug - incorrect cursor
+	je	weirdCrs		; type of 67h
+	mov	crsType, cx
+weirdCrs:
+
+	or	ch, 20h
+	mov	ah, 1
+	int	video			; turn cursor off
+
+	mov	ds, scrSeg
+	mov	si, row25offset
+	push	cs
+	pop	es
+	mov	di, offset save25
+	mov	cx, 80
+	rep movsw			; save row 25
+
+	push	cs
+	pop	ds
+	mov	si, offset prompt
+	mov	es, scrSeg
+	mov	di, row25offset
+	mov	cx, 80
+	mov	ah, 70h 		; reverse video
+promptLoop:
+	lodsb
+	stosw				; display prompt message
+	loop	promptLoop
+
+kbdClr: mov	ah, 1			; clear keyboard buffer
+	int	keyboard
+	pushf
+	xor	ah, ah			; and read a key
+	int	keyboard
+	popf
+	jnz	kbdClr
+
+	push	cs
+	pop	ds
+	assume	ds:codeSeg		; leave DS alone from now on
+	mov	si, offset save25
+	mov	es, scrSeg
+	mov	di, row25offset
+	mov	cx, 80
+	rep	movsw			; restore row 25
+
+	cmp	al, 27			; exit if Esc
+	jne	notEsc
+	  jmp	prtDone
+notEsc:
+	and	al, 0DFh		; convert lower case --> upper
+
+	xor	ch, ch			; CH = char row
+	xor	dh, dh			; DH = dot row
+	mov	paper216ths, 24
+	mov	dotsPerPass, 8
+	cmp	al, 'G'
+	je	doGraphics
+
+	dec	ch			; double strike starts at char row -1
+	mov	dh, 10			; dot row 10 (to do the first strike
+	mov	paper216ths, 12 	; of the top 4 dot lines of row 0)
+	mov	dotsPerPass, 4
+	cmp	al, 'D'
+	je	doGraphics
+
+oldDump:
+	call	oldCursor
+	xor	dx, dx
+	mov	es, dx
+	mov	es:statusByte, 0
+	pushf
+	call	SaveInt 		; call the other dump routine
+	jmp	exit
+
+doGraphics:
+	mov	al, CR
+	call	prtChar 		; CR-LF to tension paper
+	mov	al, LF
+	call	prtChar
+
+nextRow:				; here to begin a character row
+	push	cx
+	push	dx
+	mov	dh, ch
+	xor	dl, dl
+	mov	bh, pageNo
+	mov	ah, 2
+	int	video			; put a big cursor on current row
+	mov	cx, bigCrs
+	mov	ah, 1
+	int	video
+	pop	dx
+	pop	cx
+
+	mov	cl, 79
+chkNxtChr:				; here to check a char col for nonblank
+	mov	dl, 7
+chkNxtDotCol:				; here to check a dot col for nonblank
+	call	getDotCol
+	test	al, al
+	jnz	startRow
+	dec	dl
+	jge	chkNxtDotCol
+	dec	cl
+	jge	chkNxtChr
+	jmp	advPaper		; nothing at to print on this row
+startRow:
+	mov	lastCol, cl
+	inc	cl
+	mov	al, 9
+	mul	cl
+	mov	bx, ax			; bx = number of dot cols to print
+
+	mov	al, ESC
+	call	prtChar
+	mov	al, '*'
+	call	prtChar 		; set 720 dot graphics mode
+	mov	al, 6
+	call	prtChar
+	mov	al, bl			; with the exact number of dots
+	call	prtChar
+	mov	al, bh
+	call	prtChar
+
+	mov	cl, 0			; CL = char col
+nextChar:				; here to dump one character column
+	mov	dl, 7			; DL = dot col
+nextCol:				; here for each dot column
+	call	getDotCol
+	call	prtChar
+
+	dec	dl
+	cmp	dl, -1
+	jge	nextCol
+
+	inc	cl
+	cmp	cl, lastCol
+	jle	nextChar
+
+advPaper:
+	mov	al, CR
+	call	prtChar
+	mov	al, ESC
+	call	prtChar
+	mov	al, "J"
+	call	prtChar
+	mov	al, paper216ths
+	call	prtChar
+
+	add	dh, dotsPerPass
+	cmp	dh, 14
+	jge	sub14
+	  jmp	nextRow
+sub14:
+	sub	dh, 14
+	inc	ch
+	cmp	ch, 25
+	jge	prtDone
+	  jmp	nextRow
+
+prtDone:
+	call	oldCursor
+	xor	al, al
+	jmp short getOut
+prtErr:
+	call	oldCursor
+	mov	al, 0FFh
+getOut:
+	xor	dx, dx
+	mov	es, dx
+	mov	es:statusByte, al
+exit:
+	pop	bp
+	pop	di
+	pop	si
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ax
+	pop	es
+	pop	ds
+	iRet
+
+printScreen	endP
+
+
+; Call with CH=char row, CL=char col, DH=topmost dot row, DL=dot col.
+; Returns with the dot column byte for printing in AL.
+getDotCol   proc    near
+
+	push	bx
+	xor	bx, bx			; BH=dot row offset, BL=dot accumulator
+nextDot:				; here for each dot vertically
+	push	dx
+	add	dh, bh
+	call	getDot
+	pop	dx
+
+	shl	bl, 1
+	or	bl, al
+	inc	bh
+	cmp	bh, 8
+	jl	nextDot
+
+	mov	al, bl
+	pop	bx
+	ret
+
+getDotCol   endP
+
+
+; Call with CH=char row, CL=char col, DH=dot row, DL=dot col.
+; Returns with the dot in AL bit 0.
+getDot	proc	near
+
+	push	bx
+	push	cx
+	push	dx
+
+	cmp	dh, 14			; are we really in next char row?
+	jl	gd1
+	inc	ch			; yes, adjust char and dot rows
+	sub	dh, 14
+gd1:
+	xor	al, al
+	or	ch, ch
+	jl	gdRet
+	cmp	ch, 25
+	jge	gdRet			; return 0 if outside screen bounds
+
+	call	getCA			; AH = attr, AL = char
+
+	or	dl, dl			; special check for dot col "-1"
+	jge	gd2
+	cmp	al, 192
+	jl	gd3
+	cmp	al, 223
+	jle	gd4
+gd3:	xor	al, al			; col -1 not in 192..223 is 0
+	jmp	gd5
+gd4:	xor	dl, dl			; col -1 in 192..223 duplicates col 0
+gd2:
+	mov	bl, al
+	xor	bh, bh
+	shl	bx, 1
+	shl	bx, 1
+	shl	bx, 1
+	push	dx
+	mov	dl, dh
+	xor	dh, dh
+	add	bx, dx			; BX = (chr*8) + dotRow
+	pop	dx
+
+	cmp	dh, 8
+	jl	gd6
+	add	bx, 2040		; dot rows 8-13 are higher in ROM
+gd6:
+	mov	al, cgData[bx]		; get the character data
+	mov	cl, dl
+	shr	al, cl			; shift dot into position
+	and	al, 1
+gd5:
+	and	ah, 77h
+	cmp	ah, 70h 		; check for reverse video
+	jne	gdRet
+	xor	al, 1			; yes, toggle the dot
+gdRet:
+	pop	dx
+	pop	cx
+	pop	bx
+	ret
+
+getDot	endP
+
+
+; Call with CH=row, CL=col.  Returns with AH=attribute, AL=character.
+getCA	proc	near
+
+	push	bx
+	push	cx
+
+	mov	al, 80
+	imul	ch
+	xor	ch, ch
+	add	ax, cx
+	shl	ax, 1
+	mov	bx, ax
+	mov	ax, scrSeg
+	mov	es, ax
+	mov	ax, es:[bx]
+
+	pop	cx
+	pop	bx
+	ret
+
+getCA	endP
+
+
+;prints the character in AL
+prtChar proc	near
+
+	push	dx
+	xor	dx, dx
+	xor	ah, ah
+	int	17h
+	pop	dx
+	test	ah, 25h
+	jz	prtRet
+	pop	dx		; get rid of our return address
+	jmp	prtErr
+
+prtRet: ret
+
+prtChar endP
+
+
+; restores user's cursor
+oldCursor   proc    near
+
+	push	cs
+	pop	ds
+
+	mov	bh, pageNo
+	mov	dx, crsPos
+	mov	ah, 2
+	int	video			; restore cursor position
+
+	mov	cx, crsType
+	mov	ah, 1
+	int	video			; and type
+
+	ret
+
+oldCursor   endP
+
+codeSeg endS
+
+	end	printScreen
+```
+{% endraw %}
+
+## UNDOC.DOC
+
+{% raw %}
+```
+	 D O S   A N D    M S D O S    P R O B L E M S
+
+	This is a list of PCDOS and MSDOS peculiarities,
+etc. You will have to guess from the text what the
+particular questions were, but you systems programmers will
+find it worth your while to rummage through it all.
+
+........................................
+
+There is a problem of compatibility between MS-DOS and IBM
+PC-DOS having to do with FCB Open and Create which has
+finally been tracked.
+
+The IBM 1.0, 1.1, and 2.0 documentation of OPEN (call 0FH)
+contains the following statement.
+
+        "The current block field (FCB bytes C-D) is
+         set to zero [when an FCB is opened]."
+
+This statement is NOT true of MS-DOS 1.25 or MS-DOS 2.00.
+The difference is intentional, and the reason is CP/M 1.4
+compatibility. Zeroing that field is not CP/M compatible.
+Some CP/M programs will not run when machine translated if
+that field is zeroed. The reason it is zeroed in the IBM
+versions is that IBM specifically requested that it be
+zeroed. 
+
+This is the reason for the complaints from some vendors
+about the fact that IBM MultiPlan will not run under MS-DOS.
+It is probably the reason that some other IBM programs don't
+run under MS-DOS.
+
+
+PROGRAMMERS NOTE:
+        Do what all MS/PC-DOS  Systems programs do: Set
+every single FCB field you want to use regardless of what        
+the documentation says is initialized.
+
+........................................
+
+    a)  It seems there is a maximum of 19 handles, no matter
+what the files parameter is set to.  Is this really the
+case?  What does one gain by setting files to less than 19? 
+Is memory for handles allocated dynamically?
+
+	There is a maximum of 20 handles per process no
+matter what the files parameter is set to. There has to be a
+table in your process header for your handles, there is a
+limited amount of space down there. 40 bytes or so are taken
+up by each system FCB, setting files to less than 20 saves a
+little bit of memory. Memory for handles is not allocated
+dynamically, in general an attempt to do so would fail
+anyway. Recall that .COM files and most .EXE files are given
+the biggest piece of memory possible when they are EXECed
+because the DOS cannot make assumptions about how much
+memory these programs really use. This means they typically
+get ALL of the free memory, that means there is no free
+memory to allocate dynamically. You will find that almost
+all operating systems (CP/M is about the only exception)
+have a limit on the number of open files. MS-DOS has a limit
+of 20. CP/M has no such limits because it requires the user
+to keep FCBs in his own address space, managing FCBs is a
+pain. You get simplicity and you give up very little. What
+program needs more than 20 open files? If you can think of
+one, it is probably a poorly written program in that it
+probably only needs a few open files at a time and doesn't
+bother to close files after it's done with them.
+
+    b)  Execing a program eats 5 (I think) handles per try. 
+Is this the passing of parent's environment that is
+mentioned (very briefly) in the documentatio n?  What are
+these handles?  They don't seem to be allocated with system
+calls,  either.  Is that true? 
+ 
+   std-in, std-out, std-err, std-aux, std-prn. I suppose you
+would like your program to be able to use the 1-12 system
+calls? That means there have to be 5, the first three are
+standard UNIX style fair and are required for the software
+tools approach to programming. Std-aux and Std-prn are
+required for system calls 3,4, and 5. Just because you are
+handed these default handles doesn't mean you can't close
+them.
+
+........................................
+
+
+    "...  1) what exactly is meant by the dos being in an    
+unstable state.  (This is what the documentation says    
+happens if one returns to a user program directly from    
+an int 24 handler.)..." 
+
+It means that the DOS has the notion of an error being in
+effect. All printer echoing is turned off, and some other
+stuff doesn't work. Also, there are dirty buffers that are
+not correctly flushed out.  Thus the disks may not be
+consistent.
+
+    "...  2) my experimentation shows that an abort from    
+a hard error handler causes an int 22 without the value    
+for int 22 being sucked out of the program header.  every    
+other way out of a program uses the terminate address in the
+header.  is this difference intentional?  Why? DOes one
+expect the value at int 22 to be different from the value in
+the header ever?..."
+
+False.  No INT 22h is ever issued.  The header is only used
+to save the previous process' vectors.  The address
+contained in INT 22 is saved in a temp spot, the contents of
+INTs 22-24 are restored from the header, and then an
+indirect jump is taken through the temp location.  Certain
+programs (such as COMMAND) may want to intercept themselves
+from terminating.
+
+Consider this case:  You create a file on a write-protected
+drive.  The system will read in a directory sector and
+modify it.  It will then attempt to write it out, causing a
+write-protect error.  If you catch the INT 24 and do not
+return, the dirty buffer still exists. To clear out the
+dirty buffer, you MUST return from the INT 24 saying to
+abort the process.  You can then catch the terminate and
+restore your stack (you will be running on your parent's
+stack). 
+
+........................................
+
+
+    "...  1) Why does PCDOS exec function 3 (overlay) demand
+that there be some free memory that it can allocate...."
+
+It doesn't. IBM specifically requested that the Exec code be
+overlayable in the MSDOS.  As a result, it lives in the
+transient piece of COMMAND.COM and gets loaded when needed: 
+thus the requidement for enough free space to laod the Exec
+loader (about 1.5K).
+
+Under other MSDOS's there is no such problem as the Exec
+system call lives in system space.  A general rule of thumb
+is: if you are not going to use some space, free it.  You
+can do this either via SetBlock system call, or by twiddling
+the EXE file header. You should avoid .COM format files.
+
+
+    "...  what happens if I try to overlay an .EXE file with
+the high/low switch set to load the thing for high
+memory..." 
+
+Nothing.  The HIGH/LOW switch is only for process creation,
+not for overlays.
+
+    "...  Are all these answeres the same for MSDOS?..."
+
+Yes.
+
+........................................
+
+    "... zeroing of the current record field ..."
+
+That incompatability existed between 1.1 PC-DOS and 1.25
+MSDOS.  2.0 versions of both function identically (like 1.1
+PC-DOS).
+
+........................................
+
+
+The Shell command on PC-DOS 2.0 works just fine.
+
+	CONFIG.SYS
+		shell = b:\command.com b:\ /P
+
+Putting a disk with command.com in drive B: when the system
+boots causes COMMAND to be read from drive B: and the
+COMSPEC in  the environment is "B:\COMMAND.COM". If you are
+having trouble it's because you are doing something wrong.
+Recall that your given COMSPEC is checked, if you give it a
+bad one it will try to go back to the default which is the
+root directory on the default drive. Recall also that this
+is an undocumented 2.0 feature so even if it doesn't work
+nobody is going to be all that hot to do something about it.
+
+........................................
+
+ My error on the shell stuff, IBM hid it real well. The
+"b:\" is also documented on page 10-9 (the [d:][path] part).
+They did an equally poor job here.
+
+The /P and the path spec have absolutely nothing to do with
+the SHELL command, they are arguments to command. Expecting
+SHELL to know stuff particular to command is not reasonable
+because you are not restricted to running command as your
+top level shell. You can run DEBUG as your top level shell
+by saying
+
+        SHELL = debug.com
+
+But watch out!! debug is not designed to run as a top level
+shell. if you ever say "q" to this debug the system will
+crash. Command on the other hand is smart enough to run as a
+top level shell. If you give the /P switch to it Command
+does some special things to insure that typing EXIT to it
+will not cause the system to crash as with debug. There is
+absolutely no way for command to assume the /P switch
+because he must run as a top level shell, and as a utility.
+The smart user has to tell him what to do. Similarly the
+"b:\" tells command where to look for himself. For instance:
+
+        SHELL = A:\BIN\COMMAND.COM D:\COMMAND\BIN /P
+
+The "A:\BIN\COMMAND.COM" tells SYSINIT where to load the
+initial command.com, the "D:\COMMAND\BIN" tells command
+where to look for himself when he needs to locate his
+transient. As you can see they are not restricted to being
+the same things. I suggest you foreward any complaints about
+the manual to 
+
+........................................
+
+ The volume ID attribute is very special, and is treated
+differently from all the other attributes. It is very
+"sticky", in order to find one you must look for it and it
+alone. And when you do look for it, you find only it and
+nothing else.
+
+The volume ID is constrained to be in the ROOT directory,
+and there can be only one file in the ROOT with the
+attribute. The FCB flavor calls have special code to enforce
+these rules.
+
+The new calls were supposed to enforce the same rules, but
+they are not working correctly, and unexpected results are
+possible. You should use the old FCB calls to diddle with
+volume ID for the moment.
+
+........................................
+
+Thanks for the info.  The causes of your problems are:
+
+(a) ^Z on output to a device in cooked mode will terminate    
+the output.  This is for CPM-compatability:  you don't want
+stuff after the ^Z output to your printer for example. 
+
+    As a result COMMAND.COM issues a write to stdout and    
+then checks to see if the number written is equal to the    
+number requested.  If they are not the same, then a
+redirection error is assumed.  ECHO ^Z is supposed to    
+output a single character.  It outputs NO characters and    
+thus the strange message.
+
+    Programs that use old function calls, get redirected,    
+and then read more than is expected will behave    
+bizarrely: how do you indicate EOF on a read-byte-from-    
+console system call?  I believe that it returns ^Z. Most of
+these programs were never expecting to get redirected and
+thus, the failure to handle the boundary conditions
+properly. 
+
+(b) The main crock about CP/M is that the extention on a    
+file name determined the type of the file.  This is    
+bogus: a file should be distinguished by its contents,    
+not by its name.  When you are loading a file with the    
+name *.EXE, it does NOT assume that it is an EXE format    
+file.  It looks at the first two bytes for a signature    
+telling it that it is an EXE file.  If it has the proper    
+signature, then the load proceeds. otherwise, it    
+presumes the file to be a COM-format file.
+
+    If the file has the EXE signature, then the internal    
+consistency IS checked.
+
+    Pre-2.0 versions of MSDOS did not check the signature    
+byte for EXE files.
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

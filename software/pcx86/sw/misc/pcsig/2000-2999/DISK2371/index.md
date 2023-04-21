@@ -42,6 +42,53 @@ machines:
     will ever need in a programmer's calculator, right on your screen.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2371.TXT
+
+{% raw %}
+```
+Disk No: 2371                                                           
+Disk Title: QuikMath                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: QWIKMATH , The Complete Programming Calculator           
+Author Version: 1.00                                                    
+Author Registration: $24.95                                             
+Special Requirements: Mone.                                             
+                                                                        
+QWIKMATH is the most comprehensive programmer's calculator on the market
+today.  QWIKMATH is full of features, such as, Values may be entered in 
+binary, octal, decimal, or hexadecimal, with results always displayed in
+all radices (as well as their ASCII or extended scan code equivalents), 
+A complete range of arithmetic and bitwise operators, A special         
+"character" value-entry mode permits you to press any ASCII or extended 
+scan code key(s) and instantly see its value in all radices, The ability
+to perform calculations in 32-bit, 16-bit, and 8-bit values, A 16-level 
+"undo" feature to escape erroneous entries or freely experiment in a    
+"what if" session without losing the results of prior operations, and   
+Context-sensitive help screens.                                         
+                                                                        
+QWIKMATH provides a feature not normally found in programmer's          
+calculators through its Character Format.  You can select how you want  
+the character output treated, in ASCII mode or extended scan code mode. 
+This lets you see ALL characters output to the screen.                  
+                                                                        
+QWIKMATH is executable as a stand-alone or memory-resident (pop-up)     
+program.  If installed as a memory-resident program (TSR) it is         
+instantly popped-up with a "hot key".  QWIKMATH gives you all the       
+functions you will ever need in a programmer's calculator, right on     
+your screen.                                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2371
 

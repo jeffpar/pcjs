@@ -28,6 +28,98 @@ machines:
     LA Kings.  The documentation is extensive and helpful.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1426.TXT
+
+{% raw %}
+```
+Disk No: 1426
+Program Title:  THE SPORTS STATBOOK (Disk 1 of 2)
+PC-SIG version 1
+
+If you're in charge of tracking stats for hockey, soccer, volleyball or
+other team sports, STATBOOK will significantly reduce the time and
+effort you spend.  Appropriate for pro, semipro, high school, college
+and company-sponsored teams, it automatically tracks and provides
+year-to-date and/or historical player statistics.  This software is
+currently being used by such teams as Hockey Central of Philadelphia and
+the LA Kings (R).  The documentation is extensive and helpful.
+
+Synopsis:  Track sports statistics for hockey, soccer, volleyball and
+other team sports.
+
+Usage:  Sports/Statistics.
+
+Special Requirements:  None.
+
+How to Start:  Type SSMENU (press enter).
+
+Suggested Registration:  $40.00, $49.00 with a printed manual.
+
+File Descriptions:
+
+SS       EXE  Subprogram.
+SS2      EXE  Subprogram.
+SS3      EXE  Subprogram.
+COBRUN   EXE  Subprogram.
+SSR      EXE  Subprogram.
+SSMENU   EXE  Main program.
+SSDOC         Users guide.
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## FILE1427.TXT
+
+{% raw %}
+```
+Disk No: 1427
+Program Title: THE SPORTS STATBOOK Disk 2 of 2
+PC-SIG version 1
+
+This is the second of the SPORTS STATBOOK PACKAGE.  See Disk #1427 for a
+full program description.  All three are needed to run the program.
+
+Usage:  Database.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $40.00, $49.00 with a printed manual.
+
+File Descriptions:
+
+COBRUN   EXE  Compiler.
+SSBACK   FIL  Data file.
+SSPARM   FIL  Data file.
+SSTEAM   FIL  Data file.
+SSTEAM   KEY  Record key file.
+SSMENU   EXE  Menu program.
+SETPRINT EXE  Print attribute file.
+SSPRINT  EXE  Print program.
+SSDEFINE EXE  Team/player record definition program.
+SSPRINT2 EXE  Print program.
+SSSAVE   EXE  Save program.
+RJLDOC        Other programs by author.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1427
 

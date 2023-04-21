@@ -44,6 +44,54 @@ machines:
     distribution P values and help commands.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1931.TXT
+
+{% raw %}
+```
+Disk No: 1931                                                           
+Disk Title: Micro Statistics Package                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Micro Statistics Package                                 
+Author Version: 2.0                                                     
+Author Registration: $39.95                                             
+Special Requirements: None.                                             
+                                                                        
+Here is a powerful statistical package--lots of muscle, but an          
+unintimidating look and feel.  THE MICRO STATISTICAL PACKAGE, MSP, is an
+integrated system consisting of a command line interpreter and a set of 
+statistical procedures with many utility routines.  Together they are   
+used to perform analyses and mathematical operations on data stored in  
+the programs worksheet.                                                 
+                                                                        
+This package is intended to be used by students and researchers dealing 
+with small or medium size data analysis problems.  It allows the user to
+perform a wide variety of statistical analyses on columns of data       
+contained in a worksheet.  The user manipulates data in a typical       
+statistical worksheet by typing in English commands indicating actions  
+to be taken on the column or columns of data.  Commands are also        
+provided to edit data contained in the worksheet.                       
+                                                                        
+There are over 100 commands, including procedures for regression,       
+analysis of variance, correlation, Chisquare analysis of count data,    
+plotting, sorting, transforming data, stem and leaf displays, boxplots, 
+nonparametric statistics, cross tabulation, save and retrieval of files,
+letter value displays, condensed plots, pop up reverse Polish Calculator
+with combinations and permutations and over 25 functions, pop up        
+distribution calculator to compute Normal, T, F and Chisquare           
+distribution P values and help commands.                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1931
 

@@ -14,6 +14,35 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## AUTHORS.TXT
+
+{% raw %}
+```
+Shareware authors!
+------------------
+
+* Like to be able to offer your customers Visa and Mastercard ordering?
+  Of course, who wouldn't?  But just try and arrange this with the bank...
+
+  Delays...Security Deposits...Applications...Non-refundable fees...Hassle!
+
+
+* Think you're losing orders because the mail is soooooo slow?
+
+* Losing overseas customers because money changing is expensive?
+
+=============================================================================
+
+Well, I've got Visa/MC for my Shareware and my customers love it, and I
+can do it for your software too.
+
+Give me a call and I'll be taking their orders for you.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3827
 

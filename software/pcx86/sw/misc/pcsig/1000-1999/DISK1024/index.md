@@ -14,6 +14,58 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1024.TXT
+
+{% raw %}
+```
+Disk No: 1024
+Program Title:  TIME TRAKER version 2.10 (Disk 2 of 2)
+PC-SIG version:  2.4
+
+Are you someone who has to keep track of the amount of work you do for
+others?  Such as a contractor or sub-contractor?  PC-SIG now offers an
+easy way for your to track your working hours and simplify the billing
+process.
+
+TIME TRAKER keeps track of what you do for your customers and the time
+it takes to do it.  It also keeps track of all of your clients for you
+and bills them.  It also records the receipt of money from your
+billings.
+
+Since TIME TRAKER takes care of your accounts receivable, the only thing
+you have to worry about is keeping track of your expenses.  Moreover, it
+will let you know where you stand in terms of accounts receivable,
+income, and unbilled hours, at any time.
+
+Usage:  Time Management and Billing System.
+
+Special Requirements:  512K and a hard disk is recommended.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $25.00
+
+File Descriptions:
+
+???????? DBF  Database file (7 files).
+???????? NDX  Index file (9 files).
+CONFIG   FX   Configuration file.
+INSTALL  BAT  Installation file.
+TIMETRAK FOX  Main program.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1024
 

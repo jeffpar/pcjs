@@ -37,6 +37,46 @@ machines:
     keystroke away.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2358.TXT
+
+{% raw %}
+```
+Disk No: 2358                                                           
+Disk Title: Data Master                                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Data Master                                              
+Author Registration: $35.00                                             
+Special Requirements: 512K RAM, and a hard drive.                       
+                                                                        
+DATA MASTER is not your run of the mill dbase III and Lotus 1-2-3       
+file manipulator. This powerful, easy to use program allows you to      
+create, modify, browse, add, and copy. Other options are being able     
+to create Lotus 1-2-3 worksheets from dbase databases, change the       
+structure of databases, and design your own custom reports with the     
+DATA MASTER's report maker.                                             
+                                                                        
+Being able to build a powerful querie (search filter) is a must for     
+todays software. With DATA MASTER you have the most sophisticated, easy 
+to use querie builder you will ever need for your searches of data. DATA
+MASTER even has the power to convert Lotus 1-2-3 worksheets into dbase  
+III files, and dbase III files into Lotus 1-2-3 worksheets. With this   
+program in your computer you can do everything you need to do and more  
+with your dbase III, Lotus 1-2-3, and even Symphony worksheets. A full  
+calculator, dos commands and reading text files anywhere on your hard   
+drive is just a key stroke away.                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2358
 

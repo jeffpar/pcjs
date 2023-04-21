@@ -28,6 +28,112 @@ machines:
     thus you may customize this program according to your interests.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1526.TXT
+
+{% raw %}
+```
+Disk No: 1526                                                           
+Disk Title: Problems                                                    
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: Problems                                                 
+Author Version: 3.1                                                     
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+What does the Bible have to say about abortion?  Alcoholism?  Humility? 
+Or vengeance?  These and 55 other topic areas are instantly accessed    
+through PROBLEMS!  Pick your topic or problem of concern, such as       
+"Pride," and the relevant Bible verses pop up on your screen for        
+enlightenment and printing if you desire: PROVERBS 16:18 "Pride goeth   
+before destruction, and an haughty spirit before a fall."  Verses can be
+added or deleted, thus you may customize this program according to your 
+interests.                                                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+#
+If you have an older version of this program and you have added verses to
+it, you need a program to convert the old data files to the new version.
+Signify that you need the Converter when you register this Copy and I'll
+send it to you.
+
+Place the disk in the Drive and type PROBLEMS or Copy all files on a
+hard drive. The program is user friendly.
+
+THE FIRST  THING YOU SHOULD DO IS TO MAKE A BACKUP COPY OF THE DISK.
+
+THE SECOND THING YOU SHOULD DO IS REGISTER YOUR COPY WITH ME.
+    (More on this later)
+
+FLOPPY DISK OPERATION:
+If you want to add your favorite verse for any particular problem
+then you should copy half of the data files to a new disk and erase
+them from this one to give yourself room. If you transfer files to
+another disk, be sure to copy FILEDATA.DAT & FRNTPAGE.DAT also.
+
+
+# YOU CAN USE YOUR WORD PROCESSOR to Add, Delete or Print Verses.
+Two things to remember.
+1. Be sure to save the file in ASCII mode (Readable English)
+2. Look at the files that I have put together. You will notice that
+   the First Line of a new Verse has a <Pound Sign> at the beginning and the
+   line before the References has a <At Sign>. Continue to use these in
+   your entry. The program uses them to split pages. If you don't use
+   them, you'll scroll through your entire file. Unless you can speed
+   read at an incredible rate, you'll miss alot.
+
+I PURPOSELY SET THE PROGRAM UP SO YOU CAN LIST A DIFFERENT SET OF PROBLEMS.
+
+   There are a few things you need to remember.
+
+   1. FILEDATA.DAT has a list of 59 files in it. They correspond to the
+      headings listed in FRNTPAGE.DAT. Be sure that your new file name in
+      FILEDATA.DAT matches the location of your display title in FRNTPAGE.DAT
+
+   2. Be sure your new title isn't to long to fit in the display.
+
+   3. Don't change Number 60. It's set up to Exit the program.
+
+#    WHY BOTHER TO REGISTER.
+     1. Shareware Houses don't supply authors with a list of people
+        who have ordered their programs. Without your registration
+        the programmer doesn't get any `feed back' at all.
+
+     2. You get a quality program at a reasonable price. The shareware
+        house makes money on the volume they distribute but the Author
+        doesn't even know if the program is being used!
+
+     3. In the two years this Program has been available, the response
+        has been Seven letters  (1988-90).  If that's the total number
+        of people using it then my time should be spent doing something else.
+
+     4. If this is a program that you use often, then you should
+        register it for ten dollars.
+
+
+
+      SEND TO:  Paul Godin
+                22612 Hoffman
+                St. Clair Shores, MI 48082
+#
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1526
 

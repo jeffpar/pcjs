@@ -56,8 +56,629 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CMODE.DOC
+
+{% raw %}
+```
+    This file describes modifications to MODE.COM to enable its use
+with the C.ITOH 8510 printer.  The method described will also work
+with other printers whose control codes are different from the EPSON/
+IBM printers.
+    First, enter DEBUG as follows:
+
+        A>DEBUG MODE.COM
+
+    Next, verify the present code (to ensure that you don't have a
+different level of MODE.COM from mine):
+
+         DOS 1.1                        DOS 2.0
+
+        -D 0862 0863                -D 0854 0855
+        xxxx:0862 B3 12             xxxx:0854 B3 12
+        -D 0872 0873                -D 0864 0865
+        xxxx:0872 B3 0F             xxxx:0864 B3 0F
+        -D 089A 089B                -D 088C 088D
+        xxxx:089A B3 32             xxxx:088C B3 32
+        -D 08A5 08A6                -D 0897 0898
+        xxxx:08A5 B3 30             xxxx:0897 B3 30
+        -D 087E 087F                -D 0870 0871
+        xxxx:087E 18 00             xxxx:0870 18 00
+
+ Then make the following entries:
+
+        -N CMODE.COM   (or any other name for the new MODE command)
+
+         DOS 1.1       DOS 2.0
+
+        -E 087E 1B    -E 0870 1B (only if your printer requires <ESC> for the
+                                    80 & 132 character line commands)
+        -E 0863 4E    -E 0855 4E (or your printer's code for 80-character line)
+        -E 0873 51    -E 0865 51 (or your printer's code for 132-character line)
+        -E 089B 41    -E 088D 41 (or your printer's code for 6 LPI)
+        -E 08A6 42    -E 0898 42 (or your printer's code for 8 LPI)
+
+    And write them back onto the disk:
+
+        -W
+
+    Finally, exit DEBUG:
+
+        -Q
+
+   Your new CMODE.COM now has the correct control codes to set line
+spacing and number of characters per line.
+
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #84, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  FILECMD2.BAS         CRC = BA A4
+
+--> FILE:  FILECMD .BAS         CRC = 39 E0
+
+--> FILE:  KILL    .BAS         CRC = 93 D8
+
+--> FILE:  DOWDIF  .COM         CRC = BE 23
+
+--> FILE:  DOWDIF  .DOC         CRC = 3B 58
+
+--> FILE:  DOWDIF  .BAT         CRC = 0A 9C
+
+--> FILE:  DOWTRY  .TXT         CRC = 37 88
+
+--> FILE:  UPVC    .DOC         CRC = 5D 05
+
+--> FILE:  TXTPRO  .DOC         CRC = CE 34
+
+--> FILE:  TXTPRO  .EXE         CRC = 30 79
+
+--> FILE:  FPR     .C           CRC = B6 D2
+
+--> FILE:  DRAWIT  .BAS         CRC = 4B 29
+
+--> FILE:  CMODE   .DOC         CRC = 83 8D
+
+--> FILE:  CHMOD   .C           CRC = 90 9C
+
+--> FILE:  CHMOD   .EXE         CRC = A0 A3
+
+--> FILE:  QPRINT  .ASM         CRC = 54 F4
+
+--> FILE:  QPRINT  .BIN         CRC = 00 00
+
+--> FILE:  QPRINT  .BAS         CRC = E5 0F
+
+ ---------------------> SUM OF CRCS = 10 77
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## DOWDIF.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    DOW TO DIF
+
+
+
+                            Program for conversion of
+
+                     Dow Jones News Retrieval historical data
+
+                            to DIF file specifications
+
+
+                                        by
+                                   Frank Patton
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                             ***** Generalware *****
+
+                               7735 S. 88th E. Ave.
+                              Tulsa, Oklahoma  74133
+
+                          Copyright (c) 1983 Generalware
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                      ***** Dow to Dif *****
+
+                 ***** To Users of Dow to Dif version 1.00 *****
+
+
+      Before you use your Dow to Dif  program disk or file,  you should make
+      backup copies.  The file is 35K in length, and will easily fit on your
+      working communications diskette or on your data diskettes.  You should
+      also make backup copies of this documentation file.  It is important that
+      both files be included with any distribution of Dow to Dif.
+
+
+      To make a working copy of Dow to Dif, either copy the DOWTODIF.EXE
+      file to any diskette that contains PC-DOS (version 1.00, 1.10, or
+      2.00) or make a backup copy of the Dow to Dif program diskette and
+      perform the following steps.
+
+      1.  Place your own copy of IBM PC DOS (version 1.00, 1.10, or 2.00) in
+          Drive A if your system and perform a system reset (Simultaneously
+          press Ctrl Alt and Del keys).
+
+      2.  Enter the Date and Time if appropriate.  You should then see the
+          A> prompt.
+
+      3.  If using a two-drive system, place a blank diskette in Drive B.
+          Type "Format b:/s" and press return.  This will format the blank
+          diskette and transfer the COMMAND.COM file and the system.
+          Skip to step 5.
+
+      4.  If using a one-drive system, get a blank diskette ready.  With the
+          DOS diskette still in Drive A, type "Format A:/S".  Place the
+          blank diskette in your drive when prompted to do so.  This will
+          prepare the blank disk with formatting, the DOS system, and the
+          COMMAND.COM file.
+
+      5.  Place the Dow to Dif program diskette diskette in Drive A and Type
+          "Copy DOWTODIF.EXE B:.  After this copy has been completed you can
+          elect to also transfer this documentation file to the working
+          disk.  To do this type "Copy DOWTODIF.DOC B:  Single drive users
+          should follow prompts and switch diskettes when appropriate.  This
+          will complete the preparation procedures.
+
+      6.  Additional working diskettes can be made using the DISKCOPY
+          command of the DOS operating system.
+
+      Before you start to use the Dow to Dif program, please read the
+      remainder of this documentation carefully.  Your Dow Jones News
+      Retrieval Historical Quotes files downloaded from the service must be
+      editied to conform to the specifications displayed in this
+      documentation.  This can be done with your word processing or text
+      editing program.
+
+      Read carefully the message concerning the importance of using Print
+      files (as opposed to data files).    This is especially important for
+      users of some word processing-text editing packages that do unique
+      things in saving their data files (such as enciphering characters).
+      Dow to Dif requires use of standard ASCII text files.
+
+
+                                      Page 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                      ***** Dow to Dif *****
+
+
+      Starting Dow to DIF:
+
+      First make sure that you have configured your working copy of Dow to
+      Dif with the appropriate DOS system and COMMAND.COM file.
+
+      To start the program from the DOS A> prompt just type "DOWTODIF"
+      and the Return key.  Program execution will begin automatically.
+
+
+
+
+
+      Using Dow to Dif:
+
+      After you have been greeted with the User Supported request and the
+      title page of Dow to Dif, you will receive a menu which asks you to
+      specify a disk drive as the source for your edited historical quotes
+      text file.  Simply answer the prompt by pressing the letter
+      corresponding to the drive you have your data diskette in.  (Note:
+      drives C through E are for those users with additional external disk
+      drives, hard disk, or Ram disk.  If using DOS 2.0, make sure you have
+      specified the appropriate directory, if applicable, for the data drive
+      before running Dow to Dif.)
+
+      After specifying your selected drive, Dow to Dif will present a
+      listing of the files on the drive selected.  If your data disk
+      contains many files, some of the file listing may scroll off of the
+      screen.  To stop the scrolling just press both Ctrl and Num Lock at
+      the same time.  Press any key to continue.
+
+      The prompt at the bottom of the page will ask you to enter the full
+      filename of the file you wish to convert.  The full name includes both
+      the filename and extension (if appropriate).  If the filename, as
+      displayed, is "APL80583.PRN" then it must be typed in as
+      "APL80583.PRN".  If the filename is merely "APL80583", with no file
+      extension, then it can be typed in that way.  (APL80583.PRN is the
+      authors edited Wordstar print file that contains daily historical
+      quotes for Apple Computer through 8-05-83).
+
+      Dow to Dif will begin by loading the specified file from your
+      specified drive.  Next, Dow to Dif will work to convert the file to a
+      special format, then will convert the formatted file to a DIF file.
+
+      When conversion to DIF has been completed, Dow to Dif will ask you to
+      specify a name for the DIF file it is ready to save to disk.  If you
+      omit the name, Dow to Dif will use the name of the text file it loaded
+      and append a .DIF filespec to it.  You can specify another filename
+      for the output file.  You need not specify the .DIF filespec as Dow to
+      Dif appends it automatically.
+
+      When the file save is completed you will be given the option to
+      convert another file, or to exit from Dow to Dif.
+
+
+                                      Page 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                      ***** Dow to Dif *****
+
+      Dow to Dif is designed to work with Historical Dow information only.
+      Keyboard entry of individual daily-close information is more
+      time effective than converting to DIF, translating to a worksheet,
+      then adding to an existing worksheet, then locating and using in a
+      formula.
+
+      Historical information, on the other hand, represents a volume of
+      information that is more effectively converted to DIF, translated into
+      a worksheet, and then analyzed.  Typing historical data into a
+      worksheet would be time prohibitive.
+
+      Below is a partial sample text retrieved from a Dow Jones News
+      Retrieval session.  The text downloaded from DJNS appears between the
+      hyphen lines.  This sample shows a mix of current quote and historical
+      quote information.  This text must be edited with a word processor or
+      text editor before it can be converted to DIF by Dow to Dif.
+
+      --------------------
+      1cat 80 m
+      STOCK      BID       ASKED
+                CLOSE     OPEN      HIGH      LOW       LAST      VOL(100'S)
+      1CAT      44 1/4    44        44 1/2    43 3/4    44        573
+      80        STOCK SYMBOL IN ERROR
+      M         10 7/8    11        11 1/8    10 7/8    10 7/8    40
+
+      1cat 80 m
+      STOCK      BID       ASKED
+                CLOSE     OPEN      HIGH      LOW       LAST      VOL(100'S)
+      1CAT      44 1/4    44        44 1/2    43 3/4    44        573
+      80        STOCK SYMBOL IN ERROR
+      M         10 7/8    11        11 1/8    10 7/8    10 7/8    40
+
+      1DE 81 M
+
+
+      DOW JONES HISTORICAL
+      STOCK QUOTE REPORTER SERVICE
+
+
+      STOCK 1DE
+
+          1982  MONTHLY SUMMARY
+       DATE       HIGH       LOW      CLOSE      VOL(100/S)
+      01/82       36 7/8    33 1/4    35 1/8      14261
+      02/82       35 1/8    31 3/8    32 1/4      18844
+      03/82       33        30 5/8    31 1/8      24084
+      04/82       35 3/8    29 5/8    29 3/4      30597
+      05/82       31        24 1/8    25 3/8      39697
+      06/82       27 3/4    24 3/4    25          29013
+      07/82       25 1/8    22 1/8    22 7/8      21384
+      08/82       26 3/8    22        25 3/4      38322
+      09/82       28 3/4    23 3/4    23 3/4      35534
+      10/82       30 1/4    23 1/8    26 5/8      56813
+      11/82       31 7/8    26 1/8    29 1/4      39599
+      12/82       31 1/8    27 7/8    29 1/2      40632 (end of text)
+      -------------------
+
+                                      Page 3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                      ***** Dow to Dif *****
+
+      The downloaded text must be edited to conform to the specifications of
+      the file below.  All text above the line that reads "STOCK 1DE " must
+      be deleted.  Notice that this leaves four lines of text above the
+      start of the actual numeric data.  This is important!!  For Dow to Dif
+      to work properly, this specification MUST be adhered to!!!
+
+      All lines of text below the end of the numeric data must also be
+      deleted.  Top, bottom, and left margins MUST be zero.  The completed
+      file should look like this (as text appears between hyphen lines):
+
+      --------------------
+      STOCK 1DE
+
+          1982  MONTHLY SUMMARY
+       DATE       HIGH       LOW      CLOSE      VOL(100/S)
+      01/82       36 7/8    33 1/4    35 1/8      14261
+      02/82       35 1/8    31 3/8    32 1/4      18844
+      03/82       33        30 5/8    31 1/8      24084
+      04/82       35 3/8    29 5/8    29 3/4      30597
+      05/82       31        24 1/8    25 3/8      39697
+      06/82       27 3/4    24 3/4    25          29013
+      07/82       25 1/8    22 1/8    22 7/8      21384
+      08/82       26 3/8    22        25 3/4      38322
+      09/82       28 3/4    23 3/4    23 3/4      35534
+      10/82       30 1/4    23 1/8    26 5/8      56813
+      11/82       31 7/8    26 1/8    29 1/4      39599
+      12/82       31 1/8    27 7/8    29 1/2      40632 (end of text)
+      -------------------
+
+
+      The file to be converted can contain up to 250 lines of numeric data.
+      This is enough to contain a year of daily price data (52 weeks X 5
+      days a week less holidays).  Again, the file MUST be edited to conform
+      to the above specifications.
+
+      A normal Dow session will likely include dowloading of historical data
+      on more than one stock.  Each stock's data must be placed into a separate
+      data file before use with Dow to Dif.  Two prime methods are available
+      for accomplishing this requirement.
+
+      First, the data from each stock that you download can be received into
+      separate files.  Each file can then be edited with your word processor
+      to eliminate the extraneous text as outlined above.
+
+      Second, once downloaded (or received), your data file can be copied
+      with the DOS "COPY filename.ext   newname.ext" command.  It should be
+      copied once for each separate historical file that you wish to retain,
+      each with a different filename.  Then, each of these duplicate files
+      must be edited to eliminate all but one individual stock's data.  It
+      is suggested that you devise filenames that in some way refer to the
+      desired stock's symbol and the file date.
+
+      Please refer to the Guide to Operations and DOS manuals for additional
+      instruction on how to copy a file to the same disk with a different
+      filename.
+
+
+                                      Page 4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                      ***** Dow to Dif *****
+
+      ** IMPORTANT NOTE **
+      Some word processing programs, such as Wordstar by Micropro, encode
+      text saved to disk.  This encoding uses a method known as "high order
+      bits".  These files CANNOT be converted by Dow to Dif!  Most of these
+      same packages allow you to PRINT a file to disk (as opposed to printer).
+      These files are known as "Print Files".  They differ from the high order
+      bit files in that they are standard text.  These Print Files CAN be
+      converted by Dow to Dif.  If you use such a word processor, or if you
+      have difficulty after editing your files to the above spec's, please
+      refer to the section of your word processing manual that deals with
+      saving Print Files.  Left, top, and bottom margins MUST be zero.
+
+      Refer also to your Lotus 1-2-3, Visicalc, or other spreadbase or
+      spreadsheet manual for instruction on how to read DIF files, or
+      translate DIF files into worksheet files.
+
+      A sample pre-edited file has been provided on the Dow to Dif Disk for you
+      to use for practice.  Look at it's structure with your word processor.
+
+      Another useful feature of your spreadsheet that you may want to
+      learn is how to append data from separate worksheets.  This will
+      enable you to effectively update historical information.  An example
+      follows.
+
+      This is an example of use of the Lotis 1-2-3's capability to combine
+      worksheets.  This example assumes that you have downloaded historical
+      data into a file, that the file has been edited to conform to the
+      required specifications, that it has been converted to DIF by Dow to
+      Dif, and that it has subsequently been converted from DIF to .WKS by
+      the Lotus 1-2-3 Translate utility.
+
+      From "Ready" status on an empty the 1-2-3 worksheet, load in one file
+      that you have converted from text to .DIF to .WKS.  Once it has
+      loaded, position the cursor at the bottom leftmost column of the
+      worksheet.  Follow this routine:
+
+           /File    Combine    Copy     Entire File    filename  Return
+
+      The additional worksheet will be loaded below the first one (from the
+      cursor position).  You can use the /Worksheet,Delete,Row  sequence to
+      eliminate the header text of the second file and any historical
+      overlap (such as duplicated days' data at the end of the first file
+      and beginning of the second).
+
+      Use of the historical information is virtually as unlimited as the
+      analytical creativity of the user.  One suggestion is to learn the
+      /Graph features to do charting analysis.
+
+      Good luck, may the Bull be with you!
+
+
+      Wordstar is a trademark of Micropro International Corporation
+      Lotus 1-2-3 is a trademark of Lotus Development Corporation
+      Visicalc is a trademark of Visicorp
+      PC-TALK is a trademark of The Headlands Press
+      DIF is a trademark of Software Arts, Inc.
+
+
+                                      Page 5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
+
+## DOWTRY.TXT
+
+{% raw %}
+```
+STOCK 1DE
+
+    1982  MONTHLY SUMMARY
+ DATE       HIGH       LOW      CLOSE      VOL(100/S)
+01/82       36 7/8    33 1/4    35 1/8      14261
+02/82       35 1/8    31 3/8    32 1/4      18844
+03/82       33        30 5/8    31 1/8      24084
+04/82       35 3/8    29 5/8    29 3/4      30597
+05/82       31        24 1/8    25 3/8      39697
+06/82       27 3/4    24 3/4    25          29013
+07/82       25 1/8    22 1/8    22 7/8      21384
+08/82       26 3/8    22        25 3/4      38322
+09/82       28 3/4    23 3/4    23 3/4      35534
+10/82       30 1/4    23 1/8    26 5/8      56813
+11/82       31 7/8    26 1/8    29 1/4      39599
+12/82       31 1/8    27 7/8    29 1/2      40632
+```
+{% endraw %}
+
 ## DRAWIT.BAS
 
+{% raw %}
 ```bas
 10 '***************************************************************************
 20 '*                                                                         *
@@ -382,9 +1003,11 @@ machines:
 50120 COLOR 0,0  'set background to black and select palette 0
 50130 RETURN
 ```
+{% endraw %}
 
 ## FILECMD.BAS
 
+{% raw %}
 ```bas
 10 ' **************************FILCMD.BAS**************************************
 20 ' *                                                                        *
@@ -523,9 +1146,11 @@ machines:
 1340 SFLAG=0:LOCATE AA+1,1:PRINT STRING$(30,32):LOCATE AA+3,1:PRINT STRING$(19,32):RETURN
 1350 '************************END OF PROGRAM***********************************
 ```
+{% endraw %}
 
 ## FILECMD2.BAS
 
+{% raw %}
 ```bas
 1 '  **************************FILCM2.MRG**************************************
 2 '  *                                                                        *
@@ -673,9 +1298,11 @@ machines:
 1340 SFLAG=0:LOCATE AA,1:PRINT STRING$(30,32):LOCATE AA,40:PRINT STRING$(19,32):RETURN
 1350 '************************END OF PROGRAM***********************************
 ```
+{% endraw %}
 
 ## KILL.BAS
 
+{% raw %}
 ```bas
 10 '***************************************************************************
 20 '*                                                                         *
@@ -854,9 +1481,151 @@ machines:
 50120 COLOR 0,0  'set background to black and select palette 0
 50130 RETURN
 ```
+{% endraw %}
+
+## QPRINT.ASM
+
+{% raw %}
+```
+page ,132
+title QPRINT - 8088 routine CALLed from BASIC   Dan Rollins Byte 7/83 p408
+
+comment * This routine prints a string to the video display at
+          10 times the speed of BASIC. Works for color or
+          monochrome in 80 or 40 column TEXT modes (no graphics)
+          Characters are displayed with the existing color,
+          blink, and underline attributes.
+
+Called from BASIC via:
+
+  CALL QPRINT(VAR$,ROW%,CLM%)
+
+Where:
+
+  CLM% is an integer variable name (1-80)
+  ROW% is an integer variable name (1-25)
+  VAR$ is a string variable name.
+
+  VAR$ is displayed beginning at position CLM% of line
+       ROW%. If too long, it will wrap around to
+       the next line.
+
+note: Color card pages 1-7 may be accesed by setting
+      ROW% above 25.
+*
+bios_data  segment at 40h       ;set up labels to determine
+           org     10h          ; color or mono card
+equip_flag label   word
+           org     4ah          ; 40 or 80 column display
+crt_clms   label   word
+           org     63h
+addr_6845  label   word         ; points to video card ports
+bios_data ends
+
+cseg    segment
+        assume CS:cseg, DS:nothing, ES:nothing
+;
+;Define the file header so that the BASIC
+;BLOAD file loader will know what to do.
+; ------these bytes not executed--------
+;
+ header:
+        db      0fdh            ;indicate BLOAD file
+        dw      0               ;segment--BASIC will use default
+        dw      0               ;offset--specify in BLOAD command
+        dw      rtn_len         ;length of the subroutine
+        page
+ qprint proc     far
+        push    es              ;must save for BASIC
+        mov     bp,sp           ;point to arguments on stack
+
+        mov     bx,[bp+6]       ;set addr of CLM% storage
+        mov     di,[bx]         ; set the column value
+        dec     di              ; adjust for the LOCATE format
+
+        mov     bx,[bp+8]       ;set address of ROW% storage
+        mov     ax,[bx]         ; set the screen line value
+        dec     ax              ; adjust for LOCATE format
+
+        mov     bx,[bp+10]      ;set ptr to string descriptor
+        xor     ch,ch           ; zero the high byte
+        mov     cl,[bx]         ;set length of string
+        cmp     cl,0            ;null string
+        je      exit            ; if so, do nothing, Else,
+        mov     si,[bx+1]       ; SI => 1st character of VAR$
+;
+        mov     bx,bios_data    ;set ready to determine card type
+        mov     es,bx           ; and number of columns
+
+        mul     es:crt_clms     ;AX = CLM% * words per line
+        add     di,ax           ;DI = words from start of screen
+        shl     di,1            ; adjust for attribute bytes
+
+        mov     dx,es:addr_6845 ;point to 6845 base port
+        add     dx,6            ;point to status port
+
+; CX has the count of characters to write,
+; SI (Source Index) points to the string data,
+; DI (Destination Index) points to a screen position,
+        mov     ax,0b800h       ;default to color card
+        mov     bx,es:equip_flag
+        and     bx,30h
+        cmp     bx,30h          ;is it monochrome?
+        jne     card_ok         ; no, so
+        mov     ax,0b000h       ; yes, set for monochrome
+card_ok:
+        mov     es,ax           ; point ES to video
+
+; DS (Data Segment) points to BASIC variables area
+; ES (Extra Segment) points to video card memory
+; Now display VAR$ on the screen.
+
+        call    print_string
+exit:
+        pop     es              ;restore segment register
+        ret     6               ;intersegment return,
+                                ; clearing stack of 3 args
+qprint  endp
+        page
+;this procedure displays a string of characters
+;expects:
+;       DS:SI => first character of the string
+;       ES:DI => screen memory to display it
+;       CX    =  number of characters to display
+;       DX    => status port of video card
+
+print_string    proc    near
+
+;------------wait for horizontal retrace
+test_low:
+        in      al,dx           ;get status
+        test    al,1            ; is it low?
+        jnz     test_low        ; no, keep checking
+        cli                     ;turn off interrupts
+test_hi:
+        in      al,dx           ;get status
+        test    al,1            ; is it high?
+        jz      test_hi         ; no, keep checking
+;-----------okay to write to screen now (no 'hash')
+
+        movsb                   ;[DS:SI] -> [ES:DI], DI++, SI++, CX--
+
+        inc     di              ;skip the attribute byte
+        loop    test_low        ;do till end of string
+
+        sti                     ;turn interrupts back on
+        ret                     ;back to qprint proc
+print_string endp
+
+rtn_len equ     $ - qprint      ;define length for BLOAD header
+cseg    ends
+        end     header          ;needed for .BIN file conversion
+```
+{% endraw %}
 
 ## QPRINT.BAS
 
+{% raw %}
 ```bas
 10 ' qprint.bas
 20 ' The program demonstrates the use of the QPRINT.BIN direct screen writing
@@ -880,6 +1649,129 @@ machines:
 200 END
 210 CALL QPRINT (P$,ROW%,CLM%): RETURN
 ```
+{% endraw %}
+
+## TXTPRO.DOC
+
+{% raw %}
+```
+         This is the documentation for a program I call TXTPROC.
+TXTPROC is  a multi-purpose text processor. The purpose of this program
+is to solve some of the problems people have with text files. You may
+find that this program alone, solves some of the problems you solve
+using several shorter programs.
+
+         By properly combining your responses to the various prompts
+you can translate WORDSTAR document files to straight text, add or
+remove the <LF> to or from every <CR>, or just strip control chars.
+
+         The program is written in basic and compiled. The source code
+is also available, however don't run it unless you are very patient, at
+present it is not very efficient when its interpreted. The compiled
+version is quite effective and fast.
+
+         It is self-prompting. Play with it for a while. Once you get
+used to it you will find it easy to use. For instance, filtering
+control chars and translating everything >128 down 128 will turn a
+WORDSTAR document file with imbedded printer commands into a regular
+text file.
+
+                                       Comments welcome.
+                                                 Rob
+                                                 71745,352
+
+
+SIG/Access:
+
+```
+{% endraw %}
+
+## UPVC.DOC
+
+{% raw %}
+```
+     [[This patch was extracted from the PHOENIX IBM-PC Software
+Library newsletter. They received it from the HAL-PC users group of
+Houston, TX.   Many thanks to them.]]
+
+     ****      HOW TO BACK-UP YOUR PC VISICALC DISK   ****
+
+     The following technique will convet your VISICALC disk to a disk
+that may be copied by "diskcopy". Diskcopy must be used because there
+are four programs on the disk which do not appear in the directory.
+DO NOT TRY TO ADD OTHER FILES TO THE NEW DISK.  Use of this procedure
+does not relieve you of your responsibilities under copyright laws or
+licensing agreements.
+
+     Boot your DOS disk up on drive A: format drive b without copying
+the dos system. (FORMAT B: (ENTER)). Then enter the following DEBUG
+Commands:
+
+[FOR SYSTEMS 96K OR OVER]
+
+-L 100 0 0 80           (READS FIRST 16 TRACKS FROM A:)
+-W 100 1 0 80           (WRITES 16 TRACKS TO B:)
+-L 100 0 80 80          (READS NEXT 16 TRACKS FROM A:)
+-W 100 1 80 80          (WRITES SAME ON B:)
+-L 100 0 100 3E         (COPIES THE LAST 8 TRACKS EXCEPT
+-W 100 1 100 3E          FOR THE UNCOPYABLE SECTOR 13F)
+
+[FOR SYSTEMS WITH LESS THAN 96K]
+
+-L 100 0 0 40
+-W 100 1 0 40
+-L 100 0 40 40
+-W 100 1 40 40
+-L 100 0 80 40
+-W 100 1 80 40
+-L 100 0 C0 40
+-W 100 1 C0 40
+-L 100 0 100 3E
+-W 100 1 100 3E
+
+NOW YOU HAVE COPIED THE DISK: NOW PATCH THE 80-COLUMN PROGRAM LOADER/
+DECRYPTER SO THAT IT WILL RUN CORRECTLY WITH SECTOR 13F FORMATTED
+NORMALLY.
+
+-L 100 1 138 3            (LOAD THE INVISIBLE LOADER-DECRYPTER)
+-E 150 90 90
+-E 156 B0
+-E 158 90 90
+-E 168 90 04 40 90 90
+-E 16E C6 06
+-E 173 90 90
+-E 179 90 04 20 90 90
+-E 17F C6 06
+-E 184 90 90
+-E 18A 90 04 00 90 90
+-E 190 C6 06
+-E 195 EB
+-E 1B0 90 05 00 00 90     (LAST PATCH DISABLES TIMER CHECK)
+-W 100 1 138 3            (SAVE IT BACK ON NEW DISK)
+
+LASTLY, YOU MUST PATCH 'VCONFIG' IS YOU NEED THE 40 COLUMN DISPLAY.
+(WITH THE NEW VISICALC DISK IN DRIVE B:)
+
+-L 100 1 13B 3             (LOAD 40-COL LOADER-DECRYPTER)
+-E 14D 90 90 B4 10 90 90 90
+-E 169 C6 06
+-E 16E 90 90
+-E 174 90 2C 20 90 90
+-E 17A C6 06
+-E 17F 90 90
+-E 185 90 2C 00 90 90
+-E 18B C6 06
+-E 190 EB
+-E 1AB 90 04 00 90 90       (DISABLE TIMER CHECK HERE TOO)
+-W 100 1 13B 3              (SAVE ON BACK ON NEW DISK)
+-Q                          (QUIT DEBUG)
+
+     All copies of the new disk should function exactly as the original
+"copy-protected" disk. The serial number is unchanged. You may not legally
+sell; give or load either the original disks, copies or documentation
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

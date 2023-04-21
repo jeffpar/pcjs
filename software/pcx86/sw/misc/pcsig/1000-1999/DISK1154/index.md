@@ -33,6 +33,52 @@ machines:
     select the group of addresses to print according to the group codes.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1154.TXT
+
+{% raw %}
+```
+Disk No: 1154
+Program Title: Phone Caddy version 1.12
+PC-SIG Version: 1.2
+
+PHONE CADDY is a complete mailing list manager.  It lets you update and
+maintain your mailing list and prints addresses on labels, rolodex cards
+(two sizes), and standard office envelopes.  You can even specify the
+size of the labels.
+
+Each PHONE CADDY address record includes fields for an ID number, group
+code, whether it is for an individual or business, first and last name,
+spouse name, address, and home and work phone number.  For businesses,
+an extra address line is included along with a contact name.  You select
+the order of printing according to any field in the record and also
+select the group of addresses to print according to the group codes.
+
+Usage:  Mailing List Manager.
+
+Special Requirements:  320K memory.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $35.00
+
+File Descriptions:
+
+PCMENU   DOC  Documentation text.
+PCMENU   EXE  PHONE CADDY Program.
+README   1ST  Text instruction for installation.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1154
 

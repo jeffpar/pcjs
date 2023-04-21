@@ -27,6 +27,37 @@ machines:
     rich Bible study.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2484.TXT
+
+{% raw %}
+```
+Disk No: 2484                                                           
+Disk Title: Online Bible Cross References 2/2(2483)                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Online Bible Cross References                            
+Author Version: 5.0                                                     
+Author Registration: None.                                              
+Special Requirements: Hard disk, ONLINE BIBLE INSTALL. DISK (#2482), and
+                                                                        
+The authors of Online Bible (#2191-#2197) now offer another add-on,     
+ONLINE BIBLE CROSS REFERENCES, to make Online Bible even more complete. 
+Using over 550,000 cross references from the Treasury of Scripture      
+Knowledge and other sources, ONLINE BIBLE CROSS REFERENCES allows       
+instant recall and display of cross references.  This makes for a very  
+rich Bible study.                                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2484
 

@@ -14,6 +14,97 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## ORDERFRM.DOC
+
+{% raw %}
+```
+
+
+
+
+
+    ORDER / REGISTRATION FORM                                    Zilch v1.13
+
+
+    Michael J. Riley
+    P.O. Box 1874 
+    Lake Havasu City, AZ 86405 U.S.A.
+
+
+       Name:  _____________________________________________________________
+    
+    Address:  _____________________________________________________________
+
+              _____________________________________________________________
+
+       City:  _____________________________________________________________
+
+      State:  __________________________________ Zip Code: ________________
+
+    Country:  __________________________________ Phone: ___________________ 
+
+
+                  Please indicate diskette size:  5.25" ____  3.5" ____ 
+  
+
+           _____  Copy/Copies of Zilch at $29.95 each . . . .  $ __________
+
+                  South Carolina residents add 5% Sales Tax..  $ __________
+
+                  Shipping & Handling $3.00 (Overseas $7.00)   $ __________
+
+                  TOTAL U.S. DOLLARS ENCLOSED . . . . . . . .  $ __________
+
+    
+    Registered owners receive the most recent version of this program, with 
+    a printed manual.  Registered owners also receive 2 FREE upgrades of 
+    this program and discounts on future products from the author.  Please 
+    indicate below: 
+    
+    Automatically send upgrades:  ____     Send upgrade announcements: ____
+
+    Where did you get your copy of Zilch?  ________________________________
+
+    How do you rate the documentation?  (Please indicate below)
+
+    Excellent ____   Good  ____   Fair ____   Poor  ____    No Comment ____
+
+    Comments/Suggestions:  ________________________________________________
+
+    _______________________________________________________________________
+
+    _______________________________________________________________________
+
+```
+{% endraw %}
+
+## UPDATE.DOC
+
+{% raw %}
+```
+UPDATE.DOC                                                 Zilch v1.13
+
+
+Zilch v1.11
+03/29/92  -  Fixed a bug that would not allow reverse video on 
+             monochrome systems. 
+
+Zilch v1.12
+06/18/92  -  A problem in calculating the priorites was discovered when 
+             large amounts of pledge money was entered.  This problem 
+             has been corrected in version 1.12.
+
+Zilch v1.13
+07/24/92  -  Prior versions would not work on Tandy 1000SL, 1000TL and 
+             machines with the same Hercules video card.  Removed the 
+             code that allowed intense background colors.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2886
 

@@ -75,6 +75,7 @@ machines:
 
 ## AUTODIAL.BAS
 
+{% raw %}
 ```bas
 12000 '---------------------- AUTO PHONE DIALER -------------------------------
 12010 DEFINT A-Z:ON ERROR GOTO 15000:COMMON N,RAN$,IN$,NBR$,SRT$,S,CR$,ESC$:SRT$=RAN$+".SRT":DIM I1$(1000),I1(1000)
@@ -187,9 +188,11 @@ machines:
 15030 I$=INKEY$:IF I$=CHR$(13) THEN RESUME ELSE 15030
 15040 ON ERROR GOTO 0
 ```
+{% endraw %}
 
 ## CONCOL.BAS
 
+{% raw %}
 ```bas
 10 '*****************************************************
 20 ' CONCOL PROGRAM TO SET UP COLORS FOR DATACCOUNT
@@ -229,9 +232,81 @@ machines:
 430 IF A$="N" OR A$="n" THEN CLS:GOTO 40
 440 END
 ```
+{% endraw %}
+
+## FILES330.TXT
+
+{% raw %}
+```
+Disk No:  330
+Program Title: Ledger and Business
+PC-SIG version: 2.1
+
+While very different, these programs are alike in that this general
+ledger program, a check register program, and two mail list programs
+here are all menu-driven and will run on a PCjr with one disk drive and
+sufficient memory.
+
+DATACOUNT is a general ledger program suitable for individuals or small
+businesses.  The MICRO ACCOUNTING SYSTEM is a multi-purpose check
+register accounting system.  This software package was written for
+individuals and small businesses that can use a check register for their
+accounting.  The MAILISTI program lets you create a file of names and
+addresses.  You can add to this list, change and delete entries.  It
+sorts, displays, prints a hardcopy to labels or reports, and it will
+automatically dial selected phone numbers with an autodial modem.
+
+Usage:  Business/Finance.
+
+Special Requirements:  Some programs require BASIC.
+
+How to Start:  Type GO to Start.
+
+Suggested Registration:  $30.00 for DATACOUNT II, $35.00 for MICRO
+ACCOUNTING SYSTEM, $15.00 for MAILIST1.
+
+File Descriptions:
+
+------------  Datacount II
+CONCOL   BAS  Program used by General Ledger
+CONCOL   EXE  Subprogram.
+CONF     PAR  Program used by General Ledger
+DAT      DOC  ASCII text file containing documentation for DATAC.EXE.
+DATAC    EXE  Main ledger program.
+DEMO          Sample data file for DATAC.EXE.
+DEMOA         Sample data file for DATAC.EXE.
+DEMON         Sample data file for DATAC.EXE.
+------------  Check register
+MA       BAS  Multi-purpose check register accounting system.
+MA       DOC  ASCII text file containing documentation for MA.BAS.
+MACOPY   BAT  Batch file for copying this group of files to user disk.
+MADOC    BAT  Batch file for printing MA.DOC.
+START    BAT  Batch file for running MA.BAS.
+------------  Maillist program
+DATA          Sample data file for MAIL.IST.
+MAIL     DIR  ASCII text file containing a list of this group of files.
+MAIL     DOC  ASCII text file containing documentation for MAIL.IST.
+MAIL     IST  Mail list maintenance program (BASIC language; treat as
+              .BAS file).
+------------  Another maillist program
+AUTODIAL BAS  Autodial program chained to by MAILIST1.BAS.
+MAILIST1 BAS  Mail list maintenance program.
+MAILIST1 DIR  ASCII text file containing a list of this group of files.
+MAILIST1 DOC  ASCII text file containing documentation for MAILIST1.BAS.
+MAILSORT BAS  Sort program chained to by MAILIST1.BAS.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## MA.BAS
 
+{% raw %}
 ```bas
 1 '**********************                                                          Micro Accounting                                                                Version 1.3 : January 1985
 2 KEYOFF:FORX%=1TO10:KEYX%,"":NEXT:GOTO10
@@ -1129,9 +1204,2039 @@ machines:
 60000 DATAJANUARY,FEBRUARY,MARCH,APRIL,MAY,JUNE,JULY,AUGUST,SEPTEMBER,OCTOBER,NOVEMBER,DECEMBER
 60010 DATATEN,,,ELEVEN,,ONE,TWELVE,TWENTY,TWO,THIRTEEN,THIRTY,THREE,FOURTEEN,FORTY,FOUR,FIFTEEN,FIFTY,FIVE,SIXTEEN,SIXTY,SIX,SEVENTEEN,SEVENTY,SEVEN,EIGHTEEN,EIGHTY,EIGHT,NINETEEN,NINETY,NINE
 ```
+{% endraw %}
+
+## MA.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                           MICRO ACCOUNTING SYSTEM
+
+
+                       A Multi-purpose Check Register
+                             Accounting System
+
+
+
+                                Written by
+				
+                              Donald R. Ramsey
+                            727 Bunker Hill  #70
+                           Houston, Texas   77024
+
+                                Version 1.2
+
+
+
+
+
+
+
+	                     TABLE OF CONTENTS
+
+
+	Program Overview                               1
+
+	System Requirements                            2
+
+	Limitations                                    2
+
+	Program Standards                              2
+
+	Installing System                              3
+	
+	Program Operation
+	  Main Menu                                    4
+	  Initializing System                          5
+	
+	File Maintenance                               6
+	
+	Transaction Entry                              7
+	  Automatic Payments                           8
+	  Individual Entries                           9
+	  Handling Cash Entries                        9
+	  Transferring Money Between
+	    Budget Accounts                            9
+	  Print Checks                                 7, 9
+
+	Reports                                        10
+
+	Checkbook Reconciliation                       11
+
+	Begin New Year                                 11
+
+	Entering Data in Last Year's File
+	After Starting a New Year                      11
+
+	When a Data Disk is Full                       12
+
+	The User-Supported Concept                     13
+
+	Modifying the program                          14
+
+	Copying Program for Other Users                15
+
+	Future Enhancements                            16
+
+	Trouble Shooting                               17
+
+	Appendix
+
+	Invoice
+
+
+
+
+
+
+                                    DISCLAIMER
+
+
+
+
+
+
+
+
+	************************************************************************
+	          DONALD R. RAMSEY hereafter called the PROGRAMMER
+	------------------------------------------------------------------------
+
+	   This  diskette  contains  programs  made  available to PERSONS
+	   as a service.  In no event will the PROGRAMMER be liable to you
+	   for any damages, including any lost profits, lost savings or
+	   other  incidental or consequential damages arising out of the
+	   use of or inability to use such programs, even if the PROGRAMMER
+	   has been advised of the possibility of such damages, or for any
+	   claim by any other party.
+
+	************************************************************************
+
+
+
+	
+
+		                MICRO ACCOUNTING SYSTEM
+
+		            A Multi-Purpose Check Register
+		                   Accounting System
+
+
+	PROGRAM OVERVIEW
+
+
+		If you are like most people, you have only a vague idea
+	as to where your money is spent each year. Of course, keeping
+	better records is the solution, but this is usually a big 
+	job that never gets done. However, if only one entry was 
+	required for each transaction and this one entry would make
+	available a wide variety of reports, almost everyone would take
+	the time. That is what this program is all about.
+
+		This software was written for the small business that can 
+	use just a check-register for it's accounting as well as for all 
+	individuals. Imagine sitting down to write checks and entering
+	the information into the computer instead of your checkbook.
+	That's all there is to it. The program will even print checks
+	that have been addressed for use with window envelopes. But,
+	that's only the beginning! The standard check register can be
+	printed with a running balance, a memo report is available, and
+	also an account distribution summary is yours for the asking.
+
+		Probably more significant, especially at tax time, is the 
+	Budget Analysis and Average Month report. This report shows
+	how much has been expended in each budget account for the current
+	month and for the year. It also shows the amount that was 
+	budgeted so you can compare it to the actual expenditure and it
+	computes an average monthly amount for each account.
+
+		Ever wonder how much you are spending on a particular item
+	or what the total cash value of all your bank accounts is?
+	Simply run the Selected Account Detail or the Bank Account Summary
+	and you will know in a minute. The Account Detail report searches
+	the months you specify for all transactions in any account you choose
+	and the Bank Account Summary lists all accounts and totals the
+	balances of all bank accounts.
+
+		The system is menu driven and well prompted for user ease.
+	All corrections are very easily accomplished and can be done
+	at any time (you never have to wait until all the data has been
+	entered to make corrections). Once you have used this program
+	for a while, you will wonder how you ever did without it.
+
+
+	                                                     Page 2
+
+	SYSTEM REQUIREMENTS:
+		IBM PC, IBM XT, or compatible
+		64K RAM
+		1 Disk Drive ( 2 preferred )
+		Printer
+		PC-DOS or MS-DOS with BASIC or BASICA
+
+	LIMITATIONS:
+		30  Bank Accounts
+		200 Budget Accounts
+
+	PROGRAM STANDARDS:
+
+		The software was designed to be very user friendly. It is
+	a single program file, so moving from section to section is very
+	fast since there are no modules to be chained. Data entry is fast
+	and there are numerous reports to make your end-of-year or tax
+	accounting almost painless. The software will even print checks
+	with addresses for use with window envelopes if you wish. And
+	you certainly can't beat the price.
+
+		This manual and the program uses, in it's documentation,
+	brackets ( < > ) to enclose any letter or KEY that should be
+	pressed for a given action. For instance, if the letter <P> is 
+	to be pressed, all you need do is press P. It is not necessary
+	to type the brackets.
+
+	***** IMPORTANT ***** 
+		The bottom two lines of the screen are reserved for user
+	prompts. If you have a question as to what to do next, consult
+	these lines. Also, the <F1> key will usually take you back one
+	step so you may correct any errors that have been made. This
+	<F1> key is VERY IMPORTANT. Using it allows immediate correction
+	of all errors, so remember it!
+
+		Number locks are automatically set when needed so the number
+	key pad can be used for quick entry of numbers. It is not even
+	necessary to type the decimal point in a dollar entry. Dates are
+	entered by typing only the numbers, the slashes ( / ) are not
+	required. To correct typing errors, use the backspace key ( large
+	arrow by the = sign ) because the arrow keys are inoperative.
+
+
+
+                                                            Page 3
+
+
+	INSTALLING SYSTEM:
+
+		Simply copy  MA.BAS to your system disk (a system disk is
+	a disk you have formatted using the FORMAT [d:]/S command; see
+	DOS manual. HARD DISK USERS disregard this format procedure) that 
+	contains either BASIC or BASICA. For example, for a 2 disk system, 
+	put the MICRO ACCOUNTING Disk in Drive B and type COPY B:MA.BAS.
+
+		To run the program after it has been installed on your
+	system disk, you must enter BASIC and specify 4 files with a
+	buffer Size of 256, e.g.,
+
+		BASIC MA.BAS/F:4/S:256 or,
+		BASICA MA.BAS/F:4/S:256
+
+	This may, of course, be put in a batch file for easy starting.
+	This will NOT work unless BASIC or BASICA is on your disk.
+	To create a Batch File for starting this program do the following:
+
+		1. Start your system normally.
+
+		2. At the Dos prompt ( e.g. A> ) insert the 
+		   Micro Accounting System Disk ( the one you
+		   made with your system and Basic on it ) in the 
+		   default drive ( the drive shown by the DOS prompt, 
+		   for example A> ) and type
+
+			COPY CON:MA.BAT (then you press enter)
+			BASICA MA.BAS/F:4/S:256 (press enter)
+			(press the F6 key and the screen will show)
+			^Z (press enter)
+
+		3. You may now start MICRO ACCOUNTING by typing MA at
+		   the DOS prompt.
+
+
+
+                                                            Page 4
+
+
+	PROGRAM OPERATION:
+
+
+	Starting the program:
+		With the exception of the first time the program is run,
+	all that is necessary to begin operation, is the date entry.
+	If today's date is OK just press <ENTER> and the system will
+	default to today's date. After a short pause this menu will
+	be displayed.
+
+
+                             MAIN MENU
+
+			<T> Transaction Entry
+
+			<2> Reconcile Checkbook
+			<3> Run Alternate Accounts
+			<4> Begin New Year
+			<5> End Program
+
+			<R> Report Menu
+			<F> File Maintenance Menu
+	
+			<D> Print Program Documentation
+
+
+	<T> Transaction Entry: all transactions, both deposits and
+		checks are entered in this section. Check printing is
+		also done here.
+
+	<2> Reconcile Checkbook: checks are cleared and bank 
+		statement is reconciled.
+
+	<3> Run Alternate Accounts: starts the system again so that
+		another data disk with other bank accounts and budget
+		codes may be run. Hard disk users may specify a new
+		path for data here.
+
+	<4> Begin New Year: prepare a new data disk for the new year.
+
+	<5> End Program: exit to DOS
+
+	<R> Report Menu: go to the report section
+
+	<F> File Maintenance Menu: add, delete, and make changes to
+		budget, bank, and auto-payment files
+
+	<D> Print Program Documentation: instructions for printing
+		document.
+
+
+                                                            Page 5
+
+
+	INITIALIZING THE SYSTEM:
+
+		Before the program can be run, your bank accounts and budget
+	accounts must be defined. This is done in the File Maintenance
+	section. Note: maximum number of characters in bank and budget codes
+	is 4. You should take some time to decide what budget accounts
+	you might need before making these entries because the budget
+	accounts are sorted alphabetically in the report section. As a
+	suggestion, group all similar codes under the same first letter,
+	e.g. all household accounts might go under the letter H; HMOR for
+	household mortgage, HUT for household utilities, etc.(see Appendix)
+	After the accounts have been entered, you can go to the Report
+	section and run the Budget Analysis to get a sorted list of the
+	codes just to make sure you have what you want.
+		If you are beginning this system after the first of the year
+	you may enter an amount in the year-to-date column for the amount
+	already expended.
+		After both Budget Codes and Bank Codes have been entered, 
+	you can make entries in the Transaction section.
+
+
+
+	** Note to Hard Disk Users and anyone who will use the system with
+		one or more sets of alternate Bank and Budget Codes **
+
+		Hard disk users may specify a path for their data disk.
+	This is done at the DOS prompt with the MKDIR or MD Command
+	(see DOS Manual). Once the directory is created, you may 
+	set a path to your data when specifying your data disk. This
+	is useful if you need to use the system for other accounts and
+	this alternate data needs to be on a separate disk.
+
+	  Example: C:\CRPER\ for check register personal. 
+
+		Hard disk users will have to answer one additional question
+	on start-up. Each time the program is started, the current data
+	disk will be displayed. If this is the data disk and the path
+	you need, simply press <ENTER>. This protection is added for 
+	safety in assuring that the records you add in a session do go 
+	in the proper files. (To by-pass this feature, modify line
+	49035 of the program to be a remark line. Add a  '  to the
+	start of the line and save the modified program as MA.BAS).
+
+		Floppy disk users may also use the system for alternate
+	accounts by putting the different data on separate disks.
+ 
+
+
+	                                                        Page 6  
+
+	FILE MAINTENANCE:
+
+                           FILE MAINTENANCE MENU
+
+			<1> Bank Account Information
+			<2> Budget Information
+			<3> Automatic Payment Accounts
+
+			<4> Re-build Account Balances
+			<5> Change Password or Data Disk
+
+
+	<1> Bank Account Information: assign, delete, change 
+		bank account information.
+
+	<2> Budget Information: same as bank accounts. Do not leave
+		more than one space between words in account description
+		because part of the description will not be printed
+		in one of the reports if an extra space is added.
+
+	<3> Automatic Payment Accounts: This file is to allow 
+		you to make quick entry of data for any bills that
+		are paid on a regular basis. The amount and bank from
+		which the payment is made can be easily changed when
+		the bill is paid in the transaction section. There is 
+		also space for addresses that may be used to address 
+		checks for use with window envelopes.
+
+	<4> Re-build Account Balances: use this section if you
+		think that some of the accounts may have incorrect
+		balances. All balances for budget and bank accounts
+		are re-constructed.
+
+	<5> Change Data Disk or Password: if you use a password
+		it can be changed or if you initially elect not to
+		use this protection it can be added here.
+
+
+                                                              Page 7
+
+	TRANSACTION ENTRY:
+
+
+                         TRANSACTION MENU
+			
+			<1> Individual Entries
+			<2> Automatic Payments
+
+		Upon entering this section you will be given an option
+	for entering transactions. If you have defined automatic
+	payment accounts in the File Maintenance section you can use
+	option <2> of this menu. Otherwise, only individual entries
+	may be made.
+
+
+
+
+	AUTOMATIC PAYMENTS:
+
+		This section allows quick and easy data entry for bills
+	that are paid on a regular basis. To make payments, enter the
+	month and year of transactions as requested. The records that
+	may be paid are then displayed. Press <P> to pay a bill, then
+	select the record to pay. The selection is then displayed and
+	you may pay it as is, change the bank or amount and then pay,
+	or you may skip the item entirely.
+		If you elect to pay this selection, you then will be asked
+	for the date. Pressing <ENTER> will default this to the last
+	date entered or the system date if no date has been used. Next 
+	the check number will be required and again pressing <ENTER> 
+	will default this item to the last check # + 1 or you may enter
+	any check number.
+		The last item is a request to print a check. If you do NOT
+	wish to print a check, press <ENTER>, otherwise, if you do wish
+	to have the check printed, the printer must be turned on and
+	the forms properly positioned. Once this last item is complete
+	the check will be filed on disk and all accounts up-dated.
+
+		Check forms may be obtained from:
+			
+			NEBS COMPUTER FORMS
+			12 SOUTH STREET
+			TOWNSEND, MASS.  01469
+			1-800-325-1117
+			Product 9020 or 9024
+
+
+                                                               Page 8
+
+
+	INDIVIDUAL ENTRIES:
+
+		Checks or deposits in any bank account are made in this
+	section. You must select a Bank code and the month and year
+	for transactions before entering data. Once these items are
+	selected they remain in effect until you return to the
+	Transaction Menu.  *** WARNING ***    Entries in this section are
+	NOT sorted by date. Also, if you have selected January as the
+	month for transactions and entered checks that are dated in
+	February, these February checks will be filed in the January file.
+	
+		 Now, either checks or deposits may be selected. The date
+	may be entered from the key pad or you may press <ENTER> to
+	default to the last date entered. Check number is then entered
+	or default to the last check #+1 by pressing <ENTER>.
+	** NOTE:
+	Another option for the check # is to enter the letter P. Entering
+	a <P> will flag this check for later printing.
+
+		Once the check portion of this entry has been made, budget
+	accounts are then assigned. You may assign as many as six budget
+	accounts or you can exit this portion of the transaction by pressing
+	the <F3> key when entering the Budget code. To assign a Budget code
+	enter any previously assigned code. If the code you chose has not
+	been assigned, there will be a BEEP and you will be given the
+	opportunity to either assign the code or change your entry.
+		
+		The tax code is then requested. This may be assigned or you
+	can press <ENTER> for no assignment. These codes are not error
+	checked and you have to keep up with your assignments personally
+	(this is for future expansion).
+
+		To assign the amount, you have two options. You may press
+	<ENTER> and the entire amount of the check will be assigned to
+	this budget code or you may enter a portion of the check amount.
+	If this second option is taken, the remaining amount will be
+	displayed and you will be allowed to assign the remainder to
+	other budget codes ( max 6 ).
+
+		After all entries for this transaction are made, there
+	will be a last chance to make corrections ( did you remember
+	that corrections could be made immediately during data entry
+	by pressing the <F1> key ). Press <C> to make corrections and
+	then use the <F1> and <F2> keys, as prompted on the bottom two
+	lines,  to scroll through the entries. To change an entry that
+	the => selects, press <C> then make the change. You can exit
+	changes at any time by pressing the <E> key.
+
+
+
+                                                               Page 9
+
+
+	*** WARNING ***    Once this last chance to make a change
+	has passed, you will no longer be able to change this
+	transaction. The reason for this is to give a good audit
+	trail. You may, however, correct the entry by making another
+	transaction to offset the error (Payee/Payor could be a note
+	to yourself stating the change).
+
+		If you specified a P for the check number, you will now print
+	the check. Addresses can also be added at this time.
+
+	Check forms may be obtained from:
+	  NEBS COMPUTER FORMS,  12 SOUTH STREET,  TOWNSEND, MASS.  01469
+	  1-800-325-1117
+	  Product 9020 or 9024
+
+	HANDLING CASH ENTRIES:
+
+		Cash entries may be handled in one of two ways. You may
+	assign a bank account called CASH or you may make a memo
+	entry in any bank account.
+
+		If you assign the bank account `CASH', deposits and
+	withdrawals (checks) are handled as any other bank account.
+	However, this bank balance will show in the Bank Account
+	Summary Report (see Report Section).
+
+		Maybe a better way would be to make a MEMO entry in any
+	bank account that is assigned. To do this, write a check as
+	usual but for the amount enter 0.00 or just press <ENTER>.
+	This 0.00 amount will not affect the bank balance and then the
+	entry can be assigned to any budget account as a cash paid
+	item.
+
+
+	TRANSFERRING MONEY BETWEEN BUDGET ACCOUNTS:
+
+		If you made a mistake by entering an incorrect budget
+	code or you want to transfer money from one budget code
+	to another, then follow this procedure.
+
+		1. Make an entry in the Individual Transaction Section
+		   specifying $0.00 for the check amount. You might also
+		   make a note in the Payee/Payor entry as to what this
+		   transaction is accomplishing.
+		2. As the first budget code, you assign the code that
+		   you want the money transferred from ( out of ). For
+		   the amount, assign a negative of the amount that
+		   you want transferred from the account (e.g. -154.95 ).
+		3. The second budget code is the code of the account you
+		   want the money to go into. To assign the amount, you
+		   need only press enter.
+		4. This amount has now been subtracted from the first
+		   Budget code and added to the second Budget code.
+
+
+                                                               Page 10
+
+	REPORTS:
+
+		             REPORT MENU
+
+			<1> List Transaction Register
+			<2> Budget Analysis and Average Month
+			<3> Memo Report
+			<4> Bank Account Summary
+
+			<5> Account Distribution Report  (printer only)
+			<6> Selected Account Detail      (printer only)
+			<7> Selected Tax Code Detail     (printer only)
+
+
+	<1> List Transaction Register: list the register of the bank
+		of your choice with running balances and totals of all
+		deposits and checks. An  *  by the check number
+		indicates that this check has cleared the Bank and
+		has been reconciled in your check register.
+
+	<2> Budget Analysis and Average Month: A sorted list of all
+		your budget accounts with a description of each, the
+		amount that was budgeted in this category, what was spent
+		in the month of the report, the average amount spent in
+		a month, and the year-to-date amount.
+
+	<3> Memo Report: list of memos that were made in transaction
+		entry. An  *  by the amount in this report indicates
+		that this transaction was a deposit.
+
+	<4> Bank Account Summary: list all bank accounts and their
+		current balance and give a total of all the balances.
+
+		
+	<5> Account Distribution Report: report to show how each check
+		was distributed among the different budget codes.
+
+	<6> Selected Account Detail: list all entries for any budget
+		code you select over any period of time you choose.
+
+	<7> Selected Tax Code Detail: same as <6> except for tax codes.
+
+
+                                                              Page 11
+
+	CHECKBOOK RECONCILIATION:
+    
+		Checks can be reconciled by checking off items just as 
+	you might if you were using a checkbook. Just read the last two 
+	lines of the screen for help.
+
+		Once the checks are cleared, the checkbook may be
+	reconciled. The report to the screen does not give the detail
+	that is available in the printed report. The printout contains
+	a listing of all items that have not been cleared that is not
+	available in the screen report.
+
+
+
+
+	BEGIN NEW YEAR:
+
+		This procedure is used to prepare a new data disk for the
+	new year.
+	
+	** IMPORTANT ** USE ONLY A BACKUP DATA DISK FOR THIS PROCEDURE!
+
+		Once the backup data disk has been made, put it in the
+	drive normally used for data and follow the screen instructions.
+
+		All transactions for last year are erased from the new
+	data disk, all budget code year-to-date balances are set to
+	zero, and all bank balances are set to last year's ending
+	balance.
+
+     ENTERING DATA IN LAST YEAR'S FILE
+     AFTER BEGINNING A NEW YEAR  :
+
+          If you enter data in the previous year after using this
+     procedure, this year's data will not be updated properly. If
+     you are using a floppy disk system, you should make an entry
+     in the current year to bring the current balance up-to-date.
+     If you are using a Hard disk system, you can run the Re-Build
+     Account Balances of the File Maintenance Menu and the current
+     year's balance will be up-dated.
+
+
+
+
+                                                               Page 12
+
+
+	WHEN A DATA DISK IS FULL:
+
+		Most people should be able to keep an entire year of data
+	on a single disk. However, should you run out of space, follow
+	these steps:
+
+		1. Return to DOS by the End Program Option. 
+		2. Format a new data disk (see DOS manual)
+		3. COPY  mmmyy.TRX to the new data disk.
+		   mmm = the month in which you were entering data
+		         when the disk became full (e.g. JAN)
+		   yy  = the year in which you are working ( e.g. 84)
+		4. DEL   mmmyy.TRX on the FULL data disk.
+		5. Use the new data disk and re-run the program.
+		6. Re-enter the transaction on which the disk became full.
+
+	Example:
+		If you were entering data in November 1985 and you got a
+		`DISK FULL' error message, you would ( assuming a 2 drive 
+		system ) return to DOS by the End Program option of the
+		Main Menu, format a new data disk, and put the new data 
+		disk in Drive B and the full Data disk in Drive A. Then
+
+			type COPY NOV85.TRX B:. Once the copy was complete,
+			type DEL NOV85.TRX. 
+
+		Replace the full data disk with the MICRO ACCOUNTING Program 
+		Disk and type MA ( MA.BAT if you prefer ).
+
+
+
+	                                                          Page 13
+
+	                                    
+	=================== User-Supported Software ===================
+
+	
+		If you have received this program from another
+		 user and find it of value, your contribution 
+		   will be appreciated ( $35.00 suggested ).
+
+
+	                  ______________________
+
+	                     Donald R. Ramsey    
+	                    727 Bunker Hill #70
+	                   Houston, Texas  77024
+	                                        
+	                  _______________________
+
+
+		Regardless of whether you make a contribution, you are
+	encouraged to copy and distribute this program.
+
+	===============================================================
+
+
+
+
+	The user-supported concept:
+
+		Anyone may request a copy of a user-supported program by
+	sending a blank, formatted disk to the program author together
+	with an addressed, postage-paid return mailer. A copy of the
+	program, with documentation, will be sent by return mail on
+	user's disk.
+
+		The program carries a notice suggesting a contribution for
+	the software. Making a contribution is voluntary on the part of
+	the user.
+
+	Regardless of whether a contribution is made, the user is
+	is encouraged to copy the program for trial use by others
+	on a private, non-commercial basis. Payment for use is 
+	discretionary on the part or each subsequent user.
+
+
+
+
+
+	                                                          Page 14
+
+
+	MODIFYING THE PROGRAM
+
+
+		I have made every effort to supply a program that is
+	free of bugs and will provide the user with an easy to use,
+	fast operating system. However, many people may feel that
+	this version of the program could be modified to better meet
+	their needs. I fully encourage you to make any modifications
+	that you feel necessary.
+
+		** Please do not distribute a modified program to
+		** other users. The reason for this is if people
+		** have problems with the program, they contact me.
+		** If the program is modified, I do not know what
+		** they have and may not be able to help.
+
+		If you do come up with useful modifications, please
+	keep them in a merge file that can be incorporated into the
+	system at the user's option.
+		
+		I also encourage you to contact me regarding any problems,
+	suggestions, or modifications to the program. To facilitate
+	the modification process, on request, I will supply a commented
+	version of the program. Also included is a listing of all
+	major variables, file structures, and comments on the major
+	routines. This disk is available only to REGISTERED OWNERS and
+	I do request a $10.00 contribution.
+
+		As new releases of the Program become available, there
+	will be a file on the disk named MACHANGE.DOC that details the
+	changes that were made to each revision.
+
+	TO ADD A CHECK NUMBER TO THE CHECK FORM:
+
+		1. Load the program as usual.
+		2. Press the Ctrl & Break key together until the OK prompt
+		   appears. This is the Basic prompt and you are now in the
+		   Basic Editor.
+		3. Add line 10385 by typing
+		    10385 LPRINT TAB(60)"Check No. ";CK.NO : LPRINT
+		    then press <ENTER>
+		4. Edit line 10370 by typing
+		    EDIT 10370. Then change the line by using the arrows and
+		    the number keys to read:
+		    10370 FOR Y=1 TO 12:LPRINT" ":NEXT then press <ENTER>
+		5. If the check number is not where you desire, adjust lines
+		   10370 and 10385 by changing the TAB setting and number of
+		   LPRINTs in line 10370 as desired.
+		6. Save the program by typing SAVE"A:MA.BAS"
+		   and pressing <ENTER>
+
+
+
+                                                               Page 15
+
+	COPYING THE PROGRAM FOR OTHER USERS:
+
+		The following files must be on the new user's disk:
+
+			MA.BAS
+			MA.DOC
+			MADOC.BAT
+			MACOPY.BAT
+
+		MACOPY.BAT is a batch file for copying the required
+	files to a user's disk. It assumes a 2 drive system with
+	Drive A as the source disk.
+
+	EXAMPLE USE OF MACOPY.BAT:
+
+		1. Put Original MICRO ACCOUNTING disk in Drive A
+		2. Put New user's Formatted System disk in drive B
+		   (User's disk should contain BASIC or BASICA)
+		3. Type MACOPY.BAT and press <ENTER>.
+		4. The required files will be copied to Drive B.
+
+
+
+                                                               Page 16
+
+
+	FUTURE ENHANCEMENTS AND UPDATE POLICY:
+
+		This program is distributed under the user-supported
+	concept and, as such, will only be improved if you, the user,
+	make suggestions as to improvements and enhancements that you
+	would like to see. LET ME HEAR FROM YOU. If you have had
+	problems that you feel should be added to the Trouble Shooting
+	Section of this Manual, then let me know. Also, I would like
+	to hear of any unusual uses that you may have discovered.
+
+		Provided the Users do support this program, this will apply.
+	Any time there are revisions or up-dates to the program
+	I will notify all Registered Owners. They may then obtain a
+	copy of the new disk for a $10.00 fee. This fee is to cover the
+	cost of the disk as well as mailing. If you are NOT a Registered
+	owner then you will have to get the update from a friend.
+
+		I might also mention that since I have spent a great
+	amount of time writing the program, I hope to benefit from
+	the contributions of the Users. If you do not contribute
+	to a Useful user-supported program, the supply of improving
+	public domain programs will start to diminish. Help make
+	this experiment a success and send a donation.
+
+
+
+                                                               Page 17
+
+	                           TROUBLE SHOOTING
+
+
+    PROBLEM : While using the system there is an error in a line in the
+              57000s.
+    SOLUTION: You have probably entered BASIC incorrectly. Exit the
+              program by the End Program option and type the following:
+                    BASICA MA/F:4/S:256 or
+                    BASIC MA/F:4/S:256.
+
+              You may wish to create a Batch file to handle the above
+              DOS command automatically. To create a Batch file called
+              MA.BAT do the following:
+                   1. At the A> prompt type
+                      COPY CON:MA.BAT     and press <ENTER>
+                   2. type
+                      BASICA MA/F:4/S:256 and press <ENTER>
+                   3. Press the <F6> key  and press <ENTER>
+              The next time you wish to run the Micro Accounting
+              Program all you need do at the A> prompt is to
+              type MA and the program will automatically load and
+              start to run.
+
+    PROBLEM : You have entered test data to test the system and are
+              now ready to set up a system for actual use. On trying
+              to enter new Bank or Budget codes, the system will not
+              allow your codes.
+    SOLUTION: Return to the A> prompt and type
+                   DEL *.MAC   then press <ENTER>
+                   DEL B:*.MAC then press <ENTER>
+              This will delete all the old test files that you were
+              using when you were testing the system. You should also
+              put a newly formatted disk in your data drive.
+
+
+    PROBLEM:  After entering Bank and Budget data, System continues to
+              display message that System has not been initialized.
+    SOLUTION: The program is not finding your data on the data drive.
+              1. Put the correct Data Disk in the data drive.
+              2. If Data Disk is correct then the program has lost the
+                 Drive for the data. Go to the File Maintenance Section
+                 and change the Data Disk. This will redefine the Drive
+                 for the program.
+
+
+
+
+
+                               APPENDIX
+
+
+	SAMPLE BUDGET CODE:
+
+		Code		Description
+		====		===========
+		AEX1		Auto- car 1 expense
+		AEX2		Auto- car 2 expense
+		AGAS		Auto- gas
+		APMT		Auto- payments
+		AZ  		
+		BCOM		Business- computer
+		BENT		Business- entertaining
+		BSUP		Business- supplies
+		BTEL		Business- telephone
+		BZ  		
+		CASH		Pocket cash
+		CLTH		Clothes
+		CONT		Contributions
+		DUMP		Catch all category
+		FUN 		Hobbies & entertainment
+		GIFT		Gifts
+		H   		
+		HADU		Home- association dues
+		HEL 		Home- electric bill
+		HFUR		Home- furnishings
+		HINS		Home- insurance
+		HMOR		Home- mortgage
+		HTEL		Home- telephone
+		HWAT		Home- water
+		HZ  		
+		IHUS		Income- husband
+		IWIF		Income- wife
+		IDIV		Income- dividends
+		IINT		Income- interest
+		IMIS		Income- miscellaneous
+		IZ  		
+		MAG 		Magazines
+		MAIL		Stamps & postage
+		MED 		Medical
+		TAX 		Taxes
+		UNDU		Union dues
+		XFER		Transfer $ acc to acc
+
+	SAMPLE BANK CODE:
+
+		CK__		Bank checking account
+		CKCU		Checking account credit union
+		S___		Saving account
+
+
+
+
+
+
+
+	                           INVOICE
+	                         ===========
+
+
+
+
+	Purchased From:
+	  
+	   Donald R. Ramsey
+	   727 Bunker Hill #70
+	   Houston, Texas  77024
+
+
+	==================================================================
+	Item       | Description                 | Qty | Price ea |  TOTAL
+	==================================================================
+
+	MICRO      | Check Register Accounting   |     |          |
+	ACCOUNTING |   Software for the IBM PC   |     |  $35.00  |
+	           |                             |     |          |
+	           |                             |     |          |
+	           |                             |     |          |	
+	           |                             |     |          |
+	COPIES     | Copies of above software to |     |  $20.00  |
+	           |   to be used at other       |     |          |
+	           |   locations.                |     |          |
+	           |                             |     |          |
+	           |                             |     |          |
+	           |                             |     |          |
+	           |                             |     |          |
+	           |                             |     |          |
+	           |                             |     |          |
+	==================================================================
+	                                         	                              
+	                               TOTAL DUE:                    
+
+	==================================================================
+ 
+
+
+
+
+	Retain this copy for your records.
+ 
+
+
+        This disk copy was originally provided by "The Public Library",
+        the software library of the Houston Area League of PC Users.
+ 
+        Programs are available from the Public Library at $2 per disk
+        on user-provided disks.  To get a listing of the disks in the
+        Public Library, send a self-addressed, stamped envelope to
+
+             Nelson Ford,  P.O.Box 61565,  Houston, TX 77208.
+
+```
+{% endraw %}
+
+## MAIL.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     MAILIST
+                                       by
+                             Software Studios, Inc.
+                              8516 Sugarbush Court
+                            Annandale, Virginia 22003
+                                 (703) 978-2339
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      MAILIST
+
+
+                                      Index
+
+
+
+                   System Overview.......................3
+
+                   Quick Rules...........................4
+
+                   Entering Data.........................5
+
+                   Printing Labels.......................6
+
+                   Printing Envelopes....................6
+
+                   Printing Repetitive Stickers..........7
+
+                   Displaying Records....................7
+
+                   Searching For A Record................8
+
+                   To Alter Or Delete A Record...........9
+
+                   To Write A Letter....................10
+
+                   To Print Letters.....................12
+
+                   Sort/Select Records..................13
+
+                   Users Log............................14
+
+                   Telephone Directory..................14
+
+                   Sign Off And Copy Out................15
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  -3-
+
+
+
+                                     MAILIST
+
+
+                                 System Overview
+
+
+         MAILIST is a mailing list maintenance program that has the
+         following capabilities:
+                  1) Mail label generation
+                  2) Repetitive letter writing 
+                  3) Envelope addressing
+                  4) Selection on four fields
+                  5) Sort on two fields
+                  6) Select on expiration date
+                  7) Print repetitive stickers
+                  8) Print telephone directory
+
+         MAILIST is ideal for databases of 200 or fewer records.  Files
+         are stored on disk and read into an array in RAM at system
+         start-up. This RAM-based array permits much faster access to
+         data when adding, deleting or modifying records. Upon exiting
+         the system, the updated file is copied to disk, thus
+         preserving all additions, deletions and alterations.
+
+         MAILIST is menu driven for maximum user-efficiency and
+         simplicity of operation. There are no codes to memorize and
+         operation is as easy as choosing the proper option.
+
+         For your ease in adapting the program, MAILIST source code is
+         provided in BASICA. For faster execution and to make room for
+         more records, it is recommended that the BASIC program be
+         compiled once adapted. 
+
+         MAILIST is not copy protected, but it is copyrighted property.
+         Therefore, it is illegal to sell or distribute unauthorized
+         copies of the program.
+
+         WARNING: Built into the program are certain anti-copying
+         sub-programs that will cause the program to self-destruct
+         if any attempt is made to alter the basic system.
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  -4-
+
+
+
+
+
+
+
+
+                                   QUICK RULES
+
+         MAILIST is simple to operate and should be self-explanatory.
+         We have provided an option-by-option description below for the
+         use of those more methodical in their approach. In general,
+         here are the fast rules:
+
+                   1) Always exit the program from the main menu 
+                      using the "E" option. The program does a
+                      copy out of all changes, additions and deletions
+                      upon exiting and only then are they permanent.
+
+                   2) Use care in making modifications to the program.
+                      Do not attempt to defeat the Copyright.
+                      Intentional booby traps have been inserted to
+                      prevent unauthorized use.
+
+                   3) In editing mode, cursor control keys should be
+                      regarded as disabled. Only the back-space-erase
+                      key has any cursor control.
+
+                   4) Letters and sort/selection files stored by the
+                      system should be regarded as temporary. They are
+                      overwritten by the next file to be stored.
+
+                   5) MAILIST is a powerful, feature chocked, little
+                      system that can significantly ease the burden
+                      of small offices and businesses. Please enjoy!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  -5-
+
+
+
+
+
+
+                                  ENTERING DATA
+
+
+         To enter data, option "1" on the Main Menu will display an
+         information template for data entry. Data is entered simply by
+         typing the information in the appropriate field and pressing
+         "Enter."  To skip a data field, press "Enter."
+
+         Data can be of any length, even beyond the bounds of the
+         template.  Mis-typed data can be corrected within a field by
+         using the back-space-erase key and re-entering the correct
+         data.  If an error is detected after the field is entered, it
+         can be edited by:  1) responding to the prompt "Is The Above
+         Correct?" with an "N"--in which case, all data is erased and
+         the template is blank; or, 2) enter the remaining data and
+         call the record back from the main menu for editing using the
+         <A>lter option.
+
+         Record numbers are automatically assigned by the system and
+         cannot be changed by the user.
+
+         There are four select fields that may be used alone or in
+         combination to distinguish between sub-lists. "Record Type" is
+         the first select field. This is similar to a list code that
+         can be increasingly refined by other select fields. Most users
+         will require only the Record Type to distinguish among their
+         various lists. Record Type can consist of code, alpha or
+         numeric, of any length. It is recommended that the code be
+         kept short to minimize storage usage.
+
+         Other select fields are "List Category", "Selections" and
+         "Participation Code". Again, these may be alpha, numeric, or a
+         combination and may be of any length.
+
+         "Expiration Date" is also a selection field, but it is
+         designed to be selected by providing  bracket  dates between
+         which the expiration date must fall. Data in the Expiration
+         Date field must be entered as MM-DD-YY, or MM/DD/YY--numerics
+         only, except for the dash or slash seperating the dates.
+
+         The "Salutation" field is used to provide for the familiar
+         form of address in personalized letters. While a letter may be
+         addressed to "Mr. William Rogers, Jr." the salutation on the
+         letter can read "Dear Bill:"  Similarly, where one wants to be
+         more formal, the salutation can be input as "Mr. Rogers" to
+         have an opening as "Dear Mr. Rogers:"  An added feature of the
+         Salutation is that when searching for the record by
+         individual's name, you can search for either "William
+         Rogers" or "Bill Rogers."   Nice!
+
+         
+
+
+
+
+
+
+
+
+                                  -6-
+
+
+
+
+
+
+                                 PRINTING LABELS
+
+
+         To print mailing labels, use option "2" on the main menu.
+
+         You will then be prompted to choose between printing labels,
+         envelopes or repeating stickers (labels with the same text).
+
+         If you wish to print a sub-set of the entire mailing list, you
+         must first select a file by using the Select/Sort option (4)
+         on the main menu. You will be prompted to Print All Records or
+         to Print Selected Records.
+
+         TO PREPARE PRINTER FOR LABELS, insert one-up labels aligned
+         with the first print position, first print line, insure that
+         printer is turned on, and strike any key when ready. A label
+         print run can be aborted by turning off the printer.
+
+
+
+
+
+
+
+                               PRINTING ENVELOPES
+
+
+         To print envelopes, choose the Print Labels option (2) at the
+         main menu.
+
+         You will then be prompted to choose between printing labels,
+         envelopes or repeating stickers (labels with the same text).
+
+         If you wish to address envelopes from a sub-set of the entire
+         mailing list, you must first select a file by using the
+         Select/Sort option (4) on the main menu.  You will be prompted
+         if you wish to print envelopes from a pre-selected file or to
+         prinnt envelopes from the entire database.
+
+         TO PREPARE PRINTER FOR ENVELOPES, insert an envelope at a
+         position where the first line to be printed is to appear.
+         Printing will start at column 40.
+
+         PRINTING WILL AUTOMATICALLY HALT BETWEEN ENVELOPES to allow
+         for insertion of the next envelope. Strike any key when ready
+         to print.
+
+         
+
+
+
+
+
+
+
+
+
+
+
+                                  -7-
+
+
+
+
+
+
+                          PRINTING REPETITIVE STICKERS
+
+
+         Repetitive stickers are labels with the same text, repeated a
+         specified number of times. They are useful for making return
+         address labels, multiple copies of floppy disk labels, or
+         simply to make any pressure sensitive label with text.
+
+         To print repetitive stickers, choose Print Labels option (2)
+         from main menu. You will then be prompted to Print Labels,
+         Print Envelopes, or Print Repetitive Stickers. 
+
+         A five-line template for up to 40 characters will be displayed
+         for insertion of text.  Text can be any length, however, that
+         will fit on a label.  Text may be alpha, numeric or any
+         combination. Errors may be corrected prior to entering the
+         data by using the back-space-erase key and reentering correct
+         text. If an error is detected after entering, simply enter
+         zero when prompted for number of stickers and begin again.
+
+         You will be prompted for the number of repetitive stickers you
+         wish. Entering zero will return to main menu.
+
+         TO PREPARE FOR PRINTING REPETITIVE STICKERS, insert one-up
+         labels positioned at the first print line, first print column
+         and insure printer is on.  Strike any key when ready.  To
+         abort a print run, turn printer off.
+
+
+
+
+
+                              DISPLAYING RECORDS
+
+         A preview capability permits you to scan a label file before
+         printing, or to scan the entire database.
+
+         To display a file, choose the Display File (3) option on the
+         main menu. You will be prompted to choose between Display All
+         Records and Display A Sorted or Selected File.
+
+         Labels will be displayed in screens of eight records.
+         Contained on the screen record will be the Record Number, the
+         Record Type, and other Selection information. These will NOT
+         appear on the printed label. 
+
+         Press "R" to return to the main menu.
+         
+
+
+
+
+
+
+
+
+
+
+
+                                  -8-
+
+
+
+
+
+
+                             SEARCHING FOR A RECORD
+
+
+         To recall a record individually, use the Search/Alter/Delete
+         option (4) on the main menu.
+
+         You will be prompted if you wish to access the record by
+         Number, Name, or Company Name.
+
+         TO SEARCH BY NUMBER, enter the Record Number at the prompt. If
+         no record exists by that number, the system will respond
+         "Number Not Found" and you may re-enter number. Enter zero to
+         return to main menu.
+
+         TO SEARCH BY NAME, enter the Last Name at the prompt, then the
+         First Name at the next prompt.  Enter Name as exactly as
+         possible. If no name exists, the system will respond "Name Not
+         Found" and you may re-enter another name. Press enter to
+         return to main menu.
+
+         In searching by Name, the system uses the first four
+         characters of the First Name OR the first four characters of
+         the Salutation, plus the first four characters of the Last
+         Name. Thus, "William R. Rogers, Jr." may be accessed by "Bill
+         Rogers" OR "William Rogers" OR "Will Rogers" OR "William R.
+         Rogers, Jr." 
+
+         TO SEARCH BY COMPANY NAME, the company name must be entered
+         exactly as entered into the system, including "Co.", "Inc."
+         and the punctuation must be the same.  If no match is found
+         the system will respond "Name Not Found" and you may try
+         again. Press enter to return to main menu.
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  -9-
+
+
+
+
+
+
+
+                           TO ALTER OR DELETE A RECORD
+
+         Follow the procedure under SEARCHING FOR A RECORD to display
+         the correct record.
+
+         TO DELETE the record, enter "D".  The record will remain in
+         the system until the records are copied out, at which time all
+         records except those marked for deletion will be copied out.
+         Records marked for deletion will have a "D" written in the
+         area for Zip Code. It may be changed at any time prior to
+         copying out.
+
+         TO ALTER A RECORD, press "A".  The cursor will be positioned
+         at the first field (First Name). If any changes are to be
+         made, type in the changes. If no changes are to be made, press
+         enter to access the next field. If a record is changed, only
+         that text appearing on the left side of the cursor will be
+         entered. Altered text will appear in highlight. If an error
+         is detected prior to pressing enter, use the back-space-erase
+         key to delete the error and re-enter the information. If an
+         error is detected after enter has been pressed, re-cycle
+         through the Alter procedure.
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  -10-
+
+
+
+
+
+
+                                TO WRITE A LETTER
+
+
+         From the main menu, select the Write A Letter option (5).
+
+         Write-A-Letter is a convenient way to address the same
+         correspondence to everyone in your database or to a selected
+         group drawn from the total list.
+
+         TO SELECT A SUBSET OF THE TOTAL DATABASE, see section on
+         SELECTING AND SORTING.
+
+         TO WRITE THE BODY OF THE LETTER, select the Write The Form
+         Letter option (2) from the Write A Letter menu. You will be
+         prompted, line by line, for up to 45 lines of text. Each line
+         can contain up to 78 characters, alpha or numeric. Typing
+         errors may be corrected by using the back-space-erase key and
+         re-entering the correct text. Errors detected after enter has
+         been pressed can only be corrected by restarting the letter
+         writing procedure.
+
+         All numerals and characters are valid EXCEPT DOUBLE QUOTATION
+         MARKS (").  A double quotation mark delimits the print and
+         results will be garbled.
+
+         Format the text, line for line, as you would have it appear in
+         the body of the letter. The Date, Name, Address, City, State,
+         Zip Code, AND SALUTATION will be added automatically by the
+         label program when it merges with the letter. Thus, "Dear Mr.
+         Smith:" will draw "Mr. Smith" from the Salutation Field from
+         the database. If no information has been added to the
+         Salutation Field, "Dear Sirs:" will appear.
+
+         To end the body of the text, enter !! on the next blank line.
+         This will not appear in the text of the letter.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  -11-
+
+
+
+
+
+
+
+         Once completed, the text of the letter is written to disk
+         under a temporary file "LTR."  This file is temporary in the
+         respect that it is overwritten when the next form letter is
+         filed.  If you wish to preserve a letter, copy it to another
+         disk after exiting the system and copy it back to the program
+         disk when you wish to again use it.
+
+         TO RESET FORMAT OF THE LETTER, that is, to alter the Date,
+         Name, Address, City, State, Zip Code and Salutation, select
+         the Set Format option (3) from the Write A Letter menu. This
+         option will exit into the appropriate place within the
+         program. Some programming knowledge of BASICA is required to
+         make modifications. For those brave enough to tackle this job,
+         the following are the parameters of the variable information
+         you will require:
+
+                             S=Record Number
+                             A$=Title
+                             B$=First Name and Initial
+                             C$=Last Name
+                             D$=Company Name
+                             F$=Street Address
+                             H$=City, State
+                             J=Zip Code
+                             K$=Record Type
+                          DATE$=Date
+                             P$=Salutation
+                             L$=List Category
+                             M$=Selection
+                             N$=Expiration Date
+                             O$=Participation Code
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  -12-
+
+
+
+
+
+
+                                TO PRINT LETTERS
+
+         To print letters, select the Print Letters option (5) on the
+         Write A Letter menu.
+
+         You will be prompted to choose between single sheets and
+         continuous forms. Specifying single sheets will make the
+         printer stop between letters until additional letterhead
+         is loaded and you strike any key.
+         
+         You will be prompted for the number of columns to leave blank
+         as the left-hand margin. A letter with print beginning in
+         column 10 is recommended. 
+
+         The system merges two temporary disk files, "PAD" containing a
+         subset of names and addresses, and "LTR" containing the text
+         of the letter. THE SYSTEM ASSUMES THAT A SUBSET OF THE
+         DATABASE IS BEING USED. To send a letter to the entire
+         database, select all records using the procedures in the
+         SORT/SELECT section.
+
+         TO SET UP PRINTER FOR LETTERS, position the letterhead at the
+         first line on which the date is to appear. Spacing is as
+         follows:
+                                DATE
+                                                ONE SPACE
+                                NAME, TITLE
+                                COMPANY
+                                ADDRESS
+                                CITY, STATE, ZIP
+                                                ONE SPACE
+                                SALUTATION
+                                                ONE SPACE
+
+                                TEXT OF LETTER
+
+                                (Up to 45 Lines)
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  -13-
+
+
+
+
+
+
+                               SORT/SELECT RECORDS
+
+
+         To Sort or Select Records use the Select/Sort option (6) from
+         the main menu.
+
+         From the Select Records/Sort Records memu, you may sort on Zip
+         Code (in ascending order). You may also sort on Record Number
+         (also in ascending order). Sorting and storage of the sorted
+         file are automatic and require no response. The system will
+         keep you informed of what actions are taking place and also
+         advise you of the approximate time involved. After sorting,
+         you may want to display the sorted file to insure it is what
+         you want before printing.
+
+         SELECTING RECORDS, using the Select Records option (1) from
+         the Select/Sort menu, displays a selection template. This is
+         best explained by saying to oneself "I want only
+         ______and_____and_____and ______; with characteristics of
+         ____and _____and_____ and ______. A selection can be made for
+         each selection field and only those records meeting those
+         requirements will be selected. [In the first field, Record
+         Type, an "X" should be entered in blank fields, otherwise you
+         will receive any records with a blank Record Type.]  Care
+         should be used not to prohibitively restrict the selection to
+         the point of no records that can meet the description.
+
+         Expiration dates should be expressed as MM-DD-YY, or
+         MM/DD/YY, with two figures separated by a dash or a slash.
+         Thus, January 1, 1984 would be 01-01-84.
+
+         Expiration dates should be bracketed. That is, if one wants
+         all expirations for the first week in December, ask for
+         expirations between 12-01-85 and 12-07-85 (Expirations that
+         occur on the First and Seventh will be included.) Also
+         remember, your database knows nothing about weekends, so be
+         sure to include these dates in your brackets to insure all
+         expirations are covered.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  -14-
+
+
+
+
+
+
+         Any selection field not to be used may be skipped over by
+         pressing enter.
+
+         If an error is detected, you may begin again once the
+         selection template has been indexed through. You will be
+         prompted "Is The Above What You Want?" By responding "N", the
+         template will be reset. By responding "Y" the selection
+         process will begin.
+
+         Selected records are automatically copied to a temporary file
+         on disk called "PAD".  This file will reside on disk until
+         another selection is made, overwriting the file. No further
+         response is required to select records. You will automatically
+         be returned to the main menu.
+
+
+
+                                    USERS LOG
+
+         A disk file of system usage is kept on disk listing the User's
+         Logon, Date and Time. This information may be useful for
+         tracking usage or data utilization.
+
+         TO PRINT THE USERS LOG, choose the Select/Sort option (6) from
+         the main menu and the Print Users Log option (3) from the
+         ensuing menu.
+
+         This file, "USER.LOG", should be deleted periodically from DOS
+         level if disk storage space becomes a factor.
+
+
+
+
+                               TELEPHONE DIRECTORY
+
+
+         A convenient Telephone Directory can be generated from the
+         database by choosing the Print Labels option (2) on the main
+         menu.
+
+         An alphabetical listing of Last Name, First Name, Telephone
+         Number will be generated from data available in the database
+         and automatically printed on the printer.
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  -15-
+
+
+
+
+
+
+
+
+                              SIGN OFF AND COPY OUT
+
+         IT IS IMPORTANT TO REMEMBER TO EXIT THE PROGRAM BY PRESSING
+         "E" FROM THE MAIN MENU. No data is permanently stored in the
+         system until it is copied to disk at sign off.  To simply turn
+         off the computer or to interrupt the program with
+         Control-Break will cause the loss of any additions, changes or
+         deletions. A fail-safe subprogram has been installed to alert
+         you should an error crash the program and your changes and
+         additions are lost. In such a case, only the data input since
+         Logon has been lost (your original files are intact) and to
+         recover you would re-start the system and re-input additions,
+         changes and deletions.
+
+         Of course, this can also be used constructively, where the
+         additions, changes and deletions were to be used only
+         temporarily and one wants to restore to the original files.
+         Then, one may simply switch the computer off or use the
+         Control-Break interrupt.
+
+
+
+
+
+         Neither the author of this program nor Software Studios, Inc.
+         warrant this program to be free from defect, error or
+         omission. No damages or liability, derived or consequential,
+         from the use of or reliance on this program or the data
+         generated therefrom is assumed and is expressly disclaimed.
+         Software Studio's sole liability consists of the replacement
+         of defective programs, excepting those programs that it deems
+         to have been modified or that are lost due to mishandeling or
+         attempts to defeat the copyright protection.
+
+
+
+
+
+
+
+         (c) 1984, Wade B. Dowdle, Software Studios, Inc.
+         This program is the property of Software Studios, Inc.,
+         Annandale, Virginia 22003. It is illegal to copy for
+         distribution, loan or temporary usage, this program, its
+         format, instructions, calculations or instructional materials.
+
+
+
+
+
+
+
+
+
+
+
+
+        This disk copy was originally provided by "The Public Library",
+        the software library of the Houston Area League of PC Users.
+ 
+        Programs are available from the Public Library at $2 per disk
+        on user-provided disks.  To get a listing of the disks in the
+        Public Library, send a self-addressed, stamped envelope to
+
+             Nelson Ford,  P.O.Box 61565,  Houston, TX 77208.
+
+```
+{% endraw %}
 
 ## MAILIST1.BAS
 
+{% raw %}
 ```bas
 
 
@@ -1879,9 +3984,11 @@ machines:
 25000 '(C) Copyright William Dwinell and Mike Berry 1983
 
 ```
+{% endraw %}
 
 ## MAILSORT.BAS
 
+{% raw %}
 ```bas
 
 
@@ -1941,6 +4048,7 @@ machines:
 11140 IF VAL(I$)=0 THEN RETURN ELSE I=VAL(I$):RETURN
 Press <ENTER> 
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

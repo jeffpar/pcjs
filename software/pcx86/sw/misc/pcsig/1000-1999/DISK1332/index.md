@@ -26,6 +26,127 @@ machines:
     Windows may be positioned to any part of the screen.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1332.TXT
+
+{% raw %}
+```
+Disk No: 1332
+Program Title:  HYPERHELPER version 1.5a
+PC-SIG version:  1.1
+
+HYPERHELPER lets you make special "hypertext" pop-up windows or help
+screens from an ordinary ASCII file with simple embedded commands.  Each
+window is linked together by highlighted words in the text with other
+windows, which users can pop up for even more detailed information.
+Windows may be positioned to any part of the screen.
+
+Usage:  Viewing Help Text Screens.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $20.00 for a memory resident version which
+allows you to create systems of on-line help that may be viewed while
+operating another program.
+
+File Descriptions:
+
+README        How to get started.
+HYPERHLP HTX  HYPERHELPER text.
+HC       EXE  HYPERHELPER compiler.
+HH       EXE  HYPERHELPER browser.
+SAMPLE   TXT  Sample ASCII file for compiling.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## SAMPLE.TXT
+
+{% raw %}
+```
+#rem
+#rem  This is a very simple .txt file that illustrates the
+#rem  typical form of a hypertext file. You will need to compile
+#rem  this file, using the HyperHelper compiler before you'll
+#rem  be able to browse through this file. To compile this .txt
+#rem  file use:
+#rem
+#rem                       C:> hc sample
+#rem
+#rem  Note that the .txt extension of the filename is not used.
+#rem  The compiler will translate the .txt file into a special form
+#rem  that is only readable by the HyperHelper browser. This compiled
+#rem  file will be called sample.htx.
+#rem
+#rem  Once sample.txt is compiled, you can browse through the sample.htx
+#rem  file using the HyperHelper browser by typing:
+#rem
+#rem                       C:> hh sample
+#rem
+#rem  This sample hypertext deck only contains a portion of the commands
+#rem  that are available in HyperHelper. However, the commands used here
+#rem  are probably the ones you'll use most often. In particular, note
+#rem  the usage of:
+#rem
+#rem          #rem              -- a comment line.
+#rem          #deck title       -- declares the title of the deck.
+#rem          #size             -- defines the size of all cards;
+#rem                               in this case, 40 columns by 9 rows.
+#rem          #center text on   -- center all text in the cards that
+#rem                               follow within the window size specified
+#rem                               by the #size command.
+#rem          #card             -- marks the beginning of a card. Note
+#rem                               the first word after "#card" is the
+#rem                               internal card name and any words
+#rem                               after it are external card names which
+#rem                               can be used to access the card from
+#rem                               the command line (See card 2) or as
+#rem                               a context sensitive link in the
+#rem                               memory resident version of the
+#rem                               HyperHelper browser.
+#rem          #end              -- marks the end of a card (optional).
+#rem          #center line      -- centers the next line to the text
+#rem                               in the card.
+#rem          !                 -- special character which is used
+#rem                               to define the links between cards.
+#rem
+#rem  Now here are the cards in the sample.txt deck:
+#rem  ------------------------------------------------------------------
+#deck title Sample HyperHelper File
+#size 40 9
+#center text on
+#card 1
+This is the first card in the deck.
+It is linked to the !2!second! and
+!3!third! cards.
+#end ------------------------------------------------------------------
+#card 2 tryme
+This is the second card. It is linked
+to the !3!third! card.
+
+Try accessing this card from the
+DOS prompt by typing:
+
+#center line
+hh -ctryme sample
+#end ------------------------------------------------------------------
+#card 3
+This is the third card which is linked
+to card !1!one!.
+#end ------------------------------------------------------------------
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1332
 

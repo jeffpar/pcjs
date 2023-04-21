@@ -14,6 +14,47 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2837.TXT
+
+{% raw %}
+```
+Disk No: 2837
+Disk Title: Market Chartist
+PC-SIG Version: S1.2
+
+Program Title: Market Chartis: An Intro to Technical Market Analysis
+Author Version: 1.2
+Author Registration: $10.00
+Special Requirements: Graphics card. Epson compatible dot matrix printer
+
+The Market Chartist, an interactive computer-based tutorial, was created
+to help you to become more informed and self-reliant in your investment
+decision making. A basic understanding of technical market analysis is
+an important part of a well-rounded investor's knowledge regardless of
+investment strategy. The tutorial introduces you to the construction and
+interpretation of several market charts used by technical market
+analysts to guide their investment decisions including moving averages,
+momentum, advance-decline lines, trading volume, and trendlines.
+
+Computer-based instruction provides a high-interest learning medium. The
+tutorial stimulates student involvement by providing an interactive
+educational environment. Questions embedded in the self-paced
+instruction reinforce course content and provide students with
+individualized feedback concerning their progress. The Market Chartist
+features a 40-page Course Notebook of illustrations and worksheets,
+which can be printed from within the program.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2837
 

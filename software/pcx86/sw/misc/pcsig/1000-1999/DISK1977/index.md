@@ -68,6 +68,177 @@ machines:
     your particular installation.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1977.TXT
+
+{% raw %}
+```
+Disk No: 1977                                                           
+Disk Title: The Electrical DBS 1 of 2 (#1978 also)                       
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: The Electrical DBS disk                                  
+Author Version: 2.0                                                     
+Author Registration: $60.00                                             
+Special Requirements: 640K RAM, hard drive.                             
+                                                                        
+THE ELECTRICAL REFERENCE DATABASE gives electricians, engineers,        
+designers, and panel shop operators one place on your computer where you
+can go to and find those little notes that only experience produces.  In
+this case an experienced professional has given you his experience and  
+created a forum for you to add your own.                                
+                                                                        
+Databases include:                                                      
+                                                                        
+~ D.C.  MOTORS                                                          
+                                                                        
+~ SINGLE PHASE MOTORS                                                   
+                                                                        
+~ THREE PHASE INDUCTION MOTORS                                          
+                                                                        
+~ THREE PHASE WOUND ROTOR MOTORS                                        
+                                                                        
+~ THREE PHASE SYNCHRONOUS MOTORS                                        
+                                                                        
+~ NEMA DATA                                                             
+                                                                        
+~ MOTOR FRAME SIZES                                                     
+                                                                        
+~ THREE PHASE CONDUCTORS AMPACITIES                                     
+                                                                        
+~ SINGLE PHASE CONDUCTOR AMPACITIES                                     
+                                                                        
+~ MAXIMUM CONDUCTORS IN CONDUIT                                         
+                                                                        
+~ THREE PHASE TRANSFORMERS                                              
+                                                                        
+~ RECOMMENDED COPPER WIRE AND TRANSFORMER SIZES                         
+                                                                        
+Motor databases provide information as to full load currents, motor over
+current protection rating, the size or guage of the wire required to    
+connect one motor of that particular horsepower in a general purpose    
+application, the conduit trade size required to house the wire, the NEMA
+size starter recommended,the amperage and the recommended fusing.       
+                                                                        
+The present data is referred to as "seed" data just to get you started. 
+You may add and delete data as you like.  Each data base may can handle 
+a maximum of 32000 entries.                                             
+                                                                        
+Each database is menu-driven and complete with it's own help function   
+and notes field.  Use this data base as a tool - not as a replacement   
+for the NATIONAL ELECTRICAL CODE manual!  All information assumes a     
+single motor installation.  Consult your N.E.C. manual for the details  
+of your particular installation.                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## FIXFILES.TXT
+
+{% raw %}
+```
+
+ Volume in drive B has no label
+ Directory of  B:\
+
+DCMOTFIX EXE    19088   2-14-90  10:33p
+SINGLFIX EXE    19088   2-15-90  10:47p
+THREEFIX EXE    19088   2-14-90  10:38p
+THREWFIX EXE    19088   2-14-90  10:42p
+THRESFIX EXE    19088   2-14-90  10:41p
+MAXCOFIX EXE    19760   2-14-90  10:50p
+FRAMEFIX EXE    19408   2-15-90  10:19p
+SINGAFIX EXE    19216   2-10-90   8:38p
+THREAFIX EXE    19216   2-10-90   8:38p
+THREXFIX EXE    19168   2-10-90   9:10p
+SINXFFIX EXE    19168   2-10-90   9:38p
+RECOVER  EXE    22672   2-14-90  10:51p
+NEMAFIX  EXE    20192   2-14-90  10:44p
+WIREFIX  EXE    19200   2-14-90  10:56p
+FILES    TXT        0   2-17-90  10:44p
+       15 File(s)     82944 bytes free
+```
+{% endraw %}
+
+## MESSAGE1.TXT
+
+{% raw %}
+```
+
+          ╔════════════════════════════════════════════════════╗
+          ║   YOUR COMPUTER IS GOING TO INSTALL THIS PROGRAM.  ║
+          ║   IT WILL CREATE A DIRECTORY CALLED "MOTORS" AND   ║
+          ║   COPY ALL FILES FROM DRIVE [A] TO THE "MOTORS"    ║
+          ║   SUBDIRECTORY.THESE FILES HAVE BEEN ZIPPED TO     ║
+          ║   REDUCE THE NUMBER OF DISKS REQUIRED FOR THIS     ║
+          ║   PROGRAM.THEY WILL BE UNZIPPED IN THE "MOTORS"    ║
+          ║   SUBDIRECTORY AND THE FILES WITH THE "ZIP"        ║
+          ║   EXTENTIONS WILL BE ERASED TO FREE UP YOUR HARD   ║
+          ║   DRIVE SPACE.AFTER THIS, A VIDEO CONFIGURATION    ║
+          ║   PROGRAM WILL BE EXECUTED IF NECESSARY.FOLLOW THE ║
+          ║   DIRECTIONS.YOUR PROGRAM WILL RUN AFTER THE       ║
+          ║   CONFIGURATION IS COMPLETED.                      ║
+          ║                                                    ║
+          ║    PRESS [CTRL-C] TO EXIT THIS BATCH FILE IF THIS  ║
+          ║   PROCEDURE IS NOT DESIRED.                        ║
+          ║                                                    ║
+          ║            THANKS FROM,                            ║
+          ║                           FUTURE SYSTEMS           ║
+          ╚════════════════════════════════════════════════════╝
+
+```
+{% endraw %}
+
+## MESSAGE2.TXT
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+          ╔════════════════════════════════════════════════════════════╗
+          ║  PLEASE INSERT DISK #2 AND PRESS ENTER WHEN YOU ARE READY. ║
+          ╚════════════════════════════════════════════════════════════╝
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
+
+## SYSFILES.TXT
+
+{% raw %}
+```
+
+ Volume in drive B has no label
+ Directory of  B:\
+
+NEC      EXE    23728   2-17-90   2:46p
+FILES    TXT        0   2-17-90  10:43p
+        2 File(s)    336896 bytes free
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1977
 

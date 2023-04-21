@@ -48,6 +48,7 @@ machines:
 
 ## AUTODIAL.BAS
 
+{% raw %}
 ```bas
 12000 '---------------------- AUTO PHONE DIALER -------------------------------
 12010 DEFINT A-Z:ON ERROR GOTO 15000:COMMON N,RAN$,IN$,NBR$,SRT$,S,CR$,ESC$:SRT$=RAN$+".SRT":DIM I1$(1000),I1(1000)
@@ -160,9 +161,11 @@ machines:
 15030 I$=INKEY$:IF I$=CHR$(13) THEN RESUME ELSE 15030
 15040 ON ERROR GOTO 0
 ```
+{% endraw %}
 
 ## BASECONV.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -369,9 +372,11 @@ machines:
 24999 END
 25000 CLS:BEEP:BEEP:BEEP:LOCATE 12,12:PRINT N$" IS NOT ALLOWED":FOR J=1 TO 2000:NEXT :GOTO 10
 ```
+{% endraw %}
 
 ## CONVERT.BAS
 
+{% raw %}
 ```bas
 10 ' COPYRIGHT 1982, RICHARD M. SCHINNELL
 20 ' This Program is called CONVERT.BAS VER 1.1 (2-13-83)
@@ -450,9 +455,60 @@ machines:
 740 NEXT I
 750 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #187, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  AUTODIAL.BAS         CRC = 6F 2F
+
+--> FILE:  CONVERT .BAS         CRC = 8F CF
+
+--> FILE:  EZSIG3  .HLP         CRC = 92 77
+
+--> FILE:  HAYSMODM.BAS         CRC = 7C 4D
+
+--> FILE:  KILLNULL.BAS         CRC = 8A 3E
+
+--> FILE:  PC-SPEAK.BAS         CRC = AE 18
+
+--> FILE:  TALK450 .DOC         CRC = 26 8F
+
+--> FILE:  TALK450 .MRG         CRC = 2E 2B
+
+--> FILE:  BASECONV.BAS         CRC = 75 CF
+
+--> FILE:  XXX     .            CRC = E3 B1
+
+ ---------------------> SUM OF CRCS = F4 52
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## HAYSMODM.BAS
 
+{% raw %}
 ```bas
 10 CLS : KEY OFF : FOR A = 1 TO 10 : KEY A,"" : NEXT : DEF SEG : POKE 106,0
 20 PRINT : PRINT
@@ -506,9 +562,11 @@ machines:
 1000 PLAY "T50L48MNAMSAA"
 1010 RETURN
 ```
+{% endraw %}
 
 ## KILLNULL.BAS
 
+{% raw %}
 ```bas
 10 INPUT "Name of file";OLD$
 20 OPEN OLD$ FOR INPUT AS #1
@@ -523,9 +581,11 @@ machines:
 110 NAME "NEW" AS OLD$
 120 END
 ```
+{% endraw %}
 
 ## PC-SPEAK.BAS
 
+{% raw %}
 ```bas
 10 REM ************* MY COMMUNICATION by Larry E. Jordan, 5-7-82 **********
 11 '                                     Telephone (301)340-2466
@@ -720,6 +780,7 @@ machines:
 1780 LOCATE RC,CC 'restore position of cursor
 1790 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

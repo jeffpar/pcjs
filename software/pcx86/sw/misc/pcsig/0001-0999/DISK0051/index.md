@@ -56,8 +56,64 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #51, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  GOMOKU  .PAS         CRC = 25 70
+
+--> FILE:  RAMDISK .ASM         CRC = 6D F3
+
+--> FILE:  GOMOKU  .EXE         CRC = BE CA
+
+--> FILE:  HYPERDRV.DOC         CRC = 8C 19
+
+--> FILE:  HDS320  .EXE         CRC = D7 8E
+
+--> FILE:  HDD512  .EXE         CRC = 8B E0
+
+--> FILE:  INTERUPT.MAC         CRC = 7C 1E
+
+--> FILE:  FUTRDATE.BAS         CRC = 4B 65
+
+--> FILE:  FUTRDATE.DOC         CRC = B2 F4
+
+--> FILE:  GOMOKU  .DOC         CRC = 46 42
+
+--> FILE:  FOUR    .EXE         CRC = B6 C0
+
+--> FILE:  TMDAY   .BAS         CRC = FD 3B
+
+--> FILE:  PCGLOBE .BAS         CRC = 90 A8
+
+ ---------------------> SUM OF CRCS = 47 10
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## FUTRDATE.BAS
 
+{% raw %}
 ```bas
 1 ' (PC)^3 Software Submission FUTRDATE authored on February 14, 1983 by
 2 '
@@ -117,9 +173,427 @@ machines:
 14000 X$=INKEY$:IF X$="" THEN 14000 ELSE IF X$=CHR$(27) THEN KEY ON:END ELSE RUN
 65000 '         SAVE"futrdate",a
 ```
+{% endraw %}
+
+## FUTRDATE.DOC
+
+{% raw %}
+```
+                    DOCUMENTATION FOR FUTRDATE.BAS
+
+			Copyright 1983 by Michael Csontos
+					  3228 Livonia Center Road
+					  Lima, New York 14485
+
+
+	This program may replace a calendar for arranging meeting or travel
+schedules. However it is important to understand the assumptions made in its
+operation. 
+
+	The first entry to the program is a starting date. Pressing <Enter> at
+this time will enter the date accessed by the BASIC [DATE] function. In order
+for this to be the correct current date it must be initialized by the [DATE]
+command in DOS (perhaps automaticly by an AUTOEXEC.BAT file from a built-in
+real time clock) or by the BASIC entry [DATE$="mm-dd-yy"] before this program
+is run.
+
+	If you choose to enter a starting date it may be in any form acceptable
+to the BASIC [DATE$] command. This is fairly flexible, allowing mm/dd/yy,
+m-d-yyyy, 0m/0d/yy and ohter variations for any year between 1980 and 2099.
+If the entry is wrong you are asked to try again. This checks for day 31 in 
+30 day months, Feb. 29ths, and other errors besides format.
+
+	You will then be asked to enter, one after the other, years, months,
+weeks, and days. The program will accept any whole number and assume 0 if
+enter is pressed without an entry. The numbers are not limited by the maximum
+in the next higher unit; i.e. 20 months or 60 weeks are ok.
+
+	Next the program calculates and displays a new date. The rules for
+this calculation are as follows.
+
+		Years are added as whole numbers. One year from now will be
+the same day of the same month with the year incremented by one.
+
+		Months are also added as whole numbers, with the excess over
+twelve converted to years and added as years. Thus six months from now will
+be the same day of the month six months from now.
+
+	If the result of either of these calculations is a February 29 that
+is not a leap year, then the result will be February 28.
+
+	Weeks and days are handled differently. Weeks are converted to days,
+then the date resulting from the entered date and the years and months entered
+is incremented day by day for number of days and converted weeks entered.
+The perpetual calendar built into the [DATE$] function is used to adjust for
+the month lengths and leap years. This process is time consuming so if you 
+enter a year as 51 weeks,1 day or as 365 days it will take a few seconds to
+get the result.
+
+	The day of week is calculated and the result is displayed both in
+words (Fri., Feb. 25, 1983) and as a [DATE$] entry (02-25-1984). If you have
+entered a combination of years/months and weeks/days that would result in a
+Feb. 29 on a non leap year you will get a result like "Fri., Mar. 1, 2097 or
+02-28-2097". I am as confused as the computer as to which is appropriate so
+I haven't tried to resolve the conflict.
+
+	After the result is displayed you may press <Esc> to return to BASIC
+or press any other key to recycle the program.
+
+	If you have entries such as a start date that you will be using 
+repeatedly, remember that you can program them into the function keys by 
+using the BASIC [KEY] command before you run the program. For example:
+
+	KEY 8, "12/25/83"
+
+will set <F8> to enter Christmas '83 when pressed.
+
+
+		             ---***---
+
+
+	The program FUTRDATE.BAS and the file FUTRDATE.DOC are
+	made freely available for non-exclusive distribution
+	to members of the Picture City Personal Computer
+	Programing Club and through software exchange with
+	other users' groups as long as the author and (PC)^3
+	are fully credited.
+
+```
+{% endraw %}
+
+## GOMOKU.DOC
+
+{% raw %}
+```
+DESCRIPTION:
+
+GOMOKU is a game similar to tic-tac-toe but played on a 20 x 20 board.
+The object of the game is to place five marks in a row (instead of
+three).  It requires a monochrome adapter and 64K of memory.
+
+OPERATION:
+
+Insert the diskette into the default drive and type GOMOKU.  This
+should start the game.
+
+RULES:
+
+Either you or the computer can go first.  (It's easier to win if you go
+first, but it'll still be tough going.)  You alternate taking turns.
+Each turn consists of moving the cursor to the location that you want
+to place your mark, and then pressing ENTER.  In addition to the
+standard cursor moves (up, down, left, right), you can also move the
+cursor diagonally - HOME will move the cursor up and left, PGUP will
+move the cursor up and right, END will move the cursor down and left,
+and PGDN will move the cursor down and right.  After you make your
+move, the computer then selects its move.  This continues until neither
+player can move (a draw) or one player gets five marks in a row.  You
+can press DEL if you want to start over, and you can press ESC if you
+want to end the program.
+
+OTHER NOTES:
+
+The computer does not play a "perfect" game.  That is, although it is
+very hard to beat the computer, it uses a formula to compute a very
+good (although not necessarily the best) move, and if you play enough,
+you can beat the program.  This program is "borrowed" from the
+Hewlett-Packard Users' Group Contributed Library for the 3000 series
+computer, and was originally written in BASIC by Jobst Brandt.  I just
+did a translation from HP-BASIC to Pascal, so some of the variable
+names may be nebulous.  If you do translate it back to BASIC, be sure
+you compile it.  It is a very slow program if run interpretively.  As a
+strategy, when you first start playing, play in the center, since it
+leaves you with more options.  I'd tell you more, but it'd ruin your
+fun of trying to discover the technique of winning.
+
+```
+{% endraw %}
+
+## HYPERDRV.DOC
+
+{% raw %}
+```
+                HyperDrive Disk-Based User Guide
+
+                    Written by Jeff Duntemann
+                  Software by Mark S. Zachmann
+
+                      Last Revision 2/3/83
+
+The HyperDrive software is explicitly placed in the Public Domain 
+as of 1/1/83.  You may distribute it freely without obligation to 
+Starside  Engineering  or  the  author,  Mark  Zachmann.   Please 
+understand  that,  aside from this documentation,  no support  of 
+this  package should be expected from either Starside Engineering 
+or  the author.   Full ASCII source for the program is  provided, 
+which   may  be  modified  and  reassembled  using  the  IBM   PC 
+macroassembler.
+
+
+                          PLEASE NOTE!
+
+The  typeset hardcopy documentation of HyperDrive which  Starside 
+Engineering  provides  as  a  service  to  its  customers  is   a 
+copyrighted expression of this document,  and we would appreciate 
+your  not  photocopying  the hardcopy version of  this  document.  
+Thank you!
+
+                      Starside Engineering
+                PO Box 18306  Rochester NY 14618
+                         (716) 461-1027
+
+                          *   *   *   *
+
+
+I.  CONTENTS OF THE DISTRIBUTION DISK
+
+     The  HyperDrive  distribution  disk contains at  least  four 
+files.  They are:
+
+     RAMDISK.ASM              Source for HyperDrive
+     INTERUPT.MAC             Macro for interrupts
+     HDD512.EXE               HyperDrive set up for 512K
+     HDS320.EXE               HyperDrive set up for 320K 
+                                
+     There may be other files of one sort or another  (especially 
+configurations  for different combinations of size of ramdisk and 
+placement of ramdisk).
+
+
+II.  SETTING UP YOUR PC TO RUN HYPERDRIVE
+
+     A  HyperDrive ramdisk may be sized to any multiple of  160K.  
+In  practice,  we have not had the memory to try anything  larger 
+than a 320K ramdisk.   You need at least 320K to run  HyperDrive.  
+(This  means a full 64K on the PC system board and an add-on 256K 
+RAM card.)  With a 320K RAM PC,  you may set up a 160K ramdisk in 
+the top half of your RAM,  leaving the lower 160K for ordinary PC 
+DOS programs.  This is the way the distributed file HDS320.EXE is 
+set up.
+
+     If  you have a 512K RAM card in your PC,  you may set  up  a 
+"double-sided"  320K ramdisk in the top 320K of RAM,  leaving the 
+remainder of lower memory for DOS programs.   This is the way the 
+distributed  file HDD512.EXE is set up.   Other combinations  are 
+possible and set up without a great deal of effort.  For example, 
+you  could configure a "single-sided" ramdisk up at the top of  a 
+512K PC system if you needed lots of lower memory.   In theory, a 
+"triple-sided"  (interesting notion) ramdisk is possible--try  it 
+if you have the RAM.   The second 'D' in HDD512.EXE refers to the 
+double-sidedness  of  the  ramdisk  it  creates.   In  a  similar 
+fashion, the 'S' in HDS320.EXE denotes a single-sided ramdisk.
+
+     The first thing you must do to set up a ramdisk is to inform 
+the  PC that you have one more disk drive than you used to.   The 
+System Board DIP switch 1 positions 7 & 8 indicate to the PC  how 
+many  disk drives are installed in it.   (Leave the other  switch 
+positions alone,  and be careful if you use a blunt instrument to 
+change  switch positions.   It's easy to bump something you don't 
+want to bump!)
+
+     For setting up a ramdisk as drive C,  set DIP switch 1  this 
+way:
+                         12345678
+                        |      X |
+                        |X      X|
+                         --------
+
+     (Switches  which are not shown in our diagram do not  affect 
+HyperDrive operation and should not be disturbed.)
+
+     For setting up a ramdisk as your fourth disk drive,  drive D 
+(assuming you have a drive C of some other sort) set DIP switch 1 
+this way:
+
+                         12345678
+                        |        |
+                        |X     XX|
+                         --------
+
+
+     See  page  2-28 of the Technical Reference Manual  for  more 
+discussion of the DIP switch settings.
+
+     Next,  you  must  "fool" the PC into thinking that  the  RAM 
+memory  you  are using for the ramdisk does not  exist.   PC  DOS 
+cannot  be  "aware"  that  ramdisk  RAM is  on-line  or  it  will 
+interfere  with  the  operation  of  HyperDrive.   You  must  set 
+positions 1-4 of System Board DIP switch 2 so that the top of RAM 
+indication it holds is below the RAM you are using for a ramdisk.
+
+     For example,  if you have 320K of RAM in your PC and want to 
+use  the top 160K for a ramdisk,  you must "tell" the PC that  it 
+has only 160K of RAM.  To do this, set switch 2 this way:
+
+
+                         12345678
+                        |  XX    |
+                        |XX      |
+                         --------
+
+     This  is  how  you  set this DIP switch  for  use  with  the 
+HDS320.EXE version of HyperDrive.
+
+     As another example,  if you have 512K in your PC and wish to 
+use  the  top  320K of RAM as a ramdisk,  you must  set  the  DIP 
+switches  to  inform the PC that it has only 192K of RAM to  work 
+with, since 512-320=192.
+
+
+
+III.  RUNNING HYPERDRIVE
+
+     You invoke HyperDrive as you would any other .EXE file:
+
+     A>HDD512 (CR)
+
+     It will print a title message and immediately return control 
+to  DOS.   The ramdisk has been created.   Before you can use it, 
+you  must  format it.   It formats like any  other  disk  device.  
+Assuming you set it up to be drive C, you would type:
+
+     A>FORMAT C: (CR)
+
+     FORMAT will come back and tell you to insert a disk in drive 
+C;  ignore that request and press any key.   Once your ramdisk is 
+formatted, you can use it as you would any other disk drive.  
+
+     You will find that putting assembler or compiler files on  a 
+ramdisk can greatly increase the speed of compiles and assembles, 
+since  such  programs  move data to and from disk a  great  deal.  
+Just remember to move anything you want to save (like a  compiler 
+output file) to a "real" diskette before you power down!
+
+     Hyperdrive  has  a feature which may save  you  considerable 
+aggravation  in  the  event of systems  crashes.   If  a  program 
+running  under  DOS  goes  into the Twilight Zone  and  you  must 
+reboot, you need not lose all files in your ramdisk.  (Of course, 
+if the program you were running went berserk and filled RAM  with 
+trash  before  it  died you're out of luck.)  HyperDrive  has  an 
+option  which will re-create the ramdisk in RAM without the  need 
+to reformat it.   With this option,  you can re-boot your PC  and 
+still  find your files waiting for you in your ramdisk.   This is 
+the "OLD" option.
+
+     To  re-build a ramdisk without destroying files  which  were 
+there before a re-boot, type:
+
+     A>HDD512 OLD (CR)
+
+     You  need not format the ramdisk after using the OLD option.  
+The  OLD option assumes that the ramdisk is still in  memory  and 
+formatted;  if  you  use  the OLD option without  there  being  a 
+formatted  ramdisk  already in RAM you will probably  crash  your 
+PC.
+
+
+IV.  MODIFYING HYPERDRIVE
+
+     HyperDrive  is a means of mapping logical disk devices  onto 
+other  logical disk devices,  or onto areas of memory.   You  can 
+alter  this  mapping  either  by changing  the  source  file  and 
+reassembling it (if you own the Macroassembler) or using DEBUG to 
+change the assembled object code.
+
+     Using  DEBUG is probably easier.   One caution:   You  can't 
+modify  a file with an .EXE extension using DEBUG.   First RENAME 
+the HyperDrive program file to have a different  extension,  like 
+(for example) HDD512.ZZZ.  Then load it into DEBUG:
+
+     A>DEBUG HDD512.ZZZ (CR)
+
+     Display the 32 bytes from offset 03C0 through 03DF:
+
+     -D03C0-03DF (CR)
+
+     We  have  added some delimiters to the hex dump  you  should 
+see:
+                                             
+                                           |  1  A: 2  |
+052B:03C0  8E C0 8E DB 87 FE C3 00-00 00 00|00 00 00 01|01
+                                              0     1
+
+           1 B: 2  |  1  C: 2  |  1  D: 2  |
+052B:03D0  00 01 01|00 40 00 68|FF-FF FF FF|00 00 00 00 00
+           0    1     0     1     0     1
+
+     The  16  bytes  from  03CB to 03DA are a map  of  your  disk 
+system.   Each  group of two bytes identifies one side of a  disk 
+device.   The first 2 bytes is the map for Drive 0, Side 0, which 
+you know as side 1 of drive A:.  The second two bytes are the map 
+for Drive 0 Side 1.   The third set of two bytes are the map  for 
+Drive 1 Side 0 (the first side of the B: drive) and so on.
+
+     Notice the four bytes at offset 03D3:  00 40 00 68.  This is 
+the  map for both sides of the C:  disk drive.   It is actually a 
+pair of memory segment addresses.   It means that Drive 2 Side  0 
+is  mapped into RAM at segment 4000 and Drive 2 side 1 is  mapped 
+into  RAM at 6800.   (For those of you not familiar with  Intel's 
+memory address notation,  the least significant byte of a  2-byte 
+address offset or segment always comes first in memory.)
+
+     The  important  thing  to notice about the map is  that  the 
+first  four byte pairs (encompassing disk drives A:  and B:)  map 
+onto themselves.   That is,  Drive 0,  Side 0 is mapped as 00 00.  
+You could remap Drive 0, Side 0 into RAM by replacing the pair of 
+bytes at 03CB with a segment address.  If you were to replace the 
+byte at 03CC with 24H, you would see this:
+
+                                           |  1  A: 2  |
+052B:03C0  8E C0 8E DB 87 FE C3 00-00 00 00|00 24 00 01|01
+                                              0     1
+
+           1 B: 2  |  1  C: 2  |  1  D: 2  |
+052B:03D0  00 01 01|00 40 00 68|FF-FF FF FF|00 00 00 00 00
+           0    1     0     1     0     1
+
+
+     This  would  map side 1 of disk A:  into RAM  as  a  ramdisk 
+existing  at segment 2400.   (This is not recommended unless  you 
+know  what you're doing and what the consequences might be.)  You 
+could also map Disk 0,  Side 0 onto another disk drive.   Suppose 
+you changed the map to look like this:
+
+                                           |  1  A: 2  |
+052B:03C0  8E C0 8E DB 87 FE C3 00-00 00 00|01 01 00 01|01
+                                              0     1
+
+           1 B: 2  |  1  C: 2  |  1  D: 2  |
+052B:03D0  00 01 01|00 40 00 68|FF-FF FF FF|00 00 00 00 00
+           0    1     0     1     0     1
+
+
+     This  would  map side 1 of disk A:  onto side 2 of disk  B:, 
+which  is,  again,  something  you shouldn't do unless  you  have 
+really  thought it through and understand what's  going  on.   We 
+show  you these possibilities mostly to give you a flavor for how 
+disk device mapping works and what it does.
+
+     Once you have altered the map the way you want it,  save the 
+program back out to disk and RENAME it as an .EXE file.   (If you 
+recall,  we changed the file extension to .ZZZ to allow DEBUG  to 
+work properly with it.)
+
+     If you have no place to put a disk device,  say,  the second 
+side  of  a single-sided ramdisk,  or all of drive D in a  three-
+drive  system,  fill  the unnecessary positions in the  map  with 
+FF's.  (We have done this in the above examples for drive D.)  If 
+you do a hex dump of HDS320.EXE, you will see that drive 2 side 1 
+(A.K.A.  Drive  C side 2--confusing,  isn't it?) is  filled  with 
+FF's.   This informs HyperDrive not to attempt to format the half 
+of the ramdisk which doesn't exist.
+
+     It's yours,  folks.   Use it in good health.   Pass it on to 
+those  who  don't have it.   Tell them you got it  from  Starside 
+Engineering.   Get  our catalog of other goodies which (while not 
+free) are cheaper than you might expect!
+
+```
+{% endraw %}
 
 ## PCGLOBE.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1                           'PC WORLD
 20 CLS:KEY  OFF                       'Karl Koessel
@@ -242,9 +716,472 @@ machines:
 1190 SCREEN 0,0,0,0:KEY  ON
 1200 END
 ```
+{% endraw %}
+
+## RAMDISK.ASM
+
+{% raw %}
+```
+;Version 2.1   1982    Mark S Zachmann
+;
+;	This program lets you totally remap the
+; disks on MS-DOS. You can map each side of a logical 
+; drive to any other side or to memory.
+;
+;	For example, a usual configuration would be
+; map drive 0, sides 0,1 to drive 0 sides 0,1 (no change)
+;     drive 1, sides 0,1 to drive 1 sides 0,1    "
+;     drive 2, side 0 to   segment  4000h
+;     drive 2, side 1 to   segment  6800h
+;
+;  this will let you use 256K for the MS-DOS system, and another
+; 320K of memory for a double-sided RAM disk, if you have a 512K 
+; board installed. ( for 576K total )
+
+;**********************************************
+; to alter this for your system:
+;   change the equates at locations 'DISKPTR'
+;    they come in order (0/0, 1/0, 0/1, 1/1, 0/2, 1/2, 0/3, ...
+;	and each entry says which to map to:
+;
+;	0h = side 0/disk 0
+;     100h = side 1/disk 0
+;       1h = side 0/disk 1
+;     101h = side 1/disk 1
+;       ...etc
+;     anything bigger than f00h is treated as a location in RAM,
+;    thus
+;     4000h = segment beginning at 4000:0000h
+;     6800h = segment beginning at 6800:0000h
+;	etc
+;*********************************************
+; also, 0FFFFh = return an error if this side is selected.
+
+; for my default setup: (disk A,B normal, C RAMdisk, ...)
+;	Note that the dip switches inside must then be set to
+; indicate 3 disk drives and 256K of memory. All disk operations
+; are transparent to the user.
+;	this is for two reasons:
+;(1) MS-DOS must feel that any RAMdisk memory does not exist
+;(2) MS-DOS needs to know how many drives (real or otherwise)
+;	there are
+; Note that the RAM disks must be FORMATted before use, unless
+; you use DISKCOPY to send data to them.
+;
+;
+;  SYNTAX:
+
+;	A>ramdisk		creates a ramdisk and writes F6 to each byte
+;				to eliminate possible parity errors on read
+;
+;	A>ramdisk old		creates a ramdisk, but does not overwrite
+;				old data. used if you had to reset
+;				(ctrl-alt-del) for some reason
+
+
+TITLE Double-Sided Diskette Support
+SUBTTL
+
+
+BASE	equ	0h	;Base of memory
+DiskInt	equ	4Ch	;Offset of int
+DISKETTE_STATUS equ	0441h
+DISK_POINTER	equ	078h
+bufr	equ	80h	; command line parm address
+
+
+;first the macro library must be in here
+
+	IF1
+Include Interupt.MAC
+	ENDIF
+
+;first macro ----
+
+	Prolog	DOUBLE
+
+  ASSUME DS:DOUBLE,CS:DOUBLE
+;----------------------------------------
+;----------------------------------------
+;----------------------------------------
+
+SUBTTL	Diskette I/O Call Entry Point
+
+COMMENT *   Actual Entry point 
+   On entry:
+	DL = logical disk number (0-n)
+	DH = 0 (side-1)
+   On call to disk I/O:
+	DL = physical disk number
+	DH = side number (0 or 1)
+	     DH=0 or 1 (1 if DL was odd)
+
+   For other registers...
+	See Reference Manual p.A-32
+
+IF reference is to memory_disk
+  {  Case:
+	RESET - pass to usual disk reset
+	STATUS - "	"	"
+	READ   - transfer buffer to memory
+	WRITE  - transfer memory to buffer
+	VERIFY  - do nothing (just like BIOS)
+	FORMAT  - fill sectors(s) with [DISK_BASE+8]
+
+   Always return successful completion code.
+	unless signaled otherwise by 0xFFFF assegment
+  }
+
+ Upon return, all registers except AX unchanged.
+	Memory references also set
+	DISKETTE_STATUS to 0.
+
+	*
+
+;---------------------------------------------
+;
+;	Actual diskette I/O filter routine
+;
+;---------------------------------------------
+Main	proc	far
+
+ENTRY:	STI	;Allow interrupts
+	push	DX	;So we can reset it later
+	cmp	AH,1	;Is it disk independent?
+	jle	USUAL	;Yes, do what is usual.
+
+; Now figure out which disk is involved.
+;	by table lookup. No validity check here.
+; The table will return a DX (DH - side, DL - drive)
+;	value for use or > 3FFh which implies a memory
+;	reference, in which case the two bytes
+;	are a starting segment number.
+; ** Special Case:
+;	if address is FFFF hex (impossible, ROM is there)
+;	we return an error code, so you can use 160K ramdisk
+;	effectively as single sided disk
+;	.Most DOS routines try to read side 2, hence this kludge
+;	for a 160K ramdisk
+
+	XCHG	BX,DX	;Need BX for indexing
+	SHL	BL,1	;*2 for word offset
+	add	BL,BH	;side parameter
+	shl	BL,1
+	xor	BH,BH
+	MOV	BX,CS:[BX+offset DISKPTR]	;address/map
+	xchg	BX,DX	;back again
+	cmp	DX,0FFFFh	;kludge ?
+	je	Doerror		;generate error, for opposite side
+				;of 160K ramdisk
+	cmp	DX,03FFh	;is memory ?
+	ja	short MEMdisk	;yes
+
+;----------------------------------------------
+;
+;Now call the operating system
+;	because call requires disk activity
+;
+;-----------------------------------------------
+
+USUAL:	pushf		; because OS does IRET
+			;which wastes a stack item.
+	call	cs:disket	;call BIOS
+
+;Return to calling routine
+
+ToDOS:	pop	dx	;old DX value, must be intact
+	ret	2	;keep flags intact
+Main	endp
+
+;----------------------------------------------
+;
+;	Use memory for disk
+; On entry:	DX -  starting SEGMENT
+;		other registers as in BIOS call
+;		old DX on top of stack
+;
+; On exit:
+;		All registers returned 
+;	to normal. AX set to status, and
+;	DISKETTE_STATUS set to 0.
+;	Also CY = 0, unless segment was FFFFh
+;
+;
+;-----------------------------------------------
+
+Doerror	proc	near		
+	clc
+	cmp	AH,5		;format operation?
+	mov	AH,0
+	je	ToDos		;if format, then say OK
+				;error routine for single
+	mov	AX,400h		;sided operation of ramdisk
+	stc
+	jmp	short ToDOS	;no need to do the push/pop stuff
+Doerror	endp
+
+
+MEMdisk	proc	near		;usual memory disk, can't return error
+; First calculate the starting address
+;	DX+CH*100h+CL*20h
+	push	DI
+	push	SI
+	push	DS
+	push	ES
+	push	CX
+	push	BX
+	push	AX
+	CLD		;always increment string moves
+
+; if parms change then leave reg's alone
+	xor	AX,AX
+	mov	AL,CL	;sector
+	dec	AX	;relative to 0
+	mov	CL,5
+	SHL	AX,CL	;*20h
+	add	AH,CH	;+track*100h
+	add	AX,DX	;+segment
+	mov	DS,AX	;now DS contains buffer addr
+
+	pop	AX	;get AX back, AL has count
+	push	AX
+	xor	CX,CX	;how many sectors
+	mov	CH,AL	;*256 for words to move
+
+; set up the parameters for DS:SI -> ES:DI
+;	i.e. a read operation
+	xor	SI,SI	; ->0
+	mov	DI,BX	; was ES:BX
+
+; now do the operation
+
+	cmp	AH,3
+	jb	short READ
+	je	short WRITE
+	cmp	AH,5
+	jb	short VERIF
+	je	short FORMAT
+	STC		;unknown, set error flag
+
+;----------------------------------
+;
+; Return to DOS by setting status
+;	to 0 (all OK) and then pop'ing
+;	registers (leave flags alone)
+;
+;-------------------------------------
+
+Memret	label	near
+	mov	AX,Base
+	mov	DS,AX
+	mov	BX,DISKETTE_STATUS
+	mov	BYTE PTR [BX],0
+	pop	AX
+	pop	BX
+	pop	CX
+	pop	ES
+	pop	DS
+	pop	SI
+	pop	DI
+	mov	AH,0	;Status NEC no problems!
+	CLC		;impossible to get error
+	jmp	short ToDOS
+MEMdisk	endp
+
+
+;--------------------------------------
+;
+;   Memory I/O routines.
+; On Entry:
+;	ES:DI = DMA address for transfer
+;	DS:SI - buffer address
+;	 CX   = number of words to transfer
+;
+;  On Exit:
+;	CY = 0
+;
+;------------------------------------------
+
+;----------------------------------
+;
+; Memory read
+;
+;----------------------------------
+
+READ	proc	near
+	rep movsw
+	jmp	short MEMret
+READ	endp
+
+;-----------------------------------------
+;
+; Memory write
+;
+;  On entry as in read
+;
+;------------------------------------------
+
+WRITE	proc	near
+	call	REVERS	;backwards move
+	rep movsw
+	jmp	short MEMret
+WRITE	endp
+
+;-----------------------------------------
+;
+; Memory Verify
+;	note that verify does nothing
+;	if you look at reference manual
+;	p.A-34 it is clear that
+;	verify only tries to read a track!
+;	which must work here
+;
+;-----------------------------------------
+
+VERIF	proc	near
+	jmp	short MEMret
+VERIF	endp
+
+;---------------------------------------
+;
+; Memory Format
+;
+;-----------------------------------------
+
+FORMAT	proc	near
+	call	REVERS	;source backwards
+	mov	AX,BASE
+	mov	DS,AX
+	mov	BX,DISK_POINTER
+	lds	BX,dword ptr [BX]
+	mov	AL,BYTE PTR [BX+8]	; Format char
+	mov	AH,AL	;Dup
+	rep	stosw
+	jmp	short MEMret
+FORMAT	endp
+
+
+;-----------------------------------
+;
+;	REVERS
+; Change Direction, i.e.
+;	XCHG	DS:SI,ES:DI
+;
+;------------------------------------
+
+REVERS	proc	near
+	mov	AX,DS
+	mov	BX,ES
+	mov	ES,AX
+	mov	DS,BX
+	xchg	DI,SI
+	ret
+REVERS	endp
+
+;--------------------------------------
+;
+; Permanent storage area
+;
+;--------------------------------------
+
+ 
+disket	LABEL	DWORD
+	DW	?
+	DW	?
+;you can patch this (before or after assembly)
+;or use the 7E and 7F system calls to set this
+;on the fly
+DISKPTR	label	WORD
+	dw	0,100h,1,101h	;my usual setup
+	dw	4000h,6800h	;C disk is all memory
+	dw	0FFFFh, 0FFFFh		;D disk is error
+	dw	12 dup(0)	;extra
+
+;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+;!!
+;!! everything after this is temporary
+;!!
+;!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+;---------------------------------------------
+;   This 'subroutine' sets up the operating
+;	system so that the ENTRY routine
+;	can map logical disks into physical
+;	disks and memory.
+;
+;   Store the old interrupt vector 13h
+;	at an indirect call location 'disket'.
+;	Then replace the vector
+;	with the user entry point (ENTRY).
+;   This has the effect of leaving the
+;	full user routine in memory until
+;	there is a warm start.
+;
+;   On entry:
+;	DS = origin of program segment
+;  Effect on registers is irrelevant.
+;
+;------------------------------------------
+
+
+; macro ---
+
+	Epilog	013h,Disket,DOUBLE
+
+;---------------------------------
+;
+; Fill Memory Disk areas with zero's
+;	for parity
+;
+;-----------------------------------
+
+;			 if Old then do not fill
+	mov	AX,CS:zzarg	; first word at 80h
+	cmp	AL,'O'
+	je	Nofl
+	cmp	AL,'o'		;u/l case
+	je	Nofl
+;
+; must not have been an O
+;
+	int	12h	;memory size(K) -> AX
+	mov	CL,6	;*64
+	shl	AX,CL	;gives segment #
+	CLD		;upwards
+	mov	BX,AX	;for loop convenience
+	mov	DX,0800H	;32K increment
+FILLUP:	mov	ES,BX
+	mov	AX,0F6F6h
+	xor	DI,DI	;from 0 base
+	mov	CX,4000h ;words/32k
+	rep stosw
+	mov	BX,ES
+	add	BX,DX
+	cmp	BH,0B0h	;video yet ?
+	jb	FILLUP
+
+;------------------------------------
+;
+; Configure the disks
+;
+;---------------------------------------
+
+Nofl:	jmp	CONFIG
+HIMSG:	db	'Disk reconfiguration program',13,10
+	db	' 1982, MSZachmann',13,10,'$'
+
+; macro ---
+
+	Finish	DOUBLE,250
+
+	end
+```
+{% endraw %}
 
 ## TMDAY.BAS
 
+{% raw %}
 ```bas
 10 '   c l o c k routine
 15 DEFINT A-Z
@@ -392,6 +1329,7 @@ machines:
 4090 TIME$ = X$
 4100 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

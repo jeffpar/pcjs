@@ -44,6 +44,47 @@ machines:
     you have worked on.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0537.TXT
+
+{% raw %}
+```
+Disk No:  537                                                           
+Disk Title: DBS-Kat File Librarian Package                              
+PC-SIG Version: S2.6                                                    
+                                                                        
+Program Title: DBS-KAT File Librarian Package                           
+Author Version: 2.25                                                    
+Author Registration: $27.50                                             
+Special Requirements: 384K RAM and DOS 2.1 or greater.                  
+                                                                        
+The purpose of the DBS-KAT software is to maintain a master catalog of  
+all disk filenames that can be inquired against quickly to inform       
+you which disk(s) contains the filename(s) you are looking for.         
+                                                                        
+Simply put, DBS-KAT requires that you physically label all your disks   
+starting with the label 0001 up through 9999 and that you stack your    
+disks sequentially in numeric order.  Now insert all of your disks      
+into your disk drive and let DBS-KAT ``look'' at each one of your       
+diskettes.  Its records each files vital inforamtion. By doing this,    
+DBS-KAT can always tell you quickly where something is you want.        
+                                                                        
+Now you can start using your disks to contain critically needed files   
+and put off upgrading the hard drive capacity of your computer.  You    
+can start thinking of your disks as being as hard disk subdirectories,  
+for you will be able to find out directory information about any file   
+you have worked on.                                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0537
 

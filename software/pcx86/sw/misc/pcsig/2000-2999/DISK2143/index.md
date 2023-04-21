@@ -48,6 +48,58 @@ machines:
     get from the best.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2143.TXT
+
+{% raw %}
+```
+Disk No: 2143                                                           
+Disk Title: Easy Format                                                 
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: EASY FORMAT                                              
+Author Version: 3.1                                                     
+Author Registration: $40.00                                             
+Special Requirements: None.                                             
+                                                                        
+The fun floppy disk formatter.  Powerful, flexible, fully customizable, 
+and easy to use.  Gives you complete control over every formatting      
+detail.  Supports all common diskette sizes.                            
+                                                                        
+EASY FORMAT is designed to meet all your diskette formatting needs,     
+providing four different methods of disk testing and six different      
+options for marking bad spots to make floppy disks more reliable.  Or   
+you can turn all disk testing off for very fast formatting.             
+                                                                        
+EASY FORMAT makes it possible to format two disks simultaneously in     
+two different drives, even if they're different capacities.  You can    
+place a volume label on each disk formatted and still make the disk     
+bootable with the DOS "SYS" command.  You can even put your own custom  
+"boot message" onto the disk.                                           
+                                                                        
+EASY FORMAT makes it easy to format a 360K disk in a 1.2M for use in    
+other 360K drives.  It can produce diskettes with either one or two     
+copies of the File Allocation Table (FAT).  It won't format hard        
+disks, so there is no danger in accidentally choosing the wrong drive   
+for formatting.                                                         
+                                                                        
+Everything from drives and disk sizes, format options, screen colors,   
+sound effects, and more can be customized.  Set up EASY FORMAT once     
+and it will remember your preferences the next time it is used.  Or     
+just flip a switch and EASY FORMAT changes languages.  English,         
+German, and Spanish are supported.  These are all the extras you only   
+get from the best.                                                      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2143
 

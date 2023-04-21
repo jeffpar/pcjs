@@ -36,6 +36,48 @@ machines:
     study verses by topic, by reference, or a combination of these.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2268.TXT
+
+{% raw %}
+```
+Disk No: 2268                                                           
+Disk Title: Scripture Master                                            
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Scripture Master                                         
+Author Version: 1.1                                                     
+Author Registration: $25.00                                             
+Special Requirements: 512K RAM.  Printer recommended.                   
+                                                                        
+For anyone interested in Bible verses, the books of the Bible, the      
+Disciples, or the Ten Commandments, here is a comprehensive software    
+package designed to facilitate the memorization of scripture. 104       
+passages are provided in each of the King James, New International, and 
+New King James translations.                                            
+                                                                        
+The program is menu-driven and easy to learn and use.  It checks verses 
+entered and displays errors, and can print on either index cards or 8   
+1/2 x 11 paper. Add verses to the provided translations, or add new     
+translations.  There are activities to memorize other biblical          
+information - the books of the Bible, Ten Commandments and Disciples are
+also provided.  Reports may be printed, or saved to disk and then viewed
+on-screen.                                                              
+                                                                        
+By utilizing two different study techniques you can quote a verse given 
+the reference, or given a verse you can cite the reference.  You may    
+study verses by topic, by reference or a combination of these.          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2268
 

@@ -64,8 +64,73 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILE1368.TXT
+
+{% raw %}
+```
+Disk No: 1368
+Disk Title: RGB^Techwriter
+PC-SIG Version: 1.1
+
+Program Title: RGB^Techwriter
+Author Version: 2.23
+Author Registration: $20.00
+Special Requirements: CGA, EGA, MCGA, or VGA.
+
+RGB^TECHWRITER is a wordprocessor specifically designed to fulfill the
+technical writing needs of engineers, scientists and students.
+Scientific notations, equations, and symbols not present on your
+keyboard are quickly available without the need for an extensive
+background in wordprocessing.  Instead of displaying various arcane
+notes, it uses color to identify such things as superscripts,
+subscripts, and other symbolic information.  This keeps your display
+relatively uncluttered and insures exact correspondence between screen
+and printer while allowing you to print complex equations and
+formulas.
+
+The easy-to-use menu gives you access to all of the standard
+wordprocessing functions such as: headers and footers, page numbering,
+search and replace, line centering and justification, underlining and
+bold print, text-block movement, page-break control, and fractional
+line spacing.  Written in assembly language, it's fast -- able to
+handle typing speeds of up to 120 WPM.  Individual files are limited
+to 62.8K characters, approximately 20 pages of printed material.
+
+File Descriptions:
+
+ATT473        Printer configuration file.
+DECLN03       Printer configuration file.
+DIABLO        Printer configuration file.
+EPSON80  RX   Printer configuration file.
+GUIDE??  PRN  Documentation file (6 files).
+GUIDE7   TWF  Documentation file.
+HPLJ          Printer configuration file.
+HPLJ     ME   Printer configuration file.
+HPTJ          Printer configuration file.
+IBMGP         Printer configuration file.
+IBMPRO        Printer configuration file.
+OKIDLCG  BAS  Printer configuration file.
+LASERJET BAS  Printer configuration file.
+OKI192   IBM  Printer configuration file.
+OKI92    OKI  Printer configuration file.
+READ     ME   Small text file.
+TI855         Printer configuration file.
+TI855    GM   Printer configuration file.
+TOSH341       Printer configuration file.
+TW       EXE  Main program
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
 ## LASERJET.BAS
 
+{% raw %}
 ```bas
 
 10 rem  The HP LaserJet printer requires special codes in order to start 
@@ -85,9 +150,11 @@ machines:
 55 rem  At the DOS prompt you can proceed to copy the documentation files to
 60 rem  the printer as described in the file READ.ME.
 ```
+{% endraw %}
 
 ## OKIDLCG.BAS
 
+{% raw %}
 ```bas
 10 REM OKI-DLCG: ALTERNATE CHARACTER SET LOADER FOR OKIDATA PRINTERS
 20 REM
@@ -292,6 +359,7 @@ machines:
 1130 REM script nu
 1135 DATA %A,?,46,8,0,56,64,0,68,42,16,10,4,8
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -18,6 +18,7 @@ machines:
 
 ## ERFIND.BAS
 
+{% raw %}
 ```bas
 
 '          ╔═════════════════════════════════════════════════════╗
@@ -229,6 +230,37 @@ machines:
   END SUB
 
 ```
+{% endraw %}
+
+## FILE3007.TXT
+
+{% raw %}
+```
+Disk No: 3007                                                           
+Disk Title: Add-Power PowerBASIC Library                                
+PC-SIG Version: S2.7                                                    
+                                                                        
+Program Title: Add-Power Lib for PowerBASIC                             
+Author Version: 2.7B                                                    
+Author Registration: Donation.                                          
+Special Requirements: PowerBasic 2.10d+, 640K RAM, and a hard disk for s
+                                                                        
+Contains many useful, tested PowerBASIC routines. Write complete        
+pulldown menu interfaces, rodent-aware, just by modifying the demo      
+program. Fancy entry routines for string or numeric data, phone numbers,
+dates, etc. (never use INPUT again!). Date arithmetic, get file dirs and
+diskspace, open a data-entry window, dialog box, let users customize    
+colors, push and pop screens, and much more! All in PB units. In daily  
+use by author and others (posted on CompuServe) for as many as four     
+years.                                                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

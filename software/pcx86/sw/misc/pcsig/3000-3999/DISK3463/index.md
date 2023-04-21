@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+
+
+NETWORK MARKETING SYSTEM 10.1
+
+Steps in setting up your files:
+
+1.  Prepare a directory on you Hard Disk. Call it NMS (it doesn't matter what
+    you call it) MD NMS
+2.  Copy the ALL THE FILES from the diskette to the NMS Directory.
+3.  Read the README file for last minute information.
+4.  Type NMSZIP and all the files will decompress in the NMS Directory.
+5.  After all the files have been decompressed you can erase the NMSZIP file
+6.  To start type NMS then press ENTER
+7.  Read the Help Screen when asked for USER CODE. (ie; type SAMP to get in)
+8.  To clean out the sample data provided, just go to DOS and DELETE the
+    data files (type DELDATA)
+    The next time you start the program, all the data files will be empty
+    awaiting your own information, product lists, etc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3463
 

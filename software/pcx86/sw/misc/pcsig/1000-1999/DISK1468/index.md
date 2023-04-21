@@ -34,8 +34,42 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILE1468.TXT
+
+{% raw %}
+```
+Disk No: 1468                                                           
+Disk Title: ZIP Insulation                                              
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Zip Insulation                                           
+Author Version: 1.0                                                     
+Author Registration: None specified.                                    
+Special Requirements: None.                                             
+                                                                        
+Save money on your home's heating and cooling bills!  The National      
+Institute of Standards and Technology wrote this program to help you    
+determine how much insulation your home really needs to be both         
+comfortable to live in and provide you energy savings of at least a     
+seven per cent return over inflation on your cost of insulating.        
+                                                                        
+To have the program calculate your insulation needs for having a        
+warmer/cooler, more energy efficient home, you simply answer a few basic
+questions: whether your home is new or used, what components can be     
+insulated (such as attic, walls, floor), costs of insulation, how your  
+home is heated and air-conditioned, and the efficiency of your furnace. 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
 ## ZIP.BAS
 
+{% raw %}
 ```bas
 'ZIP - LAST MODIFIED NOVEMBER 31, 1988
 'AUTHOR: STEVE PETERSEN, NATIONAL INSTITUTE OF STANDARDS AND TECHNOLOGY (301) 975-6136
@@ -1739,6 +1773,7 @@ RETURN
 
 
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

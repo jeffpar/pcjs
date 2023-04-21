@@ -14,6 +14,44 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2712.TXT
+
+{% raw %}
+```
+Disk No: 2712
+Disk Title: TrainBall
+PC-SIG Version: S1
+
+Program Title: TrainBall
+Author Version: 6/90
+Author Registration: $25.00
+Special Requirements: None.
+
+TRAINBALL is a model train layout pinball game for all age groups.
+Create layouts with switches, tunnels, bumpers, and other features.
+Three trains can be designed with up to seven cars to a train.  Objects
+on the user-designed screen affect the direction of the trains, which
+can fire missiles at other trains.  Switching is randomly controlled by
+the computer but train speed is controlled by the user.  If any of the
+trains collide, there is an explosion and the game ends.
+
+TRAINBALL comes with two track layout files and three train files.
+Select from the existing files, edit them, or create your own.  Creating
+screen layouts and trains can be difficult and confusing for those
+unfamiliar with ASCII characters.  These files give inexperienced users
+an opportunity to practice and learn.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2712
 

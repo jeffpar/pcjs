@@ -29,6 +29,40 @@ machines:
     again?
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1590.TXT
+
+{% raw %}
+```
+Disk No: 1590                                                           
+Disk Title: Aggravation                                                 
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: AGGRAVATION                                              
+Author Version: 1.1                                                     
+Author Registration: $5.00                                              
+Special Requirements: CGA.                                              
+                                                                        
+At last, the PC has it's own version of that old favorite board game,   
+Aggravation.  This is the same game that you played as a kid in summer  
+camp or at the dining room table with the family.  Play with up to three
+others or challenge the computer - you still get your markers sent back 
+to the Start.  Play is fast, the computer rolls the dice and you can    
+always reach your men.  The only thing missing is that little grin on   
+your older sister's face as she sweetly inquires if you want to play    
+again?                                                                  
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1590
 

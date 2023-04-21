@@ -32,6 +32,41 @@ machines:
     transferred to CAD programs via DXF files.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0926.TXT
+
+{% raw %}
+```
+Disk No:  926                                                           
+Disk Title: CC-Surveyor 1 of 2 (also 1029)  (Disk 1 of 2)               
+PC-SIG Version: S3.0                                                    
+                                                                        
+Program Title: CC-Surveyor                                              
+Author Version: 4                                                       
+Author Registration: $300.00                                            
+Special Requirements: 640K RAM, EGA or VGA, and a hard drive.           
+                                                                        
+CC-SURVEYOR is designed for civil engineers and land surveyors as an aid
+for Generic CADD.                                                       
+                                                                        
+Create points, point numbers, and lines from maps of record or legal    
+descriptions.  Then Generic CADD quickly loads the boundary, letting you
+get started with the building layout or lot layout within CADD.  It     
+includes traverse, inverse, sideshot, bearing, and distance intersection
+routines, area, inscribe curve, rotate/translate scale, and other       
+point-manipulation utilities.  Points can also be transferred back to   
+CC-SURVEYOR from Generic CADD.                                          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0926
 

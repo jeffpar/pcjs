@@ -31,6 +31,42 @@ machines:
     baseball fans.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1400.TXT
+
+{% raw %}
+```
+Disk No: 1400
+Disk Title: Budget Baseball
+PC-SIG Version: S1.1
+
+Program Title: Budget Baseball
+Author Version: 1.6
+Author Registration: $19.95
+Special Requirements: CGA.
+
+Bring big league baseball to your den with BUDGET BASEBALL.  Become one
+of baseball's great managers.  You can replay a World Series game or pit
+a Series contender of one year against a team from another year.
+
+Along the way, you can alter the course of the game by controlling
+batters, runners and pitchers.  You can even alter infield placement,
+call for intentional walks and display the team rosters.  You can tell
+the batter to bunt, take a pitch, try to fly out or go for a home run.
+On base, you can tell the runner to try and steal.  A marvelous game for
+baseball fans.
+
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1400
 

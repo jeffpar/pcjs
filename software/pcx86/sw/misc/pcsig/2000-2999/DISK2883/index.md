@@ -14,6 +14,39 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2883.TXT
+
+{% raw %}
+```
+Disk No: 2883                                                           
+Disk Title: PCX-Show                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PCX-Show                                                 
+Author Version: 4.0                                                     
+Author Registration: $89.95                                             
+Special Requirements: 348K RAM and EGA.                                 
+                                                                        
+PCX-SHOW is a highly stylized screen presentation program from PC WEST  
+Software & Services of Phoenix, Arizona.  The program allows the user to
+create customized screen presentations using pictures/screens saved or  
+captured in the PCX file format. PCX-SHOW features include multiple     
+screen fades and segues, special effects, kaleidoscope screen effects,  
+text display using customized and computer fonts, border and screen     
+clearing effects, and more. Accompanying the package is a demo script   
+to get the new user started.                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2883
 

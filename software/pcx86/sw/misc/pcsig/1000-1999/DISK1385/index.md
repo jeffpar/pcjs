@@ -27,6 +27,50 @@ machines:
     CPU's sign and carry flags are also displayed.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1385.TXT
+
+{% raw %}
+```
+Disk No: 1385
+Program Title:  HDBCALC version 1.0
+PC-SIG version 1
+
+HBDCALC is a 16-bit calculator made for programmers.  It performs
+calculations entered in hexadecimal, decimal or binary, or a mix of the
+three and shows the answer in all three number bases.  Converting a
+number from one base to another is instantly done.  Both mathematical
+and logical operations are handled, including add, subtract, SHR, SHL,
+AND, NOT, XOR and OR functions.
+
+Synopsis:  16-bit calculator handles hex, decimal and/or binary
+computations.  A programmer's delight.
+
+Usage:  Programming/Math/Calculator.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00 entitles you to a memory resident
+version of the program.
+
+File Descriptions:
+
+HDBCALC  COM  Main program.
+HDBCALC  DOC  User guide.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1385
 

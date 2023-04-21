@@ -51,6 +51,94 @@ machines:
     more than 100 screens of context-sensitive help.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1414.TXT
+
+{% raw %}
+```
+Disk No: 1414
+Program Title: SS1 version 2.0 (Disk 1 of 2)
+PC-SIG version 1
+
+This combo of programs will solve 70% of your computing needs!  The two
+disk set combines a word processor, a list/data manager, communications,
+a mid-size spreadsheet, and a file and directory browser.  To make the
+program even more comprehensive, pop-up aids are a keystroke away
+anywhere in the system.  These include a calculator, an aid for graphing
+data, file/directory viewing, DOS shell interface and a utility for
+making macros or smart keys.
+
+Packed with features, the word processor offers functions normally found
+only in the top of the line packages.  The commands are unique to this
+program, but they are easy to learn and fast.  The mailing list manager
+uses standard text files, can edit columns, and sort, select and print
+records as reports or mailing labels.  The spreadsheet provides all the
+standard functions, plus handling multiple pages.
+
+The communications program is one of most general on the market, making
+it capable of communicating through almost every modem.  However, this
+tremendous flexibility may make it difficult to configure for your
+particular system the first time you use it.  The file and directory
+browser/manager, on the other hand, is fairly easy to use and a great
+help in dealing with hard disk housekeeping.  You have all the commands
+found in many separate programs at your fingertips: backups, deletions,
+printing, viewing and directory alterations.
+
+The pop-ups include a calculator, file and directory checker, a print
+screen utility, a graph maker, and programmable "hot" or "smart" keys.
+The calculator supports decimal, hex and binary for basic arithmetic
+functions.  The help system provides instant access to more than 100
+screens of context-sensitive help.
+
+Program Limitations: This is an evaluation copy and, while it is fully
+functional, there are limitations.  The spreadsheet, 64 columns by 255
+rows, is only half the size of the full program.  The Spell Checker
+dictionary is omitted along with almost half of the system
+documentation.  Users who register their copy will receive a full
+system, a printed manual, a set of quick reference cards, support, and
+update news.
+
+Synopsis:  Spreadsheet, word processor, and communications combo with a
+selection of pop-up desktop functions.
+
+Usage:  Wordprocessor/Spreadsheet/Communications/Disk File
+Management/Calculator.
+
+Special Requirements:  360K memory.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $50.00
+
+File Descriptions:
+
+SS1      SP   Spreadsheet overlay.
+SS1      S    Spell list.
+SS1      PR   Print/format overlay.
+SS1      P    Phone list aid.
+SS1      LM   List manager overlay.
+SS1      HLP  Help file.
+SS1      FM   File manager overlay.
+SS1      ED   Word processor overlay.
+SS1      CO   Communications overlay.
+SS1      A    ASCII table aid list.
+SS1      PRN  Printer parameter file.
+SS1      OVL  Aids overlay.
+SS1      COM  Main program.
+README        User information.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1414
 

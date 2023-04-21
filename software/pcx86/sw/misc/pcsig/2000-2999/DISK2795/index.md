@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2795.TXT
+
+{% raw %}
+```
+Disk No: 2795
+Disk Title: New Print Shop Library
+PC-SIG Version: S1
+
+Program Title: New Print Shop Library
+Author Version: 08/90
+Author Registration: None.
+Special Requirements: New Print Shop.
+
+This disk contains a library of over 1000 pieces of clipart for the New
+Print Shop. It features people, places, and just about anything else you
+can think of.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2795
 

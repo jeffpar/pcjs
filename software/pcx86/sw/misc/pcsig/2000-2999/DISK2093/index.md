@@ -39,6 +39,49 @@ machines:
     setting the absolute position of the cursor, and more.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2093.TXT
+
+{% raw %}
+```
+Disk No: 2093                                                           
+Disk Title: FlashPac Pascal Library 2 of 2 (1982)                       
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: FlashPac Pascal Library                                  
+Author Version: 3.21                                                    
+Author Registration: $50.00                                             
+Special Requirements: A version of Turbo Pascal.                        
+                                                                        
+These low level Turbo Pascal routines access the video display,         
+keyboard, printer, disk, mouse devices, and a couple of DOS functions.  
+These routines are not intended to replace the standard features of     
+Turbo Pascal, but add to and extend the Turbo Pascal programming        
+environment for the MS-DOS operating system.                            
+                                                                        
+To simplify the use of these routines, the number of global variables   
+needed for this library has been kept to a minimum.  All functions in   
+the library were written in Assembly language using the Pascal          
+parameter passing conventions.                                          
+                                                                        
+FPDISK supports several DOS function calls that use byte streams when   
+accessing disk files.  FPKBD supports BIOS and DOS keyboard function    
+calls.  FPMOUSE supports basic mouse functions, including a mouse event 
+handler.  FPPRT supports BIOS printer functions.  FPVIDEO consists of   
+several video routines that provide direct access to the video display. 
+Routines include saving and restoring the screen, framing windows,      
+setting the absolute position of the cursor, and more.                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2093
 

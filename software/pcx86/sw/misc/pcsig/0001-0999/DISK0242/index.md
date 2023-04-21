@@ -43,6 +43,58 @@ machines:
     *        CCC  Example data files (4 files)
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #242, version V1 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ST      .EXE         CRC = DF FC
+
+--> FILE:  ST      .HLP         CRC = A1 84
+
+--> FILE:  ST      .SPC         CRC = 4D 66
+
+--> FILE:  ST      .ARF         CRC = 00 00
+
+--> FILE:  LCFEB84 .CCC         CRC = B3 52
+
+--> FILE:  LCAPR84 .CCC         CRC = 86 C2
+
+--> FILE:  CNMAR84 .CCC         CRC = 82 D9
+
+--> FILE:  CNMAY84 .CCC         CRC = 2C 37
+
+--> FILE:  INSTALL .BAT         CRC = 0F A1
+
+--> FILE:  TRADER  .PRN         CRC = 93 B2
+
+ ---------------------> SUM OF CRCS = 5B 5D
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0242
 

@@ -46,6 +46,92 @@ machines:
     experience, so the lack of a manual is not a problem.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1728.TXT
+
+{% raw %}
+```
+Disk No: 1728                                                           
+Disk Title: Fone: International                                         
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Fone: International                                      
+Author Version: 5.3                                                     
+Author Registration: $6.95 per disk, or $14.95 for the set of three disk
+Special Requirements: 640K recommended, Hard Drive recommended          
+                                                                        
+If you are a home or small business computer user looking for a way to  
+bring long-distance telephone bills under control, you might be         
+interested in FONE. FONE is a database program for keeping track of     
+telephone numbers and addresses.  It compares the rates charged by      
+different long-distance services between the area code of the user and  
+that of the party being called, and, on a computer equipped with a      
+modem, FONE will automatically dial a number in its directory.  It can  
+be used to time calls and indicate the cost of the call based on the    
+long-distance service used and rate structure for that time of day.  It 
+also may be used to look up the correct area code for a particular city,
+or to provide a list of cities within a particular area code.           
+                                                                        
+FONE comes in three versions, each on its own disk; one for business    
+users, one for residential users, and a third for international callers.
+The author provides quarterly updates of rate information to registered 
+users.                                                                  
+                                                                        
+FONE combines features that will be familiar to users of communications 
+and address or mailing list database programs, although the combination 
+of features in a single program may be new.                             
+                                                                        
+Telephone services acknowledged in this program may not always be       
+complete or applicable for other parts of the country.  For example, ACC
+service, which is popular among residential and business users in many  
+areas of upstate New York is not included.                              
+                                                                        
+FONE can be used easily by someone with little computer experience by   
+following the menu prompts, so the lack of a manual is not a problem.   
+Some users may, in fact, appreciate this as a convenience.              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## FONINTRO.TXT
+
+{% raw %}
+```
+
+
+      
+                    F O N E (tm)   V E R S I O N   5 . 3
+
+
+          ONE MOMENT PLEASE, WHILE THE FONE(tm) PROGRAM IS LOADING...
+
+   
+
+                             A T T E N T I O N
+
+                      TELECOMMUNICATIONS SERVICES USERS
+
+
+ FONE(tm) is now available in three individually convenient data-base formats.
+
+              * RESIDENTIAL services (Including Canada & Mexico)
+              * BUSINESS services (Including Canada & Mexico)
+              * INTERNATIONAL services (Canada & Mexico not included)
+
+                                                            Serial No:  03711
+
+Copyright (c) 1988/89/90, by EUGENE L. WOODS, PE/EE.  All rights reserved.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1728
 

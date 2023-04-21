@@ -42,6 +42,70 @@ machines:
     lets you go on creating or editing a chart while you print another one.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1496.TXT
+
+{% raw %}
+```
+Disk No: 1496
+Disk Title: Charts Unlimited
+PC-SIG Version: 1.1
+
+Program Title: Charts Unlimited
+Author Version: 1.9
+Author Registration: $35.00
+Special Requirements: 512K RAM and CGA.
+
+CHARTS UNLIMITED integrates graphics and text processing into a single
+system to allow creation, editing, and printing of flow charts,
+organization charts, floor plans, electrical diagrams, Gantt charts,
+business forms, and many other documents.  Highly versatile, CHARTS
+UNLIMITED is valuable to engineers, architects, programmers, system
+analysts, teachers, and anyone with a need to draw charts.
+
+Charts are drawn on a worksheet 256 columns wide up to 1,000 rows long,
+a graphics area of four million pixels or dots.  A few keystrokes will
+bring up various geometric shapes, bar graph designs, flowchart arrows,
+math symbols, and more.  They can be displayed, moved, stretched,
+shrunk, saved, and replicated.
+
+Text can be entered anywhere as lowercase, uppercase, or boldface with
+most text editing features.  You can load text files from spreadsheets
+and word processors into your chart.
+
+Most dot matrix and laser printers are supported.  You can print your
+chart horizontally or vertically.  A magnification feature allows you to
+expand your chart or a portion of it up to 100 times.  A printer buffer
+lets you go on creating or editing a chart while you print another one.
+
+File Descriptions:
+
+???????? CU   Objects/symbols (7 files).
+CU       DOC  User guide.
+CU       EXE  Main program.
+CU       PIC  Startup screen.
+CU       SYM  CHARTS symbol.
+DRIVERS  EXE  Subprogram.
+EMPTY    OBJ  Empty object.
+HELP     HLP  Main help file.
+OBJECTS  HLP  Objects help file.
+PRINT    BUF  Print buffer.
+READ     ME   Initial information.
+SYMBOLS  HLP  Symbols help file.
+USER     OBJ  User object.
+USER     SYM  User symbol.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1496
 

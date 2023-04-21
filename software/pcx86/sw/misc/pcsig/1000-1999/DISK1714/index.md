@@ -49,6 +49,7 @@ machines:
 
 ## COLCONST.BAS
 
+{% raw %}
 ```bas
   CONST BLACK = 0
   CONST BLUE = 1
@@ -62,6 +63,7 @@ machines:
   CONST BLINK = 16
   CONST YELLOW = BRIGHT + BROWN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

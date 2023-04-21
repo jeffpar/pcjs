@@ -31,6 +31,7 @@ machines:
 
 ## APPENDIX.BAS
 
+{% raw %}
 ```bas
 100 REM Documentation for the Genealogy ON DISPLAY Programs
 110 REM All data is in the form of DATA statements.
@@ -462,9 +463,11 @@ machines:
 5180 DATA ".eof"
 5190 END
 ```
+{% endraw %}
 
 ## DIRECTOR.BAS
 
+{% raw %}
 ```bas
 100 REM Program Directory for the Notes and Sources ON DISPLAY Program
 110 REM All data is in the form of DATA statements.
@@ -959,9 +962,62 @@ machines:
 5850 DATA ".eof"
 5860 END
 ```
+{% endraw %}
+
+## FILES594.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  594  NOTES FOR ON DISPLAY                                    v1.2
+---------------------------------------------------------------------------
+Notes on Display is an extension of the Genealogy on Display program
+disk #90 in the library.  This program enhances and organizes the search for
+your ancestral past by allowing you to save notes upon each new find.
+ 
+ 
+--------------NOTES ON DISPLAY
+ 
+RUNFIRST BAS  Copy of the Cover Letter.  Like a README File.
+OVERVIEW BAS  General Concepts.  Displayed on the Screen.
+PRINTERS BAS  Modifications to use Different Printers.
+ 
+    Documentation
+    ----------------------------------------------------------------
+DIRECTOR BAS  The Program Directory.  What's What and How to Start.
+TABLEOFC BAS  User's Manual.  Table of Contents.
+INTRODUC BAS  User's Manual.  Introduction.
+GENERAL  BAS  User's Manual.  General Information.
+USINGTHE BAS  User's Manual.  Using the Programs.
+REFERENC BAS  User's Manual.  Reference Material and Sample Screens.
+APPENDIX BAS  User's Manual.  Appendix.
+ 
+    Main Program
+    -------------------------------------------------------------------
+NOTESAND BAS  Program to enter, inquire, personalize and report notes.
+VERIFILE      Verifies BASIC's Buffer Size
+ 
+    Data Files
+    ------------------------------------------------------------------
+SOURFILE      Sample Sources.  User can customize.
+TYPEFILE      Sample Types.  User can customize.
+HIGH          Highest Record Number formed and Highest used.
+ 
+    Other
+    -------------------------------------------------------------------
+CLEANDOC BAT  Batch file to erase all documentation files from data disk
+ 
+PC-SIG
+1030 D EAST DUANE AVE.
+SUNNYVALE CA., 94086
+PH# 408-730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## GENERAL.BAS
 
+{% raw %}
 ```bas
 100 REM Documentation for the Genealogy ON DISPLAY Programs
 110 REM All data is in the form of DATA statements.
@@ -1567,9 +1623,11 @@ machines:
 6920 DATA ".eof"
 6930 END
 ```
+{% endraw %}
 
 ## INTRODUC.BAS
 
+{% raw %}
 ```bas
 100 REM Documentation for the Genealogy ON DISPLAY Programs
 110 REM All data is in the form of DATA statements.
@@ -1979,9 +2037,51 @@ machines:
 4960 DATA ".eof"
 4970 END
 ```
+{% endraw %}
+
+## NOTES594.TXT
+
+{% raw %}
+```
+Program name:         Notes on Display (Ver 1.1) 
+ 
+Author name:          Melvin O. Duke
+Address:              P.O. Box 20836, San Jose, CA  95160
+ 
+Telephone Number:     (408)268-6637
+ 
+Suggested Donation:   $35.00 - $45.00
+ 
+Program Description:
+ 
+The Notes on Display program is for anyone considering the task of
+tracing their own or someone else's lineage into the past.  This
+program must be used in conjunction with the Genealogy on Display
+program provided on another diskette for maximum results.  As any-
+one who has undertaken this work has found out, the effort involved
+in keeping track of the huge amount of data accumulated, is over-
+powering.  This nifty program does that for the researcher with 
+practically no effort at all.  The investigator merely enters a
+record for each find made into the database with a short note des-
+cribing the find to clarify matters in the future.  To aid in the
+process, the user will enter some relevant facts, such as, the
+person to whom this find relates, the source of the find (i.e. city 
+state, church, etc.), the type of find (birth record, grave
+stone, etc.) and the date is usually helpful.  After a short while
+a huge database will have been built with facts relating to many
+of the people in the past.  Now this information can be viewed in
+some order and be made sense of.  You may view a selected person,
+source or even type from the database.  This data will be presented
+either on the screen or via the printed page.  I think anyone doing
+this type of work will find this program a breeze to use and help
+in the reseach.  Requires a minimum of 320K RAM.  A printer and
+two floppy disk drives would be nice.  
+```
+{% endraw %}
 
 ## NOTESAND.BAS
 
+{% raw %}
 ```bas
 100 REM NOTESAND Program
 110 REM Notes and Sources ON DISPLAY
@@ -3234,9 +3334,11 @@ machines:
 13030 RETURN
 13040 END
 ```
+{% endraw %}
 
 ## OVERVIEW.BAS
 
+{% raw %}
 ```bas
 100 REM Overview Program for Notes and Sources ON DISPLAY
 110 REM By:  Melvin O. Duke.  Last Updated 20 June 1986
@@ -3526,9 +3628,11 @@ machines:
 2950 '
 2960 KEY ON : END
 ```
+{% endraw %}
 
 ## PRINTERS.BAS
 
+{% raw %}
 ```bas
 100 LPRINT TAB(10);"Changes to Documentation Programs to support Other Printers."
 110 LPRINT
@@ -3559,9 +3663,11 @@ machines:
 360 FOR I = 1 TO 40 : LPRINT : NEXT I
 370 END
 ```
+{% endraw %}
 
 ## REFERENC.BAS
 
+{% raw %}
 ```bas
 100 REM Documentation for the Genealogy ON DISPLAY Programs
 110 REM All data is in the form of DATA statements.
@@ -4190,9 +4296,11 @@ machines:
 7150 DATA ".eof"
 7160 END
 ```
+{% endraw %}
 
 ## RUNFIRST.BAS
 
+{% raw %}
 ```bas
 100 REM RUNFIRST Program to show new users how to start
 110 PRINT
@@ -4220,9 +4328,11 @@ machines:
 330 PRINT "ON DISPLAY program, and how to use it."
 340 END
 ```
+{% endraw %}
 
 ## TABLEOFC.BAS
 
+{% raw %}
 ```bas
 100 REM Documentation for the Genealogy ON DISPLAY Programs
 110 REM All data is in the form of DATA statements.
@@ -4550,9 +4660,11 @@ machines:
 4180 DATA ".eof"
 4190 END
 ```
+{% endraw %}
 
 ## USINGTHE.BAS
 
+{% raw %}
 ```bas
 100 REM Documentation for the Genealogy ON DISPLAY Programs
 110 REM All data is in the form of DATA statements.
@@ -5450,6 +5562,7 @@ machines:
 9840 DATA ".eof"
 9850 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

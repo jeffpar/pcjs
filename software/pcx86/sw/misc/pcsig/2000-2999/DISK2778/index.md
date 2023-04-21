@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2778.TXT
+
+{% raw %}
+```
+Disk No: 2778
+Disk Title: EasyDial
+PC-SIG Version: S1
+
+Program Title: EasyDial
+Author Version: 3.6
+Author Registration: $20.00
+Special Requirements: None.
+
+Use your computer modem to dial your telephone for normal voice
+communication.  Too many numbers to remember?  EASYDIAL is for you.
+
+Use EASYDIAL to call your bank -- EASYDIAL remembers both the bank phone
+number and your account number.  A few keystrokes will do it.  Run from
+either the command line or in full menu mode.  Track the total time of a
+call and enter a comment for each one.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2778
 

@@ -34,6 +34,44 @@ machines:
     but context-sensitive help may be called at any time.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1950.TXT
+
+{% raw %}
+```
+Disk No: 1950                                                           
+Disk Title: Dos Practice                                                
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Dos Practice                                             
+Author Version: 11/06                                                   
+Author Registration: $25.00                                             
+Special Requirements: Hard  Drive.                                      
+                                                                        
+This program is a new approach to the development of proficiency and    
+speed in the use of DOS.  It is not a tutorial, and is not intended     
+simply to teach the basic knowledge needed to use a personal computer.  
+Rather, its purpose is to increase practical knowledge, skill, and speed
+in the use of DOS by providing what people need most: practice.         
+                                                                        
+Sessions of simulated interaction with DOS can be selected for whatever 
+topic or level of expertise is desired, whether the student is a novice 
+or has been using personal computers for years.  DOS PRACTICE is also a 
+very effective refresher in DOS usage, and compliments computer         
+tutorials, written courses, and classes taught by instructors.          
+Interaction with the program is mostly self-explanatory, but            
+context-dependent help may be called up at any time.                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1950
 

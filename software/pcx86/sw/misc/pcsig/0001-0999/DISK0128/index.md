@@ -26,6 +26,7 @@ machines:
 
 ## ANIMAL.BAS
 
+{% raw %}
 ```bas
 10 CLS
 100 PRINT "PLAY 'GUESS THE ANIMAL' WITH THE COMPUTER"
@@ -63,9 +64,11 @@ machines:
 9999 END
 10000 PRINT "NO ANIMAL FILES":RESUME 522
 ```
+{% endraw %}
 
 ## BANNER.BAS
 
+{% raw %}
 ```bas
 20 PRINT "WARNING !!!!! THE CAPS-LOCK KEY MUST BE ON !!! "
 30 PRINT "-----------------------------------------------"
@@ -160,9 +163,11 @@ machines:
 930 DATA ".",001,001,129,449,129,001,001
 940 END
 ```
+{% endraw %}
 
 ## BARIC.BAS
 
+{% raw %}
 ```bas
 2 GOSUB 5000
 5 S=1000-S*100
@@ -214,9 +219,103 @@ machines:
 10020 LOCATE 20,1:PRINT "do you want to play again?";
 10030 A$=INKEY$:IF A$="" THEN 10030 ELSE IF A$="y" THEN RUN
 ```
+{% endraw %}
+
+## CATALOG.TXT
+
+{% raw %}
+```
+ANIMAL  .BAS - Guess the animal game.  
+ANIMAL  .GME - Sample data file of animals for ANIMAL.BAS.
+BANNER  .BAS - Make large banners on the screen.
+LBANNER .BAS - Make large banners on the printer.
+BARIC   .BAS - Two person Tron like game.
+HAMURABI.BAS - Be king for a ten year term (game).
+PICTURE .BAS+- 3-D graphic demo (requires color/graphics).
+PINWHEEL.BAS - Animated program listing.
+KBD_FIX .BAS - Creates KBD_FIX.COM.
+KBD_FIX .COM - Increase keyboard buffer to 159 characters.
+DAY     .PRG - dbase II program to find day of week.
+DATE    .PRG - dbase II program to set date from system date.
+TIME    .PRG - dbase II program to get system time.           
+COMSTRIP.PRG - dbase II program to strip comments from other dbase II programs.
+GEMINI  .ABS - Fix to use DOS 2.0 graphic dump on Gemini printer.
+CATALOG .TXT - List of files on this disk.
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #128, version v1 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  BARIC   .BAS         CRC = C7 4D
+
+--> FILE:  PINWHEEL.BAS         CRC = E7 43
+
+--> FILE:  CATALOG .TXT         CRC = 8A C4
+
+--> FILE:  HAMURABI.BAS         CRC = D0 4D
+
+--> FILE:  ANIMAL  .BAS         CRC = 9B 08
+
+--> FILE:  PICTURE .BAS         CRC = 89 C5
+
+--> FILE:  BANNER  .BAS         CRC = 10 36
+
+--> FILE:  KBD_FIX .BAS         CRC = 07 90
+
+--> FILE:  LBANNER .BAS         CRC = 1A 33
+
+--> FILE:  KBD_FIX .COM         CRC = 56 25
+
+--> FILE:  DAY     .PRG         CRC = 97 20
+
+--> FILE:  DATE    .PRG         CRC = E8 B4
+
+--> FILE:  TIME    .PRG         CRC = A7 83
+
+--> FILE:  COMSTRIP.PRG         CRC = F0 33
+
+--> FILE:  ANIMAL  .GME         CRC = 57 C3
+
+--> FILE:  GEMINI  .ABS         CRC = 23 46
+
+--> FILE:  DBS     .PRT         CRC = 50 DB
+
+--> FILE:  README  .            CRC = 00 00
+
+--> FILE:  DBS     .EXE         CRC = 62 DF
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+ ---------------------> SUM OF CRCS = B9 FB
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## HAMURABI.BAS
 
+{% raw %}
 ```bas
 80 PRINT "Try your hand at governing ancient Sumaria"
 85 PRINT "successfully for a 10 year term of office."
@@ -336,9 +435,11 @@ machines:
 995 PRINT "SO LONG FOR NOW.":PRINT
 999 END
 ```
+{% endraw %}
 
 ## KBD_FIX.BAS
 
+{% raw %}
 ```bas
 10 DIM CHECK(48)
 20 FOR I= 1 TO 48:CHECK(I)=0:NEXT
@@ -432,9 +533,11 @@ machines:
 2050 DATA 248,215,143,245,115,41,38,228
 2060 DATA 164,112,28,45,128,71,11,183
 ```
+{% endraw %}
 
 ## LBANNER.BAS
 
+{% raw %}
 ```bas
 20 PRINT "WARNING !!!!! THE CAPS-LOCK KEY MUST BE ON !!! "
 30 PRINT "-----------------------------------------------"
@@ -529,9 +632,11 @@ machines:
 930 DATA ".",001,001,129,449,129,001,001
 940 END
 ```
+{% endraw %}
 
 ## PICTURE.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 105:SCREEN ,,3,3:KEY OFF:CLS
 20 P=300:Q=90:XP=250:XR=1.5*3.1415927#:YP=56:YR=1:ZP=64:XF=XR/XP:YF=YP/YR:ZF=XR/ZP:FOR ZI=-Q TO Q-1:IF ZI<-ZP OR ZI>ZP THEN GOTO 50
@@ -539,14 +644,17 @@ machines:
 40 X1=XX+ZZ+P:Y1=-YY+ZZ+Q:PSET(X1,Y1),1:NEXT XI
 50 NEXT ZI
 ```
+{% endraw %}
 
 ## PINWHEEL.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:CLS:DEF SEG=&H40:POKE 26,32:POKE 28,44:POKE 32,82:POKE 34,85:POKE 36,78:POKE 38,32:POKE 40,50:POKE 42,13:LIST
 2 LOCATE 6,0:PRINT CHR$(76)+CHR$(73)+CHR$(83)+CHR$(84)+STRING$(2,32);
 3 A$="I/-"+CHR$(92):FOR A=1 TO 48 : OUT 97,79: OUT 67,161: OUT 66,A: FOR C=1 TO A: NEXT:X$=MID$(A$,A-INT(A/4)*4+1,1):LOCATE 4,7:PRINT X$X$X$;:NEXT:GOTO 3
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

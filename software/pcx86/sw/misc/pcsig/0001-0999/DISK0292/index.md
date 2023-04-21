@@ -104,6 +104,215 @@ machines:
     VACATION BAS  Mini vacation demo.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES292.TXT
+
+{% raw %}
+```
+Disk No:  292                                                           
+Disk Title: SpaceWars and other games                                   
+PC-SIG Version: S1.4                                                    
+                                                                        
+Program Title: SpaceWar                                                 
+Author Version: 1.72                                                    
+Author Registration: $20                                                
+                                                                        
+The primary program on this disk, SPACEWAR, is an excellent asteroid    
+type arcade game.  The three versions, SWC for color graphics, SWATT    
+for the ATT 6300 using 640x400 graphics mode, and SWH for the Hercules  
+graphics card, provide good detail in a fast paced game.  Other games   
+include some Turbo Pascal offerings and a large number of BASIC games   
+and demos.  The large number of small simple BASIC demos with a few     
+Turbo programs to add spice make this an excellent package for the      
+novice programmer.                                                      
+                                                                        
+Special Requirements: Hercules or color graphics card, other            
+programs require BASIC                                                  
+                                                                        
+How to Start: To read DOC or TXT files, enter TYPE filename.ext and     
+press <ENTER>.  To run an EXE or COM program, just type its name and    
+press <ENTER>.  For instructions on running BASIC programs, please      
+refer to the GETTING STARTED section in this catalog.                   
+                                                                        
+Suggested Registration: $20.00                                          
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## SPACEWAR.DOC
+
+{% raw %}
+```
+	S P A C E W A R   D I S K    V E R S I O N    1 . 7 2
+
+
+SWC.EXE		Version of spacewar for the standard PC Color Graphics
+		Card in 640 X 200 resolution.
+
+SWH.EXE		Version of spacewar for the Hercules Graphics Card in
+		720 X 348 resolution.
+
+SWATT.EXE	Version of spacewar for the AT&T Computer in 640 X 400
+		resolution.
+
+SPACEWAR.DOC	SPACEWAR documentation file. ( This file. )
+
+
+
+	S P A C E W A R   G A M E    I N S T R U C T I O N S
+
+
+OBJECT:
+	Destroy the other ship before it destroys you.  Use your
+	PHOTON TORPEDOS or PHASERS to reduce its SHIELD energy.
+	A hit with no shields will destroy the ship.
+
+WEAPONS:
+	PHOTON TORPEDOS	The best offsensive weapon.  The torpedo takes
+			one unit of energy to fire and does four units
+			of damage to your opponent's shields.
+
+	PHASERS		A good defensive weapon if you are accurate.
+			The phaser requires one unit of energy to fire
+			and does two units of damage to your opponent's
+			shields.
+
+DEFENSE:
+	IMPULSE ENGINES	Used to move your ship in the direction you are
+			pointing.  Remember in space there is no friction,
+			to slow down you must turn your ship around and thrust
+			from the other direction.  The impulse engines use
+			about one unit of energy every half second.
+
+	CLOAK		Used to makes your ship invisible.  You can still move,
+			fire, hyper space, etc. but no one can see you.
+			Cloaking will use about one unit of energy every half
+			second.
+
+	HYPER SPACE	Hyper space is a quick way to get out of a bad
+			situation fast.  You pay eight energy units to use
+			hyper space, and you don't know where you will end up.
+COMMENTS:
+	You must have energy to use your weapons or defenses.  The 'E' bar on
+	your side of the bottom of the screen must display energy.  Your 'E'
+	bar energy is recharged from your Dilithium crystals at one unit every
+	two seconds.
+
+	Use your phasers to shoot incoming photon torpedos.  Those torpedos do
+	alot of damage.
+
+	If you hear the warning sound, someone's shield energy is below sixteen
+	units, and they are about to be distroyed.  The 'S' bar  on your side
+	of the bottom of the screen indicates you shield energy.  Use the
+	energy balance keys to increase your shield energy and protect yourself.
+	The energy balance keys for the left player are 'Z' and 'C' and for the
+	right player '1' and '3'.
+
+	Warning, touching the planet will drain your shields very fast so stay
+	away.
+
+	When using Gravity try to get in orbit.  Care must be used when firing
+	torpedoes in orbit.  If they don't hit something, they will come back
+	and hit you.
+
+	The Left Auto Robot is a good defensive player.  He is a crack shot and
+	hard to destroy.
+
+	The Right Auto Robot is an offensive player.  He will chase you around
+	space firing often.
+
+
+
+	S P A C E W A R    I B M  P C    F U N C T I O N    K E Y S
+
+
+	F1 = Exits to DOS in attract mode.
+	     Switchs to attract mode in when playing the game.
+
+	F2 = Starts the game.
+
+	F3 = Enables the Left Auto Robot Player.
+
+	F4 = Enables the Right Auto Robot Player.
+
+	F5 = Places a Gravity hole at the center of the screen.
+
+	F6 = Places a Planet at the center of the screen.
+
+	F7 = Freezes the action for attract or play mode.
+
+	F8 = Toggles the sound on or off.
+
+
+
+	S P A C E W A R    G A M E    K E Y S
+
+
+LEFT PLAYER KEYS
+		Q = FIRE PHASERS
+		W = CLOAK SHIP
+		E = FIRE PHOTON TORPEDO
+		A = ROTATE COUNTER-CLOCKWISE
+		S = IMPULSE ENGINES
+		D = ROTATE CLOCKWISE
+		Z = MOVE SHIELD ENERGY TO WEAPON ENERGY
+		X = HYPER SPACE
+		C = MOVE WEAPON ENERGY TO SHIELD ENERGY
+
+RIGHT PLAYER KEYS
+		7 = FIRE PHASERS
+		8 = CLOAK SHIP
+		9 = FIRE PHOTON TORPEDO
+		4 = ROTATE COUNTER-CLOCKWISE
+		5 = IMPULSE ENGINES
+		6 = ROTATE CLOCKWISE
+		1 = MOVE SHIELD ENERGY TO WEAPON ENERGY
+		2 = HYPER SPACE
+		3 = MOVE WEAPON ENERGY TO SHIELD ENERGY
+
+
+	S P A C E W A R   I S   U S E R   S U P P O R T E D
+
+
+	     SPACEWAR is distributed under the USER-SUPPORTED concept.
+	You are encouraged to copy and share this program with other users.
+	Please do not remove the copyright or the user-supported notice.
+	If you enjoy SPACEWAR, and want me to finish SPACE MINEZ your
+	contribution ($20 suggested) will be appreciated.  For a $30
+	contribution you will receive a floppy disk with the source code
+	of the latest version of SPACEWAR.
+
+	USER-SUPPORTED software is based on these three beliefs:
+
+		1.  The value of software is best assessed by the
+		    user on his own system.
+
+		2.  Creation of personal computer software can and
+		    should be supported by computing community.
+
+		3.  That copying of programs should be encouraged,
+		    rather than restricted.
+
+	     If you have any comments, bugs, additions or improvements,
+	please use the address below to contact me .
+
+	Bill Seiler
+	317 Lockewood Lane
+	Scotts Valley, CA. 95066
+	(408) 438-4172
+
+	SPACEWAR  COPYRIGHT 1985,1986,1987  B SEILER.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0292
 

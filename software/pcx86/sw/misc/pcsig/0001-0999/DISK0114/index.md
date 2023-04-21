@@ -59,8 +59,354 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## BASCOM.DOC
+
+{% raw %}
+```
+Here are a few of the patches from IBM related to the
+IBM PC BASIC Compiler
+
+-----CHAIN with COMMON-----
+
+The use of CHAIN with COMMON when CHAINing from a large program
+with a large data area to a small program with a large data
+area may produce an incorrect "Out of memory" error.
+
+  Here is the patch procedure:
+A>rename basrun.exe basrun.tmp
+A>b:debug basrun.tmp
+-e1951
+xxxx:1951  3B.72 C1.09 77.3b 03.c1 E9.77 CA.05 FB.e9
+xxxx:1958  A3.ca 7A.fb 07.00 0B.00 FF.a3 74.7a 38.07
+-w
+Writing 7C00 bytes
+-q
+A>rename basrun.tmp basrun.exe
+
+-----MOD-----
+
+MOD (and others??) does not return the correct value under the
+following conditions:
+
+  1) Using a binary non-commutative operator such as MOD, IMP,
+     of \ (integer division with the backslash)
+  2) The left operand is simpler than the right operand
+  3) The result is required in the BX register
+
+The following example shows the problem:
+
+ 10 A=3 : B=4 : C=10
+ 20 PRINT "10 MOD (3 + 4) = "; C MOD (A + B)
+
+In the unpatched compiler, it will return 7 (the right operand,
+A + B).  The correct value is 3.
+
+    The patch procedure:
+A>b:debug bascom.com
+-e7450
+xxxx:7450  F6.86 87.47 02.02 00.24 08.08
+-w
+Writing A280 bytes
+-q
+A>
+
+
+
+-----ARRAYS and OPTIMIZING-----
+
+When using arrays and making calculations such as:
+    T(J,L) = G(J)*E(L)+T(J+1,I)
+the compiler may give an Internal Error or the calculation
+may be performed incorrectly.  I think the error is in the
+optimization process.  I wanted to compare the generated code
+before and after the patch but the unpatched compiler bombed
+on that statement with "Internal Error".
+
+   The patch procedure:
+A>b:debug bascom.com
+-e8ab3
+xxxx:8AB3  0C.1f
+-w
+Writing A280 bytes
+-q
+A>
+
+
+
+-------------
+
+How to get patches for a problem with IBM software.
+
+   If you are having a problem with one of IBM's software
+products for the PC, you should do the following.  Try to
+isolate the simplist conditions that will cause the problem.
+If the problem is with a language product, isolate it to
+one line (if possible) and have a very short program
+available that will demonstrate the problem.  Then, take
+this information to your friendly dealer who sold you the
+product.
+
+   There should be someone at the dealership who can
+understand your problem.  If he can't see anything wrong
+with your sample program, he will have to contact IBM.
+He will call the IBM hotline and tell them what product the
+problem is with.  The support people are usually all busy,
+so they will take the phone number of the dealer and will
+call him back when someone is available (i.e. you will have
+to come back/call back later for the answer).  When the
+dealer gets in touch with IBM, they will try to find a
+patch that deals with the area of your problem.  If one
+is found, IBM will print the update description and procedure
+and send it to the dealer.  These are titled "IBM Personal
+Computer Programming Clarifications" and are usually a couple
+of pages long, printed on an IBM/Epson printer.  If they
+can find no match for your problem, they will ask for an
+example of the problem, and work from there.
+
+
+        Dave Alverson
+        72155,1560
+        September 15, 1983
+
+-----------------------------------------------------------------------------
+        Some additional patches courtesy of the SVCS Library SIG.
+-----------------------------------------------------------------------------
+
+The use of the INPUT# statement with quoted strings of length 1
+may produce random results.
+
+A>RENAME BASRUN.EXE BASRUN.TMP
+-E6236
+XXXX:6236  3C.b1 22.ff
+XXXX:623B  75.3c 10.22 80.75 FA.10 2C.80 75.fa 0B.2c E8.75
+XXXX:6240  7E.0b 00.e8 BA.7c 22.00 22.ba E8.22 48.22 D4.e8
+XXXX:6248  72.46 40.d4 B1.72 FF.3e
+-W
+Writing 7C00 bytes
+-Q
+A>RENAME BASRUN.TMP BASRUN.EXE
+
+
+A>B:DEBUG BASCOM.LIB
+-ECBD7
+XXXX.CBD7  3C.b1
+XXXX.CBD8  22.ff 75.3c 10.22 80.75 FA.10 2C.80 75.fa 0B.2C
+XXXX.CBE0  E8.75 00.0b 00.e8 BA.00 22.00 22.ba E8.22 00.22
+XXXX.CBE8  00.e8 72.00 40.00 B1.72 FF.3e
+-ECCA1
+XXXX.CCA1  39.3b
+-ECCA8
+XXXX.CCA8  3F.41
+-W
+Writing 19600 bytes
+-Q
+A>
+
+Test program:
+10 OPEN "TSTPROG" FOR OUTPUT AS #1
+20 FOR I=1 TO 10
+30 WRITE #1,I,"A","BB","CCC","DDDD"
+40 NEXT
+50 CLOSE
+60 OPEN "TSTPROG" FOR INPUT AS #1
+70 IF EOF(1) THEN END
+80 INPUT #1,J,A$,B$,C$,D$
+90 PRINT J,A$,B$,C$,D$
+900 GOTO 70
+
+Program should print:
+1 ABBCCCDDDD
+2 ABBCCCDDDD
+3 ABBCCCDDDD
+4 ABBCCCDDDD
+5 ABBCCCDDDD
+6 ABBCCCDDDD
+7 ABBCCCDDDD
+8 ABBCCCDDDD
+9 ABBCCCDDDD
+10 ABBCCCDDDD
+
+Test program for the ARRAY patch given above:
+
+10 DEFINT D,F,N
+20 DSD=0
+30 FOR N=0 TO 7
+40   FSEC=FSEC+1
+50 NEXT
+60 PRINT "The result is  ";512*(1-DSD)*FSEC,"The result should be 4096"
+
+
+
+
+
+```
+{% endraw %}
+
+## CABLE.DOC
+
+{% raw %}
+```
+        These instructions are to help IBM PC users with the Color Graphics
+Adapter construct a cable/interface for a Sony Profeel monitor.  These
+are not complete instructions, but corrections to the instructions and
+schematics that appeared in PC World, Volume 1, Number 3, pages 320-321,
+and Softalk, August 1983, pages 8-9.   Sony now lists a cable for use
+in interfacing with the IBM PC.  It is part # PC701.  It retails for
+80 dollars.
+
+        This cable/interface will only produce the high intensity colors.
+Use of the IBM CG Adapter pin #6, used for setting intensity, is NOT
+applied.  Use of that pin was NOT in the magazine instructions, and this
+author is not qualified to figure out the correct use of that signal in
+interfacing.  It is not known whether the Sony PC701 cable gives both
+intensities.  I am waiting for a reply from Sony.
+
+        These corrections have been determined through comparison of the
+pin-outs of the Color Graphics Adapter printed in the adapter's
+Inventory Checklist, the Sony 12" Profeel monitor's pin-ins as printed
+in the Sony PX-34 instructions that came with the set, and finally, the
+schematics printed in the two issues of the above mentioned magazines.
+This author takes ABSOLUTELY NO RESPONSIBILITY for the results of this
+cabling procedure.  You are onw your own.  These instructions are only
+supplied in order to share my experience with you.
+
+        The Sony Profeel and the IBM Color Graphics Adapter (CGA) differ
+in their handling of the Vertical and Horizontal Sychronizations.  Sony
+uses negative logic.  IBM uses positive.  To get the two to work with
+each other, the polarity of the Vert and Horz signals must be reversed
+between the two.
+
+        The basic design of the schematics that appeared in the magazines
+was correct.  The errors are all in the identification of the pin
+numbers of the IBM CGA pin-outs.  The number labeling at the Sony end
+was correct.
+
+        In essence, the Red, Green, and Blue signals are passed from
+the CGA directly to the Sony 34 pin connector.  This is just a straight
+wiring.  The IBM signal pins were mislabeled in the schematic.  Pin #1
+is shown as Ground.  This is correct.  Pin #2 is shown as the Red signal.
+This is very incorrect!  Pin #2 is ALSO a ground.  The Red signal comes
+from Pin #3.  The Green signal comes from Pin #4.  The Blue signal comes
+from Pin #5.
+
+        As indicated above, the IBM CGA pin #6 is for intensity and
+IS NOT used in this cabling application (at this time - I am trying to
+get data on how to use it correctly).  The IBM CGA Pin #7 is not used
+by IBM and not used here.  I think it is a dead pin.
+
+        The magazine schematics also mis-labeled the Pin Numbers for
+pins #8 and #9.  As mentioned above, the Sony end IS LABELED CORRECTLY!
+The IBM CGA pin #8 is the Horz Synch, NOT the Vert as listed.  The VERT
+Synch comes from Pin #9 of the IBM CGA.
+
+        Here are the correct Pass-Throughs for the interface:
+IBM Pin # 1 (ground) to Sony Pin # 11 or Pin #13. (I used 11 because it
+is the one Identified by Sony as Ground).
+
+        IBM Pin # 2 to 74LS240 Inverter Pin # 1, and connect jumper from
+74LS240 Pin # 1 to 74LS240 Pin # 10.  All of these are Grounds also.
+
+        IBM Pin # 3 (Red Signal) to Sony Pin # 25 (Red).  IBM Pin # 4
+(Green Signal) to Sony Pin # 26 (Green).  IBM Pin # 5 (Blue Signal) to
+Sony Pin # 27 (Blue).  IBM Pins # 6 and # 7 are not used.
+
+        IBM Pin # 8 (Horz Signal) to 74LS240 Pin # 2.  74LS240 Pin #18
+to Sony Pin # 30 (Horz).  IBM Pin # 9 (Vert Signal) to 74LS240 Pin # 4.
+Then 74LS240 Pin # 16 to Sony Pin # 31.
+
+        Remember to jump the Vert and Horz signals to Ground via the
+47 Pica Ferad Capacitors as indicated in the schematic.  This jump can
+be made back to 74LS240 Pins # 1 or # 10, or to the cable wire running
+from IBM Pin #1 to Sony Pin # 11 (or 13).
+
+        There is one more wire that needs to be run.  It is a 5 volt
+power supply than must be obtained and run to Pin # 20 of the 74LS240
+Inverter.  The magazine instruction was to obtain the 5 V source from the
+the IBM CGA's Light Pen connector.
+
+        The Sony documentation indicated that a 5 V supply could be
+obtained from the Sony Pin #1 or #2.  If the 74LS240 Inverter is placed
+near the Profeel end of the cable the use of the monitor's 5 V source
+makes much more sense.  The cable can be entirely self contained rather
+than the sloppy arrangement of getting the power source from within the
+computer.  This obviously allows easier connect/disconnect from the
+computer when needed.
+
+        My cable/interface came out well.  As I mentioned, I mounted
+a 20 Pin Wirewrap socket (PAGE part # PWG20-2) to a mini-circuit board
+(from neighborhood Radio Shack).  Radio Shack did not carry the 74LS240
+Inverter.  I found it at another electronics supply house.  I mounted
+the circuit board in a Radio Shack Deluxe Project Case #270-220.  I
+had to slice off some internal ridges with an EXACTO knife, and had to
+drill holes through which to route the cable.  Radio Shack stores now
+also carry the DB 9 connector needed for the IBM end.  Be VERY CAREFUL
+with the Sony 34 pin connector.  I don't know how difficult it would be
+find another.
+
+         CompuServe 70055,474
+
+```
+{% endraw %}
+
+## FILES114.TXT
+
+{% raw %}
+```
+Disk No:  114
+Program Title:  Assembly
+PC-SIG version: 1.2
+
+The file ASM. is a tutorial on the assembly language for the IBM-PC's
+8088 processor and was distributed by IBM itself.  It is a concise
+description of the essentials of IBM-PC assembly language programming.
+NEWCLOCK is a fixit device driver addressing the 24 hour rollover
+problem as well as mis-stamped file times.  UASMLS is a utility that
+will enable the creation of an almost-assembler-ready listing from the
+output of a DEBUG dis-assembly.  The PCTALK files are overlays to the
+original PCTALK III release and support VT100 or VT52 terminal
+protocols.  TERM is overlay for the IBM ASYNC.BAS program.
+
+Usage:  Programming/Education.
+
+Special Requirements:  Some programs require a version of BASIC.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+BASCOM   DOC  Four patches for the BASIC Compiler.
+CABLE    DOC  Procedure for making a cable for the Sony Profeel.
+FPLOT    BAS  Plots math functions in polar and Cartesian coordinates.
+FPLOT    DOC  Documentation file for FPLOT.BAS.
+KBDFIX   BAS  Fix for keyboard buffer program in September Softalk.
+NEWCLOCK DOC  Documentation file for NEWCLOCK.SYS.
+NEWCLOCK SYS  Fix for DOS 2.0 clock update function.
+PC-TALK  DEF  PC-Talk utility file.
+PC-TALK  DIR  PC-Talk utility file.
+PC-TALK  KEY  PC-Talk utility file.
+PCT3VT   BAS  Vidtex, VT52, VT100 & ANSI cursor control to PC-Talk III.
+PROFEEL  DOC  Review of Sony KX 1211 HG monitor/TV.
+TERM     BAS  Adds auto-dial and auto log-on to IBM ASYSC. Comm. 2.0.
+TERM     DOC  Documentation file for TERM.BAS.
+TREND123 DOC  Documentation file for TREND123.MAC.
+TREND123 MAC  LOTUS 123 macro for straight line/exponential curves.
+UASMLS   DOC  Documentation file for UASMLS.EXE.
+UASMLS   EXE  Formats DEBUG unassemble output file.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1985,86,87,88.89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
 ## FPLOT.BAS
 
+{% raw %}
 ```bas
 10 '         Function plotting program, adapted from:
 20 '         Creative Computing: Vol 9(no.1), 202, 1983
@@ -242,9 +588,46 @@ machines:
 1780 LOCATE 25,1:PRINT MSG$;" -- hit <CR> to continue.";:INPUT;R$:LOCATE 25,1:PRINT SPACE$(50);:RESUME 1590
 1790 ON ERROR GOTO 0
 ```
+{% endraw %}
+
+## FPLOT.DOC
+
+{% raw %}
+```
+   This program is an IBM adaptation of an Apple program written by James
+Fuller, that appeared in Creative Computing, January 1983.  The program
+allows the plotting of a function defined at line 270 in Cartesian, or Polar
+coordinates or as a 3 dimensional "Solid of Rotation".  The program also
+allows the screen image to be saved for later recall.
+   Three dimensional plots are quite time consuming (1-2 hours), although
+often very interesting.  The program can be compiled which speeds up the
+3d plots considerably considerably.
+   Some suggested equations:
+
+                DEF FN R(Q)=COS(7*SIN(2*Q))  in Polar coordinates
+                DEF FN R(Q)=COS(Q)+COS(2*Q)+COS(5*Q)  any type of plot
+                DEF FN R(Q)=COS(2*Q)+COS(X+BB/16)  3D plot
+                DEF FN R(Q)=COS(4*Q)+(20/X^2+3))   3D plot
+
+   Some interesting spiral graphics can be obtained with polar plots with
+the following alterations:
+                    Delete 750, 760
+                680 FOR G=0 TO 18000 STEP INX
+                770 IF G=0 THEN PSET(1.2*G+XOFF,YY)
+                775 line -(1.2*XX+XOFF,YY)
+        try DEF FN R(Q)=Q/3.14159 or R(Q)=COS(4*Q)
+Use large increments (25-150), and small scale factors (0.05-0.5) for best
+results.  Other examples were listed in the article.
+
+                                        David Bush
+                                        71046,654
+
+```
+{% endraw %}
 
 ## KBDFIX.BAS
 
+{% raw %}
 ```bas
 1 'Fix for keyboard buffer program in Sept. Softalk
 2 'Merge these statements with the orginal BASIC program.  Jeff Garbers
@@ -275,9 +658,38 @@ machines:
 2060 DATA    69,  166,   94,   60,   35,  158,  154,  173
 2070 DATA   233
 ```
+{% endraw %}
+
+## NEWCLOCK.DOC
+
+{% raw %}
+```
+The following paragraph is a cogent explanation of the functioning of the Dos
+2.0 CLOCK$ routine and the partial fix made by Larry Rosen:
+
+There are two different "date" problems, Earle. One is caused by the fact that
+the BIOS updates the time and DOS updates the date. That is, just because the
+time passes midnight and is reset to zero, the date is not changed until DOS
+"notices" that condition. If <two> midnights are passed without anyone asking
+DOS for the time or date, it can't know that any more than <one> midnight was
+passed. The other problem is the way DOS determines whether midnight was
+passed. Without my "fix" DOS uses the "midnight" flag returned by a TOD request
+to the BIOS. The <first> request after midnight receives this indication, which
+is then reset. The problem in DOS 2.0 is the fact that the builtin CLOCK$
+routine is not going to be the first requestor after midnight since other
+routines also request the TOD, especially the diskette and hard disk routines
+which are more popular. My "fix" causes DOS to detect the date change whenever
+the current TOD is less than the previous TOD. The technique is not perfect,
+but it's better than the old way.
+
+SVCS Library SIG comment: DOS 2.1 functions correctly, no fix required.
+
+```
+{% endraw %}
 
 ## PCT3VT.BAS
 
+{% raw %}
 ```bas
 125 DIM ALT$(10),K$(40),SCR.DN(16),SCR.CLR(27),SCR.UP(14),GRAF(33),PARAM(10)
 135 BS$=CHR$(8):LF$=CHR$(10):CR$=CHR$(13):ESC$=CHR$(27):ESC=0:WTH=-1:ANSI=-1:LED$=CHR$(27)
@@ -376,9 +788,91 @@ machines:
 12280 FOR J=1 TO SAV:IF PARAM(J)=0 THEN LOCATE ,,,7,7:COLOR FG,BG ELSE IF PARAM(J)=1 THEN COLOR HI ELSE IF PARAM(J)=4 THEN LOCATE ,,,1,7 ELSE IF PARAM(J)=5 THEN COLOR FG+32 ELSE IF PARAM(J)=7 THEN COLOR BG,FG
 12285 NEXT:RETURN
 ```
+{% endraw %}
+
+## PROFEEL.DOC
+
+{% raw %}
+```
+        First, let me thank those SIG members who helped me with the process
+of gathering information and then tying it together.  In no way could I have
+gotten the job done without that help.
+
+        As I type this text, I am viewing a brilliant two-color Wordstar.
+The Sony is fired up and works beautifully.  It is the 12" PROFEEL, Model
+Number KX-1211HG.  Last night I left a reply on this SIG to Dave Crane
+and advised him that the image and text quality of this monitor was
+better than the Amdek II RGB, but maybe not as good as the IBM, Quadram,
+or Princeton.  I lied!!
+
+        Maybe I had been up too late on several consecutive nights.
+Maybe I had read too many specs (such as the Sony spec on PROFEEL Horz
+Resolution that only claimed "..greater than 350 lines...").  Today I
+got a chance to compare this jewel side by side with the same Princeton
+that I judged side-by-side with an IBM.  All Five people judging it
+judged the PROFEEL as good, and three of the five judged it better!
+
+        Here is an interesting quote from the Sony PROFEEL KX-1211HG's
+Operating Instructions Book.  "...The line system is switched
+automatically from the normal 525 lines to 625 lines according to the
+input from the microcomputer...".  Why Sony doesn't publish this spec
+is beyond me, but the text and graphics quality speak for themselves.
+
+        Another real plus, this 12" monitor gives me an eight and three-
+quarter inch wide 80 column screen.  My Zenith ZVM-121 green monochrome
+display, also 12", gives me only seven and one-half inches of width
+(full 80 columns).
+
+        The PROFEEL does not have the richer background of the IBM, but
+the Sony seems to have more brilliant color than the rest of the field
+(sans IBM).  The text is clearer and sharper than I ever hoped for.  And
+the one big plus for me --- I can reach to the front panel and toggle
+from RGB signal to TV/VCR signal, all with one easy touch.  And the TV
+picture quality is unexcelled.
+
+        I am going to write and upload cabling instructions to the SIG
+XA area.  The schematic that appeared in PC World Vol 1, No 3, page 321,
+and Softalk, August 1983, both had errors (identical).  I will document
+those errors and give corrections.
+
+        A major limitation IS left.  The color intensity is FIXED.  The
+cable DOES NOT handle the Intensity signal-out from the Color Graphics
+Adapter.  That pin-out #6 of the adapter is not used at all in the
+cabling.  I do not possess the knowledge on how this intensity-out works.
+The PROFEEL has a "Level Set" pin on it's pin-ins.  I have not tried any
+connection between the two as I am afraid of hurting one or the other.
+I am looking for a cure to this and will let the group know
+when I discover it.  If anyone knows, please give me the info or a ring
+at (918) 250 9770.
+
+                                ADDENDUM
+
+        Some additional information --- I am adding this one day later than
+the original part of this text was created.  Today I was able to do a
+side by side comparison with the IBM Color Display.  It was done at a
+local computer store.  Everyone's eyes bugged out.  The two displays were
+identical in clarity and quality.  Brightness and color were exactly the
+same.  The ONLY difference was the background.  The Sony 12" Profeel
+had just as black a background as the IBM.  The difference is that the
+IBM has more of a flat black or non-glare appearance.  The actual
+display screen of the Sony is larger, but I did not have the opportunity
+to take measurements as I did vs. the Zenith green screen monitor.
+
+        Anyone with nearby access to a video recorder/tuner would be
+foolish to overlook this option.  Think of the possibilities.  The
+combination of the PC / Profeel / and PC could be used as a terrific
+computer training aid.  The student/teacher could toggle back and forth
+between active computer and video-taped instruction as needed or
+instructed.              -FP
+
+         CompuServe 70055,474
+
+```
+{% endraw %}
 
 ## TERM.BAS
 
+{% raw %}
 ```bas
 2 COLOR 7,1,1
 3 CTR=1:DONE=1
@@ -492,6 +986,185 @@ machines:
 32330 CLS:KEY OFF:SCREEN 0,1,0:WIDTH 40:COLOR 7,1,1:CLS:RETURN
 32490 PRINT"F9 AUTODIAL    F10 This HELP Menu       ";"[ON or OFF] indicates current status.   ";
 ```
+{% endraw %}
+
+## TERM.DOC
+
+{% raw %}
+```
+        This is a program that is designed to be merged into the TERMINAL.BAS
+program of the IBM Asyncronous Communications Support 2.0 to provide autodial
+with a forty number directory and auto log-on capability for Compuserve and
+very likely other services as well.  It also contains the lines neccessary to
+add color to the program operation, and is formatted to work properly in 40
+column as well as 80.  For auto log-on to Compuserve it requires a modem that
+displays a screen message indicating that the carrier tone from the host
+computer has been detected, for example the "CONNECT" message provided by the
+Hayes Smartmodem.  The log-on sequence works by watching for "prompts" that you
+have entered at the time of making your directory entry-- (actually, it watches
+for the last three characters of the screen message-- "ECT" for "CONNECT",
+"ID:" for "USER ID:", and "rd:" for "Password:".  Note that you must specify the
+prompts exactly, with upper and lower case correct.  When you respond to the
+input statements while entering the log-on information, you cannot enter
+certain characters directly such as the "^C" (ASCII 3) neccessary to respond to
+the "CONNECT" message from the modem.  Instead, enter the desired ASCII number
+plus 128 by holding down the ALT key while typing the number on the numeric
+keypad, then releasing the ALT key.  (For example, type 131 for a "^C" or 141
+for a carriage return.  The character produced on the screen will actually be an
+ASCII 131 or 141 but will be stripped of the added 128 when it is sent by the
+communications program).  More instructions can be found by reading the program
+listing.  For safety's sake, *DO NOT MODIFY YOUR ORIGINAL PROGRAM DISK!*.  The
+program is actually written to use the Hayes Smartmodem and touch-tone dialing.
+If your phone line will not support touch-tone, it will be neccessary to change
+the "ATDT" in line 4430 to "ATDP".  This line and others may have to be further
+modified if this program is to be adapted to another brand of auto-dialing
+modem.  Please send questions, comments or suggestions to Robert Relf,
+[70176,403].
+
+```
+{% endraw %}
+
+## TREND123.DOC
+
+{% raw %}
+```
+                                   TREND123
+                                 version 1.0
+                       A Lotus 123 Curve fitting macro
+               created by John C. Dannenfeldt (Compuserve 71435,561)
+
+The file TREND123.WKS is a independent macro that may be used within any Lotus
+123 spreadsheet.  This version enables you to create a set of data points with
+the range name LINE or CURVE which fit any set of data points you range name
+DATA with either a least squares straight line or an exponential curve:
+
+     Linear (LINE)-         y=(c1 * x) + c2
+
+     Exponential (CURVE)-   ln y=(c1 * x) + c2
+
+Restrictions:
+     The DATA range must be continous.. no blank cells.
+     ...     ...    must be less than 257 points long.
+     You must be at A70 before you load the macro into your worksheet.
+     Your spreadsheet must not extend beyond A1..IV69 or it may be partially
+        overwritten.
+
+Instructions:
+     Before running the macro you must:
+          1) Define a continuous set of numbers range named DATA.
+               They may be in either a row or column orientation but the
+               program takes much longer to work on the vertical ranges
+               because it must first transpose them into a horizontal range.
+
+          2) Name the macro so that you can call it by typing:
+
+               /RNC\t  then press (ENTER)
+               A70     then press (ENTER)
+
+          3) Load the macro into your spreadsheet-
+             Now goto A70 and type:
+
+               /FCCETREND123   then press (ENTER)
+
+    To activate the macro type ALT-T and follow the instructions.  When the
+    macro is done it will return you to its main menu and ask if you would
+    like to do a linear or exponential curve fit or quit.  If you do a
+    different curve fit the old LINE or CURVE will be destroyed.  If you quit
+    you may then look at LINE or CURVE directly or even better graph it beside
+    the original DATA that you were trying to fit the curve to.
+
+Comments:
+     I was forced to create some type of curve fitting regime for an
+application I had and in the process developed part of the current macro.  The
+next version will include some additional curve fitting routines such as
+parabolic, moving averages and exponential smoothing.
+     Some of the things I don't like about this macro are a result of the
+limitations of the 123 macro language.  After finally figuring out how to
+transpose a column into a row I certainly wished that 123 had a general
+command for that function.  Hopefully the next version will have an easier to
+use macro language.
+     Feel free to make changes to the routine to fit your needs.  Some obvious
+variants would be a basically vertical layout (which would make vertical
+ranges faster to input) and locating the origin of the macro at a point more
+suitable for your particular spreadsheet( remember that all references to
+cells within a macro must be changed for it to work in a new location).
+     If you got this macro in the form TREND123.HEX you must convert it to a
+binary file called TREND123.WKS before trying to use it in a worksheet.
+
+ If you have any suggestions contact me on COMPUSERVE at the IBMPC SIG.
+
+```
+{% endraw %}
+
+## UASMLS.DOC
+
+{% raw %}
+```
+                           Uasmls
+
+     Ever  use  DEBUG to dis-assemble a file and sit  around  for
+hours  doing  a simetaneous dump to the printer,  all  the  while
+wishing you could put it in a file instead,  and them get down to
+actually  editing  the source code and re-assemblying,  with  you
+changes? Pipes and filters are the answer.
+
+     The  DOS manual says pipes "allow the screen output  of  one
+program   to   be   used  as  the  keyboard  input   to   another
+program....and piping is the chaining of programs with  automatic
+redirection of standard input and output."
+
+     Well,  exactly what is standard input and  output?  Keyboard
+and screen, respectively. The redirection of standard output is a
+cinch,  just  tell  DOS  to  send  the output  to  a  disk  file.
+Unfortunately,  this kills the standard output to the screen,  so
+you don't know what you are doing. Working in the dark, you might
+say.  This is where the use of input redirection comes into play,
+why not create a script of debug commands,  use that as  standard
+input  and kick back and let the script do all the work.  This is
+how it can be done for creating a debug dis-assembly file.
+
+A>DEBUG
+-F CS:0100 L1000 "0"   <=== Fills 1,000 bytes with hex "F"
+-Q
+A>DEBUG MYFILE.COM     <=== Load the file to be dis-assembled
+-D                     <=== Dump  the  file,   note   addresses
+                            containing data, continue Dumping
+                            until you reach the end of the file
+                            (section when contains contigious
+                            FFFFFF's).
+-Q                     <=== Quit debug
+A>Copy con infile
+U addr1  addr2         <=== Start and stop address
+U addr3  addr4         <=== Start and stop address
+etc.                   <=== Until all code addresses are specified
+q                      <=== Tell debug to Quit
+Ctrl Z                 <=== End of file mark
+
+A>DEBUG MYFILE.COM <INFILE >OUTFILE
+
+     Think of the pipes as funnels.  In this case INFILE will  be
+used  in lieu of keyboard input to debug.  All output that  would
+normally  be  sent to the screen will be piped to a  file  called
+OUTFILE.  Of  course,  the names of these files can be changed to
+any filename that you would like to use.
+
+     You've  now  created  a  file  which  is  identical  to  the
+unassembly that you would normally see on your screen. Now run the
+UASMLS program. The program  will ask for the  input  file.  Enter
+OUTFILE.  When  asked  for  the  output file  name  enter  a  new
+filename,  usually with a .ASM extension.  The program will  then
+read OUTFILE,  eliminate the hex addresses on the left and assign
+labels  (in  the form Ln,  where n = 1 - 999) for all  jumps  and
+calls, and send the results to the new file you have specified.
+
+     If  you  get an error message "Error:  Referenced  code  not
+found:",  it means that a jump or call was found which referenced
+an  address  not found in the input file.  This means you  missed
+portions of the code, you started unassembling in the middle   of
+an instruction,  or you got into data areas
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

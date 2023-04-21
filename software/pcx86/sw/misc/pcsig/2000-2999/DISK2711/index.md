@@ -16,8 +16,162 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## AT-SLOW.DOC
+
+{% raw %}
+```
+AT-SLOW.DOC
+
+There are no implied warranties or guarantees with this software.  To the best
+of our knowledge it is free from defect.
+
+Provided by PCGURU BBS
+Tested on 9/08/88 by David R. Foley
+PC GURU BBS  (617) 783-5154  24 Hours 2400bps
+
+
+
+                                AT-SLOW
+                    PC-AT High Performance Slowdown
+                             By David Keil
+
+        AT-SLOW is a utility which when loaded will use the high 
+   resolution timer found in a PC-AT or close clone to slow down 
+   games and other programs which run to fast on PC-AT's.
+
+        This program is hardware dependent and requires a PC-AT or 
+   close clone to operate. AT-SLOW uses the AT's real time clock 
+   found at interrupt 70h to slow down the AT's speed.
+        Using the real time clock's interrupt has two advantages 
+   over the usual use of the normal PC's timer.
+
+     1 - The high resolution timer occurs 1024 times a second (as
+         opposed to 18.2 with the normal timer). This provides a much 
+         smoother slow down than with the normal timer. This also 
+         provides a higher degree of performance reduction.
+     2 - Since this slow down uses interrupt 70h and only AT's use
+         this interrupt, programs don't know to re-vector it. So
+         programs that don't work with mormal slow down programs
+         will work with AT-SLOW.
+
+
+
+
+
+
+   Using AT-SLOW:
+
+        The command for using AT-SLOW is
+
+            at-slow [/delay][/d][/h]
+
+        Where:
+            /delay = Amount of performance reduction.
+            /d     = Disables AT-SLOW
+            /h     = Show brief help message
+
+        The range of values for delay is 1-1000. Values of 300-400 
+   on 286 machines is usually adequate. Care must be used when using 
+   values over 400 (over 800 on 386 machines) as the computer will 
+   be slowed down to the point of uselessness where it appears to be 
+   locked up or if slowed down enough will lock up. If this occurs 
+   the only solution is to re-boot the computer.
+        Once installed AT-SLOW can be disabled by using the /d 
+   option. This option will disable the timer interrupt and return 
+   the computer to normal speed. AT-SLOW can be removed with TSR 
+   management programs such as MARK & RELEASE however care must be 
+   taken to disable AT-SLOW first or the interrupt may remain active 
+   and this will cause about a 10% reduction in performance. The 
+   program uses very little memory however and when disabled does 
+   not effect performance so leaving it in memory should not be of 
+   great concern.
+        To reactivate AT-SLOW after disabling it or to change the 
+   delay value just re-run AT-SLOW with the new delay value.
+
+
+
+
+
+
+      If you find AT-SLOW useful:
+
+        This program is copyrighted and may only be distributed
+   in unmodified form and with this DOC file included. Absolutely no
+   money may be charged for distribution of this program. If you
+   were charged for the disk that contained this software and have
+   the name of the company that did so please contact me.
+
+        A lot of time went into the finding of information which
+   enabled the writing of AT-SLOW, the Program itself is not that
+   complex. So if you find this program useful (and I'm sure you
+   will) and would like to support the development of more PC-AT
+   (and other high performance computers) related software
+   (here it comes). Please send a contribution of $5.00 payable to:
+
+   Better Software Co.
+   10 W. Wilburn Ave.
+   Greenville, S.C. 29611
+
+   Home (803) 295-4971
+   BBS  (803) 269-7899 after 1st of July   (1200-2400)
+                       after 1st of August (1200-9600)
+
+EOF
+```
+{% endraw %}
+
+## FILE2711.TXT
+
+{% raw %}
+```
+Disk No: 2711
+Disk Title: Techstaff Games Volume II
+PC-SIG Version: S1
+
+Program Title: TechStaff Games Volume II
+Author Version: 3/91
+Author Registration: $5.00
+Special Requirements: Some games require graphics.
+
+TECHSTAFF GAMES VOLUME II is a collection of popular games for all ages.
+
+Contained on this disk are the following games:
+
+~ HIQ1 -- A puzzle with 32 pegs arranged in a cross with the center
+position empty.  The object of the game is to remove all but one peg by
+jumping across pegs horizontally or vertically.  The ``perfect game'' is
+when the last peg is located in the center of the cross.
+
+~ PCMAN1 -- Another version of the popular game PacMan.  Choose between
+one to four ghosts.  The screen uses ASCII graphic characters while the
+program keeps track of the top ten scores.
+
+~ WHEEL3 -- A version of the game Wheel of Fortune, for one to three
+players.  A hidden phrase is given, and each player is given a turn to
+guess a consonant or buy a vowel.  Spin a wheel to determine how much
+money each correct guess wins.
+
+~ STATES1 -- A States and Capitals quiz game.  Questions can be True -
+False, multiple-choice, or fill-in-the-blanks.
+
+~ ERULET1 -- The game of European Roulette for one to four players.
+Thirty-six possible outcomes are on the wheel and each player makes bets
+on which number might come up next.  Three separate bets are made on
+each turn -- one on the specific number that will show up, another on
+whether the number is odd or even, and another on one of three blocks of
+twelve numbers.  ERULET1 requires graphics.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
 ## WHEEL.BAS
 
+{% raw %}
 ```bas
 10 CLEAR :SCREEN 0:WIDTH 80:COLOR 15,1,1:KEY OFF:CLS
 15 ON KEY(1) GOSUB 40000:KEY (1) ON
@@ -367,6 +521,7 @@ machines:
 51060 LOCATE 19,1:COLOR 14:PRINT"There are no more consonants left in the puzzle."
 51070 GOTO 50050
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

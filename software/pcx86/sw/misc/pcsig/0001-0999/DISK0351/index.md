@@ -82,6 +82,446 @@ machines:
     GETSETDD LIB  Get or set the default drive
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES.TXT
+
+{% raw %}
+```
+TURBO WHEELS (handy tools for Turbo PASCAL programs)
+ 
++---------------------------------------------------------------+
+|  This public domain media material is made available to club  |
+|  membership, for its use and distribution, by the following:  |
+|                 "TURBO WHEELS" (version 1.00)                 |
+|                       Neil J. Rubenking                       |
+|            (300 Page St., San Francisco, CA 94102)            |
+|  If, after trial, one finds the software application useful,  |
+|  SFpcUG encourages your becoming a registered user (donation  |
+|  of $10 is sought by the author of this user-supported task)  |
++---------------------------------------------------------------+
+ 
+This is a DOUBLE-SIDED diskette (DOS 2.00) ... (re: Turbo PASCAL)
+ 
+Name           Description
+ 
+READTHIS NOW  Documentation (9pp) and detailing of disk files
+ALLFILES LIB  Get files matching template + display, then select
+ALLFILES PAS  ^
+CIRCLE   LIB  Circle-drawing procedure for graphics mode
+CIRCLE   PAS  ^
+CURSOR   LIB  Change or hide cursor
+CURSOR   PAS  ^
+GETSECTR LIB  Read a sector from disk to buffer  (see DISKMOD.PAS)
+LABEL    PAS  ^Uses GETSECTR to read and write diskette label
+DISKMOD  PAS  ^Disk sector viewing + modification using GETSECTR
+DISKTYP  LIB  Get disk type (single/double/fixed, 8/9 sectors)
+DISKTYP  PAS  ^Returns disk size in K (160, 180, 320, 360)
+EQUIPMNT LIB  Returns information about equipment attached to PC
+EQUIPMNT PAS  ^
+ERRMESSG LIB  Error messages for DOS 2.0 function calls
+EXISTFIL LIB  Test for file's existence before opening
+EXISTFIL PAS  ^(avoids crash for lack of program)
+EXTENDIO LIB  EXTENDed I/O based on DOS 2.0 full-path commands
+EXTENDIO PAS  ^
+EXTENDIO DAT  ^Specifications for the new I/O functions
+FILEATTR LIB  Read and write the attribute byte for any file
+FILEATTR PAS  ^(Read-Only, Hidden, System, Archive)
+FILENAME TYP  Filename type definition -- shared by several others
+GETFILE  LIB  Procedures to GET FILEs matching a template
+GETFILE  PAS  ^(see also ALLFILES)
+GETFREE  LIB  Get amount of free space on disk
+GETFREE  PAS  ^(avoids "out of space" crashes)
+GETINTGR LIB  Takes an integer in a given range
+GETINTGR PAS  ^(protected against invalid keystrokes)
+HEXFUNCT LIB  Convert integers in range (-32,768 to 32,767)
+HEXFUNCT PAS  (Hexadecimal strings from $0000 to $FFFF)
+GETKEYS  LIB  Simple procedure to catch any keystroke
+GETKEYS  PAS  ^(used by many programs on this disk)
+KEYCHART DAT  ^Chart of key codes for GETKEYS.LIB
+GETSETDD LIB  Get or set the default drive
+GETSETDD PAS  ^
+GRFXTABL LIB  Get the dot patterns from the ROM graphics table
+GRFXTABL PAS  ^(see also TITLES)
+TITLES   LIB  Uses ROM character patterns to create titles
+TITLES   PAS  ^(see also GRFXTABL)
+GTSETDIR LIB  Get or Set the current directory path
+GTSETDIR PAS  ^
+KAVAIL   LIB  Returns available memory in K
+KAVAIL   PAS  ^
+KEYBOARD LIB  Another approach to catching any keystroke
+KEYBOARD PAS  ^
+SCANCODE DAT  ^Chart of keyboard Scan Codes (use with KEYBOARD.LIB)
+FANCYKEY PAS  ^Character/phrase for key pressed (re: KEYBOARD.LIB)
+REBOOT   LIB  "Warm" system reboot (without clearing RAM)
+LESSRAM  PAS  ^Reset "official" amount of memory lower for programs
+LESSRAM  COM  ^  *Runs COMPILED only (uses REBOOT.LIB)
+NUMDISKS PAS  ^Change official count of disk drives (re: RAMdisks)
+NUMDISKS COM  ^  *Runs COMPILED only (uses REBOOT.LIB)
+MKRMDIR  LIB  Make or remove subdirectories
+MKRMDIR  PAS  ^
+MONITOR  LIB  Simple procedure to check for color or mono
+MOVEFILE LIB  DOS 2.0 file RENAME with parameter for MOVE
+MOVEFILE PAS  ^(also MOVES to another directory by naming new path)
+NEWINT9  LIB  Change the keyboard interrupt to get key release codes
+NEWINT9  PAS  ^(can disable typematic -- for games, music, etc.)
+NOSOUND  PAS  Quick rescue in case you accidentally leave sound on
+PARAMETR LIB  Pass parameters to programs from DOS command line
+PARAMETR PAS  ^Gets parameter string up to 80 characters
+PARAMETR COM  ^  *Runs COMPILED only
+POPSCREN LIB  Pop full screens into view by addressing screen memory
+POPSCREN PAS  ^
+POPSCREN DAT  ^Sample screen demo (uses SCREENS.TYP)
+SCREENS  TYP  ^Type declarations for full-screen manipulation
+QUEUE    LIB  A generic line-up
+QUEUE    PAS  ^(shows use of dynamic variables for those new to them)
+RECTANGL LIB  Rectangle-drawing procedure for graphics modes
+RECTANGL PAS  ^
+REGPACK  TYP  Contains type definition for REGPACK (Where ...? [ED.])
+SAFEWRIT LIB  Write to screen w/o control characters wrecking display
+SAFEWRIT PAS  ^
+SCREEN   LIB  Direct video screen input/output
+SCREEN   PAS  ^
+WINDOWS  LIB  Eases use of windows and window-frames
+WINDOWS  PAS  ^
+SUCCESS  DOC  Documention (about another Turbo PASCAL resource)
+ 
+ 
+ 
+```
+{% endraw %}
+
+## FILES351.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 351  Turbo Tools                                       v1   DS
+-----------------------------------------------------------------------
+ 
+This disk has handy tools for Turbo PASCAL programs.
+ 
+READTHIS NOW  Documentation (9pp) and detailing of disk files
+ALLFILES LIB  Get files matching template + display, then select
+ALLFILES PAS  ^
+CIRCLE   LIB  Circle-drawing procedure for graphics mode
+CIRCLE   PAS  ^
+CURSOR   LIB  Change or hide cursor
+CURSOR   PAS  ^
+GETSECTR LIB  Read a sector from disk to buffer  (see DISKMOD.PAS)
+LABEL    PAS  ^Uses GETSECTR to read and write diskette label
+DISKMOD  PAS  ^Disk sector viewing + modification using GETSECTR
+DISKTYP  LIB  Get disk type (single/double/fixed, 8/9 sectors)
+DISKTYP  PAS  ^Returns disk size in K (160, 180, 320, 360)
+EQUIPMNT LIB  Returns information about equipment attached to PC
+EQUIPMNT PAS  ^
+ERRMESSG LIB  Error messages for DOS 2.0 function calls
+EXISTFIL LIB  Test for file's existence before opening
+EXISTFIL PAS  ^(avoids crash for lack of program)
+EXTENDIO LIB  EXTENDed I/O based on DOS 2.0 full-path commands
+EXTENDIO PAS  ^
+EXTENDIO DAT  ^Specifications for the new I/O functions
+FILEATTR LIB  Read and write the attribute byte for any file
+FILEATTR PAS  ^(Read-Only, Hidden, System, Archive)
+FILENAME TYP  Filename type definition -- shared by several others
+GETFILE  LIB  Procedures to GET FILEs matching a template
+GETFILE  PAS  ^(see also ALLFILES)
+GETFREE  LIB  Get amount of free space on disk
+GETFREE  PAS  ^(avoids "out of space" crashes)
+GETINTGR LIB  Takes an integer in a given range
+GETINTGR PAS  ^(protected against invalid keystrokes)
+HEXFUNCT LIB  Convert integers in range (-32,768 to 32,767)
+HEXFUNCT PAS  (Hexadecimal strings from $0000 to $FFFF)
+GETKEYS  LIB  Simple procedure to catch any keystroke
+GETKEYS  PAS  ^(used by many programs on this disk)
+KEYCHART DAT  ^Chart of key codes for GETKEYS.LIB
+GETSETDD LIB  Get or set the default drive
+GETSETDD PAS  ^
+GRFXTABL LIB  Get the dot patterns from the ROM graphics table
+GRFXTABL PAS  ^(see also TITLES)
+TITLES   LIB  Uses ROM character patterns to create titles
+TITLES   PAS  ^(see also GRFXTABL)
+GTSETDIR LIB  Get or Set the current directory path
+GTSETDIR PAS  ^
+KAVAIL   LIB  Returns available memory in K
+KAVAIL   PAS  ^
+KEYBOARD LIB  Another approach to catching any keystroke
+KEYBOARD PAS  ^
+SCANCODE DAT  ^Chart of keyboard Scan Codes (use with KEYBOARD.LIB)
+FANCYKEY PAS  ^Character/phrase for key pressed (re: KEYBOARD.LIB)
+REBOOT   LIB  "Warm" system reboot (without clearing RAM)
+LESSRAM  PAS  ^Reset "official" amount of memory lower for programs
+LESSRAM  COM  ^  *Runs COMPILED only (uses REBOOT.LIB)
+NUMDISKS PAS  ^Change official count of disk drives (re: RAMdisks)
+NUMDISKS COM  ^  *Runs COMPILED only (uses REBOOT.LIB)
+MKRMDIR  LIB  Make or remove subdirectories
+MKRMDIR  PAS  ^
+MONITOR  LIB  Simple procedure to check for color or mono
+MOVEFILE LIB  DOS 2.0 file RENAME with parameter for MOVE
+MOVEFILE PAS  ^(also MOVES to another directory by naming new path)
+NEWINT9  LIB  Change the keyboard interrupt to get key release codes
+NEWINT9  PAS  ^(can disable typematic -- for games, music, etc.)
+NOSOUND  PAS  Quick rescue in case you accidentally leave sound on
+PARAMETR LIB  Pass parameters to programs from DOS command line
+PARAMETR PAS  ^Gets parameter string up to 80 characters
+PARAMETR COM  ^  *Runs COMPILED only
+POPSCREN LIB  Pop full screens into view by addressing screen memory
+POPSCREN PAS  ^
+POPSCREN DAT  ^Sample screen demo (uses SCREENS.TYP)
+SCREENS  TYP  ^Type declarations for full-screen manipulation
+QUEUE    LIB  A generic line-up
+QUEUE    PAS  ^(shows use of dynamic variables for those new to them)
+RECTANGL LIB  Rectangle-drawing procedure for graphics modes
+RECTANGL PAS  ^
+REGPACK  TYP  Contains type definition for REGPACK (Where ...? [ED.])
+SAFEWRIT LIB  Write to screen w/o control characters wrecking display
+SAFEWRIT PAS  ^
+SCREEN   LIB  Direct video screen input/output
+SCREEN   PAS  ^
+WINDOWS  LIB  Eases use of windows and window-frames
+WINDOWS  PAS  ^
+SUCCESS  DOC  Documention (about another Turbo PASCAL resource)
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## SUCCESS.DOC
+
+{% raw %}
+```
+        ||================================================================||
+        ||                                                                ||
+        ||   THIS IS N*O*T A DESCRIPTION OF THE FILES ON T*H*I*S DISK.    ||
+        ||   MR. TODD'S ROUTINES ARE AVAILABLE FOR $20. FROM THE ADDRESS  ||
+        ||   BELOW.  THERE IS A CERTAIN AMOUNT OF OVERLAP BETWEEN HIS     ||
+        ||   ROUTINES AND MINE, BUT ENOUGH DIFFERENCES TO MAKE IT WORTH   ||
+        ||   GETTING HIS DISK.                                            ||
+        ||                   Neil J. Rubenking                            ||
+        ||                                                                ||
+        ||================================================================||
+
+
+
+        The Success Press          Box 2795  Des Plaines, Illinois 60018
+        ================================================================
+
+
+                    Procedures and Functions For Turbo Pascal
+
+                                  Version 1.07
+
+                          (C) Copyright 1984 W. E. Todd
+
+
+
+                              - Batch Programming -
+
+        Seterrlv         Allows  a  program  to  set  the  DOS errorlevel
+                         variable  upon  termination.  The errorlevel can
+                         be  tested  using the batch IF statement to find
+                         out   if   the   program   terminated  normally.
+                         Requires DOS 2.00 or later.
+
+
+                               - System Services -
+
+        Cursrsiz.inc     Set the cursor size.
+
+        Dosrelnm.inc     Gets  the DOS release number.  Requires DOS 2.00
+                         or later.
+
+        Getdefdr.inc     Gets the letter of the default disk drive.
+
+        Setdefdr.inc     Sets the default disk drive.
+
+        Getdate.inc      Gets the system date.
+
+        Setdate.inc      Sets the system date.
+
+        Gettime.inc      Gets the system time.
+
+        Settime.inc      Sets the system time.
+
+        Setverfy.inc     Turns disk write verification on or off.
+
+        Togglkey.inc     Turns    Insert,    Caps-Lock,    Num-Lock   and
+                         Scroll-Lock on or off.
+
+        Numprntr.inc     Returns  the number of parallel printer ports on
+                         the system.
+
+        NumRS232.inc     Returns  the number of RS232 serial ports on the
+                         system.
+
+
+                                  - Diskettes -
+
+
+
+
+
+
+
+
+
+
+
+
+
+        Chngattr.inc     Sets  or clears the read only, hidden, system or
+                         archive attributes of a disk file.
+
+        Diskdir.inc      Reads and writes the diskette directory.
+
+        Diskspac.inc     Gets  the  amount  of  free space on a diskette. 
+                         Requires DOS 2.00 or later.
+
+        Disktype.inc     Tells  if the diskette is single or double sided
+                         and 8 or 9 sectors per track.
+
+        Chdir.inc        Change  the  current  directory.    Requires DOS
+                         2.00 or later.
+
+        Mkdir.inc        Create  a  subdirectory.    Requires DOS 2.00 or
+                         later.
+
+        Rmdir.inc        Remove  a  subdirectory.    Requires DOS 2.00 or
+                         later.
+
+
+                                - Input/Output -
+
+        Initcomm.inc     Initializes   an   RS-232  communications  port. 
+                         Similar to the OPEN COM statement in BASIC.
+
+        Statcomm.inc     Returns  the communications port line status and
+                         modem status bits.
+
+        Cmdparam.inc     Gets  the  parameters following the program name
+                         on  the  command  line,  converts  them to upper
+                         case  and  separates them into the elements of a
+                         string array.
+
+        Dispmode.inc     Gets the current video display mode.
+
+        Getscrch.inc     Gets   the   character  at  the  current  cursor
+                         position on the screen.
+
+        Getscrat.inc     Gets  the attribute byte of the character at the
+                         current cursor position.
+
+        Inkey.inc        Works  like  the  BASIC INKEY$ statement.  Waits
+                         for  a keyboard key to be struck and returns the
+                         corresponding  character  in  a  string.  If the
+                         key  has  a  two  byte  extended code a two byte
+                         string  is returned containing both bytes of the
+                         extended code.
+
+        Inkeyclr.inc     Clears  the  keyboard buffer, waits for a key to
+                         be  struck  and returns the key in a string.  By
+                         clearing   the  keyboard  buffer  this  function
+                         forces  the  program  to  wait  for  a key to be
+                         struck after the function is executed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+        Readpixl.inc     In  graphics mode returns the value of the pixel
+                         at the specified location.
+
+        Spc.inc          Returns  the  specified  number of spaces.  This
+                         can  be  used  like  the  BASIC  SPC function to
+                         insert spaces in an output record.
+
+        Tab.inc          Tabs  to  the  specified  column when writing to
+                         the screen.
+
+        Drawabox.inc     Draws  a box of any size on the screen.  You can
+                         specify  the  character(s)  to be used.  This is
+                         handy  for  outlining  windows or other text for
+                         emphasis.
+
+        Textbord.inc     Sets the vidio display border color.
+
+
+                                   - Printer -
+
+        Printscr.inc     Invokes   the  print  screen  function  just  as
+                         though you had typed Shift-PrtSc.
+
+        Resetptr.inc     Resets  the printer using the BIOS printer reset
+                         routine.   This not only resets the printer, but
+                         if  the printer is off line it will be placed on
+                         line.
+
+        Statptr.inc      Returns  the  printer  status word.  This allows
+                         you  to tell if the printer is on line or out of
+                         paper.
+
+
+                              - Bit Manipulation -
+
+        Clr-bits.inc     Clears  any  string  of  consecutive  bits  in a
+                         word.
+
+        Set-bits.inc     Sets any string of consecutive bits in a word.
+
+        Ext-bits.inc     Extracts  any  string of consecutive bits from a
+                         word and returns their value as an integer.
+
+        Ins-bits.inc     Inserts  the  string  of  bits  representing  an
+                         integer at any location in a word.
+
+
+                                    - Math -
+
+        Dectohex.inc     Converts  an  integer  to  a  hex  string.   For
+                         example, 10 is converted to $000A.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        Hextodec.inc     Converts  a  one to four character hex string to
+                         an integer.  For example, $FFFF returns -1.
+
+        Ipower.inc       Raises an integer to an integer power.
+
+        Power.inc        Raises a real number to a real power.
+
+        Cendate.inc      Provides  three  routines to do date arithmetic.
+                         One  converts  Gregorian date to day of century,
+                         another  converts  day  of  century to Gregorian
+                         date  and  the  third  determines the day of the
+                         week from day of century.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0351
 

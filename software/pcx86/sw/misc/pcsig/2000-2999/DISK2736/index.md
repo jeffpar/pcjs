@@ -14,6 +14,39 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2736.TXT
+
+{% raw %}
+```
+Disk No: 2736                                                           
+Disk Title: DayMaster                                                   
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: DayMaster                                                
+Author Version: 3.6                                                     
+Author Registration: $25.00                                             
+Special Requirements: High density or hard drive.                       
+                                                                        
+Never forget a date or appointment again.  And have fun doing it!  With 
+DAYMASTER it's easy to enter up to five special events, three birthdays 
+or anniversaries, and five appointments for any day.  Run DAYMASTER at  
+the beginning of the day or anytime.  It will immediately display your  
+schedule and list any birthdays or events.  For fun it includes a number
+of historic events, famous birthdays, and some "quotes of the day."     
+DAYMASTER is so easy to use you'll make all your appointments and have  
+fun doing it.                                                           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2736
 

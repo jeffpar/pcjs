@@ -46,6 +46,54 @@ machines:
     TAG      PRN  Documentation for Sage Tag
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #243, version V1 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  CAL     .COM         CRC = AA 36
+
+--> FILE:  SCRN    .OVL         CRC = E6 37
+
+--> FILE:  CAL     .PRN         CRC = 76 4B
+
+--> FILE:  CALINST .BAT         CRC = 0B AA
+
+--> FILE:  TAG     .COM         CRC = 81 18
+
+--> FILE:  TAG     .HLP         CRC = D6 31
+
+--> FILE:  TAG     .PRN         CRC = EC BE
+
+--> FILE:  TAGINST .BAT         CRC = 3B 2B
+
+ ---------------------> SUM OF CRCS = 91 94
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0243
 

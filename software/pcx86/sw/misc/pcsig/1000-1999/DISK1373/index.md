@@ -27,6 +27,62 @@ machines:
     eliminating manual data entry and math errors.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1373.TXT
+
+{% raw %}
+```
+Disk No: 1373
+Program Title: THE PRICEBOOK version 1.0 (Disk 1 of 2)
+PC-SIG version: 1
+
+THE PRICEBOOK acts as a centralized item pricing log so you and your
+employees can instantly know what you are paying for any of the hundreds
+to thousands of items you carry.  It also generates price quotes,
+acknowledgements, purchase orders and invoices.  Each of these forms
+will have the prices automatically entered, extended and totaled,
+eliminating manual data entry and math errors.
+
+Disk #1374, the second disk in the set, contains the documentation for
+the program.
+
+Synopsis:  A centralized item pricing log for businesses with many items
+to track that also generates quotes, orders and invoices with pricing
+data automatically entered and calculated, eliminating manual errors.
+
+Usage:  Business/Inventory/Bookkeeping.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $99.95
+
+File Descriptions:
+
+PB       EXE  Main program.
+PRICEBK  KEY  Data file.
+PBPARM   FIL  Data file.
+PRICEBK  FIL  Data file.
+COBRUN   EXE  Misc. function files.
+PBR      EXE  Misc. function files.
+PRICEINT EXE  Misc. function files.
+PRINTPB  EXE  Misc. function files.
+Q        EXE  Misc. function files.
+QER      EXE  Misc. function files.
+QUOTEINT EXE  Misc. function files.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale, CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1373
 

@@ -31,6 +31,82 @@ machines:
     index.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## EP1LOGO.TXT
+
+{% raw %}
+```
+
+
+
+
+
+
+
+      ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█
+     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ EASY-PLAN 1 (ver.2)▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█
+     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ Mailing List/Database Program ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒█
+     ▒ Copyright (c) MCMLXXXVII AAA Data Systems. All Rights Reserved. ▒█
+     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+
+
+
+
+
+
+                     Please wait while program is loading ...
+```
+{% endraw %}
+
+## FILE1541.TXT
+
+{% raw %}
+```
+Disk No: 1541                                                           
+Disk Title: Easy Plan                                                   
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Easy-Plan                                                
+Author Version: 2.0                                                     
+Author Registration: $99.95                                             
+Special Requirements: 300K RAM and a printer and labels.                
+                                                                        
+EASY-PLAN stores names, addresses, telephone numbers, and comments.     
+This program can be used to create mailing lists of customers and       
+suppliers for your business or for personal mailing labels.             
+                                                                        
+In addition to mailing labels, you can print a variety of reports from  
+the data entries.  Each record contains the company name, personal name,
+address, home and work phone and an additional note or memo.  Records   
+can be added, edited, deleted, viewed, and searched.  Sort according to 
+one of the selections provided or according to your own customized      
+index.                                                                  
+                                                                        
+File Descriptions:                                                      
+                                                                        
+******   FRM  Database file (4 files).                                  
+******   LBL  Database label files (3 files).                           
+EP1      BAT  Start-up batch file.                                      
+EP1      DBF  Data file.                                                
+EP1      DBT  Data file.                                                
+EP1INDEX NTX  Index data file.                                          
+EP1LOGO  TXT  EASY-PLAN logo.                                           
+EP1NAME  MEM  Data file.                                                
+EP1PRG   EXE  Main program.                                             
+LABEL    EXE  Label generator.                                          
+REPORT   EXE  Report generator.                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1541
 

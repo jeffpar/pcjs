@@ -33,6 +33,88 @@ machines:
     user's favorite word processor to generate elegant report forms.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1723.TXT
+
+{% raw %}
+```
+Disk No: 1723                                                           
+Disk Title: PC Data Controller                                          
+PC-SIG Version: S1.4                                                    
+                                                                        
+Program Title: PC Data Controller                                       
+Author Version: 3B                                                      
+Author Registration: $29.95                                             
+Special Requirements: None.                                             
+                                                                        
+If you are a moderately experienced user looking for a powerful and     
+relatively easy to use flatfile database program, PCDC probably deserves
+your attention.  The program incorporates many advanced features,       
+including limited relational capabilities which permit data from two    
+files to be joined in a third.  PCDC also permits the creation of       
+"Action Files" which execute macros created by recording keystrokes,    
+thus allowing you to perform repetitive tasks automatically.            
+                                                                        
+The program is characterized by outstanding flexibility in the design of
+formats for different databases, and it combines well with the user's   
+favorite wordprocessor to generate elegant report forms.                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## PCDCDESC.TXT
+
+{% raw %}
+```
+
+
+
+    Title   : PC Data Controller v 3B - Database manager
+    Keywords: DBMS PCDC SHAREWARE DATABASE FILE REPORT DATA RECORDS FORMS
+    
+    New Version of PC Data Controller (3B) in self extracting form, complete
+    with documentation. PCDC is a flatfile database with great searching
+    -reporting capability, calculated fields, form-filling, file Import/Export,
+    Create files with up to 250 fields and 32767 records per datafile.
+    Shareware by Richware, Registration includes a free update. Req. Dos 2.x or
+    higher; 256k.
+    
+
+                   P C DATA CONTROLLER
+
+                   The best value in database Software @ $29.95
+                   -up to 32,767 records per file
+                   -250 fields per record, 80 Chars.per field
+                   -Search on up to 25 parameters at once *FAST*
+                   -Use wildcard, values, ranges, case sens.opt.
+                   -Calculated, Default data, and Date fields
+                   -Record copying makes data entry easy
+                   -Insert data into forms
+                   -Macro keystroke recording
+                   -Create reports, sorted and totalled *QUICK*
+                   -Save, Print (using options), or Send Reports
+                   -File Import/Export
+                   -Phone dialing
+                   -Sample files included
+                   -Automatic operation through ACTION FILES *NEW*
+                   -Mono or color, 256k, Dos 2.0 or higher
+
+                   RICHWARE
+                   50 MEREDITH RD.            508-851-4554
+                   TEWKSBURY, MA.01876
+
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1723
 

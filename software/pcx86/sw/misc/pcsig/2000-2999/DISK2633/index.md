@@ -18,6 +18,7 @@ machines:
 
 ## APL-QREF.BAS
 
+{% raw %}
 ```bas
 
              QUICK REFERENCE FOR HB'S ALL-PURPOSE LIBRARY:
@@ -122,9 +123,11 @@ SUB DirNext (F$, FileSize&, DateCode&, TimeCode&)
 FUNCTION DecodeDate$ (DateCode&)
 FUNCTION DecodeTime$ (TimeCode&)
 ```
+{% endraw %}
 
 ## APLIB-H.BAS
 
+{% raw %}
 ```bas
 
 DEFINT A-Z
@@ -189,9 +192,11 @@ DEFINT A-Z
 
 
 ```
+{% endraw %}
 
 ## BOXES-U.BAS
 
+{% raw %}
 ```bas
 
 
@@ -464,9 +469,11 @@ SUB Marker2 (Z$)
   LOCATE L,C
 END SUB
 ```
+{% endraw %}
 
 ## COLORSET.BAS
 
+{% raw %}
 ```bas
 
  DEFINT A-Z
@@ -786,9 +793,11 @@ Oops:
  RESUME Start
 
 ```
+{% endraw %}
 
 ## FENTRY-U.BAS
 
+{% raw %}
 ```bas
 
 
@@ -1658,9 +1667,11 @@ FUNCTION ROUNDOFF# (N#, Places%)
 END FUNCTION
 
 ```
+{% endraw %}
 
 ## FIGDAT-U.BAS
 
+{% raw %}
 ```bas
 
 '==============================================================================
@@ -1873,9 +1884,11 @@ END FUNCTION
 
 
 ```
+{% endraw %}
 
 ## HBDEMO.BAS
 
+{% raw %}
 ```bas
 
 '
@@ -3653,9 +3666,11 @@ QBoxTest:
  RETURN
 
 ```
+{% endraw %}
 
 ## INIT-U.BAS
 
+{% raw %}
 ```bas
 
 '                      ╔════════════════════════════╗
@@ -3850,9 +3865,11 @@ WriteAndPeek:
 
 
 ```
+{% endraw %}
 
 ## MENUS-U.BAS
 
+{% raw %}
 ```bas
 
 '==============================================================================
@@ -4442,9 +4459,11 @@ MClearLine:
 
  END SUB                                                         REM SUPERMENU
 ```
+{% endraw %}
 
 ## MISC-U.BAS
 
+{% raw %}
 ```bas
 
 '                      ╔════════════════════════════╗
@@ -4987,9 +5006,11 @@ FUNCTION Cen$ (A$) PUBLIC
 END FUNCTION
 
 ```
+{% endraw %}
 
 ## PUBVARS.BAS
 
+{% raw %}
 ```bas
 
 
@@ -5225,9 +5246,11 @@ FUNCTION EXIST (F$)
  END Function
 
 ```
+{% endraw %}
 
 ## PWW.BAS
 
+{% raw %}
 ```bas
 
 '           ┌─────────────────────────────────────────────┐
@@ -5464,9 +5487,11 @@ DispLns:
  RETURN
 
 ```
+{% endraw %}
 
 ## SHOWCHRS.BAS
 
+{% raw %}
 ```bas
                         $LIB ALL OFF
     CLS
@@ -5483,9 +5508,11 @@ DispLns:
     PRINT: PRINT
     END
 ```
+{% endraw %}
 
 ## SWW.BAS
 
+{% raw %}
 ```bas
 
 '            ┌────────────────────────────────────────────────────────┐
@@ -5739,9 +5766,11 @@ AbnlTermi:
  DO: LOOP UNTIL INKEY$ <> ""
  END
 ```
+{% endraw %}
 
 ## BARCODE.BAS
 
+{% raw %}
 ```bas
 'Program Name    : Barcode.bas
 'Author          : Lloyd L. Smith for Spectra Technical Support
@@ -5940,9 +5969,1868 @@ DATA 255, 0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255
 
 
 ```
+{% endraw %}
+
+## COMSET.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+        
+        
+        
+        
+        
+        
+                                     COMSET
+                                By David Macchia
+        
+             Comset  will install com ports 3 and 4 in the DOS bios  area 
+        for IBM PC, XT, AT's and compatibles.  The power on self tests on 
+        these  machines  only  tests for the presence of  the  first  two 
+        serial  ports,  and  as  a result  any  program  which  uses  DOS 
+        functions  cannot  access ports 3 and 4.  DOS  versions  3.3  and 
+        above  support COM3 and COM4 as devices, and after  using  comset 
+        you  may use the MODE command and redirection of output to  these 
+        ports.
+        
+             Most programs which support COM3 and COM4 do so by using the 
+        actual  device  addresses  rather than the  DOS  function  calls.  
+        However those which go thru DOS cannot "see" ports 3 and 4.  Many 
+        programs that use DOS will not allow selection of any port  above 
+        COM2 even though the addresses are installed.  To get around this 
+        there  are  a  couple of companion programs  included  with  this 
+        package which will swap the com ports in the DOS bios area.  They 
+        can  make DOS think that COM4 is really COM2 for instance.   They 
+        are  called COMSWPxy.COM, where x and y are the ports  which  are 
+        swapped (ie: COMSWP14.COM will exchange ports 1 and 4).
+        
+             Swapping the ports will allow you to access these ports, but 
+        will  not affect the use of them by direct access programs.   For 
+        instance  I have my modem installed as COM4 and have  swapped  it 
+        with  COM1.  Sidekick and Async are configured to use  COM1,  but 
+        are  actually using the address of COM4, while Procomm and  Xtalk 
+        are  still configured as COM4. All of the can use the  modem.  My 
+        mouse is actually connected to the physical COM1, and uses direct 
+        access ignoring the DOS addresses and is configured as COM1  when 
+        I load the driver.  This may sound complicated, but I just COMSET 
+        and COMSWAP14 in my autoexec.bat file and everything works.
+        
+             This version of Comset fixes a bug in swapping port COM2
+        
+             If  you would like to inspect the area of memory which  con-
+        tains these addresses, run debug and enter "D 40:0000".  The  com 
+        ports will be the first eight entries, and should look like this: 
+        0040:0000   F8 03 F8 02 E8 03 E8 02, which are 03F8, 02F8,  03E8, 
+        02E8 for COM 1-4
+        
+             These  programs  are not TSR's.  The will  change  the  port 
+        addresses  and  exit without wasting any memory.  They  are  free 
+        programs  which may be used and distributed by anyone so long  as 
+        they remain unmodified. 
+
+
+
+
+
+             A few notes:
+        
+        1)   Physical  ports 1 and 3, use the same interrupt as do 2  and      
+             4  respectively.   If you are using a mouse on  one  of  the 
+             ports you probably will not be able to run a  communications 
+             program  on  the  other as the are  both  usually  interrupt 
+             driven.
+        
+        2)   Using  Sidekick's dialer may require the use of  the  public 
+             domain program called SKFIX.COM, which is available on  most 
+             bulletin boards, to fool Sidekick into thinking DSR is high.  
+             If you are using version 1.52 you may find you will need  to  
+             patch  out  address  xxxx:8BB6 from 74 F0 to  90  90.   This 
+             worked  for  me, and really has nothing to do  with  comset.  
+             SKFIX  will  also  allow you to send  stuff  to  your  modem 
+             through DOS redirection such as "TYPE SETUP.TXT >  COM4:" to 
+             send  the contents of setup.txt to the modem even if DSR  is 
+             low.
+        
+
+```
+{% endraw %}
+
+## CROSSBAS.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                   CrossBas Manual
+
+                       Power-BASIC Cross-Reference List Creator
+
+
+
+
+
+
+
+                                  November 13, 1989 (1990)
+                                  (c) Lester L. Noll
+                              CompuServe Id:  72250,2551
+
+
+
+
+
+
+
+
+                                     CrossBas.exe
+                                    version 1.00P
+
+
+
+
+
+
+
+
+
+
+
+
+                                    ContentsContents
+
+
+                  1  Disclaimer  . . . . . . . . . . . . . . . . . . 1
+                  2  Copyright and Usage . . . . . . . . . . . . . . 1
+                  3  Introduction  . . . . . . . . . . . . . . . . . 1
+                  4  Running CrossBas  . . . . . . . . . . . . . . . 2
+                  5  Command Line Options  . . . . . . . . . . . . . 2
+                  6  Changing Defaults File  . . . . . . . . . . . . 5
+                  7  The Summary Report  . . . . . . . . . . . . . . 6
+                  8  What CrossBas Does  . . . . . . . . . . . . . . 8
+                     8.1  Initialize . . . . . . . . . . . . . . . . 8
+                     8.2  InitScreen . . . . . . . . . . . . . . . . 8
+                     8.3  ReadCmdLine  . . . . . . . . . . . . . . . 9
+                     8.4  OpenFiles  . . . . . . . . . . . . . . . . 9
+                     8.5  CalcFileNames  . . . . . . . . . . . . . . 9
+                     8.6  ReadDefaults . . . . . . . . . . . . . . . 9
+                     8.7  CheckStringSpace . . . . . . . . . . . .  10
+                     8.8  CalcWordArraySize  . . . . . . . . . . .  10
+                     8.9  PrintScreenTop . . . . . . . . . . . . .  10
+                     8.10  ReadAndParseData  . . . . . . . . . . .  10
+                     8.11  PrintScreen1  . . . . . . . . . . . . .  10
+                     8.12  Compare . . . . . . . . . . . . . . . .  11
+                     8.13  PrintScreen2  . . . . . . . . . . . . .  11
+                     8.14  Sort  . . . . . . . . . . . . . . . . .  11
+                     8.15  PrintScreen3  . . . . . . . . . . . . .  11
+                     8.16  PrintList . . . . . . . . . . . . . . .  11
+                     8.17  PrintReportBtm  . . . . . . . . . . . .  12
+                     8.18  PrintScreen4  . . . . . . . . . . . . .  12
+                     8.19  End Routines  . . . . . . . . . . . . .  12
+
+               Appendix A  CrossBas Files                           13
+
+               Appendix B  Modification History                     15
+
+               Appendix C  Power-BASIC Reserved Words               17
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                          i
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                         ii
+
+
+
+
+
+
+
+
+
+
+
+
+                                    FiguresFigures
+
+
+               Figure 1: Summary Report Example  . . . . . . . . . . 8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                         iii
+
+
+          CROSSBAS.DOC                CrossBas Manual                page 1
+
+
+
+          1  Disclaimer          1  Disclaimer
+
+
+               Hear ye, hear ye!  Be it known that the author hereby
+          disclaims all warranties expressed or implied as to the quality
+          or performance of this program.  The author will not be held
+          liable for any lost profits, lost savings or any other direct,
+          indirect, incidental or consequential damages resulting from the
+          use of this program.  Your use of this program constitutes your
+          agreement to this disclaimer and your release of the author from
+          any form of liability or litigation.  (Really gives you
+          confidence, huh?)
+
+
+          2  Copyright and Usage          2  Copyright and Usage
+
+
+               This program, as well as its accompanying files and
+          documents, is copyright by the author, Lester L. Noll.  You are
+          free to use and distribute it as you wish as long as you charge
+          no payment, either money or otherwise, for it.  Also, you must
+          keep all the associated files together.  The files are listed in
+          Appendix I.  Use PKUNZIP to unarchive.
+
+               If you have any questions, comments or suggestions about
+          this program, feel free to contact me at CompuServe:
+
+                    Lester L. Noll
+                    [72250,2551]
+
+
+          3  Introduction          3  Introduction
+
+
+               CrossBas will scan a Power-BASIC source file and create a
+          cross-reference table of variable names, labels, procedure and
+          function names versus the physical line numbers where those names
+          occur.
+
+               To do this we must first read in all words in the file.  We
+          can skip text to the right of "REM" statements or "'" remark
+          identifiers; text to the right of "DATA" statements; text between
+          quote marks;  numbers;  and operators.
+
+               After the program words are read in, we compare them with
+          Power-BASIC reserved words and metastatements.  We keep only
+          those that are not Power-BASIC words.
+
+               Finally, we alphabetize the remaining words and print them
+          out, one word to a line, followed by the physical source file
+          line number(s) where these words are found.  The list is sorted
+          without regard to case.
+
+
+          CROSSBAS.DOC                CrossBas Manual                page 2
+
+
+
+               We print the list to an ASCII file and allow the user some
+          control over its format.  You may either print it to your printer
+          using the DOS PRINT or TYPE filename.ext>PRN commands or you may
+          use a print program such as Norton's LP.
+
+               At the end of the file is a summary report showing
+          processing times, number of words processed and a few
+          calculations that may be helpful for customizing CrossBas to your
+          own programming characteristics.
+
+
+          4  Running CrossBas          4  Running CrossBas
+
+
+               Run CrossBas from the DOS command line.  There is no
+          interactive mode.  If you enter "CROSSBAS" with no command line
+          parameters, CrossBas will print a short message showing proper
+          syntax and the optional switches.
+
+
+          5  Command Line Options          5  Command Line Options
+
+
+               The only required command line parameter is the input file
+          (source file) path/name.  The output file path/name and switches
+          are optional.  If no output file is entered, I append ".cb" to
+          the input file name to create an output file name.  If a file
+          having the same name as output file already exists, I write over
+          it -- so be warned.
+
+               Command line options can be entered in any order.  In fact,
+          the only rule is that the input file path/name must be entered
+          before the output file path/name.  You may enter switches, one
+          after the other, without separating spaces.  If, however, you
+          enter a switch before a file path/name you must leave at least
+          one space between the file path/name and the preceding switch.
+
+          Syntax:
+
+          crossbas infile[.ext][outfile][.ext][/bw][/p][/u][/s][/l:n][/w:n]
+
+
+          Switches:
+               /bw  Set screen colors to black and white.
+               /p   Paginate output file and print page headers.
+               /u   Print variables to output file in upper case.
+               /s   Print the list to the screen as well as to file.
+               /l:n Set the printer left margin to n columns.
+               /w:n Override CrossBas' word array dimension calculation.
+
+
+          CROSSBAS.DOC                CrossBas Manual                page 3
+
+
+
+          Input File                    infile                   [required]
+
+               The input file path/name must be a valid DOS pathname.  If
+          no path is entered, the default path is assumed.  If the input
+          file path/name is not found, CrossBas prints an appropriate
+          message and quits.
+
+
+          Output File                   outfile                  [optional]
+
+               The output file path/name must be formed using valid DOS
+          pathname and filename syntax.  If no path is entered, the default
+          is assumed.  If no output file path/name is entered or if the
+          entered output file path/name is invalid, I append ".cb" to the
+          input file path/name for the output file.
+
+               I do not check if a file with the same name already exists.
+          If one does exist, I write over it.  If you have a main file with
+          the extension ".bas" and an include file with the extension
+          ".inc" you are responsible for providing output file names that
+          do not conflict with each other.  By allowing CrossBas to use its
+          default output file name, both cross-reference files would have
+          the same name, which means the second one would overwrite the
+          first.
+
+
+          Black & White                    /bw                   [optional]
+
+               The black and white switch, /bw, sets the screen color to
+          black and white.  The default screen colors are yellow (#14)
+          foreground on a blue (#1) background.  The upper and lower screen
+          lines (lines 1 and 25) use the same colors but with foreground
+          and background colors reversed.  Since only colors numbered 0
+          through 7 are allowed for background colors, and since yellow is
+          14, the upper and lower screen line colors are blue foreground
+          and brown (#6) background (14 minus 8).
+
+
+          Paginate                       /p                      [optional]
+
+               The paginate switch, /p, causes the output file to be
+          written with page breaks and page headers.  The header contains
+          the current system date, the page number and the source file
+          name.  To print a paginated file, type either "TYPE filename.ext
+          > PRN" or "PRINT filename.ext" from the DOS command line.  Blank
+          lines and form-feeds are inserted in the output file in order to
+          leave two blank lines at the top of the page and three blank
+          lines at the bottom of the page.  The header appears on line
+          three of each page, followed by one blank line. On line five is a
+          column header indicating "Variable/Label/Proc" name on the left,
+          and "Physical Line Number" on the right.
+
+
+          CROSSBAS.DOC                CrossBas Manual                page 4
+
+
+
+               If the paginate switch is not selected, the output file is
+          printed without page breaks or headers.  This method may be
+          preferable if you use a print formatter like Norton Utilities'
+          LP, which does its own page formatting.
+
+               In either case, the summary report will be printed on the
+          last page without breaks.  Thus if there are not enough lines to
+          print the entire report on what remains of the last page, I
+          insert a form-feed and print it on a new page.
+
+
+          Upper-case                      /u                     [optional]
+
+               The upper-case switch, /u, causes the variable, label,
+          procedure and function names to be written to the output file in
+          all upper-case.  If this switch is selected, two words, the same
+          in name but written in different case, would only appear once in
+          the output listing.  If this switch is not selected, for example,
+          "Label1:", LABEL1:" and "label1:" would all be listed separately.
+          If you use case to clarify your labels, such as,
+          "ThisIsLabelOne:", you will probably choose to not use this
+          switch.  Sorting is always done in upper-case order, therefore
+          "AAA", "aaa" and "Aaa" would be treated equally.  (Because I use
+          UCASE$(word$) to sort the list, the three previous examples could
+          appear in any order.)
+
+
+          Screen                        /s                       [optional]
+
+               The screen switch, /s, causes the sorted list to print to
+          the screen at the same time it prints to the output file.  After
+          22 lines print to the screen, the scroll stops with a "...Press Q
+          to Quit screen list, any other key to continue" message.  When
+          you press a key the scroll continues for 22 more lines.  If you
+          press <Q> or <ESC> the screen list stops but output to output
+          file continues until the list print is completed.
+
+          [Note:  The list prints to the output file at the same time it
+          prints to the screen.  Therefore, if you decide you don't want to
+          see anymore and press <Ctrl><Break>, you will also abort the
+          write to file.]
+
+
+          Left Margin                    /l:n                    [optional]
+
+               The left margin switch and parameter, /l:n, will insert a
+          printer setup string at the top of the output file to set the
+          left margin at "n" columns.  The left margin range is 0 to 8
+          columns.  Since the page width is 72 columns, having a left
+          margin of more than 8 would push the page off the edge of an 80
+          column page.  If you enter a left margin greater than 8, the
+          value defaults to 8.
+
+
+          CROSSBAS.DOC                CrossBas Manual                page 5
+
+
+
+          [Note:  I use the Epson escape sequence, <ESC> "l" n, where n
+          equals the left margin column.  If you have a different printer
+          you must modify the code or not use this option.]
+
+
+          Word Array Dimension Override     /w:n                 [optional]
+
+               The word dimension override switch and parameter, /w:n, will
+          override CrossBas' internal word dimension calculation.  You may
+          need to use this if the source file is less densely commented
+          than CrossBas expects.  Let me explain.
+
+               CrossBas uses a string array to hold all the words read in
+          from the input file.  I use two default parameters to calculate
+          how many words to dimension the word array for.  The two
+          parameters are Average Word Length and Packing Factor.  The word
+          array will hold all of the non-comment, non-number words found in
+          a source file.  To calculate the word array dimension, I first
+          read the source file size in bytes.  Then I multiply it by the
+          Packing Factor.  The Packing Factor is a number, less than 1,
+          that represents the ratio of non-comment, non-number word bytes
+          versus the total bytes in the file.  Then I divide the result by
+          the Average Word Length.  These two parameters are read in from
+          the defaults file, CROSSBAS.DEF, when CrossBas first starts.
+
+               Normally, this calculation is accurate enough.  However, if
+          the actual packing factor of a particular source file is
+          considerably greater than the default or the actual average word
+          length is considerably smaller than the default, you may need to
+          use this switch.
+
+               To use the /w:n switch:  approximate the number of words,
+          both Power-BASIC reserved words and non-reserved words: labels,
+          procedure names, function names, variable names, in the source
+          file.  Do not include comment words, data words or numbers in the
+          total.  This number will become the 'n' parameter of the word
+          array dimension switch.
+
+
+          6  Changing Defaults File          6  Changing Defaults File
+
+
+               You can change the defaults file with any ASCII editor.
+          When you run CrossBas the first time it will create CROSSBAS.DEF.
+          The next time it runs it will look for that file in the default
+          directory.  If it finds it, CrossBas will read in two parameters:
+          Average Word Length, and Packing Factor.
+
+               These two parameters are both in the first line of the
+          defaults file, separated by a comma.  The rest of the defaults
+          file contains a few lines of text explaining the default
+          parameters.  You may do anything you like to this file except
+          modify the format of the first line.  Change the values, if you
+          like but be sure the first number, the Average Word Length, is a
+
+
+          CROSSBAS.DOC                CrossBas Manual                page 6
+
+
+
+          number greater than one.  Likewise, the second number, the
+          Packing Factor, must be a decimal number less than one.  The two
+          numbers must be separated by a comma.
+
+               To determine the best default parameters, check the summary
+          report, at the end of your CrossBas listings.  It shows the
+          default values used by CrossBas.  It also shows the actual
+          parameters that CrossBas found after reading in the words from
+          the source file.  After CrossBas-ing a few of your source files,
+          you can get an idea of the Average Word Lengths and Packing
+          Factors you use in your files.
+
+
+          7  The Summary Report          7  The Summary Report
+
+
+               A summary report appears at the end of the CrossBas cross-
+          reference file listing.
+
+               The top two-thirds of the report is the same as what
+          CrossBas prints to the screen as it processes the source file.
+
+               Your command line options are listed on the top two rows.
+
+               The next three lines show the read and parse procedure
+          statistics.  This is where CrossBas reads in source file text
+          lines, parses them into words and saves all the words that are
+          not comments (REM or '), data words (DATA), operators (*, AND, =,
+          etc.), or numbers.  The remaining words get stored in a word
+          array.  Line number references for each of the saved words are
+          stored in a line number array.  These three lines show the number
+          of lines in the source file, the number of words saved to the
+          word array and the start, end and elapsed processing times.
+
+               The next three lines show the compare procedure statistics.
+          Up to this point, the word array contains Power-BASIC reserved
+          words, label names, variable names, subprogram (SUB) names and
+          function (FN) names.  Now CrossBas compares each word in the word
+          array with Power-BASIC reserved words.  If the words compare we
+          do not save them.  These three report lines show the number of
+          words compared, the number of non-Power-BASIC words in the source
+          file (if the same word appears 5 times then it is counted as 5
+          words at this point) and the start, end and elapsed processing
+          times.
+
+               The next two lines show the sort procedure statistics.
+          CrossBas sorts the remaining words in alphabetical order, without
+          regard for case.  These two report lines show the number of words
+          sorted and the start, end and elapsed processing times.
+
+               The next two lines show the printing to file statistics.
+          CrossBas prints the sorted words to the output file in the manner
+          specified by the command line options.  These two lines show the
+          number of unique words (if the same word appears 5 times it is
+
+
+          CROSSBAS.DOC                CrossBas Manual                page 7
+
+
+
+          counted as only one unique word) printed to the output file and
+          the start, end and elapsed processing times.
+
+               The next line shows the total CrossBas processing times:
+          start, end and elapsed, from the start of the read and parse
+          procedure to the end of the print to file procedure.
+
+               Next we have an analysis of the source file.  Use this to
+          help you customize your CROSSBAS.DEF file.
+
+               The total number of bytes used by the word array is taken at
+          the time when it contained both non-reserved words (labels,
+          procedures, functions, variables) and Power-BASIC reserved words.
+          I use this figure (actually a projection of this figure using the
+          input file length and the default Packing Factor) to determine if
+          there will be enough string space to process the source file.
+
+               The default word array dimension is the number used to
+          dimension the word array.  This is a calculated value unless you
+          included a command line override (/w:n).  The command line
+          override is shown at the top of the report.  If no override
+          option was included, the screen report will show "No o/r."
+
+               The actual word array dimension is the actual number of
+          words found in the source file.
+
+               The default Average Word Length is the number read in from
+          the CROSSBAS.DEF file.  I use this, along with the default
+          Packing Factor, to calculate the default word array dimension.
+
+               The actual average word length is the actual average word
+          length of the non-reserved words in the source file.  I guess
+          that explains itself.
+
+               The default Packing Factor is the number read in from the
+          CROSSBAS.DEF file (a number less than one).  I use this, along
+          with the Average Word Length, to calculate the word array
+          dimension.  I use this also to determine if there is enough
+          string space to process the source file.
+
+               Finally, we list the source and output file names and sizes.
+
+
+          CROSSBAS.DOC                CrossBas Manual                page 8
+
+
+
+                               -+-+-+- Summary Report -+-+-+-
+
+          Options: Upper-case:  No     Screen:   No       Paginate:  Yes
+                   Left Margin: 6      ArrayDim: No o/r
+
+          Read:      448 lines from source file CROSSBAS.INC
+          Found:     919 non-comment words.
+          Times:     Start: 15:06:59  End: 15:07:16  Elapsed: 00:00:17
+
+          Compared:  919 non-comment words from source file CROSSBAS.INC
+          Found:     432 non-reserved words (variables, labels, procedures)
+          Times:     Start: 15:07:17  End: 15:07:27  Elapsed: 00:00:10
+
+          Sorted:    432 non-reserved words (variables, labels, procedures)
+          Times:     Start: 15:07:28  End: 15:08:01  Elapsed: 00:00:33
+
+          Printed:   93 unique, non-reserved words to CROSSBAS.CBI
+          Times:     Start: 15:08:02  End: 15:08:04  Elapsed: 00:00:02
+
+          Totals:    Start: 15:06:59  End: 15:08:04  Elapsed: 00:01:05
+
+          Word Array Size:   4,852 bytes
+          Default Word Array Dim.:  1,124 wds  Actual Word Array Dim.:    919 wds
+          Default Avg.Word Length:      6 byt  Actual Avg.Word Length:      5 byt
+          Default Packing Factor:   45.00 %    Actual Packing Factor:   32.35 %
+
+          Source,    CROSSBAS.INC, File size:  14,998 bytes
+          Cross-Ref, CROSSBAS.CBI, File size:   6,984 bytes
+
+
+                              Figure 1: Summary Report Example                              Figure 1
+
+
+
+          8  What CrossBas Does          8  What CrossBas Does
+
+
+               CrossBas' main program flow consists of a series of GOSUB-
+          type subroutines.  The following is a description of each one in
+          the order in which they occur.
+
+          8.1  Initialize          8.1  Initialize
+
+               Initialize the screen type and color variables.  Most of my
+          numbers will be integers so I define all number variables as
+          integers.  Set up an error trap.
+
+          8.2  InitScreen          8.2  InitScreen
+
+               Print initializing message to the screen.
+
+
+          CROSSBAS.DOC                CrossBas Manual                page 9
+
+
+
+          8.3  ReadCmdLine          8.3  ReadCmdLine
+
+               Read in the DOS command line parameters.  Set up the
+          paginate, screen print and upper-case flags, and the left margin
+          and word array dimension variables.  Get input file path/name.
+          The second parameter that is not a valid switch is assumed to be
+          the output file path/name.  If no input file path/name is found
+          then print the appropriate message to the screen and die.
+
+          8.4  OpenFiles          8.4  OpenFiles
+
+               Attempt to open the input and output files.  If I fail while
+          opening the input file, I check to see if it has an extension.
+          If it doesn't, I append ".bas" and try again.  If I fail again, I
+          print the appropriate message to the screen and die.
+
+               If the input I open the input file ok, I next attempt to
+          open the output file.  If no file path/name is given I append
+          ".cb" to the end of the input file (after stripping the
+          extension, if one exists).  If I fail, I somewhere along the way,
+          I print the appropriate message to the screen and die.  If I am
+          successful I close the output file until I'm ready to write to
+          it.
+
+          [Note:  A previously existing file with the same name as the
+          output file is, at this point, replaced by a file of 0 bytes.]
+
+          8.5  CalcFileNames          8.5  CalcFileNames
+
+               Strip off the drive and directory specs from the input and
+          output file path/names.  I use these stripped names for output
+          file page headers and screen and file report headers.
+
+          8.6  ReadDefaults          8.6  ReadDefaults
+
+               Read in the default values for Average Word Length and
+          Packing Factor from the defaults file, CROSSBAS.DEF.  If this
+          file does not exist, I make one.
+
+               If you run CrossBas from other than its home directory, it
+          will not find its defaults file and will create a new one in the
+          default directory.  This won't bother CrossBas but if you have
+          modified the CROSSBAS.DEF and are assuming your modified default
+          parameters will be used, you may be surprised.  In that case, you
+          had better change directory to the CrossBas directory and run the
+          program from there.  See the default section for more on
+          modifying the defaults file.
+
+
+          CROSSBAS.DOC                CrossBas Manual               page 10
+
+
+
+          8.7  CheckStringSpace          8.7  CheckStringSpace
+
+          [Note:  I removed this subroutine from the Power-BASIC version of
+          CrossBas because of PB's increased string space capacity.  To use
+          it with Turbo-BASIC, reinstall.]
+
+               Check to see that there is enough free string space for
+          storing the anticipated input file words.  I read the input file
+          size and multiply it by the packing factor.  This should give me
+          the approximate number of bytes of non-comment, non-number words
+          in the input file.  Then I compare this "effective file size"
+          with the free string space.  If not enough string space, I print
+          the appropriate message to the screen and die.
+
+          8.8  CalcWordArraySize          8.8  CalcWordArraySize
+
+               First check to see if there is a command line Word Array
+          Dimension override (/w:n).  If so, use this value to dimension
+          the word array.
+
+               If not calculate the approximate number of words in the
+          input file.  Find the effective input file size by multiplying
+          the input file size by the Packing Factor.  Then divide the
+          effective file size by the Average Word Length.  Packing Factor
+          and Average Word Length are values read in from the defaults file
+          in the ReadDefaults section.
+
+          8.9  PrintScreenTop          8.9  PrintScreenTop
+
+               Print the first few lines of the screen report.  These show
+          the input file name, less any drive or directory specifications;
+          the condition of the three command line switch flags; and the
+          option values for left margin and word array dimension override.
+
+          8.10  ReadAndParseData          8.10  ReadAndParseData
+
+               Read in the input file line by line, and parse out the non-
+          comment, non-number words.  Save these words, along with their
+          physical line numbers in separate arrays.  Keep a running total
+          of the bytes in the word array.  Print the current input file
+          line number and word to the status bar at the bottom of the
+          screen after every input file line.
+
+               Also, check the free string space after each line and, if it
+          gets below 300 bytes (249 column limit per line, plus a few extra
+          for good measure) then abort and print the appropriate message to
+          the screen and die.
+
+          8.11  PrintScreen1          8.11  PrintScreen1
+
+               Print the number of lines read from the input file, the
+          number of non-comment, non-number words read and saved in the
+          word array, and the start and end times for the operation to the
+          screen.
+
+
+          CROSSBAS.DOC                CrossBas Manual               page 11
+
+
+
+          8.12  Compare          8.12  Compare
+
+               Compare the word array words with Power-BASIC reserved
+          words.  If the words are not Power-BASIC words, then save them
+          and their associated line-number array elements.  Print the
+          current word number to the status bar at the bottom of the screen
+          after every non-Power-BASIC word is saved.
+
+               By checking the first letter of the word array word, I only
+          need to compare the word array word with Power-BASIC words
+          beginning with the same letter.  Save the non-Power-BASIC words
+          back into the same array but at a lower location.
+
+               Lets say words 1,2 and 3 were Power-BASIC words.  Word 4 is
+          a label.  Therefore I save word array element number 4 back to
+          the same array but as element 1.  I also save the associated
+          line-number array element, in this case, 4 to 1.
+
+               When I have compared all the words in the array, I blank out
+          the remaining, non-used elements in the word array to free up
+          string space.
+
+          8.13  PrintScreen2          8.13  PrintScreen2
+
+               Print the number of non-reserved words saved back to the
+          word array and the start and end times for the operation to the
+          screen.
+
+          8.14  Sort          8.14  Sort
+
+               Sort the remaining non-Power-BASIC words into alphabetical
+          order.  I use a modified bubble sort and compare upper-case
+          values of the words.  Print the current pass to the status bar at
+          the bottom of the screen.
+
+               If there are J words in the word array then I make J-1
+          passes through the array, comparing a word with the word after
+          it.  If the words are in order, I check the next two words.  If
+          the words are out of order I swap them and their associated
+          line-number array elements.  If I make an entire pass without
+          making any swaps, then the sorting is complete.
+
+          8.15  PrintScreen3          8.15  PrintScreen3
+
+               Print the number of non-reserved words sorted and the start
+          and end times for the operation to the screen.
+
+          8.16  PrintList          8.16  PrintList
+
+               Print the word list to the output file.  The words are
+          listed in the left column.  The associated line numbers are
+          listed in the right eight columns.  Print the current page and
+          word number to the status bar at the bottom of the screen.
+
+
+          CROSSBAS.DOC                CrossBas Manual               page 12
+
+
+
+            o  If a left margin (/l:n) is selected, print the printer setup
+               string at the top of the file.
+            o  If the upper-case switch (/u) is selected, convert the words
+               at print time.
+            o  If the screen print switch (/s) is selected, print the words
+               and line-numbers to the screen as they print to file.
+            o  If the paginate switch (/p) is selected, print a page header
+               at the top of each page and a form-feed at the bottom of
+               each page.
+
+          8.17  PrintReportBtm          8.17  PrintReportBtm
+
+               Print the summary report on the last page of the report.  If
+          the paginate switch (/s) is selected then if there is not enough
+          room on the last page for the entire report, send out a form-feed
+          and put it on a new page.  If the paginate switch is not selected
+          then send out a form-feed to start a new page.
+
+               The report contains read, compare, sort and print
+          information, similar to that displayed on the screen.
+          Additionally I print total procedure times; source and output
+          file sizes; word array words and bytes, both default and actual;
+          and Packing Factors and Average Word Lengths, default and actual.
+
+          8.18  PrintScreen4          8.18  PrintScreen4
+
+               Print the number of unique words printed to the output file
+          and the start and end times for the operation to the screen.
+          Erase the status bar and print a "CrossBas finished" message.
+
+          8.19  End Routines          8.19  End Routines
+
+               Finally, I close all open files, flush the keyboard buffer
+          and wait for the user to acknowledge he has read the report
+          screen by pressing a key.  I included this step because some
+          versions of DOS erase the screen when they reload COMMAND.COM.
+
+
+          CROSSBAS.DOC                CrossBas Manual               page 13
+
+
+
+
+
+
+
+
+
+                                     Appendix AAppendix A
+
+                                   CrossBas FilesCrossBas Files
+
+
+               CrossBas uses the following files:
+
+          CRSBAS.ZIP          CrossBas archive file that contains the
+                              CrossBas files.
+          CROSSBAS.EXE        CrossBas executable file.
+          CROSSBAS.DEF        CrossBas defaults file.  (CrossBas creates
+                              this file the first time it runs.)
+          CROSSBAS.BAS        CrossBas main source file.
+          CROSSBAS.INC        CrossBas subprograms file.
+          CROSSBAS.DOC        CrossBas document file (this file).
+
+
+          CROSSBAS.DOC                CrossBas Manual               page 14
+
+
+          CROSSBAS.DOC                CrossBas Manual               page 15
+
+
+
+
+
+
+
+
+
+                                     Appendix BAppendix B
+
+                                Modification HistoryModification History
+
+
+          version 1.00P     12/ 1/90
+
+          Uploaded CrossBas version 1.00P to CompuServe PCVENB, Spectra
+          forum.
+
+          version 1.000     11/13/89
+
+          Uploaded CrossBas version. 1.00 to CompuServe BPROGA forum,
+          LIB 9.
+
+          KEYWORDS:  CROSS-REFERENCE, TABLE, LIST, NON-RESERVED WORDS,
+                     BASIC, CREF, XREF
+
+          Description:   CrossBas will read in a Power-BASIC source file
+                         and create an alphabetized cross-reference listing
+                         of non-reserved words, i.e., variable, subprogram,
+                         function and label names, along with the physical
+                         line number(s) where they appear.  The list is
+                         printed to file.  Handy for cleaning up unused
+                         variable names, labels, etc.
+
+
+          CROSSBAS.DOC                CrossBas Manual               page 16
+
+
+          CROSSBAS.DOC                CrossBas Manual               page 17
+
+
+
+
+
+
+
+
+
+                                     Appendix CAppendix C
+
+                             Power-BASIC Reserved WordsPower-BASIC Reserved Words
+
+
+          $COM             BLOAD            DEF              FILEATTR()
+          $COM1            BSAVE            DEFBCD           FILES
+          $COM2                             DEFDBL           FIX()
+          $COMPILE         CALL             DEFEXT           FIXDIGITS
+          $CPU             CASE             DEFFIX           FLEXCHR$
+          $DEBUG           CBCD()           DEFFLX           FN
+          $DYNAMIC         CDBL()           DEFINT           FOR
+          $ELSE            CEIL()           DEFLNG           FRE()
+          $ENDIF           CTEXT()          DEFQUD           FREEFILE
+          $ERROR           CFIX()           DEFSNG           FROM
+          $EVENT           CHAIN            DEFSTR           FUNCTION
+          $FLOAT           CHDIR            DELAY
+          $IF              CHR$()           DELETE           GET
+          $INCLUDE         CINT()           DESCEND          GET()
+          $INLINE          CIRCLE()         DIM              GET$
+          $LIB             CLEAR            DO               GOSUB
+          $LINK            CLNG()           DRAW             GOTO
+          $LIST            CLOSE            DYNAMIC
+          $OPTION          CLS                               HEX$()
+          $SEGMENT         COLLATE          ELSE
+          $SOUND           COLOR            ELSEIF           IF
+          $STACK           COM()            END              IMP
+          $STATIC          COMMAND$         ENDMEM           IN
+          $STRING          COMMON           ENVIRON          INCR
+                           COS()            ENVIRON$()       INKEY$
+          ABS()            CQUD()           EOF()            INP()
+          ABSOLUTE         CSNG()           EQV              INPUT
+          AND              CSRLIN           ERADR            INPUT #
+          ANY              CVB()            ERASE            INPUT$()
+          APPEND           CVD()            ERDEV            INSERT
+          ARRAY            CVE()            ERDEV$           INSTAT
+          AS               CVF()            ERL              INSTR()
+          ASC()            CVI()            ERR              INT()
+          ASCEND           CVL()            ERROR            INTERRUPT
+          ASCII()          CVMD()           EXECUTE          IOCTL
+          DATA             CVMS()           EXIT             IOCTL$
+          AT               CVQ()            EXP()
+          ATN()            CVS()            EXP10()          KEY
+                                            EXP2()           KEY()
+          BASE             DATA             EXTERNAL         KILL
+          BEEP             DATE$            EXTRACT$()
+          BIN$()           DECLARE                           LBOUND()
+          BINARY           DECR             FIELD            LCASE$()
+
+
+          CROSSBAS.DOC                CrossBas Manual               page 18
+
+
+
+          LEFT$()          OCT$()           RESET            TALLY()
+          LEN()            OFF              RESTORE          TAN()
+          LET              ON               RESUME           THEN
+          LINE             OPEN             RETURN           TIME$
+          LINE()           OPTION           RIGHT$()         TIMER
+          LIST             OR               RMDIR            TIMER()
+          LOC()            OUT              RND              TO
+          LOCAL            OUTPUT           RND()            TROFF
+          LOCATE                            ROUND()          TRON
+          LOF()            PAINT()          RSET
+          LOG()            PALETTE          RTRIM$()         UBOUND()
+          LOG10()          PEEK()           RUN              UCASE
+          LOG2()           PEEK$()                           UCASE$()
+          LOOP             PEEKI()          SAVE             UNTIL
+          LPOS()           PEEKL()          SCAN             USING
+          LPRINT           PEN              SCREEN           USING$()
+          LPRINT #         PEN()            SCREEN()         USR
+          LSET             PLAY             SEEK             USR0
+          LTRIM$()         PLAY()           SEG              USR1
+                           PMAP()           SELECT           USR2
+          MAP              POINT()          SERVICE          USR3
+          MAX()            POKE             SGN()            USR4
+          MAX$()           POKE$            SHARED           USR5
+          MAX%()           POKEI            SHELL            USR6
+          MEMSET           POKEL            SIN()            USR7
+          MID$()           POS              SORT             USR8
+          MIN()            POS()            SOUND            USR9
+          MIN$()           PRESET           SPACE$()
+          MIN%()           PRINT            SPC()            VAL()
+          MKDIR            PRINT #          SQR()            VARPTR()
+          MKB$()           PSET()           STATIC           VARPTR$()
+          MKD$()           PUBLIC           STEP             VARSEG()
+          MKE$()           PUT              STICK()          VERIFY()
+          MKF$()           PUT()            STOP             VIEW
+          MKI$()           PUT$             STR$()           VIEW()
+          MKL$()                            STRIG
+          MKMD$()          RANDOM           STRIG()          WAIT
+          MKMS$()          RANDOMIZE        STRING$()        WEND
+          MKQ$()           READ             STRPTR()         WHILE
+          MKS$()           REDIM            STRSEG()         WIDTH
+          MOD              REG              SUB              WINDOW
+          MTIMER           REG()            SWAP             WINDOW()
+                           REM              SYSTEM           WITH
+          NAME             REMOVE$()                         WRITE
+          NEXT             REPEAT$()        TAB()            WRITE #
+          NOT              REPLACE          TAGARRAY
+                                                             XOR
+
+```
+{% endraw %}
+
+## DIABLO.ASM
+
+{% raw %}
+```
+;Program Name    : Diablo.asm
+;Author          : Mark Winkler, Consultant
+;Date            : 10-20-90
+;Compuserve #    : 73210,611
+;Description     : Supports X-On, X-off as a TSR
+;Tech Support BBS: 813-625-1721, PC-Board, 8,N,1 USR HST 300 - 14.4, 24hrs
+;Tech Support Fax: 813-625-1698  G2 & G3 compatible
+;Tech Support Voc: 813-625-1172  Voice
+;
+;
+;       Diablo Driver
+;
+;       Intercepts calls to Int 17 (printer) and converts them
+;       to Int 14 (communications) and does either x-on/x-off or
+;       Etx logic
+;
+;       Command Format: Diablo L C X B P L S N
+;                              | | | | | | | |
+;                              | | | | | | | - Nulls
+;                              | | | | | | --- Stop bits
+;                              | | | | | ----- Word lenght
+;                              | | | | ------- Parity
+;                              | | | --------- Baud Rate
+;                              | | ----------- Protocol (E)tx,(X)on,(R)edirect
+;                              | ------------- Com device 0,1,2,3
+;                              --------------- LPT Device 0,1,2
+;
+;               or
+;
+;       diablo *  -- activates or deactivates an existing driver
+;
+;
+;       Note:
+;               Pins 5,6 must be hooked up.
+;               If simple hook up tie pin 20 to 5,6.
+;
+;
+;       update history
+;
+;       10/24/87  init dtr and rts lines on start of program
+;       12/24/87  added switch for nulls
+
+
+
+
+
+
+code    segment byte public 'code'
+
+etxbyte equ     03h
+ackbyte equ     06h     ;
+passbyte equ    01      ;pass through   byte
+xonbyte equ     11h
+xoffbyte equ    13h
+;
+etries  equ     20      ;number of error tries before reporting error
+                        ;the exact time depends on what is located at
+                        ;40:7c rs-232 timeout values
+
+
+        assume cs:code,ds:code,es:code
+
+        org     80h
+
+comlength db    0
+
+
+        org     100h
+beg:    jmp     start
+;
+;
+resident db     'Diablo'
+int17:
+        pop     dx              ;pop registers
+        pop     ds
+;
+        db      0eah            ;jmp far instruction
+intdword dd     0               ;double word ptr to int 17
+activefg db     0ffh
+intdwd  dd      0               ;storage for point to intercept
+
+;
+;
+protocol db     0               ;protocol byte
+comdevice dw    0               ;which com port to use
+lptdevice dw    0               ;which printer device to use
+errtries db     0               ;storage for errors
+;
+;
+baud    db      0
+parity  db      0
+wordlen db      0
+stopbit db      0
+;
+nulls   db      0               ;number of nulls to insert
+;
+int17catch:
+        push    ds              ;save segment
+        push    dx
+        push    cs              ;place on stack
+        pop     ds              ;update ds register
+
+        cmp     dx,lptdevice    ;intercept this call ?
+        jnz     int17           ;no
+        cmp     ah,0            ;maybe
+        jnz     initstat
+        cmp     protocol,etxbyte
+        jz      etx             ;
+        cmp     protocol,passbyte
+        jz      passthru
+        jmp     xon             ;do xon stuff
+;
+initstat:
+        mov     ah,10010000b    ;set printer status
+        jmp     int17ret
+
+;
+int17ret:
+        pop     dx
+        pop     ds
+        iret
+;
+;       redirected and pass thru, no protocol
+;
+passthru:
+        mov     errtries,etries ;set error tries
+trypassagain:
+        call    sendtocom       ;send the byte
+        and     ah,80h          ;check for timeout
+        jz      rettocaller     ;return, a-ok
+        dec     errtries
+        jnz     trypassagain    ;try again maybe busy (pin 20)
+        jmp     error
+
+;
+;       ETX Routines
+;
+ETX:
+        call    sendtocom
+        and     ah,80h          ;check for timeout
+        jnz     error
+        cmp     al,0dh          ;carriage return
+        jnz     rettocaller
+        mov     al,etxbyte      ;send etx to printer
+        call    sendtocom
+        mov     al,0dh          ;place byte back encase error
+        and     ah,80h
+        jnz     error
+        mov     errtries,etries
+
+tryetxagain:
+        call    recfromcom      ;get character
+        and     ah,80h
+        jz      chkack
+        dec     errtries                ;decrement number of tries
+        jnz     tryetxagain
+;
+        mov     al,0dh          ;place org. back in
+        jmp     error
+chkack:
+        and     al,7fh          ;throw any extra bits away
+        cmp     al,ackbyte
+        jnz     tryetxagain
+        mov     al,0dh          ;place orginal byte back in
+rettocaller:
+        mov     ah,10010000b    ;set printer status
+        jmp     int17ret
+;
+sendtocom:
+        mov     ah,1            ;send character in al
+        mov     dx,comdevice    ;get device number
+        int     14h             ;send it
+        test    ah,80h          ;error
+        jnz     sendcomret      ;return if error
+;
+        cmp     al,0dh          ;carriage return
+        jnz     sendcomret
+;
+        push    cx
+        mov     cl,nulls        ;get the number of nulls
+        or      cl,cl           ;if zero skip it
+        jz      endnull
+;
+nulloop:
+        mov     ah,1            ;send character in al
+        mov     al,0h           ;send the null
+        mov     dx,comdevice    ;get device number
+        int     14h             ;send it
+        test    ah,80h          ;error
+        jnz     endnull         ;return if error
+        dec     cl
+        jnz     nulloop         ;if more send it
+
+endnull:
+        pop cx
+        mov al,0dh
+sendcomret:
+        ret
+;
+recfromcom:
+        mov     ah,2            ;rec character
+        mov     dx,comdevice
+        int     14h
+        ret
+;
+getstatcom:
+        mov     ah,3            ;get status of port
+        mov     dx,comdevice
+        int     14h
+        ret
+;
+
+error:
+        mov     ah,1            ;show printer busy
+        jmp     int17ret
+;
+;
+;       xon/xoff protocol
+;
+xon:    push    ax              ;save the character to send
+        call    getstatcom      ;get the status
+        and     ah,1            ;data ready
+        jz      xon1
+        call    recfromcom      ;get the character
+        cmp     al,xoffbyte     ;xoff character
+        jnz     xon1
+;
+        mov     errtries,etries
+xonwait:
+        call    recfromcom      ;get character
+        and     ah,80h
+        jz      chkxon
+        dec     errtries        ;decrement number of tries
+        jnz     xonwait
+        pop     ax              ;restore the character
+        jmp     error
+;
+chkxon:
+        and     al,7fh          ;throw any extra away
+        cmp     al,xonbyte
+        jnz     xonwait
+;
+xon1:   pop     ax              ;rtestore character
+        call    sendtocom       ;send the character
+        jmp     rettocaller     ;and return to the caller
+
+lastbyte db     0
+;
+;
+clrspace:
+        cmp     byte ptr [bx],20h
+        jnz     clrret
+        inc     bx
+        dec     cl
+        jnz     clrspace
+clrret: ret
+;
+abort:
+        mov     ah,9            ;print the string
+        mov     dx,offset message
+        int     21h             ;
+        mov     ah,0            ;terminate program
+        int     21h
+        hlt
+
+start:
+        mov     ah,9            ;print signon
+        mov     dx,offset signon
+        int     21h
+;
+        mov     cl,comlength    ;get the command length
+        and     cl,0ffh         ;if zero abort
+        jz      abort
+        mov     bx,offset comlength+1
+;
+;       check for 1st parameter lpt
+;
+
+        call    clrspace        ;get rid of spaces
+        jz      abort           ;if zero abort
+        mov     al,[bx]
+        cmp     al,'*'          ;check for special (act or deact)
+        jz      chkdrv
+        jmp     chkpar
+;
+;       activate or deactivate exisiting driver
+;
+chkdrv:
+        sub     ax,ax           ;clear reg
+        mov     es,ax           ;page zero
+        cld                     ;set the direction flag
+look1:
+        mov     di,ax
+lookagain:
+        mov     si,offset resident      ;point to message
+        cmpsb                           ;compare a byte
+        jz      maybefound
+        cmp     di,0            ;top of 64k boundary
+        jnz     lookagain
+        mov     ax,es           ;get es
+        add     ax,1000h        ;next 64k block
+        cmp     ax,0a000h       ;top of memory
+        jz      nofind          ;
+        mov     es,ax
+        jmp     lookagain
+maybefound:
+        mov     ax,di           ;save pointer incase of no match
+        cmpsw                   ;foure more words to match
+        jnz     look1
+        cmpsw
+        jnz     look1
+        cmpsw
+        jnz     look1
+        cmpsw
+        jnz     look1
+        mov     dx,es:[di]
+        or      dx,dx           ;find valid driver
+        jnz     founddr         ;yes so do flip/flop
+        jmp     look1
+nofind:
+        mov     dx,offset notvalid      ;not found
+        mov     ah,9
+        int     21h
+        mov     ah,0            ;terminate
+        int     21h
+        hlt
+;
+;       found driver in memory
+;
+founddr:
+        inc     di              ;get segment value of int 17
+        inc     di
+        mov     cx,es:[di]
+        inc     di              ;point to  active flag
+        inc     di
+        mov     ah,es:[di]              ;get the value
+        or      ah,ah           ;set the flag
+        not     ah              ;complement it
+        mov     es:[di],ah              ;flip it
+        jz      actdrv          ;restore the driver
+;
+;       deactivate driver
+;
+        push    ds
+        mov     ah,25h
+        mov     al,17h          ;int 17 (printer)
+        mov     ds,cx           ;place in the segment
+                                ;dx register has offset
+        int     21h             ;place in the vector
+        pop     ds
+        mov     dx,offset deactmsg
+flipmsg:
+        mov     ah,9
+        int     21h
+        mov     ah,0            ;terminate program
+        int     21h             ;
+        hlt
+actdrv:
+        inc     di              ;point to offset of driver
+        mov     dx,es:[di]
+        inc     di              ;and then segment
+        inc     di
+        mov     cx,es:[di]
+        push    ds
+        mov     ds,cx
+        mov     ah,25h
+        mov     al,17h          ;int 17 (printer)
+        int     21h
+        pop     ds
+        mov     dx,offset actmsg
+        jmp     flipmsg
+
+
+abort1: jmp     abort
+
+
+;
+;       check for valid printer parameter
+;
+chkpar:
+        cmp     al,30h          ;check if valid
+        jb      abort1          ;error
+        cmp     al,33h          ;check if valid
+        jae     abort1          ;if equal or above abort
+        sub     al,30h          ;subtract offset
+        mov     ah,0            ;zero out ah
+        mov     lptdevice,ax    ;update printer device
+        inc     bx              ;move to next byte
+;
+;       check for com device
+;
+
+        call    clrspace        ;get rid of spaces
+        jz      abort1          ;if zero abort
+        mov     al,[bx]
+        cmp     al,30h          ;check if valid
+        jb      abort1          ;error
+        cmp     al,34h          ;check if valid
+        jae     abort1          ;if equal or above abort
+        sub     al,30h          ;subtract offset
+        mov     ah,0            ;zero out ah
+        mov     comdevice,ax    ;update printer device
+        inc     bx              ;move to next byte
+;
+;       check for protocol
+
+        call    clrspace        ;get rid of spaces
+        jz      abort1          ;if zero abort
+        mov     al,xonbyte
+        and     byte ptr [bx],5fh ;convert to upper case
+        cmp     byte ptr [bx],'X'       ;check if valid
+        jz      proto
+        mov     al,etxbyte
+        cmp     byte ptr [bx],'E'       ;check if valid
+        jz      proto                   ;if equal or above abort
+        mov     al,passbyte
+        cmp     byte ptr [bx],'R'
+        jnz     abort1
+proto:  mov     protocol,al     ;place in the protocol byte
+;
+;       check for valid baud rate
+;       110,150,300,600,1200,2400,4800,9600,19200
+        inc     bx              ;point to next byte
+        call    clrspace
+        jz      abort1
+        mov     ax,[bx]         ;get the next two bytes
+        push    bx
+        mov     ch,0            ;zero counter
+        mov     bx,offset baudtab
+
+baudloop:
+        cmp     ax,[bx]
+        jz      foundbaud
+        inc     bx              ;point to next value
+        inc     bx
+        inc     ch              ;bump counter
+        cmp     ch,9            ;check if not found
+        jnz     baudloop
+abort2: jmp     abort
+baudtab:
+        db      '11'            ;110 baud
+        db      '15'
+        db      '30'
+        db      '60'
+        db      '12'
+        db      '24'
+        db      '48'            ;4800
+        db      '96'            ;9600
+        db      '19'            ;19200
+;
+foundbaud:
+        mov     baud,ch         ;save baud rate
+        pop     bx              ;get pointer back
+        inc     bx
+        inc     bx              ;bump to next value
+clrtospace:
+        cmp     byte ptr [bx],20h
+        jz      gotspace
+        dec     cl              ;run out yet
+        jz      abort2          ;yes so abort
+        inc     bx
+        jmp     clrtospace
+;
+gotspace:
+        call    clrspace        ;clear spaces
+        jz      abort2
+        mov     al,[bx]
+        and     al,5fh          ;upper case
+        mov     ch,0            ;zero count
+        cmp     al,'N'          ;none
+        jz      chkword
+        inc     ch
+        cmp     al,'O'          ;odd
+        jz      chkword
+        mov     ch,3
+        cmp     al,'E'          ;even
+        jnz     abort2
+chkword:
+        mov     parity,ch       ;save parity
+        inc     bx
+        call    clrspace
+        jz      abort2
+        mov     al,[bx]         ;get wordlength
+        mov     ch,2
+        cmp     al,'7'
+        jz      chkstop
+        inc     ch
+        cmp     al,'8'
+        jz      chkstop
+abort3: jmp     abort           ;error abort
+;
+chkstop:
+        mov     wordlen,ch      ;save wordlength
+        inc     bx
+        call    clrspace
+        jz      abort3
+        mov     al,[bx]
+        mov     ch,0
+        cmp     al,'1'
+        jz      patch34
+        inc     ch
+        cmp     al,'2'
+        jnz     abort3
+patch34:
+        mov     stopbit,ch
+;
+;
+        inc     bx              ;move to next character
+        call    clrspace        ;move to next parameter
+        jz      patcom34        ;nothing so continue on
+        mov     al,[bx]
+        cmp     al,'1'          ;1 to
+        jb      abort3
+        cmp     al,'9'          ;9 nulls
+        ja      abort3
+        sub     al,30h          ;sub ascii bias
+        mov     nulls,al        ;keep nulls
+;
+;       patch in address of com3 and com4
+;
+patcom34:
+
+
+        push    ds
+        mov     ax,40h          ;set for low page
+        mov     ds,ax
+        mov     bx,4            ;set up the offset
+        mov     [bx],03e8h      ;patch in com3
+        inc     bx
+        inc     bx              ;point to next port area
+        mov     [bx],02e8h      ;patch in com4
+        pop     ds              ;restore ds reg
+;
+;
+;       set the baud rate,parity,stop bits and data bits
+;
+;
+        mov     al,baud         ;get the baud rate
+        mov     cl,5            ;5 bits to shift
+        shl     al,cl
+        mov     ah,parity       ;get parity
+        mov     cl,3            ;move in parity
+        shl     ah,cl
+        or      al,ah           ;place in al
+        mov     ah,stopbit
+        mov     cl,2            ;two bits to shift
+        shl     ah,cl
+        or      al,ah
+        mov     ah,wordlen      ;word length
+        or      al,ah           ;al has all parameters
+        mov     wordlen,al      ;save 19200 maybe
+;
+        mov     ah,0            ;init sio chip
+        mov     dx,comdevice    ;get device to setup
+        int     14h             ;tell bios
+;
+;       set dtr and rts lines of port
+;
+        mov     cx,comdevice    ;get device number
+        shl     cx,1            ;muliply by 2,word offset
+        push    ds
+        mov     ax,40h          ;set for low page
+        mov     ds,ax
+        mov     bx,0            ;zero bx
+        add     bx,cx           ;add in device number
+        mov     dx,[bx]         ;get base of port
+        add     dx,4            ;add four for modem control reg
+        pop     ds              ;restore ds
+        mov     al,3            ;dtr and rts
+        out     dx,al
+;
+;
+;       check if special 19200
+;
+        cmp     baud,8          ;if 8 special
+        jnz     patchint
+;
+;       special case for 19200
+;
+        mov     cx,comdevice    ;get device number
+        shl     cx,1            ;muliply by 2,word offset
+        push    ds
+        mov     ax,40h          ;set for low page
+        mov     ds,ax
+        mov     bx,0            ;zero bx
+        add     bx,cx           ;add in device number
+        mov     dx,[bx]         ;get base of port
+        push    dx              ;save it
+        add     dx,3            ;add three for line control reg
+        in      al,dx
+        mov     ah,al           ;save for later
+        or      al,80h          ;set divisor latch bit
+        out     dx,al
+        pop     dx              ;get base port back
+        inc     dx
+        mov     al,0
+        out     dx,al           ;high reg.
+        dec     dx
+        mov     al,6            ;divisor for 19200
+        out     dx,al
+        add     dx,3            ;back to line control
+        mov     al,ah
+        out     dx,al           ;set back to what it was
+        pop     ds              ;restore ds reg
+;
+;
+;       patch in the intercept vector
+;
+patchint:
+        mov     ah,35h          ;get a vector
+        mov     al,17h          ;printer vector
+        int     21h             ;call dos
+        mov     word ptr intdword,bx
+        mov     word ptr intdword+2,es
+        mov     ah,25h          ;set a vector
+        mov     al,17h
+        mov     dx,offset int17catch
+        int     21h             ;do it
+;
+        mov     word ptr intdwd,offset int17catch ;save catch routine for flip
+        mov     ax,cs                   ;get the cs valid
+        mov     word ptr intdwd+2,ax    ;and save code value
+;
+;
+        mov     dx,offset lastbyte
+        int     27h             ;terminate but stay resident
+        hlt
+
+;
+;
+message db      0dh,0ah
+        db      'Command Format: Diablo L C X B P W S N',0dh,0ah
+        db      '                       | | | | | | | |',0dh,0ah
+        db      '                       | | | | | | | - Nulls 1-9 (blank = 0)'
+        db      0dh,0ah
+        db      '                       | | | | | | --- Stop bits (1-2)'
+        db      0dh,0ah
+
+        db      '                       | | | | | ----- Word Length (7-8)'
+        db      0dh,0ah
+        db      '                       | | | | ------- Parity (N,O,E)',0dh,0ah
+        db      '                       | | | --------- Baud Rate'
+        db      ' (110 to 19200)',0dh,0ah
+        db      '                       | | '
+        db      '----------- Protocol (E)tx,(X)on,(R)edirected',0dh,0ah
+        db      '                       | ------------- Com device 0,1,2,3'
+        db      0dh,0ah
+        db      '                       --------------- LPT Device 0,1,2'
+        db      0dh,0ah,0dh,0ah
+        db      'All seven parameters must be entered !!!!'
+
+
+
+
+        db      0dh,0ah,0dh,0ah
+        db      'Diablo *   - activates or deactivates existing driver in '
+        db      'memory'
+        db      0dh,0ah,'$'
+;
+signon  db      0dh,0ah,'Diablo Driver v1.6  C-1986 Mark Winkler',0dh,0ah,'$'
+notvalid db     0dh,0ah,'Error --- Diablo driver not installed$'
+deactmsg db     0dh,0ah,'Diablo Driver deactivated$'
+actmsg  db      0dh,0ah,'Diablo Driver activated$'
+
+
+code    ends
+        end beg
+
+```
+{% endraw %}
 
 ## ERASCN.BAS
 
+{% raw %}
 ```bas
 'Program Name    : EraScn.bas
 'Author          : Lloyd L. Smith for Spectra Technical Support
@@ -5995,9 +7883,11 @@ sub EraLine(r)
 locate r,1:print space$(80);
 end sub
 ```
+{% endraw %}
 
 ## FACTORY.BAS
 
+{% raw %}
 ```bas
 'Program Name    : Factory.bas
 'Author          : Lloyd L. Smith for Spectra Technical Support
@@ -6134,9 +8024,11 @@ RETURN
 
 
 ```
+{% endraw %}
 
 ## INPUSING.BAS
 
+{% raw %}
 ```bas
 cls
 mask$ ="Phone (###) ###-####"
@@ -6259,9 +8151,11 @@ SUB fbmove(mask$, x%, anslen%, move%)
   LOOP
 END SUB
 ```
+{% endraw %}
 
 ## NATINST.BAS
 
+{% raw %}
 ```bas
 'Program Name    : NatInst.bas - graphics screen simulation
 'Author          : Lloyd L. Smith for Spectra Technical Support
@@ -6333,9 +8227,676 @@ idle:
 k$=inkey$:if k$=chr$(27) then system
 goto idle
 ```
+{% endraw %}
+
+## BOOT.DOC
+
+{% raw %}
+```
+
+
+
+
+
+BOOT.COM, Version 1.31 Copyright (c) 1990 mcTRONic Systems - Houston, TX
+
+BOOT SUPPORT FILES:                               Date: August 31, 1990
+
+Name           Description
+
+BOOT.COM       Main Program, Selectable computer restart
+BOOT.DOC       Main Program Document file
+COLDBOOT.BAT   Use to replace COLDBOOT.COM when required
+WARMBOOT.BAT   Use to replace WARMBOOT.COM when required
+REBOOT.BAT     Use to replace REBOOT.COM when required
+
+Syntax: BOOT [x] [B] [>nul]
+
+"x" can be a "C" for System Coldboot, "W" for System Warmboot, or "M" for
+menu.  If no command line parameter is entered then BOOT will display a
+help screen.  If you enter a "B" then you will force BOOT to jump to the
+power on reset location, instead of using the keyboard reset location.  If
+you enter a "C" or "W" and do not wish to see any display from BOOT then
+enter the ">NUL" and BOOT will display nothing to the screen.
+
+BOOT has several advantages over other computer reboot type programs.
+First in combines both COLD and WARM boot options into one program.  It
+provides a menu option that can be aborted.  Being a single file, it
+is smaller than most disk cluster sizes, and thus will take up less room
+(than two separate files, discounting the support files).  And last but
+most likely the most important, BOOT uses the keyboard controller chip
+to reboot the computer if BOOT determines you do not have a PC or PC/XT
+computer.  For compatability, BOOT will work on PC/XT computers, however
+BOOT must jump to the power on reset location to reboot your computer.
+
+With the advent of many memory manager type programs such as Quarterdecks
+QEMM, Qualitas's 386MAX and Microsoft's Windows 3.0, some of the computer
+reboot programs, when used on a system with a memory manager or EMS
+emulator, will just lock up the computer.  BOOT uses a new trick to make
+the computer think that a CTRL-ALT-DEL was pressed by the user (on AT
+computers).  Since any self respecting memory manger will honor a keyboard
+CTRL-ALT-DEL request over a unnatural jump to the BIOS power on reset
+location, BOOT should work on almost all "AT" clones and PS/2 computers.
+
+For those who might wonder what a Cold or Warm Boot mean, the term BOOT
+or REBOOT means to restart your computer, either the very first time, or
+one more time, since your computer was turned.  Your computer, when it is
+rebooted, will reload DOS and so forth.  Each time you first turn on your
+computer, your computer also goes through a Power On Self Test mode (POST),
+which checks out your computer's hardware, including your computer memory.
+A program that can COLDBOOT your computer will make it run through the
+POST mode just like you first turned it on and it will take longer to
+COLDBOOT than to WARMBOOT.  A WARMBOOT works more like a keyboard CTRL-ALT-
+DEL.  Normally using the WARMBOOT option of BOOT will be just fine and take
+less time, however, if your computer does not restart properly, then use
+the COLDBOOT option of BOOT.
+
+
+
+
+
+
+Houston Phone Number: 713-462-7687, 5-10pm, M-F, CST
+Compuserve Number is: 74365,1716; James D. McDaniel
+Houston Address: 7426 Cornwall Bridge; Houston, TX  77041-1709
+
+BOOT is Freeware Software program and can be distribute free of charge.
+No cost can be charged for BOOT except to cover the expense of
+distribution.  Donations of $5 will be accepted.  BOOT is included with
+the OPSYS program package for now.  A separate charge for BOOT may be
+charged in the future....
+
+
+```
+{% endraw %}
+
+## OPSYS.DOC
+
+{% raw %}
+```
+
+
+
+
+          Product: OPSYS                   mcTRONic Systems
+             Date: September 11, 1990      7426 Cornwall Bridge Ln.
+         Document: Product Information     Houston, TX  77041-1709
+          Version: OPSYS.EXE R1.03         (713) 462-7687 5-10pm M-F CST
+                   BOOT.COM R1.31          CIS # : 74365,1716
+
+        OPSYS will maintain up to 12 different operating system  configu-
+        rations, each with its own separate AUTOEXEC and CONFIG files and
+        an optional user defined batch file to be run at boot time.  Each
+        configuration  is given a unique three letter code which is  used
+        as the file name extension of your configuration files. All files
+        are  maintained together in the OPSYS directory.  OPSYS  provides
+        the  ability  to create, maintain and  remove  the  configuration
+        descriptions  and support files.  OPSYS will use your ASCII  file
+        editor  to edit your AUTOEXEC, CONFIG and USER files while  main-
+        taining the file names, locations, and usage.
+
+        The  advantages of OPSYS over other such programs is its  ability
+        to make the operating system configuration selections before  you
+        boot  your  computer.  Each time thereafter, when the  system  is
+        booting,  your selection will be used without  further  interven-
+        tion.  When you are ready to change selections again, start OPSYS
+        and  make your new selection.  OPSYS does not get in the  way  of
+        using your selected configurations, no matter how many times your
+        may  restart your computer.  Another advantage for OPSYS  is  the
+        fact  that  the copy of your AUTOEXEC.BAT  and  CONFIG.SYS  files
+        located in your root directory of your boot drive are only tempo-
+        rary.   Your  primary copy is maintained by OPSYS  in  the  OPSYS
+        directory.  You can now elect to have new programs, which you are
+        installing,  modify  your configuration files without  fear  that
+        your  main  copy will be modified.  In addition, if you  want  to
+        maintain the changes made, you can have OPSYS get them for you as
+        yet another configuration.  And finally, if you are not using any
+        other  multi-configuration program, OPSYS is much easier  to  use
+        that any manual method that you might try to use.
+
+        The OPSYS files are:
+
+        OPSYS.EXE      -    The OPSYS Main program (*)
+        OPSYS.DOC      -    The OPSYS Document file
+        OPSYS.CFG      -    Maintains OPSYS setup, Created when first run
+        OPSYS.FIL      -    Configuration Names, Created when first run
+        INSTALL.BAT    -    OPSYS Hard Disk Install Program
+        BH.COM         -    BATHELP Install program file
+        DOCUTIL.BAT    -    Utility to print and display document files
+        ORDER.DOC      -    OPSYS program order form
+        PROBLEM.DOC    -    OPSYS problem report form
+
+        The BOOT files are:
+
+        BOOT.COM       -    Batch file computer boot utility (*)
+        BOOT.DOC       -    The BOOT Document file
+        COLDBOOT.BAT   -    Use to replace COM file of same name
+        WARMBOOT.BAT   -    Use to replace COM file of same name
+        RESTART.BAT    -    Use to replace COM file of same name
+
+
+                                        1
+
+
+
+
+        OPSYS INSTALLATION:
+
+        OPSYS  includes  a hard disk installation program.   To  use  the
+        install program, place all OPSYS files in your default directory.
+        If on a floppy disk, place them in either the A: or B: drive  and
+        then  make it your default drive.  OPSYS will also  install  from
+        one hard disk directory to another directory.  Make sure OPSYS is
+        in  the  default directory and elect to install it  in  either  a
+        different  directory or a different disk from the default.   Then
+        enter:
+
+        INSTALL d:[\path]
+
+        Where d: is the hard disk you want OPSYS installed on.  The  path
+        is optional.  If you give no path, OPSYS will create a  directory
+        called  \OPSYS  on the target drive.  If you do give a  path,  it
+        must  already exist.  OPSYS will create a directory in  the  path
+        you  entered.  For instance, INSTALL C: will create and copy  all
+        OPSYS  files to the C:\OPSYS directory.  If you  entered  INSTALL
+        C:\UTIL   then  OPSYS  would  be  installed  in   the   directory
+        C:\UTIL\OPSYS.   If you enter just INSTALL you will  prompted  to
+        select  a hard drive between C-G with the directory default  name
+        of  \OPSYS.   After installation, the INSTALL  program  will  run
+        OPSYS.  When you exit OPSYS, you will be asked if you want to run
+        DOCUTIL  so you can either print or reread the documentation  for
+        all  document  files.
+
+        At any time you can elect to run DOCUTIL.  DOCUTIL will allow you
+        to  either  print  or display OPSYS.DOC, BOOT.DOC  or  any  other
+        included DOC file.  Both DOCUTIL and INSTALL use the file  BH.COM
+        to  run, and neither will run if this program is not in  the  de-
+        fault drive or in your path.  If DOCUTIL is run prior to  instal-
+        lation  of  OPSYS, you will have a menu option  to  run  install.
+        After installation this option will not be present.
+
+        The  two  files (*) OPSYS.EXE and BOOT.COM are  required  to  use
+        OPSYS.  If you do not have BOOT.COM, but do have another computer
+        reboot  program,  rename  it to BOOT and place it  in  the  OPSYS
+        directory.  Put both files together in a directory by  themselves
+        and then run OPSYS.  See starting OPSYS the first time.
+
+        STARTING OPSYS the first time:
+
+        The first time OPSYS is run several questions will be asked.  You
+        should be prepared to enter your name, which is required, and  an
+        optional  company name.  You can edit your name or  company  name
+        later.  You must select your boot drive, normally C:, whether you
+        want color or not, the OPSYS directory name (use the default  the
+        first  time  run), the name of your ASCII editor  (EDLIN  is  the
+        default), the editor path and editor options, if any, and finally
+        whether  you want to execute a warm or cold boot each  time  your
+        computer is restarted.
+
+        After you finish answering the OPSYS setup questions, OPSYS  goes
+        into action.  OPSYS will create two configurations for you.   The
+
+
+                                        2
+
+
+
+
+        first is called MIN for minimum DOS configuration.  The second is
+        your present AUTOEXEC and CONFIG located in the root directory of
+        your  selected  boot drive.  Your present configuration  will  be
+        copied  to the OPSYS directory and renamed AUTOEXEC.ORG and  CON-
+        FIG.ORG.  You can elect to rename and describe them later.   Your
+        original  files will be untouched until you elect to use  one  of
+        the  OPSYS configurations.  After it is done OPSYS will send  you
+        to the main menu.
+
+        HOW DOES OPSYS WORK:
+
+        OPSYS  maintains a separate CONFIG and AUTOEXEC file for each  of
+        your  configurations.   The  file extension is the  same  as  the
+        unique 3-letter code given to each configuration.  In addition  a
+        TAG  batch file, if requested, will be run just before boot  time
+        should  you  have other duties you must perform  before  the  new
+        configuration  can take effect.  OPSYS literally copies  and  re-
+        names your CONFIG and AUTOEXEC file to the root directory of your
+        boot drive then runs the boot program, with either a warm or cold
+        boot as you requested.
+
+        STARTING OPSYS after installation.
+
+        When OPSYS is started it must locate the OPSYS.CFG file which was
+        created  the first time OPSYS was run.  OPSYS does recognize  the
+        DOS  environment  variable  OPSYSCONFIG.   If  you  use  the  SET
+        OPSYSCONFIG=d:\path  where d:\path is set to the location of  the
+        OPSYS.CFG  file,  OPSYS will look there and  load  the  OPSYS.CFG
+        file.   If  OPSYSCONFIG  is not set, then OPSYS  will  check  the
+        default directory for OPSYS.CFG.  If it is not there, OPSYS  will
+        determine  from  where it is being run and  check  for  OPSYS.CFG
+        there.  If the OPSYSCONFIG variable is set, but OPSYS.CFG is  not
+        present,  then  OPSYS.CFG will be created where  the  OPSYSCONFIG
+        says  it should be.  If OPSYSCONFIG is not set and  OPSYS.CFG  is
+        neither  in the default drive or in the directory with  OPSYS.EXE
+        is, it will be created in the default directory.
+
+        I  suggest that you do set the OPSYSCONFIG variable to the  OPSYS
+        directory. In addition , either place the OPSYS directory in your
+        path,  put  OPSYS.EXE in a directory that is in  your  path  (but
+        separate from the OPSYS file directory) or create a batch file in
+        a directory that is located in your path (to call OPSYS.EXE  when
+        not  in  path).   Then you can run OPSYS from  anywhere  in  your
+        system.
+
+        OPSYS allows 1 command line parameter.  If you enter OPSYS  [???]
+        where ??? represents the three letter code for a valid configura-
+        tion,  OPSYS will restart your computer with that  configuration.
+        If the entry is invalid, OPSYS will send you to the main menu.
+
+        If  you start OPSYS with no command line options, you will go  to
+        the main menu.  From the main menu you will see a complete memory
+        rundown of your system, up to 12 configuration selections, and  8
+        function  key selections.  You may use the up or down arrow  keys
+        to highlight your configuration selection and then press enter or
+
+
+                                        3
+
+
+
+
+        just  enter the letter or number that is next to each  configura-
+        tion.   After you select the required configuration, you will  be
+        given the option to reboot or escape from the function.
+
+        Function key F1 gives a very short program description for OPSYS.
+        Press any key to return to the main menu.
+
+        F2 allows you to create a new configuration.  You must give it  a
+        unique 3-character code and up to a 43 character description.  Do
+        not  enter a ?,*,\, or any invalid DOS file name  character  into
+        the unique three-character code.  After the code and  description
+        is entered, you will be asked if you want a TAG batch file creat-
+        ed (Yes/No).  After the above information is entered you will  be
+        asked  if you want to copy the files from another  configuration,
+        or use the one in the root directory of your boot drive.  Enter X
+        if  you do not want to create the files automatically.  When  you
+        are done, OPSYS will carry out your instructions.
+
+        F3 allows you to delete a configuration.  You may also optionally
+        delete all files associated with this configuration.
+
+        F4 allows you to edit a configuration.  If you change the  unique
+        3-character code the files will also be renamed.
+
+        F5 allows you to edit any of the files associated with a configu-
+        ration.   After you select the configuration, you must select  to
+        edit  either  the AUTOEXEC, CONFIG, or optional  USER  TAG  batch
+        file,  if  present.  You will use the editor which  you  selected
+        from  the  OPSYS setup menu.  You can change  your  selection  if
+        needed.
+
+        F6 allows you to change any part of you setup.  The user name  is
+        required while the company name is not.  The OPSYS directory  you
+        enter  must  already exist.  The ASCII editor you enter  must  be
+        present  as  you enter it or you will not be able  to  edit  your
+        files.   The  default editor is EDLIN.COM.  To use  Wordstar  you
+        could  enter: WS.EXE for name, C:\WS6 for path and /N/X  for  op-
+        tions.  Many other editors such as TED or ED could be used.   The
+        EDLIN commands are:
+
+        -------------------------EDLIN COMMANDS-------------------------
+        F1  =  Copies one character from the template to the new line.
+        F2  =  Copies  all characters from the template to the new  line,
+        up to the character specified.
+        F3  =  Copies  all remaining characters in the  template  to  the
+        screen.
+        DEL =  Does not copy (skips over) a character.
+        F4  =  Does not copy (skips over) the specified characters in the
+        template, up to the character specified.
+        ESC = Clears the current input and leaves the template unchanged.
+        INS = Enter/exists the insert mode.
+        F5  = Makes the new line the new template.
+        BKSP=  Deletes a character from the command line and  places  the
+        cursor back one character in the template
+
+
+
+                                        4
+
+
+
+
+        A   =  Appends lines from disk to memory.
+        C   =  Copies lines.
+        D   =  Deletes lines.
+        line=  Edits  a line or lines, 1-65534, . equals current lint,  #
+        replaces line after the line you specify
+        E   =  Ends editing session and saves edits.
+        I   =  Inserts lines of text.
+        L   =  Lists a range of lines.
+        M   =  Moves a range of text to a specified line.
+        P   =  Pages through a file 23 lines at a time.
+        Q   =  Quits the editing session without saving the file.
+        R   =  Replaces text.
+        S   =  Searches for text.
+        T   =  Transfers the contents of another file into the file being
+        edited.
+        W   =  Writes specified lines from memory to disk.
+        -----------------------------------------------------------------
+
+        EDLIN is not supplied with OPSYS but is included with every  copy
+        of  DOS  that I have seen.  Use EDLIN only if you have  no  other
+        ASCII file editor on your computer.
+
+        F9  allows you to shell to DOS to perform any duties not  covered
+        by OPSYS.  You do not need to change back to the OPSYS  directory
+        or drive as OPSYS will handle this for you.  The DOS prompt  will
+        include a double >> when shelled to DOS.  Please remember to type
+        EXIT when done.
+
+        F10 or ESC will return you to DOS.  OPSYS will always return  you
+        to  the  directory you started from if different from  the  OPSYS
+        directory.   In addition, if the default directory of  the  drive
+        that contains the OPSYS directory, if other than the OPSYS direc-
+        tory, it will be returned to normal when you exit from OPSYS.  If
+        you  change  the default path, while shelled from OPSYS,  of  any
+        other drive, it will not be returned to the original, pre-startup
+        location.
+
+        In addition to using the function keys, each function label has a
+        highlighted letter.    This letter may be entered in place of the
+        function  key with the same results as pressing the function key.
+        "H" is F1, "N" is F2, "D" is F3, "E" is F4, "F" is F5, "O" is F6,
+        "S" is F9, and "X" is F10.
+
+        The  OPSYS  and BOOT package is a Shareware product  of  mcTRONic
+        Systems.   It cost just $19.95 + $3.00 shipping sent first  class
+        mail  to you.  Order your copy today! (P.S.  Orders  outside  the
+        USA  must pay by money order and include an additional  $5.00  to
+        cover increased handling, in USA funds only, Please!, Thank You)
+
+
+
+
+
+
+
+
+
+                                        5
+
+
+
+```
+{% endraw %}
+
+## ORDER.DOC
+
+{% raw %}
+```
+
+
+                                Shareware
+
+
+
+      OPSYS       is a Shareware program.  As a Shareware program you
+
+      are allowed to copy   OPSYS     and pass out UNALTERED copies to
+
+      your friends.  You can try out   OPSYS     on any of your machines
+
+      free of charge.  If, however you find    OPSYS    works, and you
+
+      decide to continue using    OPSYS   , no matter how infrequent, you
+
+      ARE required to register your copy.  The cost of    OPSYS    is
+
+      only $19.95 plus $3.00 shipping (outside the U.S. shipping is $8.00,
+
+      U.S. funds only).  Please include your disk type (3.5" or 5.25" disk).
+
+      I will send you the latest version of    OPSYS    First Class Mail.
+
+
+
+
+      If you wish to register a copy of   OPSYS     you already have, you
+
+      can forgo the shipping and handling charge if you like.  Keep in
+
+      mind you may not have the latest version of the program and you will
+
+      not have your own    OPSYS    disk.  Also each copy of   OPSYS    
+
+      purchased from me will include a Shareware (unregistered copy) copy
+
+      of MAILALL, my great mail list program.
+
+
+
+
+      Please fill out the following form and send it iN today with your
+
+      payment for OPSYS TODAY!
+ 
+
+ 
+
+
+        OPSYS Version : ________      Serial Number : _____________
+
+
+        TO:
+
+           mcTRONic Systems
+           James D. McDaniel
+           7426 Cornwall Bridge Ln.
+           Houston, TX  77041-1709
+
+
+        Gentlemen:
+
+        Enclosed is my check or money order for $19.95 + shipping
+        (single user) or $89.95 + shipping (commercial site license,
+        including a network or any multi-user system,  standard 
+        version) as a registration fee for OPSYS.        I've also
+        included $3.00 (all U.S. States) or $8.00 (any area outside
+        the U.S.) for shipping and handling.  Make checks payable
+        to: "James D. McDaniel" or "MCTRONIC SYSTEMS".  
+        (U.S. Funds only, please! Money orders only outside the U.S)
+
+        Please send my copy of OPSYS to:
+
+
+        Name_______________________________________________________
+
+        Company Name_______________________________________________
+
+        Street Address_____________________________________________
+
+        City,State,Zip_____________________________________________
+
+
+        Where did you obtain this copy of OPSYS ? _________________
+
+        ___________________________________________________________
+
+
+        If you require 3.5 inch 720K disk check here [ ]
+
+
+        Please allow two to three weeks for delivery.    Thank You!
+
+
+        Please share with us any additional comments that you have
+        concerning OPSYS.      
+
+
+        COMMENTS:
+
+        ___________________________________________________________
+
+        ___________________________________________________________
+
+        ___________________________________________________________
+
+        ___________________________________________________________
+ 
+```
+{% endraw %}
+
+## PROBLEM.DOC
+
+{% raw %}
+```
+
+
+        
+                             OPSYS Problem Report
+
+        
+        
+        FROM:__________________________________________   DATE:__________
+        
+        COMPANY:_______________________________________
+        
+        ADDRESS:_______________________________________
+        
+        CITY,STATE,ZIP:________________________________
+        
+        
+        HARDWARE:
+        
+        
+        OPSYS VERSION:___________            OPSYS SERIAL #:_____________
+        
+        COMPUTER TYPE(IBM/PC/XT/AT OR COMPATIBLE:________________________
+        
+        COMPUTER BRAND(IBM,COMPAQ,AST,EVEREX,ECT):_______________________
+        
+        COMPUTER MODEL NUMBER:___________________________________________
+        
+        FLOPPY DRIVE SIZE(S)  A:_______  B:_______ (360K,1.2M,720K,1.44M)
+        
+        DRIVE SIZE FOR HARD DISKS    C:_______    D:______ (20M,30M,ECT.)
+        
+        DISPLAY ADAPTER CARD TYPE (MDA,CGA,EGA,VGA):_____________________
+        
+        DO YOU HAVE A COLOR MONITOR?  YES  NO | BRAND____________________
+        
+        TOTAL STANDARD RAM MEMORY INSTALLED:_____________________________
+        
+        TOTAL EXPANDED MEMORY INSTALLED:_________________________________
+        
+        IF "AT" COMPUTER WHAT IS THE TOTAL EXTENDED MEMORY:______________
+        
+        DO YOU HAVE A 8087 / 80287 / 80387 MATH CHIP INSTALLED:__________
+        
+        WHAT BRAND PRINTER DO YOU USE:_____________  MODEL:______________
+        
+        PLEASE  LIST ANY  OTHER HARDWARE  THAT MAY BE INSTALLED INSIDE OR
+        
+        OUT SIDE OF BUT ATTACHED TO YOUR COMPUTER:
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+ 
+
+
+
+
+        SOFTWARE:
+
+        
+        
+        HOW MANY COM/LPT PORTS DO YOU HAVE:______________________________
+        
+        
+        WHAT IS THE ADDRESS OF YOUR COM THREE:__________COM FOUR:________
+        
+        
+        FROM WHICH DISK DRIVE DO YOU NORMALLY RUN OPSYS : ________________
+        
+        
+        WHAT IS THE OPSYS SUB-DIRECTORY NAME THAT YOU NOW USE :
+        
+        __________________________________________________________________
+        
+        
+        NORMAL DEFAULT DIRECTORY WHEN YOU RUN OPSYS : ____________________
+        
+        
+        WHAT IS YOUR NORMAL DEFAULT MENU DIRECTORY: ______________________
+        
+        
+        DOES THE OPSYS SUB-DIRECTORY APPEAR IN YOUR PATH ? :
+        
+        __________________________________________________________________
+        
+        
+        PLEASE   DESCRIBE  THE  PROBLEM  THAT  YOU HAVE WITH OPSYS AND 
+        PLEASE  BE  SPECIFIC!   INCLUDE  PRINT SCREENS THAT SHOW ANYTHING 
+        THAT  MIGHT  BE  HELPFUL  AND  INCLUDE ANY ERROR REPORTS THAT YOU
+        MIGHT  RECEIVE.  USE BACK OF FORM IF REQUIRED.
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+        
+        _________________________________________________________________
+ 
+```
+{% endraw %}
+
+## PSWD.DOC
+
+{% raw %}
+```
+Pswdfile.bas simulates your proking program file.  It has a password
+concealed in a string data statement.  Compile this program to an .exe
+file and run it.  It will print out the password secret.
+
+Pswdwrit.bas This program reads and searches the Pswdfile for the
+password secret.  It then write in a new password called FOOEY.
+
+When you run pswdfile.exe again it will now print fooey on the screen.
+
+This is one way of compiling you program once and then writing a new
+password to the exe file each time you sell a new copy.  By rewriting
+this program you could make hundreds of copies of your program at a time.
+Each copy could have a unique password.
+
+Lloyd - Spectra Tech Support
+
+
+```
+{% endraw %}
 
 ## PSWDFILE.BAS
 
+{% raw %}
 ```bas
 'Program Name    : PswdFile.bas
 'Author          : Lloyd L. Smith for Spectra Technical Support
@@ -6353,9 +8914,11 @@ print a$
 
 data "secret"
 ```
+{% endraw %}
 
 ## PSWDWRIT.BAS
 
+{% raw %}
 ```bas
 'Program Name    : PswdWrit.bas
 'Author          : Lloyd L. Smith for Spectra Technical Support
@@ -6386,9 +8949,11 @@ next i&
 close #1
 print "Done!"
 ```
+{% endraw %}
 
 ## VPDEMO1.BAS
 
+{% raw %}
 ```bas
  $COMPILE EXE
  $lib All OFF
@@ -6478,9 +9043,11 @@ print "Done!"
 
  $LINK "Vp1.Pbu"
 ```
+{% endraw %}
 
 ## WHACPU.BAS
 
+{% raw %}
 ```bas
 $IF 0
  This is a very short demo program that shows how to use
@@ -6503,6 +9070,7 @@ DECLARE FUNCTION getcpu2%()	'Let the program know what's in there
 PRINT "The cpu is a";getcpu2%	'And print it.
 
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

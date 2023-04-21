@@ -37,6 +37,48 @@ machines:
     difference between horses, the more certain the outcome.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1514.TXT
+
+{% raw %}
+```
+Disk No: 1514                                                           
+Disk Title: Horses                                                      
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Horses                                                   
+Author Version: 3.2                                                     
+Author Registration: $17.50                                             
+Special Requirements: None.                                             
+                                                                        
+LONG DESCRIPTION                                                        
+So simple to use that it makes reaching for a computer manual           
+unthinkable, HORSES is a fast-out-of-the-gates, thoroughbred            
+handicapping program.  It was designed for the parimutuel player who    
+both loves horses and betting at the track.  Because it is objective and
+data oriented, HORSES offers you a leg up on touts and intuition.       
+Taking up to eight entries per race on a dirt or turf track, HORSES     
+lists projected race results numerically, according to odds and with a  
+graphic bar chart.                                                      
+                                                                        
+Users should read the Daily Racing Form and know how to understand the  
+past performance charts printed in it.  The program asks for names of   
+horses, type of race, distance, and whether the sexes or ages are mixed.
+Then it asks specific questions about the history of each horse.  In a  
+flick of a horse's tail, the screen is filled with hard data.  The      
+percentages are especially valuable: the greater the percentage         
+difference between horses, the more certain the outcome.                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1514
 

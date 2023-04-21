@@ -63,8 +63,109 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #38, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  SCROLLK .COM         CRC = 7D EF
+
+--> FILE:  SCROLLK .BAS         CRC = 4C 79
+
+--> FILE:  WS-DOS  .BAS         CRC = 70 E2
+
+--> FILE:  MODROW  .TXT         CRC = A6 68
+
+--> FILE:  DRAW    .DOC         CRC = D4 09
+
+--> FILE:  DRAW    .CMT         CRC = B2 8E
+
+--> FILE:  MDRAW   .BAS         CRC = E0 31
+
+--> FILE:  HDRAW   .BAS         CRC = 38 C1
+
+--> FILE:  HELP1   .PIK         CRC = 44 65
+
+--> FILE:  HELP1   .PIC         CRC = 59 1A
+
+--> FILE:  COLOR   .EXE         CRC = D3 5B
+
+--> FILE:  MONO    .EXE         CRC = 36 D6
+
+--> FILE:  HELP2   .PIK         CRC = 1B 43
+
+--> FILE:  HELP2   .PIC         CRC = 15 00
+
+--> FILE:  SPOOLBAS.BAS         CRC = AF E7
+
+--> FILE:  SPOOLER1.COM         CRC = E3 8A
+
+--> FILE:  SPOOLER2.COM         CRC = 6D E4
+
+--> FILE:  SPOOLER .DOC         CRC = 68 B3
+
+--> FILE:  DISKRTN .EXE         CRC = 39 0B
+
+--> FILE:  DISKRTN .DOC         CRC = B3 49
+
+--> FILE:  FILTER  .DOC         CRC = 74 DD
+
+--> FILE:  FILTER  .BAS         CRC = D9 EE
+
+--> FILE:  DM      .BAS         CRC = 6A 2C
+
+--> FILE:  DMLQ    .DOC         CRC = C7 45
+
+--> FILE:  LQ      .BAS         CRC = BA 27
+
+--> FILE:  LIST    .EXE         CRC = 3A 0E
+
+ ---------------------> SUM OF CRCS = 23 FB
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## DISKRTN.DOC
+
+{% raw %}
+```
+PROGRAM NAME: DISRTN.EXE
+AUTHOR: William Bailey
+ABSTRACT: This program contains the following five disk utility routines:
+	1. List file names in a directory
+	2. List the sectors upon which a file resides.
+	3. Recover the first sector of an erased file.
+	4. Uncover a hidden file.
+	5. Hide a normal file.
+The program is menu driven, and contains a description and help selection
+REQUIRES: IBM PC with DOS operating system, and at least one disk drive.
+INSTRUCTIONS: From DOS, type DISRTN<cr>
+
+```
+{% endraw %}
+
 ## DM.BAS
 
+{% raw %}
 ```bas
 1 CLS:PRINT "THIS basic PROGRAM WAS AUTOMATICALLY CREATED BY CONVERT.BAS"
 2 PRINT"Copyright 1982 ,Rich Schinnell Rockville,MD. Not for Sale."
@@ -93,9 +194,646 @@ machines:
 5000 PRINT "* * ERROR VERIFY DATA * * * "
 5010 CLOSE:END
 ```
+{% endraw %}
+
+## DMLQ.DOC
+
+{% raw %}
+```
+
+                        DM.COM and LQ.COM
+
+                          DOCUMENTATION
+
+Programs by:  Morris C. Burkhart
+              7806 Worthing Court
+              Alexandria VA 22310
+              703-971-3228
+
+
+     DM.COM  (Dot Matrix) and LQ.COM (Letter Quality) are printer
+selectors  that may be invoked at system level or  from  WordStar
+when two printer ports are in use.
+
+Form  the  .COM programs by running the  DM.BAS  and LQ.BAS PGMS
+DM.COM puts Lprint,  screen dump and Lpt1:  through the LPT1 port.
+LQ.COM puts Lprint,  screen dump and Lpt1:  through the LPT2 port.
+Default on boot-up is DM.COM.   If letter quality printer is connected
+to  LPT1 then just switch names or rename programs  as desired.
+
+     To  use with WordStar,  press F10 and enter either DM or  LQ
+from the "editing no file" menu before printing document.
+
+     If you have any difficulty, give me a call.
+
+```
+{% endraw %}
+
+## DRAW.DOC
+
+{% raw %}
+```
+
+
+
+
+
+                            ** DRAW **
+                                BY
+                           DAVID MORRILL
+                      EDITED BY J. G. MODROW
+
+
+ INTRODUCTION
+---------------
+    DRAW is an excellent program to demonstrate the color graphics
+capability of the IBM PERSONAL COMPUTER.  DRAW was written entirely in
+the IBM DOS ADVANCED BASIC (BASICA) and uses the 320 by 200 pixel
+color graphics mode.  DRAW provides an easy way to set colors, draw
+or sketch points, lines, boxes, and circles, paint figures, and load or
+save screen pictures.
+
+IBM PERSONAL COMPUTER REQUIREMENTS
+-----------------------------------
+
+    DRAW requires the following features:
+       
+       1. 64k
+       2. one diskette drive
+       3. color graphics board, color or b&w monitor
+       4. printer (only for a hardcopy list of DRAW'S functions)
+       
+Draw Learning Guide
+--------------------
+
+     This learning guide provides an organized way of understanding
+DRAW's function and how to use them.  
+
+    
+A.  Getting The DRAW Program Started
+      
+         The DRAW program itself comes on demo diskette A.  Picture
+    screens can be saved to or loaded from the second diskette.  The 
+    program diskette also contains procedures to change display modes
+    between the Monochromatic and the Color Monitor Display.
+
+              Note:  COLOR.BAT      (from monochrome to color)
+                     B&W.BAT        (from color to monochrome)
+
+    1.  Boot system from DOS diskette.
+      
+    2.  Place demo diskettes into diskette drives.
+   
+    3.  Type "COLOR".
+   
+    4a. Type "BASICA PDRAW" for drawing in medium resolution mode.
+
+    4b. Type "BASICA HDRAW" for drawing in high resolution mode.
+
+        <A black screen with a centered cursor will appear.>
+
+    
+
+
+
+
+
+_
+
+
+                                                       Page 2
+
+                       ******Set-Up Is Complete******
+
+   
+B.  Cursor Movement
+                          
+         The numeric key pad is used to move the cursor on the 
+    screen.  Eight directions are possible.  The following keys are
+    to be used to move in the corresponding eight directions.
+
+                     Home  / \  PgUp
+                            |
+                      <----    ---->
+                            |
+                      End  \ / PgDn
+  
+    1.  Press the (<--) key and hold down.
+
+             <The cursor will move to the left.  The cursor will 
+              continue to move until it reaches the left most side of 
+              the screen, then the system will beep.  The cursor will
+              remain at the left most position.>
+
+    2.  Press the (^) key and hold.
+
+             <The cursor will move up until it reaches the top most 
+              position, then the system will beep.  The cursor should
+              now appear at the left most position.>
+
+    3.  Try all the direction keys until you feel comfortable with
+        their functions and locations.
+
+    4.  Press the number 3 key on top of the key board then use the 
+        numeric key pad direction keys to move the cursor.
+
+        Note:  You have just told the cursor to move three spaces 
+               for each key pressed.  Try all the numbers except
+               0 (zero will be explained later).
+
+        Note:  The cursor moves slower than the keys can be entered,
+               for this reason a small key buffer is maintained.  
+               When this buffer fills, the system will beep telling
+               you that you are ahead of the cursor and no keys are
+               being stored.  Just release the key to allow the cursor
+               to catch up.
+
+
+C.  Set Background Color  (Medium resolution, MDRAW only)
+
+    1.  Press the alternate key down then press F7.
+
+             <Nothing will happen.>
+
+    2.  Press the space bar once.
+
+             <Screen will change color.>
+
+    3.  Press the space bar until the screen color is the color you
+        desire for the background.  Then press enter.  
+
+
+
+_
+
+
+                                                            Page 3
+
+
+D.  Set Palette of Colors (Medium resolution, MDRAW, only.)
+
+    Note:  The 320 x 200 pixel color graphics feature allows the user
+           to pick one of two sets of three colors.  One set is light 
+           blue, violet, and white, and the other set is green, red,
+           and yellow.
+
+    1.  Press the alternate key concurrently with the F8 key.
+
+             <System will display the set of three colors that are 
+              presently active.>
+
+    2.  Press the space bar again.
+
+             <System now has activated the other set of three colors.>
+
+    3.  Press the enter key, when selected colors are displayed.
+
+
+E.  Select the Drawing Color
+
+    1.  Press the F8 key.
+
+             <A color bar will appear.  This bar is the color of the 
+              current drawing color.>   
+
+    2.  Press the space bar.
+
+             <The color bar will change colors.  This color is now the
+              current drawing color.>
+
+        Note:  The drawing color can be the background color selected
+               in section C or any of the three colors selected in 
+               section D (the palette choice, MDRAW only).
+
+   3.  Press the space bar until your selected drawing color appears.
+       Then press enter (<--).
+
+
+F.  The Help Screen
+
+    1.  With the control key depressed, press the F5 key.
+
+             <The light on diskette drive B will come on.  The DRAW 
+              program is now saving the present screen image on diskette
+              B and when finished will load a screen which contains the
+              available functions.>
+
+    2.  Hit Enter.
+            
+             <The screen saved in step 1 is now loaded from diskette 
+              drive B into memory and will be displayed.>
+
+        Note:  The Help Screen can be used at any time without losing 
+               the contents of the screen you are using.  
+
+
+
+
+
+_
+
+
+                                                            Page 4
+   
+G.  Printing A Help Function Sheet
+
+    1.  With the alternate key depressed, press the F6 key.
+
+             <The printer will print the Help Screen.  Remove this
+              function list from the printer and refer to it as we
+              proceed.>
+
+    
+H.  Drawing Points, Lines, And Clearing The Screen
+
+    1.  Center the cursor.
+
+    2.  Press the F1 key.
+
+             <The system will place a dot on the screen at the      
+              cursor's center.>
+
+    3.  Move the cursor 27 spaces left.  (9,<--, <--, <--)
+
+    4.  Press F4.
+
+             <The system has drawn a line from the new cursor 
+              position to the position where the point was previously
+              drawn.>
+     
+    5.  Move the cursor up 27 spaces (9, ^, ^, ^).
+    
+    6.  Press F4.
+
+             <Again the system has drawn a line from the current cursor
+              position to the last point drawn.>
+
+    7.  Move the cursor to the right 54 spaces.  (9, -->, -->,  -->,  
+        -->, -->, -->).
+
+    8.  Press F4.
+
+             <Again the system has drawn a line from the current cursor
+              position to the last point drawn.>
+
+    9.  Practise drawing lines.  Notice that whenever a point is drawn
+        this now becomes the new end point for the lines drawn.
+
+   10.  When completed above, press the control key and hold while
+        pressing the F10 key.  
+
+             <The system has cleared the screen.>
+          
+      
+I.  Continuous Line Drawing
+
+    1.  Center the cursor.
+
+    2.  Draw a point (press the F1 key).
+
+    3.  Move cursor 18 spaces to the left (9, <--, <--).
+
+
+
+
+_
+
+
+                                                            Page 5
+
+    4.  Press F3 key.
+
+             <The system has drawn a line from the current position to
+              the previously drawn point just as in the previous
+              section.>
+      
+    5.  Move cursor up 18 spaces.  (9, ^, ^).
+
+    6.  Press F3 key.
+
+             <The system has now drawn a line from the current cursor
+              position to the last cursor position rather than the last
+              point drawn as in the previous section.>
+
+    7.  Move cursor and practise using F3, the continuous line drawing
+        function.  
+
+    8.  Clear screen (Control F10).
+
+   
+J.  Drawing Circles
+
+    1.  Center cursor.
+
+    2.  Draw a point - F1.
+
+        Note:  This point now becomes the refernece point (in this case
+               the center point of the circles we will draw).
+
+    3.  Move cursor left 5 spaces (5,<--).
+
+    4.  Press F2.  
+
+             <The system has now drawn a circle through the current
+              cursor position established above in step 2.>
+
+    5.  Move cursor left another 5 spaces then press F2.  
+
+             <The system has drawn another circle through the new 
+              current cursor position whose center is again the last
+              point drawn.>
+
+    6.  Practise this, then clear the screen (control/F10).
+
+     
+K.  Drawing Boxes
+
+    1.  Center cursor.
+
+    2.  Draw a point (F1).
+
+    3.  Move 10 spaces diagonally (top/left)(5, Home, Home)
+
+    4.  Press F6.
+
+             <The system has drawn a box.  The box has been drawn with
+              the current cursor position at the top/left corner and
+              the last drawn point at the opposite corner.>
+    
+
+
+_
+
+
+                                                            Page 6
+
+    5.  Move 10 more spaces diagonally (5, Home, Home).  
+
+    6.  Press F6.
+
+             <The system has duplicated step 4 above.>
+
+    7.  Practise drawing boxes then clear the screen (control/F10).
+
+   
+L.  Painting Drawn Figures
+
+    1.  Center the cursor.
+
+    2.  Draw a box (F1, 5, Home, Home, F6).  
+
+    3.  Move cursor inside box (PgDn).
+
+    4.  Select paint color.  Press F7.
+
+             <A bar will appear with the current paint color, press the
+              space bar until you have the color you wish, then press
+              return.  The color bar will disappear.>
+        
+    5.  Press F5.
+
+             <The box has been painted with the color you have 
+              selected.>
+    
+     
+M.  Erasing Points, Lines, Boxes, Or Circles
+   
+    1.  Clear screen and center cursor.
+
+    2.  Draw a line (F1, 5, Home, Home, F4).
+
+    3.  Erase line (control/F4).
+
+             <The system has erased the drawn line.>
+
+    4.  Clear screen and center cursor (PgDn, PgDn).  
+
+    5.  Draw a box (F1, 5, Home, Home, F6).
+
+    6.  Erase the box (control/F6).
+
+    7.  Redraw above box (5, PgDn, PgDn, F1, Home, Home, F6).
+
+    8.  Paint box (PgDn, F5).
+   
+    9.  Erase painted box (F7, space until color bar is the background
+        color then center)   
+        (press F5) - erases paint.
+        (Home, control/F6) - erases box.
+
+   10.  Practise drawing and erasing figures.
+
+    
+
+
+
+
+_
+
+
+                                                            Page 7
+
+N.  Sketching:  Points, Lines, Circles & Boxes
+
+    Note:  Sketching is the same as drawing except that the DRAW program  
+           draws a point, line, circle, or box everytime you move the
+           cursor.
+
+    1.  Center cursor and clear screen.
+
+    2.  Establish a reference point (F1).
+
+    3.  Tell DRAW you want to sketch a circle (shift/F2).
+
+    4.  Press #3 key on top of key board.
+    
+    5.  Press (<--) key once.
+
+             <System draws a circle.>
+
+    6.  Press (<--) key once.
+
+             <System draws another circle.>
+
+    7.  Press (<--) key and hold down.
+
+             <System continues to draw circles whose centers are the
+              last drawn point through the current cursor position each
+              time the cursor moves.  Turn off sketching with (shift/
+               F7) or (shift/F10).>
+
+    8.  Practise with boxes, lines, points, and painting.
+
+   
+O.  More Objects (GET/PUT)
+
+    1.  Create a box (F1, 5, Home, F6).
+
+    2.  Press F10.  Draw will store the box.
+
+    3.  Press #0 at the top of the keyboard.
+
+             <This tells DRAW to move the cursor the number of spaces
+              equal to the size of the box.>
+
+    4.  Press Home then F9.
+
+             <System created another box.>
+
+    5.  Press (-->,-->, F9).
+
+        Note:  The GET/PUT functions work for rectangular screen 
+               images only.
+
+        Note:  DRAW provides different ways to PUT the objects that
+               have been gotten.  The stored rectangle can be "and'ed,"
+               "or'ed,"  "xor'ed,"  or "Pset,"  with the contents of the
+               screen where the resulting image will go.  To set "and,"
+               "or,"  "xor,"  or "Pset,"  press the alternate and F9 
+               keys concurrently, then press the space bar until the
+               desired method is displayed.  Next press the return key.
+                                                                       
+
+_
+
+
+                                                            Page 8
+
+
+               Try painting an image using the different methods to see
+               their effects.  (For more information see the BASIC 
+               manuals, pages 4-200 through 4-202).
+   
+    
+P.  Clear A Section Of The Screen (Clear Box)
+
+    1.  Set reference point for one corner of the rectangular section of 
+        the screen you want to clear (F1).
+
+    2.  Move cursor to opposite corner of a rectangular area.  Then 
+        press the control and F8 keys simultaneously.
+    
+             <This will clear the contents of the rectangular area
+              to the color currently used to paint.>
+    
+    
+Q.  Writing Text On The Screen
+
+    1.  Press alternate and F10 keys simultaneously.
+
+             <Then keyboard will work as if in text mode and text can be
+              displayed on the screen.>
+
+        Note:  Can be used to label or title a screen picture.  The 
+               enter key will end text mode and return to graphics mode. 
+                      
+    
+R.  List Stored Pictures
+
+    1.  Press the alternate and F4 keys simultaneously.
+
+             <System asks which diskette drive to look at.>
+
+    2.  Enter B then press the enter key.
+
+             <System then lists all the pictures on drive B.>    
+
+        Note:  Format of listing of pictures is as follows: *
+
+               NAME1   .PIC     NAME4   .PIC     NAME7   .PIC
+               NAME2   .PIC     NAME5   .PIC     NAME8   .PIC
+               NAME3   .PIC     NAME6   .PIC     NAME9   .PIC
+
+               To load any picture enter the name, [.PIC] is 
+               unnecessary.
+            *  [.PIK] is used by HDRAW, high resolution mode.
+  
+S.  Load a Stored Picture
+
+    1.  Press alternate and F2 keys concurrently.
+
+             <System asks for the name of picture to be loaded.>
+
+
+
+
+
+
+
+_
+
+
+                                                            Page 9
+
+    2.  Type the name of any saved picture.
+
+             <System asks you to enter which diskette drive the picture
+              is on.>
+
+    3.  Enter B then press the enter key.
+
+             <System loads picture.>
+
+    
+T.  Save A Picture
+
+    1.  Create a screen.
+
+    2.  Press the alternate and F1 keys concurrently.
+
+             <System will ask you to enter the name of your picture.>
+
+    3.  Enter name of picture (up to 8 characters) and press enter.
+
+             <System will ask you which drive (A or B) you want to save
+              the picture on.>
+
+    4.  Enter B then press the enter key.
+
+             <System saves picture on diskette in drive B.>
+
+
+U.  Exit Program
+
+       Press the Escape key to exit to DOS.
+          
+
+V.  Hints
+
+    1.  Set every dot horizontally for a white line and every other
+        dot for a grey line in high resolution mode, HDRAW.
+    
+    2.  Alternate between 2 colors horizontally across the screen in
+        medium resolution mode, MDRAW, to get more that 4 colors at
+        a time.  The same line shifted by an odd number of dots will
+        change the color.  This works on a composite video monitor
+        or TV but may not work on an RGB monitor.
+
+    3.  The cursor step size for verticle movement is the number
+        entered (1-9).  Step size for horizontal movement is the
+        number entered times 6/5 in MDRAW and times 12/5 in HDRAW.
+
+    4.  DRAW.CMT contains comment lines for MDRAW and HDRAW.  Load
+        M or H DRAW.BAS then MERGE "DRAW.CMT" to get a commented 
+        program.  DRAW.CMT is a BASIC program saved with the ,A 
+        option. 
+
+
+   
+                           !! HAPPY DRAWING !!
+
+
+***********************************FIN**********************************
+
+
+
+        
+```
+{% endraw %}
 
 ## FILTER.BAS
 
+{% raw %}
 ```bas
 10 '    FILTERS  NON-ASCII CHARACTERS FROM A FILE
 20 '    USEFUL FOR CLEANING UP NULLS AND CONTROL CHARACTERS FROM A
@@ -145,9 +883,28 @@ machines:
 460 '
 470 PRINT : PRINT "ERROR CONDITION  "; ERR; "  IN LINE NO. "; ERL: PRINT : STOP
 ```
+{% endraw %}
+
+## FILTER.DOC
+
+{% raw %}
+```
+PROGRAM NAME: FILTER.BAS
+AUTHOR: Richard Steck
+ABSTRACT: This is a BASIC program that can be used to remove control and non-
+ASCII (garbage) characters from files that you have downloaded from remote
+systems. Useful for removing the nulls at the beginning of each line which are
+inserted by some systems.
+REQUIRES: IBM BASIC, and a messed up file to work on.( You may not have any)
+INSTRUCTIONS: From BASIC, type RUN" FILTER.BAS"<cr>. You will be asked the 
+name of you original file, the new file to be created, etc.
+
+```
+{% endraw %}
 
 ## HDRAW.BAS
 
+{% raw %}
 ```bas
 1000 GOTO 5000  '  -- HDRAW --
 1010 C$=INKEY$: IF C$="" GOTO 1010
@@ -335,9 +1092,11 @@ machines:
 5210 FOR I=1 TO 10: KEY I,"": NEXT
 5220 RETURN
 ```
+{% endraw %}
 
 ## LQ.BAS
 
+{% raw %}
 ```bas
 1 CLS:PRINT "THIS basic PROGRAM WAS AUTOMATICALLY CREATED BY CONVERT.BAS"
 2 PRINT"Copyright 1982 ,Rich Schinnell Rockville,MD. Not for Sale."
@@ -366,9 +1125,11 @@ machines:
 5000 PRINT "* * ERROR VERIFY DATA * * * "
 5010 CLOSE:END
 ```
+{% endraw %}
 
 ## MDRAW.BAS
 
+{% raw %}
 ```bas
 1000 GOTO 5000
 1010 C$=INKEY$: IF C$="" GOTO 1010
@@ -555,9 +1316,72 @@ machines:
 5210 FOR I=1 TO 10: KEY I,"": NEXT
 5220 RETURN
 ```
+{% endraw %}
+
+## MODROW.TXT
+
+{% raw %}
+```
+GRAPHICS INFO FROM J. G. MODROW
+
+
+       A. MDRAW.BAS, HDRAW.BAS, DRAW.CMT and DRAW.DOC are derived
+          from PDRAW.BAS on the IBM PC Club disk ADX0003.
+
+          MDRAW is the same as PDRAW except that it initializes
+          with black background, white line and includes a Help
+          Table printed in normal or condensed print modes on an
+          Epson or IBM printer.
+
+          HDRAW is MDRAW converted to high resolution mode.
+
+          DRAW.CMT is all the comments identifying the modules
+          and subroutines in MDRAW and HDRAW.  DRAW.CMT is a
+          BASIC program that is only comment lines.  DRAW.CMT
+          is in ascii format so that it can be merged with either
+          M or HDRAW.  Load M or HDRAW then MERGE "DRAW.CMT"
+          and LIST the resulting program.
+
+          DRAW.DOC is the documentation for these programs.
+          The file is edited to reflect both versions of the 
+          program and to be listed or `typed' the same way as
+          this file.
+
+       B. The Painter/Pallete programs from MICRO-G are not
+          as good as the above two programs for drawing.
+          They do have a variable size paintbrush and let
+          you automatically get more than four colors at one
+          time in medium res mode.  It's of questionable value.
+
+       C. Byte, November 1982 had several articles on graphics
+          that may be of interest.  Programs tended to be for
+          the Apple but may prove useful.  There was an article
+          on how to build a vector type video display.  Two
+          other articles were on 3-D graphics for the Apple
+          and building a video digitizer.
+
+       D. Engineering Software for Micros  by: B. J. Korites,
+          Kern Publications developes some simple CAD program
+          modules for micro computers.  The listings are in
+          Apple BASIC but they also sell a disk with the 
+          programs for the IBM PC DOS 1.1.  The book is about
+          $25 and the disk $20.  The listings are purposely kept
+          straight forward so they can be easily understood and
+          modified.  A good elementary text.
+
+       E. Graphic Software for Microcomputers,  by: B. J. Korites,
+          Kern Publications is a good self-teaching text for 2
+          and 3 dimensional graphics.  A comprehensive range of
+          tools in Apple BASIC is covered.  A disk with the 
+          program modules changed for the IBM PC is available.
+          The book is about $22 and the disk $20.
+
+```
+{% endraw %}
 
 ## SCROLLK.BAS
 
+{% raw %}
 ```bas
 1 'Pgm = SCROLLK.BAS
 2 'Softalk (IBM) May, 1983, pg 41. (no copyright notice in listing)
@@ -619,9 +1443,11 @@ machines:
 1300 DATA 88,   0,      140,    14,     90,     0,      186,    183
 1310 DATA 1,    205,    39
 ```
+{% endraw %}
 
 ## SPOOLBAS.BAS
 
+{% raw %}
 ```bas
 10 ' ABSTRACT: Some of you may have tried the SPOOLER Programs on this disk,
 20 '		and found that the spooler no longer operated when you moved
@@ -656,9 +1482,34 @@ machines:
 300 POKE 115,PEEK(95)
 310 END
 ```
+{% endraw %}
+
+## SPOOLER.DOC
+
+{% raw %}
+```
+PROGRAM NAMES: SPOOLER1.COM and SPOOLER2.COM, and SPOOLBAS.BAS
+AUTHOR: Scott Loftesness, Capital PC User's Group
+Author of SPOOLBAS, Dan Berman, Customized Data, Whitman,MA 02382
+ABSTRACT: This program is run once and only once to set aside a 20k byte
+print spooling buffer. From that point on, all files printed to the printer 
+will be spooled ( that is, the printer will run concurrently with other 
+system operations). Spooler1 runs with the monochrome display card, and
+spooler2 runs with the IBM printer card.
+Users who want the spooler's operation to extend into their BASIC
+Language operations must run Daniel Berman's program, SPOOLBAS.BAS.
+REQUIRES: IBM DOS, printer, one of the above cards. Large memory is helpful.
+INSTRUCTIONS: Just type the command SPOOLER1 (or SPOOLER2) from DOS. The next
+time you print a file you will see the effect.
+If you enter BASIC, type RUN "Spoolbas.bas <cr> to continue the spooler's
+operation there.
+
+```
+{% endraw %}
 
 ## WS-DOS.BAS
 
+{% raw %}
 ```bas
 2 'WS-DOS.BAS
 4 'by Andrew Flugelman
@@ -772,6 +1623,7 @@ machines:
 10015 DATA 22,"<_","_>"
 10020 DATA 20,"<^","^>"
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

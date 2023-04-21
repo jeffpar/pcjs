@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2831.TXT
+
+{% raw %}
+```
+Disk No: 2831                                                           
+Disk Title: The Animated Alphabet 1/2 (#2832 also)                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: The Animated Alphabet                                    
+Author Version: 4/90                                                    
+Author Registration: $7.95                                              
+Special Requirements: 640K RAM, EGA, and a hard drive.                  
+                                                                        
+THE ANIMATED ALPHABET combines colorful graphics with appealing         
+animation to teach children the letters of the alphabet. After choosing 
+the correct letter for the graphic shown, for example a monkey, the     
+monkey starts jumping around and the word "monkey" is written near the  
+bottom of the screen. This is a fun program designed to hold the        
+attention of children preschool to the first grade, more than worth the 
+author's modest registration fee.                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2831
 

@@ -46,6 +46,7 @@ machines:
 
 ## AJETCRUZ.BAS
 
+{% raw %}
 ```bas
 1 REM PROGRAM NAME JETSET
 2 REM IFR FLITE SIMULATOR, BOEING 747
@@ -720,9 +721,11 @@ machines:
 7090 RETURN
 9999 END
 ```
+{% endraw %}
 
 ## AJETOFF.BAS
 
+{% raw %}
 ```bas
 1 REM PROGRAM NAME JETSET
 2 REM IFR FLITE SIMULATOR, BOEING 747
@@ -1127,9 +1130,52 @@ machines:
 12099 GOTO 10310
 13000 REM END OF LISTING
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #39, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  JETSET  .BAS         CRC = 4D 17
+
+--> FILE:  AJETOFF .BAS         CRC = 5A 3C
+
+--> FILE:  AJETCRUZ.BAS         CRC = 2A 91
+
+--> FILE:  JETSET  .EXE         CRC = 6A F1
+
+--> FILE:  OJETCRUZ.EXE         CRC = 80 CF
+
+--> FILE:  JETSET  .DOC         CRC = 6A DA
+
+ ---------------------> SUM OF CRCS = 28 7E
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## JETSET.BAS
 
+{% raw %}
 ```bas
 1 REM:PROGRAM NAME = JETSET
 2 REM:IFR FLIGHT SIMULATOR (BOEING 747)
@@ -2192,6 +2238,65 @@ machines:
 13000 REM:END OF LISTING
 65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
 ```
+{% endraw %}
+
+## JETSET.DOC
+
+{% raw %}
+```
+this diskette contains 5 files :
+  JETSET.DOC  -  this file
+  JETSET.EXE  -  the compiled basic version of the 
+                 take off overlay for jetset
+  OJETCRUZ.EXE - the compiled basic version of the
+                 cruze overlay for jetset
+  AJETSET.BAS -  source for jetset.exe
+  AJETCRUZ.BAS - source for ojetcruz.exe
+ 
+to run jetset, just execute JETSET.EXE from dos
+ 
+ Jetset is a 747 flight simulator. It was originaly published 
+in the November 1982 issue of BYTE magazine. You will realy
+need that article to do much with the program. The following
+is a breif outline of the commands and take off proceedure.
+ 
+ The basic commands are as follows:
+ 
+  F   Thrust increase *
+  S   Thrust decrease *
+  Q   thrust reverse
+  (up arrow on the numeric pad) Pitch down *
+  (down arrow on the numeric pad) Pitch up *
+  ,(<) Rudder left *
+  .(>) rudder right *
+  L   Flaps (up/down switch)
+  W   wheels ditto
+  B   Brakes
+  M   missed approach
+  V   VOR frequency tune
+  R   radial select
+  A   VOR auto select
+ 
+  To take off
+ 
+  - Lower flaps (L)
+  - Release the brakes (B)
+  - Apply full throttle (F)
+  - Steer down the runway (, and .)
+  - When air speed reaches 150 press the down arrow on the numeric
+     pad to raise the nose and take off
+  
+  To fly to Buffalo
+  - Set VOR to 116.4
+  - Set radial to 295
+  - Fly north till you cross the radial
+  - Follow it to Buffalo
+ 
+   GOOD LUCK
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

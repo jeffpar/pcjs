@@ -45,6 +45,95 @@ machines:
     BASRUN   BAS  BASIC runtime program
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES380.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 380   GLUDRAW                                           V1 DS
+------------------------------------------------------------------------
+Good graphics generation software with extensive on-line help and sample
+drawings.
+ 
+GLUDRAW  EXE  Main executable program
+DRAW2    EXE  Part of GLUDRAW.EXE
+DRAW3    EXE  Part of GLUDRAW.EXE
+DRAW4    EXE  Part of GLUDRAW.EXE
+DRAW5    EXE  Part of GLUDRAW.EXE
+CAR      PIC  Sample picture file
+DFTLO1   PIC  Sample picture file
+DFTLO2   PIC  Sample picture file
+DFTNUM   PIC  Sample picture file
+DFTUP1   PIC  Sample picture file
+DFTUP2   PIC  Sample picture file
+DINOSAUR PIC  Sample picture file
+ELEPHANT PIC  Sample picture file
+ENGLO1   PIC  Sample picture file
+ENGLO2   PIC  Sample picture file
+ENGNUM   PIC  Sample picture file
+ENGUP1   PIC  Sample picture file
+ENGUP2   PIC  Sample picture file
+EYE      PIC  Sample picture file
+GOLF     PIC  Sample picture file
+HORSE    PIC  Sample picture file
+HOUSE    PIC  Sample picture file
+LION     PIC  Sample picture file
+NOSES    PIC  Sample picture file
+ROMLO1   PIC  Sample picture file
+ROMLO2   PIC  Sample picture file
+ROMNUM   PIC  Sample picture file
+ROMUP1   PIC  Sample picture file
+ROMUP2   PIC  Sample picture file
+SHADING  PIC  Sample picture file
+SHAPES   PIC  Sample picture file
+SNOFLAKE PIC  Sample picture file
+TRUCK    PIC  Sample picture file
+TWAIN    PIC  Sample picture file
+ZEPHYR   PIC  Sample picture file
+DRAWHELP DIR  On-line help system
+DRAWALTX HLP  Part of on-line help system
+DRAWASPE HLP  Part of on-line help system
+DRAWBRBX HLP  Part of on-line help system
+DRAWCIRC HLP  Part of on-line help system
+DRAWCKEY HLP  Part of on-line help system
+DRAWCOLR HLP  Part of on-line help system
+DRAWCONV HLP  Part of on-line help system
+DRAWCOPY HLP  Part of on-line help system
+DRAWCPIC HLP  Part of on-line help system
+DRAWCSPE HLP  Part of on-line help system
+DRAWCURV HLP  Part of on-line help system
+DRAWDELL HLP  Part of on-line help system
+DRAWDL10 HLP  Part of on-line help system
+DRAWDLBX HLP  Part of on-line help system
+DRAWDOTX HLP  Part of on-line help system
+DRAWDRBX HLP  Part of on-line help system
+DRAWDRCO HLP  Part of on-line help system
+DRAWEXIT HLP  Part of on-line help system
+DRAWEXPE HLP  Part of on-line help system
+DRAWFFIG HLP  Part of on-line help system
+DRAWFIND HLP  Part of on-line help system
+DRAWFLIP HLP  Part of on-line help system
+DRAWGENR HLP  Part of on-line help system
+DRAWGRID HLP  Part of on-line help system
+DRAWLINE HLP  Part of on-line help system
+DRAWMOVE HLP  Part of on-line help system
+DRAWMVBX HLP  Part of on-line help system
+DRAWNEWP HLP  Part of on-line help system
+DRAWPAIN HLP  Part of on-line help system
+DRAWROTA HLP  Part of on-line help system
+DRAWTEXT HLP  Part of on-line help system
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0380
 

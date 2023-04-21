@@ -41,6 +41,55 @@ machines:
     checks and deposits, and a listing of tax category items.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1677.TXT
+
+{% raw %}
+```
+Disk No: 1677                                                           
+Disk Title: CHECKEASE                                                   
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Checkease                                                
+Author Version: 1.01                                                    
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+CHECKEASE is an electronic checkbook that functions like a personal     
+finance manager for the everyday tedious checkbook accounting details.  
+CHECKEASE is fully menu driven and intuitive to operate, with very      
+little need to refer to printed documentation.  First you establish an  
+account, which consists of bank name, address, etc. and account balance.
+Then you can select one of several options to perform against that      
+account.  You can write checks or make deposits and the account balance 
+will be automa-tically adjusted.  You can even mark checks as a tax item
+for use in calculating your yearly taxes.  You can search for past      
+checks and even void invalid checks.  Deposit slips listing all of your 
+deposits can be printed by this program.                                
+                                                                        
+CHECKEASE has a bill paying feature that will automatically print out   
+the monthly bills that need to be paid.  When you establish an account  
+you enter your monthly bills, creditor name, payment amount, account    
+balance, etc., and CHECKEASE will maintain these personal account       
+balances as you write checks for payments on these accounts.  Various   
+reports can also be printed, such as a listing of bills due and bills   
+paid, a listing of all checks and deposits, a listing of outstanding    
+checks and deposits, and a listing of tax category items.               
+                                                                        
+Program Limitations:  Maximum of 18 accounts.                           
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1677
 

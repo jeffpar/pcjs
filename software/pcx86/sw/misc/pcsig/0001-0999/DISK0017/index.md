@@ -47,6 +47,7 @@ machines:
 
 ## BREAKOUT.BAS
 
+{% raw %}
 ```bas
 10 DELAY=160 'establish initial delay
 20 KEY OFF
@@ -92,9 +93,11 @@ machines:
 400 LOCATE  YPAD,XPAD:PRINT "      ";:XPAD=(XPAD+1)MOD 74 + 1:LOCATE YPAD,XPAD:PRINT CURSOR$;:RETURN
 410 DELAY=DELAY+1:RETURN 'slow down the ball
 ```
+{% endraw %}
 
 ## FENCE.BAS
 
+{% raw %}
 ```bas
 95 REM This program is FENCE
 99  OPTION BASE 1
@@ -234,9 +237,48 @@ machines:
 3040 ERASE FFFFF$ : GOSUB 1260 : GOTO 100
 5000 RUN "menu"
 ```
+{% endraw %}
+
+## FILES017.TXT
+
+{% raw %}
+```
+Disk No 17
+Program Title: GAMES #2
+PC-SIG version 1
+ 
+Usage: entertainment
+ 
+System Requirements: IBM PC or close compatible with Color graphics
+                     adapter, 2 disk drives, Dos 2.0 or later and a version
+                     of BASIC.
+ 
+File Descriptions:
+ 
+MENU     BAS  Menu to execute programs on this diskette
+PCMAN    BAS  Game - pac-man look alike for 80 column display
+SURVIVAL BAS  Game - can you survive a trip to the moon?
+MOON     BAS  Game - enhanced version of survival
+STARTREK BAS  Game - another startrek version with minor changes
+STARTRK2 BAS  Documentation for startrek game
+STARTREK DUM  Overlay module for startrek
+JBREAK   BAS  Game - bounce the ball off of the wall  (breakout)
+BREAKOUT BAS  Game - a more sophisticated version of breakout
+METEOR   BAS  Game - enhanced version of game on disk no 14
+FENCE    BAS  Game - enhanced version of game on disk no 12
+PCINIT   BAS  Initialize a high score file for pcman
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## JBREAK.BAS
 
+{% raw %}
 ```bas
 10  DEFINT A-Z
 20 RANDOMIZE(CVI(MID$(TIME$,7,2)))
@@ -318,9 +360,11 @@ machines:
 930 RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 10 REM ======================================================================
 20 REM ============================= adx007 =================================
@@ -420,9 +464,11 @@ machines:
 980 FOR I=1 TO 1000:NEXT I:RUN
 990 REM $s2
 ```
+{% endraw %}
 
 ## METEOR.BAS
 
+{% raw %}
 ```bas
 100 REM METEOR, a character graphics arcade game
 110 REM by Edward T. Ordman      November 1981
@@ -514,9 +560,11 @@ machines:
 2080 RETURN
 5000 RUN "menu"
 ```
+{% endraw %}
 
 ## MOON.BAS
 
+{% raw %}
 ```bas
 0 'MIKE STAFFORD
 5 ' ENTERED, CHANGED, CORRECTED, ENHANCED, AND SCREWED UP BY MIKE STAFFORD
@@ -1130,9 +1178,11 @@ machines:
 5950 DATA 00, 00, 00, 27, 42, 00, 41, 41, 00, 00, 00, 28, 00, 41, 42, 42
 5960 RUN"menu"
 ```
+{% endraw %}
 
 ## PCINIT.BAS
 
+{% raw %}
 ```bas
 10 REM INITIALIZE PCMAN SCORE FILE      (PCINIT)
 20 CLS:KEY OFF
@@ -1153,9 +1203,11 @@ machines:
 170 CLOSE
 180 RUN "menu"
 ```
+{% endraw %}
 
 ## PCMAN.BAS
 
+{% raw %}
 ```bas
 10 '*********************************************************************
 20 '**                    P C  M A N  -  MAZE GAME                     **
@@ -1394,9 +1446,11 @@ machines:
 2350 DATA -160,2,2,4,3,1
 2360 LOCATE 23,1:PRINT "Your score is ";SC!; :RETURN
 ```
+{% endraw %}
 
 ## STARTREK.BAS
 
+{% raw %}
 ```bas
 100 CLS
 105 RANDOMIZE (VAL(MID$(TIME$,7,2)))
@@ -2007,9 +2061,11 @@ machines:
 6980 RETURN
 50000 RETURN
 ```
+{% endraw %}
 
 ## STARTRK2.BAS
 
+{% raw %}
 ```bas
 50000 REM ===============================================================
 50100 REM =========   Instructions on how to play startrek  =============
@@ -2129,9 +2185,11 @@ machines:
 61500 GOSUB 50400
 61600 RETURN
 ```
+{% endraw %}
 
 ## SURVIVAL.BAS
 
+{% raw %}
 ```bas
 10 '---------------------------------------------------------------
 12 '
@@ -2744,6 +2802,7 @@ machines:
 9043 DATA 00,00,00,00,00,10,61,64
 9999 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

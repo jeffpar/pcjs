@@ -56,8 +56,179 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## 123KEY.DOC
+
+{% raw %}
+```
+          PROKEY SUBSET FOR 1-2-3        [123KEY.DOC]
+          -----------------------
+In order for Prokey to work with a 123 spreadsheet, certain
+setups are required.  First, the 123 system disk must contain
+the files PROKEY.EXE (the main PROKEY tm. program) as well as
+the file 123KEY.PRO which is the file that contains all the
+custom key assignments to be used while in 1-2-3.
+
+An additional third file may be included 123KEY.BAT (may be
+re-named Autoexec.bat).  This file installs prokey and the keys
+before it calls in the main 1-2-3 program.
+     [123KEY.BAT]=  PROKEY/R 123KEY.PRO
+                    123
+                    ^Z
+Upon boot-up the PROKEYS for 1-2-3 will be loaded into high
+memory and will be invisible to the user until called.
+
+One additional set-up is required on each new spreadsheet that
+is started.  Because of the way 1-2-3 defines certain of the
+function keys, it is necessary to inbed the definitions some
+where in a group of isolated spreadsheet cells.  In doing so
+you will cause PROKEY to interact with the 1-2-3 typing alternative.
+
+The result is to move the functions STEP NAME ABS QUERY TABLE CALC GRAPH
+from their respective keys F3 F4 F7 F8 F9 F10 to their new assignments
+respectively altF3 altF4 altF7 altF8 altF9 altF10.
+
+The move is to allow the re-assignment of those function keys as follows:
+         F3   becomes HOME
+         F4   becomes END
+         F7   becomes the UP arrow
+         F8   becomes the DOWN arrow
+         F9   becomes the LEFT arrow
+        F10   becomes the RIGHT arrow
+
+You may now leave your NumLock key on and use the keypad as a
+numeric keypad.  As stated above this requires a ONE-TIME-ONLY
+setup on EACH NEW spreadsheet.  The setup is an automatic feature
+built into the Prokey set loaded by the first step.  To use the
+setup feature do this:
+
+****  AFTER YOU HAVE CALLED IN A NEW SHEET OR CLEARDED THE       ****
+****  OLD SHEET TO BUILD A NEW ONE, PRESS altF2  .               ****
+
+      AltF2 moves the cursor to Cell position BA1 and writes
+      cells that 1-2-3 's typing alternative will use in
+      re-defining the keypad.  If this group of cells at
+      BA1 is going to interfere with the spreadsheet, you
+      may change their location by useing the 1-2-3 MOVE
+      command to move the group to another section of the sheet.
+      Or if you can change the prokey 123PRO.KEY file to have
+      another beginning cell in place of BA1 (To do this pull
+      up 123PRO.KEY with an editor and find BA1, change it!).
+
+      Each cell in this special group has a range name and they
+      remain the same in a 1-2-3 move. It is these names that
+      the typing alternative uses in looking for those cells.
+
+
+
+
+
+
+               |------|------|
+               | HELP |EDIT  |
+               |      |      |
+               |  alt | alt  |                Print this template on an
+               | step |setup |                Epson or Epson-like printer
+               |------|------|                in the compressed print mode.
+               | HOME |END   |
+               |      |      |                then draw the arrows in the
+               |  alt |alt   |                bottom four boxes as follows:
+               | name |abs   |
+               |------|------|
+               |      |      |
+               | GOTO |WINDOW|
+               |      |      |
+               |------|------|
+               | /|\  |  |   |
+               |  |   | \|/  |                    up           down
+               |  alt |alt   |
+               |query |table |
+               |------|------|                   left          right
+               | /___ | ___\ |
+               | \    |    / |
+               |  alt |alt   |                  Now tape this to your 1-2-3
+               | calc |graph |                  plastic template.
+               |______|______|
+
+
+To use this you need to own PROKEY and download three files to put on your
+1-2-3 system disk.  They are as follows : [123KEY.DOC]=this explanation
+[123KEY.PRO]=the prokey definition file   [123KEY.BAT]=the new 123 autoexec.bat
+
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #115, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  123KEY  .BAT         CRC = 00 00
+
+--> FILE:  123KEY  .DOC         CRC = 3B B9
+
+--> FILE:  123KEY  .PRO         CRC = 06 41
+
+--> FILE:  DHDEMO  .BAS         CRC = 6D 19
+
+--> FILE:  DSKHND  .BAS         CRC = 67 F2
+
+--> FILE:  FREE    .DOC         CRC = 46 62
+
+--> FILE:  NOCOLOR .ASM         CRC = EE 1B
+
+--> FILE:  NOCOLOR .COM         CRC = C8 93
+
+--> FILE:  NOCOLOR .DOC         CRC = 1B B6
+
+--> FILE:  PINUP1  .PIC         CRC = C9 50
+
+--> FILE:  PINUP2  .PIC         CRC = 42 DC
+
+--> FILE:  PINUP3  .PIC         CRC = A7 76
+
+--> FILE:  PINUP4  .PIC         CRC = 6B 00
+
+--> FILE:  SCROLL  .BAS         CRC = BD 5C
+
+--> FILE:  SQUEEZE .EXE         CRC = 46 CE
+
+--> FILE:  SQUSQ   .DOC         CRC = EA 27
+
+--> FILE:  SURF87  .DOC         CRC = 09 1F
+
+--> FILE:  SURF87  .EXE         CRC = 8F BC
+
+--> FILE:  SURFPR  .BAS         CRC = 9B 58
+
+--> FILE:  UNSQUEEZ.EXE         CRC = 56 C6
+
+ ---------------------> SUM OF CRCS = C7 B7
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## DHDEMO.BAS
 
+{% raw %}
 ```bas
 10 'This program demonstrates Disk Handler
 20 'from the October Issue of SofTalk, p. 72.
@@ -120,9 +291,11 @@ machines:
 590 RETURN
 600 END' of program.
 ```
+{% endraw %}
 
 ## DSKHND.BAS
 
+{% raw %}
 ```bas
 10 '***** Disk Handler *****  from the October, 1983 issue of SofTalk, p.71.
 20 '
@@ -163,9 +336,760 @@ machines:
 370 DATA &HCA,&H4,&H0,&H1D35
 380 END' of program.
 ```
+{% endraw %}
+
+## FREE.DOC
+
+{% raw %}
+```
+    U S E R   S U P P O R T E D   S O F T W A R E
+
+======================== 11/14/83 REVISION =========================
+
+THIS CATALOG IS A COMPLEMENTS OF:
+
+                    SEAWARE CORPORATION
+                    P.O. BOX 1656
+                    DELRAY BEACH, FL 33444
+                    (305) 276-5072
+
+THIS IS A CATALOG OF USER SUPPORTED SOFTWARE.  IT IS SUPPLIED AS A SERVICE
+TO CUSTOMERS AND POTENTIAL CUSTOMERS.  THE LATEST REVISION IS ALWAYS
+AVAILABLE BY CALLING THE BAT-BBS AT (305) 276-5072.  (BAT-BBS IS A
+COMBINATION VOICE/DATA PHONE LINE.  4 RINGS=VOICE.
+2 RINGS/HANDUP/REDIAL=BAT-BBS MODEM CONNECTION).  IN NO WAY IS THIS LIST AN
+ENDORSEMENT OF ANY PRODUCT SHOWN HERE BY SEAWARE CORPORATION.  UNLESS
+OTHERWISE NOTED, ALL PROGRAMS RUN ON AN IBM(TM) PERSONAL COMPUTER.
+
+IF YOU WISH TO RECEIVE A PROGRAM LISTED IN THIS CATALOG, PLEASE COMMUNICATE
+DIRECTLY WITH THE AUTHOR OR CONTACT SOURCE LISTED BELOW.  SEAWARE CORP.
+DOES NOT HAVE THE PROGRAM, NOR WILL IT HANDLE YOUR CONTRIBUTIONS (UNLESS
+SPECIFICALLY INDICATED).
+
+FREEWARE IS A CONCEPT AND TRADEMARK OF ANDREW FLUEGELMAN (THE HEADLANDS
+PRESS, INC., BOX 862, TIBURON, CA, 94920).  EACH PACKAGE DISPLAYS A NOTICE
+ASKING FOR A VOLUNTARY CONTRIBUTION TO BE SENT TO THE AUTHOR.  ANDREW'S
+FREEWARE PACKAGE IS PC-TALK, A COMMUNICATIONS PROGRAM.
+
+THE FREEWARE CONCEPT IS BASED ON THESE PRINCIPLES:
+- PEOPLE NEED TO TRY PROGRAMS TO SEE IF THEY ARE USEFUL.
+- SOFTWARE AUTHORS CAN BE SUPPORTED DIRECTLY BY USERS.
+- COPYING AND NETWORKING OF PROGRAMS CAN BE ENCOURAGED.
+
+IF YOU ARE THE AUTHOR OF A USER SUPPORTED PROGRAM.  PLEASE LEAVE A MESSAGE
+ON THE BAT-BBS AS TO THE DETAILS OF YOUR PUBLIC OFFER.
+
+PERMISSION IS GRANTED TO COPY AND SHARE THIS CATALOG PROVIDED THE ABOVE
+NOTICE IS INCLUDED AND UNALTERED.
+
+====================================================================
+PROGRAM...............: PC-TALK
+LATEST REVISION.......: 3
+
+SUGGESTED CONTRIBUTION: $35
+
+CONTACT...............: THE HEADLANDS PRESS, INC.
+                        P.O. BOX 862
+                        TIBURON, CA 94920
+
+AUTHOR................: ANDREW FUGLEMAN
+
+SYSTEM REQUIREMENTS...: 96K IBM PERSONAL COMPUTER (INTERPRETED) OR 128K
+  (TO RUN COMPILED). AN ASYNCHRONOUS COMMUNICATION ADAPTER. A HAYES
+  SMARTMODEM (RECOMMENDED) OR OTHER MODEM (300 BAUD OR 1200 BAUD). A
+  PRINTER (OPTIONAL).
+
+CONTRIBUTION PROVIDES.: A DISKETTE WITH SOURCE OF THE LATEST VERSON.
+
+DISKETTE ONLY.........: $5
+
+DESCRIPTION:  PC-TALK IS A GENERAL PURPOSE COMMUNICATION PROGRAM WHICH
+  ALLOWS COMPLETE FREEDOM IN MAKING CONNECTIONS TO EXTERNAL COMPUTER
+  EQUIPMENT BY USING THE ASYNCHRONOUS COMMUNICATION ADAPTER.  ITS
+  PRIMARY FLEXABILITY COMES WITH ITS ABILITY TO CONTROL A HAYES
+  SMARTMODEM.  FOR THE HAYES MODEM, A DIALING DIRECTORY IS AVAILABLE.
+  OPTIONS ARE ALSO AVAILABLE TO CONTROL BAUD RATE, SYSTEM PARAMETERS,
+  SCREEN "SNAP-SHOT" PRINTING/STORAGE, DATA TRANSFER (ASCII, BINARY,
+  PACING, AND XMODEM MODES), DISKETTE DIRECTORIES, DISK DATA PREVIEWING,
+  AND MORE.
+
+
+====================================================================
+PROGRAM...............: "1-RINGYDINGY"(TM)
+LATEST REVISION.......: 1.2
+
+SUGGESTED CONTRIBUTION: $25
+
+CONTACT...............: JIM BUTTON
+                        P.O. BOX 5786
+                        BELLEVUE, WA 98006
+
+AUTHOR................: JIM BUTTON
+                        SOURCE:     CL2925
+                        COMPUSERVE: 71435,2012
+
+SYSTEM REQUIREMENTS...:  "1-RINGYDINGY" REQUIRES A 64K OR
+  LARGER IBM PC (WITH PC-DOS 1.0 OR 1.1), A 96K OR LARGER IBM
+  PC (WITH PC-DOS 2.0 OR LATER), ONE DISK DRIVE, AND A SERIAL
+  I/O PORT WITH A MODEM.  YOU MUST ALSO HAVE A VIDEO MONITOR
+  CAPABLE OF DISPLAYING 80 CHARACTERS PER LINE.
+
+CONTRIBUTION PROVIDES.: PROGRAM AND DOCUMENTATION ON DISKETTE.
+
+DISKETTE ONLY.........: SEND DISKETTE WITH RETURN POSTAGE &
+  MAILER OR $6.
+
+DESCRIPTION:
+  "1-RINGYDINGY" IS A GENERAL PURPOSE ASYNCHRONOUS
+  COMMUNICATIONS PROGRAM.  IT WAS DESIGNED WITH THE "KISS"
+  ("KEEP IT SIMPLE, STUPID") PRINCIPLE IN MIND.  ALTHOUGH IT
+  EMPLOYS A SIMPLE AND STRAIGHTFORWARD APPROACH TO
+  COMMUNICATIONS, ITS CAPABILITIES SURPASS THOSE OF SOME OF
+  THE MORE EXPENSIVE COMMUNICATIONS PROGRAMS ON THE MARKET
+  TODAY.
+
+  WITH "1-RINGYDINGY" YOU WILL BE ABLE TO:
+
+  -   COMMUNICATE AT SPEEDS UP TO 9600 BAUD (LIMITED BY THE SPEED OF
+      YOUR SERIAL PORT AND MODEM.)
+
+  -   EXCHANGE (SEND OR RECEIVE) TEXT FILES WITH OTHER COMPUTERS.
+      WHILE SENDING TEXT FILES, YOU MAY DYNAMICALLY SEND SELECTED
+      RECORDS FROM THE FILE AND SKIP PAST OTHER RECORDS NOT TO BE
+      SENT.
+
+  -   EXCHANGE (SEND OR RECEIVE) NON-TEXT (EXE OR COM) FILES WITH
+      OTHER COMPUTERS WHICH SUPPORT THE "X-MODEM" PROTOCOL.
+
+  -   USE MODEMS WHICH DON'T SUPPORT AUTO-DIAL.
+
+  -   USE MODEMS WHICH DO SUPPORT AUTO-DIAL. THIS INCLUDES NOT ONLY
+      THE HAYES SMARTMODEM, BUT ALSO A VARIETY OF OTHER MODEMS WHICH
+      USE OTHER COMMANDS TO AUTODIAL A PHONE NUMBER.
+
+  -   CAPTURE INCOMING DATA IN A DISK FILE.
+
+  -   SETUP YOUR OWN "FILTERS" TO REMOVE OR CHANGE UNDESIRABLE
+      CHARACTERS IN THE INCOMING DATA.
+
+  -   DYNAMICALLY SLOW DOWN THE SPEED AT WHICH YOU TRANSMIT, SO AS
+      NOT TO OVERRUN THE COMPUTER AT THE OTHER END.
+
+  -   DYNAMICALLY ALTER YOUR COMMUNICATIONS PARAMETERS, SUCH AS
+      PARITY, SPEED, AND NUMBER OF DATA BITS.
+
+  -   BUILD AUTOMATIC LOGON SEQUENCES OF ANY LENGTH, TO ENABLE YOU TO
+      LOG ON TO A VARIETY OF REMOTE COMPUTERS WITHOUT HAVING TO
+      REMEMBER PHONE NUMBERS, PASSWORDS AND ACCESS COMMANDS.
+
+  -   CHANGE THE COLORS ON YOUR DISPLAY (IF YOU HAVE A COLOR DISPLAY)
+      TO SUIT YOUR PERSONAL TASTE.
+
+  -   MOVE BACK AND FORTH BETWEEN DIFFERENT DIRECTORIES ON YOUR HARD
+      DISK (IF YOU HAVE DOS 2.0) FOR RETRIEVING AND SENDING DATA.
+
+  -   COMMUNICATE PROPERLY WITH COMPUTERS WHICH USE "XON/XOFF"
+      CHARACTERS.
+
+  IN SHORT, "1-RINGYDINGY" IS EASY TO USE, EASY TO UNDERSTAND,
+  POWERFUL, AND SMALL IN SIZE.
+
+
+
+====================================================================
+PROGRAM...............: PC-FILE
+LATEST REVISION.......: 9.1
+
+SUGGESTED CONTRIBUTION: $25
+
+CONTACT...............: JIM BUTTON
+                        P.O. BOX 5786
+                        BELLEVUE, WA 98006
+
+AUTHOR................: JIM BUTTON
+                        SOURCE:     CL2925
+                        COMPUSERVE: 71435,2012
+
+SYSTEM REQUIREMENTS...:  PC-FILE REQUIRES A 64K OR LARGER IBM PERSONAL
+  COMPUTER, WITH AT LEAST ONE DISK DRIVE.  A PRINTER IS OPTIONAL.
+  PC-FILE CAN BE SET UP TO SUPPORT EITHER 40 CHARACTER OR 80 CHARACTER
+  WIDE DISPLAYS.
+
+CONTRIBUTION PROVIDES.: PROGRAM AND DOCUMENTATION ON DISKETTE.
+
+DISKETTE ONLY.........: SEND DISKETTE WITH RETURN POSTAGE &
+  MAILER.
+
+DESCRIPTION:  PC-FILE IS A GENERAL PURPOSE "DATA BASE MANAGER"
+  PROGRAM.  IT WAS WRITTEN WITH ONE OVERRIDING GOAL IN MIND:  EASE OF
+  USE.  WITH PC-FILE, IT'S VERY EASY FOR THE CASUAL OR PROFESSIONAL USER
+  TO CREATE AND MAINTAIN DATA FILES ON THE COMPUTER, AND TO CREATE
+  SIMPLE PRINTED REPORTS BASED ON THAT DATA.
+
+    YOU CAN USE PC-FILE FOR ALL KINDS OF TASKS:
+    -    MAINTAIN MAILING LISTS AND PRINT LABELS,
+    -    MAINTAIN PRICE LISTS,
+    -    MAINTAIN TELEPHONE DIRECTORIES,
+    -    KEEP VARIOUS TYPES OF INVENTORY RECORDS,
+    -    BUILD PERSONNEL FILES,
+    -    KEEP CUSTOMER LISTS,
+    -    BUILD AND MAINTAIN FILES TO BE USED BY OTHER PROGRAMS,
+            LIKE VISICALC AND MAILMERGE,
+    -    AND MANY OTHER TASKS WHICH ONLY YOU CAN DREAM UP.
+
+  PC-FILE WILL ALLOW YOU TO SORT YOUR DATA INTO ALMOST ANY SEQUENCE.  IT
+  ALLOWS RAPID ACCESS TO ANY RECORD IN THE FILE, WITH A SOPHISTICATED
+  SEARCH TECHNIQUE ALLOWING COMPARISON SEARCHES ON ANY FIELD IN THE
+  RECORD.  FOR EXAMPLE, YOU CAN DISPLAY ALL EMPLOYEES OVER A CERTAIN
+  AGE, OR ALL CLIENTS IN A CERTAIN STATE, OR ALL ITEMS THAT ARE NOT IN A
+  CERTAIN CATEGORY.  YOU CAN PRINT OUT REPORTS FROM YOUR DATABASE,
+  LISTING ALL OR SOME OF THE FIELDS, FROM ALL OR SOME OF THE RECORDS, IN
+  MANY DIFFERENT SEQUENCES, WITH TOTALS ON THE NUMERIC FIELDS.  REPORTS
+  CAN BE SENT DIRECTLY TO YOUR VIDEO SCREEN, OR TO ANY ONE OF MANY
+  DIFFERENT TYPES OF PRINTERS.  THEY CAN ALSO BE SENT TO DISK, FOR LATER
+  USE WITH YOUR WORD PROCESSING PROGRAMS.
+
+  YOU CAN CREATE ENTIRE NEW DATABASES FROM EXISTING DATABASES.  THE NEW
+  DATABASES CAN BE IN A DIFFERENT FORMAT, AND CAN BE A SUBSET OF THE
+  DATABASE FROM WHICH THEY WERE "CLONED".
+
+  YOU CAN EXPORT YOUR DATABASE FILES FOR USE WITH VISICALC AND OTHER
+  "CALC" TYPE PROGRAMS, OR TO "MAILMERGE" FILES.
+
+  BUT ABOVE ALL ELSE, PC-FILE IS EASY!  MOST PEOPLE CAN USE IT WITH NO
+  TRAINING OR INSTRUCTIONS.
+
+====================================================================
+PROGRAM...............: FRED (FREE EDITOR)
+LATEST REVISION.......: 1.21
+
+SUGGESTED CONTRIBUTION: $20
+
+CONTACT...............: DAVID N. SMITH
+                        44 OLE MUSKET LANE
+                        DANBURY, CT 06810
+
+AUTHOR................: DAVID N. SMITH
+
+SYSTEM REQUIREMENTS...: IBMPC, 1 DISKETTE DRIVE, 96K MEMORY
+  MINIMUM, DOS 1.1 OR 2.0.
+
+CONTRIBUTION PROVIDES.:
+
+DISKETTE ONLY.........: SEND DISKETTE WITH RETURN POSTAGE &
+  MAILER.
+
+DESCRIPTION:
+  FRED IS A FULL SCREEN EDITOR FOR THE IBM PC.   IT  DISPLAYS FILES
+  UP TO 1500 LINES LONG AND WITH LINES UP TO 254 CHARACTERS LONG ON
+  A MONOCHROME DISPLAY  OR  80 COLUMN GRAPHICS DISPLAY.  THE SCREEN
+  IS A WINDOW ONTO THE  FILE.   THE  WINDOW CAN MOVE UP, DOWN, LEFT
+  AND RIGHT.  LINES  WHICH  ARE  LONGER  THAN THE SCREEN ARE PARTLY
+  DISPLAYED.  IF YOU INSERT DATA, CHARACTERS SEEM TO BE LOST OFF OF
+  THE  END OF THE LINE; THEY ARE NOT LOST BUT ARE  JUST  NO  LONGER
+  DISPLAYED.   MOVE  THE CURSOR OFF OF THE SCREEN TO THE RIGHT  AND
+  THEY WILL REAPPEAR AS THE WINDOW MOVES.
+
+  IF A FILE IS TOO BIG TO FIT INTO MEMORY,  IT  COMPLAINS POLITELY;
+  IF  MEMORY NEARS THE LIMIT WHILE YOU ARE EDITING, FRED TELLS  YOU
+  AND LETS YOU CONTINUE EDITING  BUT  WON'T LET YOU ADD MORE LINES.
+  IN GENERAL, IT IS FORGIVING; YOU CAN EVEN REMOVE THE  DISKETTE IT
+  IS READING FROM OR WRITING TO WITHOUT BOMBING IT OR LOOSING  DATA
+  IN MEMORY BUT I DO NOT RECOMMEND IT (NOR GUARANTEE IT).
+
+  IT  UPDATES  THE  DISPLAY BUFFER DIRECTLY SO THAT SCREEN  UPDATES
+  APPEAR  INSTANTANEOUS;  IT  IS FULLY POSSIBLE TO SCROLL THROUGH A
+  FILE AT TYPAMATIC SPEEDS.
+
+  FRED IS WRITTEN IN ABOUT 590 LINES OF COMPILED BASIC AND ABOUT 30
+  LINES OF ASSEMBLER.  SINCE  ITS PERFORMANCE IS HORRID EXCEPT WHEN
+  COMPILED, SOURCE IS NOT DISTRIBUTED.
+
+  FRED IS SIMILAR TO THE IBM PERSONAL EDITOR; MOST OF IT'S KEYS ARE
+  THE  SAME  AND  ITS  APPROACH TO HANDLING THE SCREEN IS ABOUT THE
+  SAME.   I  USE  THE PERSONAL EDITOR;  FRED WAS AN EXPERIMENT FROM
+  SOME TIME AGO WHICH I HAD  LAID ASIDE.  SEVERAL MONTHS OF READING
+  THE DIALOGS  ON  THE  IBM PC SPECIAL INTEREST GROUP ON COMPUSERVE
+  CONVINCED  ME  THAT THERE ARE MANY PEOPLE OUT THERE WHO STILL USE
+  EDLIN AND WHO WILL NEVER PAY $100 FOR AN EDITOR.  THEREFORE I GOT
+  FRED OUT AND POLISHED  IT  UP  A BIT  TO  GIVE AWAY.  I HOPE THAT
+  PEOPLE FIND IT USEFUL.
+
+  THE DOCUMENTATION IS SOMEWHAT SPARSE; THERE IS  NO  TUTORIAL  AND
+  LITTLE  ELSE  BUT A LIST OF KEYS.  I SUSPECT THAT MOST  PC  USERS
+  WON'T HAVE ANY TROUBLE USING  IT  SINCE  MOST  OF THE KEYS DO THE
+  "RIGHT" THING.
+
+====================================================================
+PROGRAM...............: PC-WRITE
+LATEST REVISION.......: 1
+
+SUGGESTED CONTRIBUTION: $75
+
+CONTACT...............: QUICKSOFT
+                        219 FIRST N. #224
+                        SEATTLE, WA 98109
+                        (206) 282-0452
+
+AUTHOR................: BOB WALLACE
+
+SYSTEM REQUIREMENTS...:
+
+CONTRIBUTION PROVIDES.:  REGISTRATION PROVIDES ADDITIONAL SERVICES, SUCH AS
+  SOURCE FILES, TELEPHONE SUPPORT, A PRINTED MANUAL, AND A FREE COPY OF THE
+  NEXT UPDATED VERSION.
+
+  IN ADDITION, REGISTERED OWNERS RECEIVE A COMMISSION ($25) WHEN SOMEONE
+  REGISTERS ONE OF THE OWNER'S COPIES.  THIS COMMISSION IS NOT MULTI-LEVEL
+  OR "PYRAMIDAL", SINCE ONLY ONE PERSON RECEIVES IT.  IT'S JUST A SALES
+  COMMISSION.
+
+  PEOPLE WHO LIKE PC-WRITE REGISTER AND GIVE COPIES TO FRIENDS OR BUSINESS
+  ASSOCIATES WITH IBM PC'S.  IF ONE REGISTERS, THEY GET A CHECK IN THE
+  MAIL, AN EXTRA BONUS.
+
+  TO REGISTER YOUR COPY, SEND THE AMOUNT REQUESTED TO QUICKSOFT, OR CALL
+  WITH YOUR VISA/MASTERCARD NUMBER.  WE WILL NEED YOUR OLD REGISTRATION
+  NUMBER SO WE CAN PROPERLY CREDIT THE OWNER.  YOU WILL RECEIVE YOUR NEW
+  REGISTRATION NUMBER OVER THE PHONE OR WITH YOUR OTHER MATERIALS.
+
+DISKETTE ONLY.........: $10
+
+DESCRIPTION:  PC-WRITE IS A WORD PROCESSOR AND TEXT EDITOR FOR THE IBM
+  PERSONAL COMPUTER.  IT HELPS YOU WRITE AND FORMAT BOOKS, REPORTS, LETTERS,
+  PROGRAMS, MANUALS, OR OTHER TEXT.
+
+  PC-WRITE WAS DEVELOPED FOR THE IBM PERSONAL COMPUTER.  IT MAY NOT RUN ON
+  OTHER COMPUTERS, EVEN THOSE WHICH CLAIM TO BE "COMPATIBLE" WITH THE IBM PC.
+  IF YOU ARE TRYING TO USE PC-WRITE ON ANOTHER MACHINE, YOU MAY BE OUT OF
+  LUCK.  SOME, SUCH AS THE COMPAQ, MAY BE COMPATIBLE ENOUGH.
+
+  THE PC-WRITE DISKETTE CONTAINS TWO PROGRAMS:  THE EDITOR AND PAGE PRINTER.
+  YOU USE THE EDITOR TO CREATE YOUR TEXT, AND THE PAGE PRINTER TO DIVIDE IT
+  INTO PAGES FOR PRINTING.
+
+  IF YOU HAVE NEVER USED A COMPUTER OR AN EDITING PROGRAM, WELCOME TO WORD
+  PROCESSING!  THE MANUAL INCLUDES A TUTORIAL SECTION TO HELP YOU GET
+  STARTED.  IT ALSO AVOIDS THE USE OF TECHNICAL JARGON AS MUCH AS POSSIBLE.
+
+  IF YOU HAVE USED OTHER EDITING PROGRAMS, ESPECIALLY FULL SCREEN EDITORS,
+  YOU WILL FIND PC-WRITE EASY TO PICK UP.  YOU WILL ALSO FIND IT SMALL, FAST,
+  AND RESPONSIVE.
+
+  PC-WRITE INCLUDES MANY FEATURES:
+
+  -  INSERT, REPLACE, AND DELETE TEXT ANYWHERE YOU WANT.
+  -  SEARCH FOR A PIECE TEXT AND REPLACE IT WITH OTHER TEXT.
+  -  MOVE AND COPY BLOCKS OF TEXT FROM ONE PLACE TO ANOTHER.
+  -  SET MARGINS AND TABS, REFORMAT AND JUSTIFY PARAGRAPHS.
+  -  PRINT YOUR TEXT IN PAGES WITH HEADERS AND FOOTERS.
+  -  SPLIT SCREEN MODE LETS YOU EDIT TWO FILES AT ONCE.
+  -  SEARCH AND REPLACE USE "WILD CARD" MATCH CHARACTERS.
+  -  VERY FAST OPERATION LETS YOU EDIT EFFICIENTLY.
+  -  CONVENIENT TRANSPOSE, CHANGE CASE, AND BOOKMARK KEYS.
+  -  YOU CAN SET ANY CONTROL KEY TO BE ANY OTHER KEY.
+
+
+====================================================================
+PROGRAM...............: EXTENDED BATCH LANGUAGE
+LATEST REVISION.......: 2.0
+
+SUGGESTED CONTRIBUTION: $30 (SUGGESTED CONTRIBUTION FOR PUBLIC USE)
+                            ($30 LICENSE FEE REQUIRED FOR BUSINESS USE)
+
+CONTACT...............: SEAWARE CORP.
+                        P.O. BOX 1656
+                        DELRAY BEACH, FL 33444
+                        (305) 276-5072
+
+AUTHOR................: FRANK CANOVA
+
+SYSTEM REQUIREMENTS...: 64K IBM PERSONAL COMPUTER AND PC-DOS (ANY VERSION)
+
+CONTRIBUTION PROVIDES.:  A DISKETTE WITH THE PROGRAM, DEMONSTRATION
+  FILES, AND SAMPLES.  A 70 PAGE HARDCOPY MANUAL WITH EXAMPLES, TIPS,
+  AND DESCRIPTIONS.  A PASSWORD AND USER ID TO THE BAT-BBS, A HOT-LINE
+  FOR HELP, TIPS, SWAPPING PROGRAMS WITH OTHER USERS, FREE UPDATES, AND
+  OTHER SERVICES SUCH AS THIS CATALOG.
+
+DISKETTE ONLY.........:  $5 FOR DISKETTE AND POSTAGE/HANDLING.
+
+DESCRIPTION:  EXTENDED BATCH LANGUAGE IS A COMMAND PROGRAMMING
+  LANGUAGE.  IT IS A HIGH LEVEL LANGUAGE THAT CAN BE USED AS A DIRECT
+  REPLACEMENT OR IN CONJUNCTION WITH DOS BATCH FILES.  IT CAN OPERATE
+  WITH IBM DOS VERSIONS 1.0, 1.1, OR 2.X.  COMPARED WITH STANDARD DOS
+  BATCH FILES, BAT HAS SUPERIOR CONTROL STRUCTURES, STRING HANDLING, AND
+  USER INTERFACES.  IT ALSO HAS TRACING FACILITIES, AND IS EASY TO LEARN
+  AND USE.  MANY ASPECTS OF THE LANGUAGE ARE LIKE BASIC.  USERS OF
+  VM/370 WILL ALSO FIND IT SIMILAR TO EXECS.  THE EFFECT OF USING BAT IS
+  TO PUT "COVERS" ON THE PROGRAMS AND SYSTEM THAT IT CONTROLS.  A
+  FRIENDLY, EASY TO USE INTERFACE IS EASILY CREATED.
+
+  EXTENDED BATCH LANGUAGE HAS MORE POWER AND ENHANCED CAPABILITIES THAN
+  EITHER DOS 1.1 OR DOS 2.0.  THIS PROGRAM USES THESE CAPABILITIES TO
+  SOLVE COMMON PROBLEMS FOR......
+
+  THE SYSTEM PROGRAMMER - WHO NEEDS TO DO LONG SEQUENCES OF TASKS
+  BETWEEN LINKER, COMPILERS, DEBUGGERS, AND EDITORS.  HE CAN NOW CREATE
+  AN INTELLIGENT LINK BETWEEN THESE PROGRAMS.  FOR INSTANCE, HE MAY WISH
+  TO DO A LINK DEPENDING ON IF THE PREVIOUS COMPILE WAS SUCCESSFUL.  HE
+  CAN ALSO RESPOND AUTOMATICALLY FROM A KEYBOARD "STACK" INTO VARIOUS
+  UTILITIES.
+
+  THE SECRETARY - WHO HAS SEVERAL TYPES OF TASKS TO PERFORM (WORD
+  PROCESSING, ACCOUNTING PACKAGES, ETC) AND REQUIRES A SIMPLE WAY OF
+  CHANGING FROM ONE TYPE OF TASK TO ANOTHER, PERHAPS WITH OPTIONAL HELP
+  TEXT.
+
+  THE STUDENT - WHO WISHES TO GO FROM ONE GAME TO ANOTHER WITHOUT HAVING
+  TO LEARN THE SYSTEM COMMANDS REQUIRED TO MAKE EACH AVAILABLE.
+
+  TESTERS - WHO WISH TO AUTOMATE LONG, BORING TESTS AND PROCEDURES ON
+  THE PERSONAL COMPUTER.  AN EXCELLENT TOOL FOR A MANUFACTURING LINE.
+
+    WITH EXTENDED BATCH LANGUAGE, YOU CAN HAVE:
+    -    BETTER CONTROL OF MESSAGES TO THE SCREEN
+    -    ACCEPT RESPONSES FROM THE USER AND CREATE RESPONSES TO PROGRAMS
+    -    STRING HANDLING OPERATIONS (SUBSTRING, LENGTH, ETC.)
+    -    ARITHMETIC EXPRESSIONS AND ASSIGNMENTS
+    -    COMPARISONS AND PROGRAM RETURN CODES
+    -    SEARCH FOR FILES OR TELL IF THEY EXIST
+    -    COMPLETE FREEDOM TO MIX DOS AND BAT COMMANDS WITHIN THE SAME
+                  CONTROL FILE
+
+
+====================================================================
+PROGRAM...............: EPISTAT
+LATEST REVISION.......: 2.0
+
+SUGGESTED CONTRIBUTION: $25
+
+CONTACT...............: TRACY L. GUSTAFSON, M.D.
+                        1705 GATTIS SCHOOL ROAD
+                        ROUND ROCK, TX  78664
+
+AUTHOR................: TRACY L. GUSTAFSON, M.D.
+
+SYSTEM REQUIREMENTS...:
+               MINIMUM                               OPTIMAL
+         IBM PC WITH 64K RAM                  IBM PC WITH 96K RAM
+         ONE 160K DISK DRIVE                  TWO DISK DRIVES
+         COLOR/GRAPHICS ADAPTER               COLOR GRAPHICS ADAPTER
+         MONOCHROME MONITOR                   HI-RES COLOR MONITOR
+         BASICA                               BASICA
+                                              IBM OR EPSON PRINTER
+                                                  WITH GRAPHICS
+
+CONTRIBUTION PROVIDES.: PROGRAM AND DOCUMENTATION ON DISKETTE.
+
+DISKETTE ONLY.........: FREE PROGRAMS IF YOU SEND DISKETTE.
+
+DESCRIPTION:  EPISTAT IS A COLLECTION OF PROGRAMS WRITTEN IN BASICA
+  FOR STATISTICAL ANALYSIS OF SMALL TO MEDIUM-SIZED DATA SAMPLES ( <
+  1000 OBSERVATIONS PER SAMPLE AND < 28 DATA SAMPLES PER FILE).  IT
+  INCLUDES PROGRAMS TO ENTER, APPEND, AND EDIT DATA, AS WELL AS PERFORM
+  SEVERAL KINDS OF DATA TRANSFORMATIONS.  THE DATAFILES CAN BE PRINTED,
+  GRAPHED, OR SAVED TO DISK.  THE 21 PROGRAMS IN EPISTAT CAN ALSO
+  PERFORM 34 COMMON STATISTICAL TESTS OR FUNCTIONS.
+
+  THE PROGRAMS ARE INTENDED TO BE AS SELF-EXPLANATORY AND USER-FRIENDLY
+  AS POSSIBLE.  ALL QUESTIONS CAN BE ANSWERED WITH A NUMBER, A "Y" FOR
+  YES, OR AN "N" FOR NO.  A THOROUGH STUDY OF THIS GUIDE IS NOT
+  NECESSARY BEFORE USING THE PROGRAMS.  ON THE OTHER HAND, NEITHER THE
+  PROGRAMS NOR THIS MANUAL PURPORT TO TEACH THE PROPER USE OR
+  INTERPRETATION OF STATISTICS.  RATHER, SOME FAMILIARITY WITH THE KINDS
+  OF DATA REQUIRED AND THE UNDERLYING ASSUMPTIONS APPROPRIATE TO EACH
+  STATISTICAL TEST IS ASSUMED.
+
+  ONE WILL NOTE THAT SOME OF THE PROGRAMS EMPHASIZE EPIDEMIOLOGIC AND
+  MEDICAL APPLICATIONS.  DESPITE THE WORDING OF VARIOUS PROGRAM
+  QUESTIONS OR STATEMENTS, THESE TEST ALSO APPLY TO MANY OTHER TYPES OF
+  DATA.  FOR FURTHER EXPLANATIONS OF TESTS, REFER TO:
+
+   1.  COLTON, THEODORE. STATISTICS IN MEDICINE. LITTLE, BROWN AND CO.
+         BOSTON, 1974.
+   2.  FLEISS, JOSEPH.  STATISTICAL METHODS FOR RATES AND PROPORTIONS.
+         JOHN WILEY AND SONS. NEW YORK, 1973.
+
+
+
+====================================================================
+PROGRAM...............: LADYBUG
+LATEST REVISION.......: 0.9
+
+SUGGESTED CONTRIBUTION: $35
+
+CONTACT...............: DAVID N. SMITH
+                        44 OLE MUSKET LANE
+                        DANBURY, CT 06810
+
+AUTHOR................: DAVID N. SMITH
+                        COMPUSERVE: 73145,153.
+
+SYSTEM REQUIREMENTS...:
+    -   128K OF MEMORY.
+    -   ONE SINGLE SIDED DISK DRIVE.  (BUT TWO, OR A DOUBLE SIDED ARE
+        RECOMMENDED).
+    -   A GRAPHICS ADAPTOR.
+    -   A GRAPHICS DISPLAY OF ANY KIND.  (COLOR IS SUPPORTED ONLY ON
+        A COLOR DISPLAY; 80 COLUMN EDITING IS SUPPORTED ONLY ON A
+        HIGH RESOLUTION MONITOR.)
+    -   DOS 1.1 OR 2.0
+    -   AN IBM PC.
+
+CONTRIBUTION PROVIDES.:
+
+DISKETTE ONLY.........: FREE, SEND A DISKETTE AND A SELF ADDRESSED
+        RETURNABLE MAILER TO ABOVE ADDRESS.
+
+DESCRIPTION:
+
+  LADYBUG IS A GRAPHICS LANGUAGE BASED ON LOGO TURTLE GRAPHICS.  IT
+  CONTAINS MOST OF THE GRAPHICS COMMANDS, PROCEDURE MAKING COMMANDS, AND
+  CONTROL COMMANDS FROM THE APPLE II(1) IMPLEMENTATION OF LOGO DONE BY
+  TERRAPIN, INC.  THIS VERSION IS DESCRIBED IN THE BOOK LOGO FOR THE
+  APPLE II, BY HAROLD ABELSON, PUBLISHED BY MCGRAW-HILL IN 1982.  IT IS
+  VERY SIMILAR TO OTHER VERSIONS FOR THE APPLE II, TEXAS INSTRUMENTS,
+  AND TRS-80(2) COMPUTERS.
+
+  LADYBUG IS A VERSION OF LOGO PATTERNED AFTER THE APPLE II
+  IMPLEMENTATION DEVELOPED BY TERRAPIN, INC.  IN GENERAL IT HAS:
+
+  -   ALL OF THE GRAPHICS COMMANDS.
+  -   ALL OF THE MATHEMATICAL COMPUTATIONS.
+  -   ALL OF THE CONTROL COMMANDS.
+
+  IN ADDITION IT HAS:
+
+  -   A LARGE LIBRARY OF PROCEDURES ADAPTED FROM A VARIETY OF
+      SOURCES.
+  -   PAINTING OF AREAS.
+  -   CLIPPING OF DRAWINGS (AS WELL AS WRAPAROUND).
+  -   A FAST FULL SCREEN EDITOR.
+  -   SUPPORT FOR USING BOTH DISPLAYS IF BOTH ARE PRESENT.
+  -   SOUNDS -- PLAY STATEMENT LIKE BASIC.
+
+  THE MAJOR FEATURES MISSING ARE:
+
+  -   LIST MANIPULATION.
+  -   VARIABLE NUMBERS OF PARAMETERS TO PRIMITIVES.
+  -   SAVING SCREEN IMAGES.
+
+  LADYBUG IS DISTRIBUTED AS COMPILED BASIC; SOURCE IS NOT DISTRIBUTED
+  NOR IS IT AVAILABLE.
+
+
+
+====================================================================
+PROGRAM...............: ULTRA-ZAP
+                        ULTRA-FORMAT
+                        ULTRA-FILE
+
+LATEST REVISION.......: ?
+
+SUGGESTED CONTRIBUTION: ?
+
+CONTACT...............: FREESOFT ULTRA-UTILITIES
+                        P.O. BOX 27608
+                        ST. LOUIS, MO  63146
+
+AUTHOR................: ?
+
+SYSTEM REQUIREMENTS...:  TO USE THEM, YOU'LL NEED AN IBM-PC WITH AT LEAST
+                         64K RAM AND ONE SINGLE OR DOUBLE-SIDED DISK DRIVE
+                         AND AN 80 COLUMN MONITOR.
+
+CONTRIBUTION PROVIDES.:
+
+DISKETTE ONLY.........: FREE PROGRAMS IF YOU SEND DISKETTE.
+
+DESCRIPTION:
+   THERE IS NOW AVAILABLE A THREE VOLUME SET OF IBM-PC
+   UTILITIES THAT DO EVERYTHING THE NORTON UTILITIES DO AND
+   MUCH, MUCH MORE.  TO GET THEM, SEND ONE FORMATTED
+   DOUBLE-SIDED DISKETTE OR 2 FORMATTED SINGLE-SIDED DISKETTES,
+   AND A SELF-ADDRESSED, POSTAGE-PAID RETURN MAILER TO THE
+   ADDRESS ABOVE.
+
+   THE PACKAGE INCLUDES:
+
+*  ULTRA-ZAP:  PROGRAM FOR DISPLAYING/MODIFYING DISK SECTORS
+   AND FILE SECTORS, COPYING DISK SECTORS, SEARCHING FOR BYTE
+   OR CHARACTER SEQUENCES IN DISK OR FILE SECTORS, FILLING OR
+   ZEROING DISK SECTORS, AND INTERROGATING DISKETTES TO DISPLAY
+   THEIR PROTECTION TECHNIQUES.  THIS PROGRAM CAN WORK ON ANY
+   DISK SECTOR, REGARDLESS OF PROTECTION, ETC.
+
+*  ULTRA-FORMAT:  CAN FORMAT STANDARD OR COPY-PROTECTED DISK
+   TRACKS, ALSO CAN REPAIR FILES CONTAINING "FLAKY" SECTORS BY
+   PLACING A FRESH FORMAT ON A TRACK WITHOUT ERASING PRIOR
+   DATA.
+
+*  ULTRA-FILE:  PROGRAM FOR DISPLAYING ALL DIRECTORY
+   INFORMATION ABOUT A DISK FILE, ASSIGNING OR REMOVING SYSTEM
+   OR HIDDEN STATUS TO A FILE, BUILDING FILES FROM SCRATCH,
+   RESURRECTING ACCIDENTALLY ERASED FILES, AND SELECTIVELY
+   KILLING FILES FROM A MENU (FAST!).
+
+   ALL IN ALL, IT IS AN EXTREMELY POWERFUL PACKAGE THAT MAKE
+   LIFE MUCH EASIER FOR YOU AND YOUR IBM-PC.
+
+
+====================================================================
+PROGRAM...............: DESK-TOP
+
+LATEST REVISION.......: ?
+
+SUGGESTED CONTRIBUTION: $25
+
+CONTACT...............: MICROCOMPUTER MANAGEMENT
+                        45 DRUM HILL ROAD
+                        CONCORD, MA 01742
+
+AUTHOR................: ?
+
+SYSTEM REQUIREMENTS...: ?
+
+CONTRIBUTION PROVIDES.: ?
+
+DISKETTE ONLY.........: FREE PROGRAMS IF YOU SEND TWO
+                        FORMATED DOUBLE SIDED DISKS AND A
+                        PREPAID MAILER.
+
+DESCRIPTION:
+IT IS AN DESK TOP AID FOR EXECUTIVES.  AMONGST MANY OTHER
+THINGS, IT CONTAINS MACRO AND MENU-WRITING FOR 1-2-3.  ALL
+CHOICES ARE USER-MODIFIABLE.
+
+(( MORE DETAILS WILL BE AVAILABLE AT A LATER DATE ))
+
+   DT IS BEING MARKETED UNDER THE FREEWARE<TM> CONCEPT. TO GET
+YOUR COPY, SEND TWO FORMATTED DOUBLE SIDED DISKS AND A PREPAID
+MAILER, AND WE'LL RETURN DT. IF YOU LIKE IT, WE ASK FOR A $25
+DONATION.  OR, SEND THE $25.00 AND WE'LL SUPPLY THE DISKS AND
+POSTAGE.
+                       MICROCOMPUTER MANAGEMENT
+                       45 DRUM HILL ROAD
+                       CONCORD, MA 01742
+
+<<END OF CATALOG>>
+
+```
+{% endraw %}
+
+## NOCOLOR.ASM
+
+{% raw %}
+```
+PAGE 60,132
+; NOCOLOR.ASM: FOR TURNING OFF THE VIDEO COLOR,
+; ALLOWING USERS WITH COMPOSITE B/W MONITORS TO
+; USE PROGRAMS WHICH SET THE COLOR ON.
+;                               PROGRAM BY RICH WINKEL
+BOTTOM  SEGMENT AT 0H
+        ORG     024H
+KBDIP   DW      ?               ;IP FOR KBD INT
+KBDCS   DW      ?               ;CS FOR KBD INT
+        ORG     0417H
+KB_FLAG DB      ?               ;ROM BIOS DATA
+        ORG     0465H
+CRTMODE DB      ?               ;CURRENT CRT MODE
+BOTTOM  ENDS
+;
+NOCOLOR SEGMENT
+        ASSUME CS:NOCOLOR,DS:BOTTOM
+        ORG     100H
+MAIN    PROC    NEAR
+        JMP     INIT
+;
+; KEYBOARD INTERRUPT INTERCEPT ROUTINE
+;
+CATCH:  STI                     ;INTERRUPTS BACK ON
+        PUSH    AX
+        IN      AL,60H          ;CHECK SCAN CODE
+        CMP     AL,0FH          ;IS IT TAB KEY?
+        JNZ     L2              ;NO, ON TO KEYBOARD ROUTINE
+        PUSH    DS              ;OTHERWISE, CHECK FOR
+        XOR     AX,AX           ;ALT KEY SHIFT
+        MOV     DS,AX           ;GET DOWN TO THE BOTTOM
+        MOV     AL,KB_FLAG      ;GET KEYBOARD FLAG BYTE FROM ROM DATA
+        TEST    AL,08H          ;ALT SHIFT?
+        JZ      L1              ;NO, ON TO KEYBOARD ROUTINE
+        PUSH    DX              ;OTHERWISE,
+        MOV     DX,03D8H        ;POINT TO MODE SELECT PORT ON CG CARD
+        MOV     AL,CRTMODE      ;GET BYTE FOR MODE REG
+        OR      AL,04H          ;TURN ON B/W BIT
+        MOV     CRTMODE,AL      ;SAVE CRT STATE
+        OUT     DX,AL           ;TURN OFF COLOR
+        IN      AL,61H          ;NOW, PREPARE TO RETURN
+        MOV     AH,AL           ;RESET
+        OR      AL,80H          ;THE
+        OUT     61H,AL          ;KEYBOARD
+        MOV     AL,AH           ;CONTROL
+        OUT     61H,AL          ;PORT
+        CLI                     ;TURN OFF INTERRUPTS
+        MOV     AL,20H          ;RESET INTERRUPT CONTROLLER (8259)
+        OUT     20H,AL
+        POP     DX
+        POP     DS
+        POP     AX
+        IRET                    ;BACK TO BUSINESS
+L1:     POP     DS              ;ONWARD TO KBD ROUTINE
+L2:     POP     AX
+        DB      0EAH            ;PREFIX BYTE FOR FAR JUMP
+JFARIP  DW      0H              ;IP FOR KBD ROUTINE
+JFARCS  DW      0H              ;CS FOR KBD ROUTINE
+;
+; INSTALLATION ROUTINE
+;
+INIT:   XOR     AX,AX           ;GET INTO
+        MOV     DS,AX           ;BOTTOM SEGMENT
+        MOV     AX,KBDIP        ;GET IP FOR KBD INTERRUPT
+        MOV     CS:JFARIP,AX    ;PUT IN OUR FAR JUMP
+        MOV     AX,KBDCS        ;GET CS FOR KBD INTERRUPT
+        MOV     CS:JFARCS,AX    ;PUT IN OUR FAR JUMP
+        MOV     AX,CS           ;BACK TO
+        MOV     DS,AX           ;OUR SEGMENT
+        MOV     DX,OFFSET CATCH ;USE DOS TO POINT KBD INT TO US
+        MOV     AX,2509H        ;'RESET INT 9H VECTOR TO DS:DX'
+        INT     21H             ;DO IT
+        MOV     AH,09H          ;PRINT MESSAGE
+        MOV     DX,OFFSET MSG   ;POINT TO MESSAGE
+        INT     21H             ;DO IT
+        MOV     DX,OFFSET INIT  ;GET LAST ADDRESS OF RESIDENT CODE
+        INT     27H             ;TERMINATE AND STAY RESIDENT
+;
+MSG     DB 0AH,09H,'      NOCOLOR installed.',0DH,0AH,0AH
+        DB 09H,'Press Alt-Tab to disable color.',0AH,'$'
+;
+MAIN    ENDP
+NOCOLOR ENDS
+        END MAIN
+```
+{% endraw %}
+
+## NOCOLOR.DOC
+
+{% raw %}
+```
+NOCOLOE.COM
+
+Those PC owners using a COLOR/GRAPHICS card with a monochrome monitor
+may find this program useful.  Many programs assume that if you have
+a C/G card, you have a color display, and proceed to produce color-
+encoded video output, which makes indecipherable garbarge on a
+monochrome screen.
+Use this program to switch your Color/Graphics card to B/W mode from
+within such a program.
+Run NOCOLOR at the DOS prompt.  From then on, hitting Alt-Tab will
+switch the C/G card to B/W mode.
+
+```
+{% endraw %}
 
 ## SCROLL.BAS
 
+{% raw %}
 ```bas
 10 ' SCROLL.BAS  -  Modified from the listing of DEMO.BAS on page 650 of
 20 ' the October 1983 issue of "PC-Magazine"
@@ -273,9 +1197,191 @@ machines:
 1050 DATA 138,251,179,0,205,16,93,202,14,0,1098
 1060 END ' of program.
 ```
+{% endraw %}
+
+## SQUSQ.DOC
+
+{% raw %}
+```
+               SQUEEZE AND UNSQUEEZ DOCUMENTATION
+
+These two programs compress and decompress files.  Compression
+(using SQUEEZE) allows files take less storage on disk, to be
+transmitted faster, etc.  Additionally, compressed files provide
+some information security, since they are encoded and are not
+intelligible until decompressed (using UNSQUEEZ).  These programs
+are compatible with the CP/M squeeze and unsqueeze programs
+(information on CP/M bulletin boards is often squeezed).  In
+fact, these versions were obtained in source format from the
+Compuserve CP/M SIG (from the C database).  The only changes made
+were those required to compile on the IBM PC using the C86
+compiler.
+
+Credit should be given to Richard Greenlaw who wrote this version
+of SQUEEZE and UNSQUEEZ and to those who enhanced it.
+
+
+                           SQUEEZE.EXE
+
+Typical compression factors are:
+
+      .COM    6%      (Don't bother)
+
+      .ASM    33%     (using full ASCII set)
+
+      .HEX    46%     (using only uppercase and a few others)
+
+       Squeezing a really big file takes a few minutes.
+
+
+Usage:     SQUEEZE filename
+
+The squeezed file name is formed by changing the middle
+letter of the file type to Q. If there is no file type,
+the squeezed file type is QQQ. If the name exists it is
+overwritten!
+
+
+The transformations compress strings of identical bytes and
+then encode each resulting byte value and EOF as bit strings
+having lengths in inverse proportion to their frequency of
+occurrence in the intermediate input stream. The latter uses
+the Huffman algorithm. Decoding information is included in
+the squeezed file, so squeezing short files or files with
+uniformly distributed byte values will actually increase size.
+
+
+                          UNSQUEEZ.EXE
+
+UNSQUEEZ converts the information compressed with SQUEEZE or
+compatible compression programs back to their original data.
+
+Usage:     UNSQUEEZ filename
+
+Note:  The file will be UNSQUEEZED to a file with the original
+unsqueezed name.  For example if the file CVTHEX.BAS was
+squeezed, it would create a file called CVTHEX.BQS.  UNSQUEEZ
+CVTHEX.BQS will create a file called CVTHEX.BAS
+
+
+                  RESTRICTIONS AND LIMITATIONS
+
+1.   These versions do not support the DOS 2. hierarchical direct-
+     ories.  Thus the file to be squeezed or unsqueezed must be
+     in the current directory of the specified disk.
+
+2.   If the disk is full, these programs do not detect it.  They
+     terminate normally, with a directory entry that shows the
+     actual size of the file and a file that has been truncated
+     to fit on the disk.  No damage is done to the disk or
+     directory.  If this happens, delete the truncated file, make
+     some room on the disk (either by deleting unnecessary infor-
+     mation or rerunning the program on a disk with sufficient
+     space.
+
+3.    The output file is always placed on the same disk drive as
+     the input file.
+
+I may fix these later, but for now, I am so happy to be able to
+squeeze files for archive so am using the programs as is.
+
+
+Dan Galorath [72245,1114]
+
+```
+{% endraw %}
+
+## SURF87.DOC
+
+{% raw %}
+```
+*********************************************************************
+**                            SURFACE87                            **
+*********************************************************************
+
+    This program developed from an article in 80-Micro, May 1983, page
+236.  The article is written by Delmer D. Hinrichs.  I got tired of
+running benchmarks on the 8087 in my IBM-PC and remembered this
+program, which draws elaborate, drop of water type waveforms on dot
+matrix printers, such as the EPSON MX series.  Elaborate yes, but even
+in compiled BASIC a moderately complex picture can take an hour or two
+while the program computes hundreds of thousands of sine functions.
+
+    SURFACE87 is written entirely in 8088/87 assembler, taking advan-
+tage of the number crunching power of the 8087.  If you don't have an
+8087 installed in your PC or compatible computer, this program will
+not produce anything worthwhile.  If you do, some very intriguing
+waveforms can be cranked out on your printer in an average of
+fifteen minutes.
+
+    You are invited to experiment with values outside those suggested
+by the program.  A negative height multiplier, for instance, will make
+a negative peak.  Different size waves make the peaks fatter or skinnier.
+A good set of values to start out with are 1 peak, circular wave forms,
+left margin 300, X position 250, Y position 250, wave lengths 71,
+height multiplier 530.  This creates the classic three dimensional
+drop of water in the pond image you have probably seen a hundred times
+in magazines--in less than ten minutes.
+
+    Output is intended for printer, but can optionally be sent to the
+screen or disk. The screen image is compressed by a factor of four in
+order to represent the 720,000 possible dots.  A disk file can be speci-
+fied but make sure you have 91,200 bytes free on the disk. SURFACE87
+can also print the files it writes.  A good way to experiment, once
+you have a feel for the screen verses printer images, is to send the
+picture to the screen and electric disk.  This saves a lot of paper
+and if you create a really wonderful design you can save it to real
+disk and print it out anytime at maximum speed.
+
+    This file is one of three or four. SURF87.EXE is the main
+program.  SURF87.HEX must be run through a hex-converter program to
+produce SURF87.EXE.  SURFPR.BAS is a PC-BASIC program to install
+alternate printers on SURF87.  The program comes ready to go for all
+EPSON GRAFTRAX printers, including the IBM Graphics Printer.  If your
+printer has a bit-plot mode, it can most likely be installed.
+
+    Technical details:
+
+    For IBM compatibles--if your computer understands the IBM video
+BIOS routines in Interrupt 10H, the printer call Interrupt 17H and
+standard MS-DOS function calls (version 1.10 and later) you should
+have no problems with this program.
+
+    For IBM-PC--in order to allow as many people as possible to use
+the program the disk files only use the DOS 1.10 function calls, so
+sorry about no PATH names.
+
+    SURFACE87 disk files are standard random files with a block size
+of 960.  In BASIC, a program to print these files can be written by
+going to BASIC with the /S:960 option, and then doing an
+       OPEN "filename" AS #1 LEN=960.
+Printers other than the EPSON sometimes have more and less than 960
+dot widths, and this is one way to get at the actual data produced.
+Alternatively, SURFPR has sixteen bytes of space for each printer
+set-up sequence, and can be used to move the image around the page.
+
+    There is error detection built in to cope with out of disk space
+or printer problems.  If you have specified output to disk and printer,
+for instance, and run out of space on the disk file, the program will
+close the disk file and continue sending to the printer.  If the
+printer then runs out of paper, the program will find that it doesn't
+have anything to do and will return to 'Program possibilities'.  So if
+you are printing a picture and it looks crummy, just turn off the
+printer for a second and you will be back at the main menu.
+
+    Program translation and modifications by:
+
+Marty Smith                 SOURCE ST2259 / COMPUSERVE 72155,1214
+310 Cinnamon Oak Lane       (713) 464-6737 [Home]
+Houston, TX  77079          (713) 661-1241 [Office]
+11/7/83
+
+```
+{% endraw %}
 
 ## SURFPR.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-Z
 20 I=0:J=0:BOX=0:X=0:Y=0:Z=0:REC=0:A$="":X$="":FS$="SURF87.EXE"
@@ -519,6 +1625,7 @@ machines:
 2780 PRINT : PRINT FS$+" has been installed with new printer codes!"
 2790 GOTO 500
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

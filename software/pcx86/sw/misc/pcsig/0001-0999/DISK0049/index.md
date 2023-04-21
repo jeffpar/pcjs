@@ -65,6 +65,7 @@ machines:
 
 ## ADDRFLCD.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 '                PC^3 Software Library Program  ADDRFLCD
@@ -124,9 +125,11 @@ machines:
 560 END
 570 ' SAVE"addrflcd
 ```
+{% endraw %}
 
 ## BIGTYPE1.BAS
 
+{% raw %}
 ```bas
 10 'Program to display dot matrix characters from ROM patterns.
 20 'Will Fastie --19 Nov 81. Typed in 6 Feb 82 from Creative Computing
@@ -174,9 +177,11 @@ machines:
 1310 SCREENWIDTH=80
 1320 RETURN
 ```
+{% endraw %}
 
 ## CALEPSON.BAS
 
+{% raw %}
 ```bas
 1440 T$ = STRING$(4,157)+CHR$(152) : M$(1)=CHR$(134)+T$+T$+T$+T$+T$+T$+STRING$(4,157)+CHR$(149)
 1450 T$ = "    "+CHR$(156) : M$(2)=CHR$(156)+T$+T$+T$+T$+T$+T$+"    "+CHR$(156):M$(3)=M$(2)
@@ -187,9 +192,54 @@ machines:
 1750 IF YR = 8 THEN DAYS(2)=29
 65000 '         SAVE"calepson",a
 ```
+{% endraw %}
+
+## CALEPSON.DOC
+
+{% raw %}
+```
+CALEPSON.BAS, by Michael W. Csontos 2/13/83
+
+The few lines of code in the file CALEPSON.BAS are modifications to
+the program CALENDAR.BAS which was supplied on the IBM DOS 1.0 and 1.1
+disks as part of the SAMPLES series.
+
+IBM naturally wrote (or probably rewrote) the program to match their
+printer ROM. This means that with the standard EPSON printer you get
+a mess of italic characters instead of the line borders for the calendar
+outlines. This "program" replaces the lines of code in the IBM file that
+specify the special characters for the borders of the calendars. In fact
+it looks as if the IBM ROM didn't have all of the necessary characters
+for the corners so their program left most of them open. Therefore
+you should get better looking calendars with this modification and the
+EPSON printer than with the original program and an IBM printer. That
+is why I think the program was written before the IBM ROM was available.
+
+The version of CALENDAR distributed with DOS 1.0 (at least the one I got.)
+had a simple error that prevented it from printing correct leap year
+calendars. This modification also corrects that.
+
+To use these modifications, be sure that CALEPSON is stored in ASCII form
+on the disk (if you can read it with a DOS [TYPE] command, it is). Then
+load BASIC or BASICA, and load CALENDAR.BAS from a DOS disk. Now type
+MERGE "CALEPSON.BAS" (I'm leaving it to you to keep your disks and drives
+sorted out). Now you have a modified version of CALENDAR in memory and 
+can print calendars on an EPSON printer.
+
+If you decide to save the modified version I recommend that you save it
+under another name on a non-DOS disk to prevent confusion in the future.
+I don't know what the copyright status is of the modified program but it
+is hard to imagine a problem distributing the few original lines of code
+so it is probably best to keep them separate and use MERGE when you want
+calendars.
+
+
+```
+{% endraw %}
 
 ## CHARDISP.BAS
 
+{% raw %}
 ```bas
 10 '     Picture City Personal Computer Programming Club    "CHARDISP"
 20 '             Michael Csontos, 3228 Livonia Center Road, Lima, NY 14485
@@ -276,9 +326,11 @@ machines:
 830 RETURN
 840 '           SAVE"CHARDISP
 ```
+{% endraw %}
 
 ## CLOCK.BAS
 
+{% raw %}
 ```bas
 10 REM                   Smart Digital Clock
 11 REM
@@ -374,9 +426,92 @@ machines:
 1610 T$=TIME$
 1620 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #49, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  CLOCK   .BAS         CRC = 47 AD
+
+--> FILE:  BIGTYPE1.BAS         CRC = DA 50
+
+--> FILE:  JOYSTICK.BAS         CRC = A3 67
+
+--> FILE:  PRINTER2.BAS         CRC = 91 22
+
+--> FILE:  EMBEDDED.BAS         CRC = E2 19
+
+--> FILE:  FINISH  .BAS         CRC = ED BB
+
+--> FILE:  FINISHTX.BAS         CRC = C1 AF
+
+--> FILE:  DAYLOG  .BAS         CRC = F8 95
+
+--> FILE:  HEARING .BAS         CRC = 2E B6
+
+--> FILE:  RHMLINE .BAS         CRC = C4 92
+
+--> FILE:  GREATCIR.BAS         CRC = A9 BD
+
+--> FILE:  GREATRHM.BAS         CRC = A3 A1
+
+--> FILE:  CHARDISP.BAS         CRC = B2 D1
+
+--> FILE:  SPINOUT .BAS         CRC = 6A 88
+
+--> FILE:  CUBE    .BAS         CRC = 74 40
+
+--> FILE:  LOAN3   .BAS         CRC = CD 50
+
+--> FILE:  ADDRFLCD.BAS         CRC = C2 8A
+
+--> FILE:  PCHALLEN.BAS         CRC = 8C 89
+
+--> FILE:  XREFMOD .BAS         CRC = 04 C0
+
+--> FILE:  NCCLSPRE.BAS         CRC = 48 BC
+
+--> FILE:  SEC&BYTE.BAS         CRC = 2D 89
+
+--> FILE:  PRINTSET.            CRC = 00 00
+
+--> FILE:  PRINTSET.DOC         CRC = 3F 31
+
+--> FILE:  CALEPSON.BAS         CRC = B8 8E
+
+--> FILE:  CALEPSON.DOC         CRC = 58 FE
+
+--> FILE:  JOYSTEST.BAS         CRC = 7D 39
+
+ ---------------------> SUM OF CRCS = 18 3B
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## CUBE.BAS
 
+{% raw %}
 ```bas
 7 ' Source:  Printed copy offered in
 8 '          PC Magazine, Vol. 1, No. 2, pp. 85-87
@@ -777,9 +912,11 @@ machines:
 4450 RETURN
 4460 END
 ```
+{% endraw %}
 
 ## DAYLOG.BAS
 
+{% raw %}
 ```bas
 1 '     Picture City Personal Computer Programmers Club Software Library
 2 '
@@ -1064,9 +1201,11 @@ machines:
 16090 PRINT "Program will continue when problem is corrected.":RESUME
 65000 ' SAVE"DAYLOG.bas",a
 ```
+{% endraw %}
 
 ## EMBEDDED.BAS
 
+{% raw %}
 ```bas
 10 '  SOURCE: CREATIVE COMPUTING [MAY 1982] page 198
 20 '  AUTHOR: Will Fastie
@@ -1091,9 +1230,11 @@ machines:
 270 LPRINT NORMAL$;DASHES$;CHR$(14);X$;CHR$(20);DASHES$;NORMAL$
 280 END
 ```
+{% endraw %}
 
 ## FINISH.BAS
 
+{% raw %}
 ```bas
 10 ' Program "finish" with 8 fonts, diskette version, saved 820603.2320
 20 DEFINT A-Z
@@ -1429,9 +1570,11 @@ machines:
 4180 SCREEN 0,,0,0: RETURN
 5000 PRINT ", because the pretty font is only available at 10 cpi.": RETURN
 ```
+{% endraw %}
 
 ## FINISHTX.BAS
 
+{% raw %}
 ```bas
 10 '$#0
 20 '.pf8.ce"finish"
@@ -1878,9 +2021,11 @@ machines:
 4320 '.pf0.bl1.tp2
 4330 'Using .pf0 restores the font chosen at runtime, "plain" or "pretty"
 ```
+{% endraw %}
 
 ## GREATCIR.BAS
 
+{% raw %}
 ```bas
 10 '********************************************************
 20 '*****            GREAT CIRCLE PLOTTING             *****
@@ -1945,9 +2090,11 @@ machines:
 610 A$ = INKEY$: IF A$ = "" THEN 610 ELSE IF A$ = "Y" OR A$ = "y" THEN R = 3: GOTO 300
 620 KEY ON: END
 ```
+{% endraw %}
 
 ## GREATRHM.BAS
 
+{% raw %}
 ```bas
 10 '********************************************************
 20 '*****                  GREATRHM                    *****
@@ -2073,9 +2220,11 @@ machines:
 1220 NEXT J
 1230 KEY ON: END
 ```
+{% endraw %}
 
 ## HEARING.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF: CLS: LOCATE 1,22: PRINT "HEARING EVALUATION"
 20  LOCATE 2,24: PRINT "E. WEISSBERGER"
@@ -2113,9 +2262,11 @@ machines:
 340 PRINT "Will you run this program again (Y/N)?"
 350 A$ = INKEY$: IF A$ = "" THEN 350 ELSE IF A$ = "Y" OR A$ = "y" THEN CLS: GOTO 190 ELSE CLS: KEY ON: END
 ```
+{% endraw %}
 
 ## JOYSTEST.BAS
 
+{% raw %}
 ```bas
 10 'SAVE"B:JOYSTEST.BAS",A
 20 'SAVE"B:JOYSTEST.BAK"
@@ -2159,9 +2310,11 @@ machines:
 400 DRAW "BM250,025"+DR$
 410 GOTO 180
 ```
+{% endraw %}
 
 ## JOYSTICK.BAS
 
+{% raw %}
 ```bas
 10 REM PROGRAM TO WATCH THE JOYSTICK PORTS
 15 REM SOURCE: CREATIVE COMPUTING [APRIL 1982] PAGE 321
@@ -2176,9 +2329,11 @@ machines:
 90 LOCATE 10,1: PRINT USING F$;AX,AY,AT,BX,BY,BT
 100 GOTO 70
 ```
+{% endraw %}
 
 ## LOAN3.BAS
 
+{% raw %}
 ```bas
 10 CLS: KEY OFF: LOCATE 3,30: PRINT "LOAN.BAS"
 20 LOCATE 9,25: PRINT "Edward Weissberger"
@@ -2408,9 +2563,11 @@ machines:
 2300 DEF SEG: POKE 106,0
 2310 KEY ON: CLS: NEW: END
 ```
+{% endraw %}
 
 ## NCCLSPRE.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF
 10 REM PRECISION PROGRAM v1.83 by N. ADAMS
@@ -2484,9 +2641,11 @@ machines:
 660 IF ZX$ ="e" OR ZX$ = "E" THEN 700 ELSE 640
 700 CLS: KEY ON
 ```
+{% endraw %}
 
 ## PCHALLEN.BAS
 
+{% raw %}
 ```bas
 1 GOTO 11
 2 FOR T= 1TO L:NEXT:POKE FNP(X,V),32
@@ -2505,9 +2664,11 @@ machines:
 15 Z=FNZ:COLOR 1:LOCATE 17,66:PRINT"Time Spent":LOCATE 14,66:PRINT"Final Drag":COLOR 4:LOCATE,69:PRINT L:LOCATE 18,65:PRINT USING"#### seconds";Z-W:LOCATE 20,65:PRINT"Want to play":LOCATE,65:PRINT"AGAIN (Y/N)?"
 16 A$=INKEY$:IF A$="Y"OR A$="y"THEN RUN ELSE IF A$="N"OR A$="n"THEN CLS ELSE 16
 ```
+{% endraw %}
 
 ## PRINTER2.BAS
 
+{% raw %}
 ```bas
 10 REM PRINTER
 15 REM SOURCE: CREATIVE COMPUTING [MAY 1982] page 194
@@ -2654,9 +2815,35 @@ machines:
 1380 IF X$ = "" THEN 1370
 1390 RETURN
 ```
+{% endraw %}
+
+## PRINTSET.DOC
+
+{% raw %}
+```
+ PRINTSET, BY MICHAEL W. CSONTOS  1/18/83
+
+THIS "PROGRAM" SETS UP THE EPSON PRINTER TO PRINT COMPRESSED PRINT
+WITH 1/8 IN SPACING WITH AUTO-SKIP-OVER-PERF ON 11 INCH PAGES. IT
+ALSO RESETS THE PRINTER TO TOP-OF-FORM WHEN IT IS RUN.
+
+TO "RUN" THE PROGRAM TURN ON THE PRINTER AND, IN DOS, TYPE "TYPE PRINTSET".
+
+THE CHARACTERS THAT APPEAR ON THE SCREEN AND THE BEEP ARE THE RESULT OF
+DOS INTERPRETING THE EPSON COMMAND CODES. THE DOTS THAT ARE PRINTED ON THE 
+PRINTER WERE JUST TO HELP IN DEBUGGING THE PROGRAM AND TO SHOW THAT IT 
+FUNCTIONED PROPERLY.  IT TOOK QUITE A WHILE TO FIND A CODE THAT WAS 
+COMPATABLE WITH EDLIN, DOS, AND THE EPSON!
+
+I FIND THIS SMALL ROUTINE VERY USEFUL IN PRINTING OUT LONG DOCUMENTATION 
+FILES WITHOUT USING TOO MUCH PAPER.
+
+```
+{% endraw %}
 
 ## RHMLINE.BAS
 
+{% raw %}
 ```bas
 10 '**************************************************************
 20 '*****                RHUMBLINE NAVIGATION                *****
@@ -2751,9 +2938,11 @@ machines:
 910 A$ = INKEY$: IF A$ = "" THEN 910 ELSE IF A$ = "Y" OR A$ = "y" THEN 350
 920 KEY ON: END
 ```
+{% endraw %}
 
 ## SEC&BYTE.BAS
 
+{% raw %}
 ```bas
 10 'SAVE "B:Sec&Byte.BAS"
 20 REM Program to print table of sectors and bytes
@@ -2769,9 +2958,11 @@ machines:
 120 NEXT X
 130 LPRINT CHR$(27);CHR$(64);
 ```
+{% endraw %}
 
 ## SPINOUT.BAS
 
+{% raw %}
 ```bas
 10 REM ibm pc spinout
 20 REM K.R. Sloan, Jr.
@@ -2937,9 +3128,11 @@ machines:
 1520 PUT(PL,PY),PADDLE,XOR
 1530 RETURN
 ```
+{% endraw %}
 
 ## XREFMOD.BAS
 
+{% raw %}
 ```bas
 1 '     XREFMOD.BAS modified from XREF.BAS and PRINTER.BAS from BALTIMORE
 2 '
@@ -3080,6 +3273,7 @@ machines:
 1800 LPRINT STRING$(130,"-"):LZ = LZ + 1: SZ = 0: RETURN
 2000 '  SAVE"a:xrefmod.sys",a
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

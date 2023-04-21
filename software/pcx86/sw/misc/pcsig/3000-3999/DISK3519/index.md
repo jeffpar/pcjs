@@ -14,6 +14,33 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## DEALER.DOC
+
+{% raw %}
+```
+A note for Vendors/Consultants/Distributers.
+
+AMS is also available as a commercial software package to re-sellers.
+
+A number of vendors have expressed interest in the Shareware Version of the 
+software, and have forwarded it to clients. If however you have a number of 
+prospective customers and would prefer to sell the commercial version to them, 
+please fax us or contact us via CompuServe for our generous discount rates 
+and terms and conditions.
+
+The commercial package has a re-compiled version of the software, without 
+Order AMS and Register AMS options, and is packaged with manuals and user 
+guides. Documentation has no references to the AMS shareware version.
+
+A demonstration version is available. If you have a CompuServe address, 
+please include this on the fax, for a prompt EMail delivery.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3519
 

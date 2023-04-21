@@ -68,8 +68,183 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## DECIHEX.ASM
+
+{% raw %}
+```
+          ; from ASSEMBLY LANGUAGE PRIMER FOR THE IBM PC & XT
+          ; by Robert LaFore
+          ;    modified to be compilable by CHASM  (disk # 37)
+          ;MAIN PART OF PROGRAM
+          ;Connects procedures together
+repeat   call      decibin   ;keyboard to binary
+         call      crlf      ;print cr and lf
+         call      binihex   ;binary to screen
+         call      crlf      ;print cr and lf
+         jmps      repeat    ;do it again
+
+         ;+++++++++++++++++++++++++++++++++++++++++++
+         ;PROCEDURE TO CONVERT DEC ON KEYBD TO BINARY
+         ;result is left in bx register
+decibin  proc      near
+         mov       bx,0      ;clear bx for number
+         ; get digit from keyboard, convert to binary
+newchar  mov       ah,1      ;keyboard input
+         int       21h       ;call DOs
+         sub       al,30h    ;ASCII to binary
+         jl        exit      ;jump if <0
+         cmp       al,9      ;> 9d?
+         jg        exit      ;if so, not a dec. digit
+         cbw                 ;byte in al to word in ax
+         ;(digit is now in ax)
+         ;Multiply number in bx by 10 decimal
+         xchg      ax,bx     ;trade digit and number
+         mov       cx,10     ;put 10d in cx
+         mul       ax,cx     ;number times 10 (ChAsm wants "ax")
+         xchg      ax,bx     ;trade number and digit
+                             ;add digit in ax to number in bx
+         add       bx,ax     ;add digit to number
+         jmps      newchar   ;get next digit
+exit
+         ret                 ;return from decibin
+         endp
+         ;+++++++++++++++++++++++++++++++++++++++++++
+         ;PROCEDURE TO CONVERT BINARY NUMBER IN BX TO HEX ONSCREEN
+
+binihex   proc      near      ;
+          mov       ch,4      ;number of digits
+rotate    mov       cl,4      ;set count to 4 bits
+          rol       bx,cl     ;left digit to right
+          mov       al,bl     ;move to al
+          and       al,0fh    ;mask off left digit
+          add       al,30h    ;convert to ascii
+          cmp       al,3ah    ;is it > 9?
+          jl        printit   ;if not, printit
+          add       al,7h     ;digit is A to F
+printit
+          mov       dl,al     ;put ascii chr in dl
+          mov       ah,2      ;display output function
+          int       21h       ;DOS call
+          dec       ch        ;done 4 yet?
+          jnz       rotate    ;if not, go back
+          ret                 ; return from binihex
+          endp
+         ;+++++++++++++++++++++++++++++++++++++++++++
+         ;PROCEDURE TO PRINT CR AND LF ONSCREEN
+crlf     proc      near
+         mov       dl,0dh     ;carriage return
+         mov       ah,2       ;display function
+         int       21h        ;DosCall
+         mov       dl,0ah     ;linefeed
+         mov       ah,2       ;display function
+         int       21h        ;DosCall
+         ret                  ;return from crlf
+         endp
+         ;+++++++++++++++++++++++++++++++++++++++++++
+         ;decihex ends
+         ;+++++++++++++++++++++++++++++++++++++++++++
+```
+{% endraw %}
+
+## FILES.TXT
+
+{% raw %}
+```
+TURBO PASCAL miscellany + Make A Movie animation (+)
+ 
+This is a DOUBLE-SIDED diskette (DOS 2.00) -- programs run in DOS
+ 
+Name           Description
+ 
+AMAZING .COM   Produces a maze-like pattern (great with color)
+AMAZING .PAS   ^TURBO PASCAL source code
+DECIHEX .COM   Enter a decimal integer, receive a hexadecimal number
+DECIHEX .ASM   ^Source code from Waite Group book -- <Ctrl>C to exit
+FONTEDIT.BAS   Create new fonts for OKIDATA 93, 92, and maybe 82
+FONTEDIT.DOC   ^Documentation guide
+NEWCHARS.BAS   ^Program created by FONTEDIT.BAS (Okidata fonts)
+NEWCHARS.DOC   ^Documentation guide
+KEYDEMO .COM   A demo program that reads all keystrokes
+KEYDEMO .PAS   ^TURBO PASCAL source code
+MAKAMOVI.COM   Create animation in text mode (needs 96K minimum)
+MAKAMOVI.DOC   ^Documentation (user guide) version 1.0
+MAKAMOVI.PAS   ^TURBO PASCAL source code
+INTRO   .SCN   ^Used by MAKAMOVI.COM (must be on same disk)
+SHOWMOVI.COM   ^Used to "show" the "movies" created by MAKAMOVI.COM
+SHOWMOVI.DOC   ^Documentation (user guide)
+SHOWMOVI.PAS   ^TURBO PASCAL source code
+BOUNCY  .SCN   ^File created by MAKAMOVI.COM (used by SHOWMOVI.COM)
+SQUARE  .SCN   ^File created by MAKAMOVI.COM (used by SHOWMOVI.COM)
+OKIGRAFX.COM   Create all-points-addressable graphics up to 10" square
+OKIGRAFX.DOC   ^Documentation guide
+OKIGRAFX.PAS   ^TURBO PASCAL source code
+ANAGRAM .OKI   ^File created by OKIGRAFX.COM
+DICT    .OKI   ^File created by OKIGRAFX.COM
+NOISE   .COM   Makes a "machine-gun" noise
+NOISE   .ASM   ^Source code from Waite Group book on IBM Assembler
+PIANO   .COM   PC piano (version 1.00) with record and playback
+PIANO   .PAS   ^TURBO PASCAL source code
+PIANO   .TXT   ^Short text on PIANO.COM
+TURBO   .DOC   Random comments about Borland's Turbo Pascal
+ 
+ 
+ 
+```
+{% endraw %}
+
+## FILES353.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 353  Turbo Programs                                    v1   DS
+-----------------------------------------------------------------------
+ 
+This disk contains TURBO PASCAL programs and other programs.
+ 
+AMAZING  COM  Produces a maze-like pattern (great with color)
+AMAZING  PAS  ^TURBO PASCAL source code
+DECIHEX  COM  Enter a decimal integer, receive a hexadecimal number
+DECIHEX  ASM  ^Source code from Waite Group book -- <Ctrl>C to exit
+FONTEDIT BAS  Create new fonts for OKIDATA 93, 92, and maybe 82
+FONTEDIT DOC  ^Documentation guide
+NEWCHARS BAS  ^Program created by FONTEDIT.BAS (Okidata fonts)
+NEWCHARS DOC  ^Documentation guide
+KEYDEMO  COM  A demo program that reads all keystrokes
+KEYDEMO  PAS  ^TURBO PASCAL source code
+MAKAMOVI COM  Create animation in text mode (needs 96K minimum)
+MAKAMOVI DOC  ^Documentation (user guide) version 1.0
+MAKAMOVI PAS  ^TURBO PASCAL source code
+INTRO    SCN  ^Used by MAKAMOVI.COM (must be on same disk)
+SHOWMOVI COM  ^Used to "show" the "movies" created by MAKAMOVI.COM
+SHOWMOVI DOC  ^Documentation (user guide)
+SHOWMOVI PAS  ^TURBO PASCAL source code
+BOUNCY   SCN  ^File created by MAKAMOVI.COM (used by SHOWMOVI.COM)
+SQUARE   SCN  ^File created by MAKAMOVI.COM (used by SHOWMOVI.COM)
+OKIGRAFX COM  Create all-points-addressable graphics up to 10" square
+OKIGRAFX DOC  ^Documentation guide
+OKIGRAFX PAS  ^TURBO PASCAL source code
+ANAGRAM  OKI  ^File created by OKIGRAFX.COM
+DICT     OKI  ^File created by OKIGRAFX.COM
+NOISE    COM  Makes a "machine-gun" noise
+NOISE    ASM  ^Source code from Waite Group book on IBM Assembler
+PIANO    COM  PC piano (version 1.00) with record and playback
+PIANO    PAS  ^TURBO PASCAL source code
+PIANO    TXT  ^Short text on PIANO.COM
+TURBO    DOC  Random comments about Borland's Turbo Pascal
+FILES    TXT  Disk documentation
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## FONTEDIT.BAS
 
+{% raw %}
 ```bas
 10 DIM M%(7)
 20 'Fontedit.bas        A character editor for downloading character sets
@@ -250,9 +425,11 @@ machines:
 1760 KEY ON
 1770 END
 ```
+{% endraw %}
 
 ## NEWCHARS.BAS
 
+{% raw %}
 ```bas
 10  REM--Select Download Character Set
 20  LPRINT CHR$(27);CHR$(50);
@@ -335,6 +512,155 @@ machines:
  800 Lprint chr$(27);chr$(37);chr$(65);chr$( 110 );
  810  Lprint chr$(65);chr$(62);chr$(65);chr$(32);chr$(16);chr$(12);chr$(2);chr$(65);chr$(62);chr$(65);chr$(0);
 ```
+{% endraw %}
+
+## NOISE.ASM
+
+{% raw %}
+```
+          ; from ASSEMBLY LANGUAGE PRIMER FOR THE IBM PC & XT
+          ; by Robert LaFore
+          ;    modified to be compilable by CHASM  (disk # 37)
+          ;GUN--makes a machine gun sound
+          ;   fires fixed number of shots
+          ;------------------------------------------
+main      proc      far       ;main part of program
+          mov       cx,20     ;set # of shots
+new_shot
+          push      cx        ;save count
+          call      shoot     ;sound of shot
+          mov       cx,4000h  ;set up silent delay
+silent    loop      silent    ;silent delay
+          pop       cx        ;get back shots count
+          loop      new_shot  ;loop til done
+          int       20h       ;back to DOS
+          endp
+          ;------------------------------------------
+          ;subroutine to make brief noise
+          ;------------------------------------------
+shoot     proc      near      ;
+          mov       dx,140h   ;initial value of wait
+          mov       bx,20h    ;set count
+          in        al,61h    ;get port 61
+          and       al,0FCh   ;"and off" bits 0 and 1
+sound     xor       al,2      ;toggle bit #1 in al
+          out       61h,al    ;output to port 61
+          add       dx,9248h  ;add random pattern
+          mov       cl,3      ;get set to rotate 3 bits
+          ror       dx,cl     ;rotate it
+          mov       cx,dx     ;put it in cx
+          and       cx,1FFh   ;mask off upper 7 bits
+          or        cx,10     ;ensure not too short
+wait      loop      wait      ;time delay
+          dec       bx        ;done enough?
+          jnz       sound     ;if not, back to sound
+          and       al,0FCh   ;and off bits 0 and 1
+          out       61h,al    ;turn off bits o and 1
+          ret                 ;return from subroutine
+          endp
+          ;------------------------------------------
+```
+{% endraw %}
+
+## PIANO.TXT
+
+{% raw %}
+```
+
+                     PIANO--yet another PC PIANO program
+                        (c) 1984 by Neil J. Rubenking
+                                version 1.00
+
+     Just run it and play away.  I'm working on some way to make the notes
+just hold while you hold down the key and stop when you release it.  At
+present, if you hold down the key you get a rather unpleasant repetition
+of a note.
+
+```
+{% endraw %}
+
+## SHOWMOVI.DOC
+
+{% raw %}
+```
+
+                            SHOW A MOVIE version 1.0
+                         (c) 1984 by Neil J. Rubenking
+
+     SHOWMOVI.COM is a stripped-down version of MAKAMOVI.  You call it from
+DOS with a parameter string as described below, and it SHOWs a MOVIe file that
+you created with MAKAMOVI.
+
+
+SYNTAX:
+
+SHOWMOVI MOVINAME/[o,c, or r]/[wait]/[repetitions]/
+
+MOVINAME is the name of the screen file selected.  It may include a drive
+     letter, but must not include the extension, which is automatically set
+     to ".SCN".  This item is REQUIRED -- there is no default.
+
+[o,c, or r]  Set the mode of display, where ...
+     O : One time display -- last screen remains until a key is pressed.
+     C : Continuous display until a key is pressed.
+     R : Repetitive display -- repeats the cycle a set number of times,
+         then holds the last screen 'till a key is pressed.
+     Default is r.
+
+[wait]  This is the time between screens.  It is an integer value.  The range
+     10 to 100 is probably what you'll want.  Default is 50.
+
+[repetitions]  An integer value that tells an R display how many times to
+     repeat.  Default is 5.
+
+The parameters MUST be passed in this order, with slashes between AND a slash
+     after the last parameter.  Only MOVINAME is required.
+
+
+EXAMPLES:
+
+SHOWMOVI bouncy/o/20/     Shows "bouncy" once, with 20 units between screens
+SHOWMOVI square/r/100/10  Shows "square" ten times, with 100 units between
+SHOWMOVI bouncy/c/        Shows "bouncy" continuously, with the default value
+                          of 50 units between
+SHOWMOVI square/o         CRASHES, because of missing final slash
+SHOWMOVI bouncy/50/       CRASHES -- you don't have to give all the parameters,
+                          but you must give a complete list up to the point
+                          you stop (SHOWMOVI bouncy/o/50/ would be right)
+SHOWMOVI bouncy/          Uses all default values, so it shows "bouncy" 5
+                          times with 50 between
+
+
+```
+{% endraw %}
+
+## TURBO.DOC
+
+{% raw %}
+```
+
+
+TURBO PASCAL is a product of Borland International.  The programs on this disk
+use many of its extended features, so they are probably not compilable by some
+other PASCALs.  However, TURBO only costs $50, so if you are just dying to
+improve some of these programs, the cost is within reach.
+
+The main differences between TURBO and other PASCALs is one of efficiency.
+Programs compile very fast, in just one pass.  Execution time for compiled
+programs is also good.  The editor comes as a WORDSTAR clone, but you can
+completely change it at will.  If a program being compiled to memory fails,
+you are dumped back into the editor at the exact spot the error occurred.
+Also, the magazines report that TURBO-compiled programs generally take up
+less disk space.
+
+The main disadvantage of TURBO, if it is one, is that it generates ".COM"
+files only.  Thus the code cannot exceed 64K.  However, unless you are doing
+some kind of big project, it's HARD to come up with 64K.  If you do, CHAINing
+and OVERLAYS are built in.
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

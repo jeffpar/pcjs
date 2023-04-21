@@ -36,6 +36,36 @@ machines:
     PC-ZAP20 DOC  Documentation for PC-ZAP.  Only prints on IBM/EPSON or
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES355.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 355  PC-ZAP                                             v1   DS
+------------------------------------------------------------------------
+ 
+PC-ZAP is a utility program which allows easy modification of any DOS
+file without the use of the DOS DEBUG command.  PC-ZAP can dump a file,
+verify data in a file and replace data in a file.  PC-ZAP functions are
+controlled by user created files.  Several examples are included in the
+documentation [but not on disk]:Unprotect Lotus 123, Unprotect
+MemoryShift, Make /v default for FORMAT.COM and others.
+ 
+PC-ZAP20 DOC    Documentation for PC-ZAP.  Only prints on IBM/EPSON or
+                compatible printer.
+PC-ZAP20 EXE    Executable PC-ZAP program.
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0355
 

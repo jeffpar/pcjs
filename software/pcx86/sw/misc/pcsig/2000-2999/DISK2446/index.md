@@ -24,6 +24,34 @@ machines:
     Includes five utilities to aid in compressing your programs.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2446.TXT
+
+{% raw %}
+```
+Disk No: 2446                                                           
+Disk Title: pKDisk                                                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: pKDisk                                                   
+Author Version: 1.1                                                     
+Author Registration: $25.00 or $45.00                                   
+Special Requirements: None.                                             
+                                                                        
+pKDisk is a compact terminate-stay-resident compression program which   
+reduces the size of your .EXE or .COM files by 10 to 30 percent.        
+Includes five utilities to aid in compressing your programs.            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2446
 

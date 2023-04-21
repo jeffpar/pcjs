@@ -104,6 +104,138 @@ machines:
     cursor.  This mode shows what's underneath the cursor.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2234.TXT
+
+{% raw %}
+```
+Disk No: 2234                                                           
+Disk Title: VPT, VFONT, READ, SEL, SNOOP, V7CURS                        
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: VPT                                                      
+Author Version: 3.50                                                    
+Author Registration: $20.00                                             
+Special Requirements: VGA.                                              
+                                                                        
+Anyone who wants to improve their color VGA system's look by setting    
+their own VGA color shades should try out VPT.                          
+                                                                        
+This program allows VGA or MCGA users to view the quarter-million       
+(262,144) available VGA colors.  It's interactive and easy to use.  It 
+has a graphical-type display, there are no "magic numbers" to type.         
+                                                                        
+Users can also set any text-mode attribute to any color out of the      
+quarter-million; control the overscan (a.k.a. border) color (not        
+available on MCGA systems); have the colors "stick" with almost all     
+programs; load and save their favorite settings in color files, and use 
+the program in a command-line mode (for batch files).                   
+                                                                        
+VPT operates in text mode and allows setting of any or all of the       
+sixteen attributes available in text mode.                              
+                                                                        
+Program Title: VFONT                                                    
+Author Version: 4.35                                                    
+Author Registration: None.                                              
+Special Requirements: VGA.                                              
+                                                                        
+This program is for anyone tired of the default VGA text-mode font.     
+VFONT contains and loads replacement fonts for VGA systems; it includes 
+two variations of a "modern" font, and a handwritten "scrawl" font.     
+                                                                        
+The DOS version is a "terminate-and-stay-resident" program that takes up
+approximately 4.5K of RAM, and works only in text modes.  The OS/2      
+version calls the OS to request a new font.  OS/2 version only works in 
+full-screen sessions.                                                  
+                                                                        
+The four fonts are modern solid-line, modern double-line,              
+scrawl-straight-line, and scrawl-scrawled-line.  Modern is a pleasing,   
+san-serif font.  Scrawl is a handwritten-looking "scrawled" font.      
+                                                                        
+VFONT remains in place even if your software sets the video mode. This  
+means the font won't "go away" like with some other font programs.  The 
+OS/2 version is saved and restored by the OS when switching between     
+screen groups.                                                          
+                                                                        
+                                                                        
+Program Title: Read                                                     
+Author Registration: None.                                              
+Special Requirements: DOS 3.3 or 4.0                                    
+                                                                        
+If you are a batch file writer who needs interaction and the use of DOS'
+environment variables, here are a couple of utilities to make your life 
+easier.                                                                 
+                                                                        
+Most batch file utilities return results in the ERRORLEVEL.  These      
+utilities set an environment variable, which means direct character     
+results can be communicated between programs.  If you ask for a Y or N,  
+you can test for a Y or N.                                              
+                                                                        
+READLN and READKEY are programs that get input from the keyboard and    
+place it in environment variables.  They're perfect for making          
+interactive batch files and much easier to use than utilities that use  
+ERRORLEVEL to communicate the results.                                  
+                                                                        
+READLN displays the prompt (which must be in double quotes) and waits   
+for input.  All input up to an ENTER is placed in specified environment 
+variables.  If the first letter of var is capitalized, so will the 
+input.
+                                                                        
+READKEY displays the prompt (again in double quotes) and waits for      
+input.  ONE character is read (no ENTER is needed) and it is placed in  
+the environment variable var.  If the first letter of var is            
+capitalized, so will the input character.  If an extended key (function 
+key, arrow keys, etc.) is pressed, the ASCII representation of the       
+hexadecimal scan code for the key is placed in the variable. If a       
+Carriage Return, Escape, BEL, or TAB is pressed, the ASCII              
+representation of the character's ASCII code is placed in the variable. 
+                                                                        
+Program Title: SEL                                                      
+Author Version: 6.05                                                    
+Author Registration: None.                                              
+Special Requirements: CGA, and ANSI driver.                             
+                                                                        
+SEL is an ANSI color selector for DOS or OS/2 for those who use any ANSI
+screen driver (ANSI.SYS, NANSI.SYS, &c. under DOS; ANSI ON for OS/2).   
+                                                                        
+SEL allows easy color selection using mnemonics instead of numbers; has 
+a random color selection mode; and sets the prompt to a contrasting     
+color.                                                                  
+Program Title: Snoop                                                    
+Author Version: 3.93                                                    
+Author Registration: None.                                              
+Special Requirements: EGA, or VGA.                                      
+                                                                        
+This isn't an end-user program; rather, it's for programmers and 
+advanced users who wish to snoop around a part of the VGA BIOS.  SNOOP 
+is a program to show various EGA and VGA pointers maintained by BIOS, 
+and display the contents of the tables these pointers point to.  These      
+tables include the user palette override table, the alpha character     
+override table, and the SAVE_PTR table.  The program also displays the  
+current contents of the VGA color registers.                            
+Program Title: V7CURS                                                   
+Author Version: 1.01                                                    
+Author Registration: None.                                              
+Special Requirements: VGA with the V7VGA chip set.                      
+                                                                        
+For anyone who hates blinking cursors and owns a VGA card based on the 
+V7VGA chipset, such as the FastWrite VGA and VRAM VGA.                  
+                                                                        
+V7CURS exploits the non-blinking hardware cursor built into the V7VGA   
+chipset by Video-7/Headland Technologies.  It is a small TSR that turns 
+off the blinking attribute, leaving you with an "XOR" cursor; this mode 
+shows what's underneath the cursor.                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2234
 

@@ -14,6 +14,49 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2767.TXT
+
+{% raw %}
+```
+Disk No: 2767
+Disk Title: Moraff's Stones
+PC-SIG Version: S1
+
+Program Title: Moraff's Stones
+Author Version: 1.0
+Author Registration: Varies
+Special Requirements: 512K RAM, and a graphics card.
+
+What do they do in the taverns on Moraff's World?  What a silly
+question!  Play the strategy gambling/barter game called STONES, of
+course.
+
+Here you are in a tavern on Moraff's World, the only human in the
+place.  Don't worry, discrimination is against the law in this
+province.  You're sure that the guys (guys? aliens, ETs, BEMs,
+whatever...) beckoning you to play STONES with them are nice enough
+creatures who just need a fourth player.  You buy into the game and take
+a seat at the STONES table.
+
+After a while, you aren't doing badly.  In fact, you've just wiped out
+one opponent who leaves the game.  Who's this taking her place?  You
+gradually realize that each time one player gets wiped out, it gets
+replaced by somebody smarter and nastier.
+
+This excellent game from Moraff supports all graphic cards from Hercules
+to 1024 X 768, 256-colors in super VGA resolution.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2767
 

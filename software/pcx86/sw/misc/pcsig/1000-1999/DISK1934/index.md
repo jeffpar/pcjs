@@ -30,6 +30,40 @@ machines:
     included. At any point that help is required, simply press F1 and a
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1934.TXT
+
+{% raw %}
+```
+Disk No: 1934                                                           
+Disk Title: FBNCAT                                                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: FBNCAT                                                   
+Author Version: 06/17                                                   
+Author Registration: $15.00                                             
+Special Requirements: 2 Floppy's or Hard Drive.                         
+                                                                        
+Here's a disk cataloger with pull-down menus, full search and sort      
+capabilities by disk and file, and the power to print disk labels.  You 
+can enter disk and file comments and save for later editing.  Pull up   
+reports on your own library then edit the cataloger to keep it current. 
+                                                                        
+FBNCAT was designed to be easy to use.  The menus and dialogue boxes are
+self explanatory and extensive context sensitive help screens are       
+included.  At any point that help is required simply press <F1> and a   
+brief description of how to proceed is displayed.                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1934
 

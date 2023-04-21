@@ -71,6 +71,7 @@ machines:
 
 ## ACRS.BAS
 
+{% raw %}
 ```bas
 10 REM -- ACRS PROGRAM
 20 REM -- BY L. AND S. BROUDY
@@ -178,9 +179,11 @@ machines:
 985 LPRINT
 990 GOTO 310
 ```
+{% endraw %}
 
 ## CHARS.BAS
 
+{% raw %}
 ```bas
 10 REM IBM PC  -----CHARS------
 20 VERSION$= "V1.02"   ' 8/14/1982 rev 11/14/82
@@ -249,9 +252,11 @@ machines:
 1190 LOCATE 5,4,0,13,0
 1200 RETURN
 ```
+{% endraw %}
 
 ## CHECKOUT.BAS
 
+{% raw %}
 ```bas
 1000 '"CHECKOUT" Test output ports, peripherals and handshake
 1010 REV$="821210"'Robert Hamilton  (415) 493-2664                             »
@@ -402,9 +407,11 @@ machines:
 2490 CLS:LOCATE 21,1:BEEP:CLOSE #1
 2500 PRINT"MENU SELECTION: ";"(";K$;")":PRINT "ERROR NUMBER:  ";ERR;CHR$(10):RESUME 1290
 ```
+{% endraw %}
 
 ## CNTRLBK.BAS
 
+{% raw %}
 ```bas
 1 DEF SEG=0:V1=PEEK(108):V2=PEEK(109):V3=PEEK(110):V4=PEEK(111)
 2 DEF SEG=0:POKE 108,&H53:POKE 109,&HFF:POKE 110,&H0:POKE 111,&HF0
@@ -420,9 +427,296 @@ machines:
 65 DEF SEG:POKE 1124,0
 70 END
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #6, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  CHARS   .BAS         CRC = 83 5B
+
+--> FILE:  CHARS   .EXE         CRC = 62 E9
+
+--> FILE:  STARLANE.BAS         CRC = 4B B8
+
+--> FILE:  FREE1   .EXE         CRC = E3 E0
+
+--> FILE:  FREE1   .BIN         CRC = FD 9C
+
+--> FILE:  FREE3   .DOC         CRC = 3E 33
+
+--> FILE:  FREE3   .COM         CRC = 51 15
+
+--> FILE:  FREE1   .DOC         CRC = 85 CA
+
+--> FILE:  GDUMP   .BAS         CRC = 82 C3
+
+--> FILE:  DCBA    .HOW         CRC = 8F 70
+
+--> FILE:  GRAFHAT .EXE         CRC = A4 59
+
+--> FILE:  GDUMP   .EXE         CRC = 99 F2
+
+--> FILE:  STICK   .BAS         CRC = 3D 59
+
+--> FILE:  PROFILER.BAS         CRC = 95 69
+
+--> FILE:  PROFILE .MEM         CRC = BC A4
+
+--> FILE:  PROFILE .BAS         CRC = 49 B1
+
+--> FILE:  MONO    .COM         CRC = 00 00
+
+--> FILE:  COLOR40 .COM         CRC = 00 00
+
+--> FILE:  COLOR80 .COM         CRC = 00 00
+
+--> FILE:  COLORG  .COM         CRC = 00 00
+
+--> FILE:  GUIDE1  .REF         CRC = 95 43
+
+--> FILE:  GRAFHAT .BAS         CRC = 79 14
+
+--> FILE:  NUM-WORD.BAS         CRC = 3F E6
+
+--> FILE:  ZELLER  .BAS         CRC = 2E 30
+
+--> FILE:  PRTSET  .BAS         CRC = FA A2
+
+--> FILE:  GUIDE2  .REF         CRC = 6C 91
+
+--> FILE:  KB_FLAG .BAS         CRC = F2 90
+
+--> FILE:  ACRS    .BAS         CRC = EA 62
+
+--> FILE:  CHECKOUT.BAS         CRC = F6 7C
+
+--> FILE:  CNTRLBK .BAS         CRC = 66 1A
+
+ ---------------------> SUM OF CRCS = 6F 47
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## FREE1.DOC
+
+{% raw %}
+```
+                    B&L FREE PROGRAMS
+ 
+
+
+
+     This program will convert 160K of ram space into an electronic
+     drive.  This drive will be drive C: .  An electronic disk drive
+     functions like a regular disk drive except it is 50 TIMES faster!!
+
+     Since this drive looks exactly like a single sided double
+     density drive, you can use programs like DISKCOPY, DISKCOMP,
+     FORMAT with it.
+
+     As stated in the prologue to the program, this program is
+     distributed FREE to interested users.  Those who find the
+     program useful are requested to make a $15 voluntary contribution
+     to B&L FREE PROGRAMS, 226 South Cole, Boise, ID  83709.  Such
+     contributions serve a twofold purpose:
+
+             First, the contributions offset the cost of developing the
+             program.  If the program is financially successful, you will
+             see it grow and improve with time.  Furthermore, the program
+             will be made available in different variations and also be
+             upgraded to new releases of DOS.  This is important, since
+             information concerning future releases of DOS are not made
+             available to software developers such as ourselves.  Thus
+             it is impossible to tell if this program will work, as is,
+             when DOS 2.0 is released.  It is fairly likely that certain
+             parts of the program will need to be rewritten.
+
+             Second, the contributions received serve as a poll to determine
+             which programs are necessary and useful and which are not.  If
+             you contribute, that is a vote for the survival of the program.
+             Programs which do not have adequate financial support will
+             not be supported in the future.
+
+     INSTALLATION:
+
+     To install the B&L ELECTRONIC DISK on your system, you need
+     to have DOS 1.1, and at least 256k of memory.
+
+     The first thing you need to do is convince the system that
+     you have 3 disk drives.  This is done by patching some system
+     software using the following steps:
+
+            (1) Make a new copy of the diskette you boot with using
+                DISKCOPY.
+
+            (2) Copy the files FREE1.EXE and FREE1.BIN to this new
+                diskette.  Put the new diskette into drive A: and
+                make sure A is the default drive (ie, A> ).
+
+            (3) If the new diskette does not have DEBUG.COM on it,
+                use the COPY command to put DEBUG.COM on this new diskette.
+
+
+
+
+
+
+
+
+
+
+
+            (4) Run the DEBUG program:
+                A>DEBUG FREE1.BIN
+
+                The debug program will prompt you with:
+                - 
+
+            (5) Enter the command:
+                W 100 0 7 4  (use W 100 0 142 4 for double sided disks)
+                followed by the enter key.
+
+            (6) Now reset the system using the usual CTRL/ALT/DEL keys.
+
+            The system will boot thinking there are 3 disk drives.  You
+            can test this by typing
+            A>C:
+
+            If the system responds with C:, you are successful!  If
+            the system responds with "Invalid Drive Specification", you
+            were unsuccessful, and should try again until you are successful.
+            ANY TIME YOU BOOT (RESET) WITH THIS DISKETTE, THE SYSTEM
+            WILL THINK YOU HAVE 3 DISK DRIVES.  YOU WILL NOT NEED
+            TO REPEAT THE ABOVE STEPS AS LONG AS YOU BOOT WITH THIS
+            SPECIAL DISKETTE!!
+
+            The following steps are necessary every time the system is
+            reset.  Note that the AUTOEXEC batch files can be used to
+            automatically load the electronic disk program!!
+
+
+            Now type:
+            FREE1
+
+            This will convert drive C: to a B&L ELECTRONIC DISK.  To
+            use drive C after this step you MUST use either the FORMAT
+            program or the DISKCOPY program.  FORMAT will set up drive
+            C as an empty disk; DISKCOPY will copy existing files on it.
+            Now you can use drive C: any way you wish!!
+
+            IMPORTANT!!!!!!!!
+            When using FORMAT or DISKCOPY, the /1 option MUST BE USED!!
+            Examples:
+              A:FORMAT/1 C:
+                  or
+              A>DISKCOPY/1 A: C:
+
+            Also note that when the system does a reset, it completely
+            erases memory, including the contents of the electronic disk.
+            Thus, you should make sure important files on drive C: are
+            copied onto a regular diskette.
+
+            NOTE:
+              The problem of CTRL/ALT/DEL erasing memory has been solved
+              by B&L FREE PROGRAMS #3: NEW RESET.  It offers two additional
+              resets which do NOT erase memory and thus will NOT
+              destroy the contents of the B&L Electronic Disk!
+
+```
+{% endraw %}
+
+## FREE3.DOC
+
+{% raw %}
+```
+                    B&L FREE PROGRAMS
+                    226 South Cole
+                    Boise, ID  83709
+
+                 NEW RESET PROGRAM: FREE3
+
+
+     This program adds 3 new reset keys to DOS 1.1 for the IBM Personal
+     Computer.  Two of the keys provide new functions; the third
+     performs the same function as CTRL/ALT/DEL.  CTRL/ALT/DEL
+     remains unchanged.
+
+     The three new reset keys are invoked are CTRL/1, CTRL/2, and
+     CTRL/3.  CTRL/3 is a mild reset which will return you to the
+     DOS prompt (A> ).  CTRL/2 reloads DOS from the diskette in
+     drive A but does NOT ERASE MEMORY.  Time does not have to be
+     reset when CTRL/2 is used.  CTRL/2 is particularly useful
+     with programs such as electronic disks in which important
+     information is stored in memory.  It works very well with
+     FREE1, another free program offered by B&L FREE PROGRAMS.
+     CTRL/1 functions identically to CTRL/ALT/DEL.  DOS is reloaded
+     from Drive A, and memory is completely erased.
+
+
+     INSTALLATION:
+     FREE3, the new reset program is a DOS program which is called
+     from a DOS prompt.  For example, if the current drive is drive
+     A and the FREE3 program resides on drive B, you would enter:
+
+       A>B:FREE3
+
+     It is strongly suggested that you include FREE3 in an
+     AUTOEXEC.BAT file on the diskette you boot (see the DOS
+     manual).  This will cause the CTRL/1, CTRL/2, CTRL3 programs
+     to always work.
+
+
+     As stated in the prologue to the program, this program is
+     distributed FREE to interested users.  Those who find the
+     program useful are requested to make a $10 voluntary contribution
+     to B&L FREE PROGRAMS, 226 South Cole, Boise, ID  83709.  Such
+     contributions serve a twofold purpose:
+
+             First, the contributions offset the cost of developing the
+             program.  If the program is financially successful, you will
+             see it grow and improve with time.  Furthermore, the program
+             will be made available in different variations and also be
+             upgraded to new releases of DOS.  This is important, since
+             information concerning future releases of DOS are not made
+             available to software developers such as ourselves.  Thus
+             it is impossible to tell if this program will work, as is,
+             when DOS 2.0 is released.  It is fairly likely that certain
+             parts of the program will need to be rewritten.
+
+             Second, the contributions received serve as a poll to determine
+             which programs are necessary and useful and which are not.  If
+             you contribute, that is a vote for the survival of the program.
+             Programs which do not have adequate financial support will
+             not be supported in the future.
+
+
+```
+{% endraw %}
 
 ## GDUMP.BAS
 
+{% raw %}
 ```bas
 0 REM prog = GDUMP
 1 VERSION$= "V1.2"  'COMPILE open-print time delay bug sidestepped.
@@ -511,9 +805,11 @@ machines:
 780 END
 790 PRINT #1,CHR$(27)+"\"+CHR$(0)+CHR$(0);:RETURN
 ```
+{% endraw %}
 
 ## GRAFHAT.BAS
 
+{% raw %}
 ```bas
 0 REM prog = GRAFHAT
 1 REM from CREATIVE COMPUTING, 12/81 pg 215
@@ -558,9 +854,11 @@ machines:
 2090 RETURN 'from transfer to color.
 2100 'Adapted from "B" & "C" by Herb Shear, 1982
 ```
+{% endraw %}
 
 ## KB_FLAG.BAS
 
+{% raw %}
 ```bas
 0 ' program = ---- KB_FLAG -----
 1 'Author: Herb Shear, 1590 Vineyard Dr., Los Altos, CA 94022
@@ -626,9 +924,11 @@ machines:
 620 'restore former CtrlBrk pointer
 630 DEF SEG = 0: FOR I = 0  TO 3: POKE 108+I, POINTER%(I): NEXT: RETURN
 ```
+{% endraw %}
 
 ## NUM-WORD.BAS
 
+{% raw %}
 ```bas
 1 REM IBM PC ------- NUM-WORD ---------
 2 REM VERSION$= "V1.2"    '8/14/82
@@ -677,9 +977,11 @@ machines:
 5210 DATA TWENTY,THIRTY,FORTY,FIFTY,SIXTY,SEVENTY,EIGHTY,NINETY
 5220 DATA ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,ELEVEN,TWELVE,            THIRTEEN,FOURTEEN,FIFTEEN,SIXTEEN,SEVENTEEN,EIGHTEEN,NINETEEN
 ```
+{% endraw %}
 
 ## PROFILE.BAS
 
+{% raw %}
 ```bas
 10 REM prog = profile
 20 REM PC Magazine [Oct 1982 pg 102]
@@ -709,9 +1011,11 @@ machines:
 260 NEXT
 270 END
 ```
+{% endraw %}
 
 ## PROFILER.BAS
 
+{% raw %}
 ```bas
 10 REM prog = build PROFILER
 20 REM from PC Magazine [Oct 1982 pg 102]
@@ -765,9 +1069,11 @@ machines:
 510 BEEP: PRINT "PROGRAM ABORTED"
 520 END
 ```
+{% endraw %}
 
 ## PRTSET.BAS
 
+{% raw %}
 ```bas
 50 'C.ITOH/NEC setup program --- P ---
 55 'Author - Herb Shear, 1590 Vineyard Dr. Los Altos, CA 94022
@@ -801,9 +1107,11 @@ machines:
 270 PLAY "ACEG": FOR I=1 TO 2000:NEXT
 280 RESUME
 ```
+{% endraw %}
 
 ## STARLANE.BAS
 
+{% raw %}
 ```bas
 1000 GOTO 4320: REM GO SETUP GAME
 1020 '                                                                                                                                                           --- MAIN PROGRAM LOOP ---
@@ -1051,9 +1359,11 @@ machines:
 5860 NEXT: IF CSRLIN > 16 THEN GOSUB 5380: CLS
 5880 RETURN
 ```
+{% endraw %}
 
 ## STICK.BAS
 
+{% raw %}
 ```bas
 0 'prog = -----STICK-------
 2 'Author: Herb Shear, 1590 Vineyard Dr. Los Altos, CA 94022
@@ -1070,9 +1380,11 @@ machines:
 100 LOCATE 12,1,1
 110 END
 ```
+{% endraw %}
 
 ## ZELLER.BAS
 
+{% raw %}
 ```bas
 10 ' program = ZELLER
 20 '
@@ -1091,6 +1403,7 @@ machines:
 320 DATA SUNDAY,MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY
 330 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

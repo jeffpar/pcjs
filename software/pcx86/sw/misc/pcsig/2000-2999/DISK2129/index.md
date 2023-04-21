@@ -37,6 +37,47 @@ machines:
     additional units.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2129.TXT
+
+{% raw %}
+```
+Disk No: 2129                                                           
+Disk Title: Ole! 2000 Set 1                                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: OLE! 2000 SET 1                                          
+Author Version: G-1                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+Formerly DRILLS IN SPANISH, OLE! 2000 SET 1 is a novel way of learning a
+language -- in short bursts and with a lot of variety.  Various complete
+phrases are presented in expressions, with alternative verb usage, and  
+even in short stories.  By selecting one unit of 20 translations at a   
+time, the user has unique control over the material covered, and his/her
+learning progress.                                                      
+                                                                        
+The learning environment is encouraging thanks to the program's unique  
+integration of rewarding statements and musical tunes.  This program set
+is for the serious student or teacher who wants a challenging but       
+rewarding tool for learning written Spanish.  When you have learned the 
+material presented in the 40 units of this introduction, a nominal      
+registration fee will get you 60 additional units of advanced material  
+(all of which span the first college semester).  You'll also receive    
+additional program tools for selecting, constructing, and editing these 
+additional units.                                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2129
 

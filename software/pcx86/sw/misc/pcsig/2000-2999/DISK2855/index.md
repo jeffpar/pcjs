@@ -14,6 +14,54 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2855.TXT
+
+{% raw %}
+```
+Disk No: 2855                                                           
+Disk Title: REXL - Lazarillo de Tormes                                  
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: REXL - Lazarillo de Tormes                               
+Author Version: 24                                                      
+Author Registration: $19.00                                             
+Special Requirements: Two floppy drives recommended.                    
+                                                                        
+REXL - LAZARILLO DE TORMES is a great study aid for both the Spanish    
+literature student and for anyone who wants to brush up on their        
+Spanish reading skills, with the added benefit of becoming familiar with
+one of the great Spanish classics.                                      
+                                                                        
+The author of this program has employed a unique and very practical     
+method for study and comprehension of the famous and sometimes difficult
+piece of Spanish literature, LAZARILLO DE TORMES. Having provided the   
+complete book in text form, the author includes the translation of      
+individual words and/or idiomatic expressions to lend understanding to  
+the writing of the anonymous pre-1600 novelist.                         
+                                                                        
+Not only is the book automatically or manually translated for you,      
+exercises are included for reading improvement training. One method     
+enlists, at your request and at the speed you designate, words covered  
+up to push the reader to read at a rate higher than he or she would     
+normally achieve. Also available is a tachistoscope option, an exercise 
+intended to increase the reader's visual span (the number of characters 
+he or she can read in a single fixation of the eyes). An impressive     
+program, REXL - LAZARILLO DE TORMES is more than worth its registration 
+fee.                                                                    
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2855
 

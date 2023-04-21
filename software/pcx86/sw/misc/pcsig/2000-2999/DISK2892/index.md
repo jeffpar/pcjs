@@ -14,6 +14,41 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2892.TXT
+
+{% raw %}
+```
+Disk No: 2892
+Disk Title: Commander Keen 4: Goodbye Galaxy Disk 2 of2 (VGA)
+PC-SIG Version: S1.0
+
+Program Title: Commander Keen 4: Goodbye Galaxy (VGA)
+Author Version: 1.1
+Author Registration: $35.00/two-volume set
+Special Requirements: 640K RAM, EGA, and a hard drive.
+
+The latest addition to the Commander Keen saga!  In COMMANDER KEEN 4:
+GOODBYE GALAXY, Billy Blaze is out to discover "The Secret of the
+Oracle." This huge game has 1.6 megs of graphics and tilted perspective
+which gives the appearance of depth. Other features include support for
+most popular sound cards (five songs), three skill levels, and the
+ability to save anywhere in the game (even inside levels). Fourteen
+creatures try to stop Commander Keen, but with your help you can get to
+the ending which sports an astounding animated sequence. Playable with
+keyboard or joystick, this program is one of the year's best. You will
+not be disappointed.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1992 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2892
 

@@ -14,6 +14,45 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2509.TXT
+
+{% raw %}
+```
+Disk No: 2509                                                           
+Disk Title: Sheetcut                                                    
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: SheetCut                                                 
+Author Version: 1.1                                                     
+Author Registration: $7.50 for individuals, and $49.95 for companies.   
+Special Requirements: CGA.                                              
+                                                                        
+If you have to cut it, you need SHEETCUT.  SHEETCUT is a state of the   
+art material optimization system which will save you time and money by  
+helping you get the most out of your raw materials.  Just enter the raw 
+material sheet size, then list the size and number of pieces you need   
+cut, and SHEET CUT does the rest.  The best way to cut the raw material 
+can be graphically displayed on the screen or printed out as part of a  
+"work order" which includes a diagram and a list of the cuts and their  
+sizes.                                                                  
+                                                                        
+By reducing your raw materials (plywood, glass, plastic, sheet metal, or
+any material that comes as a sheet) and labor costs, SHEETCUT reduces   
+your product costs.  Pull-down menus make this program a breeze to use. 
+You can easily recoup the registration fee of the program in the first  
+week of use!                                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2509
 

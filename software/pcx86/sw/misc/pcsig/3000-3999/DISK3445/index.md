@@ -16,8 +16,258 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## CONTROL.DOC
+
+{% raw %}
+```
+
+PROCON CONTROL Version 1.0  25/11/1987
+
+Copyright (C) Peter E. King, 1987
+
+ADDRESS:       ProCon Software
+               P.O. Box 43
+               Essendon
+               Victoria, 3040
+               AUSTRALIA.    
+
+               (This is a Down Under product)
+
+Requirements:
+
+IBM-PC  or  compatible  with  DOS version  2.0  or  higher.   One 
+parallel printer port with inter-connecting hardware.  To run the 
+BASIC  source programs,   BASICA,  GWBASIC or any  compiler   IBM 
+BASIC compiler, QuickBASIC or Turbo-BASIC is required.
+
+
+Copying and distribution:
+
+PROCON  CONTROL  may  be copied and distributed  as  a  SHAREWARE 
+program.   That  is  the  disk may be copied and  distributed  to 
+others   provided  that  ALL  files  on  this  disk  are   copied 
+unmodified.   It  may NOT be distributed on BBS's as NO  controls 
+are  provided (This may be reviewed in future but little  returns 
+have been forthcoming from BBS users!).   The program may NOT  be 
+used  as  a value added product and NO fee can be charged  except 
+for a disk and handling charge of up to $10 Australian or $6 U.S.
+
+The copyright notices are to preserve my options,  and to protect 
+you  from  the  untoward modifications  of  others.   It  is  NOT 
+intended  to  prevent the public distribution of PROCON  CONTROL, 
+subject to the above limitations.
+
+
+INTRODUCTION
+============
+
+YES!   You  can  turn your IBM-PC or compatible into  a  COMPUTER 
+CONTROL CENTRE.   On this disk are a number of programs which use 
+any  OUTPUT port on the computer to control 8 relays.   In  fact, 
+any system with a parallel printer output can be used!
+
+To  get  started,  simply connect eight LED's via 1.5K  resistors 
+from  each  data  line of your printer port (pins 2 to 9  of  the 
+25  pin connector) to ground (pin 22).   Then,  when you run  the 
+following programs you will be able to see what's happening.
+
+If  you  use  PROCON CONTROL,  please support it  by  becoming  a 
+registered user.   For $30 AUS ($25 U.S. from overseas), you will 
+receive the lastest version on disk, complete with ALL source and 
+executable code.   A circuit diagram of the necessary connections 
+to control up to 12 relays from a single printer port is provided 
+together with full instructions.  As a BONUS, I will also provide 
+a simple logic control program which provides control of 8 inputs 
+and  8  outputs on the computer in an inter-active PLC  language.  
+(e.g.  AND X1,  OR X2,  OUT Y1 etc).   Ideal for controlling  all 
+sorts   of  devices  and  learning  the  fundamentals  of   PLCs.  
+(Programmable Logic Controller).
+
+Suppport:
+
+If  you are a contributor (bless your little heart!),   I'll most 
+happily  help you with any difficulties encounted.   Mail is  the 
+preferred  method  of exchange,  but you may also contact  me  on 
+VIATEL no. 333749600 or FIDO-NET 631 node 323.
+
+If  you are not a contributor (oh dear!),  please send a  stamped 
+SAE,  and I'll try to get back to you.   Overseas letters will be 
+answered but these will take a little longer.
+
+
+PROBLEMS AND ENHANCEMENTS
+=========================
+
+I  am most certainly interested in any problems or bugs with  the 
+programs.   And,  indeed,  if  you have any suggestions  or  have 
+produced any enhancements to these programs I would be interested 
+in  hearing from you.   Please READ THESE INSTRUCTIONS  CAREFULLY 
+before reporting any problems.
+
+I  am  continually improving these programs.   Your  contribution 
+will  aid  the development of further  enhancements,  which  will 
+include a memory resident REMOTE program - so you can continue to 
+use  the computer for other things while it switches the  outputs 
+ON  and OFF at selected times.   I am also working on day of week 
+control  so  the  you can switch an output only  from  MONDAY  to 
+FRIDAY  for example.  And random switching for burgular  deterent 
+and lighting effects etc.
+
+
+LIST OF FILES
+=============
+
+CLOCK.SYS      New system clock driver for DOS.
+
+CONFIG.SYS     Configure system file for CLOCK.SYS.
+
+CONTROL.COM    Controls relays from keyboard, memory resident.
+
+EXAMPLE.BAS    BASIC program example of how to control relays.
+
+STICK.BAS      BASIC program shows how to control from joystick.
+
+REMOTE.BAS     BASIC program controls relays by DATE and TIME.
+
+REMOTE.EXE     Compiled version of REMOTE program.
+
+CLEAR.REM      REMOTE file to clear all settings.
+
+TEST.REM       REMOTE file example of settings.
+
+SHIFT.REM      REMOTE file example of shift register.
+
+ORDER.DOC      ORDER form for contribution.
+
+NEW.DOC        NEW products list.
+     
+README.DOC     This file.
+
+
+SYSTEM FILES
+============
+
+The  CLOCK.SYS device driver is provided to allow the DATE to  be 
+incremented  when the TIME clocks over to 00:00:00.00.   This  is 
+done  already in DOS version 3 but not in version 2.   It is also 
+useful  in DOS version 3 because some  programs  (i.e.  on-screen 
+clocks  etc) may 'steal' the timer flag indicating that the clock 
+has passed 24 hours.  Also, since this driver monitors the system 
+timer  continually,  date increments cannot be lost when the time 
+is  not  read for 24 hours.   To install the driver  simply  copy 
+CLOCK.SYS  to  your boot disk and include DEVICE =  CLOCK.SYS  in 
+your CONFIG.SYS file.  If one does not exist then copy the one on 
+this disk to your boot disk.
+
+
+CONTROL
+=======
+
+This  is  a  memory resident program which only needs to  be  run 
+ONCE.  When installed,  the program allows the keyboard to toggle 
+the eight data lines on your printer port ON and OFF.   Hold down 
+the Ctrl key and press F1 to F8,  these toggle the eight outputs.  
+To switch ALL outputs OFF press Ctrl-F10 and all ON by Ctrl-F9.
+
+The  program  uses  the printer port 378.   To  change  the  port 
+setting use your debug program as follows:
+
+A>DEBUG CONTROL.COM           <execute DEBUG and load program>
+
+-E104                         <enter into memory at 104>
+
+XXXX:0104  78 LL  03 HH       <LL - low /HH - high port address>
+
+-W                            <write new program>
+
+-Q                            <quit - go back to DOS>
+
+
+You may now run the program, which remains resident in memory and 
+can be utilised at ANY TIME - even whilst running other programs!
+
+
+BASIC PROGRAMS
+==============
+
+The  BASIC source programs show how the outputs can be controlled 
+from:   1.  The computer (EXAMPLE)  2.  The joystick  (STICK) and  
+3.  The system date and time (REMOTE).
+
+To change the PORT address simply alter the line PORT=&H378.
+
+
+REMOTE
+======
+
+A  compiled version of REMOTE is provided on the disk for  faster 
+scanning  of the dates and times.    Execute this by entering the 
+word  REMOTE then pressing Return.   You will first be asked  for 
+the  printer port (if you have more than one!) which you wish  to 
+use as the output.
+
+The OPTION menu then appears:
+
+(T)  Changes  system time and date.   And the repeat  time,  this 
+     time  is  used when the (R) Reset and  execute  function  is 
+     selected.
+
+(L)  Load from file.   Allows all the 8 outputs (RL1 - RL8)  with 
+     their ten settings to be loaded from disk.
+
+(S)  Save  to file.   Allows the settings to be saved to disk for 
+     later loading.
+
+(R)  Reset  and  Execute.   This resets the time to 00:00:00  and 
+     then begins execution.   This allows a timed sequence to  be 
+     repeated.   When the repeat time is reached then the time is 
+     again reset to zero and the sequence repeats once more.
+
+(E)  Execute.   Begins  scanning dates and times from the current 
+     setting.
+
+(1)  Set ON/OFF dates and times for RL 1.
+
+...  ....................................
+
+(8)  Set ON/OFF dates and times for RL 8.
+
+
+DATE AND TIME SETTINGS
+======================
+
+Each  output (RL1 to RL8) is allowed up to ten  ON/OFF  settings.  
+DATE1  and  TIME1  set the ON time and DATE2 and  TIME2  the  OFF 
+time.   NOTE:  ALL dates are entered in the format YYYY-MM-DD for 
+comparison purposes. Times must be entered in the standard format 
+HH:MM:SS  (24 hour clock).   When the ON date and time occurs the 
+output  is switched ON and when the OFF date and time is  reached 
+it turns OFF again.  If DATE1 is not provided then only the times 
+are taken into account and the output switches ON and OFF at  the 
+times set every 24 hours.
+
+
+APPLICATIONS
+============
+
+This  program  may  be used to control a  sprinkler  system.   To 
+switch  a radio or tape recorder ON and OFF.   Or as  a  burgular 
+deterent  by  switching things ON and OFF at particular times  of 
+the  night  and day.   The program could also be used  for  model 
+control  such as a robot or train control by using the repeatable 
+timed  sequence.  The output relays may be connected to a  remote 
+control  allowing  the TV,  HI-FI etc to be controlled  from  the 
+computer.  The applications are only limited by your imagination!
+
+
+(C) 1987, ProCon Software, Box 43, Essendon, 3040, AUSTRLALIA.
+
+```
+{% endraw %}
+
 ## EXAMPLE.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-Z
 20 PORT=&H378:' Set to port address
@@ -29,9 +279,75 @@ machines:
 80 IF A<256 THEN 40
 90 GOTO 30
 ```
+{% endraw %}
+
+## ORDER.DOC
+
+{% raw %}
+```
+
+                                PROCON CONTROL
+                                ==============
+
+       If  you would like to receive the lastest version of CONTROL  and 
+       the other goodies mentioned, including full USER SUPPORT write to 
+       the  address shown below and include your personal check or money 
+       order  for $30 Australian or $25  U.S.  (U.S.   orders   - please 
+       allow 2 weeks for delivery).   This price includes packaging  and 
+       handling,   worldwide!  INCREDIBLE!    NO!  ProCon   Software  is 
+       committed to the  concept  of  good, cheap software being readily   
+       available   and  without    copying  restrictions.    Your  money 
+       will  encourage  the development  of this product and other value 
+       products by ProCon.
+
+
+                    Send To:     Peter E. King
+                                 ProCon Software
+                                 P.O. Box 43
+                                 Essendon, 3040
+                                 AUSTRALIA
+
+
+
+       -----------------------------------------------------------------
+                                  ORDER FORM
+       -----------------------------------------------------------------
+
+       YES,    I  like  the CONTROL disk and would like to  receive  the        
+       full  source  code and instructions.    I enclose  a  check/money 
+       order* of [      ] being for [   ] subscription(s).
+
+
+       MY NAME:       _____________________________________
+
+
+       ADDRESS:       _____________________________________
+
+                      _____________________________________
+
+                      _____________________________________
+
+                      _____________________________________
+
+
+
+       STATS:    My Computer is a  ____________________________________.
+
+                 I run DOS version _____.  I have CONTROL version _____.
+
+                 I obtained my copy of CONTROL from ___________________.
+
+
+       * Payable to:  PROCON SOFTWARE, Box 43, Essendon 3040, AUSTRALIA.
+
+       -----------------------------------------------------------------
+
+```
+{% endraw %}
 
 ## REMOTE.BAS
 
+{% raw %}
 ```bas
 100 REM *** REMOTE CONTROL PROGRAM BY P.E.KING ***
 110 REM
@@ -276,9 +592,11 @@ machines:
 2500 IF A$="-" THEN RT$="" ELSE RT$=A$
 2510 GOTO 1220
 ```
+{% endraw %}
 
 ## STICK.BAS
 
+{% raw %}
 ```bas
 100 REM *** JOYSTICK CONTROL PROGRAM ***
 110 REM
@@ -314,6 +632,7 @@ machines:
 390 OUT PORT,I:'Output to relays
 400 GOTO 270
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

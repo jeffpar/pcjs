@@ -72,6 +72,7 @@ machines:
 
 ## BUSPGM.BAS
 
+{% raw %}
 ```bas
 1 KEY(10) ON:ON KEY(10) GOSUB 3
 2  GOTO 5
@@ -486,9 +487,11 @@ machines:
 7880 GOTO 7830
 7890 PRINT YN$  :  RETURN
 ```
+{% endraw %}
 
 ## CHECK.BAS
 
+{% raw %}
 ```bas
 10 '                         CHECKBOOK PROGRAM
 20 '   THIS PROGRAM WILL PROCESS MULTIPLE ACCOUNTS (WITH THE LIMIT CURRENTLY SET TO 5).
@@ -790,9 +793,11 @@ machines:
 2960 A$=INKEY$ : IF A$="" GOTO 2960 ELSE IF ASC(A$)<>13 GOTO 2960
 2970 RETURN
 ```
+{% endraw %}
 
 ## DATAPGM.BAS
 
+{% raw %}
 ```bas
 1 KEY(10) ON:ON KEY(10) GOSUB 3
 2  GOTO 5
@@ -1147,9 +1152,62 @@ machines:
 7880 GOTO 7830
 7890 PRINT YN$  :  RETURN
 ```
+{% endraw %}
+
+## FILES406.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 406   FINANCIAL PROGRAMS & LOTUS WORKSHEETS             v1 DS
+------------------------------------------------------------------------
+A variety of BASIC programs and LOTUS 1-2-3 worksheet templates for
+personal and business financial and real estate analysis.  Included
+is a spreadsheet program written in Basic and an address book program.
+ 
+AUTO1-1  BAT  Autoexecute batch file DOS 1.X
+AUTO2-1  BAT  Autoexecute batch file DOS 2.X
+MENU1-1  BAT  Main program for use with BASICA 1.0
+MENU2-1  BAT  Main program for use with BASICA 2.0
+BUSPGM   BAS  Business financial program
+CHECK    BAS  Home check book program
+DATAPGM  BAS  Statistical analysis program
+FINANCE  BAS  Home finance program
+FINPGM   BAS  Financial analysis program
+KALK     BAS  Compound interest computation program
+LOANS    BAS  Loan analyzer
+MORTGAGE BAS  Amortization program
+PC-PAD   BAS  Editor/spreadsheet/viewer program
+PERPCAL  BAS  Calendar for any year
+PERS     BAS  Data file for personal address book
+PERSONAL BAS  Personal address book
+PRINTCON BAS  Printer setup
+REALPGM  BAS  Real estate analysis program
+STOCK    BAS  Stock market analysis
+BUDGET   WKS  LOTUS 123 - budget worksheet
+DIVIDEND WKS  LOTUS 123 - dividend and interest report
+EDFNDWKS WKS  LOTUS 123 - plan for educational expenses
+GROWTH   WKS  LOTUS 123 - accumulation planning worksheet
+INSURE   WKS  LOTUS 123 - insurance calculator
+INVEST   WKS  LOTUS 123 - portfolio summary worksheet
+PAYMENTS WKS  LOTUS 123 - expenditures and cash flow worksheet
+PROPERTY WKS  LOTUS 123 - personal property tracking worksheet
+RETIRE   WKS  LOTUS 123 - retirement analysis
+SECURITY WKS  LOTUS 123 - social security analysis worksheet
+TX5J     WKS  LOTUS 123 - 5 year income tax averaging worksheet
+WEALTH   WKS  LOTUS 123 - compute your networth worksheet
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## FINANCE.BAS
 
+{% raw %}
 ```bas
 5 CLS
 10 '
@@ -1336,9 +1394,11 @@ machines:
 5120 RETURN
 9500 FOR Z=1 TO 6000:NEXT:RETURN
 ```
+{% endraw %}
 
 ## FINPGM.BAS
 
+{% raw %}
 ```bas
 1 KEY(10) ON:ON KEY(10) GOSUB 3
 2  GOTO 5
@@ -1730,9 +1790,11 @@ machines:
 7880 GOTO 7830
 7890 PRINT YN$  :  RETURN
 ```
+{% endraw %}
 
 ## KALK.BAS
 
+{% raw %}
 ```bas
 1 KEY(10) ON:ON KEY(10) GOSUB 3
 2 GOTO 5
@@ -2366,9 +2428,11 @@ machines:
 6300 FOR COUNT=1 TO 1500:NEXT COUNT
 6310 GOTO 620
 ```
+{% endraw %}
 
 ## LOANS.BAS
 
+{% raw %}
 ```bas
 10 ' LOAN ANALYZER  Copyright (c) 1983 Zyncon Inc.
 20 DIM F(6,3),P$(5),PARSET(5),PARERR(6),TABLE1(60,3), TABLE2(60,5):KEY OFF:RESTORE
@@ -2734,9 +2798,11 @@ machines:
 40020 T$=INKEY$: IF T$="" THEN 40020
 40030 LOCATE 24,25: PRINT SPC(52);: RESUME
 ```
+{% endraw %}
 
 ## MORTGAGE.BAS
 
+{% raw %}
 ```bas
 10 '1/20/84 12:30 PM
 20 KEY OFF:CLEAR ,36000.:WIDTH 80:SCREEN 0,0,0:ON ERROR GOTO 410
@@ -3181,9 +3247,11 @@ machines:
 6460 ZH=LEFT$(ZH,LEN(ZH)-1):RSET ZA=ZH:LOCATE XLIN,XPOS:PRINT USING MASK$;VAL(ZA);:GOTO 6380
 6470 GOTO 40
 ```
+{% endraw %}
 
 ## PC-PAD.BAS
 
+{% raw %}
 ```bas
 10      'PC\PAD: an MS-BASIC editor/spreadsheet/printing routine; 4/07/83
 20       SCREEN 0,0,0:WIDTH 80:CLS:KEY OFF:LOCATE 5,1:Q$=SPACE$(20)
@@ -3522,9 +3590,11 @@ machines:
 10050   I=NROW0-2: J=NCOL0+NCOL: X$="Row Totals"      : GOSUB 9920 'label col
 10060   GOTO 460           'this exits to the View Function
 ```
+{% endraw %}
 
 ## PERPCAL.BAS
 
+{% raw %}
 ```bas
 100 ' THE PERPETUAL CALENDAR  Copyright (c) 1983 Morris Effron
 140 OPTION BASE 1:DEFINT A-Z:DEFSNG T:KEY OFF:CLS:GOSUB 1000
@@ -3618,15 +3688,19 @@ machines:
 9510 LPRINT " ";:FOR K=1 TO 7:LPRINT CHR$(179)+SPACE$(10);:NEXT:LPRINT CHR$(179):RETURN
 9520 LPRINT " "+CHR$(195);:FOR K=1 TO 6:LPRINT STRING$(10,196)+CHR$(197);:NEXT:LPRINT STRING$(10,196)+CHR$(180):RETURN
 ```
+{% endraw %}
 
 ## PERS.BAS
 
+{% raw %}
 ```bas
 "SMITH","JOHN","555-5555","1234 MAIN STREET","YOUR TOWN","YOUR STATE","12345",""
 ```
+{% endraw %}
 
 ## PERSONAL.BAS
 
+{% raw %}
 ```bas
 100 REM ------------------------------
 110 N$=        "PERSONAL FILE"
@@ -4001,9 +4075,11 @@ machines:
 7880 GOTO 7830
 7890 PRINT YN$  :  RETURN
 ```
+{% endraw %}
 
 ## PRINTCON.BAS
 
+{% raw %}
 ```bas
 100 ' IBM MATRIX PRINTER CONTROL Copyright (c) 1983 Roxanne Katt
 140 OPTION BASE 1:DEFINT A-Z:CLS:KEY OFF:DIM VL$(8),VL(8),LN(8,2),LIM(3,2)
@@ -4062,9 +4138,11 @@ machines:
 4090 LPRINT CHR$(VL(1));CHR$(VL(2));CHR$(27);CHR$(VL(3));CHR$(27);CHR$(VL(4));CHR$(27);CHR$(VL(5));CHR$(27);CHR$(67);CHR$(VL(6));CHR$(27);CHR$(65);CHR$(VL(7));CHR$(27);CHR$(50);CHR$(27);CHR$(68);
 4120 FOR I=VL(8) TO LIM(3,2)-1 STEP VL(8):LPRINT CHR$(I);:NEXT:LPRINT CHR$(0);:RETURN
 ```
+{% endraw %}
 
 ## REALPGM.BAS
 
+{% raw %}
 ```bas
 1 KEY(10) ON:ON KEY(10) GOSUB 3
 2  GOTO 5
@@ -4453,9 +4531,11 @@ machines:
 7880 GOTO 7830
 7890 GOTO 110
 ```
+{% endraw %}
 
 ## STOCK.BAS
 
+{% raw %}
 ```bas
 4 BLANK$="                                                           "
 5 DIM PQ$(50)
@@ -4897,6 +4977,7 @@ machines:
 21060 RETURN
 21070 FOR LATE =1 TO 500:NEXT LATE:RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

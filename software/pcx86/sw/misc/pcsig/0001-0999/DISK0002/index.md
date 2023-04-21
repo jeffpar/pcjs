@@ -55,6 +55,7 @@ machines:
 
 ## ADDCR.BAS
 
+{% raw %}
 ```bas
 1 ' ADDCR.BAS - Add carriage returns to text files
 10 CLS:LOCATE 5,14:PRINT "Here's a nifty program to insert carriage returns"
@@ -69,9 +70,11 @@ machines:
 70 GOTO 40
 80 CLOSE:END
 ```
+{% endraw %}
 
 ## CR.BAS
 
+{% raw %}
 ```bas
 10 ' CR.BAS - Add carriage returns to text files
 20 KEY OFF
@@ -103,9 +106,11 @@ machines:
 1150 LOCATE 16,20:PRINT"Do another? ";:GOSUB 100:IF IN$="Y" THEN FOR X=11 TO 17:LOCATE X,1:PRINT SPACE$(79):NEXT:GOTO 1050
 1160 CLS:END
 ```
+{% endraw %}
 
 ## CROSSREF.BAS
 
+{% raw %}
 ```bas
 4  'SEE INTERFACE AGE -- JUNE 1981 -- PAGE 98
 6  '
@@ -279,9 +284,11 @@ machines:
 1540 LPRINT
 1550 LZ=3:RETURN
 ```
+{% endraw %}
 
 ## DISKMOD.BAS
 
+{% raw %}
 ```bas
 10 REM ********************************************************************
 20 REM *       DiskMod              by            John Vandegrift         *
@@ -491,9 +498,60 @@ machines:
 2060 LOCATE 19,5:INPUT "Press return to continue....",IANS
 2070 RETURN
 ```
+{% endraw %}
+
+## FILES002.TXT
+
+{% raw %}
+```
+Disk No 2
+Program Title: SPOOLERS
+PC-SIG version 1.1
+ 
+Usage: Utility
+ 
+System Requirements: IBM PC or close compatible, 1 disk drive, printer, and
+Dos 1.1 or later and a version of BASIC.
+ 
+How to Start: print the documentation by using the command:
+ 
+                            Copy PROGRAM.DOC lpt1:
+ 
+File Descriptions:
+ 
+MSPOOL   COM  Print spooler for monochrome/printer adapter
+CSPOOL   COM  Print spooler for printer adapter
+DISKMOD  BAS  Utility to examine and modify disk sectors
+SDIR     COM  Displays the directory on one screen  (DOS 1.1 only)
+CLEAN    COM  Exercises disk when using a cleaning diskette
+GRAF2    COM  Graphic screen dump using the PRTSC key
+MONITOR       Toggles between monochrome and color display
+CR       BAS  Cleans up downloaded BASIC files
+KYBD     BAS  Outputs keyboard input to the printer like a typewriter
+SYSTAT   COM  Displays system status
+PROGRAM  DOC  Details for running the programs on this disk
+STARTREK BAS  The game of
+CLS      COM  Clears the screen from DOC
+ADDCR    BAS  Adds a carriage return to each line in a text file
+LISTER   BAS  Generates a formatted listing of BASIC programs
+NEWKEY   BAS  Reassigns the ten function keys
+CROSSREF BAS  Generates a cross-reference listing for BASIC programs
+UNPROT   TXT  Procedure for unprotecting BASIC programs
+HEXCONV  BAS  Converts binary files to ascii for transmission
+HGRI     EXE  Graphics screen dump using PRTSC key
+ 
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## HEXCONV.BAS
 
+{% raw %}
 ```bas
 101 ' Binary-to-hex-and-back-again conversion program for the IBM PC
 102 '
@@ -680,9 +738,11 @@ machines:
 10030 IF ERL = 5100 OR ERL = 4100 THEN PRINT : PRINT "Unable to open output file." : CLOSE : RESUME 2200
 10999 CLS : LOCATE 12, 10: PRINT "Unexpected error #"; ERR; "at line"; ERL: ON ERROR GOTO : END
 ```
+{% endraw %}
 
 ## KYBD.BAS
 
+{% raw %}
 ```bas
 100 'DIRECT PRINTER DRIVER.  THIS PROGRAM IS USED TO SEND CHARACTERS DIRECTLY
 110 'TO THE PRINTER OUTPUT PORT ON THE IBM MONOCHROME BOARD OR PARALLEL PRINTER
@@ -720,9 +780,11 @@ machines:
 430 IF INP(STATUSREG) <> &HDF THEN 430
 440 RETURN
 ```
+{% endraw %}
 
 ## LISTER.BAS
 
+{% raw %}
 ```bas
 10 '  LISTER ,to list BASIC programs saved on disk in the ASCII format.
 20 '
@@ -968,9 +1030,11 @@ machines:
 2420 ON ERROR GOTO 0
 2430 END
 ```
+{% endraw %}
 
 ## NEWKEY.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 20 KEY 1,"List "
@@ -986,9 +1050,134 @@ machines:
 120 KEY ON
 130 CLS:NEW
 ```
+{% endraw %}
+
+## PROGRAM.DOC
+
+{% raw %}
+```
+SVCS club disk #2
+--------------------------------------------------------------------------
+
+Welcome to the October, 1982 edition of the SVCC software disk.
+
+This month we have several useful utilities.  Here's a brief description
+of each:
+
+CLS.COM -- Clears the screen from DOS, just like the CLS command does in
+when you're in BASIC.  Nice when you exit to SYSTEM, and find left-over
+stuff on the screen.
+
+ADDCR.BAS -- Useful when Downloading files from Bulliten Boards.  Adds a
+carriage return to each line, so the downloaded file can be used with EDLIN.
+
+LISTER.BAS -- A fine utility for LLISTing BASIC programs.  Just save your
+program in ASCII with the ,A switch, then run LISTER.  Your listings will
+be neatly centered, IF statements will begin on a new line, and much more!
+
+NEWKEY.BAS -- Sets the ten Function Keys on the left hand side of the key-
+board to a more useful configuration.  From DOS, type BASIC NEWKEY , then
+look at the 25th line.
+
+CROSSREF.BAS -- Gives you a cross-reference listing of the variables and
+line numbers in your BASIC program saved in ASCII.
+
+UNPROT.TXT -- Ever wonder what is in those secret BASIC programs that
+have been saved with the ,P option?  TYPE this file to find out how to
+see those protected programs.
+
+HEXCONV.BAS -- Used for machine language files that have been transmitted
+or received over a Bulletin Board.  Converts those files to .HEX files,
+and vice versa.
+
+HGRI.EXE -- Bring out the power of the graphics capabilities in your EPSOM
+printer with GRAFTRAX!	After booting up your system, type HGRI from DOS.
+Then, you can save any graphics display from the CRT to your printer.  For
+a large image, press the Shift Arrow to the left of the space bar, and
+"PrtSc" key simultaneously.  For a miniature display, press the Right Shift
+and PrtSc.  Program execution will resume as soon as your graphic is printed.
+
+STARTREK.BAS -- This game originally appeared in Creative Computing, and has
+been implemented on the IBM PC.  Have fun with it after using all the above
+routines.
+
+MSPOOL & CSPOOL -- Two versions of a print spooler for the PC.	MSPOOL is
+for those of you with the IBM monochrome monitor/parallel printer card.
+CSPOOL is for other printer cards.  To use, copy the appropriate program
+to SPOOL.COM on your System Disk.  Then run ONLY ONCE!, when the system
+is booted (your best bet is to include this command in an AUTOEXEC.BAT file).
+Once enabled, it sets aside approx. 20 K of memory aside for spooling.	To
+spool a text file, use this syntax in DOS: COPY <filename> LPT1:
+Then you can go to BASIC, or whatever.
+
+DISKMOD.BAS -- Finally, an elegant way to examine or modify any sector on
+your Disk!  This fine program is fully self-explanatory; it displays the
+sector in both Hex and ASCII formats.
+
+SDIR.COM -- A fix for that annoying feeling of watching the directory listing
+of your program scroll off the screen just as you've found it in the jumble
+of other files.  Just use SDIR in place of DIR to see the files on your disks.
+You'll get a display of the Date, Time, free space on the Disk, and an
+alphabetized listing of your programs.
+
+CLEAN.COM -- A utility that makes it easier to periodically clean your Disk
+Drives.  From DOS, say: CLEAN A: or CLEAN B: , then insert a cleaning disk.
+The head will travel through the entire range of tracks.
+
+GRAF2.COM -- An enhanced version of the MX-80 bit-plot graphics utility.
+Run it ONLY ONCE! from DOS after your system is booted.  From then on, you
+can print a large version of a graphics display on your CRT by pressing the
+left-hand side SHIFT and PrtSc keys, or a small version with the right-hand
+side SHIFT and PrtSc keys.  Abort printing at any time with the Esc key.
+
+MONITOR -- If you have both the IBM Monochrome monitor and a Color monitor,
+this will let you toggle between them.	The text file can either be run as
+is from BASIC, or modified to have a RETURN where the END statement is, and
+run as a subroutine.  Toggles the CRT each time it's called.
+
+CR.BAS -- My own program to clean up downloaded text files and BASIC programs.
+From BASIC, run the program and follow the prompts.  If a line is encountered
+that is NOT a BASIC statement, this program will stop and ask if you want to
+(D)elete the line, which is useful form cleaning up garbage at the beginning
+and end of a downloaded BASIC listing, (C)ontinue, if the downloaded file
+only contains lines of text, or (A)bort the operation.	If you specify another
+drive for the output file, the same filename is used.  With the same drive, an
+extension of .OUT is added.
+
+KYBD.BAS -- You say you typewriter broke, and you want to use your printer
+from the IBM keyboard?	This program lets you do just that.  The text line
+is sent to the printer when <ENTER> is hit.
+
+SYSTAT.COM -- From DOS, this utility will display the capacity of each drive
+and the free space on each.  Also, if a short text file with the extension
+.NAM is put on a disk, its filename will be displayed and its contents (less
+than 40 characters) will be shown on the Comments line.  Handy for keeping
+track of all those disks.
+
+
+PROGRAM NOTES:
+
+There is no operating system on this disk.  Just the files on a formatted
+diskette.  To use the programs, you must Boot up with a DOS diskette in
+the A: Drive.  Then log on the B: Drive, type A:BASIC , followed by the
+.BAS program you wish to run.  Or, you can copy all these programs onto
+a DOS disk with BASIC.
+
+A word about the kind of programs you'll find on these SVCS club disks.
+You won't see any program that anyone else is selling anywhere else, so
+don't expect WORDSTAR or anything like that.  You will, however, see a
+wide range of programs from Bulliten Boards all over the Country, pro-
+grams contributed by club members, and programs with a Copyright notice
+that are not separately sold for profit.
+
+Hope you enjoy these programs.
+
+```
+{% endraw %}
 
 ## STARTREK.BAS
 
+{% raw %}
 ```bas
 10 REM ****INSTRUCTIONS  FOR SUPER STAR TREK FROM CREATIVE COMPUTING
 20 REM ****PUT ON IBM PC BY STEVENS ON 2-10-82
@@ -1571,6 +1760,33 @@ machines:
 5930 G2$=G2$+" IV":RETURN
 10500 IN$=INKEY$:IF IN$="" THEN 10500 ELSE CLS:RETURN
 ```
+{% endraw %}
+
+## UNPROT.TXT
+
+{% raw %}
+```
+
+
+This data was made available from the SOURCE
+
+load DOS   AT THE A> PROMPT
+           LOAD BASICA
+           POKE &H30,95
+           LOAD"protected pgm"
+           SYSTEM
+           BASICA
+           POKE &H30,95
+           LIST
+
+ You can't save the program without setting the end
+of program pointer at &H358-359 to point to end.
+the bit string to locate the end of pgm is
+
+  00 00 00  4 88 00 00 00
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

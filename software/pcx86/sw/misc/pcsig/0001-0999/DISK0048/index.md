@@ -60,8 +60,70 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #48, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  DATAFIX .BAS         CRC = C3 9D
+
+--> FILE:  EDIPAGE .BAS         CRC = D8 36
+
+--> FILE:  RUNOFF  .BAS         CRC = 90 BD
+
+--> FILE:  RUNOFF  .RNO         CRC = 70 80
+
+--> FILE:  UPDLOAD .BAS         CRC = 54 93
+
+--> FILE:  FORTH   .BAS         CRC = CE 9F
+
+--> FILE:  RUBIC   .BAS         CRC = 94 0A
+
+--> FILE:  GROWTH2 .BAS         CRC = CB 74
+
+--> FILE:  LOAN2   .BAS         CRC = 66 BA
+
+--> FILE:  SERIAL  .BAS         CRC = CD DC
+
+--> FILE:  XX      .HED         CRC = 7D E5
+
+--> FILE:  FF      .BAT         CRC = 00 00
+
+--> FILE:  FF      .TXT         CRC = 00 00
+
+--> FILE:  PCFORM  .BAS         CRC = 24 35
+
+--> FILE:  QUADRIVE.DOC         CRC = 00 84
+
+--> FILE:  FF      .DOC         CRC = A2 DA
+
+ ---------------------> SUM OF CRCS = 99 CE
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## DATAFIX.BAS
 
+{% raw %}
 ```bas
 100 'DATAFIX
 120 '
@@ -216,9 +278,11 @@ machines:
 2940 KEY ON : ON ERROR GOTO 0   'must also end open error traps
 2960 END                        'by Art Schneider (617) 993-2621
 ```
+{% endraw %}
 
 ## EDIPAGE.BAS
 
+{% raw %}
 ```bas
 100 'EDIPAGE
 120 '   by      Art Schneider  Feb 8 1982
@@ -272,9 +336,34 @@ machines:
 6300 PRINT #FF, TAB(30) "end" CHR$(12)
 6400 CLOSE : END
 ```
+{% endraw %}
+
+## FF.DOC
+
+{% raw %}
+```
+PROGRAM NAME: FF.BAT
+AUTHOR: Bill Walde, Acton, MA
+ABSTRACT: This little routine allows you to send a form feed to your printer
+from DOS. 
+REQUIRES: IBM PC and DOS operating system and a printer.
+INSTRUCTIONS: From DOS, simply type FF<cr> and your printer will perform a
+form feed.
+
+```
+{% endraw %}
+
+## FF.TXT
+
+{% raw %}
+```
+
+```
+{% endraw %}
 
 ## FORTH.BAS
 
+{% raw %}
 ```bas
 10 REM **********BASIC FORTH V. 3 ************
 11 ' by C. H. Ting
@@ -515,9 +604,11 @@ machines:
 2330 GOTO 190
 2340 END
 ```
+{% endraw %}
 
 ## GROWTH2.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 30 WIDTH 80:SCREEN 0:COLOR 7,0:CLS
@@ -660,9 +751,11 @@ machines:
 2100 FOR J=5 TO 25 STEP 2:LOCATE J,1:PRINT INT((168-(J/5-1)*40)/S+0.5);:NEXT:RETURN
 2200 FOR J=5 TO 25 STEP 3:LOCATE J,1:PRINT INT((168-(J/5-1)*40)/S+0.5);:NEXT:RETURN
 ```
+{% endraw %}
 
 ## LOAN2.BAS
 
+{% raw %}
 ```bas
 10 REM BASIC LOAN ANALYSIS
 12 WIDTH 80:DOLL$="$$######,.##":NUMM$="######,.##":PERR$="######,.##_ _%"
@@ -753,9 +846,11 @@ machines:
 1414 IF LEFT$(YORN$,1)="y" OR YORN$="Y" THEN RUN ELSE END
 1450 ON ERROR GOTO 0 : PRINT "Program ERROR... STOP PROGRAM":STOP
 ```
+{% endraw %}
 
 ## PCFORM.BAS
 
+{% raw %}
 ```bas
 1 'PCFORM 11/01/82 Forms-oriented data entry routines
 2 '
@@ -867,9 +962,122 @@ machines:
 970 DATA 05|22|-2|0|STATE
 980 DATA 05|31|05|1|ZIP
 ```
+{% endraw %}
+
+## QUADRIVE.DOC
+
+{% raw %}
+```
+
+[File: QUADRIVE.DOC]                            14-OCT-82
+
+SUBJECT:  QUADram Drive, for QUADram's QUADboard.
+
+I recently purchased a 192K version of the QUADboard from the QUADram company.
+It has proved to be quite interesting!  The floppy disk which accompanied the
+new board had the following label on it:
+
+               "Quadram Clock V1.6
+                QuadRAM - Drive
+                Quadram Utilities"
+
+Examining the directory showed that it contained the usual utilities, but one
+program "QD.EXE" didn't have any documentation.  I assumed it was the program
+to make a portion of the extra (RAM) Random Access Memory appear to MS-DOS as
+a pseudo disk drive.  I called the company and verified my suspicions.  The
+command format for envoking QUADram Drive is:
+
+                QD n[/A]      where:  n is a number from 0 to 10.  Each "unit"
+                                        represents 32K of QUADram to be
+                                        allocated towards the pseudo Disk Drive.
+
+                                             0 = De-allocate QUADram Drive
+                                             1 to 5 = Single-Sided Diskette
+                                             6 to 10 = Double-Sided Diskette
+
+                                      /A is an optional switch, required if you
+                                         include "QD" in your AUTOEXEC.BAT file
+                                         to keep it from becoming recursive.
+
+Apparently QUADram Drive re-executes the AUTOEXEC.BAT file, probably via a
+"warm" boot.  The optional "/A" switch is not needed if executing QD from the
+console.  The drive which is assigned to RAM-drive is one greater than what
+the DIP switches inside the System Unit are set for.  For example, my system
+has 3 drives; therefore RAM-drive was assigned to "D:".  With 2 drives it is
+assigned to "C:".  If you have 4 drives, RAM-drive will supercede "D:", and
+the real disk drive is supposed to become inoperative.  If you specify a number
+from 1-4 or 6-9, the disk areas for which there is no RAM assigned will be
+allocated as Bad Tracks in a hidden file.  That way non-existent RAM sectors
+will not be assigned to pseudo-disk files.
+
+All of the MS-DOS disk utilities seem to work fine with QUADram Drive.  This
+includes CHKDSK, DIR, DISKCOPY, FORMAT, and the Public Domain SDIR (Sorted
+Directory).  There is one minor exception, and that is DISKCOMP.  After doing
+a DISKCOPY, all tracks compare equal EXCEPT "Track 00, Side 0".  Since the RAM
+memory always checks out okay during power-up, I am assuming that the error is
+due to a change in the FAT (File Allocation TAble) so that the software can tell
+that a real disk drive is not there.  This error has never given me any trouble.
+In fact, if you compare each file individually, you won't find any differences!
+
+I usually assign "n" as 5, or 163,840 bytes.  This means that I have a enough
+RAM allocated for a full single-sided pseudo diskette.  After executing the
+QD program, the CHKDSK utility will show that available memory has been reduced
+from 262,144 (256K) to 98,304 (96K) bytes.  This still allows me enough room to
+run the Public Domain SPOOLER program that requires 20K.  I have formated a
+SINGLE-SIDED system diskette, which contains those programs which I consider to
+constitute a minimal system.  The following is the AUTOEXEC.BAT file for that
+disk:
+
+                QD 5/A
+                PWRUPCLK
+                DISKCOPY A: C: /1
+                C:
+
+This causes the unit to power-up with all of the system programs on Drive C,
+and causes Drive C to be the default (logged on) drive.  Everything is rather
+automatic, except that the DISKCOPY utility requires a couple of keystrokes
+to get through it.  Note that the diskette in Drive A was a system disk, and
+as a result of the DISKCOPY, Drive C will also be a system "disk".  Why, might
+you ask, would you want Drive C to be a system disk if you cannot "boot" from
+it?  The answer is that if you run the FORMAT utility from Drive C and you
+wish to create a new diskette with the "/S" option, then it expects to find
+a copy of the operating system there to copy over to the new disk.  If DOS is
+not there, it will ask you to insert a system disk in Drive A!
+
+The advantage to QUADram Drive is that it is faster than a conventional disk
+drive, not to mention quieter.  Also there is no physical diskette to wear out.
+This should be of particular interest to people who are doing assemblies and
+compiles that do a lot of I/O to temporary disk files.  A friend reports that
+QUADram Drive is 3 times faster than his Tecmar hard disk!  The disadvantage,
+of course, is that ALL IS LOST if you have a power failure or inadvertently turn
+off the computer.  Therefore, I recommend that you copy unrecoverable data from
+the RAM-Drive to a real disk on a regular basis.
+
+I asked a representative at the company about the fact that the "QD.EXE"
+program had been seen on a Public Domain disk.  The reply was that they sort of
+encourage it, and I get the feeling that they really didn't want to get into
+a big hassle distributing it, supporting it, and all that goes with it.  Someone
+else has reported that the company said that this particular RAM-Drive software
+would not work with other manufacturer's expansion boards.
+
+If you are considering getting a QUADboard from QUADram, I am happy to report
+that I am quite pleased with mine.  In fact, I haven't even bothered to set the
+clock on mine yet.  Apparently they set it at the factory, and it was running
+in the box during shipping.  When I plugged the card in, it automatically came
+up with the correct time and date!  GOOD LUCK with yours.
+
+        Bill Walde
+        617/263-8070
+        member, Boston Computer Society
+
+<end>
+
+```
+{% endraw %}
 
 ## RUBIC.BAS
 
+{% raw %}
 ```bas
 1 CLS
 10 PRINT "INSTRUCTIONS"
@@ -1154,9 +1362,11 @@ machines:
 2780 PRINT "THANK YOU FOR PLAYING. "
 2790 END
 ```
+{% endraw %}
 
 ## RUNOFF.BAS
 
+{% raw %}
 ```bas
 10 REM  RUNOFF - A simple text formatter      February, 1982
 20 REM
@@ -1620,9 +1830,11 @@ machines:
 11900 'PAGE
 11910 '----------------------------------------------------------------------
 ```
+{% endraw %}
 
 ## SERIAL.BAS
 
+{% raw %}
 ```bas
 1 ' see  PC Magazine  Volume 1 Number 3  june/july 1982
 10 REM program serial.  used to fakeout PC to allow use of serial printer in the                        same way the Print Screen function works for a parallel
@@ -1670,9 +1882,11 @@ machines:
 420 SYSTEM
 4800 , OR 9600
 ```
+{% endraw %}
 
 ## UPDLOAD.BAS
 
+{% raw %}
 ```bas
 5  'UPDLOAD
 10 'DTSS DUMB TERMINAL AND DOWN LOAD PROGRAM
@@ -1785,6 +1999,7 @@ machines:
 9000 RESUME
 9990 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -34,6 +34,45 @@ machines:
     privacy.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1887.TXT
+
+{% raw %}
+```
+Disk No: 1887                                                           
+Disk Title: KBOZP Message Handler                                       
+PC-SIG Version: SA                                                      
+                                                                        
+Program Title: KB0ZP MESSAGE HANDLER                                    
+Author Version: A.1                                                     
+Author Registration: $25.00.                                            
+Special Requirements: None.                                             
+                                                                        
+The KB0ZP MESSAGE HANDLER aids the amateur radio operator, or Ham, with 
+all the typing and organizational chores associated with recording      
+radio traffic. Up to 10 TO and FROM addresses can be saved in memory    
+and recalled at any time. TIME and DATE stamps are handled by the       
+computer.  Up to 225 individual messages may be saved on a single 5 1/4 
+floppy disk.                                                            
+                                                                        
+Help screens define precenence, HX codes, Post Office abbreviations,    
+Third Party Agreements and U.S. territories and possessions. Operators  
+may send a single message to many addresses through a special booking   
+option.                                                                 
+                                                                        
+Finally, KB0ZP MESSAGE HANDLER can encode your messages for total       
+privacy.                                                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1887
 

@@ -14,6 +14,72 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2922.TXT
+
+{% raw %}
+```
+Disk No: 2922
+Disk Title: Mah Jongg -V-G-A-
+PC-SIG Version: S1.0
+
+Program Title: Mah Jongg -V-G-A-
+Author Version: 3.0
+Author Registration: $15.00
+Special Requirements: 640K RAM, VGA, two floppy drives, and a Logitech-
+                      compatible mouse.
+
+MAH JONGG -V-G-A- is a high-tech simulation of the ancient Chinese game
+of Mah Jongg.  Some historians date Mah Jongg back to the time of
+Confucius -- over 25 centuries ago!
+
+It's believed that sailors and fishermen played Mah Jongg as a diversion
+from the monotony of their long voyages.  The game was originally played
+with cards, but eventually bone and bamboo tiles were substituted since
+these were less likely to be blown off the deck. The object of the game
+was to match tiles, but the tiles had to first meet certain criteria.
+
+MAH JONGG -V-G-A- recreates the beauty and addictive pleasure of Mah
+Jongg, but uses modern data processing techniques and high-resolution
+graphics instead of bamboo tiles.
+
+In an attempt to make this game as elegant and as enjoyable as possible,
+the author has used some of the most advanced features of today's
+state-of-the-art MS-DOS computers.  Not all PC computers are able to run
+MAH JONGG -V-G-A-.  But if yours can, prepare yourself for the meeting
+of the past and future!!!
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+## MJ8514.DOC
+
+{% raw %}
+```
+Attention 8514/a users!
+
+I now have a BETA TEST version of MJ8514 available.  Look for it
+at a BBS near you!  If you register the beta version, you'll get
+the "official" v1.0 when it's released!
+
+MJVGA registered users, you can get a copy of the MJ8514 BETA disk
+directly form me for $3 shipping & handling.  It's available ONLY on 
+5.25" high density diskette.  
+
+Please note that MJ8514 *REQUIRES* 8514/a graphics compatibility, a 
+Logitech or (I hope) compatible mouse, and probably about 2 MEG of LIM 
+EMS 4.0 expanded memory.  If your hardware doesn't meet these 
+requirements, MJ8514 won't even THINK of running!!!
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2922
 

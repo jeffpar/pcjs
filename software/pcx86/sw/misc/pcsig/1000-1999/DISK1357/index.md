@@ -33,6 +33,43 @@ machines:
     printer.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1357.TXT
+
+{% raw %}
+```
+Disk No: 1357                                                           
+Disk Title: VAR Grade 2 of 3 (also 903, 2099)  
+PC-SIG Version: S2.1                                                    
+                                                                        
+Program Title: VAR GRADE                                                
+Author Version: 4.02A                                                    
+Author Registration: $30.00                                             
+Special Requirements: 384K RAM and two floppy drives (or one 720K drive)
+                                                                        
+LONG DESCRIPTION                                                        
+record of their students' grades.  It tracks an unlimited number of     
+students and up to 99 sections of students per class for up to 240 days 
+of attendance.  There is no limit to the number of classes.             
+                                                                        
+VAR GRADE supports several grading methods, including weighted exams,   
+use of letter or number grades, and the ability to throw out the lowest 
+exam score(s).  Several statistical features are also available         
+through the program: calculation of mean, median, and mode for exams;   
+correlation of two exams; and the ability to sum, average, or take the  
+percentage of any combination of exams.  Plot the exam results on your  
+printer.                                                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1357
 

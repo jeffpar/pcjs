@@ -26,6 +26,58 @@ machines:
     King James version of the Bible.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2126.TXT
+
+{% raw %}
+```
+Disk No: 2126                                                           
+Disk Title: Bible Quiz Plus 2 of 2 (also 974)                           
+PC-SIG Version: S3.0                                                    
+                                                                        
+Program Title: BIBLE QUIZ PLUS                                          
+Author Version: 3.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+BIBLE QUIZ PLUS is a religious trivia game with three different levels  
+of play for one to six players.  Questions are asked and answers can be 
+in  multiple choice, fill-in-the-blank, or answer only format.  These   
+questions are from the Book of Psalms and the Book of Proverbs from the 
+King James version of the Bible.                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+ 
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║             <<<<  DISK #2126 BIBLE QUIZ PLUS  >>>>            ║
+    ╠═══════════════════════════════════════════════════════════════╣
+    ║                                                               ║
+    ║  To start the program, insert disk #1 and type:               ║
+    ║                                                               ║
+    ║                                         BQUIZ (press enter)   ║
+    ║                                                               ║
+    ║  To install the program, insert disk #1 and type:             ║
+    ║                                                               ║
+    ║                                        HINSTALL (press enter) ║
+    ║                                                               ║
+    ╚═══════════════════════════════════════════════════════════════╝
+ (c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2126
 

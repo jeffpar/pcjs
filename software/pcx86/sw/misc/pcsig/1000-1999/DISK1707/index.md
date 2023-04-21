@@ -26,6 +26,36 @@ machines:
     conduct any statistical analysis that is available.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1707.TXT
+
+{% raw %}
+```
+Disk No: 1707                                                           
+Disk Title: SPPC Student Version (232,623,1708 also)                    
+PC-SIG Version: S4                                                      
+                                                                        
+Program Title: SPPC Student Version                                     
+Author Version: 3.0                                                     
+                                                                        
+This is a student version of SPPC, a fully interactive statistical      
+package that enables you to enter, manage and analyze simple and        
+complex sets of data.  In order to use the SPPC, you must enter your    
+data and store it on a diskette or hard disk file.  You can then        
+conduct any statistical analysis that is available.                     
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1707
 

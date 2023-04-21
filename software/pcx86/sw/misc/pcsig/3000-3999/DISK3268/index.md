@@ -14,6 +14,92 @@ machines:
 ---
 
 {% include machine.html id="ibm5160" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILES.TXT
+
+{% raw %}
+```
+CAT1     DAT    Files containing Bible trivia questions
+CAT2     DAT                     "
+CAT3     DAT                     "
+CAT4     DAT                     "
+CAT5     DAT                     "
+DAYGOLD  TBK    Application (program file)
+FILES    TXT    This file
+PSG1     NIV    Files containing Bible verses
+PSG10    NIV                      "
+PSG2     NIV                      "
+PSG3     NIV                      "
+PSG4     NIV                      "
+PSG5     NIV                      "
+PSG6     NIV                      "
+PSG7     NIV                      "
+PSG8     NIV                      "
+PSG9     NIV                      "
+INSTALL  BAT    Batch file for installing program
+REG      DOC    Registration file to print out and send to author
+README          File to be read before starting
+LIST     COM    Listing utility for reading manual
+START    BAT    Batch file for reading the readme file
+DG       DES    Detailed program description
+```
+{% endraw %}
+
+## REG.DOC
+
+{% raw %}
+```
+                               REGISTRATION FORM
+
+               Daily Gold Toolbook for the IBM PC and compatibles
+                          Version 1.0  November, 1990
+
+Name ______________________________________
+
+Address ____________________________________
+
+City ______________________________  State __  Zip ____________
+
+(Country) ______________________________________
+
+Registration amount $5
+
+Where did you obtain your copy of "Daily Gold"? _______________________
+
+Comments:
+
+
+
+
+
+Features you would like to see:
+
+
+
+
+
+
+Other Christian programs you would like to see:
+
+
+
+
+
+Please send to:
+
+Robert S. Smith
+557 Plantation Rd.
+Pelican Lake, WI  54463
+
+If address is not current, please check with PC SIG
+
+Thanks.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3268
 

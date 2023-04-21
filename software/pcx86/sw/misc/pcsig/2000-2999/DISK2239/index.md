@@ -33,6 +33,44 @@ machines:
     protection, and customize the display and choice of records.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2239.TXT
+
+{% raw %}
+```
+Disk No: 2239                                                           
+Disk Title: System Manager                                              
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Systems Manager                                          
+Author Version: 2.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: Hard disk.                                        
+                                                                        
+SYSTEMS MANAGER manages the DOS and hard disk systems making the        
+computer simple to use for both business and home users.  It consists   
+of a fast point-and-Shoot one-screen menu system of up to 60 entries    
+for application programs and DOS commands!                              
+                                                                        
+The menu has an easy loading feature as well as advances loading for    
+DOS batch files. It is not memory resident so that the maximum computer 
+memory is available for big application programs.  SYSTEMS MANAGER      
+automatically generates time records and reports of user purposes and   
+applications for business productivity management purposes.  It Displays
+date and time, affords password protection, and allows the user to      
+customize the display and choice of records as well as select the drive 
+for automatic installation.                                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2239
 

@@ -14,6 +14,47 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2955.TXT
+
+{% raw %}
+```
+Disk No: 2955
+Disk Title: C*GEN  (#2954, #2960 also)
+PC-SIG Version: S1.0
+
+Program Title: C*GEN Customer Survey Generator
+Author Version: 2.1A
+Author Registration: $95.00
+Special Requirements: 640K RAM, graphics card, DOS 3.3+, hard drive, and
+                      dot matrix or laser printer.
+
+For a successful business, it is essential to discover what is important
+to your customers and how your services and products are perceived.
+C*GEN allows you to easily design a customized and fully computerized
+customer and/or market research survey using a database of 430 questions
+covering 20 topics. Your own questions (both multiple-choice
+quantitative and open-ended qualitative) and topics, introductory text,
+and demographic questions can be included as well.
+
+The surveys, which are designed by you, can be conducted interactively
+on the phone or with questionnaires. Custom reports and graphs with
+trend analysis and breakdowns by demographic categories can be produced.
+
+C*GEN can also be used to computerize your organization's existing
+surveys or to develop other types of surveys (Market Research, Training
+Needs Assessment, etc.).
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2955
 

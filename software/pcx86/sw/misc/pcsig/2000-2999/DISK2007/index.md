@@ -45,6 +45,82 @@ machines:
     When necessary, a purchase lot is automatically split into two parts.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2007.TXT
+
+{% raw %}
+```
+Disk No: 2007                                                           
+Disk Title: Personal Portfolio Analyzer, disk 2 of 2                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PERSONAL PORTFOLIO ANALYZER                              
+Author Version: 2.1                                                     
+Author Registration: $25.00                                             
+Special Requirements: None, but 4-D recommended.                        
+                                                                        
+THE PERSONAL PORTFOLIO ANALYZER performs record-keeping, analysis and   
+reporting on any number of portfolios containing mutual funds, stocks,  
+bonds, time deposits and other security types.                          
+                                                                        
+This program calculates market values, realized and unrealized gains and
+losses, holding periods, annual percentage returns, and expected annual 
+income and yield before and after taxes.  Reports, which can be         
+displayed on screen or printer, include income and taxability           
+analysis, realized (tax) gains and losses, and current market value     
+analysis.  In addition, a list of expected income payments can be       
+printed for the next 12 months, for a checklist.  Expected income can be
+broken down monthly for budgeting purposes, and by security type and    
+taxability (non-taxable, taxable Federal and taxable State) for tax     
+planning.  Total market value can be broken down by security type,      
+portfolio name or industry category.  Up to four portfolios may be      
+combined in all reports.                                                
+                                                                        
+THE PERSONAL PORTFOLIO ANALYZER is designed to be easy to use for       
+individuals and small fund managers.  Entry of the market price for one 
+security, or application of a stock split or other distribution for one 
+security, in any portfolio, automatically applies to that security in   
+all portfolios.  Security sales may be applied on a First-In First-Out  
+or Last-In First Out basis, or applied to a particular purchase lot.    
+When necessary, a purchase lot is automatically split into two parts.   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+                   PERSONAL PORTFOLIO ANALYZER - RELEASE 2.1
+
+To obtain directions on how to get these programs running, first make sure you
+are in DOS.  You should see the prompt A> (or C> if you are on a hard disk).
+Remove your DOS diskette, and insert the STARTUP diskette (or the STARTUP/PRO-
+GRAM diskette if you have only a single diskette) in drive A.  Turn on your
+printer and make sure it is ready to print.  Most printers have a ready light,
+and it should be on.  Then type the following command just as it appears:
+
+                           COPY A:PAVERS21.DOC LPT1:
+
+and press the ENTER key.  Fourteen pages of information will be printed, and
+the output will be paginated with pages numbered.
+
+To get a "snapshot" printout of this screen, first make sure your printer is
+ready and then press a shift key and the PrtSc key simultaneously.  The PrtSc
+key on the IBM-PC keyboard is on the second row of keys up from the bottom row,
+near the right-hand side under the ENTER key.  On other computers it may be in
+a different position.  This procedure can be used to obtain a screen printout
+at almost any time, except when the screen contains graphics.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2007
 

@@ -54,6 +54,7 @@ machines:
 
 ## 3DTT.BAS
 
+{% raw %}
 ```bas
 10  '********************************************
 20  '*                                          *
@@ -457,9 +458,11 @@ machines:
 4000 INPUT"Please fix the errror "
 4010 RETURN
 ```
+{% endraw %}
 
 ## ALIEN.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:SCREEN 0,1:COLOR 15,0,0:WIDTH 40:CLS:LOCATE 5,19:PRINT "IBM"
 20 LOCATE 7,8 ,0:PRINT "General  utility  programs"
@@ -504,9 +507,25 @@ machines:
 820 GOTO 800
 830 RUN "A2.SPC"
 ```
+{% endraw %}
+
+## ALIEN.DOC
+
+{% raw %}
+```
+PROGRAM NAME: ALIEN.BAS
+OTHER FILES NEEDED: ALIEN.SPC, A2.SPC, A5.SPC
+ABSTRACT: This is an adventure type of game. You are the only
+survivor of a space crash, and must avoid storms, battle strange
+creatures, and find safe places to hide until you are rescued.
+REQUIRES: BASIC language, and the four files named above.
+
+```
+{% endraw %}
 
 ## ANIMATE.BAS
 
+{% raw %}
 ```bas
 1 REM This is a sample program that illustrates how to use several of
 2 REM the BASICA graphics commands.  Specifically, animation of objects
@@ -601,9 +620,11 @@ machines:
 590 CLS:RUN "MENU.PGM"
 20000 PRINT "error encountered";ERL;"=error line";:RESUME
 ```
+{% endraw %}
 
 ## BAGPIPES.BAS
 
+{% raw %}
 ```bas
 10   '***********************************************************************
 20   '*                                                                     *
@@ -638,9 +659,11 @@ machines:
 301 COLOR 7,0,0
 310 RUN "menu.pgm"
 ```
+{% endraw %}
 
 ## CIA.BAS
 
+{% raw %}
 ```bas
 1 REM  Translated from TRS-80 version on CPMNET BBS
 2 REM  Pete Wohlmut 10-3-82
@@ -886,9 +909,90 @@ machines:
 2360 IF Z$="Y" THEN RUN
 2370 END
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #100, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  MENU    .PGM         CRC = AF 2D
+
+--> FILE:  BAGPIPES.BAS         CRC = A8 CA
+
+--> FILE:  JUKEBOX .BAS         CRC = B1 86
+
+--> FILE:  JUKEDOWN.MUS         CRC = E4 7B
+
+--> FILE:  JUKEGARO.MUS         CRC = DA 19
+
+--> FILE:  JUKESATI.MUS         CRC = 28 54
+
+--> FILE:  JUKESOUN.MUS         CRC = 14 70
+
+--> FILE:  JUKECARA.MUS         CRC = B3 98
+
+--> FILE:  JUKEIMPO.MUS         CRC = E0 37
+
+--> FILE:  JUKESUNR.MUS         CRC = 3E 0C
+
+--> FILE:  JUKESECO.MUS         CRC = 1D EC
+
+--> FILE:  JUKETHIR.MUS         CRC = EB 0E
+
+--> FILE:  JUKETAKE.MUS         CRC = 67 52
+
+--> FILE:  ALIEN   .BAS         CRC = C7 C8
+
+--> FILE:  ALIEN   .SPC         CRC = 79 D1
+
+--> FILE:  ALIEN   .DOC         CRC = B3 AF
+
+--> FILE:  A2      .SPC         CRC = 53 16
+
+--> FILE:  A5      .SPC         CRC = 0A B9
+
+--> FILE:  3DTT    .BAS         CRC = 19 DA
+
+--> FILE:  ANIMATE .BAS         CRC = 44 54
+
+--> FILE:  EGGS    .BAS         CRC = A3 85
+
+--> FILE:  EGGS    .DOC         CRC = 39 5D
+
+--> FILE:  MANOR   .BAS         CRC = 37 D1
+
+--> FILE:  TRADER  .BAS         CRC = F1 36
+
+--> FILE:  CIA     .BAS         CRC = BD DE
+
+ ---------------------> SUM OF CRCS = BC 08
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## EGGS.BAS
 
+{% raw %}
 ```bas
 5 ' A simple passive demo ("eggs")
 10 SCREEN 1
@@ -908,9 +1012,31 @@ machines:
 100 NEXT I
 110 GOTO 45
 ```
+{% endraw %}
+
+## EGGS.DOC
+
+{% raw %}
+```
+PROGRAM NAME: EGGS.BAS
+AUTHOR:
+ABSTRACT: This is a very short and simple graphics display program
+		to generate random eggs (elipses) of random colors.
+		It is of little or no practical use to anyone, but is
+		interesting to watch for a while.  Also, beginning
+		programmers may learn a little about the RND function,
+		and the CIRCLE and PAINT commands.
+REQUIRES: Basica and a color graphics board and monitor.
+INSTRUCTIONS: Just start your system with BASICA, and type RUN"EGGS <cr>
+		Alternatively, from one of the menu programs, just type
+		the name of this program (EGGS)
+
+```
+{% endraw %}
 
 ## JUKEBOX.BAS
 
+{% raw %}
 ```bas
 10 REM  ====>  IBM-PC JUKEBOX -- MAIN PROGRAM
 20 SCREEN 0,1: WIDTH 80: COLOR 7,0,1: KEY OFF: LOCATE ,,0: CLS
@@ -999,9 +1125,11 @@ machines:
 840 COLOR 7,0
 850 RETURN
 ```
+{% endraw %}
 
 ## MANOR.BAS
 
+{% raw %}
 ```bas
 10 CLS:L=9:DIM I$(33),O$(33),O(33),L$(37),D$(3,37),D(3,37)
 100 SCREEN 0:WIDTH 40:KEY OFF:RANDOMIZE VAL(RIGHT$(TIME$,2))
@@ -1383,9 +1511,11 @@ machines:
 8470 FOR X=1 TO 33:WRITE#1,O(X):NEXT X
 8495 CLOSE#1:CLS:KEY ON:END
 ```
+{% endraw %}
 
 ## TRADER.BAS
 
+{% raw %}
 ```bas
 5 REM                   STAR TRADERS
 10 REM - MODIFIED FOR 'ALTAIR BASIC 4.0' BY - S J SINGER
@@ -1859,6 +1989,7 @@ machines:
 4650 PRINT:PRINT:PRINT:PRINT
 4660 CLS:RUN "MENU.PGM"
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

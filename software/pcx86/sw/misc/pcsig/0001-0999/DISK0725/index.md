@@ -34,6 +34,49 @@ machines:
     TK31     PGM  Main program file
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES725.TXT
+
+{% raw %}
+```
+Disk No  725
+Program Title: Turnkey version 3.1 (Demo version)
+PC-SIG version 1.2
+ 
+TURNKEY is a program which helps you to set up your computer as a
+menu-driven system.  You construct and edit menu choices to your liking
+(the words you want to be displayed on the menu).  It then allows you to
+specify what actions should be taken for each item in the menu by helping
+you write simple batch files that correspond to the menu choice.  TURNKEY
+can then pop up a menu with your choices and allow you to run a program
+simply by moving the cursor over your choice and pressing enter.  When you
+finish running your program, you are returned to the menu.
+ 
+Usage:  Menuing System.
+ 
+System Requirements:  256K memory and a hard disk.
+ 
+How to Start:  Type INSTALL (press enter).
+ 
+Suggested Registration:  $25.00
+ 
+File Descriptions:
+ 
+INSTALL  BAT  Installation batch file
+README        Introductory text file
+TK31     PGM  Main program file
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,1988 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0725
 

@@ -36,6 +36,46 @@ machines:
     version)!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1922.TXT
+
+{% raw %}
+```
+Disk No: 1922                                                           
+Disk Title: Zip Appeal Disk 2 of 3                                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Zip Appeal                                               
+Author Version: 1.3                                                     
+Author Registration: $39.95                                             
+Special Requirements: Hard Drive   Mass Appeal Mailing Manager.         
+                                                                        
+ZIPP APPEAL is a companion product to Mass Appeal mailing manager.      
+Essentially, ZIPP APPEAL is a large data file that links cities to      
+zipcodes and zipcodes to cities.  While working in Mass Appeal, if you  
+enter the zipcode ZIPP APPEAL will find the city and state and          
+automatically insert them into the data entry screen.                   
+                                                                        
+With ZIPP APPEAL installed, you can also enter the name, or partial name
+of a city, and browse through a list of possible zip codes and states   
+for the entry.  You are allowed to page forwards, backwards, and even   
+find another city if you like.                                          
+                                                                        
+When ZIPP APPEAL is on your hard disk, Mass Appeal automatically senses 
+the presence of the zip code data file, and inserts the city and state  
+for over 95,000 U.S. zip codes (Also available in a smaller, 40,000     
+version)!                                                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1922
 

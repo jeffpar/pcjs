@@ -14,6 +14,68 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2740.TXT
+
+{% raw %}
+```
+Disk No: 2740
+Disk Title: Workbase & Recap
+PC-SIG Version: S1
+
+Program Title: Workbase
+Author Version: 3.2
+Author Registration: $49.00
+Special Requirements: 512K RAM.  Knowledge of Clipper or dBASE recommend
+
+Designed with the serious database developer in mind, WORKBASE provides
+an interactive environment for dBASE language commands, including some
+that may be new to you.
+
+Features include:
+
+~ Create a DBF file; append a DBF file
+
+~ Edit and browse records
+
+~ Restore from and save to MEM files
+
+~ Display memory
+
+~ Display structure
+
+~ Modify structure
+
+~ and many other commands necessary for development, troubleshooting,
+and support
+
+The current version includes a simple PRG interpreter.  If your
+applications use dBASE-compatible DBF files, you'll love this handy
+utility.  Unlike other ``dot prompt'' programs, this one works!
+Everything you need to create and manipulate dBASE III data, memo, and
+index files is here.
+
+Program Title: Recap
+Author Version: 2.1
+Author Registration: $15.00
+Special Requirements: dBASE III-compatible database file.
+
+It can be very frustrating to find that some of your database records
+have been entered in caps when you didn't want them that way, or that
+some have not been entered in caps when you wanted caps.  RECAP will go
+through any dBASE III-compatible file and make the desired adjustments.
+Save yourself hours of re-entering data.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2740
 

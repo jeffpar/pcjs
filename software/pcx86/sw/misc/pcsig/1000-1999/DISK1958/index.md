@@ -31,6 +31,79 @@ machines:
     useful if your printer does not support these characters).
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CAPBUF.DOC
+
+{% raw %}
+```
+CAPBUF is a memory resident (TSR) program that lets you capture any text 
+screen and save it for later processing or printing.  It is quite useful for 
+programs that do not otherwise provide means of printing their results.  Use 
+it for intermediate results of games, or collecting copies of messages while 
+on a bulletin board.  
+ 
+To install the program, type:
+ 
+      >CAPBUF
+ 
+A file will be created in the root of your current directory.  It's named 
+"captured.buf".  You can then run any programs you wish.  When you find a 
+screen that you want to save, press Alt-J, and that screen will be appended 
+to your collection.  When finished, you can print it out, or use any 
+wordprocessor to edit it.  Note that if you enter the command
+
+      >TYPE \CAPTURED.BUF
+
+it may appear that there are extra lines.  These will not appear on 
+printing, though.   When you are finished with a session, be sure to rename 
+the 'captured.buf' file, since the next time the program starts, it will 
+erase any previous file it finds.
+
+To remove CAPBUF, just enter the program name again.  You will then be asked 
+if you want to remove it.  Any captured material will still be available.
+                                 
+CAPBUF is a shareware program.  If you find it useful please send a 
+contribution of $15 to: 
+      Cascoly Software
+      4528 36th NE
+      Seattle, WA 98105
+
+
+```
+{% endraw %}
+
+## FILE1958.TXT
+
+{% raw %}
+```
+Disk No: 1958                                                           
+Disk Title: Capbuf                                                      
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: CAPBUF                                                   
+Author Version: 10/31                                                   
+Author Registration: $15.00                                             
+Special Requirements: CGA.                                              
+                                                                        
+CAPBUF is a memory resident program that lets you capture any text      
+screen and save it for later processing or printing.  It is quite useful
+for programs that do not otherwise provide means of printing their      
+results.  Use it for intermediate results of games, or collecting copies
+of messages while on a bulletin board.  Remember that many elaborate    
+program screens are line graphics.  They too can be captured then       
+brought into an ASCII editor.  CAPBUF can be removed from memory once   
+you are finished capturing screens.                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1958
 

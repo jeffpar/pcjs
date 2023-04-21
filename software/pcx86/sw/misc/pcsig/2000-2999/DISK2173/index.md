@@ -32,6 +32,42 @@ machines:
     for a way out of INSANITY.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2173.TXT
+
+{% raw %}
+```
+Disk No: 2173                                                           
+Disk Title: Insanity                                                    
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: Insanity                                                 
+Author Version: 2.0                                                     
+Author Registration: $20.00                                             
+Special Requirements: 512K RAM and CGA.                                 
+                                                                        
+A huge maze based adventure game where INSANITY rules. Find clues, solve
+puzzles, and try to stay alive in a place where the unexpected is       
+common, and pandemonium is found at every turn.                         
+                                                                        
+As you try to find the exit from INSANITY you'll encounter many strang  
+things.  You'll meet a wizard.  Pass through the stars.  Collect        
+ammuniti to defend yourself against little red men.  Explore a castle   
+and a church along the way.  Play games like seven card challenge or    
+fast a fast paced soccer match.  Most things won't make sense, but if   
+you can find a method to the madness, you could find the key to end     
+your search for a way out of INSANITY.                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2173
 

@@ -67,6 +67,7 @@ machines:
 
 ## B1.BAS
 
+{% raw %}
 ```bas
 0 CLS
 10  PRINT "FUTURE VALUE OF AN INVESTMENT"
@@ -96,9 +97,11 @@ machines:
 170 INPUT "Would you like to return to the main menu or business (M/B) <B> ? ";A$
 180 IF A$="M" OR A$="m" THEN RUN "MENU" ELSE RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B10.BAS
 
+{% raw %}
 ```bas
 10 CLS:PRINT:PRINT"DEPRECIATION RATE"
 20  PRINT 
@@ -119,9 +122,11 @@ machines:
 140  IF X = 1 THEN 20
 150 RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B11.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "DEPRECIATION AMOUNT"
@@ -150,9 +155,11 @@ machines:
 180  IF X = 1 THEN 20
 190 RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B12.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "SALVAGE VALUE"
@@ -178,9 +185,11 @@ machines:
 160  IF X = 1 THEN 20
 170  RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B13.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "DISCOUNT COMMERCIAL PAPER"
@@ -207,9 +216,11 @@ machines:
 160  IF X = 1 THEN 20
 170 RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B14.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "PRINCIPAL ON A LOAN"
@@ -238,9 +249,11 @@ machines:
 160  IF X = 1 THEN 20
 170  RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B15.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "REGULAR PAYMENT ON A LOAN";
@@ -270,9 +283,11 @@ machines:
 160  IF X = 1 THEN 20
 170  RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B16.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "LAST PAYMENT ON A LOAN"
@@ -311,9 +326,11 @@ machines:
 240  IF X = 1 THEN 20
 250  RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B17.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "REMAINING BALANCE ON A LOAN"
@@ -352,9 +369,11 @@ machines:
 240  IF X = 1 THEN 20
 250  RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B18.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "TERM OF A LOAN"
@@ -384,9 +403,11 @@ machines:
 160  IF X = 1 THEN 20
 170  RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B19.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "ANNUAL INTEREST RATE ON A LOAN"
@@ -436,9 +457,11 @@ machines:
 280  IF X = 1 THEN 20
 290  RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B2.BAS
 
+{% raw %}
 ```bas
 0 CLS : PRINT
 10 PRINT "FUTURE VALUE OF REGULAR DEPOSITS": PRINT "       (ANNUITY)"
@@ -461,9 +484,11 @@ machines:
 170 IF X = 1  THEN 20
 180 RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B20.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 5 REM this version updated and revised july 1986
@@ -548,9 +573,11 @@ machines:
 750  IF Z = 1 THEN 20
 760  RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B3.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "REGULAR DEPOSITS"
@@ -581,9 +608,11 @@ machines:
 170  IF X = 1 THEN 20
 180 RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B4.BAS
 
+{% raw %}
 ```bas
 0  CLS:PRINT
 10  PRINT "REGULAR WITHDRAWALS FROM AN INVESTMENT"
@@ -614,9 +643,11 @@ machines:
 170  IF X = 1 THEN 20
 180 RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B5.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "INITIAL INVESTMENT"
@@ -646,9 +677,11 @@ machines:
 170  IF X = 1 THEN 20
 180 RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B6.BAS
 
+{% raw %}
 ```bas
 5 CLS
 10  PRINT "MINIMUM INVESTMENT FOR WITHDRAWALS"
@@ -678,9 +711,11 @@ machines:
 170  IF X = 1 THEN 20
 180 RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B7.BAS
 
+{% raw %}
 ```bas
 0  CLS  :  PRINT
 10  PRINT "NOMINAL INTEREST RATE ON INVESTMENTS"
@@ -703,9 +738,11 @@ machines:
 160  IF X = 1 THEN 20
 170 RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B8.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "EFFECTIVE INTEREST RATE ON INVESTMENTS"
@@ -726,9 +763,11 @@ machines:
 130  IF X = 1 THEN 30
 140 RUN "BUSIN"
 ```
+{% endraw %}
 
 ## B9.BAS
 
+{% raw %}
 ```bas
 1 CLS:PRINT
 3  REM   - ROUND OFF FUNCTION
@@ -847,9 +886,11 @@ machines:
 820  IF Z = 1 THEN 20
 840  RUN "BUSIN"
 ```
+{% endraw %}
 
 ## BUSIN.BAS
 
+{% raw %}
 ```bas
 10 CLS :' EDITED BY ats 11.26.91   BUSIN.BAS ---------------
 20  PRINT "PROGRAMS IN THE BUSINESS CATAGORY:"
@@ -870,9 +911,11 @@ machines:
 150  DATA  "DEPRECIATION AMOUNT","SALVAGE VALUE","DISCOUNT COMMERCIAL PAPER","PRINCIPAL ON A LOAN","REGULAR PAYMENT ON A LOAN"
 160  DATA  "LAST PAYMENT ON A LOAN","REMAINING BALANCE ON LOAN","TERM OF A LOAN","ANNUAL INTEREST RATE ON LOAN","MORT AMORT TABLE","RETURN TO MAIN MENU"
 ```
+{% endraw %}
 
 ## CASHREG.BAS
 
+{% raw %}
 ```bas
 1 ON ERROR GOTO 9000
 10 REM
@@ -1129,9 +1172,56 @@ machines:
 10020 IF TB$="A" OR TB$="a" THEN CITYR=RCITYA:COUNTR=RCOUNA:STATER=RSTATA
 10030 RETURN
 ```
+{% endraw %}
+
+## FILES171.TXT
+
+{% raw %}
+```
+----------------------------------------------------------------------------
+Disk No  171  Misc Financial Items                                 v1.1 DS2
+----------------------------------------------------------------------------
+B1       BAS  Future value of an investment
+B2       BAS  Future value of regular deposits
+B3       BAS  Regular deposits
+B4       BAS  Regular withdrawals from an investment
+B5       BAS  Initial investment
+B6       BAS  Minimum investment for withdrawals
+B7       BAS  Nominal interest rate
+B8       BAS  Effective interest rate on investment
+B9       BAS  Earned interest table
+B10      BAS  Depreciation table
+B11      BAS  Depreciation amount
+B12      BAS  Salvage value
+B13      BAS  Discount commercial paper
+B14      BAS  Principal on a loan
+B15      BAS  Regular payment on a loan
+B16      BAS  Last payment on a loan
+B17      BAS  Remaining balance on a loan
+B18      BAS  Term of a loan
+B19      BAS  Annual interest rate on loan
+B20      BAS  Mortgage amortization table
+BUSIN    BAS  Menu for above Bnn items
+FINANCE  BAS  Amortization, present values, future values, interest rate
+INTEREST BAS  Prints compound interest factors
+CASHREG  BAS  POS Inventory - Cash register transaction processing
+INVENPRC BAS  POS Inventory - Inventory transaction processing
+INVENRPT BAS  POS Inventory - Inventory reporting
+INVENTRY DOC  POS Inventory - Documentation
+PICKER   BAS  POS Inventory - Picking list generation
+PICKTRAN BAS  POS Inventory - Picking list transaction processing
+START    BAS  POS Inventory - Main menu
+ 
+ 
+PC Software Interest Group(PC-SIG)
+1030D East Duane Avenue
+Sunnyvale, CA 94086
+```
+{% endraw %}
 
 ## FINANCE.BAS
 
+{% raw %}
 ```bas
 5 REM FINANCE  VERSION 1.0  MARCH 4, 1982
 10 COLOR 15:CLS:KEY OFF:SCREEN 0,0,0:WIDTH "SCRN:",80
@@ -1600,9 +1690,11 @@ machines:
 6010 RUN
 6030 PRINT "ERROR";ERR;"HAS OCCURR
 ```
+{% endraw %}
 
 ## INTEREST.BAS
 
+{% raw %}
 ```bas
 10 CLS : KEY OFF:WIDTH "lpt1:",150:T$ = "COMPOUND INTEREST FACTORS":PRINT TAB(25);T$:PRINT :PRINT:PRINT "PRINTER TO BE USED:":PRINT "    1 - EPSON MX80":PRINT "    2 - MICROLINE " CHR$(230) "84":PRINT "    3 - EPSON MX100"
 20 PRINT :PRINT "ENTER APPROPRIATE SELECTION (1-3) ";
@@ -1632,9 +1724,11 @@ machines:
 260 IF A$="y" OR A$="Y" THEN CLS:PRINT :FILES:KEY ON:END
 270 CLEAR: GOTO 10
 ```
+{% endraw %}
 
 ## INVENPRC.BAS
 
+{% raw %}
 ```bas
 10 REM
 20 REM   INVENPRC
@@ -1967,9 +2061,11 @@ machines:
 10200 GOSUB 10100:IF TB$="A" THEN RCITY=RCITYA:RSTATE=RSTATA:RCOUNT=RCOUNA
 10210 RETURN
 ```
+{% endraw %}
 
 ## INVENRPT.BAS
 
+{% raw %}
 ```bas
 1 ON ERROR GOTO 9000
 10 REM
@@ -2148,9 +2244,323 @@ machines:
 10010 RCITY=(RCITY-INT(RCITY))*100:RSTATE=(RSTATE-INT(RSTATE))*100:RCOUNT=(RCOUNT-INT(RCOUNT))*100
 10020 RETURN
 ```
+{% endraw %}
+
+## INVENTRY.DOC
+
+{% raw %}
+```
+
+
+    OPERATIONAL GUIDELINES FOR THE INVENTORY CONTROL PROGRAM
+
+
+GENERATING INVENTORY CONTROL DISKETTE
+
+1.   Copy  the basic DOS with BASIC to your designated  inventory
+control diskette (refer to the DOS manual).
+
+2.   Then, copy over the files that are on the supplied inventory
+control diskette.  Your new inventory control diskette will automatically
+load the inventory control system.
+
+3.    This program runs most efficiently under DOS 1.1.  However,
+it will run under DOS 1.0.
+
+
+OPERATION OF THE INVENTORY CONTROL SYSTEM
+
+1.   Be sure that the inventory control diskette is in DRIVE A.
+
+2.   If possible, use a new formatted diskette in DRIVE B to hold
+the  master inventory file that the program generates.  This will
+give you the maximum number of line items.  If you have only  one
+disk  drive,  you can still run the inventory control system  but
+the number of line items will be greatly reduced.
+
+3.   When  the system BOOTS,  the AUTOEXEC.BAT  file will request
+the  date and time because these variables are necessary for  the
+operation of the inventory control program.
+
+4.   When requested,  input the inventory control file name (your
+choice).  If  the  master inventory file resides/is to reside  on
+DRIVE B, type B: before the inventory file name.
+
+5.   This will bring you to the MENU in the MAIN MODULE.
+
+
+MAIN MODULE
+
+1.   PROCESSING OVERLAY           Transfers control to the proce
+                                 ssing module
+
+2.   REPORTING OVERLAY            Transfers control to the repor
+                                 ting module
+
+3.   INVENTORY FILE BACK UP       This  sub-module will automati
+                                 cally copy  the master invento
+                                 ry  file  to the  new  back  up
+                                  file. Upon completion of  copy,
+                                  the  back  up will be  compared
+                                  to  the original for  verifica
+                                 tion.
+
+4.  CHANGE TO ANOTHER
+    INVENTORY FILE                You will be taken back to  ini
+                                 tial starting point of the MAIN
+                                  MODULE.
+
+5.  CASH  REGISTER OVERLAY        Transfers control to  the  CASH
+                                  REGISTER MODULE
+
+6.  PICK LIST FILE GENERATION
+    OVERLAY                       Transfers  control to  the PICK
+                                  LIST GENERATION MODULE
+
+
+7.  PICK LIST TRANSACTION
+    OVERLAY                       Transfers  control  to the PICK
+                                  LIST TRANSACTION MODULE
+
+8.  TERMINATE                     You will be returned to PC DOS.
+
+
+PROCESSING MODULE
+
+1.   LIST  STOCK  NUMBER AND DESCRIPTION - On the screen will  be
+displayed:the stock number,  the description,  the record number,
+if the item is on order (presented by an asterisk),  if the  item
+is  to  be re-ordered,  and the record number within  the  random
+access file.
+
+2.   ADD  ADDITIONAL  STOCK NUMBERS - You will be queried by  the
+following questions:  stock number, description, department code,
+location code,re-order point,  quantity on hand,  selling  price,
+cost of item, and if the item is taxable.
+
+3.   STOCK FILE EDITING - This sub-module gives you the option of
+deleting  a  particular  stock item or  modifying  the  following
+parameters:  stock number, description, department code, location
+code,  re-order point,  price,  tax code, and last vendor ordered
+from.
+
+4.   UPDATE STOCK FILE - After requested stock number is found, a
+file listing of all inventory parameters will be presented on the
+screen.  These parameters are:  if the item is taxable or not, if
+the item is on order or not,  the stock number,  the description,
+the department code,  the location code,  the re-order point, the
+quantity on hand, the last date received, the last date sold, the
+last  date ordered,  the last purchase order number,  the selling
+price, the received cost, the last vendor ordered from, the total
+cost of item to date,  the total sold in dollars to date.  A menu
+of four items will then be presented:
+    A.   ORDER MORE STOCK - Input the amount ordered and the P.O.
+         number.
+    B.   RECEIVE  STOCK - Input the amount received and the  unit
+         cost.  If you receive more than what was ordered,  or if
+         your cost is greater than the selling price, you will be
+         given the option of aborting this catagory or continuing
+         on.
+    C.   SELL STOCK - Input the quantity sold.  If you sold  more
+         than you have in stock,  you will be warned. If the item
+         is taxable, you will be asked if you wish to include the
+         sales  tax  entries which will update the sales tax  re
+        cord.  If your quantity on hand drops equal to or  below
+         your re-order point, you will be warned.
+    D.   RETURN  STOCK - Input the quantity returned.  The  stock
+         will be added back to the quantity on hand. If sales tax
+         were paid, the tax will be subtracted from the sales tax
+         record.  Accumulated  total sold in dollars to date will
+         be adjusted.
+    E.   TERMINATE  UPDATE  - You will be returned  to  the  MAIN
+         PROCESSOR MENU.
+
+5.  SALES TAX EDITING - A menu of four items will be presented:
+    A.   LIST SALES TAX RECORD - City,  county,  and state tax in
+         percent  (primary and alternate) and  accumulated  city,
+         county, and state tax.
+    B.   ZERO-OUT ACCUMULATED SALES TAX ENTRIES
+    C    GENERATE TAX RATE TABLE - For primary and  alternate tax
+         rates.
+    D.   TERMINATE SALES TAX EDITOR - You will be returned to the
+         MAIN PROCESSOR MENU
+
+6.   TERMINATE THE PROCESSOR MODULE - You will be returned to the
+     MAIN MENU.
+
+AUTOMATIC FEATURES BUILT INTO THE PROCESSOR MODULE:
+    A.   To abort any function,  when the stock number is reques
+        ted,  depress  ENTER.  When  in the editing  sub-module,
+         depress ENTER when the stock number is requested or when
+         a parameter is requested for editing.
+    B.   If  you  input a file  name that  does  not  exist,  the
+         processor  module  will assume that this is a  new  file
+         generation  and  will automatically enter the SALES  TAX
+         sub-module  and will request the sales  tax  parameters.
+         Upon  completion  of the SALES TAX sub-module,  it  will
+         automatically enter the ADD ADDITIONAL STOCK sub-module.
+         It will then display the MAIN PROCESSOR MENU.
+    C.   When  a stock number is deleted from the stock  file,  a
+         hole exists in the file.  The program will take the next
+         ADD  ADDITIONAL  STOCK entry and  fill  the  hole.  This
+         prevents wasting space on the diskette.
+    D.   If you enter a duplicate stock number in the ADD ADDITIO
+
+         NAL STOCK  sub-module, you will receive an ERROR MESSAGE
+         and you will be returne to the MAIN PROCESSOR MENU.
+
+DESCRIPTION OF RANDOM ACCESS VARIABLE PARAMETERS:
+    A.  City, county, and state tax rate - any numeric string
+    B.  Stock number - ten characters
+    C.  Description - twenty characters
+    D.  Department code - four characters
+    E.  Location code - four characters
+    F.  Re-order point - any numeric string
+    G.  Quantity on hand - any numeric string
+    H.  Last P.O. number - ten characters
+    I.  Selling price - any numeric string
+    J.  Last received cost - any numeric string
+    K.  Last vendor ordered from - twenty characters
+NOTE:  The  number of characters mentioned above are the  maximum
+but may be less. All other variables are supplied by the program.
+
+
+REPORTING MODULE
+
+1.  UNSORTED INVENTORY REPORT
+2.  SORTED ON STOCK NUMBER INVENTORY REPORT
+3.  SORTED ON DEPARTMENT CODE/STOCK NUMBER INVENTORY REPORT
+4.  SORTED ON LOCATION CODE/STOCK NUMBER INVENTORY REPORT
+5.  RE-ORDER/ON ORDER REPORT (SORTED ON STOCK NUMBER)
+6.  USAGE REPORT (SORTED ON STOCK NUMBER)
+7.  SALES TAX SUMMARY REPORT
+8.  BACK ORDER REPORT
+9.  TERMINATE THE REPORT OVERLAY - return to the menu in the MAIN
+    MODULE
+
+Reports one thru four have the same format;  howvever,  the stock
+numbers are sorted differently.  These reports contain the following
+ parameters:  stock number,  description,  department  code,
+location code,  re-order point,  quantity on hand, selling price,
+last cost, and taxable/non-taxable.
+
+Report five will give a listing of stock items to be re-orderd or
+are on order.  The items will be presented in the following  format:
+stock number, description, re-order point, quantity on hand,
+last date ordered,  if on order,  last P.O.  number,  last vendor
+used, and amount not received.
+
+Report  six will give a listing of all stock items present in the
+following format:  stock number, description, last received date,
+last sold date,  selling price, total cost to date, total sold in
+dollars to date, and quantity on hand.
+
+Report seven will give a listing of city,  county,  and state tax
+rates  (primary  and  alternate) in percent and  the  accumulated
+city, county, and state taxes.
+
+Report  eight has the exact same format as report five except the
+user must specify the number of days that constitutes if an  item
+is  on  back order.  Only items that have been  ordered  and  not
+recieved  and the period is equal to or longer than the specified
+number of days will be printed.
+
+
+NOTE:If  the  reporting module can not find the master  file,  it
+will return control back to the MAIN MODULE.
+
+
+
+
+CASH REGISTER MODULE
+
+1.  DAILY INITIALIZATION - Deletes the prior TRANSACTION FILE and
+initializes  daily sum totals in the MASTER FILE.  It also  generates
+ a  new DAILY TRANSACTION FILE with the same  name  as  the
+Master  File except for the last three letters.  They will always
+be DLY.  It also accepts the store parameters to be typed on  the
+invoices.  You need only type the parameters one time.  They will
+be stored in the master inventory file for future use.
+
+2.   SELL  STOCK - This sub-module emulates the N.C.R.  automatic
+cash register technique.  Input answers to questions as they  are
+presented on the screen. This sub-module verifies the authenticity
+ of the the stock number and that there is sufficient quantity
+to support the amount sold. This sub-module prints out an invoice
+per customer and updates the transaction register and the  master
+inventory file. Important features are:
+    A.  Automatic invoice generation
+    B.  Immediate update to master inventory file
+    C.  Automatic  sales  tax  calculation on  taxable  items  if
+        requested. You may choose either the primary or alternate
+        tax table.
+    D.  Entry available for freight cost
+    E.  Automatic discounting
+    F.  Generation of invoice  number which includes the  present
+        date
+
+3.  RETURN STOCK - This sub-module is identical to the SELL STOCK
+sub-module but in reverse.
+
+4.  PRINT OUT TRANSACTION REGISTER - Prints out the daily transactions
+and totals.
+
+5.  TERMINATE OVERLAY - Returns you back to the main module
+
+
+
+
+PICK LIST GENERATION MODULE
+
+This module would be used primarily by the wholesale distributor.
+It  generates  a pick list file which contains the desired  stock
+and quantity which the user desires.  The overlay will generate a
+report  for  the  ware-houseman or clerk to be used  to  fill  an
+order.   In  this  report  the  desired  quantity,   stocknumber,
+description,  department code,  and location code are printed for
+each  item.  A  space  is provided after each line item  for  the
+actual quantity or weight that will be shipped.  This amount  may
+be different from the desired amount. This is hand entered by the
+individual who is filling the order.
+
+This report is headed by the customer's name,  the file name, and
+the  date and time that the report is generated.  At the  end,  a
+line is provided for the name of the person who filled the order.
+
+The  pick  list file may be any name that the  operator  desires;
+however,  if the file is to reside on drive A,  A:  must be typed
+prior  to entering the file name.  Likewise,  if the file  is  to
+reside  on drive B,  B:  must be typed prior to entering the file
+name.  This  file will automatically be deleted by the PICK  LIST
+TRANSACTION OVERLAY after the information has been utilized. This
+module  will  verify the stock number and if there is  sufficient
+stock on hand.  WARNING:  NO INVENTORY ADJUSTMENT IS PERFORMED BY
+THIS MODULE!
+
+
+
+PICK LIST TRANSACTION MODULE
+
+
+This  module  has all the features of the  CASH  REGISTER  MODULE
+except  that  the  customer's name,  stock  number,  and  desired
+quantity  are  read from the pick list file that  the  PICK  LIST
+GENERATION MODULE originated. The operator will use the pick list
+report  that contains the hand written amount to be sold for each
+line  item.  The  operator will use this amount for  the  invoice
+generation.  Since the pick list report contains the name of  the
+pick  list  file,  the  operator simply types the name  from  the
+report  when requested by the module.  Remember to use A:  or  B:
+when  necessary.  When all the information is utilized  from  the
+pick list file, this module will delete the file from the disk so
+that unclaimed disk space may be recovered.
+
+```
+{% endraw %}
 
 ## PICKER.BAS
 
+{% raw %}
 ```bas
 1 ON ERROR GOTO 9000
 10 REM
@@ -2218,9 +2628,11 @@ machines:
 10100 LOCATE 22,1:PRINT "TYPE A CHARACTER TO CONTINUE";
 10110 QX$=INKEY$:IF QX$="" THEN 10110 ELSE RETURN
 ```
+{% endraw %}
 
 ## PICKTRAN.BAS
 
+{% raw %}
 ```bas
 1 ON ERROR GOTO 9000
 10 REM
@@ -2485,9 +2897,11 @@ machines:
 10030 RETURN
 10100 CLOSE 3:KILL PCKLST$:GOTO 720
 ```
+{% endraw %}
 
 ## START.BAS
 
+{% raw %}
 ```bas
 20 COMMON F$
 40 CLS:SCREEN 0,0,0:WIDTH 80:COLOR 7,0:KEY OFF
@@ -2544,6 +2958,7 @@ machines:
 960 CLOSE 1:GOTO 120
 999 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

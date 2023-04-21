@@ -56,6 +56,7 @@ machines:
 
 ## ACEY-DUE.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 20 KDB=VAL(RIGHT$(TIME$,2))*VAL(MID$(TIME$,4,2))
@@ -176,9 +177,11 @@ machines:
 1170 FOR T=1 TO 2000 : NEXT T
 1180 LOAD"masterp",R
 ```
+{% endraw %}
 
 ## ALIEN.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:SCREEN 0,1:WIDTH 40:COLOR 6,1,1:CLS
 20 LIMIT=INT(RND*5)
@@ -543,9 +546,11 @@ machines:
 3610 CLS:COLOR 6:RETURN
 3620 'Last Line of ALIEN.BAS
 ```
+{% endraw %}
 
 ## BASEBALL.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1132,9 +1137,11 @@ machines:
 6540 END
 6550 CHAIN "MENU",1000
 ```
+{% endraw %}
 
 ## BLACKBOX.BAS
 
+{% raw %}
 ```bas
 10 '
 20 '   **********************************************
@@ -1564,9 +1571,11 @@ machines:
 10490 Q = INKEY$ : IF Q = "" THEN 10490
 10500 RETURN
 ```
+{% endraw %}
 
 ## BLKFRDY.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1946,9 +1955,11 @@ machines:
 4470 RETURN
 4480 RESET
 ```
+{% endraw %}
 
 ## CHECKERS.BAS
 
+{% raw %}
 ```bas
 10 '
 20 '   **********************
@@ -2110,9 +2121,76 @@ machines:
 1570 FOR X= 1 TO 1000: NEXT X
 1580 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #175, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ACEY-DUE.BAS         CRC = 86 D8
+
+--> FILE:  ALIEN   .BAS         CRC = D9 4B
+
+--> FILE:  BASEBALL.BAS         CRC = 6C 3C
+
+--> FILE:  BLACKBOX.BAS         CRC = B8 96
+
+--> FILE:  BLKFRDY .BAS         CRC = A7 89
+
+--> FILE:  BLOCK   .EXE         CRC = 24 34
+
+--> FILE:  CHECKERS.BAS         CRC = 0E C1
+
+--> FILE:  HUSTLE  .BAS         CRC = 10 E0
+
+--> FILE:  HUSTLE  .DAT         CRC = 00 00
+
+--> FILE:  HUSTLE  .DOC         CRC = C1 7B
+
+--> FILE:  KNOCK   .ASC         CRC = F7 B7
+
+--> FILE:  KNOCK   .BAS         CRC = 27 09
+
+--> FILE:  XXX     .            CRC = 96 6D
+
+--> FILE:  MUSICFIL.BAS         CRC = AB 7F
+
+--> FILE:  MEDLEY  .BAS         CRC = 61 14
+
+--> FILE:  JHORCH  .MUS         CRC = AB 22
+
+--> FILE:  JHBAND  .MUS         CRC = 0D C0
+
+--> FILE:  SHORCH  .MUS         CRC = BC E8
+
+ ---------------------> SUM OF CRCS = 69 58
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## HUSTLE.BAS
 
+{% raw %}
 ```bas
 10 '**** HUSTLE ****
 15 'Written by Charles Bennett (PC251)
@@ -2227,9 +2305,64 @@ machines:
 1030 IF PEEK(FNFIND(A+1,B))=219 THEN RETURN ELSE TEMP=0: RETURN
 1040 IF PEEK(FNFIND(A,B-1))=219 THEN RETURN ELSE TEMP=0: RETURN
 ```
+{% endraw %}
+
+## HUSTLE.DOC
+
+{% raw %}
+```
+
+                           Hustle Documentation
+
+Written By: Charles Bennett (PC251)
+Please direct any comments to my mailbox.
+
+This version of Hustle is similar to the original arcade version put
+out many years ago.  The object of the game is to capture as many boxes
+as you can to gain the most points.
+
+You start the game with four Hustlers.  The four arrow keys on the 
+numeric keypad are used to control the direction in which the Hustler
+will travel.  You must always avoid hitting the surrounding border
+as this will result in the destruction of your Hustler.
+
+You cannot go back on yourself either.  The only valid targets that are
+valid are the boxes which randomly appear on the screen.  Boxes with 
+question marks in them (???) are worth between 100 and 1000 points. 
+These points can somtimes be negative though.  There is no way of 
+knowing in advance whether you will gain or lose points on a particular
+box.
+
+As the game progresses and you obtain more and more points, the tail
+of the Hustler grows longer and longer.  Boxes will appear with slashes
+inside them (/\/\/\).  These are tail zap boxes and they cause the 
+Hustlers' tail to temporarily shorten. 
+
+An extra Hustler is awarded AFTER reaching 10000 and 20000 points.
+
+Permanent top five scores are kept on disk at all times.  You MUST
+copy the file HUSTLE.DAT for the game to function properly.
+
+In summary:
+
+      arrow keys - move in specified direction
+      F1         - increase speed of Hustler
+      F2         - decrease speed of Hustler
+
+
+--------------------------------------
+Your comments are invited and welcome
+--------------------------------------
+
+End of Documentation..................
+
+
+```
+{% endraw %}
 
 ## KNOCK.BAS
 
+{% raw %}
 ```bas
 10 REM ----- TELL KNOCK-KNOCK JOKES
 20 REM ----- TRS-80 MOD 1 LEVEL II 16K
@@ -2271,9 +2404,11 @@ machines:
 530 INPUT I$
 540 RETURN
 ```
+{% endraw %}
 
 ## MEDLEY.BAS
 
+{% raw %}
 ```bas
 10 COLOR 2,0
 9999 'Grandfather's Clock
@@ -2491,9 +2626,11 @@ machines:
 14920 C$ = "o4 dc+de o3 a o4 d2. o3 g o4 e.e8dcc. o3 b8b o4 cd o3 bag o4 c2.cc. o3 a8a o4 cc. o3 g8gga o4 c o3 g o4 dc2."
 14990 PLAY "mn t120 l4 o3;xa$;xb$;xa$;xc$;"
 ```
+{% endraw %}
 
 ## MUSICFIL.BAS
 
+{% raw %}
 ```bas
 5 '***********************************
 10 '**MUSIC CLASS MANAGEMENT PROGRAM**
@@ -2977,6 +3114,7 @@ machines:
 11100 NEXT CHAR
 11200 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

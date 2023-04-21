@@ -67,6 +67,7 @@ machines:
 
 ## BASIC.BAS
 
+{% raw %}
 ```bas
 10 REM 19:04:16  2/24/1985
 20 CLS
@@ -115,9 +116,11 @@ machines:
 470 INPUT  "          PRESS THE  [RETURN]  KEY FOR THE TUTORIAL MAIN MENU ",Z$
 480 LOAD"B:BTMENU.BAS",R
 ```
+{% endraw %}
 
 ## BTMENU.BAS
 
+{% raw %}
 ```bas
 10 ' MARK A. SWANSON         19:35:44  2/27/1985
 20 CLS
@@ -153,9 +156,11 @@ machines:
 320 IF Z$="Q" THEN LOAD"B:MENU.BAS",R
 330 PRINT "INVALID RESPONSE ..............> TRY AGAIN ":GOTO 210
 ```
+{% endraw %}
 
 ## CHAIRMAN.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 CLS
@@ -723,9 +728,11 @@ machines:
 5610 IF TA$="Y" THEN GOTO 10
 5620 LOAD"B:MENU.BAS",R
 ```
+{% endraw %}
 
 ## COUNTING.BAS
 
+{% raw %}
 ```bas
 10 REM  BY MARK A. SWANSON  5/1/83  BELLEVUE, WA.
 20 ' DOC SWAN LEARNING SERIES
@@ -795,9 +802,11 @@ machines:
 660 NEXT I
 670 RETURN
 ```
+{% endraw %}
 
 ## BASIC.BAS
 
+{% raw %}
 ```bas
 10 REM 19:04:16  2/24/1985
 20 CLS
@@ -846,9 +855,11 @@ machines:
 470 INPUT  "          PRESS THE  [RETURN]  KEY FOR THE TUTORIAL MAIN MENU ",Z$
 480 LOAD"B:BTMENU.BAS",R
 ```
+{% endraw %}
 
 ## BTMENU.BAS
 
+{% raw %}
 ```bas
 10 ' MARK A. SWANSON         19:35:44  2/27/1985
 20 CLS
@@ -884,9 +895,11 @@ machines:
 320 IF Z$="Q" THEN LOAD"B:MENU.BAS",R
 330 PRINT "INVALID RESPONSE ..............> TRY AGAIN ":GOTO 210
 ```
+{% endraw %}
 
 ## CHAIRMAN.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 CLS
@@ -1454,9 +1467,11 @@ machines:
 5610 IF TA$="Y" THEN GOTO 10
 5620 LOAD"B:MENU.BAS",R
 ```
+{% endraw %}
 
 ## COUNTING.BAS
 
+{% raw %}
 ```bas
 10 REM  BY MARK A. SWANSON  5/1/83  BELLEVUE, WA.
 20 ' DOC SWAN LEARNING SERIES
@@ -1526,9 +1541,11 @@ machines:
 660 NEXT I
 670 RETURN
 ```
+{% endraw %}
 
 ## DOCSWAN.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 20 PRINT
@@ -1571,9 +1588,11 @@ machines:
 390 PRINT "            When you're ready, please press [RETURN] for the main menu  ";INPUT$(1)
 400 LOAD"B:MENU.BAS",R
 ```
+{% endraw %}
 
 ## FORNEXT.BAS
 
+{% raw %}
 ```bas
 10 ' MARK A. SWANSON     02-27-1985  20:22:35 
 20 CLS
@@ -1800,9 +1819,11 @@ machines:
 2240 PRINT "        Remember to use quotations instead of double apostrophies ('')
 2250 PRINT "------------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## GOTO.BAS
 
+{% raw %}
 ```bas
 10 CLS
 30 FOR A=1 TO 260:PRINT "GOTO";:NEXT A
@@ -1948,9 +1969,11 @@ machines:
 1420 PRINT
 1430 PRINT "-----------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## GR.BAS
 
+{% raw %}
 ```bas
 10 CLS: ' MARK A. SWANSON     19:15:29  2/27/1985
 20 PRINT:PRINT:PRINT:PRINT
@@ -2101,9 +2124,11 @@ machines:
 1470 PRINT "                   To practice, type NEW and press [RETURN]
 1480 PRINT "------------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## GUESS.BAS
 
+{% raw %}
 ```bas
 10 CLS
 30 FOR I=1 TO 280:PRINT "? ";:NEXT I
@@ -2206,9 +2231,11 @@ machines:
 1060 IF GU<NM THEN NBW=NBW+1:PRINT:PRINT"MY NUMBER IS HIGHER":FOR I=1 TO 500:NEXT:GOTO 1000
 1070 IF GU>NM THEN NBW=NBW+1:PRINT:PRINT"MY NUMBER IS LOWER":FOR I=1 TO 500:NEXT:GOTO 1000
 ```
+{% endraw %}
 
 ## GUIDE.BAS
 
+{% raw %}
 ```bas
 10 ' MARK A. SWANSON    19:19:51  2/27/1985
 20 CLS
@@ -2316,9 +2343,11 @@ machines:
 990 IF Z$="P" THEN GOTO 650
 1000 IF Z$="Q" THEN LOAD"B:BTMENU.BAS",R ELSE GOTO 980
 ```
+{% endraw %}
 
 ## IFTHEN.BAS
 
+{% raw %}
 ```bas
 10 REM MARK A. SWANSON    20:48:25   02-24-85
 20 CLS
@@ -2487,9 +2516,11 @@ machines:
 1650 PRINT "         Remember to use quotations instead of double apostrophies ('')
 1660 PRINT "------------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## INPUT.BAS
 
+{% raw %}
 ```bas
 10 REM MARK A. SWANSON    20:43:15   02-24-85
 20 CLS
@@ -2629,9 +2660,11 @@ machines:
 1350 PRINT "        Remember to use quotations instead of double appostrophies ('')
 1360 PRINT "------------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## LET.BAS
 
+{% raw %}
 ```bas
 10 REM MARK A. SWANSON     20:41:32  02-24-85
 20 CLS
@@ -2765,9 +2798,11 @@ machines:
 1300 PRINT " Remember, when using STRINGs, use quotations instead of double apostrophies.
 1310 PRINT "-------------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## MATH.BAS
 
+{% raw %}
 ```bas
 10  REM  BY MARK A. SWANSON  5/1/83  BELLEVUE, WA.
 20 RAND$=RIGHT$(TIME$,2)
@@ -2921,9 +2956,11 @@ machines:
 1460 PRINT:PRINT
 1470 GOTO 1210
 ```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 1 SCREEN 0,0
 10 KEY 3, "LOAD"+CHR$(34)+"B:MENU"+CHR$(34)+CHR$(44)+"R"+CHR$(13)
@@ -2996,9 +3033,11 @@ machines:
 700 IF P$="12" THEN LOAD"B:TYPE.BAS",R
 710 END
 ```
+{% endraw %}
 
 ## MISSING.BAS
 
+{% raw %}
 ```bas
 2 CLS  
 3 FOR A=1 TO 28:PRINT"    MISSING ____       _______ WORD  ";:NEXT A
@@ -3254,9 +3293,11 @@ machines:
 2280 DATA HIGHWAY,SOLDIERS,STREAM,MATINEE,MAGICIAN,TRAVEL,STUBBORN
 2290 RETURN
 ```
+{% endraw %}
 
 ## MODES.BAS
 
+{% raw %}
 ```bas
 10 CLS
 30 PRINT:PRINT
@@ -3456,9 +3497,11 @@ machines:
 1970 PRINT "------------------------------------------------------------------------------"
 1980 PRINT "                       To begin, type NEW and press [RETURN]
 ```
+{% endraw %}
 
 ## MPG.BAS
 
+{% raw %}
 ```bas
 1 CLS
 10 DIM TRCK(2,104)
@@ -3674,9 +3717,11 @@ machines:
 2100 INPUT "             # OF MILES  ";JG
 2110 GOTO 780
 ```
+{% endraw %}
 
 ## PRINT.BAS
 
+{% raw %}
 ```bas
 20 CLS
 30 PRINT "                              GETTING STARTED WITH
@@ -3813,9 +3858,11 @@ machines:
 1340 PRINT"-----------------------------------------------------------------------------"
 1350 NEW
 ```
+{% endraw %}
 
 ## PRINTING.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 PRINT "WELCOME TO PRINTING FUN !
@@ -3863,9 +3910,11 @@ machines:
 390 LOCATE 22,22:INPUT "▒▒▒▒▒▒ PRESS [RETURN] TO START OVER ▒▒▒▒▒▒  ",STARTOVER
 400 GOTO 220
 ```
+{% endraw %}
 
 ## READDATA.BAS
 
+{% raw %}
 ```bas
 10 REM  MARK A. SWANSON   20:53:20   02-24-85
 20 CLS
@@ -4031,9 +4080,11 @@ machines:
 1620 PRINT "                 To begin practice, type NEW and press [RETURN]
 1630 PRINT "------------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## SCRAMBLE.BAS
 
+{% raw %}
 ```bas
 20 CLS
 30 FOR I=1 TO 4
@@ -4154,9 +4205,11 @@ machines:
 4200 CLS
 4300 GOTO 290
 ```
+{% endraw %}
 
 ## SPELLING.BAS
 
+{% raw %}
 ```bas
 10 REM  BY MARK A. SWANSON  6/1/83  BELLEVUE, WA.
 30 DIM TCO$(10)
@@ -4266,9 +4319,11 @@ machines:
 2270 DATA RULER,GRAPE,FUNNY,TUNED,WEAVE,PLATE,CROWD
 2280 DATA HIGHWAY,SOLDIERS,STREAM,MATINEE,MAGICIAN,TRAVEL,STUBBORN
 ```
+{% endraw %}
 
 ## SUPSCRAM.BAS
 
+{% raw %}
 ```bas
 10 :REM                          Concieved by Mark A. Swanson
 20 :REM                            Edited by E. W. Connell
@@ -4377,9 +4432,11 @@ machines:
 1055 IF ML=>ROUNDS THEN GOTO 10
 1060 GOTO 820
 ```
+{% endraw %}
 
 ## TYPE.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 OPENNING=OPENNING+1
@@ -4601,9 +4658,11 @@ machines:
 2040 LOCATE 24,30:LINE INPUT "PRESS [RETURN] TO CONTINUE  ",XYZ$
 2050 GOTO 400
 ```
+{% endraw %}
 
 ## TYPING.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 OPENNING=OPENNING+1
@@ -4825,9 +4884,11 @@ machines:
 2040 LOCATE 24,30:LINE INPUT "PRESS [RETURN] TO CONTINUE  ",XYZ$
 2050 GOTO 400
 ```
+{% endraw %}
 
 ## WURD.BAS
 
+{% raw %}
 ```bas
 10 REM 'WURD '  by Mark A. Swanson
 20 REM          Copyright 1984
@@ -4969,9 +5030,11 @@ machines:
 1380 INPUT "                        Press [RETURN] to start the game   ",R$
 1390 RETURN
 ```
+{% endraw %}
 
 ## DOCSWAN.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 20 PRINT
@@ -5014,9 +5077,72 @@ machines:
 390 PRINT "            When you're ready, please press [RETURN] for the main menu  ";INPUT$(1)
 400 LOAD"B:MENU.BAS",R
 ```
+{% endraw %}
+
+## FILES595.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  595  BASIC GAMES & PROGRAMMING INTRO                       v1 DS2
+---------------------------------------------------------------------------
+This product is a handy and interesting tool for getting acquainted with
+the mico-computer.  It has an easy to follow and understand tutorial for
+BASIC, introducing the beginner to the elemental concepts of the language.
+There are a series of practise sessions so the user can acutually see the
+programs operate.
+The set of games which are included are simple, and engage the user with
+a lot of keyboard interaction.  They include a simple word processor, several
+number games as well as varying levels of anagrams.
+For the youngster who has a computer and an honest interest in its use,
+this product would be an informative and varied way to get initiated.
+The product is run under the computer's BASIC inperpreter.
+ 
+MENU     BAS  Main menu for the system
+MATH     BAS  Math program
+MISSING  BAS  Missing Word program
+PRINT    BAS  Printing Fun program
+REPORT   DAT  Report data file
+DOC SWAN BAS  Doc Program
+PRINTING BAS  Printing Program
+MPG      BAS  M.P.G. Program
+TYPE     BAS  Typing Practice Program
+NUMBER   BAS  Number Program
+NUMFUN   BAS  Number Fun Program
+SPELLING BAS  Spelling Skill Program
+COUNTING BAS  Counting Program
+WURD     BAS  WURD Program
+SUPSCRAM BAS  Superscam Program
+GUIDE    BAS  Guide Program
+MODES    BAS  Modes Program
+BASIC    BAS  BASIC Programming Section
+LET      BAS  Command - 1
+INPUT    BAS          - 2
+IFTHEN   BAS          - 3
+READDATA BAS          - 4
+SCRAMBLE BAS          - 5
+GR       BAS          - 6
+BTMENU   BAS          - 7
+GOTO     BAS          - 8
+FORNEXT  BAS          - 9
+GUESS    BAS  Guess My Number Exercise
+CHAIRMAN BAS  Climb the corporate ladder
+DOCSWAN  ARC  Archived back-up of disk
+README   1ST  Introduction text file
+TYPING   BAS  Typing skill program
+ 
+ 
+ 
+PC-SIG (SOFTWARE INTEREST GROUP)
+1030 D DUANE AVE.
+SUNNYVALE CA., 94086
+PH# 408-730-9291
+```
+{% endraw %}
 
 ## FORNEXT.BAS
 
+{% raw %}
 ```bas
 10 ' MARK A. SWANSON     02-27-1985  20:22:35 
 20 CLS
@@ -5243,9 +5369,11 @@ machines:
 2240 PRINT "        Remember to use quotations instead of double apostrophies ('')
 2250 PRINT "------------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## GOTO.BAS
 
+{% raw %}
 ```bas
 10 CLS
 30 FOR A=1 TO 260:PRINT "GOTO";:NEXT A
@@ -5391,9 +5519,11 @@ machines:
 1420 PRINT
 1430 PRINT "-----------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## GR.BAS
 
+{% raw %}
 ```bas
 10 CLS: ' MARK A. SWANSON     19:15:29  2/27/1985
 20 PRINT:PRINT:PRINT:PRINT
@@ -5544,9 +5674,11 @@ machines:
 1470 PRINT "                   To practice, type NEW and press [RETURN]
 1480 PRINT "------------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## GUESS.BAS
 
+{% raw %}
 ```bas
 10 CLS
 30 FOR I=1 TO 280:PRINT "? ";:NEXT I
@@ -5649,9 +5781,11 @@ machines:
 1060 IF GU<NM THEN NBW=NBW+1:PRINT:PRINT"MY NUMBER IS HIGHER":FOR I=1 TO 500:NEXT:GOTO 1000
 1070 IF GU>NM THEN NBW=NBW+1:PRINT:PRINT"MY NUMBER IS LOWER":FOR I=1 TO 500:NEXT:GOTO 1000
 ```
+{% endraw %}
 
 ## GUIDE.BAS
 
+{% raw %}
 ```bas
 10 ' MARK A. SWANSON    19:19:51  2/27/1985
 20 CLS
@@ -5759,9 +5893,11 @@ machines:
 990 IF Z$="P" THEN GOTO 650
 1000 IF Z$="Q" THEN LOAD"B:BTMENU.BAS",R ELSE GOTO 980
 ```
+{% endraw %}
 
 ## IFTHEN.BAS
 
+{% raw %}
 ```bas
 10 REM MARK A. SWANSON    20:48:25   02-24-85
 20 CLS
@@ -5930,9 +6066,11 @@ machines:
 1650 PRINT "         Remember to use quotations instead of double apostrophies ('')
 1660 PRINT "------------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## INPUT.BAS
 
+{% raw %}
 ```bas
 10 REM MARK A. SWANSON    20:43:15   02-24-85
 20 CLS
@@ -6072,9 +6210,11 @@ machines:
 1350 PRINT "        Remember to use quotations instead of double appostrophies ('')
 1360 PRINT "------------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## LET.BAS
 
+{% raw %}
 ```bas
 10 REM MARK A. SWANSON     20:41:32  02-24-85
 20 CLS
@@ -6208,9 +6348,11 @@ machines:
 1300 PRINT " Remember, when using STRINGs, use quotations instead of double apostrophies.
 1310 PRINT "-------------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## MATH.BAS
 
+{% raw %}
 ```bas
 10  REM  BY MARK A. SWANSON  5/1/83  BELLEVUE, WA.
 20 RAND$=RIGHT$(TIME$,2)
@@ -6364,9 +6506,11 @@ machines:
 1460 PRINT:PRINT
 1470 GOTO 1210
 ```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 1 SCREEN 0,0
 10 KEY 3, "LOAD"+CHR$(34)+"B:MENU"+CHR$(34)+CHR$(44)+"R"+CHR$(13)
@@ -6439,9 +6583,11 @@ machines:
 700 IF P$="12" THEN LOAD"B:TYPE.BAS",R
 710 END
 ```
+{% endraw %}
 
 ## MISSING.BAS
 
+{% raw %}
 ```bas
 2 CLS  
 3 FOR A=1 TO 28:PRINT"    MISSING ____       _______ WORD  ";:NEXT A
@@ -6697,9 +6843,11 @@ machines:
 2280 DATA HIGHWAY,SOLDIERS,STREAM,MATINEE,MAGICIAN,TRAVEL,STUBBORN
 2290 RETURN
 ```
+{% endraw %}
 
 ## MODES.BAS
 
+{% raw %}
 ```bas
 10 CLS
 30 PRINT:PRINT
@@ -6899,9 +7047,11 @@ machines:
 1970 PRINT "------------------------------------------------------------------------------"
 1980 PRINT "                       To begin, type NEW and press [RETURN]
 ```
+{% endraw %}
 
 ## MPG.BAS
 
+{% raw %}
 ```bas
 1 CLS
 10 DIM TRCK(2,104)
@@ -7117,9 +7267,11 @@ machines:
 2100 INPUT "             # OF MILES  ";JG
 2110 GOTO 780
 ```
+{% endraw %}
 
 ## PRINT.BAS
 
+{% raw %}
 ```bas
 20 CLS
 30 PRINT "                              GETTING STARTED WITH
@@ -7256,9 +7408,11 @@ machines:
 1340 PRINT"-----------------------------------------------------------------------------"
 1350 NEW
 ```
+{% endraw %}
 
 ## PRINTING.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 PRINT "WELCOME TO PRINTING FUN !
@@ -7306,9 +7460,11 @@ machines:
 390 LOCATE 22,22:INPUT "▒▒▒▒▒▒ PRESS [RETURN] TO START OVER ▒▒▒▒▒▒  ",STARTOVER
 400 GOTO 220
 ```
+{% endraw %}
 
 ## READDATA.BAS
 
+{% raw %}
 ```bas
 10 REM  MARK A. SWANSON   20:53:20   02-24-85
 20 CLS
@@ -7474,9 +7630,11 @@ machines:
 1620 PRINT "                 To begin practice, type NEW and press [RETURN]
 1630 PRINT "------------------------------------------------------------------------------"
 ```
+{% endraw %}
 
 ## SCRAMBLE.BAS
 
+{% raw %}
 ```bas
 20 CLS
 30 FOR I=1 TO 4
@@ -7597,9 +7755,11 @@ machines:
 4200 CLS
 4300 GOTO 290
 ```
+{% endraw %}
 
 ## SPELLING.BAS
 
+{% raw %}
 ```bas
 10 REM  BY MARK A. SWANSON  6/1/83  BELLEVUE, WA.
 30 DIM TCO$(10)
@@ -7709,9 +7869,11 @@ machines:
 2270 DATA RULER,GRAPE,FUNNY,TUNED,WEAVE,PLATE,CROWD
 2280 DATA HIGHWAY,SOLDIERS,STREAM,MATINEE,MAGICIAN,TRAVEL,STUBBORN
 ```
+{% endraw %}
 
 ## SUPSCRAM.BAS
 
+{% raw %}
 ```bas
 10 :REM                          Concieved by Mark A. Swanson
 20 :REM                            Edited by E. W. Connell
@@ -7820,9 +7982,11 @@ machines:
 1055 IF ML=>ROUNDS THEN GOTO 10
 1060 GOTO 820
 ```
+{% endraw %}
 
 ## TYPE.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 OPENNING=OPENNING+1
@@ -8044,9 +8208,11 @@ machines:
 2040 LOCATE 24,30:LINE INPUT "PRESS [RETURN] TO CONTINUE  ",XYZ$
 2050 GOTO 400
 ```
+{% endraw %}
 
 ## TYPING.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 OPENNING=OPENNING+1
@@ -8268,9 +8434,11 @@ machines:
 2040 LOCATE 24,30:LINE INPUT "PRESS [RETURN] TO CONTINUE  ",XYZ$
 2050 GOTO 400
 ```
+{% endraw %}
 
 ## WURD.BAS
 
+{% raw %}
 ```bas
 10 REM 'WURD '  by Mark A. Swanson
 20 REM          Copyright 1984
@@ -8412,6 +8580,7 @@ machines:
 1380 INPUT "                        Press [RETURN] to start the game   ",R$
 1390 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

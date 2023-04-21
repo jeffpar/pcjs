@@ -14,6 +14,46 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE3023.TXT
+
+{% raw %}
+```
+Disk No: 3023                                                           
+Disk Title: LaserTome                                                   
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: LaserTome                                                
+Author Version: 1.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: Windows 3.x and a LaserJet II compatible printer. 
+                                                                        
+Windows 3.0 and 3.1 have wonderful tools built into them.  One of the   
+most important tools left out by the programming team at Microsoft is to
+view and/or directly print a text file. LASERTOME fills that void. It   
+takes plain-text files, signatures them in booklet form, and then       
+prints them on an HP LaserJet IIP or compatible printer.  It's ideal for
+the many "readme" files and manuals that come with programs.  LASERTOME 
+will turn any plain-text file into a neatly formatted manual.  A        
+file viewer allows the viewing of a file prior to signaturing or        
+printing.  Options include adding file name, page numbers, and date     
+headers, as well as descriptive names.                                  
+                                                                        
+LASERTOME  is THE program for you if you receive tons of documents in   
+ASCII text format and have to view them using a word processor under    
+Windows.                                                                
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3023
 

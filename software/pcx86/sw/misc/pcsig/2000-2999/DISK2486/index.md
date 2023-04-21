@@ -14,6 +14,109 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2486.TXT
+
+{% raw %}
+```
+Disk No: 2486                                                           
+Disk Title: Soff Balls                                                  
+PC-SIG Version: S2.3                                                    
+                                                                        
+Program Title: Soff Balls                                               
+Author Version: 2.3                                                     
+Author Registration: $25.00                                             
+Special Requirements: 270K RAM and ANY video board                      
+                                                                        
+SOFF BALLS was designed to make life easier for anyone who keeps records
+for a softball team, baseball team, or even a whole league.  You enter  
+game results and SOFF BALLS keeps all the statistics.                   
+                                                                        
+SOFF BALLS is easy to use.  At the beginning of the season you enter    
+team names and rosters.  As each game is played, you enter the game     
+score and statistics for each player.  The program lets you display or  
+print the team's or player's current hitting statistics.                
+                                                                        
+Though SOFF BALL does not produce standings for leagues, it tracks the  
+following statistics for 20 teams and up to 9,999 players: TAB, OAB, H, 
+R, D, T, HR, SAC, B, SO, SA, BA.                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## INVOICE.DOC
+
+{% raw %}
+```
+
+                   SOFF BALLS 2.3 Registration/Order Form
+
+
+    * Send this form with check or money order payable to:
+
+         Jeff Elwood
+         2809 Lordshire Road
+         Madison, WI 53719
+         (608) 271-1586
+
+
+    * From:
+
+         Name:    _________________________________
+
+         Address: _________________________________
+
+         City:    _________________________________
+
+         State:   __________________ Zip: _________
+
+
+    * Select one of the following:
+
+         _____   I am sending $25 to register my copy of SOFF BALLS.
+                 Send me STEELE'S Final Statistics and Press Release.
+                 Notify me of any major upgrades.  If my version of
+                 SOFF BALLS, which is _____, isn't the most current,
+                 then send me the latest version FREE.
+
+         _____   I am sending $25 to get the current version of SOFF
+                 BALLS and also want to register.  Send me STEELE'S
+                 Final Statistics and Press Release.  Notify me of
+                 any major upgrades.
+
+         _____   I am sending $3, for shipping and handling, to get
+                 a trial copy of the current version of SOFF BALLS.
+
+
+    * I use the following size disk:  ___ 3 1/2 inch   ___ 5 1/4 inch
+
+
+    * I will be using SOFF BALLS for:
+
+         ___ Slowpitch Softball  ___ Fastpitch Softball  ___ Baseball
+
+
+    * I received my copy of SOFF BALLS from: ________________________
+
+
+    * Comments:
+    _________________________________________________________________
+    _________________________________________________________________
+    _________________________________________________________________
+    _________________________________________________________________
+    _________________________________________________________________
+                                                                     
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2486
 

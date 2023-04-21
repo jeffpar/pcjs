@@ -14,6 +14,23 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FLIP.DOC
+
+{% raw %}
+```
+        FLIP-IT (C) PC Solutions.
+
+  FLIP-IT is based on REVERSI/OTHELLO. It out-plays all other shareware
+OTHELLO games, and I believe the full version is the strongest commercially
+available one around.
+  Keep FLIP14.EXE and FLIP.SPR in the same directory.
+  Hercules users should get away with SIMCGA - I haven't tested this.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3518
 

@@ -30,6 +30,40 @@ machines:
     the players.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0711.TXT
+
+{% raw %}
+```
+Disk No:  711
+Disk Title: Get Lucky! (requires color graphics
+PC-SIG Version: S2.4
+
+Program Title: Get Lucky!
+Author Version: 2.25D
+Author Registration: $24.99
+Special Requirements: CGA.
+
+This disk has a multi-faceted adult-oriented game, featuring trivia
+(for one or two players), adult trivia, adult poker, and a poker
+machine like those in Las Vegas.  The questions covered by the trivia
+section include entertainment, sports, general knowledge, science, and
+sex. Penalties for missing a question or losing a hand in either of the
+``adult'' games include removing an article of clothing, taking a
+drink, performing a task, telling a joke, or trying to say a tongue
+twister -- all of which can be considered optional... or mandatory,
+depending upon the players.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0711
 

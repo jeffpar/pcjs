@@ -32,6 +32,42 @@ machines:
     in today's technological age.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1629.TXT
+
+{% raw %}
+```
+Disk No: 1629                                                           
+Disk Title: KinderMath                                                  
+PC-SIG Version: S2.1                                                    
+                                                                        
+Program Title: KinderMath                                               
+Author Version: 2.1                                                     
+Author Registration: User determined.                                   
+Special Requirements: 512K RAM.                                         
+                                                                        
+Up and coming computer hacks will love the sounds and colors of this    
+educational math game.  Basic enough for any age just starting to add,  
+subtract, multipy, or divide.  There are some quick beginning           
+instructions for Mom or Dad to get the child started, but the program   
+itself can be run easily by the child.                                  
+                                                                        
+The computer will ask the child, through the use of symbols, what he/she
+wishes to practice.  The computer then runs a timed drill (time can also
+be specified by the user) keeping track of correct answers.             
+Encouraging beeps prod the child along.  This is an excellent way to    
+give a youngster a head start in this age of computers.                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1629
 

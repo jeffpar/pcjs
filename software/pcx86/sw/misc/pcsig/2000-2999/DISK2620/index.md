@@ -14,6 +14,73 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2620.TXT
+
+{% raw %}
+```
+Disk No: 2620                                                           
+Disk Title: DAYO Smart Reports 2 of 2 (#2417 also)                      
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: DAYO Smart Reports                                       
+Author Version: 2.0                                                     
+Author Registration: $25.00                                             
+Special Requirements: 640K RAM, hard drive, and DOS 3.3.                
+                                                                        
+DAYO is a collection of multiuser business applications that provide a  
+means of managing inventory, purchasing, invoicing, customers, vendors, 
+sales and more... All DAYO products are multiuser, designed to work on a
+Microcomputer (PC) Based Local Area Network (LAN), like Novell (tm).    
+They can, however, work as a 'standalone', running on a single PC.      
+                                                                        
+DAYO SMART REPORTS contains many reports and routines that will help you
+to manage your purchasing, inventory, invoices, back orders, sales, and 
+databases. There are 22 reports/lists/routines included in smart        
+reports; i.e., Single warehouse, inventory zero price, valuation        
+expanded, inventory zero retail, reorder (2 weeks), reorder (4 weeks),  
+reorder (8 weeks), negative onhand, stock level shortage, vendor list,  
+stock level over, customer list, inventory ascii text, inventory item   
+list, late po, checking account list, po - due in this week, check      
+format list, inventory zero cost, and an expenses list.                 
+                                                                        
+To date, large and complex mulituser business applications required Mini
+and Mainframe computers, but because of products like the PC based LAN/ 
+Network, they can now be run on microcomputers. DAYO is one of the first
+microcomputer based business applications designed to handle such a     
+system.                                                                 
+                                                                        
+DAYO Business Applications grow with your company. The ability to       
+upgrade your system is available with the addition of other DAYO        
+products. Source to DAYO is also available, allowing you to make further
+modifications and enhancements. DAYO Clock was written with Qbasic (tm);
+all others were written with Clipper (tm).                              
+                                                                        
+                                                                        
+Current Modules:                                                        
+                                                                        
+Inventory         Back Orders             Smart Reports                 
+Point of Sale     Accounts Receivable     Materials Requirement Planning
+Price Book        Accounts Payable        Menu                          
+Quotes            General Ledger          Clock                         
+Index             Look Up Databases       Payroll                       
+Passwords         End of Period/Purge     Update & Conversion           
+Time & Billing                                                          
+                                                                        
+DAYO databases are all dBASE (tm) compatible, thus providing an         
+additional or alternative source of support and reporting.              
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2620
 

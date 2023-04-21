@@ -32,6 +32,41 @@ machines:
     libraries.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2171.TXT
+
+{% raw %}
+```
+Disk No: 2171                                                           
+Disk Title: PC_Util #2 of 2 (2170 also)                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PC_Util                                                  
+Author Version: 1.02                                                    
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+PC-UTIL is a collection of utilities which allow implementation of      
+interrupt calls to DOS or to the ROM of a PC, XT or AT.  PC-UTIL        
+gives you the ability to control cursor movement, paint the screen,     
+draw boxes, control the keyboard buffer and much more.  The             
+documentation correlates with and references by page number Peter       
+Norton's "The New Peter Norton Programmer's Guide to the IBM PC and     
+PS/2".  Object files are supplied for several C compilers, for          
+example QuickC, MicroSoft C and Lattice C.  Programmers will find       
+PC-UTIL routines to be a convenient addition to their programming       
+tool libraries.                                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2171
 

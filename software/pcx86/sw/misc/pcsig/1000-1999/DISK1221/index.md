@@ -45,6 +45,59 @@ machines:
     than ever.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1221.TXT
+
+{% raw %}
+```
+Disk No: 1221                                                           
+Disk Title: EGA Trek & MahJongg                                         
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: EGA Trek                                                 
+Author Version: 2.1                                                     
+Author Registration: $15.00                                             
+Special Requirements: EGA.                                              
+                                                                        
+You have been put in command of the Constitution Class Heavy Cruiser    
+U.S.S. ENTERPRISE, naval construction contract number NCC-1701.  Your   
+mission as commander of the ENTERPRISE is to secure a 64 quadrant sector
+of the galaxy.                                                          
+                                                                        
+Since the collapse of the Organian Peace Treaty of 3199.5, a Klingon    
+invasion fleet has been sighted in parts of the Federation territory.   
+You have been instructed to eliminate any Klingon cruiser, command      
+vessel, or Klingon starbase found in your area.  Good luck, Captain!    
+                                                                        
+This is an impressive EGA version of an old favorite.                   
+Program Title: MahJongg                                                 
+Author Version: 3.3                                                     
+Author Registration: $15.00                                             
+Special Requirements: Hercules graphics or EGA.                         
+                                                                        
+MAH JONGG is based on an ancient Chinese game that has been around for  
+centuries.  The object of the game is to remove as many matching tiles  
+from the playing board as possible.  Sounds easy, huh?                  
+                                                                        
+Not quite.  The board has five levels of tiles and the tile you may need
+might be at the bottom level, out of your reach.  There are 65,535      
+different boards that can be played, which will keep you glued to your  
+computer for many hours.                                                
+                                                                        
+The game supports Hercules graphics as well as EGA. An UNDO             
+facility, mouse support, and game statistics make it more interesting   
+than ever.                                                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1221
 

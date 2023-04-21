@@ -46,6 +46,72 @@ machines:
     README   NOW  Introduction to GENESIS with feature list
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES591.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  591  GENESIS  Ver 1.0                                     v1 DS2
+---------------------------------------------------------------------------
+GENESIS is a program designed to work with TRAVELLER ( a science fiction
+game ) from Game Designers Workshop. It helps to speed up the process of
+setting up planets by the referee and handles aspects such as planetary
+size, atmosphere and population.
+ 
+README   NEW  File with list of revisions
+SETUP    BAT  Batch file for setup
+SECTOR   CHN  Planet sctor detail file
+SUBSEC   CHN  Planet subsector detail file
+PLANET   CHN  Planet detail file
+GENESIS  COM  Main GENESIS program
+SYSTEM1  DAT  System data file to set up planet
+GENESIS  DOC  System documentation with users guide
+AUTOEXEC BAT  Auto-execute file
+README   NOW  Introduction to GENESIS with feature list
+PLANET   000  Sample planet detail file
+--GNSS10 DID  Genesis system work file
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+## NOTES591.TXT
+
+{% raw %}
+```
+Program name:          GENESIS Version 1.0
+ 
+Author name:           Jim D. Hart & Craig Schiller
+Address:               Synergy Software of Nebraska, Papillon, NE 68046
+ 
+Suggested Donation:    $ 20.00
+ 
+Program Description:   GENESIS is a package designed to help set up planets
+                       for the game TRAVELLER form Game Designers Workshop.
+                       It would be of interest to people familiar with
+                       the TRAVELLER game.
+ 
+                       GENESIS is capable of reducing the time needed by
+                       a referee to set up planets and sectors for the game
+                       or TRAVELLER which is available from :
+                       Game Designers Workshop,
+                       PO Box 1646, Bloomington, Il 61701
+ 
+                       In addition to help speed up planet sector creation,
+                       it will also implement planetary features such as
+                       size, atmosphere and population.
+ 
+                       GENESIS  needs 256 Kb RAM, 1 drive and DOS 2.1 or
+                       above to run.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0591
 

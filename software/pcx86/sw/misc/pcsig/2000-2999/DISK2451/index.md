@@ -43,6 +43,47 @@ machines:
     blocks are included on the disk!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2451.TXT
+
+{% raw %}
+```
+Disk No: 2451                                                           
+Disk Title: Musical Blocks                                              
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Musical Blocks                                           
+Author Version: 1.0                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+MUSICAL BLOCKS is a fun paint program that plays music. Each color of   
+the pallet is a musical note of your design. Paint on a screen called a 
+canvas with two dimensional patterns which are played like sheet music. 
+                                                                        
+FEATURES:                                                               
+~Input existing music into the computer, save it and play it            
+~Break an existing composition into pieces and build new music from it  
+~Play either melodies or two part harmonies                             
+~Create random music                                                    
+~Experiment with two dimensional music                                  
+~Experiment with non western scales                                     
+~Create musical games and puzzles                                       
+                                                                        
+Another feature allows you to type in text onto the pallet. This can be 
+used to add a title to a tune you compose.    ...Need a little starter? 
+Examples of musical blocks are included on the disk!                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2451
 

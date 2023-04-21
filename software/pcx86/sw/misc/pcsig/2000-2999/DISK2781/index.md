@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2781.TXT
+
+{% raw %}
+```
+Disk No: 2781
+Disk Title: BMP files #1
+PC-SIG Version: S1
+
+Program Title: BMP files #1
+Author Version: 7/91
+Author Registration: None.
+Special Requirements: Windows.
+
+Six .BMP files for Windows -- Earth as seen from space, a surrealistic
+view of Jupiter and its moons, a moonscape, the moon with Earth rising,
+a picture of Saturn, and a lush forest scene.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2781
 

@@ -14,6 +14,40 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## UNINSTAL.DOC
+
+{% raw %}
+```
+                    HOW TO UNINSTALL WEALTH PARTNER
+
+The setup program for WP does the following:
+        copies vbrun100.dll to the c:\windows or equivalent directory.
+        copies these files to the c:\windows\system or equiv. directory.
+                graph.vbx
+                gsw.exe
+                threed.vbx
+                gauge.vbx
+                grid.vbx
+                gswdll.dll
+        copies these files to c:\partner or the directory you specified
+        during installation:
+                readme
+                wp.exe
+
+To uninstall, erase all files from your c:\partner directory (unless you 
+added other files from other programs), and erase the other files named 
+above from the directories in which they have been placed.  Please note,
+however, that other programs you have may use the vbrun100.dll file, which is 
+used by any program written in Visual Basic (TM Microsoft).  You may have 
+programs which use some of the other files with the vbx and dll extensions
+as well.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3325
 

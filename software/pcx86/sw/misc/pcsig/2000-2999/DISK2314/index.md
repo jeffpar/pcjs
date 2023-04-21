@@ -41,6 +41,150 @@ machines:
     to illustrate the value of this library.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2314.TXT
+
+{% raw %}
+```
+Disk No: 2314                                                           
+Disk Title: Le_C C Library Functions                                    
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: LE_C - C Library Functions                               
+Author Version: 1.0                                                     
+Author Registration: $30.00                                             
+Special Requirements: QuickC or Microsoft C Compilers.                  
+                                                                        
+The LE_C Library is a set of C run-time functions that allow you to     
+easily create programs that implement many of today's standard user     
+interfaces, such as, menus, box menus, data entry, help facility, line  
+drawing, border drawing (including exploding boxes), and much more.     
+                                                                        
+What makes the LE_C Library unique is its integrated help facility      
+functions.  All of the menu and input functions support help screens.   
+You can specify help screens unique to each menu selection and even move
+the help window within the screen.  Help screens are an important part  
+of any program using data-entry.  The LE_C Library provides you with the
+help functions you need to build professional looking programs.         
+                                                                        
+The LE_C Library also allows you to specify up to 40 special function   
+keys (Ctrl-F1, Ctrl-End, etc.) for use with the menu and input          
+functions.  These 40 keys are in addition to the pre-defined commonly   
+used function keys.  The screen functions write directly to video memory
+resulting in exceptional display speed.                                 
+                                                                        
+You can increase the functional and asthetic value of your programs with
+the LE_C C Library Functions.  A demostration program is also included  
+to illustrate the value of this library.                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+LE_C - C Library Functions - Version 1.0
+
+FILE            DESCRIPTION
+--------------  -----------------------------------------------
+LE_C.LIB        LE_C Object Code Library for Linking C Programs
+LE_C.H          LE_C Header File
+LE_C.MAN        LE_C Manual
+LE_DEMO.EXE     LE_C Demo Program - Type LE_DEMO to execute
+LE_DEMO.HLP     LE_C Demo Program Help File
+LE_C.ZIP        All of the above files compressed using PKZIP
+
+
+GENERAL DESCRIPTION
+-------------------
+
+The LE_C Library is a comprehensive set of C run-time functions
+that allows you to easily create programs that implement many of
+today's standard user interfaces.  LE_C contains routines for
+menus, box menus, data entry, help facility, border drawing
+(including exploding boxes), line drawing, and much, much more. 
+Most of the LE_C functions write directly to the video memory
+page -- giving you fast screens.
+
+What makes LE_C unique is its integrated help facility functions. 
+LE_C allows you to create a very useful help facility with a
+minimum of fuss.  All of the menu and input functions of LE_C
+support help screens.  In addition, you can specify help screens
+unique to each menu selection.  Plus, LE_C will allow the user to
+move the help window within the screen.
+
+LE_C also allows you to specify up to 40 special function keys
+(e.g. Ctrl-F1, Ctrl-End, etc.) for use with the menu and input
+functions.  These 40 keys are in addition to the pre-defined
+commonly used function keys.
+
+Extra Bonus!  All registered users will receive the screen
+painter & code generator.  The screen painter & code generator
+allows you to create screens complete with boxes and lines.  This
+utility will then generate LE_C function calls for the desired
+screen.
+
+
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+LE_C - C Library Functions - Version 1.0
+
+FILE            DESCRIPTION
+--------------  -----------------------------------------------
+LE_C.LIB        LE_C Object Code Library for Linking C Programs
+LE_C.H          LE_C Header File
+LE_C.MAN        LE_C Manual
+LE_DEMO.EXE     LE_C Demo Program - Type LE_DEMO to execute
+LE_DEMO.HLP     LE_C Demo Program Help File
+LE_C.ZIP        All of the above files compressed using PKZIP
+
+
+GENERAL DESCRIPTION
+-------------------
+
+The LE_C Library is a comprehensive set of C run-time functions
+that allows you to easily create programs that implement many of
+today's standard user interfaces.  LE_C contains routines for
+menus, box menus, data entry, help facility, border drawing
+(including exploding boxes), line drawing, and much, much more. 
+Most of the LE_C functions write directly to the video memory
+page -- giving you fast screens.
+
+What makes LE_C unique is its integrated help facility functions. 
+LE_C allows you to create a very useful help facility with a
+minimum of fuss.  All of the menu and input functions of LE_C
+support help screens.  In addition, you can specify help screens
+unique to each menu selection.  Plus, LE_C will allow the user to
+move the help window within the screen.
+
+LE_C also allows you to specify up to 40 special function keys
+(e.g. Ctrl-F1, Ctrl-End, etc.) for use with the menu and input
+functions.  These 40 keys are in addition to the pre-defined
+commonly used function keys.
+
+Extra Bonus!  All registered users will receive the screen
+painter & code generator.  The screen painter & code generator
+allows you to create screens complete with boxes and lines.  This
+utility will then generate LE_C function calls for the desired
+screen.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2314
 

@@ -38,6 +38,91 @@ machines:
     1-2-3, or any word processing system with an ASCII import feature.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1702.TXT
+
+{% raw %}
+```
+Disk No: 1702                                                           
+Disk Title: Mailing List Management disk 1of2 (1703)                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Mailing List Management DataBase                         
+Author Version: 1.01                                                    
+Author Registration: $25.00                                             
+Special Requirements: Hard Disk, 640K                                   
+                                                                        
+Does your business need to track customer contacts and print mailing    
+labels for customer information?  The MAILING LIST MANAGEMENT DATABASE  
+can do both jobs for you.                                               
+                                                                        
+The MAILING LIST MANAGEMENT DATABASE  uses a single entry screen and a  
+series of pop-up windows, selected by function keys.  These pop-up      
+windows allow you to see the main entry screen as you select a          
+particular function.  You'll never lose site of your data.              
+                                                                        
+The database can maintain an unlimited number of files with up to 1,000 
+records per datafile.  A fast search function will search through the   
+selected data file for a particular Record number, Name, Company, State,
+Category, and/or ID Number.  A file backup feature is included to safe- 
+guard against data corruption.  A file export function will allow the   
+data to be sent to a file that can be imported to dBASE 3+, LOTUS 1-2-3 
+or any word processing system with an ASCII import feature.  A utility  
+program is included to assist you with importing files to dBASE 3+. Also
+included is the source code of a small data entry/edit program for the  
+dBASE 3+ database.                                                      
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+
+                                HOW TO INSTALL
+
+    The main file on  this  diskette  is  called  MAIL_LST.EXE  and  is  an
+    archived  file.  An  archived  file is a composite of several files and
+    each file must be extracted before the Mailing List Management
+    Database can  be operated.
+
+    In  order  to  extract  the  program files, simply follow the following
+    instructions :
+
+          1    -     COPY  MAIL_LST.EXE  TO  THE  DISK  THAT  YOU  WILL  BE
+                     OPERATING FROM.  PREFERRABLY A HARD DRIVE.
+
+          2    -     AT THE DOS PROMPT, TYPE THE WORD MAIL_LST
+
+          3     -    YOU  WILL  SEE A SERIES OF TEXT LINES APPEAR ON YOUR
+                     SCREEN, THESE ARE THE FILES BEING EXTRACTED FROM THE
+                     ARCHIVED FILE.
+
+          4    -     ONCE THE EXTRACTION PROCEDURE IS COMPLETE, YOU WILL BE
+                     RETURNED TO THE DOS PROMPT.
+
+          5    -     AT THIS POINT, TYPE THE WORD VIEWCUST TO  READ  AND/OR
+                     PRINT THE DOCUMENTATION.
+
+          6    -     TO RUN THE PROGRAM, TYPE THE WORD CUSTOMER AT THE DOS
+                     PROMPT AND FOLLOW THE DIRECTIONS. ON-LINE HELP
+                     IS ACCESSED BY PRESSING <F1>.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1702
 

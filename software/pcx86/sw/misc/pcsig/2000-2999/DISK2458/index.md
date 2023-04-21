@@ -32,6 +32,42 @@ machines:
     immediate tree.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2458.TXT
+
+{% raw %}
+```
+Disk No: 2458                                                           
+Disk Title: Parents                                                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Parents                                                  
+Author Version: 08/90                                                   
+Author Registration: $25.00                                             
+Special Requirements: Windows 3.0                                       
+                                                                        
+PARENTS makes collecting and organizing your genealogy easier.  With the
+help of PARENTS, you will be able to easily gather, store, and view     
+information about all of you ancestors, as well as your children and    
+your children's children.                                               
+                                                                        
+PARENTS allows you to enter and store vital information such as names,  
+birth, marriage, death dates and places and more.  All of this          
+information can then be easily organized and related together to form   
+your family tree.  You will also be able to print the detailed          
+information about any one of your ancestors as well as print your       
+immediate tree.                                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2458
 

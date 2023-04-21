@@ -54,6 +54,49 @@ machines:
     PCMAG85A ???  PC Magazine 1985 First Quarter reference files (4 files)
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES548.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  548  LETUS A-B-C #11                                      v1  DS2
+---------------------------------------------------------------------------
+Literature Evaluation Table User Service - A database of articles and
+letters from third quarter 1984 magazines about IBM PCs.  It requires
+PC-FILE III and can be searched using keywords, author names, article
+titles, issue numbers, page numbers and descriptive text.
+ 
+BCOMP85A DTA  Business Computing 1985 First Quarter reference files
+BCOMP85A HDR  Business Computing 1985 First Quarter reference files
+BCOMP85A INX  Business Computing 1985 First Quarter reference files
+BCOMP85A KWD  Business Computing 1985 First Quarter reference files
+BYTE85A  DTA  BYTE Magazine 1985 First Quarter reference files
+BYTE85A  HDR  BYTE Magazine 1985 First Quarter reference files
+BYTE85A  INX  BYTE Magazine 1985 First Quarter reference files
+BYTE85A  KWD  BYTE Magazine 1985 First Quarter reference files
+PCMAG85A DTA  PC Magazine 1985 First Quarter reference files
+PCMAG85A HDR  PC Magazine 1985 First Quarter reference files
+PCMAG85A INX  PC Magazine 1985 First Quarter reference files
+PCMAG85A KWD  PC Magazine 1985 First Quarter reference files
+PCPRO85A DTA  PC Professional 1985 First Quarter reference files
+PCPRO85A HDR  PC Professional 1985 First Quarter reference files
+PCPRO85A INX  PC Professional 1985 First Quarter reference files
+PCPRO85A KWD  PC Professional 1985 First Quarter reference files
+PCTEC85A DTA  PC Tech Journal 1985 First Quarter reference files
+PCTEC85A HDR  PC Tech Journal 1985 First Quarter reference files
+PCTEC85A INX  PC Tech Journal 1985 First Quarter reference files
+PCTEC85A KWD  PC Tech Journal 1985 First Quarter reference files
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0548
 

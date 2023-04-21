@@ -38,17 +38,105 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILE1524.TXT
+
+{% raw %}
+```
+Disk No: 1524
+Program Title: SPROGH version 3.2
+PC-SIG version: 1.0
+
+If you enjoyed spiralling away hours with Spirograph(tm) as a kid, you
+won't be able to resist this computerized version of the famous drawing
+game!  And with SPROGH, you won't have to worry about your pen slipping
+at the last minute and ruining your artistic efforts!
+
+At first SPROGH is a little more difficult to use than the actual game
+since the effect the "disks" and "rings" involved can be tough to
+visualize.  But after some experimentation anyone can become a pro at
+creating the telltale spirograph spirals.  SPROGH is very versatile, it
+permits adjustment of image size and shape, and has the ability to
+rotate an existing drawing or even create nested spirographs.
+
+Images can be saved and reloaded for later display and there is a more
+limited version of the program for us more artistically inept to use.
+This great fun for the young, or bored, computer user.
+
+Synopsis: If you enjoyed making spirals with Spirograph(tm) as a kid,
+you are gonna love this computerized version!
+
+Usage:  Amusement/Game.
+
+Special Requirements:  Hercules,  CGA.
+
+How to Start:  Type GO (press ENTER).
+
+Suggested Registration:  $4.37
+
+Author:  Rev. Phil Paustian
+
+File Descriptions:
+
+LILSPROG BAS  Scaled down version.
+LILSPROG DOC  Documentation for scaled down version.
+SPIRO1   COL  Sample drawing for CGA graphics.
+SPIRO1   HRC  Sample drawings for Hercules graphics.
+SPIRO2   COL  Sample drawing for CGA graphics.
+SPIRO2   HRC  Sample drawings for Hercules graphics.
+SPIRO3   COL  Sample drawing for CGA graphics.
+SPIRO3   HRC  Sample drawings for Hercules graphics.
+SPROGH   DOC  Main Documentation.
+SPROGH   EXE  Main Program.
+SPROGH   BAS  Program source (Turbo BASIC source code.)
+
+The PC-SIG Library
+1030D E. Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
 ## LILSPROG.BAS
 
+{% raw %}
 ```bas
 1 KEY OFF:SCREEN 2:P=ATN(1)/45:A=0:B=0:C=0:D=0:E=150:F=300:G=40:H=100:CLS
 2 INPUT A:INPUT B:A=A*P:B=B*P:PSET((SIN(A)+SIN(B))*E+F,(COS(A)+COS(B))*G+H)
 3 K$=INKEY$:C=C+A:D=D+B:LINE -((SIN(C)+SIN(D))*E+F,(COS(C)+COS(D))*G+H)
 4 IF K$="" THEN 3 ELSE GOTO 1
 ```
+{% endraw %}
+
+## LILSPROG.DOC
+
+{% raw %}
+```
+LILSPROGH
+by phil paustian 
+
+Requirements:IBM PC or compatible, a Basic language, and a graphics card.
+
+    This program creates some of the same designs as SPROGH, but is much
+simpler. Load Basic, then load and run the program, and you will be given
+two input prompts. Type in any two numbers, hitting [Enter] after each,
+and the program will draw a design for you.  If you want a curved design
+use two small numbers, between plus and minus 15 or thereabouts.  If you
+use large numbers, you may find it a challenge to create aesthetically
+pleasing patterns, but keep trying and you'll be rewarded when you least
+expect it. You might try some of these examples for inspiration: 2 and 90;
+124 and 2; 4 and 91; 42 and 238; 38 and 90; 116 and 2; 68 and 100; 124 and
+240; 12 and 132; 42 and 282; 110 and 50; 34 and 64; 256 and 336; 58 and 94;
+124 and 64; 132 and 48; 138 and 46; 130 and 46; 56 and 2; 3 and 60.
+    If the drawings don't fit correctly on your screen, just fiddle around
+with the variables E,F,G, and H in line 1 of the program until it fits.
+```
+{% endraw %}
 
 ## SPROGH.BAS
 
+{% raw %}
 ```bas
 '
 ' SPROGH:A SPIROGRAPH SIMULATOR BY PHIL PAUSTIAN
@@ -1157,6 +1245,407 @@ DATA  124,68,84,68,116,20,28,0,0,112,80,92,68,84,84,124,0,0,0,999
 DATA -1
 END
 ```
+{% endraw %}
+
+## SPROGH.DOC
+
+{% raw %}
+```
+                                SPROGH!
+                                ver 3.2
+            The Spirograph simulator with a smidgeon more.
+
+Copyright(C)  Phil Paustian
+Address:      Box 644
+              Terry, MT  59349
+
+Hardware required:IBM-PC or compatible with graphics card.
+
+Disclaimer: If something goes wrong, I didn't do it, I don't know who did
+it, and besides, it wasn't my fault.
+
+
+    Sprogh is a program that simulates the curved designs of a spirograph.  
+As you can probably imagine, a spirograph is something that is much easier
+to use than it is to describe.  I would guess that you will learn alot more 
+about this program by running it than you will by reading this manual. 
+However, I will give you a brief description of all of the commands to help 
+you as well as I can.
+    I suggest printing out this manual and reading the appropriate sections 
+as you use the program.  From DOS you can use the command
+"TYPE SPROGH.DOC >PRN" to get a copy on your printer.
+
+        RUNNING SPROGH
+
+    From DOS type "Sprogh".  You can watch the introductory screen draw two
+sample spirograph designs, or press any key to start.  Hit "C" for color or
+"M" for monochrome and the program will begin.
+    You will be presented a menu with seventeen choices, a rather
+intimidating assortment of arcane jargon.  To enter any menu
+selection simply hit the first letter of that command (the capitalized
+letter).  For the novice, the commands you will want to learn first
+are Disk, Ring, Pen, Go, Clear, Quit, and Examples.  Once you've mastered
+these you can move on to the other commands. Start at the top and the
+bottom of the menu and work your way toward the middle.
+
+                                 GO
+    Go:  This command tells the computer to draw the presently set design.  
+Just hit the letter "G" and it goes to work.  You must first put numbers
+into "Disk gears" and "Ring gears" so it will know what to draw.  You will 
+be returned to the menu as soon as the design is completed.  If you want
+to stop sooner, just hit any key while the design is being drawn to get
+back to the menu.
+
+                            CLEAR SCREEN
+    Clear screen:  Hit the letter "C" to erase the screen.  Simple enough.  
+Maybe too simple.  Before you go wiping out designs indescriminately, think 
+for a moment of the tragic loss.  If Leonardo da Vinci had had a "C" key
+the world might never have seen Mona's smile.
+
+                                QUIT
+    Quit:  Hit "Q" to quit.  You will be asked "ARE YOU SURE?"  Press "Y"
+to quit or any other key to continue.  Naturally you will be so enthralled
+by SPROGH that you will wish you never had to use this command.  But such
+is life.  All good things must have a "Quit" command.
+
+                            DISK and RING
+    Disk and Ring: First a brief refresher course in spirography. If you
+remember the spirograph you had when you were much, much younger, you had
+an assortment of plastic rings which had to be pinned down onto the paper.
+You also had some smaller round disks that were spun around inside the ring
+to create a design. The ring and disk had alot of gear teeth around their
+rim. The "Disk gear" command asks you to tell the computer how many gears
+the disk should have. When you are in the menu, hit the letter "D" and a
+prompt at the bottom of the screen will ask you what to change Disk gears
+to. Type in a number and hit return. Or you can just hit return without any
+number to leave the number unchanged. You may also hit the escape key at
+any time to get out of any command you didn't want to make.
+    Both Disk and Ring must be set at some number other than 0 before you
+can draw a design. The larger the number, the larger the disk will be. The
+same thing goes for the "Ring gear" command.
+    Actually, the program will automatically draw every design the same
+size, large enough to fill the screen, unless you tell it not to.  So
+changing "Disk" or "Ring" will not affect the size of the design.  But the
+combination of those two numbers will tell the program what design to draw. 
+To create an authentic spirograph design Ring should be a larger number
+than Disk (otherwise the disk wouldn't fit inside the ring, obviously), but 
+the program won't complain if you throw logic out the window.
+    By experimenting with these two numbers you will learn that whenever
+the Ring is three times the size of Disk the program will always draw a
+triangular design. But if you use very large numbers the design will be
+drawn very slowly. Using smaller numbers will speed up the drawing, but if
+the numbers are too small, let's say below twenty or so, the curve will not
+be smooth.
+    Try these examples:
+        C D 20 [Return] R 60 [Return] G 
+        C D 100 [Return] R 300 [Return] G
+        C D 8 [Return] R 24 [Return] G
+    Then try these variations:
+        C D 20 [Return] R 80 [Return] G
+        C D 20 [Return] R 82 [Return] G
+        C D 20 [Return] R 42 [Return] G
+    By now you're ready to choose your own designs.  Experiment.  Be
+daring.  Let your spirit guide you to all the images you can create.  Let
+the immortal Muse of Spirography inspire the artist within your soul.
+    But wait.  With a real spirograph, there are two ways to make a design, 
+by spinning the disk inside the ring, and by spinning it outside.  With
+SPROGH creating an outside design is as simple as using a negative number
+for either Disk or Ring (not both). Like this:
+        D -30 [Return] R 100 [Return] G
+
+                                 PEN
+    Pen position: Another method you can use in a real spirograph to change
+the way a design looks is by moving the pen position. Every disk had a
+number of holes in it. If you put the pen in a hole near the edge of the
+disk, you got a design with sharp points. Holes near the center gave
+nothing but gentle curves. This effect is acheived with SPROGH by changing
+"Pen position". If Pen is 1, the pen is set right at the edge of the disk;
+if Pen is 0, the pen is in the center of the disk. You can choose any
+position between those two extremes, or you can take a step beyond what was
+possible with a real spirograph by setting Pen at a number greater than 1.
+That puts the pen outside the physical border of the disk.
+    If you are really astute you will realize that a real spirograph could
+draw these impossible designs, but only by choosing a different disk size.
+But please don't give yourself a headache trying to figure out how.
+    Try out some examples:
+        C D 30 [Return] R 120 [Return] P 1 [Return] G
+        P .5 [Return] G
+        P 1.5 [Return] G
+        P 0 [Return] G
+    Of course, all these designs are the same size because the program is
+automatically making every design fill the screen.  See the section of this 
+manual on "Size" to learn how to change that. 
+    This might be a good time to mention a couple features of this program 
+that make entering numbers easier. The left arrow key can be used as a
+backspace, while the right arrow key will either type one character from
+the default (previous) setting, or it will retype what you destroyed with
+the backspace. Hitting the center key on the numberpad, the '5' key, will
+type the entire default.
+    Secondly, instead of entering numbers directly and absolutely, you have
+the option of adding a number to the present setting. Simply type a '+'
+before the number and it will be added to the default, or a '+-' (Plus
+sign, Minus sign) to subtract. For example if P is 1.5 then typing 'P+.1'
+makes it 1.6. Typing 'P+-1.1' will then set the pen position to .5.
+
+                              EXAMPLES
+    Examples:  Just hit the letter "E" and the computer will begin drawing
+several examples of what this program is able to do.  At any time while a
+design is being drawn you can simply hit any key and you will be returned
+to the menu.  When you stop the examples, the menu will show you the
+numbers that were required to create this design.
+    If you have mastered these commands, you are ready to explore all the
+possibilities SPROGH has to offer.  Check out each of the remaining
+commands as you wish.
+
+                                MOVE
+    Move:  You can move the design anywhere you choose on the screen.  The
+screen is set up so that the top of the screen is "U 100".  The
+bottom is "D 100".  The left and right sides are "L 150" and "R 150". Keep 
+the design within those limits.  To make a move hit "M" followed by the
+letter corresponding to the direction you want to move, followed by the
+distance and [Return]. Prompts at the bottom of the screen will remind you
+what to do, and a crosshair will show you where you're at on the screen. 
+You might choose to move the design to "R 50" so that it won't be covered
+up by the menu, especially on a color monitor that uses a bigger menu.
+
+                                TURN
+    Turn:  It does what it says, it turns the design whatever number of
+degrees you enter. "T 180" will set a design upside down, while "T 5" will
+just turn it slightly out of its normal position.  "T+5" will turn it five
+degrees from its previous setting, and this simplifies the task if you want 
+to draw the same design several times turning the design just a little bit
+each time.  One good turn deserves another.
+    There is one special function of Turn.  If you set Turn at 999, the design 
+will continue drawing from where it left off.  That allows you to stop a 
+drawing in the middle, then change the color for instance, then continue with 
+the rest of the design.  However, the computer won't automatically quit
+drawing now until it reaches the spot where it was restarted.
+
+                                SIZE
+    Size:  To change the size of a design hit "S".  You will be given three
+choices, "Auto, Fixed, or Nested".  Hit "A", "F" or "N".
+    If you choose "Auto" you will be asked to enter a number, usually
+between 0 and 1 if you want the design to fit on the screen.  Entering .5
+will give you a design one half as large as the normal size; .1 would be
+one tenth the normal size.  You get the idea.  The current size is
+indicated by the number under the word size in the menu.
+    Your second option is "Fixed".  Hitting the letter "F" will freeze the 
+scale at the present setting.  That means that from now on, different
+designs will be different sizes.  Instead of every design filling the
+screen automatically, now the ring is fixed to its present position on the 
+screen, and future drawings have to rotate around this ring position. 
+    Setting a smaller Pen position will give you a smaller design, choosing
+different Disk or Ring settings will also change the size. This option is
+handy for making inner designs fit inside outer designs, or making changes
+in the Pen position act exactly as they would in a "real spirograph."
+(Pretty soon I'm going to have to start calling a "real spirograph" what it
+really is, nothing more than a "Manually-operated Sprogh.")
+    For example, choose Disk and Ring settings you like, then make several
+designs using different pen positions to remind yourself what that does. 
+Now clear the screen, set Pen position at '2', hit 'S F', and you are in
+Fixed mode.  Draw the design, change Pen position to 1.5 and draw it again. 
+Make several more drawings with Pen position anywhere between 0 and 2.  If
+you make Pen position greater than 2, the design will be too large for the
+screen, but I can tell you're just the kind of rebel who's going to do it
+anyway just because I told you not to.  To get back to "Auto" mode, type
+"S A [Return]".
+    The final choice is "Nested".  Nested calculates how large a hole
+exists in the center of the design.  It then changes the "Size" to cause
+new designs to fit in the center.  It also changes size to "Auto" so that
+any design drawn now will fit neatly inside that hole.
+    Whew.  That was confusing.  If you now understand how to use the
+various size options, you are truly a SPROGHmeister.  If not, a little
+experimentation might teach you enough to use these commands profitably.
+
+                                OVAL
+    Oval:  You can make your drawing either a vertical or horizontal oval
+by changing this number.  A setting of 1 gives you a circle.  A setting
+between 0 and 1 gives a tall oval, while settings greater than 1 create wide 
+ovals.  One way you might choose to use this setting is to really make
+SPROGH fill the whole screen.  Here's how:
+        Type "O 1.5 [Return] S A 1.5 [Return]"
+This will give you an oval that is as wide and as tall as the screen.
+
+                                HUE
+    Hue: That means color, but I had to use "C" to clear the screen, so
+you'll just have to get used to saying Hue. I have to admit that I only
+have a Hercules monochrome monitor, so I have not tested this program with
+color. Let me know if it works. With monochrome screens the only thing this
+command will do is set the color black or white. Even numbers (Black) can
+be used to erase designs without clearing the whole screen.
+
+                             LOAD/SAVE
+    Load/save:  For saving your masterpieces.  When you hit "L" you are
+given two options, Disk or Memory.  You can save a design on disk (in
+Basic Bload format) by choosing the Disk option. Simply tell the computer
+whether you want to load an image from disk or save one to disk. Then enter
+the file name. If you do not type in a file name, the computer will use the
+default "SPIRO1".
+    Your second option here is to load/save to memory.  At any time the
+program can hold one image in memory.  You can use this to undo a mistake,
+or to easily combine two or more images.  When you choose to load an image
+from memory, there will be four options to choose from.  They are:
+    RESTORE: erases whatever is presently on the screen and brings back the 
+saved image exactly as it was stored.
+    NEGATIVE: erases the screen and brings back the old image with the 
+color reversed, so every black pixel is white and vice versa.
+    SUM: adds the saved image to the image presently on the screen. Any
+point that was white on either screen will remain white.
+    ICON: adds the saved image in a way that allows it to be subtracted
+again.  Choosing this option once adds the saved image to the present
+image.  Choosing it a second time erases the saved image and returns the
+screen to the same condition it was in before you loaded that image.
+
+                               BLANK
+    Blank menu:  This command erases the menu so it never hides the design.
+Hitting "B" a second time will restore the menu.
+
+                               WIPE
+    Wipe: This is a paint fill-in command.  Choose a color or pattern to
+fill in either inside or outside of your design.  Use the Move command to
+move the crosshairs to the section of the screen you wish to fill in.  Then 
+hit "W" for wipe. Now enter a number from 1 to 8 to fill in that part of
+the screen with a solid color, or a number from 10 to 99 to choose a tile
+pattern. The color or pattern you choose will paint the screen, filling
+outward until it reaches any line that is the color of the presently set
+Hue. Experiment and you'll see what I mean.
+Examples:
+"C W1 [Return]"
+"C W96 [Return]"
+"C D20 [Return] R85 [Return] G W96 [Return] M R 130 [Return] W96 [Return]"
+    This program was written using a Hercules monitor.  So I confess I have 
+absolutely no idea whether these patterns will work as expected on a color
+screen.  I suspect most will be garbage in color. But just in case they do 
+work, but you don't like the colors try patterns from 110 on up to about
+5000.  These are the same 90 patterns with various color shifts. Drop me a
+line and tell me how it looks.
+
+                               AGAIN
+    Again:  This is one of those commands that was created with the true
+Sproghmeister in mind.  This command lets you repeat any series of commands 
+over and over.  When you choose this option, you will be asked to enter the 
+command list.  Simply type in the commands exactly as you would normally,
+but without hitting [Return] until you're finished.  After you hit [Return] 
+you will be asked how many times to repeat.
+    For example, hit "A". Then at the "Again:" prompt, type
+"ML5T+5P+-.1G [Return]" The computer will now ask "How many times?"
+Type "10 [Return]". The computer will now Move Left 5, Turn 5 degrees,
+Subtract 0.1 from the current Pen position, and draw the design. Then it
+will do it again 9 more times. 
+    One more feature of Again:  place an "A" at the end of the command list 
+and when the computer reaches the "A" it will start over at the beginning.  
+This will give you an infinite loop.  For example, at the "Again:" prompt,
+type "H+1GA".  This will draw the same design over and over, just
+changing the color each time.  On a monochrome screen it will draw the
+design, then erase it, then draw it again, over and over and over.
+    If you so desire, you can also put a number after the "G" to tell the
+program who many points to draw before it quits, in case you want it to
+stop drawing before the design is finished.  You'll have to use trial
+and error to determine how large a number you want to use.  One possible
+use on a color monitor: set Turn to 999. Then enter the Again command and
+type this string:
+    H+1G3A
+That will draw your design in constantly changing colors.
+
+                                FORM
+    Form:  We have come to the last command.  I saved this one for last
+because it is not really part of a real spirograph simulation.  Hitting "F" 
+toggles the program back and forth between Gear input and Degree input. 
+You will notice that when you hit "F" the numbers under Disk and Ring
+change.  If a disk has 20 gear teeth around its rim, then each tooth is 18
+degrees wide (20 x 18 = 360 degrees). If it has 60 gear teeth, each tooth
+is 6 degrees wide. "Form Degrees" lets you enter those numbers by the
+number of degrees instead of by the number of gear teeth.
+    But that isn't the only thing this command changes. The Disk and Ring
+sizes and rotation are also calculated differently. This command is useful
+for creating unusual designs that look nothing like a spirograph. In a
+spirograph you will normally use Disk and Ring settings between around 20
+to around 200 or so. With "Form: Degrees" you should try using all numbers
+between 1 and 360.
+    It will be more of a challenge to find designs that look aesthetic with 
+"Form: Degrees".  But some people like a challenge.  Hit "F" to get into
+the "Form: Degrees" mode, and then hit "E" to see a half dozen examples of
+what you can do.  You will see that these designs are very angular, unlike
+a spirograph.  They are also more complex and varied than a spirograph. 
+While running the examples, you can hit a key at any time to stop, and then 
+look at the Disk and Ring settings to see what numbers created those
+designs.
+
+                             THE HIDDEN COMMANDS
+    There are a couple of commands that are not mentioned in the menu.  It
+sounds mysterious and vaguely ominous, but the truth is, I just ran out of
+room in the menu, and the remaining commands are too trivial and useless to 
+deserve mention.  Judge for yourself.  The hidden commands are:
+
+                             INITIALIZE
+    Initialize:  This command simply resets all variables to their original 
+value except Disk and Ring.  It's not a command you'll use very often, but
+it might save a few keystrokes once in a while.
+
+                             VERSION
+    Version:  Tells you the version number of your copy of Sprogh and
+reminds you to send in your checks and money orders and IOU's and the
+change you dug out of the sofa to yours truly.
+
+                             ZILCH
+    Zilch:  Does absolutely nothing except delays one second and beeps at
+you. The only conceivable use for this command is to slow down an Again
+Command.  Example: Type "C W10 [Return]"; Hit "A"; Enter "CW+1Z [Return]"
+When you are asked "How many times?" Enter "90".  The program will now show 
+you all the Wipe patterns available and give you one second to view each
+before showing the next one.
+
+
+
+    The rest is up to you.  Drop me a line with any suggestions or comments 
+you might have.  If you find this program interesting or you just feel very 
+charitable, please register by sending the low, low price of $4.37 to Box
+644, Terry, MT 59349.  If the program totally bored or confused you, we
+offer a specially discounted price of $4.29.  What will you get when you
+register, you ask?  You get my undying thanks and devotion.  I guess $4.37
+just doesn't buy as much as it used to.              Enjoy!
+
+
+        Handy Registration Form
+_________________________________________________________________________
+
+SPROGH REGISTRATION
+VERSION 3.2
+
+Mail your registration check to:
+Phil Paustian
+Box 644
+Terry, Montana  59349
+
+Check One:
+    ___ Yes, I want to do my part supporting your outstanding achievement
+        in pointless programming.  Enclosed you will find my check for
+        $4.37.  I understand that I will receive a personal autograph from
+        the author himself, on the back of my cancelled check, suitable for
+        framing.  And if I am the one thousandth registerer, I will win a
+        free T-shirt emblazoned with the company motto; SPROGH, IT'S NOT
+        JUST FOR THE SEMI-COMATOSE!
+
+    ___ This program totally bored and confused me.  Here's my check for
+        $4.29.
+
+    ___ No, I do not wish to register at this time, but here is my name and 
+        address, so you can harass me and my family, day and night, until we
+        fork over the money.
+
+Name:______________________________________________________________________
+    (First name, Last name, and cruel nickname they called you in school)
+
+Address:___________________________________________________________________
+
+City:________________________________State:___________Zip Code_____________
+
+Comments and Suggestions:__________________________________________________
+
+___________________________________________________________________________
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

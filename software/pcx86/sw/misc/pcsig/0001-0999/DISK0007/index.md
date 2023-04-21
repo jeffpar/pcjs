@@ -60,6 +60,7 @@ machines:
 
 ## BIHEX.BAS
 
+{% raw %}
 ```bas
 100 '
 101 ' Binary-to-hex-and-back-again conversion program for the IBM PC
@@ -249,9 +250,1049 @@ machines:
 10030 IF ERL = 5100 OR ERL = 4100 THEN PRINT : PRINT "Unable to open output file." : CLOSE : RESUME 2200
 10999 CLS : LOCATE 12, 10: PRINT "Unexpected error #"; ERR; "at line"; ERL: ON ERROR GOTO : END
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #7, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  EXPLIST .EXE         CRC = D5 86
+
+--> FILE:  EXPLISTR.EXE         CRC = 83 3E
+
+--> FILE:  EXPOPT  .            CRC = 36 67
+
+--> FILE:  EXPMAIL .EXE         CRC = 21 6D
+
+--> FILE:  EXPLIST .DOC         CRC = 7A 00
+
+--> FILE:  PRINT   .BAS         CRC = 39 2A
+
+--> FILE:  PRINTNEC.BAS         CRC = 1F CF
+
+--> FILE:  BIHEX   .BAS         CRC = 4D BD
+
+--> FILE:  LF      .COM         CRC = 3F 90
+
+ ---------------------> SUM OF CRCS = 10 DE
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## EXPLIST.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+                        Computerenergy's Expanding Lister
+
+
+
+
+
+
+                                   Version 1.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                               Proprietary Notice
+
+Expanding Lister is  a proprietary  product developed by Richard C.   Bemis and
+distributed by Computerenergy Corporation, Denver, Colorado.  
+
+Copyright 1982 by Richard C.  Bemis and Computerenergy Corporation.  All rights
+reserved except those expressly granted to the user within this document.  
+
+Computerenergy Corporation,  PO  Box  6267,  Denver,  CO  80206  (303) 233-9118
+Source: ST6070 
+
+
+
+
+
+
+
+                                      - i -
+                                TABLE OF CONTENTS
+
+Section                                                                    Page
+
+
+
+CHAPTER 1  EXPANDING LISTER DISTRIBUTION NOTICE ...........................   1
+
+CHAPTER 2  INTRODUCTION ...................................................   2
+
+CHAPTER 3  SYSTEM SETUP ...................................................   3
+   3.1  Copying Expanded Lister ...........................................   3
+   3.2  Program Setup - Final Installation ................................   3
+
+CHAPTER 4  OPERATION ......................................................   4
+   4.1  Execution .........................................................   4
+   4.2  Entering Responses ................................................   4
+   4.3  Maillist/Donation Assistance ......................................   4
+   4.4  Options ...........................................................   4
+   4.5  Program Entry .....................................................   5
+
+CHAPTER 5  EXPANDING LISTER FUNCTIONS .....................................   6
+   5.1  Blank Lines .......................................................   6
+   5.2  Loop Structures ...................................................   6
+   5.3  Multi-Statement Lines .............................................   6
+   5.4  Page Titles .......................................................   6
+   5.5  Program Title .....................................................   6
+   5.6  REMarks ...........................................................   6
+      5.6.1  Standalone Remarks ...........................................   7
+      5.6.2  Remarks which follow statements ..............................   7
+
+CHAPTER 6  OPTIONS ........................................................   8
+   6.1  Option Setting ....................................................   8
+   6.2  Program Name Extension ............................................   8
+   6.3  Beginning Program Line Number .....................................   8
+   6.4  Ending Program Line Number ........................................   8
+   6.5  Condensed Print On/Off ............................................   8
+   6.6  Maximum Printer Line Length - Standard Print ......................   9
+   6.7  Maximum Printer Line Length - Condensed Print .....................   9
+   6.8  Number of Spaces to Indent per Level ..............................   9
+   6.9  Number of Spaces to Indent per Multple Statement ..................   9
+   6.10  Condensed Print ASCII Sequence ...................................   9
+
+CHAPTER 7  PROGRAMMING SUGGESTIONS ........................................  10
+   7.1  Standalone REMs to segment blocks of code .........................  10
+   7.2  Routine Management ................................................  10
+      7.2.1  Remarks after GOSUB statements to describe routines ..........  10
+      7.2.2  GOSUB Library ................................................  10
+   7.3  FOR ... NEXT Case structure .......................................  11
+   7.4  Other Coding Recommendations for Lister Limitations ...............  11
+
+CHAPTER 8  OTHER INFORMATION ..............................................  13
+   8.1  Distribution Disk Contents ........................................  13
+   8.2  System Requirements ...............................................  13
+   8.3  Disclaimer ........................................................  13
+
+CHAPTER 9  SUGGESTIONS, FEEDBACK, AND BUG REPORTS .........................  14
+
+
+Expanding Lister                     - ii -          Computerenergy Corporation
+                                    CHAPTER 1
+
+                      EXPANDING LISTER DISTRIBUTION NOTICE
+
+Expanding Lister is being distributed using the "Freeware"* approach.  To those
+of you  unfamiliar with this approach, it works like this.  You may send either
+a preformatted  single-sided disk  (or a prepaid contribution for  our disk and
+mailer) to  us with a prepaid return mailer and we will send a complete copy of
+the product.   If the product does not meet your needs, please pay nothing.  If
+the product  does meet your needs, and you can use it, then we would appreciate
+a  contribution of  whatever  you  feel  is  appropriate.  Naturally,  we  have
+probably given  you  a clue  in several  places  as to what is  our "completely
+unprejudiced opinion" of an appropriate contribution amount.  Contributions are
+completely voluntary and much encouraged.  
+
+Even if you  do not  contribute, you are encouraged to  copy and distribute the
+product freely subject to the following restrictions: 
+
+     1. Do not  distribute altered copies.  Note: You may distribute a separate
+        set of modifications  to merge in if you  wish but they must be clearly
+        identified  as  not originating  from Computerenergy.   If  you do make
+        modifications, we  would like to see what you've done, if possible, for
+        future versions.  
+
+     2. The  product  is to  be distributed  as  a complete "distribution copy"
+        produced  by the  copy  utility  provided  with  the product  for  this
+        purpose.  
+
+     3. No fee is to be charged for copying or distributing the program without
+        an express written agreement with Computerenergy Corporation.  
+
+     4. Commercial  sale of  this product  in any manner is prohibited  without
+        Computerenergy's  written  permission.  Some  products will be released
+        with this permission automatically given and expressly stated.  
+
+User Groups/Clubs:  Computerenergy's  freeware  products may  be distributed by
+Clubs and User Groups subject to the same restrictions.  We would ask only that
+contributions to  our continuing efforts be encouraged by those performing such
+distribution.  
+
+Computer Bulletin Boards: Computerenergy's freeware products may be distributed
+by  BBS's  subject  to the  same restrictions  and  contribution encouragement.
+However, as the products tend to be large and consist of several files, we have
+some concern as to the reliability of transmissions and length of connect time.
+Perhaps disks could be mailed or just the documentation placed on the board for
+browsers.  
+
+
+* The  Freeware concept  was initially  developed by Andrew Fluegelman and  the
+term  "FREEWARE"  is a  trademark of  The Headlands Press, Inc.  The  Headlands
+Press provides  a catalog of information about Freeware products available from
+multiple sources.   They may  be contacted at PO Box  862, Tiburon, CA 94920 or
+Source: TCP204 or Compuserve: 71435,1235.  
+
+
+
+
+
+
+Expanding Lister                     - 1 -           Computerenergy Corporation
+                                    CHAPTER 2
+
+                                  INTRODUCTION
+
+
+Computerenergy's Expanding   Lister   was  created   to  make  programming  and
+maintenance jobs  easier.   We  feel  that  a computer  should  help as much as
+possible in its  own development efforts.  The Expanding  Lister is a tool that
+performs a  number of formatting functions as a program is listed.  It provides
+powerful aids to visualizing what is happening (and where) within a program.  
+
+Expanding Lister will  do several things to help you improve the readability of
+your  program  listings.   Most of  its functions  are  designed to display the
+structure  of a  program without  the burden of any additional  effort from the
+programmer.   However,  as  you become  more familiar  with  Expanding Lister's
+capabilities, you may  wish to slightly adjust the  way you enter code in order
+to take greater advantage of some of the features.  
+
+After you have  setup the  system and read the Operation  chapter, we recommend
+that you try the Lister on some of your own programs.  
+
+If you  are  going to  "wing-it" without  reading further, then SAVE the  Basic
+program to be listed in ASCII (true wingers understand this), type EXPLIST, and
+good luck!  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Expanding Lister                     - 2 -           Computerenergy Corporation
+                                    CHAPTER 3
+
+                                  SYSTEM SETUP
+
+
+The Expanding Lister  distribution disk contains two versions of the program in
+compiled  formats  along with  its options  file.   Compiled versions are being
+distributed  as  they  execute much  faster.  The  first  is EXPLIST.EXE and is
+compiled in  complete native format.  It is the fastest version, but requires a
+larger amount of  disk space.  The second is  EXPLISTR.EXE which is smaller but
+requires  the Basic  Compiler Run-Time  package which is not included  as it is
+available only under license from IBM at $30/copy.  EXPLISTR is slightly slower
+than EXPLIST and the speed difference is not noticable unless a large number of
+statements are skipped over before listing begins.  
+
+3.1  Copying Expanded Lister
+
+     There is a batch file which copies the entire distribution disk for backup
+     or distribution purposes.  We highly recommend making a backup copy before
+     proceeding as it is safer and the mails can be slow.  
+
+     Place the Expanding Lister  distribution disk in Drive A:  and a formatted
+     disk without DOS on it in Drive B:.  While in DOS, type EXPCOPY and follow
+     any instructions.  
+
+3.2  Program Setup - Final Installation
+
+     We recommend that  a copy  of the Lister and its  control file, EXPOPT, be
+     placed  on a  Basic Program  Development DOS System disk if  possible.  If
+     this is  your first  run-through, do not perform this  step yet - use your
+     copy of the distribution disk and proceed to the Operation Chapter.  
+
+     1. Copy the EXPLIST.EXE (or the EXPLISTR.EXE program if you have the Basic
+        Run Time Module) to the System disk.  
+
+             A Sample COPY command might be:
+
+                            COPY B:EXPLIST.EXE A:
+
+     2. Copy the EXPOPT file to the same disk.  This file must be available any
+        time the EXPLIST(R) program is used.  
+
+             A sample COPY command might be:
+
+                            COPY B:EXPOPT A:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Expanding Lister                     - 3 -           Computerenergy Corporation
+                                    CHAPTER 4
+
+                                    OPERATION
+
+4.1  Execution
+
+     Starting the  Expanding  Lister  is simply  a matter  of  entering DOS and
+     typing EXPLIST (or EXPLISTR) followed by the Enter key.  
+
+4.2  Entering Responses
+
+     You will quickly notice that all input requested by Expanding Lister is at
+     the  bottom  of  the screen,  following a  prompt,  and contained within a
+     "target".  We have found that a relatively constant area for data entry is
+     superior  to  the  more  typical  design  of  "fill-in-the-blanks"  as  it
+     minimizes  eye travel  and  usually  makes  for  a more  consistant  entry
+     process.   All  responses  are completed  by pressing  the  Enter key.  In
+     several prompts,  and on  the keyboard, the Enter key  is represented by a
+     symbol roughly similar to this: (<-').  
+
+     In addition  to  the  normal  editing  functions provided  for inner-field
+     editing there are a couple of special functions available: 
+
+               Field Erase:  Press the ESC key to erase an entry and start over
+                             or to change a field that has a pre-loaded value.
+
+               Field Backup: Press the Up-Arrow to "backup" to the previous
+                             entry.  The current entry will be erased as you
+                             "backup".
+                             Note: You can "backup" as far as you like until
+                             the very beginning of the program.
+
+4.3  Maillist/Donation Assistance
+
+     The first  screen you  see is  a title, information, and copyright  screen
+     with a "Press Enter to continue or space for Maillist/Donation assistance"
+     prompt.  Normally, you  will press the Enter key  to start the Lister.  If
+     you press  the space  bar, a program will run  which will help you print a
+     letter that you can send to us to be sure you are placed on our maillist -
+     particularly important  if you did not receive your copy directly from us.
+     Amazingly enough, the letter will even assist you in making a contribution
+     but that is not required (nice though).  
+
+     Note: The assistance  program - EXPMAIL - is contained on the distribution
+     disk and  its copies but should not be copied to your DOS development disk
+     as it  is  large, not  required, and  a  waste of disk space.   EXPMAIL is
+     chained from the Expanded Lister as it resides on the distribution disk or
+     may be executed directly from the distribution disk by typing EXPMAIL.  If
+     you are using EXPLISTR, EXPMAIL must be executed standalone.  
+
+4.4  Options
+
+     There are a  number of options which may be changed as desired by the user
+     in  order  to  tailor the  Lister to  his  configuration.  The options are
+     usually changed only  for the current run but  may be permanently saved if
+     desired.  As  the program is initially distributed, all options are set at
+     the  most  commonly used  values.  We  would recommend that no options  be
+     changed until you are more familiar with the Lister's functions.  
+
+Expanding Lister                     - 4 -           Computerenergy Corporation
+                                                           CHAPTER 4: OPERATION
+
+
+4.5  Program Entry
+
+     Up to 25 programs  may be specified to be  listed in sequence at one time.
+     NOTE: Each program must be previously saved in ASCII format using the ",A"
+     option of the Save command in Basic.  Example: 
+
+                    SAVE "B:progname.S",A
+
+     We use the  .S  extension  for  "Source"  to differentiate  between  Basic
+     encoded programs  and those saved in ASCII.  This approach also provides 2
+     copies of  each program  as it is developed -  a sort of automatic backup.
+     Any program extension may be used.  
+
+     If a program is read by the Lister that has accidentally not been saved in
+     ASCII, the Lister will display an ERR=62 message and return to DOS.  
+
+     For each program to be listed, the Lister asks for 3 pieces of information
+     - program name, beginning line number to start listing, ending line number
+     to end listing.  Each program name may be entered without an extension and
+     the Lister  will append the Program Name Extension specified in the option
+     list.   If  the  program is  entered with  an  extension, then the entered
+     extension will be used.  
+
+     Each line  number field  is pre-loaded  with a default value which  may be
+     changed  most easily  by pressing  the ESC key and keying  a new number or
+     backspacing and  re-keying the  number.  The default value is  selected by
+     pressing the Enter key.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Expanding Lister                     - 5 -           Computerenergy Corporation
+                                    CHAPTER 5
+
+                           EXPANDING LISTER FUNCTIONS
+
+5.1  Blank Lines
+
+     A blank link  is  inserted  after  certain  Basic keywords  such  as GOTO,
+     RETURN,  NEXT,  etc.  This  helps break  up the code visually at  probable
+     control transfer or routine ending points.  
+
+     A blank link is also inserted before each FOR and WHILE.  
+
+
+5.2  Loop Structures
+
+     Each statement within  a FOR ...  NEXT or WHILE ...  WEND loop is indented
+     to indicate  that  it  is  in  control.  Nested  loops  are indicated with
+     further  indentations.   The  indentations provide  a simple but effective
+     visible structure to the program.  
+
+
+5.3  Multi-Statement Lines
+
+     In program  lines  that  contain  multiple  statements, each  statement is
+     placed on a  separate line.  Statements 2 through  N are indented 2 spaces
+     and preceeded by  colons.  This greatly enhances ledgibility  and provides
+     much more space to make any necessary changes.  
+
+
+5.4  Page Titles
+
+     Each page  of the  program listing  is titled, dated, and time  stamped as
+     well as paginated.  
+
+
+5.5  Program Title
+
+     A banner title is  printed at the beginning of  each program listing.  The
+     title contains the name of the program being listed.  In addition, if line
+     15 in a program is of the form: 
+
+               15 ZTITLE$="Official Program Description/Title"
+
+     then that  description  will  also be  included in  the  banner title as a
+     separate line.   The  line  15  feature  maintains compatability  with  an
+     upcoming product and is totally optional.  
+
+
+5.6  REMarks
+
+     Remark statements are used within a program to provide documentation about
+     sections  of  the  code.   Many  programmers  provide  extra  highlighting
+     statements around their  remarks to have them stand  out within a listing.
+     We felt that the computer should automatically provide the highlighting.  
+
+     For the purposes  of the Lister, there are two types of remark statements.
+     The  first  is a  remark  on  its  own  statement number  which  we call a
+     Standalone Remark.  The  other is a remark which  follows a statement or a
+
+Expanding Lister                     - 6 -           Computerenergy Corporation
+                                          CHAPTER 5: EXPANDING LISTER FUNCTIONS
+
+
+     series of statements on a line.  Each has a separate type of highlighting.
+
+
+5.6.1  Standalone Remarks
+
+     Remarks which are  placed on  a separate line are printed  and highlighted
+     with a  blank  line,  a  full  line of  asterisks,  the remark - centered,
+     another full  line of  asterisks, and another blank line.   The remark may
+     begin  with either  REM or  the single quote abbreviation.  If  there is a
+     series of remarks, they will be included within a single highlight.  
+
+
+5.6.2  Remarks which follow statements
+
+     Remarks which follow  statements are  treated in one of two  ways.  If the
+     remark uses the  single quote, then the remark  will be right-justified on
+     the line  containing the last statement.  If the remark is a REM statement
+     as the last  statement on the line following  one or more statements, then
+     no highlighting will occur.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Expanding Lister                     - 7 -           Computerenergy Corporation
+                                    CHAPTER 6
+
+                                     OPTIONS
+
+6.1  Option Setting
+
+     As the Expanding  Lister begins its execution, it will display the current
+     setting of all  of its options and ask  if you wish to change any of them.
+     Any  changes  that are  made will  be effective for the current  run only.
+     However, after the  changes are made, the Lister  asks if you wish to make
+     them permanent.   If you respond "Y" then the current settings will become
+     the automatic option  values from then on.  Of  course, you may change any
+     option on any  run and then make the  new settings permanent as many times
+     as you desire.  
+
+
+6.2  Program Name Extension
+
+     The Program Name Extension option is used by the Lister to concatenante to
+     any  program  name that  is entered  without an extension.  We use  .S for
+     "Source"  to  differentiate from  Basic encoded programs extensions (.BAS)
+     but any extension is acceptable.  
+
+     If a program name is entered with an extension, this option is ignored.  
+
+
+6.3  Beginning Program Line Number
+
+     The beginning program  line number option establishes a value that will be
+     preloaded into the  Beginning Line Number prompt request  for each program
+     to  be  listed.  The  value may  be changed at entry time  for any and all
+     programs, if desired.  
+
+     We tend to place  a significant number of commonly  used routines at lines
+     10 -  9999 and therefore do not wish to list these routines over and over.
+     The  beginning  value  we use  is  10000  but  any  valid line  number  is
+     acceptable.  
+
+
+6.4  Ending Program Line Number
+
+     The ending  program line  number option  establishes a value that will  be
+     preloaded into the  Ending Line Number prompt request  for each program to
+     be  listed.  The  value  may  be  changed  at entry  time  for any and all
+     programs, if desired.  
+
+     The value we  use is  65529, which is the highest  valid line number for a
+     Basic  program  and therefore  will list  to the end of the  program.  Any
+     valid line number is acceptable.  
+
+
+6.5  Condensed Print On/Off
+
+     The Condensed Print On/Off  option is a "toggle" option.   When you select
+     it, it  will reverse status from ON to OFF or OFF to ON.  This option will
+     generate condensed or compressed print on Epson printers and thereby allow
+     more levels  of indentation than would be otherwise available.  Titles and
+     Remark highlighting are adjusted for condensed print.  
+
+Expanding Lister                     - 8 -           Computerenergy Corporation
+                                                             CHAPTER 6: OPTIONS
+
+
+     The option is effective for all programs listed during the current run.  
+
+
+6.6  Maximum Printer Line Length - Standard Print
+
+     For standard (ie.   not condensed) print, this option contains the maximum
+     print line  length available.  This value is used by the Lister in a Width
+     statement.  
+
+
+6.7  Maximum Printer Line Length - Condensed Print
+
+     For condensed print,  this option  contains the maximum print line  length
+     available.  This value is used by the Lister in a Width statement.  
+
+
+6.8  Number of Spaces to Indent per Level
+
+     The number of spaces  to indent per level option  contains the incremental
+     "tab  value"  of spaces  that  is  used  for  each loop  control  level of
+     indentation.  This  value is added to the indentation as each FOR or WHILE
+     loop is encountered  and subtracted from the indentation  for each NEXT or
+     WEND.  
+
+     We recommend a  number of around 5 unless there is deep nesting of program
+     loop levels.  
+
+
+6.9  Number of Spaces to Indent per Multple Statement
+
+     The number of  spaces to  indent per multiple statement is  the additional
+     amount  of  indentation to  be added  to the current level for  the second
+     through the last statement on a line as the statements are printed.  
+
+     We recommend the standard value of 3 be maintained, if possible.  
+
+
+6.10  Condensed Print ASCII Sequence
+
+     The condensed print  ASCII sequence is a series of up to 5 3-digit decimal
+     ASCII codes.   These codes  will be sent to your  printer if the condensed
+     print option is  "ON".  Each code must contain  3 digits which may include
+     leading zeroes if  necessary.  No embedded blanks or  other separators are
+     allowed.  Enter as many codes as needed.  
+
+     As distributed, this code contains the sequence for IBM/Epson printers.  
+
+
+
+
+
+
+
+
+
+
+Expanding Lister                     - 9 -           Computerenergy Corporation
+                                    CHAPTER 7
+
+                             PROGRAMMING SUGGESTIONS
+
+7.1  Standalone REMs to segment blocks of code
+
+     In order  to   visually  segment  your  routines,  we  suggest  that  each
+     subroutine be  titled with one (or more) standalone Remarks.  Depending on
+     your  style, you  may also  wish to group your subroutines  in one area of
+     your program.  With the Expanding Lister, it becomes much easier to locate
+     routines.  
+
+     There is an  ongoing debate about whether it is good practice to branch to
+     Remark  statements.   If you  do,  it  is  easier  to insert  code  at the
+     beginning  of  the routine.   However, some compression programs eliminate
+     Remark  statements entirely  thus creating invalid line number references.
+     The Basic  Compiler must also save some space for the REM statement if you
+     branch to it.   Our feeling is that it  is better not to branch to Remarks
+     if possible.  
+
+
+7.2  Routine Management
+
+7.2.1  Remarks after GOSUB statements to describe routines
+
+     One of the more difficult aspects of using IBM's Basic for larger programs
+     is  that  routines  are identified  solely with  line  numbers rather than
+     labels or  names.  That's  not all bad until you  renumber the program and
+     the numbers all change.  
+
+     To assist your debugging  and make your program more  readable, we suggest
+     placing a  remark  on  the  line  with each  significant  GOSUB statement.
+     Example: 
+
+               12100  GOSUB 22000  'Read Input
+
+     Now, no matter  what 22000 is renumbered to, the comment will identify the
+     routine.  The Expanding  Lister will move these remarks  over to the right
+     side of  the page for easier reading.  Note: this can only be done for the
+     last statement  on a multiple statement line as everything following the "
+     ' " sign will be ignored.  
+
+
+7.2.2  GOSUB Library
+
+     Also for larger programs, we suggest placing a routine or GOSUB library at
+     the end  of your program to help identify routine locations and functions.
+     The form might be: 
+
+               60000 REM Routine Library
+               60010 GOSUB 22000  REM Read Input
+               60020 GOSUB 11130  REM Process Calculations
+               60030 GOSUB 32312  REM Output Line
+                etc. - 1 per statement
+
+     This code is  never executed,  but will automatically show the  effects of
+     any renumbering.   After renumbering,  if you wish to GOSUB  to a routine,
+     you can  easily determine  its new line number from  this list rather than
+
+Expanding Lister                     - 10 -          Computerenergy Corporation
+                                             CHAPTER 7: PROGRAMMING SUGGESTIONS
+
+
+     searching through pages of code.  
+
+     Note: the  use  of GOSUBs  in the  library is recommended rather than  the
+     shorter GOTO  as the Expanding Lister will insert a blank line after every
+     GOTO and  the library will not be as compact.  The word REM instead of the
+     shorter " ' " is used as otherwise the Remark will be shifted to the right
+     of the page and be more difficult to read.  
+
+
+7.3  FOR ... NEXT Case structure
+
+     Dr. Willard A.  Brown writes about a nifty method of adding some structure
+     to  Basic  programs in  the September  issue of Personal Computer Age  (p.
+     51-52  Vol 1.6  -  not  a  bad  magazine, by  the  way).  Essentially, his
+     recommendation  is  an implementation  of SELECT  ...   CASE using FOR ...
+     NEXT.  We've  tried it,  it works and when combined  with loop indentation
+     provides a good visual structure.  Our variation (changes DO to CASEn%) of
+     his recommendation: 
+
+               FOR CASE1% (truth statement) TO -1
+                    statement
+                    statement
+                    NEXT CASE1%
+
+     Quoting from Dr.  Brown: "First a few words about truth statements for the
+     beginners among you.   In IBM BASIC, a true  statement takes on a value of
+     -1, while false statements are indicated with a 0." 
+
+     "Here are a couple of simple examples of truth statements: 
+
+               (Age>25) = -1 
+
+               if age is 30.  If age age is 24, 
+
+               (Age>25) = 0 
+
+     "The FOR-NEXT construct  executes until the index counter (CASE1%, in this
+     case) is greater  than the final value.  If  the truth statement is false,
+     its already greater than the final value, and so the code section won't be
+     executed.  If  the  truth  statement  is  true, the  code  section will be
+     executed once.  For  more information on this, see  pages 3-22 and 4-88 in
+     the BASIC manual.  For nested blocks of statements, be sure to use CASE2 ,
+     CASE3 , etc.  to eliminate ambiguity." 
+
+     That is the heart  of his suggestion, but you  might want to read the full
+     article.   Be  aware that  although maintainability is improved, execution
+     speed may slow, especially with the interpreter - the usual quality versus
+     speed tradeoff.  (Yes, we used it in the Lister.) 
+
+7.4  Other Coding Recommendations for Lister Limitations
+
+     1. Keep REMark statements to under 65 characters unless condensed print is
+        being  used.   If you  need more  room, use another remark on  the next
+        line.  
+
+
+Expanding Lister                     - 11 -          Computerenergy Corporation
+                                             CHAPTER 7: PROGRAMMING SUGGESTIONS
+
+
+     2. Always use  correct and  complete syntax.  Ex.  Do not  use PRINT "text
+        (c/r) without a final quotation mark even though it works.  
+
+     3. Use  only  a  single  NEXT per  FOR  or  a  single  WEND per  WHILE  as
+        indentation  results  will  be incorrect.   The Basic Compiler requires
+        this approach.  
+
+     4. Try not to  use capital FOR, NEXT, WHILE,  WEND surrounded by blanks in
+        literals as they will be treated as keywords.  
+
+        We will  continue  to work  to remove  as many of these limitations  as
+        possible.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Expanding Lister                     - 12 -          Computerenergy Corporation
+                                    CHAPTER 8
+
+                                OTHER INFORMATION
+
+8.1  Distribution Disk Contents
+
+
+          File Name       Description
+          ------------    --------------------------------------
+
+          EXPLIST.EXE     Fully compiled Lister
+          EXPLISTR.EXE    Compiled for Compiler's Run Time Module
+          EXPLIST.DOC     Documentation
+          EXPOPT          Options File
+          EXPMAIL.EXE     Maillist/Donation Assistance
+          EXPCOPY.BAT     Copies Distribution Disk
+
+
+8.2  System Requirements
+
+     Expanding Lister requires an IBM PC with 64K, DOS 1.1, and at least 1 disk
+     drive (2 disks highly recommended for development machines).  
+
+
+8.3  Disclaimer
+
+     All Computerenergy computer programs  are distributed on an "as  is" basis
+     without warranty.  
+
+     Computerenergy Corporation and/or any of its program authors shall have no
+     liability or responsibility to customer or any other person or entity with
+     respect to  any liability,  loss or damage caused or  alleged to be caused
+     directly  or  indirectly   by  programs  distributed  in  any   manner  by
+     Computerenergy Corporation,  including but not limited to any interruption
+     of  service,  loss of  business or  anticipatory  profits or consequential
+     damages resulting from the use or operation of such computer programs.  
+
+     Note: Good  data  processing  procedure dictates  that the  user  test the
+     program, run  and test sample sets of data, and run the system in parallel
+     with the  system previously in use for a period of time adequate to insure
+     that results of operation of the computer program are satisfactory.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Expanding Lister                     - 13 -          Computerenergy Corporation
+                                    CHAPTER 9
+
+                     SUGGESTIONS, FEEDBACK, AND BUG REPORTS
+
+     If you  can  spare  the  time,  we  would  appreciate  your  feedback  and
+     suggestions to  help us to improve the Lister.  As an added inducement, we
+     will  also send  a free  Lister (corrected) to the first  person reporting
+     each bug.   Immediate family  members of Computerenergy employees are  NOT
+     eligible.  Valid bugs do not include obvious architectual limitations such
+     as 52 indentation levels falling off the page, etc.  If possible, each bug
+     reported  should include  a short-as-possible  printout  of the before and
+     after  expansion  situation  with  explanatory  notes.   Our  unprejudiced
+     judging panel  will make  "Bug Awards" when the spirit  moves them and, of
+     course, their decisions are final.  
+
+     We are also  aware of  some esthetic errors when operating  with the color
+     video interface.  Those still remaining should be corrected soon, but we'd
+     still like to hear about any you find.  
+
+     Please address  correspondence  to  the address  on the  title  page.  (If
+     you've lost  your title page, just send us a note and we'll send you a new
+     one.) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Expanding Lister                     - 14 -          Computerenergy Corporation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Expanding Lister     
+```
+{% endraw %}
 
 ## PRINT.BAS
 
+{% raw %}
 ```bas
 10 'PERSONAL COMPUTER AGE PRINTER UTILITY
 20 '
@@ -419,9 +1460,11 @@ machines:
 1640 'CLEAN UP
 1650 LPRINT CHR$(FORM.FEED):LPRINT CHR$(18);:CLOSE #1:SYSTEM
 ```
+{% endraw %}
 
 ## PRINTNEC.BAS
 
+{% raw %}
 ```bas
 10 'PERSONAL COMPUTER AGE PRINTER UTILITY
 20 '
@@ -591,6 +1634,7 @@ machines:
 1660 'CLEAN UP
 1670 LPRINT CHR$(FORM.FEED):LPRINT CHR$(27);CHR$(78):CLOSE #1:SYSTEM
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -35,6 +35,45 @@ machines:
     ACTIVE LIFE with only a keyboard, a mouse is highly recommended.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2022.TXT
+
+{% raw %}
+```
+Disk No: 2022                                                           
+Disk Title: Active Life for MS-DOS disk 2of2 (2021)                     
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: Active Life for MS-DOS                                   
+Author Version: 1.2                                                     
+Author Registration: $89.00                                             
+Special Requirements: Hard drive and a mouse is recommended.            
+                                                                        
+Think a computer is too much hassle to replace your DayTimer?  Or maybe 
+your current appointment calendar doesn't have the strength you need?   
+ACTIVE LIFE is an extremely powerful system for planning, managing, and 
+tracking one's active business and personal life that takes advantage of
+your mouse (though a mouse is not required).                            
+                                                                        
+The flexible schedules manage workflow effectively and all types of     
+recurring activities need be entered just once.  Plus, the ACTIVE LIFE  
+Notebook provides an indexed text/graphics database manager featuring   
+telephone auto-dial. ACTIVE LIFE also includes pop-up calendars, alarms,
+and week-at-a-glance.  Printed schedules provide reference and notation.
+                                                                        
+This DOS version uses a look-alike windows format.  While you can  use  
+ACTIVE LIFE with only a keyboard, a mouse is highly recommended.        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2022
 

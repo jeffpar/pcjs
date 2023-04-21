@@ -43,6 +43,82 @@ machines:
     and sophisticated case function.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1284.TXT
+
+{% raw %}
+```
+Disk No: 1284
+Program Title:  POWER SHEETS version 2.25E (Disk 1 of 2)
+PC-SIG version: 1
+
+PC Magazine calls POWER SHEETS "the most powerful, pure spreadsheet on
+the market" and labels it "easy to use."  Corporations such as Ford,
+AMOCO and First Chicago are using it to develop sophisticated turnkey
+applications beyond the capabilities of other spreadsheets.
+
+POWER SHEETS offers three-dimensional data presentations with the
+ability to rotate the data cube to view slices in other orientations.  A
+special language gives POWER SHEETS programmability.  Pop-up menus guide
+users through all functions.
+
+Other spreadsheets operate on ranges; POWER SHEETS goes further, using
+lists involving a combination of ranges, cell references, or formulae.
+Another feature allows it to base the bounds of a range on the values of
+other cells, and provides for true date and time math.  All functions
+are fully recursive and can be nested to any depth.  The upshot is the
+availability of 16 million cells.
+
+POWER SHEETS reads and writes DIF files either row-wise or column-wise.
+It reads and writes ASCII files either non-delimited or delimited with
+any choice of delimiters.  Its rich function library includes trig and
+logarithmic functions, statistical and Boolean functions, yes-no-maybe
+logic, and sophisticated case function.
+
+Usage:   Spreadsheet.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $19.95 (Note: one-years consultation requires
+another $10.00.)
+
+File Descriptions:
+
+PSLDTAB       Data file.
+PSLPTAB       Data file.
+PVA           Computes present value of annuity.
+FVA           Computes future value of annuity.
+FV            Computes future value.
+NPV           Computes net present value.
+EF            Computes effective interest rate.
+PVB           Computes present value of a bond.
+PV            Computes present values.
+LP            Compute loan payment.
+NP            Compute number of payments.
+PA            Compute payments for annuity due.
+LR            Linear regression.
+ITERATE       Compare cells.
+IRR           Compute internal rate of return.
+AMORT         Compute amortization.
+EDITEX        Text editor.
+CD            Directory change example.
+PS       COM  Main Program.
+???????? TAB  Print table (10 files).
+???????? CIM  Overlay (13 files).
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1284
 

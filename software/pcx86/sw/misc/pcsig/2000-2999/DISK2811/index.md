@@ -14,6 +14,36 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2811.TXT
+
+{% raw %}
+```
+Disk No: 2811                                                           
+Disk Title: *DAYO Simple POS                                            
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: DAYO Simple POS                                          
+Author Version: 3.0                                                     
+Author Registration: $25.00                                             
+Special Requirements: 520K RAM, hard drive, DOS 3.3, & PC-SIG #2402-2403
+                                                                        
+DAYO SIMPLE POS is a modified version of DAYO POS that was created to   
+exclude the option of selecting a customer. This program is used on Cash
+accounts only, for example in a grocery store-type environment where no 
+customer name is required. Requires the same configurations found in    
+DAYO POS.                                                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2811
 

@@ -44,8 +44,61 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #21, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  PCMAN   .EXE         CRC = 7F 26
+
+--> FILE:  JOYSTICK.EXE         CRC = B2 D3
+
+--> FILE:  PACGIRLA.EXE         CRC = 52 B4
+
+--> FILE:  JOYSTICK.DOC         CRC = DD 8E
+
+--> FILE:  PCHEERS .BAS         CRC = 6C 3C
+
+--> FILE:  PCMANHI .FIL         CRC = 3F ED
+
+ ---------------------> SUM OF CRCS = 0E 64
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## JOYSTICK.DOC
+
+{% raw %}
+```
+If you want to use a joystic with PCMAN, run JOYSTICK first.
+JOYSTICK will create a file that PCMAN looks for to decide
+whether or not to accept joystick input.
+
+```
+{% endraw %}
+
 ## PCHEERS.BAS
 
+{% raw %}
 ```bas
 4  WIDTH 80
 5  ON ERROR GOTO 9500 : PLAY "P64"
@@ -294,6 +347,7 @@ machines:
 9510 PRINT "This program requires ADVANCED BASIC; please reload using BASICA."
 9520 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

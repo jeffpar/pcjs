@@ -14,6 +14,46 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2783.TXT
+
+{% raw %}
+```
+Disk No: 2783
+Disk Title: Doing Time
+PC-SIG Version: S1
+
+Program Title: Doing Time
+Author Version: 1.02B
+Author Registration: $50.00+
+Special Requirements: 640K RAM, DOS 3.0+, and hard drive recommended.
+
+DOING TIME is a timekeeping and billing program that generates
+professional bills. Although it can be used by any company that is
+service-oriented, it is especially designed for companies whose
+employees bill by time worked (it was written for a law firm). DOING
+TIME maintains, among other things, the amounts billed, hours worked,
+and amounts due for each employee, each client, each case or project,
+and the company as a whole, for the current billing period and for the
+year. It also maintains up to 60 billing periods of history that are
+instantly available, from which bills can be reprinted.
+
+Geared toward the more experienced computer user, documentation is
+limited, though not really needed to any extent as most options are
+fairly straightforward. DOING time could very well be the solution for
+service-oriented companies that have not had any luck yet with other
+software programs.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2783
 

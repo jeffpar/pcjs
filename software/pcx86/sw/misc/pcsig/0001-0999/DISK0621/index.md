@@ -35,8 +35,4914 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILE0621.TXT
+
+{% raw %}
+```
+Disk No:  621                                                           
+Disk Title: RBBS-PC 3 of 5 (212,334,622,2092)            
+PC-SIG Version: S8.3                                                    
+                                                                        
+Program Title: RBBS-PC                                                  
+Author Version: 17.3                                                    
+Author Registration: $35.00.                                            
+Special Requirements: A hard drive and modem.                           
+                                                                        
+The RBBS is the bulletin board system of choice for many IBM PC         
+bulletin boards. It is a large system on four disks and                 
+supports the PC-SIG LIBRARY ON CD ROM.                                  
+                                                                        
+RBBS-PC's internal structure continued to become significantly more     
+modularized and structured.  Major enhancements included a File         
+Management System for directories, additional file exchange protocols,  
+support for managing subscriptions, the ability to run as a local       
+application on a network, configurable command letters, the ability to  
+use any field or to define a new field to identify callers, the ability 
+to individuate callers having the same ID, multiple uploads on a single 
+command line, new A)nswer and V)erbose ARC list commands, and context   
+sensitive help. Source code is included.                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## 10-NET.ASM
+
+{% raw %}
+```
+CSEG     SEGMENT BYTE PUBLIC 'CODE'
+         ASSUME  CS:CSEG,DS:CSEG,ES:CSEG,SS:CSEG
+         PUBLIC  LPLK10
+         PUBLIC  LOK10
+         PUBLIC  UNLOK10
+LOOPLOCK EQU     11H               ; 3COM LOCK WITH DELAY
+LOCK     EQU     12H               ; 3COM LOCK WITH RETURN
+UNLOCK   EQU     13H               ; 3COM UNLOCK
+REQUEST  DB      ?                 ; TYPE OF REQUEST
+DRIVE    DB      ?                 ; INPUT DRIVE NUMBER
+DELAY    DW      ?                 ; DELAY TIME
+ENET     DW      0                 ; DUMMY ETHERNET ADDRESS
+LENLOK   DW      ?                 ; LENGTH OF LOCK NAME
+POINTER  DW      ?                 ; POINTER TO LOCK NAME
+LOCKNAME DB      31 DUP(?)         ; INPUT LOCK NAME
+         DB      0                 ; TERMINATOR
+LPLK10   PROC    FAR
+         MOV     CS:REQUEST,LOOPLOCK
+         MOV     CS:DELAY,300      ; WAIT 5 MINUTES FOR LOCK
+         JMP     PROCESS
+LPLK10   ENDP
+LOK10    PROC    FAR
+         MOV     CS:REQUEST,LOCK
+         MOV     CS:DELAY,10       ; WAIT 10 SECONDS FOR LOCK
+         JMP     PROCESS
+LOK10    ENDP
+UNLOK10  PROC    FAR
+         MOV     CS:REQUEST,UNLOCK
+         MOV     CS:DELAY,0
+PROCESS:
+         PUSH    BP                ; SAVE BP
+         MOV     BP,SP             ; SAVE SP INTO BP FOR PARM ADDRESSING
+         PUSH    DS                ; SAVE BASIC'S DATA SEGMENT
+         PUSH    ES                ; SAVE BASIC'S EXTRA SEGMENT
+         MOV     BX,[BP+8]         ; GET ADDRESS OF STRING DESCRIPTOR
+         MOV     DX,[BX+2]         ; GET ADDRESS OF STRING
+         MOV     CS:POINTER,DX     ; SAVE POINTER TO STRING
+         MOV     CX,[BX]           ; GET LENGTH OF STRING
+         MOV     CS:LENLOK,CX      ; SAVE LENGTH OF THE STRING
+         MOV     BX,[BP+10]        ; GET ADDRESS OF DRIVE NUMBER
+         MOV     AL,[BX]           ; GET LOW ORDER BYTE OF DRIVE ADDRESS
+         INC     AX                ; ADJUST DRIVE NUMBER
+         MOV     CS:DRIVE,AL       ; SAVE THE DRIVE NUMBER
+         PUSH    CS                ; MOV CS TO ES VIA STACK
+         POP     ES                ; TARGET IS IN OUR CSEG
+         MOV     SI,DX             ; OFFSET OF BASIC'S STRING
+         MOV     DI,OFFSET LOCKNAME; OFFSET OF WORK AREA
+         CLD                       ; START FROM THE BOTTOM
+         REP     MOVSB             ; COPY BASIC'S STRING TO OUR WORK AREA
+         PUSH    CS                ; MOV CS TO DS VIA STACK
+         POP     DS                ; OUR CSEG SEGMENT INTO DS
+         MOV     BX,OFFSET LOCKNAME+2 ; POINT TO NEW NAME
+         MOV     SI,OFFSET ENET    ; POINT TO DUMMY ETHERNET ADDRESS
+         MOV     AL,DRIVE          ; GET DRIVE FOR LOCK
+         MOV     AH,REQUEST        ; RETRIEVE LOCK REQUEST TYPE
+         MOV     DX,DELAY          ; 3COM DELAY TIME
+         INT     60H               ; CALL 3COM LOCK MANAGER
+         POP     ES                ; GET BACK BASIC'S EXTRA SEGMENT
+         POP     DS                ; GET BACK BASIC'S DATA SEGMENT
+         MOV     DI,[BP+6]         ; GET ADDRESS OF RESULT VARIABLE
+         MOV     [DI],AL           ; STORE RETURN CODE FROM LOCK MANAGER
+         POP     BP
+         RET     6
+UNLOK10  ENDP
+CSEG     ENDS
+         END
+```
+{% endraw %}
+
+## ANSI17.ASM
+
+{% raw %}
+```
+; ANSI1-7ASM  Revised 11/28/88 Garry G. Kraemer
+;
+;   A problem existed with version 1-6 when the sysop exited to DOS from
+;   CHAT and returned, Linefeeds would not be displayed on the CRT.
+;   The text would overwrite on the same line.  After several hours of
+;   intense debugging, I have placed a few lines of code into the .ASM
+;   file that will add a LineFeed (LF or CHR$(10)) to STRNG$ if it
+;   does not end with one.  I assume that if I find a CR and am NOT at
+;   the end of the string, a LF follows!!
+;
+;   Changed lines reflect GGK in the right column
+;
+;   Garry G. Kraemer    520 El Portal   Merced, CA
+;   WINTONS LOCAL RBBS 9758 N SHAFFER RD WINTON, CA 95388
+;   2400/1200/300 24hrs 400 days a year (209) 358-6154
+;
+; ANSI1-6ASM  Revised 10/28/87 Jon Martin fix boundary bug
+; ANSI1-5ASM  Revised 8/24/85 Dave Terry for QuickBasic Compiler
+; ANSI1-4ASM  Revised 8/23/85 Dave Staehlin
+
+ANSI_PRNT SEGMENT PUBLIC 'CODE'         ;By  David W. Terry
+          ASSUME CS:ANSI_PRNT           ;    3036 So. Putnam Ct.
+          PUBLIC ANSI                   ;    West Valley City, UT 84120
+
+;                      Screen scroll mods by David C. Staehlin
+;                                            5430 Candle Glow NE
+;                                            Albuquerque, NM 87111
+;
+;                                       Data (505) 821-7379 24 Hrs, 2400 Baud
+STRG_LEN          DW 0                  ;CHANGED TO LENGTH OF STRING PASSED
+VID_PAGE          DB 0                  ;Active video page
+;
+;
+ANSI      PROC    FAR
+          PUSH    BP
+          MOV     BP,SP
+;
+          MOV     SI,10[BP]         ;GET STRING DESCRIPTOR
+          MOV     BL,[SI+ 2]        ;REARRANGE LOW/HIGH BYTES
+          MOV     BH,[SI+ 3]        ;NOW BX HOLDS THE ADDRESS OF THE STRING
+          MOV     AX,[SI]           ;GET STRING LENGTH
+          ADD     AX,BX             ;ADD INITIAL OFFSET (BX) TO LENGTH
+          MOV     STRG_LEN,AX       ;STORE OFFSET PLUS LENGTH
+;
+          PUSH    BX                ;SAVE BX
+          MOV     AH,15             ;Get current video state
+          INT     10H               ;DO INTERRUPT
+          MOV     VID_PAGE,BH       ;Save it
+          POP     BX                ;RESTORE BX
+;
+          MOV     AH,02             ;SET UP FOR FUNCTION CALL 02H
+LOOP:
+          MOV     DL,[BX]           ;SET DL TO CHARACTER TO PRINT
+          PUSH    DX                ;Save the character in AX 'till we check..
+          CALL    WHERE_ARE_WE      ; where the cursor is.......
+          CMP     DH,17H            ;Row 24?
+          JL      NOPE              ; Jump if less......
+          CMP     DX,174FH          ;Row 24 column 79 ?
+          JZ     NEXT1              ;YES, JUMP TO NEXT 1
+          CMP     DH,18H            ;Row 25?
+          JZ      NOPE              ;Don't scroll line 25
+;         DEC     BX                ; Else backup one character
+;         JMP     SCROLL2           ; And go scroll the screen
+;
+; program never executes thru NEXT2!!  Trust ME!                            GGK
+;
+NEXT2:    POP     DX                ;And restore the stack to where it was
+          CMP     DL,0AH            ;Do we have a line feed?
+          JZ      SCROLL            ; Yup - scroll this sucker!
+          CMP     DL,0DH            ;  How about a carriage return?
+          JNZ     NOPE1             ;  Nope - just go display it.......
+          INC     BX                ;  Yup - see if next char is a line feed
+          MOV     DX,[BX]
+          CMP     DL,0AH            ;  Well, is it?
+          JZ      SCROLL            ;  It sure is - let's go scroll
+          DEC     BX                ;  Oops - just a carriage return
+          JMP     SCROLL            ;  But let's go scroll it anyway
+;
+NEXT1:    POP     DX                ; save DX
+          INT     21H               ; print char using interrupt
+          CALL SCROLLIT
+          JMP     EXIT1
+;
+NOPE:     POP     DX
+NOPE1:    INT     21H               ;Else just display it
+SKIPIT:   INC     BX                ; point to next char
+          CMP     DL,0DH            ; WAS LAST CHAR A CR?                   GGK
+          JNZ     NOTCR             ; NO, jump to not CR                    GGK
+          CMP     BX, STRG_LEN      ; AT END OF STRING?                     GGK
+          JB      LOOP              ; NO, CONTINUE - NEXT MUST BE A LF!!    GGK
+          MOV     DL,0AH            ; ELSE AT END OF STRING SO WE ADD A LF! GGK
+          INT     21H               ; DO INTERRUPT AND DISPLAY IT!          GGK
+          JMP     EXIT1             ; AND EXIT                              GGK
+;                                                                           GGK
+;                                                                           GGK
+NOTCR:    CMP     BX,STRG_LEN       ; Test 'AT END OF STRING' ?             GGK
+          JB      LOOP              ; NO, LOOP UNTIL ALL CHARS PROCESSED
+;
+EXIT1:    MOV     AH,03             ;SET UP FOR ROM-BIOS CALL (03H)
+          MOV     BH,VID_PAGE       ;TO READ THE CURRENT CURSOR POSITION
+          INT     10H               ;  DH = ROW   DL = COLUMN
+          INC     DH                ;ADD 1 TO ROW (BECAUSE TOP OF SCREEN = 0)
+          INC     DL                ;ADD 1 TO COL (BECAUSE POS 1 = 0)
+;
+          MOV     SI,[BP]+ 8
+          MOV     [SI],DH           ;PASS BACK ROW COORDINATE
+          MOV     SI,[BP]+ 6
+          MOV     [SI],DL           ;PASS BACK COLUMN COORDINATE
+;
+          POP     BP
+          RET     6
+ANSI      ENDP
+
+Where_Are_We:                       ;Get the current cursor position
+          PUSH    AX                ;Save the registers
+          PUSH    BX
+          PUSH    CX
+          MOV     AH,03             ;SET UP FOR ROM-BIOS CALL (03H)
+          MOV     BH,VID_PAGE       ;TO READ THE CURRENT CURSOR POSITION
+          INT     10H               ;  DH = ROW   DL = COLUMN
+          POP     CX                ;Restore the registers
+          POP     BX
+          POP     AX
+          RET                        ;And go back from wence we came
+;
+SCROLL2:  POP     DX                ;Put the stack like it was
+SCROLL:   CALL    SCROLLIT          ;Scroll the screen
+          JMP     SKIPIT
+;
+SCROLLIT: PUSH    AX                ;Save the registers that will be affected
+          PUSH    BX
+          PUSH    CX
+          PUSH    DX
+          PUSH    BP
+          MOV     AH,2              ;Now set cursor position to 24,0
+          MOV     DX,1700H          ;so we can get the proper character
+          MOV     BH,VID_PAGE       ;attribute
+          INT     10H
+          MOV     AH,8              ;Get the current character attribute
+          MOV     BH,VID_PAGE
+          INT     10H
+          MOV     BH,AH             ;Transfer the attribute to BH for next call
+          MOV     AH,6              ;Otherwise scroll 24 lines
+          MOV     AL,1              ; Only blank line 24
+          MOV     CX,0000H          ; Begin scroll at position 0,0
+          MOV     DX,174FH          ; End scroll at Line 24, Col 79
+          INT     10H               ; And do it.......
+          MOV     AH,2              ;Now set cursor position to 24,0
+          MOV     DX,1700H
+          MOV     BH,VID_PAGE
+          INT     10H
+          POP     BP
+          POP     DX                ;Restore the stack like it was
+          POP     CX
+          POP     BX
+          POP     AX
+          RET
+;
+ANSI_PRNT ENDS
+          END
+```
+{% endraw %}
+
+## ANSI17.DOC
+
+{% raw %}
+```
+
+From the Computer of:                             25 NOV 1988
+
+Garry G. Kraemer
+520 El Portal
+Merced, CA  95340
+
+
+ATTENTION RBBS USERS!
+
+Here is a modification that will solve the case of the missing Line Feed.
+
+Typically when a SYSOP is in the CHAT mode, drops to DOS, and returns to
+the CHAT mode, he no longer has Line Feeds displayed on the CRT.  This
+happens because of a problem in ANSI.ASM.  I have added a few lines of
+code to add a line feed to a carriage return when the variable STRNG$
+ends with a carriage return or a single carriage return is passed
+to the ANSI subroutine.  If a line feed is passed along with a cariage
+return the modification will not add a line feed.
+
+
+I have provided a Basic program that will demonstrate the problem.
+
+1.  Compile GARRY.BAS.
+2.  Link GARRY.OBJ and the old ANSI.OBJ (ANSI1-6.ASM).  Call it GARRY1.EXE
+3.  Link GARRY.OBJ and the new ANSI.OBJ (ANSI1-7.ASM).  Call it GARRY2.EXE
+
+Now run GARRY1 and watch what happens.
+Then run GARRY2 to see the results of the added line feed.
+
+
+I hope this modification helps!
+
+Any messages can be passed through Doyle Warkentin's BBS 
+WINTONS LOCAL RBBS
+2400/1200/300 24hrs 400 days a year
+(209) 358-6154.
+9758 N SHAFFER RD
+WINTON, CA 95388
+
+The following BASIC code will test the new changes to ANSI.ASM.
+GARRY.BAS should be included in this .ARC.
+
+
+'   This program written to test the ANSI driver used by RBBS.
+'
+'   It will confirm that my modification to ANSI.ASM will in fact
+'   add a line feed to a single carriage return when sent to the
+'   ANSI subroutine.
+'
+'   Written by:
+'
+'                     GARRY G. KRAEMER
+'                     520 El Portal
+'                     Merced, CA  95340
+'
+'
+'   Donated as a FIX for the Famous RBBS.
+'
+LOCATE 25, 1: PRINT "Simulated RBBS STATUS line 25.      25    25     25    25    25 "
+LOCATE 1, 1                                             ' position cursor to top of screen
+CR$ = CHR$(13)                                          ' define carriage return
+CRLF$ = CHR$(13) + CHR$(10)                             ' define carriage return and line feed
+'
+FOR X = 1 TO 35                                         ' set up a loop
+'
+STRNG$ = "A STRING ENDING WITH A CARRIAGE RETURN " + STR$(X) + CR$
+CALL ANSI(STRNG$, C.L%, C.C%)                           ' CALL ANSI subroutine
+'
+' BUILD A DELAY LOOP TO WATCH WHAT HAPPENS.
+'              
+                FOR J = 1 TO 3000: NEXT J
+'
+'
+NEXT X                                                  ' print next line
+'
+'
+'
+'    BUILD A TEST ROUTINE TO SEE WHAT CR AND LF TOGETHER DO.
+'
+CLS
+LOCATE 25, 1: PRINT "Simulated RBBS STATUS line 25.      25    25     25    25    25 "
+LOCATE 1, 1                                             ' position cursor to top of screen
+
+FOR X = 1 TO 35                                         ' set up a loop
+
+STRNG$ = "A STRING ENDING WITH A CARRIAGE RETURN AND LINE FEED " + STR$(X) + CRLF$
+CALL ANSI(STRNG$, C.L%, C.C%)
+'
+' BUILD A DELAY LOOP TO WATCH WHAT HAPPENS.
+'            
+                FOR J = 1 TO 3000: NEXT J
+'
+'
+NEXT X
+'
+
+END
+
+
+```
+{% endraw %}
+
+## BASNOV.ASM
+
+{% raw %}
+```
+;---------------
+; ██████████████████████████████████████████████
+; █████████████ BASNOV 0.01 ████████████████████
+; ██████████████████████████████████████████████
+; █████████████ ASSEMBLE WITH MASM 5.1 █████████
+; ██████████████████████████████████████████████
+;---------------
+		.model	medium,basic
+;---------------
+		.data
+
+FileName	db	128 dup (0)		; buffer for filename
+;---------------
+		.code
+;---------------
+; CheckNovell(Err%)
+;
+; return values for Err% :
+;
+;    0	if Netware installed
+;   -1	if Netware not installed
+;
+CheckNovell	proc	Err:word
+
+		mov	ax,0B600h		; get station number
+		int	21h
+		or	al,al			; Netware loaded ?
+		jz	Error
+
+		xor	ax,ax			; return  0 if no error
+		jmp	short Exit
+
+Error:		mov	ax,-1			; return -1 if error
+
+Exit:		mov	bx,[Err]		; set result to Err%
+		mov	[bx],ax
+		ret
+
+CheckNovell	endp
+;---------------
+;  SetSharedAttr(FileName$, Err%)
+;
+;  return values for Err% :
+;
+;     0     no error reported by DOS
+;    -1        error reported by DOS
+;
+SetSharedAttr	proc	Filename:ptr, Err:word
+
+		mov	bx,[Filename]		; ptr to string descriptor
+		mov	si,[bx+2]		; fetch string address
+		mov	cx,[bx] 		; length of string
+
+		mov	ax,@data		; ES:DI points to local buffer
+		mov	es,ax
+		mov	di,offset FileName
+		mov	dx,di			; copy offset into DX
+		rep	movsb			; copy string contents
+		mov	al,0			; make string ASCIIZ
+		stosb
+
+		push	ds			; save DS temp
+
+		mov	ax,es			; make DS equal to ES
+		mov	ds,ax
+
+		mov	ax,04300h		; CHMOD, get attribute
+		int	21h
+		jc	Error			; check for error
+
+		or	cx,0080h		; set shared bit
+
+		mov	ax,04301h		; CHMOD, set attribute
+		int	21h
+		jc	Error			; check for error
+
+		xor	ax,ax			; set Err% to  0
+		jmp	short Exit
+
+Error:		mov	ax,-1			; set Err% to -1
+
+Exit:		pop	ds			; restore DS
+		mov	bx,[Err]		; offset of Err%
+		mov	[bx],ax 		; store result
+		ret				; return
+
+SetSharedAttr	endp
+;---------------
+		end
+```
+{% endraw %}
+
+## BDRIVEC2.ASM
+
+{% raw %}
+```
+TITLE  DRIVEIO
+;
+; --- CORVUS/IBM DRIVE INTERFACE UNIT FOR MICROSOFT ---
+;	      PASCAL AND BASIC COMPILERS
+;	  CONST ][ VERSION FOR DOS 1.10 & 2.0
+;
+;		VERSION 1.41  BY  BRK
+;	   (MICROSOFT ASSEMBLER VERSION )
+;
+;
+;   NOTE: THIS INTERFACE UNIT NOW SUPPORTS BOTH PASCAL AND BASIC
+;	  COMPILERS BUT IT MUST BE RE-ASSEMBLED WITH THE APPROPRIATE
+;	  SETTING OF THE  "LTYPE"  EQUATE TO DO THIS FOR EACH LANGUAGE.
+;
+;
+;
+;	THIS UNIT IMPLEMENTS  9  PROCEDURES:
+;
+;	INITIO
+;	BIOPTR		- CONST. ][
+;	SETSRVR		- CONST. ][
+;	FINDSRVR	- CONST. ][
+;	NETCMD		- CONST. ][
+;	CDRECV = DRVRECV
+;	CDSEND = DRVSEND
+;
+;	THE CALLING PROCEDURE IN PASCAL IS :
+;
+;		CDSEND (VAR st : longstring )
+;
+;	THE FIRST TWO BYTES OF THE STRING ARE THE LENGTH
+;	OF THE STRING TO BE SENT OR THE LENGTH OF THE 
+;	STRING RECEIVED.
+;
+;		function INITIO	: INTEGER
+;
+;	THE FUNCTION RETURNS A VALUE TO INDICATE THE STATUS OF
+;	THE INITIALIZATION OPERATION.  A VALUE OF ZERO INDICATES
+;	THAT THE INITIALIZATION WAS SUCCESSFUL.  A NON-ZERO VALUE
+;	INDICATES THE I/O WAS NOT SETUP AND THE CALLING PROGRAM
+;	SHOULD NOT ATTEMPT TO USE THE CORVUS DRIVERS.
+;
+;		function BIOPTR	: INTEGER
+;
+;	THE FUNCTION RETURNS A 16 BIT POINTER TO THE "CORTAB"
+;	BIOS TABLE IN THE CORVUS "BIOS" DRIVERS.  THIS ROUTINE
+;	SHOULD NOT BE EXECUTED BEFORE A SUCCESSFUL USE OF THE
+;	"INITIO" ROUTINE (ABOVE).  NOTE:  THE RETURNED VALUE IS
+;	RELATIVE TO "SEGMENT" ZERO, AND A RETURNED VALUE OF ZERO
+;	INDICATES THAT THE "CORTAB" TABLE COULD NOT BE FOUND.
+;
+;		function SETSRVR ( srvr : integer): INTEGER
+;
+;	THE FUNCTION RETURNS THE "BOOT SERVER" NETWORK ADDRESS.
+;	IF THE INPUT PARAMETER IS LESS THAN  255 ( BUT NOT NEGATIVE ),
+;	IT WILL BE TAKEN AS A RESET OF THE DEFAULT SERVER # WHEN
+;	USING THE  SEND & RECIEVE  ROUTINES.  IF IT IS GREATER THAN 255
+;	OR NEGATIVE, NO CHANGE OF THE DEFAULT SERVER # WILL BE MADE.
+;	NOTE: THE DEFAULT SERVER # IS AUTOMATICALLY SET TO THE
+;	BOOT SERVER # WHEN THE  "INITIO" FUNCTION IS EXECUTED.
+;	
+;		function FINDSRVR : INTEGER
+;
+;	THE FUNCTION RETURNS THE NETWORK ADDRESS OF A VALID DISK SERVER.
+;	IF THE RETURNED VALUE IS GREATER THAN 63 OR NEGATIVE, THE COMMAND
+;	FAILED TO FIND A SERVER ( THE FLAT CABLE CARDS WOULD DO THIS ).
+;
+;		function CARDID : INTEGER
+;
+;	THE FUNCTION RETURNS THE CORVUS INTERFACE CARD TYPE ( 0 - OMNINET,
+;	1 - FLAT CABLE ).
+;
+;		function NETCMD ( VAR inp, VAR out: longstring) : INTEGER
+;
+;	THE FUNCTION IS USED TO SEND/RECIEVE DATA TO A NETWORK SERVER.
+;	STRING  inp  SPECIFIES THE COMMAND TO SEND TO THE SERVER,
+;	AND STRING  out  IS WHERE ANY RETURNED DATA WILL BE PLACED
+;	( THE STRING LENGTH OF  out  WILL NOT BE CHANGED BY THIS
+;	OPERATION UNLESS THE COMMAND FAILED- IN WHICH CASE THE LENGTH
+;	WILL BE SET TO ZERO).  THE VALUE OF THE FUNCTION WILL BE
+;	RETURNED AS  ZERO  IF THE OPERATION WAS SUCCESSFUL, AND
+;	NON-ZERO IF IT FAILED.
+;	NOTE: THE SERVER # USED WILL BE THE "BOOT SERVER" # UNLESS
+;	THE DEFAULT IS CHANGED BY THE  "SETSRVR" CMD.
+;
+;
+;
+;
+;	THE CALLING PROCEDURE BASIC IS :
+;
+;		CALL CDSEND (B$ )
+;
+;	THE FIRST TWO BYTES OF THE STRING ARE THE LENGTH
+;	OF THE STRING TO BE SENT OR THE LENGTH OF THE 
+;	STRING RECEIVED ( I.E. LEFT$(B$,2) ).
+;
+;		CALL INITIO (A%)
+;
+;	THE FUNCTION RETURNS A VALUE TO INDICATE THE STATUS OF
+;	THE INITIALIZATION OPERATION.  A VALUE OF ZERO INDICATES
+;	THAT THE INITIALIZATION WAS SUCCESSFUL.  A NON-ZERO VALUE
+;	INDICATES THE I/O WAS NOT SETUP AND THE CALLING PROGRAM
+;	SHOULD NOT ATTEMPT TO USE THE CORVUS DRIVERS.
+;
+;		CALL BIOPTR (A%)
+;
+;	THE FUNCTION RETURNS A 16 BIT POINTER TO THE "CORTAB"
+;	BIOS TABLE IN THE CORVUS "BIOS" DRIVERS.  THIS ROUTINE
+;	SHOULD NOT BE EXECUTED BEFORE A SUCCESSFUL USE OF THE
+;	"INITIO" ROUTINE (ABOVE).  NOTE:  THE RETURNED VALUE IS
+;	RELATIVE TO "SEGMENT" ZERO, AND A RETURNED VALUE OF ZERO
+;	INDICATES THAT THE "CORTAB" TABLE COULD NOT BE FOUND.
+;
+;		CALL SETSRVR (A%)     here  A% is used for input and output
+;
+;	THE FUNCTION RETURNS THE "BOOT SERVER" NETWORK ADDRESS.
+;	IF THE INPUT PARAMETER IS LESS THAN  255 ( BUT NOT NEGATIVE ),
+;	IT WILL BE TAKEN AS A RESET OF THE DEFAULT SERVER # WHEN
+;	USING THE  SEND & RECIEVE  ROUTINES.  IF IT IS GREATER THAN 255
+;	OR NEGATIVE, NO CHANGE OF THE DEFAULT SERVER # WILL BE MADE.
+;	NOTE: THE DEFAULT SERVER # IS AUTOMATICALLY SET TO THE
+;	BOOT SERVER # WHEN THE  "INITIO" FUNCTION IS EXECUTED.
+;	
+;		CALL FINDSRVR (A%)
+;
+;	THE FUNCTION RETURNS THE NETWORK ADDRESS OF A VALID DISK SERVER.
+;	IF THE RETURNED VALUE IS GREATER THAN 63 OR NEGATIVE, THE COMMAND
+;	FAILED TO FIND A SERVER ( THE FLAT CABLE CARDS WOULD DO THIS ).
+;
+;		CALL CARDID (A%)
+;
+;	THE FUNCTION RETURNS THE CORVUS INTERFACE CARD TYPE ( 0 - OMNINET,
+;	1 - FLAT CABLE ).
+;
+;		CALL NETCMD ( A$,B$,C%)
+;
+;	THE FUNCTION IS USED TO SEND/RECIEVE DATA TO A NETWORK SERVER.
+;	STRING  A$  SPECIFIES THE COMMAND TO SEND TO THE SERVER,
+;	AND STRING  B$  IS WHERE ANY RETURNED DATA WILL BE PLACED
+;	( THE STRING LENGTH OF  out  WILL NOT BE CHANGED BY THIS
+;	OPERATION UNLESS THE COMMAND FAILED- IN WHICH CASE THE LENGTH
+;	WILL BE SET TO ZERO).  THE VALUE OF THE FUNCTION WILL BE
+;	RETURNED ( IN C% ) AS  ZERO  IF THE OPERATION WAS SUCCESSFUL, AND
+;	NON-ZERO IF IT FAILED.
+;	NOTE: THE SERVER # USED WILL BE THE "BOOT SERVER" # UNLESS
+;	THE DEFAULT IS CHANGED BY THE  "SETSRVR" CMD.
+;
+;=============================================================
+;			REVISION HISTORY
+;
+; FIRST VERSION : 10-05-82  BY BRK
+; 		: 11-01-82  improved turn around delay for mirror
+;		: 02-16-83  CONST. ][ version
+;		: 05-16-83  added support for Basic
+;		: 07-06-83  fixed bug in FINDSRVR routine
+; V1.40		: 07-29-83  updated for DOS 2.0 
+; V1.41		: 08-04-83  set timeout to zero to avoid ROM bug
+;
+;=============================================================
+;
+TRUE	EQU	0FFFFH
+FALSE	EQU	0
+;
+PASCAL	EQU	1	; LANGUAGE TYPE DESCRIPTOR
+BASIC	EQU	2	; LANGUAGE TYPE DESCRIPTOR
+;
+LTYPE	EQU	PASCAL	; SET TO LANGUAGE TYPE TO BE USED WITH
+INTDVR	EQU	FALSE	; SET TO FALSE TO DISABLE INTERNAL FLAT CABLE DRIVER
+;
+;
+; ----- CORVUS EQUATES -----
+;
+DATA	EQU	2EEH	; DISC I/O PORT #
+STAT	EQU	2EFH	; DISC STATUS PORT
+DRDY	EQU	1	; MASK FOR DRIVE READY BIT
+DIFAC	EQU	2	; MASK FOR BUS DIRECTION BIT
+ROMSEG	EQU	0DF00H	; LOCATION OF CORVUS ROM
+BIOSSEG	EQU	60H	; STD IBM BIOS SEGMENT ADDRESS
+ABTCTR	EQU	0A00H	; VALUE TO SET TIMEOUT AND # OF RETRYS
+;			;   v1.41  timeouts=0
+;
+FCALL	EQU	9AH	; OPCODE FOR FAR CALL
+FJMP	EQU	0EAH	; OPCODE FOR FAR JUMP
+;
+; --- MSDOS EQUATES ( V2.0 ) ---
+;
+VERCMD	EQU	30H	; BDOS COMMAND TO GET VERSION #
+HOPEN	EQU	3DH	; BDOS COMMAND TO "OPEN" A FILE HANDLE
+HCLOSE	EQU	3EH	; BDOS COMMAND TO "CLOSE" A FILE HANDLE
+HREAD	EQU	3FH	; BDOS COMMAND TO "READ" FROM A FILE
+HWRITE	EQU	40H	; BDOS COMMAND TO "WRITE" TO A FILE
+;
+PGSEG	SEGMENT 'CODE'
+	ASSUME	CS:PGSEG
+;
+;
+	IF	LTYPE EQ PASCAL
+	DB	'CORVUS/IBM PC CONST. ][ PASCAL DRIVER AS OF 08-04-83'
+	ENDIF
+;
+	IF	LTYPE EQ BASIC
+	DB	'CORVUS/IBM PC CONST. ][ BASIC  DRIVER AS OF 08-04-83'
+	ENDIF
+;
+; --- COPY OF "ROM" FAR JUMP TABLE ---
+;
+ROMTAB	PROC	NEAR
+	DB	FJMP
+	DW	0,ROMSEG	; FAR JUMP TO COLD BOOT ROM ENTRY
+	DB	FJMP
+	DW	3,ROMSEG	; FAR JUMP TO WARM START ROM ENTRY
+	DB	FJMP
+	DW	6,ROMSEG	; FAR JUMP TO I/O ROM ENTRY
+	DB	FJMP
+	DW	9,ROMSEG	; FAR JUMP TO DUMMY "IRET" ENTRY
+LENTAB	EQU	offset $-offset ROMTAB	; LENGTH OF TABLE
+ROMTAB	ENDP
+;
+; --- COPY OF CORVUS TABLE IDENTIER ---
+;
+CORTAB	DB	'CORTAb'	; VERSION FOR CONST. ][
+;
+; --- COPY OF UTILITY "HOOK" DRIVER NAME ---
+;
+UTILPTR	DB	'UTILHOOK',0
+;
+;
+; --- THESE DATA POINTERS MUST BE KEPT IN THE SAME RELATIVE ORDER
+;
+SNDPTR	DW	0		; BUFFER TO SAVE POINTER TO 'SEND' STRING
+SNDSEG	DW	0		; BUFFER TO SAVE 'SEND' STRING SEGMENT #
+;
+CORVEC	DW	0,0		; BUF TO SAVE DOUBLE WORD POINTER TO "CORTAB"
+;
+; --- MISC DATA AND BUFFERS ----
+;
+CORPTR	DW	0		; BUFFER FOR "CORTAB" POINTER
+;				;  INITIALIZE INITIALLY TO ZERO
+CRDTYPE	DB	1		; BUFFER TO SAVE "CARD TYPE" BYTE
+BOOTSRVR DB	0FFH		; BUFFER FOR "BOOT SERVER"
+SRVR	DB	0FFH		; BUFFER FOR "DEFAULT SERVER"
+;
+;
+; === INITIALIZE CORVUS I/O DRIVERS ===
+;
+;	THIS ROUTINE MUST BE CALLED
+;	ONCE TO SETUP THE DRIVERS BEFORE
+;	THEY ARE USED. IF THE ROUTINE DOES
+;	ANYTHING THAT CAN ONLY BE DONE ONCE,
+;	IT MUST DISABLE THIS SECTION SO THAT
+;	AND ACCIDENTAL SECOND CALL WILL NOT
+;	LOCK UP THE HARDWARE.
+;
+	PUBLIC INITIO
+;
+INITIO	PROC	FAR
+	PUSH	DS
+	PUSH	ES
+	PUSH	CS
+	POP	ES		; SET ES=CS
+	CLD
+;
+	MOV	AH,VERCMD	; MSDOS VERSION CHECK COMMAND
+	INT	21H		; GET VERSION # OF DOS
+	OR	AL,AL		; IS IT V 1.1 OR 1.0?
+	JZ	IV11		; YES, SO TRY FINDING "CORTAb"
+;
+	PUSH	CS
+	POP	DS		; SET TO LOCAL SEGMENT FOR TESTING
+;
+	MOV	AH,HOPEN	; SET MSDOS 2.X, OPEN HANDLE COMMAND
+	MOV	AL,2		; OPEN FOR R/W
+	MOV	DX,offset UTILPTR ; POINT TO "HOOK" DRIVER NAME
+	INT	21H		; DO IT
+	JC	IV12		; IF ERROR, TRY FOR IBM ROM
+;
+	MOV	BX,AX		; GET "HANDLE" IN (BX)
+	MOV	AH,HWRITE	; GET WRITE CMD
+	MOV	CX,2		; SET TO WRITE 2 CHARS
+	MOV	DX,offset UTILPTR ; USE NAME FOR SOURCE OF CHARACTERS
+	INT	21H		; THIS SHOULD RESET "POINTER" IN DRIVER
+;
+	MOV	AH,HREAD	; SET READ CMD
+	MOV	CX,4		; SET TO READ  DOUBLE WORD
+	MOV	DX,offset CORVEC ; POINT TO DESTINATION OF READ
+	INT	21H		; DO IT
+;
+	MOV	AH,HCLOSE	; GET CLOSE CMD
+	INT	21H		; CLOSE HANDLE
+;
+	LDS	BX,dword ptr CORVEC ; GET POSSIBLE POINTER TO "CORTAb"
+	CALL	BIOT1		; TEST FOR "CORTAb"
+	JNC	OKEXIT		; IF OK, EXIT
+	JMP	IV12		; OTHERWISE PROCEED
+;
+IV11:	MOV	AX,BIOSSEG	; SET TO TEST STD IBM SEGMENT ADD
+	CALL	BIOTST		; TEST BIOS AND LINK TO IT IF OK
+	JNC	OKEXIT		; IF OK, EXIT
+	MOV	AX,BIOSSEG-20H	; TRY MICROSOFT STD LOCATION (40H)
+	CALL	BIOTST
+	JNC	OKEXIT		; IF OK, EXIT
+;
+IV12:	MOV	AX,ROMSEG
+	MOV	DS,AX		; SET DS=ROM SEGMENT
+	XOR	AX,AX		; GET A ZERO
+	MOV	BX,AX		; POINT TO START OF ROM
+	MOV	DI,AX		; INIT CHECKSUM COUNTER
+	MOV	CX,4		; CHECK FOR  4  JUMPS AT START OF ROM
+;
+CKROM:	MOV	AL,[BX]		; READ POSSIBLE OPCODE BYTE
+	ADD	DI,AX		; SUM THE TEST BYTES
+	ADD	BX,3		; POINT TO POSSIBLE NEXT OPCODE
+	LOOP	CKROM		; SUM THE OPCODES
+;
+	CMP	DI,4*(0E9H)	; SHOULD BE 4  0E9H  OPCODES (JMP)
+;
+	 IF	INTDVR
+	JNZ	OKEXIT		; NO, SO LEAVE DEFAULT DRIVERS
+	 ENDIF
+;
+	 IF	NOT INTDVR
+	JNZ	BDEXIT		; NO, SO LEAVE WITH ERROR CONDITION
+	 ENDIF
+;
+	PUSH	CS
+	POP	DS		; DS=ES=CS
+;
+	MOV	SI,offset ROMTAB	; POINT TO SOURCE (ROM CALL TABLE COPY)
+	CALL	CPYTAB		; COPY TABLES
+;
+	DB	FCALL
+	DW	3,ROMSEG	; FAR CALL TO ROM "INIT" ROUTINE
+;
+	MOV	AH,0		; COMMAND FOR CARD TYPE IDENTIFY
+;
+	DB	FCALL
+	DW	6,ROMSEG	; FAR CALL TO DRIVE I/O ROM ENTRY
+;
+	MOV	CS:CRDTYPE,AL	; SAVE CARD TYPE []
+;
+	OR	AL,AL		; TEST FOR OMNINET
+	JNZ	OKEXIT		; IF FLAT, EXIT
+	MOV	AH,4		; SET TO FIND SERVER ADDRESS
+	MOV	BX,ABTCTR	; SET ABORT TIME AND RETRYS
+;
+	DB	FCALL
+	DW	6,ROMSEG	; FAR CALL TO DRIVE I/O ROM ENTRY
+;
+	MOV	CS:BOOTSRVR,AH	; SAVE SERVER #
+	MOV	CS:SRVR,AH
+	OR	AL,AL		; WAS SERVER # ACTUALLY FOUND
+BDEXIT:	MOV	AX,1		; SET FOR ERROR CONDITION
+	JNZ	INEXIT		; NO, SO SHOW ERROR AND EXIT
+;
+OKEXIT:	MOV	AX,0	; RETURN A ZERO
+INEXIT:	POP	ES
+	POP	DS
+;
+	IF	LTYPE EQ PASCAL
+	RET
+	ENDIF
+;
+	IF	LTYPE EQ BASIC
+	PUSH	BP
+	MOV	BP,SP
+	MOV	BX,6 [BP]	; GET POINTER TO DATA "INTEGER"
+	MOV	[BX],AX		; RETURN ERROR CONDITION BYTE
+	POP	BP
+	RET	2
+	ENDIF
+;
+INITIO	ENDP
+;
+; --- COPY ADDRESS INFORMATION FROM SOURCE POINTED TO BY DS:SI ---
+;
+CPYTAB	PROC	NEAR
+	MOV	DI,offset LNKTAB	; POINT TO ROUTINE LINKAGE TABLE
+	MOV	CX,LENTAB		; SET TO COPY
+	REP	MOVSB			; DO COPY
+	RET
+CPYTAB	ENDP
+;
+; --- TEST FOR "CORVUS" CONST ][ BIOS ---
+;
+BIOTST	PROC	NEAR
+	MOV	DS,AX		; SET DATA SEGMENT TO THAT OF "BIOS"
+	MOV	BX,1		; POINT TO "INIT" ADDRESS FIELD OF JUMP
+	MOV	BX,[BX]		; GET THIS ADDRESS IN  BX
+	ADD	BX,1		; OFFSET FOR INSTRUCTION SIZE
+	MOV	BX,[BX]		; GET POSSIBLE POINTER TO "CORTAb" STRING
+;
+BIOT1	PROC	NEAR
+	MOV	SI,BX		; SAVE IT
+	MOV	DI,offset CORTAB	; POINT TO LOCAL COPY OF STRING
+	MOV	CX,6		; LENGTH OF STRING
+	REPZ	CMPSB		; COMPARE STRINGS
+	STC			; SET CARRY TO INDICATE POSSIBLE MISMATCH
+	JNZ	BIOE		; EXIT IF MISMATCH
+;
+	MOV	AX,DS		; GET "BIOS" SEGMENT
+	MOV	CL,4		; SET TO MULTIPLY BY 16
+	SHL	AX,CL		; CONVERT SEGMENT # TO ADDRESS
+	ADD	AX,BX		; FIND "CORTAb" ADDRESS RELATIVE TO SEG. 0
+	MOV	CS:CORPTR,AX	; SAVE FOR POSSIBLE USE []
+;
+	MOV	AL,35 [BX]	; GET "BOOT SERVER" # FROM BIOS
+	MOV	CS:BOOTSRVR,AL	; SAVE IT []
+	MOV	CS:SRVR,AL	; INIT "DEFAULT SERVER" AS "BOOT SERVER" []
+;
+	ADD	BX,23		; OFFSET TO ROM FUNCTION TABLE POINTER
+	MOV	SI,[BX]		; GET IT
+	CALL	CPYTAB		; COPY TABLE INTO THIS DRIVER
+	MOV	AH,0		; ID COMMAND
+	CALL	far ptr CRVIO	; DO IT
+	MOV	CS:CRDTYPE,AL	; SAVE CARD TYPE
+	CLC			; CLEAR CARRY TO INDICATE SUCCESS
+BIOE:	RET			
+;
+BIOT1	ENDP
+BIOTST	ENDP
+;
+;
+; === RETURN POINTER TO "CORTAb" IN CORVUS BIOS ===
+;
+	PUBLIC	BIOPTR
+;
+BIOPTR	PROC	FAR
+	MOV	AX,CS:CORPTR	; GET POINTER []
+;
+	IF	LTYPE EQ PASCAL
+	RET
+	ENDIF
+;
+	IF	LTYPE EQ BASIC
+	PUSH	BP
+	MOV	BP,SP
+	MOV	BX,6 [BP]	; GET POINTER TO DATA "INTEGER"
+	MOV	[BX],AX		; RETURN POINTER
+	POP	BP
+	RET	2
+	ENDIF
+;
+BIOPTR	ENDP
+;
+; ==== SET SERVER # AND READ BOOT SERVER # ====
+;
+	PUBLIC	SETSRVR
+;
+SETSRVR	PROC	FAR
+	PUSH	BP		; SAVE FRAME POINTER
+	MOV	BP,SP		; SET NEW ONE
+;
+	IF	LTYPE EQ PASCAL
+	MOV	CX,6 [BP]	; GET PASSED VALUE
+	ENDIF
+;
+	IF	LTYPE EQ BASIC
+	MOV	BX,6 [BP]	; GET POINTER TO VALUE
+	MOV	CX,[BX]		; GET ITS VALUE
+	ENDIF
+;
+	OR	CH,CH		; IS IT TOO BIG?
+	JNZ	SETS1		; YES, SO DO NOT CHANGE PRESENT VALUE
+	MOV	CS:SRVR,CL	; NO, SO SET NEW DEFAULT SERVER #
+SETS1:	XOR	AX,AX		; GET A ZERO
+	MOV	AL,CS:BOOTSRVR	; GET "BOOT SERVER" # AS RETURN VALUE
+;
+	IF	LTYPE EQ BASIC
+	MOV	[BX],AX		; SET RETURNED VALUE
+	ENDIF
+;
+	POP	BP		; RESTORE FRAME
+	RET	2
+SETSRVR	ENDP
+;
+; === FIND A VALID NETWORK SERVER ADDRESS ===
+;
+	PUBLIC	FINDSRVR
+;
+FINDSRVR PROC	FAR
+	MOV	AH,4		; FIND SERVER COMMAND ( 1.31 bug fix )
+	MOV	BX,ABTCTR	; SET MAX RETRY COUNT AND ABORT TIME
+	CALL	far ptr CRVIO	; CALL I/O DRIVER
+	XCHG	AL,AH		; GET SERVER # IN LSB
+;
+	IF	LTYPE EQ PASCAL
+	RET
+	ENDIF
+;
+	IF	LTYPE EQ BASIC
+	PUSH	BP
+	MOV	BP,SP
+	MOV	BX,6 [BP]	; GET POINTER TO DATA "INTEGER"
+	MOV	[BX],AX		; RETURN SERVER #
+	POP	BP
+	RET	2
+	ENDIF
+;
+FINDSRVR ENDP
+;
+; === IDENTIFY CORVUS I/O CARD TYPE ===
+;
+	PUBLIC	CARDID
+;
+CARDID	PROC	FAR
+	MOV	AH,0		; ZERO MSB
+	MOV	AL,CS:CRDTYPE	; GET CARD IDENTIFIER
+;
+	IF	LTYPE EQ PASCAL
+	RET
+	ENDIF
+;
+	IF	LTYPE EQ BASIC
+	PUSH	BP
+	MOV	BP,SP
+	MOV	BX,6 [BP]	; GET POINTER TO DATA "INTEGER"
+	MOV	[BX],AX		; RETURN CARD TYPE
+	POP	BP
+	RET	2
+	ENDIF
+;
+CARDID	ENDP
+;
+; === SEND/RECEIVE A COMMAND TO A NETWORK SERVER ===
+;
+	PUBLIC	NETCMD
+;
+NETCMD	PROC	FAR
+	PUSH	BP		; SAVE FRAME POINTER
+	MOV	BP,SP		; SET NEW ONE
+;
+	IF	LTYPE EQ PASCAL
+	MOV	SI,6 [BP]	; GET ADDRESS OF INPUT STRING
+	MOV	DI,8 [BP]	; GET ADDRESS OF OUTPUT STRING
+	ENDIF
+;
+	IF	LTYPE EQ BASIC
+	MOV	BX,6 [BP]	; GET ADDRESS OF STRING DESCRIPTOR
+	MOV	SI,[BX]		; GET ADDRESS OF INPUT STRING
+	MOV	BX,8 [BP]	; GET ADDRESS OF STRING DESCRIPTOR
+	MOV	DI,[BX]		; GET ADDRESS OF OUTPUT STRING
+	ENDIF
+;
+	PUSH	DS
+	POP	ES		; SET ES=DS (SAVE SEGMENT)
+;
+	MOV	CX,[SI]		; LOOK AT LENGTH
+	MOV	AL,CL		; SAVE FOR RETURN STATUS
+	JCXZ	NETE		; IF ZERO, SET RET LENGTH TO ZERO AND RET
+;
+	PUSH	DI
+	INC	SI
+	INC	SI		; POINT TO SEND DATA ( DS:SI )
+;
+	INC	DI
+	INC	DI		; POINT TO PLACE TO SAVE RETURNED DATA ( ES:DI)
+;
+	MOV	DX,530		; SET MAX # OF RETURNED BYTES
+;
+	MOV	AH,3		; SET FOR  SERVER CMD
+	MOV	AL,CS:SRVR	; SET DISK SERVER #
+	MOV	BX,ABTCTR	; SET ABORT TIME AND # OF RETRYS
+	CALL	far ptr CRVIO	; DO DISK I/O
+;
+	POP	DI		; GET POINTER BACK TO LENGTH
+	MOV	CX,[DI]		; GET LENGTH PREVIOUSLY SET
+NETE:	MOV	[DI],CX		; SET LENGTH OF RETURNED STRING
+	MOV	AH,0		; CLEAR MSB OF RETURNED VALUE
+;
+	IF	LTYPE EQ PASCAL
+	POP	BP		; GET FRAME POINTER BACK
+	RET	4		; CLEAR RETURN STACK
+	ENDIF
+;
+	IF	LTYPE EQ BASIC
+	MOV	BX,10 [BP]	; GET POINTER TO DATA "INTEGER"
+	MOV	[BX],AX		; RETURN ERROR CONDITION BYTE
+	POP	BP
+	RET	6
+	ENDIF
+;
+NETCMD	ENDP
+;
+; === RECEIVE A STRING OF BYTES FROM THE DRIVE ===
+;
+	PUBLIC	CDRECV, DRVRECV
+;
+CDRECV	PROC	FAR
+DRVRECV:
+	PUSH	BP		; SAVE FRAME POINTER
+	MOV	BP,SP		; SET NEW ONE
+;
+	IF	LTYPE EQ PASCAL
+	MOV	DI,6 [BP]	; GET ADDRESS OF STRING TO SAVE DATA IN
+	ENDIF
+;
+	IF	LTYPE EQ BASIC
+	MOV	BX,6 [BP]	; GET ADDRESS OF STRING DESCRIPTOR
+	INC	BX
+	INC	BX		; POINT TO STRING POINTER
+	MOV	DI,[BX]		; GET ADDRESS OF STRING TO SAVE DATA IN
+	ENDIF
+;
+	PUSH	DS
+	POP	ES		; SET ES=DS (SAVE SEGMENT)
+;
+	PUSH	DI
+	PUSH	DS
+;
+	LDS	SI,CS:dword ptr SNDPTR ; GET POINTER TO SOURCE STRING
+	MOV	CX,[SI]		; LOOK AT LENGTH
+	MOV	AL,CL		; SAVE FOR RETURN STATUS
+	JCXZ	RLPE		; IF ZERO, SET RET LENGTH TO ZERO AND RET
+;
+	INC	SI
+	INC	SI		; POINT TO SEND DATA ( DS:SI )
+;
+	INC	DI
+	INC	DI
+	INC	DI		; POINT TO PLACE TO SAVE RETURNED DATA ( ES:DI)
+;
+	MOV	DX,530		; SET MAX # OF RETURNED BYTES
+;
+	MOV	AH,1		; SET FOR "BCI" LIKE COMMAND
+	MOV	AL,CS:SRVR	; SET DISK SERVER #
+	MOV	BX,ABTCTR	; SET ABORT TIME AND # OF RETRYS
+	CALL	far ptr CRVIO	; DO DISK I/O
+;
+RLPE:	POP	DS
+	POP	DI		; GET POINTER BACK TO LENGTH
+	MOV	[DI],CX		; SET LENGTH OF RETURNED STRING
+	MOV	2 [DI],AL	; SAVE RETURN STATUS
+	POP	BP		; GET FRAME POINTER BACK
+	RET	2		; CLEAR RETURN STACK
+CDRECV	ENDP
+;
+; === SEND STRING OF BYTES TO DRIVE ===
+;
+;	THIS CONSTELLATION VERSION
+;	JUST SAVES TWO POINTERS TO 
+;	THE DATA STRING TO SEND.  THE
+;	CDRECV  ROUTINE ACTUALLY SENDS
+;	THE DATA AND RECEIVES THE
+;	RETURN STATUS
+;
+	PUBLIC	CDSEND, DRVSEND
+;
+CDSEND	PROC	FAR
+DRVSEND:
+	PUSH	BP		; SAVE FRAME POINTER
+	MOV	BP,SP		; SET NEW ONE
+;
+	IF	LTYPE EQ PASCAL
+	MOV	AX,6 [BP]	; GET ADDRESS OF STRING TO SEND
+	ENDIF
+;
+	IF	LTYPE EQ BASIC
+	MOV	BX,6 [BP]	; GET ADDRESS OF STRING DESCRIPTOR
+	INC	BX
+	INC	BX		; POINT TO STRING POINTER
+	MOV	AX,[BX]		; GET ADDRESS OF STRING TO SAVE DATA IN
+	ENDIF
+;
+	MOV	CS:SNDPTR,AX	; SAVE IT []
+;
+	MOV	AX,DS		; GET DATA SEGMENT
+	MOV	CS:SNDSEG,AX	; SAVE IT []
+;
+	POP	BP		; GET FRAME POINTER BACK
+	RET	2		; CLEAR RETURN STACK
+CDSEND	ENDP
+;
+;
+;
+;
+; ============ FLAT CABLE R/W ROUTINES ==============
+;
+;  THESE ROUTINES ARE ESSENTIALLY THE SAME AS THE FLAT CABLE
+;  DRIVERS IN THE "ROM".  THEY ARE REPRODUCED HERE SO THAT
+;  SYSTEMS WITH FLAT CABLE INTERFACES NEED NOT HAVE A "ROM"
+;  TO WORK WITH  CONSTELLATION ][  SOFTWARE.
+;
+; --- BUFFERS USED BY "ROM" DRIVER ROUTINES ---
+;
+CLICKS	DB	0		; BUFFER FOR SAVING # OF CLOCK TICKS
+STOPTM	DW	0		; BUFFER FOR SAVING STOP TIME
+RMCMD	DB	0		; BUFFER FOR SAVING PASSED "ROM" CMD
+BLKLEN	DW	512		; BUFFER FOR SAVING # OF BYTES TO XFER
+CMDLEN	DW	4		; BUFFER FOR SAVING LENGTH OF CMD
+RTNCODE DB	0		; BUFFER FOR SAVING DISK RETURN CODE
+;
+; --- SET TIMER ---
+;
+STIME	PROC	NEAR
+	XOR	AH,AH		; READ TIME OF DAY CLOCK
+	INT	1AH
+	JMP	STIME1
+;
+; --- CHECK FOR TIMOUT ---
+;
+CKTIME:	CMP	CS:CLICKS,0	; WAS A WAIT REQUESTED? []
+	CLC
+	JZ	CKRET		; NO, SO RETURN WITH CARRY CLEAR
+	XOR	AH,AH		; TIME OF DAY CALL
+	INT	1AH
+	OR	AL,AL		; HAS CLOCK WRAPPED AROUND TO ZERO?
+	JZ	CKT1		; NO
+;
+;  IF CLOCK HAS PASSED 24 HOURS, RECALCULATE STOP TIME
+;
+STIME1:	MOV	AL,CS:CLICKS	; GET # OF CLOCK TICKS OF DELAY []
+	XOR	AH,AH
+	MOV	CL,4		; SET TO MULTIPLY BY 16
+	SHL	AX,CL		; DO IT BY SHIFTING
+	ADD	DX,AX
+	MOV	CS:STOPTM,DX	; SAVE STOP TIME []
+CHKOK:	CLC			; CLEAR CARRY ( TIME CHECK IS OK )
+	RET
+;
+CKT1:	CMP	DX,CS:STOPTM	; TIMEOUT? []
+	JB	CHKOK
+;
+	STC			; SET CARRY IF TIMEOUT
+CKRET:	RET
+STIME	ENDP
+;
+; ---- MAIN DRIVER ENTRY POINT ---
+;
+DRVIO	PROC	FAR
+	CLD			; SET FOR "INCREMENT"
+	MOV	CS:RMCMD,AH	; SAVE COMMAND []
+	CMP	AH,1		; IS IT A "BCI" COMMAND?
+	JZ	RW15		; YES, SO DO IT
+	CMP	AH,5		; IS IT A "WRITE" COMMAND?
+	JZ	RW15		; YES, SO DO IT
+	CMP	AH,0		; IS IT AN "IDENTIFY" COMMAND
+	JZ	RW00		; YES, SO DO IT
+	MOV	AL,0FFH		; IF ANY OTHER, INDICATE "ABORT" OR ERROR
+	MOV	CX,0		
+	RET			; LONG RET
+;
+RW00:	MOV	AL,1		; INDICATE FLAT CABLE
+	RET			; LONG RET
+;
+;
+RW15:	PUSH	DS		; SAVE REGISTERS THAT MAY BE CHANGED
+	PUSH	SI
+	PUSH	DI
+	PUSH	BX
+	PUSH	DX
+;
+	MOV	CS:CLICKS,BL	; SAVE # OF TIMER CLICKS  []
+	MOV	CS:BLKLEN,DX	; SAVE BLOCK LENGTH []
+	MOV	CS:CMDLEN,CX	; SAVE CMD LENGTH []
+	CALL	ROMIO		; DO DISK I/O
+	POP	DX
+	POP	BX
+	POP	DI
+	POP	SI
+	POP	DS
+	MOV	AL,CS:RTNCODE	; GET RETURN CODE []
+;
+DMYLRET	LABEL	FAR
+	RET			; LONG RET
+;
+DMYIRET	LABEL	FAR
+	IRET			; DUMMY  "IRET"
+;
+DRVIO	ENDP
+;
+ROMIO	PROC	NEAR
+	CALL	STIME		; SETUP TIMER COUNT
+;
+RO1:	MOV	DX,STAT		; POINT TO STATUS PORT
+	CLI			; DISABLE INTERRUPTS FOR TEST
+	IN	AL,DX		; READ DRIVE STATUS BYTE
+	TEST	AL,DRDY		; IS IT READY?
+	JZ	RO2		; YES, SO PROCEED
+	STI			; NO, SO RE-ENABLE INTERRUPTS
+	CALL	CKTIME		; CHECK IF TIMED OUT
+	JNC	RO1		; IF NOT, TRY AGAIN
+ARET:	MOV	CS:RTNCODE,0FFH ; IF TIMED OUT, SET ERROR []
+	MOV	CX,0		; INDICATE NO DATA RETURNED
+	RET
+;
+RO2:	MOV	CX,CS:CMDLEN	; GET CMD LENGTH []
+	CALL	SNDBLK		; SEND BLOCK OF DATA TO DRIVE
+	CMP	CS:RMCMD,5	; WAS CMD A "WRITE" CMD? []
+	JNZ	RCVBLK		; NO, SO GO RECEIVE DATA
+;
+	MOV	SI,DI		; YES, POINT TO SECTOR DATA
+	MOV	AX,ES
+	MOV	DS,AX
+	MOV	CX,CS:BLKLEN	; GET LENGTH OF DATA BLOCK []
+	CALL	SNDBLK		; SEND SECTOR DATA
+;
+RCVBLK:	CALL	STIME		; SET TIMER
+;
+	CALL	DELAY1		; DELAY
+;
+RCV1:	CALL	CKTIME		; TIMED OUT YET?
+	JC	ARET		; YES, SO RETURN WITH ERROR
+;
+RCV2:	MOV	DX,STAT		; POINT TO STATUS PORT
+	IN	AL,DX		; READ DRIVE STATUS BYTE
+	TEST	AL,DIFAC	; TEST BUS DIRECTION
+	JNZ	RCV1		; WAIT FOR "HOST TO DRIVE"
+	TEST	AL,DRDY		; TEST IF ALSO READY
+	JNZ	RCV1
+;
+	CALL	DELAY1		; WAIT TO BE SURE
+;
+	IN	AL,DX		; TEST STATUS AGAIN
+	TEST	AL,DIFAC		
+	JNZ	RCV1		; IF FALSE ALARM, TRY AGAIN
+	TEST	AL,DRDY
+	JNZ	RCV1		; IF NOT READY, TRY AGAIN
+;
+	DEC	DX		; POINT TO DATA PORT
+	IN	AL,DX		; GET RETURN CODE
+	INC	DX		; POINT BACK TO STATUS PORT
+;
+	MOV	CX,1		; INDICATE 1 BYTE WAS RETURNED
+	MOV	CS:RTNCODE,AL	; SAVE IT []
+	CMP	CS:RMCMD,5	; WAS CMD A "WRITE" CMD []
+	JZ	RCRET		; YES, SO RETURN
+;
+	MOV	BX,CX		; OTHERWISE SET COUNTER
+	MOV	CX,CS:BLKLEN	; GET LENGTH OF EXPECTED DATA
+;
+RCV3:	IN	AL,DX		; GET STATUS AGAIN
+	TEST	AL,DRDY		; IS DRIVE READY?
+	JNZ	RCV3		; NO, SO WAIT
+	TEST	AL,DIFAC	; ARE WE DONE?
+	JNZ	RCV4		; POSSIBLY, ...
+;
+	DEC	DX		; POINT TO DATA PORT
+	IN	AL,DX		; GET DATA FROM DRIVE
+	INC	DX		; POINT BACK TO STATUS PORT
+;
+	JCXZ	RCVS		; IF DATA NOT WANTED
+	STOSB			; SAVE DATA IN BUFFER
+	DEC	CX		; COUNT DOWN # TO SAVE
+;
+RCVS:	INC	BX		; COUNT UP # RECEIVED
+	JMP	RCV3		; LOOP UNTIL EXIT
+;
+RCV4:	IN	AL,DX		; GET STATUS BYTE
+	TEST	AL,DRDY		; IS DRIVE READY
+	JNZ	RCV3		; NO, SO PREVIOUS RESULT MAY BE FALSE
+	TEST	AL,DIFAC	; IS IT STILL "HOST TO DRIVE"?
+	JZ	RCV3		; NO, SO TRY AGAIN
+;
+	MOV	CX,BX		; GET # OF BYTES RECEIVED
+RCRET:	RET
+;
+DELAY1:	MOV	BL,15		; SET DELAY
+DELAY:	DEC	BL
+	JNZ	DELAY		; LOOP UNTIL DONE
+	RET
+;
+; --- SEND BLOCK OF DATA TO DRIVE ---
+;
+SNDBLK:	MOV	DX,STAT		; POINT TO STATUS PORT
+;
+SND1:	IN	AL,DX		; GET STATUS BYTE
+	TEST	AL,DRDY		; IS DRIVE READY?
+	JNZ	SND1		; NO, SO LOOP
+;
+	DEC	DX		; POINT TO DATA PORT
+	LODSB			; GET DATA FROM MEMORY
+	OUT	DX,AL		; SEND DATA TO DRIVE
+	INC	DX		; POINT BACK TO STATUS PORT
+;
+	STI			; RE-ENABLE INTERRUPTS
+	LOOP	SND1		; CONTINUE UNTIL DONE
+	RET
+;
+ROMIO	ENDP
+;
+;
+; ---- INTERFACE "FAR" CALL TABLE ---
+;	THIS TABLE GETS PATCHED
+;	TO EITHER "BIOS" CALLS OR
+;	"ROM" CALLS IF THE APPROPRIATE
+;	       LINK IS FOUND
+;
+LNKTAB	PROC	NEAR
+	JMP	DMYLRET		;
+	JMP	DMYLRET		;
+;
+CRVIO	LABEL	FAR
+	JMP	DRVIO		; THIS SHOULD BE A FAR CALL
+;
+	JMP	DMYIRET		; THIS SHOULD BE A FAR JUMP
+LNKTAB	ENDP
+;
+; =========================================================
+;
+PGSEG	ENDS
+;
+;
+	END
+```
+{% endraw %}
+
+## GIVEBK31.ASM
+
+{% raw %}
+```
+page 88,132
+Comment ~
+             GIVEBACK (Version 3.1) Description and Source Code
+
+        Kurt Riegel, 3019 North Oakland Street, Arlington, VA 22207
+        ASTRO Bulletin Board, data 202-524-1837, voice 703-522-5427
+
+
+(The description below is cast in terms of using GIVEBACK under DESQview or
+DoubleDos, in conjunction with the bulletin board program RBBS-PC, but the same
+procedure is usable from ANY calling program, for example using CALL GIVEBACK
+in compiled BASIC.)
+
+This small assembly language routine follows information provided in the
+DESQview (DV) 2.01 manual, and in the DoubleDos (DD) 4.0 manual.
+
+The idea is simple, but powerful.  DESQview kindly terminates processing in a
+window if the computer pauses for a standard dos keyboard function, saving the
+rest of the time slice for jobs in other windows.  But in other kinds of loops,
+for example the loop in RBBS bulletin board which watches for the telephone to
+ring, lots of time is wasted, uselessly looking for a phone ring every few
+milliseconds.  Once a second would be quite enough!
+
+By calling this routine from the end of a wasteful loop in a program, DESQview
+will be forced to "give back" the rest of the time in that time slice, that is,
+you will execute the loop only once per time slice rather than many times.
+This greatly speeds up jobs in the other DV windows, without affecting the
+calling program at all.
+
+The most wasteful RBBS task is waiting for the telephone to ring; another is
+waiting for the user to select a command and hit the Return key.  So we CALL
+this procedure at the end of these loops.  The table below summarizes actual
+measurements made with DV on an AST Premium 286 (10 MHz, zero wait state),
+relative to speed on the same machine without DV, running a single job.  DV
+SETUP default performance settings were 9 slices foreground, 3 slices
+background.  This improvement would be larger and MUCH more noticeable on a
+slower machine.
+
+Similarly, DoubleDos normally allocates two thirds of the computing cycles to
+the Visible task, and the remaining third to the Invisible task (plenty for
+the RBBS bulletin board).  The loss of cycles is sometimes noticeable, and this
+reclaims them when not really needed by RBBS.  You can even use this to speed
+up both nodes of RBBS, when one is in the Visible section and the other is in
+the Invisible section (you would probably choose PRIORITY=EQUAL with 2 nodes).
+DD version 4.00 has a special interrupt that allows the programmer to "give
+back" up to 255 time slices of duration 55 milliseconds each.  This procedure
+gives back 6 slices, about a third of a second at the old 4.77 MHz clock rate.
+                        
+The table below summarizes actual speed measurements with and without
+GIVEBACK, running under both DoubleDos and DESQview.  The speedup is
+wonderful, about 65%.  Once you use it, you'll never go back.
+
+                        
+        Non-bbs speed   │  Waiting for Ring  │  Caller On
+        ────────────────┼────────────────────┼──────────────────────
+DV:     Unmodified      │        74%         │    74%              
+        With GIVEBACK   │        98%         │ variable, average 86%   
+        ────────────────┼────────────────────┼──────────────────────
+DD:     Unmodified      │        57%         │    57%              
+        With GIVEBACK   │        94%         │ variable, average 80%   
+        ────────────────┴────────────────────┴──────────────────────
+
+Challenge for multitasking RBBS enthusiasts:  There are additional wasteful
+loops in RBBS--put on your best Sherlock outfit, and go snooping for places to
+CALL GIVEBACK.  Please keep in touch with me on your progress through the
+telephone numbers or address posted at the top of this file.
+
+
+                           ┌─────────────────────┐                          
+                           │     RBBS 16.1       │
+┌──────────────────────────┴─────────────────────┴─────────────────────────┐
+│   Starting with version 16.1, RBBS has the implementation for GIVEBACK   │
+│   already built in.  The original release version omitted one call,      │
+│   the one within the loop waiting for the telephone to ring.  It is      │
+│   repaired by making the small change below in RBBSSUB2.BAS              │
+│                                                                          │
+│  270 . . .                                                               │
+│      call giveback:WEND                                                  │
+│                                                                          │
+│    Then compile the modified RBBSSUB2.BAS, and LINK  RBBSSUB2.OBJ        │
+│    together with  GIVEBK31.OBJ and the rest of the normal RBBS  OBJect   │
+│    files package.                                                        │
+└──────────────────────────────────────────────────────────────────────────┘
+
+
+                                                                            
+                           ┌─────────────────────┐                          
+                           │    RBBS 15.1c       │                          
+┌──────────────────────────┴─────────────────────┴─────────────────────────┐
+│    To implement GIVEBACK, modify RBBSSUB1.BAS by the addition of the     │
+│    lower case letter portion) in 2 lines only:                           │
+│                                                                          │
+│  270 IF RECYCLE.WAIT > 0 THEN _                              ' CPC15-1C  │
+│      IF TI! > INACTIVE.DELAY! THEN _                         ' CPC15-1C  │
+│      SUBROUTINE.PARAMETER = 8 : _                            ' CPC15-1C  │
+│      EXIT SUB                                                ' CPC15-1C  │
+│      call giveback:WEND                                                  │
+│      . . .                                                               │
+│ 1526 Y$ = KEY.PRESSED$                                                   │
+│      IF Y$ <> "" THEN _                                                  │
+│      GOTO 1545                                                           │
+│      call giveback:GOTO 1525                                             │
+│                                                                          │
+│    Then compile the modified RBBSSUB1.BAS, and LINK  RBBSSUB1.OBJ        │
+│    together with  GIVEBK31.OBJ and the rest of the normal RBBS  OBJect   │
+│    files package.                                                        │
+└──────────────────────────────────────────────────────────────────────────┘
+
+                           ┌─────────────────────┐                          
+                           │    RBBS 14.1d       │                          
+┌──────────────────────────┴─────────────────────┴─────────────────────────┐
+│    To implement GIVEBACK, modify RBBS-SUB.BAS version 14.1D (by the      │
+│    addition of the lower case letter portion) in 2 lines only:           │
+│                                                                          │
+│     270  call giveback : WEND                                            │
+│          . . .                                                           │
+│    1526  (actually, three lines after this line number . . .)            │
+│          call giveback : WEND                                            │
+│                                                                          │
+│    Then compile the modified RBBS-SUB.BAS, and LINK  RBBS-SUB.OBJ        │
+│    together with  GIVEBK31.OBJ and the rest of the normal RBBS  OBJect   │
+│    files package.                                                        │
+└──────────────────────────────────────────────────────────────────────────┘
+
+
+
+
+GIVEBACK Version history:
+
+ 1.0    December 1986 was the first version, for RBBS-PC v14.1D and DoubleDos
+        version 4.0
+
+ 1.2    January 2, 1987  Added a second call to giveback in the WHILE..WEND
+        loop which waits for user to enter a command.  DoubleDos only.
+
+ 1.3    May 20, 1987.  Changed to prevent RBBS modified with GIVEBACK from
+        crashing the system when run under naked Dos, that is, without the use
+        of DoubleDos.  Replaced direct INT FEh statement, with indirect AH=EEh,
+        followed by normal Dos function INT 21h.  DD and Dos obligingly work
+        together like this:  DD modifies the INT 21h function tables when it
+        starts so as to recognize EEh, and naked Dos ignores functions like EEh
+        which are unknown to it.  Possible caution--DD is definitely
+        non-standard in making this modification.  This should cause no
+        problem, UNLESS you use yet another non-standard program that also
+        grabs AH=EEh under INT 21h for another purpose (unlikely).
+
+2.0     Jan 1988.  Version is for DESQview 2.01  (works fine in 2.0 too),
+        together with RBBS 15.1c.  It does not supersede GIVEBK13,
+        required for operation under DoubleDos.  Although it duplicates some
+        lines of code found in RBBSDV.ASM, this is a simple, small, and cleanly
+        independent addition.  RBBS, modified to include this revision, will
+        work under naked DOS alone, or under DESQview.  (personal note--I run
+        only a single node, and prefer to drop all the FILELOCK, RBBSDV, and
+        multilink crap and related calls from my personal version of RBBS;
+        shrinks the .EXE file and makes it more reliable)
+
+3.0     Feb 1988.  This version consolidates DoubleDos and DESQview routines
+        into one that works equally well for RBBS running under either
+        multitasker, or under naked DOS.  Calling points are given for both
+        RBBS 14.1d and 15.1c.  My hope is that RBBS version 16.0 will
+        incorporate this into the release version.
+
+3.1     Apr 1988.  Minor upgrade neatens code and also eliminates the former
+        requirement for initializing GIVEBACK by calling GIVEINIT.  It can be
+        initialized explicitly as before; but if the user chooses to call
+        GIVEBACK straight away, then the initialization will be taken care of
+        automatically.
+
+(End of comments here-you do not have to remove these comments to assemble.) ~
+
+
+GIVESEG SEGMENT 'CODE'
+        ASSUME  CS:GIVESEG
+        PUBLIC  GIVEINIT        ;the initialization routine, optional
+        PUBLIC  GIVEBACK	;CALL GIVEBACK to give back time slice
+
+MultiTasker  DB  -1     ; will indicate which multitasker is running, if any
+                        ;-1 means this hasn't yet been called, and
+                        ;    initialization is required using GIVEINIT
+                        ; 0 means no multitasker is present, only naked dos
+                        ; 1 means DESQview is running
+                        ; 2 means DoubleDos is running
+
+GIVEINIT PROC	FAR
+	PUSH	AX	; save this stuff for safety
+        PUSH    BX
+        PUSH    CX
+        PUSH    DX
+        MOV     AX,2B01H                ; DV get version request, result to AX
+        MOV     CX,'DE'                 ; Illegal
+        MOV     DX,'SQ'                 ;        date, on purpose
+        INT     21H                     ; An error indicates DV isn't running
+        CMP     AL,0FFH                 ; Are we in DV?
+        JE      NO_DV                   ; Jump if not
+        MOV     CS:MultiTasker,1  	; 1 will mean DV is present
+        JMP     SHORT InitExit
+NO_DV:				; DV isn't here, maybe DD is-let's check
+	MOV	AH,0E4h		; function E4h tests for presence of DoubleDos
+	INT	21h  		; does nothing at all if DD not present
+	CMP	AL,01  		; 1 indicates DD present, program visible
+	JZ	DDhere
+	CMP	AL,02 		; 2 indicates DD present, program invisible
+	JZ	DDhere
+        JMP     NoMultitsk      ; anything else indicates not present, so quit
+DDhere: MOV	CS:MultiTasker,2	;this value indicates DD present
+        JMP     SHORT InitExit
+NoMultitsk:
+        MOV     CS:MultiTasker,0        ;Neither DV nor DD running
+InitExit:
+        POP     DX                      ;and put it all back
+        POP     CX
+        POP     BX
+	POP	AX
+        RET
+GIVEINIT ENDP
+
+
+API_CALL PROC		; local DV routine that goes on stack, does whatever
+	PUSH	AX	;  call is passed in BX, then goes off stack
+        MOV     AX,101AH
+        INT     15H                     ; OSTACK
+        MOV     AX,BX
+        INT     15H                     ; Parameter
+        MOV     AX,1025H
+        INT     15H                     ; USTACK
+        POP     AX
+        RET
+API_CALL ENDP
+
+
+GIVEBACK PROC FAR       ;Gives up the rest of its time slice when called.
+                        ;GIVEINIT will be invoked automatically the first time
+                        ; that GIVEBACK is called; GIVEINIT can (optionally)
+                        ; be called explicitly to force initialization.
+        CMP     CS:MultiTasker,1        ;let's see what's running here
+        JZ      DVrunning               ;1 means DESQview is running
+        JG      DDrunning               ;2 means DoubleDos is running
+        CMP     CS:MultiTasker,0        ;only naked Dos or uninitialized state
+                                        ;  remain as possibilities
+        JZ      GetOutaHere             ;0 means naked Dos
+        CALL    GIVEINIT                ;last remaining possibility is -1
+        JMP     GIVEBACK                ;after initializing, try this again
+
+GetOutaHere:                            ;nothing else to do, so go back
+        RET
+
+DVrunning:
+        PUSH    BX
+        MOV     BX,1000H                ; DV_PAUSE function call
+        CALL    API_CALL
+        POP     BX
+        JMP     SHORT GetOutaHere
+
+
+DDrunning:
+        push    bp      ;save caller's base pointer register
+        mov     bp,sp   ;setup to address off of base pointer register
+        push    ax      ;just in case this messes up something
+        mov     ax,0EE06h
+
+Comment ~       EEh in AH is special DoubleDos giveback interrupt. 06h in AL is
+six 55ms giveback intervals = 1/3 sec.  ~
+
+        int     21h     ;invokes special DoubleDos giveback interrupt
+        pop     ax      ;puts it back
+	POP	BP      ;restore callers base pointer register
+        JMP     SHORT GetOutaHere
+
+GIVEBACK ENDP
+GIVESEG  ENDS
+         END
+```
+{% endraw %}
+
+## PC-NET.ASM
+
+{% raw %}
+```
+CSEG     SEGMENT BYTE PUBLIC 'CODE'
+         ASSUME  CS:CSEG,DS:CSEG,ES:CSEG,SS:CSEG
+         PUBLIC  LPLKIT
+         PUBLIC  LOKIT
+         PUBLIC  UNLOKIT
+LOOPLOCK EQU     0
+LOCK     EQU     1
+UNLOCK   EQU     2
+REQUEST  DB      ?                 ; TYPE OF REQUEST
+DRIVE    DB      ?                 ; INPUT DRIVE NUMBER
+LENLOK   DW      ?                 ; LENGTH OF LOCK NAME
+POINTER  DW      ?                 ; POINTER TO LOCK NAME
+LOCKNAME DB      64 DUP(?)         ; INPUT LOCK NAME
+NEWNAME  DB      '\'               ; REBUILT LOCK NAME WITH PATH
+CURPATH  EQU     $                 ; CURRENT PATH FOR INPUT DRIVE
+         DB      64 DUP(?)         ; REBUILT LOCK NAME WITH PATH
+LENPATH  EQU     $-CURPATH
+LPLKIT   PROC    FAR
+         MOV     CS:REQUEST,LOOPLOCK
+         JMP     PROCESS
+LPLKIT   ENDP
+LOKIT    PROC    FAR
+         MOV     CS:REQUEST,LOCK
+         JMP     PROCESS
+LOKIT    ENDP
+UNLOKIT  PROC    FAR
+         MOV     CS:REQUEST,UNLOCK
+PROCESS:
+         PUSH    BP                ; SAVE BP
+         MOV     BP,SP             ; SAVE SP INTO BP FOR PARM ADDRESSING
+         PUSH    DS                ; SAVE BASIC'S DATA SEGMENT
+         PUSH    ES                ; SAVE BASIC'S EXTRA SEGMENT
+         MOV     BX,[BP+8]         ; GET ADDRESS OF STRING DESCRIPTOR
+         MOV     DX,[BX+2]         ; GET ADDRESS OF STRING
+         MOV     CS:POINTER,DX     ; SAVE POINTER TO STRING
+         MOV     CX,[BX]           ; GET LENGTH OF STRING
+         MOV     CS:LENLOK,CX      ; SAVE LENGTH OF THE STRING
+         MOV     BX,[BP+10]        ; GET ADDRESS OF DRIVE NUMBER
+         MOV     AL,[BX]           ; GET LOW ORDER BYTE OF DRIVE ADDRESS
+         MOV     CS:DRIVE,AL       ; SAVE THE DRIVE NUMBER
+         PUSH    CS                ; MOV CS TO ES VIA STACK
+         POP     ES                ; TARGET IS IN OUR CSEG
+         MOV     SI,DX             ; OFFSET OF BASIC'S STRING
+         MOV     DI,OFFSET LOCKNAME; OFFSET OF WORK AREA
+         CLD                       ; START FROM THE BOTTOM
+         REP     MOVSB             ; COPY BASIC'S STRING TO OUR WORK AREA
+         PUSH    CS                ; MOV CS TO DS VIA STACK
+         POP     DS                ; OUR CSEG SEGMENT INTO DS
+         MOV     DI,OFFSET CURPATH ; ADDRESS OF AREA TO BLANK
+         MOV     CX,LENPATH        ; LENGTH OF AREA TO BLANK
+         MOV     AL,' '            ; A BLANK (NATURALLY)
+         REP     STOSB             ; BLANK THE AREA OUT
+         MOV     SI,OFFSET CURPATH ; SET UP FOR CURRENT PATH CALL
+         MOV     AH,47H            ; ASK FOR CURRENT PATH
+         MOV     DL,DRIVE          ; REQUEST PATH FOR INDICATED DRIVE
+         INC     DL                ; 1 ORIGIN FOR PATH CALL
+         INT     21H               ; CALL DOS
+         MOV     DI,OFFSET CURPATH ; START SCAN FOR ZERO BYTE AT START OF PATH
+         CMP     BYTE PTR [DI],0   ; SEE IF WE ARE IN THE BASE DIRECTORY
+         JE      ROOT              ; IF [DI]=0 THEN WE ARE IN THE BASE DIR
+         MOV     CX,LENPATH        ; ONLY GO FOR LENGTH OF PATH
+         SUB     AL,AL             ; SCANNING FOR THE 0 BYTE
+         REPNE   SCASB             ; SCAN THE STRING WHILE [DI] <> 00H
+         DEC     DI
+         MOV     BYTE PTR [DI],'\' ; PUT IN THE ENDING '\' BEFORE FILE NAME
+         INC     DI                ; DI NOW POINTS TO THE ENDING 0
+ROOT:
+         MOV     SI,OFFSET LOCKNAME+2 ; START MOVE AFTER THE ':'
+         MOV     CX,LENLOK         ; LENGTH OF STRING
+         DEC     CX                ; MINUS 1
+         DEC     CX                ; MINUS 1
+         REP     MOVSB             ; COPY FILENAME AFTER PATH NAME
+         MOV     DX,OFFSET NEWNAME ; POINT TO NEW NAME
+         MOV     AL,DRIVE          ; GET DRIVE FOR LOCK
+         MOV     AH,REQUEST        ; RETRIEVE LOCK REQUEST TYPE
+         INT     67h               ; CALL LOCK MANAGER
+         POP     ES                ; GET BACK BASIC'S EXTRA SEGMENT
+         POP     DS                ; GET BACK BASIC'S DATA SEGMENT
+         MOV     DI,[BP+6]         ; GET ADDRESS OF RESULT VARIABLE
+         MOV     [DI],AL           ; STORE RETURN CODE FROM LOCK MANAGER
+         POP     BP
+         RET     6
+UNLOKIT  ENDP
+CSEG     ENDS
+         END
+```
+{% endraw %}
+
+## QBARCV6.ASM
+
+{% raw %}
+```
+	page	74,132
+	title	ARCV - Verbose ARC directory listing
+
+;	Special version of ARCV to be called by QB program
+; usage:
+;
+;	CALL ARCV (Workname$,"filename[.PAK]", RETCD%)		     ' CPC151AC
+;
+; notes:
+;	This code originated from ARCV 1.15d - Verbose ARC directory display
+;	written by V.Buerg and was modified to run as a called routine under
+;	Microsoft QuickBasic. It was further modified to allow PAK files by
+;	Robert J. Simoneau.
+;
+;	Change 9/14/86 to dis-allow wildcards
+;	Change 1/1/87 to recognize squash format
+;	Change 2/18/87 to support network usage - - - - Jon Martin   ' CPC151A
+;	Change 1/7/89 to support Pak files -------------Bob Simoneau
+
+;	Change 890320 to support ZIP files	David Kirschbaum, Toad Hall
+;	- Question:  Why do we "have to look for the damned thing" when it
+;	  comes to finding ARC/PAK headers?  All comments are at file ends,
+;	  so the header should be EXACTLY where it should be .. at the end of
+;	  the file's compressed code.  Hacked severely to reflect this,
+;	  and vastly cleaning up the code.
+;	- Replaced old SDIR Binary to Ascii conversion with a hacked version
+;	  from JMODEM .. about 10 times faster, plus offers integer conversion
+;	  as well as long integers.
+;v1.3	- FAAR RBBS reports this sucker runs once and then just returns
+;	  a usage message (in the output file).
+;	  Trying to find out why.  Found it .. dumb mistake, not clearing
+;	  variables between runs.
+;	- Adding true EOF testing for file pointer bumps.
+;	  ZIP files have a good way to find EOF (e.g., the central directory),
+;	  but PAK and ARC files don't.
+;	- Added some more error msgs.
+;	- Tightened hex output (CvH).
+;	- Reduced buffer sizes to minimum (archdr and inbuf).
+;
+;v1.4	- Adding the new Japanese .LHZ capability.	Toad Hall
+;	  See LHARC10E.ZIP (available on GEnie and BBS's) for details.
+;	- Neatening up total line.
+;	- Found some bugs in trying to predetermine ARC/PAK EOF.
+;	  Fixed (hopefully).
+;	- Added a bunch of [bx] references .. saved 100 bytes!
+;	- Credits for LHARC (.LHZ) file header structure to:
+;		Daniel Durbin
+;		SysOp: Cygnus X-1 BBS		| CIS: 73447,1744
+;		(805) 541-8505 (data)		| GEnie: D.DURBIN
+;		EL major at PolySlo		| ddurbin@polyslo.CalPoly.EDU 
+;	  from his LVIEW.C code.
+;
+;Fix    - Correct bug that kept version 1.4 from functioning when linked
+;08/23/89 with RBBS-PC that had been compiled using QB4.5 compiler.
+;         As it turned out it was an out and out bug that just did not
+;         happen to crash when RBBS-PC was compiled using QB3.0.
+;       
+;         Jon Martin AIRCOMM (415) 689-2090
+;
+;Fix    - Correct bug that did not support Implode as valid ZIP compression
+;09/02/89 type.                                                    
+;       
+;         Jon Martin AIRCOMM (415) 689-2090
+;
+STDOUT	equ	1			;Standard Output		v1.3
+STDERR	equ	2			;Std Error (console)		v1.3
+FALSE	equ	0
+TRUE	equ	NOT FALSE
+DEBUG	equ	FALSE
+
+Print	macro	name			; display a field
+	mov	dx,offset name
+	call	PrintS
+	endm
+
+header  struc				; archive header
+aMbrflag	db	1AH		;unique ARC/PAK flag		v1.3
+aCmpMeth	db	0		;  compression code
+aMbrName	db	13 dup (0)	;  file name
+aCmpSiz		dw	0,0		;  file size in archive
+aModDate	dw	0		;  creation date
+aModTime	dw	0		;  creation time
+aCrc16		dw	0		;  cyclic redundancy check
+aUncmpSiz	dw	0,0		;  true file size, bytes
+header  ends
+
+ARCHDRLEN	equ	29		;size of ARC/PAK header.	v1.3
+
+;v1.3	ZIP Local file header structure:
+
+zLocalEntry	STRUC
+  
+zdig0	db	50H,4BH,03H,04H	;local file header signature	4 bytes
+				;(0x04034b50)
+zVerMade	dw	?	;version needed to extract	2 bytes
+zBitflag	dw	?	;general purpose bit flag	2 bytes
+zCmpMeth	dw	?	;compression method		2 bytes
+zModTime	dw	?	;last mod file time 		2 bytes
+zModDate	dw	?	;last mod file date		2 bytes
+zCrc32		dw	?,?	;crc-32   			4 bytes
+zCmpSiz		dw	?,?	;compressed size		4 bytes
+zUncmpSiz	dw	?,?	;uncompressed size		4 bytes
+zNameLen	dw	?	;filename length		2 bytes
+zExtraLen	dw	?	;extra field length		2 bytes
+zMbrName	db	?	;filename (variable size)
+				;extra field (variable size)
+ZLocalEntry	ENDS
+
+ZIPHDRLEN	equ	30		;length of initial ZIP hdr read	v1.3
+
+;v1.4	LZH header structure
+
+lzhlfh	STRUC			;Local file header
+lUnk1		db	?,?	;char unknown1[2];	;?
+lCmpMeth	db	5 dup(?) ;char method[5];	;compression method
+lCmpSiz		dw	?,?	;long csize;	;compressed size
+lUncmpSiz	dw	?,?	;long fsize;	;uncompressed size
+lModTime	dw	?	;int ftime;	;last mod file time
+lModDate	dw	?	;int fdate;	;last mod file date
+lFAttr		db	?	;char fattr;	;file attributes
+lUnk2		db	?	;char unknown2;	;?
+lNameLen	db	?	;char namelen;	;filename length
+lMbrName	db	?	;char *fname;	;filename
+;lCrc16		dw	?		;int crc;	;crc-16
+lzhlfh	ENDS
+
+LZHHDRLEN	equ	22	;not including lMbrName or lCrc16
+
+
+CSEG	segment public para 'CODE'
+	assume	CS:CSEG,DS:CSEG,ES:CSEG
+
+	public  ArcV
+
+ArcV	proc	far
+	push	bp			; save BASIC reg
+	mov	bp,sp			; get parameter list pointer
+	mov	CS:stkptr,sp		; save stack ptr
+	mov	CS:saveds,DS		; save QB seg reg
+	mov	CS:savees,ES		; save QB seg reg
+	call	Start			; do our thing			v1.3
+
+;	set DOS error level and exit
+;v1.3a	We aren't relying on the CF flag anymore to indicate errors.
+;	Instead, check AL.
+;	0 = success
+;	1 = command line parm error
+;	2..6 are file-related (not found, etc.)
+;	11 = Invalid format (probably didn't find a member header)
+;	13 = invalid data (probably a bad file header structure)
+;	18 = Unexpected EOF ('no further files to be found')
+
+Exit:	mov	sp,stkptr		; restore entry stack value
+
+	push	ax			;save error value		v1.3
+
+;v1.3	Numerous errors could be returned
+
+	or	al,al			;no errors?
+	jz	Exit_NoErr		;yep, ok
+
+	mov	bx,offset errtbl	;assume unknown error
+	mov	di,bx			;various error values
+	mov	cx,ERRTBLLEN		;table length
+	repne	scasb			;find the offset
+	jnz	Err_TblDone		;unknown, BX has table start
+
+	 dec	di			;back up to actual error
+	 sub	di,bx			;current psn - start = relative nr
+	 mov	bx,di			;into BX for msg offset
+
+Err_TblDone:
+	shl	bx,1			;*2 for words
+Err_Unk:
+	add	bx,offset errmsgtbl	;table of addresses
+	mov	dx,[bx]			;ptr to string
+	call	PrintS			;output error msg
+		
+Exit_NoErr:
+
+	mov	bx,word ptr outhdl	; close listing file
+	cmp	bl,STDERR		;never opened or STDERR?	v1.3
+	jna	Exit1			;not a real handle		v1.3
+	 mov	ah,3eh			;close file handle
+	 int	21h
+Exit1:
+	mov	bx,word ptr archdl	;close ARC/PAK/ZIP file		v1.3
+	or	bx,bx			; if it was opened		v1.3
+	jz	Exit2			; nope				v1.3
+	 mov	ah,3EH			;close file handle		v1.3
+	 int	21H			;				v1.3
+Exit2:					;				v1.3
+
+;v1.3	Adding a test to insure we switched DTAs
+;	(so we don't blow away the caller's DTA with a vector 0:0!)
+
+	lds	dx,dword ptr savedta	;get orig DTA vector
+	or	dx,dx			;did we ever get it?
+	jz	Exit_NoDTA		;nope
+	mov	ax,DS			;check out seg
+	or	ax,ax
+	jz	Exit_NoDTA		;nope
+	 mov	ah,1ah			;set DTA
+	 int	21h
+Exit_NoDTA:
+
+	les	ax,dword ptr CS:saveds	;recover calling seg regs    08/23/89
+					;(low word is orig DS)	     08/23/89
+	mov	ds,ax                   ;                            08/23/89
+	ASSUME	DS:NOTHING,ES:NOTHING	;a reminder
+
+	pop	ax			;restore error level		v1.3
+	xor	ah,ah			;insure msb clear		v1.3a
+
+	mov	bp,sp			; parm ptr from entry
+	mov	6[bp],ax		;return retcd variable		v1.3
+	pop	bp
+	ret	6			; clear parms from stack     ' CPC151A
+
+	subttl	'--- constants, equates and work areas'
+	page
+
+CR	equ	13
+LF	equ	10
+BEL	equ	7
+TAB	equ	9
+
+STOPPER equ	0		; end of display line indicator
+ARCMARK equ	26		; special archive marker
+ARCVER  equ	10		; highest compression code used
+
+	even			;v1.3a
+
+stkptr  dw	0		; stack pointer upon entry
+
+arctitl db	CR,LF,'Archive:  '	;keep this even			v1.3a
+saveds  dw	0		; QB seg reg
+savees  dw	0		; QB seg reg
+
+	subttl	'--- i/o control variables'
+	page
+
+INBUFSZ equ	128	;512	; size of input buffer			v1.3
+
+;v1.3	Completely reordered these runtime variables
+;	so we can purge them with one fell swoop
+
+PURGESTART	equ	$	;					v1.3
+
+totsf	dw	0,0		; average stowage factor
+totlen  dw	0,0		; total of file lengths
+totsize dw	0,0		; total of file sizes
+totmbrs dw	0		; total number of files
+
+archdl  dw	0		; file handle
+fileptr dw	0		; ptr to filename part of arcname
+arclen	dw	0		;full archive filename length		v1.3
+arcname db	76 dup (0)
+
+outhdl  dw	0		; handle for output listing		v1.3
+templen	dw	0		;output filename length			v1.3
+temp	db	76 dup (0)	; and temporary file name
+
+filelen	dw	0,0		;absolute archive file length		v1.3a
+curpsn	dw	0,0		;remember current file pointer psn	v1.3a
+
+savedta dw	0,0		; addr of QB dta
+dta	db	48 dup (0)	; data transfer area
+
+	even			;					v1.3
+
+PURGELEN	EQU	($ - PURGESTART) SHR 1	;amount to purge each run v1.3
+
+;	display lines for verbose
+
+vhdr	db	CR,LF
+ db CR,LF,'Name          Length    Stowage    SF   Size now  Date       Time    CRC '
+ db CR,LF,'============  ========  ========  ====  ========  =========  ======  ===='
+ db CR,LF			;v1.4
+ db STOPPER
+
+;vline	db	CR,LF
+vline	label	byte		;v1.4
+vname	db	14 dup (' ')
+vlength db	'          '	; length in archive			v1.3
+vstyle  db	'          '	; compression method
+vfactor db	' xx%  '	; compression factor
+vsize	db	10 dup (' ')	; actual file bytes
+vdate	db	'dd '		; creation date
+ vmonth db	'mmm '
+ vyear  db	'yy  '
+ vtime  db	'hh:mm   '	; creation time
+ vcrc	db	'xxxx'		; crc in hex
+	db	CR,LF		;v1.4
+	db	STOPPER
+
+hundred dw	100		; for computing percentages
+
+;	final totals line
+
+vthdr	db '------    --- --------            ----  --------',CR,LF	;v1.4
+	db	'*Total    '						;v1.4
+ vtmbrs db	'    '
+ vtlen  db	8 dup (' '),'  '
+	db	10 dup (' ')
+ vtsf	db	'   %  '
+ vtsize db	8 dup (' ')
+	db	CR,LF		; for tom
+	db	STOPPER
+
+ sign	db	' '
+
+styles  db	'  ----- '	; 1 = old, no compression
+	db	'  ----- '	; 2 = new, no compression
+	db	' Packed '	; 3 = dle for repeat chars
+	db	'Squeezed'	; 4 = huffman encoding
+	db	'crunched'	; 5 = lz, no dle
+	db	'crunched'	; 6 = lz with dle
+	db	'Crunched'	; 7 = lz with readjust
+	db	'Crunched'	; 8 = lz with readjust and dle
+	db	'Squashed'	; 9 = 13-bit lz with no dle
+	db	' Crushed'	;10 = Pak10 file ---------Bob Simoneau
+
+;v1.3	ZIP compression types:
+
+zstyles	label	byte
+	db	'  Stored'	;0 - The file is stored (no compression)
+	db	'  Shrunk'	;1 - The file is Shrunk
+	db	'Reduced1'	;2 - Reduced with compression factor 1
+	db	'Reduced2'	;3 - Reduced with compression factor 2
+	db	'Reduced3'	;4 - Reduced with compression factor 3
+	db	'Reduced4'	;5 - Reduced with compression factor 4
+        db      'Imploded'      ;6 - New don't know format              v1.6
+
+;v1.4	LZH compression types are already coded as 5 chars of text
+;	in the compressed file.
+;	All we need to do is pad them out to the correct width.
+
+months  db	'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec '
+
+ARCPAK	=	0			;				v1.3
+ZIP	=	1			;				v1.4
+LZH	=	2			;				v1.4
+ftype	db	ZIP			;flag which type file		v1.3
+
+;v1.4	4 types of archive file
+
+ziptype	db	'ZIP'
+arctype	db	'ARC'
+paktype	db	'PAK'
+lzhtype	db	'LZH'			;v1.4
+larctype db	'LZS'			;v1.4 not enabled for now
+
+;zfilesig db	50H,4BH,03H,04H		;local file header signature	v1.3
+;zdirsig db	50H,4BH,01H,02H		;central file header signature	v1.3
+
+ZSIG	equ	4B50H			;unique ZIP signature		v1.4
+ZFILESIG equ	0403H			;file member signature		v1.4
+ZDIRSIG	equ	0201H			;central file header signature	v1.4
+
+;v1.3	Centralizing errors at the exit point
+
+;	1 = command line parm error
+;	2..6 are file-related (not found, etc.)
+;	11 = Invalid format (probably didn't find a member header)
+;	12 = Invalid file type (not an ARC, PAK, ZIP)
+;	13 = invalid data (probably a bad file header structure)
+;	18 = Unexpected EOF ('no further files to be found')
+
+errtbl db	0,1,2,3,4,5,6,11,12,13,18,25,27,29,30			;v1.3a
+ERRTBLLEN	equ	$ - errtbl
+
+errmsgtbl dw	msg0,msg1,msg2,msg3					;v1.3a
+	dw	msg4,msg5,msg6,msg11
+	dw	msg12,msg13,msg18,msg25
+	dw	msg27,msg29,msg30
+
+msg0	db	'Unknown error',0
+
+msg1	db	'Invalid function number',0
+msg2	db	'Archive file not found',0
+msg3	db	'Path not found',0
+msg4	db	'No handle available',0
+msg5	db	'Access denied',0
+msg6	db	'Invalid handle',0
+msg11	db	'Archive header error',0
+msg12	db	'Invalid file type',0
+msg13	db	'Archive format error',0
+msg18	db	'No further files to be found',0
+msg25	db	'Disk seek error',0
+msg27	db	'Disk sector not found',0
+msg29	db	'Write error',0
+msg30	db	'Read error',0
+
+
+	subttl	'--- mainline processing'
+	page
+;
+Start	proc	near			;				v1.3
+
+	mov	ax,CS			;just set ES for now		v1.3
+	mov	ES,ax
+	ASSUME	DS:NOTHING,ES:CSEG	;a reminder			v1.3a
+
+;v1.3	Insure all variables are cleared
+	cld
+	mov	di,offset PURGESTART
+	xor	ax,ax			;clear all the variables	v1.3
+	mov	cx,PURGELEN		;nr words to clear		v1.3
+	rep	stosw			;				v1.3
+
+;v1.3	Move first parameter (output filename) into code space
+
+	mov	si,word ptr 10[bp]	; ptr to parameter vector    ' CPC151A
+	lodsw				; get string length	     ' CPC151A
+	mov	cx,ax			;			     ' CPC151A
+	jcxz	Copy_Parm2		;empty, forget it		v1.3
+	 mov	di,offset templen	;str length			v1.3
+	 stosw				;save length			v1.3
+	 mov	si,[si]			; get string offset		v1.3a
+	 rep	movsb			;copy in the string		v1.3
+
+Copy_Parm2:
+
+;v1.3	Now copy 2d parameter (target archive filename)
+
+	mov	si,word ptr 8[bp]	; ptr to parameter vector
+	lodsw				; get string length
+	mov	cx,ax			;				v1.3
+	jcxz	Parm2_Done		;forget it			v1.3
+	 mov	di,offset arclen	;archive name length		v1.3
+	 stosw				;save length			v1.3
+	 mov	si,[si]			; get string offset		v1.3
+	 mov	ah,'a'			;constant for uppercasing	v1.3
+Parm2_Upper:				;				v1.3
+	 lodsb				;snarf char			v1.3
+	 cmp	al,ah			;need uppercasing?		v1.3
+	 jb	Parm2_NoU		;nope				v1.3
+	  sub	al,20H			;uppercase it			v1.3
+Parm2_NoU:				;				v1.3
+	 stosb				;				v1.3
+	 loop	Parm2_Upper		;				v1.3
+
+Parm2_Done:
+
+;v1.3	All done with DS
+
+	mov	ax,CS			;				v1.3
+	mov	DS,ax			;				v1.3
+	ASSUME	DS:CSEG,ES:CSEG		;a reminder			v1.3a
+
+	mov	ax,STDERR		;assume no output filename	v1.3a
+	cmp	temp,0			;any output filename?		v1.3
+	jz	Temp_Opened		;nope, use STDERR		v1.3a
+
+;v1.3	Forcing output file to STDERR for debugging.
+;v1.3	 mov	al,1			; will show usage		v1.3
+;v1.3	 ret				;back to Exit			v1.3
+
+;v1.3a	 mov	ax,STDERR		;force to STDERR		v1.3
+;v1.3a	 jmp	short Temp_Opened	;continue			v1.3
+
+;Got_Temp:
+	mov	dx,offset temp		; open temporary file for output
+	xor	cx,cx			;no special attributes		v1.3
+	mov	ah,3ch			;create file
+	int	21h
+	jnb	Temp_Opened		;fine				v1.3
+	 ret				;back to Exit, AL=error code	v1.3
+					;CF set				v1.3a
+Temp_Opened:
+	mov	outhdl,ax		;save handle
+
+;v1.3	Parse the target archive name
+;	Separate path from name
+;	Insure it's an ARC, PAK or ZIP type.
+
+	mov	di,offset arclen	;archive name length		v1.3
+	mov	ax,[di]			;snarf length			v1.3a
+	inc	di			;bump to name proper		v1.3a
+	inc	di			;				v1.3a
+	mov	cx,ax			;into CX for scans to come	v1.3a
+	jcxz	No_ArcName		;no length, ergo no name	v1.3a
+
+	mov	dx,ax			;save in DX for later		v1.3
+	xor	al,al			;will scan for AsciiZ terminator v1.3
+	cmp	[di],al			;no name at all?		v1.3
+	jnz	Got_ArcName		;yep				v1.3
+
+No_ArcName:
+	 mov	al,2			;'Archive file not found'	v1.3
+	 ret				;back to Exit			v1.3
+
+Got_ArcName:
+
+;v1.3	We have some sort of target name.
+;	But is it a legal type?
+;	DX = filename length
+;	DI -> archive filename (arcname)
+
+	add	di,dx			;+ length -> last char+1	v1.3
+	dec	di			;back up to last char		v1.3
+	mov	bx,di			;BX -> last char		v1.3
+
+	mov	al,'\'			;look for normal path delimiter	v1.3
+	mov	cx,dx			;length for scan		v1.3
+	std				;backwards scanning now		v1.3
+	repne	scasb			;				v1.3
+	jz	Got_Start		;found one			v1.3
+
+;Ugh .. tired of typing in v1.3's!
+
+	mov	di,bx			;back to end
+	mov	cx,dx			;restore length
+	mov	al,'/'			;funny path delimiter
+	repne	scasb
+	jz	Got_Start		;found one
+
+	mov	di,bx			;back to end .. sigh ..
+	mov	cx,dx			;restore length
+	mov	al,':'			;ok, how about a drive?
+	repne	scasb
+	jnz	No_Paths		;nope, DI -> name start
+
+Got_Start:
+	inc	di			;bump up to the separator
+No_Paths:
+	inc	di			;bump to the first name char
+	cld				;forward again
+	mov	fileptr,di		;remember real filename start
+
+;v1.4	You MUST specify the type .. .ARC, .PAK, .ZIP, or .LZH.
+;	If .ARC or .PAK, we'll use the old code to display ARC-type
+;	files.
+;v1.4	Else if ZIP or LZH, it's a totally new format!
+;	We remember the type archiving format in 'ftype'.
+
+;v1.3	DS:SI -> filename's first char.
+
+	mov	al,'.'			;find the separator		v1.3
+	mov	cx,word ptr 12		;max of 12 chars		v1.3
+	repne	scasb			;find it			v1.3
+	jnz	BadType			;forget it			v1.3
+
+	mov	dx,di			;save pointer to file type	v1.3
+					;(just past the separator)	v1.3
+	mov	ax,3			;3 chars constant
+
+	mov	ftype,ZIP		;assume ZIP
+
+	mov	si,offset ziptype	;is it a ZIP?
+	mov	di,dx			;back to filename type
+	mov	cx,ax			;3 chars
+	repz	cmpsb			;compare
+	jz	Got_Type		;a match
+
+	mov	ftype,ARCPAK		;ok, assume ARC or PAK		v1.3a
+
+	mov	si,offset arctype	;is it an ARC?			v1.3
+	mov	di,dx			;back to filename type
+	mov	cx,ax			;3 chars
+	repz	cmpsb			;compare
+	jz	Got_Type		;a match
+
+	mov	si,offset paktype	;is it a PAK?
+	mov	di,dx			;back to filename type
+	mov	cx,ax			;3 chars
+	repz	cmpsb			;compare
+	jz	Got_Type		;a match
+
+;v1.4	Adding .LZH types
+	mov	ftype,LZH		;ok, assume .LZH file		v1.4
+
+	mov	si,offset lzhtype	;is it an LZH?
+	mov	di,dx			;back to filename type
+	mov	cx,ax			;3 chars
+	repz	cmpsb			;compare
+	jz	Got_Type		;a match
+
+BadType:
+	 mov	al,12			;'Invalid file type'		v1.3a
+	 ret				;back to Exit			v1.3
+
+Got_Type:				;v1.3
+
+;	find first matching file
+
+	push	ES
+	mov	ah,2fh			; get current dta ptr
+	int	21h			; returned in ES:bx
+	mov	savedta,ES
+	mov	savedta[2],bx
+	pop	ES
+
+	mov	dx,offset dta		; set local dta for murkers
+	mov	ah,1ah
+	int	21h
+
+	call	OpenArc			; see if archive exists
+;	jb	ArcV_X			;nope, return, AL = error	v1.3
+	jnb	ArcV1			;ok
+	 jmp	ArcV_X			;nope, return, AL=error		v1.4
+
+;v1.3a	Display archive filename, header,
+;	then into a loop for each archive member.
+
+ArcV1:	mov	dx,fileptr		;pointer to filename		v1.3a
+	call	PrintS			;display, CR/LF			v1.3a
+	jb	ArcV_X			;output failed			v1.3a
+
+	Print	vhdr
+	jb	ArcV_X			;output failed, AL = error	v1.3
+
+ArcVNext:
+IF	DEBUG
+	Print	debug1
+	jmp	short debugj1
+debug1	db	'Calling GetHdr',CR,LF,0
+debugj1:
+ENDIF
+	call	GetHdr			; load next header
+	jb	ArcV_NoHdr		;failed somehow, AL=error	v1.3a
+					;(could be EOF, which is ok)	v1.3a
+IF	DEBUG
+	Print	debug2
+	jmp	short debugj2
+debug2	db	'Calling ArcVgo',CR,LF,0
+debugj2:
+ENDIF
+	call	ArcVgo			;format, write out file report
+	jb	Arcv_NoHdr		;something failed, AL=error	v1.3a
+
+IF	DEBUG
+	Print	debug3
+	jmp	short debugj3
+debug3	db	'Calling Bump_ArcPtrs',CR,LF,0
+debugj3:
+ENDIF
+	call	Bump_ArcPtrs		;bump to next archive file	v1.3
+	jnb	ArcVNext		;loop if ok, else AL=error	v1.3a
+					;(could be EOF)			v1.3a
+
+ArcV_NoHdr:
+	cmp	archdr.aCmpMeth,0	; archive eof?
+	jnz	ArcV_X			;nope, something else happened	v1.3
+
+	cmp	totmbrs,0		;any totals?			v1.3
+	jz	ArcV_X			;nope				v1.3
+	 push	ax			;save previous error value	v1.3
+	 call	Format_Totals		;yep, format and output		v1.3
+	 pop	ax			;restore prev err value		v1.3
+
+ArcV_X:	ret				;AL=error			v1.3a
+
+Start	endp				;				v1.3
+
+
+;v1.3	Format, display single line for each member
+;	On success, return:
+;	 CF clear
+;	 AL = 0
+;	On error, return:
+;	 CF set (because of output write fail)
+;	 AL = error code
+
+ArcVgo	proc	near
+	mov	di,offset vname		; copy file name
+	mov	si,offset archdr.aMbrName
+	mov	cx,word ptr 13		;up to 12 chars long, AsciiZ 0
+ArcV3:
+	lodsb
+	or	al,al			; end of name?			v1.3
+	je	ArcV4
+	 stosb
+	 loop	ArcV3
+	 jmp	short ArcV5
+
+ArcV4:
+	mov	al,' '			; pad with blanks
+	rep	stosb
+ArcV5:
+; reduce the size/length to word values
+
+	mov	bx,offset archdr.aCmpSiz	;-> compressed size	v1.4
+	mov	cx,[bx]			;.lo				v1.4
+	mov	dx,2[bx]		;.hi				v1.4
+	mov	bx,offset archdr.aUncmpSiz	;-> uncompressed size	v1.4
+	mov	ax,2[bx]		;.hi				v1.4
+	mov	bx,[bx]			;.lo				v1.4
+
+ArcV51: or	ax,ax			; big number?
+	jz	ArcV52			; nope, can use it
+	 shr	ax,1			; yup, divide by two
+	 rcr	bx,1
+	 shr	dx,1
+	 rcr	cx,1
+	 jmp	short ArcV51
+
+ArcV52:
+	mov	ax,bx			; low word of actual size
+	mov	sign,' '
+	cmp	ax,cx			; arc member is larger?
+	jb	ArcV520
+	 sub	ax,cx			; amount saved
+	 jmp	short ArcV56
+
+ArcV520:
+	sub	ax,cx
+	neg	ax
+	mov	sign,'-'
+
+ArcV56:
+	mul	hundred			; to percentage
+	add	ax,50
+	adc	dx,0			; round up percent
+	or	bx,bx			; empty file?
+	jnz	ArcV53
+	 mov	ax,100
+	 jmp	short ArcV54
+
+ArcV53: div	bx
+ArcV54:
+	cmp	ax,100			; archive fouled?
+	jbe	ArcV55
+	 sub	ax,ax
+ArcV55:
+	mov	di,offset vfactor-2	;format stowage factor		v1.3
+	call	Asciify			;display AX
+
+	mov	al,sign
+	mov	vfactor,al
+
+	mov	cx,word ptr 3		;gonna need it in a sec		v1.4
+	cmp	ftype,LZH		;LZH type? (compression method	v1.4
+					; is already text)		v1.4
+	jnz	ArcV_GetStyles		;nope				v1.4
+
+;v1.4	The LZH compression method (5 chars) is still in inbuf.
+
+	mov	si,offset inbuf.lCmpMeth	;-> 5-char compression	v1.4
+						;   method string	v1.4
+	mov	di,si
+	add	di,5			;point to beyond chars		v1.4
+	mov	ax,'  '			;need 3 trailing blanks		v1.4
+	stosw
+	stosb
+	mov	di,offset vstyle+1	;indent to be neat		v1.4
+	jmp	short ArcV_GotStyle	;skip				v1.4
+
+ArcV_GetStyles:				;				v1.4
+
+	mov	si,offset zstyles	;assume ZIP			v1.3
+	cmp	ftype,ZIP		;ZIP file?			v1.3
+	jz	ArcV55A			;yep				v1.3
+	 mov	si,offset styles	;ARC or PAK			v1.3
+ArcV55A:				;				v1.3
+
+	sub	bx,bx			; determine style
+	mov	bl,archdr.aCmpMeth
+	dec	bl			;adjust for table offset	v1.3
+;v1.4	mov	cl,3			; eight bytes each entry
+;v1.4	CX = 3 (eight bytes each entry)
+	shl	bx,cl	;*8
+
+	add	si,bx			;point into style table		v1.3
+	mov	di,offset vstyle
+
+ArcV_GotStyle:				;				v1.4
+	inc	cx			;CX=4=words to move		v1.4
+	rep	movsw			;				v1.3
+
+	mov	bx,offset archdr.aCmpSiz	;-> compressed size	v1.4
+	mov	ax,[bx]			;.lo				v1.4
+	mov	dx,2[bx]		;.hi				v1.4
+	mov	bx,offset totsize	;-> accumulated compressed size	v1.4
+	add	[bx],ax			;.lo				v1.4
+	adc	2[bx],dx		;.hi				v1.4
+
+	mov	di,offset vsize		;format file size		v1.3
+	call	Asciify_Long		;				v1.3
+
+	mov	bx,offset archdr.aUncmpSiz	;-> uncompressed size	v1.4
+	mov	ax,[bx]			;.lo				v1.4
+	mov	dx,2[bx]		;.hi				v1.4
+	mov	bx,offset totlen	;-> total length accumulator	v1.4
+	add	[bx],ax			;.lo				v1.4
+	adc	2[bx],dx		;.hi				v1.4
+	
+	mov	di,offset vlength	;format file length		v1.3
+	call	Asciify_Long		;				v1.3
+
+	mov	ax,archdr.aModDate	; format file date
+	call	GetDate
+
+	mov	ax,archdr.aModTime	; format file time
+	call	GetTime
+
+	mov	ax,archdr.aCrc16	; format crc in hex
+	mov	di,offset vcrc
+	call	Cvh
+
+	inc	totmbrs			;NOW bump total count		v1.3a
+	Print	vline			; display this file info
+					;(may return error)		v1.3a
+	ret
+
+ArcVgo	endp
+
+
+	subttl	'--- load next archive header'
+	page
+
+;v1.3	Adding ZIP file searching
+;v1.3a	For ARC/PAK files, now testing to see if we're at the archive
+;	file end.  If so (a proper file), return with EOF (CF set
+;	but AL=0).
+;	Archive files may have picked up some garbage on the end
+;	(from XMODEM xfers, whatever).  We'll see if we at LEAST have
+;	enough data for an archive header.
+;	If not, assume EOF, ignoring garbage.
+;	If there's more than 29 bytes of garbage .. the header will be
+;	garbage and we're gonna report a format error .. but that's ok for now.
+;	Zip files have a definite ending (the central directory,
+;	and they'll look out for their own endings.
+;
+;	Also returning CF and AL per any errors.
+
+GetHdr  proc	near
+
+	xor	ax,ax			;handy 0
+	mov	archdr.aCmpMeth,al	;assume archive EOF
+
+	cmp	ftype,ZIP		;doing ZIP files?
+	jnz	GH_NotZip		;nope				v1.4
+	 jmp	Get_ZipHdr		;yep, they look out for themselves
+
+GH_NotZip:
+	cmp	ftype,LZH		;doing an LZH file?		v1.4
+	jnz	GH_ArcPak_Hdr		;nope				v1.4
+	 jmp	Get_LZHHdr		;yep				v1.4
+
+GH_ArcPak_Hdr:				;				v1.4
+
+;v1.3	New code
+;	ARC/PAK headers look like this:
+;aMbrFlag	db	1AH		;unique header flag
+;aCmpMeth	db	0		;  compression code
+;aMbrName	db	13 dup (0)	;  file name
+;aCmpSiz	dw	0,0		;  file size in archive
+;aModDate	dw	0		;  creation date
+;aModTime	dw	0		;  creation time
+;aCrc16		dw	0		;  cyclic redundancy check
+;aUncmpSiz	dw	0,0		;  true file size, bytes
+
+	mov	dx,offset archdr	;read into here
+	mov	cx,ARCHDRLEN		;nr bytes to read
+	mov	bx,archdl		;archive file handle
+	mov	ah,3FH			;read from file/device
+	int	21H
+	jnb	GH_ChkHdr		;read ok			v1.3a
+	 ret				;return CF set, AL=error	v1.3a
+
+GH_ChkHdr:
+	mov	bx,dx			;DS:BX -> structure start	v1.3a
+
+	cmp	[bx].aMbrFlag,ARCMARK	;start of header?
+	jne	Hdr_InvalFmt		;'invalid format', exit CF set
+
+	mov	al,[bx].aCmpMeth	;type compression
+	cmp	al,ARCVER		;reasonable code?
+	ja	Hdr_InvalFmt		;nope, funny stuff
+
+	or	al,al			; archive eof?
+	je	Hdr_RetCF		;yep, done, return CF set
+					;but AL=0 = not a REAL error	v1.3a
+	cmp	al,1			; old format?
+	jne	GetHdrX			; if so, it's short
+	 mov	si,offset archdr.aCmpSiz			; CPC15-1C
+	 mov	di,offset archdr.aUncmpSiz			; CPC15-1C
+	 movsw				;				v1.3
+	 movsw				;				v1.3
+GetHdrX:
+	xor	al,al			;return AL=0, success		v1.3a
+	clc
+	ret
+
+Hdr_InvalFmt:
+	mov	al,0BH			;'invalid format'
+Hdr_EarlyEOF:				;				;v1.4
+	mov	[bx].aCmpMeth,al	;signal EOF or invalid format	v1.4
+Hdr_RetCF:
+	stc				;return CF set, AL=error
+	ret
+
+GetHdr	endp
+
+
+Get_ZipHdr	proc	near
+;v1.4	GetHdr Subroutine for ZIP files
+;v1.3	Reads in ZIP file entry.
+;	Then scans for the unique file entry signature.
+;	On success:
+;	 DS:BX -> file entry directory structure
+;	 CF clear
+;	Else CF set for failure
+
+	call	Read_Zip_Entry
+	jb	Get_ZHdrX			;failed, AL=ERRORLEVEL
+
+	mov	bx,offset inbuf			;use for field base
+	mov	di,offset archdr.aCmpMeth	;moving into this structure
+
+;v1.4	Remember, the ZIP header we'll be snarfing data from
+;	looks like this:
+;zVerMade	dw	?	;version needed to extract	2 bytes
+;zBitflag	dw	?	;general purpose bit flag	2 bytes
+;zCmpMeth	dw	?	;compression method		2 bytes
+;zModTime	dw	?	;last mod file time 		2 bytes
+;zModDate	dw	?	;last mod file date		2 bytes
+;zCrc32		dw	?,?	;crc-32   			4 bytes
+;zCmpSiz	dw	?,?	;compressed size		4 bytes
+;zUncmpSiz	dw	?,?	;uncompressed size		4 bytes
+;zNameLen	dw	?	;filename length		2 bytes
+;zExtraLen	dw	?	;extra field length		2 bytes
+;zMbrName	db	?	;filename (variable size)
+				;extra field (variable size)
+;
+;	and the ARC/PAK record we'll be formatting to
+;	looks like this:
+;aMbrFlag db	1AH
+;aCmpMeth db	0			;  compression code
+;aMbrName db	13 dup (0)		;  file name
+;aCmpSiz dw	0,0			;  file size in archive
+;aModDate dw	0			;  creation date
+;aModTime dw	0			;  creation time
+;aCrc16  dw	0			;  cyclic redunancy check
+;aUncmpSiz  dw	0,0			;  true file size, bytes
+
+	mov	ax,[bx].zCmpMeth		;compression method
+	inc	al				;bump to be non-0
+	stosb					;->  aCmpMeth
+
+;For now, assuming a normal file name (no paths)
+
+	mov	ax,[bx].zNameLen		;filename length
+	and	ax,15				;constrain to max 12 chars
+	mov	cx,ax				;into CX for move
+	lea	si,[bx].zMbrName		;pointer to actual filename
+	rep	movsb				;do the move
+	xor	al,al				;terminating 0
+	stosb
+
+	mov	di,offset archdr.aCmpSiz	;bump past name
+
+;	mov	ax,[bx].zCmpSiz			;compressed size.lo
+;	stosw					; -> aCmpSiz
+;	mov	ax,[bx].zCmpSiz[2]		;compressed size.hi
+;	stosw					; -> aCmpSiz[2]
+	mov	si,offset inbuf.zCmpSiz		;-> compressed size
+	movsw					;aCmpSiz.lo
+	movsw					;aCmpSiz.hi
+
+	mov	ax,[bx].zModDate		;last mod date
+	stosw					; -> aModDate
+	mov	ax,[bx].zModTime		;last mod time
+	stosw					; -> aModTime
+	mov	ax,[bx].zCrc32			;CRC-32 value.lo
+	stosw					; -> aCrc16
+
+;	mov	ax,[bx].zUncmpSiz		;uncompressed size.lo
+;	stosw					; -> aUncmpSiz
+;	mov	ax,[bx].zUncmpSiz[2]		;uncompressed size.hi
+;	stosw					; -> aUncmpSiz[2]
+	mov	si,offset inbuf.zUncmpSiz	;-> uncompressed size
+	movsw					;aUncmpSiz.lo
+	movsw					;aUncmpSiz.hi
+
+	xor	ax,ax				;return AX 0
+	clc					;return CF clear
+Get_ZHdrX:
+	ret
+
+Get_ZipHdr	endp		;GetHdr subroutine
+
+
+
+Get_LZHHdr	proc	near
+;v1.4	GetHdr Subroutine for LZH headers
+;	LZH file header has already been read in to inbuf.
+;
+;	If all is ok, we move the appropriate LZH fields into the
+;	standard ARC/PAK structure (archdr) (so far as we can).
+;
+;	Gleaning from the LHARCDOC documentation, the 'laCmpMeth' field
+;	(5 characters) can be:
+;		'-lh0-'		stored as is (no compression)
+;		'-lh1-'		compressed by LZHuf coding
+;	There appear to be at least two more possible compression codes
+;	that may appear:  "LARC type 4 and type 5" (whatever they may be!).
+;
+;	Assuming this field will ALWAYS be text, we are NOT gonna try to
+;	snarf some magic code number out of the field, but will just
+;	protect the field (in inbuf) and move the text directly into our
+;	formatted display line later.
+;
+;	The only way we can test this as an LZH header is to look
+;	for a '-%%%-' starting at the 2d header byte (the laCmpMeth
+;	field).
+;
+;	On success:
+;	 DS:BX -> file entry directory structure
+;	 CF clear
+;	Else CF set for failure
+
+;v1.4	LZH files don't have a decent, clean EOF header.
+;	We have to test for near-EOF the hard way.
+
+	mov	di,offset archdr.aMbrFlag	;moving into this structure
+	mov	ax,001AH			;fake ARC/PAK flag
+	stosw					; and EOF compression code
+
+	xor	ax,ax			;handy 0
+	mov	bx,offset filelen	;-> file length
+	mov	dx,[bx]			;file length.lo
+	mov	cx,2[bx]		;file length.hi
+
+	mov	bx,offset curpsn	;for fast access	
+	cmp	cx,2[bx]		;length.hi = psn.hi?
+	jnz	GL_AddHdr		;nope
+	cmp	dx,[bx]			;length.lo = psn.lo?
+	jz	GL_TrueEof		;yep, we're exactly at EOF
+
+GL_AddHdr:
+	sub	dx,LZHHDRLEN		;sub header length
+	sbb	cx,ax	;0		;handle the borrow
+	jb	GL_Eof			;<0, beyond EOF
+	sub	dx,[bx]			;- file psn.lo
+	sbb	cx,2[bx]		;- file psn.hi, minus any borrows
+	jnb	GL_NotEof		;not near end .. ok
+
+;There must've been junk on the file end.
+;However .. there ALWAYS seems to be junk on the end.
+; So .. we'll return no message at all (AL=0)
+;If we ever figure out how to detect a TRUE LZH EOF,
+;we can enable this ERRORLEVEL=18 business.
+
+GL_Eof:
+;	mov	al,18			;'No further files to be found'
+GL_TrueEof:
+	stc				;CF set for EOF			v1.4
+	ret
+
+GL_NotEof:
+
+	push	di			;save ptr -> archdr.aMbrName
+	call	Read_LZH_Entry
+	pop	di
+	jb	Get_LHdrX			;failed, AL=ERRORLEVEL
+
+	mov	bx,offset inbuf			;use for field base
+
+;v1.4	Remember, the LZH header we'll be snarfing data from
+;	looks like this:
+;lUnk1	db	?,?	;char unknown1[2];	;?
+;lCmpMeth	db	5 dup(?) ;char method[5];	;compression method
+;lCmpSiz	dw	?,?	;long csize;	;compressed size
+;lUncmpSiz	dw	?,?	;long fsize;	;uncompressed size
+;lModTime	dw	?	;int ftime;	;last mod file time
+;						; (msdos format)
+;lModDate	dw	?	;int fdate;	;last mod file date
+;lfAttr		db	?	;char fattr;	;file attributes
+;unknown2	db	?	;char unknown2;	;?
+;lNameLen	db	?	;char namelen;	;filename length
+;
+;lMbrName	db	?	;char *fname;	;filename
+;;lCrc16	dw	?	;int crc;	;crc-16
+;
+;	and the ARC/PAK record we'll be formatting to
+;	looks like this:
+;aMbrFlag db	1AH
+;aCmpMeth db	0			;  compression code
+;aMbrName db	13 dup (0)		;  file name
+;aCmpSiz dw	0,0			;  file size in archive
+;aModDate dw	0			;  creation date
+;aModTime dw	0			;  creation time
+;aCrc16  dw	0			;  cyclic redundancy check
+;aUncmpSiz  dw	0,0			;  true file size, bytes
+
+	mov	al,[bx].lNameLen		;filename length
+	and	ax,15				;constrain to max 12 chars
+	mov	cx,ax				;into CX for move
+	mov	si,offset inbuf.lMbrName	;-> actual filename
+	rep	movsb				;do the move
+	xor	al,al				;terminating 0
+	stosb
+
+;In LZH headers, the 2-byte CRC16 word lies immediately
+;after the filename.
+;Snarf it now and stuff in the ARC header.
+
+	lodsw					;lCrc16
+	push	ax				;save a sec
+
+	mov	di,offset archdr.aCmpSiz	;bump past name
+
+;	mov	ax,[bx].lCmpSiz			;compressed size.lo
+;	stosw					; -> aCmpSiz
+;	mov	ax,[bx].lCmpSiz[2]		;compressed size.hi
+;	stosw					; -> aCmpSiz[2]
+	mov	si,offset inbuf.lCmpSiz		;-> compressed size
+	movsw					;aCmpSiz.lo
+	movsw					;aCmpSiz.hi
+
+	mov	ax,[bx].lModDate		;last mod date
+	stosw					; -> aModDate
+	mov	ax,[bx].lModTime		;last mod time
+	stosw					; -> aModTime
+	pop	ax				;CRC-16 value
+	stosw					; -> aCrc16
+;	mov	ax,[bx].lUncmpSiz		;uncompressed size.lo
+;	stosw					; -> aUncmpSiz
+;	mov	ax,[bx].lUncmpSiz[2]		;uncompressed size.hi
+;	stosw					; -> aUncmpSiz[2]
+	mov	si,offset inbuf.lUncmpSiz	;-> uncompressed size
+	movsw					;aUncmpSiz.lo
+	movsw					;aUncmpSiz.hi
+
+	xor	ax,ax				;return AX 0
+	clc					;return CF clear
+Get_LHdrX:
+	ret
+
+Get_LZHHdr	endp			;GetHdr Subroutine		v1.4
+
+
+Read_LZH_Entry	proc	near		;GetHdr Subroutine		v1.4
+
+	mov	dx,offset inbuf			;read into here
+	mov	cx,LZHHDRLEN			;entry structure size
+						;(does NOT include variable
+						; length filename, and the
+						;two CRC bytes following the
+						;filename)
+	mov	bx,archdl			;file handle
+	call	ReadZ_It			;try to read in header
+						;(up to filename)
+	jb	ReadL_Eof			;failed, AL=error
+
+	mov	si,dx				;structure start
+	mov	al,'-'				;test for '-l%-' or whatever
+	cmp	[si].lCmpMeth,al		;first part of compression
+						;method string?
+	jnz	ReadL_InvalDat			;bogus, failed
+	 cmp	[si].lCmpMeth+4,al		;how about last char?
+	 jz	ReadL_Ok1			;yep, fine
+ReadL_InvalDat:
+	mov	al,0DH				;force to 'invalid data'
+ReadL_Eof:
+	mov	archdr.aCmpMeth,al		;set per EOF or error
+	stc					;return CF set
+	ret
+
+ReadL_Ok1:
+	mov	dx,offset inbuf.lMbrName	;-> lMbrName psn
+	mov	cl,inbuf.lNameLen		;length of member filename
+	xor	ch,ch				;clear msb
+	call	ReadZ_It			;read in the name
+	jb	ReadL_Eof			;failed
+	add	dx,cx				;bump buff ptr past name
+	mov	cx,2				;LZH CRC is a word
+	call	ReadZ_It			;read in the CRC word
+	jb	ReadL_Eof			;failed
+	ret					;success
+
+Read_LZH_Entry	endp			;GetHdr Subroutine		v1.4
+
+
+Read_Zip_Entry	proc	near		;GetHdr Subroutine
+
+	mov	dx,offset inbuf			;read into here
+	mov	cx,ZIPHDRLEN			;entry structure size
+						;(does NOT include filename or
+						; Extra fields, which are
+						;dynamic)
+	mov	bx,archdl			;file handle
+	call	ReadZ_It			;try to read in header
+						;(up to filename)
+	jb	ReadZ_Eof			;failed, AL=error	v1.3a
+
+	mov	si,dx				;->file signature	v1.4
+	lodsw					;snarf first 2 chars	v1.4
+	cmp	ax,ZSIG				;ZIP header?		v1.4
+	jnz	ReadZ_InvalDat			;nope, bogus		v1.4
+	lodsw					;file or central sig	v1.4
+	cmp	ax,ZFILESIG			;next member?		v1.4
+	jz	ReadZ_Ok1			;yep, fine		v1.4
+	cmp	ax,ZDIRSIG			;central directory?	v1.4
+						;(means we're done)	v1.4
+	mov	al,0				;assume yes, EOF	v1.4
+	jz	ReadZ_Eof			;yep			v1.4
+
+ReadZ_InvalDat:
+	mov	al,0DH				;'Invalid data'		v1.4
+ReadZ_Eof:					;			v1.3a
+	mov	archdr.aCmpMeth,al		;set per EOF or error	v1.3a
+	stc					;return CF set		v1.3a
+	ret
+
+ReadZ_Ok1:
+	mov	dx,offset inbuf.zMbrName	;move to zFilename psn
+	mov	cx,inbuf.zNameLen		;length of member filename
+						;fall thru to ...	v1.3a
+
+;v1.4	Common subroutine for ReadZ and Read_LZH
+;	DX -> buffer
+;	CX = bytes to read
+;	BX MUST have archdl .. so protect BX!
+
+ReadZ_It:
+	mov	ah,3FH				;read from file/device
+	int	21H
+	jb	ReadZ_ItX			;failed, error in AX	v1.3a
+
+;v1.4	We'll update our curpsn file pointers later
+;	when we try to read past compressed file contents.
+
+;v1.4	 add	curpsn,ax			;bump current file ptr	v1.3a
+						;by amount read		v1.3a
+;v1.4	 adc	word ptr curpsn[2],0		;bump psn.hi if carry	v1.3a
+
+	 cmp	ax,cx				;read all we expected?
+	 mov	ax,0				;clear AX		v1.3a
+	 jz	ReadZ_ItX			;yep, return CF clear	v1.3a
+	  mov	al,0BH				;assume unexpected EOF
+						;('invalid format')
+	  stc
+ReadZ_ItX:
+	ret					;CF, AL set per error	v1.3a
+
+Read_Zip_Entry	endp			;GetHdr subroutine
+
+
+;v1.3	Common subroutine
+;	Bumps archive file pointers to next entry
+;	On success, return:
+;	 CF clear
+;	 AL = 0
+;	On failure (e.g., couldn't move ptrs), return:
+;	 CF set
+;	 AL = error
+
+Bump_ArcPtrs	proc	near
+
+	cmp	ftype,ZIP		;ZIP file?			v1.3
+	jz	Next_ZEntry		;bump file ptr to next entry	v1.3
+
+;v1.3	Entirely new code
+
+	mov	bx,offset archdr.aCmpSiz	;-> encoded file length	v1.4
+	mov	dx,[bx]			;.lo				v1.4
+	mov	cx,2[bx]		;.hi
+	jmp	short Bump_Common	;common code
+
+
+;v1.3	Positions ZIP file pointer to next local entry.
+;	We've already read in the entire header, plus the filename,
+;	so the file pointer should be just beyond the filename
+;	(at the Extra field).
+;	Move file pointers beyond the Extra field, and then past
+;	the actual entry data (the compressed size).
+
+Next_ZEntry:
+
+	mov	bx,offset inbuf			;point back to structure
+	mov	dx,[bx].zCmpSiz			;size.lo
+	mov	cx,[bx].zCmpSiz[2]		;size.hi
+	add	dx,[bx].zExtraLen		;add in extra field length
+	adc	cx,0				;in case of carry
+
+Bump_Common:
+
+	mov	bx,archdl			;file handle
+	mov	ax,4201H			;move pointer from current loc
+	int	21H
+	jb	Bump_X				;seek error		v1.3a
+						;return CF set, AL=error v1.3a
+
+;v1.4	Updating curpsn variables now
+;	so the NEXT GetHdr call will have current data.
+	 mov	bx,offset curpsn
+	 mov	[bx],ax
+	 mov	2[bx],dx
+	 xor	ax,ax				;AX,CF clear		v1.3a
+Bump_X:
+	ret
+
+Bump_ArcPtrs	endp
+
+
+;v1.3	Formats, displays totals
+
+Format_Totals	proc	near
+
+	mov	ax,totmbrs		;total members			v1.3
+	mov	di,offset vtmbrs-2	;format total members		v1.3
+	call	Asciify			;				v1.3
+
+	mov	bx,offset totlen	;-> total actual file size	v1.4
+	mov	ax,[bx]			;.lo				v1.4
+	mov	dx,2[bx]		;.hi				v1.4
+
+	push	ax			;save totlen.lo			v1.4
+	push	dx			; and totlen.hi			v1.4
+
+	mov	di,offset vtlen		;format total actual file size	v1.3
+	call	Asciify_Long		;				v1.3
+
+	mov	bx,offset totsize	;-> total compressed file sizes	v1.4
+	mov	ax,[bx]			;.lo				v1.4
+	mov	dx,2[bx]		;.hi				v1.4
+
+	push	ax			;save totsize.lo		v1.4
+	push	dx			; and totsize.hi		v1.4
+
+	mov	di,offset vtsize	;format total archive file size	v1.3
+	call	Asciify_Long		;				v1.3
+
+; reduce the total size/length to word values
+
+	pop	dx			;totsize.hi			v1.4
+	pop	cx			;totsize.lo			v1.4
+	pop	ax			;totlen.hi			v1.4
+	pop	bx			;totlen.lo			v1.4
+
+ArcV2b: or	ax,ax			; big number?
+	jz	ArcV2c			; nope, can use it
+	 shr	ax,1			; yup, divide by two
+	 rcr	bx,1
+	 shr	dx,1
+	 rcr	cx,1
+	 jmp	short ArcV2b
+
+ArcV2c:
+	mov	ax,bx
+	mov	sign,' '		; whata kludge
+	cmp	ax,cx			; arc is bigger than orig?
+	jb	ArcV2c1
+	 sub	ax,cx			; amount saved
+	 jmp	short ArcV2f
+
+ArcV2c1:
+	sub	ax,cx
+	neg	ax
+	mov	sign,'-'
+
+ArcV2f:
+	mul	hundred			; to percentage
+	add	ax,50
+	adc	dx,0			; round up percent
+	or	bx,bx			; empty file?
+	jnz	ArcV2d
+	 mov	ax,100
+	 jmp	short ArcV2e
+
+ArcV2d: div	bx
+ArcV2e:
+	mov	di,offset vtsf-2	;format stowage factor		v1.3
+	call	Asciify			;AX				v1.3
+
+	mov	al,sign
+	mov	vtsf,al
+	Print	vthdr			; display totals
+	ret
+
+Format_Totals	endp
+
+
+OpenArc proc	near			; open new archive
+
+	mov	dx,offset arcname
+	mov	ax,3d00h		; for input
+	int	21h
+	jnb	Open_GetSize		;opened ok			v1.3a
+	 ret				;return CF set, AL=error	v1.3a
+
+Open_GetSize:
+	mov	bx,ax			;handle into BX			v1.3a
+	mov	archdl,ax		; save file handle
+
+;v1.3a	We get the total file size now for later EOF testing.
+	xor	dx,dx			;0 offset
+	xor	cx,cx
+	mov	ax,4202H		;from file end
+	int	21H
+	mov	filelen,ax		;length.low
+	mov	filelen[2],dx		;length.hi
+	xor	cx,cx			;back to start
+	xor	dx,dx
+	mov	ax,4200H		;psn file pointer from start
+	int	21H
+	ret				;CF should be clear
+
+OpenArc endp
+
+
+ClosArc proc	near
+
+	mov	bx,archdl		; previous handle
+	or	bx,bx			; already open?
+	jz	Closed
+	 mov	ah,3eh			; yes, so close it
+	 int	21H
+Closed:	mov	archdl,0		;flag as closed
+	ret
+
+ClosArc endp
+
+;
+;	print null-terminated (AsciiZ) string like int 21h function 9
+;	Enter with DS:DX -> AsciiZ string
+;	destroys AX
+;	On success, return:
+;	 CF clear
+;	 AL = 0
+;	On failure (write fail), return:
+;	 CF set
+;	 AL = error
+
+PrintS  proc	near
+
+	push	di			;v1.3
+	push	bx
+	push	cx
+
+	mov	cx,0FFFFH		;max scan			v1.3
+	xor	al,al			;handy 0			v1.3
+	mov	di,dx			;string start			v1.3
+	repne	scasb			;find the terminator		v1.3
+	inc	cx			;adjust				v1.3
+	not	cx			;CX=length			v1.3
+
+	mov	bx,outhdl		; using std out or temp file
+	or	bx,bx			;never opened?			v1.3
+	jnz	Print_S1		;nope, we got a handle		v1.3
+	 inc	bx			;make it StdErr			v1.3
+	 inc	bx
+Print_S1:				;				v1.3
+	mov	ah,40h			; write to file
+	int	21h
+	jnb	PrintS_Done		;fine				v1.3
+
+;v1.3	What happens if we're trying to write to an output file
+;	and THAT fails?  Even error msgs can't get out.
+;	We switch to StdErr, that's what!
+
+	mov	di,ax			;save error level		v1.3a
+	mov	bx,STDERR		;force to STdErr		v1.3a
+	mov	outhdl,bx		;and for future output		v1.3a
+	mov	ah,40H			;write to STDOUT		v1.3a
+	int	21H			;(CX,DX unchanged)		v1.3a
+	mov	ax,di			;restore orig error		v1.3a
+	stc				;return CF set			v1.3a
+ 
+PrintS_Done:
+	pop	cx			; recover registers
+	pop	bx
+	pop	di
+	ret
+
+PrintS  endp
+
+	page
+;
+;	format the time (in AX)
+
+time	record  hour:5,min:6,sec:5	;packed time
+
+GetTime proc	near			;format the date
+	mov	di,offset vtime
+	or	ax,ax			;it is zero?
+	jz	GotTime
+
+	push	ax			;save date
+	and	ax,mask hour		;get hour part
+	mov	cl,hour			;bits to shift
+	shr	ax,cl
+	call	Cnvrt1
+	stosw
+	mov	al,':'
+	stosb
+
+GT3:	pop	ax			;get the time back
+	and	ax,mask min		;get min part
+	mov	cl,min			;bits to shift
+	call	Cnvrt
+	stosw
+GotTime:ret
+GetTime endp
+
+
+Cnvrt2  proc	near			;convert to ascii
+	call	Cnvrt
+	cmp	al,'0'			;suppress leading zero
+	jne	Cnvrtd
+	 mov	al,' '
+	 ret
+
+Cnvrt:  shr	ax,cl
+Cnvrt1: aam				;make al into bcd
+	or	ax,'00'			; and to ascii
+	xchg	al,ah
+Cnvrtd: ret
+Cnvrt2  endp
+
+	page
+;
+;	format the date (in AX)
+
+date	record  yr:7,mo:4,dy:5		;packed date
+
+GetDate proc	near			;format the date
+	or	ax,ax			;is it zero?
+	jz	GotDate
+
+	push	ax			;save date
+	and	ax,mask yr		;get year part
+	mov	cl,yr			;bits to shift
+	call	Cnvrt
+	mov	di,offset vyear
+	or	al,'8'			;adjust for base year
+	stosw
+
+	pop	bx			;get the date back
+	push	bx			;save it
+	and	bx,mask mo		;get month part
+	mov	cl,mo			;bits to shift
+	shr	bx,cl
+	add	bx,bx			; form month table index
+	add	bx,bx
+	lea	si,word ptr months-4[bx]
+	mov	cx,word ptr 3
+	mov	di,offset vmonth
+	rep	movsb
+
+	pop	ax			;get the date back
+	and	ax,mask dy		;get day part
+	mov	cl,dy			;bits to shift
+	call	Cnvrt
+	mov	di,offset vdate
+	stosw
+GotDate:ret
+GetDate endp
+
+	page
+;
+;v1.3	A severely hacked single/double precision number conversion function.
+;	Originally from JMODEM, but severely hacked by Toad Hall.
+;	ES:DI -> string
+;	Destroys everything almost.
+
+;Enter here if integer in AX
+Asciify	proc	near
+
+	xor	dx,dx			; clear fake long.hi
+	mov	si,ax			;move integer into SI
+	xor	ah,ah			;clear msb (flag)
+	jmp	short Ascii_Ax		;jump into the code
+
+;Enter here if long integer in DX:AX.
+Asciify_Long:
+
+	mov	si,ax			;move long.lo into SI
+	xor	ah,ah			;clear msb (flag)
+Comment	~
+	MOV	CX,3B9AH		; Get billions
+	MOV	BX,0CA00H
+	CALL	Subtr			; Subtract them out
+
+	MOV	CX,05F5H		; Get hundred-millions
+	MOV	BX,0E100H
+	CALL	Subtr			; Subtract them out
+Comment	ends	~
+
+	and	dx,4FFH			;seems likely			v1.3
+	MOV	CX,word ptr 0098H	; Get ten-millions
+	MOV	BX,9680H
+	CALL	Subtr			; Subtract them out
+
+	MOV	CX,word ptr 000FH	; Get millions
+	MOV	BX,4240H
+	CALL	Subtr			; Subtract them out
+
+	MOV	CX,word ptr 1		; Get hundred-thousands
+	MOV	BX,86A0H
+	CALL	Subtr			; Subtract them out
+
+Ascii_Ax:
+	xor	cx,cx			; Get ten-thousands
+	MOV	BX,2710H
+	CALL	Subtr			; Subtract them out
+	MOV	BX,03E8H
+	CALL	Subtr			; Subtract them out
+
+	MOV	BX,word ptr 0064H
+	CALL	Subtr			; Subtract them out
+	MOV	BX,word ptr 10
+	CALL	Subtr			; Subtract them out
+	mov	ax,si			;residual in SI
+	add	AL,'0'			; Add bias to residual
+	stosb				; Put in the string
+	RET
+
+;Common subroutine for Asciify
+
+Subtr:	mov	al,'0'-1
+
+Subtr1:	INC	al			; Bump the digit character
+	SUB	si,BX			; Dword subtraction
+	SBB	DX,CX
+	JNB	Subtr1			; Continue until a carry
+
+	ADD	si,BX			; One too many, add back
+	ADC	DX,CX			;   and the remainder
+
+	cmp	al,'0'
+	jnz	Subtr2			;nope, turn off leading flag, stuff
+	 or	ah,ah			;no more leading spaces?
+	 jnz	Sub_Stuff		;right, stuff the '0'
+	  mov	al,' '			;make it neat with leading spaces
+Sub_Stuff:
+	stosb				;stuff the char
+	RET
+
+Subtr2:	inc	ah			;turn off leading space flag
+	stosb
+	ret
+Asciify	ENDP
+
+
+;v1.3a	Convert 16-bit binary word in AX
+;	to hex ASCII string at ES:DI
+;	(No need to save any registers)
+
+hexchar db	'0123456789ABCDEF'
+
+Cvh	proc	near
+
+	mov	si,offset hexchar	;for faster access		v1.3a
+	mov	dx,ax			; save 16-bits
+
+	mov	bl,dh			; third nibble
+	mov	cx,0F04H		;CL=4 for shifting,		v1.3a
+					;CH=0FH for masking		v1.3a
+	shr	bl,cl
+	mov	al,[si][bx]		;snarf hex char			v1.3a
+	stosb
+
+	mov	bl,dh			; last nibble
+	and	bl,ch	;0fh		;				v1.3a
+	mov	al,[si][bx]		;snarf hex char			v1.3a
+	stosb
+
+	mov	bl,dl			; first nibble
+	sub	bh,bh
+	shr	bl,cl			; isolate (CL still 4)		v1.3a
+	mov	al,[si][bx]		;snarf hex char			v1.3a
+	stosb
+
+	mov	bl,dl			; second nibble
+	and	bl,ch	;0fh		; isolate			v1.3a
+	mov	al,[si][bx]		;snarf hex char			v1.3a
+	stosb
+	ret
+
+Cvh	endp
+
+	subttl	'--- i/o data areas'
+
+ArcV	endp
+
+archdr  db	30 dup (0)		; i/o area for a header		v1.3a
+
+inbuf	db	INBUFSZ dup (0)		;just big enough for ZIP
+					;directories and filenames	v1.3a
+
+CSEG	ENDS
+	END
+```
+{% endraw %}
+
+## RBBSDV.ASM
+
+{% raw %}
+```
+PAGE 60,132
+TITLE DESQview BASIC File Locking Interface Copyright 1988 by Jon Martin     
+;--------------------------------------------------------------------;
+;ROUTINE: LOCKDV              AUTHOR:  Jon Martin                    ;
+;                                      4396 N. Prairie Willow Ct.    ;
+;                                      Concord, California 94521     ;
+;                                                                    ;
+;DATE:  October 23, 1988      VERSION: 1.0                           ;       
+;                                                                    ;
+;DESCRIPTION: This subroutine enables programs written in Compiled   ;
+;             BASIC to do Semaphore type resource locking when       ;
+;             running in a DESQview environment.  Care was taken     ;
+;             to allow the program to be fully DESQview aware.       ;
+;             Programs calling this interface in a non DESQview      ;
+;             environment will totally ignore the lock and unlock    ;
+;             requests.  BEGINC (Begin critical) and ENDC (End       ;
+;             critical) are used in a pre DESQview 2.00 environment. ;
+;             API calls to Create and Test for the presence of       ;
+;             mailboxes are used to implement the resource locking   ;
+;             strategy when running in a DESQview 2.00 or higher     ;
+;             environment.                                           ;
+;                                                                    ;
+;             LOCKING - Get resource name                            ;
+;                       Find mailbox using resource name             ;
+;                       If found then pause and loop until not found ;
+;                       Create mailbox using resource name           ;
+;                       return to calling program                    ;
+;           UNLOCKING - Get resource name                            ;
+;                       Find mailbox using resource name             ;
+;                       If not found then return to calling program  ;
+;                       If found then Close and Free mailbox         ;
+;                       Return to calling program                    ;
+;                                                                    ;
+;                       BEGINC and ENDC have been wrapped around     ;
+;                       those processes that were determined to be   ;
+;                       necessary.                                   ;
+;                                                                    ;
+;FUNCTION: This routine supports calls from the IBM (MICROSOFT)      ;
+;          BASIC Version 2.0 or Microsoft QuickBASIC Versions 1.0,   ;
+;          2.01, 3.0, 4.00b & 4.50 compilers to the DESQview User    ;
+;          Interface.  The calls are:                                ;
+;                                                                    ;
+;            CALL DVLOCK(resource name)                              ;
+;                 a) returns if DESQview is not present              ;
+;                 b) issues Begin Critical if DESQview level < 2.00  ;
+;                 c) issues Lock Mailbox if DESQview level           ;
+;                    >= 2.00                                         ;
+;                                                                    ;
+;            CALL DVUNLOCK(resource name)                            ;
+;                 a) returns if DESQview is not present              ;
+;                 b) issues End Critical if DESQview level <2.00     ;
+;                 c) issues Unlock Mailbox if DESQview level         ;
+;                    >= 2.00                                         ;
+;                                                                    ;
+; NOTE: "resource" must be a string and not exceed 32 characters     ;
+;       Link this with your BASIC program in the following manner    ;
+;                                                                    ;
+;       LINK PGMNAME+LOCKDV,,,;                                      ;
+;                                                                    ;
+;--------------------------------------------------------------------;
+LOCKDV   SEGMENT BYTE PUBLIC 'CODE'
+
+         ASSUME  CS:LOCKDV,DS:LOCKDV,ES:LOCKDV
+         ORG     0
+.xlist
+.SALL
+;  DESQview API interfaces
+
+;***************************************************************
+;
+;  Function numbers (AX values) for the @CALL interface
+;
+;***************************************************************
+
+DVC_PAUSE	EQU	1000H
+DVC_PRINTC	EQU	1003H
+DVC_GETBIT	EQU	1013H
+DVC_FREEBIT	EQU	1014H
+DVC_SETBIT	EQU	1015H
+DVC_ISOBJ	EQU	1016H
+DVC_LOCATE	EQU	1018H
+DVC_SOUND	EQU	1019H
+DVC_OSTACK	EQU	101AH
+DVC_BEGINC	EQU	101BH
+DVC_ENDC	EQU	101CH
+DVC_STOP	EQU	101DH
+DVC_START	EQU	101EH
+DVC_DISPEROR	EQU	101FH
+DVC_PGMINT	EQU	1021H
+DVC_POSWIN	EQU	1023H
+DVC_GETBUF	EQU	1024H
+DVC_USTACK	EQU	1025H
+DVC_POSTTASK	EQU	102BH
+DVC_NEWPROC	EQU	102CH
+DVC_KMOUSE	EQU	102DH
+
+DVC_APPNUM	EQU	1107H
+DVC_DBGPOKE	EQU	110AH
+DVC_APILEVEL	EQU	110BH
+DVC_GETMEM	EQU	110CH
+DVC_PUTMEM	EQU	110DH
+DVC_FINDMAIL	EQU	110EH
+DVC_PUSHKEY	EQU	1110H
+DVC_JUSTIFY	EQU	1111H
+DVC_CSTYLE	EQU	1112H
+
+DVC_DVPRESENT	EQU	0FFFFH
+DVC_SHADOW	EQU	0FFFEH
+DVC_UPDATE	EQU	0FFFDH
+
+;***************************************************************
+;
+;  Message numbers (BH values) for the @SEND interface
+;
+;***************************************************************
+
+DVM_HANDLE	EQU	00H
+DVM_NEW		EQU	01H
+DVM_FREE	EQU	02H
+DVM_ADDR	EQU	03H
+DVM_DIR		EQU	03H
+DVM_READ	EQU	04H
+DVM_APPLY	EQU	04H
+DVM_WRITE	EQU	05H
+DVM_SIZEOF	EQU	08H
+DVM_LEN		EQU	09H
+DVM_ADDTO	EQU	0AH
+DVM_SUBFROM	EQU	0BH
+DVM_OPEN	EQU	0CH
+DVM_CLOSE	EQU	0DH
+DVM_ERASE	EQU	0EH
+DVM_STATUS	EQU	0FH
+DVM_EOF		EQU	10H
+DVM_AT		EQU	11H
+DVM_SETSCALE	EQU	11H
+DVM_SETNAME	EQU	11H
+DVM_READN	EQU	12H
+DVM_GETSCALE	EQU	12H
+DVM_REDRAW	EQU	13H
+DVM_SETESC	EQU	14H
+DVM_LOCK	EQU	14H
+
+;***************************************************************
+;
+;  Alias numbers (BL values) for the @SEND interface
+;
+;***************************************************************
+
+DVA_TOS		EQU	00H
+DVA_ME		EQU	01H
+DVA_MAILTOS	EQU	02H
+DVA_MAILME	EQU	03H
+DVA_KEYTOS	EQU	04H
+DVA_KEYME	EQU	05H
+DVA_OBJQTOS	EQU	06H
+DVA_OBJQME	EQU	07H
+DVA_WINDOW	EQU	08H
+DVA_MAILBOX	EQU	09H
+DVA_KEYBOARD	EQU	0AH
+DVA_TIMER	EQU	0BH
+DVA_POINTER	EQU	0FH
+DVA_PANEL	EQU	10H
+
+
+;***************************************************************
+;
+;  @SEND interface macro - bombs AH and BX
+;
+;***************************************************************
+
+@SEND		macro	message,object
+		ifdef DVA_&object
+		  MOV	BX,DVM_&message*256+DVA_&object
+  		  MOV	AH,12H
+		  INT	15H
+		else		
+		  @PUSH	&object
+		  @SEND	&message,TOS
+		endif
+		endm
+
+;***************************************************************
+;
+;  @CALL interface macro - bombs AX
+;
+;***************************************************************
+
+@CALL		macro	func
+	        local	L1
+		ifndef DVC_&func
+		  MOV	AX,&func
+		  INT	15H
+		else
+		if (DVC_&func eq DVC_APILEVEL)
+		  CMP	BX,200H		; is 2.00 sufficient ?
+		  JB	L1		; jump if so
+		  MOV	AX,DVC_APILEVEL	; issue the call
+		  INT	15H
+		  CMP	AX,2		; early version 2.00 ?
+		  JNE	L1		; jump if not
+		  XCHG	BH,BL		; reverse bytes
+		  MOV	AX,DVC_APILEVEL	; reissue call
+		  INT	15H
+		  XCHG	BH,BL		; correct byte order
+L1:
+		else
+		if (DVC_&func eq DVC_DVPRESENT)
+		  PUSH	BX		; save registers
+		  PUSH	CX
+		  PUSH	DX
+		  MOV	AX,2B01H	; DOS Set Date function
+		  XOR	BX,BX		; in case outside DESQview
+		  MOV	CX,'DE'		; invalid date value
+		  MOV	DX,'SQ'
+		  INT	21H
+		  MOV	AX,BX		; version # to AX
+		  CMP	AX,2		; early DV 2.00 ?
+		  JNE	L1		; jump if not
+		  XCHG	AH,AL		; swap bytes if so
+L1:		  POP	DX		; restore registers
+		  POP	CX
+		  POP	BX
+		else
+		if (DVC_&func eq DVC_SHADOW)
+		  MOV	AH,0FEH
+		  INT	10H
+		else 
+		if (DVC_&func eq DVC_UPDATE)
+		  MOV	AH,0FFH
+		  INT	10H
+		else 
+		  MOV	AX,DVC_&func
+		  INT	15H
+		endif
+		endif
+		endif
+		endif
+		endif
+		endm
+
+
+;***************************************************************
+;
+;  @PUSH and supporting macros - pushes 32-bit values on the stack
+;
+;***************************************************************
+
+@PUSH_ESDI	macro
+		PUSH	ES
+		PUSH	DI
+		endm
+
+@PUSH_DSSI	macro
+		PUSH	DS
+		PUSH	SI
+		endm
+
+@PUSH_BXAX	macro
+		PUSH	BX
+		PUSH	AX
+		endm
+
+@PUSH_DXCX	macro
+		PUSH	DX
+		PUSH	CX
+		endm
+
+@PUSH_ESSI	macro
+		PUSH	ES
+		PUSH	SI
+		endm
+
+@PUSH_DSDI	macro
+		PUSH	DS
+		PUSH	DI
+		endm
+
+@PUSH		macro	parm
+		ifdef @PUSH_&parm
+		  @PUSH_&parm
+		else		  
+		  PUSH	WORD PTR &parm+2
+		  PUSH	WORD PTR &parm
+		endif
+		endm
+
+
+;***************************************************************
+;
+;  @POP and supporting macros - pops 32-bit values from the stack
+;
+;***************************************************************
+
+@POP_ESDI	macro
+		POP	DI
+		POP	ES
+		endm
+
+@POP_DSSI	macro
+		POP	SI
+		POP	DS
+		endm
+
+@POP_BXAX	macro
+		POP	AX
+		POP	BX
+		endm
+
+@POP_DXCX	macro
+		POP	CX
+		POP	DX
+		endm
+
+@POP_ESSI	macro
+		POP	SI
+		POP	ES
+		endm
+
+@POP_DSDI	macro
+		POP	DI
+		POP	DS
+		endm
+
+@POP		macro	parm
+		ifdef @POP_&parm
+		  @POP_&parm
+		else		  
+		  POP	WORD PTR &parm
+		  POP	WORD PTR &parm+2
+		endif
+		endm
+
+
+;***************************************************************
+;
+;  @MOV and supporting macros - moves 32-bit values to/from memory
+;
+;***************************************************************
+
+@DV_LOAD	macro	seg,off,arg
+		MOV	&seg,WORD PTR &arg+2
+		MOV	&off,WORD PTR &arg
+		endm
+
+@DV_STORE	macro	seg,off,arg
+		MOV	WORD PTR &arg+2,&seg
+		MOV	WORD PTR &arg,&off
+		endm
+
+@MOV_ESDI	macro	mac,arg
+		&mac	ES,DI,&arg
+		endm
+
+@MOV_DSSI	macro	mac,arg
+		&mac	DS,SI,&arg
+		endm
+
+@MOV_BXAX	macro	mac,arg
+		&mac	BX,AX,&arg
+		endm
+
+@MOV_DXCX	macro	mac,arg
+		&mac	DX,CX,&arg
+		endm
+
+@MOV_ESSI	macro	mac,arg
+		&mac	ES,SI,&arg
+		endm
+
+@MOV_DSDI	macro	mac,arg
+		&mac	DS,DI,&arg
+		endm
+
+@MOV		macro	dest,src
+		ifdef @MOV_&dest
+		  @MOV_&dest	@DV_LOAD,&src
+		else
+		  @MOV_&src	@DV_STORE,&dest
+		endif
+		endm
+
+ 
+;***************************************************************
+;
+;  @CMP macro - compares BX:AX to DWORD in memory
+;
+;***************************************************************
+
+@CMP		macro	parm
+		local	L1
+		CMP	AX,WORD PTR &parm
+		JNE	L1
+		CMP	BX,WORD PTR &parm+2
+L1:
+		endm
+.list
+CX_HOLD          DW      0
+SEMAPHORE        DD      0
+RESOURCE         DB      '                                '
+
+DVLOCK   PROC    FAR
+         PUBLIC  DVLOCK 
+         PUSH    BP                              ;save base pointer
+         MOV     BP,SP                           ;establish new base
+         PUSH    DS                              ;save BASIC data segment
+         PUSH    ES                              ;save BASIC extra segment
+         MOV     BX,[BP+6]                       ;get string descriptor
+         MOV     DX,[BX+2]                       ;get address of string
+         MOV     CX,[BX]                         ;get length of string
+         MOV     CS:CX_HOLD,CX                   ;save length of string
+         PUSH    CS                              ;setup for ES
+         POP     ES                              ;ES now points to us
+         MOV     SI,DX                           ;offset of BASIC'S string
+         LEA     DI,CS:RESOURCE                  ;point to resource name
+         CLD                                     ;start from bottom
+         REP     MOVSB                           ;copy string to resource name
+         @CALL   DVPRESENT                       ;test for DESQview
+         TEST    AX,AX                           ;well is it there?
+         JZ      LK_EXIT                         ;zero means no
+         MOV     BX,200H                         ;set API level required
+         CMP     AX,BX                           ;is required level supported?
+         JNB     APILKSEM                        ;not below means ok!
+         @CALL   BEGINC                          ;start critical
+LK_EXIT:
+         JMP     DVLOCK_EXIT                     ;exit lock resource
+APILKSEM:
+         @CALL   APILEVEL                        ;set API level
+LOOP_SEMA:
+         @CALL   BEGINC                          ;start critical
+         LEA     DI,CS:RESOURCE                  ;point to resource mailbox nm
+         PUSH    CS                              ;setup for ES
+         POP     ES                              ;ES now points to us
+         MOV     CX,CS:CX_HOLD                   ;setup resource name len
+         XOR     DX,DX                           ;clear high register
+         @CALL   FINDMAIL                        ;find the resource mailbox
+         TEST    BX,BX                           ;did we find it?
+         JZ      MAKE_SEMA                       ;zero means nope!
+         @CALL   ENDC                            ;end critical
+         @CALL   PAUSE                           ;let's wait for awhile
+         JMP     LOOP_SEMA                       ;let's go try again
+MAKE_SEMA:
+         @SEND   NEW,MAILBOX                     ;create resource mailbox
+         @POP    CS:SEMAPHORE                    ;save semaphore
+         LEA     DI,CS:RESOURCE                  ;point to resource mailbox nm
+         PUSH    CS                              ;setup for ES
+         POP     ES                              ;ES now points to us
+         @PUSH_ESDI                              ;put address on stack
+         MOV     CX,CS:CX_HOLD                   ;setup resource name len
+         XOR     DX,DX                           ;clear high register
+         @PUSH_DXCX                              ;put length on stack
+         @SEND   SETNAME,CS:SEMAPHORE            ;let's give it a name
+         @CALL   ENDC                            ;end critical
+DVLOCK_EXIT:
+         POP     ES                              ;restore BASIC extra segment
+         POP     DS                              ;restore BASIC data segment
+         POP     BP                              ;restore BASIC base pointer
+         RET     2                               ;return to BASIC
+DVLOCK   ENDP
+
+DVUNLOCK PROC    FAR
+         PUBLIC  DVUNLOCK
+         PUSH    BP                              ;save base pointer
+         MOV     BP,SP                           ;establish new base
+         PUSH    DS                              ;save BASIC data segment
+         PUSH    ES                              ;save BASIC extra segment
+         MOV     BX,[BP+6]                       ;get string descriptor
+         MOV     DX,[BX+2]                       ;get address of string
+         MOV     CX,[BX]                         ;get length of string
+         MOV     CS:CX_HOLD,CX                   ;save length of string
+         PUSH    CS                              ;setup for ES
+         POP     ES                              ;ES now points to us
+         MOV     SI,DX                           ;offset of BASIC'S string
+         LEA     DI,CS:RESOURCE                  ;point to resource name
+         CLD                                     ;start from bottom
+         REP     MOVSB                           ;copy string to resource name
+         @CALL   DVPRESENT                       ;test for DESQview
+         TEST    AX,AX                           ;well is it there?
+         JZ      UNLKSEMA_EXIT                   ;zero means no
+         MOV     BX,200H                         ;set API level required
+         CMP     AX,BX                           ;is required level supported?
+         JNB     APIULSEM                        ;not below means ok!
+         @CALL   ENDC                            ;end critical
+UNLKSEMA_EXIT:
+         JMP     DVUNLOCK_EXIT                   ;exit unlock resource
+APIULSEM:
+         @CALL   APILEVEL
+         LEA     DI,CS:RESOURCE                  ;point to resource mailbox nm
+         PUSH    CS                              ;setup for ES
+         POP     ES                              ;ES now points to us
+         MOV     CX,CS:CX_HOLD                   ;setup resource name len
+         XOR     DX,DX                           ;clear high register
+         @CALL   FINDMAIL                        ;find resource mailbox
+         TEST    BX,BX                           ;did we find it?
+         JZ      DVUNLOCK_EXIT                   ;zero means nope!
+         @MOV    CS:SEMAPHORE,DSSI               ;found so save semaphore
+         @CALL   BEGINC                          ;begin critical
+         @SEND   CLOSE,CS:SEMAPHORE              ;unlock resource mailbox
+         @SEND   FREE,CS:SEMAPHORE               ;release resource mailbox
+         @CALL   ENDC                            ;end critical
+DVUNLOCK_EXIT:
+         POP     ES                              ;restore BASIC extra segment
+         POP     DS                              ;restore BASIC data segment
+         POP     BP                              ;restore BASIC base pointer
+         RET     2                               ;return to BASIC
+DVUNLOCK ENDP
+
+LOCKDV   ENDS
+         END
+```
+{% endraw %}
+
+## RBBSHS.ASM
+
+{% raw %}
+```
+PAGE 66,132
+TITLE RBBS-PC HearSay Interface Copyright 1989 by Jon J. Martin
+;--------------------------------------------------------------------;
+;ROUTINE: RBBSHS              AUTHOR:  Jon J. Martin                 ;
+;                                      4396 N. Prairie Willow Ct.    ;
+;                                      Concord, California 94521     ;
+;                                                                    ;
+;DATE:  January 27, 1989      VERSION: 1.0                           ;       
+;                                                                    ;
+;FUNCTION: This routine supports calls from the IBM (MICROSOFT)      ;
+;          BASIC Version 2.0 or Microsoft Quick BASIC Version 1.0    ;
+;          compilers to the HearSay User Interface.  The call is:    ;
+;                                                                    ;
+;            CALL RBBSHS (A$)                                        ;
+;                                                                    ;
+;          where A$ is a string data item with the first byte        ;
+;          containing a CHR$(x) value of the legnth of the string    ;
+;          to be spoken.  (DO NOT INCLUDE THE 1 BYTE IN THE ACTUAL   ;
+;          LENGTH)                                                   ;
+;                                                                    ;
+;--------------------------------------------------------------------;
+RBBSHSAY  SEGMENT BYTE PUBLIC 'CODE'
+          ASSUME CS:RBBSHSAY 
+          PUBLIC RBBSHS
+RBBSHS    PROC   FAR           ;LONG CALL
+          PUSH   BP            ;SAVE CALLERS BASE POINTER REGISTER -- BP 
+          MOV    BP,SP         ;SETUP TO ADDRESS OFF OF BASE POINTER REGISTER
+          MOV    SI,[BP]+6     ;GET ADDRESS OF STRING PARAMETER
+          MOV    AX,2[SI]      ;PUT VALUE IN AX REGISTER
+          PUSH   DS            ;DATA SEGMENT ON STACK
+          PUSH   AX            ;STRING POINTER ON STACK
+          XOR    AX,AX         ;SET AL TO 0
+          INT    55H           ;CALL HearSay USER INTERFACE
+          POP    AX            ;REMOVE PARAMETERS FROM STACK
+          POP    AX            ;REMOVE PARAMETERS FROM STACK
+          POP    BP            ;RESTORE CALLERS BASE POINTER REGISTER-- BP
+          RET    2             ;RETURN AND REMOVE THE PARAMETER FROM STACK
+RBBSHS    ENDP
+RBBSHSAY  ENDS
+          END
+```
+{% endraw %}
+
+## RBBSML.ASM
+
+{% raw %}
+```
+PAGE 66,132
+TITLE RBBS-PC MultiLink Interface Copyright 1985 by D. Thomas Mack
+;--------------------------------------------------------------------;
+;ROUTINE: RBBSML              AUTHOR:  D. Thomas Mack                ;
+;                                      10210 Oxfordshire Road        ;
+;                                      Great Falls, Virginia  22066  ;
+;                                                                    ;
+;DATE:  October 7, 1985       VERSION: 1.0                           ;       
+;                                                                    ;
+;FUNCTION: This routine supports calls from the IBM (MICROSOFT)      ;
+;          BASIC Version 2.0 or Microsoft Quick BASIC Version 1.0    ;
+;          compilers to the MultiLink User Interface.  The call is:  ;
+;                                                                    ;
+;            CALL RBBSML (AX%,BX%)                                   ;
+;                                                                    ;
+;          where AX% and BX% are 16-bit binary data items (i.e.      ;
+;          integer variables) and should be set for the desired      ;
+;          function as described in the MultiLink manual.            ;
+;                                                                    ;
+;          The value for AX, as defined in your MultiLink manual,    ;
+;          should be computed as                                     ;
+;                                                                    ;
+;             AX% = 256*function-code + value-for-AL                 ;
+;                                                                    ;
+;          and similarly BX% should be computed as                   ;
+;                                                                    ;
+;             BX% = value-for-BX                                     ;
+;                                                                    ;
+;          as shown in the MultiLink manual for BASIC programs.      ;
+;          for Basic programs.  A MultiLink "status code" is         ;
+;          returned in AX%.                                          ;
+;--------------------------------------------------------------------;
+RBBS_MLTI SEGMENT BYTE PUBLIC 'CODE'
+          ASSUME CS:RBBS_MLTI
+          PUBLIC RBBSML
+RBBSML    PROC   FAR           ;LONG CALL
+          PUSH   BP            ;SAVE CALLERS BASE POINTER REGISTER -- BP 
+          MOV    BP,SP         ;SETUP TO ADDRESS OFF OF BASE POINTER REGISTER
+          MOV    DI,[BP]+8     ;GET ADDRESS OF AX% PARAMETER
+          MOV    AX,[DI]       ;PUT VALUE IN AX REGISTER
+          MOV    DI,[BP]+6     ;GET ADDRESS OF BX% PARAMETER
+          MOV    BX,[DI]       ;PUT VALUE IN BX REGISTER
+          INT    7FH           ;CALL MultiLink USER INTERFACE
+          MOV    DI,[BP]+8     ;GET ADDRESS OF AX% PARAMETER
+          XOR    AH,AH         ;CLEAR GARBAGE IN AH REGISTER
+          MOV    [DI],AX       ;PUT RETURN CODE IN AX% PARAMETER
+          POP    BP            ;RESTORE CALLERS BASE POINTER REGISTER-- BP
+          RET    4             ;RETURN AND REMOVE THE 2 PARAMETERS FROM STACK
+RBBSML    ENDP
+RBBS_MLTI ENDS
+          END
+```
+{% endraw %}
+
+## RBBSUTIL.ASM
+
+{% raw %}
+```
+PAGE 66,132
+TITLE RBBS-PC Assembly Language Subroutines Copyright 1986, by D. Thomas Mack
+;--------------------------------------------------------------------;
+;ROUTINE: RBBSFIND            AUTHOR:  D. Thomas Mack                ;
+;                                      10210 Oxfordshire Road        ;
+;                                      Great Falls, Virginia  22066  ;
+;                                                                    ;
+;DATE:  June 29, 1986         VERSION: 1.0                           ;       
+;                                                                    ;
+;FUNCTION: This routine supports calls from the IBM (MICROSOFT)      ;
+;          BASIC Version 2.0 or Microsoft Quick BASIC Version 1.0    ;
+;          compilers to find the date a file was created.            ;
+;                                                                    ;
+;            CALL RBBSFIND (A$,ERROR%,YEAR%,MONTH%,DAY%)             ;
+;                                                                    ;
+;          where A$ is the fully qualified file name to find the     ;
+;                   date for and all other parameters are zeroes.    ;
+;                                                                    ;
+; Offset   Variable    Description of Variable                       ;
+;                                                                    ;
+; BP+14       BX  = string descriptor address of the file name to    ;
+;                   find the creation date for where the string      ;
+;                   descriptior has the format:                      ;
+;                                                                    ;
+;                   Bytes 0 and 1 contain the length of the string   ;
+;                                 (0 to 32,767).                     ;
+;                   Bytes 2 and 3 contain the lower and upper 8 bits ;
+;                                 of the string's starting address   ;
+;                                 in string space (respectively).    ;
+; BP+12   ERROR% = Zero if no error was encountered.  Non-zero if an ;
+;                  error occurred.                                   ;
+; BP+10    YEAR% = number of years since 1980 when file was last     ;
+;                  modified.
+; BP+8    MONTH% = month the file was last modified.                 ;
+; BP+6      DAY% = day the file was last modified.                   ;
+;                                                                    ;
+;--------------------------------------------------------------------;
+;
+; LIST OF PARAMETERS AS THEY APPEAR ON THE STACK
+;
+PARMLIST STRUC
+SAVE_BP   DW     ?             ;RETAINS CONTENTS OF BASE POINTER REGISTER
+RET_OFF   DW     ?             ;RETURN ADDRESS OF CALLING PROGRAM
+RET_SEG   DW     ?             
+PARM5     DW     ?             ;DAY FILE WAS CREATED
+PARM4     DW     ?             ;MONTH FILE WAS CREATED
+PARM3     DW     ?             ;YEAR FILE WAS CREATED (PAST 1980)
+PARM2     DW     ?             ;ERROR RETURN CODE
+PARM1     DW     ?             ;STRING DESCRIPTOR
+PARMLIST  ENDS
+;
+; LET THE ASSEMBLER CALCULATE THE VALUE FOR RETURNING FROM SUBROUTINE WITH EQU
+;
+PARMSIZE  EQU    OFFSET PARM1 - OFFSET RET_SEG
+;
+; LOCAL DATA AREA FOR INITIALIZED CONSTANTS (NONE)
+;
+CONST     SEGMENT WORD PUBLIC 'CONST'
+CONST     ENDS
+;
+; LOCAL DATA AREA OF UNINITIALIZED VALUES
+; 
+DATA      SEGMENT WORD PUBLIC 'DATA'
+SAVE_DTA_OFF DW  ?             ;ADDRESS OF CURRENT DISK TRANSFER AREA
+SAVE_DTA_SEG DW  ?      
+RBBSDTA      DB 30 DUP(?)      ;WORKING DTA (NOT BASIC'S)
+PATHFILE     DB 64 DUP(?)      ;PATH AND FILE NAME FOR SEARCH
+DATA      ENDS
+DGROUP    GROUP DATA,CONST
+;
+; DEFINE A STACK TO PUSH UP TO 3 ITEMS ON THE STACK AT ANY GIVEN TIME
+;
+STACK     SEGMENT WORD STACK 'STACK'
+          DW      4 DUP(?)
+STACK     ENDS
+RBBS_UTIL SEGMENT BYTE PUBLIC 'CODE'
+          ASSUME  CS:RBBS_UTIL,DS:DGROUP
+RBBSFIND  PROC   FAR           ;LONG CALL
+          PUBLIC RBBSFIND
+          PUSH   BP            ;SAVE CALLER'S BASE POINTER REGISTER -- BP 
+          MOV    BP,SP         ;SETUP TO ADDRESS OFF OF BASE POINTER REGISTER
+          MOV    BX,[BP].PARM1 ;GET FILE NAME STRING DESCRIPTOR ADDRESS
+          MOV    CX,[BX]       ;GET THE SIZE OF THE STRING
+          XOR    AX,AX         ;INDICATE NO ERROR CONDITIONS
+          CMP    CX,0          ;IF LENGTH IS ZERO,
+          JE     FINISH        ;EXIT
+;
+          MOV    SI,[BX+2]     ;GET THE ADDRESS OF THE STRING
+          PUSH   DS            ;PUSH DATA SEGMENT REGISTER -- DS, 
+          POP    ES            ;INTO EXTENDED SEGMENT REGISTER -- ES, FOR MOVE
+          LEA    DI,PATHFILE   ;MOVE PATH/FILE SPECIFICATION TO "PATHFILE" AREA
+          CLD                  ;CLEAR DIRECTION FLAGS
+          REP    MOVSB         ;END STRING WITH A BINARY ZERO FOR DOS CALL
+          MOV    BYTE PTR ES:[DI],0
+;
+          MOV    AH,2FH        ;GET DISK TRANSFER AREA ADDRESS IN BX
+          INT    21H           ;ISSUE DOS INTERRUPT 21
+          JC     FINISH        ;EXIT IF THERE WERE ERRORS
+          MOV    SAVE_DTA_OFF,BX ;SAVE BASIC'S DISK TRANSFER AREA
+          MOV    SAVE_DTA_SEG,ES
+;
+          LEA    DX,RBBSDTA    ;SET UP PRIVATE DISK TRANSFER AREA FROM BASIC'S
+          MOV    AH,1AH        ;SETUP NEW TEMPORARY DISK TRANSFER AREA ADDRESS
+          INT    21H           ;ISSUE DOS INTERRUPT 21
+          JC     FINISH        ;EXIT IF THERE WERE ERRORS 
+;
+          XOR    CX,CX         ;SET UP TO LOOK FOR ALL DIRECTORY ENTRIES
+          LEA    DX,PATHFILE   ;FIND THE FIRST FILE THAT MATCHES "PATHFILE"
+          MOV    AH,4EH        ;CALL DOS FUNCTION X'4E' TO FIND FILE
+          INT    21H           ;ISSUE DOS INTERRUPT 21
+          JC     EXIT          ;EXIT IF THERE WHERE ERRORS
+;
+          LEA    DI,RBBSDTA+24 ;POINT TO DATE FIELD IN DISK TRANSFER AREA (+24)
+          MOV    AX,DS:[DI]    ;GET DATE OF FILE (DTA +24) IN AX REGISTER
+;                               BITS 0-4  = DAY(1-31)
+;                               BITS 5-8  = MONTH(1-12)
+;                               BITS 9-15 = YEAR(0 - 119, AS AN OFFSET OF 1980)
+;      SET UP AS FOLLOWS:
+;
+;      |<-------YEAR------->|<--MONTH-->|<-----DAY---->|
+;      |15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0|
+;      |           |           |           |           | 
+;        0  0  0  0  0  0  0  1  1  1  1  0  0  0  0  0  = X'01E0'  
+;        0  0  0  0  0  0  0  0  0  0  0  1  1  1  1  1  = X'001F'
+
+          MOV    BX,AX         ;GET THE DATE INTO THE BX REGISTER
+          MOV    CL,9          ;PREPARE TO SHIFT RIGHT NINE BITS (0-8)
+          SHR    BX,CL         ;SHIFT RIGHT NINE BITS LEAVING THE YEAR ONLY
+          MOV    DI,[BP].PARM3 ;GET ADDRESS OF WHERE TO PUT YEAR (AS AN INDEX 
+          MOV    [DI],BX       ;PAST 1980) FILE WAS CREATED AND PASS IT BACK
+;
+          MOV    BX,AX         ;GET THE DATE INTO THE BX REGISTER AGAIN
+          AND    BX,01E0H      ;TURN OFF ALL THE BITS EXCEPT BITS 5-8 (MONTH)
+          MOV    CL,5          ;PREPARE TO SHIFT RIGHT FIVE BITS (0-4)
+          SHR    BX,CL         ;SHIFT RIGHT FIVE BITS TO GET MONTH ONLY
+          MOV    DI,[BP].PARM4 ;GET ADDRESS OF WHERE TO PUT MONTH FILE WAS MADE
+          MOV    [DI],BX       ;PASS BACK THE MONTH THE FILE WAS CREATED
+;
+          AND    AX,001FH      ;TURN OFF ALL THE BITS EXCEPT BITS 0-4 (THE DAY)
+          MOV    DI,[BP].PARM5 ;GET ADDRESS OF WHERE TO PUT DAY FILE WAS MADE
+          MOV    [DI],AX       ;PASS BACK THE DAY THE FILE WAS CREATED
+          XOR    AX,AX         ;INDICATE NO ERROR CONDITIONS
+
+;
+EXIT:     PUSH   AX            ;SAVE ERROR INDICATOR REGISTER -- AX
+          PUSH   DS            ;SAVE DATA SEGMENT REGISTER -- DS
+          MOV    DX,SAVE_DTA_OFF ;RESTORE BASIC'S DISK TRANSFER AREA AFTER  CPC151A7+
+          MOV    DS,SAVE_DTA_SEG ;SETTING UP THE TEMPORARY RBBS-PC ONE      CPC151A7+
+          MOV    AH,1AH        ;CALL DOS FUNCTION '1A' TO CHANGE DTA'S
+          INT    21H          ;ISSUE DOS INTERRUPT 21                      CPC151A7+
+          POP    DS            ;RESTORE DATA SEGMENT REGISTER -- DS
+          POP    AX            ;RESTORE ERROR INDICATOR REGISTER -- AX
+;
+FINISH:   MOV    DI,[BP].PARM2 ;GET ADDRESS OF WHERE TO PUT ERROR RETURN CODE
+          MOV    [DI],AX       ;PUT THE ERROR RETURN CODE IN ERROR%
+          POP    BP            ;RESTORE CALLERS BASE POINTER REGISTER-- BP
+          RET    PARMSIZE      ;RETURN AND REMOVE THE 5 PARAMETERS FROM STACK
+RBBSFIND  ENDP
+;--------------------------------------------------------------------;
+;ROUTINE: RBBSULC             AUTHOR:  D. Thomas Mack                ;
+;                                      10210 Oxfordshire Road        ;
+;                                      Great Falls, Virginia  22066  ;
+;                                                                    ;
+;DATE:  June 29, 1986         VERSION: 1.0                           ;       
+;                                                                    ;
+;FUNCTION: This routine supports calls from the IBM (MICROSOFT)      ;
+;          BASIC Version 2.0 or Microsoft Quick BASIC Version 1.0    ;
+;          compilers to convert a string to upper case alphabetic    ;
+;          characters.                                               ;
+;                                                                    ;
+;            CALL RBBSULC (A$)                                       ;
+;                                                                    ;
+;          where A$ is the string to be converted to upper case.     ;
+;                                                                    ;
+; Offset   Variable    Description of Variable                       ;
+;                                                                    ;
+; BP+6        BX  = string descriptor address where the string       ;
+;                   descriptor has the format:                       ;
+;                                                                    ;
+;                   Bytes 0 and 1 contain the length of the string   ;
+;                                 (0 to 32,767).                     ;
+;                   Bytes 2 and 3 contain the lower and upper 8 bits ;
+;                                 of the string's starting address   ;
+;                                 in string space (respectively).    ;
+;                                                                    ;
+;--------------------------------------------------------------------;
+RBBSULC   PROC   FAR           ;LONG CALL
+          PUBLIC RBBSULC
+          PUSH   BP            ;SAVE CALLERS BASE POINTER REGISTER -- BP 
+          MOV    BP,SP         ;SETUP TO ADDRESS OFF OF BASE POINTER REGISTER
+          MOV    BX,[BP+6]     ;GET A$ STRING DESCRIPTOR ADDRESS
+          MOV    CX,[BX]       ;GET LENGTH OF STRING A$ IN CX REGISTER
+          MOV    DI,2[BX]      ;GET ADDRESS OF STRING A$ IN DATA INDEX 
+          CMP    CX,0          ;IF LENGTH IS ZERO (I.E. PASSED A NULL STRING)
+          JZ     DONE          ;EXIT
+LOOP:     MOV    AL,[DI]       ;GET A CHARACTER.
+          CMP    AL,'a'        ;IF LESS THAN A LOWER CASE "A" DON'T CHANGE. 
+          JL     NEXT          ;JUMP TO GET THE NEXT CHARACTER.    
+          CMP    AL,'z'        ;IF GREATER THAN A LOWER CASE "Z" DON'T CHANGE.
+          JA     NEXT          ;JUMP TO GET THE NEXT CHARACTER.
+LOWER:    SUB    AL,32         ;SUBTRACT 32 FROM VALUE IF A LOWER CASE LETTER.
+          MOV    [DI],AL       ;STORE THE VALUE IN THE STRING AREA.
+NEXT:     INC    DI            ;POINT TO THE NEXT CHARACTER OF THE STRING.
+          LOOP   LOOP          ;NOW GO BACK TO TEST THE NEXT CHARACTER.
+DONE:     POP    BP            ;RESTORE CALLERS BASE POINTER REGISTER-- BP
+          RET    2             ;RETURN AND REMOVE THE 1 PARAMETES FROM STACK
+RBBSULC   ENDP
+;--------------------------------------------------------------------;
+;ROUTINE: RBBSFREE            AUTHOR:  D. Thomas Mack                ;
+;                                      10210 Oxfordshire Road        ;
+;                                      Great Falls, Virginia  22066  ;
+;                                                                    ;
+;DATE:  June 29, 1986         VERSION: 1.0                           ;       
+;                                                                    ;
+;FUNCTION: This routine supports calls from the IBM (MICROSOFT)      ;
+;          BASIC Version 2.0 or Microsoft Quick BASIC Version 1.0    ;
+;          compilers to DOS interrupt 36 to find the amount of free  ;
+;          space on a specific disk drive.                           ;
+;                                                                    ;
+;            CALL RBBSFREE (AX%,BX%,CX%,DX%)                         ;
+;                                                                    ;
+;          where AX% and BX% are 16-bit binary data items (i.e.      ;
+;          integer variables) and should be as follows:              ;
+;                                                                    ;
+; Offset   Variable    Description of Variable                       ;
+;                                                                    ;
+; BP+12       AX% = number of the disk drive to find the free space  ;
+;                   for where 0=default drive, 1=A, 2=B, etc.        ;
+;                                                                    ;
+; BP+10       BX% = zero when calling RBBSFREE                       ;
+; BP+8        CX% = zero when calling RBBSFREE                       ;
+; BP+6        DX% = zero when calling RBBSFREE                       ;
+;                                                                    ;
+;          upon returning from RBBSFREE, these are set as follows:   ;
+;                                                                    ;
+;             AX% = if the drive specified was invalid contains the  ;
+;                   hexadecimal value of FFFF.  If the drive was     ;
+;                   valid contains the number of sectors per cluster.;
+;             BX% = contains the number of available clusters.       ;
+;             CX% = contains the number of bytes per sector.         ;
+;             DX% = contains the total number of clusters on the     ;
+;                   drive.                                           ;
+;           FREESPACE = AX%*BX%*CX% IF AX%<> X'FFFF'                 ;
+;--------------------------------------------------------------------;
+RBBSFREE  PROC   FAR           ;LONG CALL
+          PUBLIC RBBSFREE
+          PUSH   BP            ;SAVE CALLERS BASE POINTER REGISTER -- BP 
+          MOV    BP,SP         ;SETUP TO ADDRESS OFF OF BASE POINTER REGISTER
+          MOV    DI,[BP+12]    ;GET ADDRESS OF AX% PARAMETER
+          MOV    DL,[DI]       ;PUT VALUE IN DL REGISTER OF DISK DRIVE
+          MOV    AH,36H        ;CALL DOS FUNCTION 36 TO GET FREE DISK SPACE
+          INT    21H           ;ISSUE DOS INTERRUPT 21 
+          MOV    DI,[BP+12]    ;GET ADDRESS OF AX% PARAMETER
+          MOV    [DI],AX       ;PUT VALUE OF AX IN AX% PARAMETER
+          MOV    DI,[BP+10]    ;GET ADDRESS OF BX% PARAMETER
+          MOV    [DI],BX       ;PUT VALUE OF BX IN BX% PARAMETER
+          MOV    DI,[BP+8]     ;GET ADDRESS OF CX% PARAMETER
+          MOV    [DI],CX       ;PUT VALUE OF CX IN CX% PARAMETER
+          MOV    DI,[BP+6]     ;GET ADDRESS OF DX% PARAMETER
+          MOV    [DI],DX       ;PUT VALUE OF DX IN DX% PARAMETER
+          POP    BP            ;RESTORE CALLERS BASE POINTER REGISTER-- BP
+          RET    8             ;RETURN AND REMOVE THE 4 PARAMETERS FROM STACK
+RBBSFREE  ENDP
+;--------------------------------------------------------------------;
+;ROUTINE: RBBSDOS             AUTHOR:  D. Thomas Mack                ;
+;                                      10210 Oxfordshire Road        ;
+;                                      Great Falls, Virginia  22066  ;
+;                                                                    ;
+;DATE:  June 29, 1986         VERSION: 1.0                           ;       
+;                                                                    ;
+;FUNCTION: This routine supports calls from the IBM (MICROSOFT)      ;
+;          BASIC Version 2.0 or Microsoft Quick BASIC Version 1.0    ;
+;          compilers to DOS interrupt 33 to find the version of DOS  ;
+;          that RBBS-PC is being run under.                          ;
+;                                                                    ;
+;            CALL RBBSDOS (AX%,BX%)                                  ;
+;                                                                    ;
+;          where AX% and BX% are 16-bit binary data items (i.e.      ;
+;          integer variables) and should be as follows:              ;
+;                                                                    ;
+; Offset   Variable    Description of Variable                       ;
+;                                                                    ;
+; BP+8        AX% = major version number of the DOS that RBBS-PC is  ;
+;                   running under.  (Zero if less than DOS 2.0)      ;
+;                                                                    ;
+; BP+6        BX% = minor version under of the DOS that RBBS-PC is   ;
+;                   running under.                                   ;
+;--------------------------------------------------------------------;
+RBBSDOS   PROC   FAR           ;LONG CALL
+          PUBLIC RBBSDOS
+          PUSH   BP            ;SAVE CALLERS BASE POINTER REGISTER -- BP 
+          MOV    BP,SP         ;SETUP TO ADDRESS OFF OF BASE POINTER REGISTER
+          MOV    AH,30H        ;CALL DOS FUNCTION 30 TO GET DOS VERSION
+          INT    21H           ;ISSUE DOS INTERRUPT 21 
+          MOV    DI,[BP+8]     ;GET ADDRESS OF AX% PARAMETER
+          MOV    [DI],AL       ;PUT VALUE OF MAJOR DOS NUMBER IN AX% PARAMETER
+          MOV    DI,[BP+6]     ;GET ADDRESS OF BX% PARAMETER
+          MOV    [DI],AH       ;PUT VALUE OF MINOR DOS VERSION IN B% PARAMETER
+          POP    BP            ;RESTORE CALLERS BASE POINTER REGISTER-- BP
+          RET    4             ;RETURN AND REMOVE THE 2 PARAMETERS FROM STACK
+RBBSDOS   ENDP
+RBBS_UTIL ENDS
+          END
+```
+{% endraw %}
+
+## WATCHDG1.ASM
+
+{% raw %}
+```
+	PAGE	60,132
+	TITLE	Watchdog - resets machine when carrier is lost
+;
+; WATCHDOG.COM	8/15/84  by James R. Reinders
+;
+;  Update/Modification History (reverse order):
+;
+;	8/15/84 - Original program.
+;
+;	The IBM Macro Assembler and Link will produce WATCHDOG.EXE
+;	which must be converted to a .COM program by the DOS
+;	EXE2BIN command:
+;
+;	C\> EXE2BIN WATCHDOG.EXE WATCHDOG.COM
+;------------------------------------------------------------------------------
+;	8/29/84
+;	- Revised for COM1: - 
+;
+;	Jim Kovalsky
+;------------------------------------------------------------------------------
+TRUE	EQU	1
+FALSE	EQU	0
+
+CSEG	SEGMENT 'CODE'
+	ASSUME	CS:CSEG
+	ORG	100H		; SET UP FOR .COM CONVERSION
+
+INIT	PROC	FAR		; WE'RE AN INTERRUPT ROUTINE
+	JMP	SHORT INITIAL	; SO WE HAVE TO SET UP FIRST
+
+START	PROC	FAR	; Start of main routine - Timer (18.2 times per second)
+	ASSUME	CS:CSEG,DS:CSEG
+
+	PUSH	AX
+	MOV	AL,CS:101H
+	OR	AL,AL
+	JZ	NOWAY
+	PUSH	DX
+
+	MOV	DX,3FEH      ;COM1:  (2FEH for COM2:)
+	IN	AL,DX
+	RCL	AL,1
+	JNC	LOSTCARR
+
+	POP	DX
+NOWAY:	POP	AX
+
+	DB	0EAH		; JMP old timer routine
+WAS1Co	DW	0
+WAS1Cs	DW	0
+
+LOSTCARR:
+	DB	0EAH
+	DW	0
+	DW	0FFFFH
+
+START	ENDP
+
+BUFFER	DB	'     Watchdog v1.1    8/29/84   by James R. Reinders, Mods by'
+	DB	' Jim Kovalsky'
+	DB	13,10,'$'
+
+INITIAL:
+	MOV	AX,CS
+	MOV	DS,AX
+
+	MOV	DX,OFFSET BUFFER
+	MOV	AH,9
+	INT	21H	; PRINT GREETING
+
+	MOV	AX,351CH
+	INT	21H
+
+DOWHAT: XOR	AL,AL
+	MOV	SI,05DH
+	CMP	BYTE PTR [SI],'O'
+	JNZ	ONONON
+	CMP	BYTE PTR [SI+1],'F'
+	JNZ	ONONON
+	CMP	BYTE PTR [SI+2],'F'
+	JNZ	ONONON
+	CMP	BYTE PTR [SI+3],' '
+	JZ	OFFOFF
+
+ONONON: INC	AL
+	CMP	WORD PTR ES:[BX],2E50H
+	JNZ	PUTIN
+OFFOFF: CMP	WORD PTR ES:[BX],2E50H
+	MOV	DX,OFFSET NODOG
+	JNZ	PBYE
+
+	DEC	BX
+	MOV	ES:[BX],AL
+
+	MOV	DX,OFFSET ACTIVE
+	OR	AL,AL
+	JNZ	PBYE
+	MOV	DX,OFFSET NACTIVE
+
+PBYE:	MOV	AH,9
+	INT	21H
+	INT	20H
+
+PUTIN:	MOV	AX,ES
+	MOV	WAS1Cs,AX
+	MOV	CS:WAS1Co,BX
+
+	MOV	AX,CS
+	MOV	DS,AX
+
+	MOV	DX,OFFSET START
+	MOV	AX,251CH  ; DOS ROUTINE TO RESET INT. VECTOR
+	INT	21H
+
+	MOV	DX,OFFSET INSTAL
+	MOV	AH,9
+	INT	21H
+;
+	MOV	DX,OFFSET BUFFER ; LAST ADDRESS HERE
+	INT	27H	; TERMINATE BUT STAY RESIDENT
+INIT	ENDP
+
+
+INSTAL	DB	'Watchdog installed and activated.',13,10,'$'
+ACTIVE	DB	'Watchdog activated.',13,10,'$'
+NACTIVE DB	'Watchdog deactivated.',13,10,'$'
+NODOG	DB	'Watchdog not present OR'
+	DB	' another time utility loaded since watchdog.'
+	DB	13,10,'$'
+
+CSEG	ENDS
+	END	INIT
+```
+{% endraw %}
+
+## WATCHDGS.ASM
+
+{% raw %}
+```
+        PAGE    60,132
+        TITLE   Watchdog - resets machine when carrier is lost
+;
+; WATCHDGS.COM  3/6/88  Original by James R. Reinders
+;
+;  Update/Modification History (reverse order):
+;
+;       8/15/84 - Original program.
+;       3/06/88 - Doug Azzarito: WATCHDGS command specifically written for
+;                 ALLOY PC-SLAVE systems and other non-standard MS-DOS
+;                 computers.  Changed reboot command from direct jump
+;                 (FFFF:0000) to an INT 19H.  Use this only if WATCHDOG.COM
+;                 does not properly reboot your system.
+;
+;       The IBM Macro Assembler and Link will produce WATCHDGS.EXE
+;       which must be converted to a .COM program by the DOS
+;       EXE2BIN command:
+;
+;       C\> EXE2BIN WATCHDGS.EXE WATCHDGS.COM
+;
+TRUE    EQU     1
+FALSE   EQU     0
+
+CSEG    SEGMENT 'CODE'
+        ASSUME  CS:CSEG
+        ORG     100H            ; SET UP FOR .COM CONVERSION
+
+INIT    PROC    FAR             ; WE'RE AN INTERRUPT ROUTINE
+        JMP     SHORT INITIAL   ; SO WE HAVE TO SET UP FIRST
+
+START   PROC    FAR     ; Start of main routine - Timer (18.2 times per second)
+        ASSUME  CS:CSEG,DS:CSEG
+
+        PUSH    AX
+        MOV     AL,CS:101H
+        OR      AL,AL
+        JZ      NOWAY
+        PUSH    DX
+
+        MOV     DX,2FEH
+        IN      AL,DX
+        RCL     AL,1
+        JNC     LOSTCARR
+
+        POP     DX
+NOWAY:  POP     AX
+
+        DB      0EAH            ; JMP old timer routine
+WAS1Co  DW      0
+WAS1Cs  DW      0
+
+LOSTCARR:
+        INT     19H
+
+START   ENDP
+
+BUFFER  DB      'Watchdog for PC-Slave v1.0  03/06/88 by James R. Reinders.'
+        DB      13,10
+        DB      'PC-Slave mods by Doug Azzarito'
+        DB      13,10,'$'
+
+INITIAL:
+        MOV     AX,CS
+        MOV     DS,AX
+
+        MOV     DX,OFFSET BUFFER
+        MOV     AH,9
+        INT     21H     ; PRINT GREETING
+
+        MOV     AX,351CH
+        INT     21H
+
+DOWHAT: XOR     AL,AL
+        MOV     SI,05DH
+        CMP     BYTE PTR [SI],'O'
+        JNZ     ONONON
+        CMP     BYTE PTR [SI+1],'F'
+        JNZ     ONONON
+        CMP     BYTE PTR [SI+2],'F'
+        JNZ     ONONON
+        CMP     BYTE PTR [SI+3],' '
+        JZ      OFFOFF
+
+ONONON: INC     AL
+        CMP     WORD PTR ES:[BX],2E50H
+        JNZ     PUTIN
+OFFOFF: CMP     WORD PTR ES:[BX],2E50H
+        MOV     DX,OFFSET NODOG
+        JNZ     PBYE
+
+        DEC     BX
+        MOV     ES:[BX],AL
+
+        MOV     DX,OFFSET ACTIVE
+        OR      AL,AL
+        JNZ     PBYE
+        MOV     DX,OFFSET NACTIVE
+
+PBYE:   MOV     AH,9
+        INT     21H
+        INT     20H
+
+PUTIN:  MOV     AX,ES
+        MOV     WAS1Cs,AX
+        MOV     CS:WAS1Co,BX
+
+        MOV     AX,CS
+        MOV     DS,AX
+
+        MOV     DX,OFFSET START
+        MOV     AX,251CH  ; DOS ROUTINE TO RESET INT. VECTOR
+        INT     21H
+
+        MOV     DX,OFFSET INSTAL
+        MOV     AH,9
+        INT     21H
+;
+        MOV     DX,OFFSET BUFFER ; LAST ADDRESS HERE
+        INT     27H     ; TERMINATE BUT STAY RESIDENT
+INIT    ENDP
+
+
+INSTAL  DB      'Watchdog installed and activated.',13,10,'$'
+ACTIVE  DB      'Watchdog activated.',13,10,'$'
+NACTIVE DB      'Watchdog deactivated.',13,10,'$'
+NODOG   DB      'Watchdog not present OR'
+        DB      ' another time utility loaded since watchdog.'
+        DB      13,10,'$'
+
+CSEG    ENDS
+        END     INIT
+```
+{% endraw %}
+
+## WATCHDOG.ASM
+
+{% raw %}
+```
+	PAGE	60,132
+	TITLE	Watchdog - resets machine when carrier is lost
+;
+; WATCHDOG.COM	8/15/84  by James R. Reinders
+;
+;  Update/Modification History (reverse order):
+;
+;	8/15/84 - Original program.
+;
+;	The IBM Macro Assembler and Link will produce WATCHDOG.EXE
+;	which must be converted to a .COM program by the DOS
+;	EXE2BIN command:
+;
+;	C\> EXE2BIN WATCHDOG.EXE WATCHDOG.COM
+;
+TRUE	EQU	1
+FALSE	EQU	0
+
+CSEG	SEGMENT 'CODE'
+	ASSUME	CS:CSEG
+	ORG	100H		; SET UP FOR .COM CONVERSION
+
+INIT	PROC	FAR		; WE'RE AN INTERRUPT ROUTINE
+	JMP	SHORT INITIAL	; SO WE HAVE TO SET UP FIRST
+
+START	PROC	FAR	; Start of main routine - Timer (18.2 times per second)
+	ASSUME	CS:CSEG,DS:CSEG
+
+	PUSH	AX
+	MOV	AL,CS:101H
+	OR	AL,AL
+	JZ	NOWAY
+	PUSH	DX
+
+	MOV	DX,2FEH
+	IN	AL,DX
+	RCL	AL,1
+	JNC	LOSTCARR
+
+	POP	DX
+NOWAY:	POP	AX
+
+	DB	0EAH		; JMP old timer routine
+WAS1Co	DW	0
+WAS1Cs	DW	0
+
+LOSTCARR:
+	DB	0EAH
+	DW	0
+	DW	0FFFFH
+
+START	ENDP
+
+BUFFER	DB	'       Watchdog v1.0    8/15/84   by James R. Reinders'
+	DB	13,10,'$'
+
+INITIAL:
+	MOV	AX,CS
+	MOV	DS,AX
+
+	MOV	DX,OFFSET BUFFER
+	MOV	AH,9
+	INT	21H	; PRINT GREETING
+
+	MOV	AX,351CH
+	INT	21H
+
+DOWHAT: XOR	AL,AL
+	MOV	SI,05DH
+	CMP	BYTE PTR [SI],'O'
+	JNZ	ONONON
+	CMP	BYTE PTR [SI+1],'F'
+	JNZ	ONONON
+	CMP	BYTE PTR [SI+2],'F'
+	JNZ	ONONON
+	CMP	BYTE PTR [SI+3],' '
+	JZ	OFFOFF
+
+ONONON: INC	AL
+	CMP	WORD PTR ES:[BX],2E50H
+	JNZ	PUTIN
+OFFOFF: CMP	WORD PTR ES:[BX],2E50H
+	MOV	DX,OFFSET NODOG
+	JNZ	PBYE
+
+	DEC	BX
+	MOV	ES:[BX],AL
+
+	MOV	DX,OFFSET ACTIVE
+	OR	AL,AL
+	JNZ	PBYE
+	MOV	DX,OFFSET NACTIVE
+
+PBYE:	MOV	AH,9
+	INT	21H
+	INT	20H
+
+PUTIN:	MOV	AX,ES
+	MOV	WAS1Cs,AX
+	MOV	CS:WAS1Co,BX
+
+	MOV	AX,CS
+	MOV	DS,AX
+
+	MOV	DX,OFFSET START
+	MOV	AX,251CH  ; DOS ROUTINE TO RESET INT. VECTOR
+	INT	21H
+
+	MOV	DX,OFFSET INSTAL
+	MOV	AH,9
+	INT	21H
+;
+	MOV	DX,OFFSET BUFFER ; LAST ADDRESS HERE
+	INT	27H	; TERMINATE BUT STAY RESIDENT
+INIT	ENDP
+
+
+INSTAL	DB	'Watchdog installed and activated.',13,10,'$'
+ACTIVE	DB	'Watchdog activated.',13,10,'$'
+NACTIVE DB	'Watchdog deactivated.',13,10,'$'
+NODOG	DB	'Watchdog not present OR'
+	DB	' another time utility loaded since watchdog.'
+	DB	13,10,'$'
+
+CSEG	ENDS
+	END	INIT
+```
+{% endraw %}
+
+## XMODEM.ASM
+
+{% raw %}
+```
+; Modified 8/24/85 for use with QuickBasic Compiler
+
+; Heavy modifications 8/31/86 by Jim King
+; Changed CRC_CALC from the awfulness it was to an algorithm suggested
+; by Philip Burns.  In a test program, this algorithm is over 3 times as
+; fast as the one previously used by RBBS-PC.
+; Changed the loop that calculates checksum and calls the CRC to be more
+; efficient (just about halved the number of instructions).
+; Note that RBBS-PC.BAS was also modified so that it no longer tacks on
+; two null bytes to the input string (they were necessary for the old CRC
+; routine to work correctly).
+; Once again, thanks to Philip Burns for suggesting the CRC algorithm.
+; Many thanks also to John Souvestre, who helped me tweak the assembly
+; routine to run even faster.
+
+XM_CALC   SEGMENT PUBLIC 'CODE'
+          ASSUME CS:XM_CALC
+          PUBLIC XMODEM
+;
+CHK_SUM           DB 0
+STRG_LEN          DW 0                  ;CHANGED TO LENGTH OF STRING PASSED
+STRG_LOC          DW 0
+STRG_MSG          DB 1026 DUP (' ')     ;COMMAND CHARS (+CR) GO INTO HERE
+;
+;
+;
+XMODEM    PROC    FAR
+          PUSH    BP
+          MOV     BP,SP
+          MOV     CHK_SUM,0         ;INITIALIZE
+;
+          MOV     SI,[BP+14]        ;GET STRING DESCRIPTOR
+          MOV     BL,[SI+ 2]        ;REARRANGE LOW/HIGH BYTES
+          MOV     BH,[SI+ 3]        ;NOW BX HOLDS THE ADDRESS OF THE STRING
+          MOV     STRG_LOC,BX       ;STORE IT
+          MOV     AX,[SI]           ;GET STRING LENGTH
+          MOV     STRG_LEN,AX       ;STORE IT
+;
+          MOV     CX,STRG_LEN           ;STORE LENGTH IN CX
+          MOV     SI,STRG_LOC           ;STORE OFFSET TO STRING IN SI
+          PUSH    CS
+          POP     ES
+          MOV     DI,OFFSET STRG_MSG    ;ES:DI = LOCATION OF VARIABLE
+          REP     MOVSB                 ;FILL STRG_MSG WITH STRING
+;
+          PUSH    DS                    ;SAVE DS
+          PUSH    CS
+          POP     DS
+
+          MOV     CX,STRG_LEN           ;INITIALIZE COUNTER
+	  MOV	  SI,OFFSET STRG_MSG    ;get address of input string
+          XOR     DX,DX			;initialize CRC value to 0
+LOOP1:
+	  LODSB				;get character into AL
+          MOV     DI,CX                 ;SAVE CX
+          ADD     CHK_SUM,AL            ;ADD AL TO CHK_SUM
+
+; this used to be:
+;CRC_CALC   PROC NEAR
+; this is the CRC calculation routine.  It's placed here instead of in
+; a separate procedure for additional speed.
+; DX contains the CRC value, AL has the new character.  Other registers
+; are used for temporary storage and scratch work.
+	XCHG	DH,DL			; CRC := Swap(CRC) XOR Ord(Ch);
+	XOR	DL,AL
+
+	MOV	AL,DL			; CRC := CRC XOR ( Lo(CRC) SHR 4 );
+	MOV	CL,4
+	SHR	AL,CL
+	XOR	DL,AL
+
+					; CRC := CRC XOR ( Swap(Lo(CRC)) SHL 4 )
+					;        XOR ( Lo(CRC) SHL 5 );
+	MOV	BL,DL
+	MOV	AH,DL
+	SHL	AH,CL
+	XOR	DH,AH
+	XOR	BH,BH
+	INC	CL
+	SHL	BX,CL
+	XOR	DX,BX
+; end of the CRC calculation routine
+	
+          MOV     CX,DI                 ;RESTORE CX
+	  LOOP	  LOOP1			;do it again
+
+
+          POP     DS                   ;RESTORE DS
+          MOV     BX,DX                ;PASS BACK THE CRC VALUE
+          MOV     SI,[BP+ 6]           ;AND CRC HIGH AND LOW BYTES
+          MOV     [SI],BL
+          MOV     SI,[BP+ 8]
+          MOV     [SI],BH
+          MOV     SI,[BP+10]
+          MOV     [SI],BX
+          MOV     BL,CS:CHK_SUM        ;PASS BACK THE CHECK SUM
+          MOV     SI,[BP+12]
+          MOV     [SI],BL
+;
+          PUSH    CS                ;CLEAN UP WORK TO RETURN TO BASIC
+          POP     ES
+          POP     BP
+          RET     10
+XMODEM    ENDP
+XM_CALC   ENDS
+          END
+```
+{% endraw %}
+
 ## CNFG-SUB.BAS
 
+{% raw %}
 ```bas
 ' $linesize:132
 ' $title: 'CNFG-SUB.BAS CPC17.3, Copyright 1987-90 by D. Thomas Mack'
@@ -2285,9 +7191,11 @@ machines:
       GOTO 62105
       END SUB
 ```
+{% endraw %}
 
 ## CNFG-VAR.BAS
 
+{% raw %}
 ```bas
 ' $SUBTITLE: 'Arrays passed between parts of CONFIG.BAS 17.3'
 ' $PAGE
@@ -2680,9 +7588,11 @@ COMMON SHARED _
          DEF FNYESNO$(TORF) = MID$("NOYES",1-2*TORF,2-TORF)
          DEF FNYESNO(STRNG$) = (LEFT$(STRNG$,1) = "Y")
 ```
+{% endraw %}
 
 ## CONFIG.BAS
 
+{% raw %}
 ```bas
       ' $linesize: 132
       ' $title:  'CONFIG CPC17.3, Copyright 1983-90 by D. Thomas Mack'
@@ -6872,9 +11782,11 @@ COMMON SHARED _
 60480 MKDIR LEFT$(STRNG$,LEN(STRNG$)-1)
       RETURN
 ```
+{% endraw %}
 
 ## RBBS-PC.BAS
 
+{% raw %}
 ```bas
 3 ' $linesize: 132
 4 ' $title: 'RBBS CPC17.3, Copyright 1990 by D. Thomas Mack'
@@ -11661,9 +16573,11 @@ COMMON SHARED _
       ZHidden = ZFalse
       RETURN
 ```
+{% endraw %}
 
 ## RBBS-VAR.BAS
 
+{% raw %}
 ```bas
 ' $SUBTITLE: 'Arrays passed between various components of RBBS-PC'
 ' $PAGE
@@ -12373,9 +17287,11 @@ COMMON SHARED _
 
 DEF FNOffOn$ (Switch) = MID$("OffOn", 1 - 3 * (Switch <> 0), 3)
 ```
+{% endraw %}
 
 ## RBBSSUB1.BAS
 
+{% raw %}
 ```bas
 ' $linesize:132
 ' $title: 'RBBS-SUB1.BAS CPC17.3, Copyright 1986-90 by D. Thomas Mack'
@@ -14039,9 +18955,11 @@ DEF FNOffOn$ (Switch) = MID$("OffOn", 1 - 3 * (Switch <> 0), 3)
           CALL FOSExit(ZComPort)
        SYSTEM
 ```
+{% endraw %}
 
 ## RBBSSUB2.BAS
 
+{% raw %}
 ```bas
 ' $linesize:132
 ' $title: 'RBBSSUB2.BAS CPC17.3, Copyright 1986 - 90 by D. Thomas Mack'
@@ -17970,9 +22888,11 @@ DEF FNOffOn$ (Switch) = MID$("OffOn", 1 - 3 * (Switch <> 0), 3)
       END SUB
 
 ```
+{% endraw %}
 
 ## RBBSSUB3.BAS
 
+{% raw %}
 ```bas
 ' $linesize:132
 ' $title: 'RBBSSUB3.BAS CPC17.3, Copyright 1986 - 90 by D. Thomas Mack'
@@ -21369,9 +26289,11 @@ DEF FNOffOn$ (Switch) = MID$("OffOn", 1 - 3 * (Switch <> 0), 3)
       GOTO 58175
       END SUB
 ```
+{% endraw %}
 
 ## RBBSSUB4.BAS
 
+{% raw %}
 ```bas
 ' $linesize:132
 ' $title: 'RBBSSUB4.BAS CPC17.3, Copyright 1986 - 90 by D. Thomas Mack'
@@ -24688,9 +29610,11 @@ DEF FNOffOn$ (Switch) = MID$("OffOn", 1 - 3 * (Switch <> 0), 3)
       'RETURN
       END SUB
 ```
+{% endraw %}
 
 ## RBBSSUB5.BAS
 
+{% raw %}
 ```bas
 ' $linesize:132
 ' $title: 'RBBSSUB5.BAS CPC17.3, Copyright 1986 - 90 by D. Thomas Mack'
@@ -27353,6 +32277,7 @@ DEF FNOffOn$ (Switch) = MID$("OffOn", 1 - 3 * (Switch <> 0), 3)
             Found = (MID$(ZMsgRec$,SearchPos, LEN(WasX$)) = WasX$)
       END SUB
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -36,6 +36,44 @@ machines:
     summary reports will be done with more ease than ever imagined.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES288.TXT
+
+{% raw %}
+```
+Disk No:  288
+Program Title: FILE EXPRESS version 4.28 (Disk 2 of 2)
+PC-SIG version: 3.5
+
+This is the second disk of FILE EXPRESS.  Disk #287 and #288 make up the
+pair.  Both disks are required to run the program.  For a description of
+the program refer to disk #287.
+
+Usage:  Financial.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $69.95
+
+File Descriptions:
+
+FE       DOC  Documentation.
+???????? EXE  FILE EXPRESS sub-program (6 files).
+TUTORIAL ???  Sample Database (6 files).
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1985,86,87,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0288
 

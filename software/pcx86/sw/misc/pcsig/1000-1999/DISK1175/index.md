@@ -37,6 +37,47 @@ machines:
     opponents using the on-screen clock.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1175.TXT
+
+{% raw %}
+```
+Disk No: 1175                                                           
+Disk Title: Worthy Opponent                                             
+PC-SIG Version: S1.3                                                    
+                                                                        
+Program Title: Worthy Opponent                                          
+Author Version: 2.0                                                     
+Author Registration: $15.00                                             
+Special Requirements: Color monitor (CGA,EGA), modem recommended.       
+                                                                        
+WORTHY OPPONENT is a competitive, challenging, and entertaining game    
+package that actually allows you to play games over your modem with     
+other opponents.                                                        
+                                                                        
+What makes WORTHY OPPONENT unique are the sophisticated communications  
+capabilities.  Game competition occurs with an opponent miles away.  You
+can still taunt and jeer at your opponent with every move.  Discuss     
+anything you like; strategy, good/bad moves, etc. with the specialized  
+``talk'' capabilities.                                                  
+                                                                        
+With excellent graphics, WORTHY OPPONENT is completely menu-driven and  
+has on-line help screens to explain all functions.  Four games are on   
+the disk; Snake Pit, CornerStone, Checkers, and CannonBall.             
+                                                                        
+Tournament play is also available where you can play against remote     
+opponents using the on-screen clock.                                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1175
 

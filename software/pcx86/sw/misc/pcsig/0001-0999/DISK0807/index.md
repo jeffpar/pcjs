@@ -65,6 +65,45 @@ machines:
     READ     ME   General information about the disk.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES807.TXT
+
+{% raw %}
+```
+Disk No:  807
+Program Title:  REMARKABLE GENERAL LEDGER (Disk 2 of 2)
+PC-SIG Version: 1.1
+
+This is the second disk in a two-disk set.  Please refer to disk #806
+for full information.
+
+Usage:  Financial.
+
+Special Requirements:  512K memory and at least two disk drives.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $69.95, includes full version of the program
+with a printed manual, and includes service and backup.
+
+File Descriptions:
+
+DOC     <DIR> Directory containing the documentation.
+CONFIG   SYS  Sample configuration file.
+???????? DBF  Data file (12 files).
+READ     ME   General information about the disk.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0807
 

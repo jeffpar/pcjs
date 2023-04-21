@@ -35,6 +35,27 @@ machines:
     summaries.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+ 
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║           <<<<  DISK #1147 FAST INVOICE WRITER  >>>>          ║
+    ╠═══════════════════════════════════════════════════════════════╣
+    ║                                                               ║
+    ║    To start the program, type:    INVOICE  (press enter)      ║
+    ║                                                               ║
+    ║    To print documentation, type: PRINTMAN  (press enter)      ║
+    ║                                                               ║
+    ╚═══════════════════════════════════════════════════════════════╝
+ (c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1147
 

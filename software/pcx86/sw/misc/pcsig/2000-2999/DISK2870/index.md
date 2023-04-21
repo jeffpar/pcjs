@@ -14,6 +14,76 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## REGISTER.TXT
+
+{% raw %}
+```
+                                  INVOICE
+   Remit to:                                     From:
+                                                 __________________________
+   Painless Accounting, Inc.
+   4401 Birdsong                                 __________________________
+   Plano, TX 75093
+                                                 __________________________
+                                                 Phone: (   )    -
+
+   Qty                                                  Unit Price    Total
+   ___     Painless Accounting Version 6.0/Registration  $125.00      _____
+             (includes printed manual and 3 ring binder)
+
+   ___     Painless Payroll/Registration                 $ 75.00      _____
+             (includes printed manual and 3 ring binder)
+
+   ___     Painless Accounting/Payroll Companion/Reg.    $ 45.00      _____
+            A custom graph/report/export generating program
+             (includes printed manual)
+
+   ___     Painless Accounting for Windows               $ 99.95      _____
+             (includes printed manual and 3 ring binder)
+
+   ___     Painless Payroll for Windows                  $ 89.95      _____
+             (includes printed manual and 3 ring binder)
+
+   ___     Painless Menu Manager - A HardDisk Menu System$ 20.00      _____
+             (includes printed manual)
+
+   ___     Painless Accounting Version 6.0/Shareware     $ 10.00      _____
+
+   ___     Painless Payroll Version 6.0/Shareware        $ 10.00      _____
+
+   ___     Painless Accounting for Windows/Shareware     $ 10.00      _____
+
+   ___     Painless Payroll for Windows/Shareware        $ 10.00      _____
+
+   ___     Painless Accounting/Payroll Companion/Share   $  7.50      _____
+
+   ___     Registration for Painless Accounting/Painless
+           Payroll and Painless Companion                $200.00      _____
+           (includes printed manuals and 3 ring binders)
+
+   ___     Painless Event Scheduler/Registration         $ 45.00      _____
+             (includes printed manual)
+
+   ___     Painless Event Scheduler/Shareware            $  5.00      _____
+                                                        SubTotal      _____
+
+                        (On Registered Products Only)   Shipping       5.00
+                        (Outside USA please add $10.00)
+                            Texas Residents please add sales tax      _____
+
+                                                           Total      _____
+   ___Check ___Money Order ___Cashier Check ___M/C ___Visa ___Amex
+   ___Dinners Club ___Carte Blanche
+   Card Holder: _______________________________________________________
+   Card Number: _______________________________ Exp: _____/_____
+   All sales are final. Thank you for your order.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2870
 

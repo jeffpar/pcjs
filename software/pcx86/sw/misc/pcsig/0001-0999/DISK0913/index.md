@@ -31,6 +31,41 @@ machines:
     libraries, or add them to an existing library.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0913.TXT
+
+{% raw %}
+```
+Disk No:  913                                                           
+Disk Title: FloDraw 2 of 3 (912 and 2020 also)  (Disk 2 of 2)           
+PC-SIG Version: S2.2                                                    
+                                                                        
+Program Title: FloDraw                                                  
+Author Version: 2.11A                                                   
+Author Registration: $25.00                                             
+Special Requirements: 320K RAM, CGA, and a printer.                     
+                                                                        
+FLODRAW is a graphics editor that produces black and white full-page    
+diagrams.  It is designed to handle symbols quickly and easily and is   
+ideal for documentation such as flowcharts, organization charts, system 
+diagrams and other symbols-oriented materials.  It combines text and    
+graphics and is equipped with a basic graphics editor for lines and     
+circles, plus pixel editing.                                            
+                                                                        
+FLODRAW has symbol libraries for flowcharts, HIPO charts, and electric  
+diagrams.  Design your own symbols, save them, and combine them into new
+libraries, or add them to an existing library.                          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0913
 

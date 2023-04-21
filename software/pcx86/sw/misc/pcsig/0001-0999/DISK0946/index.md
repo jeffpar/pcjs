@@ -34,6 +34,91 @@ machines:
     with any combination of these teams or create teams of your own.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES946.TXT
+
+{% raw %}
+```
+Disk No:  946
+Program Title:  BASKETBALL version 2.0
+PC-SIG version 1.1
+
+BASKETBALL is a text-based simulation of basketball.  This is not an
+interactive computer game.  Once you have choosen the teams and players
+and the game begins, you are a spectator: as gameplay proceeds, the
+radio announcer's dialogue rolls across the screen.  And if you enjoy
+listening to games played over the radio, you will enjoy this game!
+Rather than trying to capture the physical characteristics of basketball
+on the PC, this program effectively brings the thrill of the game to you
+the same way the radio sports announcer does.
+
+The program comes with data for six teams: the Celtics, the Lakers, the
+Rockets, the '76ers, and the East and West All-Star teams.  You can play
+games using any combination of these teams.  Output can be sent to your
+printer, if you would like to examine the game after it has been played,
+by using the CTRL-PRTSC combination before play begins.  You can also
+create teams of your own from within the program.
+
+Please note: Because of space limitations, the Baseball Simulator has
+been removed from this disk and moved to disks #1186 & #1187.
+
+Usage:  Entertainment.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+BASKBALL EXE  Executable BASKETBALL program.
+BASKBALL OBJ  Basketball object file.
+BASKBALL C    Basketball source file.
+MAGIC         Player.
+COOPER        Player.
+WORTHY        Player.
+RAMBIS        Player.
+KAREEM        Player.
+LAKERS        Lakers team '85-86.
+JOHNSON       Player.
+CHEEKS        Player.
+ERVING        Player.
+BARKLEY       Player.
+JONES         Player.
+MALONE        Player.
+76ERS         76ers team '85-86.
+ROCKETS       Rockets team '85-86.
+AINGE         Player.
+BIRD          Player.
+MCHALE        Player.
+PARISH        Player.
+JORDON        Player.
+AGUIRRE       Player.
+WILKINS       Player.
+SAMPSON       Player.
+OLAJUWON      Player.
+ENGLISH       Player.
+ISIAH         Player.
+LAIMBEER      Player.
+EWING         Player.
+DANTLEY       Player.
+CELTICS       Celtics team '85-86.
+WSTARS        All-star team.
+ESTARS        All-star team.
+ROSTER   DIR  Directory of players on disk, used by BASKBALL.EXE.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0946
 

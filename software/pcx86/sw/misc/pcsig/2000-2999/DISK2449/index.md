@@ -51,6 +51,61 @@ machines:
     external data base, spreadsheet, or word processing program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2449.TXT
+
+{% raw %}
+```
+Disk No: 2449                                                           
+Disk Title: 9 O'Clock Personal Time-Tracking System                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: 9 O'Clock Personal Time-Tracking System                  
+Author Version: 09/90                                                   
+Author Registration: $29.95                                             
+Special Requirements: Hard disk recommended.                            
+                                                                        
+Now you can manage your time far better than ever before!  9 O'CLOCK    
+PERSONAL:                                                               
+                                                                        
+~Tracks up to nine simultaneous activities, each with its own           
+ attached-note capabilities.  You can even do so with 9 O'CLOCK entirely
+ removed from your computer's memory--even with your computer turned    
+ off!  And, of course, you may pause, restart, save, and reset clocks at
+ any time.                                                              
+                                                                        
+~9 O'CLOCK may be run like any other ordinary program or as a           
+ "stay-resident" program instantly available with a "hotkey" of your    
+ choice.                                                                
+                                                                        
+~An alarm clock "beeps" and "pops up" your own message at the chosen    
+ time.                                                                  
+                                                                        
+~The accompanying 9OLOGP Data Base Manager provides total control of    
+ clock data you file in 9  O'CLOCK's data base.  Edit, print, and       
+ otherwise manipulate all clock data--even create data for an activity  
+ which catches you unexpectedly without 9 O'CLOCK handy.  Records may be
+ grouped for printing, editing, etc., quickly and easily by date range  
+ and more--or individually selected at any time.  Sophisticated report  
+ format options are provided.                                           
+                                                                        
+~The data base for filed clock information may be of virtually unlimited
+ size.                                                                  
+                                                                        
+~Want to use 9 O'CLOCK's data with another program?  No problem.        
+ 9 O'CLOCK provides automated export to formats usable by virtually any 
+ external data base, spreadsheet, or word processing program.           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2449
 

@@ -39,6 +39,7 @@ machines:
 
 ## DEMO.BAS
 
+{% raw %}
 ```bas
 10000 REM *******************************************************************
 10010 REM **         DEMO - Program to Demonstrate Animation               **
@@ -195,9 +196,11 @@ machines:
 11520    RETURN
 11530 WEND
 ```
+{% endraw %}
 
 ## DESIGNER.BAS
 
+{% raw %}
 ```bas
 10000 REM **************************************************************
 10010 REM **                  THE DESIGNER V1.0                       **
@@ -798,6 +801,1380 @@ machines:
 15960 IF MSG > 0 THEN PLAY "t255o1c8e-8c8e-8"
 15970 RETURN
 ```
+{% endraw %}
+
+## DESIGNER.DOC
+
+{% raw %}
+```
+
+
+                        The Designer User's Manual - V1.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  THE DESIGNER
+                                  Version 1.0
+
+
+               A BASIC Animation Programming Tool for the IBM PC
+
+
+
+
+
+
+                                 User's Manual
+
+
+
+
+
+
+
+
+
+
+
+
+                                         Copyright 1983 by Jan B. Young
+                                                         April 29, 1983
+                                       Manual Updated November 23, 1984
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+
+
+
+                               Table of Contents
+
+
+          I.  Introduction
+              A.  Overview                                   3
+              B.  Capabilities                               4
+              C.  Benefits and Advantages                    4
+              D.  Requirements                               4
+
+         II.  General Information
+              A.  Description of Functions                   5
+              B.  Definition of Terms                        6
+              C.  Explanation of General Concepts            6
+
+        III.  How to Use the Program
+              A.  What to Do The First Time (Only)           8
+              B.  Using The Designer                         9
+              C.  Using Files Created by The Designer       12
+              D.  "DEMO"                                    14
+              E.  What To Do If an Error Occurs             15
+
+         IV.  Administration
+              A.  Warranty and Disclaimer                   16
+              B.  Program Distribution                      16
+              C.  Questions and Problems                    16
+              D.  Maintenance and Enhancements              17
+
+          V.  Reference Material
+              A.  Command Summary                           18
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     Page 2
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+
+                                I. INTRODUCTION
+
+
+                                  A. OVERVIEW
+
+       The  Designer  is  a  programming  tool  for  BASIC  users  working  with
+       animated graphics on an  IBM-PC.  It  can  be  of  significant  value  to
+       people    writing   graphic   games   and   to   people   interested   in
+       experimenting with animation.
+
+       The  Designer  is  written  in   IBM   advanced   BASIC   (BASICA).   The
+       source  code  is  included  for  those  who  wish  to study and/or modify
+       it. Since  The  Designer  uses  dynamic  array  dimensioning,  it  cannot
+       be compiled.
+
+       Included   with   The   Designer   is   a   demonstration  program  which
+       illustrates one  way  to  program  animation.  "Demo"  is  also  provided
+       in   source  code  form  so  you  can  study  and/or  modify  it  as  you
+       wish.
+
+       The  Designer  is  distributed  without  charge.  If  you  are  using  it
+       and  find  it  to  be  of  value,  a  contribution  ($20 suggested) would
+       be appreciated.
+
+                             Jan B. Young
+                             767 N. Holden St.
+                             Port Washington, Wi.  53074
+
+       Regardless   of   whether   you   make    a    contribution    or    not,
+       individuals,    clubs,    and    other   non-profit   organizations   are
+       granted  permission  to  copy  and  distribute  programs,   data   files,
+       and  documentation  to  others,  providing  that  no  charge  is made for
+       the  software.  Distribution  costs  may   be   charged   to   recipients
+       providing they do not exceed $7 per copy.
+
+       The   programs,   data  files,  and  documentation  may  be  modified  as
+       desired  by  any  individual  or   non-profit   organization,   and   the
+       modified    materials    distributed    providing    the   following   is
+       retained  without  modification:  all  appearances   of   the   copyright
+       notice,    all    warranty    disclaimers,    all   material   explaining
+       distribution  policies,  and  all  requests  for   contributions.   Users
+       distributing   modified   program   or   documentation  copies  are  also
+       required to  add  the  words  "User  Modified"  wherever  The  Designer's
+       version   number  appears  and  must  distribute  without  charge  (other
+       than the $7 maximum distribution cost).
+
+
+
+
+
+
+
+
+
+
+                                     Page 3
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+
+                                B. CAPABILITIES
+
+       The  objective  of  The  Designer  is  to  create  data  files   of   two
+       types,   "screens"   and   "sprites".   A   "screen  file"  contains  the
+       image  of  a  fixed  background  (the   scenery  behind  your  game).   A
+       "sprite  file"  contains  the  image  of  a  character  which  your BASIC
+       programs  can  move  about.  The  completed  screen  and   sprite   files
+       are input data for your animation programs.
+
+       The   Designer   features   full   use  of  the  PC's  function  keys  to
+       control  program  function.  It  has  online-help  capabilities  and   is
+       able   to   print   a   handy   reference  card  on  your  printer.  This
+       documentation is included on the disk.
+
+
+
+                           C. BENEFITS AND ADVANTAGES
+
+       The  Designer  was  born  of  the  frustration  involved  in   an   early
+       attempt  on  my  part  to  write  a  game.  I  found  that I was spending
+       as  much  time  creating  the  images  as  I  was  programming  the  game
+       logic and decided that a generalized tool would be of value.
+
+       With  The  Designer,  your  PC  can  be  used  like  an  artist's canvas.
+       You can  draw  on  the  screen  in  color,  store  your  work  in  either
+       "screen"  or  "sprite"  form,  and  recall  it  later  to  make  changes.
+       All  calculations  required   to   create   the   files   are   performed
+       automatically  and  you  need  concern  yourself  only  with  the artwork
+       and the graphic appearance of your images.
+
+       The  Designer,   together   with   Demo,   can   also   be   a   learning
+       experience   for   you   if   you   aren't   familiar   with    animation
+       programming.  Since  Demo  is  modifiable,  it  gives  you   a   starting
+       place and some ideas for program architecture and design.
+
+       Whether  your  programs  are  modifications  of  Demo  or  not,  they can
+       directly  read  both   screen   and   sprite   files   created   by   The
+       Designer,  limiting  your  programming  effort  to  the  game  logic  and
+       its presentation to the user.
+
+                                D. REQUIREMENTS
+
+       The  Designer  requires  an  IBM-PC  with  at  least   64K   of   memory,
+       PC-DOS   with   BASICA,   a   color/graphics   adapter,  an  80-character
+       display, and at least one disk drive (two recommended).
+
+       The  Designer,  and  this  manual,  assume  that  you  have  a  beginning
+       understanding   of   programming   concepts  and  a  beginning  knowledge
+       of BASIC.
+
+
+
+
+
+
+                                     Page 4
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+                            II. GENERAL INFORMATION
+
+
+                          A. DESCRIPTION OF FUNCTIONS
+
+       The  Designer  supports  ten  different  functions,  each   accessed   by
+       pressing   a   function   key   on   the   IBM   PC.  All  functions  are
+       available   at   any   time,   simply   by   pressing   the   appropriate
+       function key.
+
+       The Designer's ten functions are:
+
+  Fctn Key   Function
+  --------  ------------------------------------------------------------
+     1         NEW   -  Begin  a  new  image  on  the  screen.   Both  high  and
+               medium  resolution  are  supported.   Colors  are  supported   to
+               the   extent  that  the  color/graphics  adapter  supports  them.
+               The  cursor  control  keys  are  used  to  draw  lines.   Special
+               commands   draw  diagonals,  circles,  arcs  and  paint-in  areas
+               with color.
+     2       SCL - Scale.  The  Designer  can  expand  and  contract  images  on
+               the  screen.   This  allows  you  to  create  an  original  image
+               in  a  convenient  size  and  then  enlarge  or  reduce  it   for
+               actual use.
+     3        SSP  -  Store  Sprite.   Function  key  3  causes the image now on
+               the display to be stored as a sprite.
+     4       SSC - Store Screen.   Function  key  4  causes  the  image  now  on
+               the display to be stored as a background screen.
+     5        RSP  -  Retrieve  Sprite.   The  Designer  can,  of  course,  read
+               the  sprite  files  it  creates  and  permits   sprites   to   be
+               modified.   Modified  sprites  can  be  saved  either  as  a  new
+               sprite or as a screen.
+     6       RSC - Retrieve  Screen.  Similar  to  sprites,  saved  screens  can
+               be   retrieved  from  disk,  modified  and  saved.   Segments  of
+               screens   can   be   saved   as   sprites,   giving   flexibility
+               in the application of your artwork.
+     7         TXT   -   Add   Text.   Sometimes  background  screens  (or  even
+               sprites)  involve  text  characters.    The   Designer   includes
+               a   library  of  characters,  and  is  able  to  locate  them  on
+               your artwork as you direct.
+     8        ANI  -  Test  Animation.   Since  the  overall  effectiveness   of
+               animated   graphics   is   dependent   on   the   integration  of
+               screens  and  sprites,  The   Designer   includes   the   ability
+               to   simultaneously   retrieve   a   screen   and  a  sprite,  to
+               display both, and to permit movement of the sprite.
+
+
+
+
+
+
+
+
+
+
+
+                                     Page 5
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+
+     9        INS  -  Instructions.   Function  key  9  returns   you   to   the
+               master   menu   from   any  place  in  The  Designer.   From  the
+               master  menu,  helps   covering   all   functions   and   general
+               system   use   can   be   requested.   In  addition,  the  master
+               menu  permits  changes  to  the  default  disk  drive   and   the
+               printing of a handy reference card.
+    10       Stop.  Function key 10 stops execution of The Designer.
+
+       These functions are explained in further detail in section III.C.
+
+
+                             B. DEFINITION OF TERMS
+
+       The Designer uses the following terms which may be new to you:
+
+       Pixel   -   The   color/graphics  adapter's  display  is  made  up  of  a
+          large  number  of  dots,  called   pixels.     The   pixels   can   be
+          colored   in   medium   resolution   and   black   or  white  in  high
+          resolution.   Medium  resolution  graphics  gives   you   200   pixels
+          vertically  by  320  horizontally.   High  resolution  gives  you  200
+          by 640.
+
+       Screen  -  "Screens"  are  commonly  used  as  backgrounds  in  animation
+          programming.  By  definition,  a  screen  is  the  full  size  of your
+          display  (200x320  pixels  in  medium  resolution   and   200x640   in
+          high   resolution).  Screens  are  retrieved  using  the  BASIC  BLOAD
+          statement.
+
+       Sprite -  "Sprites"  are  smaller  figures   which  can  be  superimposed
+          on   screens   and   moved   about   as   dictated   by   game  logic.
+          Sprites  require  more  memory  per  unit  area  than  screens,    but
+          are   movable   in   single   pixel   increments.   The   smaller  the
+          sprite, the faster it moves and the less memory it uses.
+
+       Image  &  Figure  -  The  Designer  uses  the  terms  Image  and   Figure
+          interchangably   to   denote    artwork   on   the   display.    Since
+          artwork  can  become  either  a  "screen"  or  a  "sprite"   at   your
+          command,   The   Designer   refrains  from  using  terms  which  imply
+          one orientation or the other.
+
+
+                       C. EXPLANATION OF GENERAL CONCEPTS
+
+       BASICA  supports  two  key  statements  of  value   to   the   programmer
+       working   with   animation    BLOAD  and   PUT.  You  should  read  about
+       these  statements  in  the  BASIC  manual,  as  well  as  reviewing   the
+       short explanations given here.
+
+
+
+
+
+
+
+
+                                     Page 6
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+       BLOAD
+
+       The  BASIC  BLOAD  statement  moves  data  from  a  file to a location in
+       memory  specified  by  the  programmer.  One  of  the  major   uses   for
+       BLOAD  is  the  transfer  of  an  image  from  a  file  into  the  screen
+       buffer.
+
+       The  color/graphics   screen  buffer  is  16K  long,  so  the   operation
+       of   BLOAD  takes  a  few  seconds.  BLOAD  fills  the  buffer  linearly.
+       Since the display unit  scans  the  display  (and  uses  the  buffer)  in
+       an   odd-even  pattern,  you  will  be  able  to  watch  BLOAD work first
+       in horizontal stripes, and then filling in between the stripes.
+
+       When  programming  with  BLOAD,  remember  that  the  statement   assumes
+       that   files  to  be  loaded  will  be  qualified  with  ".BAS".  If  you
+       rename a screen file that  was  created  by  The  Designer,  be  sure  to
+       retain the .BAS suffix.
+
+
+       PUT
+
+       PUT  differs  from  BLOAD  in  several  respects.  First,  it  moves data
+       only  into  the  screen  buffer  and  only  from  a   basic   subscripted
+       variable.  Second,  it  is  able  to  load  a  portion  of  the buffer as
+       directed  by  the  programmer,  while  BLOAD  is  really  effective  only
+       for  loading  the  entire  buffer.  And  third,  it  is  able  to restore
+       the  screen  to  its  prior  appearance,  simply  by  executing   another
+       PUT (using the XOR mode).
+
+       PUT  works  under  four  modes:  AND,  OR,  XOR,  and  PSET.  The  use of
+       these modes  is   explained  in  the  BASIC  manual,  but   may  be  best
+       understood  by  experimenting   with  them.  Try  creating  a  screen and
+       sprite  using  The  Designer,  and  then  use  The  Designer's  animation
+       test facility to experiment with the different modes.
+
+       Remember  that  PUT  runs  much  faster  on  small  sprites than on large
+       ones.  Animation  of  small   characters,   therefore,   will   be   much
+       faster and smoother than large ones.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     Page 7
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+
+                          III. HOW TO USE THE PROGRAM
+
+
+                      A. WHAT TO DO THE FIRST TIME (ONLY)
+
+       When  you  first  receive  The  Designer,  it  will  have  the  following
+       files on the diskette:
+
+        DESIGNER.BAS       The Designer program
+        VERBIAGE            Helps,  menus,  and  the   like.    This   file   is
+                             input     data.     The    Designer    won't    run
+                             without it.
+        TEXTCHAR             Text   character   images.    If   this   file   is
+                             deleted,   The   Designer   will   work,   but  use
+                             of Function Key 7 will cause an abend.
+        DESIGNER.DOC         This   document,   which   can   be   printed    by
+                             typing "COPY A:DESIGNER.DOC LPT1:"
+        DEMO.BAS           Animation Demo Program
+        MOUSE.SPR          Input to Demo (See IV.C)
+        MAZE.RES           Input to Demo (See IV.C)
+        MAZE.BAS           Input to Demo (See IV.C)
+
+       Starting The Designer the first time is done like this:
+
+       Step  1:  If  you're  anxious  to  play  with  your  new toy (as I always
+          am when I get new  software)  do  step  2.  If  you   want  to  do  it
+          "right"  the  first  time,  then  skip  step  2  and  proceed  to step
+          3.
+
+       Step 2:  Insert  your  DOS  disk   in  drive  A  and  boot  the   system.
+          Type  BASICA  to  invoke  advanced  basic.  Remove  the  DOS  disk and
+          insert   The   Designer.   Type   RUN   "DESIGNER"   (including    the
+          quotation marks).
+
+       Step 3.  To do it "right":
+
+
+          a. Insert your DOS diskette in drive A and boot the system.
+
+          b. Insert a blank diskette in drive B and type:
+                      FORMAT B:/S <Enter>
+                      COPY COMMAND.COM B: <Enter>
+                      COPY BASICA.COM B: <Enter>
+
+          c. Now type the following commands:
+                      COPY CON: AUTOEXEC.BAT <Enter>
+                      BASICA DESIGNER/S:512 <Enter>
+                      <Function key 6> <Enter>
+
+
+
+
+
+
+
+                                     Page 8
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+          d.   Now  remove  the  DOS  diskette  from  drive  A  and  replace  it
+             with The Designer's diskette.  Type:
+                      COPY *.* B: <Enter>
+
+          e. If you have  only  one  disk  drive,  you  may  want  to  create  a
+             "production"   version   of   The   Designer.   To   do   this,  go
+             through steps 3.a, 3.b,  and  3.c.   In  place  of  3.d,  type  the
+             following:
+                      COPY DESIGNER.BAS B: <Enter>
+                      COPY VERBIAGE B: <Enter>
+                      COPY TEXTCHAR B: <Enter>
+             The   other   files   delivered  on  The  Designer's  diskette  are
+             not required for operation of the system.
+
+          Once you have completed  step  3,  The  Designer  can  be  started  by
+          booting your PC with The Designer's diskette in drive A.
+
+       4.  Regardless  of  whether  you  use  step  2  or step 3, the first time
+          you operate  The  Designer,  it  will   ask  you  which  drive  should
+          be  used  for  storage.  Respond  with  A,  B,  C,  or  D.   This data
+          will be stored  in  a  new  file  called  DESIGNER.DRV  and  you  will
+          not   be   asked   the  question  again  (unless   the   new  file  is
+          destroyed). If you  want  to  change  the  designation  at  any  time,
+          you can do so. See section B.3 below for details.
+
+       5.  If  you  want  to  use  The  Designer  from  a hard disk (or from any
+          disk  other  than  drive  A),  modify  line  15530  to   reflect   the
+          drive   that   the   "VERBIAGE"   file   will  be  residing  on.   The
+          Designer assumes that it will be on drive A.
+
+
+                             B. USING THE DESIGNER
+
+       Detailed  instructions  for  operating  The  Designer   appear   in   the
+       helps  which  are  available  online  during  any  session.  For  reasons
+       of  space  economy,  most  of  this   information   is   not   duplicated
+       here.   Instead,   this   section   of  the  manual  contains  additional
+       information and hints which may be of value.
+
+       The helps can be  printed  and  appended  to  this  manual  if  you  wish
+       to  do  so.  Printing  can  be  done  by  running  The  Designer, calling
+       the helps from the main menu, and using PrtSc to print them.
+
+
+       1.  Overall Scheme
+
+       The Designer is  intended  to  be  a  tool  for  the  programmer  who  is
+       interested   in   experimenting   with   animated   graphics  or  writing
+       games or other animations  using  the  IBM  BASICA  lanugage  on  an  IBM
+       PC.
+
+
+
+
+
+
+                                     Page 9
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+       BASIC   provides   several   powerful   animation  statements  permitting
+       the programmer  to  display  backgrounds  and  movable  elements  and  to
+       move   them   around  the  screen.  In  particular,  the  BLOAD  and  PUT
+       statements  are  valuable.   These  statements  move  images   onto   the
+       screen  and  are  capable  of  animation.  You  should  refer  to the IBM
+       BASIC manual for more information.
+
+       But,  BLOAD  and  PUT  both  require  images  which  have  already   been
+       created   and   exist   either  in  memory  or  in  a  disk  file.  BASIC
+       provides no significant support for the creation of the images.
+
+       This  is  The  Designer's  role  -  the  creation  of   backgrounds   and
+       movable  characters  in  a  form  usable  by  the  BASIC  BLOAD  and  PUT
+       statements.
+
+       Assuming  you  are  writing  a  game  involving  animated  graphics,  The
+       Designer is intended to be used as follows:
+
+       -   Design   your   game.   Divide   the   display   images   into  fixed
+         backgrounds  and  movable  characters.  Get  a  rough   idea   of   the
+         game  logic  and  think  about  the  shape,  form  and color of screens
+         and sprites.
+
+       - Use The Designer to  draw  and  save,  one  by  one,  the  screens  and
+         sprites your game will use.
+
+       -   Use   The   Designer's  animation  test  facilities  to  inspect  the
+         screens  and  sprites  in  combination  to  assure  that   things   fit
+         and look good together.
+
+       -  Start  the  programming.  Use  the  BASIC  manual  for  help  with the
+         BLOAD and PUT  statements.  Look  over  the  Demo  program  that  comes
+         with  The  Designer  for  ideas  and  for  help  in applying the screen
+         and sprite files created by The Designer.
+
+       -  If  you  find  that  additional  screens  and  sprites  are  required,
+         use The Designer to make them.
+
+       -  If  you  find  that  changes  are  needed  to screens and sprites, The
+         Designer will help you make them.
+
+
+       2.  Starting
+
+       If  you  have  been  through  the  steps  in  section   III.A   of   this
+       manual,  starting  The  Designer  is  a   matter  only  of  inserting the
+       diskette  in  drive  A  and  booting  your  PC.  If  you  have  not  done
+       III.A, refer to it for instructions on starting The Designer.
+
+
+
+
+
+
+
+
+                                     Page 10
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+
+       3.  Using the Function Keys
+
+       With  only  a  very   few  exceptions,  any  function  key can be used at
+       any  time  throughout  The  Designer.  However,  be  careful   when   you
+       have  artwork  in  progress.  If,  for  instance,  you  use  function key
+       9  (which  calls  up  the  main  menu)  with  artwork  in  progress,  The
+       Designer  will  assume  that  you  are  done  with  the  artwork and will
+       clear the screen to fill your request for the menu.
+
+       4.  Changing the Default Disk Drive
+
+       To  change  the  default  diskette  drive  used  by  The   Designer   for
+       storage  of  screen  and  sprite  files,  move  to  the  master menu (F9)
+       and type  DRV.  The  menu  will  be  refreshed  and  the  notation  (last
+       line)  showing  the  default  drive  will  change.   Moving  from  A to B
+       requires  one  entry  of  DRV.  Moving  from  B  to  A  requires  cycling
+       through  C  and  D.  All  changes  to  the  default  drive  are permanent
+       and  will  remain  in  effect  through  future  uses  of   The   Designer
+       until explicity changed by you.
+
+
+       5. Cursor Management
+
+       The   use   of   function   keys  2,  5,  or  6  immediately  results  in
+       changing  the  cursor  to  the  current  foreground   color.   Therefore,
+       the   cursor   can  be  made  to  disappear  by  setting  the  foreground
+       color   as   appropriate   to   your   situation   before   using   these
+       function  keys.  If  the  foreground  color  is  not  correctly  set, the
+       cursor will become  a  permanent  part  of  the  image  and  it  will  be
+       necessary  to   retrieve  the  saved  image   to  erase   it.  Therefore,
+       always check foreground  color  before  using  function  keys  2,  5,  or
+       6.
+
+
+       6. Using the Enter Key
+
+       The  Designer  is  largely  controlled  with  fixed-length  commands  and
+       function  keys.  To  make  it  easier   to  use,  it   is   designed   to
+       respond   to  commands  without  waiting  for  you  to  press  the  enter
+       key. In most cases the enter key has been rendered inoperative.
+
+       The exception to this  rule  lies  in  the  entry  of  file  names  which
+       can   be   anywhere  from  one  to  eight  characters  long.   Since  The
+       Designer does not know how long  a  file  name  will  be,  it  waits  for
+       you to press enter before responding.
+
+
+
+
+
+
+
+
+
+
+                                     Page 11
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+
+       7.  File Names.
+
+       When   storing   or   retreiving   either   screens   or   sprites,   The
+       Designer  requests  a  file  name.  The   Designer   will   append   file
+       qualifiers, relieving you of the need to type them.
+
+       It  is  best  to  refrain  from  using  "DESIGNER"  as  a file name.  You
+       might   overwrite   the   program   itself,   permanently   loosing   it.
+       Unless  Demo  has  been  moved  to  another  diskette,  "DEMO",  "MOUSE",
+       and "MAZE" should also be considered reserved names.
+
+
+       8. Upper and Lower Case
+
+       In all cases but  one,  if  you  type  lower  case  characters  into  The
+       Designer,   they   will   be  converted  into  upper  case  before  being
+       displayed  or  used.  Therefore,  you  need  not   be   concerned   about
+       cases.
+
+       The   exception  is  function  7,  which  allows  inclusion  of  text  on
+       your  images.  Since  both  upper   and   lower   case   characters   are
+       supported,   the   status   of  the  shift  and  capslock  keys  will  be
+       recognized and used.
+
+
+       9.  Sound
+
+       The  Designer  involves  a  great  deal   of   full-screen   work   which
+       cannot  be  disturbed  by  printing  messages  on  the  display.   Yet in
+       some cases, The Designer  needs  to  confirm  that  it  has  completed  a
+       requested task, and in some cases it has to report problems.
+
+       The    display-in-use    problem   is   circumvented   using   the   PC's
+       speaker. When The Designer  wants  to  confirm  that  it  has  done  what
+       you  asked  it  to  (and  particularly  when  its  actions  do  not  make
+       any  visible  change  to  the  screen),  it  will  confirm   with   three
+       high-pitched   beeps.   When   The   Designer  encounters  an  error,  it
+       reports with a low-pitched warble.
+
+
+                     C. Using Files Created by The Designer
+
+       The Designer is intended  to  be  a  tool  to  create  data  files  which
+       will   be   read   by  your  programs.  Discussion  of  the  contents  of
+       these  files  and  of  their  use  in  your   programs   is,   therefore,
+       important.
+
+
+
+
+
+
+
+
+
+                                     Page 12
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+       Screen Files
+
+       When  you  save  a  screen  using  The  Designer,  two files are created.
+       The  file  names  default  to  SCREEN.RES  and  SCREEN.BAS,  but  can  be
+       changed   by   The  Designer  if  you  tell  it  to  do  so,  or  can  be
+       changed using RENAME later.
+
+       The  RES  file  will  consist  of  a   single   record   containing   the
+       following information:
+
+          The resolution (2= high, 1=medium)
+          The background color (0 through 15)
+          The palette (0 or 1)
+
+       The  RES  file  is  necessary  because  this  information  is  not stored
+       by BSAVE in creating the  BAS  file.  Since  BASIC  does  not  provide  a
+       simple  way  of  appending  the  screen  to  the  RES file, two files are
+       used.
+
+       The  RES  file  should  be  read  with  the  following  BASIC  statements
+       (obviously  you  should  use  the  correct  file  and  variable names for
+       your program) taken from DEMO.
+
+          OPEN "A:MAZE.RES" FOR INPUT AS #1
+          INPUT #1,RES,BAK,PAL
+          CLOSE #1
+
+       Use of the RES file is  not  required  in  your  program.  If  you   know
+       the   correct   values   for   the   resolution,  background  color,  and
+       palette,  you  can  write  them   into  the  program   and  avoid   using
+       the  RES  file.  You   can  even  erase  the  RES file.  If, however, you
+       aren't sure what  the  values  might  be  in  the  future,  data  in  the
+       RES file can be checked to prevent errors.
+
+       The  BAS  file  is  used  directly  by  BLOAD.  Its  format  and contents
+       are controlled entirely by BASIC. The required statements are:
+
+          SCREEN RES
+          COLOR BAK,PAL
+          CLS
+          DEF SEG=&HB800
+          BLOAD "A.MAZE",0
+          DEF SEG
+
+
+       Sprite Files
+
+       Saving  a  sprite  results  in  the  creation  of  a  single  data   file
+       bearing  a  name  you  specified  (there  is  no  default  in  this case)
+       with a .SPR extension.
+
+
+
+
+
+
+                                     Page 13
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+       The first record in a sprite file contains the following:
+
+          The resolution (2= high, 1=medium)
+          The palette (0 or 1)
+          The size of the array required to hold the sprite
+          The width of the sprite (in pixels)
+          The height of the sprite (in pixels).
+
+       Subsequent  records  contain  the  ASCII   values   of   the   characters
+       that need to be loaded into the array to represent the sprite.
+
+       The  statements  required  to  load  a  sprite  from  a  file  created by
+       The Designer are: 
+
+          OPEN "A:MOUSE.SPR" FOR INPUT AS #1
+          INPUT #1,RES,PAL,ARR,WID,HGHT
+          DIM MOUSE(ARR)
+          FOR I=0 to ARR
+             INPUT #1, J(0),J(1),J(2),J(3)
+             P=VARPTR(MOUSE(I))
+             FOR N = 0 to 3
+                POKE P+N,J(N)
+             NEXT N
+          NEXT I
+          CLOSE #1
+
+       Similar  to  Screen  files,  if  you  know  the  resolution  and  palette
+       information  and  the  array  size,  you  can  avoid  a  small  amount of
+       computing  by  writing  the  values  directly  into  your   program.   In
+       this  case,  you  will  have  to  delete  the  first line from the sprite
+       file using either EDLIN or some other editor.
+
+       The sprite width and  height  are  supplied  only  as  a  convenience  to
+       you. They need not be used at all in your program.
+
+       When  your  program  has  finished  loading  the   array,  and  has moved
+       the  screen  into  the  screen  buffer,  the  BASIC  PUT   statement   is
+       used  to  apply  and  remove  the  sprite  from  the  screen according to
+       your program's logic.
+
+
+                                    D. DEMO
+
+       The  program  "Demo"  is  intended  only  as  a  demonstration  of    the
+       abilities  of  The  Designer   and  of  BASICA  animation.  It  is  not a
+       game,  nor  is   it  the  ultimate  in  animation  technique.  In   fact,
+       Demo   is   purposefully   less   than   optimum   to   enhance   program
+       legibility.
+
+
+
+
+
+
+
+
+                                     Page 14
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+       Demo, when run, displays  a  maze  and  a  mouse  that  wanders  randomly
+       (and   slowly)  through  the  maze.  Compiling  this  program  will  make
+       the  mouse  move  much  faster  and  will  make  watching  it  more  fun,
+       but  will  eliminate  the  real  benefit  of  the  program,  reading  the
+       code.
+
+       To run Demo, stop  The  Designer  with  function  key  10  and  type  RUN
+       "DEMO"   (including   the   quotation  marks).   Demo  requires  no  user
+       input - you can just  sit  and  watch  it  go.  When  you  are  tired  of
+       it,   stop   it   with   Cntl-Break   and   type  "LIST"  (excluding  the
+       quotation  marks)  to  see  the  program.   Print   the   program   using
+       LLIST  and  study,  especially,  the  use  of  the  MOUSE.SPR,  MAZE.RES,
+       and MAZE.BAS files in lines 10180 through 10410.
+
+
+                             E. IF AN ERROR OCCURS
+
+       The  Designer  should  catch  all  possible  user  errors   and   provide
+       complete   error   diagnostics   and   opportunities  to  correct  errors
+       online.  Since  the  online  diagnostics  are  very  complete,  they  are
+       not documented here, with one exception.
+
+       The   Designer   uses  dynamic  array  definition  to  build  arrays  for
+       transferring  sprites   from   your   display   to   diskette.    It   is
+       possible  for  you  to  attempt  to  store  a  sprite  which  is so large
+       that the required array would exceed the available memory.
+
+       Should  you  exceed  the  available  memory,  The  Designer  will  detect
+       the   problem  before  crashing.  Since  your  sprite  is  still  on  the
+       screen,  and  is  stored  nowhere  except   the    screen   buffer,   The
+       Designer  refrains   from  clearing  the  screen  and  provides  only  an
+       error  tone  (a  low  warble  -  see  above).  When  this  happens,   you
+       have  a  choice:  you  can  reduce  the  size  of  the  sprite by closing
+       down  the  box  further,  or  you  can   abort   the   whole   thing   by
+       pressing a function key.
+
+       The    Designer    is   affected   by   one   significant   BASICA   bug.
+       Occasionally when saving  a  screen,  you  may  get  a  syntax  error  on
+       either  a  non-existent  line  number  or  on  line  number  15530.  When
+       this  happens  The  Designer  will  probably  lock  up  and   you    will
+       have   to   re-boot  your  PC.  However,  the  DIR  command  will  reveal
+       that all is not  lost  -  your  screen  has  been  saved  as  SCREEN.BAS.
+       If  you  rename  it  and  restart  The  Designer,  you  can continue from
+       where you were when you were interrupted.
+
+
+
+
+
+
+
+
+
+
+
+
+                                     Page 15
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+       In addition  to  these  errors  and  messages,  you  may  run  across  an
+       error message in the form:
+
+           Error Number nnn on Line Number nnn
+
+       followed  by  a  BASIC  OK.  This  message  means  that  The Designer has
+       crashed.  I  would  like  very  much  to  know  about   crashes.   Please
+       write   to   Jan   Young,  767  N.   Holden  St.,  Port  Washington,  Wi.
+       53074, and include as  much  detail  as  possible  about  what  you  were
+       doing  when  the  problem   arose,  and  what  suspicions  you  have,  if
+       any, about the causes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     Page 16
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+                               IV. ADMINISTRATION
+
+
+                           A. WARRANTY AND DISCLAIMER
+
+       In  view  of  the  fact  that  The  Designer  is   distributed   entirely
+       without    charge   and   contributions   are   wholly   voluntary,   all
+       warranties  are  disclaimed.  I  cannot  be   responsible  in   any   way
+       for  direct,  indirect,  or  consequential  damages.  Any  and  all  risk
+       associated with  using  The  Designer,  Demo,  their  data  files  and/or
+       the documentation is the user's.
+
+
+                            B. PROGRAM DISTRIBUTION
+
+       The  Designer  is  distributed  without  charge.  If  you  are  using  it
+       and find it  to  be  of  value,  a  contribution  ($20  suggested)  would
+       be appreciated.
+
+                             Jan B. Young
+                             767 N. Holden St.
+                             Port Washington, Wi.  53074
+
+       Regardless    of    whether    you    make   a   contribution   or   not,
+       individuals,   clubs,   and   other   non-profit    organizations     are
+       granted   permission   to  copy  and  distribute  programs,  data  files,
+       and documentation to  others,  providing  that  no  charge  is  made  for
+       the   software.   Distribution   costs  may   be  charged  to  recipients
+       providing they do not exceed $7 per copy.
+
+       The  programs,  data  files,  and  documentation  may  be   modified   as
+       desired   by   any   individual  or   non-profit  organization,  and  the
+       modified   materials   distributed    providing    the    following    is
+       retained   without   modification:   all  appearances  of  the  copyright
+       notice,  all  warranty  disclaimers,   all   material   explaining   this
+       distribution   policy,   and   all  requests   for  contributions.  Users
+       distributing  modified    program    or    documentation    copies    are
+       also   required   to   add   the  words  "User   Modified"  wherever  The
+       Designer's  version  number   appears   and   must   distribute   without
+       charge (other than the $7 maximum distribution cost).
+
+
+                           C. QUESTIONS AND PROBLEMS
+
+       If   you   have   questions  about  The  Designer,  or  have  experienced
+       problems with it, I  will  try  to  help.   Write  to  me  (please  don't
+       phone)   and   enclose   a   stamped   self-addressed   envelope  for  my
+       reply.  Please  don't  expect  return-mail  responses  since   I   travel
+       quite a bit and may not even read your letter for a week or two.
+
+
+
+
+
+
+
+                                     Page 17
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+       If   The  Designer  crashes  while  you  are  using  it,  please  let  me
+       know so I can fix  the  problem.   The  more  details  you  provide,  the
+       easier it will be for me to make the fix.
+
+
+                        D. MAINTENANCE AND ENHANCEMENTS
+
+       If   there   is   a   reasonable   level  of  interest  in  The  Designer
+       (measured  by  the  number  of  contributions   I   receive),   I    will
+       create   and   make   available  new  releases.  Some  possibilities  for
+       future enhancements  include:  1)  Variable  line  widths  in  the  "NEW"
+       mode,   2)   Separation  of  scaling  into  a  compilable  module  so  it
+       will  run  faster,  3)  use   of  color  in  high   resolution   (it   is
+       possible,  but  limited),  4)  the  ability  to  rotate  images,  and  5)
+       extension  into  text-mode   graphics.   If   you   have   other   ideas,
+       please write and let me know what they are.
+
+       If  you  contribute  once,  the  suggested  contribution  is  reduced  to
+       $2  for  a  new  release.  Just  send  me   a   diskette,   a   postpaid,
+       self-addressed  mailer,  and  a  brief  note  requesting  a  copy  of the
+       latest version.  The  same  policy  holds  if  you  accidentally  destroy
+       the  program  and  want  a  fresh  copy  of  the  current version. I will
+       be unable to supply replacement copies of obsolete versions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     Page 18
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+
+                             V. REFERENCE MATERIAL
+
+                               A. COMMAND SUMMARY
+
+  Function  Command  Explanation
+  --------  ------- ----------------------------------------------------
+   1  NEW            Cursor Arrows move the cursor.
+              Fn      Set  foreground  color  to  n,  where  n  is  0  or  1  in
+                      high  resolution;  0,  1,  2,  or  3 in medium resolution.
+                      Color received depends on palette selelction.
+              D1      Defines  the  first  end  of  a  diagonal  line   at   the
+                      current cursor location.
+              D2       Defines  the  second  end  of  a  diagonal  line  at  the
+                      current  cursor  location  and  causes  the  line  to   be
+                      drawn in the current foreground color.
+              C1      Defines  the  center  of  a  circle  at the current cursor
+                      location.
+              C2      Defines  the  periphery  of  a  circle  at   the   current
+                      cursor   location  and  causes  the  circle  to  be  drawn
+                      in the current foreground color.
+              A1     Defines the  center  of  a  circular  arc  at  the  current
+                      cursor location.
+              A2      Defines  the  radius  of  a  circular  arc  and the start-
+                      ing  position  at  the  current  cursor  location.    (The
+                      arc    will    be   drawn   counterclockwise   from   this
+                      position.
+              A3     Defines  the  ending  position  of  a  circular  arc  as  a
+                      line   from   the   A1  location  to  the  current  cursor
+                      position  and  causes  the  arc  to  be   drawn   in   the
+                      current foreground color.
+   2  SCL     En     Expand the image by 4*n percent.
+              Cn     Contract the image by 4*n percent.
+   3   SSP             Cursor  Arrows  reduce  the  box  size.   The  up  arrow,
+                      for instance, raises the bottom of the box.
+               n      Used  as  a  multiplier  for  the  speed  of  the   cursor
+                      arrows.
+              G       Signals  that  the  box  now  represents  the  size of the
+                      sprite and initiates creation of the sprite files.
+   4  SSC            No commands
+   5  RSP            No commands  (but  return  to  NEW  is  automatic  and  the
+                      NEW commands can be used).
+   6   RSC             No  commands  (but  return  to  NEW  is automatic and the
+                      NEW commands can be used).
+   7   TXT             Any  key  (ASCII  33  to  125)  can  be  used  to  create
+                      the corresponding character.
+                     Cursor   arrows   move  the  most  recently  created  char-
+                      acter.
+                     Space  bar  deletes  the  most   recently   created   char-
+                      acter and blanks anything under it.
+
+
+
+
+
+
+                                     Page 19
+
+
+
+
+
+
+                        The Designer User's Manual - V1.0
+
+
+                         A. COMMAND SUMMARY (Continued)
+
+  F u n c t i o n               C o m m a n d              E x p l a n a t i o n
+  --------  ------  ---------------------------------------------------
+   8  ANI            Cursor arrows move the sprite.
+              A      Begins use of ADD mode PUTs.
+              O      Begins use of OR mode PUTs (alpha Oh).
+              X      Begins use of XOR mode PUTs.
+              P      Begins use of PSET mode PUTs (the default).
+   9   INS             Typing  any  of  the  three-letter   abbreviations   will
+                      display   a   series   of  helps  explaining  the  use  of
+                      the corresponding function.
+              GEN    Initiates display of helps explaining general
+                      topics about The Designer.
+              CRD    Causes printing of the reference card.
+              DRV    Alters the default disk drive.
+  10  Stop           No commands.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     Page 20
+
+
+
+
+0  Stop           No commands.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     Page 20
+
+
+
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

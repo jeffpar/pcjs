@@ -94,12 +94,15 @@ machines:
 
 ## ARKTRAV.BAS
 
+{% raw %}
 ```bas
 10 PLAY"l4o2go3l8cedcl4o2aaggo3ccddeel8dedco2l4ago3cedcl4o2aaggo3cco4l8co3bo4co3gao4co3bagfedl4c
 ```
+{% endraw %}
 
 ## BULLSEYE.BAS
 
+{% raw %}
 ```bas
 10 CLEAR,,8000
 20 CLS
@@ -110,9 +113,74 @@ machines:
 60 NEXT RADIUS
 70 GOTO 70
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #12, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  FENCE   .BAS         CRC = 72 A9
+
+--> FILE:  DEMO3   .BAS         CRC = 9D D0
+
+--> FILE:  LOGO40  .BAS         CRC = 30 07
+
+--> FILE:  GRAPHICS.BAS         CRC = 92 03
+
+--> FILE:  MOUNTX  .PIC         CRC = 25 1D
+
+--> FILE:  WORM    .PIC         CRC = 96 48
+
+--> FILE:  COMPLEX1.PIC         CRC = 9F A6
+
+--> FILE:  WORM2   .PIC         CRC = 5D 5C
+
+--> FILE:  QUILT   .PIC         CRC = 24 C9
+
+--> FILE:  EGGS    .PIC         CRC = 53 68
+
+--> FILE:  FLOWERS .PIC         CRC = E5 E2
+
+--> FILE:  BULLSEYE.BAS         CRC = 9B 8A
+
+--> FILE:  MEDBULL .BAS         CRC = 05 1F
+
+--> FILE:  PAINT   .BAS         CRC = 2E BD
+
+--> FILE:  ARKTRAV .BAS         CRC = 0A A2
+
+--> FILE:  SIREN   .BAS         CRC = 80 76
+
+--> FILE:  LIFE    .BAS         CRC = 7D B6
+
+ ---------------------> SUM OF CRCS = C1 31
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## DEMO3.BAS
 
+{% raw %}
 ```bas
 5 KEY OFF
 10 CLS
@@ -436,9 +504,11 @@ machines:
 9040 RETURN
 9050 COLOR 7,0,0
 ```
+{% endraw %}
 
 ## FENCE.BAS
 
+{% raw %}
 ```bas
 99  OPTION BASE 1
 100 CLS
@@ -576,9 +646,11 @@ machines:
 3030 LOCATE 23,20:PRINT" Press any key to continue ": COLOR 7,0
 3040 ERASE FFFFF$ : GOSUB 1260 : GOTO 100
 ```
+{% endraw %}
 
 ## GRAPHICS.BAS
 
+{% raw %}
 ```bas
 5 'SAVE"B:GRAPHICS"
 10 GOTO 85
@@ -1070,9 +1142,11 @@ machines:
 3410 FOR I=1 TO 3000:NEXT
 9900 CHAIN "B:TEXT"
 ```
+{% endraw %}
 
 ## LIFE.BAS
 
+{% raw %}
 ```bas
 2 PRINT TAB(34);"LIFE"
 4 PRINT TAB(15);"LINE DELETED"
@@ -1141,9 +1215,11 @@ machines:
 640 GOTO 210
 650 END
 ```
+{% endraw %}
 
 ## LOGO40.BAS
 
+{% raw %}
 ```bas
 3000 ' START.BAS    SYSTEM STARTUP ROUTINE     6/9/81 PBK
 3005 KEY OFF
@@ -1185,9 +1261,11 @@ machines:
 3185 A$=INPUT$(1)
 3190 CHAIN "MENU"
 ```
+{% endraw %}
 
 ## MEDBULL.BAS
 
+{% raw %}
 ```bas
 10 CLEAR,,8000
 20 CLS
@@ -1198,9 +1276,11 @@ machines:
 60 NEXT RADIUS
 70 GOTO 70
 ```
+{% endraw %}
 
 ## PAINT.BAS
 
+{% raw %}
 ```bas
 5 CLEAR ,5000
 7 KEY OFF
@@ -1215,9 +1295,11 @@ machines:
 60 NEXT
 65 FOR T=0 TO 600:NEXT T:GOTO 15
 ```
+{% endraw %}
 
 ## SIREN.BAS
 
+{% raw %}
 ```bas
 10 FOR N = 37 TO 2000 STEP 50
 15 PRINT N
@@ -1229,6 +1311,7 @@ machines:
 70 NEXT N
 80 GOTO 10
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -66,6 +66,7 @@ machines:
 
 ## DEFINE.BAS
 
+{% raw %}
 ```bas
 10 REM DSNAME=DEFINE.BAS
 20 GOTO 40
@@ -161,9 +162,11 @@ machines:
 920 PRINT "File created for you.":FILES B$+":*.plt"
 930 END
 ```
+{% endraw %}
 
 ## GRAF.BAS
 
+{% raw %}
 ```bas
 10 '**********************************
 20 '*   THIS IS A REVISION OF THE    *
@@ -304,9 +307,26 @@ machines:
 11520 IF Y>YU THEN YP%=16:RETURN
 11530 YP%=176-D%:RETURN
 ```
+{% endraw %}
+
+## OKICHAR.TXT
+
+{% raw %}
+```
+Okichar is provided on this disk in a library form in order
+to keep the files separate from the others so you can organize
+your hard disk better.
+In order to use okichar you should:
+  1) md\okichar             create a okichar subdirectory
+  2) cd\okichar
+  3) copy a:okichar.lbr     move in the okichar library
+  4) lu a okichar.lbr       disperse the files in the okichar library
+```
+{% endraw %}
 
 ## OKIMENU.BAS
 
+{% raw %}
 ```bas
 1010 ' *** OKIMENU.BAS   Print Control Menu for Okidata ML92
 1020 '
@@ -788,9 +808,527 @@ machines:
 5770 DATA "Exit to BASIC"
 5780 DATA "Exit to DOS"
 ```
+{% endraw %}
+
+## OKIMENU.DOC
+
+{% raw %}
+```
+6F661%C081
+
+
+
+       *** OKIMENU ***
+
+
+        OKIDATA  ML92
+
+
+     PRINT  CONTROL  MENU
+
+
+        USER'S  MANUAL
+
+
+
+
+             Version 2.94       March 20, 1984
+
+
+
+
+        Copyright (C)1984  BWare SoftWare EveryWare
+
+
+
+
+
+This documentation is intended solely for use with the
+OKIMENU.BAS print control menu program.  Sale of either the
+program or this documentation is strictly prohibited.  The
+information in this document has been carefully compiled and
+tested, but no guarantee is made for its accuracy or suitability
+for any specific purpose or configuration.
+
+
+
+
+
+Both OKIMENU.BAS and this documentation are made available
+through the Software Library of the Silicon Valley Computer
+Society, P.O. Box 60506, Sunnyvale, CA 94088.
+
+
+CGENERAL INFORMATIOND
+
+
+OKIMENU.BAS is an IBM-PC BASIC program which is intended to
+provide an easy-to-use facility for controlling the Okidata ML92
+dot-matrix printer.  Thirty printer features and several related
+printer functions are included in this program which should run
+on any version of PC-DOS with Disk or Advanced BASIC, although at
+least one function requires DOS 2.00 (or greater).  Either the
+monochrome or color graphics monitors may be used.  Although the
+program has not been tested with an Okidata ML93 printer, it
+should function just as well as on the ML92.  Compatibility with
+any other printer (including other Okidata models) would be sheer
+coincidence.
+
+
+
+*****  OKIMENU.BAS will CNOTD function properly on a printer  *****
+*****  with the Okidata-IBM Plug 'n Play ROM's installed.   *****
+
+
+
+OKIMENU should be run just as any other BASIC program is run on
+the IBM PC, using either Basic or BasicA.  Selection of the
+print codes and functions should be mostly self-evident, but the
+following additional advice is offered.
+
+
+
+
+CKEY USAGED
+
+
+<Enter> means the gray key with the bent arrow on the right side
+of the keyboard which is also called "return" or "carriage return".
+This key is not used when selecting items from the menu, and will
+normally be used only when entering responses which are more than
+one character in length, such as a filename.
+
+<Esc> means the gray key between F2 and number 1 at the top left
+of the keyboard.  This key can be pressed at any time to "escape"
+from the current selection.  If pressed when on the main menu
+prompt, the entire screen will be cleared and rewritten.
+
+To exit from this program, select menu item 6 to exit to your own
+"menu" program (if you have one), menu item 7 to exit to BASIC,
+or menu item 8 to exit to DOS.
+
+
+CNOTE 1D
+
+Make sure the printer is on and selected (SEL light on) when
+using OKIMENU.  Although error conditions will be detected and
+effectively handled, there will be a 30-second timeout period if
+the printer is powered on but not selected.  If you use a print
+spooler program (SUPERSPL, SPOOL, DSPOOL, etc.), obscure problems
+might occur since printer errors might not be detected by
+OKIMENU.
+
+CNOTE 2D
+
+There are three conditions which can cause your Okidata ML92 to
+stop printing even though it appears to be in a ready state.
+First, if the printer receives the deselect code (DC3, decimal 19
+or hexadecimal 13), it will remain in the deselected state until
+it receives the select code (DC1, decimal 17 or hexadecimal 11).
+This code can be sent by choosing menu selection A (Clear print
+buffer & reset printer).
+
+Second, if the printer receives the control code for the start of
+the VFU load sequence (DC4, decimal 20, hex 14), it will
+interpret all following codes as part of the VFU load sequence
+until it receives the termination code (?, decimal 63, hex 3F).
+Since it is impossible to know whether this condition has been
+accidentally created, the best solution is to turn off your
+printer if menu selection A does not make it print.  (Arbitrarily
+sending the termination code to the printer will cause the
+question mark to print if it is not in the VFU load sequence.)
+
+Third, if the printer receives the control code for entering
+graphics mode (ETX, decimal 3, hex 3), nothing will print unless
+the appropriate graphics codes are sent to the printer.  Since
+the codes for exiting graphics mode (ETX-STX, decimal 3-2) will
+cause the printer to enter graphics mode if it is not already in
+that mode, the quickest solution is to turn off the printer if
+menu selection A does not restore normal operation.
+
+CNOTE 3D
+
+Once the printer has been set for the various modes of operation,
+it should retain those modes until it is turned off, your
+computer is rebooted (Ctrl-Alt-Del or power off/on), or certain
+programs are run which change the print modes.  Compiled BASIC
+programs and BASIC version 1.0 appear to completely reset the
+printer, and WordStar or other word processing programs may also
+change the print modes.
+
+CNOTE 4D
+
+The original User's Manuals (blue or green soft cover manuals)
+contain a number of errors and misconceptions.  An updated
+version in a three-ring binder is now available by request if you
+send proof of purchase (a copy of your purchase invoice) to
+Okidata Corporation, Marketing Services, 532 Fellowship Road,
+Mount Laurel, New Jersey 08054.
+
+
+PRINT CONTROL CODES FROM A to Z
+
+
+CA. Clear print buffer & reset printerD
+
+All unprinted data in the printer buffer will be deleted.  The
+following power-on defaults will be reset:
+
+     Data processing print mode
+     Single-width characters at 10 CPI and 6 LPI
+     Enhanced and emphasized print off
+     Superscripts and subscripts off
+     Underlining off
+     Space between characters is normal
+           (for Correspondence Quality print mode)
+
+Other conditions will remain unchanged, such as the left margin
+setting, tab settings, page length.  Also see Note 3 above.
+
+If printer does not print even though it appears ready, it will
+be necessary to use the "master reset" (turn it off and back on).
+See Note 2 above for further details.
+
+
+CB. Data processing print modeD
+
+Data processing characters will be selected.
+
+
+CC. Correspondence Quality print modeD
+
+Correspondence Quality characters will be selected.
+
+
+CD. Downloaded Character print modeD
+
+The downloaded character set currently stored in the printer's
+memory will be selected.  If no characters have been downloaded,
+no printing will occur while this mode is selected.  Use print
+function 1 to download an italics character set.  Note that
+turning off the printer will erase the downloaded character set.
+
+
+CE. Enhanced printingD
+
+Half-dot enhanced printing mode is turned on.  This feature can
+be combined with emphasized printing, but it cannot be selected
+if Correspondence Quality print mode is currently selected.
+
+
+CF.  Emphasized printingD
+
+Half-dot emphasized printing mode is turned on.  This feature can
+be combined with enhanced printing, but it cannot be selected if
+Correspondence Quality print mode is currently selected.
+
+
+CG. Stop enhanced/emphasized printingD
+
+Both enhanced and emphasized printing will be turned off.
+
+
+CH. 10 characters per inchD
+
+10 CPI (Pica) type size is selected.
+
+
+CI. 12 characters per inchD
+
+12 CPI (Elite) type size is selected.
+
+
+CJ. 17 characters per inchD
+
+17 CPI (Compressed) type size is selected.  Compressed print
+cannot be selected in Correspondence Quality print mode; if this
+menu item is selected in CQ mode, 10 CPI will be selected.
+
+
+CK. Double-width charactersD
+
+Character width will be set to twice the current width:
+  5 CPI, 6 CPI or 8.5 CPI.
+
+To return to single-width characters, select menu item H, I or J.
+
+
+CL. 6 lines per inchD
+
+Six LPI is selected.  It is not necessary to change the form
+length (see menu item T).
+
+
+CM. 8 lines per inchD
+
+Eight LPI is selected.  It is not necessary to change the form
+length (see menu item T).
+
+
+CN. Underlining onD
+
+Continuous underlining is turned on.
+
+
+CO. Underlining offD
+
+Underlining is turned off.
+
+
+CP. Subscripts/superscripts onD
+
+Subscripts or superscripts will be turned on, depending on your
+reply to the prompt which will be issued.  If either one is
+already turned on, it will be turned off before turning on your
+new choice.
+
+
+CQ. Subscripts/superscripts offD
+
+Subscripts or superscripts will be turned off, if either is
+currently turned on.
+
+
+CR. Set variable horizontal tab stopsD
+
+You will be asked to enter the column numbers of the desired tab
+stops.  The columns can range from 1 to 255:  type any one-digit,
+two-digit or three-digit number in this range.  Press <Enter>
+after each column number has been typed.  The tabs will be
+displayed each time you press <Enter>.  When you have entered all
+desired tab stops, press <Enter> again and the tabs will be set.
+
+Once you have pressed <Enter> after typing a column number, you
+cannot backspace to erase it.  If you change your mind, press
+<Esc> to return to the menu without setting any tab stops.
+You may then select menu item R again.
+
+Use of this function will cause all previously set tab stops to
+be cleared.  You cannot set a few tab stops and then add more in
+a separate command.  (This is a printer limitation, not a program
+limitation.)
+
+Only 14 tab stops can be set using this function (due to space
+limitations on the display line), although the Okidata ML92 will
+accept 16 tab settings.  After you have entered 14 tab stops,
+they will automatically be sent to the printer without asking for
+any more (you will not have to press <Enter> again).
+
+A peculiar circumstance (bug) seems to exist on the Okidata ML92.
+Only one tab stop can be set between columns 234 and 255.
+Fortunately, this is a minor hindrance.  This program will not
+request any more tab columns once you have entered a column
+number greater than 233.  (If you could enter another tab
+setting, it would print the column number instead of setting a
+tab stop for it.)
+
+
+CS. Set fixed horizontal tab stopsD
+
+You will be asked to enter the number of columns between tab
+stops.  Type any one-digit, two-digit or three-digit number
+between 1 and 254, and then press <Enter>.  A maximum of 16 tab
+stops can be set, but no tab stop can be set past column 255.
+
+The tab stops will be displayed on line 24 for your review.
+Press any key to set the tabs and return to the menu.  All
+previously set tab stops will be cleared.  As noted in menu
+item R above, only one tab stop will be set between columns
+234 and 255.
+
+
+CT. Clear all tab stopsD
+
+All currently set tab stops will be cleared.
+
+
+CU. Set form length (for form-feeds)D
+
+You will be asked to enter the number of lines per page in order
+to set the length of the form used by the form-feed (top-of-form)
+command.  Normal form length is 11 inches, which is obtained by
+setting either 66 lines per page at 6 LPI or 88 lines per page at
+8 LPI.
+
+It is strongly recommended that you select menu item L or M
+before using this selection, so that the current number of lines
+per page can be ascertained.  The prompt will display the current
+setting:  6 LPI or 8 LPI if known, or "?" if not known.
+
+Note that setting 66 lines per page at 8 LPI results in a form
+length of 8.25 inches, while setting 88 lines per page at 6 LPI
+results in a form length of 14.67 inches.
+
+Any number of lines per page from zero to 99 can be selected.
+Setting the form length to zero cancels any previous setting and
+restores the setting of the FORM LENGTH dial on the front of the
+printer.
+
+This command does CNOTD set the number of lines which will
+be printed on a page, since that is determined by the program
+which is doing the printing.
+
+
+CV. Set top-of-formD
+
+The top-of-form position used by the form-feed command will be
+set at the current paper position.  This is the same as pressing
+the TOF SET button on the front of the printer.  Top-of-form will
+also be set when the printer is turned on.
+
+
+CW. Advance to top-of-formD
+
+The paper in the printer will be advanced to the next top-of-form
+as determined by the current form length and top-of-form settings
+(refer to menu items U and V).  This is the same as pressing the
+FORM FEED button on the front of the printer.
+
+
+CX.  Skip 01-99 linesD
+
+You can skip zero to 99 lines.  Just type any one- or two-digit
+number and press <Enter>.  Skipping zero lines is the same as
+doing nothing at all.  Skipping 1 to 99 lines is the same as
+pressing the LINE FEED button on the front of the printer 1 to 99
+times.
+
+
+CY. Set left marginD
+
+Type any one- or two-digit number from 1 to 90 and press <Enter>
+to set the left margin.  All subsequent printing will begin
+in the specified column number.
+
+This setting is not changed by the reset printer command (menu
+item A), so it must be specifically changed by this menu item if
+you wish to have a different left margin.  Turning off the
+printer will, of course, reset the left margin to column one.
+
+
+CZ. Set space between charactersD
+
+This setting applies only to Correspondence Quality print mode.
+
+Type any one-digit number to set the space between characters in
+multiples of 1/120th of an inch.  Zero will reset the spacing to
+normal.
+
+
+PRINT-RELATED FUNCTIONS 1 to 8
+
+
+C1. Download Italics character setD
+
+The program named OKITALIC.BAS will be loaded from disk to begin
+the download of the 96-character Italics character set, which
+will take approximately 12 seconds.  Once Italics have been
+downloaded into the printer, they can be used by switching to the
+Downloaded Character print mode (menu item D).
+
+If OKITALIC.BAS is not on the diskette in the default drive, you
+will be asked for the letter of the drive containing the program.
+Once the download has been completed, OKIMENU.BAS will be
+reloaded and the menu screen will be rewritten.
+
+
+C2. Print test--all ASCII charactersD
+
+All printable ASCII values (decimal 32 to 127) will be printed,
+using the current print mode settings.
+
+
+C3. Print an ASCII text fileD
+
+This function provides a simple way to print normal ASCII text
+files.  Tokenized BASIC programs cannot be printed by this
+function; use the ASCII format option to save BASIC programs for
+printing (SAVE "PROG",A).  Files created in WordStar's document
+mode can be printed, but probably will not be formatted correctly
+unless the "soft" carriage-returns are replaced by "hard"
+carriage-returns.  Text files from other word processing programs
+may or may not print correctly.
+
+You must first enter the number of print lines per page.  Just
+press <Enter> if the text file already contains the necessary
+form-feeds.  Otherwise, enter the number of lines you would like
+printed on each page; 54 lines at 6 LPI or 72 lines at 8 LPI on
+an 11-inch page are usually good values.  You must, of course,
+have set your choice of lines per page and the form length prior
+to using this function (using menu items L, M and U).
+
+You will then be asked for the name of the file you want to
+print.  Be sure to type the complete filename (including the disk
+drive identifier if not on the default drive) and the filename
+extension.  For example, type B:OKIMENU.DOC, then press <Enter>.
+
+If you type the filename incorrectly, or fail to specify the
+drive identifier, or the file does not contain any data, or the
+file is a tokenized BASIC program or other non-text file, an
+error message will be displayed, and you will be asked to type
+the name of the ASCII text file again.  Press <Esc> if you do not
+wish to print any file.  You can use print function 5 if you do
+not remember the name of the file you want to print.
+
+If the specified text file is found, it will begin to print.
+Please note that CNOD leading form-feed will be sent to the
+printer, even if one is contained in the file, so you must
+position the paper where you want printing to start before using
+this function.  Form-feeds will be used between pages (if the
+number of print lines per page was entered), AND at the end of
+the printing.
+
+You can terminate printing at any time by pressing <Esc>, but
+please note that printing may continue if you are using a print
+spooler/buffer.
+
+
+C4. Print disk directory (BASIC 2.00)D
+
+This function can be used only in BASIC 2.00 and DOS 2.00 (or
+higher).  It will print the directory and disk space usage using
+the BASIC SHELL command and the DOS DIR and CHKDSK commands with
+output redirected to the printer.  Correspondence Quality print
+mode at 12 CPI and 8 LPI will be used to print the information
+starting in column one.
+
+You must specify a disk drive letter:  only A through D are
+valid.  If the drive is not ready, you will get the DOS error
+message asking for "Abort, Retry or Ignore"; A or R is the
+recommended response.
+
+
+C5. Display disk directoryD
+
+You must specify the drive letter of the desired disk:  only A
+through D are valid.  The directory will be displayed using the
+BASIC FILES command.  This function serves mainly as an aid in
+identifying files for menu item 3.
+
+
+C6. Exit to MENUD
+
+This function can be used to exit OKIMENU and run your own
+MENU.BAS program (if you have one).  If MENU.BAS is not on the
+default drive, you will be asked for the correct drive letter.
+
+
+C7. Exit to BASICD
+
+This function will clear the screen and exit from OKIMENU to
+BASIC in text mode with color enabled.
+
+
+C8. Exit to DOSD
+
+This function will clear the screen and exit to DOS.
+
+```
+{% endraw %}
 
 ## OKIMENUC.BAS
 
+{% raw %}
 ```bas
 1030 KEYOFF:SCREEN0,1,0,0:WIDTH80:CLS:DEFINTA-Z:BV=1:CG=0:LI$="?":ONERRORGOTO1060:E=TIMER/3:BV=2:GOTO1070
 1060 RESUME1070
@@ -991,9 +1529,11 @@ machines:
 5660 DATA27,78,255
 5710 DATA"Download Italics character set":DATA"Print test--all ASCII characters":DATA"Print an ASCII text file":DATA"Print disk directory (BASIC 2.00)":DATA"Display disk directory":DATA"Exit to MENU":DATA"Exit to BASIC":DATA"Exit to DOS
 ```
+{% endraw %}
 
 ## OKITALIC.BAS
 
+{% raw %}
 ```bas
 1010 '*** OKITALIC.BAS - Okidata ML92 italics down-load character generator
 1020 KEY OFF: DEFINT A-K: ON ERROR GOTO 1260      'Set error-catcher
@@ -1136,9 +1676,70 @@ machines:
 3127  DATA A,127,&H0,&H40,&H8,&H60,&H18,&H46,&H9,&H40,&H1,&H42,&H0
 3128 '*** above character is British pound sign
 ```
+{% endraw %}
+
+## PRINT.DOC
+
+{% raw %}
+```
+PRINT  --  Print PC-DOS file(s) to a Diablo 630 serial printer at 1200
+           baud using XON/XOFF protocol.
+
+
+SYNOPSIS
+
+	PRINT  [-[P][n]]  filespec1  [filespec2  ... ]
+
+
+DESCRIPTION
+
+	PRINT prints a list of files to a Diablo 630 printer set for
+	1200 baud without data overrun.  CTRL/Break stops the print
+	process except for data already in the Diablo memory.
+
+	filespec	Any valid PC-DOS file specification.  (Pathnames
+			do not work.)  If more than one file is speci-
+			fied, they must be separated by blanks.  PRINT
+			always generates a formfeed between files.
+
+	-P		Pause between pages.  P may be upper or lower case.
+			This option may appear anywhere between filespecs and
+			refers only to those filespecs occuring to the right
+			of it.  Default is not to pause between pages.
+
+	-n		Generate a formfeed every n lines.  Default is 54.
+			When P and n occur together as a single option,
+			P must come first.  -n may appear anywhere between
+			filespecs and refers only to filespecs to the right.
+
+
+EXAMPLES
+
+		A>PRINT  -P -72 C:FILE1.TXT FILE2.DOC
+		A>PRINT  -p72 C:FILE1.TXT FILE2.DOC
+
+	These two examples are different forms of identical commands.
+	There will be a pause between pages.  72 print lines per page
+	(leaves one-inch margins on legal size paper).  FILE2.DOC is
+	on the default or system disk.
+
+
+INSTALLATION
+
+	PRINT1.EXE addresses COM1:.  PRINT2.EXE addresses COM2:.  Copy
+	the appropriate version to PRINT.EXE on the working disk.
+
+
+AUTHOR:
+
+	Jim Serwer,  PO Box 555, Cupertino, California, 95015
+
+```
+{% endraw %}
 
 ## SPIRO.BAS
 
+{% raw %}
 ```bas
 1 ' Program : SPIROGRAPH
 2 ' Author  : Ned Mazerall & Dennis Bayomi
@@ -1186,6 +1787,7 @@ machines:
 350 GCD = Y
 360 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

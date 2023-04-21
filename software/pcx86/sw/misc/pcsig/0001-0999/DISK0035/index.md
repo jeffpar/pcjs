@@ -64,6 +64,7 @@ machines:
 
 ## 23MATCH.BAS
 
+{% raw %}
 ```bas
 100 REM *** '23 MATCHES'"
 110 PRINT "LET'S PLAY 23 MATCHES. WE START WITH 23 MATCHES,"
@@ -108,9 +109,11 @@ machines:
 520 GOTO 215
 999 END
 ```
+{% endraw %}
 
 ## ADDRESS.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -216,9 +219,11 @@ machines:
 1110 DATA JOHNSON RUTH, 441 EAST 25nd ST NY NY, 212-455-0338
 1120 END
 ```
+{% endraw %}
 
 ## BANKER.BAS
 
+{% raw %}
 ```bas
 10 BE=1
 20 WIDTH 80
@@ -837,9 +842,11 @@ machines:
 6140 LPRINT "Press any key to continue with program. Do not attempt to enter data until you  have changed line 10. ( Ctrl-Break to stop and do this now, or continue, to     explore program's features.)":LPRINT CHR$(140)
 6150 A$=INKEY$:IF A$="" THEN 6150 ELSE 270
 ```
+{% endraw %}
 
 ## BARGRAPH.BAS
 
+{% raw %}
 ```bas
 10 DIM M#(72),M(72),T(39),A%(71),TITLE$(3),LABEL$(71),S(71),W(71),SV$(12)
 20 LOCATE ,,0: YOPT=1: DEFINT I,J,K,L,O,X,Y
@@ -1278,9 +1285,11 @@ machines:
 9000 KEY (3) OFF: SAMPLE$="y":Z$=""
 9010 Z$=Z$+"s": OLDFILE$=Z$+".bar": GOTO 4600
 ```
+{% endraw %}
 
 ## BULLSEYE.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -1335,9 +1344,11 @@ machines:
 600 FOR I=1 TO M:PRINT A$(W(I));"SCORED";S(W(I));"POINTS.":NEXT I
 610 PRINT :PRINT  "THANKS OR THE GAME.":END
 ```
+{% endraw %}
 
 ## CAPTURE.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -1503,9 +1514,11 @@ machines:
 1710 GOTO 750
 1720 CLS:PRINT:PRINT "THANK YOU FOR THE GAME AND I LOOK FORWARD TO PLAYING WITH YOU AGAIN."
 ```
+{% endraw %}
 
 ## CHESS.BAS
 
+{% raw %}
 ```bas
 0 ' exit on error
 1 CLEAR ,,2048:KEY OFF
@@ -1879,9 +1892,11 @@ machines:
 2520 RETURN
 65529 END
 ```
+{% endraw %}
 
 ## CHIEF.BAS
 
+{% raw %}
 ```bas
 10 PRINT " I AM CHIEF NUMBER FRIEK, THE GREAT INDIAN MATH GOD."
 20 PRINT "ARE YOU READY TO TAKE THE TEST YOU CALLED ME OUT FOR";
@@ -1932,9 +1947,11 @@ machines:
 510 PRINT "BYE"
 520 END
 ```
+{% endraw %}
 
 ## DECIDE.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -2067,9 +2084,11 @@ machines:
 1540 CLS:PRINT TAB(26);"DECIDE":PRINT:RETURN
 1550 FOR J=1 TO 1500:NEXT:RETURN
 ```
+{% endraw %}
 
 ## DESERT.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -2331,9 +2350,70 @@ machines:
 2670 P=0
 2680 RETURN
 ```
+{% endraw %}
+
+## FILES35.TXT
+
+{% raw %}
+```
+Disk No:   35
+Program Title: Games Series No 5
+PC-SIG version: 1.1
+
+Another collection of games from the earlier years of PC-SIG.  All these
+games have been in the library since the early 1980's.  These programs
+are not only entertaining, but will show you the origins of some of
+later programs in the library.  Some programs here have some practical
+uses as well.  Simple phone lists, checkbook programs, and others
+provide useful functions for you to enjoy.
+
+Usage:  Entertainment.
+
+Special Requirements:  A version of BASIC.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+BULLSEYE BAS  Simulated dart game.
+CHESS    BAS  Play chess with the computer.
+CHIEF    BAS  Math game.
+CAPTURE  BAS  Logic game, try to capture the enemy space ship.
+DECIDE   BAS  Helps decide between alternatives.
+GOLF     BAS  Play golf, pick your club and stroke.
+DESERT   BAS  Try to cross the desert without getting killed.
+BARGRAPH BAS  Creates bargraphs.
+KENO     BAS  Nevada style bingo.
+ICICLE   BAS  A race to the top of the screen.
+LOAN     BAS  Loan amortization program.
+LEM      BAS  A moon lander program.
+LANDER   BAS  Another moon lander program.
+KINGDOM  BAS  Can you survive your term as king?
+MISSLE   BAS  Earth under attack from another planet.
+SECRETNO BAS  You try to guess the number.
+STARS    BAS  Challenging permutation puzzle to solve.
+STORY    BAS  Creates four stories from user-supplied words.
+TRAP     BAS  Number guessing game.
+STRIKE9  BAS  Dice roll numbers game.
+ZAP-EM   BAS  Space shoot'em on the monochrome.
+23MATCH  BAS  The match game.
+ADDRESS  BAS  Addresses and phone numbers.
+BANKER   BAS  Checking account maintenance, expense categories.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1985,86,87,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## GOLF.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -2600,9 +2680,11 @@ machines:
 2720 DATA 510,5,434,4,210,3,312,4,428,4,440,4,205,3,515,5,318,4
 2730 END
 ```
+{% endraw %}
 
 ## ICICLE.BAS
 
+{% raw %}
 ```bas
 10 SEED = VAL(MID$(TIMES$,4,2))*60 = VAL(RIGHT$(TIME$,2)):RANDOMIZE SEED
 20 DIM V(79)
@@ -2617,9 +2699,11 @@ machines:
 110 A$ = INKEY$:IF LEN(A$) >0 THEN ERASE V:GOTO 20
 120 GOTO 110
 ```
+{% endraw %}
 
 ## KENO.BAS
 
+{% raw %}
 ```bas
 10 REM KENO ACCORDING TO PAYOFFS OF
 11 REM MGM GRAND CASINO LAS VEGAS JAN 1976
@@ -2825,9 +2909,11 @@ machines:
 2500 END
 19000 PRINT "MY NUMBERS WERE: "
 ```
+{% endraw %}
 
 ## KINGDOM.BAS
 
+{% raw %}
 ```bas
 10 FOR I=1 TO 10:PRINT:NEXT I
 20 PRINT TAB(20);"*** KINGDOM ***":FOR I=1 TO 10:PRINT:NEXT I
@@ -3051,9 +3137,11 @@ machines:
 2650 IF Q=0 THEN 440
 2660 END
 ```
+{% endraw %}
 
 ## LANDER.BAS
 
+{% raw %}
 ```bas
 1 	REM----------------------------------------------------
 2 	REM		L  A  N  D  E  R
@@ -3185,9 +3273,11 @@ machines:
 1800 GOTO 1710
 1810 STOP
 ```
+{% endraw %}
 
 ## LEM.BAS
 
+{% raw %}
 ```bas
 10     CLS:KEY OFF:PRINT:PRINT:PRINT:PRINT:PRINT:PRINT
 20           PRINT "          L    U    N    A    R"
@@ -3406,9 +3496,11 @@ machines:
 2150    ON WWW GOSUB 1130,1160,1190,1220,1250,1280,1310
 2160    RETURN
 ```
+{% endraw %}
 
 ## LOAN.BAS
 
+{% raw %}
 ```bas
 10 REM   LOAN AMORTIZATION PROGRAM
 20 REM   WRITTEN BY BOB SIMPSON , CARDIFF CA.
@@ -3499,9 +3591,11 @@ machines:
 870 GOTO 370
 880 END
 ```
+{% endraw %}
 
 ## MISSLE.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -3571,9 +3665,11 @@ machines:
 750 C$=INKEY$:IF C$="" THEN RETURN
 760 RETURN
 ```
+{% endraw %}
 
 ## SECRETNO.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -3663,9 +3759,11 @@ machines:
 950 GOTO 760
 960 CLS
 ```
+{% endraw %}
 
 ## STARS.BAS
 
+{% raw %}
 ```bas
 0 REM SHOOTING STARS BY TBX
 10 PRINT "INSTRUCTIONS (1=YES, 0=NO)";
@@ -3809,9 +3907,11 @@ machines:
 999 RETURN
 1000 END
 ```
+{% endraw %}
 
 ## STORY.BAS
 
+{% raw %}
 ```bas
 10       REM---------------------------------------------------
 20       REM             s  t  o  r  y
@@ -3958,9 +4058,11 @@ machines:
 1420 PRINT
 1430     RETURN
 ```
+{% endraw %}
 
 ## STRIKE9.BAS
 
+{% raw %}
 ```bas
 90 	DIM A(9),D(4),U(9)
 110 PRINT
@@ -4077,9 +4179,11 @@ machines:
 1200 STOP
 1210  END
 ```
+{% endraw %}
 
 ## TRAP.BAS
 
+{% raw %}
 ```bas
 5  RANDOMIZE
 10 G = 6 : N=100
@@ -4119,9 +4223,11 @@ machines:
 430 PRINT "GOODBYE"
 440 END
 ```
+{% endraw %}
 
 ## ZAP-EM.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -4274,6 +4380,7 @@ machines:
 1580 IF PLY$="Y" THEN 420
 1590 RUN "MENU
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

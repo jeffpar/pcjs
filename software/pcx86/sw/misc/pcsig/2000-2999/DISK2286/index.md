@@ -44,6 +44,54 @@ machines:
     room to run memory-hungry programs.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2286.TXT
+
+{% raw %}
+```
+Disk No: 2286                                                           
+Disk Title: Elftree                                                     
+PC-SIG Version: S1D6D                                                   
+                                                                        
+Program Title: Elftree                                                  
+Author Version: 1.D6D                                                   
+Author Registration: $35 and $50.00                                     
+Special Requirements: Hard drive.                                       
+                                                                        
+If you want to get the most out of your computer, here's an integrated  
+file and directory manager to help you get the job done.                
+                                                                        
+Copy, move, protect, edit, print, rename, locate and hide files         
+quickly and easily. Rename, protect, hide, locate, copy, move, make     
+and remove directories just as easily. Sort the file display 14 ways.   
+You have eight ways of tagging a group of files for use. ELFTREE will   
+remember your last 15 commands and give you a convenient way to         
+retrieve them when desired. You may also attach short notes to files    
+in any directory.                                                       
+                                                                        
+There's an editor that can handle as many files as will fit into RAM.   
+It will let you edit multiple files by tagging them and selecting a     
+menu option. It has 11 storable keyboard macros for complex editing, a  
+speedy search-and-replace, many block commands (cut, paste, copy, save, 
+print, convert to upper, lower, proper case), and it's small!           
+                                                                        
+Instruct ELFTREE to run a program for you by simply pointing to it and  
+pressing ENTER. ELFTREE can be programmed to recognize up to 40         
+extensions per directory, so your applications are automatically        
+launched with the corresponding data file. When you use ELFTREE to run  
+a program, it will reserve less than 3K for itself, leaving you with the
+room to run memory-hungry programs.                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2286
 

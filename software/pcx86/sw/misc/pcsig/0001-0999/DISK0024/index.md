@@ -55,8 +55,72 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #24, version v1.1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  EVRONWRD.BAS         CRC = 56 DA
+
+--> FILE:  GOBBLE  .BAS         CRC = AE 81
+
+--> FILE:  JAMMER  .BAS         CRC = EA 7A
+
+--> FILE:  LITUPLIF.BAS         CRC = 7F E2
+
+--> FILE:  MOON    .BAS         CRC = 0B 53
+
+--> FILE:  PUFF    .BAS         CRC = 1F EA
+
+--> FILE:  RANGERD .BAS         CRC = 3D AA
+
+--> FILE:  YESTER  .BAS         CRC = FD 37
+
+--> FILE:  SONGS   .BAS         CRC = A8 32
+
+--> FILE:  TICTACTO.BAS         CRC = CA 32
+
+--> FILE:  WUMPUS  .BAS         CRC = 21 B1
+
+--> FILE:  NEWTREK .BAS         CRC = 46 7B
+
+--> FILE:  NEWTREK .HOW         CRC = 99 39
+
+--> FILE:  OPERATOR.BAS         CRC = 5E 97
+
+--> FILE:  PACKMAN .DOC         CRC = AC A0
+
+--> FILE:  PACKMAN .EXE         CRC = F7 32
+
+--> FILE:  RACJAM  .SCO         CRC = 7F E7
+
+ ---------------------> SUM OF CRCS = CB EE
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## EVRONWRD.BAS
 
+{% raw %}
 ```bas
 10 REM                         Ever Onward
 20 '
@@ -138,9 +202,11 @@ machines:
 780 PRINT WORDSG$:  PLAY LINEG$
 790 END
 ```
+{% endraw %}
 
 ## GOBBLE.BAS
 
+{% raw %}
 ```bas
 5 'VERSION   3/30/82
 10 CLS:KEY OFF:DEF SEG:POKE 106,0
@@ -252,9 +318,11 @@ machines:
 4000 PLAY "mbl64t255o2;cc#dd#gg#"
 4010 RETURN
 ```
+{% endraw %}
 
 ## JAMMER.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-Z
 20 BRIGHT=10:DULL=2
@@ -523,9 +591,11 @@ machines:
 51100 NUM.SCORE=10
 52000 RESUME 190
 ```
+{% endraw %}
 
 ## LITUPLIF.BAS
 
+{% raw %}
 ```bas
 2999 RUNITSTR$ = "DIRECT"
 3000 REM this program will demonstrate the play statement for the pc
@@ -580,9 +650,11 @@ machines:
 3470 DATA "end"
 3480 DATA "end"
 ```
+{% endraw %}
 
 ## MOON.BAS
 
+{% raw %}
 ```bas
 0 'MIKE STAFFORD
 5 ' ENTERED, CHANGED, CORRECTED, ENHANCED, AND SCREWED UP BY MIKE STAFFORD
@@ -1202,9 +1274,11 @@ machines:
 5955 DATA 00, 00, 00, 28, 00, 41, 42, 42 :'42
 5960 END
 ```
+{% endraw %}
 
 ## NEWTREK.BAS
 
+{% raw %}
 ```bas
 3  REM  ** R.H. JOHNSON 6/28/82   **
 5  REM  ** NEWTREK FOR THE IBM PC **
@@ -2092,9 +2166,11 @@ machines:
 55200 PRINT:PRINT"Push a key to continue the game...";
 55210 INPUT A$:RETURN
 ```
+{% endraw %}
 
 ## OPERATOR.BAS
 
+{% raw %}
 ```bas
 100  KEY OFF:CLS
 110  REM  ** COMPUTER OPERATOR **
@@ -2491,9 +2567,115 @@ machines:
 6045 PRINT "Storage Utilization: ";INT(100*CS/XS);"%";"     ";
 6050 LOCATE OLINE,OCOL:RETURN
 ```
+{% endraw %}
+
+## PACKMAN.DOC
+
+{% raw %}
+```
+                PACKMAN PROGRAM DESCRIPTION 
+                =========================== 
+SCREEN LAYOUT 
+------------- 
+The score appears at the upper left.  The screen number is shown at the 
+far right.  The remaining PACKMEN are also shown in the upper right. 
+The prompt area is in the center of the status area above the center 
+"tunnel" exit.  The prompts indicate readiness to satrt/resume play, display
+display bonus points for capturing a monster or prize, etc. 
+  
+CONTROLS 
+-------- 
+The player controls PACKMAN's direction using either the four arrow keys 
+(make sure [NumLock] is not accidently pressed!) or, optionally, via 
+joystick.  The player indicates his choice simply by pressing either a 
+cursor key or joystick "fire" button to start/resume play in response to 
+the READY! prompt.  Thus, it is even possible to alternate between keyboard 
+and joystick(s) during the game.  The joystick button may also be used to 
+respond affirmatively to the new game prompt. 
+  
+Pressing [CTRL][END] during play causes the program to end immediately and 
+return to DOS. 
+  
+Note:  This program assumes the joysticks are wired such that resistance 
+values increase from left to right and top to bottom, following the con- 
+vention for screen pel coordinates. 
+  
+SCORING 
+------- 
+Dots:....................10 points 
+Power Capsules:..........50 points 
+"Scared" Monsters:......200,400,800, or 1600 points 
+Prizes: 
+     Screen 1:..........100 points (Cherries) 
+     Screen 2:..........300 points (Strawberry) 
+     Screen 3:..........500 points (Apple) 
+     Screen 4:..........700 points (Grapes) 
+     Screen 5:.........1000 points (Key) 
+     Screen >=6:.......2000 points (Randomly chosen symbol) 
+  
+A bonus PACKMAN is awarded at each 10,000 point plateau. 
+  
+GAME DESCRIPTION 
+================ 
+The objective is for PACKMAN to score as many points as possible by 
+devouring dots, prizes, power capsules, and "scared" monsters, while 
+avoiding fatal collisions with "mean" monsters.  A screen ends when 
+all 180 dots and four power capsules are cleared. The game ends when 
+the player loses his last PACKMAN. 
+  
+As play starts/resumes, the four monsters emerge from their "pen" in 
+the center and begin searching for PACKMAN.  At first, they move 
+randomly about the maze, checking out the corridors ahead and to the 
+sides.  As soon as a monster sees PACKMAN, it begins to chase him. 
+PACKMAN may be spotted even if only partially visable in a corridor. 
+  
+Chasing basically entail this: If PACKMAN is in sight, the monster will 
+head directly toward him.  If PACKMAN then ducks out of sight, the 
+monster will remember where he was last seen and the direction he 
+turned, and will try to proceed to that point and turn the same way, 
+after which it reverts to its searching algorithm.  The monsters also 
+forget the trail when exiting the tunnels or passing in front of the 
+pen exit. 
+  
+  
+  
+                          PACKMAN                              Page 2 
+  
+The monsters normally do not look backwards or reverse their direc- 
+tions arbitrarily.  Therefore, PACKMAN can follow a monster without 
+being seen.  However, since the monsters cannot run over each other, 
+collisions between monsters may resuld in one or both suddenly revers- 
+ing their course, unexpectedly trapping PACKMAN if he is careless. 
+  
+When PACKMAN eats a power capsule, all monsters outside the pen turn 
+blue, slow to half-speed, and attempt to flee if they see PACKMAN. 
+The first monster PACKMAN catches is worth 200 points, doubling for 
+each subsequent monster.  When a monster is captured, its disembodied 
+eyes make a beeline back to the pen, where it is reincarnated and re- 
+emerges.  After a short time, the blue monsters flash white three times 
+and revert to their normal dangerous state. 
+  
+The prize appears twice per screen, staying for a time for PACKMAN to 
+claim it, then disappearing.  The first appearance is sometime after 
+one-third to two-thirds of the dots are cleared from the screen. 
+  
+Each screen is progressively more difficult than the last.  For the 
+first several screens, PACKMAN is considerably faster than the monsters 
+in open corridors, so he can usually out-run them unless he gets him- 
+self trapped or is slowed by eating a long string of dots (eating slows 
+his speed by one-third).  However, with each screen, the monsters 
+become faster relative to PACKMAN, and remain frightened for shorter 
+length of time.  By the tenth screen, the power capsules cease to have 
+any effect at all.  Also, the prizes appear for progressively shorter 
+intervals. 
+creen, the power capsules cease to have 
+any
+```
+{% endraw %}
 
 ## PUFF.BAS
 
+{% raw %}
 ```bas
 10 A$="MBO4C4P8C8C4C4O3B2G4P4A2O4C4C4O3G2.G4F4F4G4F4"
 20 B$="E4G4O4C4C8C8C4O3A4B8O4C4.D1C4C4C4C4O3B4G2.A4A4O4C4C4O3G2.G4F4F4G4F4E4G4O4C4.C8O3A4O4C4O3B4O4D4C2O3B2"
@@ -2501,9 +2683,11 @@ machines:
 35 D$="O4C4P8C8C4C4O3B2G4P4A2O4C4C4O3G2.G4F4F4G4F4E4G4O4C4C8C8O3A4O4C4O3B4O4D4C2"
 40 PLAY "XA$;XB$;XC$;XD$;"
 ```
+{% endraw %}
 
 ## RANGERD.BAS
 
+{% raw %}
 ```bas
 1000 REM =====  THE LONE RANGER  +++++++
 1010 REM ===== ARRANGED BY TOM SORBER  ++++++
@@ -2538,9 +2722,11 @@ machines:
 1260 S$ ="l1go1MLl1gL1G
 1270  PLAY "P8xi$;xi$;xj$;xk$;xl$;xm$;xn$;xo$;xp$;xq$;xr$;xs$;
 ```
+{% endraw %}
 
 ## SONGS.BAS
 
+{% raw %}
 ```bas
 10 CLS
 15 PRINT ,"Select one of the following:"
@@ -2726,9 +2912,11 @@ machines:
 925 PLAY "T100XA3$;XA3$;"
 930 RETURN
 ```
+{% endraw %}
 
 ## TICTACTO.BAS
 
+{% raw %}
 ```bas
 10 CLEAR ,,1024
 20 GOSUB 390  'set up arrays
@@ -2799,9 +2987,11 @@ machines:
 670 A1 = A1 + 2
 680 NEXT A1:RETURN
 ```
+{% endraw %}
 
 ## WUMPUS.BAS
 
+{% raw %}
 ```bas
 1000 PRINT TAB(10);"WUMPUS 2"
 1010 PRINT " "
@@ -3173,9 +3363,11 @@ machines:
 4630 RETURN
 4640 END
 ```
+{% endraw %}
 
 ## YESTER.BAS
 
+{% raw %}
 ```bas
 10 ' Yesterday
 20 PLAY "t80
@@ -3198,6 +3390,7 @@ machines:
 190 PLAY "mll4al2amn
 200 PLAY "l4fagdfmsl8amll8al2a
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

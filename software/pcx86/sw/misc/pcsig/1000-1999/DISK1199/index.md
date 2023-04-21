@@ -32,6 +32,42 @@ machines:
     mouse and includes an on-disk a manual of over 120 pages.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1199.TXT
+
+{% raw %}
+```
+Disk No: 1199                                                           
+Disk Title: File-Man (Formerly SuperDIR 210)                            
+PC-SIG Version: S4.0                                                    
+                                                                        
+Program Title: File-Man                                                 
+Author Version: 4.0                                                     
+Author Registration: $35.00                                             
+Special Requirements: None.                                             
+                                                                        
+FILE-MAN is a menu-driven utility program that aids in managing disk    
+files.  Directory and file names are displayed in sorted order.  File   
+names can be sorted by name, extension, date or size.  Single files or  
+file groups may be quickly marked and acted upon.  Actions include      
+copy, move, spawn, append, erase, rename, change attribute status,      
+display, print and locate.  Features include macro execution, color     
+display, directory tree, disk labels and a utility option that allows   
+extensive customization.                                                
+                                                                        
+FILE-MAN runs up to 18 user-entered macros.  The program supports a PC  
+mouse and includes an on-disk a manual of over 120 pages.               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1199
 

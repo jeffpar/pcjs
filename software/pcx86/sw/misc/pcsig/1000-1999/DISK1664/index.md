@@ -37,6 +37,78 @@ machines:
     EASYTYPE, so unique file translations are easy to perform.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## EZINFO.TXT
+
+{% raw %}
+```
+
+Specifications:
+                               E A S Y T Y P E
+          The Intelligent Word Processing to Typesetting Translator
+==============================================================================
+
+Memory:       128K (MS/PC-DOS)
+               64K (CP/M--specify make/model)
+Disk:            1 (floppy or hard)
+Input Modes:   WordStar
+               WordPerfect
+               ASCII/Generic (from virtually any word processor)
+Typesetter:    Standard defaults provided; user installable as desired
+               (configurable for multiple typesetters)
+License:       $49.95 (increase anticipated) (see AEORDER program for details) 
+Copyright:     J.W. Olsen / Advocate, Enterprises, Ltd., Chicago
+
+     Complete menu-driven, run-time HELP documentation, printable to screen or 
+formatted to printer. Includes primer on preparing word processing files for 
+typesetting, which shareware users may retain regardless of registration.
+     Shareware version is fully functional except for retrieving user-created
+Configuration Files between sessions.
+     See AEORDER for companion typesetting, desktop publishing and general 
+computer-user products.
+```
+{% endraw %}
+
+## FILE1664.TXT
+
+{% raw %}
+```
+Disk No: 1664                                                           
+Disk Title: EasyType                                                    
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: EasyType                                                 
+Author Version: 3.11                                                    
+Author Registration: $49.95                                             
+Special Requirements: None.                                             
+                                                                        
+EASYTYPE is the first and only typesetting program which directly       
+translates wordprocessing files into the format of most typesetting     
+systems, and some desktop publishing systems.  In addition to a         
+generic/ASCII mode which handles the standard ASCII files that are      
+produced by most wordprocessors, EASYTYPE also offers special modes     
+which directly translate codes unique to wordprocessing files created by
+industry leading WordPerfect and WordStar.  With EASYTYPE, anyone       
+familiar with wordprocessing can prepare basic typesetting files.       
+                                                                        
+EASYTYPE is an intelligent translation program.  Other programs         
+translate wordprocessing files simply by removing characters which      
+might confuse the typesetting program.  They also turn all line endings 
+into "hard" returns which must be individually removed by the           
+typesetter.  EASYTYPE is smart enough to truly translate word processing
+codes to typesetting codes.  One-key macros are also supported by       
+EASYTYPE, so unique file translations are easy to perform.              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1664
 

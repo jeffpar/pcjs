@@ -18,6 +18,7 @@ machines:
 
 ## DUNGEON.BAS
 
+{% raw %}
 ```bas
 1 RANDOMIZE VAL(RIGHT$(TIME$,2))
 2 REM
@@ -507,6 +508,39 @@ machines:
 31060 RETURN
 32000 CLS
 ```
+{% endraw %}
+
+## FILES720.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk no 720   "Cronum's Castle" by Matt Ashcraft & Richard Tonsing   V1
+------------------------------------------------------------------------
+Here is the first prize winner in PC-SIG's "Write an Adventure
+Module" contest. The adventure contained on this disk must be used in
+conjunction with the main adventure program on disk #297 in our
+library.
+ 
+ADVENTUR ER   Data file
+???????? ERR  BASIC merge files (4 files)
+CHARACTE RS   Data file
+DUNGEON  BAS  Main dungeon module
+EAMON    ???  Data file (6 files)
+ERRATA        Text file
+ERRATA   BAT  Batch file which explains files ending with extension of .ERR
+FRESHMEA T    Data file
+READ-ME       Introductory text file from the authors
+READ-ME  BAK  Back-up of READ-ME
+ROOM     NAM  Data file
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

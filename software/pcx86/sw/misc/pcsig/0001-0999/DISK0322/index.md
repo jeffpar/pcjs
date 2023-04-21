@@ -87,6 +87,7 @@ machines:
 
 ## ANT2.BAS
 
+{% raw %}
 ```bas
 1 '
 2 ' AnteaterMusic II: Classical
@@ -335,9 +336,11 @@ machines:
 3210 LOCATE 25,1:PRINT "Press any key to continue...";
 3220 IF INKEY$="" THEN 3220 ELSE CLS:END
 ```
+{% endraw %}
 
 ## ANVIL.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 20 PLAY"T200"
@@ -353,15 +356,19 @@ machines:
 120 DATA "C4 P4 D4 P4 O2 B4 O3 C4 O2 A4 B4 E4 P4 P8 G+8 A8 B8"
 130 DATA "O3 C4 C4 P8 O2B8 O3C8 D8 E4 E4 P8 D8 E8 F8 G2. F8 G16 F16 E4 P4 P2"
 ```
+{% endraw %}
 
 ## ARKTRAV.BAS
 
+{% raw %}
 ```bas
 10 PLAY"l4o2go3l8cedcl4o2aaggo3ccddeel8dedco2l4ago3cedcl4o2aaggo3cco4l8co3bo4co3gao4co3bagfedl4c
 ```
+{% endraw %}
 
 ## BACH.BAS
 
+{% raw %}
 ```bas
 5 T$="l12t140"
 10 A$="mln42mso3db-mln23mso3db-mln11mso3db-mln42msdb-"
@@ -395,9 +402,11 @@ machines:
 210 FOR I=1 TO 1000:NEXT I
 220 CHAIN"A:CLASSICS.BAS"
 ```
+{% endraw %}
 
 ## BLUESBOX.BAS
 
+{% raw %}
 ```bas
 10 ON ERROR GOTO 30000:CLS:OPTION BASE 1:KEY OFF:DEFINT A-Z:MAX=&H29A
 50 DEF FNL2!(X)=LOG(X)/LOG(2):DEF FNS$(N$)=RIGHT$(N$,LEN(N$)-1):TRUE=-1:FALSE=0:FLAT=FALSE:SHARP=FALSE:OC=3:CN$="C":SCALE$="CDEFGAB":NN=7*OC-6
@@ -657,9 +666,11 @@ machines:
 30030 PRINT X;"IN";ERL;"... BUG?":PRINT:PRINT "TO SAVE ANY CURRENT WORK, GOSUB 18000":PRINT:ON ERROR GOTO 0:END
 50000 GOSUB 11000:LOCATE 22,16:PRINT "Invalid command ...":FOR X=1 TO 1000:NEXT X:LOCATE 22,16:PRINT SPC(24):RETURN
 ```
+{% endraw %}
 
 ## BOUREE.BAS
 
+{% raw %}
 ```bas
 10 'bouree - with comments describing the strings
 20 A$ = "MB ML L8 T150"
@@ -712,9 +723,11 @@ machines:
 390 'SYSTEM
 400 END
 ```
+{% endraw %}
 
 ## CHOPIN1.BAS
 
+{% raw %}
 ```bas
 10 T$="t92"
 11 AA$= "l1mlo1g+l12c+o2g+o3c+ec+o2g+c+g+o3c+ec+o2g+"
@@ -736,9 +749,11 @@ machines:
 110 FOR I=1 TO 1000:NEXT I
 120 CHAIN"A:CLASSICS.BAS"
 ```
+{% endraw %}
 
 ## CLASSICS.BAS
 
+{% raw %}
 ```bas
 10 CLS :PRINT "CLASSICS":PRINT
 20 PRINT " 1 - FROM `THE LITTLE NOTEBOOK FOR ANNA MAGDALENA BACH' BY J. S. BACH"
@@ -763,9 +778,11 @@ machines:
 210 CHAIN "A:LUDWIG.BAS"
 220 CHAIN "A:MINUET.BAS"
 ```
+{% endraw %}
 
 ## DANCE.BAS
 
+{% raw %}
 ```bas
 1 ' ANITRA = Music          from  P. Fraundorf         2/83
 10    ' anitra.bas: Anitra's Dance from "Peer Gynt" by Edvard Grieg
@@ -824,9 +841,85 @@ machines:
 65001 LOCATE 24,1:PRINT SPACE$(79);:LOCATE 24,1:PRINT "  Press ESC key to continue ";:ANS$=INPUT$(1):IF ASC(ANS$)<>27 THEN 65001
 65005 END
 ```
+{% endraw %}
+
+## FILES322.TXT
+
+{% raw %}
+```
+Disk No  322
+Program Title: MORE MUSIC
+PC-SIG version 1.1
+
+A really fine collection of songs that will bring hours of fun. You can
+compose and save, or play different songs. Some of the songs require a
+version of BASIC to make them run.
+
+Usage:  Entertainment.
+
+System Requirements: A version of BASIC.
+
+How to Start: Enter PIANO to start PIANO.COM; Enter MINWALTZ to start
+MINWALTZ.EXE; To run the programs written in BASIC, please consult your
+BASIC language manual for the commands needed for your specific machine
+type.
+
+File Descriptions:
+
+PIANO    COM  Turns keyboard into piano keys to play music on
+MINWALTZ EXE  Minute Waltz
+ANT2     BAS  Anteater Music II demo
+ANVIL    BAS  A song
+ARKTRAV  BAS  Arkansas Traveler
+BACH     BAS  Classic: A song by Bach
+BLUESBOX BAS  Part of MUSICBOX.BAS
+BOUREE   BAS  A song
+CHOPIN1  BAS  Classic: A song by Chopin
+CLASSICS BAS  Menu for the selection of CLASSIC songs
+DANCE    BAS  Dance of the Watchacallit
+ELEPHANT TUN  Baby Elephant Walk song that is part of TUNE.BAS
+HAPPYB   BAS  Happy Birthday song
+HEARING  BAS  Hearing test
+HUNGRHAP BAS  Hungarian Rapsody
+IBMSONG  BAS  IBM fight song
+JSB      BAS  Sonata VI in E Major, 1st Movement. by J.S. Bach
+JSB      MUS  Same as JSB.BAS
+JUKEBOX  BAS  Music menu program with a colection of songs
+LIEBESTR BAS  Franz Liszt
+LUDWIG   BAS  Classic: Song by Bach [Ludwig]
+MAGDALEN BAS  Classic: From The Little Notebook For Anna Magdalena Bach
+MESSIAH  BAS  Messiah
+MINUET   BAS  Classic: Minuet by J.S. Bach
+MTN-KING BAS  A song
+MUSICBOX BAS  Compose your song and save to disk [requires graphics]
+NUTCRAKR BAS  Nutcracker Suite
+NYLOGO   BAS  New York PC Users Group song and graphics demo [graphics]
+PRAELUD1 BAS  A song
+PRAELUD2 BAS  A song
+RAIL     BAS  Classic: I've Been Working On The Railroad
+SCALES   BAS  Plays different music scales
+SFG-BACH BAS  Classic: Solfeggietto by Bach
+SIREN    BAS  Alarm Siren
+SOUNDS   BAS  Different sounds
+SYMPH-5  BAS  A symphony
+SYNTH    BAS  Demo
+TRAUMERI BAS  Traumerei
+TUNE     BAS  Plays music files [ELEPHANT.TUN]
+WILLTELL BAS  Classic: William Tell Overture
+XMAS     BAS  Collection of Xmas songs
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## HAPPYB.BAS
 
+{% raw %}
 ```bas
 5 FOR X%=1 TO 15:Y$=INKEY$:NEXT X%
 6 IF INKEY$="" THEN 6
@@ -839,9 +932,11 @@ machines:
 59 IF INKEY$="" THEN 59
 60 CHAIN "A:PLOTTER
 ```
+{% endraw %}
 
 ## HEARING.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF: CLS: LOCATE 1,22: PRINT "HEARING EVALUATION"
 20  LOCATE 2,24: PRINT "E. WEISSBERGER"
@@ -879,9 +974,11 @@ machines:
 340 PRINT "Will you run this program again (Y/N)?"
 350 A$ = INKEY$: IF A$ = "" THEN 350 ELSE IF A$ = "Y" OR A$ = "y" THEN CLS: GOTO 190 ELSE CLS: KEY ON: END
 ```
+{% endraw %}
 
 ## HUNGRHAP.BAS
 
+{% raw %}
 ```bas
 1 'HUNGARIAN RHAPSODIE #2  BY FRANZ LISZT   TRANSCRIBED BY NELSON FORD
 10 'CLS:KEY OFF
@@ -909,9 +1006,11 @@ machines:
 210 DATA "O3C O2B O3C O2A O3C D E F G F+ G E"
 220 DATA "F G A B- O4C O3B O4C O3A O4D2 MN E2 F2 O3 MS F4 F4 O1F4 P4"
 ```
+{% endraw %}
 
 ## IBMSONG.BAS
 
+{% raw %}
 ```bas
 4 WIDTH 80
 5 ON ERROR GOTO 9500
@@ -1054,9 +1153,11 @@ machines:
 9510 PRINT "This program requires ADVANCED BASIC; Please reload, using BASICA"
 9520 END
 ```
+{% endraw %}
 
 ## JSB.BAS
 
+{% raw %}
 ```bas
 10 REM
 20 REM
@@ -1176,9 +1277,11 @@ machines:
 1160 LOCATE 20,10:PRINT"The Art of the Fugue!"
 1170 LOCATE 22,9:PRINT"(Sprechen zie Deutsch?)
 ```
+{% endraw %}
 
 ## JUKEBOX.BAS
 
+{% raw %}
 ```bas
 10 ' LIST OF SONGS  SAVE "A:jukebox.bas"
 20 CLS
@@ -1338,9 +1441,11 @@ machines:
 1510 '
 1520 ' SONG: ????
 ```
+{% endraw %}
 
 ## LIEBESTR.BAS
 
+{% raw %}
 ```bas
 1 'LIEBESTRAUM  BY FRANZ LISZT   TRANSCRIBED BY NELSON FORD
 10 'CLS:KEY OFF
@@ -1363,9 +1468,11 @@ machines:
 160 DATA "E A O4C+ E C+ O3A O2E O3C+ E A O2E16. O3E32 C+ O2E O3C+ O2F+ O3C+ O2G O3C+"
 170 DATA "O2B O3D F+ B O2A16. O3F+32 D O2G B O3D G D O2B G B O3D G D O2B O3G2."
 ```
+{% endraw %}
 
 ## LUDWIG.BAS
 
+{% raw %}
 ```bas
 10 A$="o4ed#ed#eo3bo4dco3ao2eao3ceabo2eg#o3eg#bo4co2eao3eo4ed#ed#eo3bo4dco3ao2eao3ceabo2eg#o3do4co3ba"
 20 A1$="o2ea"
@@ -1384,9 +1491,11 @@ machines:
 130 FOR I=1 TO 1000:NEXT I
 140 CHAIN"A:CLASSICS.BAS"
 ```
+{% endraw %}
 
 ## MAGDALEN.BAS
 
+{% raw %}
 ```bas
 2 CLS:ZA$="From 'The Little Notebook for"
 3 ZB$="Anna Magdalena Bach'"
@@ -1427,9 +1536,11 @@ machines:
 295 FOR I=1 TO 1000:NEXT I
 300 CHAIN "A:CLASSICS.BAS"
 ```
+{% endraw %}
 
 ## MESSIAH.BAS
 
+{% raw %}
 ```bas
 1 'MESSIAH
 10 'CLS:KEY OFF
@@ -1450,9 +1561,11 @@ machines:
 140 DATA "A G2 G8 G8  A G2 G8 G8  A G2 G8 G8
 150 DATA "A G F E  D. C8 C2 C1
 ```
+{% endraw %}
 
 ## MINUET.BAS
 
+{% raw %}
 ```bas
 10 DIM TUNE$(4)
 20 CLS:WIDTH 40:KEY OFF
@@ -1501,9 +1614,11 @@ machines:
 1310 DATA B O4 D O3 G4 F#4
 1320 DATA G2.
 ```
+{% endraw %}
 
 ## MTN-KING.BAS
 
+{% raw %}
 ```bas
 10 'CLS:KEY OFF
 20 PLAY"L8 T150 MS"
@@ -1527,9 +1642,11 @@ machines:
 180 DATA "O3D E F G A F A4 G+ E G+4 G E- G4"
 190 DATA "D E F G A F A O4D O3A F A O4D O3D2"
 ```
+{% endraw %}
 
 ## MUSICBOX.BAS
 
+{% raw %}
 ```bas
 100 REM         ----- BLUES -----
 101 '           TYPED IN WITH MODIFICATIONS BY D.G. PATTERSON
@@ -1819,9 +1936,11 @@ machines:
 51110 FOR X=1 TO 10:KEY X,FU$(X):NEXT X
 51120 SCREEN 0,0,0:CLS:COLOR 2,0,0:WIDTH 80
 ```
+{% endraw %}
 
 ## NUTCRAKR.BAS
 
+{% raw %}
 ```bas
 10 'CLS:KEY OFF
 20 PLAY"L4 T250 MS"
@@ -1839,9 +1958,11 @@ machines:
 120 DATA "O4G G8 F+8 G G E D C E D D8 C+8 D D O3B A G B"
 130 DATA "A O4D O3G O4D O3F+ O4D O3A O4D O3B O4D O3A O4D O3G E G P4"
 ```
+{% endraw %}
 
 ## NYLOGO.BAS
 
+{% raw %}
 ```bas
 10 '                     *****************************************
 20 '                     *                                       *
@@ -2277,9 +2398,11 @@ machines:
 4310 PLAY "o3e4f4g4a2p32g2a2p32o4c4o3o3a4o4c1
 4320 RETURN
 ```
+{% endraw %}
 
 ## PRAELUD1.BAS
 
+{% raw %}
 ```bas
 100 ' PRAELUDIUM I FROM THE WELL-TEMPERED CLAVIER BY J. S. BACH
 110 ' REALIZED BY JOHN D. BRINK, RIVER FOREST, IL. 0CTOBER 1983
@@ -2335,9 +2458,11 @@ machines:
 610 DATA "T090 O0C B O2G B O3D F D O2B  O3D O2B G B D F E D C1"
 620 '   THAT'S ALL, FOLKS!
 ```
+{% endraw %}
 
 ## PRAELUD2.BAS
 
+{% raw %}
 ```bas
 100 ' PRAELUDIUM II FROM THE WELL-TEMPERED CLAVIER BY J. S. BACH
 110 ' REALIZED AND TRANSCRIBED FOR PC BY JOHN D. BRINK, OCTOBER 1983
@@ -2429,9 +2554,11 @@ machines:
 970 DATA "O2EO1CO0C O2EO1CO0C O2EO1CO0C O2E4."
 980 '   THAT'S ALL, FOLKS!
 ```
+{% endraw %}
 
 ## RAIL.BAS
 
+{% raw %}
 ```bas
 10 PLAY "O1F4O2A64O3C64F64P64P8P16"
 20 PLAY "O1C4O2A64O3C64F64P64P8P16"
@@ -2511,9 +2638,11 @@ machines:
 780 FOR I=1 TO 3000:NEXT I
 790 CHAIN"A:CLASSICS.BAS"
 ```
+{% endraw %}
 
 ## SCALES.BAS
 
+{% raw %}
 ```bas
 10 REM - This is SCALES
 20 CLS: KEY OFF: COLOR 0,7,0
@@ -2868,9 +2997,11 @@ machines:
 3510 DEF SEG = &H40 : POKE &H17, PEEK (&H17) OR 96
 3520 RUN "MUSICBOX
 ```
+{% endraw %}
 
 ## SFG-BACH.BAS
 
+{% raw %}
 ```bas
 
 
@@ -2913,9 +3044,11 @@ machines:
 37 LOCATE 25,1:PRINT "Any key...";
 38 A$=INKEY$:IF A$="" THEN 38 ELSE WIDTH 80:END
 ```
+{% endraw %}
 
 ## SIREN.BAS
 
+{% raw %}
 ```bas
 10 FOR N = 37 TO 2000 STEP 50
 15 PRINT N
@@ -2927,9 +3060,11 @@ machines:
 70 NEXT N
 80 GOTO 10
 ```
+{% endraw %}
 
 ## SOUNDS.BAS
 
+{% raw %}
 ```bas
 10 '            SOUNDS.BAS
 20 '
@@ -3052,9 +3187,11 @@ machines:
 1190 '          JMP     TOP
 1200 '
 ```
+{% endraw %}
 
 ## SYMPH-5.BAS
 
+{% raw %}
 ```bas
 10 'CLS:KEY OFF
 20 PLAY"T200"
@@ -3075,9 +3212,11 @@ machines:
 160 DATA "A4 O2B2 O3E6 F+6 G6 G4 O2A2 O3D6 E6 F+6"
 170 DATA "F+4 F+4 F+4. E8 D1"
 ```
+{% endraw %}
 
 ## SYNTH.BAS
 
+{% raw %}
 ```bas
 5 REM THIS HAD BETTER WORK
 10 DEFINT A-Z:ON ERROR GOTO 30
@@ -3303,9 +3442,11 @@ machines:
 2210 REM
 
 ```
+{% endraw %}
 
 ## TRAUMERI.BAS
 
+{% raw %}
 ```bas
 1 'TRAUMEREI  BY ROBERT SCHUMANN   TRANSCRIBED BY NELSON FORD
 10 'CLS:KEY OFF
@@ -3334,9 +3475,11 @@ machines:
 220 DATA "MLF2 MNF E F A O4C A A4. G F D"
 230 DATA "C F O3G A B- O4D O3F A B- O4D O3D E F2
 ```
+{% endraw %}
 
 ## TUNE.BAS
 
+{% raw %}
 ```bas
 10 DIM PROG$(64)	'TUNES PROGRAM   - Creates Menues of Music Files -
 20 SCREEN 0: KEY OFF:KEY 2,"CLS:NEW" + CHR$(13) 'Return to Basic
@@ -3375,9 +3518,11 @@ machines:
 575 FOR I = 1 TO 8000:NEXT I
 580 CHAIN "TUNES.BAS"
 ```
+{% endraw %}
 
 ## WILLTELL.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 20 PLAY"MBL16T155"
@@ -3488,9 +3633,11 @@ machines:
 1080 DATA "p8eee8e8e8e8e4p8.
 1090 DATA "ee4p8.o2ee2
 ```
+{% endraw %}
 
 ## XMAS.BAS
 
+{% raw %}
 ```bas
 100 '
 110 '
@@ -3629,6 +3776,7 @@ machines:
 10030 NEXT
 10990 GOTO 295
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

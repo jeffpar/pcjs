@@ -44,6 +44,54 @@ machines:
     corridor.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1641.TXT
+
+{% raw %}
+```
+Disk No: 1641                                                           
+Disk Title: Moraff's Revenge                                            
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: MORAFF'S REVENGE                                         
+Author Version: 3.2                                                     
+Author Registration: $10.00                                             
+Special Requirements: CGA.                                              
+                                                                        
+Science fiction author Steve Moraff brings one of the most complex and  
+beguiling dungeons and dragons games to shareware.  Though called a     
+beginners game, few will find it easy.  With 70 levels, batallions of   
+monsters and no clear cut rules, this adventure resembles life itself.  
+This game has no single, simple object.  Not even survival qualifies.   
+Generally, the game involves equipping, fighting, exploring and healing.
+                                                                        
+New characters begin their odyssey with only a knife and no money.  The 
+characters must kill monsters, some of which are virtually indomitable, 
+and find treasures to get money, weapons and cures.  Even character     
+improvement is a key to scoring in this game.  The most exciting goal is
+to find the fountain of youth on the 70th level.  A more typical        
+expedition would call on a character to enter the dungeon and kill      
+monsters and discover treasure.  Then, the character returns and cashes 
+in treasure at the bank, and sleeps at an inn to gain "spell points" and
+gain greater power.  The character can then buy weapons with his extra  
+money and reenter the dungeon to tackle even more powerful monsters.    
+                                                                        
+Though this program uses simple ASCII graphics to represent the         
+characters and rooms, the game's mapping system still adds to the       
+excitement.  The right side of the screen offers a three dimensional    
+view of all four directions.  Monsters become visible far down the      
+corridor.                                                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1641
 

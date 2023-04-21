@@ -40,6 +40,43 @@ machines:
     from the disk-based magazine.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2121.TXT
+
+{% raw %}
+```
+Disk No: 2121                                                           
+Disk Title: SHAREDEBATE INTERNATIONAL                                   
+PC-SIG Version: 1                                                       
+                                                                        
+Program Title: ShareDebate International                                
+Author Version: 3-90                                                    
+Author Registration: $25.00 for 1 year subscription                     
+Special Requirements: 384K RAM.                                         
+                                                                        
+SHAREDEBATE INTERNATIONAL is a shareware diskette magazine that contains 
+an international debate forum for PC users who are concerned about the   
+present and the future.  The charter issue advances six debate forums
+and solicits non-fiction and fiction writers to deal with the issues. 
+The debate forums established in this issue deal with a National 
+Interest Project-Level Stock Market; Occupational Representation 
+vs Geographical Representation; Computer Modeling Future Cities; 
+Japanese vs U.S. Patent Laws; Economic Impact of Corporate Income Tax; 
+and Existing Cost of Government Intervention in Health Areas.                        
+     A unique commission/subscription feature is built into SHAREDEBATE        
+INTERNATIONAL in order to get people to distribute, participate, and    
+profit from the disk based magazine.                                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2121
 

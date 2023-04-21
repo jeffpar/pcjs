@@ -70,6 +70,7 @@ machines:
 
 ## ADDFILE.BAS
 
+{% raw %}
 ```bas
 2 COMMON DRIVEID$,FILEID$
 10 SCREEN 0,1
@@ -193,9 +194,11 @@ machines:
 1655 MAXREC=NEXTREC
 1660 RETURN
 ```
+{% endraw %}
 
 ## AREACODE.BAS
 
+{% raw %}
 ```bas
 10 REM AREA CODE LOCATER
 15 ? "ENTER ZERO TO END PROGRAM"
@@ -359,9 +362,11 @@ machines:
 1590 ? "MEXICO":? :? "MEXICO CITY":GOTO 20
 1600 ? "MEXICO":? :? "NORTHWEST MEXICO":GOTO 20
 ```
+{% endraw %}
 
 ## AUTOFILE.BAS
 
+{% raw %}
 ```bas
 
 
@@ -731,9 +736,11 @@ machines:
 9000 RESUME
 65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
 ```
+{% endraw %}
 
 ## BUILFILE.BAS
 
+{% raw %}
 ```bas
 20 COMMON DRIVEID$,FILEID$
 30 SCREEN 0,1
@@ -796,9 +803,11 @@ machines:
 600 LSET LINE3$=" "
 610 GOTO 50
 ```
+{% endraw %}
 
 ## CALENDAR.BAS
 
+{% raw %}
 ```bas
 5 DEFINT A-Z
 10 'Program Name: CALENDAR.BAS - Last Updated: 01/07/82 IJK for IBN-PC
@@ -1026,18 +1035,22 @@ machines:
 15500 POKE 1047, (PEEK(1047) OR 32) : RETURN 'NUM LOCK on
 50000 '****** End of program listing ******
 ```
+{% endraw %}
 
 ## COLRFILE.BAS
 
+{% raw %}
 ```bas
 5 COMMON DRIVEID$,FILEID$
 8 CLS
 10 WIDTH 80:DEF SEG=0:A=PEEK(&H410):POKE &H410,(A AND &HCF)OR &H20:WIDTH 40:SCREEN 1:SCREEN 0:LOCATE ,,1,6,7:COLOR 15,9,4:CLS:KEY OFF
 20 CHAIN DRIVEID$+"FILEMENU"
 ```
+{% endraw %}
 
 ## COPFILE.BAS
 
+{% raw %}
 ```bas
 10 COMMON DRIVEID$,FILEID$
 15 DIM CATARRY$(100)
@@ -1194,9 +1207,96 @@ machines:
 1560 CLOSE #2
 1570 CHAIN DRIVEID$+"FileMenu"
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #182, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  AREACODE.BAS         CRC = B0 62
+
+--> FILE:  CALENDAR.BAS         CRC = 6C AC
+
+--> FILE:  DDATE   .COM         CRC = EB B1
+
+--> FILE:  MONOCLKF.COM         CRC = 33 E6
+
+--> FILE:  MONOCLKF.DOC         CRC = 0A 98
+
+--> FILE:  SPEC-OCC.BAS         CRC = 10 3A
+
+--> FILE:  SPEC-OCC.DOC         CRC = 68 2C
+
+--> FILE:  TCLOCK  .BAS         CRC = 4E 21
+
+--> FILE:  TIME    .BAS         CRC = 1C 03
+
+--> FILE:  ADDFILE .BAS         CRC = C2 C2
+
+--> FILE:  AUTOFILE.BAS         CRC = 3D 9B
+
+--> FILE:  AUTOFILE.BAT         CRC = 00 00
+
+--> FILE:  AUTOFILE.DOC         CRC = 8B DA
+
+--> FILE:  AUTOFILE.FIX         CRC = E6 E9
+
+--> FILE:  BUILFILE.BAS         CRC = 05 3C
+
+--> FILE:  COLRFILE.BAS         CRC = 45 9D
+
+--> FILE:  COPFILE .BAS         CRC = D2 49
+
+--> FILE:  DCATFILE.BAS         CRC = 1C 28
+
+--> FILE:  DISPFILE.BAS         CRC = BD 52
+
+--> FILE:  DTEXFILE.BAS         CRC = 81 90
+
+--> FILE:  EASYFILE.BAS         CRC = 4C 8B
+
+--> FILE:  EZFDOCM .BAS         CRC = 0E 9A
+
+--> FILE:  FILEFILE.BAS         CRC = AD 68
+
+--> FILE:  FILEMENU.BAS         CRC = DC F2
+
+--> FILE:  LISTFILE.BAS         CRC = 83 CA
+
+--> FILE:  MONOFILE.BAS         CRC = D5 41
+
+--> FILE:  STATFILE.BAS         CRC = 1D C6
+
+--> FILE:  XXX     .            CRC = 37 AC
+
+ ---------------------> SUM OF CRCS = A9 0F
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## DCATFILE.BAS
 
+{% raw %}
 ```bas
 5 COMMON DRIVEID$,FILEID$
 10 SCREEN 0,1
@@ -1269,9 +1369,11 @@ machines:
 1015 CLOSE #1
 1020 CHAIN DRIVEID$+"DISPFILE"
 ```
+{% endraw %}
 
 ## DISPFILE.BAS
 
+{% raw %}
 ```bas
 2 COMMON DRIVEID$,FILEID$
 10 SCREEN 0,1
@@ -1297,9 +1399,11 @@ machines:
 185 IF K$ = CHR$(27) THEN CHAIN DRIVEID$+"FILEMENU"
 190 GOTO 140
 ```
+{% endraw %}
 
 ## DTEXFILE.BAS
 
+{% raw %}
 ```bas
 10 DIM LARRAY$(18),RECARRY(6)
 20 COMMON DRIVEID$,FILEID$
@@ -1434,9 +1538,11 @@ machines:
 1300 GOSUB 600
 1310 RETURN
 ```
+{% endraw %}
 
 ## EASYFILE.BAS
 
+{% raw %}
 ```bas
 1 DRIVEID$="a:"
 2 FILEID$="EZFILE"
@@ -1503,9 +1609,11 @@ machines:
 554 CHAIN "IBMPMENU"
 600 CHAIN DRIVEID$+"FILEFILE"
 ```
+{% endraw %}
 
 ## EZFDOCM.BAS
 
+{% raw %}
 ```bas
 10 REM EASYFILE System Documentation
 20 REM -----------------------------
@@ -1666,9 +1774,11 @@ machines:
 1570 REM
 1580 REM
 ```
+{% endraw %}
 
 ## FILEFILE.BAS
 
+{% raw %}
 ```bas
 10 COMMON DRIVEID$,FILEID$
 20 SCREEN 0,1
@@ -1704,9 +1814,11 @@ machines:
 320 GOTO 290
 330 CHAIN DRIVEID$+"FILEMENU"
 ```
+{% endraw %}
 
 ## FILEMENU.BAS
 
+{% raw %}
 ```bas
 3 COMMON DRIVEID$,FILEID$
 10 SCREEN 0,1
@@ -1771,9 +1883,11 @@ machines:
 554 CHAIN "IBMPMENU"
 600 CHAIN DRIVEID$+"FILEFILE"
 ```
+{% endraw %}
 
 ## LISTFILE.BAS
 
+{% raw %}
 ```bas
 1 DIM LARRAY$(56),RECARRY(19)
 5 COMMON DRIVEID$,FILEID$
@@ -1881,18 +1995,38 @@ machines:
 1203 PRINT "    Code = ";ERR
 1204 RESUME
 ```
+{% endraw %}
+
+## MONOCLKF.DOC
+
+{% raw %}
+```
+THIS IS FOR REAL THE FINAL, COMPLETE, DEBUGGED VERSION 
+OF MY CLOCK DISPLAY PROGRAM.  USE THE BIN2HEX PROGRAM TO
+CONVERT MONOCLKF.HEX TO COM FORMAT.  THE PROGRAM
+WILL PUT THE CURRENT TIME OF DAY IN THE UPPER RIGHT
+CORNER OF A MONOCHROME DISPLAY.  THE TIME DISPLAY 
+MAY BE TOGGLED ON AND OFF BY RUNNING MONOCLKF OR BY
+EXECUTING AN 'INT 44' INSTRUCTION FROM WITHIN A 
+PROGRAM.
+
+```
+{% endraw %}
 
 ## MONOFILE.BAS
 
+{% raw %}
 ```bas
 5 COMMON DRIVEID$,FILEID$
 8 CLS
 10 DEF SEG=0:A=PEEK(&H410):POKE &H410,A OR &H30:WIDTH 80:LOCATE ,,1,12,13:COLOR 15,9,4:CLS:KEY OFF
 20 CHAIN DRIVEID$+"FILEMENU"
 ```
+{% endraw %}
 
 ## SPEC-OCC.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -2239,9 +2373,35 @@ machines:
 4140 GOTO 1150
 4150 END
 ```
+{% endraw %}
+
+## SPEC-OCC.DOC
+
+{% raw %}
+```
+10 PRINT "SPECIAL OCCASIONS  by Phil Michitsch "
+20 PRINT "Run name OCCASION under BASICA"
+30 PRINT "( 9614 Bytes )"
+40 PRINT "Requirements: IBM 64K,DOS 2.0,40-character screen"
+50 PRINT "either monochrome or color (switched via mode command"
+60 PRINT "before running program). Printer optional for hard copy report"
+70 PRINT "Note: a C-ITOH (PROFEEL) printer was used creating this program"
+80 PRINT "      but any IBM compatible printer will work."
+90 PRINT
+100 PRINT "A handy program,menu driven with error checking and very user-friendly"
+110 PRINT "to add,delete and generate a hard copy report of all birthdays,"
+120 PRINT "anniversarys,holidays etc. with name,dates and type of occasion input"
+130 PRINT "into a file. To get a report via screen or printer;just type in"
+140 PRINT "the month you want a listing for. Very handy for remembering to"
+150 PRINT "send out birthday cards."
+160 END
+
+```
+{% endraw %}
 
 ## STATFILE.BAS
 
+{% raw %}
 ```bas
 20 COMMON DRIVEID$,FILEID$
 30 SCREEN 0,1
@@ -2274,9 +2434,11 @@ machines:
 500 CLOSE #1
 510 CHAIN DRIVEID$+"FILEMENU"
 ```
+{% endraw %}
 
 ## TCLOCK.BAS
 
+{% raw %}
 ```bas
 1000 ' -----------------------------------------------------------------------
 1010 ' PROGRAM NAME = TCLOCK
@@ -2779,9 +2941,11 @@ machines:
 5990 ' -----------------------------------------------------------------------
 6000 COLOR 7,0:CLS:END
 ```
+{% endraw %}
 
 ## TIME.BAS
 
+{% raw %}
 ```bas
 45000 PROG1$="T I M E"' DISPLAYS SYSTEM DATE AND TIME
 45010 REV$="Rev: 830120"' By Robert Hamilton
@@ -2799,6 +2963,7 @@ machines:
 45130 IF K$="" THEN 45120
 45140 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

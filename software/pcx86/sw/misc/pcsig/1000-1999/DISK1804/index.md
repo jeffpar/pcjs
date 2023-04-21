@@ -40,6 +40,48 @@ machines:
     to a delimited ASCII file for use in database software.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1804.TXT
+
+{% raw %}
+```
+Disk No: 1804                                                           
+Disk Title: BJ-Files                                                    
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: BJ-FILES                                                 
+Author Version: 2.10                                                    
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+Easily create and maintain an inventory list of all those disks you have
+laying around, but aren't sure exactly what's on them.  BJ-FILES will   
+record every file and what disk it's on.  You can also use this program 
+to provide a nice listing of the files on your hard disk including a    
+listing of duplicate files.                                             
+                                                                        
+BJ-FILES automatically reads directory information from hard disks and  
+floppy disks and builds an inventory of your files.  It updates the     
+inventory by rereading the same disks.  Several reporting options are   
+available with your choice of output type (screen display, ASCII file,  
+or printer).                                                            
+                                                                        
+Other features include optional changing of volume labels, and optional 
+30 character description for each disk.  Reports can be generated with  
+all files listed by disk and subdirectory, all files by file name, all  
+files for one specified disk, or all disks and subdirectory locations   
+for one specified file.                                                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1804
 

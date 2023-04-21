@@ -14,6 +14,117 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2787.TXT
+
+{% raw %}
+```
+Disk No: 2787
+Disk Title: Formula I
+PC-SIG Version: S1
+
+Program Title: Formula I
+Author Version: 06/91
+Author Registration: $49.50
+Special Requirements: None.
+
+FORMULA I is the first part of a two-part program which teaches a
+complete Algebra course -- from basic addition to imaginary numbers.
+Written for high school and college students, its design makes it
+available to anyone who wants to acquire Algebra skills.
+
+FORMULA 1 is the joint effort of a physicist with many years of
+experience in teaching and tutoring math, and a psychologist who
+specializes in the use of the computer as a teaching tool.  State of the
+art Artificial Intelligence techniques imitate the actions and
+recommendations of a human tutor.  The tutor checks your progress and
+guides you through the course, the same way a human tutor would.
+
+You may choose not to use the electronic tutor.  Decide which topics you
+want to study and in what order.  The tutor will not prevent you from
+doing this, but it will make a comment if it ``thinks'' there is a
+better choice you could make!
+
+The shareware version contains three of the nine tutorials which make up
+the entire course.  The ``Introduction to Numbers,'' the ``Introduction
+to Fractions'' and the ``Quadratic Equations'' tutorials have been
+included in full.  The Pre and Post Tests for the other six tutorials
+are included to allow you to assess what the tutorials on these topics
+will cover.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+## REGISTER.DOC
+
+{% raw %}
+```
+                     INTELLIGENT   COMPUTER  TUTORIALS
+                              P.O. Box 820725
+                          Houston, TX 77282-0725
+
+                        Compuserve ID: 70441,2746
+
+
+                         FORMULA I  Registration.
+                         ------------------------
+
+
+          Name   : _______________________________________________
+
+          Company: _______________________________________________
+
+          Address: _______________________________________________
+
+          City   : _____________________ State :___ Zip :__________
+
+          Country: _______________________  Telephone : ___________
+
+
+
+   No of copies required:        _____    @  $49.50   =   $ _____
+
+                     Shipping (per copy) :
+
+                             USA   + $3.00
+                          Canada   + $3.00             =  $ _____
+                   International   + $6.00
+
+                  Texas Residents add 8.5% Sales Tax   =  $ _____
+
+                                        Total Enclosed =  $ _____
+
+
+
+              ** Check must be in US Dollars from a US account,
+
+                 payable to  INTELLIGENT COMPUTER TUTORIALS.
+
+
+
+      *** FORMULA I  is supplied on a 5 1/4" double density disk.
+
+
+
+   ****  Volume Discounts :
+
+     5 - 9  copies = 20% Discount        10 - 49 copies = 25% Discount
+    50 - 99 copies = 30% Discount         100+   copies = 35% Discount
+
+
+
+   COMMENTS:
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2787
 

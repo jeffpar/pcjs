@@ -39,6 +39,55 @@ machines:
     your winnings.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1552.TXT
+
+{% raw %}
+```
+Disk No: 1552                                                           
+Disk Title: Lotto Magic Wheel                                           
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: LOTTO MAGIC WHEEL                                        
+Author Version: 1.0                                                     
+Author Registration: $15.00                                             
+Special Requirements: Hard drive recommended.                           
+                                                                        
+One of the most effective ways to play the lottery is to `wheel' a set  
+of numbers.  Wheeling numbers involves playing a large selection of     
+numbers and combining them into bets to cover all or most of the        
+possible combinations of numbers.  This produces the widest possibility 
+of having some kind of a winning ticket.  Serious lotto players have    
+known about this for years.  Unfortunately, setting up your own wheeling
+system can be very tedious work, especially if you play several         
+lotteries.                                                              
+                                                                        
+That's where LOTTO MAGIC WHEEL and your computer come to the rescue.    
+They will take the drudgery and guesswork out of wheeling numbers and   
+provide sophisticated selection techniques such as balanced sets,       
+odd/even distribution, number range selection and Key number usage.     
+These selections are appropriate for any PICK-5, -6 or -7 lottery.      
+                                                                        
+Now you can concentrate on the important things - like how to spend your
+winnings.                                                               
+                                                                        
+File Descriptions:                                                      
+                                                                        
+WHEEL    EXE  LOTTO MAGIC WHEEL executable file.                        
+WHEEL    DOC  User's manual.                                            
+???????? BIN  Wheel control files (53 files).                           
+READ     ME   A message from the author.                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1552
 

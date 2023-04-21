@@ -50,6 +50,48 @@ machines:
     sensitive help screens make it a pleasure to use.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0199.TXT
+
+{% raw %}
+```
+Disk No   199
+Program Title: PC-CALC+ version 2.0 (Disk 1 of 3)
+PC-SIG version 4.5
+
+PC-CALC+ is Buttonware's answer to the spreadsheet, and their answer is
+the definitive answer.  PC-CALC+ is fully-functional and can create its
+own spreadsheets, plus import Lotus 1-2-3 spreadsheets.  You can then
+create graphics from the spreadsheets and print them to your printer for
+presentations or meetings.
+
+PC-CALC+ is a three disk set.  The other two disks are #1016 and #1017.
+
+Usage:  Spreadsheet/Graphics.
+
+Special Requirements:  280K memory and a hard disk.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $69.95 + $5.00 for S/H.
+
+File Descriptions:
+
+INSTALL  EXE  Installation program.
+PCCP     ZIP  Archived program file.
+PKUNZIP  EXE  Unarchiving program.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1985,86,87,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0199
 

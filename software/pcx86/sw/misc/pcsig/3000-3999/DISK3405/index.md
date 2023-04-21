@@ -14,6 +14,51 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## README.TXT
+
+{% raw %}
+```
+Welcome to Resume
+Registration Fee: $29.95 + S & H (US Funds only)
+    Send to: Attn: Resume Registration
+             Softline, Inc
+             15377 N.E. 90th
+             Redmond, WA 98052
+             (206) 861-5463
+Resume includes InWin: an install program run from
+                       within Windows.
+
+NOTE: Most files in this program are compressed and MUST
+      be installed in order to run the program.  Allow
+      about 1 minute for the install.
+
+Step #1: Make a copy of the Master diskette and place the
+         master diskette in a safe place.
+Step #2: Insert the copy in Drive A or B.
+Step #3: In Windows Program Manager, select File-Run...
+Step #4: Type:   A:INSTALL   or    B:INSTALL
+         Follow the installation instructions as they appear
+         on the screen.
+Step #5: After the Install is complete, double click
+         the left mouse button on the Resume icon to start
+         the program.
+Step #6: Select OK at the License reminder screen.
+Step #7: For instructions (HELP) on creating your own
+         talking Resume: press the <F1> key.
+Step #8: Please send in your license fee.  Softline will 
+         remove the pester screen, send a manual, and the
+         most recent version of the software.  Thank you. 
+	   Select Resume... under the File menu, within the
+              program, for the registration/order form and
+              information on other Softline products.
+ 
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3405
 

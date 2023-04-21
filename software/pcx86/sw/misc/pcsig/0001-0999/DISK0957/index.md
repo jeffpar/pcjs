@@ -34,6 +34,61 @@ machines:
     cash-flow summaries; and breakdown by transaction classification.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES957.TXT
+
+{% raw %}
+```
+Disk No  957
+Program Title: PC-FLOW version 1.20
+PC-SIG version 1.3
+ 
+PC-FLOW, the Personal Cash-Flow Budgeting System, enables you to
+forecast and evaluate your budget with an emphasis on daily cash-flow.
+Each transaction can be designated as once-only, daily, weekly, or
+monthly.  The entries can either be specific or an estimate.  These
+transactions can record both incoming and outgoing activities, and may
+be sorted and categorized by group.
+ 
+PC-FLOW can transform transactions within a user-defined time period so
+the budget may be further analyzed.  This approach to budgeting lets you
+observe the cash-flow situation as the transactions are scheduled to
+occur.  Reports concerning starting resources, cash flow, and
+transaction breakdown can be printed at any time, and you can sort
+budget transactions by ID, frequency, ending date, or classification and
+configure the system parameters for your printer and screen.
+ 
+Usage:  Financial.
+ 
+Special Requirements:  None.
+ 
+How to Start:  Type PC-FLOW (press enter).
+ 
+Suggested Registration:  $40.00
+ 
+File Descriptions:
+ 
+PCFLOW   EXE  Main program for PC-FLOW.
+README        Introductory notes.
+MANUAL        User's Manual on disk.
+ORDERFRM      Order Form for PC-Flow.
+CFCASHR  DBF  Data file for Starting Resources.
+CFCLASS  DBF  Data file for Classification Categories.
+CFTRANSX DBF  Data file for Transaction Definitions.
+CFCALC   DBF  Data file for Transformed Transactions.
+CFCFMEM  MEM  Data file for program settings.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0957
 

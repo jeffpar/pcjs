@@ -41,6 +41,34 @@ machines:
     CATEGORY B    Sports and Recreation trivia questions
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES328.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 328  Trivia 2                                          v1   DS
+-----------------------------------------------------------------------
+ 
+This disk contains the category files for the trivia game program on
+disk # 327.
+ 
+CATEGORY C    Science and Nature trivia questions
+CATEGORY A    Entertainment trivia questions
+CATEGORY B    Sports and Recreation trivia questions
+CATEGORY D    Mixed Bag trivia questions
+TM       FNT  Support file for trivia game
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0328
 

@@ -47,6 +47,85 @@ machines:
     QUICKEYS COM  Program to speed up program use while in keyboard mode
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES652.TXT
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+Disk No  652  HI-RES RAINBOW Version 1.01A                           v1
+--------------------------------------------------------------------------
+"HI-RES RAINBOW" is a full featured paint package which includes pull
+down windows, icons, multiple device inputs (joy-sticks, mouse, keyboard,
+tablet). A partial list of the features include Connecting lines, Ray,
+Zoom, Erase, Draw (two modes), Spray, Lines, Brush, Box, Fill, Circle,
+Arc lines, Connecting arcs, Undo, Reflexing, and each has their own icon.
+ 
+*        WIN  Files which are needed to run 'HI-RES' (11 files)
+*        BIN  Files which are 'HI-RES' format picture files (11 files)
+HIRES    EXE+ The HI-RES drawing program
+QUICKEYS COM  Program to speed up program use while in keyboard mode
+README   1ST  Documentation file
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1986,87 PC-SIG
+```
+{% endraw %}
+
+## NOTES652.TXT
+
+{% raw %}
+```
+Program name: HI-RES RAINBOW version 1.01A
+ 
+Author name: ORLANDO RIVERA
+Address:     415 41 STREET
+             BROOKLYN N.Y. 11232
+ 
+Tel number: not given
+ 
+Suggested donation: $25.00 for a a full implementation of 'HI-RES RAINBOW' plus
+                    full documentation
+ 
+                    $50.00 for two full implementation copies of 'HI-RES
+                    RAINBOW'; the regular 256k size and 320k size which has more
+                    screens and goodies. You also get a full printed
+                    documentation with a hint section, a second disk with
+                    additional utilities and art parts for your own use.
+ 
+Program description:
+ 
+"HI-RES RAINBOW" is a 640 by 200 hi-resolution color paint system and the first
+software alternative to the EGA card. For a fraction of the cost you can have
+four colors and other patterns that border on true colors.
+ 
+"HI-RES RAINBOW" is a full featured paint package which includes pull down
+windows, icons, multiple device inputs (joy-sticks, mouse, keyboard, tablet).A
+partial list of the features include Connecting lines, Ray, Zoom, Erase, Draw
+(two modes), Spray, Lines, Brush, Box, Fill, Circle, Arc lines, Connecting arcs,
+Undo, Reflexing (just about all the above and more work in symmetry mode), Fill
+( has 12 preset colors and more can be mixed), and each has their own icon.
+Apart from that, well organizes pull down menus give you additional features.
+The Page window gives you Directories (regular and icon dir), Load and Save (two
+types), Text window which gives you various fonts and templates, Edit window
+which has Copy, Move, Smear (all have two options, merge & replace), Screen opt
+which some show-off features like rainbow which scrolls a rainbow of color in
+the background. Beside this we also have screen swap (you have more then two
+screens to work in).
+ 
+Printing options is supported as well as screens with different fonts and sizes.
+Other unique features will be ICON directories which when invoked will show an
+actual scale down replication of the full screen painting or brush (smaller
+paintings). Related products such as animation package and 3D drawing package
+(look at cube option) can be developed to work together as a system.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0652
 

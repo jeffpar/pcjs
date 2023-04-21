@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2689.TXT
+
+{% raw %}
+```
+Disk No: 2689                                                           
+Disk Title: PCFDial                                                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PCFDial                                                  
+Author Version: 1.01                                                    
+Author Registration: $19.00                                             
+Special Requirements: Hayes compatible modem.                           
+                                                                        
+PCFDIAL, a 7K swapping TSR, dials phone numbers displayed by other      
+programs (such as your favorite database software).  It can dial        
+``vanity'' numbers like 800-IBM-DISK, keep a log of calls, and display  
+the local time for any area code.  Additionally, PCFDIAL pops up at     
+regular intervals to let you know how long you've been on the phone     
+(especially useful to salesmen who must ``close the deal'' in a certain 
+length of time).  Context-sensitive Help is available.                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2689
 

@@ -46,6 +46,78 @@ machines:
     REFYR    BIN  Part of NAEPIRS system
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #266, version v1 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  SETUP   .BAT         CRC = 00 00
+
+--> FILE:  AUTOEXEC.BAT         CRC = 00 00
+
+--> FILE:  SPOOL   .EXE         CRC = A9 FD
+
+--> FILE:  NAEPIRS .EXE         CRC = 70 9F
+
+--> FILE:  JSUM    .BIN         CRC = 00 00
+
+--> FILE:  JINT    .BIN         CRC = 9F E1
+
+--> FILE:  REFYR   .BIN         CRC = 00 00
+
+--> FILE:  DBFIND  .DAT         CRC = B3 E1
+
+--> FILE:  @HA     .OVL         CRC = C7 AB
+
+--> FILE:  @HB     .OVL         CRC = 44 BF
+
+--> FILE:  @HC     .OVL         CRC = 04 EE
+
+--> FILE:  @HD     .OVL         CRC = AF AA
+
+--> FILE:  @HE     .OVL         CRC = 34 5A
+
+--> FILE:  @HF     .OVL         CRC = 82 6C
+
+--> FILE:  @HG     .OVL         CRC = 43 43
+
+--> FILE:  @HH     .OVL         CRC = B3 11
+
+--> FILE:  @HI     .OVL         CRC = EE 26
+
+--> FILE:  @HJ     .OVL         CRC = 2D D5
+
+--> FILE:  @SB     .OVL         CRC = 81 BD
+
+--> FILE:  @SD     .OVL         CRC = 32 E0
+
+ ---------------------> SUM OF CRCS = AD 12
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0266
 

@@ -30,6 +30,47 @@ machines:
     also provided.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1045.TXT
+
+{% raw %}
+```
+Disk No: 1045
+Disk Title: Electron
+PC-SIG Version: S1.4
+
+Program Title: Electron
+Author Version: 2.1
+Author Registration: $10.00
+Special Requirements: CGA.
+
+Great for electrical engineers, technicians and hobbyists.  ELECTRON
+helps solve electrical equations, perform various electronic and
+electrical calculations, and display many different diagrams of
+motors, transformers, etc. on a graphic monitor.  Electronic
+calculations are available for the D.C. Ohm's law, parallel resister,
+resonant frequencies, decibels, and resistance for ammeters.  Electrical
+calculations are included for true power, watts, ohms, RPM, and
+frequency.  Various tables, such as a standard wire size table, are also
+available.
+
+File Descriptions:
+
+ELEC87   EXE  Version for IBM PC/XT/AT machines.
+ELECOLOR DAT  Data file
+ELECTRON EXE  Version for Tandy 1000 machines.
+README   BAT  Information about ELECTRON.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale, Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1045
 

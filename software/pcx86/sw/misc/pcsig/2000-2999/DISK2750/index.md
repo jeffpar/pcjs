@@ -14,6 +14,64 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2750.TXT
+
+{% raw %}
+```
+Disk No: 2750
+Disk Title: ShareDebate International #5 & #6
+PC-SIG Version: S1
+
+Program Title: ShareDebate International #6
+Author Version: 4/91
+Author Registration: Multiple registration plans from $5 and up.
+Special Requirements: 384K RAM.
+
+Issue 6's Headlines:
+
+             ShareDebate International's first double-disk issue
+          Featuring 11 popular authors including Jerry Pournelle &
+                     the League for Programming Freedom!
+      Also, ShareDebate has gone Semi-Annual to half subscription costs!
+                   Spring/Summer 1991 (Issue #5 & #6)
+
+ShareDebate International, a ShareWare disk magazine, formerly a
+quarterly, is now semi-annual starting with this double-disk issue (#5 &
+6). It is a debate forum for computer users concerned about the present
+& future carried by 544 to 1,444 BBSs or Shareware Dealers.
+
+                 Debates & Articles in This Double Disk Issue
+
+Prior to this issue there were 19 debate topics (named in issue #4).
+Five new debate topics have been added. Three are related to the Gulf
+War and the Palestinian problem. One is a catch-all topic, which is used
+by Sysop-Attorney Paula Goldman in her coverage of recent FCC actions
+that impact the computer industry. The other topic covers intellectual
+property law and programming freedom. Four position papers of the League
+for Programming Freeedom, including one written for ShareDebate
+International, kick off this debate.
+
+Benston and Kaufman review the history of S&Ls. Bova writes about
+freedom of information over the satellite waves. General Graham writes
+on the political limitations imposed on the Patriot. The 28 Americans
+killed by the Scud missile didn't need to die. Pournelle discusses how
+government hurts progress.  Smith assesses the National Interest Project
+level Stock market proposal.  Schulman's Prometheus- winning novel,
+Alongside Night, is excerpted (7 chapters). Martin writes on the Gulf
+War and viruses. McAfee Associates' latest version of its virus detector
+is included, SCAN76-C.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2750
 

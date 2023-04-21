@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## VENDOR.DOC
+
+{% raw %}
+```
+Shareware Vendors:
+ 
+You may freely distribute the shareware version of the MORFORM system
+with the following provisions:
+ 
+   -  You may not charge more than $9.95.
+   -  The MORSOFT name must be noted in your literature and that
+      what you are distributing is the shareware version (not public
+      domain or FREEWARE).
+   -  For your benefit and that of your customers, the system must be
+      received from the MORSOFT company.  This insures that you have
+      the latest version, the files are complete, and it is virus free.
+ 
+If you choose to distribute MORFORM contact us by writing to the following
+address or call us at (512) 561-0731.
+ 
+                           MORSOFT
+                    9859 IH-10 W, 107/811
+                    San Antonio, TX 78230
+ 
+We will send you a copy of the system at no charge and will keep you
+updated with new releases as they become available.  Thank You.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2918
 

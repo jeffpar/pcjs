@@ -62,6 +62,7 @@ machines:
 
 ## BBSLOGO.BAS
 
+{% raw %}
 ```bas
 	    ██████    ████▌    ██    ██    █████    ██████
 	      ██      █   █    ██    ██    █   █    █
@@ -82,9 +83,82 @@ machines:
 		████▌	█████	█   █	█   ▐	████
 		  System Software Services  (1983)
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #150, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  BBSCOMP .BAT         CRC = 00 00
+
+--> FILE:  BBSLOGO .BAS         CRC = A9 7F
+
+--> FILE:  CALLERS .            CRC = F0 09
+
+--> FILE:  COUNTERS.            CRC = 84 56
+
+--> FILE:  FLASH   .            CRC = 00 00
+
+--> FILE:  HARDWARE.            CRC = 00 00
+
+--> FILE:  HELP    .BBS         CRC = 87 F8
+
+--> FILE:  IBBS    .BAS         CRC = 09 45
+
+--> FILE:  IBBS    .DOC         CRC = F7 1E
+
+--> FILE:  IBBS    .EXE         CRC = C5 BE
+
+--> FILE:  MESSAGES.            CRC = A9 05
+
+--> FILE:  NEWCOM  .            CRC = 85 22
+
+--> FILE:  RBBSUTIL.BAS         CRC = 12 59
+
+--> FILE:  RBBSUTIL.EXE         CRC = 9D C4
+
+--> FILE:  SOFTWARE.            CRC = 00 00
+
+--> FILE:  SUMMARY .            CRC = 6C C7
+
+--> FILE:  USERS   .            CRC = 64 73
+
+--> FILE:  WELCOME .            CRC = 54 CA
+
+--> FILE:  XFER    .HLP         CRC = 1C A4
+
+--> FILE:  XFERLIST.            CRC = A9 1C
+
+--> FILE:  XXX     .            CRC = E1 D5
+
+ ---------------------> SUM OF CRCS = 17 D4
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## IBBS.BAS
 
+{% raw %}
 ```bas
 400 CLEAR ,,5000	  ' IMPORTANT NOTE- IF SMARTMODEM IS USED, SWITCH 1   :
 500 COLOR 7,0,0 	  ' AND SWITCH 6 MUST BE UP. CARRIER DETECT AND DTR.  :
@@ -993,9 +1067,326 @@ machines:
 55720 OUT &H3FB,R:ON ERROR GOTO 38650
 55730 RETURN
 ```
+{% endraw %}
+
+## IBBS.DOC
+
+{% raw %}
+```
+              IBBS - The IBMPC Bulletin Board System
+
+This  short  document describes the installation and care of  the 
+remote  bulletin  board  system  called  IBBS.  This  system  was 
+modified to it's current state by Gene Plantz of System  Software 
+Services.
+
+
+Requirements:
+
+IBMPC with 192K of RAM (might squeak by with 128K)
+
+2 disk drives  (either single or double sided, but double or harddisk better)
+
+One communications adapter addressed as COM1
+
+One  300  (or 300/1200) baud modem (Bell 212A used by author,  but any  should 
+work)
+
+BASIC COMPILER (needed if changes are to be made to system)
+
+
+NICE THINGS TO HAVE:
+
+Hard  disk  (allows larger message files and file  transfer  with 
+little increase in file access time)
+
+
+
+
+CONTROL:
+
+This  system  is controlled by a system operator who is  responsible 
+for all maintenance and content of the messages on the  system.  The 
+system operator has a special logon. The first and last name will be 
+a  sequence known to the IBBS system,  and a third password will  be 
+requested  ("2ND  CODEWORD?").  The  3 codewords for  the  disk  you 
+received  will  be  written  on a piece of  paper  attached  to  the 
+diskette  sent  to  you.  Once you are on the system as  the  system 
+operator  (hereafter  known as the SYSOP),  you  have  much  greater 
+authority  than any other user.  The commands that the SYSOP can  do 
+will be described a little later.
+
+
+These passwords can be changed by locating the labels:
+
+BOSS$, P1$, and P2$.
+
+
+INSTALLATION:
+
+The  diskette you received is a double-sided disk containing  all 
+the  source  and executable modules for the  system.  The  source 
+files  (.BAS)  may be retained on the  distribution  disk,  while 
+everything else should be copied to a working disk.  The  working 
+disk should have a DOS boot on it. All the executable modules are 
+compiled, so no BASICA module is required.
+*****THIS CODE WILL NOT RUN WITH THE BASIC INTERPRETER******. 
+
+The files on the disk are:
+
+IBBS.BAS     - source code for the BBS
+IBBS.EXE     - compiled BBS module  
+RBBSUTIL.BAS - source for the file cleanup utility
+RBBSUTIL.EXE - compiled file cleanup utility
+USERS        - List  of logon IDs (name appears once  only here)
+CALLERS      - This is the list of each logon (except for SYSOP)
+COUNTERS     - small file that has next msg #,next caller #,etc
+BBSLOGO.BAS  - the local logo that is displayed upon BBS startup
+MESSAGES     - this is the main messages file
+SUMMARY      - this is the message summary file
+NEWCOM       - this is an info file for first time callers
+FLASH        - this is an info file, displayed after WELCOME file
+HELP.BBS     - help file with info on commands, called by ?
+WELCOME      - another info file displayed first after LOGON
+XFER.HLP     - info file for the file transfer function
+SOFTWARE     - info file on software prices, called by B
+HARDWARE     - info file on hardware prices, called by B
+XFERLIST     - list of files that can be transferred (not supplied)
+
+
+
+STARTING THE BBS:
+
+To begin operations, place the disk containing the BBS files in
+drive A,  and type in IBBS. This system is set up for a hard disk 
+and  will probably require some modifications to split the  files 
+out  to a couple of floppies.  All files are currently placed  on 
+the default drive.
+
+
+
+STOPPING THE BBS:
+
+To  shutdown  the  BBS,  just press the F1  key.  If  anyone   is 
+currently  logged  on,  they will be cut off during the  shutdown 
+process.
+
+
+
+LOGGING OFF TWITS:
+
+If  you  wish to log off someone currently on  the  system,  just 
+press  the  F2 key.  This will force off the current  caller  and 
+cause the BBS to recycle for the next call.
+
+
+MESSAGE TO GET OFF SYSTEM:
+
+If you want to shutdown the system for maintenance,  but  someone 
+is  currently  on,  you may ask them to finish up what  they  are 
+doing  and logoff by pressing the F4 key.  This does not log them 
+off.
+
+TOGGLE PRINTER:
+
+This system uses a printer to log info on logon,  timeouts, files 
+transferred,  logoffs,  errors.  If a printer is on and ready  at 
+system  startup,  it  will be used.  If you wish to turn it  off, 
+press F5.  If the printer has a problem and fails to operate, the 
+BBS  will automatically toggle it off (the status of the  printer 
+is displayed on line 25).
+
+
+CLEARING ERROR COUNT DISPLAY:
+
+To  clear  the counters display on the local  screen,  below  the 
+logo, press the F8 key.
+
+
+DISPLAYING STATUS COUNTS:
+
+To  re-display the status counts on the local screen,  just below 
+the logo, just press the F9 key.
+
+
+
+PROGRAM FLOW:
+
+When  someone calls into the board, CARRIER DETECT is found active and
+the BBS begins the process of waiting for the user to press his ENTER key.
+This is the baud rate detection technique. Throughout the  system,  a 
+control-k  (or control-c) can be used to kill the display data being 
+sent.  Due to a quirk in the compiler,  the data is in the  outgoing 
+communications buffer (the  data that has not yet made it out to the 
+modem),  and cannot be purged (according to an IBM rep).  Therefore, 
+control-K  can  seem to take a while to work.  Watching at  the  BBS 
+machine  and  the  modem will show you that this is  the  case.  The 
+computer display will have stopped while the modem is still  sending 
+data.
+
+The WELCOME and FLASH files are sent to the caller,  and then the 
+caller  is prompted for his/her FIRST NAME.  At this  point,  all 
+commands  may  be stacked if the caller knows  what  prompts  are 
+next.  Otherwise,  he/she will then be prompted for LAST NAME.  A 
+check is then done in the USERS file.
+
+If a match is found,  then he/she is logged in the CALLERS file with 
+the date and time. If he/she was not found in the USERS file, caller 
+will  be  asked for CITY,STATE info.  This is then placed  into  the 
+USERS file. Then logged to CALLERS file.
+
+
+After that is out of the way (does NOT occur for SYSOP), the main 
+system menu is displayed. The choices here are:
+
+G- Logoff the system
+M- Go to the message subsystem
+F- Go to the File transfer system
+D- change duplex (i.e. ECHO) from ECHO to NO ECHO
+X- short menus (sets Expert mode)
+
+
+FILE TRANSFER:
+ 
+
+The options in the FILE TRANSFER menu are self-descriptive.
+The  list of files to xfer are in a file called XFERLIST.  This is a 
+random file that is displayed LAST-FIRST.  Currently,  file DOWNLOAD 
+is restricted to the hours of 9:00PM until NOON machine  time.  This 
+was  done  to  allow the users of electronic mail so access  to  the 
+system.  File  transferers are very selfish and will monopolize  the 
+system  for great gobs of time.  After one hour on the  system,  the 
+caller  starts to get messages that he/she has been on for over  one 
+hour and should think about giving someone else a chance.  After  90 
+minutes, the caller is logged off and a string of ^^^^ is printed on 
+the hardcopy log.
+
+Line 8662 can be "commented out" to eliminate the download time period
+restriction or the time values can be changed.
+
+XMODEM  file  transfers use the standard CPM protocol and  an  ASCII 
+transfer  is  nothing more than a listing from this  end.  An  ASCII 
+upload can be done,  and is terminated by sending an ESCAPE (or just 
+pressing the escape key).  Incomplete files are deleted  most of the 
+time if it is clear that the xfer was aborted. (No data is echoed 
+during an ASCII upload).
+
+
+When  the SYSOP list the XFERLIST file,  at the end (or following  a 
+control-K)  the SYSOP is asked  if he wants to XFER a new BBS.  This 
+feature  allows the SYSOP to be remote to the system,  build  a  new 
+IBBS.EXE module,  and transfer it via the phone to the system. It is 
+saved  as  NEWIBBS.EXE.  If the SYSOP wishes,  the new code  can  be 
+executed after transfer by going to the Message system and typing in 
+a 7 at the FUNCTION? prompt. This will cause the current IBBS.EXE to 
+renamed  to OLDIBBS.EXE,  NEWIBBS.EXE renamed to IBBS.EXE and then a 
+RUN"IBBS" is done. This will cause the phone connection to drop. You 
+should  call back in to ensure that everything is OK.  I  have  done 
+this  many  times with no failures.  The machine running the BBS  is 
+located 15 miles from my home.
+
+
+MESSAGE SYSTEM:
+
+
+Callers  are  notified if they have messages waiting for  them  upon 
+entering  the  message system (also the first time the main menu  is 
+displayed).  The SYSOP has the additional commands (undocumented for 
+safety reasons):
+
+9 - read the comments file
+8 - delete the comments file
+7 - cause the new copy of the BBS to be RUN
+Z - modify an old message (cannot add more lines)
+
+
+There is a designation known as SPECIAL user. If the USER file entry 
+for a given person has a + symbol in the first position, that person 
+is  a special user.  He/she may use the Z command on messages to  or 
+from  themselves,  and  are not limited by the time restrictions  on 
+system usage.  If,  instead,  the first position in that file  entry 
+contains an *, the user is a twit and cannot log on in the future.
+
+
+
+Special Note:
+
+Most  of  the files used in this system are random files.  They  are 
+fixed length and,  although they can be editted with an editor,  you 
+****MUST**** be extremely careful not to change the length of any record. If 
+you do, the file will not be readable past the record changed.
+
+
+CLEANUP:
+
+Since  the  deleted  messages in a random file  are  only  logically 
+deleted,  a file cleanup must be done periodically (depends on  your 
+system activity).  Run the program RBBSUTIL to do this.  It has many 
+features,  but  the one needed to do the file cleanup is called with 
+the  P  (for  PURGE)  command.  You will be asked  if  you  wish  to 
+resequence  the messages (I recommend you do not).  Just  press  the 
+enter  key  to see what the other options are before pressing the  P 
+option.  All deleted messages are archived to a disk (compressed  to 
+save  space).  The  drive that this will go on is specified  via  an 
+option  in  this program.  The message file will be recreated and  a 
+backup will be keep.  Be warned that these files can get to be  very 
+large and cause disk space problems during the cleanup process.
+
+
+
+TIMEOUT:
+
+There  is  a 7 minute timeout on this system.  Any inactivity for  a 
+consecutive 7 minutes will cause a forced logoff.
+
+
+SERIOUS NOTE:
+
+Due  to  a limitation in the BASIC COMPILER,  this  code  cannot  be 
+enlarged without causing a compiler error. This code will have to be 
+broken  up  into  multiple modules for any more enhancements  to  be 
+done.
+
+
+COMPILING:
+
+The  BBS system may be compiled using the COMPILED run  time  system 
+option or without it. It is distributed using the /O option so as to 
+not require the BASIC COMPILER.
+
+With RUN-TIME library:   BASCOM IBBS/C:3000/S/V/X;
+Without Run-Time Lib:    BASCOM IBBS/C:3000/S/O/V/X;
+
+LINK With Run-time Lib:    LINK IBBS;
+LINK Without Run-time Lib: LINK IBBS IBMCOM;
+
+
+PRIVATE MESSAGES:
+
+Messages  from one users to another can be made private by  entering 
+an  * when asked for a password.  ONLY the  sender,  addressee,  and 
+SYSOP can read it.  If anything else is used in the PASSWORD prompt, 
+that value must be used to delete the message.  It can still be read 
+by everybody. The SYSOP can read and delete anything.
+
+
+
+CABLING:
+
+
+Use a full 25-wire cable between the PC and the modem. While not all
+these sugnals are needed, more a than normal communications pgm are
+used. There have been too many people calling with problems that are
+related to cheap (or low-pin count cables). Use a full 25-pin cable
+to ensure proper functioning.
+
+
+```
+{% endraw %}
 
 ## RBBSUTIL.BAS
 
+{% raw %}
 ```bas
 10  CLS
 100 DEFINT A-Z
@@ -1208,6 +1599,7 @@ machines:
 4090 ARCDRV$=X$
 4100 GOTO 440
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

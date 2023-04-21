@@ -34,6 +34,82 @@ machines:
     within FORMGEN.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## BBS-DESC.TXT
+
+{% raw %}
+```
+FormGen - Form Generator                                                       
+========================                                                       
+                                                                               
+Category: Business / Desktop Publishing                                        
+                                                                               
+FormGen is the world's most popular form drawing package. It works     
+like a word processor, but has many features specially geared to designing     
+forms.  Using the full screen editor, you can quickly draw lines and boxes     
+and position text.  You then print the form on your Epson, IBM or HP type      
+printer.  The printed results are amazing!  Professional quality forms can     
+be designed and printed in minutes.  [ASP MEMBER]                              
+```
+{% endraw %}
+
+## FILES.TXT
+
+{% raw %}
+```
+ ------------------------ Disk Files for FormGen 3.33 ------------------------ 
+|                                                                             |
+|   FORM     CFG    FormGen configuration file                                |
+|   FORM     COL    FormGen overlay file                                      |
+|   FORM     DOC    Brief documentation for unregistered version              |
+|   FORM     FNT    Laser font (for HP compatible laser printers)             |
+|   FORM     EXE    FormGen program                                           |
+|   FORM     HLP    FormGen overlay file                                      |
+|   FORM     OVL    FormGen overlay file                                      |
+|   MANUAL   BAT    Prints brief documentation                                |
+|   BBS-DIST DOC    Distribution terms for BBS or Shareware distribution      |
+|   UPGRADE  DOC    Upgrade notice                                            |
+|   KEYS     FRM  * use FormGen to print this function key reference          |
+|   REF      FRM  * use FormGen to print this reference card                  |
+|   REG      FRM  * use FormGen to print this registration form               |
+|   UPGRADE  FRM  * use FormGen to print this upgrade notice                  |
+|   BBS-DESC TXT    Brief description for BBS or catalog listing              |
+|   FILES    TXT    list of files                                             |
+|   READ     ME     brief instructions for getting started                    |
+|  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  |
+|   BOARDAGT FRM    Sample form - pet boarding agreement                      |
+|   BRPPINV  FRM    Sample form - invoice                                     |
+|   CAD3     FRM    Sample form - CAD/CAM record                              |
+|   CHARS    FRM    Sample form - demos use of special characters             |
+|   CREDIT   FRM    Sample form - credit application                          |
+|   DATAINV  FRM    Sample form - invoice                                     |
+|   DAYSUM   FRM    Sample form - daily sales summary                         |
+|   EXPENSE  FRM    Sample form - expense report                              |
+|   FTREE    FRM    Sample form - geneology record                            |
+|   INSERTIO FRM    Sample form - advertising insertion order                 |
+|   INVOICE1 FRM    Sample form - invoice                                     |
+|   MAP      FRM    Sample form - street map                                  |
+|   MESSAGE  FRM    Sample form - telephone message pad                       |
+|   NINTENDO FRM    Sample form - cartridge rental                            |
+|   ORDER    FRM    Sample form - sales order                                 |
+|   PAIDOUT  FRM    Sample form - paid-out list                               |
+|   PDOUTSUM FRM    Sample form - weekly paid-out summary                     |
+|   PETALLY  FRM    Sample form - daily sales summary                         |
+|   PRINTORD FRM    Sample form - printing order                              |
+|   PURCHASE FRM    Sample form - purchase order                              |
+|   RENEWAL  FRM    Sample form - membership renewal                          |
+|   SERVICE  FRM    Sample form - vehicle service record                      |
+|   TALLY    FRM    Sample form - health club daily sales report              |
+|   VCRENT01 FRM    Sample form - VCR rental                                  |
+|   WEEKLY   FRM    Sample form - weekly planner                              |
+|   WO       FRM    Sample form - work order                                  |
+|   YR_ATT   FRM    Sample Form - annual attendance report                    |
+ ----------------------------------------------------------------------------- 
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1561
 

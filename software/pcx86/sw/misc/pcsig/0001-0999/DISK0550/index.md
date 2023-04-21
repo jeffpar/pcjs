@@ -49,6 +49,32 @@ machines:
     PCWK85B  ???  PC Week Second Quarter 1985 reference files (4 files)
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES550.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  550 5LETUS A-B-C #13                                      v1  DS2
+---------------------------------------------------------------------------
+Literature Evaluation Table User Service - A database of articles and
+letters from third quarter 1984 magazines about IBM PCs.  It requires
+PC-FILE III and can be searched using keywords, author names, article
+titles, issue numbers, page numbers and descriptive text.
+ 
+BYTE85B  DTA  BYTE Magazine Second Quarter 1985 reference files
+BYTE85B  HDR  BYTE Magazine Second Quarter 1985 reference files
+BYTE85B  INX  BYTE Magazine Second Quarter 1985 reference files
+BYTE85B  KWD  BYTE Magazine Second Quarter 1985 reference files
+PCWK85B  DTA  PC Week Second Quarter 1985 reference files
+PCWK85B  HDR  PC Week Second Quarter 1985 reference files
+PCWK85B  INX  PC Week Second Quarter 1985 reference files
+PCWK85B  KWD  PC Week Second Quarter 1985 reference files
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0550
 

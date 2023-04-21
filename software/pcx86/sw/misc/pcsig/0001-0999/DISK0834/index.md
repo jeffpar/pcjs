@@ -32,6 +32,71 @@ machines:
     save them to disk.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES834.TXT
+
+{% raw %}
+```
+Disk No  834
+Program Title: GRAPHTIME II for HERCULES (Disk 2 of 2)
+PC-SIG version 1
+ 
+    Finally, GRAPHTIME is available to HERCULES graphics users!  This
+version offers HERCULES graphics owners all the features of the original
+GRAPHTIME II.
+ 
+    This two-disk demo set contains a business-presentation graphics
+program. GRAPHTIME II does various line, column and pie charts. The charts
+can be printed or plotted, viewed individually, or set up to run as an
+unattended "slide show" on the monitor.
+ 
+    GRAPHTIME accepts data from dBase II/III, Multiplan, and LOTUS, or you
+can enter data directly into GRAPHTIME. There is a font editor and macro
+editor. There are math functions including moving averages. There is even
+an "undo" function. A Microsoft mouse (or compatible) is recommended.
+ 
+    This demo version does not have the pen-plot driver and supports only
+color graphics adapters. This version will plot only 24 data points. The
+commercial version can handle 365 data points. This demo version will not
+save "Paint" files, but will print them.
+ 
+    This is the first disk of the two-disk GRAPHTIME II package.  It
+contains the startup modules.
+ 
+Usage: Graphics
+ 
+System Requirements: 256K memory and a Hercules graphics card.
+ 
+How to Start: For instructions on installing the program, type:
+              GO (press enter).
+ 
+Suggested Registration: $39.00 U.S. (includes Airmail)
+ 
+File Descriptions:
+ 
+???????? GTH  Help files (19 files).
+GT       BAT  Batch file used to start GRAPHTIME.
+GTHDRAW  EXE  GRAPHTIME drawing module.
+GTHFILE  EXE  File input/edit module.
+GTHGRAPH EXE  GRAPHTIME graphing module.
+GTHPICSA EXE  GRAPHTIME module.
+GTHPIEBL EXE  GRAPHTIME module.
+GTHSTART EXE  Main menu program.
+GTHTEXED EXE  Text and macro editor module.
+MAC1     GTM  Data file.
+TFR      GTZ  Data file.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0834
 

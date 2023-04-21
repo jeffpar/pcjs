@@ -55,6 +55,281 @@ machines:
     work done efficiently.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CHANGES.DOC
+
+{% raw %}
+```
+
+VERSION 1.2
+
+  1) The shareware screen displayed when MemTool is first loaded
+     is smaller, and no longer requires a key to be pressed to 
+     resume.
+
+  2) MemTool now allows the user to specify the "hot-key" to be used
+     to invoke the program.  The "hot-key" is specified when MemTool
+     is first loaded.  Refer to the file MANUAL.DOC for complete
+     details.
+
+  3) The Appointment Calendar has a much better appointment pad with 
+     "time slots" and a larger capacity.  Some bugs and enhancements 
+     where made to the calendar, itself.
+
+  4) The PhoneView option now allows Ctrl-PgUp and Ctrl-PgDn, to 
+     quickly jump to the start and end of your phone numbers.
+
+  5) Note that pressing the "hot-key" once inside MemTool no longer
+     terminates MemTool immediately.  You must use the <ESC> key.
+
+  6) The calculator can be moved around the screen.  Just press the
+     Num-Lock key to enable the key-pad arrows, and move the calculator
+     to any position on the screen.
+
+  7) The Alarm Clock sound, made when the alarm goes off, is no longer
+     a continuous noise.  It sounds for 3 seconds.
+
+  8) Bug fixed which caused the system to lock-up if the user tried to
+     run MemTool a second time, while using Disk-Swapping.
+     
+
+VERSION 2.0  (03/01/90)
+
+  1) Main Menu was enlarged to fit the extra options.
+
+  2) Screen Capture option added.
+
+  3) Ruler/Grid option added.
+
+  4) PhoneView option enlarged to hold 500 entries.  Loads faster too.
+     PhoneView columns are reversed so Name is first.
+
+  5) Calculator had a bug where when you first used it, you could only
+     enter 5 digits.
+
+  6) MemTool's default "hot-key" has changed from Ctrl-Enter to Ctrl-Alt.
+
+  7) Modifications to the Editor:
+
+       Search and Translate:          Cut and Paste:
+       --------------------------------------------------------------
+       F1 - Search forward            F7  - Line mark                  
+       F2 - Search forward again      F8  - Column mark                
+       F3 - Search backward           Ins - Insert scrap               
+       F4 - Search backward again     Del - Delete block               
+       F5 - Translate forward          -  - Delete to scrap            
+       F6 - Translate backward         +  - Copy to scrap              
+                                      
+       Ctrl -->, <-- allows you to jump to the next word and previous word.
+       Ctrl-Home, End allow you to jump to the Top and Bottom of the screen.
+       Alt-K - Delete to EOL  
+       Alt-F - Filename path
+       Alt-O - Output filename
+       Alt-C - Case toggle   
+       Alt-H - Help screen   
+       Alt-R - Restore session  
+       Alt-W - Write file/block  (modified for block functions)
+       Alt-P - Print file/block  (modified for block functions)
+       Alt-I - Toggle insert/replace mode (modified since Ins now
+                                           copies marked block to scrap).
+
+       Various other bugs fixed.
+  
+                                    
+  8) Alternate hot-key is no longer specified on the MT command line.
+
+  9) The MemTool Setup option has been removed.  It's not needed anymore.
+     Setup is done through "switches" specified in the Autoexec.Bat file:
+
+     SET MTPATH=    Is the path of where the MemTool files are stored.
+     SET MTDS=      Is the path of where DiskSwapping files are stored.
+     SET MTFLAGS=   Sets various MemTool options:
+
+         /D               Use diskswapping.
+         /I               Ignore EMS memory if available.
+         /Ncode           If MemTool will be used on a network.  "code" is
+                            a UNIQUE code that differentiates the users.
+         /Hxxx,xxx,desc   Use a hot-key other than the default (Ctrl-Alt).
+
+     Switches needed if default values are not acceptable.  (see manual).
+
+ 10) Appearance of MemTool screens was slightly modified.
+
+
+ 
+VERSION 2.01  (05/30/90)
+
+ 1) Bug fixed where "Disk-swapping" files (SR01, SR02, etc.) were not
+    being automatically erased by the program.
+
+
+
+
+```
+{% endraw %}
+
+## FILE2175.TXT
+
+{% raw %}
+```
+Disk No: 2175                                                           
+Disk Title: Memtool                                                     
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: MemTool                                                  
+Author Version: 2.01                                                    
+Author Registration: $30.00                                             
+Special Requirements: Hard drive recommended.                           
+                                                                        
+LONG DESCRIPTION                                                        
+If you're looking for a program to help you be more productive,         
+MEMTOOL may be the answer.  It's a memory resident program that only    
+takes up 8K when properly installed.  User definable hot keys, LAN      
+support, and optional diskswapping to save memory, are just a few of    
+its functions.  MEMTOOL will automatically use EMS memory if you have   
+it.                                                                     
+                                                                        
+MEMTOOL features include:                                               
+                                                                        
+~ Calculator                                                            
+                                                                        
+~ Calendar/Appointment pad                                              
+                                                                        
+~ File editor                                                           
+                                                                        
+~ DOS quick guide                                                       
+                                                                        
+~ Diskview                                                              
+                                                                        
+~ Phoneview                                                             
+                                                                        
+~ Alarm clock                                                           
+                                                                        
+~ Ascii table                                                           
+                                                                        
+~ Screen capture.                                                       
+                                                                        
+The phoneview file can hold up to 500 entries. The file editor will     
+handle a file up to 35K or 2500 lines which ever comes first, and the   
+calendar/appointment pad is limited only by disk space.                 
+                                                                        
+For those of you who aren't using a memory resident program, MEMTOOL    
+is an easy and useful set of utilities you can call on to help get      
+your work done efficiently.                                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+===========================================================================
+LOADING VERSION 2.01
+
+Be sure to refer to the installation instructions in the User's Manual.
+Several steps must be followed if you have been using an older version,
+and certain others may be needed as well.  Please read chapter "INSTALLATION"
+in MANUAL.DOC.
+
+
+
+===========================================================================
+LIST OF MEMTOOL FILES:                                         VERSION 2.01
+
+   Filename    Purpose
+---------------------------------------------------------------------------
+      MT.EXE   MemTool program.
+ CONVPHN.EXE   Program to convert ver 1.2 PhoneView file to ver 2.01 format.
+  MANUAL.DOC   Text file containing MemTool's user's manual.
+ CHANGES.DOC   Lists various modifications since version 1.1
+REGISTER.DOC   Text file containing the form needed to register MemTool.
+       *.HLP   DOS Quick Guide help files.
+       *.CLK   Holds parameters specified in Alarm Clock option.
+       *.PHN   Holds the PhoneView names and numbers.
+       *.FIL   Holds various data used by MemTool.
+
+
+
+```
+{% endraw %}
+
+## REGISTER.DOC
+
+{% raw %}
+```
+ 
+ REGISTRATION FORM - VERSION 2.01:
+  
+ Remember that Shareware software like MemTool allows computer users to
+ try many different types of software and then commit themselves to a small
+ few that best fits their needs, by registering their use of the software
+ with the author.
+ 
+ If you decide that you like MemTool, find it useful and will continue to
+ use the program, you should show your support and register your copy.  For
+ contributions of $30 or more I will include your name in my database of 
+ users entitled to automatically receive future minor versions at no cost. 
+ Major versions will be offered for a small fee to cover processing and 
+ shipment costs.
+
+ When sending in your registration form be sure to include the source or
+ person who introduced you to MemTool and the size diskette you prefer.
+
+
+ ==========================================================================
+
+ MEMTOOL Version 2.01                            CHRIS W. WOODMANSEE
+                                                 6548 CAMDEN AVE
+ DATE: _____________                             SAN JOSE,  CA 95120
+
+
+ Contribution amount: _______  Users: ______  Disk size (5.25, 3.5): ______
+
+ Where you obtained MemTool: ______________________________________________
+  
+         Name: ____________________________________________________________
+ 
+      Address: ____________________________________________________________
+
+         City: ____________________________________________________________
+ 
+  State & Zip: ____________________________________________________________
+
+ Phone number: ____________________________________________________________
+
+
+ ==========================================================================
+
+
+ If you have any comments or suggestions on improving MemTool please
+
+ take a few moments to write them down: ___________________________________
+
+ __________________________________________________________________________
+
+ __________________________________________________________________________
+
+ __________________________________________________________________________
+
+ __________________________________________________________________________
+
+ __________________________________________________________________________
+
+ __________________________________________________________________________
+
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2175
 

@@ -43,6 +43,53 @@ machines:
     supplier.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1996.TXT
+
+{% raw %}
+```
+Disk No: 1996                                                           
+Disk Title: Easy Inventory                                              
+PC-SIG Version: S1.5                                                    
+                                                                        
+Program Title: Easy Inventory                                           
+Author Version: 1.5                                                     
+Author Registration: $35.00                                             
+Special Requirements: 512K RAM and a hard drive is recommended.         
+                                                                        
+EASY INVENTORY brings small businessmen a near perfect stand alone      
+inventory control program.  It can end the retailer's worst nightmare:  
+too much of what is not selling stacked next to empty racks that ought  
+to be holding the goods that are moving like hotcakes.  Instead, you can
+have the sweet dreams of having on hand what the public wants, when it  
+wants it, and for the best price volume purchasing can buy you.         
+                                                                        
+The basic inventory control chore of reporting what goods are on hand   
+by numbers, locations and supplier is taken care of smoothly.  With     
+virutally unlimited capacity, it allows the businessman to quickly enter
+purchases and record sales.  Then it reports what is on hand and where  
+it is at.  Lastly, you tell EASY INVENTORY what minimum quantity of each
+should be on hand and it will tell you what is needed, and how much you 
+should buy from each supplier.                                          
+                                                                        
+EASY INVENTORY offers nine reports.  It tells you sales by time period  
+or sales by both time period and location.  It prints purchases and     
+sales for the period, a useful tool for cash flow and usage monitoring. 
+You can also print out total inventory.  The reorder report prints what 
+you should order by item.  Another report tracks back orders.  You can  
+print out a price list and an inventory by location and an inventory by 
+supplier.                                                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1996
 

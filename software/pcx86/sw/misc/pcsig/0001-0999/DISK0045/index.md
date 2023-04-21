@@ -68,6 +68,7 @@ machines:
 
 ## ANTONYMS.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 100 REM MODERNIZED BY DAVE NIXON JAN. 16 1977 
@@ -249,9 +250,11 @@ machines:
 1860 DATA 3,ASKEW,STRAIGHT,SYMMETRICAL: 
 1870 END:   
 ```
+{% endraw %}
 
 ## AWARI.BAS
 
+{% raw %}
 ```bas
 10 REM set AUTO @ 1010,5
 20 CLS:KEY OFF
@@ -332,9 +335,11 @@ machines:
 770 IK$=INKEY$
 780 IF IK$=CHR$(27) THEN CHAIN "CHOICE83.BAS",1000
 ```
+{% endraw %}
 
 ## BACCRRT.BAS
 
+{% raw %}
 ```bas
 10 REM (SOURCE UNKNOWN) EDITED SLIGHTLY BY D. KURLAND 11/6/75
 20 CLS:KEY OFF
@@ -491,9 +496,11 @@ machines:
 1540 GOTO 1170
 1550 END
 ```
+{% endraw %}
 
 ## BASEBALL.BAS
 
+{% raw %}
 ```bas
 10 REM BASEBALL SIMULATION PROGRAM
 20 REM WRITTEN BY JOEL LIND & KEN BIRKMAN - NYU - JULY 1973
@@ -1052,9 +1059,11 @@ machines:
 5550 END
 7000 CHAIN "MENU",1000
 ```
+{% endraw %}
 
 ## BIO.BAS
 
+{% raw %}
 ```bas
 105 CLS
 110 DIM W$(14),L$(41),M$(36),N$(40)
@@ -1198,9 +1207,11 @@ machines:
 1340 REM * end of run
 1360 END
 ```
+{% endraw %}
 
 ## BIRTHDAY.BAS
 
+{% raw %}
 ```bas
 100 REM BIRTHDAY UPDATED 5-5-77 TO "MITS" BY D. NIXON 
 101 CLS:KEY OFF
@@ -1355,9 +1366,11 @@ machines:
 1590 RETURN 
 1600 END
 ```
+{% endraw %}
 
 ## BOMB.BAS
 
+{% raw %}
 ```bas
 230 CLS
 240 CLS:LOCATE 4,28:PRINT "DEFUSE"
@@ -1417,9 +1430,11 @@ machines:
 780 PRINT "3RD FLOOR!!!":GOTO 710
 790 END
 ```
+{% endraw %}
 
 ## CIVILWAR.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 20 LET L=0:LET W=0:LET R1=0:LET P1=0
@@ -1666,9 +1681,11 @@ machines:
 2500 FOR I=1 TO 2000:NEXT I
 2600 CHAIN "MENU",1000
 ```
+{% endraw %}
 
 ## CLIMATES.BAS
 
+{% raw %}
 ```bas
 100 REM--E.A.GALLETTA,PATCHOGUE-H.S.,4/22/69 EARTH SIENCE (BIICAC)
 110 REM--PROGRAM ON CLIMATES  
@@ -1868,9 +1885,11 @@ machines:
 2050 DATA 0,0
 2060 END
 ```
+{% endraw %}
 
 ## CLOUD-9.BAS
 
+{% raw %}
 ```bas
 10 REM--A.C.CAGGIANO+E.A.GALLETTA, PATCHOGUE H.S., 11-20-68 
 11 REM--REVISED BY CHARLES LOSIK AND TONY PEREZ 7/18/69 
@@ -2071,9 +2090,98 @@ machines:
 1055 RETURN
 2000 END
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #45, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  BOMB    .BAS         CRC = 55 BC
+
+--> FILE:  ANTONYMS.BAS         CRC = E9 15
+
+--> FILE:  AWARI   .BAS         CRC = 63 2B
+
+--> FILE:  BIO     .BAS         CRC = 40 08
+
+--> FILE:  HIDESEEK.BAS         CRC = 45 7F
+
+--> FILE:  IQUEEN  .BAS         CRC = 83 F1
+
+--> FILE:  DOTS    .BAS         CRC = D2 3D
+
+--> FILE:  DRAGRACE.BAS         CRC = 3A F6
+
+--> FILE:  BIRTHDAY.BAS         CRC = 9B 12
+
+--> FILE:  FOOTBALL.BAS         CRC = 43 CD
+
+--> FILE:  GALAXY  .BAS         CRC = E8 1A
+
+--> FILE:  GALAXY2 .BAS         CRC = EE F9
+
+--> FILE:  CLIMATES.BAS         CRC = 62 04
+
+--> FILE:  CLOUD-9 .BAS         CRC = CE C6
+
+--> FILE:  GREEKRTS.BAS         CRC = 0E D3
+
+--> FILE:  SWARMS  .BAS         CRC = D6 F4
+
+--> FILE:  MEMBRAIN.BAS         CRC = 29 88
+
+--> FILE:  BASEBALL.BAS         CRC = E1 43
+
+--> FILE:  MINIMATH.BAS         CRC = 2C 4E
+
+--> FILE:  REVERSE .BAS         CRC = D6 3D
+
+--> FILE:  SHOP    .BAS         CRC = 4D 72
+
+--> FILE:  SNOOPY  .BAS         CRC = A0 AB
+
+--> FILE:  SQUARE  .BAS         CRC = 59 29
+
+--> FILE:  CIVILWAR.BAS         CRC = 34 F6
+
+--> FILE:  SYNONYMS.BAS         CRC = C0 AF
+
+--> FILE:  TAXMAN  .BAS         CRC = 05 AD
+
+--> FILE:  TRADE   .BAS         CRC = 89 2F
+
+--> FILE:  BACCRRT .BAS         CRC = E8 A7
+
+--> FILE:  WEATHER .BAS         CRC = 14 45
+
+ ---------------------> SUM OF CRCS = 5B 33
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## DOTS.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 20 PRINT TAB(30)"DOTS"
@@ -2397,9 +2505,11 @@ machines:
 3200 RETURN 
 3210 END 
 ```
+{% endraw %}
 
 ## DRAGRACE.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 100 DIM I$(3),P(2),E(2),W(2),S(2),X(2),M(2),C(2),B(2),Y(2)
@@ -2509,9 +2619,11 @@ machines:
 1140 NEXT T
 1150 STOP
 ```
+{% endraw %}
 
 ## FOOTBALL.BAS
 
+{% raw %}
 ```bas
 1 CLS:KEY OFF
 100 PRINT ,"F O O T B A L L"
@@ -2888,9 +3000,11 @@ machines:
 3800 DATA .1,19,.4,35,.2,100,.1 
 3810 END
 ```
+{% endraw %}
 
 ## GALAXY.BAS
 
+{% raw %}
 ```bas
 10 REM		<< GALAXY >>
 20 WIDTH 80
@@ -2910,9 +3024,11 @@ machines:
 160 IF X<0.9 THEN SWAP C$,D$
 170 RETURN
 ```
+{% endraw %}
 
 ## GALAXY2.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 100 REM		<< GALAXY >>
@@ -2969,9 +3085,11 @@ machines:
 146 DATAKEY 
 20293 PLE WILSCREEN 0,0,041246REEDOM
 ```
+{% endraw %}
 
 ## GREEKRTS.BAS
 
+{% raw %}
 ```bas
 100 REM  
 110 REM DESCRIPTION--TESTS KNOWLEDGE OF ENGLISH TRANSLATION OF   
@@ -3028,9 +3146,11 @@ machines:
 620 PRINT N$;", YOU DID THIS WITHOUT ONE MISTAKE. CONGRATULATIONS.":   
 630 END:   
 ```
+{% endraw %}
 
 ## HIDESEEK.BAS
 
+{% raw %}
 ```bas
 1 CLS :KEY OFF
 100 DIM P(4,2)   
@@ -3104,9 +3224,11 @@ machines:
 780 RETURN 
 790 END
 ```
+{% endraw %}
 
 ## IQUEEN.BAS
 
+{% raw %}
 ```bas
 100 REM CONVERTED TO U1106 DEC. 3, 1971 BY T.EDWARDS
 110 REM   NAME--1QUEEN  
@@ -3289,9 +3411,11 @@ machines:
 1860 RETURN 
 1870 END
 ```
+{% endraw %}
 
 ## MEMBRAIN.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 11 PRINT TAB(20) "CELL MEMBRAIN":PRINT
@@ -3458,9 +3582,11 @@ machines:
 1620 IF Z=0 THEN 570 
 1630 END
 ```
+{% endraw %}
 
 ## MINIMATH.BAS
 
+{% raw %}
 ```bas
 70 DEF SEG: POKE 106,0
 80 MATRIX$="NO"
@@ -3541,9 +3667,11 @@ machines:
 840 IF MATRIX$="YES" THEN CHAIN "CHOICE83.BAS",1000
 999 END
 ```
+{% endraw %}
 
 ## REVERSE.BAS
 
+{% raw %}
 ```bas
 5 'blink and highlight title
 10 CLS:KEY OFF:COLOR 31: PRINT TAB(32);"REVERSE": COLOR 7
@@ -3609,9 +3737,11 @@ machines:
 820 PRINT "simply REVERSE '0` (zero).":PRINT:FOR Z=1 TO 10000:NEXT Z:RETURN
 999 CHAIN "CHOICE83.BAS",1000
 ```
+{% endraw %}
 
 ## SHOP.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 100 REM AUTHOR/IMPLEMENTOR - ?/E. KURAMOTO   
@@ -3890,9 +4020,11 @@ machines:
 2830 DATA "USED Q-TIPS","$.25","DOZEN",25   
 2840 END
 ```
+{% endraw %}
 
 ## SNOOPY.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 11 PRINT TAB(30) "snoopy":PRINT:PRINT
@@ -4012,9 +4144,11 @@ machines:
 1220 GOTO 160
 1230 END
 ```
+{% endraw %}
 
 ## SQUARE.BAS
 
+{% raw %}
 ```bas
 10 REM  ** SQUARE **
 20 REM
@@ -4215,9 +4349,11 @@ machines:
 1970 NEXT R0:PRINT:PRINT"    0     1     2     3     4":PRINT:RETURN
 1980 END
 ```
+{% endraw %}
 
 ## SWARMS.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -4738,9 +4874,11 @@ machines:
 5170 FOR X9=1 TO X7+1 : X8=RND(1) : NEXT
 5180 RETURN
 ```
+{% endraw %}
 
 ## SYNONYMS.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 100 REM MODERNIZED BY DAVE NIXON JAN. 16 1977 
@@ -4953,9 +5091,11 @@ machines:
 2170 DATA 2,WARN,CAUTION:   
 2180 END::  
 ```
+{% endraw %}
 
 ## TAXMAN.BAS
 
+{% raw %}
 ```bas
 1 CLS:KEY OFF
 10 DIM T(10)
@@ -5137,9 +5277,11 @@ machines:
 950 GOTO 122
 999 END
 ```
+{% endraw %}
 
 ## TRADE.BAS
 
+{% raw %}
 ```bas
 5 REM                   STAR TRADERS
 10 REM - MODIFIED FOR 'ALTAIR BASIC 4.0' BY - S J SINGER
@@ -5608,9 +5750,11 @@ machines:
 4650 PRINT:PRINT:PRINT:PRINT
 4660 END
 ```
+{% endraw %}
 
 ## WEATHER.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 20 DIM S$(10)
@@ -5867,6 +6011,7 @@ machines:
 2530 PRINT "RAIN WILL FALL IN 12 TO 18 HOURS." 
 2540 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

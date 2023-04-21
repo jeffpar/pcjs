@@ -14,6 +14,135 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## SYSOP.DOC
+
+{% raw %}
+```
+     P C S T A T    S Y S O P    I N F O R M A T I O N
+
+This file provides information for BBS Sysops who wish to post PCStat.
+There are no distribution restrictions on the program other than ensuring
+file PCSTATnn.ZIP is posted intact.  The program is a statistical report
+package written by a member of the Association of Shareware Professionals.
+
+     Diskette Files:
+
+README                           ----->  README.COM
+AINSTALL.COM                    |        PCSTAT.EXE
+BINSTALL.COM                    |        PCSTAT.WKB
+UNZIP.EXE         Only post     |        PCSTAT.HLP
+PCSTATnn.ZIP ------------------>|        PCSTAT.DOC
+VENDOR.DOC        this file     |        SAMPLE.WKB
+SYSOP.DOC                       |        SWAPLPT.COM
+                                 ----->  FILE_ID.DIZ
+
+FILE_ID.DIZ:
+
+PCStat v2.5 <ASP> - Updated statistical
+and histogram report program. Easy to
+use even for novices. Pull-down menus
+and context sensitive help. Accepts
+Lotus, ASCII, DIF and preprared dBase
+data. Reports are professional and
+uncomplicated to comprehend. Ideal for
+many business and industry situations.
+
+                                      
+     Requirements:
+
+640k bytes of memory, 500k bytes of hard disk or high capacity floppy disk
+storage.  Graphics is not needed.
+
+     Registration Information:
+
+For the registration fee of $45.00 the latest version of PCStat plus a
+complete manual listing technical support information will be sent.
+
+     Current Version Information:
+
+The most current version of PCStat archive file can be found in CompuServe,
+IBMAPP, Library 13, File name: PCSTAT.ZIP or on MegaSystem, Carson City NV,
+702-849-2207 (2400), 702-849-2437 (9600 Dual), File name: PCSTATnn.ZIP.
+
+     Author Information:
+
+Roy Schoenbeck
+PC Information Systems
+310 RUE DE LA LAVANDA
+SPARKS NV  89434-9524
+Phone: 702-342-0376
+CompuServe: 71360,72
+```
+{% endraw %}
+
+## VENDOR.DOC
+
+{% raw %}
+```
+     P C S T A T    V E N D O R    I N F O R M A T I O N
+
+This file provides information for Shareware Distributors and User Groups
+who wish to distribute PCStat.  There are no distribution restrictions on
+the program other than ensuring that all the files listed below are
+included.  PCStat is a statistical report package written by a member of
+the Association of Shareware Professionals.
+
+     Diskette Files:
+
+README                           ----->  README.COM
+AINSTALL.COM                    |        PCSTAT.EXE
+BINSTALL.COM                    |        PCSTAT.WKB
+UNZIP.EXE                       |        PCSTAT.HLP
+PCSTATnn.ZIP ------------------>|        PCSTAT.DOC
+VENDOR.DOC                      |        SAMPLE.WKB
+SYSOP.DOC                       |        SWAPLPT.COM
+                                 ----->  FILE_ID.DIZ
+
+     Short Description:
+   
+Statistical report program that produces professional reports even if
+you're a novice! [ASP]
+
+     Long Description:
+
+Statistical report program providing basic descriptive statistics and
+histograms.  PCStat is particularly useful in showing comparisons such as 
+before-and-after situations or one process versus another. User interface
+similar to Lotus 1-2-3 enhanced with pull-down menus.  Context sensitive
+help provides on-line documentation. Accepts data from Lotus 1-2-3,
+prepared dBase, ASCII and DIF compatible files or manual key-in. PCStat
+produces professional reports ideal for business and industry, even if
+you're a statistics novice!  [ASP]
+
+     Requirements:
+
+640k bytes of memory, 500k bytes of hard disk or high capacity floppy disk
+storage.  Graphics is not needed.
+
+     Registration Information:
+
+For the registration fee of $45.00 the latest version of PCStat plus a
+complete manual listing technical support information will be sent.
+
+     Current Version Information:
+
+The most current version of PCStat archive file can be found in CompuServe,
+IBMAPP, Library 13, File name: PCSTAT.ZIP.
+
+     Author Information:
+
+Roy Schoenbeck
+PC Information Systems
+310 RUE DE LA LAVANDA
+SPARKS NV  89434-9524
+Phone: 702-342-0376
+CompuServe: 71360,72
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3479
 

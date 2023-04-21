@@ -14,6 +14,43 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2618.TXT
+
+{% raw %}
+```
+Disk No: 2618                                                           
+Disk Title: Your Real Estate Partner 2/2 (#2617)                        
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Your Real Estate Partner                                 
+Author Version: 2.01                                                    
+Author Registration: $35.00                                             
+Special Requirements: 512K RAM (550K of hard disk space).               
+                                                                        
+Whether you're a homeowner financing your first home, or an investor    
+making informed decisions about multi-unit properties, YOUR REAL ESTATE 
+PARTNER can save you money.                                             
+                                                                        
+YOUR REAL ESTATE PARTNER enables you to quickly determine your best     
+total investment, from purchase to resale. With this program, you can   
+evaluate five types of mortgages.  Cash flows are adjusted for taxes and
+inflation so you can compare properties and financing options.          
+                                                                        
+Your REAL ESTATE PARTNER was designed with the novice in mind.  It's    
+user friendly and comes with an easy-to-read manual complete with real  
+estate definitions.                                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2618
 

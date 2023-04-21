@@ -14,6 +14,103 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2519.TXT
+
+{% raw %}
+```
+Disk No: 2519                                                           
+Disk Title: Eventman                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: EVENTMAN Personal Event Manager                          
+Author Version: 2.0                                                     
+Author Registration: $17.00                                             
+Special Requirements: A hard drive or high density floppy drive.        
+                                                                        
+EVENTMAN makes it easy to remember the important dates to remember in   
+your life.  Whether it's birthdays, anniversaries, holidays, deadlines, 
+business meetings or anything, EVENTMAN can search for upcoming events  
+whenever you type "whatsup."  EVENTMAN will tell you what events are    
+coming in 30, 60, or 90 days.                                           
+                                                                        
+You record your important dates in an easy-to-use "windows-like" event  
+database.  You can also print lists of your events, and run the program 
+from your autoexec.bat file to automatically see what important events  
+are coming up.  EVENTMAN's on-line help makes it easy for anyone to use.
+It includes a screen saver and supports a mouse.                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989-1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## INFO.TXT
+
+{% raw %}
+```
+                    EVENTMAN Personal Event Manager
+                              Version 2.0
+
+                           by TASCS Company
+                            P. O. Box 2326
+                  Redondo Beach, California 90278-7826
+
+                  Copyright 1990 - All Rights Reserved
+
+
+  After installation is complete, you can start EVENTMAN by typing:
+
+     C:> EVENTMAN
+
+at the DOS prompt (the "C:>") and then pressing Enter.
+
+  The WHATSUP capability is an important and integral part of using EVENTMAN.
+This capability is provided by a pair of files - WHATSUP.BAT and EVENTCHK.EXE.
+The WHATSUP.BAT file is created in the first directory listed in your PATH
+statement or C:\ if no PATH statement could be found.  To use WHATSUP, type:
+
+     C:> WHATSUP
+
+To find all events in either EVENTCHK.VNT or CALENDAR.VNT for the next 90
+days.  To search for a different period of time, simply enter the number of
+days after WHATSUP:
+
+     C:> WHATSUP 30
+
+will report only for the next thirty days.  We highly recommend you add
+WHATSUP to your AUTOEXEC.BAT file.  For more recent versions of DOS, add:
+
+   CALL WHATSUP 45
+
+to the autoexec.bat file for a 45-day search.  DOS versions earlier than
+3.2 do not have the 'CALL' feature.  Simply drop 'CALL ' and add only
+WHATSUP 60 for a 60-day search.  When WHATSUP.BAT runs, it actually runs
+EVENTCHK.EXE installed in your installation directory.  WHATSUP.BAT can be
+modified to search other than the default .VNT files. (Only two separate
+files may be searched via EVENTCHK.EXE, using the format of WHATSUP.BAT.
+
+Manual and Missing Features - While EVENTMAN is fully functional, a few
+features and a manual text file are missing.  When requested, missing
+features respond with a message "Feature Not Implemented".  These features
+will be accompany the next release of EVENTMAN.  Please register today to
+speed the next version to you with all features and a manual file.
+All registered users (including preregistered users) will receive the
+update by mail when available.
+
+SHAREWARE NOTICE!  This EVENTMAN program may be distributed as shareware
+subject to the license agreement in the file READ.ME2.  If you are a
+registered user of EVENTMAN, THANK YOU!  If not, you must register (at a
+very reasonable cost) to continue using EVENTMAN.  See the file READ.ME2
+for more details.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2519
 

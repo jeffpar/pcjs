@@ -36,6 +36,33 @@ machines:
     TEK      ???  Tektronix 4010 Emulator and related programs
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES441.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No  441  TEKTRONIX 4010 Emulator                                v1.1
+-----------------------------------------------------------------------
+The program on this disk almost completely emulates a Tektronix 4010
+storage tube display terminal, both full text abd graphics.  The PC's
+screen may still be raster graphics (320 x 200), but all the detail is
+still there.
+ 
+TEK      CFG  Terminal configuration file
+TEK      DOC  Documentation
+TEK      EXE  Main program
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale, CA 94086
+(408) 730-9291
+(c) Copyright
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0441
 

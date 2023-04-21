@@ -37,6 +37,174 @@ machines:
     VISPAS   EXE  Part of compiler
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## ERR.TXT
+
+{% raw %}
+```
+error message #0 -- this should never be displayed!     11/7/84               
+the file was not opened before this      operation.                           
+the file is not open for output (WRITE   operations). Do REWRITE first.       
+the file is not open for input (READ     operations). Do RESET first.         
+the disk is full; use a disk with  more  space on it.                         
+the directory is full with too many      files; erase some of them.           
+you can't ASSIGN a file that is already  open. CLOSE it first.                
+the file name has no characters in it.                                        
+attempted read beyond the end of file.   Test for EOF to prevent this error.  
+reading an integer that is out of range: integers must be -32767 to 32767.    
+error message #10 -- not used!                                                
+#11 -- div by 0                                                               
+#12 -- string length error                                                    
+#13 -- index out of range                                                     
+#14 -- case index out of range                                                
+#15 -- stack overflow                                                         
+#16 -- sub-range error                                                        
+#17                                                                           
+#18                                                                           
+#19                                                                           
+Reached the end of the file, program is  incomplete. Check program syntax.    
+Too many identifers declared.   Remove   some declarations or definitions.    
+','  expected.                                                                
+Set elements must be between 0 and  255  in value.                            
+This character is incorrect here.                                             
+The program is too large; you must make  it smaller!                          
+All set constants must be the same type.                                      
+This item is incorrect at this point;    check your syntax.                   
+Multiple definition in the program,  or  a pre-declared identifier or routine.
+This word appears to be  an undeclared   identifier.                          
+A constant is expected here.                                                  
+A variable, constant, or function is expected here.                           
+Too many variables were declared,   or   arrays are too large.                
+Identifer expected.                                                           
+'=' expected.                                                                 
+';' expected.                                                                 
+':' expected.                                                                 
+This procedure/function was declared with a parameter list. '('  expected.    
+'(' expected.                                                                 
+')' expected.                                                                 
+'INTEGER', 'CHAR', 'BOOLEAN', 'STRING',  or 'TEXT' type identifier expected.  
+'..' expected, as in :ARRAY[1..10] OF..   etc                                 
+Boolean or integer expression required.                                       
+This word is incorrect at this point;    check your syntax.                   
+An integer is required here.                                                  
+The types of the two terms used here do  not match.                           
+A boolean expression must be used here:  it must be True or False.            
+The type of this expression does  not    match the control variable's type.   
+#48                                                                           
+':=' required.                                                                
+Variable type does not match the type of the right hand part of statement.    
+Integer, character, boolean, or string   variable  is expected here.          
+'END' expected.                                                               
+An integer or character expression  is   expected.                            
+'THEN' expected.                                                              
+A CASE label can have a maximum value of 255.                                 
+This CASE label value is a duplicate of  a previous one.                      
+An integer  or  character  variable is   expected.                            
+'OF' expected.                                                                
+This CASE label is not the same type as  the CASE variable or expression.     
+'UNTIL' expected.                                                             
+'DO' expected.                                                                
+Parameter expected, beginning with VAR   or an identifier.                    
+A variable or procedure identifier  is   expected.                            
+A statement or perhaps 'END' or ';' is   expected.                            
+The control variable in a FOR statement  must be a simple variable.           
+'BEGIN' or a declaration section (CONST, TYPE, VAR) is expected.              
+A procedure or function name is expected.                                     
+'BEGIN' expected.                                                             
+'TO' or 'DOWNTO' expected.                                                    
+Incorrect symbol here;  a statement  is  expected.                            
+'.' or another statement or procedure    is expected here.                    
+sorry, GOTO's are not allowed, since     they can lead to bad habits!         
+'DO' expected.                                                                
+'[' expected.                                                                 
+A positive integer is required for  the  index, between 1 and 4000.           
+']' expected.                                                                 
+only an array or a string can have an    index.                               
+#78                                                                           
+#79                                                                           
+INTEGER, CHAR, or BOOLEAN expected for a  type.                               
+#81                                                                           
+Functions cannot return arrays.                                               
+The number of parameters disagrees with  the declaration made earlier.        
+The type of the parameter does not match the declaration made earlier.        
+A simple variable (without index) or a   constant is needed here.             
+'PROGRAM' expected.                                                           
+Matching closing quotes required, single or double ('...' or "...").          
+READ and WRITE must have at least one    parameter to be meaningful.          
+Hexadecimal number such as $FF00 expected after a '$'.                        
+INTEGER, BOOLEAN, or CHAR funtion type   expected.                            
+#91                                                                           
+#92                                                                           
+#93                                                                           
+The array size does not agree with its   declaration.                         
+#95                                                                           
+An expression  or a  quoted string  is   expected.                            
+#97                                                                           
+#98                                                                           
+This declaration does not  match  the    previous declaration.                
+The compiler option  is: T+ or T-.       T- removes the debugger code.        
+```
+{% endraw %}
+
+## FILES510.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  510  VISIBLE-PASCAL                                         v1 DS2
+---------------------------------------------------------------------------
+VISIBLE-PASCAL, a Pascal Compiler, is particularly useful for teaching and
+learning Pascal.  With this package, users can watch the operation of a
+program as it runs.  There are also 19 sample programs already written that
+can be run or edited.
+ 
+AUTOEXEC BAT  Starts program from boot after system has been put on the disk
+EDIT     BAT  Batch file to start the editor
+ERR      TXT  Text file containing error messages
+G        BAT  Batch file that explains how to start the program
+MANUAL   1    User manual part 1 of 2 (27K)
+MANUAL   2    User manual part 2 of 2 (52K)
+PRINTMAN BAT  Batch file that prints the manual
+RUN      BAT  Batch file to run a program
+VISBUG   EXE  Part of Compiler
+VISED    EXE  Part of Compiler
+VISPAS   EXE  Part of Compiler
+ 
+There are also 19 sample programs already written that can be run or edited.
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Ave, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+## NOTES510.TXT
+
+{% raw %}
+```
+
+Program name:  VISIBLE-PASCAL
+
+Author name:   William Hapgood Associates
+Address:       10 Sycamore Road
+	       Wayland, MA 01778
+
+Telephone Number: Not given
+
+Suggested Donation: $35--You receive a future update.
+
+Program Description:  VISIBLE-PASCAL, a Pascal Compiler is particularly useful
+for teaching and learning Pascal.  With it you can watch the operation of your
+program as it runs.  Requires IBM-PC (including jr.) or compatible with 128K of
+memory, at least 1 disk drive, and DOS 2.0 or higher.  It supports a graphics
+adapter, more disk drives, and printer.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0510
 

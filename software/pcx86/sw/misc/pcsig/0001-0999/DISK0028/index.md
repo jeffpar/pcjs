@@ -76,6 +76,7 @@ machines:
 
 ## ARTILL.BAS
 
+{% raw %}
 ```bas
 1 ' THE PORTLAND IBM PERSONAL COMPUTER CLUB
 2 ' ARTILL.BAS
@@ -368,9 +369,11 @@ machines:
 2870 PRINT "PLEASE WAIT 5 SECONDS":GOTO 610
 2880 END
 ```
+{% endraw %}
 
 ## BIGTYPE.BAS
 
+{% raw %}
 ```bas
 9 'BIGTYPE  18 DEC 82  Hal Sampson
 10 'add: roam thru larger screen
@@ -414,9 +417,653 @@ machines:
 1420 SCREEN 0:SCREENWIDTH=80
 1430 RETURN
 ```
+{% endraw %}
+
+## COLOUR.DOC
+
+{% raw %}
+```
+typ colour.txt
+GETTING MORE COLOUR FOR YOUR ADAPTER!
+-------------------------------------
+
+By:  Andrew Tuline & Byron Sheppard
+
+
+     Are you feeling limited with 4
+colour graphics? Does the hi-res
+mode look a little drab? Well, there
+are ways to add excitement to your
+monochrome and colour graphics. Among
+them are artifacting and dithertizing,
+two techniques used widely on other
+colour computers. 
+     Unfortunately for the RGB monitor
+owner, those two methods have draw-
+backs. In order to understand why, we
+must first examine the differences
+between the various types of colour
+displays used.
+     The colour television is the 
+most widely used and also the poorest
+quality display.  This is due to the
+fact that all colour and synchro-
+nization signals are combined to form
+a single composite video signal. This
+is then mixed with a higher frequency
+signal, usually channels 2 or 3, and
+applied to the  T.V.'s antenna
+terminals. From here the T.V. converts
+it back to its original form.  This
+extra (and redundant) handling 
+greatly reduces picture quality.
+     The composite video monitor is
+a step up from the T.V. The major
+difference between the two is that
+the composite signal described earlier
+does not have to be converted to T.V.
+frequencies. This then cuts down on
+one of the conversion processes, ther-
+eby reducing distortion.  Unfortunate-
+ly, due to the complexities of the 
+composite video signal, this type
+of monitor still is not very good.
+     The RGB monitor, recently intro-
+duced to personal computing, is the
+highest quality colour display
+currently available. The reason for
+this is that all of the signals are
+sent to the monitor on separate wires.
+Since this is the way that all the 
+monitors actually USE the signals,
+the whole series of combining,recom-
+bining, and splitting done in the
+previous two colour displays is
+eliminated.  This simple and straight-
+forward approach effectively results
+in the RGB type of monitor having a
+much higher picture quality.
+
+            Artifacting
+   
+     The composite monitor and T.V., 
+while having lower resolution than the
+RGB, are capable of displaying more 
+colours by taking advantage of faults
+in the composite video signal. This
+process is known as artifacting, and 
+is the simplest method of increasing 
+the number of colours for the display.
+It involves drawing lines on alternate
+even or odd columns.  Magenta, for
+example, appears red if drawn on even
+columns and blue if drawn on odd
+columns. Unfortunately, this will not
+work with RGB monitors.
+(See last paragraph for exception.)
+
+Below is a table of colours available
+when using this technique.
+
+Normal      Even         Odd
+colours    columns      columns
+      
+Green       Red'         Green'
+Red         Red''        Blue
+Brown       Red'         Green''
+Cyan        Black        Cyan
+Magenta     Red          Blue
+White       Brown        Cyan
+
+The quotation marks beside the colours
+represent a slightly different shade
+of the original colour.
+
+        Dithertizing
+
+The next step in adding more colours
+to your display is to use a technique
+called dithertizing. It involves
+setting points in a checkerboard
+pattern of different colours. You
+could, for instance, set all even
+columns and rows to red, all odd rows
+and columns to green, and the rest to
+yellow, producing some alternate
+colour.  Since this technique doesn't
+depend on "faults" in the video
+signal, it will work on RGB type
+monitors.  The main drawback of this
+technique is the increased time
+necessary to draw a picture. However,
+with the use of assembly language 
+subroutines and/or preset shape
+tables, you could speed up any
+graphics action.
+
+       Some Program Examples
+   
+     Using artifacting, the following
+short program will show lots of 
+colours in the medium resolution mode.
+
+10 SCREEN 1,0
+20 FOR I=0 TO 50
+30 LINE (I,0)-(I,50),RND*4
+40 NEXT
+50 GOTO 20
+
+It is even possible to turn the
+"hi-res" monochrome mode into a multi
+coloured spectacle with a change in
+line 10.
+ 
+10 SCREEN 2:OUT 984,&HA:OUT 985,&H32
+
+OUT 984,&HA- Selects 320x200 colour
+             graphics.
+OUT 985,&H32- is binary 00110010
+                          ^^  ^
+     selects cyan palette-!!  !
+     selects intensified---!  !
+     select green backgnd.----!
+
+The last addition will allow an RGB
+monitor to use the standard 3 colour
+palette. Otherwise, when using the
+composite video input, there are many
+colours available, even in this mode.
+
+For more information, please refer
+to pages 2-57 to 2-59 of the Technical
+Reference Manual. More advanced 
+programmers should also refer to the
+BIOS video section starting on page
+A-43.
+
+     There is a device available for 
+owners of RGB monitors which will
+allow the use of the techniques
+previously described. It is called an
+N.T.S.C. demodulator, and converts the
+composite video signal to RGB format.
+The demodulator is manufactured by
+Electrohome (model# I-1302) and is
+available from the Byte shop for about
+$100. Incidentally, the N.T.S.C. 
+module enables you to attach your RGB
+monitor to a video recorder or T.V.
+tuner. In this case, it makes an 
+excellent television monitor.
+
+
+     
+    MEDIUM RESOLUTION GRAPHICS MODE
+    -------------------------------
+
+          By: Andrew Tuline
+
+
+     It   seems  someone  has  finally
+found the 160 X 100 graphics mode I've
+been having so much trouble with. It's
+in the Dec.  82  issue  of  Dr.  Dobbs
+Journal   by  John  Seal  of  Franklin
+Indiana.
+
+     Starting in  the  80  X  25  text
+mode,  the  user  must  split a single
+character    into    foreground    and
+background  by  poking  character  222
+into the display buffer. Then the 6845
+CRT controller is set to  squeeze  the
+four  video  pages  onto  one  screen,
+effectively  giving  100   points   of
+vertical   resolution.   To   set  the
+points, the user must set  either  the
+foreground,  or  background attributes
+depending   on  the  location  of  the
+character.   Below  is  a  copy of the
+program submitted by the author.
+
+100 '
+110 'Set up low resolution 160 X 100
+115 '    16-color graphics mode
+120 '
+130 SCREEN 0 : WIDTH 80          ' set up 80 X 25 alpha
+140 KEY OFF : CLS                ' clear screen
+150 OUT &H3D8,9                  'disable blink attribs
+160 A%=&H3D4 : D%=&H3D5          ' crt controller ports
+170 OUT A%,4 : OUT D%,&H7F       ' vertical total
+180 OUT A%,6 : OUT D%,&H64       ' vertical displayed
+190 OUT A%,7 : OUT D%,&H70       ' vert sync position
+200 OUT A%,9 : OUT D%,1          ' max scan line addr
+210 DEF SEG=&HB800               ' display buffer seg
+220 FOR CC%=0 TO &H3FFE STEP 2   ' all character codes
+230 POKE CC%,&HDE : NEXT         ' set to special char
+240 FOR AT%=1 TO &H3FFF STEP 2   ' all attributes
+250 POKE AT%,0 : NEXT            ' preset to black
+260 '
+270 ' Compute offset into display
+275 '   buffer, based on X and Y
+280 '
+290 DEF FNOFFSET%(X%,Y%) =160 * Y% + (X% OR 1)
+300 '
+310 END
+
+        Addenda
+        -------
+
+     An easy way to set the width to 40 while in 
+screen 2 and then converting back without clearing
+the screen or using get/put graphics is by typing:
+
+def seg=&H40:poke &H49,4 'sets width 40
+def seg=&H40:poke &H49,6 'sets width 80
+
+     There is a video data area used by the BIOS
+in Segment &H40 starting at address &H49 to 
+address &H66. Again, refer to the technical manual
+page A-3 for further information.
+
+     An interesting mode of resolution I found
+a long time ago while in screen 2 is as follows:
+
+out 984,&H18
+
+This is similar to the 160 X 100 mode shown above,
+but unfortunately I have been unable to decode the
+colour pattern.
+
+     Also, the user could try to change the 
+parameters of the 6845 Display Chip itself. There
+are 19 registers in the 6845. 18 of them are 
+addressed by the first one by the following. For
+example, if we wanted to put a &H64 to register
+6 we would type the following:
+
+out &H3d4,6     ;set address register to point
+                ;to register 6
+out &H3d5,&H64  ;put &H64 into register 6 of 
+                ;display chip.
+
+Each of these registers controls different 
+parameters for the display, such as the 
+starting address of the display, the cursor
+address, the total number of lines displayed
+and so on. See page 2-56 of technical manual.
+
+     Finally, to wrap it up, I'd like to say that
+although I was initially dismayed at the resolution
+of the colour graphics on the PC, I also found that
+to do any reasonable animation that too many pixels
+causes the speed to reduce drastically. While we may
+not have 16 shades of each colour as on the Atari,
+we do have enough to keep us busy. Maybe the next
+version of the Flight Simulator will allow the
+owners of RGB monitors to also enjoy the colour
+of flight.
+
+
+SIG/Access: 
+```
+{% endraw %}
+
+## CPCPRO.DOC
+
+{% raw %}
+```
+typ cpcpro
+
+How to Print Screen from a Basic Program
+(C) Copyright 1982, Peter Norton, author of The Norton Utilities for the IBM
+PC)
+
+When BASIC is operating on the IBM Personal Computer, the "print-screen" 
+function doesn't work.  This article shows how your BASIC programs can perform
+a print screen operation, and gives you an opportunity to learn more about how
+the IBM PC works.
+
+Before we explain it all, here is how to print-screen in BASIC.  First, you  
+must set up a print-screen routine by executing these instructions, once:
+        DEF SEG = 4095
+        POKE 0, 205   :   POKE 1, 5   :   POKE 2, 203
+        PRINT.SCREEN = 0
+Then, your programs can print the screen contents at any time, by executing:
+        CALL PRINT.SCREEN
+As long as the "DEF SEG" hasn't been changed, then CALL statement will print
+the current screen display.
+
+This bit of BASIC program doesn't make the "PrtSc" key work-- it lets your
+programs perform the print-screen function.  Your program must decide when to
+print the screen, perhaps by acting on a special keystroke.
+
+To understand how this works, we have to touch on some of the most fundamental
+parts of the IBM PC.
+
+Built into the IBM PC, in the read-only-memory, or ROM, are many service
+routines that perform operations that are basic to the computer; among them is
+the print-screen operation.  These services are activated by a mechanism known
+as a "software interrupt," and print-screen is requested with interrupt number
+5.
+
+The programs that service the keyboard are also found in the ROM.  The ordinary
+keyboard service program always checks for the "PrtSc" key: when this key is
+pressed, the keyboard program performs an interrupt #5, and the screen is
+printed.  The keyboard service routine uses interrupt #5, but doesn't own it
+exclusively-- any program that knows how to request interrupts can use it.
+
+When BASIC is running, BASIC takes charge of the keyboard, and so the regular
+ROM keyboard program doesn't see the PrtSc key, and BASIC ignores this key.
+This prevents us from using the PrtSc key to print the screen.
+
+So, the print-screen operation is not available in BASIC, ordinarily.  But
+BASIC has the ability to accept and perform machine language subroutines.  If
+we set up a program that will request interrupt 5, then we can CALL it, and
+print the screen.  That is what the BASIC program above does.  
+
+Here's how it works.  Our machine language program consists of only two
+instructions: one to request interrupt five, and the other to return to the
+caller.  The "interrupt" instruction is two bytes long, and the "return" is
+one, for a total of three bytes.  The three POKE statements above create those
+three bytes.  The numeric values 205 and 5 are the interrupt #5 instruction,
+and the value 203 is the return instruction.
+
+There is one messy little problem that occurs whenever machine-language
+programs are used in BASIC-- where to put them.  There is no one clean simple
+way to deal with this problem; it has to be solved differently depending upon
+the size of the computer's memory, and upon what else a BASIC program might do
+with "DEF SEG" related statements.
+
+The example above is set up for a computer with 64K of memory, and places the
+print-screen program in the last 16 bytes of memory.  For another memory size,
+"X" expressed in kilobytes, or "K," this formula will do the same 
+        DEF SEG = X * 64 - 1
+If X is 64K, then this formula works out to 4095, which is the number used in
+the example above.
+    
+If your programs set the "DEF SEG" for any other reason, then it will have to
+be coordinated with its use for the PRINT.SCREEN program, or any other such
+machine language program.  When PRINT.SCREEN is called, DEF SEG must be set to
+the same value used when the program was created with the POKE statements.
+
+
+
+Printer Bit Image Graphics Demonstration 
+by Dave Browning
+
+This program demonstrates a portion of the Epson printer graphics capabilities
+when the printer is connected to an IBM PC.
+
+This program has been tested for an Epson MX-100 which comes with the
+GraftraxPlus option standard.  Although not tested, the program should also 
+run as is for an Epson MX-80 with the Graftrax option.  The program should 
+also run as is for an Epson MX-70.  (The MX-70 has only normal density bit 
+image graphics mode, as opposed to dual selectable modes on the MX-80 with 
+Graftrax or the MX-100, but this program does not utilize the higher density 
+mode.)
+
+The reason for the WIDTH "LPT1:",255 statement in line 120 (use this statement
+as is even if you have an 80 column printer), and for opening the printer
+"LPT1:" as file #1 in line 130 is to suppress the line feed that Basic and
+Basica automatically send after each carriage return (ASCII 13).  Since Basic
+does not check context to distinguish between an actual carriage return and a
+character with the value 13 used for other purposes, it adds a line feed (ASCII
+10) after every character 13 output with a PRINT, PRINT #, PRINT USING, PRINT #
+USING, or WRITE # statement.  The WIDTH #1,255 statement suppresses the
+linefeed normally added to the end of lines also, so the program has to add it
+where needed (the CHR$(10) at the end of line 3000).
+
+This subject is addressed in part in several places in the IBM Basic manual. 
+See the OPEN and WIDTH statements as well as the print and write statements
+mentioned above.  You may test this by removing the OPEN and WIDTH statements
+from the program and changing all PRINT #1 xxxxx statements to LPRINT xxxxx.
+
+If this program still seems to be putting line feeds in strange places, you
+might check your printer switches for proper setting.  Switch SW2-3 on the MX-
+80 and MX-100 can be set to automatically add line feeds within the printer no
+matter what the computer does.  See your printer manual for details of getting
+at and setting the proper switch.
+
+After running the program as is, you may want to experiment with different
+settings of the parameters such as PRTLENGTH.  For MX-100s and MX-80s with 
+GraftraxPlus, changing the 75 in line 2020 to 76 will set the printer to high 
+resolution graphics (twice as many dots per inch).  Those with the MX-80 and 
+MX-100 GraftraxPlus printer manual can now proceed with the excellent 
+tutorials on bit graphics included in it.  Since the manual does not have a lot
+of information on the IBM PC connection, this program was developed to show how
+to overcome the "automatic linefeed" types of problems.
+
+One additional note:  if you stop the program during execution with a control-
+break, the printer may be in the middle of graphics mode and be waiting for
+more graphics characters.  If you then try to RUN the program (with or without
+changes) again, the printer may seem to do weird things until the buffer and
+the program are back in synch.  Everything will be OK if the program runs to
+completion, or if you turn the printer power off momentarily before reRUNning
+the program.
+
+
+100 '*** PRINTER BIT IMAGE GRAPHICS DEMONSTRATION ***
+105 '***    PROVIDED BY DAVE BROWNING 1/10/83    ***
+110 'set up BASIC to suppress automatic line feeds
+120 WIDTH "LPT1:",255
+130 OPEN "LPT1:" AS #1
+140 GOTO 1000
+200 'subroutine to output one character to printer
+210 PRINT #1, CHR$(X);
+220 RETURN
+1000 ' ***  PRINTER TEST PROGRAM  *****
+1010 DEFINT A-Z       'runs faster using integers
+1020 CHRSTART = 0     'first graphics character to print
+1030 CHREND = 255     'last graphics character to print
+1040 PRTLENGTH = 50   'number of times to repeat the
+         graphics char
+1050 PRTLEN1 = PRTLENGTH MOD 256
+        'printer expects two numbers-first remainder
+1060 PRTLEN2 = PRTLENGTH \ 256
+        'then number of "256's"
+2000 FOR GRAFCHAR = CHRSTART TO CHREND 
+        'repeats for graphics characters
+2010 X = 27 : GOSUB 200   'sends <ESC> character
+2020 X = 75 : GOSUB 200 
+        'sends char K to shift printer to graphics
+2040 X = PRTLEN1 : GOSUB 200 
+        'sends n1 (# bit images modulo 256)
+2060 X = PRTLEN2 : GOSUB 200
+        'sends n2 (# bit images times 256)(n2 max is 7)
+2070 FOR I = 1 TO PRTLENGTH 'send same character PRTLENGTH times
+2080   X = GRAFCHAR : GOSUB 200 'send the character
+2090 NEXT I
+3000 PRINT #1, "   X = ";X;CHR$(10);
+         'notes which graphics character was
+3010 'printed, and sends line feed.
+         This flushes the printer buffer and
+3020 'returns the print head to the
+         beginning of the next line.
+3030 NEXT GRAFCHAR  'loop back for next character
+3040 CLOSE #1 'resets the WIDTH statement to default
+3050 END
+
+PC Keyboarding for the Handicapped
+by Mike Todd
+
+A couple of months ago I received a letter from someone I greatly respect. 
+Since he is handicapped, he is unable to press two keys on the keyboard
+simultaneously. He asked if there was a way to create a CTRL, SHIFT, and/or ALT
+lock through the keyboard so that he might be able to do a system reboot, use
+Wordstar (or any other program that requires simultaneous pressing of multiple
+keys), and whatever anyone else can do on a PC.  I mentioned the need at a
+Capital PC general meeting and asked that someone with a little spare time just
+take a look at how it might be done. John Black came to the rescue!  He didn't
+just tell us how to do it but produced a sophisticated program and some really 
+good documentation too! Thank you, John!
+
+The program, called KEYLOC.EXE, along with the source code and documentation,
+will be on the next Capital PC Software Exchange disk ($5 and stamped, self
+addressed mailer to Capital PC Software Exchange, PO Box 6128, Silver Spring,
+MD 20906).  The following is taken from the introduction to John's
+documentation:
+
+    Keyloc is a patch to the BIOS keyboard routine. It modifies the operation
+    of the Alt, Ctrl, Left Shift and Right Shift keys. It allows one finger
+    typing by locking those keys in their shifted state.
+
+    Normally the Ctrl, Alt, Left Shift, and Right Shift keys have to be held
+    down with one finger, while another finger is used to type another key. For
+    example, if a program requires you to enter a ^P, you must hold down the
+    Ctrl key with one finger, then depress the "P" key with another.
+
+    When Keyloc is loaded into memory--this is done in DOS before executing the
+    program--it changes the way these keys operate. To type in a ^P, you first
+    type and release the Ctrl key. This locks the Ctrl key in its shifted
+    state. Next the "P" key is depressed and released.  This enters a ^P.
+    Depressing Ctrl again takes the key from its shifted to unshifted state.
+
+    Keyloc gives an audio signal so the user can tell when he is shifting or
+    unshifting a key. The first time the Ctrl key is depressed, a low tone
+    followed by a high tone is sounded. This signals that the key has been put
+    in the shifted state. The next time the Ctrl key is depressed, a low tone
+    followed by a high tone is sounded. This signals that the key has been
+    returned to the unshifted state.
+
+I've tried John's program in DOS, from within Basic, with a Basic program,
+right now with Volkswriter running, and with Wordstar. I haven't found a single
+bug and the audible tones are separated enough to be useful, at first, but not
+so much that they would become annoying after long hours at the keyboard. As a
+matter of fact, some users who would just like to strike a single key at a time
+may not find the new procedure too hard to accommodate.
+
+
+Some Useful BASIC Function Definitions
+by Harry Foxwell, SigSTAT chairman, Capital PC
+
+Conspicuously missing from IBM Basic are predefined functions for computing the
+maximum and the minimum of two numbers, and a function for converting a
+character string from lowercase to uppercase.
+
+Although it is fairly simple to code these functions with a few lines using IF
+statements, using predefined functions makes the overall program more compact
+and easily readable.
+
+The maximum and minimum of two values can be computed using the following
+functions:
+
+    DEF FNMAX(X,Y) = X*ABS(X>=Y) + Y*ABS(X<Y)
+    DEF FNMIN(X,Y) = X*ABS(X<=Y) + Y*ABS(X>Y)
+
+A function that converts a lowercase letter to its uppercase equivalent is:
+
+    DEF FNUCS$(A$) = CHR$(ASC(A$)+32*(A$>="a" AND A$<="z"))
+
+Each of these function definitions depends upon the fact that the comparison
+operators (<, >, and =) yield a value of 0 when the comparison is FALSE, and
+yield -1 when the comparison is TRUE. These values, expressed simply as the  
+original comparison, may be used in the same way as any other BASIC variable.
+
+
+
+SIG/Access: 
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #28, version v1.1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  BIGTYPE .BAS         CRC = 2E 66
+
+--> FILE:  DDATE   .COM         CRC = EB B1
+
+--> FILE:  DISKMODF.BAS         CRC = 14 9B
+
+--> FILE:  JUMBLE  .BAS         CRC = 61 7D
+
+--> FILE:  PALLETTE.BAS         CRC = 96 2F
+
+--> FILE:  SYSTAT  .COM         CRC = F6 0D
+
+--> FILE:  SPEED411.COM         CRC = 00 00
+
+--> FILE:  TIMING  .BAS         CRC = 1B CC
+
+--> FILE:  HALS    .DOC         CRC = 5D C8
+
+--> FILE:  VDEL    .COM         CRC = 8A D8
+
+--> FILE:  WAIT    .COM         CRC = 28 C8
+
+--> FILE:  GUMUP1  .DOC         CRC = F1 3E
+
+--> FILE:  SD      .COM         CRC = D6 C7
+
+--> FILE:  SYSTAT  .DOC         CRC = 17 58
+
+--> FILE:  SDIR    .EXE         CRC = 1D 51
+
+--> FILE:  CD      .COM         CRC = A5 13
+
+--> FILE:  LF      .COM         CRC = 51 B7
+
+--> FILE:  MEMPEEK .BAS         CRC = 1F 16
+
+--> FILE:  FK      .COM         CRC = 7C A0
+
+--> FILE:  FK      .DOC         CRC = 8C D1
+
+--> FILE:  UNPROT2 .TXT         CRC = 70 EE
+
+--> FILE:  ARTILL  .BAS         CRC = A9 43
+
+--> FILE:  GRAFGE  .BAS         CRC = B4 89
+
+--> FILE:  GRAFGE  .DOC         CRC = C0 8D
+
+--> FILE:  GSDUMP  .BAS         CRC = 54 62
+
+--> FILE:  SQUISH  .EXE         CRC = 7C 35
+
+--> FILE:  SQUISH  .SRC         CRC = 6E 9C
+
+--> FILE:  RESCMD  .BAS         CRC = DF 1B
+
+--> FILE:  RESCMD  .DOC         CRC = D9 79
+
+--> FILE:  RESCMDCK.BAS         CRC = 69 F6
+
+--> FILE:  COLOUR  .DOC         CRC = 7F E4
+
+--> FILE:  CPCPRO  .DOC         CRC = 63 70
+
+--> FILE:  SQUISH  .DOC         CRC = 33 F0
+
+ ---------------------> SUM OF CRCS = 6D E6
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## DISKMODF.BAS
 
+{% raw %}
 ```bas
 100 'diskmodf v1.2
 110 GOTO 280
@@ -530,9 +1177,211 @@ machines:
 1630 LOCATE 2,1:FOR A=BUF TO BUF+511 STEP 24:FOR B=A TO A+23:PRINT HX$(PEEK(B));:NEXT B:PRINT TAB(51);:FOR B=A TO A+23:PRINT AS$(PEEK(B));:NEXT B:PRINT:NEXT A
 1640 LOCATE 23,17:PRINT "                                ";:LOCATE 23,59:PRINT "                ";:RETURN
 ```
+{% endraw %}
+
+## FK.DOC
+
+{% raw %}
+```
+************************************************************************
+  DOCUMENTATION FOR FK: A FUNCTION KEY HANDLER FOR PC-DOS 1.0 and 1.1
+**********************************************************************
+
+I.  Introduction
+
+        This document describes the program FK, a function key handler for
+use under IBM PC-DOS versions 1.0 and 1.1.  The program may not work
+under other versions of DOS.
+
+        The program was developed under a grant from Userview Corporation.
+
+
+II.  Rationale
+
+        Under standard PC-DOS, the ten function keys are not used to their
+full potential.  The keys are used for simple command line editing, and
+several of the functions are duplicated by other keys on the keyboard.
+FK allows you to assign strings up to 24 characters in length to each
+of the function keys, so you can give an entire command or file name
+with a single keypress.
+
+        For those who use the normal PC-DOS command line editing facilities,
+FK moves functions not already duplicated to keys on the cursor moving pad.
+
+
+III.  Using the program
+
+        There are five different actions available with FK.  They all
+begin with the command name 'FK'; of course, the FK program (FK.COM) must be
+available on the selected disk drive when the command is issued.
+
+        The actions are as follows:
+
+        SHOWING THE DEFINITIONS:  You may display the current definitions
+of the ten function keys by giving the command "FK". Control characters
+imbedded in the strings are displayed as ^x (just as they are echoed
+during command line input) except for carriage return (ENTER), which is
+displayed as a leftward-pointing arrow.  Users with a printer may get
+a hardcopy of their definitions by pressing CTRL-PRTSC before giving the
+FK command.
+
+        REDEFINING A KEY:  You may assign a string to one of the function
+keys by giving the command "FK Fn <string>" where n is the number of the
+key to assign (1 thru 10), and <string> is the string of characters you
+wish to get when you press that key.  For example, "FK F1 DIR" would
+assign the directory command "DIR" to function key F1.  You may include
+a carriage return in the string by using the vertical line character (|)
+wherever you want the CR; for example, "FK F1 DIR|" would do the directory
+command immediately upon your pressing F1 (in the previous case, you would
+have to press ENTER yourself after pressing F1).  Keys may only be assigned
+strings of up to 24 characters in length; strings which are too long will
+be truncated without warning.
+
+        SAVING THE DEFINITIONS:  You may save the current definitions of
+the function keys to a disk file for later use (see LOADING below).  To
+do so, give the command "FK SAVE <fname>" where <fname> is the name of
+the file in which to save the definitions.  For example, "FK SAVE MY.KEY"
+would save all current key assignments in the file "MY.KEY".  Any valid
+filename may be used, but the use of the ".KEY" extension is recommended
+for clarity.
+
+        LOADING KEY DEFINITIONS:  You may recover key definitions previously
+saved with "FK SAVE" by typing "FK LOAD <fname>", where <fname> is the
+name of the file containing the key definitions.  You should *only* use
+this command on files which have been created by "FK SAVE"; if you don't,
+FK will probably not accept the file.  The key definitions which are
+automatically loaded with FK when it is first called should be available
+in the file "STD.KEY" on the disk with this document.
+
+        GETTING HELP: You can get a rundown of these command formats by
+typing "FK HELP".
+
+
+IV.  Notes
+
+        Abbreviations: You can use S, L, and H as abbreviations for
+"SAVE", "LOAD", and "HELP", respectively.  For example, you might type
+"FK L STD.KEY" to recover those definitions.
+
+        Warning concerning key files:  Attempting to load key files
+which were not created with "FK SAVE" or which were altered with DEBUG
+or some editor may result in system crashes.
+
+        Command line editing facilities:  As mentioned, the old actions
+assigned to the function keys have been moved to the cursor keypad.
+F1 (copy one char from template) has always been duplicated by the cursor-
+right key.  With FK active, the skip/copy function of F2 is moved to
+the cursor-up key.  Copy-remaining (F3) is moved to the END key.
+Skip/delete (F4) is now assigned to the down-arrow key. Move-displayed (F5)
+has been reassigned to the HOME key.
+
+        F6 was used by DOS to issue the end-of-file mark, ^Z.  The
+standard key definitions leave ^Z assigned to F6, but if you need to
+change this, you can always signal end-of-file by typing CTRL-Z.
+
+
+V. Additions to revision 2 (28 July 1982)
+
+        The following enhancements have been added to FK as of 28 July 1982.
+Thanks to Webb Blackman, Jr. , and Michael Sullivan for suggestions and
+comments.
+
+        * QUIET MODE: To prevent extraneous output during FK processing
+          (for example, the possibly unwanted listing of key definitions
+          during a "load" in an autoexec file), the 'quiet mode' option
+          has been added.  Preceeding any command letter with 'Q' causes
+          most output to be suppressed.  Copyright notices and error
+          messages will be displayed even if quiet mode is requested.
+          Example: "FK QL DEV.KEY" to 'quietly' load the definition file
+          "DEV.KEY".
+
+CHANGES AND REVISIONS:
+
+1) Carriage returns are now displayed as a vertical bar instead of
+   a left arrow. This change was made since the left arrow is a character
+   27 (escape), which many printers use as a "here comes a command"
+   signal.
+
+2) The file name you're using to SAVE your definitions is displayed
+   at the conclusion of a successful SAVE.  No drive or extension
+   spec is displayed, however.
+
+3) The much-demanded FK RESET option is now available.  Typing FK R
+   puts FK asleep until another FK command is issued, at which point
+   it reawakens (unless that is another FK R, in which case FK
+   is awake only a millisecond or so).  Please experiment with this
+   option under several systems (EDIX and VOLKSWRITER come to mind)
+   to make sure it behaves like you want it to.
+
+
+            PATCHING FK FOR NONSTANDARD OPERATING SYSTEMS
+
+     FK  is  designed to lodge itself properly in one of two different
+operating systems. Standard FK can handle DOS 1.00 and DOS  1.10.  For
+any given unusual system (i.e. hard disk, RAM-resident disk, etc.) the
+program  may  not  operate properly and may have to be modified as per
+the following instructions:
+
+     1.  Boot the oddball operating system.
+
+     2.  Using DEBUG, search segment 60 for the following string:
+
+            3C 3E 3D 3D 3F
+
+         The resulting address is the TABLE address.
+
+     3.  Search segment 60 for the following string:
+
+            92 B4 00 CD 16
+
+        The resulting address is the VECTOR address.
+
+     4.  Note that both the TABLE and VECTOR addresses are offsets in
+         segment 60H.  If either of them cannot be found, FK probably
+         cannot be patched to run in this environment.
+
+     5.  DEBUG FK.COM
+
+     6.  In the code segment at location 210 are six bytes which must be
+         patched to allow for the new operating system.  At 210 and 211 are
+         the two "identifier bytes" printed by FK when it signs on
+         (i.e. DOS 1.xx-- xx are the ID bytes).  For example, the RAMDrive
+         version of FK under DOS 1.1 has "1r" as ID bytes.
+
+     7.  The next two bytes (locations 212-213) must contain the TABLE
+         address in normal low - high order.  For example, if the search
+         returned address 0B88 for the TABLE address, one might do an
+         ECS:212 88 0B
+
+     8.  The next two bytes (locations 214-215) must contain the VECTOR
+         address in low - high order, much as in the previous example.
+
+     9.  When the patches have been made, use W to save the new version
+         of FK.COM.  One should, of course, back up the program first
+         in case something went wrong.
+
+     When following this patching procedure, FK will  work  under  the
+desired  operating  system as well as under vanilla DOS 1.10. If it is
+necessary to use something else  besides  1.10,  the  patches  may  be
+performed  at  location  216  as  well, allowing two oddball operating
+systems.
+
+     The author assumes absolutely no responsibility  for  anguish  or
+lost data caused by attempting to patch FK.
+
+KNOWN PATCHES:
+
+for DOS 1.00:                  ecs:210 30 30 18 05 C7 00
+for JEL/JFORMAT:               ecs:210 31 6A 88 0B 95 00
+for JEL/JFORMAT v1.62:         ecs:210 31 6A 88 0D 95 00
+for Microsoft RAMDrive:        ecs:210 31 72 48 06 95 00
+
+```
+{% endraw %}
 
 ## GRAFGE.BAS
 
+{% raw %}
 ```bas
 1 '      *************
 2 '      ** GRAFGEN **
@@ -841,9 +1690,60 @@ machines:
 
 
 ```
+{% endraw %}
+
+## GRAFGE.DOC
+
+{% raw %}
+```
+typ grafge.doc
+1 '      *****************
+2 '      ** GRAFGEN.DOC **
+3 '      *****************
+4 '
+5 '      by Wes Meier
+6 '      70215,1017
+7 '
+8 '      January 28, 1983
+9 '
+10 'This documentation assumes the user has at least 96K of RAM.
+11 '
+12 'The data stored at locations 0000:007C - 0000:007F is an address used by
+13 'BASIC as a pointer to a table used for the definition of the top 128 ASCII
+14 'characters. Once the character set is in memory, this address must be made
+15 'to point to the beginning of the table.
+16 '
+17 'The easiest place to store the table is immediately following the 64K
+18 'segment used by BASIC. The address stored at 0000:0510 - 0000:0511 points
+19 'to the beginning of this segment. The address is stored in the LSB/MSB
+20 'format. If we add 10H to the MSB and 1H to the LSB the result is an
+21 'address pointing to the first byte following BASIC's segment.
+22 '********************************************************************
+23 '  This code should be included in any program using a character set
+24 '  created by GRAFGEN.BAS.
+25 '  Assume the set has been BSAVED as "CHARSET.BIN".
+26 '********************************************************************
+27 DEF SEG=0   'Point to bottom of memory.
+28 POKE &H7C,0 'Zero LSB of Character Table Offset Pointer.
+29 POKE &H7D,0 'Zero LSB of Character Table Offset Pointer.
+30 POKE &H7E,PEEK(&H510)+1     'BASIC's LSB Pointer + 1
+31 POKE &H7F,PEEK(&H511)+&H10  'BASIC's MSB Pointer + 10H
+32 'Now the character set pointers are directed to the first byte following
+33 'the 64K segment used by BASIC.
+34 DEF SEG=256*PEEK(&H7F)+PEEK(&H7E)    'Point to character table segment.
+35 BLOAD "CHARSET.BIN",0        'Load in the table saved by GRAFGEN.BAS.
+36 DEF SEG      'Reset segment pointer to default.
+37 'End of required code.
+38 END 'of GRAFGEN.DOC
+
+
+SIG/Access: 
+```
+{% endraw %}
 
 ## GSDUMP.BAS
 
+{% raw %}
 ```bas
 0 'Prog = -------SCMDUMP-------
 1 'no nonsense Graphics Sideways memory DUMP for C.ITOH 8510 PROWRITER
@@ -853,9 +1753,213 @@ machines:
 30 LPRINT CHR$(29)" "E$"A"STRING$(4,10)E$"T16"E$"N"E$"L010"E$">"CHR$(15)E$"P";
 40 FOR Y=1 TO 80:LPRINT E$"S1000";:FOR X=80 TO 8000 STEP 80:K=X-Y:LPRINT STRING$(5,PEEK(K))STRING$(5,PEEK(K+8192));:NEXT:LPRINT:NEXT:LPRINT CHR$(10)E$"A"STRING$(8,10)CHR$(29)" "E$"<"CHR$(15)E$"N"E$"L000";:WIDTH"LPT1:",80:END
 ```
+{% endraw %}
+
+## GUMUP1.DOC
+
+{% raw %}
+```
+
+***************************************************************************
+			DOCUMENTATION FOR 'GUMUPs':
+		GARBS' UNSUPPORTED MODERATELY USEFUL PROGRAMS
+***************************************************************************
+
+
+I. Introduction
+
+	GUMUPs are small but useful utility programs which have been
+placed in the public domain by J. P. Garbers (me).  They may be distributed
+freely, but may NOT be included in marketed software without my express
+written consent.
+
+	As the acronym implies, I cannot support the GUMUPs.  I have
+tested them thoroughly and use them every day on my own system, but
+I cannot be held liable for any problems they may create for you.
+I am also not responsible for providing updates, fixes, or patches
+for new operating system releases or nonstandard hardware configurations.
+
+	Comments are welcome.  See the appendix for my addresses.
+
+	The GUMUPs were developed under a grant from Userview Corporation.
+
+
+II. OBTAINING GUMUPs
+
+	The GUMUPs may be obtained from a number of sources.  First,
+when Radio Free PC is on the air (as announced in POST IBM on the
+Source), users of the Crosstalk communications package may call the
+system at 404-294-6879 to do a direct download of the files.
+
+	Users of the Source may also obtain the GUMUPs in HEX format
+files.	These files will have to be converted to binary form before
+they are used.	To do this conversion, a program called PC-HEX may
+be obtained from the same account (12)CL0040.  The PC-HEX program
+is in Microsoft BASIC and is self-documenting.
+
+	Users without communications capabilities may wish to send me
+a formatted diskette with a stamped, self-addressed return mailer
+(I will return no diskettes without a stamped return mailer), which I
+will return with the GUMUP programs.  Feel free to send along any nice
+public domain software if you take this route.
+
+	In any case, I would appreciate it if you would drop me a note
+letting me know where you got the programs, and how you like them.
+
+III. LF.COM
+
+	LF is a program which provides a selective directory listing
+sorted by extension and filename.
+
+	INVOKING THE PROGRAM:  LF may be invoked with the same options
+as DIR, i.e. 'LF', 'LF B:', 'LF *.ASM', etc.  However, if either the
+filename or extension is not supplied on the command line, LF will fill
+it in with wildcards; thus, 'LF .ASM' is the same as 'LF *.ASM' and
+will list all the files with the extension '.ASM'.
+
+	LIMITATIONS:  LF has been successfully used on 160K and 320K
+floppy drives.	It should work equally well on any DOS-compatible
+drive, and should be transportable to any MS-DOS system.
+
+
+IV. VDEL.COM
+
+	VDEL is a program which allows selective deletion of files.
+
+	INVOKING THE PROGRAM:  VDEL may be invoked by typing
+'VDEL fname.ext' at the command prompt.  Wildcards may (and usually will)
+be used, i.e. 'VDEL *.ASM'.
+
+	If any matching files are found, VDEL will display the name of
+the file, and ask if it should be deleted.  Pressing 'Y' or 'y' will
+delete the file. Pressing ESC stops the program.  Any other key will
+leave the file alone and continue asking about other matching files.
+
+	I strongly encourage you to use VDEL instead of DEL or ERASE
+when doing wild-card deletions.  It is too easy to accidentally delete
+a file you wanted to keep when using the normal DOS commands.
+
+	LIMITATIONS: VDEL should be transportable to any MS-DOS system.
+
+
+V. FK.COM
+
+	FK is a function key handler for the IBM PC.  Full documentation
+is available in the external document FK.DOC.
+
+
+VI. SYSTAT.COM
+
+	SYSTAT provides you with information about all the disks
+currently accessible to your system.
+
+	INVOKING THE PROGRAM: From DOS command level, type SYSTAT.  No
+arguments are needed.  SYSTAT will report on all drives available on
+your system, showing their capacities, free space, names, and comments.
+
+	Both SYSTAT and CD (see below) make use of .NAM files for disk iden-
+tification.  With EDLIN or any other editor (or with a quick COPY CON DISK.NAM),
+create a file with the extension .NAM.	The file should consist of one
+line describing the contents of the file (i.e. 'communications programs',
+'utility packages', 'BASIC games', etc.)  SYSTAT and CD will display
+the contents of the .NAM file to help you keep track of what's currently in
+your system.  There should only be one .NAM file per diskette.
+
+	LIMITATIONS:  SYSTAT and CHKDSK occasionally disagree about disk
+free space.
+
+	SYSTAT should be compatible with all hard-disk and RAM-disk systems,
+and is transportable to any MS-DOS system.
+
+
+VII.  CD.COM
+
+	CD logs a new drive (or remains on the current one), displays
+the drive's name and description, and presents a sorted directory.
+
+	INVOKING THE PROGRAM:  From DOS command level, type CD x: where
+x: is the drive you wish to use.  Normally, you would just type x: to
+do this.  CD will connect you to the drive, display the disk's logical
+name and description (see discussion of .NAM files above), and
+display the disk's directory sorted by extension and file name.
+
+	LIMITATIONS:  CD should be compatible with all MS-DOS systems.
+
+VIII.  WAIT.COM
+
+	WAIT is only useful in batch files.  It takes about three
+seconds to count down from three before continuing.  Thus, it allows
+a user to interrupt a batch file (if, perhaps, an error occurred at
+one stage in the batch processing), but will not require attention
+during unattended operation (unlike the standard DOS command PAUSE,
+which will wait forever for a keypress).
+
+APPENDIX
+
+	I may be reached Source mail at CL0040, or via U.S. mail at
+
+	Jeffrey P. Garbers
+	890E Clubhouse Circle West
+	Decatur, GA 30032
+
+	Upon receiving this document, please do me a favor and
+and send me a note containing your name, address, and where you got the
+programs. Monetary contributions will not be refused, but are not solicited;
+comments, suggestions, criticisms, and contributions of quality public-domain
+software will be especially appreciated.
+
+
+
+
+
+
+SIG/Access:
+
+```
+{% endraw %}
+
+## HALS.DOC
+
+{% raw %}
+```
+DDATE.COM makes it easy to set the date when starting up MS/DOS.
+	Just include it in your AUTOEXEC.BAT file and it will
+	remember the last date you set on disk so that all you
+	have to do is change the day with the cursor right key
+	(or advance by a month with the cursor up key or from
+	Friday to Monday with the (week)End key).  If you overshoot,
+	use the cursor left or down keys to go back.  When the date
+	is right, press ENTER.
+
+	DDATE should reside on a writable drive, preferably the 
+	default drive, for proper operation.
+
+
+DISKMODF.BAS is an improved version of the disk sector modifier.
+	I've added retries and sped up the interaction.
+
+TIMING.BAS accurately times the execution of short BASIC programs
+	by interval averaging over 10 seconds.  
+
+SPEED411.COM changes the diskette drive step rate to 4 ms which has
+	worked fine for me but I make no guarantees.  (Test
+	it first on your drives by doing some formats and copies.)
+
+BIGTYPE.BAS is for entertaining the children.  They especially like
+	control-A's.
+
+JUMBLE.BAS permutes jumble words when your brain gets stuck.
+
+PALLETTE.BAS displays the colors possible in 160 by 200 color graphics
+	(especially good with a composite monitor).  To exit and return
+	the screen to normal, press Break then F9 then F10 (SCREEN 0,0,0).
+
+```
+{% endraw %}
 
 ## JUMBLE.BAS
 
+{% raw %}
 ```bas
 100 'jumble - solves jumbles
 120 'This is 10 lines in PASCAL but the EXE file is huge!
@@ -884,9 +1988,11 @@ machines:
 1700 A$(I)=MID$(A$(I),2)+LEFT$(A$(I),1)
 1800 GOTO 1100
 ```
+{% endraw %}
 
 ## MEMPEEK.BAS
 
+{% raw %}
 ```bas
 1000 'MEMPEEK.BAS - John Schnell - Nov. 1982...Used by permission of N.Y.P.C.
 1001 'From MICROCOMPUTING, March 1983, pg 18.
@@ -979,9 +2085,11 @@ machines:
 1820 GOTO 1020
 1830 END
 ```
+{% endraw %}
 
 ## PALLETTE.BAS
 
+{% raw %}
 ```bas
 10 'Pallette - 7 FEB 83 - Hal Sampson - (408) 866-7840
 20 'Demonstrates Pallette of >64 colors available in 160 X 200 composite mode
@@ -1006,9 +2114,11 @@ machines:
 210 A=INP(33):OUT 33,A AND 254  'turn on timer interrupt
 220 STOP
 ```
+{% endraw %}
 
 ## RESCMD.BAS
 
+{% raw %}
 ```bas
 100 '
 200 ' COMMAND.COM   MODIFICATION TRANSFER PROGRAM
@@ -1093,9 +2203,139 @@ machines:
 5100 DATA  4053, 200, 161, 4054, 5, 2, 4055, 192, 0
 5110 DATA  4056, 0, 72
 ```
+{% endraw %}
+
+## RESCMD.DOC
+
+{% raw %}
+```
+
+			  RESIDENT COMMAND INTERPRETER
+
+				  John Chapman
+			       844 S. Madison St.
+			    Hinsdale, Illinois 60521
+
+			     COMPUSERV ID 70205,1217
+
+	DISCLAIMER
+
+	This  modification is provided without warranty of any kind.  The
+	author	assumes no liability for failure of this code to  perform
+	in  any  environment.  The  user is  completely  responsible  for
+	determining   the  applicability  of  this  modification   to	a
+	particular environment.
+
+	LIMITATIONS
+
+	This modification causes the transient portion of COMMAND.COM  to
+	be  made resident at system IPL.   Re-booting the system with  an
+	unmodified   COMMAND.COM   is  the  only  way  to   remove   this
+	modification.  This  modification  alters  the	starting  segment
+	[paragraph] address available to programs, lowering the amount of
+	storage  available  by 4288 bytes [for PC/DOS 1.1 with	a  normal
+	load   segment	address  of  02C1].    The  starting  segment  of
+	COMMAND.COM can be found at location 0000:9E,  and should display
+	[debug] as	 0000:009E 2C 01
+
+	CONTENTS
+
+	This   modification,   supplied  as  a	BASIC	program    called
+	"RESCMD.COM"  (Or  RESCMDCK.BAS  for realtime clock users)  which
+	will read in an UNMODIFIED DOS 1.1 COMMAND.COM and produce a  new
+	file, "COMMAND.CMD" which has all the mods installed. This set of
+	modifications  alters  the  IBM  Personal  Computer  DOS  command
+	interpreter  (COMMAND.COM)  to remain entirely	resident,  rather
+	than  be half resident and half transient.  The whole purpose  of
+	this  modification is to suppress 99% of the occurrances  of  the
+	refresh   of  the  transient  portion.	 This  will  remove   the
+	requirement  to  ALWAYS have a disk with a valid  COMMAND.COM  in
+	drive  A.  This  change has been especially useful with  multiple
+	DISKCOPY  type activities,  and with those  application  packages
+	which  use all of memory,  including the top 4880 bytes where the
+	transient COMMAND.COM resides.
+
+	The  modification  merely omits the relocation of  the	transient
+	portion of COMMAND.COM, and sets the first free paragraph address
+	to  be	the area behind the transient routines,  rather than  the
+	small "resident" portion.
+
+
+
+
+
+
+
+					1
+
+
+
+	PC/DOS Initialization Overview
+
+	The  IBM  Personal  Computer DOS is brought in from disk  by  the
+	bootstrap loader read from track 0 of drive A by the ROM routines
+	after the initial hardware tests are performed at  power-on,  and
+	subsequently  when  ALT-CTRL-DEL re-boot is  requested.  In  both
+	cases, the following sequence occurs:
+
+	     1) The "boot" program is read from track 0.
+
+	     2) It reads IBMBIO.COM  from  a  specific location
+
+	     3) IBMBIO is given control and builds the environmental
+		control blocks, initializes peripherals, and then
+		reads IBMDOS.COM from its specific location on disk
+
+	     4) IBMDOS is passed control. After initializing the
+		remainder of the operating system, IBMDOS loads
+		the COMMAND.COM file [the command interpreter], and
+		passes it control
+
+	     5) The command interpreter immediately relocates all of the
+		main line code for command prompting,  parsing,  and  the
+		code which supports the resident commands to the high end
+		of memory, where it can be more easily destroyed by
+		wandering programs.
+
+	     6) Resident COMMAND.COM will now [pretend to] detect a
+		checksum error in the transient portion of itself,
+		immediately causing a Re-load from disk, thus setting
+		the tone for a long and tedious interaction, interrupted
+		frequently by disk I/O and requests for a DOS disk
+		in the default drive.
+
+
+
+	REAL-TIME CLOCK VERSION
+
+	An   alternate	version  of  the  modification	is  supplied   as
+	"RESCMDCK.BAS".   This version REQUIRES THE PRESENCE OF A  CLOCK.
+	The  DOS  DATE	and TIME commands ARE DISABLED by  this  version,
+	requiring the user to employ the software provided with the clock
+	card  to access date and time.	 The space formerly used by  DATE
+	and TIME is reused for three new RESIDENT commands,  BEEP,  PAGE,
+	and CLS.  PAGE causes the printer (LPT1:) to skip to top-of form.
+	CLS clears the active display.	BEEP causes a warbling tone to be
+	produced.
+
+	[The DOS 1.10 command  DEL  will  not  be  recognized however the
+	function remains implemented under the ERASE command.]
+
+
+
+
+
+
+
+
+					2
+
+```
+{% endraw %}
 
 ## RESCMDCK.BAS
 
+{% raw %}
 ```bas
 50 '
 100 '
@@ -1237,9 +2477,173 @@ machines:
 5660 DATA  4949, 84, 80, 4950, 73, 65, 4951, 77, 71
 5670 DATA  4954, 139, 248, 4955, 10, 9
 ```
+{% endraw %}
+
+## SQUISH.DOC
+
+{% raw %}
+```
+		SS SS SS SS SS SS SS SS SS SS SS
+		SS			      SS
+		SS	  IBM PC Basic	      SS
+		SS	    "Squish"          SS
+		SS   Author: Dave Archibald   SS
+		SS Translation: Alan J. Zett  SS
+		SS    Copyright (c) 1982      SS
+		SS SoftSide Publications, Inc SS
+		SS			      SS
+		SS SS SS SS SS SS SS SS SS SS SS
+"Squish" is a utility program for the IBM PC with 32K,
+color/graphics adapter, 1 disk drive, and Basic.
+
+(The following is condensed from SoftSide magazine, issue no. 34.)
+
+     Programmers tend to use quite a few REMarks when
+programming, add extra spaces to make listings more readable, as
+well as putting only a few statements on each line.  The result
+is a program that is easier to read and debug, but not very space
+or memory efficient.  The ideal utility would remove extra spaces
+and REMs, and combine lines, when possible without altering the
+structure of the BASIC program.
+     Enter the TRS-80 program Squish...if only it were translated
+to the IBM PC.	We've done so, and it is presented here for the
+benefit of all our IBM subscribers.
+
+TO USE SQUISH:
+     First LOAD the program you wish to pack.  After it is
+loaded, SAVE it with the ASCII option to a new file.  For example:
+LOAD "MYPROG.BAS" and then reSAVE it as "MYPROG.ASC",A.  After
+the program has been saved with the ASCII option, LOAD in
+"Squish" and type RUN.
+     Answer the first question with the name of the file saved
+with the ASCII option ("MYPROG.ASC" in the example above).
+     You will then be given a series of options.  You can remove
+extra spaces, delete REMarks, and combine lines.  The fourth
+option gives you the ability to protect a line or group of lines
+from being "Squished."  Lines entered under this option are
+totally ignored by "Squish."
+     "Squish" will then read in the program to check for lines
+that are referenced and proceed to work on it.	The display will
+update constantly to show, in color (or monochrome), what
+"Squish" is doing, and where.
+     When "Squish" is done, it will allow you to enter the
+"Squished" program for examination.  I suggest you then do a
+quick RENUMber and reSAVE the program under another filename.
+     When you are finished, you will have a neatly renumbered
+program that is not only much shorter than the original (usually
+by a few K), but will execute faster.  All in all, "Squish" is
+quite a useful utility.
+
+VARIABLES;
+     A: Temporary numeric storage.
+     A!: Temporary numeric storage.
+     A$: Current program line being Squished.
+     C$: Contains lines that have been combined.
+     D: Length of a reserved word being searched for.
+     DS: The maximum number of user protected lines.
+     DT: Set to 1 if current line contains a DATA statement.
+     G1 - G6: A position in A$ at which INSTR starts searching.
+     HH: Miscellaneous.
+     I$: Name of a DEF FN to convert a string input into a single upper
+	       case letter.
+     IP$: Set to "Y" if REM statements are to be deleted.
+     J$: Storage for A$ as it is being reconstructed.
+     LN: Current line number being processed.
+     L$, L1$: Current character of A$ being processed.
+     N$: Set to STR$(LN).
+     P: Set to 1 the first time a quote is encountered in a PRINT
+	       statement.  Set to 0 when second quote or end of
+	       line is encountered.  While P equals 1, all
+	       compression functions are cancelled.
+     PJ: Points to the current line in PRO(*) being tested.
+     PP: Set to 1 minus the location of the first character in a
+	       program line following the line number.
+     PV: Number of protected lines entered.
+     PRO(*): Optional protected line numbers specified by user.
+     Q$: Used in an INKEY$ loop.
+     R: Number of line numbers referenced in REF(*).
+     RD: Total number of REM statements deleted.
+     RE: Total number of lines combined.
+     REF(*): Number of program lines that can be referenced.
+     S,S1: Miscellaneous.  Used in sort routine.
+     SD: Total number of spaces deleted.
+     SQ$: SAVE filename for Squished program.
+     SV$: SAVE filename for Squished program.
+     T,T1-T2: Miscellaneous.
+     V$: The current program line stripped of its line number.
+     X: Set equal to PP.
+     XC$: Set to "Y" if lines are to be combined.
+     XS$: Set to "Y" if extra spaces are to be deleted.
+     XP$: Set to "Y" if user wishes to protect lines.
+
+
+2/9/83 Patches, enhancements, etc. by Herb Shear
+
+The R pointer can no longer lag behind allowing referenced REM and '
+  statements to be deleted.
+Trailing ' no longer added on nonnull referenced lines.
+RESTORE & RETURN references to a line now protect the line.
+Constructs like X=IGOTO+35 no longer protects line 35.
+Indentation was preserved even when combining.
+The deblanking tests were extended to close up constructs such as
+  A( I ),  etc.
+Goofs in naming the input file are now handled in a friendly fashion
+  instead of repeating the entire input session over again.
+
+      Users should take note of the instructions to use SAVE"-----",A
+files as input.  Squish is tuned to the interpreter's output which is a
+subset of valid input forms.  Lowercase, blanks preceding line numbers
+and `GO TO xxx' are not handled properly by Squish.
+
+3/7/83 Patches etc.
+  Line 185:  Variable G5  corrected to G8.
+  Line 210:  Added  OR L$=")"  to the IF conditions.
+  Added test for ERL=
+  Fixed erronous line numbers from use of VAL(A$)
+  All integer variables, less time consuming display antics, compiler ready.
+
+```
+{% endraw %}
+
+## SYSTAT.DOC
+
+{% raw %}
+```
+SYSTAT.COM.......Contributed by Jeff Garber.. 10/7/82
+
+This program when executed from DOS will display on your
+screen  the capactity of each drive and the free space
+on each. Also if you have placed on each disk an ASCII
+file with the extension of .NAM, will display the Name
+you have given the disk and a comment about the disk...
+
+
+A>SYSTAT  (this is what you get when you type this)
+
+MS-DOS Systat version 1.1       8 October 1982 4:50AM
+
+Drive   Name      Capacity    Free  Comments
+-----   ----      --------    ----  --------
+ A:     AHOST         156K     12K  HOSTCOMM Master disk
+ B:     BHOST         156K     69K  HOSTCOMM B drive general files
+ C:     CHOST         156K      5K  HOSTCOMM C drive PC-TALK & additions
+ D:     DHOST         156K     28K  HOSTCOMM D drive files
+
+
+System Memory:    256K              Available memory:  212K
+
+The Name field is the file name I placed on each disk and
+each had the extension of .NAM (ie. AHOST.NAM was on drive A.)
+The comments were in that file as line 1.....
+
+
+
+```
+{% endraw %}
 
 ## TIMING.BAS
 
+{% raw %}
 ```bas
 1 'TIMING - times statements accurately by interval averaging - Hal Sampson
 2 SZ$="00:00:01":FZ$="00:00:11":QZ$=TIME$:TIME$="00":SOUND 37,1:SOUND 37,1
@@ -1248,6 +2652,40 @@ machines:
 65527 WEND
 65528 PRINT USING "##.###";10000/IZ%-5.2005;:PRINT " ms":TIME$=QZ$
 ```
+{% endraw %}
+
+## UNPROT2.TXT
+
+{% raw %}
+```
+      UNPROTECTING BASIC PROGRAMS SAVED WITH THE ,P OPTION
+
+	 The following is a very simple anywhere, any time
+method for unprotecting BASIC programs which have been saved
+with the ,P option.  The principle of this method is to
+force a zero byte into offset 1124 of BASIC's default
+segement.  Loading a protected program disables immediate
+mode pokes however the BLOAD function will do the job.	This
+requires a compatable file readily generated with BSAVE.  In
+turn, this requires a zero byte somewhere to save.  The best
+place to get that byte is from offset 1124 before loading
+the protected program.	This means that the BSAVE file
+header will cause BLOAD to default to that load address.
+Thus the technique is as follows:
+
+	 BASIC[A]
+	 BSAVE "unpro",1124,1
+	 LOAD "filespec of protected program
+	 BLOAD "unpro"
+
+	 If you write 1124 on the back of your driver's
+license you'll be able to deal with problems in protected
+programs any time, any place.  There have been sporatic
+cases were LISTing continues past the lines of the protected
+program on into prior program residue in memory.
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

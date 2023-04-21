@@ -14,6 +14,40 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## README.DOC
+
+{% raw %}
+```
+Program: Crayon Box
+Version: 2.0
+Requirements: EGA or VGA graphics, MicroSoft compatible mouse
+Author: Philip P. Kapusta, P.O. Box 5423, Falmouth, Va. 22403 USA
+Registration: $ 9.50
+
+Short description: A coloring and sketch book, plus a math,
+counting and color quiz all rolled into one program! Fun and
+educational. Young children will love it!
+
+Long description:
+Crayon Box is a computer coloring and sketch book and learning tool for 
+young children.  Over 450 different colors and patterns can be used to 
+paint different nature scene drawings, or drawings that the child 
+creates.  In addition, Crayon Box tests the child's math,  counting, 
+and color identification skills. The math feature displays large 1" 
+high numbers and prompts the child for answers.  10 different skill 
+levels from easy (2+3=?) to difficult (45x13=?). The counting and color  
+identification feature displays a screen of randomly numbered and 
+randomly colored marbles.  The child must identify and count the number 
+of each group when prompted. Spirographs can be created which can 
+likewise be painted on the screen.  Very easy user interface (with 
+large colorful point and click buttons) makes Crayon Box simple and fun 
+to use.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3144
 

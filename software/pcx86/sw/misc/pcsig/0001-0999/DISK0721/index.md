@@ -45,6 +45,7 @@ machines:
 
 ## DUNGEON.BAS
 
+{% raw %}
 ```bas
 1 RANDOMIZE VAL(RIGHT$(TIME$,2))
 2 DIM MAP(100,6)
@@ -547,9 +548,38 @@ machines:
 60000 WIDTH 80:CLS:KEY OFF:LOCATE 5,1:PRINT"               T H E   L O R D  O F  T H E  U N D E R L A N D"
 60001 GOTO 90
 ```
+{% endraw %}
+
+## FILES721.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk no 721   "Lord of the Underland" by Justin Langseth             V1
+------------------------------------------------------------------------
+Here is the second prize winner in PC-SIG's "Write an Adventure
+Module" contest. The adventure contained on this disk must be used in
+conjunction with the main adventure program on disk #297 in our
+library.
+ 
+DUNGEON  BAS  Main dungeon module
+EAMON    ???  Data file (6 files)
+???????? PIC  Picture data file (2 files)
+RESUME   BAS  Sub-program
+ROOM     NAM  Data file
+UNDERLND DOC  Documentation file
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## RESUME.BAS
 
+{% raw %}
 ```bas
 1000 REM  Go on and Adventure
 1001 REM
@@ -595,6 +625,80 @@ machines:
 30670 NEXT I
 30680 RETURN
 ```
+{% endraw %}
+
+## UNDERLND.DOC
+
+{% raw %}
+```
+
+
+             A MODULE TO THE EAMON ADVENTURE GAME SYSTEM...
+
+
+
+
+
+                        The Lord of the Underland
+
+
+                           by Justin Langseth
+
+
+
+
+
+For use on IBM PC and compatable systems...
+
+
+
+
+
+TO START:
+Use the EAMON master disk and go to the Main Hall. Use the (1) option
+from there.  When prompted, place the "Lord of the Underland" disk
+in the drive. From there, you will get a title page if you gave a
+graphics moniter. From there, refer to your EAMON manual.
+
+SPECIAL COMMANDS:
+These commands are not covered in the EAMON manual:
+
+SAVE - To save games...
+PLAY - Restores games...
+
+NOTE: To restore games, from DOS type BASICA/S:256. When you get into
+basica, put the "Lord of the Underland" disk in the drive and type:
+RUN RESUME.BAS. When you get into the game, user the PLAY command right
+away to restore game...
+
+FUNCTION KEYS:
+The bottom of the screen contains a list of the function keys and
+what they do. For example, if you want to go north, you could simply
+press F1.
+
+ADDRESS:
+If you find this module enjoyable, send a contribution to:
+
+Justin Langseth
+12 Thirteenth Avenue
+Warwick, RI 02886-8428
+
+If you have a problem or question with this module, you can call me
+weekdays 5-7PM (EST-Eastern Standard Time) and weekends 11AM-7PM (EST)
+PLEASE- Rember that I am in Eastern Standard Time. (401)738-4347
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

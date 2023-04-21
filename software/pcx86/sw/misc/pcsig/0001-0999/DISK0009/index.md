@@ -93,6 +93,7 @@ machines:
 
 ## ACATALOG.BAS
 
+{% raw %}
 ```bas
 1000 PROG1$="        A C A T A L O G        "
 1010 REV$ = "          Rev: 830122          "
@@ -202,9 +203,11 @@ machines:
 2050 FIN=I:RESUME 1780
 2060 END
 ```
+{% endraw %}
 
 ## ASCICHAR.BAS
 
+{% raw %}
 ```bas
 1000 '"ASCICHAR" Displays or prints ascii characters
 1010 ' By Robert Hamilton
@@ -265,9 +268,11 @@ machines:
 1550 IF PRINTER=1 THEN CLS:LOCATE 20,1:COLOR 6,0:PRINT"DONE":PRINT #1,CHR$(12);
 1560 CLOSE #1:END
 ```
+{% endraw %}
 
 ## ASCII.BAS
 
+{% raw %}
 ```bas
 1000 '"ASCII" displays characters in ascii order
 1010 'REV:830120  By Robert Hamilton
@@ -286,9 +291,11 @@ machines:
 1140 K$=INKEY$:IF K$="" THEN 1140
 1150 COLOR 6,0:KEY ON:END
 ```
+{% endraw %}
 
 ## AUTOINST.BAS
 
+{% raw %}
 ```bas
 1000 PROG1$="A U T O I N S T"
 1010 REV$ = "  Rev: 830122  "'By Robert Hamilton
@@ -341,9 +348,11 @@ machines:
 1480 PR$=STRING$(35,10):LPRINT PR$:RETURN
 1490 END
 ```
+{% endraw %}
 
 ## AUTOPEEK.BAS
 
+{% raw %}
 ```bas
 1000 NM$="A U T O P E E K"' A program to peek at a location in memory
 1010 REV$="Rev: 830120"'By Robert Hamilton
@@ -367,9 +376,11 @@ machines:
 1190 DEF SEG=64:POKE 23,0:SOUND 500,5
 1200 COLOR 6,0:ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## AUTOST.BAS
 
+{% raw %}
 ```bas
 1000 '"AUTOST" Loads keys, Sets Date & Time if not set by battery clock,
 1010 'Displays Disk ID & File Directory and RUNS Program
@@ -525,9 +536,11 @@ machines:
 2510   NEXT:RETURN
 2520 END
 ```
+{% endraw %}
 
 ## CHECKOUT.BAS
 
+{% raw %}
 ```bas
 1000 '"CHECKOUT" Test output ports, peripherals and handshake
 1010 REV$="830115"'By Robert Hamilton
@@ -684,9 +697,11 @@ machines:
 2520 IF K$="" THEN 2510
 2530 C$="":D$="":COL$="40":GOTO 1320
 ```
+{% endraw %}
 
 ## COLORSET.BAS
 
+{% raw %}
 ```bas
 1000 '"COLORSET" A Program to test color attributes in Basic
 1010 'Requires Color Graphics Board and Color Monitor
@@ -744,9 +759,128 @@ machines:
 1530 DEF SEG=0:POKE &H410,(PEEK(&H410) OR &H30):SCREEN 0:WIDTH 80
 1540 LOCATE 24,1,1,12,13:RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #9, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ACATALOG.BAS         CRC = 9A 65
+
+--> FILE:  ASCICHAR.BAS         CRC = 43 87
+
+--> FILE:  ASCII   .BAS         CRC = 4C 5E
+
+--> FILE:  AUTOINST.BAS         CRC = A3 38
+
+--> FILE:  AUTOPEEK.BAS         CRC = 17 47
+
+--> FILE:  AUTOST  .BAS         CRC = FD C6
+
+--> FILE:  CHECKOUT.BAS         CRC = 98 B6
+
+--> FILE:  COLORSET.BAS         CRC = A9 87
+
+--> FILE:  KEYSBAS .BAS         CRC = CA E6
+
+--> FILE:  KEYSMP  .BAS         CRC = 00 87
+
+--> FILE:  LONGZONE.BAS         CRC = D0 FB
+
+--> FILE:  MENU    .BAS         CRC = 01 09
+
+--> FILE:  MINIPROG.BAS         CRC = 7C D7
+
+--> FILE:  MODULO  .BAS         CRC = E4 2F
+
+--> FILE:  MONOSET .BAS         CRC = ED A0
+
+--> FILE:  NUMVERT .BAS         CRC = 4C 23
+
+--> FILE:  OPKEYS  .BAS         CRC = F1 C4
+
+--> FILE:  PAYMENT .BAS         CRC = 0D 45
+
+--> FILE:  PEEK    .BAS         CRC = 68 1A
+
+--> FILE:  Q       .BAS         CRC = 5D CB
+
+--> FILE:  REAL$   .BAS         CRC = 35 AC
+
+--> FILE:  SYS     .BAS         CRC = 41 57
+
+--> FILE:  TIME    .BAS         CRC = 1C 03
+
+--> FILE:  !       .BAT         CRC = 00 00
+
+--> FILE:  AUTOEXEC.BAT         CRC = 00 00
+
+--> FILE:  STARTUP .BAT         CRC = 00 00
+
+--> FILE:  UPDATE  .BAT         CRC = 00 00
+
+--> FILE:  2COLOR  .COM         CRC = 00 00
+
+--> FILE:  2MONO   .COM         CRC = 00 00
+
+--> FILE:  DISKID  .REV         CRC = 17 51
+
+--> FILE:  2COLOR  .SYS         CRC = AE 02
+
+--> FILE:  2MONO   .SYS         CRC = 62 9C
+
+--> FILE:  INDEX   .DOC         CRC = F5 D2
+
+--> FILE:  MDM7I   .COM         CRC = A2 B4
+
+--> FILE:  MDMIBM  .ASM         CRC = 82 79
+
+--> FILE:  MDM7    .DOC         CRC = A1 9F
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+--> FILE:  CRCK4   .CPM         CRC = B8 F5
+
+--> FILE:  LOOK    .COM         CRC = 45 7F
+
+--> FILE:  FIND    .COM         CRC = A2 2C
+
+--> FILE:  WASH    .COM         CRC = 31 0F
+
+--> FILE:  WASH    .DOC         CRC = 76 E7
+
+--> FILE:  SQUISH  .BAS         CRC = 23 88
+
+--> FILE:  SQUISH  .DOC         CRC = D5 F7
+
+ ---------------------> SUM OF CRCS = 98 BE
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## KEYSBAS.BAS
 
+{% raw %}
 ```bas
 1000 PROG1$=" K E Y S B A S "
 1010 REV$ = "  Rev: 830120  "'By Robert Hamilton
@@ -807,9 +941,11 @@ machines:
 1560 PR$=STRING$(33,10):LPRINT PR$:LPRINT CHR$(18);CHR$(27)+CHR$(72):RETURN
 1570 END
 ```
+{% endraw %}
 
 ## KEYSMP.BAS
 
+{% raw %}
 ```bas
 1000 PROG1$="  K E Y S M P  "
 1010 REV$ = "  Rev: 830120  "'By Robert Hamilton
@@ -864,9 +1000,11 @@ machines:
 1500 PR$=STRING$(33,10):LPRINT PR$:LPRINT CHR$(18);CHR$(27)+CHR$(72):RETURN
 1510 END
 ```
+{% endraw %}
 
 ## LONGZONE.BAS
 
+{% raw %}
 ```bas
 1000 '"LONGZONE" Converts a time to local & GMV time
 1010 ' By Robert Hamilton
@@ -939,16 +1077,493 @@ machines:
 1680 END
 1690 PRINT UP$;CL$;:LOCATE ,1:RETURN
 ```
+{% endraw %}
+
+## MDM7.DOC
+
+{% raw %}
+```
+              CP/M MODEM PROGRAM DOCUMENTATION
+	    by Mark M. Zeiger and James K. Mills
+			  11/04/80
+	    ( updated for "portable" version by BRK )
+
+This  program  uses  the  file transfer routines  written  by  Ward 
+Christensen  in his CP/M file transfer program (V2.0 as of  8/6/79) 
+and  is  compatable with his program in single file transfer  mode. 
+Multi-file transfers are only possible between two systems  running 
+the program described below.
+
+This program has two functions:
+
+        1.  Communication
+        2.  Program transfer
+
+
+COMMUNICATIONS
+
+The program may emulate a terminal or echo data back to sender (act
+as a computer).
+
+Terminal Mode  -  'T' Option
+
+        The  terminal mode may be called with or without a file  name. 
+        If  a  file  is  specified (it should be  a  new  file),  then 
+        anything  received  by the modem may be saved  in  memory  and 
+        later  written on disk.  The save feature is toggled ON/OFF by 
+        Control-Y.  A colon  (:) will be printed at the  beginning  of
+        each line when memory save is active.  The  colon will  not be
+        transmitted over the modem nor will it be saved in memory.
+
+        If  a  file  is not specified,  then memory save  can  not  be 
+        activated.
+
+        If  the memory buffer is full (the buffer is from the  top  of 
+        the program to the top of the segment ),   the  contents  are 
+        automatically  written  to  disk  (but the  file  is  not  yet 
+        closed).  Communications  may  then continue with  the  buffer 
+        reinitialized.  The  computer with which you are communicating 
+        must  accept  the  X-ON and X-OFF  (Control-Q  and  Control-S) 
+        conventions or data will be lost.
+
+        When  communications are over,  use Control-E to exit from the 
+        Terminal  mode and enter the Menu.  The file to which you  are 
+        writing  must then be closed by using the  'WRT'  command.  If 
+        this  is  not done,  all data will be lost.  I decided not  to 
+        close  the file automatically since there will be  times  when 
+        you leave terminal mode and then decide to re-enter.  This may 
+        be done while in the Menu by using the 'RET' command.  You may 
+        re-enter Terminal mode and save in the same file as many times 
+        as  you wish as long as you have not closed the file with  the 
+        'WRT' command.
+
+        While  in  Terminal  mode,  Control-T will  put  you  in  File 
+        Transfer mode.  This will allow you to send the contents of an 
+        ASCII file over the modem. This routine does no error checking 
+        and  there are no protocols specified between this program and 
+        the  receiving computer other than that it should be ready  to 
+        receive  data  via  the  modem.   Control-X  will  cancel  the 
+        transfer.
+
+
+Computer mode - 'E' Option
+
+        This  mode  echos data received by other  computer.  Only  one 
+        computer  may be in this mode at one time.  There is  no  save 
+        feature  in this mode.  Useful if you wish to communicate with 
+        somebody running the terminal portion of the program.
+
+File transfer - 'S' and 'R' Options
+
+        These  features  are  the same as in the  CP/M  Modem  program 
+        written by Ward Christensen except that upon completion of the 
+        transfer, control returns to the Menu unless the secondary 'T' 
+        option has been selected.  In the latter case, control returns 
+        to Terminal mode.  Remember that if you are operating a remote 
+        computer   using   a  timesharing  program   (such   as   Ward 
+        Christensen's "BYE"),  the remote should be instructed to send 
+        or  receive  in  the  quiet (Q) mode as  a  secondary  option. 
+        Examples  of  commands for sending and  receiving  are  listed 
+        below.  You may also have to use the  quiet  mode  when  using
+        direct computer to computer  communication  at  speeds  higher
+        about  2400 baud because the console listing speed is too slow.
+
+        The transmission protocol involves sending data in packets of
+        about 128 bytes along with an 8 bit checksum.  The receiving
+        system recomputes the checksum and compares it to one received.
+        If the checksums agree it sends back an acknowledgement character
+        and the sending system sends the next packet.  If the checksums
+        do not match, a negative acknowledge is sent and the sending
+        system automatically sends the packet again ( it will retry
+        at most 10 times before giving up ).
+
+Multi-file transfers
+
+        Using  the B (batch) secondary option,  more than one file and 
+        ambiguous filenames may be transferred. To send files, use the 
+        primary  option  "S" and the secondary option "B" (along  with 
+        any  other  secondary options and baudrate).  To  receive  the 
+        files  being  sent,  use the "R" primary option  and  the  "B" 
+        secondary  option.  Files may not be named since filenames are 
+        sent by the sending program, but a disk drive may be specified 
+        (or else the files are written to the default drive).
+
+Backup option
+
+        There  is  a byte at the beginning of the program (106H)  that 
+        will  create a backup file if a file on the disk has the  same 
+        name  as the file being received in multi-file  transfer  (see 
+        MODEM.SET). If this byte is set to 0FFH, a backup file will be 
+        created.  If  it is zero the file on the disk will be  deleted 
+        before the new file is received. If you are running CP/M 2 and 
+        a file on the disk is designated R/O or SYS,  a backup will be 
+        created whether the byte at 106H is set or not.
+
+        Be  careful - if you are running CP/M 1 and the drive on which 
+        you  are receiving has an R/O file with the same name  created 
+        by CP/M 2,  the R/O file can not be accessed (found,  changed, 
+        erased,  etc.)  by CP/M 1.  You will therefore have two  files 
+        with  the same name when you are running CP/M 2.  To fix  this 
+        problem, use CP/M 1 to change the name of the file that is not 
+        R/O. Then use CP/M 2 to do what you want with the R/O file.
+
+        Examples:   ( note in the examples that follow, Ignore the
+    		      secondary  O  or  A commands as the portable
+     		      version cannot set Originate or Answer mode- it
+		      must be done manually on the modem)
+
+        The  sender enters    SBOT.600 B:*.COM    to send all the  COM 
+        files on disk B.  Also specified were originate mode 600  baud 
+        (PMMI modem) and return to terminal mode when done.
+
+        The  receiver enters     RBA.600    to receive all  the  files 
+        being  sent on the default drive.
+
+
+        The sender enters the command   SB.600  ASM.COM  *.HEX  B:M*.*
+        which  will send ASM.COM from the default drive,  all the  HEX 
+        files from the default drive,  and all the files starting with 
+        "M" from the B drive.  
+
+        Multifile transfers may only be done from the menu. It may not 
+        be specified when the MODEM program is called.  In other words    
+        A>MODEM  SAB  *.COM   will result in an INVALID  OPTION  error 
+        message.
+
+
+Return to Menu - 'M' option
+
+        When asked to select an option, 'M' returns to Menu.
+
+The MENU
+
+        If  the Modem program is entered with no option,  the Menu  is 
+        called.  The  Menu gives the choice of selecting the  standard 
+        options as defined by Ward Christensen (T,  E,  R, and S). The 
+        Terminal  mode has been greatly expanded as  described  above. 
+        The "R" and "S" commands must be called with a filename or you 
+        will be required to enter the primary command (S or R) and the 
+        filename  again (but NOT the secondary options).  If you  want 
+        multi-file  transfers,  then  the "R" option does not  need  a 
+        filename.
+
+  RET - You may also enter terminal mode using the 'RET' command,  but 
+        no  data  will  be saved since a file may not  be  named  with 
+        'RET'.  Use  the 'RET' command to RE-ENTER Terminal mode after 
+        it  has  first been entered with the 'T' option.  If  this  is 
+        done, you will still be able to save the communications if you 
+        were doing so before you exitted the terminal mode.
+
+  WRT - The  'WRT' command must be used after leaving  Terminal  mode. 
+        This  writes  the  last buffer to disk and  closes  the  file. 
+        Failure  to use the 'WRT' command results in loss of all  data 
+        and a file of length zero.
+
+  DEL - The  'DEL'  command  erases the most recent file  accessed  in 
+        Terminal mode.  Useful if you decide after communications that 
+        you don't want to save information just gathered.
+
+  DOS - The 'DOS' command reboots and returns to DOS.
+
+  XPR - The  'XPR'  command is a toggle which causes the  menu  to  be 
+        printed  or not printed.  Initially the menu is on unless  the 
+        program is called with the "X" option (ie.  A>MODEM X ).
+
+  DIR - The 'DIR' command lists the directory of a DOS disk.  A drive 
+        may  be specified (ie.  DIR B:) or the default drive  will  be 
+        listed.  After  the directory is listed,  the menu will not be 
+        printed whether XPR mode is on or off.  If XPR mode is on  and 
+        you wish to see the menu, hit return.
+
+  ^B -  Control-B  while  in Terminal (or Echo) mode allows change  of 
+        baudrate "on-the-fly." A carriage return gives 300  baud;  all 
+        other rates (110-600) must be explicitely stated.
+
+
+LISTING OF COMMANDS AND OPTIONS
+
+    Primary options
+
+        S - send a CP/M file (must specify file/s)
+        R - receive  a CP/M file (must name file unless B sec opt used)
+        T - terminal mode (specify file if memory save wanted)
+        E - terminal mode with echo
+        M - return to menu
+        X - used only when program is called to initially
+            toggle menu off
+
+    Secondary options
+
+        B - multi-file mode for sending and receiving files
+        T - return to terminal mode after transfer (memory save off)
+        R - view what is received in file transfer
+        S - view what is being sent in file transfer
+        V - view what is being sent or received in file transfer
+        T - Terminal mode (used with remotely controlled computer)
+        O - originate mode -- NOT IMPLEMENTED IN PORTABLE VERSION --
+        A - answer mode        ""   ""
+        .xxx - baud rate xxx (xxx = 110-9600 for the serial port )
+
+EXAMPLES        (fn = filename,  ft = filetype)
+
+        Send file, originate mode, 300 baud
+
+                                   SO fn.ft
+
+        Send another file, same mode and baudrate
+
+                                   S fn.ft
+
+        Receive  file on B drive,  600 baud,  ans mode,  view what  is 
+        being received, return to terminal mode 
+
+                               RART.600 B:fn.ft
+
+        Send all COM files, no messages on console, same baud and mode 
+        as last transfer
+
+                                  SBQ *.COM
+
+        Send two files from two different drives
+
+                           SB A:fn1.ft1  B:fn2.ft2
+
+        Receive files being sent by above on drive A (baudrate must be 
+        same and modes opposite)
+
+                                    RB A:
+
+        Terminal mode,  save communication in file,  300 baud (default 
+        rate),  originate mode (in terminal must type CTRL-Y to  start 
+        save, in menu must type "WRT" to close file)
+
+                                   TO fn.ft
+
+
+
+        Any problems or bugs, please call me:
+
+				Or latest revisor:
+        Mark M. Zeiger		James K. Mills         Bruce R. Kendall
+        198-01B 67th Ave.	824 Jordan Place       Mt. View, Ca.
+        Flushing, N.Y. 11365	Rockford, IL  61108
+        (212) 454-6985		(815) 398-0579	       415-967-3613
+
+
+
+
+
+
+```
+{% endraw %}
+
+## MDMIBM.ASM
+
+{% raw %}
+```
+;  ---- I/O DEPENDENT OVERLAY TO FRONT OF MODEM PROGRAM---
+;
+; ==== IBM PC VERSION FOR MAIN SERIAL PORT ====
+;
+;
+	ORG	103H
+	PUT	103H
+;
+;THESE ROUTINES ARE AT THE BEGINNING OF THE PROGRAM SO
+;THEY CAN BE PATCHED BY A MONITER WITHOUT RE-ASSEMBLING
+;THE PROGRAM.
+;
+PMMIBYTE:	DB	FALSE	;TRUE=PMMI MODEM
+				; PMMI NOT IMPLEMENTED IN THIS
+				; VERSION
+IMSAIBYTE:	DB	FALSE	;TRUE=IMSAI FRONT PANEL
+FASTCLK:	DB	FALSE	;8 MHZ OR GREATER
+BAKUPBYTE:	DB	TRUE	;TRUE=MAKE .BAK FILE
+XPRFLG:		DB	FALSE	;TRUE=NO MENU, FALSE=PRINT MENU
+;
+XINIT:		JMP	MXINIT	; INIT MODEM ROUTINES (NOT HARDWARE)
+INXMDATA:	JMP	MXIN	; GET DATA FROM MODEM
+OTXMDATA:	JMP	MXOUT	; OUTPUT DATA TO MODEM
+INXSTAT:	JMP	MXISTAT	; TEST FOR INPUT DATA
+OTXSTAT:	JMP	MXOSTAT	; TEST IF OK TO OUTPUT DATA
+XSETXBAUD:	JMP	MXSETBAUD ; SETUP BAUDRATE
+JPXINITMOD:	JMP	MXINITH	; INIT MODEM HARDWARE
+;
+MODCTLP:	EQU	3FDH	; PUT YOUR MODEM CONTROL PORT HERE
+MODSNDB:	EQU	20H	; YOUR BIT TO TEST FOR SEND
+MODSNDR:	EQU	20H	; YOUR VALUE WHEN READY
+MODRCVB:	EQU	01H	; YOUR BIT TO TEST FOR RECEIVE
+MODRCVR:	EQU	01H	; YOUR VALUE WHEN READY
+MODDATP:	EQU	3F8H	; YOUR MODEM DATA PORT
+;
+; --- INPUT DATA FROM MODEM ---
+;
+MXIN:	PUSH	DX
+	MOV	DX,MODDATP
+	INB	DX
+	POP	DX
+	RET
+;
+; --- OUTPUT DATA TO MODEM ---
+;
+MXOUT:	PUSH	DX
+	MOV	DX,MODDATP
+	OUTB	DX
+	POP	DX
+	RET
+;
+; --- TEST IF DATA IS AVAILABLE FROM MODEM ---
+;
+MXISTAT: PUSH	DX
+	MOV	DX,MODCTLP
+	INB	DX
+	POP	DX
+	AND	AL,MODRCVB
+	CMP	AL,MODRCVR
+	RET		; RETURN WITH Z SET IF DATA IS READY
+;
+; --- TEST IF MODEM IS READY TO BE SENT NEXT CHAR. ---
+;
+MXOSTAT: PUSH	DX
+	MOV	DX,MODCTLP
+	INB	DX
+	POP	DX
+	AND	AL,MODSNDB
+	CMP	AL,MODSNDR
+	RET		; RETURN WITH Z SET IF MODEM IS READY
+;
+; --- INIT MODEM ROUTINES AND POSSIBLE STARTUP MESSAGE ---
+;	THIS MUST NOT INIT THE MODEM HARDWARE AND NEED
+;		NOT PRESERVE ANY REGISTERS.
+;
+MXINIT:	MOV	DX,MSG		; POINT TO MESSAGE
+	MOV	CL,9
+	CALL	05H		; USE BDOS CALL TO PRINT STRING
+;
+;
+; --- INIT THE 8250 FOR 8 BITS, NO PARITY, AND 1 STOP BIT ---
+;
+	MOV	DX,MODDATP+3	; POINT TO LINE CONTROL REG.
+	MOV	AL,13H		; SET TO 8 BITS, NO PARITY, SETUP MODE
+	OUTB	DX		;   1 STOP BIT
+;
+	MOV	DX,MODDATP+1	; POINT TO INTERRUPT ENABLE REG.
+	MOV	AL,0
+	OUTB	DX		; DISABLE INTERRUPTS ON THIS UNIT
+;
+	MOV	DX,MODDATP+4	; POINT TO MODEM CONTROL REG.
+	MOV	AL,0CH		; SET  DTR & RTS
+	OUTB	DX
+;
+	RET
+;
+;CR:	EQU	0DH
+;LF:	EQU	0AH
+MSG:	DB	CR,LF
+	DB	' VERSION FOR IBM PC MAIN SERIAL PORT  '
+	DB	CR,LF,'$'
+;
+; --- INIT MODEM HARDWARE IF NECESSARY ---
+;	THIS ROUTINE MAY BE CALLED SEVERAL TIMES, SO BE
+;	SURE THAT THIS WILL NOT HANG UP THE HARDWARE.
+;
+MXINITH:	RET
+;
+;
+; --- SET HARDWARE BAUDRATE FROM STRING POINTED TO BY---
+;	(H,L).  IF THE STRING STARTS WITH AN ASCII SPACE,
+;	SET THE BAUDRATE TO THE DEFAULT VALUE.  IF THE
+;	REQUEST IS NOT VALID, RETURN WITH CARRY SET.
+; 	NOTE: THE INTERNAL ROUTINES ONLY COPY THE
+;	      FIRST 3 CHARACTERS OF THE BAUDRATE
+;	      INTO THE  STRING POINTED TO BY (H,L)
+;
+MXSETBAUD:
+	PUSH	BX
+	PUSH	DX
+	PUSH	CX
+	MOV	[PTR],BX     	; SAVE POINTER
+	MOV	AL,[BX]		; GET FIRST CHAR.
+	CMP	AL,' '		; IS IT A SPACE (300 BAUD)
+	MOV	DX,B300		; POINT TO 300 BAUD SEQUENCE
+	JZ	SETUP		; SET BAUDRATE
+	MOV	DX,BDTAB     	; POINT TO TABLE OF BAUDRATES
+	MOV	CH,NTAB		; GET # OF ENTRYS TO SEARCH THRU
+;
+SLOOP:	MOV	BX,[PTR]     	; GET POINTER TO BAUDRATE STRING
+	PUSH	DX		; SAVE TABLE POINTER
+;
+	MOV	CL,3		; SET LENGTH OF ASCII BAUDRATE
+SLOOP1:	MOV	SI,DX
+	LODB			; GET STRING VALUE FROM TABLE
+	CMP	AL,[BX]		; MATCH INPUT STRING?
+	JNZ	X1		; NO, SO TRY NEXT TABLE ENTRY
+	INC	BX		; MATCH, SO INC POINTERS TO TEST NEXT CHAR.
+	INC	DX
+	DEC	CL		; COUNT DOWN CHARACTERS
+	JNZ	SLOOP1    	; LOOP TO TEST ALL 3 CHARACTERS
+;
+X1:	POP	DX		; GET POINTER BACK
+	JZ	SETUP		; IF MATCH, SET BAUDRATE AND RETURN
+	ADD	DX,4		; POINT TO NEXT TABLE ENTRY
+	DEC	CH		; COUNT DOWN # OF TABLE ENTRYS
+	JNZ	SLOOP     	; LOOP TO TEST ALL VALID ENTRYS
+	STC			; SET ERROR CONDITION IF NO MATCH
+	JMP	XRET
+;
+SETUP:	MOV	BX,3
+	ADD	BX,DX		; POINT TO BAUDRATE SETUP WORDS
+	MOV	AL,[BX]		; GET ONE
+	MOV	DX,0		; SELECT DEVICE #0
+	MOV	AH,0		; SELECT INIT FUNCTION
+	INT	14H
+	XOR	AL,AL		; RESET CARRY
+XRET:	POP	CX
+	POP	DX
+	POP	BX
+	RET
+;
+;
+; --- BAUDRATE TABLE FOR IBM SETUPS ---
+;	  ( AND UART CONTROL BIT )
+;
+BDTAB:
+	DB	'110',3
+	DB	'150',23H
+B300:	DB	'300',43H
+	DB	'600',63H
+;   HERE INPUTS OF 120,240,480,960 ARE FOR 1200, 2400, ...
+	DB	'120',83H
+;
+	DB	'240',0A3H
+	DB	'480',0C3H
+	DB	'960',0E3H
+;
+ENTAB:	EQU	$
+;
+NTAB:	EQU	8	; [ENTAB-BDTAB]/5	; # OF TABLE ENTRYS
+;
+PTR:	DS	2		; BUFFER TO SAVE POINTER
+;
+;
+	ORG	300H	; START OF PROGRAM
+	PUT	300H
+; ----------------------------------------------------
+```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 1000 '"MENU"
 1010 RUN"AUTOST"
 ```
+{% endraw %}
 
 ## MINIPROG.BAS
 
+{% raw %}
 ```bas
 1000 PROG1$="  M I N I P R O G  "
 1010 REV$ = "    Rev: 830120    "
@@ -977,9 +1592,11 @@ machines:
 1240     REM: »» START PROGRAM
 1250 ERROR 255:END '                ERROR TRAP TEST, Start program on this line
 ```
+{% endraw %}
 
 ## MODULO.BAS
 
+{% raw %}
 ```bas
 1000 '"MODULO" Demonstrates Modulo Arithmetic
 1010 REV$="Rev: 830120"' By Robert Hamilton
@@ -994,9 +1611,11 @@ machines:
 1100 LOCATE 22,1:PRINT"This program demonstrates Modulo Arithemetic";
 1110 COLOR 6,0:END
 ```
+{% endraw %}
 
 ## MONOSET.BAS
 
+{% raw %}
 ```bas
 1000 '"MONOSET" A Program to test mono screen attributes in Basic
 1010 REV$="Rev: 830120"'By Robert Hamilton
@@ -1038,9 +1657,11 @@ machines:
 1370 COLOR 16,7:PRINT" 16,7 ";:COLOR 7,0:PRINT SPC(3);
 1380 RETURN
 ```
+{% endraw %}
 
 ## NUMVERT.BAS
 
+{% raw %}
 ```bas
 1000  NM$="N U M V E R T"' Converts Decimal, Hex and Octal Numbers
 1010  REV$="Rev: 830120"'By Robert Hamilton
@@ -1066,9 +1687,11 @@ machines:
 1210 COLOR 6,0:ON ERROR GOTO 0:END
 1220 PRINT CL$;UP$;:LOCATE ,1:RETURN
 ```
+{% endraw %}
 
 ## OPKEYS.BAS
 
+{% raw %}
 ```bas
 40000 '"OPKEYS" Loads special function keys
 40010 REV$="830120"'By Robert Hamilton
@@ -1080,9 +1703,11 @@ machines:
 40070 COLOR 6,0:CLS: LOCATE 22,1:PRINT"Special Function Keys Loaded";
 40080 KEY ON: END
 ```
+{% endraw %}
 
 ## PAYMENT.BAS
 
+{% raw %}
 ```bas
 1000 '"PAYMENT" Calculates payment to amortize a loan
 1010 ' By Robert Hamilton
@@ -1164,9 +1789,11 @@ machines:
 1780 CLOSE #1:RESUME 1790
 1790 LOCATE 25,1:PRINT CL$;:LOCATE 25,1:BEEP:COLOR 12,0:PRINT"ERROR: Check Printer - ENTER to Continue";:COLOR 6,0:INPUT;"",ZZ$:LOCATE 25,1:PRINT CL$;:LOCATE 25,1:GOTO 1650
 ```
+{% endraw %}
 
 ## PEEK.BAS
 
+{% raw %}
 ```bas
 1000 NM$="P E E K"' A program to peek at a location in memory
 1010 REV$="Rev: 830120"'By Robert Hamilton
@@ -1187,9 +1814,11 @@ machines:
 1160 GOTO 1110
 1170 DEF SEG=64:POKE 23,0:SOUND 500,5:COLOR 6,0:END
 ```
+{% endraw %}
 
 ## Q.BAS
 
+{% raw %}
 ```bas
 1000 '"Q" Returns from basic to DOS with a clean screen
 1010 DEF SEG=0:POKE 108,&HD3:POKE 109,&H15:POKE 110,&H7:POKE 111,&H3
@@ -1198,9 +1827,11 @@ machines:
 1040 DEF SEG=64:POKE 23,128:DEF SEG:CL$=STRING$(79,0):Q$=CHR$(34)
 1050 SOUND 500,6:CLS:LOCATE 24,1:SYSTEM:END
 ```
+{% endraw %}
 
 ## REAL$.BAS
 
+{% raw %}
 ```bas
 1000  PROG1$="     REAL$     " 'PRODUCES A REAL ESTATE APPRECIATION TABLE
 1010  REV$ = "  Rev: 830120  "' By Robert Hamilton
@@ -1235,9 +1866,11 @@ machines:
 1300  IF PRT=1 THEN PRINT #1,STRING$(4,10)
 1310  CLOSE #1 : KEY ON : BEEP : END
 ```
+{% endraw %}
 
 ## SQUISH.BAS
 
+{% raw %}
 ```bas
 1 '           IBM PC BASIC
 2 '            'Squish'
@@ -1341,9 +1974,131 @@ machines:
 600 IF XS$="Y"THEN X=INSTR(N$," "):N$=LEFT$(N$,X):SD=SD+PP-X-1
 610 RETURN
 ```
+{% endraw %}
+
+## SQUISH.DOC
+
+{% raw %}
+```
+                SS SS SS SS SS SS SS SS SS SS SS
+                SS                            SS
+                SS        IBM PC Basic        SS
+                SS          "Squish"          SS
+                SS   Author: Dave Archibald   SS
+                SS Translation: Alan J. Zett  SS
+                SS    Copyright (c) 1982      SS
+                SS SoftSide Publications, Inc SS
+                SS                            SS
+                SS SS SS SS SS SS SS SS SS SS SS
+"Squish" is a utility program for the IBM PC with 32K,
+color/graphics adapter, 1 disk drive, and Basic.
+
+(The following is condensed from SoftSide magazine, issue no. 34.)
+
+     Programmers tend to use quite a few REMarks when
+programming, add extra spaces to make listings more readable, as
+well as putting only a few statements on each line.  The result
+is a program that is easier to read and debug, but not very space
+or memory efficient.  The ideal utility would remove extra spaces
+and REMs, and combine lines, when possible without altering the
+structure of the BASIC program.
+     Enter the TRS-80 program Squish...if only it were translated
+to the IBM PC.  We've done so, and it is presented here for the
+benefit of all our IBM subscribers.
+
+TO USE SQUISH:
+     First LOAD the program you wish to pack.  After it is
+loaded, SAVE it with the ASCII option to a new file.  For example:
+LOAD "MYPROG.BAS" and then reSAVE it as "MYPROG.ASC",A.  After
+the program has been saved with the ASCII option, LOAD in
+"Squish" and type RUN.
+     Answer the first question with the name of the file saved
+with the ASCII option ("MYPROG.ASC" in the example above).
+     You will then be given a series of options.  You can remove
+extra spaces, delete REMarks, and combine lines.  The fourth
+option gives you the ability to protect a line or group of lines
+from being "Squished."  Lines entered under this option are
+totally ignored by "Squish."
+     "Squish" will then read in the program to check for lines
+that are referenced and proceed to work on it.  The display will
+update constantly to show, in color (or monochrome), what
+"Squish" is doing, and where.
+     When "Squish" is done, it will allow you to enter the
+"Squished" program for examination.  I suggest you then do a
+quick RENUMber and reSAVE the program under another filename.
+     When you are finished, you will have a neatly renumbered
+program that is not only much shorter than the original (usually
+by a few K), but will execute faster.  All in all, "Squish" is
+quite a useful utility.
+
+VARIABLES;
+     A: Temporary numeric storage.
+     A$: Current program line being Squished.
+     AZ: Screen line on which current program line is displayed.
+     C$: Contains lines that have been combined.
+     D: Length of a reserved word being searched for.
+     DS: The maximum number of user protected lines.
+     DT: Set to 1 if current line contains a DATA statement.
+     G1 - G6: A position in A$ at which INSTR starts searching.
+     HH: Miscellaneous.
+     I$: Name of a DEF FN to convert a string input into a single upper
+               case letter.
+     IP$: Set to "Y" if REM statements are to be deleted.
+     J$: Storage for A$ as it is being reconstructed.
+     LN: Current line number being processed.
+     L$, L1$: Current character of A$ being processed.
+     N$: Set to STR$(LN).
+     P: Set to 1 the first time a quote is encountered in a PRINT
+               statement.  Set to 0 when second quote or end of
+               line is encountered.  While P equals 1, all
+               compression functions are cancelled.
+     PJ: Points to the current line in PRO(*) being tested.
+     PP: Set to 1 minus the location of the first character in a
+               program line following the line number.
+     PV: Number of protected lines entered.
+     PRO(*): Optional protected line numbers specified by user.
+     Q$: Used in an INKEY$ loop.
+     R: Number of line numbers referenced in REF(*).
+     RD: Total number of REM statements deleted.
+     RE: Total number of lines combined.
+     REF(*): Number of program lines that can be referenced.
+     S,S1: Miscellaneous.  Used in sort routine.
+     SD: Total number of spaces deleted.
+     SQ$: SAVE filename for Squished program.
+     SV$: SAVE filename for Squished program.
+     T,T1-T2: Miscellaneous.
+     V$: The current program line stripped of its line number.
+     X: Set equal to PP.
+     XC$: Set to "Y" if lines are to be combined.
+     XS$: Set to "Y" if extra spaces are to be deleted.
+     XP$: Set to "Y" if user wishes to protect lines.
+     ZC: Position on line AZ to print L$.
+
+
+2/9/83 Patches, enhancements, etc. by Herb Shear
+
+The R pointer can no longer lag behind allowing referenced REM and '
+  statements to be deleted.
+Trailing ' no longer added on nonnull referenced lines.
+RESTORE & RETURN references to a line now protect the line.
+Constructs like X=IGOTO+35 no longer protects line 35.
+Indentation was preserved even when combining.
+The deblanking tests were extended to close up constructs such as
+  A( I ),  etc.
+Goofs in naming the input file are now handled in a friendly fashion
+  instead of repeating the entire input session over again.
+
+      Users should take note of the instructions to use SAVE"-----",A
+files as input.  Squish is tuned to the interpreter's output which is a
+subset of valid input forms.  Lowercase, blanks preceding line numbers
+and `GO TO xxx' are not handled properly by Squish.
+
+```
+{% endraw %}
 
 ## SYS.BAS
 
+{% raw %}
 ```bas
 10 '"SYS" Returns from basic to DOS with a clean screen
 20 DEF SEG=0:POKE 108,&HD3:POKE 109,&H15:POKE 110,&H7:POKE 111,&H3
@@ -1352,9 +2107,11 @@ machines:
 34 DEF SEG=64:POKE 23,128:DEF SEG:CL$=STRING$(79,0):Q$=CHR$(34)
 40 SOUND 500,6:CLS:LOCATE 24,1:SYSTEM:END
 ```
+{% endraw %}
 
 ## TIME.BAS
 
+{% raw %}
 ```bas
 45000 PROG1$="T I M E"' DISPLAYS SYSTEM DATE AND TIME
 45010 REV$="Rev: 830120"' By Robert Hamilton
@@ -1372,6 +2129,471 @@ machines:
 45130 IF K$="" THEN 45120
 45140 RETURN
 ```
+{% endraw %}
+
+## WASH.DOC
+
+{% raw %}
+```
+File "WASH.DOC"
+
+		Documentation on the operation of:
+			  "WASH.COM"
+		by:
+			Michael J. Karas
+			Micro Resources
+			2468 Hansen Court
+			Simi Valley, California 93065
+
+
+	This program is a super-duper CP/M disk directory maintence utility 
+that is designed as an "almost" all inclusive routine to make it easy to do 
+disk directory house keeping. The inspiration to produce this program came 
+from use of an older utility program called "CLEAN" that I came across at a 
+meeting of the Valley Computer Club about a year and a half ago. At that time 
+"CLEAN" seemed like a dream come true. Unfortunately it had several major 
+problems that limited its overall usefullness. The disadvantages of CLEAN have
+all been overcome with the new WASH program. Program features are listed 
+below:
+
+	a) Alphabetical list oriented file operations
+
+	b) Any legal CP/M drive (A: to P:) may be selected
+
+	c) Operator interface to the file list is at the console
+	   in sequential apha order in forward or backup mode.
+
+	d) The file list is treated as a circular buffer. Forward
+	   or backward scanning of the list wraps around the list
+	   back to the beginning or ending respectively.
+
+	e) The current list position file can be viewed at the 
+	   Console, printed on the CP/M List device, or sent
+	   to the CP/M Punch device.
+
+	f) The current list position file may be deleted or renamed.
+	   If renamed, only the new name must be entered.
+
+	g) The current list position file may be copied, with the
+	   same name, to any other operator selected disk drive.
+	   The copy utilizes all of available memory as the copy
+	   buffer for the ultimate in copy speed.
+
+      	h) The current list can be deleted and the "WASH" operation
+	   may be begun upon another operator selected disk drive.
+
+	i) The program is fully implemented in 8080 assembly language
+	   for speed, small size, and portability to any CP/M 2.2
+	   or 1.4 system.  The MSDOS VERSION is of course in 8086
+	   assembly language. No assumption is made upon the maximum
+	   number of directory files other than available memory 
+	   space for the list. (A directory with 1024 directory
+	   file names takes 12 K bytes of storage. Assuming the
+	   copy buffer minimum size requirement of 128 bytes, then
+	   WASH should easily run in the minimum CP/M 2.2 20K 
+	   System with no problems at all.) ALL directory and
+	   disk I/O is handled through calls to the BDOS. This
+	   will guarentee WASH compatibility with any CP/M system
+	   implementation. This makes the program disk media
+	   independent (all you have to do is get WASH.COM onto
+	   your diskette or hard disk in the first place.
+
+	This Program was Written by:
+
+	Michael J. Karas
+	MICRO RESOURCES
+	2468 Hansen Court
+	Simi Valley, California 93065
+	(805) 527-7299
+	September 20, 1981
+
+	NOTE:  The WASH program, its source code, documentation file,
+       	       and object code, has been released to the PUBLIC DOMAIN
+               by Michael J. Karas. This program may be modified to suit
+               your personal requirements or those of your friends. In 
+               any case no COMMERCIAL or MONEY MAKING ventures with
+               regard to SOFTWARE SALES or MODIFICATION and the subsequent
+               SALE of the WASH program in WHOLE or any PART is permitted
+               by the author. Further modification and public domain
+       	       distribution of the WASH program must include:
+
+		a) This NOTE,
+
+		b) The name "WASH" must be retained,
+
+		c) The original authorship notice
+		   from above, and
+
+		d) The MICRO RESOURCES Name in the Sign-on
+		   Menu.
+
+	MICRO RESOURCES reserves the right to modify this program at any
+time for any purpose. The Intent of the above NOTE is intended for the public 
+domain distribution of the WASH program and MICRO RESOURCES reserves the right
+to utilize the WASH program for any application whatsoever including but not 
+limited to commercial distribution and modification for custom applications
+with or without the "WASH" name.
+
+
+Modification of WASH
+--------------------
+
+	If you modify, enhance, or correct bugs in this program, please 
+include a short statement of the modifications done and include your name 
+and the date. The modification history log should be kept intact with the
+source code file in "most recent first" order. Changes to program structure 
+will generally require a change in the program version. The version number 
+is documented in the signon message and the distribution program name as 
+"WASH-10.ASM" in the specific case of the initial release 1.0.
+ 
+	The format for update notices in the source file should follow the
+format shown below:
+
+Date: Sept. 20, 1981   Version Number: 1.0  Name: Michael J. Karas
+
+Initial release to the public domain via the CP/M NET remote 
+software access program operated by Kelly Smith, 3055 Waco Ave,
+Simi Valley, CA 93063. (805) 527-9321/ PMMI modem.
+
+
+
+Running WASH
+------------
+
+	The WASH program is run as a transient command under CP/M 2.2
+or CP/M 1.4 as follows. The program creates a working list of all selected
+file names on the selected drive. Examples of command formats are:
+
+	A>WASH<cr>		<== WASH forms working list
+				    of all files from default drive A:.
+
+	A>WASH B:<cr>		<== WASH forms working list of all
+				    files from selected drive B:.
+
+	A>WASH *.COM<cr>	<== WASH formas working list of all
+				    ".COM" files from default drive A:.
+
+	WASH will boot up and read all selected file names from the selected
+drive into a "MEMORY" list that is in ascending alphabetical order. The first
+file name will be displayed with a ":" prompt awaiting some command from the
+operator. The following summary describes WASH commands.
+
+WASH Commands
+-------------
+
+	The Wash program permits entry of various commands while the console
+cursor is positioned at a ":" prompt after the currently displayed file name
+in the file name list.
+
+**** File List Manipulation Comands.
+
+	File Forward (SPACE or CARRIAGE RETURN) Command
+	-----------------------------------------------
+
+	This command will increment the displayed list pointer and 
+	then display the  next file name in the list. If last file
+	name in list is currently displayed, the message "End of List"
+	is displayed and file name display wraps around to the first 
+	file name.
+
+	Backup (B) Command
+	------------------
+
+	This command will decrement the displayed list pointer and
+	display the previous file name from the list. If the first file 
+	name in the list is currently displayed, the message "Beginning
+	of List" is displayed and the file name display wraps back to
+	the last file name in the list.
+
+
+**** File Operation Commands.
+
+	View (V) File Command
+	---------------------
+	
+	The contents of the currently displayed file name is output
+	to the console screen. Text is normally assumed to be ASCII
+	and file display ceases upon encountering a logical end of 
+	file character (01AH) (ctl-z).
+
+	Punch (P) File Command
+	----------------------
+
+	The contents of the currently displayed file name output
+	to the CP/M logical Punch device. Text is normally assumed to 
+	be ASCII and file punching ceases upon encountering a logical end 
+	of file character (01AH) (ctl-z).
+
+	List (L) File Command
+	---------------------
+ 
+	The contents of the currently displayed file name is output
+	to the CP/M logical List device. Text is normally assumed to 
+	be ASCII and file listing ceases upon encountering a logical 
+	end of file character (01AH) (ctl-z).
+
+	Copy (C) File Command
+	---------------------
+
+	This command allows the complete contents of the currently
+	displayed file name to copied to a file on another operator
+	selected drive with the same name. If the file name already 
+	exists on the destiantion disk, the operator is asked if it
+	should be replaced.
+
+	Delete (D) File Command  ( changed to CONTROL-D to reduce accidents )
+	-----------------------
+
+	The file with name corresponding to the currently displayed 
+	list name is deleted from the disk directory. After deletion
+	the message "Deleted" is displayed at the console. Deleted 
+	file name is also removed from the in memory list.
+
+	Rename (R) File Command
+	-----------------------
+
+	The file name currently displayed is renamed to the operator 
+	entered name in response to the "New Name ?" prompt. The list
+	in memory is also updated to reflect the new file name.
+
+**** Miscellaneous Commands.
+
+	Exit (X) Command  ( may also use, Q or control-C )
+	----------------
+
+	Command when entered will terminate WASH operation and return
+	system control to the CP/M Console Command Processor via a
+	warm boot operation.
+
+	Start (S) over on New Drive Command
+	-----------------------------------
+
+	Entry of the Start over command will cause the WASH program
+	to make up a new directory name list in memory from the drive
+	designator entered by the operator in response to the "New 
+	Drive ?" prompt.
+
+
+OPERATIONAL NOTES ON WASH
+-------------------------
+
+	Command entries not understood by WASH will cause display of a 
+"?" character followed by redisplay of the same current list position
+file name. Command entries, other than Backup, will generally execute
+and then return to the command mode with the next file name from the list
+displayed.
+
+	Entry of a carriage return in response to the "New Name ?" prompt
+of the Rename command or to the "New Drive ?" prompt of the Start Over
+command will abort the command function and cause display of the next file
+name in the file name list.
+
+	The WASH program contains a liberal number of error checking
+functions not normally seen by the operator unless an error condition
+arises. These are always displayed with leading and trailing pairs of the 
+plus sign character as:
+
+	++ Error Message ++
+
+Some of the error conditions are:
+
+	++ Not Found ++
+
+		command line wild card file specification
+		name list is empty, or disk is empty.
+
+		-or-
+
+		delete, rename, copy source files not found.
+		(most likely due to a diskette change)
+
+	++ Name Already Exists ++
+
+		attempt to rename a file to a name already present
+		on the disk.
+
+	++ File Cannot Be Opened ++
+
+		output file for view, list, or punch, cannot be
+		opened for reading. Most probable cause is due to
+		a disk change.
+
+	++ Source File Cannot Be Opened ++
+
+		source file on a copy operation cannot be found on
+		the disk. Most likely casued by a disk change.
+
+	++ Cannot Select Same Disk as Source ++
+
+		the copy to destination disk selected by the operator 
+		must be different than the source disk.
+
+	++ Destination Directory Full ++
+
+		The destination file on a copy operation cannot be opened
+		because the destination disk directory is full.
+
+	++ No Memory Available For Copy Buffer ++ 
+
+		Caused when size of in memory list is so large that an
+		attempted copy operation can find no buffer space.
+
+	++ Disk or Directory Full on Write ++
+
+		Caused when a copy operation attempts to place a file 
+		on a destination disk that does not have enough room
+		for the file, or not enough room to contain all the 
+		directory extent entries for the destination file.
+
+	++ Destination Close Error ++
+
+		Destination file on a copy operation cannot be closed
+		most likely due to a full directory.
+
+Looking at WASH in Action
+-------------------------
+
+	The following text is an example session with WASH at the console.
+This dislay was made possible through use of Kelly Smith's new console
+i/o capture program I/O-CAP.COM. The intepretation of the action below
+should be self evident via the descriptions in the above sections.
+The text "<== xxxxxxxxxxxx" indicates text typed in for documentation
+purposes and not by the WASH program.
+
+
+A>WASH<cr>				<== start up wash for *.* on A:
+
+
+   MICRO RESOURCES DIRECTORY "WASH UTILITY" Ver 1.0B
+		( MSDOS VERSION )
+
+         Command	Function
+         -------    ----------------------------
+            V       View file at Console
+            L       Print file to List Device
+            P       Send file to Punch Device
+            C       Copy file to another Disk
+            R       Rename file
+          ^ D       Delete file
+          Q or X    Exit to DOS (Ctl-C also works)
+            B       Backup one file in List
+            S       Restart on another Drive
+	  ? or H    List this command table
+         sp or cr   Forward to next file in List
+
+
+A: /       .COM   :  			<== space bar to go forward
+A: ADIR    .COM   :  
+A: ASM     .COM   :  
+A: CONCAP  .COM   : B			<== B to backup
+<  A: ASM     .COM   : B
+<  A: ADIR    .COM   : B
+<  A: /       .COM   : B
+
+      Beginning of List			<== Backup past top of list
+
+<  A: XSUB    .COM   : B
+<  A: WORDMAS .COM   : B
+<  A: WM      .HLP   : B
+<  A: WASH    .HEX   : B
+<  A: WASH    .DOC   : B
+<  A: WASH    .COM   : B
+<  A: WASH    .BAK   : B
+<  A: WASH    .ASM   : B
+<  A: USQ     .COM   : B
+<  A: TYPESQ14.DQC   : B
+<  A: TSQ     .COM   : B
+<  A: SYSGEN  .COM   :  		     <== forward again
+A: TSQ     .COM   : C  Destination Drive ? B <== Copy two files to B:
+A: TYPESQ14.DQC   : C  Destination Drive ? B
+A: USQ     .COM   :  
+A: WASH    .ASM   :  
+A: WASH    .BAK   :  
+A: WASH    .COM   :  
+A: WASH    .DOC   :  
+A: WASH    .HEX   :  
+A: WM      .HLP   :  
+A: WORDMAS .COM   : B
+<  A: WM      .HLP   : B
+<  A: WASH    .HEX   : B
+<  A: WASH    .DOC   : B
+<  A: WASH    .COM   : B
+<  A: WASH    .BAK   :^ D  Deleted		<== delete an old file
+A: WASH    .COM   :  				<== I didn't want
+A: WASH    .DOC   : S  New Drive ? B		<== Start over on new drive
+
+						<== WASH signs on again for 
+						    Drive B:
+   MICRO RESOURCES DIRECTORY "WASH UTILITY" Ver 1.0B
+		( MSDOS VERSION )
+
+         Command	Function
+         -------    ----------------------------
+            V       View file at Console
+            L       Print file to List Device
+            P       Send file to Punch Device
+            C       Copy file to another Disk
+            R       Rename file
+          ^ D       Delete file
+          Q or X    Exit to DOS (Ctl-C also works)
+            B       Backup one file in List
+            S       Restart on another Drive
+	  ? or H    List this command table
+         sp or cr   Forward to next file in List
+
+
+B: /       .COM   :  
+B: TSQ     .COM   : B
+<  B: /       .COM   : ^D  Deleted		<== delete a file on B:
+B: TSQ     .COM   :  
+B: TYPESQ14.DQC   :  
+B: WASH    .ASM   :  
+B: WASH    .BAK   : ^D  Deleted			<== and another
+B: WASH    .COM   :  
+B: WASHTEST.DOC   :  
+B: WM      .HLP   : B
+<  B: WASHTEST.DOC   : V			<== View a text file at crt
+        JUST A SHORT MESSAGE TO DEMONSTRATE THE PHYSICAL
+I/O CAPABILITIES OF "WASH" OF DOCMENTATION.
+
+
+B: WM      .HLP   : B
+<  B: WASHTEST.DOC   : P		<== Send text file to my TI-820
+B: WM      .HLP   : B			    on the PUNCH port of CP/M
+<  B: WASHTEST.DOC   : L		<== Send text file to printer on
+B: WM      .HLP   :  			    the LIST port of CP/M
+B: WORDMAS .COM   :  
+B: Z2      .      :  
+B: Z3      .      :  
+B: Z4      .      :  
+
+      End of List			<== forward scroll of list 
+					    past end of list
+B: TSQ     .COM   :  			<== to first one again
+B: TYPESQ14.DQC   :  
+B: WASH    .ASM   :  
+B: WASH    .COM   :  
+B: WASHTEST.DOC   :  
+B: WM      .HLP   :  
+B: WORDMAS .COM   :  
+B: Z2      .      :  
+B: Z3      .      : B
+<  B: Z2      .      : C  Destination Drive ? A  <== copy to A:
+B: Z3      .      :X			<== exit back to logged drive
+
+A>   
+
++++ End of Documentation File
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

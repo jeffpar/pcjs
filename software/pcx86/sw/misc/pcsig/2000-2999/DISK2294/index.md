@@ -38,6 +38,48 @@ machines:
     to tell you what is necessary to collect what is coming to you.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2294.TXT
+
+{% raw %}
+```
+Disk No: 2294                                                           
+Disk Title: Unclaimed Funds Database                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Unclaimed Funds Database                                 
+Author Version: 3/90                                                    
+Author Registration: $35.00                                             
+Special Requirements: 640K and a hard drive.                            
+                                                                        
+Did you know that there's millions of dollars out there that no one has 
+claimed in years -- money that could belong to you? Lost bank accounts, 
+estates that have no heirs or heiresses, etc. Find out if you're one of 
+the lucky ones by checking out the UNCLAIMED FUNDS DATABASE.            
+                                                                        
+This is a menu-driven program that holds thousands of names and         
+addresses of people that have left behind bank accounts for more than   
+seven years. Not only are the names and addresses given, but also the   
+amounts that were left behind in each of these accounts. You will also  
+find a large list of people that have passed away and left a large      
+estate to no one, no one that can be found anyway.                      
+                                                                        
+Enter a name, city, or street of a person that you think may have money 
+coming to them and the UNCLAIMED FUNDS DATABASE will search through its 
+list and give you all occurrences of your search criteria.  Once a match
+has been made, just give the author a call and he'll be more than happy 
+to tell you what is needed to collect what is coming to you.            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2294
 

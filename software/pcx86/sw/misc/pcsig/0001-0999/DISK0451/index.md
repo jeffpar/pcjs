@@ -27,6 +27,65 @@ machines:
     first-class entertainment in store for you. Onward!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CHECK.TXT
+
+{% raw %}
+```
+         You can test your copy of the distribution diskette, to make 
+         sure the copy is accurate, by entering the command CHECK *.* 
+         and the output should look like this:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  QUEST   .COM         CRC = 5A B2
+
+--> FILE:  QUEST   .000         CRC = 65 2F
+
+--> FILE:  MONSTER .DEF         CRC = B1 B7
+
+--> FILE:  PLAYER  .DEF         CRC = 58 58
+
+--> FILE:  LEVEL1  .DEF         CRC = 3A 53
+
+--> FILE:  LEVEL2  .DEF         CRC = 4D 03
+
+--> FILE:  LEVEL3  .DEF         CRC = 16 17
+
+--> FILE:  LEVEL4  .DEF         CRC = D0 92
+
+--> FILE:  LEVEL5  .DEF         CRC = BC 3E
+
+--> FILE:  SCROLL  .USE         CRC = 7E D6
+
+--> FILE:  SCROLL  .OLD         CRC = 28 28
+
+--> FILE:  SCROLL  .HNT         CRC = 06 E6
+
+--> FILE:  READ    .ME          CRC = 55 5D
+
+--> FILE:  SUPPORT .            CRC = 36 C5
+
+--> FILE:  CHECK   .COM         CRC = BD 22
+
+--> FILE:  CHECK   .TXT         CRC = unknown
+
+ ---------------------> SUM OF CRCS = unknown
+
+DONE
+
+
+         The reason why the check.txt file is unknown is because the 
+         above information is added to it.  Therefore, the sum will 
+         also be unknown. 
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0451
 

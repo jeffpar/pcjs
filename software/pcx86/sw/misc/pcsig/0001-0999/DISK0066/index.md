@@ -100,6 +100,7 @@ machines:
 
 ## ALPHAHEX.BAS
 
+{% raw %}
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************** ALPHANUMERIC HEX$ WORKSHEET PLAN ************************
@@ -270,9 +271,11 @@ machines:
 65000 REM **********************  SAVE ROUTINE  ******************************
 65100 SAVE "B:ALPHAHEX.BAS"
 ```
+{% endraw %}
 
 ## BLUEBERY.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -1682,9 +1685,71 @@ machines:
 14080 RETURN
 14090 END
 ```
+{% endraw %}
+
+## BLUEBERY.DOC
+
+{% raw %}
+```
+
+BLUEBERY.BAS is a combination multi-font label and filing program which may
+be  used  for  many  purposes. It may be used as a simple note-pad with six
+lines  of text which can be filed and recalled. It prints various fonts and
+combinations when used as a label program. These fonts are specified in the
+print-routine   menu.  The  program  is  entirely  menu-driven  and  it  is
+self-documenting. The program is compltetly input-protected with the INKEY$
+function.  The  tones used are basically 400-600 with duration 4 and should
+not  be  annoying.  When using the expanded print for a label, heed the in-
+dicator  which  appears on the input format screen. In print option 1, this
+restriction  applies  only  to  line  one. In option two, it applies to all
+lines. In the other print options, this restriction does not apply.
+
+The  print  routine prints out three lines of text. You may use the <enter>
+or  CR  key to enter a blank line. If you wish to print out more than three
+lines,  you  may  modify  the  print commands in lines 2940 thru 3650. As a
+label  program  it  will  work with an EPSON/IBM printer or GEMINI 10 or 15
+which  are  fully IBM/EPSON compatible. If you use another brand dot-matrix
+printer,  it  may  be  necessary  to modify the control codes in lines 2940
+through  3650.  Unfortunately, these codes are not standardized as yet. Use
+of the print routines with another brand printer may result in some unusual
+fonts  or  printer  action. If the printer should "lock up", turning it off
+and on will re-intitialize the mechanism so that it will work normally.
+
+```
+{% endraw %}
+
+## BLUEBRY2.DOC
+
+{% raw %}
+```
+Bluebery.bas  is  written  in SCREEN 0,0,0 WIDTH 80. It will provide vivid
+color  contract for various functions when used with a color monitor. with
+the  color statements activated. Curently, they are all COLOR 7,0 with the
+program  placement  being such that simple insertion of 1 thru 6 for the 7
+in the color statement proceeding a print line will provide color for that
+line, automatically terminated the the alreay inserted COLOR 7,0 statement
+following  it. The program was originally colorized; however, it was over-
+driving some composite video color monitors and green-screen monitors such
+as  the  ZENITH or BMC. By providing the program with the color statements
+in  place, but inactivated, it can be fully colorized in about one hour at
+the  maximum.  Unless  you  have  a  RGB  monitor,  be careful of the high
+intensity statements since they may overdrive and blur the screen.
+
+LABELPRO.BAS is a compressed version of BLUEBERY.BAS except that it prints
+five  label  lines  and  stores  one.  In the final print out -- an option
+selection  from  the  QUIT  menu  --  it prints out the first line of each
+record for filing purposes. This program, in whole or in part, may be used
+by  any  purchaser  of  "BIG  BLUE"berry  Pie  a  la Mode without license,
+restriction, or credit.
+
+        Bruno M. Larsen -- G I N A C O -1983        Sun City, Arizona
+
+```
+{% endraw %}
 
 ## BLUEMENU.BAS
 
+{% raw %}
 ```bas
 2 LOCATE,,,0,7
 10 REM ******************  BLUEMENU.BAS PROGRAM **************************
@@ -1876,9 +1941,11 @@ machines:
 65100 COLOR 7,0:SAVE"A:BLUEMENU.BAS"
 65200 GOTO 10
 ```
+{% endraw %}
 
 ## BOXINBOX.BAS
 
+{% raw %}
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '***************** FORMATTED BOXES FOR PROGRAM USE   ***********************
@@ -1999,9 +2066,11 @@ machines:
 65000 REM ********************** SAVE ROUTINE ********************************
 65100 SAVE"B:BOXINBOX.BAS"
 ```
+{% endraw %}
 
 ## BOXINPUT.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:FOR I=1 TO 10:KEY I,"":NEXT:KEY 6,"GOTO 4000"+CHR$(13):KEY 2,"GOTO 50"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 7-43
 7 '**********************   SELECTED INPUT ROUTINE   *************************
@@ -2320,9 +2389,11 @@ machines:
 65000 REM ===== SAVE ROUTINE =====
 65100 SAVE"B:BOXINPUT.BAS"
 ```
+{% endraw %}
 
 ## BUSCHECK.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '╔═════════════════════════════════════════════════════════════════════════╗
@@ -2436,9 +2507,11 @@ machines:
 65000 '************************* SAVE ROUTINE *****************************
 65100 SAVE "B:BUSCHECK.BAS"
 ```
+{% endraw %}
 
 ## CALULATE.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************  ELECTRONIC CALCULATOR MODE!  ***************************
@@ -2591,9 +2664,11 @@ machines:
 65000 REM ===== SAVE ROUTINE =====
 65100 SAVE"B:CALULATE.BAS"
 ```
+{% endraw %}
 
 ## CHEKFORM.BAS
 
+{% raw %}
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************** CHECK RECORD AND RECONCILING SHEET  *********************
@@ -2635,9 +2710,11 @@ machines:
 65000 '************************* SAVE ROUTINE ********************************
 65100 SAVE"B:CHEKFORM.BAS"
 ```
+{% endraw %}
 
 ## CHR$PRNT.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '╔═════════════════════════════════════════════════════════════════════════╗
@@ -2709,9 +2786,11 @@ machines:
 65000 REM ===== SAVE ROUTINE =====
 65100 SAVE"B:CHR$PRNT.BAS"
 ```
+{% endraw %}
 
 ## COMPOUND.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************  COMPOUND INTEREST COMPUTER $$$$$  **********************
@@ -2789,9 +2868,11 @@ machines:
 65000 '*********************** SAVE ROUTINE **********************************
 65100 SAVE "B:COMPOUND.BAS"
 ```
+{% endraw %}
 
 ## D&CFORM.BAS
 
+{% raw %}
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '*****************   DEBIT/CREDIT INPUT WORK FORM  *************************
@@ -2829,9 +2910,11 @@ machines:
 65000 '************************* SAVE ROUTINE ********************************
 65100 SAVE"B:D&CFORM.BAS"
 ```
+{% endraw %}
 
 ## EASYRITE.BAS
 
+{% raw %}
 ```bas
 10 CLS:REM EASYRITE -- A FULLY FORMATED WORD/MEMO PROCESSING SYSTEM FOR THE IBM
 30 REM VERSION 1.5 -- REVISED 05/10/84
@@ -3334,9 +3417,11 @@ machines:
 13520 CLS:LOCATE 10,30:PRINT"FILE CLEARED":FOR TD=1 TO 1000:NEXT:RETURN
 13570 END
 ```
+{% endraw %}
 
 ## EASYWORD.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 7 '***************************************************************************
@@ -3478,9 +3563,11 @@ machines:
 65000  '************************ SAVE ROUTINE *******************************
 65100 SAVE"B:EASYWORD.BAS
 ```
+{% endraw %}
 
 ## EPSONSET.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************  PRINTER STYLES AND CONTROL CODES  **********************
@@ -3607,9 +3694,11 @@ machines:
 65000 REM****************** SAVE ROUTINE **************************************
 65100 SAVE "B:EPSONSET.BAS"
 ```
+{% endraw %}
 
 ## ESCKEY.BAS
 
+{% raw %}
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):KEY OFF:LIST 10-57
 13 '*****************  ESCAPE KEY RESPONSE SUBROUTINE  ************************
@@ -3637,9 +3726,11 @@ machines:
 65000 '************************** SAVE ROUITINE ******************************
 65100 SAVE"B:ESCKEY.BAS"
 ```
+{% endraw %}
 
 ## FILEDATE.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 13 '***************** FILE DATE AND TIME STAMP PROGRAM  ***********************
@@ -3689,9 +3780,86 @@ machines:
 65000 REM ******************* SAVE ROUTINE ***********************************
 65100 SAVE"B:FILEDATE.BAS
 ```
+{% endraw %}
+
+## FILES66.TXT
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+Disk No 66    GINACO Programs                                        v3.1
+--------------------------------------------------------------------------
+This is a very popular and well-liked disk full of useful utilities and
+games.  All programs may be accessed by running the main menu program
+BLUEMENU.BAS.
+ 
+ALPHAHEX BAS  Alpha to hex reference display
+BLUEBERY BAS  Label creator, filer, record system - simular to LABELPRO.BAS
+BLUEBERY DOC  Documentation for BLUEBERY.BAS
+BLUEBRY2 DOC  Documentation for BLUEBRY2.BAS
+BLUEMENU BAS  Menu for running programs on this disk
+BOXINBOX BAS  Displays border boxes on CRT - can be used as subroutine
+BOXINPUT BAS  Disables all input keys except those needed by your program
+BUSCHECK BAS  Checking or cash account reconciliation aid
+CALULATE BAS  Simple calculator
+CHEKFORM BAS  Check ledger & statement reconciliation form sheet
+CHR$PRNT BAS  Prints you printers character set
+CIRCLE   GRA+ Hypnotic circle
+COLORSEE CLR+ Displays full-color range
+COMPOUND BAS  Annual compounded value of a sum at end of each year
+D&CFORM  BAS  Debit/credit worksheet
+EASYRITE BAS  Word processor
+EASYWORD BAS  Simple text editor with no file storage
+EPSONSET BAS  Epson printer control and tester
+ESCKEY   BAS  Converts ESC key to Continue key
+FILEDATE BAS  Date and time stamp on PC files
+GASFORM  BAS  Mileage and trip log form
+HEADCLN  BAS  Diskette drive head cleaning utility
+HEXPRINT BAS  Hex/decimal display printout
+HEXSAY   BAS  Converts hex to decimal
+IBMLABEL BAS  Label print routine
+KEYSET   BAS  BASIC function key settings
+LABLFILE BAS  Label creator, notebook, record keeper, file system
+LISTSKIP 10P  10 pitch program listing
+LISTSKIP 17P  17.5 pitch program listing
+LPT12SET BAS  Toggles between LPT1 and LPT2 if you have 2 printers
+MENUPRNT BAS+ Graphics print routine
+NECLABEL BAS  NEC 8023A label printer
+NICELIST BAS  Print an ASCII file with page skip and header
+PC-COLOR BAS+ Color monitor test
+PCADD    GRA+ Graphics print routine
+PEEKPRNT BAS  Alpha to hex reference display
+PRNTCALL BAS  Subroutine for printer control
+PROGHEAD BAS  BASIC program heading
+QUICKBOX CLR  Part of showbox
+RANDSEED BAS  Random number generator
+SAMPLE   TWD  Data for TESTWRIT.BAS
+SAVINGS  BAS  Display & print savings or checking account information
+SHOWBOX  BAS  BASIC subroutine - border
+SIXBOXES BAS  Program example - 6 nested boxes
+STARTUP  BAS  Example of menu display
+STARTUP  CLR  Example of menu display
+TASKLIST BAS  Daily phone call and to-do list
+TESTWRIT DOC  Documentation for TESTWRIT.BAS
+TIMESHOW BAS  Display, retains elapsed time
+WEIGHTFM BAS  Daily health record form
+WORKFILE BAS  General ledger - daily journal entry form
+WORKFILE DAT  Part of WORKFILE
+YESORNO  BAS  Yes/no response subroutine
+YOURMENU BAS  Menu subroutine
+ZIPCLEAR BAS  Clears designated screen area
+ 
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) copyright 1986,87 PC-SIG
+```
+{% endraw %}
 
 ## GASFORM.BAS
 
+{% raw %}
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************   GAS/DIESEL MILEAGE CHART  *****************************
@@ -3737,9 +3905,11 @@ machines:
 65000 '************************* SAVE ROUTINE ********************************
 65100 SAVE"B:GASFORM.BAS"
 ```
+{% endraw %}
 
 ## GENLEGER.BAS
 
+{% raw %}
 ```bas
 1 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 2-47
 2 ' ╔═════════════════════════════════════════════════════════════════════════╗
@@ -4653,9 +4823,11 @@ machines:
 8930 WIDTH 80:LOCATE 21,52:PRINT SPC(22);:RETURN
 8940 END
 ```
+{% endraw %}
 
 ## HEADCLN.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 RUN
@@ -4694,9 +4866,11 @@ machines:
 65000 REM ********************** SAVE ROUTINE *********************************
 65100 SAVE"B:HEADCLN.BAS"
 ```
+{% endraw %}
 
 ## HEXPRINT.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************** PROGRAMMERS TABULAR HEX PRINTOUT  ***********************
@@ -4841,9 +5015,11 @@ machines:
 65000 REM  ********************  SAVE  ROUTINE  *****************************
 65100 SAVE "B:HEXPRINT.BAS"
 ```
+{% endraw %}
 
 ## HEXSAY.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************** HEX TO DEC/DEC TO HEX CONVERTER *************************
@@ -4905,9 +5081,11 @@ machines:
 65000 REM************************** SAVE ROUTINE *****************************
 65100 SAVE "B:HEXSAY.BAS"
 ```
+{% endraw %}
 
 ## IBMLABEL.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 ' *************** EPSON/GEMINI MULITI-LABEL PROGRAM ************************
@@ -5168,9 +5346,11 @@ machines:
 65000 REM********************** SAVE ROUTINE *********************************
 65100 SAVE "B:IBMLABEL.BAS"
 ```
+{% endraw %}
 
 ## KEYSET.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '***************** PROGRAMMERS BASIC F-KEY SETTINGS  ***********************
@@ -5207,9 +5387,11 @@ machines:
 65000 '*********************** SAVE ROUTINE **********************************
 65100 SAVE"B:KEYSET.BAS"
 ```
+{% endraw %}
 
 ## LABLFILE.BAS
 
+{% raw %}
 ```bas
 10 CLS:REM LABLFILE BY GINACO: BRUNO LARSEN, SUN CITY, ARIZONA
 30 REM (C) 1984 BY BRUNO M. LARSEN, G I N A C O
@@ -5609,9 +5791,11 @@ machines:
 15520 END
 15580 RUN"EASYRITE.BAS"
 ```
+{% endraw %}
 
 ## LPT12SET.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '********************* LPT1 AND LPT2 TOGGLE PROGRAM ************************
@@ -5659,9 +5843,11 @@ machines:
 65000 '***********************  SAVE ROUTINE  *******************************
 65100 SAVE"B:LPT12SET.BAS"
 ```
+{% endraw %}
 
 ## MENUPRNT.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************** GRAPHICS PRINT ROUTINE -- BASIC *************************
@@ -5792,9 +5978,11 @@ machines:
 65000 '  ************************* SAVE ROUTINE ****************************
 65100 SAVE"B:MENUPRNT.BAS"
 ```
+{% endraw %}
 
 ## NICELIST.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************  Pretty listing Program  BASIC **************************
@@ -5880,9 +6068,11 @@ machines:
 65000 REM ********************** SAVE ROUTINE *****
 65100 SAVE"B:NICELIST.BAS"
 ```
+{% endraw %}
 
 ## PC-COLOR.BAS
 
+{% raw %}
 ```bas
 5 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '*****************  COLOR PALETTES AND COLOR CHIPS  ************************
@@ -6124,9 +6314,11 @@ machines:
 65000 REM ===== SAVE ROUTINE =====
 65100 SAVE"B:PC-COLOR.BAS"
 ```
+{% endraw %}
 
 ## PEEKPRNT.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '*****************  MEMORY PEEKER/HEX CONVERTER IBM  ***********************
@@ -6234,9 +6426,11 @@ machines:
 65000 REM ***********************    SAVE ROUTINE    **************************
 65100 SAVE"B:PEEKPRNT.BAS"
 ```
+{% endraw %}
 
 ## PRNTCALL.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************  PRINTER CONTROL SUB-ROUTINE IBM  ***********************
@@ -6309,9 +6503,11 @@ machines:
 65000 '************************ SAVE ROUTINE *********************************
 65100 SAVE "B:PRNTCALL.BAS"
 ```
+{% endraw %}
 
 ## PROGHEAD.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '*****************   PUT TITLE HERE #############  *************************
@@ -6342,9 +6538,11 @@ machines:
 65000 '************************* SAVE ROUTINE ********************************
 65100 SAVE"B:PROGHEAD.BAS",A
 ```
+{% endraw %}
 
 ## RANDSEED.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '***************** VARIABLE RANDOM SEED GENERATOR **************************
@@ -6374,9 +6572,11 @@ machines:
 65000 '*********************** SAVE ROUTINE ***********************************
 65100 SAVE"B:RANDSEED.BAS"
 ```
+{% endraw %}
 
 ## SAVINGS.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************** SAVINGS/CHECKING BALANCE PROGRAM  ***********************
@@ -6480,9 +6680,11 @@ machines:
 65000 '************************* SAVE ROUTINE ********************************
 65100 SAVE"B:SAVINGS.BAS"
 ```
+{% endraw %}
 
 ## SHOWBOX.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 5"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13)
 10 CLS:SCREEN 0,0,0:WIDTH 80:CLEAR:COLOR 7,0:KEY OFF
@@ -6512,9 +6714,11 @@ machines:
 65000 REM ********************* SAVE ROUTINE ********************************
 65100 SAVE"B:SHOWBOX.BAS"
 ```
+{% endraw %}
 
 ## SIXBOXES.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 12-57
 12 '***************** THIS IS A SIX NESTING BOX DISPLAY ***********************
@@ -6667,9 +6871,11 @@ machines:
 65000 REM ===== SAVE ROUTINE =====
 65100 SAVE"B:SIXBOXES.BAS"
 ```
+{% endraw %}
 
 ## STARTUP.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 12 '*****************  START UP PROGRAM FOR BLUEBERRY   ***********************
@@ -6734,9 +6940,11 @@ machines:
 65000 REM ************************  SAVE ROUTINE  *****************************
 65100 SAVE"B:STARTUP.BAS
 ```
+{% endraw %}
 
 ## TASKLIST.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************************************************************************
@@ -6834,9 +7042,11 @@ machines:
 65000 REM ==========  SAVE ROUTINE  ==========
 65100 SAVE "B:TASKLIST.BAS"
 ```
+{% endraw %}
 
 ## TESTWRIT.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '******************* EDUCATOR'S TOOLBOX SPECIAL ****************************
@@ -6963,9 +7173,42 @@ machines:
 65000 '*********************** SAVE ROUTINE **********************************
 65100 SAVE"B:TESTWRIT.BAS"
 ```
+{% endraw %}
+
+## TESTWRIT.DOC
+
+{% raw %}
+```
+This is a program designed for teachers and others who need to make
+up multiple choice tests and answer keys.  The tests can be saved and
+later individual questions can be changed or added.
+
+This is designed to be run on an Epson FX-80 but the printer routines
+can be changed to operated with almost any printer.  The remark state-
+ments have been left in so that modification can be made easier.  
+
+Feel free to use, copy, and change the program as your needs dictate.  I
+ask only that you do not remove my name from the beginning of the listing.
+
+I suggest that you start by running the program and loading the SAMPLE
+data file (an actual test I use with my classes).  Follow the prompts and
+print out a sample test and answer sheet.  The 'code' on the second line
+in the upper left-hand part of the page is used for keeping track of the
+information covered on your test and also for being able to tell which
+version of the test you are using.  A test can be run as many times
+as desired, using the random option, to make identical tests with only
+the answers (and Keys) mixed up for the benfit of those students who sit
+next to each other and like to "borrow" answers.  
+
+The answer key is an overlay type that should make it very easy to do the
+grading yourself.  I hope that you enjoy the program.  Bill Alton 4/16/83
+
+```
+{% endraw %}
 
 ## TIMESHOW.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '*****************  ELAPSED TIME DISPLAY ROUTINE  **************************
@@ -7008,9 +7251,11 @@ machines:
 65000 REM ****************** SAVE ROUTINE ************************************
 65100 SAVE"B:TIMESHOW.BAS"
 ```
+{% endraw %}
 
 ## WEIGHTFM.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************************************************************************
@@ -7102,9 +7347,11 @@ machines:
 65000 REM ==========  SAVE ROUTINE  ==========
 65100 SAVE "B:WEIGHTFM.BAS"
 ```
+{% endraw %}
 
 ## YESORNO.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***********************   YES/NO <Y/N> SUBROUTINE   ***********************
@@ -7166,9 +7413,11 @@ machines:
 65000 REM   ******************* SAVE ROUTINE ****************************
 65100 SAVE "B:YESORNO.BAS"
 ```
+{% endraw %}
 
 ## YOURMENU.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '***************************************************************************
@@ -7372,9 +7621,11 @@ machines:
 65000 '************************* SAVE ROUTINE ********************************
 65100 SAVE"B:YOURMENU.BAS"
 ```
+{% endraw %}
 
 ## ZIPCLEAR.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:SCREEN 0,0,0:WIDTH 80:CLEAR:FOR I=1 TO 10:KEY I,"":NEXT:KEY 2,"GOTO 60"+CHR$(13):KEY 10,"RUN"+CHR$(34)+"BLUEMENU"+CHR$(34)+CHR$(13):LIST 10-57
 10 '******************** ZIPCLEAR OF FORMATTED SCREEN ************************
@@ -7503,6 +7754,7 @@ machines:
 65000 ' ************************  SAVE ROUTINE  *******************************
 65100 SAVE "B:ZIPCLEAR.BAS"
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

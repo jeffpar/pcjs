@@ -15,6 +15,82 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2650.TXT
+
+{% raw %}
+```
+Disk No: 2650                                                           
+Disk Title: BLANK-IT, PIK, and BOTHSIDES                                
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Blank-It                                                 
+Author Version: 4.1A                                                    
+Author Registration: $10.00/$15.00                                      
+Special Requirements: Hard drive.                                       
+                                                                        
+BLANK-IT is a program that will black out the computer display after a  
+certain "timeout" period to prevent screen burning.  "Burn-in," not an  
+uncommon problem, results from allowing a computer screen to display the
+same image for long periods of time, and can ruin a monitor.            
+                                                                        
+As long as the computer keyboard is in use, there's no evidence that    
+BLANK-IT is even running. However, if the keyboard is left untouched for
+several minutes (customizeable from 1 to 59 minutes), then the screen   
+will automatically blank. When the space bar is pressed, the screen will
+reappear and the user will be right where he or she left off.           
+                                                                        
+BLANK-IT contains several advanced features, such as a quick-blank "hot 
+key" (sometimes referred to as a "Boss Key"), and the ability to        
+enable/disable BLANK-IT while it's loaded. It uses only 528 bytes of    
+memory, works during high speed communication, and has added support for
+graphics mode.                                                          
+Program Title: PIK                                                      
+Author Version: 1.20                                                    
+Author Registration: $7.00/$15.00                                       
+Special Requirements: Hard drive.                                       
+                                                                        
+PIK is a useful little 32K utility which allows you to pick files from  
+the standard DOS "DIR" display to mark for Deleting, Copying, Moving or 
+Zipping into a Zip format compressed file.                              
+                                                                        
+How many times have you typed "DIR" to examine the contents of a        
+directory and seen several files which should be moved, deleted, or     
+stored for later use in ZIP format.  Typing the commands necessary to   
+accomplish the task could take some time. By typing "PIK," you can      
+select the files upon which to perform the necessary operation right    
+from the display left behind by the "DIR" command.  Once the files have 
+been marked, you just press ENTER and you are on your way to keeping    
+your files updated.                                                     
+Program Title: BothSides                                                
+Author Version: 3.5                                                     
+Author Registration: $10.00/$15.00                                      
+Special Requirements: Hard drive.                                       
+                                                                        
+As its name indicates, BOTHSIDES formats text files of any pagination   
+method so they can be printed to both sides of your printer paper. The  
+program can send your file directly to the printer. First it prints the 
+odd numbered pages, then stops to let you turn the paper over and prints
+the even numbered pages.                                                
+                                                                        
+It can also format your text files by paginating them and printing a    
+footer containing title line and page number at the bottom of every     
+page.  In addition, you can specify an inside margin to leave more room 
+for binder holes!                                                       
+                                                                        
+Imagine how much paper you could save and how much thinner your         
+documentation will be from all the shareware packages you print out!    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2650
 

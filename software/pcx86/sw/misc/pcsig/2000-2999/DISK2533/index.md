@@ -15,6 +15,57 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2533.TXT
+
+{% raw %}
+```
+Disk No: 2533                                                           
+Disk Title: Earthwatch                                                  
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: Earthwatch                                               
+Author Version: 1.2                                                     
+Author Registration: $25.00                                             
+Special Requirements: CGA.                                              
+                                                                        
+EARTHWATCH is a graphic display program that displays in real-time a    
+dynamic Merator projection map of the world.  It includes almanac       
+information such as:                                                    
+                                                                        
+~ Graphical presentation of daylight and night areas of the earth       
+                                                                        
+~ Sunrise and sunset times for a specified location                     
+                                                                        
+~ Comparison of sunrise/sunset time with those of previous day          
+                                                                        
+~ Days until the beginning of next season (solstices & equinoxes)       
+                                                                        
+~ Percentage of daylight for present date at specified location         
+                                                                        
+~ Time of day in each of the world's time zones                         
+                                                                        
+~ Date on either side of the International Date Line                    
+                                                                        
+~ Present sunrise and sunset zones throughout the world                 
+                                                                        
+~ Position, age, and phase of the moon                                  
+                                                                        
+~ Position of the sun along the analemma path.                          
+                                                                        
+You can now replace your ordinary calendar or screensaver program with  
+EARTHWATCH.  It's an informative and fascinating earth monitoring clock.
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2533
 

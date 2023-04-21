@@ -32,6 +32,40 @@ machines:
     sacrificing power.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2361.TXT
+
+{% raw %}
+```
+Disk No: 2361                                                           
+Disk Title: QuikMenu                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: QuikMenu                                                 
+Author Version: 1.03                                                    
+Author Registration: $20.00                                             
+Special Requirements: None. Mouse optional.                             
+                                                                        
+QUIKMENU is a  great menuing system with beautiful graphics and color.  
+QUIKMENU works with a keyboard or mouse, has 3D command buttons, can use
+up to 10 menu pages, has password protection, text viewer, date and time
+display and is network compatiable. QUIKMENU uses only 4k of memory when
+running other applications and it automatically installs program main   
+menu buttons for most major programs. If programs you run are not on the
+automatic program install QUIKMENU guides you through adding them with  
+directory and file listing windows. This menuing program rates a 10 for 
+ease of setup and usage without sacraficing power.                      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2361
 

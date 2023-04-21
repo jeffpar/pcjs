@@ -40,6 +40,50 @@ machines:
     not just another diet, but a way to plan your own intake.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1056.TXT
+
+{% raw %}
+```
+Disk No: 1056                                                           
+Disk Title: Managing Your Food                                          
+PC-SIG Version: S3.01                                                   
+                                                                        
+Program Title: Managing Your Food                                       
+Author Version: 3.0                                                     
+Author Registration: $35.00                                             
+Special Requirements: 384K Ram. A hard drive is recommended.            
+                                                                        
+MANAGING YOUR FOOD (MYF) gives you complete control over your diet. Plan
+your shopping list according to cost and nutritional value.  MANAGING   
+YOUR FOOD is designed for use by food manufacturers, restaurant         
+managers, dietitians and the home user. It is friendly enough for novice
+and comprehensive enough for the professional dietitian.                
+                                                                        
+The program will track cost, protein, carbohydrates, fat, calories,     
+cholesterol, fatty acids, fiber, vitamins, minerals, exchanges, percent 
+RDA, and two user-defined fields.  An ingredient database of USDA       
+Handbook 8 (4500 ingredients) is available to registered users.         
+                                                                        
+There are over 100 ways to display the information in the files,        
+including a shopping list arranged by store and aisle.                  
+                                                                        
+Using your own recipes, you can find the nutritional information and    
+cost for all ingredients in a meal.  The information can be totaled and 
+reported in appropriate percentages.  Since you enter the information   
+about your eating habits, MANAGING YOUR FOOD is customized to you.  It's
+not just another diet, but a way to plan your own intake.               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1056
 

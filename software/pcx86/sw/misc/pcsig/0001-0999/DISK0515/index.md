@@ -69,6 +69,60 @@ machines:
     ARC      EXE  Un-archiving program
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES515.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No 515   The Draftsman                                     v1.1 DS2
+---------------------------------------------------------------------------
+The Draftsman is a program for creating data graphs or slide shows
+from Lotus 1-2-3, Symphony, and Visicalc files that are in DIF (Data
+Interchange Format), or user-created data files. A version of this
+program was licensed by Plantronics for their color graphics card.
+ 
+INSTALL  BAT  Batch file to unarchive the program and manual
+PRINTMAN BAT  Batch to print the manual
+README        Introduction letter from author
+README   BAT  Batch file to read README file
+ARC      EXE  Un-archiving program
+BROWSE   COM  Text-file display utility
+ 
+DRAWDOC  ARC  Contains the following files:
+              DRAWMAN  DOC  Documentation for DRAWMAN.EXE
+ 
+DRAWMAN  ARC  Contains the following files:
+              MOUSE    BAT  Batch file to attach a mouse to the system
+              DRAWMAN  EXE  Main program to edit business graphs
+              ERROR    DAT  Contains error messages used by DRAWMAN.EXE
+              FILE     DAT  Contains file pointer information used by
+                            DRAWMAN.EXE
+              HELP     DAT  Contains help messages used by DRAWMAN.EXE
+              MENU     DAT  Contains the menus used by DRAWMAN.EXE
+              VIO      DAT  Additonal programs segments, this is part of
+                            DRAWMAN.EXE
+              WORK     DAT  Data work file used for slide shows and plotting
+                            and printing
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+---------------------------------------------------------------------------
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0515
 

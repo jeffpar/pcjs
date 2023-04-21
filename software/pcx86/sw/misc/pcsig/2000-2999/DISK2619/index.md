@@ -14,6 +14,46 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2619.TXT
+
+{% raw %}
+```
+Disk No: 2619                                                           
+Disk Title: DAYO MRP 2 OF 2 (2398 also)                                 
+PC-SIG Version: S1                                       
+                                                                        
+Program Title: DAYO MRP (Materials Requirement Planning)                
+Author Version: 2.0                                                     
+Author Registration: $50.00                                             
+Special Requirements: 640K RAM, a hard drive, and DOS 3.3.              
+                                                                        
+New version features increased memory management/availability and no    
+more use of overlay files (.OVL), as matter of frac it is a totally     
+rewritten program with many more features than version 1.0. version 2.0 
+is not compatible with version 1.0.                                     
+                                                                        
+DAYO MRP (MATERIALS REQUIREMENT PLANNING) is a routine designed for     
+manufacturers.                                                          
+                                                                        
+DAYO MRP builds items (end items) from items (components) in the        
+inventory database. End items can later be placed into inventory for    
+later sales. Supports a multilevel Bill of Materials. Features          
+include automatic inventory posting and creation of inventory           
+adjustment records, databases are dBASE compatible, multiuser, and many 
+reports are available.                                                  
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2619
 

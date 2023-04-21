@@ -32,6 +32,53 @@ machines:
     uploading or downloading of files.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CHECK.TXT
+
+{% raw %}
+```
+         
+         You can test your copy of the distribution diskette, to make 
+         sure the copy is accurate, by entering the command CHECK *.* 
+         at the DOS prompt.  The output should look like this: 
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  READ    .ME          CRC = 7E 84
+
+--> FILE:  MANUAL  .            CRC = 02 3E
+
+--> FILE:  SUPERCOM.COM         CRC = 38 3C
+
+--> FILE:  DIAL    .COM         CRC = 6C 0B
+
+--> FILE:  DIALADD .COM         CRC = ED 34
+
+--> FILE:  DIALDEL .COM         CRC = 5F 8E
+
+--> FILE:  DIALSHOW.COM         CRC = AA 17
+
+--> FILE:  SUPPORT .            CRC = B4 81
+
+--> FILE:  CHECK   .COM         CRC = BD 22
+
+--> FILE:  CHECK   .TXT         CRC = 19 E2
+
+ ---------------------> SUM OF CRCS = A7 67
+
+DONE         
+         
+
+         Note: the CRC for CHECK.TXT will be incorrect as will be the 
+         total, because you cannot write a file's CRC to the file 
+         without altering the CRC of that file.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0717
 

@@ -37,6 +37,120 @@ machines:
     telephone lists with ease.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES.TXT
+
+{% raw %}
+```
+                Program Files
+                -------------
+ADDRESS.DBF - Main database file
+CHECK.DBF   - Reference database file
+ADDRESS.EXE - Program file
+ADDRESS.FRM - Address listing report form
+TELLIST.FRM - Telephone listing report form
+INCOADD.LBL - International Company label report form
+INHOADD.LBL - International Home label report form
+USCOADD.LBL - USA company label report form
+USHOADD.LBL - USA home label report form
+ADRSBOOK.LBL - Addressbook generator file for home addresses
+COMADRS.LBL - Addressbook generator for company addresses
+```
+{% endraw %}
+
+## FILES988.TXT
+
+{% raw %}
+```
+Disk No:  988
+Program Title: Message Master & Address Book
+PC-SIG version: 1.1
+
+MESSAGE MASTER lets several users, who use the same computer, leave
+messages for one another.  You can type, read, and delete the messages
+using the SEND and READ programs.  In sending a message, names are
+restricted to eight characters, subject headings to eighty characters,
+and the entire message to 1,000 characters.  MAIL shows the names of the
+people who have messages waiting for them, and can be set up to be
+executed when the computer is turned on.  Although MESSAGE MASTER has
+limited text editing capabilities and no password protection between
+each person, it is very easy to use and keeps a record of all messages
+sent until they are deleted.
+
+And, if you're in need to send mail the old fashioned way, ADDRESS BOOK
+is a good way to keep your addresses in order.  It is designed to be
+used by a small to mid-sized company.  Included in the program is a way
+to edit your addresses and erase.  Also included is a printer menu to
+print any or all of your addresses.  It lets you keep track of your
+personal and business address and telephone lists with ease.  The
+program is case-sensitive; i.e., Lastname = "Doe" is correct, Lastname =
+"doe" or "DOE" is incorrect.  With the exception of the country name,
+all names begin with an uppercase letter.
+
+Usage:  Message Keeper/Address Database.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00 for MESSAGE MASTER.
+
+File Descriptions:
+
+SEND     EXE  Creates and stores messages.
+READ     ME   Documentation.
+MAIL     LOG  Listing of users who have used the program.
+MAIL     EXE  Lists users who have messages on the system.
+READ     EXE  Displays messages to be read.
+ADDRESS  EXE  Main program.
+TELLIST  FRM  Data file.
+CHECK    DBF  Data file.
+ADDRESS  FRM  Overlay file.
+ADDRESS  DBF  Overlay file.
+INSTALL  BAT  Batch file to install program on the C drive.
+INTRO    TXT  Instructions on how to start program.
+ADRSNAME NTX  Index data file.
+COMP     NTX  Index data file.
+CTY      NTX  Index data file.
+STE      NTX  Index data file.
+ADRSBOOK LBL  Label data files.
+COMADRS  LBL  Label data files.
+INCOADD  LBL  Label data files.
+INHOADD  LBL  Label data files.
+USCOADD  LBL  Label data files.
+USHOADD  LBL  Label data files.
+FILES    TXT  Listing of included files.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## INTRO.TXT
+
+{% raw %}
+```
+                        ADDRESS LIST
+                        ------------
+
+        Thank you for using the Address List program.
+
+        If you would some guidance strike any key and
+        read the read.me file, else strike ^C, and type 
+        "ADDRESS" to start using the program.
+
+        To print the read.me file strike ^C and type
+        "PRINT READ.ME" 
+        
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0988
 

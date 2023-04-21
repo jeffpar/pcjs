@@ -49,6 +49,28 @@ machines:
     TVFILM        Question and answer file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES474.TXT
+
+{% raw %}
+```
+-----------------------------------------------------------------------
+Disk No 474     Trivial Towers [ Disk 2 of 2 ]                   v1 DS2
+----------------------------------------------------------------------
+This disk is all the questions and answers for the Trivial Towers program.
+ 
+------------    Trivial Towers (v1.0)
+INCOMMON        Question and answer file
+CAPITALS        Question and answer file
+VANITY          Question and answer file
+COMPUTER S      Question and answer file
+TVFILM          Question and answer file
+WRITERS         Question and answer file
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0474
 

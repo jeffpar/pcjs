@@ -50,6 +50,70 @@ machines:
     permitting recalculation if necessary.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES671.TXT
+
+{% raw %}
+```
+Disk No  671
+Program Title: FREEWAY PAYROLL SOFTWARE (disk 1 of 3)
+PC-SIG version 2
+ 
+    FREEWAY is the complete financial package for any company or
+individual. The program has everything that you need ranging from
+checkbook balancing, purchasing, payroll, general ledger, check printing
+and more.
+ 
+    FREEWAY PAYROLL programs can accommodate weekly, fortnightly, four
+weekly and monthly pay frequencies. The programs provide for: Payslip
+stationery (obtainable from FREEWAY), Bank Giro's, payment Lists, Check
+printing internal pension schemes with fixed sum or percentage
+contributions and additional voluntary contributions. Up to 99 departments
+each with a coin analysis and cost of payroll total. You may create your
+own headings for taxable and non-taxable additions to pay - and post tax
+deductions. You may produce lists of amounts deducted / paid under these
+headings. Year-end documentation includes P35 and P60 forms. (Obtainable
+from FREEWAY.) Accommodates statutory sick pay and password protection. The
+user may change tax rates, bandwidths, earnings brackets, Etc and bulk paye
+code change facility.
+ 
+    Each employee may have attached to his record card, in addition to
+basic pay and hours, any regularly occurring payment - or deduction. During
+entry of pay data only those employees who have variables need be examined
+and the variables entered. Calculation of pay and deductions are very
+flexible permitting the pay cycle to be easily re-done should errors come
+to light, until an End-Processing Update is carried out. This may be the
+first operation of the following week.
+ 
+Usage: Financial
+ 
+System Requirements: 256K
+ 
+How to Start: Type GO (press enter)
+ 
+Suggested Registration: Refer to PRICES.DOC for complete costs.
+ 
+File Descriptions:
+ 
+PAY??    EXE  Sub-routine programs accsessed by PAYROLL.EXE (25 files)
+PAY43    LU   Data file
+PAYROLL  EXE  Main program file
+PAYSTART BAT  Batch file to start program running
+PRINTERS DRV  Text file listing printer driver codes
+READ     ME   Introductory text file
+STATUS   PAY  Data file
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0671
 

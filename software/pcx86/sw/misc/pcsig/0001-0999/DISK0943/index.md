@@ -48,6 +48,42 @@ machines:
     ~ Allows international addresses.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0943.TXT
+
+{% raw %}
+```
+Disk No:  943                                                           
+Disk Title: Doctor Data Label                                           
+PC-SIG Version: S2.0                                                    
+                                                                        
+Program Title: Doctor Data Label                                        
+Author Version: 5.0                                                     
+Author Registration: $99.00                                             
+Special Requirements: 512K RAM and two floppy drives.                   
+                                                                        
+DOCTOR DATA LABEL is a professional mailing list manager designed for   
+adding, editing, organizing and printing mailing lists, including       
+international mailings.  Print on any size label (up to nine labels     
+across), Rolodex cards, postcards, and envelopes.  Print multiple copies
+of a single label.                                                      
+                                                                        
+DOCTOR DATA LABEL has an optional carrier route presort number for all  
+its data entries for bulk mailings.  You can index, filter, or sort     
+using all fields, as well as rename, copy, delete, join, divide and     
+backup the data files.  Files created with DOCTOR DATA LABEL are        
+compatible with dBASE.                                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0943
 

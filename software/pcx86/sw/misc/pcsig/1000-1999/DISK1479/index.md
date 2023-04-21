@@ -70,6 +70,98 @@ machines:
     SUPPORT       Support information.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1479.TXT
+
+{% raw %}
+```
+Disk No: 1479
+Disk Title: QIP #3 (1477-1478-1480)
+PC-SIG Version: 1.1
+
+Program Title: QIP - The Quick Information Processor
+Author Version: 1.1
+Author Registration: None stated.
+Special Requirements: 500K free memory, hard disk drive.  286 or faster
+
+This is the third disk of a four disk set.  Please refer to disk
+#1477 for a full program description.
+
+File Descriptions:
+
+PRINTERS TXT  Listing of printers supported by QIP.
+QPROG    V01  Contains QPL programs and macros.
+QPRTDEFS V01  Contains printer definitions.
+TEMPLATE      Function key template.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+       ╔═══════════════════════════════════════════════════════╗
+       ║              >>>> Disk #1479  QIP <<<<                ║
+       ╟───────────────────────────────────────────────────────╢
+       ║                                                       ║
+       ║       To install program to hard drive,               ║
+       ║       insert disk #1 and type: INSTALL C              ║
+       ║                                                       ║
+       ║       To print documentation, insert disk #1          ║
+       ║       and type: COPY MANUAL.TXT PRN:                  ║
+       ║                                                       ║
+       ╚═══════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## PRINTERS.TXT
+
+{% raw %}
+```
+   Printer Name                 PRTID
+-----------------------       ---------
+Generic                         #0001           
+                       
+IBM Color Printer               #1902        
+IBM Proprinter II               #1905        
+
+Toshiba P351                    #1704             
+
+Brother HR-10                   #2501            
+
+C.Itoh 310                      #1106    
+
+Diablo 620                      #1804               
+                               
+Epson MX-80                     #1027              
+
+HP ThinkJet                     #1501  
+HP Laser Jet                    #1550             
+
+ITT Qume                         #22              
+
+NEC Spinwrtr 2015               #2101      
+
+Oki Microline 82A               #1601    
+
+Panasonic KXP1080               #1404
+
+Seikosha BP-5420AI              #5001       
+
+Star NB-15                      #2604
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1479
 

@@ -30,6 +30,47 @@ machines:
     low stock market price, and the high and low price-to-earnings ratio.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1052.TXT
+
+{% raw %}
+```
+Disk No: 1052
+Program Title:  FINDATA CORPORATE PROFILE DATA (Disk 2 of 2)
+PC-SIG version:  1.3
+
+This is the second disk of a two-disk set.  Both disks #1051 and #1052
+are required to run the program.  For a full description, refer to disk
+number #1051.
+
+Usage:  Business Applications.
+
+Special Requirements:  PC-FILE+ or dBASE III, and a hard drive with at
+least 1.5 MB of available space.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $55.00, with quarterly updates available for
+$45.00 per calendar quarter.
+
+File Descriptions:
+
+FLOP     BAT  Batch file to install files to floppy disks.
+HARD     BAT  Batch file to install files to your hard drive.
+PKXARC   COM  Unarchiving program to unarchive FINDAT.ARC.
+FINDAT   ARC  Archived file containing data and header files.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale, CA   94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1052
 

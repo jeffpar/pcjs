@@ -35,6 +35,45 @@ machines:
     are recommended but not required.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1925.TXT
+
+{% raw %}
+```
+Disk No: 1925                                                           
+Disk Title: Big Three                                                   
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Big Three                                                
+Author Version: 1.02                                                    
+Author Registration: $17.00                                             
+Special Requirements: 512K RAM, CGA, EGA, or VGA.                       
+                                                                        
+In this WWII strategy game you control all the action from the desolate 
+fiords of Norway to the scorching sands of Egypt, from the strategic    
+Rock of Gibralter to the frozen streets of Moscow.  Recreate the epic   
+and fiercely fought battles of Tobruk and Stalingrad.  Decide to open   
+your second front in Normandy or the "soft underbelly" of Europe        
+(Italy).  Build bombers to hit your opponent's cities or build tanks and
+fighters to encircle and destroy his armies at the front.               
+                                                                        
+Detailed maps done in excellent graphics help you track your progress   
+and plan strategy.  Each player assumes supreme command of the Axis,    
+Allied or Soviet forces in Europe during 1939-1945.  Players that       
+perform better than their historical counterparts will normally win and 
+those that under perform will normally lose.  Mouse and/or Joystick(s)  
+are recommended but not required.                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1925
 

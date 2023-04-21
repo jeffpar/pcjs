@@ -102,6 +102,7 @@ machines:
 
 ## ADIABAT.BAS
 
+{% raw %}
 ```bas
 10 REM NMR - adiabatic slow passage experiment
 20 CLEAR:KEY OFF:WIDTH 40:SCREEN 1,0:COLOR 0,1:CLS
@@ -151,9 +152,11 @@ machines:
 380 IF W$="N" OR W$="n" THEN CLS:RUN"menu.bas"
 390 GOTO 150
 ```
+{% endraw %}
 
 ## BASHADAM.BAS
 
+{% raw %}
 ```bas
 1 REM this program calculates surface tension by use of the bashforth-adams tables.
 5 CLEAR:WIDTH 40:SCREEN 1,0:COLOR 0,1:KEY OFF:CLS
@@ -226,9 +229,11 @@ machines:
 1035 NEXT I
 1100 RETURN
 ```
+{% endraw %}
 
 ## BASTAT2V.BAS
 
+{% raw %}
 ```bas
 10 REM basic statistics two variables
 20 INPUT"No. of data pairs = ";N
@@ -274,9 +279,11 @@ machines:
 390 IF K=0 THEN GOTO 10
 400 CLS:END
 ```
+{% endraw %}
 
 ## BESSELJN.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:CLS:WIDTH 40:LOCATE 5,5
 2 PRINT"BESSEL FUNCTIONS Jn(X)":PRINT:PRINT
@@ -346,9 +353,11 @@ machines:
 9400 RETURN
 9999 CLS:WIDTH 80:CLEAR:END
 ```
+{% endraw %}
 
 ## BESSELYN.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:CLS:WIDTH 40:LOCATE 5,5
 2 PRINT"BESSEL FUNCTIONS Yn(x)":PRINT:PRINT
@@ -426,9 +435,11 @@ machines:
 4930 RETURN
 9999 CLS:WIDTH 80:CLEAR:END
 ```
+{% endraw %}
 
 ## BR2DIFFN.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:WIDTH 40:CLS:SCREEN 1,0
 2 KEY OFF
@@ -464,9 +475,11 @@ machines:
 196 IF W$="Q" OR W$="q" THEN CLS:END
 200 GOTO 110
 ```
+{% endraw %}
 
 ## BUBLSORT.BAS
 
+{% raw %}
 ```bas
 10 REM bubble sort
 15 CLS
@@ -500,9 +513,11 @@ machines:
 240 NEXT I
 250 END
 ```
+{% endraw %}
 
 ## CHISQDIS.BAS
 
+{% raw %}
 ```bas
 1 REM Chi-square distribution
 2 REM see Hewlett-Packard HP-41C Stat Pac manual, p. 70
@@ -546,9 +561,11 @@ machines:
 350 CLS
 360 END
 ```
+{% endraw %}
 
 ## CUBICFIT.BAS
 
+{% raw %}
 ```bas
 5 REM least squares cubic fit
 7 OPTION BASE 1
@@ -635,9 +652,11 @@ machines:
 1650 PRINT"          End of run"
 1662 END
 ```
+{% endraw %}
 
 ## CUBICSPL.BAS
 
+{% raw %}
 ```bas
 10 CLEAR
 12 WIDTH 40
@@ -704,9 +723,11 @@ machines:
 525 S=S+(Y(I)/H-Z(I)*H/6)*(T(I+1)-X)
 530 YY=S:GOTO 370
 ```
+{% endraw %}
 
 ## CURVEFIT.BAS
 
+{% raw %}
 ```bas
 10 REM ******program from:
 20 REM chemistry with a computer
@@ -780,9 +801,11 @@ machines:
 685 PRINT"OK, we're done."
 690 END
 ```
+{% endraw %}
 
 ## DEBYESOL.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:CLS:WIDTH 40
 2 LOCATE 5,5
@@ -816,9 +839,11 @@ machines:
 200 CLS:WIDTH 80:CLEAR
 201 END
 ```
+{% endraw %}
 
 ## DIFFCAP.BAS
 
+{% raw %}
 ```bas
 10 REM differential capacitance by the formula of Kiefer and Wilson
 20 CLEAR:WIDTH 40:SCREEN 1,0:COLOR 0,1:KEY OFF:CLS
@@ -884,9 +909,11 @@ machines:
 490 IF W$="Y" OR W$="y" THEN GOTO 140
 500 CLS:RUN"menu.bas"
 ```
+{% endraw %}
 
 ## ERFERFC.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:CLS:WIDTH 40:LOCATE 5,5
 2 PRINT"ERF(X) AND ERFC(X)"
@@ -938,9 +965,11 @@ machines:
 2810 RETURN
 9999 CLS:CLEAR:WIDTH 80:END
 ```
+{% endraw %}
 
 ## ERRANAL.BAS
 
+{% raw %}
 ```bas
 1 CLS:LOCATE 5,20
 5 PRINT"ERROR ANALYSIS PROGRAM"
@@ -992,9 +1021,11 @@ machines:
 1000 F=5*X(1)*X(2)*X(3)
 1005 RETURN
 ```
+{% endraw %}
 
 ## EXPFIT.BAS
 
+{% raw %}
 ```bas
 10 REM exponential curve fit
 11 REM y = a*exp(b*x)
@@ -1027,9 +1058,101 @@ machines:
 220 IF K=0 THEN GOTO 10
 230 CLS:END
 ```
+{% endraw %}
+
+## FILES391.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 391   NMR SPECTROSCOPY & STATISTICS                     v1 DS
+------------------------------------------------------------------------
+This series of programs are simulations and problems for the serious
+chemistry enthusiast of NMR - Nuclear Magnetic Resonance Spectroscopy.
+A set of statistical analysis programs are also included.
+ 
+ADIABAT  BAS  NMR - Adiabatic slow passage experiment
+AUTOEXEC BAT  Starting batch file - lists directory, starts MENU.BAS
+BASHADAM BAS  NMR - Calculates surface tension by use of the BASFORTH-
+                    ADAMS tables
+BASTAT2V BAS  Basic statistics - two variables
+BESSELJN BAS  Calculates Bessel functions Jn(x)
+BESSELYN BAS  Calculates Bessel functions Yn(x)
+BR2DIFFN BAS  Diffusion of Bromine in a tube
+BUBLSORT BAS  A bubble sort
+CHISQDIS BAS  Chi-square distribution
+CUBICFIT BAS  Least squares cubic fit
+CUBICSPL BAS  Cubic spline function interpolation
+CURVEFIT BAS  Curve fitter
+DEBYESOL BAS  Heat capacity of Debye solid
+DIFFCAP  BAS  Differential capacitance of the electric double layer
+ERFERFC  BAS  Calculates erf(x) and erfc(x)
+ERRANAL  BAS  Error analysis - root mean square
+EXPFIT   BAS  Exponential curve fit
+FOURIER  BAS  Fourier coefficients
+GAMMA(X) BAS  Gamma functions by Stirling's approximation
+GATDECUP BAS  Homonuclear gated decoupling for solvent peak suppression
+HARMOSC  BAS  Harmonic oscillator function Hn(x) by recursion
+INTERP3  BAS  4-point polynomial interpolation
+INTERP4  BAS  Quartic interpolation
+INVRECOV BAS  NMR measurement of T1 by inversion recovery
+L2FILMS  BAS  Equation of state of L2 films in surface chemistry
+LARMOR   BAS  NMR Spectroscopy Larmor precession and other effects
+LEGENDRE BAS  Calculation of Legendre polynomials by recursion
+LINEQNS  BAS  Simultaneous linear equations
+LINLSQR  BAS  Linear least squares
+LINREGR  BAS  Linear regression
+LOGCURVE BAS  Logarithmic curve fit
+LSQPARAB BAS  Least squares parabola
+LSQREXP  BAS  Non-linear least squares exponential curve fit
+MATERBAL BAS  Material balance equations
+MATRDIAG BAS  Matrix diagonalization by partial pivot method
+MATRINV  BAS  Matrix inversion
+MENU     BAS  Main menu program to gain access to all NMR programs
+MOMSKKUR BAS  Moments, skewness, kurtosis
+MORSECRV BAS  Morse curves for diatomic molecules
+MULTPULS BAS  Multiple pulses in NMR
+NEWTONRT BAS  Newton's method for real roots of polynomials
+NMR-ABC  BAS  ABC proton spectrum
+NMR-ABCD BAS  ABCD proton spectrum
+NMR-WEFT BAS  Water peak supression by WEFT - Water Elimination by
+              Fourier Transform
+NMRAPP   PIC  Diagram of NMR apparatus
+NMRAPP2  PIC  Diagram of NMR apparatus
+NMREXCH  BAS  NMR lineshapes in chemical exchange
+NMREXEC  BAS  Older version of MENU.BAS - interesting graphics
+NMRFOURT BAS  Free induction decay in spectra with several signals
+NMRPHASE BAS  NMR line phasing simulation
+NMRRELAX BAS  Effect of correlation time on the longitudinal NMR
+              relaxation time T1
+NMRROT   BAS  NMR - behavior of the magnetization vector in a rotating
+              coordinate system
+NUMDIFF  BAS  Numerical differentiation - symmetrical 4-point formula
+OFFRES   BAS  Procession on and off resonance
+POWRCURV BAS  Power curve fit
+ROOTFHLF BAS  Roots of functions / Half-interval search
+RUTHEXPT BAS  Rutherford scattering apparatus & trajectories experiment
+RUTHSCAT BAS  Rutherford scattering - calculates & plots trajectories
+              of alpha particles
+SHELSORT BAS  A shell sort routine (300 entries max.)
+SIMPINT  BAS  Integration by Simpson's rule
+SPECPROB BAS  NMR Spectroscopy spin echo measurements problem
+SPINECHO BAS  Spin echo simulation in NMR
+TRIDIAG  BAS  Tridiagonal systems of linear equations
+TWOMEANS BAS  Compares the means of two populations
+XRAYDIF1 BAS  X-ray diffraction simulations
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## FOURIER.BAS
 
+{% raw %}
 ```bas
 10 'Fourier coefficients 05/22/83
 15 NP=51:PI2=2*3.1415927#
@@ -1293,9 +1416,11 @@ machines:
 2480 IF ABS(QMAXP)>=10 OR ABS(QMINP)>=10 THEN QSCL=QSCL*10:GOTO 2330
 2490 RETURN
 ```
+{% endraw %}
 
 ## GAMMA(X).BAS
 
+{% raw %}
 ```bas
 1 CLS:LOCATE 5,20
 2 PRINT"GAMMA FUNCTIONS":LOCATE 7,1
@@ -1332,9 +1457,11 @@ machines:
 9400 RETURN
 9999 CLS:END
 ```
+{% endraw %}
 
 ## GATDECUP.BAS
 
+{% raw %}
 ```bas
 10 REM gated decoupling for solvent peak suppression
 20 CLEAR:WIDTH 40:KEY OFF:SCREEN 1,0:COLOR 0,1:CLS
@@ -1435,9 +1562,11 @@ machines:
 670 W$=INKEY$:IF W$="" THEN 670
 680 CLS:RUN"menu.bas"
 ```
+{% endraw %}
 
 ## HARMOSC.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:CLS:WIDTH 40:LOCATE 5,5
 2 PRINT"HARMONIC OSCILLATOR FUNCTIONS":PRINT:PRINT
@@ -1471,9 +1600,11 @@ machines:
 237 GOTO 20
 245 CLS:CLEAR:WIDTH 80:END
 ```
+{% endraw %}
 
 ## INTERP3.BAS
 
+{% raw %}
 ```bas
 2 CLEAR:CLS:WIDTH 40
 5 REM 4-POINT INTERPOLATION
@@ -1513,9 +1644,11 @@ machines:
 152 GOTO 45
 155 CLS:END
 ```
+{% endraw %}
 
 ## INTERP4.BAS
 
+{% raw %}
 ```bas
 2 CLEAR:REM QUARTIC INTERPOLATION
 3 WIDTH 40
@@ -1550,9 +1683,11 @@ machines:
 142 GOTO 35
 145 CLS:END
 ```
+{% endraw %}
 
 ## INVRECOV.BAS
 
+{% raw %}
 ```bas
 10 REM NMR: measurement of T1 by inversion recovery
 20 CLEAR:KEY OFF:SCREEN 1,0:COLOR 0,1:WIDTH 40:CLS
@@ -1638,9 +1773,11 @@ machines:
 655 IF W$="Q" OR W$="q" THEN CLS:RUN"menu.bas"
 660 CLS:GOTO 401
 ```
+{% endraw %}
 
 ## L2FILMS.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:SCREEN 1:COLOR 1,0:CLS
 15 DIM PI(320),SIG(320)
@@ -1716,9 +1853,11 @@ machines:
 580 CLS:END
 600 END
 ```
+{% endraw %}
 
 ## LARMOR.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:CLS:WIDTH 40:SCREEN 1,0:COLOR 0,1:KEY OFF
 11 PI=3.14159:P2=2*PI
@@ -2013,9 +2152,11 @@ machines:
 7000 REM exit from program
 7005 SCREEN 0,1:CLS:RUN"menu.bas"
 ```
+{% endraw %}
 
 ## LEGENDRE.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:CLS:WIDTH 40
 2 LOCATE 5,5
@@ -2046,9 +2187,11 @@ machines:
 149 GOTO 20
 155 WIDTH 80:CLS:CLEAR:END
 ```
+{% endraw %}
 
 ## LINEQNS.BAS
 
+{% raw %}
 ```bas
 1 CLS:LOCATE 5,20
 10 PRINT"SIMULTANEOUS LINEAR EQUATIONS":PRINT
@@ -2098,9 +2241,11 @@ machines:
 440 PRINT:PRINT"Touch <return> to clear screen and end.":INPUT"";W$
 445 CLS:END
 ```
+{% endraw %}
 
 ## LINLSQR.BAS
 
+{% raw %}
 ```bas
 1 REM linear least squares
 20 INPUT"No. of data pairs = ";N
@@ -2130,9 +2275,11 @@ machines:
 220 IF K=0 THEN GOTO 10
 230 CLS:END
 ```
+{% endraw %}
 
 ## LINREGR.BAS
 
+{% raw %}
 ```bas
 1 CLS:LOCATE 5,20
 2 PRINT"LINEAR REGRESSION OF Y ON X(1), ... X(M)"
@@ -2247,9 +2394,11 @@ machines:
 5550 RETURN
 9999 CLS:END
 ```
+{% endraw %}
 
 ## LOGCURVE.BAS
 
+{% raw %}
 ```bas
 1 CLS:LOCATE 5,10
 10 PRINT"LOGARITHMIC CURVE FIT":PRINT
@@ -2283,9 +2432,11 @@ machines:
 220 IF K=0 THEN GOTO 10
 230 CLS:END
 ```
+{% endraw %}
 
 ## LSQPARAB.BAS
 
+{% raw %}
 ```bas
 10 REM least squares parabola
 15 CLS
@@ -2350,9 +2501,11 @@ machines:
 505 GOTO 9999
 9999 CLS:END
 ```
+{% endraw %}
 
 ## LSQREXP.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:CLS:WIDTH 40
 2 LOCATE 5,3
@@ -2407,9 +2560,11 @@ machines:
 295 CLS:GOTO 70
 300 CLS:WIDTH 80:CLEAR:END
 ```
+{% endraw %}
 
 ## MATERBAL.BAS
 
+{% raw %}
 ```bas
 10 REM material balance equations
 15 OPTION BASE 1
@@ -2504,9 +2659,11 @@ machines:
 7320 RETURN
 9999 CLS:END
 ```
+{% endraw %}
 
 ## MATRDIAG.BAS
 
+{% raw %}
 ```bas
 10 REM matrix diagonalization by partial pivot method
 20 REM up to 10 x 10 symmetric matrix
@@ -2576,9 +2733,11 @@ machines:
 580 NEXT I
 600 END
 ```
+{% endraw %}
 
 ## MATRINV.BAS
 
+{% raw %}
 ```bas
 7000 REM matrix inversion
 7010 DIM A(12,12),AI(12,12),ST(12,12)
@@ -2617,9 +2776,11 @@ machines:
 7310 NEXT I
 7320 END
 ```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 10 REM menu program
 20 CLEAR:WIDTH 40:KEY OFF:SCREEN 0,1:COLOR 3,0:CLS
@@ -2689,9 +2850,11 @@ machines:
 185 CLS:END
 186 CLS:SYSTEM:END
 ```
+{% endraw %}
 
 ## MOMSKKUR.BAS
 
+{% raw %}
 ```bas
 10 REM moments, skewness, kurtosis
 12 REM Hewlett-Packard HP-41-C manual
@@ -2722,9 +2885,11 @@ machines:
 250 IF K=0 THEN GOTO 10
 260 CLS:END
 ```
+{% endraw %}
 
 ## MORSECRV.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:WIDTH 40:SCREEN 1,0:CLS:KEY OFF
 5 COLOR 0,2
@@ -2761,9 +2926,11 @@ machines:
 255 W$=INKEY$:IF W$="" THEN 255
 260 END
 ```
+{% endraw %}
 
 ## MULTPULS.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:CLS:WIDTH 40:SCREEN 1,0:COLOR 0,1:KEY OFF
 11 PI=3.14159:P2=2*PI
@@ -3058,9 +3225,11 @@ machines:
 7000 REM exit from program
 7005 SCREEN 0,1:CLS:RUN"menu.bas"
 ```
+{% endraw %}
 
 ## NEWTONRT.BAS
 
+{% raw %}
 ```bas
 1 REM NEWTON'S METHOD FOR REAL ROOTS OF POLYNOMIALS
 2 WIDTH 40
@@ -3126,9 +3295,11 @@ machines:
 540 GOTO 420
 550 CLS:END
 ```
+{% endraw %}
 
 ## NMR-ABC.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:CLS:WIDTH 40:KEY OFF:OPTION BASE 1:DIM A(8,8),S(8,8),AI(8),SI(8),SJ(8),IX(8,8),SC(8,8),AJ(8)
 2 GOSUB 3000
@@ -3364,9 +3535,11 @@ machines:
 3110 LINE (0,199)-(639,199)
 3115 GOTO 1125
 ```
+{% endraw %}
 
 ## NMR-ABCD.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:CLS:WIDTH 40:KEY OFF:OPTION BASE 1:DIM A(16,16),S(16,16),AI(16),SI(16),SJ(16),IX(16,16),SC(16,16),AJ(16)
 2 GOSUB 3000
@@ -3609,9 +3782,11 @@ machines:
 3105 NEXT I
 3110 GOTO 1125
 ```
+{% endraw %}
 
 ## NMR-WEFT.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:CLS:SCREEN 1,0:KEY OFF:WIDTH 40
 20 COLOR 0,1
@@ -3703,9 +3878,11 @@ machines:
 810 IF W$<>"Q" AND W$<>"q" THEN GOTO 540
 820 CLS:SCREEN 0,1:RUN"menu.bas"
 ```
+{% endraw %}
 
 ## NMREXCH.BAS
 
+{% raw %}
 ```bas
 10 WIDTH 40:SCREEN 1,0,0,0,2:CLS:COLOR 0,2:KEY OFF
 15 LOCATE 1,38
@@ -3771,9 +3948,11 @@ machines:
 430 CLS:WIDTH 40
 440 RUN"menu.bas"
 ```
+{% endraw %}
 
 ## NMREXEC.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:WIDTH 40:SCREEN 1,0:CLS:KEY OFF   :COLOR 0,0
 20 LOCATE 4,7:PRINT"NUCLEAR MAGNETIC RESONANCE"
@@ -3814,9 +3993,11 @@ machines:
 360 RUN "multpuls.bas"
 370 CLS:RUN"menu.bas"
 ```
+{% endraw %}
 
 ## NMRFOURT.BAS
 
+{% raw %}
 ```bas
 10 REM Interference in free induction decay of two peaks
 12 DIM A(5),W(5),T2(5)
@@ -3886,9 +4067,11 @@ machines:
 285 W$=INKEY$:IF W$="" THEN 285
 290 CLS:RUN"nmrexec.bas"
 ```
+{% endraw %}
 
 ## NMRPHASE.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:KEY OFF:CLS:WIDTH 40:SCREEN 1,0:COLOR 0,1
 20 REM nmr phasing simulation
@@ -3959,9 +4142,11 @@ machines:
 2050 NEXT I
 2060 RETURN
 ```
+{% endraw %}
 
 ## NMRRELAX.BAS
 
+{% raw %}
 ```bas
 10 REM effects of correlation time tau sub c on T1
 20 CLEAR:CLS:WIDTH 40:KEY OFF:SCREEN 1,0
@@ -4042,9 +4227,11 @@ machines:
 690 W$=INKEY$:IF W$="" THEN 690
 700 CLS:RUN"menu.bas"
 ```
+{% endraw %}
 
 ## NMRROT.BAS
 
+{% raw %}
 ```bas
 10 REM nmr; behavior of magnetization in the rotating system
 20 CLS:KEY OFF:SCREEN 1,0
@@ -4114,9 +4301,11 @@ machines:
 490 W$=INKEY$:IF W$="" THEN 490
 500 CLS:RUN"menu.bas"
 ```
+{% endraw %}
 
 ## NUMDIFF.BAS
 
+{% raw %}
 ```bas
 2 REM Numerical Differentiation
 3 CLEAR:CLS
@@ -4166,9 +4355,11 @@ machines:
 505 Y=SIN(X)
 510 RETURN
 ```
+{% endraw %}
 
 ## OFFRES.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:CLS:SCREEN 1,0:COLOR 0,1:KEY OFF:WIDTH 40
 20 DIM CS(200),SN(200)
@@ -4222,9 +4413,11 @@ machines:
 1050 LOCATE 23,1:PRINT"Patience; I have to calculate a batch   of trig functions.";
 1060 RETURN
 ```
+{% endraw %}
 
 ## POWRCURV.BAS
 
+{% raw %}
 ```bas
 1 CLS:LOCATE 5,20
 2 PRINT"POWER CURVE FIT":PRINT
@@ -4262,9 +4455,11 @@ machines:
 220 IF K=0 THEN CLS:GOTO 10
 230 CLS:END
 ```
+{% endraw %}
 
 ## ROOTFHLF.BAS
 
+{% raw %}
 ```bas
 1 REM FUNCTION ROOTS HALF-INTERVAL SEARCH
 10 CLS:PRINT TAB(10)"Roots of Functions":PRINT TAB(10) "Half-interval Search"
@@ -4329,9 +4524,11 @@ machines:
 420 GOTO 50
 430 CLS:END
 ```
+{% endraw %}
 
 ## RUTHEXPT.BAS
 
+{% raw %}
 ```bas
 1 CLEAR:REM Rutherford scattering experiment, macro
 2 CLS:SCREEN 1:KEY OFF
@@ -4378,9 +4575,11 @@ machines:
 245 RUN"ruthscat.bas"
 250 END
 ```
+{% endraw %}
 
 ## RUTHSCAT.BAS
 
+{% raw %}
 ```bas
 1 SCREEN 0:KEY OFF:CLS:WIDTH 40
 2 LOCATE 7,1:PRINT"          RUTHERFORD SCATTERING":PRINT:PRINT
@@ -4506,9 +4705,11 @@ machines:
 5055 DU(L,4)=-K3*DU(L,3)
 5060 RETURN
 ```
+{% endraw %}
 
 ## SHELSORT.BAS
 
+{% raw %}
 ```bas
 1 CLS:LOCATE 5,20
 10 PRINT"SHELL SORT PROGRAM"
@@ -4553,9 +4754,11 @@ machines:
 650 GOTO 530
 700 RETURN
 ```
+{% endraw %}
 
 ## SIMPINT.BAS
 
+{% raw %}
 ```bas
 1 REM simpson's rule integration
 10 CLS:PRINT TAB(7)"INTEGRATION BY SIMPSON'S RULE":PRINT
@@ -4603,9 +4806,11 @@ machines:
 300 PRINT"Integral is ";X1/3*(Y1+4*C+2*D+Y2)
 310 END
 ```
+{% endraw %}
 
 ## SPECPROB.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:SCREEN 1,0:COLOR 0,1:KEY OFF:CLS
 12 S=VAL(RIGHT$(TIME$,2))
@@ -4694,9 +4899,11 @@ machines:
 1010 FOR I=1 TO 2000:NEXT I:CLS
 1020 RUN "menu.bas"
 ```
+{% endraw %}
 
 ## SPINECHO.BAS
 
+{% raw %}
 ```bas
 10 CLS:CLEAR:SCREEN 1,0:KEY OFF:COLOR 0,1
 20 WIDTH 40
@@ -4792,9 +4999,11 @@ machines:
 1020 NEXT K
 1030 RETURN
 ```
+{% endraw %}
 
 ## TRIDIAG.BAS
 
+{% raw %}
 ```bas
 5 REM menu program for basic programs on this diskette
 10 CLS
@@ -4833,9 +5042,11 @@ machines:
 605 RUN"simpint"
 610 RUN"tridiag"
 ```
+{% endraw %}
 
 ## TWOMEANS.BAS
 
+{% raw %}
 ```bas
 1 REM this program compares two means
 2 CLS:LOCATE 5,20
@@ -4926,9 +5137,11 @@ machines:
 1390 X=G3
 1400 RETURN
 ```
+{% endraw %}
 
 ## XRAYDIF1.BAS
 
+{% raw %}
 ```bas
 1 REM x-ray scattering interference relationships
 2 KEY OFF:CLEAR:WIDTH 40:SCREEN 1,0:COLOR 0,1:CLS
@@ -4992,6 +5205,7 @@ machines:
 360 A$=INKEY$:IF A$="" THEN 360
 365 CLS:END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

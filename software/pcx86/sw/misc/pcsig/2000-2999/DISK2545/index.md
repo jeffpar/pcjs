@@ -14,6 +14,44 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2545.TXT
+
+{% raw %}
+```
+Disk No: 2545                                                           
+Disk Title: Learning Japanese, The Hiragana Symbols                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Learning Japanese 1. The Hiragana Symbols                
+Author Version: 1.01                                                    
+Author Registration: $25.00                                             
+Special Requirements: EGA.                                              
+                                                                        
+Have you ever wanted to learn Japanese? Well, this program will teach   
+you the Hiragana symbols. Hiragana is like a code, with symbols         
+representing syllables. The program teaches you to recognize the 75     
+Japanese Hiragana symbols using flash cards, literal conversion of      
+English sounds, and a tutorial with recognition practive. You can       
+control the program with the mouse or the keyboard.                     
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989-1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2545
 

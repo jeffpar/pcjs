@@ -55,6 +55,7 @@ machines:
 
 ## BESTCROP.BAS
 
+{% raw %}
 ```bas
 1  REM  BESTCROP-AN ANALYSIS OF EQUAL RETURN PRICES & YIELDS FOR TWO CROPS
 3  REM  ORIGINATED FROM AGNET PROGRAM
@@ -436,9 +437,11 @@ machines:
 60810 ON ERROR GOTO 0
 60820 RETURN
 ```
+{% endraw %}
 
 ## BFP.BAS
 
+{% raw %}
 ```bas
 1  REM *** BREAK-EVEN FEEDER PRICES****
 2  REM ***THIS PROGRAM CALCULATES THE BREAK-EVEN PURCHASE PRICE, SALE PRICE AND
@@ -1119,9 +1122,11 @@ machines:
 62050 PRTSCR=&HF1
 62060 RETURN
 ```
+{% endraw %}
 
 ## CARCOST.BAS
 
+{% raw %}
 ```bas
 1  REM  CARCOST-CAR & TRUCK COSTS CALCULATOR
 2  REM  PROGRAMMER: G.MONNER
@@ -1466,9 +1471,11 @@ machines:
 62050 PRTSCR=&HF1
 62060 RETURN
 ```
+{% endraw %}
 
 ## CFP.BAS
 
+{% raw %}
 ```bas
 1  REM  **COMPARATIVE FEED PRICING**
 2  REM  **-A PROGRAM FOR CALCULATING THE ENERGY & PROTEIN EQUIVALENT PRICES OF
@@ -1915,9 +1922,11 @@ machines:
 62050 PRTSCR=&HF1
 62060 RETURN
 ```
+{% endraw %}
 
 ## COWCRAB.BAS
 
+{% raw %}
 ```bas
 1 REM COW COMPUTERIZED RISK ANALYSIS BUDGET
 2 REM CALCULATES RISK LEVELS FOR COW/CALF PRODUCERS
@@ -2322,9 +2331,11 @@ machines:
 62050 PRTSCR=&HF1
 62060 RETURN
 ```
+{% endraw %}
 
 ## CRCROP.BAS
 
+{% raw %}
 ```bas
 1  REM  CRCROP PROGRAM
 2  REM  CALCULATION OF CROP ENTERPRISE COSTS
@@ -2988,9 +2999,11 @@ machines:
 61160  GOSUB 300
 61165  RETURN 
 ```
+{% endraw %}
 
 ## DIET.BAS
 
+{% raw %}
 ```bas
 1  REM  DIET DETECTIVE JR.
 2  REM  PROVIDES NUTRIENT ANALYSIS & RECOMMENDATIONS
@@ -4094,9 +4107,11 @@ machines:
 60810 ON ERROR GOTO 0
 60820 RETURN
 ```
+{% endraw %}
 
 ## DOLLAR.BAS
 
+{% raw %}
 ```bas
 1 REM ***** DOLLAR DETECTIVE *****
 2 REM COMPARES PERSONAL SPENDING HABITS TO
@@ -5088,9 +5103,40 @@ machines:
 62050 PRTSCR=&HF1
 62060 RETURN
 ```
+{% endraw %}
+
+## FILES460.TXT
+
+{% raw %}
+```
+-----------------------------------------------------------------------
+Disk No 460   Alberta Agricultural Programs                   v1 DS2
+---------------------------------------------------------------------
+This seems to be another useful collection of decision aids for Farm Management.
+Basica is required.
+ 
+AUTOEXEC BAT  Batch file BASICA HELLO
+BESTCROP BAS  Breakeven prices & yields - March 1982
+BFP      BAS  Breakeven feeder prices - July 1984
+CARCOST  BAS  Car or truck costing program - January 1984
+CFP      BAS  Comparative feed pricing - June 1984
+COWCRAB  BAS  Cow calf risk analysis budget - July 1983
+CRCROP   BAS  Concensus research crops model - July 1984
+DIET     BAS  Diet Detective Jr. - March 1983
+DOLLAR   BAS  Dollar Detective - personal budgeting - March 1983
+HAYCRAB  BAS  Hay cost returns and analysis - March 1982
+HELLO    BAS  Alberta Agricluture menu program - August 1984
+INSTALL  BAT  Batch file to add system and BASICA to disk
+LANDPUR  BAS  Land purchase decisions - February 1983
+LOAN     BAS  Loan calculator - August 1984
+RATION   BAS  Ration balancing - May 1984
+README   DOC  Author supplied documentation file
+```
+{% endraw %}
 
 ## HAYCRAB.BAS
 
+{% raw %}
 ```bas
 1  REM  HAYCRAB
 2  REM  ** A PROGRAM TO CALCULATE THE ENERGY & PROTEIN EQUIVALENT PRICES OF
@@ -5382,9 +5428,11 @@ machines:
 62050 PRTSCR=&HF1
 62060 RETURN
 ```
+{% endraw %}
 
 ## HELLO.BAS
 
+{% raw %}
 ```bas
 1 REM *** HELLO PROGRAM ***
 2 REM PRESENTS A MENU OF ADA IBM-PC PROGRAMS
@@ -5626,9 +5674,11 @@ machines:
 60810 ON ERROR GOTO 0
 60820 RETURN
 ```
+{% endraw %}
 
 ## LANDPUR.BAS
 
+{% raw %}
 ```bas
 1  REM  LAND PURCHASE DECISIONS
 2  REM  LAST REVISED FEB 8,1983
@@ -6093,9 +6143,11 @@ machines:
 62050 PRTSCR=&HF1
 62060 RETURN
 ```
+{% endraw %}
 
 ## LOAN.BAS
 
+{% raw %}
 ```bas
 1 REM **  LOAN CALCULATOR PROGRAM   **
 2 REM ** ORIGINALLY WRITTEN BY      **
@@ -6692,9 +6744,11 @@ machines:
 62050 PRTSCR=&HF1
 62060 RETURN
 ```
+{% endraw %}
 
 ## RATION.BAS
 
+{% raw %}
 ```bas
 1 REM RATION  - A PROGRAM FOR  BALANCING RATIONS FOR  LIVESTOCK
 2 REM REVISED MAY/1984
@@ -7461,6 +7515,34 @@ machines:
 62050 PRTSCR=&HF1
 62060 RETURN
 ```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+		ALBERTA DEPT. OF AGRICULTURE BASIC PROGRAMS - AUG '84
+HELLO    BAS     6049  Alberta Agricluture menu program - August 1984
+BESTCROP BAS    11245  Breakeven prices & yields - March 1982
+BFP      BAS    21669  Breakeven feeder prices - July 1984
+CARCOST  BAS    10573  Car or truck costing program - January 1984
+CFP      BAS    13758  Comparative feed pricing - June 1984
+CRCROP   BAS    22813  Concensus research crops model - July 1984
+DIET     BAS    30240  Diet Detective Jr. - March 1983
+DOLLAR   BAS    30387  Dollar Detective - personal budgeting - March 1983
+HAYCRAB  BAS     7709  Hay cost returns and analysis - March 1982
+LANDPUR  BAS    13141  Land purchase decisions - February 1983
+LOAN     BAS    20059  Loan calculator - August 1984
+RATION   BAS    24837  Ration balancing - May 1984
+COWCRAB  BAS    11265  Cow calf risk analysis budget - July 1983
+AUTOEXEC BAT       14  Batch file BASICA HELLO
+INSTALL  BAT      175  Batch file to add system and BASICA to disk
+COMMAND  COM    17792  DOS 2.1 COMMAND file
+BASICA   COM    26112  DOS 2.1 BASICA
+README   DOC     1152  This file
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

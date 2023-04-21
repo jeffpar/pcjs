@@ -40,6 +40,81 @@ machines:
     DATABASE      The Data for the 1986 statistics
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES668.TXT
+
+{% raw %}
+```
+----------------------------------------------------------------------------
+Disk No  668  WORLD version 1.0                                    V1   DS2
+----------------------------------------------------------------------------
+This program is a Data Base of statistics and demographics for Nations of
+the world. It is easy to use. It is completely menu driven. Just start it up
+and give it a try. The information was extracted from The Encyclopedia
+Britanica Year Book and other sources.
+ 
+WORLD    EXE    The program
+DATABASE        The Data for the 1986 statistics
+ 
+PC Software Interest Group (PC-SIG)
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+WORLD - NATIONAL STATISTICS AND DEMOGRAPHICS FOR 1986   V. 1.0
+----------------------------------------------------------------------------
+This program is a Data Base of statistics and demographics for Nations of
+the world. It is easy to use. It is completely menu driven. Just start it up
+and give it a try.
+ 
+To begin type WORLD and press ENTER.
+ 
+PC Software Interest Group (PC-SIG)
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987
+```
+{% endraw %}
+
+## NOTES668.TXT
+
+{% raw %}
+```
+Program name: WORLD
+ 
+Author name:Copyrighted by Bruce R. De Torres   1986
+Address:                   P.O.Box 8925
+                           Coral Gables, Florida  33124
+ 
+Program Classification: NATIONAL STATISTICS AND DEMOGRAPHICS FOR 1986
+ 
+Suggested Donation:none  The author has placed it in the public domain.
+ 
+Program Description:
+ 
+This program is a Data Base of statistics and demographics for Nations of
+the world. It is easy to use. It is completely menu driven. Just start it up
+and give it a try. The information was extracted from The Encyclopedia
+Britanica Year Book and other sources.
+ 
+PC Software Interest Group (PC-SIG)
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0668
 

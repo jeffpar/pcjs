@@ -56,6 +56,72 @@ machines:
     contained. Great for beginners!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES764.TXT
+
+{% raw %}
+```
+Disk No  #764
+Program Title: Compass
+PC-SIG version 1
+ 
+Compass is the first integrated program that combines six major programs and
+utilities into one program file. Compass has the following modules:
+ 
+Database: A full-fledged database which can be edited and formated by you.
+The database is limited to 10 fields of a maximum length of 25 characters.
+ 
+Wordprocessing: The memo pad is a functional word processor with all the
+abilities you would expect to find: word-wraping, text block editing and
+utilities, etc.
+ 
+Spreadsheet: This is a little limited in space (315 cells, A-G columns,
+1-45 rows) but it should be able to fit any small to medium calculating
+needs you have.
+ 
+Accounting: Compass has a built-in single-entry accounting package which
+can track up to 999 different income and expense sources, give you a
+month-to-date and year-to-date report, show balances by account number. It
+also has three report statement you can choose from: an account number
+listing, a monthly transaction report, and an income statement. It also has
+an easy to use End-of-period processing utility.
+ 
+Calendar: This allows you to keep track of all your appointments on your
+schedule and display them either by the day or by the month.
+ 
+Names: A built-in mailing list program
+ 
+Utilities: There are 5 major utilities built into the Compass program: List
+empty disk space available, show a directory of the disk, copy files from
+one disk to another, Execute other programs without leaving Compass, and
+set-up the parameter of the Compass.
+ 
+Usage: Personal and Business
+ 
+System Requirements: IBM PC or compatible, one disk drive, 320k of memory, color
+                     graphics adapter
+ 
+How to Start: Put the program diskette in drive A Enter COMPASS after the
+              A> prompt Select Utility and set your parameters
+ 
+ 
+File Descriptions:
+ 
+COMPASS  EXE  Main program file
+COMPASS  HLP  File holding help messages
+COMPASS  SET  Data file needed by COMPASS to store setup functions
+READ     ME   Instructions on how to start program
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0764
 

@@ -14,6 +14,43 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2538.TXT
+
+{% raw %}
+```
+Disk No: 2538                                                           
+Disk Title: Letter of Instruction                                       
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Letter of Instruction Writer                             
+Author Version: 1.11                                                    
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+LETTER OF INSTRUCTION organizes information about your finances,        
+property, and personal affairs.  It provides this information to whoever
+you designate to handle or manage your affairs in the event of your     
+death, or your inability to do so yourself.  This can include physical  
+or emotional disability, travelling away from home, or other similar    
+circumstances.  It also provides you with a recordkeeping tool for      
+financial and estate planning.                                          
+                                                                        
+NOTE: LETTER OF INSTRUCTION is not a Will, nor does it give advice on   
+how to manage your affairs.  However, it can provide you with essential 
+information at your fingertips when seeking advice from a qualified     
+professional.                                                           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2538
 

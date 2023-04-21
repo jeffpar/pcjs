@@ -40,6 +40,107 @@ machines:
     line drawing.  Files to edit cannot be larger than available memory.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## ORDERFRM.DOC
+
+{% raw %}
+```
+Remit to:  SemWare                                      Order Form  #9002-OF02
+           4343 Shallowford Rd, Suite C-3
+           Marietta, GA  30062-5003
+
+               *** QEdit Advanced version 2.1, February 1990. ***
+We offer discounts on quantity orders, multiple-user licenses, and dealer
+pricing.  We also offer student discounts and discounts for bona fide BBS
+sysops.  Please call for details. We take American Express, MasterCard, or
+VISA.  You can use this handy order form to order by MAIL, or by:
+
+VOICE: (404) 641-9002, Mon. - Fri., 9:00 a.m. - 5:00 p.m., ET ONLY.
+FAX:   (404) 640-6213, 24 hrs, 7 days a week.
+BBS:   (404) 641-8968, 24 hrs, 7 days a week. 1200/2400/9600(HST), <N81>.
+
+SemWare, send me (check desired items):
+
+____ QEdit Registration with Printed Manual...... @ $54.95 ea  $ ______
+     (Includes latest version of the licensed software, handy
+     reference card, low-cost upgrades, plus our professionally
+     printed, spiral-bound, indexed reference manual.)
+
+____ QEdit Registration ......................... @ $44.00 ea  $ ______
+     (Includes latest version of the licensed software, with
+     documentation on disk, plus low-cost upgrades)
+
+Shipping
+     With printed manual (US/Canada/Mexico: $3; Overseas: $10) $ ______
+     Disk only (US/Canada/Mexico: $3; Overseas: $5)            $ ______
+
+Purchase Orders under $100.00, add $6.00 Handling Charge       $ ______
+     (NON-PREPAID ORDERS ONLY - THIS DOES NOT APPLY TO CASH,
+     CHECK, MONEY ORDER, OR CHARGE CARD ORDERS)
+
+                                                     Subtotal  $ ______
+
+Georgia Residents please add Sales Tax ................  @ 4%  $ ______
+
+                         Total (U.S. Funds drawn on U.S. Bank) $ ______
+                                             
+Payment by:( )CHECK(MAIL ONLY)  ( )AMEX  ( )MC  ( )VISA  ( )PO# ______________
+
+  Name: _______________________________________________________________
+
+  Company (ONLY if company address):___________________________________
+
+  Address: ____________________________________________________________
+
+         : ____________________________________________________________
+
+         : ____________________________________________________________
+
+  Voice Day Phone: ______________________ Evening: ____________________
+
+  Card #: _________________________________ Exp. Date: ________________
+
+  Signature of cardholder: ____________________________________________
+
+Prices subject to change without notice.  Confirm current prices by calling
+(404) 641-9002.  TSR and OS/2 VERSIONS NOW AVAILABLE!  Call for details.
+```
+{% endraw %}
+
+## QHELP.TXT
+
+{% raw %}
+```
+<Esc> for Menus - Selected QEdit Commands By Function - Press Any Key to Return
+               # = <Shift>     @ = <Alt>     ^ = <Ctrl>
+ ┌────────────────────┐      ┌────────────────────┐      ┌────────────────────┐
+ │  Cursor Movement   │      │      Toggles       │      │ Block/Scrap Buffer │
+ └────────────────────┘      └────────────────────┘      └────────────────────┘
+  GotoBlockBeg   ^QB          ToggleBoxDraw    #F1        MarkLine       @L
+  GotoBlockEnd   ^QK          ToggleBoxType    @F1        MarkColumn     @K
+  GotoLine       ^J           ToggleIndent     ^QI        MarkCharacter  @A
+  PrevPosition   ^QP          ToggleSmartTabs  ^QT        Cut            grey -
+  ScreenLeft     @F5          ToggleTabsExpand @V         Copy           grey +
+  ScreenRight    QF6          ToggleTabsOut    @I         Paste          grey *
+  ScrollUp       ^W           ToggleWordwrap   ^OW        PasteOver      ^PrtSc
+  ScrollDown     ^Z           43/50 line mode  ^F1        UnmarkBlock    @U
+ ┌────────────────────┐      ┌────────────────────┐      ┌────────────────────┐
+ │        File        │      │       Editing      │      │       Other        │
+ └────────────────────┘      └────────────────────┘      └────────────────────┘
+  ChangeFilename @O           AddLine          F2         CenterLine     ^OT
+  EditFile       @E           DelLine          @D         Upper          @1
+  Exit           ^KD          DelToEol         F6         Lower          @2
+  GlobalExit     @X           DelRtWord        ^T         Flip           @3
+  GlobalSave     @Y           DupLine          F4         Dos Shell      F9
+  NextFile       @N           JoinLine         @J         Sort           #F3
+  ReadBlock      @R           Literal          ^P         UndoCursorline ^QL
+  WriteBlock     @W           SplitLine        @S         WrapPara       @B
+  SaveFile       ^KD          UnKill           @U         RepeatCmd      ^QQ
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1783
 

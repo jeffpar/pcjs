@@ -51,8 +51,72 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES473.TXT
+
+{% raw %}
+```
+-----------------------------------------------------------------------
+Disk No 473     Trivial Towers [ Disk 1 of 2 ]                   v1 DS2
+----------------------------------------------------------------------
+ 
+Trivial Towers is a trivia game that tests the users knowlege on a variety
+of different subjects.  It is a game that 2 to 4 people can play at a time.
+By answering questions correctly, you build "towers."  When you complete all
+4 towers, that are 6 blocks high, you win the game.  There are special blocks
+on the gameboard, that when landed on, enable the user to choose any topic
+of his/her choice.
+------------    Trivial Towers (v1.0)
+TTENTER  BAS    Program that enables the user to write customized questions.
+TTOWERS  BAS    Main program
+TTRULES  BAS    Rules for TTOWERS.BAS and directions on how to customize.
+TTNOTE   BAS    A letter from the authors of the program.
+TTSHARE  DOC    A welcome letter from the authors giving definitions.
+```
+{% endraw %}
+
+## NOTES473.TXT
+
+{% raw %}
+```
+Program Name:           Trivial Towers
+Version:                1.0
+Author:                 Vinyard Software Inc.
+                        2243 Beacon Lane
+                        Falls Church, VA. 22043-1709
+Suggested Donation:     $20
+The Program Trivial Towers is for anyone who wishes to test
+their knowlege in any area of trivia.  The program allows
+the user to create trivia questions of any kind and save them
+to disk for future use.  Anywhere from 2 to 4 players can play
+at once.  The computer automatically rolls one die and gives
+the user the choice of moving clockwise or counterclockwise.
+The user may then choose the direction he wishes to move.  There
+are special wild-card blocks on the board that enable the user
+to choode any topic of his choice.  This game follows the game
+Trivial Pursuit in a computerized way.  The only problem that
+I found with this program, is that it does not redraw the game-
+board.  When entering an answer, if the computer came back with
+the response "reenter?", the screen would move up one line.  After
+a few of these the gameboard is extremely confusing.  I found that
+it is much easier to choose your answer and just press return, then
+decide whether or not your answer is close enough to the computers
+answer.
+ 
+The most simplistic way I found to boot up this software is to put
+your DOS disk in drive A:, boot up, type B:, put the Trivial Towers
+disk in drive B:, type A:BASICA.  Then follow the programs prompts.
+There are two files that you should print out.  They are TTSHARE.DOC
+and TTNOTE.BAS.  TTNOTE.BAS is a program that is written to auto-
+matically print out on your printer.  TTSHARE.DOC you can just type
+out in DOS.  The only requirement for this program is a color monitor.
+The gameboard is in color and it would be hard to tell what subject
+you are on.
+```
+{% endraw %}
+
 ## TTENTER.BAS
 
+{% raw %}
 ```bas
 1 COLOR 0,0,0
 1000 REM *********************************************************************
@@ -234,9 +298,11 @@ machines:
 9998 CHAIN "A:TTOWERS.BAS"
 9999 END
 ```
+{% endraw %}
 
 ## TTNOTE.BAS
 
+{% raw %}
 ```bas
 10 LPRINT"                              Ed Mickolus and Calvin Andrus"
 20 LPRINT"                              2243 Beacon Lane"
@@ -288,9 +354,11 @@ machines:
 500 LPRINT"                                      Ed and Calvin"
 510 END
 ```
+{% endraw %}
 
 ## TTOWERS.BAS
 
+{% raw %}
 ```bas
 2 WIDTH 80 : COLOR 7,0,0
 10000 REM ****************************************************************
@@ -651,9 +719,11 @@ machines:
 60004 REM **********************************************************
 65529 END
 ```
+{% endraw %}
 
 ## TTRULES.BAS
 
+{% raw %}
 ```bas
 10 LPRINT "                     TRIVIAL TOWERS":LPRINT
 15 LPRINT "                       VERSION 1.0":LPRINT
@@ -918,6 +988,7 @@ machines:
 2440 LPRINT"Please write us with your comments about how Trivial Towers can"
 2450 LPRINT"further serve your entertainment needs."
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

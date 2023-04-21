@@ -43,6 +43,54 @@ machines:
     near-compatible printers will work with all of POWER LABEL's features.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2293.TXT
+
+{% raw %}
+```
+Disk No: 2293                                                           
+Disk Title: Power Label                                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Power Label                                              
+Author Version: 1.00                                                    
+Author Registration: $20.00                                             
+Special Requirements: None.                                             
+                                                                        
+Here's a program that enables you to print custom-designed labels,      
+envelopes, and index cards. For printing jobs where the size of the     
+item is unusual, there is also an "All-purpose" mode, which has no      
+restrictions on dimensions or spacing. This allows customization        
+according to the user's specifications. Some features include:          
+                                                                        
+~Custom print styles for each line by using any combinations of the 12  
+print modes available: draft, elite, compressed, horizontally expanded, 
+vertically expanded, subscript, italics, underlined, emphasized,        
+doublestrike, letter quality, and proportional printing                 
+                                                                        
+~The ability to change print styles on any line at any time             
+                                                                        
+~Editing of line text anytime                                           
+                                                                        
+~File-saving option for storing label/envelope/card data on disk for    
+ later use                                                              
+                                                                        
+~DOS shell                                                              
+                                                                        
+The program is designed for use with Epson FX-compatible dot matrix     
+printers, but most near-compatible printers will work with all of       
+POWER LABEL's features.                                                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2293
 

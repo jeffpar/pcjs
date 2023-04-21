@@ -25,6 +25,64 @@ machines:
     Improve your game painlessly.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE.TXT
+
+{% raw %}
+```
+PROGRAMID = 11734                                                       
+PROGRAM TITLE                                                           
+Disk Utilities                                                          
+SUGGESTED REGISTRATION                                                  
+None.                                                                   
+SPECIAL REQUIREMENTS                                                    
+512K RAM and two floppy drives.                                         
+PROGRAM VERSION                                                         
+3.1                                                                     
+SHORT DESCRIPTION                                                       
+DiskUtilities are two programs which let copy and format disks                 
+with a wide variety of disk drives.                                                              
+                                                                                  
+LONG DESCRIPTION                                                        
+DiskUtilites to easily copy and format disks. 
+                                                                        
+~ QFORMAT - Quickly format and verify disks in one or more drives.      
+Supports 5 1/4 and 3 1/2, 180k, 360k, 720k, and 1.4meg drives.
+                                                                         
+~ QCOPY - A very fast disk copy program which loads to disks in the     
+sequence you specify, knows what formats to use and will do so from a   
+command line or during the running of the program                       
+*******************END*******************                               
+```
+{% endraw %}
+
+## FILE2154.TXT
+
+{% raw %}
+```
+Disk No: 2154                                                           
+Disk Title: Chess Tutor                                                 
+PC-SIG Version: 1                                                       
+                                                                        
+Program Title: Chess Tutor                                              
+Author Version: 11/89                                                   
+Special Requirements: None.                                             
+                                                                        
+Learn the subtleties of many famous chess games.  Not a lot of          
+documentation - play as you learn, learn as you play.  CHESS TUTOR is an
+original and is meant to supplement PRAXIS I, although it is not        
+necessary to run CHESS TUTOR.  Improve your game painlessly.            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2154
 

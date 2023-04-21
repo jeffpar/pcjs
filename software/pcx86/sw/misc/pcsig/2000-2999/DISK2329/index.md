@@ -25,6 +25,26 @@ machines:
     Over 70 commonly-used business forms.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## VENDOR2.DOC
+
+{% raw %}
+```
+FormGen Business Forms Collection
+=================================
+
+Category: Forms                                       
+
+A collection of business forms for use with FormGen.  Standard invoices,
+purchase orders, credit applications, accounting forms, etc. that you can
+use "as is", or modify to suit your needs.  Over 70 commonly used business
+forms.  Requires FormGen.  [ASP MEMBER]                              
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2329
 

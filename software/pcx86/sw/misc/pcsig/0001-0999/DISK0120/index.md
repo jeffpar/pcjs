@@ -30,6 +30,35 @@ machines:
     pieces on a monochrome or Hercules graphics systems.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES120.TXT
+
+{% raw %}
+```
+-----------------------------------------------------------------------------
+Disk No  120  PC-CHESS                                               v1.1
+-----------------------------------------------------------------------------
+PC-CHESS is a user supported program that allows you to play chess
+against the computer or a human opponent.
+ 
+PCCHESS  EXE  Initialization/setup program
+PCCH1M   EXE  Player vs computer (monochrome display)
+PCCH2M   EXE  2 Player version   (monochrome display)
+PCCH1G   EXE  Player vs computer (graphics   display)
+PCCH2G   EXE  2 Player version   (graphics   display)
+PCCHESS  PRF  Save file for game setup parameters
+PCCHESS  PRT  Documentation
+ 
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0120
 

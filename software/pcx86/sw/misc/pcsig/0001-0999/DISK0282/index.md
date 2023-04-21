@@ -80,8 +80,222 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## ANALYST.DOC
+
+{% raw %}
+```
+
+
+
+
+
+                       * * * * * * * * * * * * * * * * *
+                       *   THE HOME FINANCING ANALYST  *
+                       * * * * * * * * * * * * * * * * *
+
+                (C) Copyright 1983, 1984 -- Ghassan F. Nakad
+
+Overview
+--------
+     The HOME FINANCING ANALYST is a comprehensive real estate evaluation 
+program written from the perspective of homeowners, potential homeowners, or 
+renters. It is destined to assist these people as well as real estate agents, 
+brokers and developers in forecasting and allocating the costs of home 
+ownership and in comparing ownership versus rental alternatives. It is also 
+useful in determining if mortgage refinancing is worthwhile. The program, 
+however, cannot be used to evaluate real estate purchased for investment 
+purposes, as it does not take into account depreciation charges and rental 
+income.
+
+      The program works with the IBM-PC, compatible systems, and both versions 
+1.1 and 2.0 of PC-DOS/MS-DOS. Only one disk drive is necessary. The compiled 
+version requires at least 128 Kb memory, while the non-compiled version 
+needs 64 Kb. The latter is less efficient and does not have the same degree of 
+precision as the compiled version (0.01% error detected). Should you run out of 
+memory in the non-compiled version, the screen will warn you and prompt you to 
+save your work under a file name. The program will then continue as usual. This 
+problem does not occur in the compiled version.
+
+Caution
+-------
+     A file with extension "HFA" must always be present on the program disk. 
+Otherwise you run into trouble.
+
+$$$
+---
+     You are encouraged to copy and distribute this program as long as it is 
+not done for profit. If you find this program useful, a $15.00 contribution is 
+requested (less is accepted if all your income is eaten up by your mortgage or 
+your rent !). Please send your contribution and other correspondence to:
+
+                              Ghassan F. Nakad
+                              697 Cove Road, Unit 2-J
+                              Stamford, CT 06902
+
+     As a registrant you are entitled to an additional copy of the program for 
+$5.00, one written response to a technical support request and annoucements of 
+future updates. Whether a registrant or not, your comments will be most   
+appreciated.
+
+     Since I carry no liability insurance I am sorry to inform you that this 
+program carries no guarantees, warrantees or what have you. If you acquired it 
+through me, and you are dissatisfied with it, I'll gladly refund your 
+contribution less $5.00 for shipping, handling and the cost of the diskette, 
+which will be most probably squeezed and bent in my mail box.
+
+     With this in mind, let's talk home financing !
+
+
+
+
+
+
+
+
+
+
+Program Components
+------------------
+     The HOME FINANCING ANALYST provides six separate schedules in a template 
+format and a worksheet for fast and accurate computation of the effective 
+mortgage cost (IRR equivalent).
+ 
+     Schedules A & B: These are the Amortization Schedules for the first (A) 
+                      and second (B) mortgages, if any. They show for each year
+                      a month by month allocation of the mortgage payments 
+                      between principal and interest paid, cumulative principal
+                      and interest paid, and the outstanding mortgage balance. 
+                      An annual summary of all these is provided at the bottom
+                      of the template.
+
+     Schedules C & D: Provide the same information as above on an after-tax 
+                      basis.
+
+     Schedule   E   : This a schedule of the annual net monthly costs of owning
+                      a home, be it a house or a condo. It takes into account 
+                      all payments made -- both tax deductible and not. This 
+                      includes mortgage payments, common charges of a condo (if 
+                      any), insurance, property taxes, etc. based on your 
+                      marginal federal tax rate and your marginal or flat
+                      state tax rate (if any). An annual summary is provided.
+
+      Schedule  F   : This last schedule gives a complete picture of the  
+                      effective costs of ownership, including such intangibles  
+                      as anticipated property appreciation, as well as the 
+                      opportunity cost of funds invested (i.e.the down payment)
+                      since a person usually forgoes some income on his/her 
+                      savings by investing in a home instead of another saving
+                      or investment instrument. Once the "true" cost of 
+                      ownership is established, the program compares it to  
+                      renting costs and determines the benefits or costs of  
+                      owning as opposed to renting your home. As usual, monthly 
+                      and annual information are provided.
+
+      Effective Rate
+      Computation   : This option is a sub-program intended to assist in 
+                      figuring out the real interest rate on the mortgage given
+                      (a) the mortgage amount; (b) its length; (c) the points 
+                      paid up-front; and, (d) the anticipated life of the 
+                      mortgage (or how long you intend to keep that mortgage).
+                      Also this sub-program will provide you with the amount
+                      of the monthly payment, total interest paid over the 
+                      life, not necessarily the length, of the mortgage and 
+                      the balance outstanding (this also corresponds to the 
+                      balloon payment).  
+
+
+Operations
+----------
+     The whole program is menu driven and requires no programming skills 
+whatsoever. Just follow the menus provided on the various screens.  
+
+
+
+
+
+
+
+
+
+
+     When you first start the program you'll be asked to select one of four 
+options:
+
+          1. Input new data
+          2. Use data on file
+          3. Review files on the disk
+          4. Effective rate computation, etc.
+
+     If you are hesitant at first, go directly to option 2 and ask for "SAMPLE" 
+when you are prompted to input the file name. A second later you'll see the 
+screen getting filled with data that I've stored for illustration purposes. At 
+this stage you can do four things: you can continue or return to the original 
+menu or alternatively you may decide to alter the data in front of you or 
+input you own data. Either way it's only a push button away.
+
+     Should you decide to input your own data all you have to do is answer the 
+prompts. The program checks every entry as to its consistency and format but it 
+can't tell if some of the amounts are correct or not. So if you make a mistake 
+you will be given a chance to make the necessary corrections in a little while. 
+In fact throughout the program you'll be constantly asked if you wish to review 
+your assumptions, thus permiting the exploration of various "what if" scenarios.
+
+     Every time a change in assumptions is made, you are given a chance to save 
+the new set of data. This is highly recommended. Make sure however that the 
+name given to the new file does not exceed eight (8) characters and not to 
+include any extensions to the name. The program will affix the extension "HFA" 
+automatically. Although the extension will appear on the screen when you review 
+the files on the disk, you never need to input it.
+
+     After you are given the option to save your data you get to a menu which 
+asks you which of the schedules { A through F } discussed earlier you wish      
+to be displayed. 
+
+     One of the unique features of the HOME FINANCING ANALYST is that it 
+provides you with the opportunity to move from one schedule to another. Hence, 
+if you want to see the schedule of the next year you just push "N". If 
+instead you want to review your assumptions (and possibly change them), you 
+push "R", etc. Everything on the screen is self-explanatory.
+
+A Note on Computation
+---------------------
+     The computational rules are to be printed and distributed at a later 
+stage. The trickiest ones are explained here:
+
+      Any Net Cost = Any Deductible Cost - Shield
+
+      Shield = Pre-tax Deductible Cost  X  Tax Rate
+
+      Tax Rate = Federal Tax Rate + [(1-(Federal Tax Rate)) X State Tax Rate]
+
+      Appreciation = (% Expected Appreciation X 0.6) 
+                     + [(1-Tax Rate) X 0.4 X  % Expected Appreciation]
+
+      Return on Investment = Appreciation / Down Payment
+
+      Total Return on Investment = Net Cost or Benefit / Down Payment
+
+That's it for now. Forthcoming enhancements will include (among other things)   
+variable and stepped-up rate mortgage rates.
+
+
+
+
+
+
+
+
+          
+
+
+
+              
+```
+{% endraw %}
+
 ## CBD.BAS
 
+{% raw %}
 ```bas
 10 WIDTH 80:KEY OFF:'    "_:CBD.BAS"   2-05-85  1A
 11 '
@@ -509,9 +723,11 @@ machines:
 5498 '
 5500 PRINT:PRINT"*** THE COPYRIGHT MESSAGE HAS BEEN MODIFIED, SO THE PROGRAM HAS BEEN HALTED.***": RETURN
 ```
+{% endraw %}
 
 ## PC-CHECK.BAS
 
+{% raw %}
 ```bas
 1 ' PC-CHECK VERSION 1.0    HOLCOM INC.
 5 KEY OFF:GOSUB 10050
@@ -1606,6 +1822,48 @@ machines:
 10520 DATA 19,4,"*Do not distribute PC-CHECKtm in modified form",21,2,"If you have any suggestions or alterations that you feel would better",22,1,"PC-CHECKtm, please send them to the above address. We will consider all",23,1
 10525 DATA "comments in our revisions of this program.",25,25,"COPYRIGHT (c) 1984 HolCom Inc."
 ```
+{% endraw %}
+
+## REGIS.DOC
+
+{% raw %}
+```
+
+              PC-CHECKtm PRODUCT REGISTRATION FORM
+
+	Here is my contribution for PC-CHECKtm. Please register me 
+with your company and send me my complimentary full, 40 page printed
+documentation. I understandthat I will also be advised when a new version
+of PC-CHECKtm becomes available so that I can receive my free revision.
+Please also send me an address/ phone number that I can use for 
+customer support.
+
+NAME OF COMPANY __________________________________________________
+
+MY NAME         __________________________________________________
+
+ADDRESS         __________________________________________________
+
+__________________________________________________________________
+
+PHONE NUMBER   ___________________________________________________
+
+COMMENTS OR SUGGESTIONS FOR PC-CHECKtm  __________________________
+
+__________________________________________________________________
+
+__________________________________________________________________
+
+__________________________________________________________________
+
+	I understand that I am encouraged to copy the PC-CHECKtm
+program to give it to other users, but that the full printed 
+documentation is not to be distributed.
+
+                                 
+  
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -15,6 +15,42 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2602.TXT
+
+{% raw %}
+```
+Disk No: 2602                                                           
+Disk Title: DAN (Data Analysis) 1 of 2 (#2603 also)                     
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: DAN (Data Analysis)                                      
+Author Version: 3.21                                                    
+Author Registration: $40.00                                             
+Special Requirements: 384K RAM and graphics card. A hard drive is recomm
+                                                                        
+DAN allows entire data files to be used as variables in formulas! What  
+an idea! You then can easily list, print, or plot the "manipulated" data
+in a fraction of the time it would take by conventional means.          
+                                                                        
+DAN comes with 21 sample algorithms ranging from the mundane (gas and   
+electric bill data) to the sophisticated (biorythms, 3-D equations, and 
+electrical filters). This is a top-flight, well documented package for  
+math students and teachers, engineers, and scientists. Combine math     
+operators, including log and trig functions, with constants and data    
+file names in algebraic expressions. Graphs can be plotted in linear,   
+log, or polar coordinates. A wide range of printers is supported.       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2602
 

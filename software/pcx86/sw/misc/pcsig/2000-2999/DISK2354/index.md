@@ -74,6 +74,84 @@ machines:
     can only be modified with EZ-FORMS EXECUTIVE, or EZ-FORMS LITE.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2354.TXT
+
+{% raw %}
+```
+Disk No: 2354                                                           
+Disk Title: EZ-InFORMa dB                                               
+PC-SIG Version: S2.0                                                    
+                                                                        
+Program Title: EZ-InFORMa dB                                            
+Author Version: 2.0                                                     
+Author Registration: $99.00                                             
+Special Requirements: Hard drive.                                       
+                                                                        
+With EZ-INFORMA DB, you can turn forms created with EZ-FORMS (lite or   
+executive) into a database.                                             
+                                                                        
+Features include:                                                       
+                                                                        
+~ Menu integration to EZ-FORMS EXECUTIVE or EZ-FORMS LITE.              
+                                                                        
+~ Handles information quickly and easily.                               
+                                                                        
+~ Converts from several other popular data formats, like fixed-length,  
+ASCII and "FileExpress."                                                
+                                                                        
+~ Reads/writes industry standard .DBF files.                            
+                                                                        
+~ Will create an input screen from your .DBF file.                      
+                                                                        
+~ Handles over 2.1 BILLION records, limited only by disk space.         
+                                                                        
+~ Full tutorial for the database novice. "DR" program is included to    
+create a meaningful database of all the files on any hard or floppy     
+drive.                                                                  
+                                                                        
+~ Quickly create from, or match to, a database from an existing form.   
+                                                                        
+~ On-line manual and extensive context-sensitive Help.                  
+                                                                        
+~ Query, seek, find, and browse modes quickly scan your records.        
+                                                                        
+~ Print fancy labels using a form as a label.                           
+                                                                        
+~ Modify database format to add/delete fields, change field sizes.      
+                                                                        
+~ Quick Report feature for on-the-fly counting, adding and averaging.   
+                                                                        
+~ Multiple indexes: Have your database sorted every way you can.        
+                                                                        
+~ Automatic indexing as new records are added.                          
+                                                                        
+~ Duplicate search mode.                                                
+                                                                        
+~ Merge or append other database files.                                 
+                                                                        
+~ Keyboard macros for those repetitive tasks.                           
+                                                                        
+~ Field validations: numeric, logical, date.                            
+                                                                        
+~ Can be used as a fill-out only module for EZFX or EZFL.               
+                                                                        
+~ Forms printing with all the features supported in the source form.    
+                                                                        
+~ EZFX v2.4 or EZFL vE20 or higher is required to modify master forms.  
+A number of pre-designed forms and applications are included, but they  
+can only be modified with EZ-FORMS EXECUTIVE, or EZ-FORMS LITE.         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2354
 

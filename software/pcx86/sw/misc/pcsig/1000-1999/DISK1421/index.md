@@ -34,6 +34,45 @@ machines:
     your friends and enemies alike.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1421.TXT
+
+{% raw %}
+```
+Disk No: 1421                                                           
+Disk Title: Garden City Software Collection #1                          
+PC-SIG Version: S1.3                                                    
+                                                                        
+Program Title: Garden City Software Collection #1                       
+Author Version: 5/90                                                    
+Author Registration: $2.00 for each program.                            
+Special Requirements: CGA.                                              
+                                                                        
+Psychologists tell us that watching fish can reduce stress.  They don't 
+understand what a $150.00 fish, belly-up in the tank, can do to your    
+blood pressure.  Instead, try electronic fish.  Not a game, FISHTANK is 
+a soothing alternative to pet care and maintenance.  With proper        
+voltage, your fish will live forever.  You get all the accessories      
+complete with a snail and eel.                                          
+                                                                        
+History buffs will love HIST-PAL, a simple timeline database that gives 
+the years of birth and death, the occupations, and noted quotes ("Let   
+them eat cake!") of over five hundred famous people.  With a word       
+processor you can add to the time line.  Want to be among the "Rich and 
+Famous"?  Just drop yourself into this electronic "Who's Who" to impress
+your friends and enemies alike.                                         
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989,1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1421
 

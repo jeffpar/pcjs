@@ -57,6 +57,71 @@ machines:
     expertise in accepted accounting procedures and protocols.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0813.TXT
+
+{% raw %}
+```
+Disk No:  813
+Disk Title: Soar 2 of 2 (812 also)
+PC-SIG Version: S2.7
+
+Program Title: SOAR
+Author Version: 3.12
+Author Registration: $59.00
+Special Requirements: Two floppy drives.
+
+SOAR (Service-Oriented Accounts Receivables) helps you simplify customer
+billing, generate meaningful management reports, and quickly get a
+snapshot of your business income and its sources.  The program is
+menu-driven and easy to operate.  Some of SOAR's major features include:
+
+~  Simplified billing for businesses that provide services as well as
+products; three billing formats are supported - two industry-
+standard general-purpose forms, as well as a ``generic'' form.
+
+~  Charges based on fixed-item (inventory item), services, hourly
+rates, fixed-cost, or variable-cost.
+
+~  Customers assigned a late-charge rate so you can give special
+treatment to good customers;  automatic billing of customers with
+fixed-rate service or support contracts; customer inquiries are
+rapid and provide an instant history of the customer's activities.
+
+~  Mailing lists are generated from the customer database and labels
+can be prepared for customers billed, all customers, active
+customers, inactive customers or customers with past-due balances.
+
+~  A tax-exempt status for dealing with government agencies or
+wholesale transactions; taxable and non-taxable sales are automatically
+stored and reported.
+
+~  22 categories to summarize your business activity.
+
+~  Powerful reporting of specific areas of income; data files can be
+merged to have your business reported in quarters or other increments.
+
+~  Easy identification of items or services that are profitable for
+your business.
+
+~  Reports sorted by up to five keys to give you the specific
+information you need for your business and directing your areas of
+effort.
+
+SOAR does not teach accounting rules and assumes a certain level of
+expertise in accepted accounting procedures and protocols.
+
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0813
 

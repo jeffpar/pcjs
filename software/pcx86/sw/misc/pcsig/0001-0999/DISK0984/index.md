@@ -33,6 +33,75 @@ machines:
     Analysis. Send reports to a disk or printer.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES984.TXT
+
+{% raw %}
+```
+Disk No:  984
+Program Title: DOUBLE BOGIE KILLER
+PC-SIG version: 2.3
+
+DOUBLE BOGIE KILLER is a golf game database program which will keep
+track of the scores of the games you have played.  Like most programs,
+DBK is controlled by menus.  Through these, you can enter course data,
+record a round of golf, print a summary, output the entire .GLF file to
+disk, show all golfers on disk, and display all courses entered,
+utilities, and help screens.  Currently, DBK generates five different
+reports.  Any of these reports can be run alone or in any combination,
+thus allowing you to save paper when printing the reports.
+
+Usage:  Golf Stats/Handicap Database.
+
+Special Requirements:  Two disk drives.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $20.00
+
+File Descriptions:
+
+???????  HLP  Help file (46 files).
+COMBINE  OVR  Module to combine data files.
+COURSE   DAT  Some golf courses in Michigan (demo file).
+COURSE   PIC  Picture file.
+CRSCHK   EXE  Sub-program.
+CURSOR   FIX  Restores cursor upon exit.
+DBK      BAT  Batch file to start program.
+DBK!     COM  Primary Database/Analysis (main program).
+DTADRIVE DEF  Data file.
+GETFILE2 PIC  Picture file.
+GETFILE3 PIC  Picture file.
+GLFHLP   OVR  Pull-down for help files.
+GOLFEND  CHN  Produces an ending quote.
+GOLFMAIN 000  Overlays for the main program.
+GOLFMAIN 001  Overlays for the main program.
+GOLFMAIN 002  Overlays for the main program.
+GOLFMAIN 003  Overlays for the main program.
+GOLFMAIN CHN  Primary Database/Analysis (main program).
+HELP          A text file printable via READ.
+HELP     BAT  Batch file for help.
+HELPFILE      Message displayed if F1 key is pressed within DBK.EXE.
+READ     EXE  Text file reader/printer.
+RESULTS  PIC  Picture file.
+SLOPE    CHN  Module to calculate temporary SLOPE ratings.
+SUMONE   000  Summary module.
+SUMONE   CHN  Summary module.
+TEMSLOPE FEM  SLOPE data for women.
+TEMSLOPE MEN  SLOPE data for men.
+VIEW     CHN  Data file.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0984
 

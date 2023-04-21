@@ -47,6 +47,56 @@ machines:
     is it.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2327.TXT
+
+{% raw %}
+```
+Disk No: 2327                                                           
+Disk Title: Caves of Thor                                               
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Caves of Thor                                            
+Author Registration: $10.00                                             
+Special Requirements: CGA.                                              
+                                                                        
+On an expedition far within the icy mountains of Norway you discover    
+a crevice leading deep into the jagged rock.  You find yourself         
+within a vast underground empire--an enormous network of caves,         
+passages and chambers.  Local legends reveal that a famous mythological 
+deity once ruled these peaks, could you have stumbled across the        
+mystical ruler's kingdom?  You decide to find out...                    
+                                                                        
+CAVES OF THOR is a brilliant 16 color arcade/graphics game with a 4-way 
+scrolling playfield. You'll need to explore seven huge levels for the   
+three Symbols of Virtue.  These three virtues are needed to finish      
+CAVES OF THOR.                                                          
+                                                                        
+As you explore the empire you must overcome the many creatures that     
+patrol it.  Use your gun (unlimited bullets) to shoot creatures and     
+creature generators.  Other hazards include underground flowing streams 
+(with currents that can drag you away!), bubbling lava pits and lakes,  
+and the very dangerous Thor Beast, which creates creatures with         
+devastating speed.                                                      
+                                                                        
+This program features some of the best music yet heard in a shareware   
+game..  Other notable features include a ) save/restore option, easy    
+keyboard controls, a demonstration mode, permanent high score, and an   
+easy playing cheat mode!                                                
+                                                                        
+For those players looking for a game similar to the Kroz games...this is
+it.                                                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2327
 

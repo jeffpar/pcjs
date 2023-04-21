@@ -25,6 +25,23 @@ machines:
     another person via a modem.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES.DOC
+
+{% raw %}
+```
+BATLCALL DIR     4007   5-26-90   5:14p - Dialing directory 
+BATLCOMM EXE   175583   5-25-90  10:41p - Modem program
+BATLSHIP DOC    10740   5-27-90  12:01p - Instructions and documentation
+BATLSHIP EXE   167593   5-26-90   4:53p - Main program
+FILES    DOC      411   5-29-90   7:42a - This file
+PRINTDOC BAT       23   2-22-90   8:40p - Batch to print BATLSHIP.DOC
+        6 File(s)      1637 bytes free
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2261
 

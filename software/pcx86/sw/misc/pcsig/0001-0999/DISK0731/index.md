@@ -33,6 +33,111 @@ machines:
     File Descriptions:
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES731.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  731  LOCATE                                                 v1
+---------------------------------------------------------------------------
+LOCATE is a system for finding out which files contain which words. It
+consists of two programs INDEX and LOCATE. INDEX scans all of the files on
+a specified disk and builds an index. In the case of a hard disk INDEX will
+scan all directories and sub-directories automatically and LOCATE will
+return full path designations to find the files. LOCATE uses that index to
+make a list of files containing the specified keywords. The program does
+have some limitations. Length of words which it will recognize must be more
+3 characters but not more than 7 (in words which are more than 7 characters
+long the extra characters are ignored ie; COMPLICATION and COMPLICITY would
+be regarded as the same word). To avoid this problem LOCATE allows more
+than one word to be specified for the search criteria. To match a file must
+have both words.
+ 
+COMMON         Documentation
+DISCLAIM       Documentation
+LICENSE        Documentation
+WORDS          Documentation
+NAMES          Documentation
+FILES          Documentation
+LOCATEOP       Documentation
+LOCATREF       Documentation
+DIRECTOR       Documentation
+CAFR           Documentation
+TESTDRIV       Documentation
+INSTALL        Documentation
+COPYRIGH       Documentation
+INDEXREF       Documentation
+TITLE          Documentation
+LIMITS         Documentation
+LOCATE   HLP   One screen help file
+INDEX    HLP   One screen help file
+EXTENSIO HLP   One screen help file
+WORDS    HLP   One screen help file
+PATH     HLP   One screen help file
+INDEXOP        Documentation
+INDEX    COM   Main index program
+KEY      INX   Index created by index.com
+EXTENSIO INX   Index created by index.com
+WORDS    INX   Index created by index.com
+MAP      INX   Index created by index.com
+ENTRY    INX   Index created by index.com
+LOCATE   COM   Main locate program
+FALSEHIT       Documentation
+README         Documentation
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+## NOTES731.TXT
+
+{% raw %}
+```
+Program name:  LOCATE
+ 
+Author name:  James E. Tarvid
+              Logical support
+              Route 2 Box 73
+              Independence, VA  24348
+Telephone:    (703)-773-3419
+ 
+Suggested donation:  $20.00 registration + $20.00 per year for support
+ 
+Program description:
+ 
+    LOCATE is a system for finding out which files contain which words.  It
+consists of two programs INDEX and LOCATE.  INDEX scans all of the files on a
+specified disk and builds an index.  In the case of a hard disk INDEX will
+scan all directories and sub-directories automatically and LOCATE will return
+full path designations to find the files.  LOCATE uses that index to make a
+list of files containing the specified keywords.  The program does have some
+limitations.  Length of words which it will recognize must be more 3
+characters but not more than 7 (in words which are more than 7 characters long
+the extra characters are ignored ie; COMPLICATION and COMPLICITY would be
+regarded as the same word).  To avoid this problem LOCATE allows more than one
+word to be specified for the search criteria.  To match a file must have both
+words.
+    There is no manual but The diskette contains numerous text files on
+various aspects of the programs.  These files contain plenty of specific
+technical information about how the program operates.  An overview of the
+technology is contained in "CAFR" and enough instructions to run the program
+are contained in "INSTALL", "INDEXOP", and "LOCATEOP".
+    These programs will run on any IBM-PC or compatible with at least 128 K of
+memory and two disk drives.  The documentation may be somewhat confusing for
+the novice user, but program operation is very simple once you find the
+instructions you need (hint: try printing the file TESTDRIV, it contains the
+best step-by-step instructions)
+ 
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0731
 

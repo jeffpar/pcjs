@@ -14,6 +14,64 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## MAKEZIP.TXT
+
+{% raw %}
+```
+
+Dear BBS Sysop and/or Shareware Disk Vendor:
+
+We're supplying you this disk for your library.  It contains one of our
+Microsoft Windows applications.  You may do any of the following:
+
+  -------------------------------------------------------------------------
+
+  1) Distribute copies of this disk "as is", or xcopy the disk to a 1.2MB
+     5.25" floppy.  None of our programs will fit on a 360K diskette and
+     we are dropping support for the 360K format.
+
+  -------------------------------------------------------------------------
+
+  2) Make a ZIP file, which can be sent out on a disk, or placed on a 
+     bulletin board or on-line service for download.
+
+     THE BATCH FILE ASSUMES YOU HAVE A COPY OF PKZIP SOMEPLACE IN YOUR DOS
+     PATH!!!
+
+     To do this, simply run the MAKEZIP.BAT file which is located in the
+     VENDOR subdirectory of the distribution floppy.
+
+       Usage:  MAKEZIPS src_drive targ_drive
+
+       This batch file is used to a ZIP file -- for from the master disk
+       supplied by Wilson WindowWare.  The ZIP file will be placed in a
+       subdirectory on the specified hard drive. (\WWWZIPS)
+
+         "src_drive" is the floppy drive where the master disk is located
+
+         "targ_drive" should be a hard drive with at least 2 Meg free disk
+         space
+
+       Example:  MAKEZIPS B: C:
+
+
+     This batch file does take a little time.  It has to uncompress the files
+     from our format and re-compress them in ZIP format.  If you need the files
+     in some other format (LHA for example), first build the ZIP files and then
+     convert the ZIP files.
+
+  -------------------------------------------------------------------------
+
+  Good Luck.  If you have any questions, call Customer Service at
+  (206) 938-1743 and ask for Morrie.
+
+  ;-)
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3551
 

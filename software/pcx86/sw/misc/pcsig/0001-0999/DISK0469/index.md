@@ -36,6 +36,46 @@ machines:
     28-page manual is adequate for experienced clerks.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0469.TXT
+
+{% raw %}
+```
+Disk No:  469                                                           
+Disk Title: MR. Bill 1 of 2 (also 470)  
+PC-SIG Version: S4.3                                                    
+                                                                        
+Program Title: Mr. Bill                                                 
+Author Version: 3.40                                                    
+Author Registration: $40.00                                             
+Special Requirements: Two floppy drives.                                
+                                                                        
+Money in the bank -- a lovely phrase.  Money owed to your company could 
+be money in YOUR bank -- if you collect it.  MR. BILL does almost       
+everything needed for your small to medium-sized firm to bird dog bills 
+and increase collections with a minimum of labor and losses.            
+                                                                        
+Highly flexible, MR. BILL handles taxes and charges of every sort.  It  
+automatically updates and sends client bills out monthly, prints your   
+letterhead, and up to a 30-line message.  You can charge different      
+customers different rates for the same thing.  Each file can have       
+16,000 entries.  Get the client's name, address, phone number, and      
+current balance from the operating system in less than four seconds.    
+                                                                        
+Prepare itemized invoices/bills and generate a bevy of summary and      
+in-depth reports including account aging and an excellent audit trail.  
+The 28-page manual is adequate for experienced clerks.                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0469
 

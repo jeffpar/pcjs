@@ -14,6 +14,48 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2624.TXT
+
+{% raw %}
+```
+Disk No: 2624                                                           
+Disk Title: UniScreen disk 3 of 3 (2056, 2057 also)                     
+PC-SIG Version: S3                                                      
+                                                                        
+Program Title: UniScreen                                                
+Author Version: 3.01                                                    
+Author Registration: $49.00                                             
+Special Requirements: None.                                             
+                                                                        
+Programmers, would you like to build your input format screens interact-
+ively?  UNISCREEN is a true universal screen format generator, usable in
+any language.                                                           
+                                                                        
+The key to professional looking programs is the screen formats.         
+However, producing such screens is often a tedious and time consuming   
+task. UNISCREEN is a complete screen management system that offers:     
+interactive format generation, windows, menus, popups, pulldowns,       
+variable field and text attributes, alphanumeric and numeric selectable 
+fields, mouse and printer support, and monochrome and color display     
+support.  Most importantly, UNISCREEN supports all the major languages  
+and compilers, such as, C, Pascal, BASIC, Cobol, Fortran, Assembler,    
+Prolog, Clipper, and dBASE III Plus.                                    
+                                                                        
+UNISCREEN is invaluable to anyone wanting to improve the appearance of  
+their programs.  It even comes with a DEMO program to illustrate its    
+ease of use.                                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2624
 

@@ -36,6 +36,84 @@ machines:
     suitable for delivery to a client.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0970.TXT
+
+{% raw %}
+```
+Disk No:  970
+Program Title: MSFORMS version 6 (Disk 1 of 2)
+PC-SIG version: 2.4
+
+MSFORMS and its accompanying utility program, NAMES, reads a QUAN report
+from a FINNIGAN(tm) mass spectrometer and produces a finished report
+suitable to give a client for given classes of target compound analysis
+(TCA).
+
+The process starts by attaching the RS232 communications cable that runs
+from the GC/MS NOVA computer to the Tektronix/Westward system terminal
+of the NOVA to the serial port of your PC.  You can then load a suitable
+terminal emulator program on your PC and capture as individual ASCII
+files the FINNIGAN TCA QUAN reports onto your PC's disk.
+
+MSFORMS is then loaded and the QUAN filenames passed to the program,
+along with other information, including matrix type and dilution
+factors.  MSFORMS reads in the QUAN report, processes it, and prints an
+analysis form suitable for giving a client.  In addition, MSFORMS
+generates an MS/MSD report.
+
+MSFORMS is know a two disk set, #970 and #1453.  Both disks are needed
+to run the program.
+
+Usage:  Report Generator for Finnigan Mass Spectrometers.
+
+Special Requirements:  512K memory, two disk drives, and a printer.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $50.00
+
+File Descriptions:
+
+EPSON    PRN  Printer data file.
+HPLJET   PRN  Printer data file.
+MATRIX   BN   Data file.
+MATRIX   VO   Data file.
+MATRIX   PC   Data file.
+MSFORMS  EXE  Main Program.
+MSFORMS  CFG  Configuration file.
+NAMES    BNS  Sample Data.
+NAMES    BNW  Sample Data.
+NAMES    PCW  Sample Data.
+NAMES    VOS  Sample Data.
+NAMES    VOW  Sample Data.
+NAMES    ACW  Sample Data.
+PRINTER  CFG  Printer configuration file.
+QUAN1    VO   Data file.
+QUAN2    VO   Data file.
+QUAN3    VO   Data file.
+QUAN4    BN   Data file.
+QUAN5    BN   Data file.
+QUAN6    BN   Data file.
+QUAN7    VO   Data file.
+QUAN8    BN   Data file.
+REPORTS  FRM  Data file.
+SURROGAT BN   Data file.
+SURROGAT PC   Data file.
+SURROGAT VO   Data file.
+SURROGAT AC   Data file.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0970
 

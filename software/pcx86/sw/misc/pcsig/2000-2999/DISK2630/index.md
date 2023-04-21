@@ -14,6 +14,40 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2630.TXT
+
+{% raw %}
+```
+Disk No: 2630                                                           
+Disk Title: Computer Buyer's Best Price Database                        
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Computer Buyer's Best Price Database                     
+Author Version: 04/90                                                   
+Author Registration: Varies.                                            
+Special Requirements: None.                                             
+                                                                        
+Looking to buy computer hardware soon? COMPUTER BUYER'S BEST PRICE      
+DATABASE has already done the research for you and found the best prices
+on computers, drives, printers, modems, fax boards, video boards,       
+monitors, mice, scanners, and tape backups. The database also includes  
+names and phone numbers of vendors.  Search for hardware by name or     
+specification. The information in this database is constantly selected  
+from numerous different PC magazines and computer vending sources making
+it comprehensive, easy-to-use, and current. Computer groups, businesses,
+and individuals can save a bundle of time and money with this package!  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2630
 

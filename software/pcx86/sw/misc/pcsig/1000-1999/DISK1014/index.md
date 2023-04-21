@@ -31,6 +31,7 @@ machines:
 
 ## ACRE.BAS
 
+{% raw %}
 ```bas
  4.04686E+09 
  4.04686E+07 
@@ -45,9 +46,11 @@ machines:
  1.79881E-03 
  1 
 ```
+{% endraw %}
 
 ## ANGS.BAS
 
+{% raw %}
 ```bas
  1 
  .0001 
@@ -62,9 +65,11 @@ machines:
  6.214E-14 
  7.1511E-14 
 ```
+{% endraw %}
 
 ## BARL.BAS
 
+{% raw %}
 ```bas
  119254 
  7277.35 
@@ -76,9 +81,11 @@ machines:
  26.229 
  1 
 ```
+{% endraw %}
 
 ## BTU.BAS
 
+{% raw %}
 ```bas
  1054.74 
  1.05474E+10 
@@ -89,9 +96,11 @@ machines:
  3.9293E-04 
  .2519324 
 ```
+{% endraw %}
 
 ## CIRMIL2.BAS
 
+{% raw %}
 ```bas
  .0005067 
  5.067E-06 
@@ -106,9 +115,11 @@ machines:
  1.477331E-16 
  1.2521E-13 
 ```
+{% endraw %}
 
 ## CM.BAS
 
+{% raw %}
 ```bas
  1E+08 
  10000 
@@ -123,9 +134,11 @@ machines:
  6.214E-06 
  7.1511E-06 
 ```
+{% endraw %}
 
 ## CM2.BAS
 
+{% raw %}
 ```bas
  100 
  1 
@@ -140,9 +153,11 @@ machines:
  2.91554E-11 
  2.471135E-08 
 ```
+{% endraw %}
 
 ## CM3.BAS
 
+{% raw %}
 ```bas
  1000 
  1 
@@ -154,9 +169,11 @@ machines:
  1.307951E-06 
  2.39913E-16 
 ```
+{% endraw %}
 
 ## DAY.BAS
 
+{% raw %}
 ```bas
  8.64E+16 
  8.640001E+13 
@@ -169,9 +186,11 @@ machines:
  .142857 
  .0027397 
 ```
+{% endraw %}
 
 ## DYNE.BAS
 
+{% raw %}
 ```bas
  .00102 
  1.02E-06 
@@ -181,9 +200,11 @@ machines:
  2.248E-06 
  7.233001E-05 
 ```
+{% endraw %}
 
 ## ERG.BAS
 
+{% raw %}
 ```bas
  .0000001 
  1 
@@ -194,9 +215,11 @@ machines:
  3.7244E-14 
  2.3889E-11 
 ```
+{% endraw %}
 
 ## FCC.BAS
 
+{% raw %}
 ```bas
  1 
  .06102 
@@ -208,9 +231,11 @@ machines:
  2.19969E-04 
  8.3855E-06 
 ```
+{% endraw %}
 
 ## FGAL.BAS
 
+{% raw %}
 ```bas
  3785 
  231 
@@ -222,9 +247,50 @@ machines:
  .83267 
  .031746 
 ```
+{% endraw %}
+
+## FILE1014.TXT
+
+{% raw %}
+```
+Disk No  1014
+Program Title: UNITS version 2.1
+PC-SIG version 1
+ 
+    UNITS is a menu-driven technical units conversion program that includes
+a review of six common systems of units and gives a number of physical
+constants and relationships.
+ 
+Usage: Units Conversions
+ 
+System Requirements: 128K memory and one disk drive.
+ 
+How to Start: Type: UNITS (press enter).
+ 
+Suggested Registration: $15.00
+ 
+File Descriptions:
+ 
+README   DOC  This file. Product documentation.
+BRUN20   EXE  Run time file.
+U-C      EXE  Loads the UNITS program for color systems.
+U-M      EXE  Loads the UNITS program for monochrome systems.
+UNITS    EXE  Main program.
+PLIC     EXE  Prowess, Inc. license statement.
+??????   BAS  Conversion factors used by the UNITS program (73 files).
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## FIN.BAS
 
+{% raw %}
 ```bas
  16.387 
  1 
@@ -236,9 +302,11 @@ machines:
  3.60464E-03 
  1.37413E-04 
 ```
+{% endraw %}
 
 ## FLIT.BAS
 
+{% raw %}
 ```bas
  1000.028 
  61.02 
@@ -250,9 +318,11 @@ machines:
  .21999 
  .0083849 
 ```
+{% endraw %}
 
 ## FOOT.BAS
 
+{% raw %}
 ```bas
  3.048E+09 
  304800 
@@ -267,9 +337,11 @@ machines:
  1.89394E-04 
  1.64579E-04 
 ```
+{% endraw %}
 
 ## FOZ.BAS
 
+{% raw %}
 ```bas
  29.5785 
  1.805 
@@ -281,9 +353,11 @@ machines:
  .0065052 
  2.4803E-04 
 ```
+{% endraw %}
 
 ## FPINT.BAS
 
+{% raw %}
 ```bas
  473.2 
  28.87 
@@ -295,9 +369,11 @@ machines:
  .10408 
  .0039683 
 ```
+{% endraw %}
 
 ## FQT.BAS
 
+{% raw %}
 ```bas
  946.4 
  57.75 
@@ -309,9 +385,11 @@ machines:
  .20817 
  7.93651E-03 
 ```
+{% endraw %}
 
 ## FT2.BAS
 
+{% raw %}
 ```bas
  92900 
  929 
@@ -326,9 +404,11 @@ machines:
  2.7086E-08 
  2.29568E-05 
 ```
+{% endraw %}
 
 ## FT3.BAS
 
+{% raw %}
 ```bas
  2.832E+07 
  28320 
@@ -340,9 +420,11 @@ machines:
  .037037 
  6.79357E-12 
 ```
+{% endraw %}
 
 ## FTLB.BAS
 
+{% raw %}
 ```bas
  1.356 
  1.356E+07 
@@ -353,9 +435,11 @@ machines:
  5.05051E-07 
  3.2394E-04 
 ```
+{% endraw %}
 
 ## FTPDL.BAS
 
+{% raw %}
 ```bas
  .042146 
  421460 
@@ -366,9 +450,11 @@ machines:
  1.56975E-08 
  1.00684E-05 
 ```
+{% endraw %}
 
 ## GRAMF.BAS
 
+{% raw %}
 ```bas
  1 
  .001 
@@ -378,9 +464,11 @@ machines:
  .002205 
  .07093 
 ```
+{% endraw %}
 
 ## GRAMM.BAS
 
+{% raw %}
 ```bas
  1 
  .001 
@@ -388,9 +476,11 @@ machines:
  .0022046 
  6.854E-05 
 ```
+{% endraw %}
 
 ## HOUR.BAS
 
+{% raw %}
 ```bas
  3.6E+15 
  3.6E+12 
@@ -403,9 +493,11 @@ machines:
  5.95238E-03 
  1.141541E-04 
 ```
+{% endraw %}
 
 ## HPHR.BAS
 
+{% raw %}
 ```bas
  2685000 
  2.685E+13 
@@ -416,9 +508,11 @@ machines:
  1 
  641.168 
 ```
+{% endraw %}
 
 ## IGAL.BAS
 
+{% raw %}
 ```bas
  4546.1 
  277.42 
@@ -430,9 +524,11 @@ machines:
  1 
  .0381257 
 ```
+{% endraw %}
 
 ## IN2.BAS
 
+{% raw %}
 ```bas
  645.16 
  6.4516 
@@ -447,9 +543,11 @@ machines:
  1.881E-10 
  1.59423E-07 
 ```
+{% endraw %}
 
 ## IN3.BAS
 
+{% raw %}
 ```bas
  16387.1 
  16.3871 
@@ -461,9 +559,11 @@ machines:
  2.14335E-05 
  3.931466E-15 
 ```
+{% endraw %}
 
 ## INCH.BAS
 
+{% raw %}
 ```bas
  2.54E+08 
  25400 
@@ -478,9 +578,11 @@ machines:
  1.57828E-05 
  1.37147E-05 
 ```
+{% endraw %}
 
 ## JOULE.BAS
 
+{% raw %}
 ```bas
  1 
  1E+07 
@@ -491,9 +593,11 @@ machines:
  3.7244E-07 
  2.3889E-04 
 ```
+{% endraw %}
 
 ## KCAL.BAS
 
+{% raw %}
 ```bas
  4186 
  4.186E+10 
@@ -504,9 +608,11 @@ machines:
  1.55965E-03 
  1 
 ```
+{% endraw %}
 
 ## KGF.BAS
 
+{% raw %}
 ```bas
  1000 
  1 
@@ -516,9 +622,11 @@ machines:
  2.205 
  70.9308 
 ```
+{% endraw %}
 
 ## KGM.BAS
 
+{% raw %}
 ```bas
  1000 
  1 
@@ -526,9 +634,11 @@ machines:
  2.20462 
  .06852 
 ```
+{% endraw %}
 
 ## KM.BAS
 
+{% raw %}
 ```bas
  1E+13 
  1E+09 
@@ -543,9 +653,11 @@ machines:
  .621369 
  .539957 
 ```
+{% endraw %}
 
 ## KM2.BAS
 
+{% raw %}
 ```bas
  1E+12 
  1E+10 
@@ -560,9 +672,11 @@ machines:
  .291554 
  247.1135 
 ```
+{% endraw %}
 
 ## KM3.BAS
 
+{% raw %}
 ```bas
  1E+18 
  1E+15 
@@ -574,9 +688,11 @@ machines:
  1.307951E+09 
  .239913 
 ```
+{% endraw %}
 
 ## KWH.BAS
 
+{% raw %}
 ```bas
  3599710 
  3.59971E+13 
@@ -587,9 +703,11 @@ machines:
  1.34102 
  859.85 
 ```
+{% endraw %}
 
 ## KWHR.BAS
 
+{% raw %}
 ```bas
  3413 
  3.6E+13 
@@ -599,9 +717,11 @@ machines:
  860.1 
  1 
 ```
+{% endraw %}
 
 ## LBF.BAS
 
+{% raw %}
 ```bas
  453.6 
  .4536 
@@ -611,9 +731,11 @@ machines:
  1 
  32.17398 
 ```
+{% endraw %}
 
 ## LBM.BAS
 
+{% raw %}
 ```bas
  453.5924 
  .4535924 
@@ -621,9 +743,11 @@ machines:
  1 
  .031081 
 ```
+{% endraw %}
 
 ## M2.BAS
 
+{% raw %}
 ```bas
  1000000 
  10000 
@@ -638,9 +762,11 @@ machines:
  2.91554E-07 
  2.471135E-04 
 ```
+{% endraw %}
 
 ## M3.BAS
 
+{% raw %}
 ```bas
  1E+09 
  1000000 
@@ -652,9 +778,11 @@ machines:
  1.307951 
  2.39913E-10 
 ```
+{% endraw %}
 
 ## METER.BAS
 
+{% raw %}
 ```bas
  1E+10 
  1000000 
@@ -669,9 +797,11 @@ machines:
  6.21369E-04 
  5.39957E-04 
 ```
+{% endraw %}
 
 ## MI3.BAS
 
+{% raw %}
 ```bas
  4.168182E+18 
  4.168182E+15 
@@ -683,9 +813,11 @@ machines:
  5.45177E+09 
  1 
 ```
+{% endraw %}
 
 ## MICRON.BAS
 
+{% raw %}
 ```bas
  .0001 
  1 
@@ -700,9 +832,11 @@ machines:
  6.214E-10 
  7.151101E-10 
 ```
+{% endraw %}
 
 ## MICROS.BAS
 
+{% raw %}
 ```bas
  1000000 
  1000 
@@ -715,9 +849,11 @@ machines:
  1.65343E-12 
  3.17098E-14 
 ```
+{% endraw %}
 
 ## MIL.BAS
 
+{% raw %}
 ```bas
  254000 
  25.4 
@@ -732,9 +868,11 @@ machines:
  1.57828E-08 
  1.3715E-08 
 ```
+{% endraw %}
 
 ## MIL2.BAS
 
+{% raw %}
 ```bas
  6.4515E-04 
  6.4515E-06 
@@ -749,9 +887,11 @@ machines:
  1.881E-16 
  1.59423E-13 
 ```
+{% endraw %}
 
 ## MIL3.BAS
 
+{% raw %}
 ```bas
  1.63871E-05 
  1.63871E-08 
@@ -763,9 +903,11 @@ machines:
  2.14335E-14 
  3.931466E-24 
 ```
+{% endraw %}
 
 ## MILE.BAS
 
+{% raw %}
 ```bas
  1.609347E+13 
  1.609347E+09 
@@ -780,9 +922,11 @@ machines:
  1 
  .868961 
 ```
+{% endraw %}
 
 ## MILE2.BAS
 
+{% raw %}
 ```bas
  2.5889E+12 
  2.5889E+10 
@@ -797,9 +941,11 @@ machines:
  .755123 
  640 
 ```
+{% endraw %}
 
 ## MILLIS.BAS
 
+{% raw %}
 ```bas
  1E+09 
  1000000 
@@ -812,9 +958,11 @@ machines:
  1.65343E-09 
  3.17098E-11 
 ```
+{% endraw %}
 
 ## MIN.BAS
 
+{% raw %}
 ```bas
  6E+13 
  6E+10 
@@ -827,9 +975,11 @@ machines:
  9.92063E-05 
  1.902568E-06 
 ```
+{% endraw %}
 
 ## MM.BAS
 
+{% raw %}
 ```bas
  1E+07 
  1000 
@@ -844,9 +994,11 @@ machines:
  6.214E-07 
  7.1511E-07 
 ```
+{% endraw %}
 
 ## MM2.BAS
 
+{% raw %}
 ```bas
  1 
  .01 
@@ -861,9 +1013,11 @@ machines:
  2.91554E-13 
  2.471135E-10 
 ```
+{% endraw %}
 
 ## MM3.BAS
 
+{% raw %}
 ```bas
  1 
  .001 
@@ -875,9 +1029,11 @@ machines:
  1.307951E-09 
  2.39913E-19 
 ```
+{% endraw %}
 
 ## NEWTON.BAS
 
+{% raw %}
 ```bas
  102 
  .102 
@@ -887,9 +1043,11 @@ machines:
  .2248 
  7.233 
 ```
+{% endraw %}
 
 ## NMILE.BAS
 
+{% raw %}
 ```bas
  1.852E+13 
  1.852E+09 
@@ -904,9 +1062,11 @@ machines:
  1.1508 
  1 
 ```
+{% endraw %}
 
 ## NMILE2.BAS
 
+{% raw %}
 ```bas
  3.4299E+12 
  3.4299E+10 
@@ -921,9 +1081,11 @@ machines:
  1 
  847.5434 
 ```
+{% endraw %}
 
 ## NSEC.BAS
 
+{% raw %}
 ```bas
  1000 
  1 
@@ -936,9 +1098,11 @@ machines:
  1.65343E-15 
  3.17098E-17 
 ```
+{% endraw %}
 
 ## OZF.BAS
 
+{% raw %}
 ```bas
  28.345 
  .028345 
@@ -948,9 +1112,11 @@ machines:
  .0625 
  2.0109 
 ```
+{% endraw %}
 
 ## OZM.BAS
 
+{% raw %}
 ```bas
  28.3495 
  .0283495 
@@ -958,9 +1124,11 @@ machines:
  .0625 
  .0019426 
 ```
+{% endraw %}
 
 ## PDL.BAS
 
+{% raw %}
 ```bas
  14.1 
  .0141 
@@ -970,9 +1138,11 @@ machines:
  .03108 
  1 
 ```
+{% endraw %}
 
 ## PSEC.BAS
 
+{% raw %}
 ```bas
  1 
  .001 
@@ -985,9 +1155,333 @@ machines:
  1.65343E-18 
  3.17098E-20 
 ```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+
+
+
+                             UNITS -- DOCUMENTATION
+
+
+                           UNITS - LICENSE AGREEMENT
+                      Copyright 1986, 1987, Prowess, Inc.
+
+
+     This is a user supported software product.  It is not public domain
+     software, nor is it free software. You are granted a limited license
+     to use this product on a trial basis.   If you continue to use this
+     product after a trial period, you are expected to register by sending:
+
+           $15 (Minimum reg.)          or        $25 (+ $4 S/H) (Full reg.)
+
+           * Technical support                   *  Technical support
+           * Update notification                 *  Latest diskette
+                                                 *  Printed manual
+
+                 Texas residents, please add 7 1/4 % sales tax
+
+         Contact us for information concerning low cost site licenses.
+
+     If you like the shareware concept - try before you buy - please support the
+     companies that provide useful, professional quality products.
+
+       Prowess,Inc. -  203 Lakeridge Village - Suite 102 - Dallas  75238
+
+                               (214) 349-4718
+
+
+     You are encouraged to distribute copies of this software providing
+     that you make no modifications to any of the files and that the copy
+     that you distribute, regardless of the means of distribution, contains
+     all files that came on your product diskette.
+
+                                   DISCLAIMER
+                                   ----------
+
+     This software product and associated instructional material are sold
+     "as is" without warranty as to their performance, accuracy, freedom
+     from error, merchantability or fitness for any particular purpose.
+     The entire risk as to the performance of the software is assumed by
+     the user.
+
+     Under no circumstances, whether in contract or tort, shall Prowess,
+     Inc. be liable for indirect, consequential, special, or exemplary
+     damages such as, but not limited to, loss of revenue or anticipated
+     profits, lost business or other economic loss, arising out of, or
+     in connection with this agreement, or your use, or inability to use
+     any program or sub-program associated with this software product.
+
+          ------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                   CONTENTS
+
+                             *  File description
+
+                             *  System requirements
+
+                             *  Preparation
+
+                             *  Program descriptions
+
+                             *  Running UNITS
+
+                             *  General operation guide
+
+
+          --------------------------------------------------------------
+
+                                FILE DESCRIPTION
+                                ----------------
+
+
+        The following files should reside on your product diskette.
+
+
+        README.DOC              This file. Product documentation.
+
+        BRUN20.EXE              Run time file.
+
+        U-C.EXE                 Loads the UNITS program for color systems.
+
+        U-M.EXE                 Loads the UNITS program for monochrome systems.
+
+        UNITS.EXE               Main program.
+
+        PLIC.EXE                Prowess, Inc. license statement.
+
+        *.BAS                   This is a group of 73 files that contain the
+                                conversion factors used by the UNITS program.
+
+
+          -------------------------------------------------------------
+
+                              SYSTEM REQUIREMENTS
+
+This program will run on the IBM-PC and all 100% compatibles. Both color and
+monochrome systems are supported. All systems should have a minimum of 128 K
+of memory and at least one floppy disk drive. The program is not copy protected
+and may be installed on your hard disk.
+
+
+          --------------------------------------------------------------
+
+                                  PREPARATION
+                                  -----------
+
+     First format a new diskette with the /S option.
+
+          EXAMPLE:   FORMAT B:/S  (assuming that a new diskette is
+                                   installed in dirve B.)
+
+
+
+
+
+
+
+     Next, copy the contents of your UNITS product diskette to the newly
+     formatted diskette.
+
+          EXAMPLE:  COPY *.* B:   (Assuming that you have the product
+                                   diskette in drive A and the newly
+                                   formatted disk in drive B)
+
+          The new diskette will become your working copy, so protect your
+          investment and put the UNITS product diskette in a safe place.
+
+
+               Your working copy is ready to use. Label it UNITS.
+
+              -----------------------------------------------------
+
+                                 RUNNING UNITS
+                                 -------------
+
+
+Put your working copy of UNITS in drive A and make drive A the default drive.
+
+If you have a color system, enter: U-C  <return>
+
+If you have a monochrome system, enter: U-M  <return>
+
+Whichever of these entry programs you use, you will see the Prowess, Inc. logo
+screen followed by the license statement. Pressing any key, after reading the
+license statement, will cause the UNITS program to load.
+
+When the UNITS menu screen appears, we suggest that you first select the help
+option (#11). The two help screens summarize the information that is needed to
+operate the program successfully. Much of the information presented below is
+duplicated in the help files. From the help screens, you will be returned to
+the UNITS menu.
+
+Next, select the "SYSTEMS OF UNITS", option #10. Two screens provide a review
+of six different systems of units that are in common use. When working with
+units, it is essential to be aware of the system of units in which you are
+working. Helping you translate between these systems is one of the major
+functions of this program. After viewing the second "system of units" screen,
+you will return to the menu
+
+Next, select "MISC. RELATIONSHIPS", option #9. This screen contains a random
+selection of physical constants and miscellaneous relationships that are
+commomly needed in technical work. After viewing this screen, you will be
+returned to the UNITS menu.
+
+The remaining menu selections, with the exception of "EXIT", deal with units
+conversions.  All of the units conversions work the same way. There are two
+critical things to remember:
+
+      1. DO NOT use the arrow keys to position cursor. Use ONLY the
+         return key!!!!!
+
+      2. Because units conversions deal with very small and very large numbers,
+         all answers will be presented in "D" format - double precision
+         scientific notation.
+
+               2.345D-09 should be read as 2.345 x 10^-9 or .000000002345
+
+
+
+
+
+
+
+
+         If your input is a decimal number, it will also be converted to the "D"
+         format. You may make entries in integer form, decimal form, use the "E"
+         format or use the "D" format. If you want to enter the number 1000, all
+         of the following input forms are acceptable:
+
+
+                                    1000
+
+                                    1000.000
+
+                                    1E03   or 10E02  etc.
+
+                                    1D03   or .100D04  etc.
+
+For practice, select "LENGTH" from the UNITS menu (#3). A list of "length" units
+will appear in the work field. Let's say that you want to convert  .0067 Cm.
+to Mils. Using the return key, move the cursor adjacent to the "CENTIMETER ="
+row and enter .0067. When you press return, the units program will read the
+appropriate conversion file and display the conversion of .0067 centimeters to
+ALL other length units. From this list, you will find that .0067 centimeters =
+2.6378D+00 Mils (or 2.6378 Mils).
+
+Having your input converted to all other units is surprisingly useful. Many
+times you will see relationships that would have gone unnoticed if you had
+simply converted one unit to another!
+
+Notice that your input was converted to "D" format. On color systems, your input
+will be shown in a different color and will have an asterisk (*) shown to the
+right of the number. This serves to remind you of the unit that you input. On
+monochrome systems the asterisk, alone, serves this purpose.
+
+After displaying the conversions, you may elect to return to the UNITS menu or
+may input another value.
+
+Both AREA and VOLUME selections have a basic geometry calculator associated with
+them. By selecting the calculator function, you can find the area or volume of
+simple geometries (rectangles, circles, spheres, boxes, cylinders, etc.). If you
+use the calculator functions to find an area or volume, you may transfer the
+calculated result to the units list by entering an "A" or "V" beside the
+appropriate unit. When you press return, the calculated area or volume will
+appear beside the selected unit and will be converted to all other units.
+
+If you select the "VOLUME" option (#7), you can then select either "standard"
+or "fluid" volumes. We define "standard" volumes as those volumes that usually
+have names that begin with the word "cubic" (cubic inches, cubic yards, etc.)
+and that typically are NOT thought of as exclusively fluid measures. Fluid
+measure (liters, fluid oz., gallons, etc.) is handled separately. To allow for
+translation between fluid and standard volumes, we have included cubic
+centimeters (CCs) and cubic inches in the fluid measure section. This creates a
+situation of which you should be aware. If you use the volume calculator to
+calculate a volume, its result is in cubic units. You define the unit when you
+transfer the calculated volume to the units list. Should you try to transfer a
+calculated volume to a fluid unit (quarts, barrels, etc.), the program will not
+let you do it. Trying to do that would be interpreted, by the program, as "cubic
+quarts" or "cubic barrels", which would be nonsense. The program WILL let you
+transfer a calculated volume to the cubic centimeters and cubic inch listings of
+fluid units.
+
+
+
+
+
+
+
+
+Since many of the conversion factors were derived with computer help and are the
+result of many multiply and divide operations, possible roundoff errors limit
+the conversion accuracy to four significant digits.
+
+              -------------------------------------------------------
+
+                            GENERAL OPERATION GUIDE
+                            -----------------------
+
+     As with all Prowess, Inc. products, you can enter a 'Q' at most user
+     inputs to exit the programs.
+
+     Options are selected by entering the capitalized letter in the option
+     word (usually the first letter). On color systems, this letter is
+     displayed in a different color. On some monochrome systems, you may
+     need to increase the display intensity to see the key letters in
+     option words.
+
+     Unless instructed otherwise, DO NOT use the TAB key or ARROW keys to
+     position the cursor, or use commas or double quotes (") in your inputs!
+     In some circumstances, entering an unexpected character will result in
+     the error message "REDO FROM START". If this message appears, do not
+     attempt to reposition the cursor - simply make a correct input, at the
+     current cursor position. Although the screen will be "messy" until it is
+     redrawn, the program will proceed normally.
+
+
+                ------------------------------------------------------
+
+     If you like this program set, try our other Prowess , Inc. shareware
+     tools:
+
+      * Financial programs (interest, annuities, amortization, etc.)
+      * Complete technical plotting (X-Y, area under curves, polar & vectors)
+      * Circuit design calculations (DC circuits, RC, RL, Pw., Energy, etc.)
+      * AC circuit design (great graphics,- RF design, Op amps, Xformers, BW)
+      * Magnetics design (great graphics - linear motors, mag. force, etc.)
+      * Automated Planning Form (project planning tools - Gantt-charts, etc.)
+      * Math utilities (eq. solving, factors, intersections, etc.)
+      * Geometry for design (great graphics - a real time saver)
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## SEC.BAS
 
+{% raw %}
 ```bas
  1E+12 
  1E+09 
@@ -1000,9 +1494,11 @@ machines:
  1.65343E-06 
  3.17098E-08 
 ```
+{% endraw %}
 
 ## SLUG.BAS
 
+{% raw %}
 ```bas
  14590 
  14.59 
@@ -1010,9 +1506,11 @@ machines:
  32.17398 
  1 
 ```
+{% endraw %}
 
 ## WEEK.BAS
 
+{% raw %}
 ```bas
  6.048E+17 
  6.048E+14 
@@ -1025,9 +1523,11 @@ machines:
  1 
  .019231 
 ```
+{% endraw %}
 
 ## YARD.BAS
 
+{% raw %}
 ```bas
  9.144001E+09 
  914400 
@@ -1042,9 +1542,11 @@ machines:
  5.681818E-04 
  4.93728E-04 
 ```
+{% endraw %}
 
 ## YD2.BAS
 
+{% raw %}
 ```bas
  836130 
  8361.3 
@@ -1059,9 +1561,11 @@ machines:
  2.43777E-07 
  2.06612E-04 
 ```
+{% endraw %}
 
 ## YD3.BAS
 
+{% raw %}
 ```bas
  7.64555E+08 
  764555 
@@ -1073,9 +1577,11 @@ machines:
  1 
  1.83423E-10 
 ```
+{% endraw %}
 
 ## YEAR.BAS
 
+{% raw %}
 ```bas
  3.1536E+19 
  3.1536E+16 
@@ -1088,6 +1594,7 @@ machines:
  52 
  1 
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

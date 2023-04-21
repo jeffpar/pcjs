@@ -31,6 +31,50 @@ machines:
     thorough documentation completes the package for the budding author.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES343.TXT
+
+{% raw %}
+```
+Disk No   343
+Program Title:  WORD PROCESSING FOR KIDS version 2.0
+PC-SIG version 1.1
+ 
+WORD PROCESSING FOR KIDS (WPK) is a simple word processor for children.
+It was developed especially for children to help them build
+communication skills and make writing fun! It features graphic menus,
+word wrap, and extra large characters.
+ 
+Usage:  Word Processing for children.
+ 
+Special Requirements:  CGA graphics.
+ 
+How to Start:  Type GO (press enter).
+ 
+Suggested Registration:  $10.00
+ 
+File Descriptions:
+ 
+WPK      EXE   Executable children's word processing program.
+THE_CAT  WPK   Sample text file.
+THE_DOG  WPK   Sample text file.
+RHYMES   WPK   Sample text file.
+STORY    WPK   Sample text file.
+PRACTICE WPK   Sample text file.
+WPK      DOC   Documentation for WPK.EXE.
+MANUAL   BAT   Program to print out documentation.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0343
 

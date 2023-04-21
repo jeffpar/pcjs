@@ -14,6 +14,42 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2963.TXT
+
+{% raw %}
+```
+Disk No: 2963
+Disk Title: Fonts Galore #3
+PC-SIG Version: S1.0
+
+Program Title: Fonts Galore #3
+Special Requirements: Windows 3.0 and Adobe Type Manger.
+
+A collection of ten diskettes full of fonts to be used with Windows and
+Adobe-type Manager installed. They can be used by Postcript and LaserJet
+printers. Fonts included with this disk are: RSChitown, RSCuneiFont,
+RSDaytona, RSDeusex, RSEIGarrett, RSFlintFont, RSFutaruBold, RSFutura,
+RSGordon, and RSGraphicLight.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1992 PC-SIG, Inc.
+```
+{% endraw %}
+
+## RSDEUSEX.DOC
+
+{% raw %}
+```
+Enclosed in this archive are the following files:Deuse -- PostScript font 'Deusex'Deusex.AFM -- Adobe Font Metrics file for 'Deusex'Deusex.bmap -- Macintosh screen fonts for 'Deusex' in sizes 24, 48.If you do not know what to do with these files, read your manuals.This font, created by Fontographer 3.0, is in the public domain.  No warranties are made as to its artistic sensibilities, usefulness, etc.A service to you from I'LL-BYTE-MANHATTAN.Kindly include this file if you distribute the font through any channels.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2963
 

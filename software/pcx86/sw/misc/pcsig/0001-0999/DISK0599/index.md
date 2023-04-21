@@ -58,6 +58,92 @@ machines:
     ~ Electronic note pad.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## INSTALL.DOC
+
+{% raw %}
+```
+                                   PC SYSTEMS
+                               307 Barwynne Lane
+                               Wynnewood, PA 19151, U.S.A
+                               tel. (215)649-8981
+
+                                   D R E A M
+
+                     Data Retrieval, Entry, And Management
+
+                                  VERSION 2.2
+
+
+
+                  COPYRIGHT (C) 1985, 1986, 1988 PC SYSTEMS
+
+                               ALL RIGHTS RESERVED
+
+===============================================================================
+                              REGISTRATION
+                              ------------
+
+    Registration  fee for  DREAM  software package is  $59.00  payable
+to PC-SYSTEMS. Registered users will receive notifications of future updates,
+a copy of DREAM User Guide (shipping and handling charges are included in
+the registration fee), and software support.
+===============================================================================
+                              INSTALLATION
+                              ------------
+
+   Before DREAM system can be used on your PC, it has to be installed. DREAM
+software comes on two (2) diskettes labeled #1 and #2. The diskettes were
+formatted for 360K.
+
+VERY IMPORTANT: READ INFORMATION IN file READ-ME.DOC after installation is
+                complete. Use TYPE command of DOS to display it, or same with
+                Ctrl+PrtSc to obtain the hard copy on the printer.
+
+NOTE: DREAM may also be installed and used with TWO FLOPPY DRIVES.
+      Contact PC-SYSTEMS for details.
+
+                           Systems With Hard Disk
+                           ----------------------
+1. We assume that your hard disk is formatted and that the necessary DOS files
+   have been copied onto the hard disk.
+2. Prompt C> should be displayed. Create directory called DREAM.
+   The hard disk is assigned to drive C.
+                            MKDIR C:\DREAM
+3. Change directory         CHDIR  C:\DREAM
+4. Insert DREAM system diskette #1 in drive A. If your hard drive id is C,
+   then type
+                            A:INSTALL   C
+   Substitute the hard disk id if it is different then C.
+5. Follow the procedure for DREAM system diskette #2 as required by
+   the installation program.
+6A.If your hard drive id is C, the system is installed, otherwise continue:
+6B.Re-define the system parameters to reflect the specifics of your
+   installation. At the prompt, type
+                                      DREAM
+   and press Enter key. This will start your first DREAM session.
+   a) If your hard drive id is other than C, at initiation you will
+      PRESS ANY KEY in response to warning messages about missing files.
+   b) Press Enter key in response to the system's request for Access Name.
+   c) Choose option 8 (System Parameters) of the Main menu. A list of system
+      parameters and their current values will be displayed.
+   d) Choose option 9 (Max Disks) and type the appropriate hard disk id to
+      replace value of C.
+   e) Choose option 2 (Program Disk Drive) and type the appropriated disk
+      id to replace the value of C.
+   f) Choose option 3 (Administration and Tutorial Drive) and type the
+      appropriate disk id to replace current value of C.
+   g) You may change other system defaults, but it is optional at this time.
+      Choose option E of the System Parameters menu to save the changes and
+      return to the Main menu.
+   h) Choose option 9 of Main menu to exit DREAM.
+Your system is now installed.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0599
 

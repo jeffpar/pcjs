@@ -36,6 +36,46 @@ machines:
     functions, which makes it easy to see where your money is going.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1793.TXT
+
+{% raw %}
+```
+Disk No: 1793                                                           
+Disk Title: Mark's Checkbook Plus                                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Mark's Checkbook Plus                                    
+Author Version: 2.0                                                     
+Author Registration: $25.00                                             
+Special Requirements: Hard Drive Recommended.                           
+                                                                        
+Designed for people who save a number of transactions before entering   
+them into their checkbook, this complete checkbook manager will perform 
+complex tasks that you thought you needed an accounting program to      
+handle.  It is well suited for those who use the Automatic Teller       
+Machines (ATMs) frequently and/or use the carbon copy type checkbooks.  
+Also perfect for those with a number of credit cards or accounts that   
+require a regular payment.                                              
+                                                                        
+MARK'S CHECKBOOK PLUS handles two types of accounts: Assets and         
+Liabilities.  You can track an unlimited number of accounts and         
+transactions.  The program allows the transfer of funds between accounts
+and keeps track of all outstanding credits and debits.  Very easy to    
+reconcile.  Prints monthly reports or all transactions reports.  You    
+have control over all your accounts with browse and sort functions that 
+make it easy to see where your money is going.                          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1793
 

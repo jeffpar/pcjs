@@ -30,6 +30,40 @@ machines:
     released as user-supported shareware.  It's great fun.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2394.TXT
+
+{% raw %}
+```
+Disk No: 2394                                                           
+Disk Title: Conjecture                                                  
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Conjecture                                               
+Author Version: 08/90                                                   
+Author Registration: $10.00                                             
+Special Requirements: Graphics Card.                                    
+                                                                        
+CONJECTURE is similar to a very popular TV game show.  You spin wheels, 
+guess letters, and try to solve puzzles. The press called it            
+"exceptional," and our customers rave over it.                          
+                                                                        
+The graphics are excellent and there is a mode for playing solo or with 
+up to 4 others. It comes with plenty of puzzles and you can             
+customize the game to suit the way you like to play. CONJECTURE sold    
+nationwide through major retail stores for $24.95 and is now being      
+released as user-supported shareware.  It's great fun.                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2394
 

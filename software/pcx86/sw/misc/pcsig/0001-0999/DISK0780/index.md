@@ -31,6 +31,55 @@ machines:
     Optional besthand feature increases your chances for offensive play.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES780.TXT
+
+{% raw %}
+```
+Disk No:  780
+Program Title:  BRIDGEPAL, The Game of Contract Bridge
+PC-SIG Version: 1.1
+
+BRIDGEPAL is a computerized version of the classic card game of bridge.
+Here's your chance to learn, practice, or just enjoy the game of bridge
+without needing three other human players.  BridgePal is played just
+like a normal game of bridge, except the computer shuffles and deals the
+cards, makes bids and plays the other three hands, and does the scoring.
+You start the game bidding and playing from the South hand position.  If
+your team wins the bidding, then you get to play both the North and
+South hands, otherwise you play defense with East or West as dummy.
+Optional besthand feature increases you chances for offensive play.
+
+Usage:  Entertainment.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $9.95
+
+File Descriptions:
+
+AUTOEXEC BAT  Batch file for automatically starting the program.
+BPEGA    EXE  Program for an EGA system.
+BRIDGE   EXE  Main program for monochrome and CGA color monitors.
+PRINTDOC BAT  Prints the 12 page documentation manual.
+???????? PRN  Documentation for BRIDGEPAL (12 files).
+PRINTONE BAT  Prints the same manual one page at a time.
+READ     ME   Breif discription about program.
+SCORE    BP0  Score data file.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0780
 

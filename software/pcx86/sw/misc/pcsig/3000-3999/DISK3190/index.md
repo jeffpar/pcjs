@@ -14,6 +14,71 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## SUMMARY.TXT
+
+{% raw %}
+```
+PC-SIG Disk No: 3190
+Disk Title: SHAREDEBATE INTERNATIONAL
+PC-SIG Version: 8
+
+Program Title: ShareDebate International
+Author Version: 3/92
+Author Registration: Freeware
+Special Requirements: 384K RAM.
+
+Issue 8's Headlines:
+
+             ShareDebate International - A  Diskette  Magazine
+                       Winter 1991-1992 (Issue #7 & #8)
+
+               Milton Friedman: "We Have Socialism, Q.E.D."
+            ShareDebate International now copyrighted freeware!
+       Print utility included for readers who hate computer screens
+
+   Double-disk issue features 12 authors, including Economist & Nobel laureate
+Milton Friedman; Japan Economic Institute & Citizens Against Statistical
+Distortion Used to Further Protectionism (both on US-Japan Trade Myths);
+Prometheus award-winning science fiction authors J.Neil Schulman & Victor
+Koman; Columnists Joseph Sobran & Sam Wells; GEnie Management on new FCC cost
+increases threatening computer services; Libertarian Party platform;
+Republican Liberty Caucus; Drs. T. Urell & C. Lyon against socialized
+medicine; R.H. Martin on Japan, Health Costs & Political Correctness on the
+Right
+
+   Prior to this issue there were 24 debate topics.  Two new debate topics are
+added for this issue: US-Japan Situation and New Insights in the Abortion
+Debate.  Long excerpts from two Prometheus-award winning novels are included,
+Alongside Night, by J. Neil Schulman (continued from issue 6) and Solomon's
+Knife by Victor Koman.
+
+   ShareDebate International is a diskette-magazine. Formerly a shareware
+semi-annual magazine, it is now copyrighted freeware with this double-disk
+issue.  Between 550 to 1,450 listed Bulletin Boards (BBSs) or Shareware
+dealers in 25 countries distribute the magazine.  It is an international
+debate forum for computer users concerned about the present and the future,
+carrying non-fiction & fiction, original and reprints.
+
+   How does ShareDebate International impress readers of other pro-free
+market, independent-thinking magazines?  George Cordahi, a subscriber to
+American Spectator for nearly 20 years from Mississauga, Ontario, writes
+"ShareDebate International is a terrific magazine, well edited and executed.
+I am very interested in the nexus between economics, freedom and technology.
+Add philosophy and it is a powerful brew.  It is the paradigm of the
+publication of the information age."
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1992 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3190
 

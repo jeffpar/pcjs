@@ -59,6 +59,7 @@ machines:
 
 ## APPLECOM.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-Z
 15 FALSE=0:TRUE= NOT FALSE
@@ -94,9 +95,11 @@ machines:
 800 CLOSE
 810 END
 ```
+{% endraw %}
 
 ## BIGCHAR.BAS
 
+{% raw %}
 ```bas
 10 'DISPLAY DOT MATRIX CHARACTERS           FROM ROM PATTERNS
 20 'SAMPLE INPUT ... 40,DON\JUAN
@@ -150,9 +153,11 @@ machines:
 500 PRINT CHR$(CODE)
 510 RETURN
 ```
+{% endraw %}
 
 ## CLKMOD.BAS
 
+{% raw %}
 ```bas
 21 '
 22 ' Day of week / Date rollover for Mike Sullivan's digital clock
@@ -206,9 +211,80 @@ machines:
 4580 LOCATE 22,29:PRINT DOW$;", ";MO$;" ";DA$;", ";YR4$;"     "
 4590 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #67, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  GROWTH  .BAS         CRC = CB 74
+
+--> FILE:  PRINTER .BAS         CRC = 4D 9D
+
+--> FILE:  UN      .P           CRC = 73 16
+
+--> FILE:  UNPROT  .DOC         CRC = C2 27
+
+--> FILE:  REGRESS .BAS         CRC = AC 1A
+
+--> FILE:  NONLIN  .BAS         CRC = 22 9A
+
+--> FILE:  FUNC2   .BAS         CRC = 47 34
+
+--> FILE:  FUNC1   .BAS         CRC = C8 E0
+
+--> FILE:  DATA    .            CRC = 66 F8
+
+--> FILE:  BIGCHAR .BAS         CRC = 9F 3F
+
+--> FILE:  LABELS  .BAS         CRC = 16 A0
+
+--> FILE:  APPLECOM.BAS         CRC = FA AD
+
+--> FILE:  CLKMOD  .BAS         CRC = A1 56
+
+--> FILE:  TM-BREAK.BAS         CRC = 9C 14
+
+--> FILE:  TM-DIAL2.BAS         CRC = E0 F5
+
+--> FILE:  TM-LDIR1.BAS         CRC = EF ED
+
+--> FILE:  TM-TIME1.BAS         CRC = D8 2B
+
+--> FILE:  LABELEPS.BAS         CRC = BF 6F
+
+--> FILE:  SCISUBV1.BAS         CRC = 4D 24
+
+--> FILE:  MATHFUNC.BAS         CRC = 40 C3
+
+ ---------------------> SUM OF CRCS = 78 67
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## FUNC1.BAS
 
+{% raw %}
 ```bas
 10050 NVAR = 1 : NP = 3
 11000 '********************************************************************
@@ -228,9 +304,11 @@ machines:
 11140    NEXT I
 11150 RETURN
 ```
+{% endraw %}
 
 ## FUNC2.BAS
 
+{% raw %}
 ```bas
 11000 '********************************************************************
 11010 '* SUBROUTINE LORENTZIAN                                            *
@@ -250,9 +328,11 @@ machines:
 11230    NEXT I
 11240 RETURN
 ```
+{% endraw %}
 
 ## GROWTH.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 30 WIDTH 80:SCREEN 0:COLOR 7,0:CLS
@@ -395,9 +475,11 @@ machines:
 2100 FOR J=5 TO 25 STEP 2:LOCATE J,1:PRINT INT((168-(J/5-1)*40)/S+0.5);:NEXT:RETURN
 2200 FOR J=5 TO 25 STEP 3:LOCATE J,1:PRINT INT((168-(J/5-1)*40)/S+0.5);:NEXT:RETURN
 ```
+{% endraw %}
 
 ## LABELEPS.BAS
 
+{% raw %}
 ```bas
 1 '  (PC)^3 Software Submission LABELEPS authored on November 8, 1982 by
 2 '
@@ -452,9 +534,11 @@ machines:
 470 KEY ON:CLS:END
 480 ' SAVE"LABELeps.BAS",A
 ```
+{% endraw %}
 
 ## LABELS.BAS
 
+{% raw %}
 ```bas
 10 ' labels.bas
 20 '
@@ -504,9 +588,11 @@ machines:
 460 NEXT X6
 470 STOP
 ```
+{% endraw %}
 
 ## MATHFUNC.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -935,9 +1021,11 @@ machines:
 4340 C=VAL(C$):PRINT CHR$(12)
 4350 ON C GOTO 1740,1840,1940,2040,2140
 ```
+{% endraw %}
 
 ## NONLIN.BAS
 
+{% raw %}
 ```bas
 1000 '*************************************************************************
 1010 '* PROGRAM NONLIN  version 3.0  5/1/82                                   *
@@ -1462,9 +1550,11 @@ machines:
 65080    LOCATE 23,1: STOP
 65090 RESUME
 ```
+{% endraw %}
 
 ## PRINTER.BAS
 
+{% raw %}
 ```bas
 10 'printer
 20 'Program to deal with the IBM 80 cps printer (Epson MX80)
@@ -1609,9 +1699,11 @@ machines:
 1380 IF X$ = "" THEN 1370
 1390 RETURN
 ```
+{% endraw %}
 
 ## REGRESS.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -1671,9 +1763,11 @@ machines:
 650 GOTO 590
 660 END
 ```
+{% endraw %}
 
 ## SCISUBV1.BAS
 
+{% raw %}
 ```bas
 100 PRINT"PROGRAM FOR PLOTTING EQUALLY"
 101 PRINT"SPACED DATA VALUES"
@@ -3472,9 +3566,11 @@ machines:
 43486 X=X3
 43487 RETURN
 ```
+{% endraw %}
 
 ## TM-BREAK.BAS
 
+{% raw %}
 ```bas
 1 '****** MODIFICATION FOR PC-TALK, VERSION 2.0*****************
 2 '
@@ -3503,9 +3599,11 @@ machines:
 1297 '
 1298 '  
 ```
+{% endraw %}
 
 ## TM-DIAL2.BAS
 
+{% raw %}
 ```bas
 1 '****** MODIFICATION FOR PC-TALK, VERSION 2.0*****************
 2 '
@@ -3552,9 +3650,11 @@ machines:
 10360 CLS:LOCATE 12,20,1:PRINT"You are back in terminal operation . . . . ."
 10370 REDIAL=FALSE:GOTO 400
 ```
+{% endraw %}
 
 ## TM-LDIR1.BAS
 
+{% raw %}
 ```bas
 1 '****** MODIFICATION FOR PC-TALK, VERSION 2.0*****************
 2 '
@@ -3597,9 +3697,11 @@ machines:
 6765 PUT #2,VAL(QQ$)+3
 6920 FOR I=1 TO 60
 ```
+{% endraw %}
 
 ## TM-TIME1.BAS
 
+{% raw %}
 ```bas
 1 '****** MODIFICATION FOR PC-TALK, VERSION 2.0*****************
 2 '
@@ -3626,6 +3728,28 @@ machines:
 1190 LOCATE  2,39:PRINT"3  Elapsed time this call = ";:COLOR HI,BG:PRINT ELAPSEDMIN;:PRINT" min   ";:COLOR FG,BG:LOCATE 2,75:PRINT"   3
 6312 PRINT #1, DIAL$:TIMESTRT$=TIME$
 ```
+{% endraw %}
+
+## UNPROT.DOC
+
+{% raw %}
+```
+THIS PROGRAM CALLED UN.P IS A BLOAD FROM BASIC
+DESIGNED FOR UNPROTECTING A BASIC PROGRAM WHICH
+WAS SAVED WITH THE ,P  EXTENSION.
+ TO UTILIZE
+LOAD BASIC
+LOAD PROTECTED PROGRAM
+TYPE  BLOAD"UN.P",1124
+THEN YOU CAN LIST AND SAVE THE PROGRAM JUST LIKE
+IT HAD NEVER BEEN PROTECTED.......
+GOOD LUCK.... WE HAVE NO IDEA WHERE THIS CAME FROM
+BUT I AM SURE EVERYONE WILL, SOME DAY THANK THEM...
+p.s be sure that the un.p program is on the disk
+in drive A:
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

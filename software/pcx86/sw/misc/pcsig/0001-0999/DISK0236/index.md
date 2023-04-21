@@ -60,6 +60,76 @@ machines:
     COPYINST BAT  Copies *.fmt files to second diskette
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FPRINT.DOC
+
+{% raw %}
+```
+  FPRINT.DOC - 01.SEP.1984 - Westra-Danen Associates Inc.
+  =======================================================
+
+  Program FPRINT was compiled under DOS V2.00, using
+       The BASIC Compiler V1.00, and
+       The DOS Linker V2.00.
+
+  The program will likely work under other releases of DOS,
+  but success is NOT guaranteed!
+
+  More information is contained in FPRINT.HLP, which is also
+  used by the program itself.
+
+  You may delete the FPRINT.DOC file, but
+
+                 DO NOT DELETE FPRINT.HLP...
+                 ========================
+
+```
+{% endraw %}
+
+## PC-SIG.DOC
+
+{% raw %}
+```
+
+                                                       September 1, 1984
+
+  Programs submitted by: Westra-Danen Associates Inc.
+                         204, 12910 - 50 Street
+                         Edmonton, AB         T5A 4L2
+                         CANADA
+                         Phone 403/478-2985
+
+
+  There are two utility programs on this disk:
+
+  BPRINT, a BASIC program lister, is offered under the FREEWARE, or
+  user-supported software concept.  A $25.00 donation is requested.  All
+  instructions are contained within the program.  Given enough response,
+  an extention to the program in the form of a line-number and
+  variable-name cross-reference, will be added, along with some other
+  enhancements.  A version that uses the BASRUN.EXE runtime program is
+  also available:  see information contained in the program.
+
+  FPRINT, a general-purpose ASCII file lister, is offered in the public
+  domain library.  It uses an external help file, called FPRINT.HLP.  A
+  .DOC file is also included with some general notes.  A sample file to
+  try the program is included under the name FPRINT.TRY.
+
+  Files:  BPRINT.EXE    61824   List BASIC programs
+          FPRINT.EXE    51968   List ASCII files
+          FPRINT.DOC      571   documentation for FPRINT.EXE
+          FPRINT.HLP     2790   help file for FPRINT.EXE
+          FPRINT.TRY     2646   sample file for FPRINT.EXE
+
+
+                                                       [File PC-SIG.DOC]
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0236
 

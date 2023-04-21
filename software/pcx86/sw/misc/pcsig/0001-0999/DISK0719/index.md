@@ -46,6 +46,98 @@ machines:
     CHECK    TXT  Description of check.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CHECK.TXT
+
+{% raw %}
+```
+         
+         You can test your copy of the distribution diskette, to make 
+         sure the copy is accurate, by entering the command CHECK *.* 
+         at the DOS prompt.  The output should look like this: 
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  LW      .COM         CRC = 1E 42
+
+--> FILE:  CONFIG  .COM         CRC = D9 18
+
+--> FILE:  MANUAL  .            CRC = BA C3
+
+--> FILE:  READ    .ME          CRC = D7 99
+
+--> FILE:  SUPPORT .            CRC = 8D 15
+
+--> FILE:  SAMPLE  .ADR         CRC = 1E FC
+
+--> FILE:  SAMPLE  .            CRC = B9 AF
+
+--> FILE:  CHECK   .COM         CRC = BD 22
+
+--> FILE:  CHECK   .TXT         CRC = unknown
+
+ ---------------------> SUM OF CRCS = unknown
+
+DONE
+         
+                  
+         Note: the CRC for CHECK.TXT will be incorrect as will be the 
+         total, because you cannot write a file's CRC to the file 
+         without altering the CRC of the file.
+```
+{% endraw %}
+
+## FILES719.TXT
+
+{% raw %}
+```
+Disk No:  719
+Program Title:  LETTERWRITER
+PC-SIG version: 2.1
+
+LETTERWRITER is a different kind of address manager--its specialty is
+mailmerge.
+
+You can keep different files full of different "kinds" of people, i.e.
+business acquaintances, friends, or relatives.  You can sort these
+different files by first name, last name, or zip code, just as you would
+a more traditional database address manager, but the emphasis is on
+merging the database information into an ASCII document, such as a
+letter that has been created in a word processor.
+
+Usage:  Mailmerge/Address Manager.
+
+Special Requirements:  A word processor that produces ASCII files.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $39.00
+
+File Descriptions:
+
+LW       COM  LETTERWRITER (executable program).
+CONFIG   COM  DOS system configuration file.
+READ     ME   Short description of LETTERWRITER (1 page).
+MANUAL        Documentation for LETTERWRITER (15 pages).
+SUPPORT       Registration form for LETTERWRITER.
+SAMPLE   ADR  Sample address for LETTERWRITER.
+SAMPLE        Sample file.
+CHECK    COM  Checks your copy of LETTERWRITER.
+CHECK    TXT  Description of check.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0719
 

@@ -69,6 +69,7 @@ machines:
 
 ## $$MENU.BAS
 
+{% raw %}
 ```bas
 10 REM Program $$Menu: On-Disk Software, 1984
 20 REM See documentation for copying guidelines
@@ -89,9 +90,11 @@ machines:
 170 IF K<J-3 THEN PRINT #1, "Command /c " MENU$(K+3,2): PRINT #1, "menu" ELSE PRINT #1, "EXIT"
 180 CLOSE: SYSTEM
 ```
+{% endraw %}
 
 ## COMSEP.BAS
 
+{% raw %}
 ```bas
 1 REM Program ComSep: On-Disk Software, 1984
 2 REM See documentation for copying guidelines
@@ -112,9 +115,11 @@ machines:
 17 NEXT: IF J>0 THEN B$=LEFT$(A$,J) ELSE B$=""
 18 RETURN
 ```
+{% endraw %}
 
 ## FFILE.BAS
 
+{% raw %}
 ```bas
 1 REM Program Ffile: On-Disk Software, 1984
 2 REM See documentation for copying guidelines
@@ -166,9 +171,11 @@ machines:
 48 IF I<J THEN AR$=RIGHT$(A$,J-I)
 49 A$=AL$+AR$:RETURN
 ```
+{% endraw %}
 
 ## FFILEBIG.BAS
 
+{% raw %}
 ```bas
 1 REM Program Ffile: On-Disk Software, 1984
 2 REM See documentation for copying guidelines
@@ -211,9 +218,11 @@ machines:
 39 IF I<J THEN AR$=RIGHT$(A$,J-I)
 40 A$=AL$+AR$:RETURN
 ```
+{% endraw %}
 
 ## MAPTREE.BAS
 
+{% raw %}
 ```bas
 1 REM Program Maptree: On-Disk Software, 1984
 2 REM See documentation for copying guidelines
@@ -237,9 +246,11 @@ machines:
 20 PRINT#1,: PRINT #1,"You have" STR$(NODIR) " directories which use" STR$(NODIR*3-3) " files for directory information."
 21 PRINT #1, NOFILES " data files were found.": PRINT#1,:PRINT #1,: CLOSE: SYSTEM
 ```
+{% endraw %}
 
 ## SAMECHK.BAS
 
+{% raw %}
 ```bas
 1 REM Program SameChk: On-Disk Software, 1984
 2 REM See documentation for copying guidelines
@@ -258,9 +269,11 @@ machines:
 15 PRINT:PRINT:PRINT M" duplicate file names found."
 16 CLOSE:SYSTEM
 ```
+{% endraw %}
 
 ## SETDRV.BAS
 
+{% raw %}
 ```bas
 1 REM Program SetDrv: On-Disk Software, 1984
 2 REM See documentation for copying guidelines
@@ -278,6 +291,7 @@ machines:
 14 PRINT #1, IN$(I): NEXT
 15 CLOSE: SYSTEM
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

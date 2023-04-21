@@ -30,6 +30,40 @@ machines:
     option to see how well you've learned them.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2184.TXT
+
+{% raw %}
+```
+Disk No: 2184                                                           
+Disk Title: The Element Study Aid                                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Element Study Aid                                        
+Author Version: 2.0.0                                                   
+Author Registration: $24.95                                             
+Special Requirements: 512K RAM, CGA or higer.                           
+                                                                        
+Are you doing poorly in your chemistry classes?  If you are, we've got  
+good news for you.  Introducing THE ELEMENT STUDY AID:  this program    
+will teach you everything you need to know about all of the elements    
+on the periodical table.  It will give you the element's name, atomic   
+number, atomic symbol, atomic weight, common valence, specific gravity, 
+melting point, and boiling point of each element.   An option is given  
+on the periodic table to see where all of the elements lie.  After you  
+have studied the elements or the group of your choosing, you may run the
+test option and see how well you have learned them.                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2184
 

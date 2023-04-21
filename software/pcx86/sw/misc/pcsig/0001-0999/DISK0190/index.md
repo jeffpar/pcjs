@@ -62,8 +62,72 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #190, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  CUSTOM  .BAS         CRC = BA 23
+
+--> FILE:  FIX-TEST.BAS         CRC = 74 A1
+
+--> FILE:  FRM001  .DAT         CRC = B0 A2
+
+--> FILE:  FUL001  .DAT         CRC = F6 B3
+
+--> FILE:  FULLSCRN.BAS         CRC = 6D 89
+
+--> FILE:  FULLSCRN.BSC         CRC = 5F 6C
+
+--> FILE:  FULLSCRN.BSN         CRC = EA D2
+
+--> FILE:  INFO    .DOC         CRC = D4 97
+
+--> FILE:  MEMO    .BAS         CRC = D9 71
+
+--> FILE:  PC-FORM .EXE         CRC = 86 AF
+
+--> FILE:  PGMCVRT .BAS         CRC = 1B 6E
+
+--> FILE:  RV-EDIT .BAS         CRC = F6 E3
+
+--> FILE:  RV-EDIT .DOC         CRC = 93 2D
+
+--> FILE:  TXTSCAN .BAS         CRC = 02 4A
+
+--> FILE:  VUE     .BAS         CRC = 15 C0
+
+--> FILE:  XXXX    .DAT         CRC = 00 00
+
+--> FILE:  XXX     .            CRC = 38 5E
+
+ ---------------------> SUM OF CRCS = B8 7D
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## CUSTOM.BAS
 
+{% raw %}
 ```bas
 10 '*******************************
 12 '
@@ -197,9 +261,11 @@ machines:
 1230 DATA 99,97
 1240 END
 ```
+{% endraw %}
 
 ## FIX-TEST.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -287,9 +353,11 @@ machines:
 1470 IF I$="Y" OR I$="y" GOTO 1060
 1480 END
 ```
+{% endraw %}
 
 ## FULLSCRN.BAS
 
+{% raw %}
 ```bas
  100 REM FULLSCRN - V1.0 - JOHN H. LANG - COMPUTER ENTERPRISES
  110 REM          REVISED VERSION FIRST APPEARING IN SOFTALK MAGAZINE
@@ -511,9 +579,98 @@ machines:
  2270 NEXT FR
  2280 RETURN
 ```
+{% endraw %}
+
+## INFO.DOC
+
+{% raw %}
+```
+          DOCUMENTATION CONCERNING FILES ON THIS DISKETTE
+          -----------------------------------------------
+
+
+1. FILES CONTAINED ON DISKETTE:
+
+         FILE NAME                  DESCRIPTION
+   --------------------------------------------------------------
+         FULLSCRN.BAS               FULL SCREEN DATA ENTRY PROGRAM
+                                    CREATED FROM FULLSCRN.BSC VIA
+                                    PGMCVRT.BAS PROGRAM ON THIS
+                                    DISKETTE.
+
+         FULLSCRN.BSC               FULL SCREEN DATA ENTRY PROGRAM.
+                                    RAW CODE TO BE FED INTO THE
+                                    PGMCVRT.BAS PROGRAM.
+
+
+         FULLSCRN.BSN               OUTPUT FILE AFTER RUNNING
+                                    FULLSCRN.BSC THRU PGMCVRT.BAS.
+                                    THIS IS A XREF OF LABELS AND
+                                    THE ASSOCIATED LINE NUMBERS
+                                    TO WHICH THEY WERE ASSIGNED.
+
+         FRM001.DAT                 FILE WHICH IS READ IN BY
+                                    THE FULLSCRN.BAS PGM. THIS
+                                    CONTAINS THE FRAMING PARAMETERS
+                                    IN WHICH TO DESCRIBE THE NONE
+                                    DATA ENTRY PORTION OF THE SCREEN.
+
+         FUL001.DAT                 FILE WHICH IS READ IN BY
+                                    THE FULLSCRN.BAS PGM. THIS
+                                    CONTAINS THE DATA ENTRY
+                                    PARAMETERS WHICH DESCRIBE THE
+                                    DATA ENTRY PORTION OF THE SCREEN.
+
+         PGMCVRT.BAS                BASIC PROGRAM WHICH DOES THE
+                                    CONVERSION A "XXXX.BSC" BASIC
+                                    PROGRAM TO "XXXX.BAS" AND
+                                    "XXXX.BSN". IT IS COPIED DIRECTLY
+                                    OUT OF SOFTALK WITH NO MODIFICATIONS
+                                    EXCEPT WHERE PROGRAM CORRECTIONS
+                                    NEEDED TO BE MADE.
+
+2. THE FILE WHICH DEFINES THE DATA ENTRY SCREEN (FUL001.DAT)
+   IS IN THE SAME FORMAT AS YOU WOULD SEE IT IN A DATA STATEMENT
+   WITHIN A BASIC PROGRAM. THE WAY TO DEFINE THE PARAMETERS AND
+   THEIR MEANINGS WERE NOT ALTERED. DOCUMENTATION CAN BE FOUND
+   WITHIN THE PGM  FULLSCRN.BSC  AND ALSO IN THE SOFTALK EDITION
+   IN WHICH THE FULL SCREEN PROGRAM APPEARED.
+
+3. THE FILE WHICH DEFINES THE NONE DATA ENTRY SCREEN (FRM001.DAT)
+   IS IN THE SAME FORMAT AS YOU WOULD SEE IT IN A DATA STATEMENT
+   WITHIN A BASIC PROGRAM.  DOCUMENTATION ON HOW TO DEFINE THE
+   PARAMETERS CAN BE FOUND WITH THE PROGRAM  FULLSCRN.BSC.
+
+4. SOME OPTIONS OF THE FRAMING (FRM001.DAT) HAVE NOT BEEN
+   IMPLEMENTED AS IT WAS DECIDED THEY WERE NOT NEEDED. USE
+   THE SAMPLE FILE (FRM001.DAT) AND THE DOCUMENTATION WITHIN
+   THE PROGRAM TO DECIDE WHICH OPTIONS WERE NOT IMPLEMETED.
+   I BELIEVE (AND HOPE) THIS WILL BE VERY OBVIOUS.
+
+
+5. THE FULLSCRN.BAS PROGRAM WAS ACTUALLY CREATED USING THE PROGRAM
+   PROGRAM  PGMCVRT.BAS ON THIS DISKETTE. FOR THAT REASON YOU
+   SHOULD BE ABLE TO GO INTO BASIC AND RUN  FULLSCRN.BAS. MAKE
+   SURE THE FILES  FUL001.DAT  AND  FRM001.DAT  ARE ACCESSABLE
+   TO THE PROGRAM. BY DOING THIS YOU CAN SEE IMMEDIATELY HOW
+   THIS PROGRAM WORKS.
+
+6. ALL PROGRAMS ON THIS DISKETTE HAVE BEEN TESTED AND DO WORK
+   AS SHIPPED.
+
+7. DISKETTES WERE FORMATTED AND COPIED USING PCDOS 2.0.
+
+8. PLEASE LET ME KNOW IF I CAN IMPROVE THIS DOCUMENTATION OR
+   IF YOU HAVE SOME BETTER IDEAS ON THESE PROGRAMS. I WOULD
+   WELCOME ANY COMMENTS.
+
+
+```
+{% endraw %}
 
 ## MEMO.BAS
 
+{% raw %}
 ```bas
 1010 '
 1020 '    STEVE TURNER  513-868-9150   HAMILTON, OHIO   7-9-83
@@ -893,9 +1050,11 @@ machines:
 5640 '#######################################################################
 5650 END
 ```
+{% endraw %}
 
 ## PGMCVRT.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20  REM BSCBAS.BSC V2.01 3-83,MARK GARDNER, WED ENTERPRISES,GLENDALE,CA 91201
@@ -1064,9 +1223,11 @@ machines:
 1650  STOP
 1660  END
 ```
+{% endraw %}
 
 ## RV-EDIT.BAS
 
+{% raw %}
 ```bas
 0 GOTO 65000
 1 CLEAR
@@ -1212,9 +1373,226 @@ machines:
 65150 GOTO 1
 65200 END
 ```
+{% endraw %}
+
+## RV-EDIT.DOC
+
+{% raw %}
+```
+
+                                   RV-EDIT
+                                   =======
+
+   RV-EDIT is a full screen editor written in BASIC.  It makes use of
+   most of the special function keys on the PC keyboard, such as Page
+   Up, Page Down, Home, Insert and Delete.  All the control key functions
+   are listed on the last page of this file.  I tried to make it as much
+   like the BASIC editor as possible, to let you move easily between the
+   two.  I think you'll find all the functions of the BASIC editor in
+   RV-EDIT, plus a few more.
+
+   AUTOMATIC INDENTATION
+   ---------------------
+        The carriage return [ENTER]      |  If you want to start at the left
+   key is programmed to put the cursor   |  margin, type another [ENTER]. Auto-
+   at the same position on the next      |  indent works for both old and new
+   line as the first character typed     |  lines, to let you enter data in
+   on the current line.  So, if you      |  columns or to write a multi-column
+   started the current line at column    |  letter.
+   10, the next line would start there   |
+   too.                                  |
+
+   WHAT YOU SEE IS WHAT YOU GET
+   ----------------------------
+        This means that no reformatting is done.  RV-EDIT is just an editor, it
+   does no word processing functions.  So, whatever you can put on the screen
+   will be printed just as you see it.  This is a mixed blessing.  On one hand
+   there is no doubt as to how your printed output will look.  On the other,
+   you have to block your paragraphs yourself and there is no automatic right
+   margin justification.
+
+   PRINTER CONTROL
+   ---------------
+        One feature that I use a lot is the ability to put any ASCII character
+   on a line, including printer control characters.  The PC keyboard gives you
+   the ability to do this by typing a number between 1 and 254 on the numeric
+   keypad, while holding the [ALT] key down.  When you release the [ALT] key,
+   the PC representation of that character will appear on the screen.  For
+   example, an ASCII 14 will put the Epson printer in double wide character
+   mode.  The PC representation of an ASCII 14 is a musical note.  So if you
+   type [ALT]14 at the beginning of a line, you see a musical note on the
+   screen in that position and you know that the line will be printed with
+   double wide characters.  Two character escape codes can be put in as well.
+   For example, I like to type my letters in emphasized mode to get darker
+   print.  The Epson printer code for emphasized mode is [ESC]E .  So, I type
+   [ESC]E on line one.  I see a back-arrow E, so I know its there and the
+   printer will be set to emphasized mode when it gets sent the line.
+
+   SOME CAUTIONS
+   -------------
+        This is a brand new program with limited test time and may have xome
+   problems lurking within.  Save your files periodically and when memory
+   gets under 1000 bytes, its probably time to start a new file.  You can
+   recover some space by doing a SAVE followed by a LOAD, however.  Since
+   this is a BASIC program, string space is continually consumed.  Instead
+   of doing a FRE periodically (it takes 7 minutes), the LOAD command
+   restarts the program.
+
+
+                                   RV-EDIT                         PAGE 2
+
+   LIMITATIONS
+   -----------
+   Because this is an in-storage editor, you are restricted to a maximum of
+   600 lines.
+
+   The maximum line length is 76 characters.  Because of this, RV-EDIT is not
+   suitable for editing BASIC files.  You will be able to LOAD them, but you
+   will only see the leftmost 76 bytes of each line.  You can change those
+   lines safely by typing over characters.  The problem occurs when you insert
+   or delete characters in a line which <USED TO> contain more than 76
+   characters.  The characters to the right of 76 will go into ye olde bit
+   bucket.
+
+   So there you have it fellow members, a program that will turn your multi-
+   thousand dollar computer into an electric typewriter!
+
+   GREAT OAKS FROM LITTLE ACORNS GROW
+   ----------------------------------
+   What we have here is a reasonable nucleus for a good editor or even a word
+   processor.  So take this opportunity to tailor make your own whatever-
+   you-want-to-call-it.  Break out your BASIC manual and try writing some
+   subroutines to do the things you like in an editor.  If you are wondering
+   what you could possible do to improve this thing, consider some of the
+   following:
+     copy and block copy; move and block move; tabs; speed up the LOAD and
+     SAVE routines; margins; a double-space command; a box command; format
+     a paragraph between lines A & B; automatic page titling and numbering;
+
+     There is a possibility for a whole new module to handle the print
+     function.  RV-EDIT could chain to the new module, passing it all
+     the variables.  The print module would print the text array, observing
+     a number of imbedded formatting commands such as .in .fo  etc.
+     (right now the print routine handles  only, doing a page eject for it)
+
+     Anyone experimenting with the assembler could maintain the text array
+     in another 64K segment; speed up load and save; speed up text display;
+     do a fast paragraph formatter with justification; etc.
+
+     No need to strain yourself thinking about it.  As you use it you'll
+     find yourself saying "now why doesn't it ..." or "I wish it would ...".
+     You can make it grow with your requirements.
+
+   Its easy to visualize several members working on different features
+   or similar features with different implememtations.  How can we take
+   advantage of this?  Well... I'd like to see us participate in a program-
+   ming experiment that would let us pick and choose among the features
+   that are submitted by members.  If we make each feature stand alone
+   in the form of mergeable lines of BASIC code, I think we can do it.
+
+   PROPOSAL
+   --------
+   Whenever you feel you have a feature that you would like to share, send
+   it to me in the form of a listing or a diskette containing the files.
+   (no VM files please)  I'll review it for conflicting variables and line
+   numbers etc.  If there are no problems, we will make it available on
+   the next club diskette.  I'll return your diskette at the next meeting
+   or via internal mail.
+
+
+                                   RV-EDIT                         PAGE 3
+
+     Specifics
+     ---------
+     Accepted files will be put on the future club diskette as RV-EDIT.nnn
+       where nnn is a feature number between 001 and 999
+
+     Line 64001-64999 will identify the contributor and describe the feature.
+     You will then be able to LIST 64001-64999 to see which features have
+     been installed in any particular version of the program.
+
+     Pre-requisite and co-requisite features will be identified in the
+     README file and on the feature line of the program.
+
+     You should be able to customize your editor by MERGEing the features
+     you like with the RV-EDIT.
+
+   You can send your features and suggestions for improving the process to:
+
+                     Bob Vollmer              Bob Vollmer
+                     148 Brice Court     or   L74/F37
+                     San Jose, CA 95111       Santa Teresa Lab
+
+                                  (408) 226-2652
+
+   INSTALLING RV-EDIT
+   ------------------
+   The method I prefer has RV-EDIT on the DOS diskette and a private `LETTERS'
+   diskette for each family member.  All that is on each Letters diskette is
+   a one line CONTROL.BAS file containing `10 RUN"A:RV-EDIT"'.  That is all
+   that is required to get the proper program run, leaving the remainder of
+   each diskette available for correspendence files.  There is also only
+   one diskette to update to go to a new version of the editor.
+
+   Two drives
+     From DOS, type B:
+                    A:BASICA CONTROL
+
+     From BASIC, type RUN"B:CONTROL
+
+   One drive -
+     From DOS, type BASICA RV-EDIT
+     When you see the cover page for the editor, replace the DOS diskette
+     with a Letters diskette.
+
+     RV-EDIT exits to A:TRANSFER.BAS which prompts for a new diskette and
+     [SPACE] to continue.  For a one-drive system, I'd suggest that you
+     put a copy of TRANSFER.BAS on each letters diskette as well as your
+     DOS diskette.  Then, no matter which diskette was in the drive when
+     you exited, TRANSFER.BAS would be found.
+
+     To change the exit procedure, edit the last line of the program, 65200
+     to suit your system.
+
+   NOTE - RV-EDIT as distributed on CPC Disk #11 has two files, RV-EDIT.DOC
+   and rv-edit.bas.  Only copy the RV-EDIT.BAS file to your DOS diskette.  Print
+   RV-EDIT.DOC (load and print it using RV-EDIT) and file it.
+   
+
+                               RV-EDIT CONTROL KEYS
+                               ====================
+   ARROW KEYS = move cursor in the arrow direction.
+   [CNTL] LEFT/RIGHT ARROW = side of screen
+   [C/R] = new line, indent to first char struck on current line.  [C/R] again
+           moves the cursor to column 1.
+   [HOME]     = top-left
+   [END]      = end of current line.
+   [CNTL][END]= erase to end of current line.
+   [PgUp]     = display prior 11 lines.
+   [PgDn]     = display next 11 lines.
+   [CTRL][PgUp/Dn] = prior/next 22 lines.
+   [INS]      = insert chars til [INS] or cursor moves. (half cursor=insert)
+   [DEL]      = delete chars, one char per [DEL].
+
+            SOFT KEYS(1)                         SOFT KEYS(2)
+   1. TOPLIN   Specify top display line.| 1. copy    \n\
+   2. END      Exit to next diskette.   | 2. copy+    \o\\c\
+   3. LOAD     Load a diskette file.    | 3. move      \t\\o\
+   4. SAVE     Save current file.       | 4. move+         \d\
+   5. INSERT   Insert a prior line.     | 5. before         \e\
+   6. DELETE   Delete the current line. | 6. after           \d\
+   7. TOP      Display from top of file.| 7. IMBED
+   8. BOTTOM   Display to file bottom.  | 8.
+   9. PRINT    Print entire file.       | 9. DATE     Enter current Date/Time.
+   0. KEYS     Display alternate keys   | 0. KEYS     Display alternate keys.
+
+
+```
+{% endraw %}
 
 ## TXTSCAN.BAS
 
+{% raw %}
 ```bas
 1010 PROG$="TXTSCAN.BAS":VERS$="82/08/03/2100"
 1020 '
@@ -1236,9 +1614,11 @@ machines:
 1180 LPRINT:LPRINT "   E N D   O F   F I L E"
 1190 PRINT:PRINT:PRINT "  J O B   F I N I S H E D":END
 ```
+{% endraw %}
 
 ## VUE.BAS
 
+{% raw %}
 ```bas
 1 ' VUE 12/16/82  V1.0
 2 '
@@ -1351,6 +1731,7 @@ machines:
 770 IF ERR=200 THEN BEEP:RESUME 430
 780 LOCATE 25,1:PRINT SPC(39);:CLS:ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -57,8 +57,70 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES486.TXT
+
+{% raw %}
+```
+ 
+-----------------------------------------------------------------------
+Disk N0  486  TELISOLAR                                         v1 DS2
+-----------------------------------------------------------------------
+ 
+    This set of programs helps the average homeowner evaluate the amount
+ of energy used in his home, how much it will cost, and allow the user to
+ see what areas of energy use need to be improved upon.
+ 
+    TELISOL   EXE -  The actual energy analysis program.
+    TELISOL   DOC -  An 80 page document for TELISOL.
+    SINSTALL  BAS -  A BASICA version of the installation program.
+    SOLSTALL  EXE -  A compiled version of the above.
+    INITVAL   SOL -  A sample installation file generated with SOLSTALL.
+    HOUSE     DAT -  A sample definition of a house.
+    READ      ME  -  A brief description of how to use the program.
+```
+{% endraw %}
+
+## NOTES486.TXT
+
+{% raw %}
+```
+-----------------------------------------------------------------------
+Disk No  486  PROBLEMS and/or COMMENTS                          v1 DS2
+-----------------------------------------------------------------------
+ 
+                                TELISOLAR
+ 
+The Telisolar package is a program which provides the user with an easy,
+and fast method of evaluating energy-saving in the areas of hot water
+usage, building heating/cooling load, and solar collector design.  It
+enables the average homeowner to make intelligent decisions about
+energy-related home improvements and/or investments.  If you are using this
+program and find it to be of value, your contribution of $50 will be
+appreciated.  Your donation entitles you to the following:
+ 
+    1. A letter quality printed manual with accompanying illustrations in
+       a 3-ring binder.
+ 
+    2. Telephone support.
+ 
+    3. Inclusion on our mailing list for notification of bug fixes and new
+       releases.
+ 
+    4. One free version upgrade.
+ 
+ 
+    Send to:
+ 
+                        Tesseract Enterprises Limited
+                        PO Box 25966
+                        Colorado Springs, Co 80936
+                        (303) 594-6199
+```
+{% endraw %}
+
 ## SINSTALL.BAS
 
+{% raw %}
 ```bas
 10 '
 20 '                  TeliSolar Installation Program
@@ -169,6 +231,7 @@ machines:
 1060 PRINT CHR$(200);STRING$(69,205);CHR$(188)
 1070 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

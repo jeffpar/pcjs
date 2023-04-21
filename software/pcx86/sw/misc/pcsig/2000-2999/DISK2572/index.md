@@ -14,6 +14,113 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2572.TXT
+
+{% raw %}
+```
+Disk No: 2572                                                           
+Disk Title: The Hype Utilities                                          
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: The HYPE Utilities                                       
+Author Version: 1                                                       
+Author Registration: None.                                              
+Special Requirements: None.                                             
+                                                                        
+Utility programs are a must for today's computer users.                 
+                                                                        
+Use THE HYPE UTILITIES to search whole disks for a particular file,     
+display the free space on a disk, or even add a directory to your path. 
+One very nice thing about these small utilities is that if you run the  
+program with no parameters, a Help screen will come up explaining the   
+format, what the program does, what it's intended for, and gives some   
+examples. THE HYPE UTILITIES ARE:                                       
+                                                                        
+~ ALL2DAY.EXE  Display all of the files created today.                  
+                                                                        
+~ APATH.COM    Add or remove a directory from your path. It will NOT    
+               change your autoexec.bat.                                
+                                                                        
+~ BEEP.COM     Nothing fancy to this one, it just beeps.                
+                                                                        
+~ DIRS.EXE     Display all of the subdirectories in current directory,  
+               similar to DOS's DIR.                                    
+                                                                        
+~ FF.EXE       A handy file finder.  Quickly search through a drive     
+               volume for that file you can't seem to find.             
+                                                                        
+~ FREE.COM     Display available disk space, total disk space, and disk 
+               space in use on a specified drive.                       
+                                                                        
+~ MEM.COM      Display the amount of free DOS and EMS memory.           
+                                                                        
+~ RESTPATH.COM Change to a directory whose name was saved in a file with
+               SAVEPATH.COM (Allows batch files to ``remember'' one or  
+               more directories.                                        
+                                                                        
+~ SAVEPATH.COM Save the current directory for later use by RESTPATH.COM.
+                                                                        
+~ SHOWTIME.COM Display the current time, day, month, date, and year.    
+               Its output can be funneled into an ASCII text file for   
+               logging purposes.                                        
+                                                                        
+~ TIMER.EXE    Time program execution. For those who want to know how   
+               fast programs run.                                       
+                                                                        
+~ TODAY.EXE    Display all files created today in a specified directory.
+                                                                        
+The best thing about THE HYPE UTILITIES is that they are free.  There is
+no registration fee required.                                           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.TXT
+
+{% raw %}
+```
+Welcome to The HYPE Utilities, Volume 1.
+
+This distribution contains the 12 HYPE Utilities in volume 1 of a series.
+You may use and distribute these programs freely.  The HYPE integrator
+ties them all together.  It also lets you view the manual online and
+the manual.  To start The HYPE Integrator:
+
+  * Enter "hi" at the DOS prompt to start the HYPE Integrator.
+
+The HYPE Integrator can be used to demonstrate each of the programs,
+although they were meant to work at the DOS prompt or in batch files.
+
+To print the manual, use the HYPE Integrator or:
+
+  * Enter "copy hypeman1.prn lpt1:" at the DOS prompt.
+
+The HYPE Integrator and several of The HYPE Utilities were written using
+Builder, hyperkinetix' batch file compiler.
+
+Our offices are located at 666 West Baker, Suite 405, Costa Mesa,
+California, 92626.  We can be reached by phone at (714) 668-9234, FAX at
+(714) 979-2813 and BBS at (714) 668-9662.  We are also available to you
+through Compuserve at ID 70771,3320.
+
+Thank you for using The HYPE Utilities.
+
+--The dudes at hyperkinetix. inc.
+
+
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2572
 

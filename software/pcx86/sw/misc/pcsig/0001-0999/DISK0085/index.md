@@ -51,6 +51,7 @@ machines:
 
 ## DUMPSDIF.BAS
 
+{% raw %}
 ```bas
 100 ' **********************
 110 ' *   INITIALIZATION   *
@@ -139,9 +140,85 @@ machines:
 5004 'and inquiry to DIF Clearinghouse (POB 527, Cambridge, MA 02139)
 5005 'REF: IBM VisiCalc Manual (Appendix B)...transcribed by Phillip Jacka AIA
 ```
+{% endraw %}
+
+## PR.DOC
+
+{% raw %}
+```
+        DOCUMENTATION FOR SOFTWARE EXCHANGE DISKETTE #12
+
+   The payroll programs on this diskette are titled PR.VC and 
+BPR.VC.  Both are "Visicalc" templates and run only on (or 
+through) "Visicalc".  DO NOT try to run these programs unless you 
+own and use "Visicalc".
+
+  Now, just a word about warranties: NONE.  Yes, that's right.  
+Capital PC, the software exchange group and I make no warranties 
+nor do we stand behind the output.  You should test your data to 
+assure yourself that the program is accurately computing the 
+withholdings.  you should not use the program if the rates do not 
+agree with your calculations or if the rates are changed by IRS 
+or local government.
+
+   PR and BPR use the "calculation" method of withholding 
+determination.  They do not "look up" the amounts in the same 
+table as you would by hand in the Circular E for instance.  
+Therefore, all of the withholding amounts may be slightly 
+different than the table amounts.  This is not cause for concern 
+since both methods are estimation approaches and only 
+attempt to estimate the amount of tax for the given wage.
+Both methods are entirely proper and indeed this program uses the 
+same calculating method as the more expensive and elaborate 
+payroll packages.
+
+  When the screen comes up on the spreadsheet some columns will 
+show "ERROR".  You should re-calculate before doing anything 
+else. The first time you use PR or BPR you must insert specific 
+data such as EMPLOYEE NAME, RATE, STATE OF RESIDENCE, NUMBER OF 
+EXEMPTIONS, MARRIED OR SINGLE, EXEMPT.  The program can only 
+calculate state wages for Maryland, Virginia and the District of 
+Columbia.  If you have employees who have wages withheld in other 
+than these three locales,  DO NOT USE THIS PROGRAM.  When PR 
+needs to know which of several selections applies, such as which 
+state of residency, a "1" means yes and a "0" means no.  Thus an 
+employee who resides in Maryland will have a "1" placed under the 
+column for Maryland and a "0" under the other two state columns.
+The same logic applies to questions of "yes or no".  For 
+instance, when setting up an employee the program need to know if 
+the employee is to be treated as exempt. "0" for yes and "1" for 
+no means exactly what it says: if the employee is not to have 
+wages withheld then "0" is the appropriate entry under the 
+column, and "1" is the appropriate entry if the employee is not 
+exempt.  Apply the same rationale with the remaining columns 
+between AW to AZ,  and BD to BE.   Place the number of exemptions 
+in column BF and ignore BG (PR will calculate this one).
+
+   For payday to payday use (after the first time set-up) you 
+should only have to enter the number of hours worked and 
+recalculate.  You should always recalculate twice to eliminate 
+any problems of forward reference due to changes in data.
+
+   For hard copy, remember first to enter the appropriate date in 
+the spreadsheet and then allign the screen to show Q as the left 
+column and X as the right column.  This should be easy since the 
+vertical lines in columns P and Y help you to visualize the 
+hardcopy portion of the sheet.  At this point simply print the 
+screen (SHIFT PrtSc) and you are finished with this week's
+payroll.  
+
+   Sorry, but PR does not write checks for you and it will not 
+accumulate quarterly data for use in preparing the 941, MD and VA 
+quarterly returns.  And obviously it will not do the W-2's at the 
+end of the year!  But it does do an awfully nice job of working 
+up the net payroll and withholding amounts for you which should 
+be a help on payday.  Good luck and happy computing!
+```
+{% endraw %}
 
 ## PRINTDIF.BAS
 
+{% raw %}
 ```bas
 60 ' **********************
 70 ' *   INITIALIZATION   *
@@ -253,9 +330,11 @@ machines:
 5004 'and inquiry to DIF Clearinghouse (POB 527, Cambridge, MA 02139)
 5005 'REF: IBM VisiCalc Manual (Appendix B)...transcribed by Phillip Jacka AIA
 ```
+{% endraw %}
 
 ## SORTDIF.BAS
 
+{% raw %}
 ```bas
 10 REM SORTDIF.BAS 4/1/82   REV 7/24/82 (NEW SORT)
 20 REM PROPERTY OF TOM SPRINGALL -- NOT FOR GENERAL DISTRIBUTION
@@ -485,9 +564,28 @@ machines:
 2260 BEEP:LOCATE ,1:PRINT "Error";ERR;"writing output file. Rerun from start."
 2270 PRINT:ON ERROR GOTO 0
 ```
+{% endraw %}
+
+## SORTDIF.DOC
+
+{% raw %}
+```
+                           SORTDIF.DOC
+
+   Sortdif is a basic program that comes to us by way of ?????? !
+Please recognize that it involves DIF and if you don't know  what 
+I mean by that,  the program is not for you.  If you do know what 
+a DIF is, then you may be able to make Sortdif sort some Visicalc
+spreadsheet data for you, provided you have properly saved in the 
+DIF  format.   You are on your own,  just read the REMs and  good 
+luck.
+
+```
+{% endraw %}
 
 ## SORTS.BAS
 
+{% raw %}
 ```bas
 10 REM SORTS.BAS 4/24/82 TLS
 20 ' ****************
@@ -674,9 +772,52 @@ machines:
 1830 R1=R2:IF L1<R1 THEN 1760 ELSE IF S1>0 THEN 1750
 1840 RETURN
 ```
+{% endraw %}
+
+## SORTS.DOC
+
+{% raw %}
+```
+
+                            SORTS.BAS
+
+   Sorts  is  a BASIC program that looks like it has  just  about 
+every  type of sort,  i.e.:  bubble,  heap,  etc.,  and it  comes 
+without much in the way of handholding.   Please do not expect it 
+to be the cat's meow, just look it over, read the REMs and see if 
+you can use it. 
+
+```
+{% endraw %}
+
+## VC.DOC
+
+{% raw %}
+```
+                           VISICALC.VC
+
+   There  are  several Visicalc template files on  this  diskette 
+besides  PR.VC and BPR.VC (which are documented in PR.DOC).   All 
+of  these  other visicalc templates are simply  various  Visicalc 
+spreadsheet   applications   that  someone  among  us   uses   as 
+demonstration  programs  in an introduction to Visicalc  type  of 
+course.   You may be able to use them as well.   None of them are 
+terribly   complex   and  they  certainly  do  not  require   any 
+instructions.  Just  load Visicalc,  load the programs (one at  a 
+time,  of course!) and have a look.   I like the breakeven  sheet 
+myself.   Change  a few of the fixed and variable costs and  then 
+recalculate (!). WOW, quite a nice little demonstration. 
+
+  Before you get too awfully bored,  take a look at the breakeven 
+template.   I'll  bet  some of you never knew that  Visicalc  had 
+graphics  output!   See page 2-101 in your trusty Visicalc manual 
+for the lowdown on "Transcendental Functions and Graphing".
+```
+{% endraw %}
 
 ## WRITEDIF.BAS
 
+{% raw %}
 ```bas
 60 ' **********************
 70 ' *   INITIALIZATION   *
@@ -792,6 +933,7 @@ machines:
 5004 'and inquiry to DIF Clearinghouse (POB 527, Cambridge, MA 02139)
 5005 'REF: IBM VisiCalc Manual (Appendix B)...transcribed by Phillip Jacka AIA
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

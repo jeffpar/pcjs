@@ -14,6 +14,39 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2640.TXT
+
+{% raw %}
+```
+Disk No: 2640                                                           
+Disk Title: Animated Shapes                                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Animated Shapes                                          
+Author Version: 09/90                                                   
+Author Registration: $7.95                                              
+Special Requirements: 640K RAM, EGA or VGA, and a hard drive. A mouse is
+                                                                        
+ANIMATED SHAPES teaches shape and color identification using a colorful 
+menu system designed for children pre-school through the first grade.   
+Each shape correctly identified combines with other shapes to create    
+a picture.  Upon completion, the picture becomes an entertaining        
+mini-movie.                                                             
+                                                                        
+When you register ANIMATED SHAPES, you're sent a version personalized   
+with your child's name as well as fifteen new animations.               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2640
 

@@ -37,6 +37,47 @@ machines:
     designing and managing your garden.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1125.TXT
+
+{% raw %}
+```
+Disk No: 1125                                                           
+Disk Title: The Gardner's Assistant                                     
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: The Gardener's Assistant                                 
+Author Version: 2.0                                                     
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+This is a system for planning a garden.  Describe where you live, the   
+size of your garden and choose what vegetables and fruits you want to   
+grow.  THE GARDENER'S ASSISTANT helps you to:                           
+                                                                        
+~ Calculate how many of each type of plant you need to grow in order to 
+yield a certain sized crop                                              
+                                                                        
+~ Design your garden layout while considering space availability,       
+planting density and expected yield                                     
+                                                                        
+~ Calculate planting dates and expected harvest times                   
+                                                                        
+~ Add to/modify planting information and vegetable chart                
+                                                                        
+THE GARDENER'S ASSISTANT is easy to use and can be a valuable tool for  
+designing and managing your garden.                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989, 1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1125
 

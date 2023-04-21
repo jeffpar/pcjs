@@ -38,6 +38,92 @@ machines:
     have already been made.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## BUGS.TXT
+
+{% raw %}
+```
+
+                      * BUGS - etc. *
+
+Version 1.0
+
+  Disk IO
+
+Mystery problems have occured during format (always) and read
+(sometimes) on a '386 machine running DOS 3.3. The specifics of the
+problem haven't been isolated yet. Switching to DOS 3.2 fixed things. If
+this problem crops up on your machine, try another DOS version or don't
+use DiskDup's format option (pre-format your disks).
+
+  Video
+
+Some ANSI drivers and resident video utilities appear to not handle all
+video BIOS calls properly. On color equipment, if un-expected colors
+arrive or some lines don't clear properly, you will have to run DiskDup
+without the offending ANSI driver/video routine installed.
+
+Other bug reports, comments, and suggestions are invited:
+
+                                    DiskDup 1.0
+                                    P O Box 915
+                                    Fortuna, CA 95540
+9feb89jb
+```
+{% endraw %}
+
+## FILE1451.TXT
+
+{% raw %}
+```
+Disk No: 1451
+Program Title:  DISKDUP version 1.0
+PC-SIG version 1
+
+DISKDUP makes it easy to make multiple floppy copies of all your
+favorite shareware programs to share with your friends.  Written in
+FORTH, the program is faster than the standard DOS DISKCOPY, with more
+user options.  It automatically formats disks, verifies copies and
+detects any write errors.  It will also try three times to read a disk
+section before giving up in disgust.
+
+Because DISKDUP loads the source disk to be duplicated into its virtual
+memory, it frees up both of your disk drives to crank out two copies at
+a time!  The volume name of the source disk is always shown on the
+screen so you don't wind up duping a bunch of copies of the wrong
+program.  An optional sound signal lets you do something else while
+DISKDUP takes care of the copying, calling you when its time to pop in a
+couple more blank disks.  A counter lets you know how many copies have
+already been made.
+
+Synopsis:  Makes multiple copies of your favorite programs.
+
+Usage:  Disk Copy Manager.
+
+Special Requirements: 430K RAM.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $3 to $10.
+
+File Descriptions:
+
+BUGS     TXT  Error reporting instructions.
+DISKDUP  COM  Main program.
+DISKDUP  DOC  User guide.
+ORDER    FRM  Disk order form.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1451
 

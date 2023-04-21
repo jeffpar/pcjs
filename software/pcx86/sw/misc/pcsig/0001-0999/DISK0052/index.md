@@ -63,8 +63,206 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## ABSTRACT.DOC
+
+{% raw %}
+```
+
+
+BEEP.ABS
+
+PROGRAM NAME: BEEP.COM
+AUTHOR: J. P. Garbers, 890e Clubhouse Circle West, Decatur, GA 30032
+ABSTRACT: Just a little command to play a beep.  Useful in batch files to
+signal the end of a long process.
+REQUIRES: IBM Personal Computer with DOS operating system.
+INSTRUCTIONS: Just type the command BEEP <cr> from DOS, or insert a line
+containing the command BEEP into your batch file.
+
+
+CRETURN.ABS
+
+PROGRAM NAME: CRETURN.BAS
+AUTHOR: R  Schinnell
+ABSTRACT: Sometimes, when you download a file from a remote computer system,
+and then try to list or load it, you find that the whole program prints out
+on one line - without a single line feed.  This program repairs such a file
+by inserting line feeds at the end of each line (where the carriage returns
+are).
+REQUIRES: IBM BASIC
+INSTRUCTIONS: From BASIC type run"creturn.bas"<cr> and answer the questions
+on file names etc.
+
+
+DISRTN.ABS
+
+PROGRAM NAME: DISRTN.EXE
+AUTHOR: William Bailey
+ABSTRACT: This program contains the following five disk utility routines:
+        1. List file names in a directory
+        2. List the sectors upon which a file resides.
+        3. Recover the first sector of an erased file.
+        4. Uncover a hidden file.
+        5. Hide a normal file.
+The program is menu driven, and contains a description and help selection
+REQUIRES: IBM PC with DOS operating system, and at least one disk drive.
+INSTRUCTIONS: From DOS, type DISRTN<cr>
+
+
+DSKPGM2.ABS
+
+PROGRAM NAME: DSKPGM2.BAS
+AUTHOR: Rich Schinnell, Capital PC User's Group
+ABSTRACT: This a BASIC program that creates a batch file.  This batch file
+contains the commands necessary to copy files from one disk to another -
+but in alphabetical order.
+REQUIRES: IBM BASIC, DOS, and at least one disk drive.
+INSTRUCTIONS: From BASIC, type run "dskpgm2.bas"<cr> and answer the questions
+on desired disk drive etc.  When the program has finished operating, there will
+be a new batch file on your disk, which you can then execute by typing it's
+name from DOS.
+
+
+FILTER.ABS
+
+PROGRAM NAME: FILTER.BAS
+AUTHOR: Richard Steck
+ABSTRACT: This is a BASIC program that can be used to remove control and non-
+ASCII (garbage) characters from files that you have downloaded from remote
+systems. Useful for removing the nulls at the beginning of each line which are
+inserted by some systems.
+REQUIRES: IBM BASIC, and a messed up file to work on.( You may not have any)
+INSTRUCTIONS: From BASIC, type RUN" FILTER.BAS"<cr>. You will be asked the 
+name of you original file, the new file to be created, etc.
+
+
+HEX.ABS
+
+PROGRAM NAME: HEX.BAS
+AUTHOR: JP GARBERS
+ABSTRACT: This program converts binary files to hex and back again, for the
+purpose of sending com or exe files over the phone.
+REQUIRES: IBM BASIC
+INSTRUCTIONS: From BASIC, type run"hex <cr>
+Program operation is menu driven and simple.
+
+
+SHIFTBS.ABS
+
+PROGRAM NAME: SHIFTBS.COM and SHIFTIBM.COM
+AUTHOR: Walt Rauser
+ABSTRACT: SHIFTBS converts the backslash key (\) into a left shift key for
+those of you with short fingers.  SHIFTIBM converts this key back to its
+normat definition.  The program modifies the BIOS code for the
+keyboard interrupt INT 09 function so that the make and break scan
+key codes for the backslash key are converted to those for the
+left shift key. (sorry)
+REQUIRES: IBM DOS
+INSTRUCTIONS: From DOS, just type SHIFTBS<cr>. or SHIFTIBM<cr>. 
+
+
+TUNE.ABS
+
+PROGRAM NAME: TUNE.COM
+AUTHOR: JP Garbers
+ABSTRACT: This a DOS command to play one of several little tunes.  Useful for
+signalling the end of a batch job.
+REQUIRES: IBM DOS
+INSTRUCTIONS: SEE the file GUMUP.DOC
+
+
+UTSCAN.ABS
+
+PROGRAM NAME: UTSCAN.BAS
+ABSTRACT: This program scans a specified text file for a specified character
+string, and then prints the lines containing that string on the printer.
+UTSCAN is to be used with as ASCII saved BASIC program file, or an ASCII
+text file.
+REQUIRES: IBM BASIC, and printer. EPSON MX-80 is assumed, but other printers
+can be used.
+INSTRUCTIONS: FROM BASIC, type run"utscan<cr>
+M BASIC, and 
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #52, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ABSTRACT.DOC         CRC = 5F 3D
+
+--> FILE:  BEEP    .COM         CRC = 00 00
+
+--> FILE:  POKEPEEK.DOC         CRC = C7 31
+
+--> FILE:  DISRTN  .EXE         CRC = 39 0B
+
+--> FILE:  SHIFTBS .COM         CRC = 00 00
+
+--> FILE:  SHIFTIBM.COM         CRC = 00 00
+
+--> FILE:  TUNE    .COM         CRC = 57 62
+
+--> FILE:  UTSCAN  .BAS         CRC = 2B 6C
+
+--> FILE:  CRETURN .BAS         CRC = 96 B2
+
+--> FILE:  DSKPGM2 .BAS         CRC = 82 AD
+
+--> FILE:  FILTER  .BAS         CRC = B9 5B
+
+--> FILE:  HEX     .BAS         CRC = CA 57
+
+--> FILE:  FIXIT   .BAS         CRC = F1 05
+
+--> FILE:  FREE4   .DOC         CRC = D9 60
+
+--> FILE:  FREE5   .DOC         CRC = 30 96
+
+--> FILE:  PR256   .ASM         CRC = 4A EC
+
+--> FILE:  PATCH256.ASC         CRC = 94 3F
+
+--> FILE:  HIDEFILE.BAS         CRC = 28 7A
+
+--> FILE:  FILEMOD .ASC         CRC = 98 52
+
+--> FILE:  FIXDEL  .EXE         CRC = 39 0B
+
+--> FILE:  PARTCOPY.EXE         CRC = 01 C6
+
+--> FILE:  FREE5   .COM         CRC = 93 CA
+
+--> FILE:  FREE4   .COM         CRC = A0 DF
+
+ ---------------------> SUM OF CRCS = 89 C4
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## CRETURN.BAS
 
+{% raw %}
 ```bas
 2 INPUT"INPUT THE FILENAME THAT WAS DOWNLOADED WITHOUT CR (d:filename)  ",A$
 4 INPUT"INPUT THE NEW NAME FOR THE DOWNLOADED FILE (d:filename)  ",B$
@@ -83,9 +281,11 @@ machines:
 150 'After adding CRs to the file you can then use EDLIN to remove direct
 160 'statements from the file.
 ```
+{% endraw %}
 
 ## DSKPGM2.BAS
 
+{% raw %}
 ```bas
 10 ' *DISKPGM2.BAS     PROGRAM TO SORT ALL FILES ON A DISK AND CREATE A FILE
 20 ' CALLED COPYHHMM.BAT FOR EXECUTION AND COPY IN ALPHABETICAL SEQUENCE
@@ -152,9 +352,11 @@ machines:
 630 PRINT "ERROR ";ERR;" HAS OCCURED IN LINE # ";ERL
 640 END
 ```
+{% endraw %}
 
 ## FILTER.BAS
 
+{% raw %}
 ```bas
 10 '    FILTERS  NON-ASCII CHARACTERS FROM A FILE
 20 '    USEFUL FOR CLEANING UP NULLS AND CONTROL CHARACTERS FROM A
@@ -204,9 +406,11 @@ machines:
 460 '
 470 PRINT : PRINT "ERROR CONDITION  "; ERR; "  IN LINE NO. "; ERL: PRINT : STOP
 ```
+{% endraw %}
 
 ## FIXIT.BAS
 
+{% raw %}
 ```bas
 10 CHECK=0
 20 FOR I=1 TO 112
@@ -241,9 +445,177 @@ machines:
 1120 DATA 194,2,176,8,238,184,232,3
 1130 DATA 72,117,253,176,12,238,235,219
 ```
+{% endraw %}
+
+## FREE4.DOC
+
+{% raw %}
+```
+		  FREE4.COM - 160K Electronic Disk Drive
+
+
+FREE4 is an upgrade of FREE1.  Enhancements include simplified
+installation, automatic formatting, and optional suppression of the lengthy
+text message. The last two enhancements allow FREE4 to be used effectively
+in the AUTOEXEC.BAT file.
+
+FREE4 is being distributed under an experimental voluntary pay system.	If
+you find the program useful, you are encouraged to send in a contribution
+of $15 to:
+
+			     B&L FREE PROGRAMS
+			  7337 Northview, Suite B
+			     Boise, ID	83704
+
+Comments and criticisms are also welcome.
+
+
+INSTALLATION:
+
+You need at least 256K of ram on your system to run FREE4.  FREE4 is
+installed by entering the name FREE4, like other programs:
+
+				  A>FREE4
+
+A modification is needed on your system disk (the one you boot with) before
+FREE4 will run.  If this change is necessary, FREE4 prints a message telling
+you the change is to be made, and asks you to hit a key.  FREE4 will make
+the change to the diskette in Drive A, and then reset your computer.  You
+will then need to run FREE4 one more time.  Be sure the diskette in Drive A
+is one you can boot with. This change is a one time thing; after it is
+made, you need not worry about it again, as long as you boot with the same
+diskette.
+
+NOTE 1: The system diskette may be either single sided (160K) or double
+sided (320K).  (The older version, FREE1 only worked with single sided
+system diskettes.)
+
+NOTE 2:  This modification changes the system file IBMBIO.COM  This won't
+be a problem unless you have other programs (like a hard disk) which also
+require modifications to IBMBIO.COM.  We suggest you make a copy of your
+system diskette using DISKCOPY before running FREE4.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+USING THE ELECTRONIC DISK DRIVE:
+
+Drive C is now an electronic disk drive. You may use a program such as
+DISKCOPY or the COPY command to transfer files to the electronic disk. When
+using DISKCOPY, DISKCOMP or FORMAT with Drive C, we recommend that you use
+the /1 option (described in your DOS manual) to tell the system that drive
+C is a single sided drive.
+
+FREE4 can be used in conjunction with FREE5, the NEW RESET PROGRAM, to allow
+the contents of Drive C to be maintained during a reset.  If this feature
+is desired, it is recommended that FREE4 and FREE5 be included in the
+AUTOEXEC.BAT file.
+
+
+
+Although FREE4 is a very useful program, we recognize that is does have its
+limitations.  B&L Computer Consultants now offers a commercial version of
+the Electronic Disk call the B&L MEMORY DRIVE.	This commercial version
+allows the diskette size to be varied from 4K to 320K.	It also allows the
+electronic disk drive to be drive D.  In fact, you can have two electronic
+diskette drives at the same time!  If you are interested in the B&L MEMORY
+DRIVE, write or call for details.
+
+```
+{% endraw %}
+
+## FREE5.DOC
+
+{% raw %}
+```
+ 
+                    B&L FREE PROGRAMS
+                    7337 Northview, Suite B
+                    Boise, ID  83704
+ 
+                 NEW RESET PROGRAM: FREE5
+ 
+     This program is an update of FREE3.  It allows optional suppression
+     of the lengthy text message.
+ 
+     This program adds 3 new reset keys to DOS 1.1 for the IBM Personal
+     Computer.  Two of the keys provide new functions; the third
+     performs the same function as CTRL/ALT/DEL.  CTRL/ALT/DEL
+     remains unchanged.
+ 
+     The three new reset keys are invoked with CTRL/1, CTRL/2, and
+     CTRL/3.  CTRL/3 is a mild reset which will return you to the
+     DOS prompt (A> ).  CTRL/2 reloads DOS from the diskette in
+     drive A but does NOT ERASE MEMORY.  Time does not have to be
+     reset when CTRL/2 is used.  CTRL/2 is particularly useful
+     with programs such as electronic disks in which important
+     information is stored in memory.  It works very well with
+     FREE4, another free program offered by B&L FREE PROGRAMS.
+     CTRL/1 functions identically to CTRL/ALT/DEL.  DOS is reloaded
+     from Drive A, and memory is completely erased.
+ 
+     INSTALLATION:
+     FREE5, the new reset program is a DOS program which is called
+     from a DOS prompt.  For example, if the current drive is drive
+     A and the FREE5 program resides on drive B, you would enter:
+ 
+       A>B:FREE5
+ 
+     It is strongly suggested that you include FREE5 in an
+     AUTOEXEC.BAT file on the diskette you boot with (see the DOS
+     manual).  This will cause the CTRL/1, CTRL/2, CTRL3 programs
+     to always work.
+ 
+ 
+     As stated in the prologue to the program, this program is
+     distributed FREE to interested users.  Those who find the
+     program useful are requested to make a $10 voluntary contribution
+     to B&L FREE PROGRAMS, 7337 Northview, Boise, ID  83704.  Such
+     contributions serve a twofold purpose:
+ 
+             First, the contributions offset the cost of developing the
+             program.  If the program is financially successful, you will
+             see it grow and improve with time.  Furthermore, the program
+             will be made available in different variations and also be
+             upgraded to new releases of DOS.  This is important, since
+             information concerning future releases of DOS are not made
+             available to software developers such as ourselves.  Thus
+             it is impossible to tell if this program will work, as is,
+             when DOS 2.0 is released.  It is fairly likely that certain
+             parts of the program will need to be rewritten.
+ 
+             Second, the contributions received serve as a poll to determine
+             which programs are necessary and useful and which are not.  If
+             you contribute, that is a vote for the survival of the program.
+             Programs which do not have adequate financial support will
+             not be supported in the future.
+ 
+
+```
+{% endraw %}
 
 ## HEX.BAS
 
+{% raw %}
 ```bas
 100 '
 101 ' Binary-to-hex-and-back-again conversion program for the IBM PC
@@ -431,9 +803,11 @@ machines:
 10030 IF ERL = 5100 OR ERL = 4100 THEN PRINT : PRINT "Unable to open output file." : CLOSE : RESUME 2200
 10999 CLS : LOCATE 12, 10: PRINT "Unexpected error #"; ERR; "at line"; ERL: ON ERROR GOTO : END
 ```
+{% endraw %}
 
 ## HIDEFILE.BAS
 
+{% raw %}
 ```bas
 10 REM ********************************************************************
 20 REM *       HideFile 	    by		  John Vandegrift	  *
@@ -709,9 +1083,869 @@ machines:
 2280 LOCATE 16,10:PRINT "(5)  Help is this screen."
 2290 LOCATE 19,10:INPUT "Pre
 ```
+{% endraw %}
+
+## POKEPEEK.DOC
+
+{% raw %}
+```
+ 
+     Did you know that ... there is a lot of information that may be accessed 
+from the ROM BIOS area in your IBM PC, regarding  the operating characteristics
+and options found on your own IBM PC?  After careful analysis of data found
+in the IBM Technical Reference manual a summary of the most useful information
+and where/how it may be referenced has been  prepared. 
+ 
+     By specifying a DEF SEG=&H40 in any BASIC program, it is possible to 
+reference the following vectors (fields) in the ROM BIOS area by using a PEEK
+function and the following  offsets from the current segment as defined by the
+ DEF SEG  statement.
+ 
+     &H0       -  RS232 Addresses on your IBM PC.
+                  This will allow you to tell how many (up to
+                  four) async cards are attached, if any.
+     &H8       -  Printer Addresses on your IBM PC.
+                  This will tell you what printer addresses,
+                  and how many (up to four) exist. Each is
+                  addressed by a two byte Hex value.
+     &H10      -  Equipment Flag.
+                  This field describes the setting of the
+                  options switches. It describes what optional
+                  devices are attached to the system. The    
+                  following lists the bit-significance of this
+     
+             field:
+                  Bit 0 - indicates that there are diskette 
+                          drives on the system.
+                  Bit 1 - not used.
+                  Bit 2,3 - Planar Ram Size (00=16K 10=32K 01=48K
+                            11=64K)
+                  Bit 4,5 - Initial Video Mode (00=Unused
+                                                10=40x25 Color
+                                                01=80x25 Color
+                                                11=80x25 Mono)
+                  Bit 6,7 - Number of Diskette Drives (00=1 10=2
+                            01=3 11=4) only if bit 0 = 1.
+                  Bit 8   - Unused
+                  Bit 9,10,11 - Number of RS232 Cards attached
+                  Bit 12  - Game I/O Attached
+                  Bit 13  - Not used
+                  Bit 14,15   - Number of printers attached
+     &H13      -  Memory Size in K bytes.
+     &H15      -  I/O RAM Size in K bytes.
+     &H17      -  Keyboard Flag -- the following lists the masks
+                  set to describe current keyboard status:
+                  Byte 1;
+                  &H80 - Insert state active
+                  &H40 - Caps Lock State Has been toggled
+                  &H20 - Num Lock State has been toggled
+                  &H10 - Scroll Lock State has been toggled
+                  &H08 - Alternate Shift key depressed
+                  &H04 - Control Shift key depressed
+                  &H02 - Left Shift key depressed
+                  &H01 - Right Shift key depressed
+                  Byte 2;
+                  &H80 - Insert Key is depressed
+                  &H40 - Caps Lock Key is depressed
+                  &H20 - Num Lock Key is depressed
+                  &H10 - Scroll Lock key is depressed
+                  &H08 - Suspend key has been toggled
+     &H49      -  Current CRT mode
+                  &H00 - 40x25 BW  
+                  &H01 - 40x25 Color
+                  &H02 - 80x25 BW
+                  &H03 - 80x25 Color
+                  &H04 - 320x200 Color
+                  &H05 - 320x200 BW
+                  &H06 - 640x200 BW
+                  &H07 - 80x25 B&W Card -- specialized use, used
+                         internal to the video routines.
+     &H4A      -  Number of CRT columns
+     &H50      -  Cursor Position (one of eight)
+     &H60      -  Current cursor mode 
+     &H6C      -  Low word of Timer count
+     &H6E      -  High word of Timer count
+     &H71      -  &H07 - Break key depressed
+     &HFA6E    -  Beginning of character regen memory
+     &HFF53    -  PRTSC routine address
+                                                                             
+                                                                             
+                                                                             
+           
+65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
+                                                             
+      
+```
+{% endraw %}
+
+## PR256.ASM
+
+{% raw %}
+```
+
+ Command ? re pr256.asm
+
+PAGE
+PAGE 64,132
+;
+;
+TITLE PR256 - IBM CHAR SET FOR MX100 by Tim Field
+;***********************************************
+;
+;PR256...Copyright by Tim Field, 1982
+;
+;IBM CHARACTER SET - This program resides on the IBM personal
+;  computer. All 256 of the characters used by the IBM will
+;  be available to be printed out using the MX100 or MX80 with
+;  graphics option. The nonstandard characters are printed
+;  automatically by any process or program executing the IBM
+;  interrupt #17H (normal print routine in BIOS).
+;
+;************************************************
+
+
+;************************************
+;
+; DEFINE CONSTANTS USED BY PROGRAM
+;
+;************************************
+
+
+
+INTADDR		EQU	7H * 4	;Address of interrupt vector addr
+NEWINT		EQU	027H		;DOS interrupt code for "End but stay resident"
+ESC_CHAR	EQU	1BH		;ASCII escape character
+NUL		EQU	0		;ASCII NUL character
+
+;
+;Define mask bytes used to turn on and off SYS_MODE for each printer
+;
+MASK$BIT_GRAF	EQU	11111110B	;Printer in bit graphics mode
+MASK$SEC_BITG	EQU	11111101B	;Next char is 2nd graf char count
+MASK$FST_BITG	EQU	11111011B	;Next char is 1st graf char count
+MASK$NEW_INTL	EQU	11110111B	;Next char international char defn
+MASK$ESC_SING	EQU	11101111B	;Expect one more control char
+MASK$ESC_NULL	EQU	11011111B	;Expect control char until NULL found
+MASK$ESC_C	EQU	10111111B	;One more control char if non-zero, else 2 more
+MASK$PREV_ESC	EQU	01111111B	;Next char is escape defn char
+
+;
+;Define structure used to hold each of the three possibly existing
+;printers.
+;
+PRINTERS STRUC
+	SYS_MODE	DB	0	;Stores bits pertaining to current printer mode
+	GRAF_CNT	DW	0	;16 bit count of grf chars....for bit-graf mode
+	FULL_INSTR	DB	0	;<0 :CR/LF mode, >0: no control codes, = 0: normal
+	GRAF_PRINTER	DB	0	;=0 Printer has Epson graphisc, <>0: No
+	INTLSET		DB	0	;0-7 value of current international set for Epson
+PRINTERS ENDS
+	
+
+
+;**********************************
+;
+; Define a temporary stack. Required for initialization
+; of program only
+;	
+;**********************************
+
+STACK SEGMENT PARA STACK
+	DB	10 DUP('STACK   ')
+STACK ENDS
+
+;**********************************
+;
+; Start code area !!
+;
+;**********************************
+
+CODE SEGMENT
+ASSUME CS:CODE,DS:CODE,SS:STACK,ES:NOTHING
+
+PR256 PROC FAR
+;
+; Initialization code...used only once, on system startup
+;
+CALL INIT_CODE	;Call initialization routine
+RET		;Return from initialization
+
+;***********************************
+;
+;Define storage areas here
+;
+;***********************************
+
+DWORD_ADDR	DW	0,0		;Save address to BIOS print routine here
+TMPBYTE		DB	9		;A multiplicand
+PR1		PRINTERS <>		;Set aside area for three printers
+PR2		PRINTERS <>		;
+PR3		PRINTERS <>		;
+
+;************************************
+;Start of actual print runtime code
+;************************************
+
+START_UP:		;Start of actual print routine
+	PUSH	DS			;Save segment register
+	PUSH	SI			;
+	PUSH	BX			;
+	PUSH	CX			;
+	PUSH	DX			;
+	PUSH	AX			;
+	MOV	BX,CS			;
+	MOV     DS,BX			;
+	CMP	AH,0			;Is this  to print out a char?	JE	PCHAR			;Br if yes
+	CALL	PR2BYTE			;Otherwise just print char
+	JMP	DONE			;  and exit
+
+PCHAR:
+	MOV	BX,OFFSET PR1		;Now get offset to printer structure
+	CMP	DL,0			;DX contains 0,1,2 for printer number
+	JE	T1			;BR if printer 0
+	ADD 	BX,5			;Move to next printer area
+	CMP	DL,1			;Is it printer 1?	JE	T1			;Br if yes
+	ADD 	BX,5			;Offset to printer 2 structure
+
+T1:
+
+	CMP GRAF_PRINTER[BX],0		;Are we talking to a printer with Epson graphics?	JNE MORE$TO$COME		;Send out char if not graphics printer
+	MOV CH,SYS_MODE[BX]		;Get system mode bits
+	RCR CH,1			;BIT_GRAF_MODE?	JNC NOT$BIT$MODE		;Br if not
+	;
+	;We are in bit-graphics mode...decrement mode count and send character
+	;as is to printer.
+	;
+	DEC GRAF_CNT[BX]		;Decrement count of graphics characters left
+	JNZ MORE$TO$COME		;Are we done with graphics mode?	AND SYS_MODE[BX],MASK$BIT_GRAF  ;If yes, clear bit to indicate done
+
+MORE$TO$COME:
+
+	JMP SHORT SENDCHAR		;Send out bit-graf mode character
+
+NOT$BIT$MODE:
+
+	CMP	FULL_INSTR[BX],1	;Are we in "Full Instr Set" mode?	JE	TO$CHKCHAR		;Br if yes...no "control char" check
+	JL	NORM_MODE		;Br if normal mode
+	;
+	;If reach here, we are in CR/LF mode. The only "printer action"
+	;codes expected here are CR (ASCII 13) and LF (ASCII 10).
+	;All other ASCII values are interpreted as characters to be printed.
+	;
+	CMP	AL,13			;Is Carriage Return char?	JE	SENDCHAR		;Send to printer if yes
+	CMP	AL,10			;Is Line Feed char?	JE	SENDCHAR		;Send to printer if yes
+
+TO$CHKCHAR:
+	JMP	CHKCHAR			;Else print character from character set
+NORM_MODE:
+	RCR	CH,1			;SEC_BITG_CNT?	JNC	NOT$SEC			;Br if no
+	;
+	;If reach here, the current character is the second count value for
+	;the bit-graphics mode. It is the high order byte and must be added
+	;to the low order byte which was the previous character.
+	;
+	MOV	(FULL_INSTR-1)[BX],AL		;Save Graf Cnt
+	AND	SYS_MODE[BX],MASK$SEC_BITG	;Turn off SEC_BITG_CNT bit
+	CMP 	GRAF_CNT[BX],0			;Is count equal 0?	JLE	SENDCHAR			;If yes, don't set Bit-graf mode
+	OR	SYS_MODE[BX],NOT MASK$BIT_GRAF	;Indicate in Bit-graf mode
+	JMP	SHORT SENDCHAR			;Send out count character
+NOT$SEC:
+
+	RCR	CH,1			;FST_BITG_CNT?	JNC	NOT$FST			;Br if not
+	;
+	;If this bit is set, it indicates that the last character printed out
+	;was "Start Bit Graphics mode" indication. The current character is
+	;to be used as the low order byte of the count of bit-graphics characters
+	;to be sent. The next character is the high-order byte for the
+	;count.
+	;
+	AND	SYS_MODE[BX],MASK$FST_BITG	;Turn off FST_BITG_CNT bit
+	OR	SYS_MODE[BX],NOT MASK$SEC_BITG	;Turn on the SEC_BITG_CNT bit
+	MOV 	GRAF_CNT[BX],AX			;Save low order count
+	JMP	SHORT SENDCHAR			;Send count to printer
+
+NOT$FST:
+	RCR	CH,1				;NEW_INTL?	JNC	NOT$INTL			;Br if not
+	;
+	;If this bit is set, it indicates that we previously saw request for a
+	;new "International" character set to be used. The current byte is
+	;expected to be a value from 0 to 7 indicating the set to be used. If
+	;an error is found, no set change is accomplished.
+	;
+	CMP AL,0				;Is current character less than 0?	JL	NOT$VALID			;Br if yes
+	CMP	AL,7				;Is it greater than 7?	JG	NOT$VALID			;Br if yes
+	;
+	;If reach here,have valid set...update in memory
+	;
+	MOV 	INTLSET[BX],AL			;
+
+NOT$VALID:
+	AND	SYS_MODE[BX],MASK$NEW_INTL	;Clear NEW_INTL bit
+	JMP	SHORT SENDCHAR			;Send out value to printer
+
+NOT$INTL:
+	RCR	CH,1				;ESC_SINGLE mode?	JNC	NOT$ESC_SING			;Br if not
+	AND	SYS_MODE[BX],MASK$ESC_SING	;Turn off ESC_SINGLE mode
+	JMP	SHORT SENDCHAR			;Send character to printer
+
+NOT$ESC_SING:
+
+	RCR	CH1S				;ESC_NULL mode?	JNC	NOT$ESC_NULL			;Br if not
+	CMP	AL,NUL				;Is this a NULL character?	JNE	SENDCHAR			;If not, print out character
+	AND	SYS_MODE[BX], MASK$ESC_NULL	;Otherwise turn off ESC_NULL mode first
+	JMP	SHORT SENDCHAR			;
+
+NOT$ESC_NULL:
+
+	RCR	CH,1				;ESC_C mode?	JNC	NOT$ESC_C			;Br if not
+	CMP	AL,NUL				;Is character NUL?	JNE	NOT$NUL				;Skip next if not
+	OR	SYS_MODE[BX],NOT MASK$ESC_SING	;Expect one more control character
+
+NOT$NUL:
+
+	AND 	SYS_MODE[BX],MASK$ESC_C		;Turn off ESC_C mode
+
+SENDCHAR:		;Print out current character and return
+
+	CALL 	PRBYTE				;Call print routine
+	JMP	DONE				;Go to end
+
+NOT$ESC_C:
+
+	RCR	CH,1				;PREV_ESC mode?	JNC	NOT$ESC				;Br if not
+	;
+	;If PREV_ESC bit is set, it indicates that the last character seen by
+	;this printer was an "Escape" code. We will now look and see if it is
+	;a control code that we need to remember. These are:
+	;	ESC "L" - Puts printer in dual density bit graphics mode
+	;	ESC "K" - Puts printer in single density bit graphics mode
+	;	ESC "R" - Selects an international character set in printer
+	;
+	;
+	;In addition to this codes that we need to remember, we have some
+	;codes which set a temporary mode. These temporary modes are:
+	;
+	;	"ESC_SINGLE" :Expect one more control code. This is to be
+	;		      sent to printer.
+	;	"ESC_NULL"   :Expect control codes to continue until a NUL
+	;		      character (ASCII 0) is received
+	;	"ESC_C"	     :Expect one more control code. If that code is
+	;		      an ASCII 0, expect one more after that.
+	;
+	;The escape sequences which set these modes are:
+	;
+	;	ESC "A"	-  ESC_SINGLE mode
+	;	ESC "D"	-  ESC_NULL mode
+	;	ESC "Q" -  ESC_SINGLE mode
+	;	ESC "B"	-  ESC_NULL mode
+	;	ESC "C"	-  ESC_C mode
+	;	ESC "N"	-  ESC_SINGLE mode
+	;
+	AND 	SYS_MODE[BX],MASK$PREV_ESC	;Turn off PREV_ESC mode bit
+	CMP 	AL,"L"				;CTRL-L?	JE	SET$BIT_GRAF			;Br if yes
+	CMP	AL,"K"				;CTRL-K?	JNE	ARND$BIT_GRAF			;Br if not
+
+SET$BIT_GRAF:
+
+	OR 	SYS_MODE[BX],NOT MASK$FST_BITG	;Indicate that next char is FST_BITG_CNT
+	JMP	SHORT SENDCHAR			;Done, send out
+
+ARND$BIT_GRAF:
+
+	CMP	AL,'R'				;CTRL-R?	JNE	NOT$INT				;Br if not
+	OR	SYS_MODE[BX],NOT MASK$NEW_INTL	;Indicate next char is NEW_INTL bit
+	JMP 	SHORT SENDCHAR			;Send out character
+
+NOT$INT:
+
+	CMP	AL,'A'				;ESC A?	JE	DO$ESC_SINGLE			;Br if yes
+	CMP	AL,'Q'				;ESC Q?	JE	DO$ESC_SINGLE			;Br if yes
+	CMP	AL,'N'				;ESC N?	JNE	NOT$SINGLE			;Br if not ESC_SINGLE mode
+
+DO$ESC_SINGLE:			;Set ESC_SINGLE mode
+
+	OR 	SYS_MODE[BX],NOT MASK$ESC_SING	;
+	JMP	SHORT SENDCHAR			;Print out char
+
+NOT$SINGLE:			;Check for ESC_NULL mode now
+
+	CMP	AL,'D'				;ESC D?	JE	DO$ESC_NULL			;Br if yes
+	CMP	AL,'B'				;ESC B?	JNE	NOT$NULL			;Br if not ESC_NULL mode
+
+DO$ESC_NULL:			;Set ESC_NULL mode
+
+	OR	SYS_MODE[BX],NOT MASK$ESC_NULL	;
+	JMP 	SHORT SENDCHAR			;Print out char
+
+NOT$NULL:			;Check for ESC_C mode now
+
+	CMP	AL,'C'				;ESC C?	JNE	NOT$ESCC			;Br if not
+	OR	SYS_MODE[BX],NOT MASK$ESC_C	;Set ESC_C mode bit
+
+NOT$ESCC:			;Do not care what type of char this is...print it
+
+	JMP	SHORT SENDCHAR
+
+NOT$ESC:			;Previous character was not an ESCAPE control char
+		;
+		;Is this an ESCAPE code?		;
+
+	CMP	AL,ESC_CHAR			;
+	JNE NESC				;Br if not
+	OR SYS_MODE[BX],NOT MASK$PREV_ESC	;Set escape found bit
+	JMP	SHORT SENDCHAR			;Send out character
+
+NESC:
+	;
+	;See if we have any standard control codes...ASCII 7 - 20
+	;
+
+	CMP	AL,07H				;Is char less than 7?	JL	CHKCHAR				;Br if yes, not control code
+	CMP	AL,14H				;Is char less than 14H?	JLE	SENDCHAR			;If not, it is a control code...print it
+
+CHKCHAR:
+	;
+	;Here we check to see if the character to be printed is in the range
+	;of 20H to 7EH (ASCII value of the character to be printed.) If in
+	;that range, use standard EPSON character set. Otherwise, we have
+	;a special character to print.
+	;
+
+	MOV	AH,0				;Make sure nothing is in upper byte
+	CMP	AX,20H				;Is character less than 20H?	JL	BIT$CHAR			;Br if yes, special character
+	CMP 	AX,7EH				;
+	JLE SENDCHAR				;Not a special character, just print it
+	SUB	AL,7EH-20H+1			;Subtract non-special character set out
+
+BIT$CHAR:
+		;
+		;See if current character is part of the Epson's international character
+		;set (If its offset into BITTYP array is 0, international)
+		
+	PUSH BX					;Save offset to storage area
+	PUSH	AX				;Save current character
+	MOV 	BX,AX				;
+	MOV	CL,3				;Shift count
+	SHR	BL,CL				;Shift lower three bits from AL
+	MOV	CH,BITTYP[BX]			;Get byte containing type bit
+	SHL	BL,CL				;Move AL back to original position
+	;Note: we have now lost the three lower bits from AL.
+	NEG	BX				;Take 2's compliment of BL
+	ADD BL,AL				;Add original contents of AL to negated
+						;  value to get the three bits
+	INC BL					;This is now our index to type bit
+	MOV	CL,BL				;Let's use value as shift count
+	MUL TMPBYTE				;Offset into array
+	MOV	SI,AX				;Get index into array
+	POP	AX				;Once again, get original character
+	SHL	CH,CL				;Recall CH holds bit-type byte
+	JC	DO$BIT_GRAF			;Carry now is type of the char
+	;
+	;Well, we see that the bit type was 0, so we are to specify a character
+	;from the Epson international character set. To determine which, we
+	;expect the first byte in BITVAL array to tell us which international
+	;set to use and the second byte to tell us the character to print.
+	;
+	MOV	CH,BITVAL[SI]			;Get character set
+	CMP	INTLSET[BX],CH			;Is this the set we are now using?	JNE	NEW$INTSET			;Br if not
+	POP	BX				;Keep stack clean
+	MOV	AL,BITVAL[SI][1]		;If yes, just send out character
+	JMP	SENDCHAR			;
+
+NEW$INTSET:		;Must temporarily set up new international set
+
+	MOV	AL,ESC_CHAR			;Print out "Esc" char
+	CALL	PRBYTE				;
+	MOV	AL,'R'				;Send out new international signal
+	CALL	PRBYTE				;
+	MOV AL,CH				;Print out character set to use
+CALL 	PRBYTE					;
+	MOV	AL,BITVAL[SI][1]		;Get intl character to print
+	CALL	PRBYTE				;
+	MOV	AL,ESC_CHAR			;Now restore original character set
+	CALL	PRBYTE				;
+	MOV	AL,'R'				;
+	CALL 	PRBYTE				;
+	POP	BX				;Restore address to store area
+	MOV	AL,INTLSET[BX]			;Set type
+	CALL 	PRBYTE				;
+	JMP	DONE				;We are done so exit program
+
+DO$BIT_GRAF:	;Special bit-graphics mode
+
+	POP	BX			;Restore to keep stack straight
+	PUSH	AX				;Save current character for indexing
+	MOV	AL,ESC_CHAR			;Put printer in dual density bit mode
+	CALL 	PRBYTE				;
+	MOV	AL,'L'				;
+	CALL 	PRBYTE				;
+	MOV	AL,12				;Each graphics character consists of
+	CALL	PRBYTE				;  exactly nine columns of bits followed
+	MOV	AL,0				;  by 3 blank columns (12 columns total)
+	CALL	PRBYTE				;
+	POP	AX
+	CMP	AX,0B3H-(7EH-20H+1)		;See if in extended set
+	JL	NON_EXTND			;Br if not
+	CMP	AX,0E0H-(7EH-20H+1)		;
+	JGE	NON_EXTND			;
+		;
+		;The character is in the "extended" set. (ASCII 176 to 223)
+		;
+	MOV 	AL,BITVAL[SI]			;Pre-extend first column
+	CALL	PR9BYTS				;Print out character
+	JMP	AROUND				;Move around non-extended set
+
+NON_EXTND:	;Character is non-extended
+
+	MOV	AL,0				;First column is blank
+	CALL 	PR9BYTS				;Print out character
+	MOV	AL,0				;Last two columns are blank
+
+AROUND:
+
+	CALL 	PRBYTE				;Print out last two columns
+	CALL	PRBYTE				;
+
+DONE:		;Exit program
+
+	POP	DX				;Restore AL without disturbing  AH
+	MOV	AL,DL				;
+	POP	DX				;Restore registers
+	POP	CX				;
+	POP	BX				;
+	POP	SI				;
+	POP 	DS				;
+	IRET					;Return from interrupt
+
+PR256 ENDP			; Done with main routine !!!
+
+;**************************************
+;
+;   PRBYTE - Clears current value AH and prints out character in AL
+;
+;**************************************
+
+
+PRBYTE PROC NEAR
+
+	MOV 	AH,0				;Clear out for printing w/BIOS
+	CALL 	PR2BYTE				;Do actual printing of char
+	RET					;Done
+
+PRBYTE ENDP
+;**************************************************
+;
+;   PR2BYTE - Calls IBM's BIOS print routine to print out contents of AX
+;
+;**************************************************
+
+PR2BYTE PROC NEAR
+
+	PUSH 	DS				;
+	PUSH 	SI
+	PUSHF					;IBM print proc expects interrupt call
+	MOV	SI,SEG DWORD_ADDR		;Get segment to ROM code
+	MOV	DS,SI				;
+	MOV	SI,OFFSET DWORD_ADDR		;Get address to ROM code for print
+	CALL 	DWORD PTR [SI]			;Call print routine
+	POP 	SI
+	POP	DS
+	RET					;Return
+
+PR2BYTE ENDP
+
+;********************************************
+;
+;   PR9BYTS - Prints out a graphics character using BITVAL table below.
+;	      On entry, AL contains byte value of first column to be printed.
+;	      Next nine colums of characters are fetched from indexing thru
+;	      SI (which must be initialized by calling routine) into the
+;	      BITVAL table.
+;
+;*********************************************
+
+PR9BYTS PROC NEAR
+
+	CALL PRBYTE				;Print out first column
+	MOV	CX,9				;Loop through 9 columns
+
+LOOP$SEND:
+
+	MOV	AL,BITVAL[SI]			;Get next column to print
+	CALL	PRBYTE				;Print it out
+	INC	SI				;Move to next column
+	LOOP	LOOP$SEND			;Loop until done
+	RET					;Done, return
+
+PR9BYTS ENDP
+;***********************************
+;
+; Define characters...9 bytes per character
+;
+;***********************************
+.RADIX 16				;All values are in hexadecimal
+BITVAL DB	000,000,000,000,000,000,000,000,000	;0 (Decimal ASCII)
+	DB	03C,042,089,0A5,085,0A5,089,042,03C	;1
+	DB	03C,07E,093,9BH,0FBH,9BH,093,07E,03C	;2
+	DB	60,0F0,0F8,07C,07E,07C,0F8H,0F0,060	;3
+	DB	000,010,038,07C,0FE,07C,038,010,000	;4
+	DB	010,038,038,0D0,0EE,0D0,038,038,010	;5
+	DB	000,000,030,072,0FE,072,030,000,000	;6
+	DB	000,000,030,078,078,078,030,000,000	;7
+	DB	0FF,0FF,0CF,087,087,087,0CF,0FF,0FF	;8
+	DB	000,018,024,042,042,042,024,018,000	;9
+	DB	0FF,0E7,0DBH,0BDH,0BDH,0BDH,0BH,0E7,0FF	;10
+	DB	000,00C,012,012,012,0B2,0CC,0E0,000	;11
+	DB	000,000,064,094,09F,094,064,000,000	;12
+	DB	000,006,006,0FE,0A0,0A0,0A0,0E0,000	;13
+	DB	006,006,0FE,0A0,0A0,0A0,0AC,0AC,0FC	;14
+	DB	054,010,038,028,0EE,028,038,010,054	;15
+	DB	000,0FE,07C,07C,038,038,010,010,000	;16
+	DB	000,010,010,038,038,07C,07C,0FE,000	;17
+	DB	000,000,028,06C,0FE,06C,028,000,000	;18
+	DB	000,0F2,0F2,000,000,000,0F2,0F2,000	;19
+	DB	060,090,090,0FE,080,080,0FE,080,080	;20
+	DB	001,5DH,000,000,000,000,000,000,000	;21 * FRANCE -5D
+	DB	000,03C,03C,03C,03C,03C,03C,03C,000	;22
+	DB	000,001,029,6DH,0FF,6DH,029,001,000	;23
+	DB	000,000,020,060,0FE,060,020,000,000	;
+	DB	000,000,008,00C,0FE,00C,008,000,000	;25
+	DB	000,010,010,010,010,07C,038,010,000	;26
+	DB	000,010,038,07C,010,010,010,010,000	;27
+	DB	000,000,038,008,008,008,008,000,000	;28
+	DB	010,038,07C,010,010,010,07C,038,010	;29
+	DB	000,004,00C,01C,03C,01C,00C,004,000	;30
+	DB	000,020,030,038,03C,038,030,020,000	;31
+	DB	000,006,00A,012,022,012,00A,006,000	;127
+	DB	001,05C,000,000,000,000,000,000,000	;128 * FRANCE - 5C
+	DB	002,7DH,000,000,000,000,000,000,000	;129 * GERMANY -7D
+	DB	001,7BH,000,000,000,000,000,000,000	;130 * FRANCE -7B
+	DB	005,7DH,000,000,000,000,000,000,000	;131 * SWEDEN -7D
+	DB	002,7BH,000,000,000,000,000,000,000	;132 * GERMANY -7B
+	DB	001,040,000,000,000,000,000,000,000	;133 * FRANCE -40
+	DB	002,007,055,0F5,0B5,0B5,0FE,04F,001	;134
+	DB	000,071,089,089,08F,088,088,050,000	;135
+	DB	000,00E,05F,0D5,095,095,0D5,5DH,00C	;136
+	DB	000,01C,0BE,0AA,02A,02A,0AA,0BA,01B	;137
+	DB	001,7DH,000,000,000,000,000,000,000	;138 * FRANCE -7D
+	DB	000,0A2,0A2,03E,01E,082,082,000,000	;139
+	DB	000,052,0D2,09E,08E,0C2,042,000,000	;140
+	DB	000,012,092,0DE,04E,002,002,000,000	;141
+	DB	002,5BH,000,000,000,000,000,000,000	;142 * GERMANY -5B
+	DB	003,047,04E,0BA,0B2,0BA,04E,047,003	;143
+	DB	005,040,000,000,000,000,000,000,000	;144 * SWEDEN -40
+	DB	004,7BH,000,000,000,000,000,000,000	;145 * denmark - 7B
+	DB	004,5BH,000,000,000,000,000,000,000	;146 * DENMARK -5B
+	DB	000,00E,05F,0D1,091,091,0D1,05F,00E	;147
+	DB	002,07C,000,000,000,000,000,000,000	;148 * GERMANY -7C
+	DB	000,00E,01F,091,0D1,051,011,01F,00E	;149
+	DB	000,05E,0DF,081,081,0C1,05E,01F,001	;150
+	DB	001,07C,000,000,000,000,000,000,000	;151 * FRANCE -7C
+	DB	020,0B0,099,00F,006,00C,098,0B0,020	;152
+	DB	002,05C,000,000,000,000,000,000,000	;153 * GERMANY 5C
+	DB	002,5DH,000,000,000,000,000,000,000	;154 * GERMANY -5D
+	DB	018,03C,066,042,0FF,0FF,042,066,024	;155
+	DB	003,023,000,000,000,000,000,000,000	;156 * ENGLAND -23
+	DB	000,000,094,054,03F,054,094,000,000	;157
+	DB	007,023,000,000,000,000,000,000,000	;158 * SPAIN -23
+	DB	000,004,012,012,07C,090,090,040,000	;159
+	DB	004,00E,02A,06A,0EA,0AA,03C,01E,002	;160
+	DB	000,012,012,05E,0CE,082,002,000,000	;161
+	DB	000,00E,01F,011,051,0D1,091,01F,00E	;162
+	DB	000,01E,01F,041,0C1,081,01E,01F,001	;163
+	DB	007,07C,000,000,000,000,000,000,000	;164 * SPAIN -7C
+	DB	007,05C,000,000,000,000,000,000,000	;165 * SPAIN -5C
+	DB	000,012,0BA,0AA,0AA,0AA,072,07A,00A	;166
+	DB	000,072,0FA,08A,08A,08A,08A,0FA,072	;167
+	DB	007,5DH,000,000,000,000,000,000,000	;168 * SPAIN -5D
+	DB	000,000,038,020,020,020,020,000,000	;169
+	DB	000,000,020,020,020,020,038,000,000	;170
+	DB	000,042,0F4,008,010,029,053,015,009	;171
+	DB	000,042,0F4,008,012,026,04A,01F,002	;172
+	DB	007,5BH,000,000,000,000,000,000,000	;173 * SPAIN -5B
+	DB	010,038,06C,044,010,038,06C,044,000	;174
+	DB	000,044,06C,038,010,044,06C,038,010	;175
+	DB	000,055,000,0AA,000,055,000,0AA,000	;176
+	DB	055,0AA,055,0AA,055,0AA,055,0AA,055	;177
+	DB	0FF,0AA,0FF,055,0FF,0AA,0FF,055,0FF	;178
+	DB	000,000,000,000,0FF,000,000,000,000	;179
+	DB	008,008,008,008,0FF,000,000,000,000	;180
+	DB	028,028,028,028,0FF,000,000,000,000	;181
+	DB	008,008,008,0FF,000,000,0FF,000,000	;182
+	DB	008,008,008,00F,008,008,00F,000,000	;183
+	DB	028,028,028,028,03F,000,000,000,000	;184
+	DB	028,028,028,0EF,000,000,0FF,000,000	;185
+	DB	000,000,000,0FF,000,000,0FF,000,000	;186
+	DB	028,028,028,02F,020,020,03F,000,000	;187
+	DB	028,028,028,0E8,008,008,0F8,000,000	;188
+	DB	008,008,008,0F8,008,008,0F8,000,000	;189
+	DB	028,028,028,028,0F8,000,000,000,000	;190
+	DB	008,008,008,008,00F,000,000,000,000	;191
+	DB	000,000,000,000,0F8,008,008,008,008	;192
+	DB	008,008,008,008,0F8,008,008,008,008	;193
+	DB	008,008,008,008,00F,008,008,008,008	;194
+	DB	000,000,000,000,0FF,008,008,008,008	;195
+	DB	008,008,008,008,008,008,008,008,008	;196
+	DB	008,008,008,008,0FF,008,008,008,008	;197
+	DB	000,000,000,000,0FF,028,028,028,028	;198
+	DB	000,000,000,0FF,000,000,0FF,008,008	;199
+	DB	000,000,000,0F8,008,008,0E8,028,028	;200
+	DB	000,000,000,03F,020,020,02F,028,028	;201
+	DB	028,028,028,0E8,008,008,0E8,028,028	;202
+	DB	028,028,028,02F,020,020,02F,028,028	;203
+	DB	000,000,000,0FF,000,000,0EF,028,028	;204
+	DB	028,028,028,028,028,028,028,028,028	;205
+	DB	028,028,028,0EF,000,000,0EF,028,028	;206
+	DB	028,028,028,0EF,000,000,0EF,028,028	;207
+	DB	008,008,008,0F8,008,008,0F8,008,008	;208
+	DB	028,028,028,028,02F,028,028,028,028	;209
+	DB	008,008,008,00F,008,008,00F,008,008	;210
+	DB	000,000,000,0F8,008,008,0F8,008,008	;211
+	DB	000,000,000,000,0F8,028,028,028,028	;212
+	DB	000,000,000,000,03F,028,028,028,028	;213
+	DB	000,000,000,00F,008,008,00F,008,008	;214
+	DB	008,008,008,0FF,008,008,0FF,008,008	;215
+	DB	028,028,028,028,0FF,028,028,028,028	;216
+	DB	008,008,008,008,0F8,000,000,000,000	;217
+	DB	000,000,000,000,00F,008,008,008,008	;218
+	DB	0FF,0FF,0FF,0FF,0FF,0FF,0FF,0FF,0FF	;219
+	DB	00F,00F,00F,00F,00F,00F,00F,00F,00F	;220
+	DB	0FF,0FF,0FF,0FF,0FF,000,000,000,000	;221
+	DB	000,000,000,000,000,0FF,0FF,0FF,0FF	;222
+	DB	0F0,0F0,0F0,0F0,0F0,0F0,0F0,0F0,0F0	;223
+	DB	000,03C,042,042,042,03C,024,042,000	;224
+	DB	002,07E,000,000,000,000,000,000,000	;225 * GERMANY -7E
+	DB	000,07E,040,040,040,040,040,070,000	;226
+	DB	000,040,07E,040,040,040,07E,040,000	;227
+	DB	082,0C6,0AA,092,082,082,082,0C6,000	;228
+	DB	000,03C,042,042,042,07C,040,040,040	;229
+	DB	000,001,07E,004,004,004,004,078,000	;230
+	DB	000,020,040,040,03E,020,040,040,000	;231
+	DB	000,099,0A5,0A5,0E7,0A5,0A5,099,000	;232
+	DB	000,038,054,092,092,092,054,038,000	;233
+	DB	002,03A,046,080,080,080,046,03A,002	;234
+	DB	000,000,04C,0B2,092,092,08C,000,000	;235
+	DB	038,044,044,044,038,044,044,044,038	;236
+	DB	000,03A,044,04C,054,064,044,0B8,000	;237
+	DB	000,000,038,054,092,082,000,000,000	;238
+	DB 	000,01E,020,040,040,040,020,01E,000	;239
+	DB	000,054,054,054,054,054,054,054,000	;240
+	DB	000,022,022,022,0FA,022,022,022,000	;241
+	DB	000,002,08A,08A,052,052,022,022,000	;242
+	DB	000,022,022,052,052,08A,08A,002,000	;243
+	DB	000,000,000,000,07F,080,080,060,000	;244
+	DB	000,006,001,001,0FE,000,000,000,000	;245
+	DB	000,010,010,010,054,010,010,010,000	;246
+	DB	000,024,048,048,024,012,012,024,000	;247
+	DB	000,000,030,048,048,048,030,000,000	;248
+	DB	000,000,030,078,078,078,030,000,000	;249
+	DB	000,000,000,010,038,010,000,000,000	;250
+	DB	010,010,010,008,004,07E,040,040,040	;251
+	DB	080,070,080,080,078,000,000,000,000	;252
+	DB	044,08C,094,064,000,000,000,000,000	;253
+	DB	000,000,07C,07C,07C,07C,07C,000,000	;254
+	DB	000,000,000,000,000,000,000,000,000	;255
+
+
+;******************************************************
+;	
+;Set up bits to destinguish between normal graphics characters
+;and those which can use the MX100 International character sets
+;
+;*******************************************************
+
+.RADIX 10		;Back do decimal notation
+
+BITTYP DB 11111111B	;ASCII 0 TO 7
+	DB 11111111B	;8 - 15
+	DB 11111011B	;16 - 23
+	DB 11111111B	;24 - 31
+	DB 10000001B	;127 - 134
+	DB 11101110B	;135 - 142
+	DB 10001011B	;143 - 150
+	DB 01001010B	;151 - 158
+	DB 11111001B	;159 - 166
+	DB 10111101B	;167 - 174
+	DB 11111111B	;175 - 182
+	DB 11111111B	;183 - 190
+	DB 11111111B	;191 - 198
+	DB 11111111B	;199 - 206
+	DB 11111111B	;207 - 214
+	DB 11111111B	;215 - 222
+	DB 11011111B	;223 - 230
+	DB 11111111B	;231 - 238
+	DB 11111111B	;239 - 246
+	DB 11111111B	;247 - 254
+	DB 10000000B	;255
+
+
+
+LASTONE: 	;All code after this label is freed to DOS use after 
+		;initialization of the program
+
+;******************************************
+;
+;  Code to load and initialize the printing program...
+;  sets up DOS to keep all code before "LASTONE" label
+;  save from overlaying during system operation
+;
+;******************************************
+
+
+INIT_CODE PROC NEAR
+
+	POP	AX				;Remove return address of CALL
+	;
+	;After this initialization routine is finished, we wish to return
+	;control to DOS and prevent DOS from overlaying the PR256 code.
+	;This is done by replacing the INT X'20' command found at the front 
+	;of the Program Segment Prefix control block with an INT X'27'
+	;"Program end but stay resident" command. The address to this instruction
+	;is placed on the front of the stack, behind the return address
+	;used by this subroutine. When the initialization is finished, this
+	;routine returns to its caller (the main program) which executes a
+	;return to the FSP, resulting in the INT X'27' command execution.
+	;
+	PUSH	DS				;Move segment address to PSP onto stack
+	MOV	DI,0				;Set return to first location in PSP
+	PUSH DI					;
+	PUSH	AX				;Restore return address
+	MOV	AL,NEWINT			;Set up INT X'27' in PSP
+	MOV	[DI+1],AL			;
+	MOV	AX,0				;Set up address to INT 17H vector
+	MOV	DS,AX				;
+	MOV	BX,INTADDR			;
+	LES	DI,DWORD PTR [BX]		;Load double word addr to BIOS print rtn.
+	MOV	AX,SEG DWORD_ADDR		;Now set up addr to store BIOS addr
+	MOV	DS,AX				;
+	MOV	DWORD_ADDR,DI			;
+	MOV 	AX,ES				;
+	MOV	DWORD_ADDR+2,AX			;Store BIOS print routine address
+	MOV	AX,SEG START_UP			;
+	MOV	ES,AX				;Don't forget to save segment address
+	MOV 	DI,OFFSET START_UP		;
+	MOV	AX,0				;
+	MOV	DS,AX				;Now, address back to INT 17H vector
+	MOV	BX,INTADDR			;
+	MOV	[BX],DI				;
+	MOV	DI,ES				;
+	MOV	[BX+2],DI			;
+	MOV	DX,OFFSET LASTONE		;Save all code up to "LASTONE" label
+	ADD	DX,0100H			;  from overlaying by DOS
+	RET					;Return to main program
+
+	INIT_CODE ENDP
+	CODE ENDS
+	END
+65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
+
+
+```
+{% endraw %}
 
 ## UTSCAN.BAS
 
+{% raw %}
 ```bas
 1010 PROG$="UTSCAN.BAS":VERS$="82/08/03/2100"
 1020 '
@@ -733,6 +1967,7 @@ machines:
 1180 LPRINT:LPRINT "   E N D   O F   F I L E"
 1190 PRINT:PRINT:PRINT "  J O B   F I N I S H E D":END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

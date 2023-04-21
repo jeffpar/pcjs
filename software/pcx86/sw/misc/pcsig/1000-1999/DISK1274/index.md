@@ -33,6 +33,41 @@ machines:
     providing quick and easy retrieval.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1274.TXT
+
+{% raw %}
+```
+Disk No: 1274                                                           
+Disk Title: ShowLog                                                     
+PC-SIG Version: S1.5                                                    
+                                                                        
+Program Title: ShowLog                                                  
+Author Version: 3.3                                                     
+Author Registration: $22.00                                             
+Special Requirements: 360K RAM and CGA.                                 
+                                                                        
+SHOWLOG is for all of us who record movies and soaps off the air, but   
+then go crazy trying to keep track of them all!                         
+                                                                        
+At last, here is a complete system that not only prints out labels for  
+your collection of nameless black boxes but also helps you catalog them 
+in a database so you can find them again!                               
+                                                                        
+SHOWLOG holds up to 9,999 entries.  You can print a catalog that shows  
+everything in your collection, its location, the recording time left on 
+each tape and the taping speed.                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1274
 

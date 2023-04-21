@@ -40,6 +40,80 @@ machines:
     lunar geography, orbital mechanics and physics in general.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES987.TXT
+
+{% raw %}
+```
+Disk No:  987
+Program Title: APOLLO MISSION SIMULATOR version 2.1
+PC-SIG version: 1.1
+
+The APOLLO MISSION SIMULATOR is an in-depth simulation of manned lunar
+exploration in the year 2010.  In a typical mission, you begin in the
+Orbiting Laboratory, circling 150km above the lunar equator.  You enter
+the Landing Vehicle, undock, and, after performing several orbital
+maneuvers, land on the Moon.  After landing, you may explore the surface
+using a long-range Mobile Base and a short-range Roving Vehicle.  A
+permanent fixed Base is also included in the lunar exploration
+infrastructure.  Extensive documentation (109 pages) and tutorial
+lessons (over 5 hours) are provided to help you learn how to fly the
+Landing Vehicle and operate the Mobile Base and Roving Vehicle.
+
+Version 2.1 (compared with version 1.1) greatly expands the simulated
+lunar exploration infrastructure and increases the mission options
+available to the player.  Names and locations of over 300 lunar features
+are listed in one of the documents, each of which is actually present in
+the simulation, so the player can become familiar with real lunar
+geography.  The program has also been rewritten so it no longer requires
+a math coprocessor.
+
+The APOLLO MISSION SIMULATOR is "not just another Lunar Lander."  It
+allows a player to participate in practically every aspect of a manned
+lunar exploration program.  He can set program goals, plan specific
+missions, and carry out those missions in as much detail as he likes.
+Enough detail is provided so the player can learn a great deal about
+lunar geography, orbital mechanics, and physics in general.
+
+Usage:  Mathematical/Entertainment.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $20.00
+
+File Descriptions:
+
+??       CMT  Tutorial lesson comments (12 files).
+??       KEY  Tutorial lesson commands (12 files).
+??       SAV  Tutorial lesson parameters (12 files).
+AMS      DOC  Synopsis of programs, documents, and other files
+AMS      EXE  APOLLO MISSION SIMULATOR program with tutorial
+COMMANDS DOC  List of commands
+DISPLAYS DOC  Description of screen display
+FILES         List of files
+LUNAR    REF  Reference for generating Lunar maps
+LUNARMAP DOC  Map of Lunar near side and manmade objects
+MAP      EXE  Program to generate maps of the Lunar surface
+MISSIONS DOC  Instructions for Lunar exploration and training missions
+MODELS   DOC  Details of physical models
+NEW      EXE  Program to start a new game
+PHYSICS  DOC  Brief tutorial on orbital mechanics and related physics
+READ     EXE  Program to read documents (extension ".DOC")
+README   BAT  Startup batch file for first-time user
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0987
 

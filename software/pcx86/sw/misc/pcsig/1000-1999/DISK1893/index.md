@@ -27,6 +27,36 @@ machines:
     when using the phone to help a remote user revise critical batch files.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1893.TXT
+
+{% raw %}
+```
+Disk No: 1893                                                           
+Disk Title: File!                                                       
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: FILE!                                                    
+Author Version: 1.01                                                    
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+``All I want is a simple text editor!'' You got it--FILE! is a          
+convenient text editor designed for editing small batch files, your     
+CONFIG.SYS file, and your AUTOEXEC.BAT.  Very few features to bother    
+with, but enough: edit lines, delete lines, swap lines, and cripple     
+(REM) a file line.  Maximum file size to load and print is 100K.        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1893
 

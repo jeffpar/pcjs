@@ -14,6 +14,40 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## README.TXT
+
+{% raw %}
+```
+First Words For Windows
+
+A database for all of your family! 
+
+Record your childrens's first words.  Keep track of your child's growth.
+Keep data on your family's doctors, babysitters, relatives and friends.
+Estimate savings for college.
+
+
+To install:
+	Just run the FWW (First Words For Windows) file - setup.exe
+	Setup.exe will prompt you for a few items.
+	Setup copys all necessary files.
+	Setup creates a Program Manager Group for you!
+
+Please read through (and print) the FWW manual: FWWMANUL.WRI, a Windows
+Write file.  Just double click on the icon created in your new FWW Program
+Manager Group.
+
+Rlegacy Software
+13839 SW Freeway Suite # 223
+Sugar Land, Texas  77478
+
+CompuServe # 71774,736
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3685
 

@@ -38,6 +38,53 @@ machines:
     SETUP    EXE  Installation program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1033.TXT
+
+{% raw %}
+```
+Disk No: 1033
+Program Title:  QUICKLIST version 1.73
+PC-SIG version: 1.2
+
+A great program for any homeowner or renter who wants accurate records
+of possessions for insurance reasons.  Keep track of each piece of your
+furniture, its current replacement price, who uses it, and where it is
+located in your home.  The list is categorized by room and can either be
+printed by room or in its entirety.
+
+Usage:  Home Inventory.
+
+Special Requirements:  CGA card.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $35.00
+
+File Descriptions:
+
+AUTOEXEC BAT  Batch file to automatically start QUICKLIST on boot-up.
+FILE1    DTA  Room Data file.
+FILE2    DTA  Room Data file.
+FILE3    DTA  Room Data file.
+FILE4    DTA  Room Data file.
+FILE5    DTA  Room Data file.
+MANUAL   BAT  Prints manual on printer for you.
+PROPERTY EXE  Main Program.
+README        Introductory text file.
+SETUP    EXE  Installation program.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1033
 

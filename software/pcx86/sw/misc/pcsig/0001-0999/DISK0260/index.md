@@ -53,8 +53,64 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #260, version V1 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  DSS     .EXE         CRC = 42 E3
+
+--> FILE:  DSS     .DOC         CRC = DD 85
+
+--> FILE:  CRIB2   .BAS         CRC = 53 E7
+
+--> FILE:  JETSET  .BAS         CRC = 08 2E
+
+--> FILE:  JETSET  .DOC         CRC = F6 ED
+
+--> FILE:  CRIBBAGE.BAS         CRC = B4 1F
+
+--> FILE:  SCROLL1 .ML          CRC = 11 23
+
+--> FILE:  SIMONSEZ.BAS         CRC = 1A 47
+
+--> FILE:  SIMONSEZ.DOC         CRC = 10 40
+
+--> FILE:  SLOTMACH.BAS         CRC = 0C 07
+
+--> FILE:  MORSE   .BAS         CRC = 6F 52
+
+--> FILE:  TRONLC  .BAS         CRC = 9D D0
+
+--> FILE:  TRONLC  .EXE         CRC = 30 7F
+
+ ---------------------> SUM OF CRCS = AC DB
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## CRIB2.BAS
 
+{% raw %}
 ```bas
 10      REM===============================================================
 20      REM * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -723,9 +779,11 @@ machines:
 6650    DATA 1,2,3,3
 6660    DATA 1,2,3,4,5,6,A,2,3,4,5,6,7,8,9,10,J,Q,K
 ```
+{% endraw %}
 
 ## CRIBBAGE.BAS
 
+{% raw %}
 ```bas
 1 REM  20 SEPT 79  W/ SOUND/SCROLL/STROBE KEYBOARD
 150 CLEAR ,&H8000:WIDTH 80
@@ -1673,9 +1731,1867 @@ machines:
 64030 POS1%=256*(Y1-1)+X1-1:POS2%=256*(Y1+H1-1)+X1+W1:RETURN
 65000 END ' CHAIN "MENU",1000
 ```
+{% endraw %}
+
+## DSS.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+                     D U E L I N G    S T A R S H I P S (tm)
+
+
+
+                                 Version A.00.00
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             (C) Copyright 1984 Vince J. D'Angelo and Robert W. Dea
+
+                               All Rights Reserved
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                             Dueling Starships (tm)
+
+
+                                Table of Contents
+
+
+        GENERAL INFORMATION ........................................  1
+
+        INTRODUCTION ...............................................  3
+         
+        STARTING THE GAME ..........................................  4
+
+        SPLIT SCREEN INSTALLATION ..................................  5
+
+        SCREEN LAYOUT ..............................................  6
+
+        KEYBOARD LAYOUT ............................................ 10
+
+        BASIC COMMAND DESCRIPTIONS ................................. 12
+
+        INITIAL SETTINGS AND SPECIFICATIONS ........................ 24
+
+        LIST OF COMMANDS ........................................... 26
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                             Dueling Starships (tm)
+
+
+        GENERAL INFORMATION
+
+
+
+                                   DISCLAIMER
+
+        The  Authors  shall  in  no event be  liable  for  incidental  or 
+
+        consequential  damages resulting from the use or inability to use 
+
+        these programs or documentation.  Authors are not responsible for 
+
+        errors  or  defects in the programs  or  documentation,  even  if 
+
+        Authors have been notified of same. Users will use these programs 
+
+        at their own risk.
+
+
+
+                               PERMISSION TO COPY
+
+
+        The  Authors  grant  permission for clubs  and  other  non-profit 
+
+        organizations to copy these programs and documentation subject to 
+
+        the following conditions:
+
+
+        1. No  price  is  to  be  charged  for  either  the  software  or 
+
+           documentation.  However a distribution charge not to exceed $6 
+
+           total may be imposed for covering the cost of the diskette.
+
+
+        2. The software and documentation are not modified in anyway, and 
+
+           both are always distributed together.
+
+
+        3. Club members are encouraged to send donations to the Authors.
+
+
+
+
+
+
+
+
+
+
+                                        1
+
+
+
+
+
+
+
+
+
+                             Dueling Starships (tm)
+
+
+                                    DONATIONS
+
+
+        If  you  find  this game to be of value,  your  donation  to  the 
+
+        Authors will be greatly appreciated.  (Suggested donation is $15) 
+
+        DO NOT SEND CASH.
+
+        Checks should be made payable to:
+
+             Robert W. Dea  and  Vince J. D'Angelo
+
+        and mailed to:
+
+             Robert W. Dea  and  Vince J. D'Angelo
+             Dueling Starships
+             P.O. Box 968
+             Fremont, CA 94537
+
+        Users  are encouraged to copy and share this game.  In situations 
+
+        where a copy cannot be made from other users,  a user may request 
+
+        a  copy  from the Authors for a fee of $6 (check made payable  to 
+
+        Robert W. Dea  and  Vince J. D'Angelo). 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        2
+
+
+
+
+
+
+
+
+
+        INTRODUCTION
+
+        Dueling  Starships  is  a  two-player  real-time  battle  between 
+
+        opposing starships. The computer screen and keyboard are split in 
+
+        half   allowing   the   captains  of  both  starships   to   play 
+
+        simultaneously.  The  object of the game is to destroy the  enemy 
+
+        starship.
+
+
+        The  rest  of this document describes how to start-up  the  game, 
+
+        installation  of  the  split screen barrier  and  provides  brief 
+
+        descriptions  of  the basic command set to give beginners  enough 
+
+        information to start playing.
+
+
+                              Files on the Diskette
+
+             1. DSS.DOC     Documentation describing how to play this game.
+
+             2. DSS.EXE     The Dueling Starship game.     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        3
+
+
+
+
+
+
+
+
+
+        STARTING THE GAME
+
+
+             To  start the game:
+
+             1. Carefully  insert the game program diskette into drive A: 
+
+                with the label edge entering last.
+
+             2. Type "DSS" to run the program.
+
+             3. The program will prompt with the following question:
+
+                       Configure Ships?
+
+                Respond with a "NO" (CR).  This will cause both starships 
+
+                to be configured identical using default values.
+
+             4. At this point, the game's split screen will be displayed. 
+
+                The split screen barrier should now be installed.  Follow 
+
+                the instructions describing the split screen barrier.
+
+             6. You are now ready to play the game.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        4
+
+
+
+
+
+
+
+
+
+        SPLIT SCREEN INSTALLATION
+
+        Cut Out "A"                      (BACK)
+        +--------------------- (Tape Along This Line) ------------------------+
+        |                                                                     |
+        |          1.  Use this pattern and cut out on cardboard.             |
+        |          2.  Cut slit along area marked "A".                        |
+        |          3.  Tape to top of CRT.                                    |
+        |                                   A                                 |
+        |                                   A                                 |
+        |                                   A                                 |
+        +-----------------------------------A---------------------------------+ 
+                                         (FRONT)
+
+        Cut Out "B"                       (TOP)
+        +---------------------------------------------------------------------+
+        | <- (TOWARD  SCREEN)                               (TOWARD USER)  -> |
+        |                                                                     |
+        BBBBBBBBBB                                                            |
+        |                                                                     |
+        +---+                                                                 |
+            |     1.  Use this pattern and cut out on cardboard.              |
+            |     2.  Slide area "B" into slit "A" in cutout "A".             |
+            |     3.  You have now installed the split screen divider.        |
+            |                                                                 |
+        +---+                                                                 |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+                                                                              |
+         .                                                                    | 
+         .  Adjust Length To Fit Your CRT                                     |
+         .                                                                    |
+                                                                              |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        |                                                                     |
+        +---                                                                  |
+           |                             (BOTTOM)                             |
+           +------------------------------------------------------------------+
+
+
+
+                                        5
+
+
+
+
+
+
+
+
+
+        SCREEN LAYOUT
+
+
+             The  screens  for  both  the  left  and  right  players  are 
+
+             identical.
+
+
+         +----------------------+----------------+
+         |                      |   23:37:49     | <-- STAR TIME
+         |                      |                |
+         |                      | SHIP PL  = 100 | <-- SHIP POWER
+         |                      | SHLD F-1 = 100 | <-+
+         |                      | SHLD L-2 = 100 |   | DEFLECTOR
+         |           $          | SHLD B-3 = 100 |   | SHIELDS
+         |                      | SHLD R-4 = 100 | <-+
+         |                      | DIL CRYST=  10 | <-- DILITHIUM CRYSTALS 
+         |     %                | RESERVE  =  50 | <-- RESERVE POWER SUPPLY
+         |                      | CLOAK      OFF | <-- CLOAKING DEVICE STATUS
+         |                      | RADIUS   75000 | <-- VIEWING SCREEN RADIUS
+         |                      | COND     GREEN | <-- ALERT STATUS                
+         +----------------------+                |
+         | PHASERS    TORPEDOES    PROBES   PODS | <-- WEAPON STATUS
+         |   100         100         25       5  |   
+         +---------------------------------------+
+         |    BEARING  RANGE   HEADING    WARP   |
+         | %  212.3    62000    24.0      16.0   | <-- NAVIGATION
+         | $     -       -     220.0       7.0   |     WINDOW
+         +---------------------------------------+
+         |                                       | <-- STATUS
+         |                                       |     WINDOW
+         +---------------------------------------+
+         |YOUR ORDERS, CAPTAIN:                  | <-- COMMAND
+         |                                       |     WINDOW
+         |                                       |
+         |                                       |
+         |                                       |
+         +---------------------------------------+
+         |                                       | <-- ERROR MESSAGE 
+         +---------------------------------------+     WINDOW
+
+                         Figure 1-1
+
+
+             In  the  upper  left is a picture showing the  positions  of 
+
+             objects in space (such as location of the enemy, anti-matter 
+
+             probes,  etc.).  All objects are shown relative to your  own 
+
+             ship.  In other words,  YOUR SHIP IS ALWAYS AT THE CENTER OF 
+
+             THE PICTURE (represented by a "$").  Objects are mapped onto 
+
+
+
+                                        6
+
+
+
+
+
+
+
+
+             the  picture  by  their bearing and range relative  to  your 
+
+             ship. An object's bearing is its angle from 0 to 360 degrees 
+
+             plotted in two-dimensional space.  An object's range is  its 
+
+             distance.  The viewing screen has a user specifiable radius. 
+
+             If the radius is set at 75000 Km (Kilometers),  for example, 
+
+             then  an object (in Figure 1-2  denoted by a "%") bearing 45 
+
+             degrees  at  a  range  of 50000 Km  would  be  displayed  as 
+
+             follows:
+
+
+
+                                         90               
+                              +-----------------------+
+                              |                       |
+                              |                  %    |
+                              |                       |
+                              |                       |
+                          180 |           $           | 0
+                              |                       |
+                              |                       |
+                              |                       |
+                              |                       |
+                              +-----------------------+
+                                         270
+
+                                      Figure 1-2
+
+
+             Notice  that degrees are incremented counter-clockwise  from 
+
+             the x-axis.  Bearing zero degrees is to the middle right, 90 
+
+             degrees  is to the middle top,  45 degrees is to  the  upper 
+
+             right corner, etc.
+
+
+             Positions  of  objects on the viewing screen are  constantly 
+
+             being updated.  If objects (or your ship) were  moving,  you 
+
+             would see the locations of the objects change over time.
+
+
+             The  remainder  of  the  screen is broken  up  into  several 
+
+             windows.  The first window lies immediately to the right  of 
+
+
+
+                                        7
+
+
+
+
+
+
+
+
+             the viewing screen. This window is displayed in normal video 
+
+             and shows your ship's status.  At the very top of the window 
+
+             is  the current time.  Below it is displayed the ship's main 
+
+             power  level,  and  the  power levels of  the  four  shields 
+
+             surrounding the ship.  Next is shown the number of dilithium 
+
+             crystals remaining in the dilithium crystal power generator, 
+
+             and  the amount of power in the reserve  power  supply.  The 
+
+             status  of  the ship's cloaking device  is  then  displayed, 
+
+             followed  by  the  current viewing screen  radius,  and  the 
+
+             condition alert status.
+
+
+             Below the viewing screen window is the weapon status  window 
+
+             shown  in  inverse video.  This window  displays:  power  in 
+
+             phaser banks, power in photon torpedo banks, number of anti-
+
+             matter probes, and number of ion pods remaining.
+
+
+             Below  the  weapon  status window is the  navigation  window 
+
+             (shown in normal video).  The bearing,  range,  heading, and 
+
+             warp of the enemy and your own ship are shown.  The  enemy's 
+
+             ship  is  designated by a "%",  and your ship is shown as  a 
+
+             "$".  These  same  characters are also used on  the  viewing 
+
+             screen.
+
+
+             The next window on the screen is the status window which  is 
+
+             shown in inverse video.  Messages regarding enemy action are 
+
+             displayed  in  this area.  For example,  if the enemy  fired 
+
+             phasers  and  hit  your  ship,   all  pertinent  information 
+
+             regarding the attack would be shown here.
+
+
+             The last window on each player's screen is the command area. 
+
+
+                                        8
+
+
+
+
+
+
+
+
+
+             This area is in normal video, the first line of which is the 
+
+             main command prompt ("YOUR ORDERS, CAPTAIN:"). The remaining 
+
+             lines  beneath  are  used for additional  prompts  and  data 
+
+             entry.
+
+
+             The  final  line on each screen (shown in inverse video)  is 
+
+             the  error/information  line.  If erroneous  information  is 
+
+             entered  to  a prompt,  a suitable error will  be  displayed 
+
+             here. This line is also used by some of the commands for the 
+
+             relaying of general information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        9
+
+
+
+
+
+
+
+
+
+        KEYBOARD LAYOUT
+
+
+        The "SPACE BAR" toggles the sound on and off (default on).
+         
+
+        Left Player Keyboard
+
+            
+                    +----+ +----+  +----+ +----+ +----+
+                    | F1 | | F2 |  |Esc | | !  | | @  |
+                    |    | |    |  |    | | 1  | | 2  |
+                    +----+ +----+  +----+ +----+ +----+
+                    +----+ +----+  +------+ +----+
+                    | F3 | | F4 |  | |<-- | | Q  |
+                    |    | |    |  | -->| | |    |
+                    +----+ +----+  +------+ +----+
+                    +----+ +----+  +--------+ +----+
+                    | F5 | | F6 |  |  Ctrl  | | A  |
+                    |    | |    |  |        | |    |
+                    +----+ +----+  +--------+ +----+
+                    +----+ +----+  +----+ +----+ +----+
+                    | F7 | | F8 |  |    | | |  | | Z  |
+                    |    | |    |  |    | | \  | |    |
+                    +----+ +----+  +----+ +----+ +----+
+                    +----+ +----+  +---------+
+                    | F9 | | F10|  |  Alt    |
+                    |    | |    |  |         |
+                    +----+ +----+  +---------+      
+
+
+
+              Key definitions:
+
+              <F1>  = 1, <F2>  = 2 
+              <F3>  = 3, <F4>  = 4
+              <F5>  = 5, <F6>  = 6
+              <F7>  = 7, <F8>  = 8
+              <F9>  = 9, <F10> = 0
+
+              +----+
+              |Esc | = Backspace
+              |    |
+              +----+
+
+              +------+                         +----+
+              | |<-- | = Carriage Return       | Q  | = Decimal Point "."
+              | -->| |                         |    |
+              +------+                         +----+
+
+              +----+                           +----+
+              | |  | = Minus Sign "-"          | Z  | = Cancel Key
+              | \  |                           |    |   (Cancel current command)
+              +----+                           +----+
+
+
+                                       10
+
+
+
+
+
+
+
+
+
+
+
+        Right Player Keyboard
+
+
+                  +--------+ +-------+
+                  |  <--   | | Num   |
+                  |        | | Lock  |
+                  +--------+ +-------+
+                     +-----+ +----+ +----+ +----+ +----+
+                     |     | | 7  | | 8  | | 9  | | -  |
+                     |     | |    | |    | |    | |    |
+                     | <--|| +----+ +----+ +----+ +----+
+                     |     | +----+ +----+ +----+ +----+
+                     |     | | 4  | | 5  | | 6  | |    |
+                     |     | |    | |    | |    | |    |
+                     +-----+ +----+ +----+ +----+ |    |
+                     +-----+ +----+ +----+ +----+ |    |
+                     |PrtSc| | 1  | | 2  | | 3  | | +  |
+                     | *   | |    | |    | |    | |    |
+                     +-----+ +----+ +----+ +----+ |    |
+                     +------------+ +-----------+ |    |
+                     |     0      | |    .      | |    |
+                     |    Ins     | |    Del    | |    |
+                     +------------+ +-----------+ +----+
+
+              
+              Key definitions:
+
+              <1>  = 1, <2>  = 2
+              <3>  = 3, <4>  = 4
+              <5>  = 5, <6>  = 6
+              <7>  = 7, <8>  = 8
+              <9>  = 9, <0>  = 0
+
+              +--------+
+              |  <--   | = Back Space
+              |        |
+              +--------+
+
+              +-----+                    +----------+
+              |     |                    |    .     | = Decimal Point "."
+              |     |                    |    Del   |
+              | <-- | = Carriage Return  +----------+
+              |     |
+              |     |
+              |     |
+              +-----+
+
+              +-----+                    +-----+
+              | -   | = Minus Sign "-"   |PrtSc| = Cancel Key
+              |     |                    | *   |   (Cancel current command)
+              +-----+                    +-----+
+
+
+
+                                       11
+
+
+
+
+
+
+
+
+        BASIC COMMAND DESCRIPTIONS
+
+
+           Help (command # 0)
+
+              The  help command is executed by pressing the return key in 
+
+              response  to the main command prompt.  Pressing the  return 
+
+              key without entering data implies a zero response.  The ten 
+
+              basic  commands  and  their  respective  numbers  are  then 
+
+              displayed in the command area of the screen.
+
+
+                       1:FIRE WEAPON  4:PWR->SHIP  7:NAVIGATION
+                
+                       2:LOCK WEAPON  5:PWR<-SHIP  8:SCAN ENEMY
+
+                       3:CLOAK        6:CRYSTALS   9:SET SCREEN
+
+                                     10:SURRENDER
+
+
+
+           Fire Weapon (command #1)
+
+              Each starship has four weapons:
+
+              1. PHASERS  -- Pulsating energy beams which cause  moderate 
+
+                 damage to the shields,  and moderate damage to the  ship 
+
+                 if  the shield is gone.  Phasers derive their power from 
+
+                 the ship's phaser banks which can hold a maximum of  100 
+
+                 units of power. The firing range for this weapon is 6000 
+
+                 to  25000  Km (i.e.  the enemy must be between 6000  and 
+
+                 25000  Km  away  in order to  fire).  Phasers  are  also 
+
+                 limited by a firing angle.  The starship being fired  at 
+
+                 must  be between 0 to 75 and 285 to 360 degrees relative 
+
+                 to  your ship's heading (in other  words,  phasers  will 
+
+                 fire  only  if the enemy is in front of your  ship:  See 
+
+                 Figure  2-1  ).  When phasers  fire,  the  phaser  banks 
+
+                 discharge according to the intensity specified when they 
+
+
+                                       12
+
+
+
+
+
+
+
+
+
+                 were locked (see the Lock Weapon command).
+
+
+
+
+
+
+                                                                  .
+                                                                 .
+                                                                .
+                            SHIELD # 2 (LEFT)                  .
+                                                              .             F
+            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX                   .              I
+            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX                  .               R
+                                | X                        . 75 degree      I
+        SHIELD # 3  XXXXXXXXXXXXXXXXXXXXXXXXXXXXX    X XXXX                 N
+         (BACK)      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX     X>-- SHIELD # 1  G
+                    XXXXXXXXXXXXXXXXXXXXXXXXXXXXX    X XXXX     (FORWARD)  
+                                | X                        .                A
+            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX                  .285 defree     N
+            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX                   .              G
+                                                              .             L
+                           SHIELD # 4 (RIGHT)                  .            E
+                                                                .
+                                                                 .
+                                                                  .
+
+
+
+
+
+
+                                Figure 2-1
+
+
+
+              2. PHOTON  TORPEDOES -- Bundles of energy which cause minor 
+
+                 damage to the shields,  and heavy damage to the ship  if 
+
+                 the shield is gone.  Photon Torpedoes derive their power 
+
+                 from  the  ship's photon torpedo banks which can hold  a 
+
+                 maximum of 100 units of power. The firing range for this 
+
+                 weapon  is 8000 to 35000 Km.  Photon Torpedoes are  also 
+
+                 limited to the same firing angle as phasers (see  Figure 
+
+                 2-1 ).  When the torpedoes are fired, the photon torpedo 
+
+                 banks  discharge  according to the  intensity  specified 
+
+
+
+                                       13
+
+
+
+
+
+
+
+
+                 when they were locked (see the Lock Weapon command).
+
+
+              3. ANTI-MATTER  PROBES -- Masses of anti-matter which cause 
+
+                 heavy  damage to the shields,  and minor damage  to  the 
+
+                 ship  if the shield is gone.  When a probe is  launched, 
+
+                 anti-matter  is  loaded  into it from the  ship's  probe 
+
+                 supply.  Each  starship  automatically  regenerates  one 
+
+                 probe unit every minute.  The probe launcher can fire in 
+
+                 any direction.
+
+
+                 Anti-matter probes have a maximum lifespan of 30 seconds 
+
+                 in space.  If they do not reach their target within that 
+
+                 length of time,  they dissipate and become  harmless.  A 
+
+                 probe  will automatically detonate if a starship  enters 
+
+                 its  proximity  radius.  This radius is 4000  Km.  If  a 
+
+                 starship  comes within 4000 Km of the probe,  the  probe 
+
+                 will automatically blow up.
+
+
+                 When  launching  a  probe,  you  will  be  prompted  for 
+
+                 direction and speed of the probe. Direction is any angle 
+
+                 from 0 to 360 degrees (absolute space angles as shown in 
+
+                 Figure 1-2),  and speed is any warp from 0 to 40.  Since 
+
+                 probes last for a maximum of 30 seconds,  the farthest a 
+
+                 probe can travel at warp 40 is 40,000 Km (speed will  be 
+
+                 discussed  under  the Navigation  command).  Probes  are 
+
+                 designated by a "*" on the ship's viewing screen.
+
+
+              4. ION  PODS -- Space mines which cause moderate damage  to 
+
+                 the shields, and moderate to heavy damage to the ship if 
+
+                 the  shield is gone.  Each starship is allocated  5  ion 
+
+
+                                       14
+
+
+
+
+
+
+
+
+
+                 pods.
+
+
+                 Ion  pods  derive their power from your  ship.  You  may 
+
+                 divert up to 100 units from your ship's main power level 
+
+                 into  each  pod.  The pod is then transported  out  into 
+
+                 space to a location selected by you. The pod will remain 
+
+                 at  that  location  until you decide to detonate  it  by 
+
+                 using this command. (For details on transporting the pod 
+
+                 into space,  see the Lock Weapon command).  Pods have an 
+
+                 explosion  radius equivalent to 160 times the amount  of 
+
+                 power in the pod.  A pod filled with 100 units of power, 
+
+                 for  example,  would have an explosion radius of  16,000 
+
+                 Km.  The  closer  an  object is to  the  center  of  the 
+
+                 explosion,  the more damage is caused.  Pods are capable 
+
+                 of causing damage to a starship, and destroying oncoming 
+
+                 anti-matter probes.
+
+
+                 An  important  feature  of ion pods  is  their  built-in 
+
+                 cloaking  device.  An ion pod is invisible except to the 
+
+                 mother ship which ejected it.
+
+
+             NOTE:  None of the firing commands are operational when  the 
+
+                 ship's  cloaking  device  is  in  use  (see  the   CLOAK 
+
+                 command).
+
+
+           Lock Weapon (Command #2)
+
+              Before  any weapon can be used,  it must first  be  locked. 
+
+              Locking establishes an intensity to be used when the weapon 
+
+              is fired, except for ion pods, which are ejected. Once your 
+
+
+
+                                       15
+
+
+
+
+
+
+
+
+              phasers,  photon  torpedoes,  and  anti-matter  probes  are 
+
+              locked, the intensity you specified remains in effect until 
+
+              you decide to change it.  There are four locking commands:
+
+
+              1. PHASERS  -- Locks phasers onto the enemy and establishes 
+
+                 the intensity of the beam.  A maximum of 50 units may be 
+
+                 specified.   Your  phaser banks will discharge  by  this 
+
+                 amount each time you fire the weapon.
+
+
+              2. PHOTON  TORPEDOES  -- Locks  photon torpedoes  onto  the 
+
+                 enemy and establishes their intensity.   A maximum of 50 
+
+                 units may be specified.   Your photon torpedo banks will 
+
+                 discharge by this amount each time you fire the weapon.
+
+
+              3. ANTI-MATTER  PROBES  -- Locks probe  launcher  onto  the 
+
+                 enemy and establishes the number of anti-matter units to 
+
+                 be  loaded for each shot.   A maximum of 10 units may be 
+
+                 specified.   Your anti-matter probe supply will decrease 
+
+                 by this amount each time you launch a probe.
+
+
+              4. ION  PODS  -- Transports  an  ion  pod  into  space  and 
+
+                 establishes  the amount of power to be diverted into it.  
+
+                 When  ejecting  a pod with this  command,  you  will  be 
+
+                 prompted for an ejection angle,  an ejection range,  and 
+
+                 for pod power. The ejection angle is any angle from 0 to 
+
+                 360  degrees measured in absolute space angles (refer to 
+
+                 Figure 1-2).  The ejection range is any distance from  0 
+
+                 to  60,000  Km  away from the ship.   Pod power  is  any 
+
+                 amount  up  to  100 units  of  your  ship  power.   Once 
+
+                 ejected,  the  pod  will sit at that location  in  space 
+
+
+                                       16
+
+
+
+
+
+
+
+
+
+                 until  you  manually detonate it with the FIRE  command.  
+
+                 When  detonated,  the pod will have an explosion  radius 
+
+                 equal to 160 times the amount of power in the pod.  Care 
+
+                 should  be  taken not to accidentally blow  yourself  up 
+
+                 with one of your own pods.
+
+
+                 When a pod is ejected, it will be assigned a number from 
+
+                 1  to  5.   All five of your ship's ion pods can  be  in 
+
+                 space  at one time.   Pods are designated on the  ship's 
+
+                 viewing screen by their respective number.  For example, 
+
+                 ion pod #1 will be shown as a "1" on the screen.
+
+
+           Cloak (Command #3)
+
+              Each   starship   is  equipped  with  a  cloaking   device. 
+
+              Activating this device makes the starship  invisible.  This 
+
+              command  is used as a toggle to activate / deactivate  this 
+
+              device. Issuing the command once, causes the device to turn 
+
+              on. Issuing the command a second time, causes the device to 
+
+              turn off.  In order to activate the device, a starship must 
+
+              have  a  minimum of 125 units of power in the  ship's  main 
+
+              power level.  If the main power level should fall below 100 
+
+              units  at any time,  the cloaking device will automatically 
+
+              turn itself off.
+
+
+              There are two main drawbacks to using the cloaking device:
+
+              1. A starship cannot fire its weapons when invisible.
+
+              2. The  cloaking device consumes a lot of power  (25  units 
+
+                 per minute deducted from the main power level).
+
+              These  disadvantages can easily outweigh the advantages  of 
+
+
+                                       17
+
+
+
+
+
+
+
+
+
+              being  invisible  if the cloaking device remains on for  an 
+
+              extended period of time.
+
+
+           Power to Ship (Command #4)
+
+
+              The  Power to Ship and Power from Ship commands  allow  the 
+
+              captain  of a starship to transfer energy from one part  of 
+
+              the ship to another. Before these commands can be discussed 
+
+              in  detail,  the  power structure and power flow  within  a 
+
+              starship must first be explained.
+
+
+              The  power  source  of  each  starship  are  its  dilithium 
+
+              crystals.  These  reside  in  the dilithium  crystal  power 
+
+              generator.  The  generator generates one unit of power  per 
+
+              minute per crystal. In other words, if your starship has 10 
+
+              dilithium crystals,  the power generator will provide  your 
+
+              ship  with  10  units of power per minute.  This  power  is 
+
+              placed  in the reserve power supply (see Figure  2-2).  The 
+
+              reserve  power supply can be tapped to channel  power  into 
+
+              the  ship's  main power level.  From there,  power  can  be 
+
+              diverted  into the shields,  phaser and torpedo banks,  and 
+
+              can  be  used  in ejecting ion  pods.  Power  can  also  be 
+
+              diverted  back  into the main power level from the  shields 
+
+              and weapon banks if needed.  Power cannot,  however, be put 
+
+              back  into  the reserve power supply from  the  main  power 
+
+              level.
+
+
+              If  a  starship  is badly lacking in power (after  a  heavy 
+
+              attack,  for example),  and there is little or no power  in 
+
+
+
+                                       18
+
+
+
+
+
+
+
+
+              the reserve power supply, instant power can be generated by 
+
+              disintegrating  some  of  the dilithium crystals  (see  the 
+
+              Crystals command).
+
+
+
+                #################
+                #################
+                          # #  
+                          # #   Engines         Ion
+                                                Pods
+                                |                |
+                                |                |
+           ####                Reserve          Main      1:4
+            ##   -----------   Power   -------- Power  --------- Shields
+           ####           \    Supply         / Level
+                           \                 /    |
+        Dilithium Crystal   \               /     |----- Phaser Banks
+        Power Generator      \             /      |
+                              \           /       |_____ Torpedo Banks
+                              Disintegrating
+                                 Crystals
+
+
+                              Figure 2-2
+
+              The Power to Ship command has seven parts:
+
+              1. Diverts  power from shield #1 to the main  power  level. 
+
+                 Power is expressed in shield units.  A four-to-one ratio 
+
+                 exists  between a shield power unit and a power unit for 
+
+                 any other part of the ship.  Four shield units equal one 
+
+                 ship unit.  (In other words,  diverting four units  from 
+
+                 the shield to the ship boost the ship by one unit.)
+
+              2. Diverts power from shield #2 to the main power level.
+
+              3. Diverts power from shield #3 to the main power level.
+
+              4. Diverts power from shield #4 to the main power level.
+
+
+              NOTE: Withdrawing power from a shield lowers the efficiency 
+
+              of the shield.
+
+
+              5. Diverts  power from the phaser banks to the  main  power 
+
+
+                                       19
+
+
+
+
+
+
+
+
+
+                 level. This is a one-to-one ratio.
+
+              6. Diverts  power from the photon torpedo banks to the main 
+
+                 power level. This is a one-to-one ratio.
+
+              7. Taps  the  reserve power supply and channels  the  power 
+
+                 into the main power level. This is a one-to-one ratio.
+
+
+              NOTE: The ship's main power level can hold a maximum of 200 
+
+              units.
+
+
+           Power from Ship (command #5)
+
+              This  command is the opposite of the Power to Ship  command 
+
+              and has six parts:
+
+
+              1. Diverts power from the ship's main power level to shield 
+
+                 #1 on a one-to-four ratio.  Power is expressed in shield 
+
+                 units.  Boosting  the shield four units will  drain  one 
+
+                 unit from the main power level.
+
+              2. Diverts power from the main power level to shield #2.
+
+              3. Diverts power from the main power level to shield #3.
+
+              4. Diverts power from the main power level to shield #4.
+
+
+              NOTE:  Boosting a shield raises its efficiency. A    shield 
+
+              can hold a maximum of 125 units.
+
+
+              5. Diverts  power  from the main power level to the  phaser 
+
+                 banks.  This is a one-to-one ratio. The phaser banks can 
+
+                 hold a maximum of 100 units.
+
+              6. Diverts  power from the main power level to  the  photon 
+
+                 torpedo  banks.  This is a one-to-one ratio.  The photon 
+
+                 torpedo banks can hold a maximum of 100 units.
+
+
+                                       20
+
+
+
+
+
+
+
+
+
+
+           Crystals (Command #6)
+
+              This command disintegrates dilithium crystals.  This option 
+
+              should  only be exercised when it is absolutely  necessary. 
+
+              Disintegrating   crystals  creates   instant   power,   but 
+
+              decreases the rate at which the reserve power supply builds 
+
+              up.  Each crystal disintegrated generates 50 units of power 
+
+              which  is  channeled  directly into the ship's  main  power 
+
+              level (bypassing the reserve power supply).
+
+
+              For every crystal eliminated,  one unit of power is reduced 
+
+              in   the  reserve  power  regeneration  rate  per   minute. 
+
+              Dilithium crystals are the power source for each  starship. 
+
+              Burning   up  crystals  needlessly  could  have  disastrous 
+
+              effects later on.
+
+
+           Navigation (Command #7)
+
+              Changes course (heading) and speed. Heading is expressed as 
+
+              any angle from 0 to 360 degrees measured in absolute  space 
+
+              angles.  Speed is any warp from -20 to 20. A negative speed 
+
+              indicates  moving in reverse (useful if firing at the enemy 
+
+              while retreating).  Each warp equals the velocity of  2,000 
+
+              Km  per minute.  These speeds were adopted to make the game 
+
+              easier to play.  Traveling at the maximum speed of warp  20 
+
+              (or  -20)  would result in your starship moving  40,000  Km 
+
+              each minute.
+
+
+              When  changing  speed,  your  starship  will  automatically 
+
+              accelerate  / decelerate to the new speed from the  present 
+
+
+
+                                       21
+
+
+
+
+
+
+
+
+              one.  The  rate  at which your starship can  accelerate  is 
+
+              determined by your ship's main power level.  The higher the 
+
+              power level,  the faster your ship can accelerate.  A power 
+
+              level of zero would result in no acceleration.
+
+
+              When  traveling at speeds greater than warp 10  (or   -10), 
+
+              power will be drained from the reserve power supply to help 
+
+              your  engines  maintain  speed.  If the reserve  supply  is 
+
+              emptied,  your ship will automatically reduce speed to warp 
+
+              10 (or -10).
+
+
+           Scan Enemy (Command #8)
+
+              Sensor scan of the enemy starship. Causes the status of the 
+
+              enemy to be displayed on your screen (replacing the  values 
+
+              for  your ship).  All values are displayed except for power 
+
+              in  phaser and photon torpedo banks,  and number  of  anti-
+
+              matter  probe units remaining.  The sensor scan remains  in 
+
+              effect  until  you  issue another  command.  If  the  enemy 
+
+              starship is invisible, it cannot be scanned.
+
+
+           Set Screen (Command #9)
+
+              Changes  the  ship's  viewing screen  radius.  The  current 
+
+              screen  radius  is always displayed  on  the  screen.  This 
+
+              radius  will need to be adjusted according to the  distance 
+
+              of  the enemy starship and any other objects in  space,  in 
+
+              order  to see everything,  or you can adjust it to focus in 
+
+              on your immediate area.
+
+
+           Surrender (Command #10)
+
+              Allows you to surrender your ship to the enemy.  Your enemy 
+
+
+                                       22
+
+
+
+
+
+
+
+
+
+              has  the  option to accept your surrender  or  to  continue 
+
+              playing the game.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                       23
+
+
+
+
+
+
+
+
+
+                          INITIAL SETTINGS AND SPECIFICATIONS
+
+
+
+        All weapons are initially unlocked.
+
+        Headings and speeds of each ship are set to zero.
+
+        Default # of dilithium crystals: 10
+
+        Default # of anti-matter units:  25  regeneration: 1 per minute
+
+        # of ion pods:                    5  regeneration: none
+
+        Default reserve power level:     50  regeneration: 1 unit/minute/crystal
+
+
+        Ship power level:     100            max. possible: 200
+
+        Phaser banks:         100            max. possible: 100
+
+        Photon torpedo banks: 100            max. possible: 100
+
+        All four shields:     100            max. possible: 125
+
+
+        PHASERS
+
+              range:            6,000 - 25,000 Km
+
+              firing angle:     0 - 75, 285 - 360
+
+              intensity:        0 - 50
+
+              shield damage:    moderate
+
+              ship damage:      moderate
+
+
+        PHOTON TORPEDOES
+
+              range:            8,000 - 35,000 Km
+
+              firing angle:     0 - 75, 285 - 360
+
+              intensity:        0 - 50
+
+              shield damage:    minor
+
+              ship damage:      heavy
+
+              
+
+
+
+
+                                       24
+
+
+
+
+
+
+
+
+
+
+        ANTI-MATTER PROBES
+
+              range:            40,000 Km max. at warp 40
+
+              maximum lifespan: 30 seconds
+
+              proximity radius: 4,000 Km
+
+              firing angle:     ALL
+
+              intensity:        0 - 10
+
+              shield damage:    heavy
+
+              ship damage:      minor
+
+              speed:            warp 0 - 40
+
+
+        ION PODS
+
+              ejection range:   0 - 60,000 Km
+
+              firing angle:     ALL
+
+              intensity:        0 - 100
+
+              shield damage:    moderate
+
+              ship damage:      moderate to heavy
+
+                                (damage depends on distance from pod
+
+                                to target, and pod's strength)
+
+              explosion radius: 160 times pod's strength
+
+
+        Note: Initial settings for dilithium crystals, anti-matter units, 
+
+              and  reserve power supply are configurable.  Figures  shown 
+
+              are default values.
+
+
+
+
+
+
+
+
+
+
+
+
+                                       25
+
+
+
+
+
+
+
+
+
+                                   LIST OF COMMANDS
+
+
+        0    Help
+
+        1    Fire Weapons    - 1 Phasers           range (6,000 - 25,000)
+
+                             - 2 Photon Torpedoes  range (8,000 - 35,000)
+
+                             - 3 Probes    angle (0 - 360), warp (0 - 40)     
+
+                             - 4 Pod       pod # (1 - 5)
+
+        2   Lock Weapons     - 1 Phasers           (0 - 50)
+
+                             - 2 Photon Torpedoes  (0 - 50)
+
+                             - 3 Probes            (0 - 10)
+
+                             - 4 Pod   angle (0 - 360) range (0 - 60,000)
+
+                                       power (1 - 100)
+
+        3  Cloak
+
+        4  Power to Ship     - 1 Shield #1 to ship, - 2 Shield #2 to ship
+
+                             - 3 Shield #3 to ship, - 4 Shield #4 to ship
+
+                             - 5 Phaser banks to ship
+
+                             - 6 Torpedo banks to ship
+
+                             - 7 Reserve power supply to ship
+
+        5  Power from Ship   - 1 Ship to shield #1, - 2 Ship to shield #2
+
+                             - 3 Ship to shield #3. - 4 Ship to shield #4
+
+                             - 5 Ship to phaser banks
+
+                             - 6 Ship to torpedo banks
+
+        6  Crystal           50 units / crystal
+
+        7  Navigation        angle (0 - 360), warp (-20 to 20)
+
+        8  Scan Enemy
+
+        9  Set Screen       (1,000 - 300,000)
+
+        10 Surrender
+
+
+
+
+                                       26
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## JETSET.BAS
 
+{% raw %}
 ```bas
 1 ' *****JETSET*****
 2 ' IFR FLIGHT SIMULATOR (BOEING 747)
@@ -2734,9 +4650,11 @@ machines:
 12099 GOTO 10310
 12100 ' END OF LISTING
 ```
+{% endraw %}
 
 ## MORSE.BAS
 
+{% raw %}
 ```bas
 10    ' Morse Code Practice Program. Elwood Downey, WB0OEW, August, 1983.
 20    ' Written for the IBM PC in Microsoft Basica, V1.1, for PC-DOS V1.1.
@@ -2923,9 +4841,11 @@ machines:
 1820  CLS
 1830  RETURN
 ```
+{% endraw %}
 
 ## SIMONSEZ.BAS
 
+{% raw %}
 ```bas
 10 ' SIMONSEZ BY PETER WOLF * JANUARY 4, 1984
 20 ' FOR INFORMATION CALL 415-656-5200 EVENINGS
@@ -3028,9 +4948,48 @@ machines:
 980 NEXT K
 990 GOTO 780
 ```
+{% endraw %}
+
+## SIMONSEZ.DOC
+
+{% raw %}
+```
+Getting my six year old daughter interested in computing has been
+fairly easy, but she constantly wants more challenging things to
+do.  In her honor I created the game of SIMONSEZ.  It is
+relatively easy and can be played on a monochrome display, an RGB
+display or in 40 character mode on a color TV set.  The color
+monitors are best though.  The flashing colors and tones
+keep her occupied for quite some time.  Since she is so young, I
+usually change line 630 and set N=12 so she can win once in a
+while.  This is a big step up as we originally started with N=6 for
+her.  If you want to add additional color/tones do the
+following:
+
+  line  50 - This line sets the notes.  Add other notes here.
+  line 380 - Add ":SOUND n,T " for each new note (n) set in line 50.
+  line 440 - Change the multiplier of RND to the number of notes.
+  line 535 - Add this new line in the same format as lines 530 and
+             540 with an ELSE GOTO 540 and change the ELSE GOTO in
+             line 530 to read GOTO 535.  These lines screen out
+             other than acceptable responses.
+  line 742 and 745 need to be added (more lines for more notes) in
+             the same format as 730 and 740.
+
+Hope you enjoy playing (try it in color with the lights in the
+room out).
+                   Sincerely,
+
+                      Peter Wolf
+                      PO Box 3398
+                      Fremont, CA 94539
+
+```
+{% endraw %}
 
 ## SLOTMACH.BAS
 
+{% raw %}
 ```bas
 10 M=25
 20 RANDOMIZE INT(VAL(MID$(TIME$,7,2)))
@@ -3242,9 +5201,11 @@ machines:
 5120 PLAY "O3 B8 B2 O4 DC O3 A A8 G8 G2"
 5130 RETURN
 ```
+{% endraw %}
 
 ## TRONLC.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 20 SCREEN 1:CLS
@@ -3366,6 +5327,7 @@ machines:
 1180 A$=INKEY$:IF A$="" THEN 1180 ELSE 140
 1190 REM
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

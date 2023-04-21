@@ -37,6 +37,47 @@ machines:
     easier to take.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2264.TXT
+
+{% raw %}
+```
+Disk No: 2264                                                           
+Disk Title: TestWriter                                                  
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: TestWriter                                               
+Author Version: 2.1A                                                    
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+Here's a riddle.  What do teachers love that's easy to crunch and "red" 
+all over?  Give up?  It's TESTWRITER!  TESTWRITER takes the hassle out  
+of making up tests.  Well, not all the hassle, you still have to write  
+the original questions or copy them out of the teacher's manual.  But   
+once that is done, you'll never have to type them again.                
+                                                                        
+TESTWRITER is a full fledged word processor which can be used for       
+preparing a testbank containing examination questions and for almost any
+other task that word processors can handle.  Its fast, easy to us, and  
+may just take the sting out of test writing.  TESTWRITER offers a       
+command structure very similar to WordStar as well as pull-down menus,  
+function key commands and an "undo" key.                                
+                                                                        
+TESTWRITER prints the examination and also prints the corresponding     
+answer sheets.  Nobody loves tests, but TESTWRITER makes test writing   
+easier to take.                                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2264
 

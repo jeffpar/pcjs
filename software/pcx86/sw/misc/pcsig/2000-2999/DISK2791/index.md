@@ -14,6 +14,33 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2791.TXT
+
+{% raw %}
+```
+Disk No: 2791
+Disk Title: Wild Animals
+PC-SIG Version: S1
+
+Program Title: Wild Animals
+Author Registration: None.
+Special Requirements: Desktop publishing program.
+
+Wild birds and animals make up this collection of 19 .PCX files
+
+
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2791
 

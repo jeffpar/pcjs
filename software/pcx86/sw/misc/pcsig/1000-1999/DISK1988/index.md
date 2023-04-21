@@ -34,6 +34,45 @@ machines:
     statistics.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1988.TXT
+
+{% raw %}
+```
+Disk No: 1988                                                           
+Disk Title: Scientific & Engineering Tools for Lotus                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Scientific & Engineering Tools for Lotus                 
+Author Version: 1.0                                                     
+Author Registration: $20.00                                             
+Special Requirements: Lotus 1-2-3 ver  2.01, Hard Drive recommended.    
+                                                                        
+This is a template for people who are already well-versed in Lotus 1-2-3
+and are interested in applying it to solving more advanced statistical  
+problems.  Among other things it simplifies the use of simple arithmetic
+facilitates statistical macro programming, calculates frequency         
+distribution and normal distribution of data, and does four types of    
+curve-fitting.  The template taps Lotus' mathematical abilities to solve
+complicated problems and to permit the user to customize it to his or   
+her particular needs.                                                   
+                                                                        
+It is similar in concept to other spreadsheet templates in that it makes
+the macro language and advanced formula functions more accessible to the
+user. However, it is more specialized in the area of engineering-type   
+statistics than any template I have seen previously.                    
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1988
 

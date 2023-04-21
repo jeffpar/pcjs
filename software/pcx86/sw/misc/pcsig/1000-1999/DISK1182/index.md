@@ -39,6 +39,64 @@ machines:
     available to registered users.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1182.TXT
+
+{% raw %}
+```
+Disk No  1182
+Program Title:  VIBRATING, ROTATING, and CO0LING version 2
+PC-SIG version 1
+
+View and manipulate surfaces created by a mathematical function
+through three and four dimensional space by pressing a key on your PC.
+Graph x and/or y calculus functions and stand in awe at your new
+insight as you test the limits of your EGA.  Ogle at wave and stable
+state movements like heat flow.  Then, you will be venturing into the
+world of VIBRATING, ROTATING AND COOLING.
+
+User friendly, SURFACE describes surfaces moving in 3-D and 4-D spaces
+as you speed up, slow down and change the magnitude and axis of
+movement. 2DWAVE and LAPLACE bring you two dimensional movements, the
+first involving waves, the second heat flow.  The latter programs are
+substantially less user friendly.
+
+You have the option of using predefined functions or creating your
+own.  Once a function is chosen, the program graphically demonstrates
+the results of the function on a plane surface.  During the graphic
+mode you may change the speed, the axis of rotation, and the
+magnification of the image.  The program also has the option to
+include a trace of the image on the screen and a help window.
+
+Usage:  Mathematics.
+
+Special Requirements: CGA, EGA, or VGA graphics, depending on program.
+Math coprocessor recommended.
+
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $30.00
+
+File Descriptions:
+
+2DWAVE   EXE  2D wave simulation.
+LAPLACE  EXE  Wave simulation.
+READ     ME   Information about programs.
+SUR-PAGE EXE  Surface rotation.
+SURFACE  EXE  Surface rotation.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1182
 

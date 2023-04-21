@@ -14,6 +14,45 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2702.TXT
+
+{% raw %}
+```
+Disk No: 2702                                                           
+Disk Title: Weather Station                                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Weather Station                                          
+Author Version: 3/91                                                    
+Author Registration: $49.95                                             
+Special Requirements: PC-SIG #2699-#2701, hard drive, modem, & DUAT memb
+                                                                        
+This program can be an invaluable aid to those pilots who have problems 
+understanding and deciphering the government's computer weather program 
+(DUAT).  The WEATHER STATION will collate and print, in plain English,  
+any forecast a pilot could want for pre-flight planning.                
+                                                                        
+The WEATHER STATION, when coupled with the CLEARANCE FLIGHT PLANNING    
+SYSTEM (#2699-#2701), will retrieve the weather and forecasts, calculate
+and file a flight plan, and automatically provide the pilot with an     
+accurate, weather-corrected flight plan.                                
+                                                                        
+As a stand-alone program, the WEATHER STATION is fully compatible with  
+DUAT and can be customized for just about any weather vendor.  All of   
+the significant weather prognoses can be accessed by this program in an 
+easily-understood format.                                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2702
 

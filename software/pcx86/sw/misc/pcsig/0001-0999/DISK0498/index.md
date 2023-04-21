@@ -33,6 +33,34 @@ machines:
     DOSAMATC COM  DOSAMATIC program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES498.TXT
+
+{% raw %}
+```
+ 
+---------------------------------------------------------------------------
+Disk No  498  DOSamatic Ver 2.0                                    v1   DS2
+---------------------------------------------------------------------------
+DOSamatic is an acclaimed task-switching utility that allows the loading of
+several programs for the purpose of manipulating them with simple keystroke
+commands.  It contains a nice menu that list available drives, directores and
+files on the current driv e.  Commands available include view, sort, rename,
+edit, print, debug, copy, and delete.  Programs can be run from memory.
+ 
+DOSAMATC COM  DOSamatic program
+DOSAMATC HLP  Help screen information used with DOSAMATC.COM
+DOSAMATC DOC  Documentation for DOSAMATC.COM
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0498
 

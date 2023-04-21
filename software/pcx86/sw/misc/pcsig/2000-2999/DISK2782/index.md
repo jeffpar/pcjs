@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2782.TXT
+
+{% raw %}
+```
+Disk No: 2782
+Disk Title: BMP files #2
+PC-SIG Version: S1
+
+Program Title: BMP files #2
+Author Version: 7/91
+Author Registration: None.
+Special Requirements: Windows.
+
+The second volume of .BMP files for Windows -- A sharp-looking eagle
+with the US flag in the background, three Simpsons cartoons, four images
+from the Star Wars trilogy, and a waterfall.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2782
 

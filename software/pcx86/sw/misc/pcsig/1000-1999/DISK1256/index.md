@@ -35,6 +35,53 @@ machines:
     auto-dialer to call your office or home.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1256.TXT
+
+{% raw %}
+```
+Disk No: 1256
+Program Title: EZDESK version 1.0
+PC-SIG version: 1
+
+EZDESK transforms your computer into an integrated, on-line office.
+
+This single program handles word processing, client lists and account
+tracking, scheduling, mailings, autodialing, telecommunications and
+filing.
+
+EZDESK gives you an appointment calendar with notes.  The word processor
+takes care of your letters and reports with the ability to run form
+letters with automatic mail merge.  The mail handling program generates
+mailing lists and labels and works with your word processor.  The
+mailing lists can be edited and merged.  You can build a client file,
+track your accounts and get reports on their status.  An agenda option
+lets you maintain personal agenda information as well as use an
+auto-dialer to call your office or home.
+
+Usage:  Business.
+
+Special Requirements:  512K memory and a hard disk.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $90.00
+
+File Descriptions:
+
+EZ0      EXE   Self-unarchiving program.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1256
 

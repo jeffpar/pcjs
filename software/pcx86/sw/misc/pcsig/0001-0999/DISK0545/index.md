@@ -59,6 +59,59 @@ machines:
     LOGO84N8 COM  Executable file to generate Letus logo
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES545.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  545  LETUS A-B-C #8                                       v1  DS2
+---------------------------------------------------------------------------
+Literature Evaluation Table User Service - A database of articles and
+letters from third quarter 1984 magazines about IBM PCs.  It requires
+PC-FILE III and can be searched using keywords, author names, article
+titles, issue numbers, page numbers and descriptive text.
+ 
+BCOMP84C DTA  Business Computing Third Quarter 1984 reference files
+BCOMP84C HDR  Business Computing Third Quarter 1984 reference files
+BCOMP84C INX  Business Computing Third Quarter 1984 reference files
+BCOMP84C KWD  Business Computing Third Quarter 1984 reference files
+PCJR84C  DTA  PCjr Magazine Third Quarter 1984 reference files
+PCJR84C  HDR  PCjr Magazine Third Quarter 1984 reference files
+PCJR84C  INX  PCjr Magazine Third Quarter 1984 reference files
+PCJR84C  KWD  PCjr Magazine Third Quarter 1984 reference files
+PCJRW84C DTA  PCjr WORLD Magazine Third Quarter 1984 reference files
+PCJRW84C HDR  PCjr WORLD Magazine Third Quarter 1984 reference files
+PCJRW84C INX  PCjr WORLD Magazine Third Quarter 1984 reference files
+PCJRW84C KWD  PCjr WORLD Magazine Third Quarter 1984 reference files
+PCPRO84C DTA  PC PRODUCT REVIEW Magazine Third Quarter 1984 reference files
+PCPRO84C HDR  PC PRODUCT REVIEW Magazine Third Quarter 1984 reference files
+PCPRO84C INX  PC PRODUCT REVIEW Magazine Third Quarter 1984 reference files
+PCPRO84C KWD  PC PRODUCT REVIEW Magazine Third Quarter 1984 reference files
+PCWK84C  DTA  PC WEEK Third Quarter 1984 reference files
+PCWK84C  HDR  PC WEEK Third Quarter 1984 reference files
+PCWK84C  INX  PC WEEK Third Quarter 1984 reference files
+PCWK84C  KWD  PC WEEK Third Quarter 1984 reference files
+PNUT84C  DTA  PEANUT Magazine Third Quarter 1984 reference files
+PNUT84C  HDR  PEANUT Magazine Third Quarter 1984 reference files
+PNUT84C  INX  PEANUT Magazine Third Quarter 1984 reference files
+PNUT84C  KWD  PEANUT Magazine Third Quarter 1984 reference files
+SOFT84C  DTA  SOFTALK Magazine Third Quarter 1984 reference files
+SOFT84C  HDR  SOFTALK Magazine Third Quarter 1984 reference files
+SOFT84C  INX  SOFTALK Magazine Third Quarter 1984 reference files
+SOFT84C  KWD  SOFTALK Magazine Third Quarter 1984 reference files
+LOGO84N8 COM  Executable file to generate Letus logo
+LETUS    BAT  Batch file to generate logo
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0545
 

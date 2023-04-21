@@ -14,6 +14,36 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2810.TXT
+
+{% raw %}
+```
+Disk No: 2810                                                           
+Disk Title: *DAYO Returns & Refunds                                     
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: DAYO Returns & Refunds                                   
+Author Version: 2.0                                                     
+Author Registration: $25.00                                             
+Special Requirements: 450K RAM, hard drive, DOS 3.3, & PC-SIG #2402-2403
+                                                                        
+DAYO RETURNS & REFUNDS is a modified version of DAYO POS, but contains  
+only the capability of doing returns and/or refunds of invoices/items.  
+The invoices default to type 'Ret' (returns of merchandise), and are    
+posted as negative amounts (later to become Credit Memos). Requires DAYO
+POS (uses the same configuration settings).                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2810
 

@@ -50,6 +50,60 @@ machines:
     MAINTENANCE AND REPAIR does.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2073.TXT
+
+{% raw %}
+```
+Disk No: 2073                                                           
+Disk Title: Home Maintenance & Repair 2 of 2 (2072)                     
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Home Maintenance and Repair                              
+Author Version: 2.0                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+Don't you just hate it when you have to call a repairman but you think  
+he may take advantage of you?  Wouldn't it be nice to have some         
+basic knowledge of your home and auto systems just so that you could ask
+the right questions and at least sound like you know what you're talking
+about?   If you don't happen to have a brother-in-law to double-check   
+with, you can learn basic home and automotive maintenance and trouble   
+shooting techniques from HOME MAINTENANCE AND REPAIR.                   
+                                                                        
+HOME MAINTENANCE AND REPAIR has maintenance tutorials and trouble       
+shooting charts for air conditioning, home electrical systems, heating, 
+plumbing, appliances and automobiles.  HOME MAINTENANCE AND REPAIR gives
+you tool lists, illustrations, and schematics of the systems. It allows 
+you to print maintenance forms.  It offers step-by-step support for     
+doing regular maintenance on your home and car -- the simple kinds of   
+tasks that help to keep those expensive repairmen away from your door.  
+And when something does go wrong, look to HOME MAINTENANCE AND REPAIR's 
+trouble shooting charts for a suggestion of what the problem is and what
+you should do about it.  In both the trouble shooting guides and the    
+general maintenance tutorials, HOME MAINTENANCE AND REPAIR takes special
+care to alert you to all dangers, gives cautions and advive on working  
+safely, and lets you know when it's time to call in a professional.     
+                                                                        
+Depending upon your interest and skill level, HOME MAINTENANCE AND      
+REPAIR can be a beginner's tutorial and guide book for dealing with     
+mechanics and repairmen, or a ready guide for hands-on maintenance and  
+repair.  If you are among the thousands of people who don't really      
+understand much about plumbing, wiring, how your furnace works, or just 
+what you're supposed to do to keep your car in good condition, HOME     
+MAINTENANCE AND REPAIR does.                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989, 1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2073
 

@@ -36,6 +36,72 @@ machines:
     permanent file on your disk.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES.TXT
+
+{% raw %}
+```
+TEST1.COM       PRESENTS AND SCORES TESTS FROM EASILY PREPARED USER FILES
+TRAIN1.COM      PRESENTS AND SCORES TRAINING MATERIAL, USER PREPARED
+TESTEST1.COM    DEBUGGER AID PROGRAM FOR TEST1.COM  AND TRAIN1.COM
+TEST.DOC        DOCUMENTATION FOR TEST1.COM, TRAIN1.COM, TESTEST1.COM
+DOC.TST         DOCUMENTATION IN TEST FORM FOR TEST1.COM AND TRAIN1.COM
+DEMO.TST        DEMONTRATION TEST FOR TEST1.COM AND TRAIN1.COM
+SAMPLE.TST      SAMPLE TEST FOR TEST1.COM
+FILES.TXT       DESCRIPTION OF FILES IN THIS PROGRAM
+GO.BAT          PRINTS OUT TEST.DOC
+```
+{% endraw %}
+
+## FILES797.TXT
+
+{% raw %}
+```
+Disk No  #797
+Program Title: TEST
+PC-SIG version 1
+ 
+    TEST will display your questions, accept valid answers and reject
+inappropriate ones, show the correct answer with an optional comment when
+the answer is incorrect, put incorrectly answered questions on hold and
+present them again until the correct answer is givern, keep score of points
+associated with correct answers as well as the number of times that an
+incorrect answer was entered. All questions can be put on hold an
+indefinite number of times, and will be presented again in the same order
+as they were encountered. At the end of the test the program will display
+an optional evaluation, and store the results in a permanent file on your
+disk.
+ 
+Usage: Educational
+ 
+System Requirements: 128K and one floppy drive and a word processor.
+ 
+How to Start: Type TEST1 and (press enter)
+ 
+Suggested Registration: $11.88
+ 
+File Descriptions:
+ 
+TEST1    COM  Presents and scores tests from easily prepared user files.
+TRAIN1   COM  presents and scores training material, user prepared.
+TESTEST1 COM  Debugger aid program for TEST1.COM  and TRAIN1.COM.
+TEST     DOC  Documentation for test1.com, TRAIN1.COM, TESTEST1.COM.
+DOC      TST  Documentation in test form for TEST1.COM and TRAIN1.COM.
+DEMO     TST  Demontration test for TEST1.COM and TRAIN1.COM.
+SAMPLE   TST  Sample test for TEST1.COM.
+FILES    TXT  Description of files in this program.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0797
 

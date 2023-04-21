@@ -39,6 +39,120 @@ machines:
     It really is a small world and now you can have it all.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## COPYRITE.TXT
+
+{% raw %}
+```
+			     The World Digitized
+copyrite.txt
+vs 1.3								April 1987
+	
+	
+	
+	If  you  have  obtained  The  World Digitized from a share-ware 
+	organization or from a friend, you are encouraged  to  register 
+	it by sending $12 to
+	
+			The World Digitized
+			Basic Display Disk, Dept PC-SIG
+			166 Shady Lane
+			Apollo, PA  15613
+	
+	You  will  be sent the latest version of The Basic Display Disk 
+	including
+	
+		display program in BASIC
+	
+		IEEE double floating format to MS (BASIC) format routine
+	
+		program to reduce detail of map files
+	
+		program to convert ASCII map  files  (.mp1)  to  binary 
+		Mercator projection format (.mp2)
+	
+	and  will be placed on a list to receive news of updates and of 
+	any new products.
+
+	
+	Additionally, those who are really  into  C  language  graphics 
+	programming  can  obtain  the  source  of
+	
+		The Simple Display Program (Tutorial I - V)
+	
+		an Alaska demo
+
+		program to reduce detail of map files (Tutorial XV)
+	
+		program to convert .mp1 files to .mp2 format
+	
+	by sending $19 to
+	
+			The World Digitized
+			C Source Disk, Dept PC-SIG
+			166 Shady Lane
+			Apollo, PA  15613
+	
+	Unfortunately executable versions of the  C  language  graphics 
+	programs are not included because of sub-licensing restrictions.
+	
+
+	The World Digitized and its derivatives are Copyright  1986  by 
+	John  B. Allison.  Permission for non-commercial duplication is 
+	granted provided that the file bearing this copyright notice is 
+	included  with  each  copy.   Prior  written permission must be 
+	obtained  for  the  commericial  distribution  of   The   World 
+	Digitized.
+
+		
+	Commericial  license  for  The  World  Digitized  data embedded 
+	within your own application is reasonably priced.
+```
+{% endraw %}
+
+## FILES495.TXT
+
+{% raw %}
+```
+Disk No  #495
+Program Title: The World Digitized version 1.3 (disk 2 of 3)
+PC-SIG version 1.4
+ 
+The World Digitized is a collection of more than 100,000 points of latitude and
+longitude. When connected together, these co-ordinates form outlines of the
+entire world's coastlands, islands, lakes, and national boundaries in surprising
+detail.
+ 
+The World Digitized is a pure data base and as such contains no programs to
+display the data. Because many would like a starter display program to customize
+with their own ideas, The World Digitized Basic Display Disk is made available
+to those who register their copy of The World Digitized. (See the REGSTRTN.LTR
+file.)
+ 
+Usage: database
+ 
+System Requirements: IBM PC or close compatible, 1 floppy drive, 1 hard drive,
+                     Dos 2.0 or later.
+ 
+Suggested Registration: $19.00
+ 
+File Descriptions:
+ 
+COPYRITE TXT  Copyright notice
+ASIA    <DIR> Data directory containing Asia information
+EUROPE  <DIR> Data directory containing Europe information
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0495
 

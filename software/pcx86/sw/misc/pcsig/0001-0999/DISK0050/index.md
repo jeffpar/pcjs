@@ -68,6 +68,7 @@ machines:
 
 ## ADDCRS.BAS
 
+{% raw %}
 ```bas
 2 INPUT"INPUT THE FILENAME THAT WAS DOWNLOADED WITHOUT CR (d:filename)  ",A$
 4 INPUT"INPUT THE NEW NAME FOR THE DOWNLOADED FILE (d:filename)  ",B$
@@ -86,9 +87,11 @@ machines:
 150 'After adding CRs to the file you can then use EDLIN to remove direct
 160 'statements from the file.
 ```
+{% endraw %}
 
 ## ASCFILTR.BAS
 
+{% raw %}
 ```bas
 10 '    FILTERS  NON-ASCII CHARACTERS FROM A FILE
 20 '    USEFUL FOR CLEANING UP NULLS AND CONTROL CHARACTERS FROM A
@@ -138,9 +141,82 @@ machines:
 460 '
 470 PRINT : PRINT "ERROR CONDITION  "; ERR; "  IN LINE NO. "; ERL: PRINT : STOP
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #50, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ROFF    .EXE         CRC = 72 EB
+
+--> FILE:  ROFF    .DOC         CRC = F4 E8
+
+--> FILE:  ROFF    .H           CRC = C1 12
+
+--> FILE:  ROFF    .HE          CRC = EF 38
+
+--> FILE:  ROFF1   .C           CRC = E4 0C
+
+--> FILE:  ROFF2   .C           CRC = BA 80
+
+--> FILE:  ROFF3   .C           CRC = 02 BC
+
+--> FILE:  FILEIO  .C           CRC = 24 39
+
+--> FILE:  REBOOT  .ASM         CRC = 27 DE
+
+--> FILE:  REBOOT  .EXE         CRC = 8C F1
+
+--> FILE:  REBOOT  .COM         CRC = 00 00
+
+--> FILE:  SDIR    .ASM         CRC = DB D8
+
+--> FILE:  SDIR    .COM         CRC = FC 14
+
+--> FILE:  MUSICBOX.BAS         CRC = 75 20
+
+--> FILE:  DEPREC  .BAS         CRC = 18 47
+
+--> FILE:  TABLET  .BAS         CRC = 8C 37
+
+--> FILE:  TICCLOCK.BAS         CRC = 89 0C
+
+--> FILE:  ADDCRS  .BAS         CRC = 96 B2
+
+--> FILE:  ASCFILTR.BAS         CRC = B9 5B
+
+--> FILE:  COLOR   .COM         CRC = 8C 78
+
+--> FILE:  MONO    .COM         CRC = A5 59
+
+ ---------------------> SUM OF CRCS = 8E E1
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## DEPREC.BAS
 
+{% raw %}
 ```bas
 10 REM ******************** DEPRECIATION PROGRAM ******************************
 20 REM ************ REVISED FOR ECONOMIC RECOVERY ACT OF 1981 *****************
@@ -476,9 +552,11 @@ machines:
 3320 R$ = "ASSET RECOVERY SYSTEM"
 3330 GOTO 730
 ```
+{% endraw %}
 
 ## MUSICBOX.BAS
 
+{% raw %}
 ```bas
 100 REM         ----- BLUES -----
 101 '           TYPED IN WITH MODIFICATIONS BY D.G. PATTERSON
@@ -768,9 +846,896 @@ machines:
 51110 FOR X=1 TO 10:KEY X,FU$(X):NEXT X
 51120 SCREEN 0,0,0:CLS:COLOR 2,0,0:WIDTH 80
 ```
+{% endraw %}
+
+## REBOOT.ASM
+
+{% raw %}
+```
+TITLE REBOOT DOS
+;
+DSEG	SEGMENT	AT 0
+	ORG	01EH*4
+DISK_POINTER	LABEL	DWORD
+FIRST		DW	?
+SECOND		DW	?
+DSEG	ENDS
+;
+CSEG	SEGMENT
+	ASSUME	CS:CSEG,DS:DSEG
+        ORG     100H
+START:  MOV     AX,DSEG
+	MOV	DS,AX
+	MOV	SECOND,0F000H
+	MOV	FIRST,0EFC7H
+	INT	19H
+CSEG	ENDS
+	END	START
+```
+{% endraw %}
+
+## ROFF.DOC
+
+{% raw %}
+```
+August 28, 1982 /* Modified for IBM PC by MSZachmann */
+May 7, 1981
+
+			ROFF
+
+	This version of ROFF, based on the formatter  in  Kernighan
+and Plauger's book SOFTWARE TOOLS, is written in BDS C, and employs
+the  directed  i/o functions that go along with that package. Well,
+half of the directed I/O anyway - it doesn't use  redirected  input
+because  I wanted to be able to format more than one file at a run.
+Please ignore any "odd" comments to myself in ROFF1.C and  ROFF2.C;
+I tried to find them all but there may be a few extra silly remarks
+around.
+
+	For more details on the directed I/O (NDIO in our version)
+see NDIO.C
+
+
+Sample calls:
+
+A> roff filename
+
+	This will send the formatted output to the Console (display)
+
+A> roff >filename2  filename
+
+	This will send the formatted output to filename2
+
+A> roff >PRN:  filename
+
+	This will send the formatted output to the printer.
+
+
+
+
+
+
+
+        Using  ROFF,  you  can  make nice printouts of a file, with as
+little  or as much help from the program as you want, depending on the
+commands.  There  are  default  values  for  all parameters, so if you
+don't put any commands in at all, your file will come out with filled,
+right-justified  lines.   The  default line-length is  80  characters;
+the  default  page-length  is  66 lines per page. "Filled lines" means
+that  as many input words as possible are packed onto a line before it
+is   printed;   "non-filled"   lines  go  through  the  formatter  w/o
+rearrangement.  "Right-justified"  simply  means that spaces are added
+between words to make all the right margins line up nicely. 
+        To  set  a  parameter, use the appropriate commands below. All
+commands  have the form of a period followed by two letters. A command
+line  should  have nothing on it but the command and its arguments (if
+any); any text would be lost. 
+
+        A command argument can be either ABSOLUTE or RELATIVE : 
+
+.in	5	sets the indent value to 5 spaces
+
+.in	+5	sets the indent value to the CURRENT value plus 5
+
+.ls 	-1	sets the line spacing value to the current value 
+                        minus one
+
+        Also,  all commands have a minimum and maximum value that will
+weed out any odd command settings (like setting the line spacing to 
+zero, for example. It won't let you do that, but it could be changed 
+if you REALLY have a burning desire to do so).
+
+        Some  commands  cause  a  "break", which is noted in the table
+below.  Before  such  a  command goes into effect, the current line of
+text  is  put  out,  whether  it is completely filled or not. (this is
+what  happens  at  the  end  of  a  paragraph,  for  example.)  A line
+beginning  with  spaces  or  a  tab  will  cause  a break, and will be
+indented  by that many spaces (or tabs) regardless of the indent value
+at  that  time  (this  is  a "temporary indent", which can also be set
+explicitly).  An all blank line also causes a break.  If you find that
+seem  to  have  some  lines that are indented strangely,  and it's not
+obvious WHY,  look  at which commands  are causing a break,  and which 
+aren't. For instance:
+
+.fi
+.ti 0
+this is a line of text
+.in 8
+					<- blank line
+more text for the machine to play with
+
+
+At first glance it seems obvious that the line "this is a line of text"
+will   be indented zero spaces,  but it won't - it will be indented  8.
+The indent  command  does  NOT cause a break   (although the .ti  does)
+so it will not cause the line to  be put out before  setting the indent
+value to 8.  Then,  when the  blank line is encountered,  it will cause
+a break - and "this is a line of text" will be indented incorrectly.
+
+
+*********************** Table of Commands *****************************
+
+Command	      Break?	Default		Function
+-------       ------    -------         ---------
+.bp n		yes	n =  +1		begin page numbered n
+
+.br		yes			cause a break
+
+.ce n		yes	n = 1		center next n lines
+
+.fi		yes			start filling lines
+
+.fo string	no	empty		sets footer to string
+
+.he string	no	empty		sets header to string
+
+.in n		no	n = 0		sets indent value to n
+
+.ls n		no	n = 1		sets line spacing to n
+
+.m1		no	n = 2		sets topmost margin to n
+
+.m2		no	n = 2		sets 2nd top margin to n lines
+
+.m3		no 	n = 2		1st bottom margin to n lines
+
+.m4		no	n = 2		bottom-most margin to n lines
+
+.nf		yes			stop filling lines
+
+.pl n		no 	n = 66		sets page length to n
+
+.rm n		no	n = 80		sets right margin to n
+
+.sp n		yes	n = 1		space down n lines
+
+.ti n		yes	n = 0		sets temporary indent of n
+
+.ul n		no	n = 1		underline next n lines
+
+----------------------------------------------------------------------
+
+
+
+Here's what the page parameters look like:
+
+_	_________________________________________________
+|	|	top margin - (includes header)		|
+|	|-----------------------------------------------|
+|	|		top margin 2			|
+|	|-----------------------------------------------|
+P	|	:				:	|
+A	|	:<-indent			:	|
+G	|	:				:	|
+E	|	:lots and lots of silly text and:	|
+L	|	:other garbage. Get the picture?:	|
+E	|	   :This is a temp.  indentation:	|
+N	|	:				:	|
+G	|	:		right margin -> :	|
+T	|	:				:	|
+H	|	:				:	|
+|	|-----------------------------------------------|
+|	|		margin 3			|
+|	|-----------------------------------------------|
+|	|	margin 4 - (includes footer)		|
+-	-------------------------------------------------
+
+
+To change the default for any parameter, simply alter ROFFGLOB
+recompile ROFF1.c and ROFF2.c, and re-clink them with NDIO.CRL
+(you can use DIO.CRL, but it doesn't have all the features of
+NDIO )
+
+
+
+************************************************************
+A Few Extra Comments on Some of the Commands:
+************************************************************
+
+                If you want to center lots of lines, but don't
+        want to count them, do something like this:
+
+.ce	1000
+lots and
+lots of words to
+be centered
+.ce 0
+
+        --------------------------------------
+
+        To underline a few words on a line:
+
+.fi
+.ul
+Some
+of the words in
+.ul
+this
+sentence are 
+.ul
+underlined
+.nf
+
+        WOULD PRODUCE:
+
+Some of the words in this sentence are underlined.
+----                 ----              -----------
+
+(obviously you don't have to turn the fill on and off if it's
+ already on )
+
+        ------------------------------------
+
+A new paragrah may be caused by using the temporary indent
+command, like
+
+.ti +5
+
+or by simply beginning the paragraph with a tab, as you would if
+you were just typing.
+
+        ------------------------------------
+
+Headers and Footers.
+
+        A page number can be incorporated into any header or
+footer by putting a "#" in the title where you want the number
+to go:
+
+.he	This is a witty header title for page #
+
+Each time this is printed at the top of a page, the current
+page number will be substituted for the "#".
+
+        ------------------------------------
+If you want to send the output to a file, and don't want the page
+breaks in there ( that's what I did for this ) set margins 1-4 to
+zero.
+
+```
+{% endraw %}
+
+## SDIR.ASM
+
+{% raw %}
+```
+	TITLE	SDIR - SORTED DIRECTORY COMMAND, Version 2.1
+	PAGE	64,101				  ; JAN 1983
+COMMENT |
+    SDIR [d:][filename[.ext]] [options]
+	 [filespec] same as for DIR command
+
+	 [options] * /A - List hidden files.
+		   * /E - Without screen erase.
+		   * /P - Pause when screen full.
+		     /X - Sort by extension.
+		     /S - Sort by size.
+		     /D - Sort by date/time.
+		     /N - Do not sort, original order.
+
+       Default = *.* sorted by name.ext with screen erase.
+       * - Option may be combined with other options.
+
+   This source file was created from an object file obtained
+ from Gene Plantz's BBS in Chicago. The original file name
+ was SD.HEX.  I then used DEBUG and CAPTURE to get the first
+ dis-assembly which  was then edited with WORDSTAR to create
+ a source that when assembled using MASM would duplicate the
+ original object file.
+   Comments have been added and I do hope they are helpful.
+ I have made several modifications to the first version and
+ am continuing to add comments.  This source file is an
+ excellent example for anyone wishing to learn 8086/8088
+ assembly language.  Use at your own risk and feel free to
+ share this file with your friends.
+   I certainly wish that John Chapman would publish his
+ source file.  His comments are sure to be more meaningful
+ than mine could ever be.  Some of the conversion routines
+ are very elegant, but difficult to understand.  As far as
+ I'm concerned, PRINTDD is magic.
+   Several modifications have been made.  They are:
+
+	1. Filespecs are processed like DIR does.
+	2. No sort option was added. /N
+	3. Pause when screen full option added. /P
+	4. Number of files found is printed.
+
+					Ted Reuss
+					Houston, TX
+|
+
+	SUBTTL	EQUATES & STRUCTURES
+	PAGE
+IF1
+DOSCALL MACRO	FUNC,PARM1
+.xcref
+F_C	=	FUNC
+IFNB <PARM1>
+IF F_C EQ 2 OR (F_C GE 4 AND F_C LE 6) OR F_C EQ 14 OR F_C EQ 46
+	MOV	DL,PARM1
+ELSE
+	MOV	DX,OFFSET PARM1
+ENDIF
+ENDIF
+	MOV	AH,FUNC
+	INT	21H
+.cref
+	ENDM
+ENDIF
+.SALL	;supress all macro expansions
+;	PC-DOS INTERRUPT 21H FUNCTION CODES
+;
+@CHROUT EQU	2	;display char in DL
+@KEYIN	EQU	8	;kybd input w/o echo
+@STROUT EQU	9	;print string terminated with $
+@CKEYIN EQU	12	;clr kybd bufr & do inp.func in AL
+@SRCH1	EQU	17	;search for first dir entry
+@SRCH2	EQU	18	;search for next dir entry
+@GETDSK EQU	25	;get default disk drive
+@SETDTA EQU	26	;set disk transfer addr
+@FATAD2 EQU	28	;get FAT of drive # in DL
+@PARSEF EQU	41	;parse filename
+@GETDTE EQU	42	;get system date
+@GETTME EQU	44	;get system time
+
+CR	EQU	0DH	;carriage return
+LF	EQU	0AH	;line feed
+FCB_1	EQU	5CH	;fcb for parameter 1
+PARAM_L EQU	80H	;# characters in PARAM_B
+PARAM_B EQU	81H	;DOS cmd parameter buffer.
+
+; PC-DOS packed date   <yyyyyyym mmmddddd>
+P_DTE	RECORD	P_YR:7,P_MO:4,P_DY:5
+; PC-DOS packed time   <hhhhhmmm mmmsssss>
+P_TME	RECORD	P_HR:5,P_MI:6,P_2S:5
+
+DIRNTRY STRUC		;directory entry structure
+LNK	DW	0	;ptr to next entry
+NAM	DB	8 DUP(0),'.' ;filename
+EXT	DB	3 DUP(0) ;extension
+TME	DW	0	;time
+DTE	DW	0	;date
+SZL	DW	0	;low word of size
+SZH	DW	0	;high word of size
+DIRNTRY ENDS
+
+	SUBTTL	DATA AREA & INITIALIZATION
+	PAGE
+SDIR	SEGMENT PUBLIC 'CODE'
+	ASSUME	CS:SDIR,DS:SDIR,ES:SDIR
+	ORG	100H
+MAIN	PROC	FAR
+	JMP	STARTS
+
+DIRLNK	DW	DIRBUF	;ptr to next opening in DIRBUF
+C1LNK	DW	0	;ptr to row 1, column 1
+C2LNK	DW	0	;ptr to row 1, column 2
+NBRFILS DW	0	;# of files or detail lines
+SRTFLG	DB	0	;if = 0 then sort else no sort
+CLSFLG	DB	0	;if = 0 then clear screen
+EXTFLG	DB	0	;if <> 0 then sort by ext
+SIZFLG	DB	0	;if <> 0 then sort by size
+DTEFLG	DB	0	;if <> 0 then sort by date/time
+PSEFLG	DB	0	;if <> 0 then pause if screen full
+LPERSCR EQU	25	;Lines per screen
+LINCNT	DB	LPERSCR-4 ;Number of lines left
+PSEMSG	DB	'Strike a key when ready . . . $'
+
+HDNG1	DB	'Sorted Disk Directory    Version 2.02     '
+	DB	'DRIVE '
+HDRVE	DB	'@:    Date '
+D_MM	DW	'00'            ;Month
+	DB	'/'
+D_DD	DW	'00'            ;Day
+	DB	'/'
+D_YY	DW	'00'            ;Year
+	DB	'  Time '
+T_HH	DW	'00'            ;Hours
+	DB	':'
+T_MM	DW	'00'            ;Minutes
+	DB	CR,LF
+CRLF	DB	CR,LF,'$'
+HDNG2	DB	'--FILENAME--  -SIZE-  --LAST CHANGE--$'
+	DB	8 DUP(' ')
+SPACES	DB	'$'
+HDNG3	DB	' File(s)',CR,LF,'$'
+
+	SUBTTL	DISK TRANSFER AREA & FREE SPACE ENTRY DEFS
+	PAGE
+
+XFCB	DB	-1,7 DUP(0),11 DUP('?'),25 DUP(0)
+ATTRIB	EQU	XFCB+6		;file attribute
+DRVNBR	EQU	ATTRIB+1	;drive # (1=A, 2=B, etc.)
+
+DTA	DB	40 DUP(0)	;Disk Transfer Area used
+FILNAME EQU	DTA+8		;by SRCHDIR for the
+FILTIME EQU	DTA+30		;directory search.
+FILSIZE EQU	DTA+36
+
+FREESPC DW	0		;Free space entry.
+	DB	'*FREE SPACE*',4 DUP(0)
+LOSIZE	DW	0		;of free space
+HISIZE	DW	0		;of free space
+
+	SUBTTL	MAIN PROGRAM SECTION
+	PAGE
+STARTS:
+	PUSH	DS		;Set up the
+	XOR	AX,AX		; stack for a
+	PUSH	AX		; return to DOS.
+	CALL	GETARGS 	;Process arguments
+	CALL	SRCHDIR 	;Search directory
+	CMP	SRTFLG,0	;Check if any sort
+	JZ	A1		; option selected.
+	CALL	LNKDIRB 	;Leave in original
+	JMP	SHORT A2	; directory order.
+A1:	CALL	SRTDIRB 	;Sort by major key
+A2:	CALL	GETFREE 	;Get free space
+	CALL	SPLTLST 	;Set up for 2 columns
+	CALL	PRTHDNG 	;Print headings
+	CALL	PRTDRVR 	;Print detail lines
+	CALL	PRTNFLS 	;Print # of files
+	RET			;Return to DOS
+MAIN	ENDP
+
+	SUBTTL	GETARGS - PROCESS ARGUMENTS
+	PAGE
+GETARGS PROC	NEAR
+	MOV	SI,PARAM_B	;point to cmd buffer
+	MOV	DI,OFFSET DRVNBR ;point to FCB
+	MOV	AL, 1111B	;Select parse options
+	DOSCALL @PARSEF 	;Parse filename
+	CMP	BYTE PTR [DI],0 ;If <> 0 then
+	JNZ	B1		; not default drive
+	DOSCALL @GETDSK 	;AL <- default disk
+	INC	AL		;Increment drive #
+	STOSB			;Save drive #
+B1:	MOV	SI,PARAM_L	;SI <- ptr cmd length
+	MOV	CH,0
+	MOV	CL,[SI] 	;CL <- # chars in cmd
+	JCXZ	B10
+B2:	INC	SI		;Point to next char
+	CMP	BYTE PTR [SI],'/'
+	JNZ	B8		;If not a slash
+	MOV	AL,[SI+1]	;AL <- option letter
+	AND	AL,0DFH 	;Force to upper-case
+	CMP	AL,'A'          ;Hidden & system files?
+	JNZ	B3		;Nope, try next one.
+	MOV	BYTE PTR ATTRIB,2+4  ;Hidden & system
+B3:	CMP	AL,'E'          ;Without screen erase?
+	JNZ	B4		;Nope, try next one.
+	MOV	CLSFLG,AL
+B4:	CMP	AL,'S'          ;Sort by size?
+	JNZ	B5		;Nope, try next one.
+	MOV	SIZFLG,AL
+B5:	CMP	AL,'D'          ;Sort by date/time?
+	JNZ	B6		;Nope, try next one.
+	MOV	DTEFLG,AL
+B6:	CMP	AL,'X'          ;Sort by extension?
+	JNZ	B7		;Nope, try next one.
+	MOV	EXTFLG,AL
+B7:	CMP	AL,'N'          ;Original order?
+	JNZ	B8		;Nope, try next one.
+	MOV	SRTFLG,AL
+B8:	CMP	AL,'P'          ;Pause when screen full?
+	JNZ	B9		;Nope, try next one.
+	MOV	PSEFLG,AL
+B9:	LOOP	B2		;Test for another param.
+B10:	RET
+GETARGS ENDP
+
+	SUBTTL	SRCHDIR - SEARCH DIRECTORY
+	PAGE
+SRCHDIR PROC	NEAR
+	DOSCALL @SETDTA,DTA	;Set DTA for dir. search
+	DOSCALL @SRCH1,XFCB	;First call to search dir.
+C1:	OR	AL,AL
+	JNZ	C2		;Not found, quit looking.
+	MOV	BX,DIRLNK	;BX <- base of DIRBUF
+	LEA	DI,[BX].NAM
+	MOV	SI,OFFSET FILNAME
+	MOV	CX,SIZE NAM
+	CLD
+	REPZ	MOVSB		;Move filename to DIRBUF
+	MOV	BYTE PTR [DI],'.' ; Store a period
+	INC	DI
+	MOV	CX,SIZE EXT
+	REPZ	MOVSB		;Move ext to DIRBUF
+	MOV	SI,OFFSET FILTIME
+	MOVSW			;Move time to DIRBUF
+	MOVSW			;Move date to DIRBUF
+	MOV	SI,OFFSET FILSIZE
+	MOVSW			;Move size to DIRBUF
+	MOVSW
+	ADD	BX,SIZE DIRNTRY ;Point to next entry
+	MOV	DIRLNK,BX	;Save ptr
+	INC	NBRFILS 	;Increment file count
+	DOSCALL @SRCH2,XFCB	;Search for next file
+	JMP	C1		;Loop for next one
+C2:	RET
+SRCHDIR ENDP
+
+	SUBTTL	SRTDIRB - SORTS ENTRIES IN DIRBUF
+	PAGE
+SRTDIRB PROC	NEAR	;Sorts directory entries in DIRBUF
+	MOV	DI,OFFSET DIRBUF ;Point to DIRBUF
+D1:	CMP	DI,DIRLNK	;Are there anymore?
+	JNC	D8		;NO, exit
+	MOV	SI,OFFSET C1LNK ;Start with column 1 ptr
+D2:	MOV	BX,SI
+	MOV	SI,[BX] 	;SI<-ptr to next entry
+	OR	SI,SI
+	JZ	D7		;if link=0
+	MOV	AX,SI
+	MOV	DX,DI
+	XOR	CL,CL		;CL <- 0
+	CMP	CL,SIZFLG
+	JNZ	D5		;If sort by size
+	CMP	CL,DTEFLG
+	JNZ	D4		;If sort by date/time
+	CMP	CL,EXTFLG
+	JNZ	D3		;If sort by ext
+	LEA	SI,[SI].NAM
+	LEA	DI,[DI].NAM
+	MOV	CX,1+SIZE NAM+SIZE EXT	;# of bytes
+	JMP	SHORT D6
+D3:	LEA	SI,[SI].EXT	;Sort by extension
+	LEA	DI,[DI].EXT
+	MOV	CX,SIZE EXT	;# of bytes
+	JMP	SHORT D6
+D4:	LEA	SI,[SI].DTE	;Sort by date/time
+	LEA	DI,[DI].DTE
+	MOV	CX,2		;# of words
+	STD
+	REPZ	CMPSW
+	MOV	DI,DX
+	MOV	SI,AX
+	JBE	D2
+	JMP	SHORT D7
+D5:	LEA	SI,[SI].SZH	;Sort by size
+	LEA	DI,[DI].SZH
+	MOV	CX,2		;# of words
+	STD
+	REPZ	CMPSW
+	MOV	DI,DX
+	MOV	SI,AX
+	JBE	D2
+	JMP	SHORT D7
+D6:	CLD			;Sort by name.ext
+	REPZ	CMPSB
+	MOV	DI,DX
+	MOV	SI,AX
+	JBE	D2
+D7:	MOV	[DI],SI
+	MOV	[BX],DI
+	ADD	DI,SIZE DIRNTRY ;Point to next entry
+	JMP	D1
+D8:	RET
+SRTDIRB ENDP
+
+	SUBTTL
+	PAGE
+; LNKDIRB - LINKS ENTRIES IN DIRBUF
+
+LNKDIRB PROC	NEAR		;LINK ENTRIES IN DIRBUF
+	MOV	DI,OFFSET DIRBUF
+	MOV	C1LNK,DI       ;Point to 1st entry
+	MOV	CX,NBRFILS	;Set loop counter
+	DEC	CX
+LNK1:	MOV	BX,DI
+	ADD	DI,SIZE DIRNTRY ;Offset to next entry
+	MOV	[BX],DI 	;Store ptr
+	LOOP	LNK1		;Link next entry
+	MOV	[DI],CX 	;Last ptr <- null
+	RET
+LNKDIRB ENDP
+
+; SPLTLST - SPLITS LINKED LIST IN HALF
+
+SPLTLST PROC	NEAR
+	MOV	CX,NBRFILS	;Get # of entries
+	SAR	CX,1		; and divide by 2
+	JZ	F2		;if NBRFILS < 2
+	ADC	CL,0		;Account for odd #
+	MOV	BX,OFFSET C1LNK
+F1:	MOV	BX,[BX] 	;Chain thru list to
+	LOOP	F1		; last row of column 1.
+	MOV	AX,[BX] 	;Get ptr to 1st row of col 2
+	MOV	C2LNK,AX	; C2LNK <- R1,C2 ptr
+	MOV	[BX],CX 	;Last row of col 1 <- null
+F2:	RET
+SPLTLST ENDP
+
+	SUBTTL	GETFREE - GET DISK FREE SPACE
+	PAGE
+GETFREE PROC	NEAR		;cluster = allocation unit
+	MOV	DL,DRVNBR	;Get drive #
+	PUSH	DS		;Save DS
+	DOSCALL @FATAD2 	;Get FAT info from DOS
+	MOV	AH,0		;AL = sector size
+	XCHG	CX,DX		;Sector size times the
+	MUL	DX		; # sectors/cluster
+	PUSH	AX		;Save cluster size
+	XOR	AX,AX		;Unused clusters = 0
+	MOV	SI,2		;Skip first 3 clusters
+E1:	MOV	DI,SI		;DI <- cluster #
+	SHR	DI,1		;Divide cluster number
+	ADD	DI,SI		; by 1.5
+	MOV	DI,[BX+DI]	;Fetch from FAT
+	TEST	SI,1		;Test if even or odd
+	JZ	E2		;If even then skip
+	SHR	DI,1		; else if odd
+	SHR	DI,1		;  right justify the
+	SHR	DI,1		;  cluster number.
+	SHR	DI,1
+E2:	AND	DI,0FFFH	;Mask the low 12 bits
+	JNZ	E3		;If not 0 then skip, else
+	INC	AX		; increment counter.
+E3:	INC	SI		;Point to next cluster
+	LOOP	E1		; and go check it.
+	POP	CX		;Get cluster size, times
+	MUL	CX		;  # of free clusters
+	POP	DS		;Restore DS
+	MOV	LOSIZE,AX	;Save the 32 bit
+	MOV	HISIZE,DX	; binary free space
+	MOV	BX,C1LNK	;Insert FREESPC in
+	MOV	DI,OFFSET FREESPC ;first position
+	MOV	[DI],BX 	; of linked list of
+	MOV	C1LNK,DI	; directory entries.
+	INC	NBRFILS 	;Bump # of entries
+	RET
+GETFREE ENDP
+
+	SUBTTL	PRTHDNG - PRINT HEADINGS
+	PAGE
+PRTHDNG PROC	NEAR
+	MOV	AL,CLSFLG
+	OR	AL,AL
+	JNZ	G1		;If not erase screen
+	SUB	CX,CX
+	MOV	DX,24*256+79	;row=24 col=79
+	MOV	BH,7		;Video mode
+	MOV	AX,0600H
+	INT	10H		;BIOS video call
+	SUB	DX,DX
+	MOV	AH,2		;Clear screen
+	MOV	BH,0
+	INT	10H		;BIOS video call
+G1:	MOV	AL,DRVNBR	;Get drive #
+	ADD	HDRVE,AL	;Convert to ascii
+	DOSCALL @GETDTE ; CX<-year, DH<-month, DL<-day
+	MOV	AL,DH
+	AAM
+	XCHG	AL,AH
+	OR	D_MM,AX 	;Fold into month
+	MOV	AL,DL
+	AAM
+	XCHG	AL,AH
+	OR	D_DD,AX 	;Fold into day
+	MOV	AX,CX
+	SUB	AX,1900
+	AAM
+	XCHG	AL,AH
+	OR	D_YY,AX 	;Fold into year
+	DOSCALL @GETTME ; CH<-hours, CL<-minutes
+	MOV	AL,CH		;AL<-binary hours
+	AAM			;Convert AL to two
+	XCHG	AL,AH		; BCD digits in AX.
+	OR	T_HH,AX 	;Fold into hours
+	MOV	AL,CL		;AL<-binary minutes
+	AAM			;Convert AL to two
+	XCHG	AL,AH		; BCD digits in AX.
+	OR	T_MM,AX 	;Fold into minutes
+	DOSCALL @STROUT,HDNG1	;Print main heading
+	DOSCALL @STROUT,HDNG2	;Print column 1 heading
+	CMP	WORD PTR C2LNK,0
+	JZ	G2		;If not 2 columns
+	DOSCALL @STROUT,SPACES-5 ;Print 5 spaces
+	DOSCALL @STROUT,HDNG2	;Print column 2 heading
+G2:	DOSCALL @STROUT,CRLF	;Start a new line
+	RET
+PRTHDNG ENDP
+
+	SUBTTL	PRINT DETAIL LINES
+	PAGE
+PRTDRVR PROC	NEAR		;Driver routine
+	MOV	BX,C1LNK
+	OR	BX,BX		;more to print?
+	JZ	H2		; no, return
+	MOV	AX,[BX]
+	MOV	C1LNK,AX
+	CALL	PRTDTL		;print column one
+	MOV	BX,C2LNK
+	OR	BX,BX
+	JZ	H1		;If no column 2 entry
+	DOSCALL @STROUT,SPACES-5 ;print 5 spaces
+	MOV	AX,[BX]
+	MOV	C2LNK,AX
+	CALL	PRTDTL		;print column two
+H1:	DOSCALL @STROUT,CRLF
+	CMP	PSEFLG,0	;Check for pause option
+	JZ	PRTDRVR 	;Nope, continue
+	DEC	LINCNT		;Decrement line counter
+	JNZ	PRTDRVR 	;If page not full?
+	MOV	LINCNT,LPERSCR-2 ;Reset to # lines/screen
+	DOSCALL @STROUT,PSEMSG	;Display pause message.
+	MOV	AL,@KEYIN	;Specify input function
+	DOSCALL @CKEYIN 	;Wait for key press
+	DOSCALL @STROUT,CRLF	;Set to new line
+	JMP	PRTDRVR 	;Go do the next line
+H2:	RET
+PRTDRVR ENDP
+
+PRTDTL	PROC	NEAR	;Prints file.ext, size, date & time
+	MOV	CX,1+SIZE NAM+SIZE EXT
+	SUB	DI,DI		;DI <- 0
+I1:	DOSCALL @CHROUT,[BX+DI].NAM
+	INC	DI		;point to next char.
+	LOOP	I1		;go do next char.
+	PUSH	BX		;save entry base
+	MOV	SI,[BX].SZL	;SI <- low size
+	MOV	DI,[BX].SZH	;DI <- high size
+	CALL	PRINTDD 	;Print size
+	POP	BX		;restore entry base
+	DOSCALL @STROUT,SPACES-2 ;print 2 spaces
+	MOV	AX,[BX].DTE	;AX <- packed date
+	CALL	PRTDTE
+	DOSCALL @STROUT,SPACES-2 ;print 2 spaces
+	MOV	AX,[BX].TME	;AX <- packed time
+	CALL	PRTTME
+	RET
+PRTDTL	ENDP
+
+	SUBTTL	PRINTDD - PRINT A DOUBLE WORD IN DI:SI
+	PAGE
+PRINTDD PROC	NEAR	;Prints a 32 bit integer in DI:SI
+	XOR	AX,AX		;Zero out the
+	MOV	BX,AX		; working
+	MOV	BP,AX		; registers.
+	MOV	CX,32		;# bits of precision
+J1:	SHL	SI,1
+	RCL	DI,1
+	XCHG	BP,AX
+	CALL	J6
+	XCHG	BP,AX
+	XCHG	BX,AX
+	CALL	J6
+	XCHG	BX,AX
+	ADC	AL,0
+	LOOP	J1
+	MOV	CX,1710H	;5904 ?
+	MOV	AX,BX
+	CALL	J2
+	MOV	AX,BP
+J2:	PUSH	AX
+	MOV	DL,AH
+	CALL	J3
+	POP	DX
+J3:	MOV	DH,DL
+	SHR	DL,1		;Move high
+	SHR	DL,1		; nibble to
+	SHR	DL,1		; the low
+	SHR	DL,1		; position.
+	CALL	J4
+	MOV	DL,DH
+J4:	AND	DL,0FH		;Mask low nibble
+	JZ	J5		;If not zero
+	MOV	CL,0
+J5:	DEC	CH
+	AND	CL,CH
+	OR	DL,'0'          ;Fold in ASCII zero
+	SUB	DL,CL
+	DOSCALL @CHROUT 	;Print next digit
+	RET			;Exit to caller
+PRINTDD ENDP
+
+J6	PROC	NEAR
+	ADC	AL,AL
+	DAA
+	XCHG	AL,AH
+	ADC	AL,AL
+	DAA
+	XCHG	AL,AH
+	RET
+J6	ENDP
+
+	SUBTTL	PRINT DATE, TIME & # FILES ROUTINES
+	PAGE
+PRTDTE	PROC	NEAR	;Print packed date in AX as MM/DD/YY
+	OR	AX,AX
+	JNZ	K1		;If date <> 0
+	DOSCALL @STROUT,SPACES-8 ;Print 8 spaces
+	RET
+K1:	PUSH	AX
+	AND	AX,MASK P_MO	;Mask the month,
+	MOV	CL,P_MO 	; set shift count,
+	SHR	AX,CL		; right justify, &
+	CALL	PRTBCD		; print it.
+	DOSCALL @CHROUT,'/'
+	POP	AX
+	PUSH	AX
+	AND	AX,MASK P_DY	;Mask the day &
+	CALL	PRTBCD		; print it.
+	DOSCALL @CHROUT,'/'
+	POP	AX
+	AND	AX,MASK P_YR	;Mask the year,
+	MOV	CL,P_YR 	; set shift count,
+	SHR	AX,CL		; right justify,
+	ADD	AX,80		; add in year bias, &
+				; print it.
+PRTBCD: AAM			;Convert AL to BCD
+	OR	AX,'00'         ;Convert to ASCII
+	PUSH	AX
+	DOSCALL @CHROUT,AH	;High order digit
+	POP	AX
+	DOSCALL @CHROUT,AL	;Low order digit
+	RET
+PRTDTE	ENDP
+
+PRTTME	PROC	NEAR	;Print packed time in AX as HH:MM
+	OR	AX,AX
+	JNZ	L1
+	DOSCALL @STROUT,SPACES-5 ;Print 5 spaces
+	RET
+L1:	PUSH	AX
+	AND	AX,MASK P_HR	;Mask the hours,
+	MOV	CL,P_HR 	; set shift count,
+	SHR	AX,CL		; right justify, &
+	CALL	PRTBCD		; print it.
+	DOSCALL @CHROUT,':'
+	POP	AX
+	AND	AX,MASK P_MI	;Mask the minutes,
+	MOV	CL,P_MI 	; set shift count,
+	SHR	AX,CL		; right justify, &
+	CALL	PRTBCD		; print it.
+	RET
+PRTTME	ENDP
+
+PRTNFLS PROC	NEAR	;print number of files
+	MOV	SI,NBRFILS	;get # of files
+	DEC	SI		;-1 for free space
+	XOR	DI,DI		;zero high order
+	CALL	PRINTDD 	;Print # of files
+	DOSCALL @STROUT,HDNG3
+	RET
+PRTNFLS ENDP
+	EVEN
+DIRBUF	DIRNTRY <>	;Buffer for directory entr
+;
+;
+;SOMETHING IS MISSING AFTER THIS!!
+;  I'VE FILLED IN THE TWO STATEMENTS BELOW.
+;THERE MAY STILL BE BUGS.
+;
+;
+SDIR    ENDS
+        END     MAIN
+```
+{% endraw %}
 
 ## TABLET.BAS
 
+{% raw %}
 ```bas
 1 ' This program was uploaded to the Capital PC Users Group Software Exchange
 2 ' Host system by  Alex Hobbs of Raleigh NC on 11-12-82 at 17:20
@@ -963,9 +1928,11 @@ machines:
 8000 GET (0,0)-(319,199),HLPD
 8001 GOTO 7000
 ```
+{% endraw %}
 
 ## TICCLOCK.BAS
 
+{% raw %}
 ```bas
 0 '************************************************************
 1 '*                                                          *
@@ -1383,6 +2350,7 @@ machines:
 10160 NEXT II
 10170 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

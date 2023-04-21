@@ -39,6 +39,48 @@ machines:
     EDIT     EXE  TEXT EDITOR
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #57, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  TRANSLIT.EXE         CRC = F7 8B
+
+--> FILE:  SORT    .EXE         CRC = 57 BC
+
+--> FILE:  FIND    .EXE         CRC = 95 76
+
+--> FILE:  CHANGE  .EXE         CRC = E6 A1
+
+--> FILE:  COMPARE .EXE         CRC = 58 60
+
+ ---------------------> SUM OF CRCS = 23 BE
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0057
 

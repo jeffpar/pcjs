@@ -68,6 +68,7 @@ machines:
 
 ## CHECKOUT.BAS
 
+{% raw %}
 ```bas
 1000 '"CHECKOUT" Test output ports, peripherals and handshake
 1010 REV$="821210"'Robert Hamilton  (415) 493-2664                             »
@@ -218,9 +219,307 @@ machines:
 2490 CLS:LOCATE 21,1:BEEP:CLOSE #1
 2500 PRINT"MENU SELECTION: ";"(";K$;")":PRINT "ERROR NUMBER:  ";ERR;CHR$(10):RESUME 1290
 ```
+{% endraw %}
+
+## COMSPEC4.ASM
+
+{% raw %}
+```
+title COMSPEC - Patch comspec parameter for hard/electronic disk.
+page 64,132
+comment |
+	/////////////////////////////////////////////////////////////////////
+	/  A Patch to DOS 2.0 to allow resetting of the COMSPEC parameter.  /
+	/COMSPEC4.ASM							     /
+	/  Page 10-23 of the DOS 2.0 manual clearly states the the COMSPEC  /
+	/  parameter is used to locate the command processor (COMMAND.COM)  /
+	/  when it needs to be reloaded.  Although the SET command may be   /
+	/  used to respecify the path, DOS does not seem to recognize it.   /
+	/								    /
+	/  This program if included in the AUTOEXEC.BAT file at boot time   /
+	/  along with a SET command will cause DOS to reload COMMAND.COM    /
+	/  from wherever you wish.  My AUTOEXEC.BAT file looks like this:   /
+	/								    /
+	/	    ECHO ** AUTOEXEC.BAT **				    /
+	/	    COMSPEC C:\DOS20\COMMAND.COM			DMO /
+	/	    IF ERRORLEVEL 1 GOTO CSBAD				DMO /
+	/	    SET COMSPEC=C:\DOS20\COMMAND.COM			    /
+	/	    GOTO CSCONT 					DMO /
+	/	 :CSBAD 						    /
+	/	    ECHO COMSPEC ERROR					    /
+	/	 :CSCONT						DMO /
+	/								    /
+	/  I have a TallGrass hard disk which is configured as drives C-F.  /
+	/  There is a sub-directory called \DOS20 with most of the DOS 2.0  /
+	/  commands and most importantly a copy of COMMAND.COM.  This idea  /
+	/  will also work from an electronic disk.  Just remember to copy   /
+	/  COMMAND.COM to the electronic disk in your AUTOEXEC.BAT file.    /
+	/								    /
+	/	       Ted Reuss    Houston, Tx    August 1983		    /
+	/////////////////////////////////////////////////////////////////////
+
+	/ Fixed by Daniel M. O'Brien (21 August 1983). Problem was this
+	/ program only searched the first 64k segment to find the COMSPEC
+	/ string. With systems running DOS 2.0 VDISK (ramdisk) the COMSPEC
+	/ string is located higher in memory. Fix was to loop thru all segments
+	/ from 0 up to the segment containing this program.
+	/ In addition, the new COMSPEC string was changed to reflect the
+	/ use of VDISK as disk C:
+	/ Finally, I want to thank Ted Reuss who developed the concepts
+	/ and the original program as I have been battling this problem for
+	/ about two months and it is now solved.
+	/
+	/ Daniel M. O'Brien (29 August 1983). Specify where COMMAND.COM
+	/ is to come from via command line parameter. Avoids having to
+	/ patch or assemble correct values into place.
+	|
+cseg	segment public 'code'
+	assume	cs:cseg,ds:cseg
+	org	100h			;use EXE2BIN to make .com
+start	proc	far
+	jmp	initial
+
+oprm	db	'a:\COMMAND.COM',0      ;original comspec parameter
+;note that the lower case 'a' is required so we don't match this
+; string since it will be in a low memory disk buffer.
+oprm_l	equ	$-offset oprm
+
+nprm	db	'C:\COMMAND.COM',0 ;user supplied parameter                  DMO
+nprm_l	equ	$-offset nprm
+	db	14 dup(0)	;reserve space for patches
+nprm_len	dw	0	;length of user suppled parameter	     DMO
+
+initial:
+	mov	ax,nprm_l	;get default length			     DMO
+	mov	nprm_len,ax	;initialize default length field	     DMO
+
+	cld			;clear direction flag			     DMO
+	xor	ax,ax		;clear ah,al				     DMO
+	mov	si,80h		;point to input parm area		     DMO
+	lods	byte [si]	;get byte count 			     DMO
+	or	al,al		;any input?				     DMO
+	jz	no$input	;no-use default 			     DMO
+
+	mov	cx,ax		;get user input length			     DMO
+trim_blank:			;					     DMO
+	mov	al,[si] 	;get next byte				     DMO
+	cmp	al,' '          ;leading blank?                              DMO
+	jne	blank_done	;no-then done				     DMO
+	inc	si		;skip leading blank			     DMO
+	loop	trim_blank	;loop					     DMO
+
+blank_done:			;					     DMO
+
+	mov	ax,cx		;save length for update 		     DMO
+	mov	di,offset nprm	;point to path variable 		     DMO
+	rep	movs [di],[si]	;fill in our copy of value		     DMO
+	mov	byte ptr [di],0 ;don't forget to include trailing zero       DMO
+	inc	ax		;bump length by one for trailing zero	     DMO
+	mov	nprm_len,ax	;fill in length of user supplied path	     DMO
+
+no$input:			;					     DMO
+
+	xor	ax,ax
+	mov	es,ax		;Scan for original comspec string
+	mov	di,ax		; begins at 0000:0000.
+bigloop:			;					     DMO
+	mov	cx,0ffffh	;search entire segment			     DMO
+	cld			;set auto-increment
+again:	mov	si,offset oprm+1  ;point to target string
+	mov	al,byte ptr[si-1] ;and fetch first character.
+	and	al,11011111B	;force to upper case
+	repnz	scasb		;loop while not equal
+	jnz	err
+	mov	dx,cx		;save counter
+	mov	cx,oprm_l-1	;get string length-1
+	repz	cmpsb		;loop while equal
+	je	match		;strings match?
+	mov	cx,dx		;nope,
+	jmp	short again	; go look again...
+
+match:	mov	cx,nprm_len	;get length of new comspec
+	mov	si,offset nprm	;point to new comspec
+	sub	di,oprm_l	;back-up to begin of old one
+	rep	movsb		;store new comspec
+	mov	al,0		;set ERRORLEVEL = 0
+	jmp	short exit
+
+err:
+	mov	ax,es		;get current search segment		     DMO
+	add	ax,1000h	;increment to next segment		     DMO
+	mov	cx,ax		;save for update			     DMO
+	mov	ax,cs		;get our code segment			     DMO
+	cmp	cx,ax		;did we reach our code segment yet?	     DMO
+	mov	es,cx		;..in case we did			     DMO
+	mov	di,0		;..beginning of segment 		     DMO
+	jb	bigloop 	;no-continue looking			     DMO
+
+	mov	al,1		;set ERRORLEVEL = 1
+exit:	mov	ah,4CH		;DOS exit function
+	int	21H		;return to DOS
+
+start	endp
+cseg	ends
+	end	start
+```
+{% endraw %}
+
+## COMSPEC4.DOC
+
+{% raw %}
+```
+COMSPEC4.COM
+
+A program from Chicago BBS contributed by Dan O'Brien
+that apparently corrects the "SET COMSPEC" command to
+find COMMAND.COM in subdirectories and not just in the
+root segment.
+
+See beginning of COMSPEC4.ASM for installation instructions.
+
+If need immediate advise, you may call me.
+fred c. chu, 496-1244/office; 984-4075/evenings.
+
+Below is the installaltion instruction from COMSPEC4.DOC.
+
+title COMSPEC - Patch comspec parameter for hard/electronic disk.
+page 64,132
+comment |
+	/////////////////////////////////////////////////////////////////////
+	/  A Patch to DOS 2.0 to allow resetting of the COMSPEC parameter.  /
+	/COMSPEC4.ASM							     /
+	/  Page 10-23 of the DOS 2.0 manual clearly states the the COMSPEC  /
+	/  parameter is used to locate the command processor (COMMAND.COM)  /
+	/  when it needs to be reloaded.  Although the SET command may be   /
+	/  used to respecify the path, DOS does not seem to recognize it.   /
+	/								    /
+	/  This program if included in the AUTOEXEC.BAT file at boot time   /
+	/  along with a SET command will cause DOS to reload COMMAND.COM    /
+	/  from wherever you wish.  My AUTOEXEC.BAT file looks like this:   /
+	/								    /
+	/	    ECHO ** AUTOEXEC.BAT **				    /
+	/	    COMSPEC C:\DOS20\COMMAND.COM			DMO /
+	/	    IF ERRORLEVEL 1 GOTO CSBAD				DMO /
+	/	    SET COMSPEC=C:\DOS20\COMMAND.COM			    /
+	/	    GOTO CSCONT 					DMO /
+	/	 :CSBAD 						    /
+	/	    ECHO COMSPEC ERROR					    /
+	/	 :CSCONT						DMO /
+	/								    /
+	/  I have a TallGrass hard disk which is configured as drives C-F.  /
+	/  There is a sub-directory called \DOS20 with most of the DOS 2.0  /
+	/  commands and most importantly a copy of COMMAND.COM.  This idea  /
+	/  will also work from an electronic disk.  Just remember to copy   /
+	/  COMMAND.COM to the electronic disk in your AUTOEXEC.BAT file.    /
+	/								    /
+	/	       Ted Reuss    Houston, Tx    August 1983		    /
+	/////////////////////////////////////////////////////////////////////
+
+	/ Fixed by Daniel M. O'Brien (21 August 1983). Problem was this
+	/ program only searched the first 64k segment to find the COMSPEC
+	/ string. With systems running DOS 2.0 VDISK (ramdisk) the COMSPEC
+	/ string is located higher in memory. Fix was to loop thru all segments
+	/ from 0 up to the segment containing this program.
+	/ In addition, the new COMSPEC string was changed to reflect the
+	/ use of VDISK as disk C:
+	/ Finally, I want to thank Ted Reuss who developed the concepts
+	/ and the original program as I have been battling this problem for
+	/ about two months and it is now solved.
+	/
+	/ Daniel M. O'Brien (29 August 1983). Specify where COMMAND.COM
+	/ is to come from via command line parameter. Avoids having to
+	/ patch or assemble correct values into place.
+o/////////////////////////////////////////////////////////////////////
+
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #183, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  BOARD   .TST         CRC = 54 53
+
+--> FILE:  CHECKOUT.BAS         CRC = F6 7C
+
+--> FILE:  CMD99   .COM         CRC = 66 E3
+
+--> FILE:  COMPROM .EXE         CRC = A5 43
+
+--> FILE:  COMSPEC4.ASM         CRC = E8 A1
+
+--> FILE:  COMSPEC4.COM         CRC = 39 10
+
+--> FILE:  COMSPEC4.DOC         CRC = DA 4E
+
+--> FILE:  CONFIG  .EXE         CRC = 57 BF
+
+--> FILE:  COPYROM .EXE         CRC = 88 8E
+
+--> FILE:  CRL     .BAS         CRC = 52 77
+
+--> FILE:  CRL     .COM         CRC = 00 00
+
+--> FILE:  CRS     .BAS         CRC = 29 00
+
+--> FILE:  CRS     .COM         CRC = 00 00
+
+--> FILE:  INFO1   .BAT         CRC = 26 BD
+
+--> FILE:  MEM640  .DOC         CRC = F6 10
+
+--> FILE:  MEM640  .ZAP         CRC = 5E B6
+
+--> FILE:  MY-DATE .BAT         CRC = D4 AE
+
+--> FILE:  OLD-NEW .BAT         CRC = A1 98
+
+--> FILE:  RESCMD  .BAS         CRC = 37 01
+
+--> FILE:  RESCMD  .DOC         CRC = 95 C6
+
+--> FILE:  ROMREAD .BAS         CRC = A2 DA
+
+--> FILE:  ROMREAD .DOC         CRC = 42 7C
+
+--> FILE:  VTYPE   .DOC         CRC = 0A B6
+
+--> FILE:  VTYPE   .EXE         CRC = 44 9F
+
+--> FILE:  XXX     .            CRC = 72 3B
+
+--> FILE:  MOVE    .DOC         CRC = 63 E9
+
+--> FILE:  MOVE    .COM         CRC = 33 DC
+
+ ---------------------> SUM OF CRCS = AB F3
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## CRL.BAS
 
+{% raw %}
 ```bas
 10 'CRL.BAS by John R. Herzfeld, P. O. Box 159, Mercer Island, WA 98040
 20 '
@@ -276,9 +575,11 @@ machines:
 1140 DATA &HDF,&H31,&HC0,&H88,&HD6,&HC3
 1150 DATA &H29E5
 ```
+{% endraw %}
 
 ## CRS.BAS
 
+{% raw %}
 ```bas
 20 'CRS.BAS by John R. Herzfeld, P. O. Box 159, Mercer Island, WA 98040
 40 '
@@ -308,9 +609,11 @@ machines:
 540 ' The value in line 560 is the sum of all the values in lines 420 - 520.
 560 DATA &H353
 ```
+{% endraw %}
 
 ## RESCMD.BAS
 
+{% raw %}
 ```bas
 100 '
 200 ' COMMAND.COM   MODIFICATION TRANSFER PROGRAM
@@ -395,9 +698,11 @@ machines:
 5100 DATA  4053, 200, 161, 4054, 5, 2, 4055, 192, 0
 5110 DATA  4056, 0, 72
 ```
+{% endraw %}
 
 ## ROMREAD.BAS
 
+{% raw %}
 ```bas
 100 ' This program will print the copyright date,
 110 ' ROM BIOS date, and machine type
@@ -435,6 +740,90 @@ machines:
 430 PRINT P$
 440 RETURN
 ```
+{% endraw %}
+
+## ROMREAD.DOC
+
+{% raw %}
+```
+ROMREAD.BAS is a BASICA program which reads a ROM address and
+interprets it to display the IBM PC type (PC, XT, PCjr, unknown),
+ROM BIOS chip date and copyright year, and the IBM part number
+for the ROM.
+
+The program was originally published in PC Tech Journal and
+created by Susan Glinert-Cole.  The published listing contained
+several errors, corrected here by Tom Allen , Systems and Programming
+Manager for The Sunmark Companies, St. Louis, MO.
+
+```
+{% endraw %}
+
+## VTYPE.DOC
+
+{% raw %}
+```
+
+ ----------------------------------------------------------------------------
+| * VTYPE * An improved TYPE command for the IBM PC & PC-XT. V. Bly 12/12/83 |
+ ----------------------------------------------------------------------------
+
+SUMMARY
+-------
+      VTYPE is an improved version of the MS-DOS TYPE command.  It provides
+  the new features listed below.
+     1 ... The ability to quickly pause the display by pressing a key.
+	   The display may be restarted by pressing a key again.
+     2 ... The ability to cancel the displayed output at the end of the
+	   current line by pressing the [Esc] key.
+     3 ... The ability to specify the number of spaces per tab in the
+	   displayed output by following the filespec by a number between
+	   1 and 20.  If you do not specify a number, the default value
+	   of 8 spaces per tab stop will be used.
+     4 ... The ability, when using MS-DOS 2.0, of copying a text file
+	   containing tabs to a new file with all tabs expanded to spaces.
+
+      The format for the VTYPE command is:
+					   VTYPE filespec [tab expansion]
+
+EXAMPLES
+--------
+      The following examples assume that the file VTYPE.EXE is on the
+  default disk drive.  Note that "<enter>" means that you should press
+  the enter/return key after typing the command.
+
+  VTYPE MY.TXT <enter>
+	This command will simply display the text file "MY.TXT".  You can
+	pause the output by pressing a key (such as the <space> bar).  You
+	can then restart the display by pressing a key (such as the <space>
+	bar) again, or cancel the output by pressing the [Esc] key.
+
+  VTYPE MYPROG.C 4 <enter>
+	This command will display the text file "MYPROG.C".  However, any
+	tabs in the file will be expanded to 4 spaces per tab stop rather
+	than the normal 8 spaces per tab.
+
+  VTYPE MYPROGA.C 6>MYPROGB.C <enter>
+	This command will copy the text file "MYPROGA.C" to the new file
+	"MYPROGB.C".  Any tabs in the file "MYPROGA.C" will be expanded
+	to 6 spaces per tab stop in the new file "MYPROGB.C".  Of course,
+	this command can only be used with MS-DOS 2.0 or later, since it
+	uses redirection.
+
+NOTES
+-----
+      When redirecting the output of VTYPE to a disk file under MS-DOS 2.0,
+ the End-OF-File termination will be slightly different than normal.  This
+ will not usually be a problem; however, some text handling programs, such
+ as the VEDIT editor, may display a string of "^@"s at the end of the file.
+ If you encounter this, simply delete the string of "^@"s and re-save the
+ file.
+
+      Please send your comments to:  Vincent Bly
+				     Post Office Box 409
+				     Ft. Belvoir, VA  22060
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

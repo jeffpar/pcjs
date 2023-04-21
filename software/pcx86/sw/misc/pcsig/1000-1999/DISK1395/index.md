@@ -31,6 +31,65 @@ machines:
     rich piece of music, even through a PC speaker.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1395.TXT
+
+{% raw %}
+```
+Disk No: 1395
+Program Title:  PIANOMAN GOES BACH
+PC-SIG version 1
+
+PIANOMAN GOES BACH contains twelve musical selections (28 minutes) by
+Johann Sebastian Bach: the first three two- and three-part inventions
+and Well Tempered Clavier (both preludes and fugues), and three suite
+movements, transcribed and adapted for IBM-compatible PC using Pianoman
+software.  The main menu offers the user many options in playing the
+twelve works and is easy to use even for beginners.
+
+The files are run from a menu as singles or in various sequences and
+provide approximately 30 minutes of Bach's work.  Each selection is a
+rich piece of music, even through a PC speaker.
+
+Synopsis:  Twelve compositions from Johann Sebastian Bach and PIANOMAN. Play
+real music on your IBM-PC and compatibles.
+
+Usage:  Entertainment/Music.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $7.50
+
+File Descriptions:
+
+PLAYBACH BAT  Batch file, introduction and menu.
+2P-INV1  EXE  Two-part invention, C-major, Allegro.
+2P-INV2  EXE  Two-part invention, C-minor, Allegro moderato.
+2P-INV3  EXE  Two-part invention, D-major, Vivace.
+3P-INV1  EXE  Three-part invention, C-major, Allegro moderato.
+3P-INV2  EXE  Three-part invention, C-minor, Allegro vivace.
+3P-INV3  EXE  Three-part invention, D#-major, Allegro moderato.
+ALLEMAND EXE  Allemande from the First Partita in B-flat major.
+BOURREE  EXE  Bourreé from the English Suite in A-minor.
+COURANTE EXE  Courante from the French Suite in G-major.
+WTC-1ST  EXE  Well Tempered Clavier:  Prelude and Fugue in C-major.
+WTC-2ND  EXE  Well Tempered Clavier:  Prelude and Fugue in C-minor.
+WTC-3RD  EXE  Well Tempered Clavier:  Prelude and Fugue in C#-major.
+BACHREAD ME   General description and documentation.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1395
 

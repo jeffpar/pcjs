@@ -48,8 +48,124 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #224, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  README  .            CRC = 22 7C
+
+--> FILE:  PC-CALC .DOC         CRC = 37 83
+
+--> FILE:  PC-CALC .BAS         CRC = 95 DF
+
+--> FILE:  PC-CALC .EXE         CRC = F5 C8
+
+--> FILE:  SCRNSAVE.COM         CRC = BD B0
+
+--> FILE:  SCRNSAVE.DOC         CRC = B4 5C
+
+--> FILE:  SCRNSAVE.ASM         CRC = 8D 4A
+
+--> FILE:  KBUFF   .DOC         CRC = 2C C9
+
+--> FILE:  KBUFF   .COM         CRC = 00 00
+
+--> FILE:  SDIR1   .COM         CRC = 7D 6E
+
+--> FILE:  SDIR1   .DOC         CRC = AD 68
+
+ ---------------------> SUM OF CRCS = 3C 9B
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## KBUFF.DOC
+
+{% raw %}
+```
+    The program KBUFF.COM expands the IBM BIOS keyboard buffer from
+15 to 159 characters.  It is designed to replace the program KBD_FIX
+(or sometimes KEYBUFF) by John Socha in the Nov 83 SoftTalk.  This
+new version will not work with the very oldest PCs (ROM BIOS dated
+04/24/81), but will work on the IBM PC XT or the newer PC's (ROM 
+BIOS dated 10/27/82 or later).  The problem with Socha's program is 
+that it will not work with many text editors, especially if you 
+install it with SCRNSAVE, SCROLLK, or PROKEY in the wrong order.  
+In order to make his program work on all IBM PC's, Socha was forced 
+to intercept both keyboard interrupts 9 and 16.  This interfears 
+with other programs using these interrupts or the keyboard buffer.  
+
+   KBUFF does not intercept any interrupts.  Instead it takes
+advantage of two variables defined by the new BIOS which point to
+the beginning and end of the keyboard buffer.  KBUFF mearly changes
+these and the buffer head and tail, to point to a new buffer starting
+somewhere after 5C in its PSP.  There is an additional problem in that
+the IBM console driver (located in IBMBIO.COM) stupidly assumes that
+the buffer still starts on a 1E boundary.  (It clears the buffer by
+plugging 1E into the low byte of the buffer head and tail!)  To avoid
+problems, KBUFF makes certain that your new buffer starts at xx00,
+thus insuring that it contains contains the address xx1E.  
+
+   Here's the code for KBUFF.  Since it's so short I just assembled
+it with the DOS 2.0 DEBUG Assemble command.
+
+DEBUG KBUFF.COM
+A 100                           ;Start assembling code at address 100
+        XOR     AX,AX           ;segment 0
+        MOV     DS,AX           ;
+        MOV     AX,CS           ;calculate number of bytes from the
+        SUB     AX,0040         ;  BIOS data segment to cs:5C
+        MOV     CL,04           ;
+        SHL     AX,CL           ;
+        MOV     DX,AX           ;dx will keep track of memory needed
+        ADD     AX,005C         ;first usable byte of memory in PSP
+        ADD     AX,FF           ;round up
+        AND     AX,FF00         ;
+        CLI                     ;interrupts off
+        MOV     [041A],AX       ;buffer_head
+        MOV     [041C],AX       ;buffer_tail
+        MOV     [0480],AX       ;buffer_start
+        ADD     AX,140          ;make a 160 word buffer
+        MOV     [0482],AX       ;buffer_end
+        STI                     ;interrupts back on
+        SUB     AX,DX           ;space used
+        ADD     AX,30           ;saftey space
+        MOV     DX,AX           ;
+        INT     27              ;Terminate, Stay Resident
+RCX                             ;Put size of file in CX register
+ 32                             ;
+W                               ;Write the file Kbuff.com
+Q                               ;Quit debug
+
+                                                      Guy C. Gordon
+                                                White Crane Systems
+
+```
+{% endraw %}
+
 ## PC-CALC.BAS
 
+{% raw %}
 ```bas
 1  '--------------------------------------------------------------------------
 2  '|  PC-Calc 1.02             15 July, 1984           White Crane Systems  |
@@ -631,6 +747,497 @@ machines:
 9080 IF INKEY$="" THEN 9080
 9090 CLOSE: RESUME 300
 ```
+{% endraw %}
+
+## SCRNSAVE.ASM
+
+{% raw %}
+```
+		page	60,132
+		page
+;-----------------------------------------------------------------------------;
+;	Scrnsave - a program to disable a video monitor after 3 minutes.      ;
+;	Published:	SOFTALK for the IBM Personal Computer		      ;
+;			December 1983					      ;
+;			'Save your Monitor Screen'; pages 81-86               ;
+;	Author	 -	John Socha					      ;
+;	Transcribed	John Teichert					      ;
+;									      ;
+;	Note that several inconsistencies appeared in the article in Softalk  ;
+;	notably the video disable bit was continually described in the text   ;
+;	as bit 2 of the 3x8 register.  The bit was actually bit three and     ;
+;	was correct as the program was written. The cursor setting for	      ;
+;	the monochrome was printed as 0C0BH serveral times when it is	      ;
+;	actually 0B0CH again correct in the program code.		      ;
+;									      ;
+;	Being a lazy typist I have taken several liberties with the labels    ;
+;	used in the program.						      ;
+;	TOD for TIME_OF_DAY						      ;
+;	KB  for keyboard  etc ad nauseum.				      ;
+;-----------------------------------------------------------------------------;
+;	change	date	    author	      description		      ;
+;	1     01/28/84	John Teichert  Add ability to specify the time before ;
+;				       screen is disabled on command line     ;
+;	2     01/28/84	John Teichert  Add ability to change time out value   ;
+;				       and prevent multiple invocation	      ;
+;				       problems 			      ;
+;	3     02/02/84	John Teichert  Add ability to disable scrnsave before ;
+;				       using programs that take over video    ;
+;				       and keyboard interrupts. 	      ;
+;-----------------------------------------------------------------------------;
+		page
+;----------------------------------------------------------------------------;
+;	interrupt vectors for clock; keyboard; and video		     ;
+;----------------------------------------------------------------------------;
+
+VECTORS 	SEGMENT AT 0H
+		ORG	8H*4
+TOD_INT_VECTOR		LABEL	DWORD	; time of day interrupt vector
+		ORG	9H*4
+KB_INT_VECTOR		LABEL	DWORD	; Keyboard interrupt vector
+		ORG	10H*4
+VIDEO_INT_VECTOR	LABEL	DWORD	; Video interrupt vector
+VECTORS 	ENDS
+
+;-----------------------------------------------------------------------------;
+;	The data area starting at 400H is used by ROM BIOS routines.	      ;
+;	ADDR_6845 contains the base address of the current display	      ;
+;	adapter and CRT_MODE_SET contains the current setting of the 3X8      ;
+;	display register.  Here X is B for the monochrome display adapter     ;
+;	and D for the color-graphics display adapter.			      ;
+;-----------------------------------------------------------------------------;
+
+ROM_BIOS_DATA	SEGMENT AT 40H
+		ORG	10H
+EQUIP_FLAG	DW	?		; Used to determin display type
+		ORG	60H
+CURSOR_MODE	DW	?		; Current cursor mode(start,stop line)
+		ORG	63H
+ADDR_6845	DW	?		; Base address of active display
+CRT_MODE_SET	DB	?		; Current setting of 3X8 register
+ROM_BIOS_DATA	ENDS
+		page
+;-----------------------------------------------------------------------------;
+;	Start of local data and executable code 			      ;
+;-----------------------------------------------------------------------------;
+
+CODE_SEG	SEGMENT
+		ASSUME	CS:CODE_SEG
+		ORG	100H		; For Com files a must
+BEGIN:		JMP	INIT_VECTORS	; Jump over data areas and init
+SCRSMSG 	DB	'SCRS1.00'
+ROM_TOD_INT	DD	?		; Save area for ROM interrupt
+ROM_KB_INT	DD	?		;   addresses
+ROM_VIDEO_INT	DD	?
+
+TIMER_DELAY	DW	0		; Delay count b4 turning off display
+MIN_COUNTER	DW	?		; Clock ticks 3276D=3minutes
+OLD_CURSOR_TYPE DW	?		; Hold old cursor type
+
+		page
+;-----------------------------------------------------------------------------;
+;	Turn video display after MIN_COUNTER ticks have occurred	      ;
+;	Calls:		ROM_TOD_INT					      ;
+;	Reads:		ADDR_6845,CRT_MODE_SET				      ;
+;      Writes:		MIN_COUNTER,OLD_CURSOR_TYPE			      ;
+;-----------------------------------------------------------------------------;
+
+INTERCEPT_TOD	PROC	NEAR
+	PUSH	AX
+	PUSH	DS
+	MOV	AX,CS			; Set dataseg to code seg
+	MOV	DS,AX
+	ASSUME	DS:CODE_SEG		; Tell assembler
+	MOV	AX,7FFFH		; Check to see if not to touch
+	CMP	AX,TIMER_DELAY		; Q. leave alone
+	JE	GOTO_ROM_TOD		;   Yes bypass
+	DEC	MIN_COUNTER		; Q. Minutes eaten up
+	JZ	TURN_VIDEO_OFF		; Yes turn off video
+	JG	GOTO_ROM_TOD		; No leave it
+	MOV	MIN_COUNTER,0		; Already off, reset counter
+GOTO_ROM_TOD:
+	POP	DS
+	POP	AX
+	ASSUME	DS:NOTHING		; Drop Data seg addressability
+	JMP	ROM_TOD_INT		; Resume further tod processing
+TURN_VIDEO_OFF:
+	ASSUME	DS:CODE_SEG
+	PUSH	BX
+	PUSH	CX
+	PUSH	DX
+	MOV	AH,3			; Get current cursor type into CX
+	PUSHF				; Simulate an interrupt
+	CALL	ROM_VIDEO_INT		; On to regular video int
+	MOV	OLD_CURSOR_TYPE,CX	; Save value
+	MOV	CH,0FH			; Setup to remove cursor
+	MOV	CL,0
+	MOV	AH,1
+	PUSHF
+	CALL	ROM_VIDEO_INT		; On to regular video int
+	POP	DX
+	POP	CX
+	POP	BX
+	PUSH	DX			; Turn off video
+	MOV	AX,ROM_BIOS_DATA
+	MOV	DS,AX
+	ASSUME	DS:ROM_BIOS_DATA
+	MOV	DX,ADDR_6845		; Get video base
+	ADD	DX,4			; IO address for 3X8
+	MOV	AL,CRT_MODE_SET
+	AND	AL,0F7H 		; Turn off video enable bit
+	OUT	DX,AL
+	POP	DX
+	JMP	GOTO_ROM_TOD
+
+INTERCEPT_TOD	ENDP
+		page
+;-----------------------------------------------------------------------------;
+;	This procedure resets the timer count to 0CCCH and turns the display  ;
+;	on if it was off						      ;
+;-----------------------------------------------------------------------------;
+RESET_COUNTER	PROC	NEAR
+	PUSH	AX
+	PUSH	DX
+	PUSH	DS
+	MOV	AX,CS
+	MOV	DS,AX
+	ASSUME	DS:CODE_SEG
+	CMP	MIN_COUNTER,0		; Q. Was display off
+	JG	VIDEO_NOT_OFF		; No then reset
+	PUSH	DS			; YES turn video on
+	MOV	AX,ROM_BIOS_DATA
+	MOV	DS,AX			; setup addressability
+	ASSUME	DS:ROM_BIOS_DATA
+	MOV	DX,ADDR_6845		; Addr of display
+	ADD	DX,4			; 3X8 reg
+	MOV	AL,CRT_MODE_SET
+	OR	AL,8
+	OUT	DX,AL			; Enable Video
+	POP	DS
+	ASSUME	DS:CODE_SEG
+	PUSH	CX
+	MOV	CX,OLD_CURSOR_TYPE
+	MOV	AH,1			; Tell BIOS to restore old cursor
+	PUSHF
+	CALL	ROM_VIDEO_INT
+	POP	CX
+VIDEO_NOT_OFF:
+	MOV	AX,TIMER_DELAY
+	MOV	MIN_COUNTER,AX
+	POP	DS
+	POP	DX
+	POP	AX
+	RET
+RESET_COUNTER	ENDP
+
+INTERCEPT_KB_INT	PROC	NEAR
+	ASSUME	DS:NOTHING
+	CALL	RESET_COUNTER		; Reset timer counter
+	JMP	ROM_KB_INT		; Continue with keyboard
+INTERCEPT_KB_INT	ENDP
+	page
+;-----------------------------------------------------------------------------;
+;	This procedure resets the cursor type to the default cursor type      ;
+;	for the display adapter in use:0607h for the color/graphics adapter   ;
+;	0B0CH for the monochrome display.				      ;
+;-----------------------------------------------------------------------------;
+
+SET_CURSOR_MODE 	PROC	NEAR
+	PUSH	AX
+	PUSH	CX
+	PUSH	DS
+	MOV	AX,ROM_BIOS_DATA
+	MOV	DS,AX			; Addressability to ROM BIOS
+	ASSUME	DS:ROM_BIOS_DATA
+	MOV	AX,EQUIP_FLAG
+	AND	AL,30H			; Isolate adapter info
+	MOV	CX,0607H		; Setup for color
+	CMP	AL,30H			; Q. Is Mono active
+	JNE	COLOR_ACTIVE		; No color adapter is
+	MOV	CX,0B0CH		; So setup for mono
+COLOR_ACTIVE:
+	MOV	AH,1			; Set up for video io call
+	PUSHF				; Simulate interrupt by pushing flags
+	CALL	ROM_VIDEO_INT
+	POP	DS
+	POP	CX
+	POP	AX
+	RET
+SET_CURSOR_MODE 	ENDP
+
+;-----------------------------------------------------------------------------;
+;	This procedure resets the timeout counter and passes control to       ;
+;	 ROM VIDEO IO Routines. 					      ;
+;-----------------------------------------------------------------------------;
+INTERCEPT_VIDEO_IO	PROC	NEAR
+	ASSUME	DS:NOTHING
+	CMP	AH,0FFH 		; Dummy interupt to see if installed
+	JNE	IVI_CHK_RST		; Check to see if reset
+	MOV	AX,CS:WORD PTR SCRSMSG[0]   ; Move first two bytes in
+	MOV	BX,CS:WORD PTR SCRSMSG[2]   ; Move second two bytes
+	JMP	NOT_MODE_SET		; EXIT
+IVI_CHK_RST:
+	CMP	AH,0FEH 		; Reset parms
+	JNE	IVI_RST_CNT
+	MOV	CS:TIMER_DELAY,BX	; Reset parms
+	JMP	NOT_MODE_SET
+IVI_RST_CNT:
+	CALL	RESET_COUNTER
+	PUSHF				; Simulate interrupt
+	CALL	ROM_VIDEO_INT
+	OR	AH,AH			; Q. Asking for set mode
+	JNZ	NOT_MODE_SET
+	CALL	SET_CURSOR_MODE 	; Yes so set to default
+NOT_MODE_SET:
+	IRET
+INTERCEPT_VIDEO_IO	ENDP
+	page
+;-----------------------------------------------------------------------------;
+;	This procedure intializes the interrupt vectors 		      ;
+;-----------------------------------------------------------------------------;
+;									      ;
+;	NOTE --- NOTE --- NOTE --- NOTE --- NOTE --- NOTE --- NOTE	      ;
+;	BOTH DOS 1.1 AND DOS 2.0 HAVE FUNCTION 25 FOR PERFORMING INTERRUPT    ;
+;	RESETING.  DOS 2.0 HAS AN INTERRUPT FUNCTION 35 FOR OBTAINING THE     ;
+;	ADDRESS OF A INTERRUPT.  PERSONS WISHING TO PERFORM INTERRUPT	      ;
+;	RESETTING SHOULD USE THE OFFICIAL MECHANISMS AS THIS MAY BECOME       ;
+;	IMPORTANT IN MULTITASKING SITUATIONS ONCE IBM WAKES UP. 	      ;
+;					John Teichert			      ;
+;									      ;
+;-----------------------------------------------------------------------------;
+INIT_VECTORS		PROC	NEAR
+	ASSUME	DS:CODE_SEG		; Setup to analyze input if any
+	ASSUME	SS:CODE_SEG		; Setup stack seg register address
+	MOV	SP,100H 		; Point to top of unformatted area
+	MOV	SI,080H 		; Point to unformatted parameter area
+	CLD				; Clear direction flag
+	LODSB				; Get first byte into ax
+	OR	AL,AL			; See if any input
+	JZ	TIM_DEFAULT		; No use default of 3 minutes
+	XOR	AH,AH			; Clear high order register
+	MOV	CX,AX			; Move to count register
+	XOR	BX,BX			; Zero Working Reg
+TIM_LOOP:
+	LODSB				; Get first data byte
+	CMP	AL,' '                  ; Is it blank
+	JNE	TLP000			; No so bypass decrement loop would do
+	LOOP	TIM_LOOP		; Yes loop back
+TIM_DEFAULT:
+	MOV	AL,'3'                  ; Set default value
+	MOV	CX,1			; Fake having a parm of 3
+	JMP	SHORT TVL001		;
+TLP000:
+	JMP	SHORT TVL000A		; bypass LODSB
+TIM_VAL_LOOP:				;
+	LODSB				; Get another value
+TVL000A:
+	CMP	AL,'-'                  ; Going for disable
+	JNE	TVL000B 		; NO continue
+	MOV	AX,7FFFH		; Assume they are so disable
+	MOV	TIMER_DELAY,AX		;   and set value
+	JMP	CHK_IS_INSTALLED	; Check whether or not been here
+TVL000B:
+	CMP	AL,'0'                  ; Q. Is it 0 or above
+	JGE	TVL000			;    Yes check high range
+	JMP	BAD_PARM		;    No bad
+TVL000:
+	CMP	AL,'9'                  ; Q. Is it 9 or below
+	JLE	TVL001			;    Yes cont
+	JMP	BAD_PARM		;    No bad
+TVL001:
+	SUB	AL,'0'                  ; Get value relative to hex 0
+	MOV	BX,AX			; Save for time being
+	MOV	AX,TIMER_DELAY		; Get prior value
+	MUL	PWR10			; Multiply by 10
+	JNO	TVL002
+	JMP	BAD_PARM		; If overflowed then too high
+TVL002:
+	ADD	AX,BX			; Add last value
+	MOV	TIMER_DELAY,AX		; Move it back in
+	LOOP	TIM_VAL_LOOP		; if another
+	MOV	AX,TIMER_DELAY		; Now figure out delay time
+	CMP	AX,MAX_DELAY
+	JLE	TVL003
+	JMP	BAD_PARM
+TVL003:
+	CMP	AX,MIN_DELAY
+	JGE	TVL004
+	JMP	BAD_PARM
+TVL004:
+	MUL	SEC_MIN 		; Multiply by num seconds in minute
+	MUL	TICKS_SEC		; timer number timer tics per second
+	MOV	TIMER_DELAY,AX
+CHK_IS_INSTALLED:
+	MOV	AH,0FFH 		; Setup Inquiry
+	INT	10H			; Call Video interupt
+	CMP	AX,WORD PTR SCRSMSG[0]	; If up already this will find out
+	JNE	SET_VECTORS		;  Nope so init
+	CMP	BX,WORD PTR SCRSMSG[2]	;  Make real sure
+	JNE	SET_VECTORS		;  Nope so init
+	MOV	BX,TIMER_DELAY		; Get value to change to
+	MOV	AH,0FEH 		; Set for change
+	INT	10H			; To the video interupt
+	JMP	SPILL_CHANGED		; Tell the world
+	page
+SET_VECTORS:
+	ASSUME	DS:VECTORS		; Setup data seg for vectors
+	MOV	AX,VECTORS
+	MOV	DS,AX
+	CLI				; Disable interrupts while manipulating
+	MOV	AX,TOD_INT_VECTOR	; Get tod interrupt vector
+	MOV	ROM_TOD_INT,AX		; Save
+	MOV	AX,TOD_INT_VECTOR[2]
+	MOV	ROM_TOD_INT[2],AX
+	MOV	TOD_INT_VECTOR,OFFSET INTERCEPT_TOD
+	MOV	TOD_INT_VECTOR[2],CS
+
+	MOV	AX,KB_INT_VECTOR
+	MOV	ROM_KB_INT,AX
+	MOV	AX,KB_INT_VECTOR[2]
+	MOV	ROM_KB_INT[2],AX
+	MOV	KB_INT_VECTOR,OFFSET INTERCEPT_KB_INT
+	MOV	KB_INT_VECTOR[2],CS
+
+	MOV	AX,VIDEO_INT_VECTOR
+	MOV	ROM_VIDEO_INT,AX
+	MOV	AX,VIDEO_INT_VECTOR[2]
+	MOV	ROM_VIDEO_INT[2],AX
+	MOV	VIDEO_INT_VECTOR,OFFSET INTERCEPT_VIDEO_IO
+	MOV	VIDEO_INT_VECTOR[2],CS
+
+	MOV	AX,TIMER_DELAY
+	MOV	MIN_COUNTER,AX
+
+	STI				; NOW that all vecotrs are set reenable
+	CALL	SET_CURSOR_MODE 	; Set cursor mode to default
+	MOV	DX,OFFSET INIT_VECTORS
+	INT	27H			; Terminate but stay resident
+	page
+SPILL_CHANGED:
+	MOV	AH,9			; DOS put video
+	MOV	DX,OFFSET SC_MSG1	; Message to spill
+	INT	21H			; To the op sys
+	JMP	EXIT_DOS		; That's all folks
+
+BAD_PARM:
+	MOV	AH,9			; DOS put video interupt
+	MOV	DX,OFFSET BP_MSG1	; More for interupt
+	INT	21H			; DOS interrupt
+	MOV	AH,9
+	MOV	DX,OFFSET BP_MSG2
+	INT	21H
+	MOV	AH,9
+	MOV	DX,OFFSET BP_MSG3
+	INT	21H
+EXIT_DOS:
+	INT	20H			; DOS return
+INIT_VECTORS	ENDP
+
+PWR10		DW	10		; Power of 10
+TICKS_SEC	DW	18		; Number of timer ticks per second
+MAX_DELAY	DW	30		; Max delay time
+MIN_DELAY	DW	3		; Set Minimum to 3 minutes
+SEC_MIN 	DW	60		; Number of secs in minute
+BP_MSG1 DB	'    ERR Usage:  scrnsave  [nn] [-d]',13,10,'$'
+BP_MSG2 DB	'        where nn = ( 3 - 30 )',13,10,'$'
+BP_MSG3 DB	'              -d = disable scrnsave',13,10,'$'
+
+SC_MSG1 DB	'  Scrnsave time out value changed',13,10,'$'
+
+CODE_SEG	ENDS
+	END	BEGIN
+```
+{% endraw %}
+
+## SCRNSAVE.DOC
+
+{% raw %}
+```
+
+           SCRNSAVE 1 SYNTAX:  scrnsave  [nn] [-d]
+                               where nn = (3 - 30)
+                                     -d = disable scrnsave
+
+
+    Looking over the office with all the PC screens merrily lit up (even though
+no one was using them), burning Lotus 123 and Visi-Calc into the screens, it 
+seemed like SCRNSAVE from Softalk magazine was just the thing to save those 
+one-eyed CRT's.  How marvelous--after three minutes Blinko!, the screen fades 
+and preserves those vital phosphors.
+
+    The trouble started with Debug.  Just as you got to the data where things
+were going wrong--Blinko!  Hit a key and lose concentration.  The real killer 
+was our 3278 emulator.  The first fix was the ability to specify the timeout
+limit on the command line.  But the 3278 emulator took over all the keyboard
+and display interrupts, and after 10 minutes the screen went out anyway and 
+you felt silly tring to get it back on.  Controlling time out wasn't enough, 
+now I needed to disable it too.  Sooooooooo SCRNSAVE 1 was born.
+
+
+   SCRNSAVE 1 FEATURES AND PROBLEMS RESOLVED:
+   ------------------------------------------
+
+   1.  Fixed   - Mulitple invocation used to eat up memory.  Scrnsave 1 uses 
+       the standard DOS exit when invoked multiple times.
+
+   2.  Feature - Specify timeout value in minutes on command line.  Scrnsave
+       now accepts values between 3 minutes and 30 minutes.
+
+   3.  Feature - Disable Scrnsave when necessary from command line with the
+       -d option.
+
+   4.  NICE    - Scrnsav1 occupies only 44 more bytes than the original
+       (592 as oppossed to 544) although the command module is twice as large.
+
+
+   PROBLEMS NOT RESOLVED:
+   ----------------------
+
+   1. Problem - Scrnsave does not use the function 25 to set interrupt vectors
+      nor function 35 to get the vectors.  This should not be a problem until
+      multi-tasking arives.
+
+   2. Problem - Since Scrnsave uses a dummy function in the video display
+      interrupt 10 (AH = X'FF' and AH = X'FE'), there is the potential problem
+      of interfering with other programs taking over this interrupt and using
+      the same invalid function numbers.  However, this is very unlikely.
+
+
+                                                     John Teichert
+                                                     Atlanta, Ga.
+
+```
+{% endraw %}
+
+## SDIR1.DOC
+
+{% raw %}
+```
+        SDIR - SORTED DIRECTORY COMMAND, Version 1.30     Nov. 1983
+
+    SDIR [d:][filename[.ext]] [options]
+     [filespec] same as for DIR command
+
+     [options]  * /P - Print image - No Pause, erase, etc.
+                * /C - Single Column display.
+                * /E - No screen Erase.
+                * /A - List All (including hidden) files.
+                  /X - Sort by EXtension.
+                  /S - Sort by Size.
+                  /D - Sort by Date/time.
+                  /N - No sort, original order.
+
+       Default = *.* sorted by name.ext with screen erase.
+       * - Option may be combined with other options.
+
+	The bottom line displays the total number of file listed, the
+    number of bytes they contain, and the number of bytes free on the
+    diskette.   The directory will pause when the screen is full  un-
+    till a key is struck.  The /P option (Print image)  turns off the
+    pause and screen erase for use when printing or  in a batch file.
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -45,6 +45,55 @@ machines:
     register.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1906.TXT
+
+{% raw %}
+```
+Disk No: 1906                                                           
+Disk Title: Lotto Challenger                                            
+PC-SIG Version: S2.0                                                    
+                                                                        
+Program Title: Lotto Challenger                                         
+Author Version: 3.5                                                     
+Author Registration: $29.50                                             
+Special Requirements: Color monitor, hard disk, and printer recommended.
+                                                                        
+Given the astronomical odds against winning state lotteries, you must   
+use a scientific approach to playing the lottery if you expect to win   
+consistently.  LOTTO CHALLENGER is designed for use with all Pick-5,    
+Pick-6 and Pick-7 lottery games.  Some of its functions can also be used
+with Daily 3 or 4 digit number games.                                   
+                                                                        
+LOTTO CHALLENGER greatly improves your odds of winning by using two     
+proven techniques; statistical analysis and lotto number systems.  Using
+statistical analysis, LOTTO CHALLENGER analyzes the numbers drawn in    
+previous drawings.  Numbers are broken down into several categories:    
+Hot, Cold, Overdue, and Last Drawing.  Averages and percentages are     
+calculated from all the previous drawings for the above categories.     
+                                                                        
+All program functions are menu driven and easy to use with the keyboard 
+or a mouse.  Data entry screens prompt the user and will not allow      
+invalid entry, and a pop-up help window is always available.  All this, 
+combined with colorful sliding screens, make LOTTO CHALLENGER an        
+enjoyable program to use.                                               
+                                                                        
+LOTTO CHALLENGER is distributed with two current Florida state lottery  
+data files.  Though the program can be easily configured for any other  
+state lottery, use these files as you explore and learn how to use LOTTO
+CHALLENGER.  A state data file of your choice will be mailed to you at  
+no charge when you register.                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1906
 

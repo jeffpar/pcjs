@@ -44,8 +44,704 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## ADVENT.DOC
+
+{% raw %}
+```
+ADVENTURE COMPILER and INTERPRETER system 2.1
+---------------------------------------------
+        Basic Version 4/1/83
+Written by
+Peter F. Levy
+4209 Longmeadow Way
+Fort Worth, TX 76133
+(817) 292-8731
+Adapted to the IBM Personal Computer by
+Jim R. Cummins, jr.
+5 Jacob St.
+Ballston Lake, NY 12019
+CompuServe [72155,1174]
+(c) 1982,1983  P.F. Levy and J.R. Cummins
+           All Rights Reserved
+INTRODUCTION
+This package is a Basic language version of the Levy Adventure
+Development System, a machine language NEWDOS/80 based adventure 
+game compiler and interpreter system for 32K or 48K Model I or 
+Model III TRS-80's.  Version 2.x is an adapted version for the 
+IBM Personal Computer that is essentially source code compatible 
+with the TRS-80 versions.  All the capabilities of the machine-
+language version are implemented, with three restrictions (due 
+mostly to Basic's processing speed): 
+(a) only limited synonyms are allowed.  A later version may 
+    implement more complete synonyms if processing time for
+    the input parser can be kept acceptable (namely under
+    one second). 
+(b) long descriptions are limited to 255 characters. 
+(c) the number of explicit actions is limited to
+    about 2000. 
+Adventure game scenarios are created or edited using any
+text editor capable of handling ASCII disk files (SCRIPSIT,
+ELECTRIC PENCIL and PERSONAL EDITOR do nicely; WORDSTAR in
+the non-document mode should work; even EDLIN is OK).  If
+Wordstar or another word processor is used it must be in the
+non-document mode so that DOS-compatible files are produced.
+The databases are then saved as ASCII data files to be
+compiled by utility COMPILER.BAS in order to prepare them
+for interpretation by DRIVER.BAS.  The third program in this
+system, DISASSEM.BAS, is used to disassemb compiled
+adventures into an editable, re-compilable source file. 
+For simplicity's sake, COMPILER.BAS will be referred to as
+"the compiler", DRIVER.BAS as "the driver", and DISASSEM.BAS
+as "the disassembler".
+In order to allow this system to run very large databases,
+the driver does not maintain an entire adventure in memory.
+Instead, the parts of the database which require frequent or
+immediate access are stored in memory, while the remainder
+are kept on disk in an indexed reference file.  The index
+permits almost instant access to random data. 
+Consequently, there are a total of three separate disk files
+associated with each complete adventure.  For any one
+adventure, each has the same file name (the name of the
+adventure) but a different identifying suffix or extension.  
+The name of the adventure is defined by the filespec under 
+which the creator saves the ASCII source file.
+ (1) name.ADV, the ASCII source file
+ (2) name.DAT, the portion of the database which resides in
+     memory while the adventure is played including the
+     index to the reference file
+ (3) name.REF, the reference file addressed by the driver on
+     an as-needed basis
+The source file is used only by the compiler and need not be
+present to play a compiled adventure.  The other two files
+(which are created by the compiler) must be present for the
+adventure to be played.
+The remainder of these instructions will consist of sections
+explaining the use of the compiler, driver, and disassembler;
+followed by a detailed explanation of the source database
+structure.
+DEFINITIONS
+-----------
+VERB:    the first operative word of a player input, usually
+         specifying what is to be done.
+NOUN:    the second operative word of a player input, usually
+         specifying what the action is to be done to.
+OBJECT:  (a) the third operative word of a player input,
+             usually specifying the tool through which the
+             verb will be applied to the noun.
+         (b) an item in the game having the properties of
+             description, location, and weight
+ROOM:    a discrete location in the game play area
+MESSAGE: a predefined text displayable as a response to
+         player input
+IMPLICIT ACTION:  a series of tests and/or actions
+         carried out by the driver each turn without 
+         player interaction.  Each implicit action is
+         attempted each iteration of play.
+EXPLICIT ACTION:  a series of tests and/or actions to be
+         carried out by the driver in response to a specific
+         player input or command.  An explicit action is
+         attempted only in response to player input for which
+         it is defined.
+TOKEN:   a mnemonic word used to name a specific test or action
+TURN:    each time the player presses the <return> key
+         constitutes a turn.  Implicit actions are attempted
+         each turn and the player's input is parsed for
+         a defined explicit action. 
+THE COMPILER
+The compiler creates the files required to actually play the
+adventure, based on the information contained in the ASCII
+source file.  The LADS compiler is called COMPILER.BAS.  It
+requires three files to run.
+You will first be asked "Database name? ".  Reply with the
+name of the adventure database to be compiled (excluding the
+extension, <name>.ADV is assumed).
+Next you are asked, "Compilation drive? (A-D)".  Reply with
+the letter of the disk drive (A-D) which is to receive the
+compiled adventure files.  The source file need not be
+resident on that particular drive.
+Last, you are asked "Hard copy of compilation messages?
+(Y/N)".  Reply Y if the messages the compiler displays during
+its run (including error warnings and diagnostics) are to be
+sent to the system printer as well as screen.  If no printer 
+is attached to your system be sure to answer this question 
+"N" or an error might occur.
+The compiler runs to completion without user interaction.  As
+the compilation progresses, messages will be displayed naming
+the part of the database currently being processed and
+describing any errors encountered, followed by "Compilation
+complete" and a return to the OK prompt.  The adventure may be 
+played immediately after compilation has been completed.
+Compilation error messages are detailed and are, hopefully,
+self-explnatory.
+DISASSEM.BAS
+The disassembler can read a set of compiled adventure data
+files and generate source listings.  The disassembler has the
+ability to provide hard copy and a disk source file, which can
+be edited, if desired, and re-compiled by COMPILER.BAS.  Both of 
+an adventure's runtime files (<name>.DAT and <name>.REF) must be 
+present for the disassembler to work.
+When you run the disassembler, you are first asked "Database
+name?".  Reply with the name of the adventure to be
+disassembled, excluding any extensions.
+Next you are asked "Disassembly to line printer? (Y/N)". 
+Reply Y or N, depending on whether or not you want a hard copy
+of the disassembled source file.  If there is no printer on
+your system be sure to answer N or errors may occur.
+Next you are asked "Create source file on disk? (Y/N)".  Reply
+Y or N, depending on whether or not you want to create an
+ASCII source file on disk.  If you reply Y, you will be
+further prompted "Destination file? (full filespec)".  Reply
+with the full name (including any extensions and drive
+specificaitions) of the file to receive the created source
+text.
+The disassembler runs to completion without user interaction.
+THE INTERPRETER
+The interpreter is the game executor and moderator.  It
+supervises play of the game, updating the situation in
+response to the player's typed commands and displaying the
+game situation for the player.  The LADS driver is called
+DRIVER.BAS.  It requires two files to run; both of these files
+are generated by the compiler.
+The driver will ask, "Adventure name?".  Reply with the name
+of the adventure to be played, excluding any extensions.
+The driver will open the needed files and almost immediately
+display an opening text, which will remain displayed while the
+reference file is opened and the data file and index is
+transferred into memory.  When this setup phase is complete,
+         "[press space bar to begin play]" 
+will appear at the bottom center of the screen.  Play of the 
+adventure will begin when the space bar is depressed.
+Play of adventures under this system consists of a fairly
+simple loop of events: 
+      (a) the driver displays the current situation and a 
+          ">" prompt, 
+      (b) the player types his responses in any reasonable 
+          grammatical form, and 
+      (c) the driver interprets the player's response and 
+          updates the game situation accordingly.
+Although the command parser (which translates typed input into
+numbers understandable by the driver) does a good job of
+extracting information from fairly complex input phrases, it
+does assume that the content of the player's response conforms
+generally to a "verb-noun-object" structure, i.e., something
+along the general lines of "verb the noun with the object". 
+Input may be upper or lower case or a mixture.
+The player may interrupt the game and return to OK by
+pressing CTRL-BREAK at any > prompt.  This exit will not
+close the data files, but this is harmless since the driver
+never writes to disk. The may be continued by entering the
+BASIC command CONT.  Note that some actions, such as changing
+the program will not allow you to continue.
+This system has eight abbreviated single-letter commands:  N,
+S, E, W, U, D, I, and L.  N, S, E, W, U, and D are exactly
+equivalent to "GO NORTH", "GO SOUTH", etc.  I displays an
+inventory of what the player is currently carrying.  L stands
+for "look" and describes the player's current location, and
+describes and object in the room in detail.
+The bottom line of the screen contains a summary of the current
+game status and is revised whenever the player enters any
+command.  This summary shows the player's current location, the 
+available exits, the player's load (in percent of his carrying 
+capacity), his current score, and the number of game turns 
+played so far.
+CREATING AN ADVENTURE -- SOURCE FILE STRUCTURE
+An adventure source file in LADS is a straight ASCII text
+file.  Each source file contains nine SECTIONS, each of which
+is segmented into RECORDS.  The end of each record is marked
+by a carriage return and the end of each section by two
+consecutive carriage returns.  The nine sections are (in the
+order in which they must exist within the file):
+    1.  a header record
+    2.  a verb dictionary
+    3.  a noun dictionary
+    4.  an object list
+    5.  a room list
+    6.  a message list
+    7.  an implicit action table
+    8.  an explicit action table
+    9.  a remarks section, not read by the compiler.
+NOTE:  In order to allow the adventure creator to display
+several texts on one line, this system does NOT automatically
+add a carriage return to the end of any text.  It is the
+writer's responsibility to include a linefeed symbol ("/") at
+the end of a text if desired.
+HEADER
+The first section is the HEADER, which is simply the
+introductory or instructive text which the driver is to
+display during setup.  Any slashes ("/") in this text will be
+compiled as linefeeds; all other characters are displayed
+exactly as entered.  Single carriage returns are also allowed
+within the header record.  There is no limit to the length of
+the header, but if it is longer than about 700/1400 characters 
+it is likely to scroll the display in 40/80 width mode.  The 
+end of this header section is marked by two consecutive 
+carriage returns.
+VERB SECTION
+The second section is the VERB DICTIONARY.  This is a list of
+all words which are to be used as verbs in the play of this
+adventure.  Each record in this section consists of a primary
+verb followed by a comma, number and carriage return.  There should
+be no spaces between words and separators.  The section is
+ended with a double carriage return.
+Verbs should not use lower-case characters.
+You may specify up to 199 verbs.  Each verb is either a primary or
+secondary verb. Primary verbs are used in the action tables while
+secondary verbs are synonyms of the primary verbs. If the number 
+after the verb is zero then the verb is taken as primary otherwise 
+it is linked to the verb defined in that position( 1=first verb
+defined, 2=second, etc.).  The first three verbs must be "GET", 
+"DROP", and "GO", in that order.
+EXAMPLE:
+GET,0<CR>
+DROP,0<CR>
+GO,0<CR>
+ATTACK,0<CR>
+WAIT,0<CR>
+GRAB,1<CR>
+RUN,3<CR><CR>
+NOUN SECTION
+The third section is the NOUN DICTIONARY.  This is structured
+similarly to the verb dictionary, with two differences.  First, 
+there are seven required nouns:  the first through seventh 
+nouns must be "ANY", "NORTH", "SOUTH", "EAST", "WEST","UP", 
+and "DOWN" (in that order).
+Second, following each noun is an "object link", which is a
+number from 0 to 255.  This specifies the object, by number,
+to which the noun refers.  If the noun will not be used to
+refer to any specific object, its link should be 0.  A noun
+must be linked to a (material) object in the object list for
+it to function when used as a (grammatical) object in player
+input during game play.
+You may specify up to 199 nouns.  Note that several nouns can
+be linked to the same physical object.
+EXAMPLE:
+ANY,0<CR>
+.
+.
+DOWN,0<CR>
+BOOK,2<CR>
+NEWSPAPER,6<CR>
+DISKETTE,0<CR><CR>
+OBJECT SECTION
+The fourth section is the OBJECT TABLE.  The object table
+contains up to 255 records, each of which describes one object
+in the game.  Each record has six items in it:
+    (a) An object number from 1 to 255, followed by a space.
+        These numbers are the ones to which the noun links refer.
+        No two objects may have the same number.  Each object must
+        be numbered, and the numbers must be sequential from 1.
+    (b) The object's name, which must be no longer than 25
+        characters and is ended by a comma.  Both upper and lower case
+        characters are permitted, as well as digits, spaces, and
+        punctuation (except a comma, of course.)
+    (c) The object's start room, which is a number which describes
+        the object's location at the start of the game.  LADS uses
+        rooms numbered from 0 to 255.  An object may be placed in any
+        room.  Room 0 is a storeroom of objects not in play for now,
+        room 255 is the location of objects carried by the player.
+    (d) The object's weight, in percent of the player's carrying
+        capacity.  A weight of 255 signifies an immovable object.
+    (e) The object's point value.  This is the number of points
+        the player is awarded for carrying the object.
+    (f) The object's long description, which may be up to 255
+        characters long and contain any characters.  Slashes will be
+        compiled as linefeeds. The long description (and the record)
+        are terminated by a carriage return.
+Note: If an object starts as carried by the player (e.g. in
+room 255), that object's weight will initially be added to
+the player's load.  
+The object's name is how it is referred to when the inventory
+("I") command is issued; its long description is the notice
+printed by the driver to announce object's presence.
+EXAMPLE:
+1 Book,1,5,0,There is an old leather-bound book here./<CR>
+2 Brass lantern,0,15,20,You note a shiny brass lantern lying/
+nearby./<CR>
+3 Statue,3,255,0,There is a six foot high statue of a/
+parakeet in the room./<CR>
+4 Stairs,7,255,0,A flight of narrow stairs leads up./<CR><CR>
+Note that linefeed symbols ("/") are added to the end of each
+text line.  If this is omitted, the next line of text the
+driver displays will follow the previous line without any
+linefeeds.
+ROOM SECTION
+The fifth section is the ROOM TABLE.  This section is very
+similar to the object table.  The first item is the players
+start room number (1 to whatever) followed by a carriage
+return; the second and following(up to 255 records) each  
+describe one room (or discrete location).  Each  record has
+the following structure: 
+    (a) A room number from 1 to 254, followed by a blank.  No 
+        two rooms may have the same number.  Note that rooms 0 
+        and 255 are predefined:  room 0 is a storeroom for objects 
+        not currently in play; room 255 is the player (objects that 
+        are carried are in room 255).  Rooms 0 and 255 MUST NOT be 
+        defined in the room table.  Each room must be numbered, and 
+        the numbers must be sequential from 1.
+    (b) A room name, up to 25 characters long, ended by a comma. 
+        Any other characters are allowed.
+    (c) Six links, specifying (by number) the connecting rooms to 
+        the north, south, east, west, up, and down; respectively. 
+        Zero indicates no passage in a particular direction. Note 
+        that only the "obvious" passages are indicated and the 
+        author may have "secret" or "hidden" passages. See below.
+    (d) A long description of the room, ended by a carriage
+        return.  The description may be any length.  Slashes in this
+        description are compiled as linefeeds.
+ROOM CONNECTION DETAILS.  The room connections specified by
+the links in the room table are a room's "obvious exits", and
+will be dislayed as available exits on the status dislay at
+the bottom of the screen.  Any other room connections are not
+"obvious" and won't be displayed; the player must be told of
+them.  An example is an elevator where the U command does not
+cause the player to go up but pushing the proper button causes
+the player to be moved "up" to the proper "room".
+EXAMPLE:
+1 Cave,0,3,0,6,0,5,You are in a large cavern./<CR>
+2 Computer room,1,5,0,0,0,0,You are in a computer room.  An /
+IBM PC named Halob awaits your bidding./<CR><CR>
+MESSAGE SECTION
+Each record in the MESSAGE TABLE defines one message available
+to the adventure driver, and contains two items:  a message
+number from 1 to 255, followed by a space; and the message
+text terminated with a carriage return.  The text may be up to
+255 characters long and may contain any characters.  Slashes
+are compiled as linefeeds.  Each message must be numbered.  No
+two messages may have the same number.  Numbers must be
+sequential from 1.
+EXAMPLE:
+1 The UFO's protective field won't let you approach./<CR>
+2 Please don't shoot him, you'll only make him mad./<CR>
+3 There was a passage hidden behind the drapes!/<CR><CR>
+IMPLICIT(AUTO) ACTION TABLE
+The seventh section describes the background activities to
+take place during play of an adventure.  Implicit actions are
+attempted automatically by the driver each turn of play, and
+are used to move dragons around at random, check to see if
+certain unsupervised (uncommanded, therefore implicit) actions
+are to take place, and so on.  Each activity consists of a
+line naming tests and actions to be carried out by the driver
+and is ended by a space-period-carriage return sequence.  The
+exact structure of an action line, and the names and uses of
+the different tests and actions available, are explained in a
+later section.  The table is terminated with a double carriage
+return.
+Action entries may be divided over several lines.  If a line
+ends with a space-comma-carriage return, the next line is
+treated as a continuation of the same action line.
+Since the implicit action is checked on every turn it can 
+greatly slow the game.  Structure your tests so that if the 
+event has not happened it will quickly exit. Careful design 
+will maintain reasonable speed.
+EXPLICIT ACTION TABLE
+The eighth section is the explicit action table.  An explicit
+action is carried out by the driver in response to a specific
+command, in the form of a verb-noun pair.  It contains one
+record for each verb-noun pair for which the adventure author
+wishes to define an action.  Each entry consists of the verb
+and noun to which the action is to be linked, and a line
+naming the tests and actions to be performed by the driver if
+the verb-noun command is given.
+All letters used in nouns and verbs here must be upper case. 
+The driver converts all input to upper case before testing so
+lower case verbs and nouns will never match. The verb, noun, 
+and all test or action names must be separated by one or more 
+spaces; and the record terminated by a space-period-carriage 
+return sequence.
+Action entries may be divided over several lines.  If a line
+ends with a space-comma-carriage return, the next line is
+treated as a continuation of the same action line.
+REMARKS SECTION
+The ninth and last section is ignored entirely by the compiler
+and provides space for the author to place any remarks he
+wishes to add to the database.
+
+ACTION ENTRIES (Both Implicit and Explicit)
+Action entries define action to take place, either as a
+background activity (implicit or auto action) or as a result
+of a player instruction (an explicit action, invoked by a
+verb-noun pair).  These are what actually tell the driver
+program what to do in response to situations or player
+input. Each action entry consists of one line of tests and
+actions to be carried out.  Each test and action available
+has a four-character mnemonic name (called a "token") and
+represents either a specific test to be performed ("is the
+golden key in the King's Chamber?") or action to be taken
+("display message 2"). Each token has from zero to two data
+fields associated with it which specify the parameters
+involved in the test or action (object numbers, locations,
+etc).  These follow the token name as decimal numbers. 
+There is no particular limit to the length of a typed action
+entry, but the total number of tokens (and data fields
+associated with them) in a single action entry must not exceed
+255.
+When the driver executes an action line, that line is
+interpreted from left to right.  Tests and actions may be
+mixed unconditionally within an action line.  If the token
+involves a test, the truth of the tested condition is
+evaluated and logically ANDed with a truth flag; if the token
+is an action it is performed if the truth flag is currently
+TRUE (that is, all the preceding tests returned a logical
+TRUE).
+Any test may be inverted by prefixing it with a "-" character.
+This will cause the opposite condition from that specified to
+be tested.  For example, token "INRX" means "in room X", and
+"INRX 4" returns a logical TRUE if the player is then in room
+4.  If the token is inverted, as "-INRX 4", it returns a
+logical TRUE if the player is NOT in room 4.
+Any action may also be inverted in the same way.  An action is
+normally performed if all the preceding tests returned logical
+TRUE; an inverted action is performed if one or more of the
+preceding tests returned a logical FALSE.
+Following is a list of the tokens available and their
+functions.  Where used, "x" and "y" represent prototype values
+supplied after the token as data.
+TEST TOKENS
+TOKEN        RETURNS "TRUE" IF
+--------------------------------------------------------------
+HASX x       The player is carrying object x
+NCRX x       Object x is in the current room (the same room as
+               the player)
+AVLX x       Object x is available to the player (either in
+               the same room or carried)
+XINY x y     Object x is in room y
+NSRX x       Object x is in its start room
+NR0X x       Object x is in room zero (out of play)
+XW/Y x y     Object x is in the same room as object y
+HASL         The player is carrying the object linked to the
+               current noun (the "linked object")
+NCRL         The linked object is in the same room as the
+               player
+AVLL         The linked object is available to the player
+LINX x       The linked object is in room x
+NSRL         The linked object is in its start room
+NR0L         The linked object is in room 0
+LW/X x       The linked object is in the same room as object x
+RAND x       x% chance of returning TRUE
+CEQN x y     Counter #x is equal to y
+CGEN x y     Counter #x is greater than or equal to y
+CEQC x y     Counter #x is equal to counter #y
+CGEC x y     Counter #x is greater than or equal to counter #y
+XSET x       Bit flag #x is set
+INRX x       Player is in room x
+LIGH         The current location is lighted
+LDGT x       The player's load is greater than x%
+OBJ= x       The command's (grammatical) object referred to
+               (material) object #x.  The (grammatical) object
+               in the command line must have been a noun which
+               is linked to a (material) object for this to
+               work.  OBJ= 0 will return TRUE if either the
+               input specified no object or the (grammatical)
+               object is not linked to a (material) object
+               in the noun dictionary.
+ACTION TOKENS
+TOKEN        Performance
+------------------------------------------------------------
+X2RY x y     Object x is moved to room y
+X2OY x y     Object x is moved to object y
+X2CR x       Object x is moved to the current room
+X2SR x       Object x is moved to its start room
+X2R0 x       Object x is moved to room 0
+X<>Y x y     Objects x and y are exchanged
+L2RX x       Linked object is moved to room x
+L2OX x       Linked object is moved to object x
+L2CR         Linked object is moved to the current room
+L2SR         Linked object is moved to its start room
+L2R0         Linked object is moved to room 0
+L<>X x       Linked object is exchanged with object x
+DROP         All objects carried by player are dropped (moved
+               to current room)
+P2RX x       The player is moved to room x
+P2OX x       The player is moved to the room occupied by
+               object x
+SCO+ x       x is added to the player's score, x=-127 to 127
+HEAL x       x is added to the player's health, x=-100 to 100
+CTX+ x y     y is added to counter x, y=-127 to 127
+CTX= x y     Counter x is set equal to y, y=-127 to 127
+SETX x       Bit flag x is set
+CLRX x       Bit flag x is reset (cleared)
+MSGX x       Message x is displayed
+ENDG         The game is ended
+LMP1         Illumination is "on"
+LMP0         Illumination is "off" -- darkness
+DIAG         Display health state
+WAIT x       Game play pauses for about x/4 seconds.
+ECHO         The player's input is echoed in format "To <verb>
+               a <noun> with a <object> ", with a trailing
+               space but without a following carriage return
+RPTV         Repeat verb.  The last input verb is displayed
+               without leading or trailing blanks.
+RPTN         Repeat noun.  The last input noun is
+               displayed without leading or trailing blanks.
+RPTO         Repeat object.  The last input object is
+               displayed without leading or trailing blanks.
+ELSE         If TRUE when evaluated, action processing ends;
+               if FALSE, the truth state is reset to TRUE and
+               processing restarts with the next token.
+SAVE         Save the game to disk. The player's location and
+               all objects in the game are saved.
+LOAD         A previously SAVEd game is loaded from disk. 
+EXAMPLES:
+(a) if at any time the player carries object 17 into room 4,
+make object 8 appear and display message 7.  This is a
+background-type activity and would go in the background
+activity table.  In specific terms,
+    if player is in room 4, and                   INRX 4
+       player is carrying object 17, then         HASX 17
+       move object 8 to current room, and         X2CR 8
+       display message 7.                         MSGX 7
+The action entry would be:  INRX 4 HASX 17 X2CR 8 MSGX 7 .<CR>
+(b) if the player specifies "RUB LANTERN", and is carrying
+object 2 (the lantern), and object 4 (a magic preventer) is
+not either carried or in the current room (hence not
+available), then bring a genie into the room and display
+message 10 ("POOF!"); otherwise display message 11 ("The
+lantern gets shinier").
+    If player commands "RUB LANTERN",            RUB LANTERN
+       and has object 2                          HASX 2
+       and object 4 isn't around                 -AVLX 4
+       then bring in genie to current room       X2CR 7
+       and display message 10                    MSGX 10
+    otherwise,                                   ELSE
+       display message 11                        MSGX 11
+The action entry would be:
+RUB LANTERN HASX 2 -AVLX 4 X2CR 7 MSGX 10 ELSE MSGX 11 .<CR>
+(c) If the player attacks a demon with any object besides a
+sword, display "To attack a demon with a <whatever> is not a
+good idea."  The sword is object 4, and "is not a good idea./"
+is message 9.
+    If player specifies "ATTACK DEMON"            ATTACK DEMON
+       and the object is not "SWORD"              -OBJ= 4
+       echo user input                            ECHO
+       and print message 9                        MSGX 9
+The action entry would be:
+ATTACK DEMON -OBJ= 4 ECHO MSGX 9 .
+DEFAULT ROUTINES FOR EXPLICIT ACTIONS
+LADS provides default action handlers which allow the
+adventure creator to handle a variety of general situations
+using only one explicit action entry.  A default action has
+the same form as any other action line, but specifies ANY as
+a noun.  A verb's default action is invoked if there is no
+action routine defined for the verb-noun pair the player has
+issued or if the noun isn't in the game dictionary. 
+For example, the default action of EXAMINE is "You find it
+perfectly ordinary." If the a different default action is
+desired then rather than having to tediously define action
+entries for each possible examination, you can specify a
+single entry as EXAMINE ANY. This action would then be
+performed if the player typed "EXAMINE something", and
+either there was no explicit action entry defined for that
+verb-noun pair or the noun wasn't in the dictionary. 
+GET, DROP, and GO also have default action handlers which 
+are built in the driver.  If the player issues a GET noun, 
+DROP noun, or GO noun command the driver will (first) try to 
+find a specific action entry for the command, then failing 
+that will (second) look for a GET ANY, DROP ANY, or GO ANY 
+action routine, then (failing even that) try to execute its 
+internal GET, DROP, or GO handler.
+Note that the presence of GET ANY or DROP ANY action 
+handlers will prevent the driver from using its internal GET 
+or DROP handlers.  The internal GO handler is not locked out 
+by the presence of a GO ANY action;  if such an action is 
+present the internal GO routine will be used if execution of 
+the GO ANY routine was attempted but failed to cause any 
+action because of false tests.
+For GET, the object will be picked up if all of the 
+following conditions are met:
+        (a) the noun is linked to an object,
+        (b) the linked object is in the same room
+            as the player,
+        (c) it is not currently carried,
+        (d) it is not immovable (weight is not 255),
+        (e) the player's load will permit the acquistion.
+If any of these tests fails, an appropriate message will be 
+displayed (such as "You can't carry that much more 
+weight.");  if the object is picked up the driver will 
+announce "The (whatever) taken."
+For DROP, the object will be dropped if (a) the noun is 
+linked to an object, and (b) the object is carried.  If 
+either test fails, a message will be printed.  If the tests 
+succeed, the driver will display "The (whatever) released."
+For GO, the player will move if the noun was a legal 
+direction and there is a link to a room in the specified 
+direction.
+        TECHNICAL STUFF
+        ---------------
+Exact Interpretation Logic
+The general flow of action processing is:
+    display     get      conduct     carry     display
+-->        --> user  -->implicit -->  out  -->   new  --> ...
+   situation  command    action     command   situation
+Actions are interpreted as follows:
+1. Parse command.  The verb, noun, and object are extracted 
+   from the input line and each is looked up in a vocabulary 
+   table.  If the verb doesn't exist, an error is declared 
+   ("I don't know how to <verb>").  If the noun doesn't exist 
+   or isn't specified, the driver assign the noun "ANY" to the 
+   command.  The object is looked up and stored.  If no object 
+   is specified or the specified object isn't a noun linked to 
+   a physical object, then the object number is set to zero.
+2. If the entire command is "I" or "L", control is 
+   transferred immediately to the appropriate routine.
+3. The index is checked for the existence of an action 
+   routine for the specified verb-noun pair.  If an action 
+   routine exists, it is read from the reference file and 
+   control is passed to the action executor.
+4. If no action entry for the verb-noun pair exists, the 
+   driver rechecks the index for an entry for "<verb> ANY".  If 
+   one if found, it is read from the reference file and control 
+   is passed to the action executor.
+5. If no action for "<verb> ANY" exists and the verb is GET 
+   or DROP; or the verb is GO and no action has yet been taken 
+   (even if a GO ANY routine exists and has been attempted), 
+   control is passed to an internal routine dealing with GET or 
+   DROP or GO.  Note that action table entries take precedence 
+   over these internal default routines, and that the existence 
+   of GET ANY or DROP ANY action routine will lock out the 
+   driver's internal GET or DROP routines.
+6. If none of the above succeed, an error is declared and 
+   the message "I don't know how to <verb> <noun>." is 
+   displayed.
+REQUIRED EQUIPMENT
+Versions 2.x are written for an IBM Personal Computer with 
+64K RAM and at least one diskette drive running PC-DOS.  It 
+is possible that the system will run in less memory or with 
+other operating systems (such as CP/M-86) but it has not 
+been tested.  The original version was written for the 
+TRS-80 Model I or III with 32K RAM, 2 disks and NEWDOS/80 
+operating system.  Version 2.1 has extended some of the 
+capabilities of the original but for the most part is still 
+source code compatible with it.  Those who wish to further 
+extend or translate it to another system are invited to contact 
+either of the authors.
+SPECIFIACTIONS
+Vocabulary:             199 verbs, 199 nouns
+Object table:           255 objects
+Room table:             254 playing rooms
+                            (Room 0 is reserved for storage)
+                            (Room 255 is the player)
+Message table:          255 message texts
+Action table:           255 auto or implicit actions
+                        up to about 2000 action entries
+Counters:               256 available, numbered 0-255, 8 bits
+Bit flage:              256 available, numbered 0-255
+RESPONSIBILITIES OF THE ADVENTURE AUTHOR
+This compiler will let you specify just about any action.  
+The only things it disallows are those it just can't fit 
+into the system's database structure, such as two rooms with 
+the same number.  It is the responsibility of the adventure 
+author to ensure that the actions he specifies are 
+realistic.  The compiler/driver system won't stop you from 
+doing something idiotic; if you want to put the player in 
+Room 0 or such, it'll let you.
+----------End of Documentation--------
+
+```
+{% endraw %}
+
 ## BOGGLE.BAS
 
+{% raw %}
 ```bas
 1 REM The number in line 240 represents the game length in seconds.
 2 KEY OFF : CLS
@@ -129,9 +825,11 @@ machines:
 1105 COLOR 7
 1110 RETURN
 ```
+{% endraw %}
 
 ## CHESS.BAS
 
+{% raw %}
 ```bas
 240 CLEAR ,,2048
 250 REM CHESS C.4 BY M. C. RAKASKA, IDES OF MARCH, 1980
@@ -496,9 +1194,11 @@ machines:
 3840 RETURN
 3850 END
 ```
+{% endraw %}
 
 ## COMPIL.BAS
 
+{% raw %}
 ```bas
 10 ' ADVENTURE SYSTEM DATABASE COMPILER 2.1
 15 '
@@ -863,9 +1563,153 @@ machines:
 30110 DATA *END
 50000 ' LAST LINE
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #91, version v1_1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ADVENT  .DOC         CRC = 0B 2E
+
+--> FILE:  BASCOM  .PAT         CRC = A0 88
+
+--> FILE:  BOGGLE  .BAS         CRC = 8F 2C
+
+--> FILE:  CHESS   .BAS         CRC = 05 90
+
+--> FILE:  COMPIL  .BAS         CRC = D2 25
+
+--> FILE:  DKSPAT  .TXT         CRC = 7C 33
+
+--> FILE:  DRIVER  .BAS         CRC = B7 98
+
+--> FILE:  GLOBE   .BAS         CRC = 2D 9B
+
+--> FILE:  GLOBE   .DAT         CRC = C6 0A
+
+--> FILE:  GOLF2   .BAS         CRC = 38 B7
+
+--> FILE:  HIQUE2  .BAS         CRC = B0 87
+
+--> FILE:  MUGGER  .DAT         CRC = 0D 7A
+
+ ---------------------> SUM OF CRCS = 30 BF
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## DKSPAT.TXT
+
+{% raw %}
+```
+DISKCOPY and DISKCOMP PATCHES FOR LARGE MEMORY MACHINES
+In PC's with more than 320K free memory available as buffer
+storage for the Diskcopy and Diskcomp routines, the IBM DOS
+supplied programs will fail.  The programs apparently do not
+check for valid track and sector values and will continue to
+step past track 39 if memory is available even if there are
+no more valid tracks.  The head will be banged against the
+stops and read errors will be reported for track 40, sector 0,
+etc. until the operator interrupts or memory has been filled.
+The patches were obtained with the help of Dan Gregorio of
+the downtown Houston IBM Products Center.  After several calls
+to Boca Raton, we received these patches which seem to work
+properly.
+The reader should read over the DEBUG section of their DOS
+manuals before beginning any of these procedures if they are
+not familiar with the debugger.  Be sure to make backup copies
+of Diskcopy.com and Diskcomp.com before starting.
+DISKCOPY PATCH
+ 1.  Run the debugger on diskcopy by entering "debug diskcopy.com"
+ 2.  The debugger will respond with the hyphen prompt.
+ 3.  Type "e861 <return>"
+ 4.  The debugger will respond with something like "04B5: A2._"
+     (note that "_" designates the cursor).
+ 5.  Carefully type the following "e8 <space> 74 <space> 00 <return>"
+ 6.  Type "e8d8 <return>"
+ 7.  Carefully type the following:
+          3d <space>
+          51 <space>
+          00 <space>
+          72 <space>
+          02 <space>
+          b0 <space>
+          50 <space>
+          a2 <space>
+          36 <space>
+          05 <space>
+          c3 <return>
+ 8.  At the hyphen prompt, type "rcx <return>"
+ 9.  The debugger will respond with ":07D8"
+10.  At the colon prompt, type "7e3 <return>"
+11.  At the hyphen prompt, type "w <return>"
+12.  At the hyphen prompt, type "q <return>"
+13.  You should now be back in DOS and have the "A>" prompt.
+DISKCOMP PATCH
+ 1.  Run the debugger on diskcomp by entering "debug diskcomp.com"
+ 2.  At the hyphen prompt, type "e6ec <return>"
+ 3.  Carefully type the following:  "e8 <space> 79 <space> 00 <return>"
+ 4.  At the hyphen prompt, type "e768 <return>"
+ 5.  Carefully type the following:
+         3d <space>
+         51 <space>
+         00 <space>
+         72 <space>
+         02 <space>
+         b0 <space>
+         50 <space>
+         a2 <space>
+         95 <space>
+         04 <space>
+         c3 <return>
+ 6.  At the hyphen prompt, type "rcx <return>"
+ 7.  The debugger should respond with ":0668"
+ 8.  At the colon prompt, type "673 <return>"
+ 9.  At the hyphen prompt, type "w <return>"
+10.  At the hyphen prompt, type "q <return>"
+11.  You should now be back in DOS with an "A>" prompt.
+Please note that the two procedures are very similar but are
+different.  While we are using the patched routines without any
+problems on both large and small memory machines, I cannot
+accept any responsibility for the use of these patches.  
+THEREFORE, THE USER IS WARNED THAT HE IS MAKING THESE PATCHES
+AT HIS OWN RISK.  THE AUTHOR IS NOT RESPONSIBLE FOR ANY LOSS OF
+DATA OR ANY OTHER PROBLEM THAT MAY RESULT FROM THE USE OF THE
+INFORMATION PRESENTED HEREIN.
+Please address comments to:
+                 
+                   Mitchell D. Garnett
+                   72345,470
+                   DIGITAL ENGINEERING GROUP, INC.
+                   11999 Katy Fwy., Suite 150
+                   Houston, TX 77079
+                   (713) 531-6100
+```
+{% endraw %}
 
 ## DRIVER.BAS
 
+{% raw %}
 ```bas
 10 ' ADVENTURE INTERPRETER 2.1
 15 '
@@ -1470,9 +2314,11 @@ machines:
 30100 BEEP:GOTO 30070
 50000 ' LAST LINE
 ```
+{% endraw %}
 
 ## GLOBE.BAS
 
+{% raw %}
 ```bas
 10 'Real Time Perspective Image of Rotated Globe
 20 '
@@ -1587,9 +2433,11 @@ machines:
 1100 IF ERR<>53 THEN PRINT"error":END
 1110 RESUME 340
 ```
+{% endraw %}
 
 ## GOLF2.BAS
 
+{% raw %}
 ```bas
 230 CLS
 240 REM CONVERTED BY STEVE ESTLE
@@ -1843,9 +2691,11 @@ machines:
 2720 DATA 510,5,434,4,210,3,312,4,428,4,440,4,205,3,515,5,318,4
 2730 END
 ```
+{% endraw %}
 
 ## HIQUE2.BAS
 
+{% raw %}
 ```bas
 1 '             *** HIQUE *** 
 2 '             by Wes Meier (70215,1017) 
@@ -1990,6 +2840,7 @@ machines:
 141 LOCATE 23,1 
 142 END'of program.
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -32,6 +32,42 @@ machines:
     file.  The data files are in dBase III+ format.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1048.TXT
+
+{% raw %}
+```
+Disk No: 1048                                                           
+Disk Title: Filer Finder (Disk 2 of 2)  (Disk 2 of 2)                   
+PC-SIG Version: S2.2                                                    
+                                                                        
+Program Title: Filer Finder                                             
+Author Version: 2.04                                                    
+Author Registration: $34.50                                             
+Special Requirements: 380K RAM and two floppy drives.                   
+                                                                        
+FILER FINDER is an on-disk directory to information management software 
+for microcomputers, that primarily stores, indexes, manipulates and     
+retrieves textual data.  This program has a searchable data file on over
+500 pieces of information management software.  The types of software in
+the data file include file managers, database managers, integrated      
+software packages, bibliographic and indexing programs, on-line library 
+catalogs, and others.  The main program on this disk lets you search for
+programs in the data files by name, class, characteristics, comments,   
+cost, manufacturer, operating systems and number of fields available.   
+After a search, you can send the results to the screen, the printer, or 
+a disk file.  The data files are in dBase III+ format.                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1048
 

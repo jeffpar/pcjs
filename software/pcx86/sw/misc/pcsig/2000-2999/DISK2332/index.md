@@ -26,6 +26,54 @@ machines:
     customize to your exact needs with FORMGEN.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2332.TXT
+
+{% raw %}
+```
+Disk No: 2332                                                           
+Disk Title: FormGen - Home Form Collection                              
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: FormGen - Home form Collection                           
+Author Version: 6/90                                                    
+Author Registration: $15.00                                             
+Special Requirements: FormGen #(1695)                                   
+                                                                        
+A collection of 50 forms for use with FormGen.  Includes many useful and
+innovative forms for groceries, hobbies, geneology, and sports.  Forms  
+for satelite dishes, VCR use, scanners, as well as golfing, ham radio,  
+church and other activities. You can quickly customize them to your     
+exact needs with FormGen.                                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## VENDOR2.DOC
+
+{% raw %}
+```
+FormGen Home Forms Collection
+=============================
+
+Category: Forms                                       
+
+A collection of forms for use with FormGen.  Includes many useful and
+innovative forms for groceries, hobbies, geneology, and sports.  Forms
+for satelite dishes, VCR use, scanners, as well as golfing, ham radio, 
+church and other activities.  Over 50 useful forms.  Requires FormGen.  
+[ASP MEMBER]                              
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2332
 

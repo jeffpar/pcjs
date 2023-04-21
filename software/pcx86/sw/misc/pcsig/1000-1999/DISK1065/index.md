@@ -33,6 +33,43 @@ machines:
     to the printer, each with its own answer key.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1065.TXT
+
+{% raw %}
+```
+Disk No: 1065                                                           
+Disk Title: The Presidents  (Disk 1 of 2)                               
+PC-SIG Version: S1.4                                                    
+                                                                        
+Program Title: Presidents, The                                          
+Author Version: 1.9                                                     
+Author Registration: $10.00                                             
+Special Requirements: Two floppy drives.                                
+                                                                        
+Test your knowledge of each U.S. president.  In the first part, view the
+biographies of each president on the screen.  You can page through the  
+text, search for a particular word or phrase, and write parts of the    
+bibliography to other disk files.                                       
+                                                                        
+The second part quizzes and tests on the biographies of the presidents  
+using 20 multiple-choice questions.  Typical questions include: the     
+president's name, sequence, inaugural year, birthdate, party            
+affiliation, political party, state affiliation, and eventful           
+associations.  Several versions can be produced on the screen or sent   
+to the printer, each with its own answer key.                           
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1065
 

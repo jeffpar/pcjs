@@ -48,6 +48,7 @@ machines:
 
 ## BLACKBOX.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -243,9 +244,11 @@ machines:
 2630 CLS
 2640 RETURN
 ```
+{% endraw %}
 
 ## BLCKJACK.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -558,9 +561,62 @@ machines:
 3810 IF SND = 1 THEN SND = 0 ELSE SND=1
 3820 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #72, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  TICTACTO.BAS         CRC = 38 7C
+
+--> FILE:  OTHELLO .BAS         CRC = 21 B1
+
+--> FILE:  RUBIK   .BAS         CRC = B0 3B
+
+--> FILE:  DOCTOR  .BAS         CRC = 91 4C
+
+--> FILE:  MEMORY  .BAS         CRC = ED 48
+
+--> FILE:  ROADRALY.BAS         CRC = 23 EA
+
+--> FILE:  BLCKJACK.BAS         CRC = 65 4A
+
+--> FILE:  BLACKBOX.BAS         CRC = DE 0D
+
+--> FILE:  FIFTEEN .BAS         CRC = C3 29
+
+--> FILE:  ELIZA   .BAS         CRC = C3 2F
+
+--> FILE:  SPELLER .BAS         CRC = 1A A3
+
+ ---------------------> SUM OF CRCS = 91 38
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## DOCTOR.BAS
 
+{% raw %}
 ```bas
 100 '             DOCTOR,  Version PC2.1
 110 CLEAR 1000: KEY OFF
@@ -733,9 +789,11 @@ machines:
 1780 IF MID$(KE$, 7, 1) = "*" THEN DR$ = RIGHT$(KE$, LEN(KE$) - 7)
 1790 RETURN
 ```
+{% endraw %}
 
 ## ELIZA.BAS
 
+{% raw %}
 ```bas
 
 10 REM
@@ -1050,9 +1108,11 @@ machines:
  
      1  -  A
 ```
+{% endraw %}
 
 ## FIFTEEN.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1198,9 +1258,11 @@ machines:
 2130 INPUT "PRESS <ENTER = TO PLAY.";A$
 2140 RETURN
 ```
+{% endraw %}
 
 ## MEMORY.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1572,9 +1634,11 @@ machines:
 4390 PRINT CHR$(21); CHR$(15); CHR$(15) CHR$(21)
 4400 RETURN
 ```
+{% endraw %}
 
 ## OTHELLO.BAS
 
+{% raw %}
 ```bas
 1000 REM  OTHELLO -- PET VERSION -- MODIFIED BY PATRICK   LEABO
 1010 REM                                        TUCSON, ARIZONA
@@ -1825,9 +1889,11 @@ machines:
 3440 RETURN
 3450 END 
 ```
+{% endraw %}
 
 ## ROADRALY.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -2029,9 +2095,11 @@ machines:
 2690 DATA 80, .39, 15
 2700 END
 ```
+{% endraw %}
 
 ## RUBIK.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -2512,9 +2580,11 @@ machines:
 5510 RETURN
 5520 END
 ```
+{% endraw %}
 
 ## SPELLER.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 A$=STRING$(80,205)
@@ -2616,9 +2686,11 @@ machines:
 1830 PRINT "THAT'S ALL FOR NOW!"
 1840 KEY ON
 ```
+{% endraw %}
 
 ## TICTACTO.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -3207,6 +3279,7 @@ machines:
 5940  RANDOMIZE TIME  'seed random nbr generator
 5950 RETURN '---
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

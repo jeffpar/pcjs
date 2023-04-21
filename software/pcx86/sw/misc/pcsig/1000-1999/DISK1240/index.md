@@ -33,6 +33,43 @@ machines:
     who your available receivers are, and when you should pass.  Go team!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1240.TXT
+
+{% raw %}
+```
+Disk No: 1240                                                           
+Disk Title: Cunning Football                                            
+PC-SIG Version: S2.0                                                    
+                                                                        
+Program Title: Cunning Football                                         
+Author Version: 4.0                                                     
+Author Registration: $25.00                                             
+Special Requirements: 320 K RAM and CGA, EGA, VGA, or Hercules.         
+                                                                        
+You pick the plays, you run, you pass, you score!  It's CUNNING         
+FOOTBALL -- a fast action game for mouse, keyboard, or joystick!        
+                                                                        
+CUNNING FOOTBALL provides the ``Saturday'' quarterback a chance to try  
+all of his winning strategies on a realistic playing field that         
+includes interceptions, penalties, and an opposing team that wants to   
+stomp you into the ground.  On offense, you control the player with the 
+ball.  After the snap, you control the QB until you pass, lateral, or   
+handoff the ball.  On defense, you control the middle/inside linebacker.
+After selecting a play from the menu, you can display a diagram of the  
+play to give you information about where you should move, who your      
+available receivers are, and when you should pass.  Go team!            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1240
 

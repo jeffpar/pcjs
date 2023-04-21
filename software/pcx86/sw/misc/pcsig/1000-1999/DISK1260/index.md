@@ -33,6 +33,124 @@ machines:
     instruction.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1260.TXT
+
+{% raw %}
+```
+Disk No: 1260
+Program Title:  WORD PERFECT 4.2 LEARNING SYSTEM (Disk 1 of 2)
+PC-SIG version: 1
+
+More than 300 screens are used by this multifeatured tutorial to teach
+you WORD PERFECT version 4.2.
+
+Step-by-step, you learn WORD PERFECT commands and gain skills to create,
+edit or modify a document, and set up parameters for page formatting.
+The tutorial shows you how to use the spelling checker and the
+thesaurus, as well as special arithmetic features of WORD PERFECT.  The
+PC novice will find excellent introductory lessons describing hardware,
+the disk operating system (DOS) and keyboard functions.
+
+WORD PERFECT 4.2 LEARNING SYSTEM works well for individual use, and
+classroom instruction.
+
+Usage:  Educational.
+
+Special Requirements:  512K memory, CGA graphics, and WORD PERFECT 4.2
+for sample problems.
+
+How to Start:  Type GO (Press enter).
+
+Suggested Registration:  $79.95.
+
+File Descriptions:
+
+WORDPERF DBD  Tutorial program file.
+LEARN    EXE  Runtime file for WORDPERF.DBD.
+MATHCOL  WP   Document demo for math calculation in columns.
+MATHCOL1 WP   Document demo for math calculation in rows.
+CHECKLIS ECC  Demonstration of tabs.
+INTERMEM ECC  Demonstration of indentation.
+PCAL          Demonstration of columns to organize text.
+BURTON   ECC  Word Perfect document used in thesaurus practice.
+GOHARD   BAT  Batch file for installing program on hard disk.
+GOSOFT   BAT  Batch file for running program on dual floppy systems.
+GO       BAT  Executes the tutorial from the hard disk.
+FINISHED TXT  Instructions for installation process.
+INSTALL  TXT  Instructions for installation process.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## FINISHED.TXT
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+The installation process has been completed.  You should have a
+sub-directory on the hard drive named WORDPTUT.  All of the files
+for running The WordPerfect Learning System have been transferred to
+the hard drive and you are ready to use the tutorial.
+
+Change your current drive to C:
+
+Change your current directory to c:\WORDPTUT
+
+Type in the command Go and press <ENTER>
+
+
+```
+{% endraw %}
+
+## INSTALL.TXT
+
+{% raw %}
+```
+ 
+ 
+
+
+This will install The Learning System Tutorial on your hard drive
+
+This will create a sub-directory called WORDPTUT and copy all the
+files from the floppy diskette to the sub-directory.  
+
+When you are ready to run The WordPerfect LEARNING SYSTEM make the
+WORDPTUT sub-directory your current directory.  
+
+The type in the command GO and press <ENTER>.
+
+NOTE! If you are going to run The WordPerfect Learning System on a
+floppy diskette system and NOT on a hard drive.....
+
+          PRESS <CTRL> AND <BREAK>
+
+If you are going to use the hard drive to run The WordPerfect 
+Learning System, press <ANY KEY> to continue.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1260
 

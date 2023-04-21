@@ -57,6 +57,7 @@ machines:
 
 ## CHR-DEMO.BAS
 
+{% raw %}
 ```bas
 10 '***************************************************************************
 20 '*                                                                         *
@@ -215,9 +216,68 @@ machines:
 1550 CALL SUBRT%                        'call the code interface
 1560 RETURN                             'done, so return
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #221, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  PRNT-SCN.COM         CRC = AB 13
+
+--> FILE:  PRNT-CHR.COM         CRC = 91 4C
+
+--> FILE:  PRNT-SET.COM         CRC = 52 C7
+
+--> FILE:  SCN-DEMO.BAS         CRC = 6D D7
+
+--> FILE:  CHR-DEMO.BAS         CRC = A6 56
+
+--> FILE:  USMAP   .PIC         CRC = 02 2B
+
+--> FILE:  PRN-MAN .BAT         CRC = D8 C2
+
+--> FILE:  MANUAL  .DOC         CRC = 51 CF
+
+--> FILE:  PRN-APX .BAT         CRC = 69 F4
+
+--> FILE:  APPENDIX.DOC         CRC = 5C 88
+
+--> FILE:  NOTICE  .            CRC = D8 51
+
+--> FILE:  README  .            CRC = 03 76
+
+--> FILE:  CRC     .TXT         CRC = 6D 1D
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+ ---------------------> SUM OF CRCS = 9C 91
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## SCN-DEMO.BAS
 
+{% raw %}
 ```bas
 10 '***************************************************************************
 20 '*                                                                         *
@@ -320,6 +380,7 @@ machines:
 990 LPRINT CHR$(12)                             'eject graphics print
 1000 RETURN                                      'done, so retàün
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

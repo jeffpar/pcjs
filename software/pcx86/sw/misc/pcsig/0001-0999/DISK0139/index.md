@@ -61,8 +61,156 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CHAROP.ASM
+
+{% raw %}
+```
+title MSDOS 2.00 Function Library for Lattice C
+subttl -
+;;
+;;FUNCTION:	Sets and returns switch char-
+;;	acter and device availability.
+;;
+;;
+;;CALL:
+;;
+;;	ret= _charop(al,dl)
+;;	int ret;	DL return value, 
+;;	int al;		charoper function
+;;	int dl;		charoper data
+;;
+;;RETURN:
+;;	See the DOS docs for details. 
+;;_charop(0,0) returns the ASCII switch char,
+;;_charop(1,'-') sets the switch to -,
+;;_charop(2,0) returns device availability,
+;;_charop(3,i) sets device availability.
+;;
+;;
+;;DESCRIPTION:
+;;
+;;EXAMPLE:
+;;
+;;
+;;CAUTIONS:
+;;
+;;
+;;ASSUMPTIONS:
+;;
+;;LONG	32 bits (4 bytes)
+;;INT	16 bits (2 bytes)
+;;CHAR	 8 bits (1 byte)
+;;
+page
+pgroup group prog
+prog segment byte public 'prog'
+assume cs:pgroup,ds:pgroup
+
+public 	_charop
+
+_charop proc near
+	push	bp
+	mov	bp,sp
+	mov	al,[bp+4]
+	mov	dl,[bp+6]
+	mov	ah,55
+	int	33
+	mov	al,dl
+	mov	ah,0
+	pop	bp
+	ret
+_charop endp
+
+prog ends
+
+	end
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #139, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  DOSPATH .C           CRC = 31 47
+
+--> FILE:  CHAROP  .ASM         CRC = 74 40
+
+--> FILE:  LORES   .EXE         CRC = 08 F5
+
+--> FILE:  LODEMO  .BAS         CRC = 8D ED
+
+--> FILE:  NUSQ    .COM         CRC = 8A 04
+
+--> FILE:  LORES   .OBJ         CRC = 98 EF
+
+--> FILE:  LORES   .USR         CRC = 56 3F
+
+--> FILE:  LORES   .ASM         CRC = 5E 33
+
+--> FILE:  LORES   .BAS         CRC = 22 F0
+
+--> FILE:  LORES   .DOC         CRC = 49 5A
+
+--> FILE:  TELE    .BAT         CRC = E0 51
+
+--> FILE:  DIAL    .BAT         CRC = AF FD
+
+--> FILE:  EDIT    .BAT         CRC = C8 71
+
+--> FILE:  VCOPY   .BAT         CRC = 81 B6
+
+--> FILE:  ANSI    .BAT         CRC = 1E 7F
+
+--> FILE:  FORMAT  .BAT         CRC = 5D A1
+
+--> FILE:  FSKEL   .BAT         CRC = DC EC
+
+--> FILE:  MENU    .BAT         CRC = 8E C9
+
+--> FILE:  UTILITY .BAT         CRC = 91 28
+
+--> FILE:  DIR201  .BAS         CRC = 21 6F
+
+--> FILE:  DIR201  .EXE         CRC = BC 6B
+
+--> FILE:  PRINTXT1.INC         CRC = E7 8C
+
+--> FILE:  PRINTXT1.DOC         CRC = F5 C9
+
+--> FILE:  PRINTXT1.CMD         CRC = 70 BD
+
+--> FILE:  BAT200D .COM         CRC = 9C C7
+
+--> FILE:  READ    .ME          CRC = 9A 05
+
+ ---------------------> SUM OF CRCS = 36 42
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## DIR201.BAS
 
+{% raw %}
 ```bas
 10 '
 20 '      DIR201.BAS - - - - - - *** IBM Version 2.01 ***
@@ -937,9 +1085,11 @@ machines:
 8710 ON ERROR GOTO 0
 8720 'End of DIR2_01.BAS, Version 2.01.
 ```
+{% endraw %}
 
 ## LODEMO.BAS
 
+{% raw %}
 ```bas
 1 ' LODEMO.BAS
 2 ' 3/10/84
@@ -1369,9 +1519,1774 @@ machines:
 5620 ON X GOTO 810,1200,1500,5000
 5630 GOTO 5300
 ```
+{% endraw %}
+
+## LORES.ASM
+
+{% raw %}
+```
+; lores.asm	3/12/84
+; interface routines to use 160x100 mode of color graphics
+title	LORES 160x100 Graphics Primitives.
+	page	62,100
+
+	public	lores
+
+;	public	first_init,cls,plotdot,getdot
+;	public	drawline,box,circle
+;	public	random,randomize
+;	public	letter,loprint,slowletter
+;	public	sin,cos,lopaint
+
+;
+;	GENERAL FORM OF ALL ROUTINES FROM BASIC:
+;
+;	CALL LORES%(ROUTINE%,PARMS%(0))
+;
+;	Where ROUTINE% is what is to be done,
+;	  and PARMS%(0) is an integer array of 6 elements with specs for action.
+;
+;	Unless the routine returns a value, all elements of PARMS%(x)
+;	  are returned unchanged.
+;
+
+TRUE	equ	-1
+FALSE	equ	0
+
+COMPILER	EQU	FALSE	; set to TRUE for compiler .obj file
+
+REGISTER	equ	3d4h
+CRT		equ	3d5h
+MODE		equ	3d8h
+COLORPORT	equ	3d9h
+STATUS		equ	3dah
+
+ROM_TABLE_ADDRESS	equ	0fa6eh	; character patterns in ROM
+COLOR_CARD_SEGMENT	equ	0b800h	; where the action is
+
+MULT		equ	261	; for random number generator
+MODULUS 	equ	32749
+
+abs0	segment at 0
+	org	1dh*4
+parm_ptr	label	dword	; for video horizontal sync.
+				; LORES respects DOS MODE co80,r
+abs0	ends
+
+
+; Equates for drawline
+;
+;  stack has address of start of parms.
+;	V(0)	= X1	= start col. (0-159)
+;	V(1)	= Y1	= start row  (0-99)
+;	V(2)	= X2	= end column
+;	V(3)	= Y2	= end row
+;	V(4)	= color = ( 0-15 )
+;	V(5)	= length= 0 for draw whole line, else sub-set
+;
+
+ARG1	equ	word ptr [BP+4] 	; 4 for near call, 6 for far
+
+X1	equ	word ptr [si]
+Y1	equ	word ptr [si+2]
+X2	equ	word ptr [si+4]
+Y2	equ	word ptr [si+6]
+COLOR	equ	byte ptr [si+8]
+LEN	equ	word ptr [si+10]
+
+; these are values that will be inserted in the code for DRAWLINE
+	INC_X	equ	41H
+	DEC_X	equ	49H
+	INC_Y	equ	42H
+	DEC_Y	equ	4AH
+
+; these are addresses where new code is overlayed for line
+ADJ_LONG_AXIS	equ	byte ptr cs:[di]
+ADJ_MASTER	equ	word ptr cs:[di+3]
+TEST_MASTER	equ	word ptr cs:[di+7]
+ALT_ADJ_MASTER	equ	word ptr cs:[di+13]
+ADJ_SHRT_AXIS	equ	byte ptr cs:[di+15]
+
+
+;cgroup  group	 cseg
+cseg	segment para public 'code'
+	assume	CS:cseg
+
+lores	proc	far		; entry for all lobio routines
+	push	bp
+	mov	bp,sp
+	mov	ax,COLOR_CARD_SEGMENT
+	mov	es,ax		; all routines assume es: for video work
+	mov	si,[bp+8]	; routine number
+	mov	ax,[si]
+	sub	ah,ah
+	shl	ax,1
+	mov	si,[bp+6]	; array(0)
+	mov	bx,ax
+	cmp	bx,OUT_OF_RANGE
+	jae	loret
+	jmp	word ptr cs:[bx+offset jump_table]
+
+loret:
+	push	ds
+	pop	es
+	pop	bp
+	ret	4
+
+jump_table	label	word
+	dw	offset first	; 0 - array values unused, dummy address needed
+	dw	offset cls	; 1 - v(0) = color to clear screen
+	dw	offset plot	; 2 - x, y, color
+	dw	offset get	; 3 - x, y, color returned in v(2)
+	dw	offset line	; 4 - x1,y1,x2,y2,color,length(0 for whole line)
+	dw	offset box	; 5 - x1,y1,x2,y2,color,length(set to 0 by lores)
+	dw	offset circle_setup ; 6 - x,y,radius,aspect num,aspect den,color
+	dw	offset letter1	; 7 - x(0-11),y(0-19),ASC(letter$),color
+	dw	offset letter2	; 8 - x,y,letter,foreground,background
+	dw	offset print	; 9 - x,y,VARPTR(message$),color
+	dw	offset print2	; 10 - does nothing for now
+	dw	offset sine	; 11 - x(in degrees),v(1) returns sin*10000
+	dw	offset cosine	; 12 - x(in degrees),v(1) returns cos*10000
+	dw	offset rnd	; 13 - if v(0)=0 randomize else v(1) rnd 1 to x
+	dw	offset switch	; 14 - turn OFF lores, use mode at time of entry
+	dw	offset lomode	; 15 - v(0)=IBM video mode else -1 for LORES.
+	dw	offset lopaint	; 16 - x,y,fill,boundary
+
+OUT_OF_RANGE	EQU	$-jump_table
+
+;		 0   1	 2   3	 4   5	 6   7	 8   9	out 3d4h
+video	db	71h,50h,5ah,0ah,7fh,06h,64h,70h,02h,01h ; out 3d5h
+; this is the setup for LORES mode to the 6845 video controller.
+
+seed	dw	41	; random number seed
+
+boxed	dw	6 dup (0)  ; storage for BOX routine
+
+vidmode db	0	; save ibm video mode on initialization
+lostat	db	0	; is LORES active?
+locolor db	0	; init=0, cls sets to value-used by print for scroll
+
+first:
+	call	first_init
+	jmp	loret
+
+plot:
+	mov	dx,Y1
+	mov	cx,X1
+	mov	ax,X2
+	sub	ah,ah
+	call	plotdot
+	jmp	loret
+
+get:
+	mov	dx,Y1
+	mov	cx,X1
+	call	getdot
+	mov	X2,ax
+	jmp	loret
+
+line:
+	push	si
+	call	drawline
+	jmp	loret
+
+circle_setup:
+	mov	ax,X1	   ; x
+	push	ax
+	mov	ax,Y1	   ; y
+	push	ax
+	mov	ax,X2	   ; radius
+	or	ax,ax
+	jz	cir_abort1 ; zero for radius leads to divide by zero error
+	push	ax
+	mov	ax,Y2	   ; aspect numerator
+	or	ax,ax
+	jz	cir_abort2 ; zero in aspect ratio is bogus too
+	push	ax
+	mov	ax,[si+8]  ; aspect denominator
+	or	ax,ax
+	jz	cir_abort3 ; so abort routine for safety.
+	push	ax
+	mov	ax,LEN	   ; color
+	push	ax
+
+	call	circle
+	jmp	loret
+
+cir_abort3:
+	pop	ax	   ; safe circle exit for error conditions.
+cir_abort2:
+	pop	ax
+cir_abort1:
+	pop	ax
+	pop	ax
+	jmp	loret
+
+letter1:
+	mov	ax,Y2	; color
+	mov	ah,al
+	mov	bx,X2	; ascii value of letter
+	mov	al,bl
+	mov	dx,X1	; row (0-11)
+	mov	dh,dl
+	mov	bx,Y1	; col (0-19)
+	mov	dl,bl
+
+	call	letter	; print letter at pos. Ignor background
+	jmp	loret
+
+letter2:
+	mov	ax,Y2	; color
+	mov	ah,al
+	mov	al,COLOR
+	mov	cl,4
+	shl	al,cl
+	or	ah,al	; background
+	mov	bx,X2	; letter
+	mov	al,bl
+	mov	dx,X1	; row
+	mov	dh,dl
+	mov	bx,Y1	; col
+	mov	dl,bl
+
+	call	slowletter  ; print letter in color,background - fill all dots.
+	jmp	loret
+
+print:
+	mov	ax,Y2    ; color. if bit 7 set, print as xor
+	mov	ah,al
+	mov	dx,X1	; row (0-11)
+	mov	dh,dl
+	mov	bx,Y1	; col (0-19)
+	mov	dl,bl
+	mov	bx,X2	; varptr of string
+	push	si
+IF COMPILER
+	mov	cx,[bx] ; compiler uses two bytes for string - max len=32767
+	inc	bx
+	inc	bx
+	mov	si,[bx]
+
+ELSE
+	mov	cl,[bx] ; interpreter uses one byte.
+	sub	ch,ch
+	inc	bx
+	mov	si,[bx]
+
+ENDIF
+	call	loprint ; this will figure out which way to print.
+	pop	si	; get back v(0)
+	sub	ax,ax
+	mov	al,dh	; x
+	mov	X1,ax
+	mov	al,dl	; y
+	mov	Y1,ax
+	jmp	loret
+
+print2:
+	jmp	loret
+
+lopaint:
+	mov	cx,X1	; col
+	mov	dx,Y1	; row
+	mov	bx,X2	; fill color
+	and	bl,7fh	; xor in paint leads to problems
+	mov	ax,Y2	; boundary color
+	mov	bh,al	; bh=bound,bl=fill
+	mov	al,cl	; make one word since
+	mov	ah,dl	; row=0-99,col=0-159. Save stack space.
+	push	ax	; save on stack for first.
+
+	call	lopaintr ; solve recursively
+	jmp	loret	; back I hope.
+
+sine:
+	mov	ax,X1	; sin/cos use DEGREES, not radians
+			; return result in v(1) as value*10000
+sine1:
+	cmp	ax,360	; scale to 0-319 range.
+	jb	sine2
+	sub	ax,360
+	jmp	sine1
+
+sine2:
+	call	sin
+	mov	Y1,ax	; return in v(1)
+	jmp	loret
+
+cosine:
+	mov	ax,X1
+
+cosine1:
+	cmp	ax,360
+	jb	cosine2
+	sub	ax,360
+	jmp	cosine1
+
+cosine2:
+	call	cos
+	mov	Y1,ax
+	jmp	loret
+
+rnd:
+	mov	ax,X1	; get number
+	or	ax,ax
+	jz	rnd1	; if its 0 then reseed generator
+	call	random
+	mov	Y1,ax	; else return rnd from 1 to x in array(1)
+	jmp	loret
+
+rnd1:
+	call	randomize
+	mov	ax,0ffffh  ; put -1 in array(0) to indicate done
+	mov	X1,ax
+	jmp	loret
+
+lomode:
+	call	lomo		; check for LORES active,
+	jmp	loret		; else return IBM video mode.
+
+lores	endp
+
+lomo	proc	near
+	mov	al,cs:lostat	; lostat set to -1 if lores active
+	or	al,al
+	jz	lomo1
+	mov	ax,-1
+	mov	X1,ax
+	ret
+
+lomo1:
+	mov	ah,15		; if not active, return actual video state
+	int	10h
+	mov	cs:vidmode,al
+	sub	ah,ah
+	mov	X1,ax
+	ret
+lomo	endp
+
+switch	proc	near
+; turn off lores mode, restoring original screen mode. If on mono, do nothing.
+
+	sub	al,al
+	mov	cs:lostat,al	; indicate off
+	mov	al,cs:vidmode
+	cmp	al,7		; mono screen?
+	jz	swit1		; don't do anything,
+	sub	ah,ah		; else restore mode on init.
+	push	bp
+	push	si
+	int	10h
+	pop	si
+	pop	bp
+swit1:
+	jmp	loret
+
+switch	endp
+
+first_init    proc    near
+; set up screen
+; no regs changed
+	push	si
+	push	dx
+	push	cx
+	push	bx
+	push	ax
+	mov	ah,15		; store current mode for later
+	int	10h
+	mov	cs:vidmode,al
+	mov	dx,MODE
+	mov	al,1		; turn off video for setup
+	out	dx,al
+
+	push	ds		; save to get horiz. sync from table
+	mov	ax,abs0
+	mov	ds,ax		; parm_ptr at 0:74h
+
+	assume	ds:abs0
+	lds	bx,parm_ptr
+	add	bx,12h		; points to 80x25 synch
+	mov	al,[bx] 	; get value
+	pop	ds		; back to start value.
+	assume	ds:nothing
+
+	mov	si,offset cs:video
+	mov	cs:[si+2],al	; store in our table
+
+	mov	dx,REGISTER	; 6845 out 3d4 then out 3d5
+	mov	cx,10		; set ten regs
+
+finit_loop:
+	mov	al,10
+	sub	al,cl
+	out	dx,al
+	inc	dx
+	mov	al,cs:[si]
+	out	dx,al
+	inc	si
+	dec	dx
+
+	loop	finit_loop
+
+
+	mov	cx,1fffh
+	mov	di,0
+	mov	ax,00deh	; set to black
+	cld
+	rep	stosw
+
+	mov	dx,MODE
+	mov	al,9
+	out	dx,al		; re-enable video, disable blink
+
+	mov	al,0ffh
+	mov	cs:lostat,al	; indicate on
+	sub	al,al
+	mov	cs:locolor,al	; color 0 (black)
+
+	pop	ax
+	pop	bx
+	pop	cx
+	pop	dx
+	pop	si		; restore-return
+	ret
+
+first_init    endp
+
+cls	proc	near
+; CLS to color in AL
+; AX changed, others preserved
+
+	mov	ax,[si] 	; color
+	mov	cs:locolor,al	; store for later
+	and	cs:locolor,7fh	; strip off xor bit
+	push	di
+	push	dx
+	push	cx		; save regs
+
+	test	al,80h		; want an xor?
+	jz	cls10
+	call	cls_xor
+	jmp	cls20
+
+cls10:
+	push	ax		; save color
+	mov	dx,MODE
+	mov	al,1		; turn off video for setup
+	out	dx,al
+
+	mov	cx,1fffh
+	mov	di,0
+	pop	ax		; get color spec
+	and	al,0fh		; only 0-15
+	mov	ah,al		; copy
+	shl	al,1		; mov lo 4 bits to high
+	shl	al,1
+	shl	al,1
+	shl	al,1
+	or	ah,al		; same color to each dot
+
+	mov	al,0deh        ; character for setup
+	cld
+	rep	stosw
+
+	mov	dx,MODE
+	mov	al,9
+	out	dx,al		; re-enable video, disable blink
+
+cls20:
+	pop	cx		; restore regs
+	pop	dx
+	pop	di
+	jmp	loret		; back to caller
+
+cls_xor:
+	push	ds
+	push	es
+	pop	ds		; use ds to avoid seg override.
+	push	bx
+	and	al,0fh		; only 0-15
+	mov	di,1		; first attribute pos.
+	mov	bl,al		; copy color to bl
+	mov	cl,4
+	shl	bl,cl		; shift lo4 bits to hi
+	or	bl,al		; get back orig. bl makes two dots.
+	mov	cx,8000 	; attributes
+	mov	dx,STATUS
+
+clxr10:
+	in	al,dx		; wait for horiz. retrace
+	test	al,1		; for action
+	jnz	clxr10
+	cli
+
+clxr20:
+	in	al,dx
+	test	al,1
+	jz	clxr20
+				; xor to memory takes too long for
+	mov	ah,[di] 	; horiz. retrace window.
+	sti			; interrupts ok.
+	xor	ah,bl
+clxr30:
+	in	al,dx		; wait for horiz. retrace
+	test	al,1		; for action
+	jnz	clxr30
+	cli
+
+clxr40: 			; this takes longer, but makes no snow
+	in	al,dx
+	test	al,1
+	jz	clxr40
+
+	mov	[di],ah 	; back to screen
+	sti
+	inc	di		; get to next
+	inc	di
+	loop	clxr10		; do till done.
+
+	pop	bx		; keep it neat
+	pop	ds
+	ret			; back to caller
+
+cls	endp
+
+plotdot proc	near
+; set a dot to color
+;    DX = row	( 0-99 )
+;    CX = col	( 0-159 )
+;    AL = color
+; assumes ES points to video memory
+; all regs preserved.
+; plotdot mimics int 10h write dot, including xor dot
+	push	dx
+	push	si		; save regs
+	push	cx
+	push	bx
+	push	ax
+	cmp	dx,99		; don't do for out of range
+	ja	pdbridge	; no jump takes less time
+	cmp	cx,159
+	ja	pdbridge
+	push	ax		; save color
+	mov	ax,dx		; copy row to ax
+	shl	ax,1		; *2   row*160=
+	shl	ax,1		; *4   row*128
+	shl	ax,1		; *8
+	shl	ax,1		; *16
+	shl	ax,1		; *32
+	shl	ax,1		; *64
+	shl	ax,1		; *128
+	shl	dx,1		; *2   + row*32
+	shl	dx,1		; *4
+	shl	dx,1		; *8   in 27 clocks
+	shl	dx,1		; *16  instead of ~80
+	shl	dx,1		; *32
+	add	ax,dx		; row*128 + row*32
+	mov	si,ax		; move to si
+	add	si,cx		; + col
+	or	si,1		; adjust for attribute
+	pop	bx		; get back color
+
+	mov	dx,STATUS
+
+pdw1:
+	in	al,dx
+	test	al,1
+	jnz	pdw1		; wait for horiz. retrace
+	cli			; no more interrupts
+
+pdw2:
+	in	al,dx		; get status
+	test	al,1		; is it high
+	jz	pdw2		; wait till it is
+
+	mov	bh,es:[si]	; get current byte
+	sti			; interrupts ok
+	test	cx,1		; check odd/even
+	jz	pd1
+	test	bl,80h		; check for xor
+	jz	pdw2a		; no, jump
+	mov	ch,bh		; save orig
+	xor	bh,bl		; xor both
+	and	bh,0fh		; mask out other dot
+	and	ch,0f0h 	; mask our dot
+	or	bh,ch		; combine
+	jmp	short pdw3	; onward
+
+pdbridge:
+	jmp	pdret		; hop skip and a jump
+pdw2a:
+	and	bh,0f0h 	; its odd - set foreground
+	and	bl,0fh		; filter bogus color
+	or	bh,bl		; combine
+
+pdw3:
+	in	al,dx		; wait for horiz. retrace
+	test	al,1
+	jnz	pdw3
+	cli
+
+pdw4:
+	in	al,dx
+	test	al,1
+	jz	pdw4
+
+	mov	es:[si],bh	; back to screen
+	sti
+	jmp	short pdret
+
+pd1:
+	test	bl,80h		; check for xor
+	jz	pd1a		; no-go on
+	shl	bl,1		; shift to background
+	shl	bl,1
+	shl	bl,1
+	shl	bl,1
+
+	mov	ch,bh		; save orig
+	xor	bh,bl		; xor both
+	and	bh,0f0h 	; mask out other dot
+	and	ch,0fh		; mask our dot
+	or	bh,ch		; combine
+	jmp	short pdw5	; onward
+
+pd1a:
+	and	bh,0fh		; save foreground
+	shl	bl,1		; shift to background
+	shl	bl,1
+	shl	bl,1
+	shl	bl,1
+	or	bh,bl		; combine
+
+pdw5:
+	in	al,dx		; wait retrace to store on screen
+	test	al,1
+	jnz	pdw5
+	cli
+
+pdw6:
+	in	al,dx
+	test	al,1
+	jz	pdw6
+	mov	es:[si],bh
+	sti
+
+pdret:
+	pop	ax
+	pop	bx
+	pop	cx
+	pop	si
+	pop	dx
+	ret			; back to caller
+
+plotdot endp
+
+getdot	proc	near
+; get a dot, return color
+;    DX = row	( 0-99 )
+;    CX = col	( 0-159 )
+;    returns AX = color, or -1 if request out of range
+; assumes ES points to video memory
+	push	dx
+	push	si		; save regs
+	push	cx
+	push	bx
+	cmp	dx,99		; don't do for out of range
+	ja	gdret_bad
+	cmp	cx,159
+	ja	gdret_bad
+	mov	ax,dx
+	mov	bl,160
+	mul	bl		; 160 * row
+	mov	si,ax
+	add	si,cx		; + col
+	or	si,1		; adjust for attribute
+
+	mov	dx,STATUS
+
+gdw1:
+	in	al,dx
+	test	al,1
+	jnz	gdw1		; wait for horiz. retrace
+	cli			; no more interrupts
+
+gdw2:
+	in	al,dx		; get status
+	test	al,1		; is it high
+	jz	gdw2		; wait till it is
+
+	mov	al,es:[si]	; get current byte
+	sti			; interrupts ok
+
+	test	cl,1		; odd?
+	jz	gd1
+	and	al,0fh		; filter other dot
+	sub	ah,ah
+	jmp	short gdret	;back
+
+gd1:
+	mov	cl,4
+	shr	al,cl		; hi dot to low
+	sub	ah,ah
+	jmp	short gdret
+
+gdret_bad:
+	mov	ax,0ffffh	; -1 = out of range
+
+gdret:
+	pop	bx
+	pop	cx
+	pop	si
+	pop	dx
+	ret
+
+
+getdot	endp
+
+
+;	DRAWLINE.ASM  - - as a near call
+;	from Dr. Dobbs -- June 1983, p.75
+;	Uses fast-line drawing technique from BYTE, Aug. 81
+;
+;	args in array parms
+;	X1	Y1	X2	Y2	COLOR	LEN
+;	push parms offset on stack, discarded on return
+;	i.e. push address_of_first_array_element
+;	don't expect it to be there on return
+;	segments, bp preserved, others changed.
+
+drawline proc	near
+	push	bp
+	mov	bp,sp
+	mov	si,ARG1   ; i.e. V%(0)
+	mov	bl,INC_X
+	mov	ax,X2
+	sub	ax,X1
+	jge	dl1
+	mov	bl,DEC_X
+	neg	ax
+dl1:
+	mov	cx,ax
+	mov	bh,INC_Y
+	mov	ax,Y2
+	sub	ax,Y1
+	jge	dl2
+	mov	bh,DEC_Y
+	neg	ax
+dl2:
+	mov	dx,ax
+	mov	di,offset cs:modify_base
+	cmp	dx,cx
+	jge	dl3
+	xchg	cx,dx
+	xchg	bl,bh
+dl3:
+	mov	ADJ_LONG_AXIS,bh
+	mov	ADJ_MASTER,cx
+	shr	cx,1
+	mov	TEST_MASTER,cx
+	mov	ALT_ADJ_MASTER,dx
+	mov	ADJ_SHRT_AXIS,bl
+	mov	di,dx
+	cmp	LEN,0
+	jle	dl4
+	mov	di,LEN
+dl4:
+	mov	cx,X1
+	mov	dx,Y1
+	mov	al,COLOR
+	sub	bx,bx
+dl5:
+	call	plotdot
+
+modify_base	label	byte
+
+	inc	cx
+	add	bx,1111H
+	cmp	bx,1111H
+	jle	dl6
+	sub	bx,1111H
+	inc	dx
+dl6:
+	dec	di
+	jge	dl5
+
+	pop	bp
+	ret	2
+drawline endp
+
+box	proc	near
+; parms set up in boxed
+; segments, bp preserved, others changed
+
+	mov	di,offset boxed
+	push	di
+	push	si		; save for us
+	push	es
+	push	cs
+	pop	es
+	mov	cx,12		; get args to temp area
+	cld
+	rep	movsb
+	pop	es
+	pop	si
+	pop	di
+	mov	ax,cs:boxed	; bx1
+	mov	X1,ax
+	mov	ax,cs:boxed+2	; by1
+	mov	Y1,ax
+	mov	Y2,ax		; y2=y1
+	mov	ax,cs:boxed+4	; bx2
+	mov	X2,ax
+	sub	ax,ax
+	mov	LEN,ax		; length = whole
+
+	push	si
+	push	si		; store for drawline
+	call	drawline
+
+	pop	si
+	push	si
+	mov	ax,cs:boxed+4	; bx2
+	mov	X1,ax
+	mov	ax,cs:boxed+6	; by2
+	mov	Y2,ax		; y2 (y1 ok from last)
+
+	push	si
+	call	drawline
+
+	pop	si
+	push	si
+	mov	ax,cs:boxed+6	; by2
+	mov	Y1,ax		; y1
+	mov	ax,cs:boxed	; bx1
+	mov	X2,ax		; x2
+
+	push	si
+	call	drawline
+
+	pop	si
+	push	si
+
+	mov	ax,cs:boxed	; bx1
+	mov	X1,ax		; x1
+	mov	ax,cs:boxed+2	; by1
+	mov	Y2,ax		; y2
+
+	push	si
+	call	drawline
+
+	pop	di
+
+	mov	si,offset boxed
+	push	cs
+	push	ds
+	pop	es
+	pop	ds
+
+	mov	cx,12		; put args back in array
+	cld
+	rep	movsb
+
+	mov	ax,es
+	mov	ds,ax
+
+	jmp	loret
+
+box	endp
+
+;-----------------------------------
+; procedure
+; circle(x,y,radius,number,denom,color:integer)
+;
+; Dan Lee  July 1, 1982
+; SourceWare
+;
+; draws a circle at center (x,y) with aspect
+; ratio numer/denom; radius in column units
+;
+; assumes entry via inter-segment call,
+;	modified here as intra-segment
+; frame:	value x 	: bp+16
+;		value y 	: bp+14
+;		value radius	: bp+12
+;		value numer	: bp+10
+;		value denom	: bp+8
+;		value color	: bp+6
+; segments, bp preserved, others changed
+;--------------------------------------
+
+circle	proc	near
+	push	bp
+	push	bp		; as substitute for near
+	mov	bp,sp
+	mov	ax,[bp+10]
+	mov	bx,1024
+	imul	bx
+	mov	cx,[bp+8]
+	idiv	cx
+	push	ax
+	xchg	ax,cx
+	mov	cx,[bp+10]
+	imul	bx
+	idiv	cx
+	mov	[bp+8],ax
+	pop	ax
+	mov	[bp+10],ax
+
+; start by incrementing Y by one unit and
+; decrementing X by TAN units*inv aspect
+; start at (RADIUS,Y) and plot to 45 degrees
+
+	mov	ax,[bp+12]
+	mov	bx,1024
+	imul	bx
+	sub	di,di
+
+cr5:
+	push	ax
+	push	dx
+	sub	bx,bx
+	add	ax,512
+	adc	dx,bx
+	mov	bx,1024
+	idiv	bx
+	mov	bx,ax
+	add	ax,[bp+16]
+	mov	dx,[bp+14]
+	sub	dx,di
+	mov	cx,ax
+	mov	al,[bp+6]
+	mov	ah,12
+	call	plotdot
+	sub	cx,bx
+	sub	cx,bx
+	call	plotdot
+	add	dx,di
+	add	dx,di
+	call	plotdot
+	add	cx,bx
+	add	cx,bx
+	call	plotdot
+
+; cx now at original point
+
+	xchg	cx,bx
+	inc	di
+	mov	ax,di
+	mov	bx,[bp+8]
+	imul	bx
+	idiv	cx
+	sub	dx,dx
+	mov	si,ax
+	idiv	bx
+	cmp	ax,1
+	pop	dx
+	pop	ax
+	jae	cr7
+	neg	si
+	mov	bx,-1
+	add	ax,si
+	adc	dx,bx
+	jmp	short cr5
+
+; plot 45 to 90 degrees
+; now decrease X by one unit and
+; increase Y by COT units*aspect ratio
+
+cr7:
+	mov	ax,di
+	mov	bx,1024
+	imul	bx
+	mov	di,cx
+	dec	di
+
+cr8:
+	push	ax
+	push	dx
+	sub	bx,bx
+	add	ax,512
+	adc	dx,bx
+	mov	bx,1024
+	idiv	bx
+	mov	bx,ax
+	add	ax,[bp+14]
+	mov	cx,[bp+16]
+	add	cx,di
+	mov	dx,ax
+	mov	al,[bp+6]
+	mov	ah,12
+	call	plotdot
+
+	sub	cx,di
+	sub	cx,di
+	call	plotdot
+	sub	dx,bx
+	sub	dx,bx
+	call	plotdot
+	add	cx,di
+	add	cx,di
+	call	plotdot
+	sub	dx,[bp+14]
+	neg	dx
+	xchg	cx,dx
+	or	di,di
+	js	cr11
+	dec	di
+	mov	ax,di
+	mov	bx,[bp+10]
+	imul	bx
+	idiv	cx
+	mov	si,ax
+
+	pop	dx
+	pop	ax
+	sub	bx,bx
+	or	si,si
+	jns	cr10
+	mov	bx,-1
+
+cr10:
+	add	ax,si
+	adc	dx,bx
+	jmp	short cr8
+
+; exit
+
+cr11:
+	add	sp,4
+	pop	bp
+	pop	bp
+	ret	12
+
+circle	endp
+
+lopaintr proc	 near
+; using boundary fill recursive algorithm
+; from Fundamentals of Interactive Computer Graphics
+; by J.D. Foley and A. Van Dam
+; Addison-Wesley 1982, p. 450
+; has one stack data as hi=row,lo=col
+; BX has been set with color as BH=boundary,BL=fill color
+
+	push	bp
+	mov	bp,sp
+	mov	cl,[bp+4]	; lo byte=col
+	sub	ch,ch		; 0-159
+	mov	dl,[bp+5]	; hi byte=row
+	sub	dh,dh
+	mov	si,cx		; save for left scan
+
+scan_write_right:
+	mov	al,bl		; fill color
+	call	plotdot
+	inc	cx
+	call	getdot
+	cmp	al,bl		; is it fill color?
+	jz	lpr10
+	cmp	al,bh		; is it boundary color?
+	jz	lpr10
+	cmp	al,0ffh 	; is it out of range?
+	jz	lpr10
+	jmp	scan_write_right ; no, keep going
+
+lpr10:
+	dec	cx
+	xchg	si,cx		; save rightmost for later
+
+scan_write_left:
+	mov	al,bl
+	call	plotdot
+	dec	cx
+	call	getdot
+	cmp	al,bl		; is it fill color?
+	jz	lpr20
+	cmp	al,bh		; is it boundary color?
+	jz	lpr20
+	cmp	al,0ffh 	; is it out of range?
+	jz	lpr20
+	jmp	scan_write_left ; no, keep going
+
+lpr20:
+	inc	cx
+	mov	di,cx		; save leftmost
+
+	dec	dx		; up one line
+	cmp	dx,0		; is less than 0?
+	jl	find_down_right
+	mov	cx,si		; recover right
+
+find_up_right:
+	cmp	cx,di		; end of scan?
+	jl	find_down_right
+	call	getdot
+	cmp	al,bl		; fill color?
+	jz	lpr40		; scan for start
+	cmp	al,bh		; boundary color?
+	jz	lpr40
+lpr25:				; if not fill/bound, stack it
+	mov	ah,dl		; row to hi
+	mov	al,cl		; col to lo
+	push	ax		; its a start, save on stack
+
+lpr30:				; scan for boundary/fill
+	dec	cx
+	cmp	cx,di		; end of scan?
+	jl	find_down_right
+	call	getdot
+	cmp	al,bl		; is it fill?
+	jz	lpr40
+	cmp	al,bh		; or boundary?
+	jz	lpr40		; if so, look for start
+	jmp	lpr30		; else continue
+
+lpr40:
+	dec	cx
+	cmp	cx,di
+	jl	find_down_right
+	call	getdot
+	cmp	al,bl		; is it fill?
+	jz	lpr40
+	cmp	al,bh		; or boundary?
+	jz	lpr40		; if so continue scan
+	jmp	lpr25		; its a start
+
+find_down_right:
+	mov	cx,si		; recover right
+	inc	dx
+	inc	dx		; scan row below
+	cmp	dx,99
+	ja	do_while
+
+	cmp	cx,di		; end of scan?
+	jl	do_while
+	call	getdot
+	cmp	al,bl		; fill color?
+	jz	lpr60		; scan for start
+	cmp	al,bh		; boundary color?
+	jz	lpr60
+lpr45:
+	mov	ah,dl		; row to hi
+	mov	al,cl		; col to lo
+	push	ax		; its a start, save on stack
+
+lpr50:				; scan for boundary/fill
+	dec	cx
+	cmp	cx,di		; end of scan?
+	jl	do_while
+	call	getdot
+	cmp	al,bl		; is it fill?
+	jz	lpr60
+	cmp	al,bh		; or boundary?
+	jz	lpr60		; if so, look for start
+	jmp	lpr50		; else continue
+
+lpr60:
+	dec	cx
+	cmp	cx,di
+	jl	do_while
+	call	getdot
+	cmp	al,bl		; is it fill?
+	jz	lpr60
+	cmp	al,bh		; or boundary?
+	jz	lpr60		; if so continue scan
+	jmp	lpr45		; its a start
+
+do_while:
+	cmp	sp,bp		; any pushed addresses?
+	jae	lprret		; sp=bp means no work pending
+				; sp>bp means trouble
+	call	lopaintr	; resolve stacked right addresses
+	jmp	do_while	; then check again
+
+lprret:
+	pop	bp		; recover last frame
+	ret	2		; discard data
+
+lopaintr	endp
+
+random	proc	near
+; return random number from 1 to ax
+; AX changed to random, other regs. preserved
+
+	push	dx
+	push	cx
+	push	bx
+	push	ax		; rnd request
+
+	call	rn1		; AX has seed
+	pop	cx		; get back request
+	mov	dx,0		; only 16 bit
+	idiv	cx		; divide
+	xchg	ax,dx		; just want remainder
+	inc	ax		; 1 to AX
+	pop	bx
+	pop	cx
+	pop	dx
+
+	ret			; back to caller
+
+rn1:
+	mov	ax,cs:seed	; seed @
+	mov	cx,MULT 	; MULT
+	mov	dx,0		; clear out msw
+	imul	cx		; M*
+	mov	cx,MODULUS	; MODULUS
+	idiv	cx		; M/MOD
+
+	mov	cs:seed,dx	; seed !
+	xchg	ax,dx		; set up for MOD
+
+	ret
+
+randomize:
+; reseed random number generator
+; no regs changed
+	push	ax
+	push	cx
+	push	dx
+
+	sub	ah,ah
+	int	1ah		; time of day
+	sub	dh,dh		; DX has low word
+	xchg	ax,dx
+	mov	cx,100
+	div	cl		; only 8 bits needed
+	mov	cl,ah		; get remainder
+	inc	cx
+
+rn2:
+	push	cx
+	call	rn1
+	pop	cx
+
+	loop	rn2
+
+	pop	dx
+	pop	cx
+	pop	ax
+
+	ret
+
+random	endp
+
+letter	proc	near
+; prints letter in al with color in ah
+; at location specied in dl,dh
+; There are 12 lines of 20 characters,
+; DH = row = 0-11, DL = col = 0-19.
+
+; first calculate screen position for top left dot.
+; translate DX to screen coordinates.
+
+; This is fast version, only sets dots that are on.
+; use slowletter for background other than current.
+
+	push	ds	; only AX lost
+	push	si
+	push	dx
+	push	cx
+	push	bx
+
+	push	ax	; save letter and color
+	mov	al,dh	; row
+	cbw
+	shl	ax,1
+	shl	ax,1	; 8 dots verticle and horizontal
+	shl	ax,1	; times rows
+	mov	dh,al	; store screen pos. in dh - 8 bits ok
+	mov	al,dl	; col
+	cbw
+	shl	ax,1
+	shl	ax,1
+	shl	ax,1	; for columns
+	mov	dl,al	; store screen pos. in dl
+	mov	ax,0f000h
+	mov	ds,ax	; rom table
+	mov	si,ROM_TABLE_ADDRESS
+	pop	cx	; get back letter and color
+	mov	al,cl	; 8 bytes per character
+	cbw
+	shl	ax,1
+	shl	ax,1
+	shl	ax,1	; times character
+	add	si,ax	; offset into table
+	mov	al,ch	; color
+	mov	bl,ch	; store here too
+	mov	cx,8	; eight shows up a lot
+
+let1:
+	push	dx	; save screen pos.
+	mov	ah,[si] ; get bit-pattern
+	mov	bh,80h	; mask
+
+
+let2:
+	test	ah,bh	; check for dot
+	jz	let4	; if no dot skip
+
+let3:
+	push	dx
+	push	cx
+	mov	cl,dl	; col
+	mov	ch,0
+	mov	dl,dh	; row
+	mov	dh,0
+	call	plotdot
+	pop	cx
+	pop	dx
+
+let4:
+	shr	bh,1	; mask
+	jc	let5	; when bit drops out we're done
+	inc	dl	; set to next dot to right
+	jmp	let2
+
+let5:
+	pop	dx	; get back orig.
+	inc	dh	; set to next row.
+	inc	si	; set to next byte.
+
+	loop	let1	; do for whole matrix (8x8)
+
+	pop	bx	; restore regs.
+	pop	cx
+	pop	dx
+	pop	si
+	pop	ds
+
+	ret		; back to caller
+
+letter	endp
+
+
+slowletter  proc    near
+; prints letter in al with color in ah
+; at location specied in dl,dh
+; There are 12 lines of 20 characters,
+; DH = row = 0-11, DL = col = 0-19.
+
+; first calculate screen position for top left dot.
+; translate DX to screen coordinates.
+
+	push	ds	; only AX lost
+	push	si
+	push	dx
+	push	cx
+	push	bx
+
+	push	ax	; save letter and color
+	mov	al,dh	; row
+	cbw
+	shl	ax,1
+	shl	ax,1	; 8 dots verticle and horizontal
+	shl	ax,1	; times rows
+	mov	dh,al	; store screen pos. in dh - 8 bits ok
+	mov	al,dl	; col
+	cbw
+	shl	ax,1
+	shl	ax,1
+	shl	ax,1	; for columns
+	mov	dl,al	; store screen pos. in dl
+	mov	ax,0f000h
+	mov	ds,ax	; rom table
+	mov	si,ROM_TABLE_ADDRESS
+	pop	cx	; get back letter and color
+	mov	al,cl	; 8 bytes per character
+	cbw
+	shl	ax,1
+	shl	ax,1
+	shl	ax,1	; times character
+	add	si,ax	; offset into table
+	mov	al,ch	; color
+	mov	bl,ch	; store here too
+	mov	cx,8	; eight shows up a lot
+
+slet1:
+	push	dx	; save screen pos.
+	mov	ah,[si] ; get bit-pattern
+	mov	bh,80h	; mask
+
+
+slet2:
+	test	ah,bh	; check for dot
+	jnz	slet3	; if dot skip
+	push	dx	; code here will set black dots
+	push	cx	; in space where there should be no dots.
+	call	bgrnd	; get background color for plotdot
+	mov	cl,dl	; col
+	sub	ch,ch
+	mov	dl,dh	; row
+	sub	dh,dh
+	call	plotdot ; set to black
+	pop	cx
+	pop	dx
+	mov	al,bl	; get back color
+	jmp	slet4
+
+slet3:
+	push	dx
+	push	cx
+	mov	cl,dl	; col
+	sub	ch,ch
+	mov	dl,dh	; row
+	sub	dh,dh
+	call	plotdot
+	pop	cx
+	pop	dx
+
+slet4:
+	shr	bh,1	; mask
+	jc	slet5	; when bit drops out we're done
+	inc	dl	; set to next dot to right
+	jmp	slet2
+
+slet5:
+	pop	dx	; get back orig.
+	inc	dh	; set to next row.
+	inc	si	; set to next byte.
+
+	loop	slet1	; do for whole matrix (8x8)
+
+	pop	bx	; restore regs.
+	pop	cx
+	pop	dx
+	pop	si
+	pop	ds
+
+	ret		; back to caller
+
+bgrnd:
+; make a background out of al, account for xor
+	test	al,80h
+	jnz	bgrnd1
+	shr	al,1
+	shr	al,1
+	shr	al,1
+	shr	al,1	; move to foreground dot
+
+	ret
+
+bgrnd1:
+	shr	al,1
+	shr	al,1
+	shr	al,1
+	shr	al,1
+	or	al,80h
+
+	ret
+
+slowletter  endp
+
+loprint proc	near
+; print a BASIC string - CX has length.
+; at DH=row, DL=col, AH=color, DS:SI point to string
+; returns with DH,DL containing next locate position
+; AX, SI, CX, DX changed. Others OK.
+
+	cmp	dh,11
+	ja	lopret	; reject out of range
+	cmp	dl,19
+	ja	lopret
+	or	cx,cx	; EOS?
+	jz	lopret
+	test	ah,0f0h ; using backgrounds?
+	jnz	lop3
+
+lop1:
+	mov	al,[si] ; get char
+	cmp	al,13	; CR?
+	jz	lop1c
+	cmp	al,8	; BS?
+	jnz	lop1b
+	call	back_space
+	jmp	short lop2
+lop1b:
+	push	ax	; color save
+	call	letter
+	pop	ax
+
+	inc	dl
+	cmp	dl,20	; too far over?
+	jnz	lop2
+lop1c:
+	inc	dh
+	cmp	dh,12	; too far down?
+	jnz	lop1a	; scroll screen
+	call	loscroll
+	mov	dh,11
+lop1a:
+	mov	dl,0	; set to start of next line
+
+lop2:
+	inc	si
+
+	loop	lop1
+
+lopret:
+	ret
+
+lop3:
+	mov	al,[si] ; get char
+	cmp	al,13	; CR?
+	jz	lop3c
+	cmp	al,8	; BS?
+	jnz	lop3b
+	call	back_space
+	jmp	short lop4
+lop3b:
+
+	push	ax	; color save
+	call	slowletter
+	pop	ax
+
+	inc	dl
+	cmp	dl,20	; too far over?
+	jnz	lop4
+lop3c:
+	inc	dh
+	cmp	dh,12	; too far down?
+	jnz	lop3a	; scroll screen
+	call	loscroll
+	mov	dh,11
+lop3a:
+	mov	dl,0	; set to start of next line
+
+lop4:
+	inc	si
+	loop	lop3
+	jmp	lopret
+
+loprint endp
+
+back_space	proc	near
+	push	ax
+	push	cx
+	or	dl,dl	; at first col?
+	jnz	bs1
+	or	dh,dh	; at first row?
+	jz	bsret	; nothing to do.
+	dec	dh	; else set to one row up
+	mov	dl,20	; and last col+1
+
+bs1:
+	dec	dl	; one space back
+	mov	al,' '  ; make a space
+	mov	ah,cs:locolor	; background color
+	mov	cl,4	; move to bkgrnd
+	shl	ah,cl
+	call	slowletter	; make it
+
+bsret:
+	pop	cx
+	pop	ax
+	ret
+
+back_space	endp
+
+loscroll	proc	near
+; scroll lores screen 1 row, use value in locolor for blank row
+	push	ax
+	push	bx
+	push	cx
+	push	dx
+	push	si
+
+	push	ds
+	push	es
+	pop	ds	; es,ds point to video
+	mov	si,1280 ; row 1, col 0
+	mov	di,0	; row 0, col 0
+	mov	cx,14720 ; 160 bytes/row * 92 rows
+
+	mov	dx,MODE
+	mov	al,1
+	out	dx,al	; turn off video or it will start snowing
+
+	cld
+	rep	movsb	; do scroll
+	mov	ah,cs:locolor	; use last cls or init for blank line
+	and	ah,0fh	;
+	mov	bl,ah
+	mov	cl,4
+	shl	bl,cl	; move color into both halves of attribute
+	or	ah,bl	; combine
+	mov	al,0deh ; char 222
+	mov	di,14080 ; row 88, col 0
+	mov	cx,960
+	cld
+	rep	stosw	; store ax in screen[di]
+
+	mov	dx,MODE
+	mov	al,9
+	out	dx,al	; turn on video
+
+	pop	ds	; get back BASIC info
+
+	pop	si
+	pop	dx
+	pop	cx
+	pop	bx
+	pop	ax
+	ret
+
+loscroll	endp
+
+; trig lookup functions
+; from Dr. Dobbs - Oct. 82 p.53
+; by Ray Duncan from public domain FORTH
+; program by John James
+
+trig_lookup	proc	near
+
+trig:
+	mov	bx,ax
+	cmp	bx,90
+	jle	trig1
+	sub	bx,180
+	neg	bx
+
+trig1:
+	sal	bx,1
+	mov	ax,cs:sintbl[bx]
+	ret
+
+cos:
+	add	ax,90
+
+sin:
+	push	dx
+	push	bx
+	cwd
+	mov	bx,360
+	idiv	bx
+	mov	ax,dx
+	or	ax,ax
+	jns	sin2
+	add	ax,360
+
+sin2:
+	cmp	ax,180
+	jle	sin3
+	sub	ax,180
+	call	trig
+
+	neg	ax
+	jmp	sin4
+
+sin3:
+	call	trig
+
+sin4:
+	pop	bx
+	pop	dx
+	ret		; to caller
+
+sintbl	dw	0	; 0 degrees
+	dw	175
+	dw	349
+	dw	523
+	dw	698
+	dw	872
+	dw	1045
+	dw	1219
+	dw	1392
+	dw	1564
+	dw	1736	; 10
+	dw	1908
+	dw	2079
+	dw	2250
+	dw	2419
+	dw	2588
+	dw	2756
+	dw	2924
+	dw	3090
+	dw	3256
+	dw	3420	; 20
+	dw	3584
+	dw	3746
+	dw	3907
+	dw	4067
+	dw	4226
+	dw	4384
+	dw	4540
+	dw	4695
+	dw	4848
+	dw	5000	; 30
+	dw	5150
+	dw	5299
+	dw	5446
+	dw	5592
+	dw	5736
+	dw	5878
+	dw	6018
+	dw	6157
+	dw	6293
+	dw	6428	; 40
+	dw	6561
+	dw	6691
+	dw	6820
+	dw	6947
+	dw	7071
+	dw	7193
+	dw	7314
+	dw	7431
+	dw	7547
+	dw	7660	; 50
+	dw	7771
+	dw	7880
+	dw	7986
+	dw	8090
+	dw	8192
+	dw	8290
+	dw	8387
+	dw	8480
+	dw	8572
+	dw	8660	; 60
+	dw	8746
+	dw	8829
+	dw	8910
+	dw	8988
+	dw	9063
+	dw	9135
+	dw	9205
+	dw	9272
+	dw	9336
+	dw	9397	; 70
+	dw	9455
+	dw	9511
+	dw	9563
+	dw	9613
+	dw	9659
+	dw	9703
+	dw	9744
+	dw	9781
+	dw	9816
+	dw	9848	; 80
+	dw	9877
+	dw	9903
+	dw	9925
+	dw	9945
+	dw	9962
+	dw	9976
+	dw	9986
+	dw	9994
+	dw	9998
+	dw	10000	; 90
+
+trig_lookup	endp
+
+lastword	db	0
+
+cseg	ends
+	end
+```
+{% endraw %}
 
 ## LORES.BAS
 
+{% raw %}
 ```bas
 1 ' LODEMO.BAS
 2 ' 3/25/84
@@ -1797,6 +3712,815 @@ machines:
 5620 ON X GOTO 810,1200,1500,5000
 5630 GOTO 5300
 ```
+{% endraw %}
+
+## LORES.DOC
+
+{% raw %}
+```
+
+
+
+
+         * IBM PC LOW RESOLUTION COLOR MODE INTERFACE ROUTINES *
+
+
+The 'unsupported' 160x100x16 color mode of the IBM color graphics card 
+may be low resolution, but it is quite colorful. In order to use this 
+mode from interpreted and compiled BASIC you need a core of graphics 
+primitives that will enable you to draw dots, lines, boxes and circles 
+in sixteen colors. Printing text on this screen would also be nice.
+
+The series of files described below will allow you to do this, and more.
+
+If you would like to get current copy of all the LORES routines, demos 
+and printed documentation, send $5.00 and a disk or just $10.00 to:
+
+                              Marty Smith
+                         310 Cinnamon Oak Lane
+                           Houston, TX 77079
+
+GETTING STARTED:
+
+In addition to this documentation, LORES consists of the several files
+listed below.
+
+         (1) LORES.USR   - The BLOADable module for interpreted BASIC.
+
+         (2) LORES.OBJ   - An object module for compiled BASIC.
+
+         (3) LODEMO.BAS - A BASIC program using all the LORES features.
+
+         (4) LORES.ASM   - The assembler source for the routines.
+                         The two modules both come from this file.
+
+         (5) LODEMO.EXE - The compiled version of LODEMO.BAS
+
+         (6) LORES.EXE   - The original assembler demo of LORES mode.
+
+         (7) READ.ME     - This file.
+
+To run the BASIC program, you need LORES.USR in addition to LODEMO.BAS, 
+preferably both on the default drive. If this is not so, the program 
+will ask for the filename. The best way to get started is to run 
+LODEMO.BAS. This file is loaded with comments describing what it is 
+doing, and LISTing it shows the routines in action.
+
+LODEMO.BAS is a PC-BASIC program that uses the LORES routines.  It draws 
+lines and lets you enter text in LORES big letters, and has a free form 
+drawing section. It is not a good example of structured programming, but 
+I think it's lots of fun.
+
+
+
+
+
+
+
+
+         LORES Interface Routines  3/22/84   --   Page 1
+
+
+
+
+
+
+
+
+MEMORY, and LOADING .USR MODULES:
+
+If you know all about reserving memory for BASIC assembler routines you 
+don't need to read this section, just keep in mind that the LORES module 
+is about 2414 bytes in size and is totally self-contained. It uses the 
+BASIC stack, and data segment, and addresses memory directly on the 
+color card. LORES.USR is a module you BLOAD on top of BASIC, with all 
+routines CALLed at location 0 in the LORES segment. For compiled BASIC, 
+you LINK LORES.OBJ to your program. The difference in your program for 
+compiled BASIC is that you don't need the code for BLOADing the other 
+module, and your strings can be 32767 bytes long.
+
+With DOS 2.+ allocating memory for machine routines becomes a little 
+more complicated. With device drivers for RAM disks and the like, BASIC 
+may be loaded anywhere. Luckily there is hope. At location &H510 in 
+segment 0 BASIC stores the segment address where it is located. If you 
+have plenty of memory, i.e. more than 110,000 bytes free after DOS and 
+device drivers, all you need to do for a value for LORES's segment is:
+
+10       ' setup to BLOAD LORES.USR - plenty of memory, any DOS.
+         DEF SEG=0 : X!=PEEK(&H510) + 256*PEEK(&H511) ' BASIC segment
+         X! = X! + 4097       ' segment on top of BASIC 
+         IF X! > 32767! THEN X! = X! - 65536! ' compensate for integers
+         LOSEG% = X! : DEF SEG = LOSEG%  ' tell BASIC about it
+         BLOAD "LORES.USR",0 : DEF SEG   ' reestablish BASIC's segment
+
+LOSEG% now has the segment value right on top of BASIC, wherever BASIC 
+is. LORES has a few internal variables stored at relative offsets to 
+zero. This prevents LORES from being stored in an array. 2414 bytes is a 
+lot to stash in an array anyway. Convenience gained with this technique 
+is quickly lost when you go to compile your application and find you 
+need to use two different types of CALL and have to ask BASIC if it has 
+moved your array each and every time you want to do a CALL.
+
+If you have less than 110,000 bytes free, BASIC will have set its stack 
+and top of string space to the top of memory in your machine. This 
+requires that you tell BASIC not to use all this memory in order to 
+leave space for LORES.  The following routine works for any memory setup 
+and *MUST* be done before anything but REM statements in your program:
+
+10       ' general routine to load LORES, accounts for low memory.
+         DEF SEG=0 : X!=PEEK(&H510) + 256*PEEK(&H511) ' same as above
+         Y! = PEEK(&H413) + 256*PEEK(&H414) ' memory size in k's.
+         Y! = Y!*64    ' adjust memory size to segment paragraphs.
+         Z! = Y! - X!  ' top of memory - BASIC segment = total available.
+         Z! = Z! - 152 ' LORES is about 151 paragraphs long.
+         Z! = Z!*16    ' memory available for BASIC in bytes.
+         IF Z! < 65536! THEN CLEAR ,Z!,2048 ELSE CLEAR ,,2048
+         ' after this X!, Y! and Z! have been CLEARed to zero, so:
+         DEF SEG=0 : X! = PEEK(&H510) + 256*PEEK(&H511)
+         Y!=(PEEK(&H413) + 256*PEEK(&H414)) * 64 : Z! = Y! - X!
+         IF X! > 32767! THEN X! = X! - 65536! ' compensate for integers
+         IF Z! < 4096 THEN LOSEG% = X! + Z! - 151 ELSE X! = X! + 4097
+          : IF X! > 32767! THEN LOSEG% = X! - 65536! ELSE LOSEG% = X!
+         DEF SEG=LOSEG% : BLOAD "LORES.USR",0 : DEF SEG
+
+
+         LORES Interface Routines  3/22/84   --   Page 2
+
+
+
+
+
+
+
+
+LOADING THE .OBJ FILE INTO COMPILED BASIC:
+
+It is much easier to compile LORES programs than to BLOAD a module. The 
+only change from interpreted versions to compiled is to delete or com-
+ment out the lines that load the USR module, such as those described 
+above.  The DEF SEG's in the CALL's can be left in since they won't 
+affect CALL. After you do this, compiling a LORES program is done with,
+
+         BASCOM YOURPROG/whatever;
+         LINK YOURPROG+LORES;
+
+FORMAT OF COMMANDS:
+
+All the LORES routines are called from BASIC the same way. This format
+is:
+
+         DEF SEG=LOSEG%
+         CALL LORES%(ROUTINE%,LO%(0))
+         DEF SEG
+
+The routine may be simply to clear the screen, but the two elements are 
+always expected. LO%() is a six element integer array where values for 
+the CALL are stored. LOSEG% is the segment where the LORES module has 
+been BLOADed, ROUTINE% is the number of the desired function (see be-
+low), and LORES% is an integer whose value is *always* zero.  This 
+simplifies CALL, since all of them will be to location 0 in the 
+module.The LORES module figures out what you want to do from the value 
+of ROUTINE%.
+
+The first thing to do when you want to use LORES graphics in your 
+program is to initialize LORES. You do this by:
+
+90       ROUTINE%= 0 : DEF SEG= LOSEG% ' intitialize LORES
+         CALL LORES%(ROUTINE%,LO%(0))
+         DEF SEG
+
+Getting back to a normal screen later on is done by:
+
+400      ROUTINE%= 14: DEF SEG= LOSEG% ' get screen back to normal
+         CALL LORES%(ROUTINE%,LO%(0))
+         DEF SEG
+
+Now that LORES is active, say you want to draw a line from (10,20)-
+(120,60) in red. To do this you would say,
+
+100      ' draw a line. a(0)-a(3) are screen coordinates,
+         ' a(4) is the color, for XOR color use THECOLOR OR &h80
+         LO%(0)=10: LO%(1)=20: LO%(2)=120: LO%(3)=60: LO%(4)=4: LO%(5)=0
+         ROUTINE%= 4
+         DEF SEG= LOSEG% : CALL LORES%(ROUTINE%,LO%(0)) : DEF SEG
+
+LO%(5) should be zero to draw the whole line, or some other number to 
+draw part of the line.  If you want to XOR a line, set the color to 
+THECOLOR OR &H80, to set the seventh bit. If you do this and draw the 
+line twice, it will disappear without overwriting previous material.
+
+
+         LORES Interface Routines  3/22/84   --   Page 3
+
+
+
+
+
+COMMANDS, cont.
+
+
+
+To draw a circle in the middle of the screen with a radius of 40 in 
+yellow, and an aspect ratio for a normal circle,
+
+200     ' draw a circle.
+         LO%(0)= 80: LO%(1)= 50: LO%(2)= 40 ' x,y,radius
+         LO%(3)= 5: LO%(4)= 6               ' aspect ratio. numer/denom
+         LO%(5)= 14 : ROUTINE%= 6           ' color yellow, 6=circle
+         GOSUB 1000
+         GOTO 300
+         ...
+
+1000     DEF SEG= LOSEG% : CALL LORES%(ROUTINE%,LO(0)) : DEF SEG
+1010     RETURN
+
+Changing aspect ratios will make an ellipse instead of a circle. Now 
+lets PAINT this circle in light red,
+
+300      ' paint an area
+
+         ROUTINE%= 16: LO%(2)= 12: LO%(3)= 14 : GOSUB 1000
+
+LO%(2) is the fill color, LO%(3) is the boundary color. What happened to 
+LO%(0) and LO%(1)? In this case these were not needed. LORES does not 
+change array values unless it returns a value. We just got through 
+drawing a circle, so the screen coordinates are still x=160, y=80.
+
+Ordinarily you would set these values.  Paint with sixteen colors can 
+turn into a clear screen function pretty easily.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         LORES Interface Routines  3/22/84   --   Page 4
+
+
+
+
+
+
+
+
+LORES ROUTINES:
+
+These are the LORES routines, unneeded array values can be any value.
+
+Routine:
+
+   LO%(0),  LO%(1),  LO%(2),  LO%(3),  LO%(4),  LO%(5)
+
+----------------------------------------------------------------------
+
+0 = INITIALIZE.
+   No values are needed, just a dummy value. Video mode stored.
+1 = CLEAR SCREEN.
+   Color (0-15).
+2 = PLOT A DOT.
+   x(0-159), y (0-99), color.
+3 = GET A DOT.
+   x(0-159), y (0-99), returns color value or -1 for out of range, in v(2).
+4 = DRAW A LINE.
+   X1,   Y1,   X2,   Y2,  Color,  0=whole line,
+                                         other for partial line.
+5 = DRAW A BOX.
+   X1,   Y1,   X2,   Y2,  Color.
+6 = DRAW A CIRCLE.
+   X,    Y,    Radius, Aspect numer., denom., Color.
+7 = PRINT A LETTER 1.
+   Row (0-11), Col (0-19), Ascii char., Color.
+8 = PRINT A LETTER 2.
+   Row (0-11), Col (0-19), Ascii char., Color Fgnd, Color Bkgrnd.
+9 = PRINT A STRING.
+   Row (0-11), Col (0-19), VARPTR(MESSAGE$), Color.
+   Row and Col come back pointing to the next screen position.
+   Carriage return and backspace handled correctly.
+   Screen will scroll at bottom line.
+10 = NOT USED at this time. Simply returns.
+
+11 = SINE FUNCTION.
+   Angle in degrees, SIN*10000 returned.(in v(1))
+12 = COSINE FUNCTION.
+   Angle in degrees, COS*10000 returned.(in v(1))
+13 = RANDOM NUMBER FUNCTION.
+   0 to randomize, other returns 1 to x in v(1).
+14 = RESTORE SCREEN.
+   No values needed. Returns color screen to mode at initialization
+   if current screen was color. If on monochrome monitor, nothing.
+15 = MODE FUNCTION.
+   Returns -1 in v(0) if LORES is active, otherwise IBM video mode.
+16 = PAINT.
+   X (0-159), Y (0-99), Fill color, Boundary color.
+
+-----------------------------------------------------------------------
+
+
+
+
+
+
+         LORES Interface Routines  3/22/84   --   Page 5
+
+
+
+
+
+
+
+
+ROUTINES, cont.
+
+You are encouraged to experiment with these routines. The core of LORES 
+is the plot a dot function, which is range checked and won't do anything 
+bad if it is passed a value that is out of range. Circles, lines and 
+boxes larger than screen size can be created without worrying that 
+oddball values are being stashed in memory somewhere.
+
+Remember that the array passed to LORES is an integer array. You can 
+make sure of this by specifying DEF INT A-Z early in your program, as 
+the LODEMO program does, or attach a percent sign (%) to all values in 
+the CALL LORES%(ROUTINE%,LO%(0)). Using default single precision values 
+will not do anything worthwhile with LORES and will produce results you 
+probably didn't have in mind.
+
+EQUIPMENT REQUIRED:
+
+LORES of course needs a color graphics adaptor. A further need is an RGB 
+monitor. LORES is a variation on 80 column color, and has the same 
+problem this mode has with TV's and most monitors, i.e. gray scale or 
+worse instead of color.
+
+There is no real need for extensive memory, but for convenience at least 
+128k is required. A compiled program using LORES.OBJ could certainly run 
+in 64k. If you don't get the full 60k of workspace when you enter BASIC, 
+you need to reserve memory for LORES. See the routine in LOADING, etc. 
+above for details.
+
+MONITORS:
+
+If you have both a monochrome monitor and color board, you can develop 
+your programs entirely on the monochrome monitor, displaying on color.
+
+This is an advantage of being a non-standard set-up. Since there is no 
+'official' set-up, the color card and its memory are accessed directly.
+
+If you are working on a color monitor alone it's handy to set up a 
+subroutine using the RESTORE SCREEN function, number 14. Do this by:
+
+500      ' restore color screen.
+
+         DEF SEG=LOSEG% ' LOSEG% is the segment set aside for LORES
+         CALL LORES%(14,DUMMYARRAYVALUE%) ' LORES% is always zero
+         DEF SEG        ' get back to BASIC's segment
+         RETURN
+
+Then use a Function Key to "GOSUB 400"+CHR$(13) while you are working
+and you will be able to see what you are typing again.
+
+
+
+
+
+
+
+
+
+         LORES Interface Routines  3/22/84   --   Page 6
+
+
+
+
+
+
+
+
+PAINTING:
+
+One of the nifty features of LORES is the paint routine. This works 
+virtually identically to the PAINT function in BASICA, except with many 
+more color choices. It also has the same appetite for stack space as the 
+BASIC function. Unless you intend to do no painting at all, or will only 
+fill small evenly defined shapes, or will never make a mistake and 
+specify the wrong color you should set aside some extra stack space.
+
+You do this in BASIC with the CLEAR command. The format of CLEAR is:
+
+         CLEAR <,WORKSPACE,STACKSPACE>
+
+I had convinced myself that 2048 bytes stack was plenty until I made a 
+design that overran even this.  I still think 2048 bytes is a good 
+amount to reserve, especially if you are pretty sure in advance of what 
+will be painted. The free form drawing routine in LODEMO allows you to 
+create some fairly elaborate designs relatively quickly, and this is why 
+4096 bytes is set aside for stack. No design I have come up with since 
+has come close to overrunning this amount of stack. so:
+
+         CLEAR ,,4096 ' will set aside 4096 bytes for BASIC's stack.
+
+If you are running LODEMO and don't hear the BEEP when you hit Alt-P in 
+the free form section you have overflowed the stack. The program is 
+still alive, though. What happens is the stack overwrites the top string 
+values, which in this case is the string for Alt-P and some of the saved 
+function key strings. Hitting <Escape> will allow you to continue, but 
+don't try to SAVE the program.
+
+COMMENTS, THANKS, AND OFFICIAL STUFF.
+
+LORES color mode routines resulted from a curiosity on my part to see 
+what could be done with this mode of operation on my IBM PC. Medium 
+resolution color is nice, but I was always frustrated at having sixteen 
+colors in the machine and only those two palettes of three colors to 
+work with. I doubt if LORES color will catch on, since the ideal appli-
+cation is games, and game programs have to work on TV's and NTSC 
+monitors, which are LORES's shortcomings.
+
+LORES assembler routines are fairly well optimized for speed, but all 
+suffer a penalty due to the color-graphics adaptor. Since LORES graphics 
+are in fact a text-mode to the card, each time you write a dot on the 
+screen you are forced to wait for the horizontal retrace interval of the 
+monitor. This is the only moment you can write to the screen without 
+creating the infamous 'snow' effect. The alternative is actually turning 
+off the video signal, then turning it back on, resulting in an annoying 
+flicker. To give you an idea of how short a 'window' you have to write 
+without snow, a single byte can be written, but a word of two bytes 
+cannot. The flexible Intel 8088 micro-processor can perform arithmetic 
+operations directly to memory, like--XOR [screen-byte], register value--
+which takes twice as long as simply writing, or about five millionths of 
+a second, but this is TOO LONG to prevent the beginnings of the snow 
+effect!
+
+
+
+         LORES Interface Routines  3/22/84   --   Page 7
+
+
+
+
+
+COMMENTS, THANKS cont.
+
+
+LORES is fun to play with, and the free form drawing routine in the 
+LODEMO program is the demo I enjoy the most. Originally LODEMO was just 
+a feature by feature demonstration of the LORES routines. Then I thought 
+a good way to test the various assembler routines to see how they 
+responded to a wide range of values would be an interactive use of them. 
+The PAINT routine is a direct result of this program; I just had to have 
+it in there. Here's a hint: to go direct to the PLAYTIME free form 
+routine in LODEMO, hit a lowercase 'p' during the first drawing.
+
+Its hard to cram a lot of stuff into a LORES screen, so here are some 
+additional features of the PLAYTIME routine. Alt-X and then a function 
+key will XOR the screen to the color of the 'F' key. If you lose the 
+cursor dot, which can happen after a PAINT, change the dot color by 
+hitting an 'F' key. Alt-F10 is gray, though it is not mentioned.
+
+If you are having trouble using the free form drawing section, here is a 
+brief overview:
+
+o    The routine is based on the Koala Pad drawing program, using the 
+     arrow keys on the numeric keypad instead of the stylus and pad.
+
+o    The Function Keys F(1) to F(7) and Alt F(1) to Alt F(7) will make 
+     the colors corresponding to the BASIC COLOR X command become the 
+     current color.     F(10) and Alt F(10) make black or grey. If your 
+     screen is not black this color may not appear to be right, but when 
+     the drawing is set (keep reading) the current color will prevail.
+
+o    The idea is that the dot you have moves around until you want to 
+     draw a figure.
+
+o    The possible modes of operation are dots, lines, boxes, circles. 
+     You tell the program which by holding down the 'Alt' key on the 
+     left side of the keyboard and then pressing (D)ots,(L)ines,(B)oxes, 
+     or (C)ircles.
+
+o    When you press the 'Ins' key on the numeric keypad, the dot becomes 
+     the first end or corner or center of a temporary drawing.
+
+o    Now cursor movements will result in dots, or a connected line, or a 
+     larger/smaller box or circle. To set this figure on the screen and 
+     go on to draw another, hit the <Enter> key. If the temporary figure 
+     is in the wrong place or is not what you really want, hit the 'Del' 
+     key on the numeric keypad. The figure will disappear and you will 
+     be back to roving dot mode.
+
+o    If the cursor dot is moving too slow or jumping too much, use the + 
+     and - keys on the cursor pad to change it. Alternatively, hit a 
+     number key and the number of dots the cursor jumps will now be the 
+     value of that key.
+
+o    In order to paint in an area, move the dot to inside the figure, 
+     then hit Alt-P. You will hear a beep indicating the program is 
+     waiting for first a fill color, and second a boundary color. You 
+     specify this by using the Function Keys which correspond to colors 
+     as explained above.
+
+
+         LORES Interface Routines  3/22/84   --   Page 8
+
+
+
+
+
+COMMENTS, THANKS cont.
+
+
+
+o    If either the fill or boundary color is not a function or alt-
+     function key, the program returns to where it was before.
+
+This explanation is presented in lieu of elaborate menus on LODEMO since 
+LODEMO is meant to be a program to show how to use the assembler module 
+and not an end result in itself.
+
+I have to thank Dr. Dobbs magazine for some of the graphics routines, 
+and especially Ray Duncan's column. This is the first place I saw a 
+description of how to implement LORES graphics, and the LINE, CIRCLE and 
+trig. functions also come from there.
+
+IBM is a registered trademark of International Business Machines
+Corporation.
+
+BASIC, BASICA, LINK, BASCOM and DOS refer to copyrighted programs
+belonging to IBM and MicroSoft Corporation.
+
+The Intel 8088 is a micro-processor produced by the Intel Corporation.
+
+LORES interface routines are a compilation/creation by:
+
+Marty Smith              CompuServe 72155,1214
+310 Cinnamon Oak Lane
+Houston, Texas 77079
+(713) 661-1241 <Days>
+(713) 464-6737 <Nights>
+
+If you have problems getting LORES to work for you, send or call these
+problems to me at the address/number above. I will try to help.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         LORES Interface Routines  3/22/84   --   Page 9
+
+
+
+
+
+elp.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
+
+## PRINTXT1.DOC
+
+{% raw %}
+```
+     *********** PRINTXT COMMAND FILE DOCUMENTATION ***********
+
+*+========================== PROGRAM ABSTRACT ==========================+
+*|                                                                      |
+*|TITLE: PRINTXT1.CMD - dBASE II PROCEDURE TO PRINT TEXT ON MULTIPLE    |
+*|                      LINES.                                          |
+*|DATE: 06/06/83        VERSION:  1.1         LANGUAGE: dBASE II (2.3B) |
+*|SQUEEZED NAME: PRINTXT1.CQD         LIBRARY NAME: PRINTXT1.LBR        |
+*|RELATED FILES: PRINTXT1.DQC->PRINTXT1.DOC, PRINTXT1.ABS               |
+*|               PRINTXT1.IQC->PRINTXT1.INC (.CMD without comments)     |
+*|SYSTEM: Any system running dBASE II version 2.3B or equivalent        |
+*|                                                                      |
+*|PURPOSE: To provide a callable Procedure for printing or displaying   |
+*|          a dBASE II text string (field or memory variable) that      |
+*|          exceeds one line and have the line break at a space or      |
+*|          other special break character [currently - ; , \ = ]        |
+*|                                                                      |
+*|SUMMARIZE REVISION: Corrected bug in documentation for MFieldText;    |
+*|         corrected bug in length of title line; added capability for  |
+*|         multiple line break characters (in addition to dash)         |
+*|                                                                      |
+*|SUBMITTED BY: Melissa Gray, Mountain View, CA  (415)965-3267          |
+*|ORIGINAL AUTHOR: Melissa Gray                                         |
+*|OTHER CONTRIBUTORS:                                                   |
+*|                                                                      |
+*|REFERENCE: none                                                       |
+*|                                                                      |
+*|DOCUMENTATION: Fairly extensive documentation both in the code and in |
+*|                a separate .DOC file.  However, with the number of    |
+*|                options available, the documentation is not all-      |
+*|                together clear.                                       |
+*|                                                                      |
+*|PROGRAM USAGE: Since dBASE II does not seem to be able to print out   |
+*|                text that exceeds the capacity of a line and break    |
+*|                it at a reasonable place, this procedure should allow |
+*|                more use of dBASE for long text fields.               |
+*|                                                                      |
+*|RATING: *** [slow when called from DO, beginning effort of programmer]|
+*|                                                                      |
+*+======================================================================+
+
+*  This dBase II Command File is designed to provide a callable Procedure
+*  for printing or displaying a dBase II Text String Field that exceeds
+*  one line.  This Procedure will break lines at a Blank character
+*  immediately following the amount of text that will fit on a line OR
+*1 at the Blank or other allowable line break character [currently - ; , = \ ]
+*  preceeding the last non-blank text in the line.  All Blank characters at
+*  the beginning of a line will be ignored (not printed or displayed).  
+*1
+*1 The character string of allowable line break characters is initialized
+*1 in the first statement of PRINTXT1.CMD using memory variable BREAKLIST.
+*1 To add or delete allowable characters, simply edit that statement.  To
+*1 provide more flexibility within your command file, delete that statement
+*1 from PRINTXT1.CMD (along with the RELEASE at the end) and set BREAKLIST
+*1 as desired in your command file prior to calling PRINTXT1.
+*  
+*  This Procedure will print/display only the TRIMmed text.  Therefore,
+*  a blank record will print/display only one Blank character.  This
+*  Procedure will not print/display more than the total number of lines
+*  required to output the text, regardless of Field size.
+*
+*  To use this procedure, the following Memory Variables MUST be set
+*  prior to your DO PRINTXT1:
+*
+*  MLineNo	The line number on the printer page or CRT to which the
+*		first line of output is to be sent.  Subsequent lines of
+*		output will be single spaced.  The final value of MLineNo
+*		will point to the line immediately following the last
+*		line of actual text output.
+*
+*		EXAMPLE:  STORE  12  TO  MLineNo
+*
+*  MCPL		This is the maximum # of characters per line of output.
+*		This number includes the MIndent amounts specified below
+*		and does not include the preset left margin amount.  This
+*		number is superceded by MCPL1 for the 1st line only if
+*		MTitleFlag = True.
+*
+*		EXAMPLE:  STORE  77  TO  MCPL ...where you want to output
+*                         through column 80 and the left margin is set to 3.
+*
+*  MTitleFlag	MTitleFlag = True if there is MTitleText (see below)
+*		MTitleFlag = False if there is no MTitleText, MIndent1, 
+*			     MCPL1, or MTControl
+*
+*		EXAMPLE:  STORE  T  TO MTitleFlag
+*
+*  MTitleText	If MTitleFlag = True,  MTitleText is the Character String to
+*		be printed/displayed on the first line of output, followed
+*		by one space and the start of the actual Field Text .
+*		If MTitleFlag = False,  MTitleText is not required.
+*
+*		EXAMPLE:
+*		STORE "PURPOSE:" TO MTitleText  ...will produce the following
+*
+*		PURPOSE: (&MFieldText........................................
+*		........................ etc.)
+*
+*  MIndent1	If MTitleFlag = True,  MIndent1 = the number of spaces to
+*		indent the MTitleText from the preset left margin.
+*		If MTitleFlag = False,  MIndent1 is not required.
+*
+*		EXAMPLE:  STORE  0  TO MIndent1
+*
+*  MCPL1	If MTitleFlag = True,  MCPL1 = the number of characters
+*		allowed on the first line of output.  (This allows for
+*		enlarged characters in the title or other special formatting.)
+*		If MTitleFlag = False,  MCPL1 is not required;
+*
+*		EXAMPLE:  STORE  66  TO  MCPL1
+*
+*  MTControl	If MTitleFlag = True
+*		   MTControl = True if there is a MPreTitle & MPostTitle
+*			       (see below)
+*		   MTControl = False if there is no MPreTitle & MPostTitle
+*		If MTitleFlag = False
+*		   MTControl, MPreTitle, and MPostTitle are not required
+*
+*		EXAMPLE:  STORE  T  TO MTControl
+*
+*  MPreTitle	If MTitleFlag = True AND MTControl = True,  MPreTitle is
+*		a string of control characters to be output prior to the
+*		MTitleText string for control of special characteristics
+*		of the printer or CRT, such as underlining.
+*		If MTitleFlag = False OR MTControl = False,  MPreTitle
+*		is not required
+*
+*		EXAMPLE:  STORE  CHR(27) + 'X'  TO  MPreTitle
+*
+*  MPostTitle	If MTitleFlag = True AND MTControl = True,  MPostTitle is a
+*		string of control characters to be output at the completion
+*		of the MTitleText string to reset the special characteristics
+*		set by MPreTitle.
+*		If MTitleFlag = False OR MTControl = False,  MPostTitle is
+*			        not required
+*
+*		EXAMPLE:  STORE  CHR(27) + 'Y'  TO  MPostTitle
+*
+*1 MFieldText	This is the ASCII name of the DBF Field or Memory Variable 
+*1		character string (Text) to be output.  Only the TRIMmed
+*1		length of the specified text will be output. NOTE: The TRIM
+*		function will always put at least one Blank in the string.
+*
+*		EXAMPLE:  STORE  TRIM(fieldname) TO MFieldText
+*
+*  MIndntRest	If MTitleFlag = True,  MIndntRest is the number of characters
+*		to indent all lines of text, except the first line, from
+*		the preset left margin.
+*		If MTitleFlag = False,  MIndntRest if the number of characters
+*		to indent all lines of text from the preset left margin.
+*
+*		EXAMPLE:  STORE  9  TO  MIndntRest
+*  
+*  TxControl	TxControl = True if there is a MPreText & MPostText
+*			    (see below)
+*		TxControl = False if there is no MPreText & MPostText
+*
+*		EXAMPLE:  STORE  T  TO  TxControl
+*
+*  MPreText	If TxControl = True,  MPreText is a string of control
+*		characters to be output prior to the MFieldText string for
+*		control of special characteristics of the printer or CRT,
+*		such as italics.
+*		If TxControl = False,  Pretext is not required.
+*
+*		EXAMPLE: STORE CHR(27) + 'T' + CHR(50)+CHR(49)  TO  MPreText
+*
+*  MPostText	If TxControl = True,  MPostText is a string of control
+*		characters to be output at the completion of the
+*		MFieldText string to reset the special characteristics
+*		set by MPreText.
+*		If TxControl = False,  MPostText is not required
+*
+*		EXAMPLE:  STORE  CHR(27) + 'A'  TO  MPostText
+*
+*  NOTE:  The preceding memory variables will not be RELEASEd by this
+*	  Procedure, nor will any but MLineNo be changed.  Therefore, they
+*	  can be reused for subsequent calls to this Procedure from one
+*	  initial setup.  Also note, all memory variables initiated by this
+*	  Procedure will be RELEASEd at its completion.
+*
+*	  When using this Procedure from a DO PRINTXT1, it runs verrrrry
+*	  slow.  It would be wise to use dUtil to INCLUDE the command
+*	  file, WITHOUT COMMENTS, in the calling command file.
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

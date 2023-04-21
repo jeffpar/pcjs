@@ -32,6 +32,44 @@ machines:
     writes ASCII files.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1187.TXT
+
+{% raw %}
+```
+Disk No: 1187
+Program Title: BASEBALL version 2.0 (Disk 2 of 2)
+PC-SIG version 1
+ 
+This disk is the second disk of a two-disk set.  You will need disk #1186
+to use this disk.
+ 
+Usage:  Sports/Entertainment.
+ 
+Special Requirements:  None.
+ 
+How to Start:  Type SIMBASE (press enter).
+ 
+Suggested Registration:  $25.00
+ 
+File Descriptions:
+ 
+SETUP    BAT  Installation batch file
+POSTBAT? DAT  Data file (3 files)
+PREBAT?  DAT  Data file (3 files)
+TEAM??        Data file (26 files)
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1187
 

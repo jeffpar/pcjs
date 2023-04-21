@@ -73,6 +73,102 @@ machines:
     VENDORS  ZRX  Vendor records.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1289.TXT
+
+{% raw %}
+```
+Disk No: 1289
+Program Title:  Small Business Accounting Kit for ZOOMRACKS
+PC-SIG version: 1
+
+This Business Starter Kit for ZOOMRACKS, the database that uses the
+"cards & racks" approach, will allow you to computerize your company
+without changing the way you are used to doing business.
+
+This collection of 37 templates, 47 output forms for printing, and 10
+macros, works within ZOOMRACKS to help you:
+
+Keep aware of appointments and things-to-do today; know what inventory
+you have on hand; maintain investor lists for mailings and other
+purposes; print invoices, follow up for payment; write memos, track for
+followup; keep your name and address records; catalog your business
+forms; index your office files; track orders as they come in, use to
+predict cash needs; log phone calls that should be returned.
+
+View price lists when invoicing; track P.O.s, log what you ship; track
+things to do sorted by priority; prepare meeting agendas, find the area
+code for a state, keep you corporate assets; balance your checkbook,
+print checks, find the check you wanted; find your corporate IDs, tax
+and insurance numbers; use it for correspondence, search for letters;
+access customer records quickly; keep vendor records and quotes on hand
+and much more.
+
+Since this is a series of templates, you have the option of fine tuning
+the package to meet your particular business needs.
+
+Usage:  Accounting.
+
+Special Requirements:  ZOOMRACKS.
+
+How to Start:  Start Zoomracks and load accounting racks.
+
+Suggested Registration:  $49.95
+
+File Descriptions:
+
+GENERAL  ZRX  General Information.
+AGENDA   ZRX  Keep meeting agenda.
+ARCHIVE  ZRX  Archive of old cards in MISCDOCS & TASK1.
+AREACODE ZRX  List area codes, states and cities.
+ASSETS   ZRX  Keep track of business assets.
+BCHECKS  ZRX  Keep tracks of checks and deposits.
+BNAMES   ZRX  List of names and contacts.
+BUSFORMS ZRX  Rack of Output Forms to use with the Business Sta.
+BUSKIT   ZRX  A list of all the racks in the Busines.
+CMPNYNOS ZRX  Corporate ID numbers.
+CORRESP  ZRX  Correspondence rack - same as MISCDOCS.
+CUSTOMER ZRX  Customers and prospects.
+DAILY87  ZRX  Appointment Calendar for 1987.
+EMPLOYEE ZRX  Employee records.
+EXPENSES ZRX  Keep track of daily expenses.
+INVENTRY ZRX  List of inventory items.
+INVESTOR ZRX  Keep list of corporate investors.
+INVOICES ZRX  List of invoices, sales orders, backorders.
+MACBUS   ZRX  Macros used in Business Starter kit.
+MCHECKS  ZRX  List of regular monthly check.
+MEMOS    ZRX  Write brief memos, print them out and let people.
+MISCDOCS ZRX  Rack of miscellaneous documents.
+OFFFORMS ZRX  Catalog office forms.
+OFFICEFL ZRX  Record of office files.
+OFFPROC  ZRX  Description of office procedures.
+ORDERS   ZRX  Record list of sales orders received.
+PAIDINV  ZRX  Your paid invoices / receivables.
+PAYABLES ZRX  List of payables, also purchase orders and paid bills.
+PAYROLL  ZRX  Payroll records.
+PHONELOG ZRX  Log of incoming phone calls.
+POLICIES.ZRX  Policies.
+PRICEL   ZRX  Product price list.
+PROSPECT ZRX  Prospects.  Uses same template as customers.
+PURCHORD ZRX  Outstanding purchase orders.
+RACK27F  ZRX  General purpose 27 field rack.
+SHIPLOG  ZRX  Keep a log of things shipped.
+TASK1    ZRX  Rack for a special task.
+TICKLER  ZRX  Tickler items.  Macro F7 F will find key card any.
+USINGZR  ZRX  Rack of hints and suggestions on using Zoomracks.
+VENDORQU ZRX  Vendor quotations.
+VENDORS  ZRX  Vendor records.
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale, CA 94086
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1289
 

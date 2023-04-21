@@ -54,6 +54,48 @@ machines:
     PCTEC84C ???  PC Tech Journal Third Qtr 1984 reference files (4 files)
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES544.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  544  LETUS A-B-C #7                                       v1  DS2
+---------------------------------------------------------------------------
+Literature Evaluation Table User Service - A database of articles and
+letters from third quarter 1984 magazines about IBM PCs.  It requires
+PC-FILE III and can be searched using keywords, author names, article
+titles, issue numbers, page numbers and descriptive text.
+ 
+BYTE84C  DTA  Byte Magazine Third Quarter 1984 reference files
+BYTE84C  HDR  Byte Magazine Third Quarter 1984 reference files
+BYTE84C  INX  Byte Magazine Third Quarter 1984 reference files
+BYTE84C  KWD  Byte Magazine Third Quarter 1984 reference files
+PCMAG84C DTA  PC Magazine Third Quarter 1984 reference files
+PCMAG84C HDR  PC Magazine Third Quarter 1984 reference files
+PCMAG84C INX  PC Magazine Third Quarter 1984 reference files
+PCMAG84C KWD  PC Magazine Third Quarter 1984 reference files
+PCTEC84C DTA  PC Tech Journal Third Quarter 1984 reference files
+PCTEC84C HDR  PC Tech Journal Third Quarter 1984 reference files
+PCTEC84C INX  PC Tech Journal Third Quarter 1984 reference files
+PCTEC84C KWD  PC Tech Journal Third Quarter 1984 reference files
+PCW84C   DTA  PC World Third Quarter 1984 reference files
+PCW84C   HDR  PC World Third Quarter 1984 reference files
+PCW84C   INX  PC World Third Quarter 1984 reference files
+PCW84C   KWD  PC World Third Quarter 1984 reference files
+LETUS    BAT  Batch file to generate Letus logo
+LOGO84N7 COM  Executable program that generates Letus logo
+ 
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0544
 

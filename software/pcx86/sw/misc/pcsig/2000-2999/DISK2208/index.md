@@ -30,6 +30,42 @@ machines:
     and graphics, including laptops with backlit screens.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2208.TXT
+
+{% raw %}
+```
+Disk No: 2208                                                           
+Disk Title: PC-Glossary                                                 
+PC-SIG Version: 1                                                       
+                                                                        
+Program Title: PC-Glossary                                              
+Author Version: 2.2                                                     
+Author Registration: $29.00                                             
+Special Requirements: Hard disk recommended                             
+                                                                        
+Do you know what shadow RAM, an ALU, a Dvorak keyboard, and bit-mapped  
+graphics are?  If you want to find out the answers to these, and many   
+more questions about computer terms, this program is a wealth of        
+information.                                                            
+                                                                        
+PC-GLOSSARY is an educational desktop reference program to help you keep
+abreast of the ever changing terminology of microcomputers. Hundreds of 
+terms, abbreviations, buzzwords, and acronyms are defined with many     
+useful tables at your fingertips.  Each entry is cross referenced to    
+other entries. In addition the program supports all monitors and        
+graphics, including users of laptops with backlit screens.              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2208
 

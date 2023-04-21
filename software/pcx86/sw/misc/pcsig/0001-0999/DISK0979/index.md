@@ -30,6 +30,55 @@ machines:
     knowledge is transmitted, and how people relate to each other.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES979.TXT
+
+{% raw %}
+```
+Disk No  979
+Program Title: VIRTUAL LIBRARY
+PC-SIG version 1.1
+ 
+This disk contains the text files for THE VIRTUAL LIBRARY, a book about
+the electronic society of the future, based on an archival interpretation
+of human cognitive development.
+ 
+The book discusses how the electronic society will bring about new
+developments in knowledge and education, and goes into some of the other
+changes which might develop from a speedy, easily-accessable information
+databank: how we do research, how academic and scientific findings are
+published, how they are read, how knowledge is transmitted, and how people
+relate to each other.
+ 
+Usage:  Book On-Disk (ASCII files).
+ 
+System Requirements:  128K memory and one disk drive.
+ 
+How to Start:  To view a chapter of the book on your computer screen, use
+the DOS TYPE command. To print out a chapter of the book, use the DOS PRINT
+command.
+ 
+Suggested Registration:  $5.95
+ 
+File Descriptions:
+ 
+CHAPTER  ???  Chapter or text (8 files).
+EPILOGUE      Part of the book.
+PROLOGUE      Part of the book.
+README        Information file from the author.
+MORE     COM  Program that pauses text on the screen while reading
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0979
 

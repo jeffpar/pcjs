@@ -14,6 +14,35 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## VENDOR.DOC
+
+{% raw %}
+```
+DAYODE.EXE
+
+DAYO Membership is an application designed to track membership for an
+association or organization. The ability to maintain records for donations,
+dues, payments and/or invoices has also been incorporated into the package.
+Use DAYO Membership to record member information and optionally, maintain a
+simple accounting system for dues and/or donations. Many reports and reporting
+routines are included in this package, ie: Members List, Notes, Statements,
+Labels, Payments, Form Letters and much more.
+
+Version number: 3.90+
+  Version date: 3-1-92
+  Registration: $95.00
+      Category: Clubs, Association, and Mailing systems
+      Platform: IBM PC, DOS 3.3 or better
+      Requires: 530k Available Memory, Hard Disk
+  User support: Multiuser, No record limits, Manual (printed and disk),
+		Phone Support
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2807
 

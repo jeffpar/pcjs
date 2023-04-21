@@ -34,6 +34,43 @@ machines:
     different drivers.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0650.TXT
+
+{% raw %}
+```
+Disk No:  650                                                           
+Disk Title: Fansi-Console 2 of 2 (also 356)                             
+PC-SIG Version: S3.1                                                    
+                                                                        
+Program Title: Fansi-Console                                            
+Author Version: 2.00U                                                   
+Author Registration: $49.95 -- use license; $75.00 -- user manual and up
+Special Requirements: Two floppy drives.                                
+                                                                        
+A sophisticated memory-resident program which replaces the standard IBM 
+PC console drivers.                                                     
+                                                                        
+Full support is provided for:  IBM PS/2 product line for both video and 
+keyboard for models 50 and up;  VGA and Super-EGA, including 132 column 
+and 60 row display drivers; enhanced 101/102 key keyboards, including   
+foreign and ``Brand X'' keyboards.                                      
+                                                                        
+FANSI-CONSOLE extends the ROM BIOS and processes ANSI X3.64 control     
+sequences.  Keyboard macros are supported -- program specific keys to   
+perform complex series of keystokes.  Reconfigure your keyboard however 
+you wish -- even a Dvorak layout.  Experiment with different drivers.   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0650
 

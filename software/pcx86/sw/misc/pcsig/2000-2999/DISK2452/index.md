@@ -48,6 +48,80 @@ machines:
     MACHINE!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## DESCRIPT.TXT
+
+{% raw %}
+```
+
+
+
+    MAGIFONT - FANTASTIC NEW PROGRAM!  Attract/Inform/Motivate with dynamic,
+    amazing multicolored screens! Type, and watch words change instantly to 
+    gigantic SuperFonts. Dramatic displays for trade shows, meetings, class-
+    rooms, window and counter displays, and more!  Custom greetings, titles, 
+    announcements, BBS uploads, sales messages. (Companion program MAGISHOW 
+    converts display to slide show.) YOU WILL LOVE THIS! CGA/EGA/VGA Shareware.
+
+    MAGISHOW - Companion program for MAGIFONT.EXE to create slideshow-type
+    screen shows.  Motivational, awesome, eye-appealing electric colors.
+    Totally customized by YOU!  Screen after colorful screen of changing Super-
+    Font text and graphic pix in continuous display.  Special effects possible.
+    Demo included.  CGA/EGA/VGA Shareware. 
+
+    MAGIVUE - Another companion program for MAGIFONT and MAGISHOW.  Together
+    all 3 programs comprise "The Magic Font Machine!"  This one displays
+    your screens one-by-one for review and sorting.
+
+```
+{% endraw %}
+
+## FILE2452.TXT
+
+{% raw %}
+```
+Disk No: 2452                                                           
+Disk Title: The Magic Font Machine                                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: The Magic Font Machine                                   
+Author Version: 1.5                                                     
+Author Registration: $14.95                                             
+Special Requirements: Color monitor recommended.                        
+                                                                        
+Want to make some eye catching bulletin board advertisements, notes,    
+or screens. If so, THE MAGIC FONT MACHINE will help you make and        
+display brilliantly colored screens with 20 combinations of             
+foreground/background colors. You can have the whole screen in poster   
+mode (non flashing) or electric mode (flashing). The screens you make   
+are saved in files and can be used one at a time or altogether to make  
+a slide show. You can even upload screens to computer bulletin boards   
+for advertisements or messages.                                         
+                                                                        
+The directions are so easy we listed them below for you to see how easy 
+THE MAGIC FONT MACHINE is to use!                                       
+                                                                        
+~Type first line of text.                                               
+~Text appears instantly in mammoth superfonts.                          
+~Select mode and background/foreground colors from the menu.            
+~Position text with <r>ight and <l>eft keys.                            
+~Try different color combinations before saving the line.               
+~Select the <e>dit to retype the line if necessary.                     
+~<s>ave the line when satisfied, and go on to the next line or screen.  
+                                                                        
+Thaaaaats all folks!  Be creative and have fun with THE MAGIC FONT      
+MACHINE!                                                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2452
 

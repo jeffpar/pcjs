@@ -38,6 +38,48 @@ machines:
     necessary.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1928.TXT
+
+{% raw %}
+```
+Disk No: 1928                                                           
+Disk Title: The Manager's Toolbox                                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: The Manager's Toolbox                                    
+Author Version: 1.0                                                     
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+If you know your business, you know you need these strong business      
+management tools for financial statistical analysis.  Included are      
+menu-drive applications for Breakeven Analysis, Predicting Bankruptcy,  
+Inventory Analysis, Make or Buy Decision, Queuing Theory, Financial     
+Analysis, forecasting, and Sampling for Defects.                        
+                                                                        
+Most of the methods are very versatile, in that they will offer you     
+several ways of working the same problem.  This allows you to solve for 
+the exact information you need.  If you wish to obtain a printout of any
+screen, press the Shift key and the Print Screen key at the same time.  
+This program does not store any data, when you move to the next screen  
+all data is lost.                                                       
+                                                                        
+While adequate instructions on how to use these tools is in the form of 
+on-line help, there are no documentation files explaining the           
+application of these tools.  A prior understanding of finance and stats 
+is necessary.                                                           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1928
 

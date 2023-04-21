@@ -14,6 +14,66 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2665.TXT
+
+{% raw %}
+```
+Disk No: 2665
+Disk Title: Extend-A-Name  1 of 2 (#2666 also)
+PC-SIG Version: S1
+
+Program Title: Extend-A-Name
+Author Version: 2.12
+Author Registration: $79.95
+Special Requirements: None.
+
+Whatever programs you use, DOS filenames are a common problem.  There
+comes a time, sooner or later, when eight characters is just not enough
+to properly identify your files.  Wouldn't it be nice to be able to
+describe a file with a longer word, maybe a phrase, or even a whole
+sentence?  Now you can, if you use EXTEND-A-NAME, the 60-character
+filename utility.
+
+EXTEND-A-NAME is a memory-resident utility giving you the freedom to
+describe, organize, find, manage, and retrieve files in ways you never
+thought possible.  The DOS filenames don't get changed.  The descriptive
+filenames are stored in a hidden file linked to the real DOS filenames.
+When your application requests a file, the   EXTEND-A-NAME window
+pops-up.  Choose an appropriate 60-character file with a scroll bar
+menu.
+
+Select one of six configurations based on the number of files in your
+largest subdirectory.  The five conventional memory configurations range
+in size from 40K to 65K.  The sixth configuration uses Expanded Memory
+(LIM 4.0) and requires only 3K of lower memory.
+
+The program has automatic installation for the following programs:
+
+~ Agenda          ~ Microsoft Word       ~ PFS Write
+
+~ AutoCAD         ~ Microsoft Works      ~ Q & A
+
+~ DisplayWrite    ~ Multimate Adv        ~ Quattro
+
+~ Enable          ~ PC Write             ~ Samma
+
+~ Lotus 1-2-3     ~ PeachText            ~ SmartWare
+
+~ Sprint          ~ Symphony             ~ Volkswriter
+
+~ WordPerfect     ~ WordStar             ~ XyWrite
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2665
 

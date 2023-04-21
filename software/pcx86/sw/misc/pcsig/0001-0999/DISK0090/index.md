@@ -56,6 +56,7 @@ machines:
 
 ## ALPHAMAR.BAS
 
+{% raw %}
 ```bas
 100 REM ALPHAMAR Program.
 110 REM Prints an Alphabetic List of Marriages
@@ -218,9 +219,11 @@ machines:
 3240 PRINT "End of Program
 3250 RUN CC.MENU$
 ```
+{% endraw %}
 
 ## ALPHAPER.BAS
 
+{% raw %}
 ```bas
 100 REM ALPHAPER Program.
 110 REM Prints an Alphabetic List of Persons
@@ -387,9 +390,11 @@ machines:
 3280 PRINT "End of Program"
 3290 RUN CC.MENU$
 ```
+{% endraw %}
 
 ## ANCESTOR.BAS
 
+{% raw %}
 ```bas
 100 REM ANCESTOR Program.
 110 REM Prints Charts of Ancestors
@@ -1215,9 +1220,11 @@ machines:
 9870 LOCATE 23,1 : PRINT SPACE$(79);
 9880 RETURN
 ```
+{% endraw %}
 
 ## APPENDIX.BAS
 
+{% raw %}
 ```bas
 100 REM APPENDIX Program.
 110 REM Documentation.  Appendices.
@@ -2027,9 +2034,11 @@ machines:
 9220 DATA ".eof"
 9230 END
 ```
+{% endraw %}
 
 ## CREATMAR.BAS
 
+{% raw %}
 ```bas
 100 REM CREATMAR Program
 110 REM Creates (Formats) a Marriages File
@@ -2107,9 +2116,11 @@ machines:
 2230 PRINT "End of Program"
 2240 RUN CC.MENU$
 ```
+{% endraw %}
 
 ## CREATORD.BAS
 
+{% raw %}
 ```bas
 100 REM CREATORD Program
 110 REM Creates (Formats) an (LDS) Ordinances File
@@ -2202,9 +2213,11 @@ machines:
 2380 PRINT "End of Program"
 2390 RUN CC.MENU$
 ```
+{% endraw %}
 
 ## CREATPER.BAS
 
+{% raw %}
 ```bas
 100 REM CREATPER Program
 110 REM Creates (Formats) a Persons File
@@ -2293,9 +2306,11 @@ machines:
 2340 PRINT "End of Program"
 2350 RUN CC.MENU$
 ```
+{% endraw %}
 
 ## DESCEND.BAS
 
+{% raw %}
 ```bas
 100 REM DESCEND Program.
 110 REM Prints (and Displays) Charts of Descendants
@@ -2752,9 +2767,11 @@ machines:
 6160 LOCATE 23,1 : PRINT SPACE$(79);
 6170 RETURN
 ```
+{% endraw %}
 
 ## DIRECTOR.BAS
 
+{% raw %}
 ```bas
 100 REM DIRECTOR Program.
 110 REM Program Directory for the Genealogy ON DISPLAY Programs
@@ -3261,9 +3278,11 @@ machines:
 6090 DATA ".eof"
 6100 END
 ```
+{% endraw %}
 
 ## DISPLAY.BAS
 
+{% raw %}
 ```bas
 100 REM DISPLAY Program.
 110 REM Displays Genealogical Information
@@ -4095,9 +4114,11 @@ machines:
 9760 U24$ = ""
 9770 RETURN
 ```
+{% endraw %}
 
 ## FAMILY.BAS
 
+{% raw %}
 ```bas
 100 REM FAMILY Program.
 110 REM Prints Charts of Families
@@ -4781,9 +4802,87 @@ machines:
 8450 LOCATE 23,1 : PRINT SPACE$(79);
 8460 RETURN
 ```
+{% endraw %}
+
+## FILES90.TXT
+
+{% raw %}
+```
+Disk No:   90
+Program Title: GENEALOGY ON DISPLAY version 6.0
+PC-SIG version: 3.3
+
+Genealogy ON DISPLAY, Version 6.0, is an integrated, menu-driven group
+of thirty BASIC programs for PCs (including the PCjr), which assist
+users in organizing, entering, and reporting their own genealogical
+data.  It provides for 500 persons and 200 marriages within its data
+base, with no specific generation limit.
+
+Information can be displayed and printed.  Output available for printing
+or displaying includes:
+
+  1.  Pedigree (Family Tree) Charts.
+  2.  Family Group Charts.
+  3.  Descendants Charts (30 generation default)
+  4.  Detailed Personal Information.
+  5.  Detailed Marriage Information.
+
+NOTE:  A companion disk with more functions is available on Disk 594 -
+Notes On Display.
+
+Usage:  Genealogical research and family fun.
+
+Special Requirements:  A version of BASIC.
+
+How to Start:  Type, TYPE READ.ME (press enter).
+
+Suggested Registration:  $35.00
+
+File Descriptions:
+
+ALPHAMAR BAS  Prints alphanumeric marriage list.
+ALPHAPER BAS  Prints alphanumeric persons list.
+ANCESTOR BAS  Prints ancestor list.
+APPENDIX BAS  Program to print Appendices (6).
+CREATMAR BAS  Creates marriage file.
+CREATORD BAS  Creates ordinances file.
+CREATPER BAS  Creates persons file.
+DESCEND  BAS  Prints descendants.
+DIRECTOR BAS  Prints program directory.
+DISPLAY  BAS  Displays file information.
+FAMILY   BAS  Prints family group sheets.
+GENERAL  BAS  Program to print general information (3).
+INDEXMAR BAS  Creates marriage index.
+INDEXPC  BAS  Creates persons index.
+INTRODUC BAS  Program to print manual introduction (2).
+LISTMAR  BAS  Lists marriages.
+LISTPCI  BAS  Lists parent/child index.
+LISTPER  BAS  Lists persons file.
+MENU     BAS  Program to run first.
+OVERVIEW BAS  Tells a bit about genealogy.
+PRINTERS BAS  Program to print documentation on other printers.
+PRINTMAR BAS  Prints marriage file.
+PRINTPER BAS  Prints persons and ordinance file.
+READ     ME   Introductory text file.
+REFERENC BAS  Program to print reference material (5).
+TABLEOFC BAS  Program to print table of contents (1).
+UPDATMAR BAS  Updates marriage file.
+UPDATORD BAS  Updates ordinance file.
+UPDATPER BAS  Updates persons file.
+USINGTHE BAS  Program to print "Using the programs" (4).
+VERIFILE      Verification file used by main program.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1984,85,86,87,88,89 PC-SIG, Inc.
+```
+{% endraw %}
 
 ## GENERAL.BAS
 
+{% raw %}
 ```bas
 100 REM GENERAL Program.
 110 REM Documentation.  General Information.
@@ -5330,9 +5429,11 @@ machines:
 6590 DATA ".eof"
 6600 END
 ```
+{% endraw %}
 
 ## INDEXMAR.BAS
 
+{% raw %}
 ```bas
 100 REM INDEXMAR Program
 110 REM Forms the Marriages Index
@@ -5530,9 +5631,11 @@ machines:
 3570 PRINT "End of Program"
 3580 RUN CC.MENU$
 ```
+{% endraw %}
 
 ## INDEXPC.BAS
 
+{% raw %}
 ```bas
 100 REM INDEXPC Program
 110 REM Forms the Parent/Child Index
@@ -5731,9 +5834,11 @@ machines:
 3580 PRINT "End of Program"
 3590 RUN CC.MENU$
 ```
+{% endraw %}
 
 ## INTRODUC.BAS
 
+{% raw %}
 ```bas
 100 REM INTRODUC Program.
 110 REM Documentation.  Introduction.
@@ -6109,9 +6214,11 @@ machines:
 4880 DATA ".eof"
 4890 END
 ```
+{% endraw %}
 
 ## LISTMAR.BAS
 
+{% raw %}
 ```bas
 100 REM LISTMAR Program.
 110 REM Prints a List of Marriages
@@ -6235,9 +6342,11 @@ machines:
 2870 PRINT "End of Program"
 2880 RUN CC.MENU$
 ```
+{% endraw %}
 
 ## LISTPCI.BAS
 
+{% raw %}
 ```bas
 100 REM LISTPCI Program.
 110 REM Prints the Parent/Child Index
@@ -6351,9 +6460,11 @@ machines:
 2770 PRINT "End of Program"
 2780 RUN CC.MENU$
 ```
+{% endraw %}
 
 ## LISTPER.BAS
 
+{% raw %}
 ```bas
 100 REM LISTPER Program.
 110 REM Prints a List of Persons
@@ -6452,9 +6563,11 @@ machines:
 2620 PRINT "End of Program"
 2630 RUN CC.MENU$
 ```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 100 REM MENU Program
 110 REM for Version 6.0 of Genealogy ON DISPLAY.
@@ -6818,9 +6931,11 @@ machines:
 4190 PRINT "End of Program"
 4200 END
 ```
+{% endraw %}
 
 ## OVERVIEW.BAS
 
+{% raw %}
 ```bas
 100 REM OVERVIEW Program
 110 REM Screen Overview of Genealogy ON DISPLAY
@@ -7221,9 +7336,11 @@ machines:
 4060 '
 4070 END
 ```
+{% endraw %}
 
 ## PRINTERS.BAS
 
+{% raw %}
 ```bas
 100 LPRINT TAB(10);"Changes to Documentation Programs to support Other Printers."
 110 LPRINT
@@ -7254,9 +7371,11 @@ machines:
 360 FOR I = 1 TO 40 : LPRINT : NEXT I
 370 END
 ```
+{% endraw %}
 
 ## PRINTMAR.BAS
 
+{% raw %}
 ```bas
 100 REM PRINTMAR Program.
 110 REM Prints Detailed Marriage Information
@@ -7390,9 +7509,11 @@ machines:
 2970 LPRINT FORM.FEED$;
 2980 RUN CC.MENU$
 ```
+{% endraw %}
 
 ## PRINTPER.BAS
 
+{% raw %}
 ```bas
 100 REM PRINTPER Program.
 110 REM Prints Detailed Personal Information
@@ -7627,9 +7748,11 @@ machines:
 3950 U24$ = ""
 3960 RETURN
 ```
+{% endraw %}
 
 ## REFERENC.BAS
 
+{% raw %}
 ```bas
 100 REM REFERENC Program.
 110 REM Documentation.  Reference Material.
@@ -8118,9 +8241,11 @@ machines:
 6010 DATA ".eof"
 6020 END
 ```
+{% endraw %}
 
 ## TABLEOFC.BAS
 
+{% raw %}
 ```bas
 100 REM TABLEOFC Program.
 110 REM Documentation.  Table of Contents.
@@ -8480,9 +8605,11 @@ machines:
 4580 DATA ".eof"
 4590 END
 ```
+{% endraw %}
 
 ## UPDATMAR.BAS
 
+{% raw %}
 ```bas
 100 REM UPDATMAR Program
 110 REM Data Entry to the Marriages File
@@ -8860,9 +8987,11 @@ machines:
 5260 T4$ = ""
 5270 RETURN
 ```
+{% endraw %}
 
 ## UPDATORD.BAS
 
+{% raw %}
 ```bas
 100 REM UPDATORD Program
 110 REM Data Entry to the Ordinances File
@@ -9453,9 +9582,11 @@ machines:
 7390 T3$ = ""
 7400 RETURN
 ```
+{% endraw %}
 
 ## UPDATPER.BAS
 
+{% raw %}
 ```bas
 100 REM UPDATPER Program.
 110 REM Data Entry to the Persons File
@@ -9962,9 +10093,11 @@ machines:
 6550 T19$ = ""
 6560 RETURN
 ```
+{% endraw %}
 
 ## USINGTHE.BAS
 
+{% raw %}
 ```bas
 100 REM USINGTHE Program.
 110 REM Documentation.  Using the Programs.
@@ -10807,6 +10940,7 @@ machines:
 9550 DATA ".eof"
 9560 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

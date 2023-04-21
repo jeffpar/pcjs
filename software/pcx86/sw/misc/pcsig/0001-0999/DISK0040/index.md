@@ -54,8 +54,98 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #40, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  MAKSTKFL.BAS         CRC = CE 13
+
+--> FILE:  MAKSTKFL.DOC         CRC = C2 F9
+
+--> FILE:  TRANSFER.BAT         CRC = 52 9B
+
+--> FILE:  UPDSTKFL.ALL         CRC = F0 8E
+
+--> FILE:  UPDSTKFL.DAT         CRC = F0 8E
+
+--> FILE:  PLTSEQFL.DAT         CRC = F0 8E
+
+--> FILE:  PLTSEQFL.ALL         CRC = F0 8E
+
+--> FILE:  PLTSTKFL.BAS         CRC = EB C1
+
+--> FILE:  PLTSTKFL.DOC         CRC = 0C D1
+
+--> FILE:  MONEYMKT.INT         CRC = 00 00
+
+--> FILE:  AELPW   .NYS         CRC = 90 6C
+
+--> FILE:  INDUST  .DJA         CRC = EF 34
+
+--> FILE:  FLIGTSF .NYS         CRC = A9 DA
+
+--> FILE:  AUTODT  .NYS         CRC = F6 93
+
+--> FILE:  DISNEY  .NYS         CRC = D5 10
+
+--> FILE:  GANNETT .NYS         CRC = 2D 7B
+
+--> FILE:  AMPINC  .NYS         CRC = A6 18
+
+--> FILE:  GENEL   .NYS         CRC = 12 09
+
+--> FILE:  BOEING  .NYS         CRC = 83 25
+
+--> FILE:  CORNG   .NYS         CRC = 57 08
+
+--> FILE:  PUTNAMHL.MUT         CRC = 1C BE
+
+--> FILE:  ESKOD   .NYS         CRC = 9E E6
+
+--> FILE:  GMOT    .NYS         CRC = 5C DF
+
+--> FILE:  AT&T    .NYS         CRC = 8C D1
+
+--> FILE:  DELTAA  .NYS         CRC = C0 D3
+
+--> FILE:  DUPONT  .NYS         CRC = 23 66
+
+--> FILE:  COMSHARE.OTC         CRC = 16 5B
+
+--> FILE:  KELLYSER.OTC         CRC = A8 2D
+
+--> FILE:  GEMAR70 .OPT         CRC = 0A 33
+
+--> FILE:  SCHWABCM.BAS         CRC = 87 3F
+
+ ---------------------> SUM OF CRCS = 2C DE
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## MAKSTKFL.BAS
 
+{% raw %}
 ```bas
 1 ' (PC)^3 Software Submission MAKSTKFL authored on January 4, 1983 by
 2 '
@@ -642,9 +732,363 @@ machines:
 38300 '           SAVE"makstkfl.bas",a
 65000 '           SAVE"makstkfl.bas",a
 ```
+{% endraw %}
+
+## MAKSTKFL.DOC
+
+{% raw %}
+```
+                 DOCUMENTATION FOR MAKSTKFL.BAS
+
+                    Copyright 1983 BY Michael Csontos
+                                      3228 Livonia Center Road
+                                      Lima, New York 14485
+                                      January 4, 1983
+
+
+                             INTRODUCTION
+
+      This program assists in the generation of data files for securities price
+and  volume  data. It is intended for use with other programs that will analyze
+and/or plot the data. The program is designed to use the Wall Street Journal or
+other  newspaper  financial  statistics pages for manual entry of the data into
+ASCII  sequential  files  accessable  to BASIC, EDLIN and other languages under
+PC-DOS.
+
+      It includes a simple plotting routine, but the program PLTSTKFL.BAS by me
+is intended for serious plotting of the data files on an EPSON printer.
+
+      I  have  written  another  companion  program named DAYLOG.BAS which will
+generate  forms  on  the  printer  for  use  in recording securities (or other)
+statistics.  These  three programs allow you to gather data from a library or a
+stack  of  newspapers that would be awkward to handle at the computer (DAYLOG),
+create data files (MAKSTKFL), and plot the data (PLTSTKFL).
+
+      I  have  provided  no means of editing or correcting the files after they
+are  created.  While the DOS utility EDLIN is quite limited, it is adaquate for
+the  purpose.  Also  I have purposely avoided the use of the CLS (clear screen)
+command. While it may look more professional to start each segment with a blank
+sereen,  and  it  is  unfortunate  that  scrolling  is not smooth on a computer
+screen,  I like the ability to review for a few seconds what I have done before
+it vanishes completely. 
+
+      All  data  entry is in decimal. I found it confusing to remember a format
+for  entering  fractions  with  the  numeric  keypad,  and easy to remember the
+decimal equivalents of eighths. A small calculator might be useful if you trade
+in  securities  traded  in  32nds  or 16ths.
+
+      There  is  no  automatic  transfer from the end of one function to a menu
+(except  for the documentation read function). With the PC's <F2> key programed
+for  RUN and the keyboard buffer available I felt that it was not necessary. If
+you  finish  one  stock  file  and know which one you want next, you can key in
+something like  <F2><2><3><C><O><M><S><H><A><R><E>, and probably the first data
+entry, about as fast as the disk drive takes to reach that part of the program.
+This  is  as  easy  as  using another menu to get you there from the end of the
+program. 
+
+      This  program  makes  reference  to or creates several other files listed
+below and explained later. 
+
+           MAKSTKFL.DOC      which you are reading
+           UPDSTKFL.ALL      a list of all securities files
+           UPDSTKFL.DAT      a list of active securities files
+           TRANSFER.BAT      a batch file used to backup data files
+           ????????.DJA      data file created by MAKSTKFL
+           ????????.NYS        "   "     "     "      "
+           ????????.OTC        "   "     "     "      "
+           ????????.OPT        "   "     "     "      "
+           ????????.MUT        "   "     "     "      "
+
+
+                             PROGRAM OPERATION
+
+      When  the  program  is  run it immediately checks for the presence of the
+files MAKSTKFL.DOC and UPDSTKFL.DAT. If they are present you are presented with
+a  menu  with  eight  selections. If these files are not on the active disk the
+selections that would use them are omitted.
+
+      There  are  two  menus  presented.  The  first selects the function to be
+performed.  The second selects the type of security file to be used. The second
+menu is skipped when it is not needed.
+
+      A description of the menu selections follows.
+
+                             FIRST MENU - FUNCTION
+
+           (1):  INSERT DATA
+
+      If  a  securities  data file (specified by the second menu) exists on the
+active  disk  the  program finds its starting date, renames it to ????????.OLD,
+opens  a  new  file  with securities file name, allows you to enter data from a
+date you specify till the old file's starting date, then transfers the old data
+onto  the end of the new file. This allows you to extend your database backward
+in time.
+
+           (2):  ADD DATA
+
+      Using  an existing data file, the program finds the last entry date, then
+appends  data  you  enter  until  you tell it to stop by entering a code number
+(9999).
+
+           (3):  NEW DATA
+
+      The  program  will  open  a  new  file with a filename you specify and an
+extension  for  the  security type selected in the second menu. You specify the
+starting date and enter data until you enter the stop code 9999.
+
+           (4):  DATE RANGE
+
+      The  first and last dates in the specified security file are displayed on
+the screen. 
+
+           (5):  REPORT
+
+      All  data  for  the specified security is printed on the printer. This is
+useful if you have been entering data directly from a newspaper or data service
+and  have no written record. The format is easier to read than an EDLIN listing
+or a dump using the DOS TYPE command.
+
+           (6):  SCREEN GRAPH
+
+      This is an abbreviated version of PLTSTKFL directed to the screen for use
+as  a  quick check of recently entered data. While the data entry routines trap
+many  typographical  errors,  others  don't show up until an attempt is made to
+plot the data.
+
+           (7):  UPDATE
+
+      In order to use this function you must have a file called UPDSTKFL.DAT on
+the  active  disk.  You create this file in DOS with EDLIN UPDSTKFL.DAT or COPY
+CON:  UPDSTKFL.DAT.  It  is  simply a list of the files you want to update on a
+daily basis. An example of an EDLIN listing is:
+
+           1:*TRANS.DJA
+           2: DELTAA.NYS
+           3: UNPAC,NYS
+           4: DOW8_508.NYS
+           5: BIOTECH.OTC
+
+      The  program  will read this file line by line, retrieve the file listed,
+find the last date, allow you to enter the next day's data, then go to the next
+file  in the UPDSTKFL list. The program selects the proper data format from the
+extension of the filespec on the list.
+
+      While  the  program will not permit more than one day's data to be enered
+at  a  time in this mode, if the skip code (8888) is entered the next date will
+be used, to allow for the skipping of holidays.
+
+      It  may be convenient to have a file UPDSTKFL.ALL on the disk listing all
+stock  files  you  have created. It is considerably easier to delete lines from
+files with EDLIN than to type in filespecs without errors each time you want to
+change your updating cycle. Just copy UPDSTKFL.ALL to UPDATKFL.DAT and edit the
+DAT file.
+
+            (8): DOCUMENTATION
+
+      If  the  file  MAKSTKFL.DOC is present on the active disk, this mode will
+allow you to read it without leaving BASIC or reloading the program.
+
+
+                             SECOND MENU - SECURITY TYPE
+
+      Selection  of the type of security is necessary for the convience of data
+entry, since the published tables present different types of information and in
+different  order  for various markets. All of the formats are based on listings
+in The Wall Street Journal.
+
+           (1):   Dow Jones Averages
+
+      This   is  for  the  entries  from  the  tables  of  30  INDUSTRIALS,  20
+TRANSPORTATION,  15  UTILITIES  and  65 STOCKS COMPOSITE AVERAGE data. The data
+file format is actually the same as for selection (2) but this allows for entry
+in  the  same  order  as  in  the  paper.  The entry order is CLOSE, HIGH, LOW,
+VOLUME.
+
+      The data file is "date",volume,high,low,close.
+
+           (2):   New York Stock Exchange
+
+      Covers  the  data for the NYSE-Composite Transactions as well as New York
+Exchange  Bonds  and  Amex-Composite Tranactions. The order of entry is VOLUME,
+HIGH, LOW, CLOSE.
+
+      The data file is "data",volume,high,low,close.
+
+           (3):  Over the Counter Markets
+
+      Data  entry  in  the  order  VOLUME,  BID, ASKED for NASDAQ quotes of the
+Over-the-Counter Markets.
+
+      The data file is "date",volume,bid,asked,0.
+
+           (4):  Options
+
+      Listed Options Quotations data in the order NY CLOSE, CALLS, PUTS.
+
+      It  is  important  for  options files that the last two characters of the
+filename  be  the  strike price of the option if this data is to be used by the
+program   PLTSTKFL.   An  example  is  BETHJA35  where  the  filespec  will  be
+BETHJA35.OPT.  In  plotting  options  data,  PLTSTKFL  extracts  the  last  two
+characters in the filename for use as a baseline in the plot. 
+
+
+      The data file is "date",0,call,put,close.
+
+           (5):  Mutual Funds
+
+      NET  ASSET  VALUE  and OFFER PRICE data entry for Mutual Fund data.
+
+      The data file is "date",0,nav,offer,0
+
+      The  data  file formats above are what you will see if you list the files
+with  DOS  [type]  or  EDLIN.  The  null  (0)  entries are used to allow common
+subroutines to be used for search or conversion of all of the data types.
+
+                             FILE SELECTION
+
+      After  you have specified a securities type, you will be presented with a
+list of the files of that type that are on the active disk. You must then enter
+the filename of the one you want. The filename may be any that is acceptable to
+DOS  except  in  the case of options, where the last two characters are used to
+record the strike price.
+
+      {NOTE:  The filespec consists of [filename].[extension]. You are to enter
+the  eight  (or  less) character [filename]. The three character [extension] is
+supplied by the program.}
+
+      If  you  enter  a  filename  that  is  on  the  disk  but not on the list
+displayed, you may add data to that file in the wrong format, causing confusion
+later.  Therefore check the filespec displayed in line 25 of the display before
+proceeding to enter data.
+
+      .
+                             DATA ENTRY
+
+      Once  the  program  is in a mode for data entry it will list the security
+dile  open on line 25, the date for the data to be entered and the type of data
+in  the  active screen area. The program uses BASIC INPUT statements so it will
+reject  some  data  entries such as characters and extra punctuation marks. The
+program  will  trap  some  errors  such as decimal points in volume entries and
+inappropriate  values for HIGH, LOW, and CLOSE relative to data already entered
+for that date.
+
+      The  program  will  prompt  for  reentry of the data just entered. If the
+problem  is  with  data  entered earlier, enter the number 7777 and the program
+will  restart  the  data  entry  cycle with the same date. The program does not
+expect securities prices to change by more than 25% in one day. If this data is
+entered, it askes for a second <enter> to confirm it. 
+
+      Once  the last data for a day is entered the program prompts for the next
+day's  data  and  there  is  no  way  to  retreive the previous data (see ERROR
+CORRECTION).  The  number 7777 may be entered for any field to restart the data
+cycle at the same date to correct errors that are caught before the last entry.
+If  the number 8888 is entered the program will skip to the next date and there
+will  be no item in the data file for the date so skipped. When the number 9999
+is entered the program ends the data entry mode. No data entry is made for that
+last date.
+
+                             ERROR CORRECTION
+
+      The data files created with this program use the following format:
+
+           "date",data AA,data BB,data CC,data DD
+
+      A typical EDLIN listing would look like:
+
+        1:*"12-10-82",1234,22.375,21,22.125
+        2: "12-13-82",1324,22.875,21.5,22
+        3: "12-14-82",4231,20,19.125,21.25
+
+      This  is  not  intended  to  be  a  tutorial on how to use EDLIN, but the
+procedure  for correcting a file is to exit BASIC (enter <SYSTEM>), start EDLIN
+(enter  <A:EDLIN  filespec>  if your DOS disk is in drive A and your data is in
+active drive B) and enter <L>. A listing similar to the above will appear. Find
+the date where the error occors. Enter the line number and the line will appear
+with  the  prompt below it. Use the DOS editing keys to correct the error, then
+exit EDLIN.
+
+      With the error trapping routines of MAKSTKFL this procedure should seldom
+be necessary.
+
+                            DATA BACKUP
+
+      This  program  opens  all  files  for  output in the APPEND mode so it is
+difficult  to loose data. Nevertheless it is advisable to regularly backup your
+data.  The file TRANSFER.BAT is provided to simplify this procedure. It depends
+on  having  a  two  disk  system with the MAKSTKFL program, its associated data
+files, and TRANSFER.BAT all in drive B and the backup disk in drive A.
+
+      If  you are using PLTSTKFL or other analysis program it is a good idea to
+use  the  disk  containing it as the backup disk for the following reason. When
+run, TRANSFER  will first erase all stock data files in drive A. This is useful
+because  if  the  files  are  updated  on  a  daily basis they will become very
+fragmented  by  the  DOS  disk  routines.  Since the copy command uses existing
+directory entries on the destination disk if they exist, they must be erased in
+order  to  get good disk utilization on the backup disk. Using the backup files
+with analysis programs should decrease disk drive activity.
+
+      If  the disks are in the proper drives, TRANSFER will try to erase itself
+in  drive  A  as  a  precaution,  erase  securities  in  drive A, then copy all
+securities files in drive B to drive A.
+
+      Since it is possible for this routine to distroy itself if misused, it is
+listed  below. You may recreate the file by editing this file if you are clever
+at that sort of thing.
+
+           rem WARNING!!!
+           REM   This routine will erase all stock data files in drive A:.
+           rem   Be sure that this disk is in drive B:.
+           rem   The transfer is made from drive B: to drive A:.
+           rem As a precaution this transfer batch file will erase itself if it
+                 is in drive A:. 
+           pause  WARNING!  Press  <Ctrl>+<Break>  if  you  think  you  are  in
+                 trouble.
+           erase A:transfer.bat
+           erase a:*.dja
+           erase a:*.nys
+           erase a:*.otc
+           erase a:*.opt
+           erase a:*.mut
+           rem All stock data files will be transfered from B: to A:.
+           rem Be sure that the source disk is in drive B:
+           pause  and that the destination disk is in drive A:
+           copy *.dja A:
+           copy *.nys A:
+           copy *.otc A:
+           copy *.opt A:
+           copy *.mut A:
+
+                             MISCELLANEOUS
+
+      At  the  time  of  this  writing this program has quite a few rough edges
+which will have to be worked off by use. The error recovery procedures for disk
+and  printer  faults especially need work. It will be necessary to simulate all
+possible faults and trace the behavior of the software. However most of this is
+cosmetic,  since restarting the program (from <Ctrl>+<Break> if necessary) will
+solve  most  problems. The nature of the data entry and the ease of editing the
+files make this program tolerant of errors.
+
+      Revisions  of  this  program and companion programs will be made avilable
+through the user groups that distribute this program.
+
+                             ---***---
+
+
+
+           The  program  MAKSTKPLT.BAS  and  its  associated
+           files  are  made freely available non-exclusively
+           for  distribution  to  the members of the Picture
+           City  Personal  Computer  Programmers'  Club  and
+           through software exchange with other users groups
+           as  long  as  the  author  and  (PC)^3  are fully
+           credited.
+
+```
+{% endraw %}
 
 ## PLTSTKFL.BAS
 
+{% raw %}
 ```bas
 1 ' (PC)^3 Software Submission PLTSTKFL authored on January 4, 1983 by
 2 '
@@ -1101,9 +1545,274 @@ machines:
 53600 GOTO 52700
 65000 '         SAVE"pltstkfl.bas",a
 ```
+{% endraw %}
+
+## PLTSTKFL.DOC
+
+{% raw %}
+```
+                       DOCUMENTATION FOR PLTSTKFL.BAS
+
+                          Copyright 1983 BY Michael Csontos
+                                            3228 Livonia Center Road
+                                            Lima, New York 14485
+                                            January 4, 1983
+
+
+                              INTRODUCTION
+
+      This  program  is  intended for use in making printer plots of securities
+(stock,  bonds,  options,  mutual  funds)  from  files  created  by the program
+MAKSTKFL.BAS  by  the  above author. It contains printer commands for the EPSON
+MX-80  printer.  The  special  GRAPHTRACK  feature used is SCRIPT (subscript or
+superscript) for high resolution plots. Medium resoluton plots should work with
+the IBM version of the printer.
+
+      Several  files  which  should be on the same disk with this program. They
+are:
+
+           PLTSTKFL.DOC      which you are now reading
+           PLTSEQFL.DAT      a list of files you want plotted automaticly
+           PLTSEQFL.ALL      a list of all files to edit to PLTSEQFL.DAT
+           MONEYMKT.INT      containing the inerest rate to be used in plots
+           ????????.DJA      data file created by MAKSTKFL
+           ????????.NYS      "    "    "       "  "
+           ????????.OTC      "    "    "       "  "
+           ????????.OPT      "    "    "       "  "
+           ????????.MUT      "    "    "       "  "
+
+      The  program will run without these files, except that of course at least
+one data file must be present for it to do anything.
+
+      The plots may be continuous over all of the data in the files or adjusted
+for  the  most  recent  data  that  will  fit on an eleven inch page. Each plot
+consists of a heading giving the date and time plotted, the type of data (price
+or  volume)  and  some  statistics  about  the data (average price, lowest low,
+highest high, percent range).
+
+      No  scale is generated for the plots. Instead the data is referenced to a
+line based on the average closing price for the security and the daily price is
+printed  with  the  date on each line (or for every Friday in high resolution).
+The placement of the date and price is adjusted so that the price plot can take
+full advantage of the width of the paper.
+
+      The  purpose  of this type of plot is to emphasize price movements rather
+than  to  show the value of a stock. The presence of the average value baseline
+with  the money market growth plot makes it easy to see when it would have been
+a good time to have bought or to have sold.
+
+                             PROGRAM OPERATION
+
+      When  the  program  is  run  it first checks for the presence of the file
+MONEYMKT.INT.  This  file  should contain a single number, the interest rate in
+percent,  to  be  used in all but options plots to show a compartatve growth in
+the  average  price  of  the  security  over  the time plotted. The file may be
+created or revised in DOS with EDLIN.
+
+      If  the file MONEYMKT.INT is missing the program will ask you to enter an
+interest  rate for use for the current run. If you enter 0 or just press enter,
+the program will assume a rate of 10%
+
+      The   program   next   checks   for  the  presence  of  PLTSEQFL.DAT  and
+PLTSTKFL.DOC.  If they are missing, the menu options requiring them are skipped
+in the displays to follow.
+
+                             MENUS
+
+      Four  menus  are  produced  by the program. The first selects the program
+function.  The  second  selects the type of plot. The third selects the type of
+security.  And  the fourth selects the data to be plotted. The <Esc> key may be
+pressed  at any of these to abort the program. Menus will be skipped if they do
+not apply to the function selected.
+
+                             FIRST MENU - FUNCTION
+
+           (1):  DOCUMENTATION
+
+      This  appears  if the file PLTSTKFL.DOC is present on the active disk. It
+allows  you  to  read the documentation file without exiting BASIC or reloading
+the program.
+
+           (2):  SINGLE FILE
+
+      In this mode the program will ask you to specify a single securities file
+and  then will plot the data for that file, returning to BASIC when the plot is
+completed.
+
+           (3): SINGLE TYPE
+
+      If  PLTSEQFL.DAT  is  present, this mode will ask you to select a type of
+security  and  then  plot  all  files  listed  in PLTSEQFL.DAT for that type of
+security.
+
+           (4): ALL FILES
+
+      All  files  listed  in  PLTSEQFL.DAT  will  be  plotted.  The  securities
+selection menu will be skipped.
+
+                             SECOND MENU - PLOT
+
+      Selections  (1):  and (2): are for a continuous plot. The plot will start
+at  the  beginning  of  the  file  and run to the end. No provision is made for
+skipping  perforations  on  fan-fold  forms.  (I  use  teletype paper.) If your
+printer's  bit  switch  is  set for "1 inch skip over perf" you may get gaps in
+your  plots.  This  may also cause trouble in the 11 inch page mode, since this
+program  makes  full  use  of  the  page.  A space of two lines is left between
+successive  plots  in  this mode.
+
+      Selections  (3):  and  (4):  limit  the  plot to an eleven inch page. The
+program  determines the number of entries in the data file, then plots the last
+80  of  them  in  medium  resolution  mode, or the last 200 of them in the high
+resolution mode. In order to obtain this much data per page the spacing between
+pages  is  about 1/2 inch. Therefore align fan-fold paper carefully and be sure
+printer  bit  switch SW2-4 in the EPSON is off (its normal position). The paper
+is advanced to the top of the next form at the end of each plot.
+
+      Selections  (1):  and (3): use compressed print and 1/8 inch line spacing
+to  produce plots with a resolution of 1/130 and eighty days per page. The date
+and relevant price or volume data are printed on each line.
+
+      Selections  (2): and (4): use the EPSON's compressed script mode to print
+130  points per line on a 1/18 inch line for 200 lines per page. Because of the
+overlapping of lines, the price or volume data is printed only for Fridays. The
+script  type  (superscript  or  subscript) is randomized for each run using the
+TIME$ function to equalize wear on the print head and ribbon.
+
+      .
+                             THIRD MENU - SECURITY TYPE
+
+      Selection of the type of security is necessary for the format of the plot
+since  the  data  files present different types of information and in different
+order for various markets. All of the formats are based on listings in The Wall
+Street Journal.
+
+           (1):   Dow Jones Averages
+
+      This   is  for  the  entries  from  the  tables  of  30  INDUSTRIALS,  20
+TRANSPORTATION,  15  UTILITIES  and  65 STOCKS COMPOSITE AVERAGE data. The data
+file format is actually the same as for selection (2) but this selection allows
+for handling the larger volumes and prices in the plot.
+
+      The data file format is "date",volume,high,low,close.
+
+           (2):   New York Stock Exchange
+
+      Covers  the  data for the NYSE-Composite Transactions as well as New York
+Exchange  Bonds  and  Amex-Composite  Tranactions. On each line are plotted the
+daily  low,  high,  close,  average close, and the value that the average would
+have  become  since  the beginning of the plot at the market interest rate. The
+space  between the low and the high is darkened with "#" symbols and the offset
+of this bar from the average is filled with "-"'s
+
+      The data file format is "data",volume,high,low,close.
+
+           (3):  Over the Counter Markets
+
+      This  format  covers  NASDAQ  quotes of the Over-the-Counter Markets. The
+plot  is  similar  to selection (2): except that there is no closing price. The
+spread between the bid and asked prices is filled with "#"'s. 
+
+      The data file format is "date",volume,bid,asked,0.
+
+           (4):  Options
+
+      These files contain data for listed options. 
+
+      It  is  important  for  options files that the last two characters of the
+filename  be  the  strike price of the option if this data is to be used by the
+program   PLTSTKFL.   An  example  is  BETHJA35  where  the  filespec  will  be
+BETHJA35.OPT.  In  plotting  options  data,  PLTSTKFL  extracts  the  last  two
+characters in the filename for use as a baseline in the plot. 
+
+      The  plot  for  options is quite complex. The put and the call prices are
+scaled  independantly  to  fill  the  available  space  and  plotted  without a
+baseline.  They are bracketed by "#" symbols to make them stand out. The strike
+price  is  extracted  from the file name and is used as a baseline for relative
+price comparisons.
+
+      Two  new data points are generated by subtracting the call price from the
+closing  price  and  by  adding  the put price to the closing price in the data
+file.  These  numbers  are  listed, with the date, on the left of the plot. The
+resulting  low,  strike, close, and high prices are scaled to fit the available
+space and plotted.
+
+      The  space between the low and the close is filled with "-"'s and between
+close  and  high  with  "+"'s to tie them together. A study of this plot should
+provide considerable information about the behavior of options.
+
+      The data file format is "date",0,call,put,close.
+
+           (5):  Mutual Funds
+
+      This  format  is  the  same as for Over-the Counter stocks except the Net
+Asset  Value  and  Offer  Price  are  plotted,  and  there  is  no  volume data
+available.
+
+      The data file format is "date",0,nav,offer,0
+
+      The  data  file formats above are what you will see if you list the files
+with  DOS  [type]  or  EDLIN.  The  null  (0)  entries are used to allow common
+subroutines to be used for search or conversion of all of the data types.
+
+                             FOURTH MENU - DATA TO BE PLOTTED
+
+      For  most  types  of  files both price and volume data is available. This
+menu lets you decide which you want plotted. 
+
+                                   -
+
+      Printing  will  start  after  the  last  menu selection is made. There is
+considerable  disk  activity and calculation with this program. Therefore speed
+will  be  considerably  improved with any or all of printer buffers, ram memory
+disk simulation, or a compiled version of this program.
+
+                             DATA FILE GENERATION
+
+      This  program is intended to be used with the program MAKSTKFL.BAS by the
+same  author.  However  you can create data files with EDLIN or other editor or
+write  a simple high level language yourself. The files are sequential with the
+folowing format on each line"
+
+           "date",data-AA,data-BB,data-CC,data-DD
+
+      The  location  of  the  values for each type of file is shown under THIRD
+MENU above. The date is a string variable in the form used by the BASIC [TIME$]
+command. The data is fixed point. An EDLIN listing would appear as follows:
+
+           1:*"04-07-83",3598,24.5,21.25,23.875
+           2: "04-08-83",4259,26.25,23.125,25
+           3: "04-11-83",5983,27.875,25.625,26.625
+
+      With  this  information  you  may be able to use this program without any
+other software.
+
+
+                             MISCELLANEOUS
+
+      At the time of this writing this program is still in a fairly rough form.
+Most  work  is  needed  in  the  error  recovery routines from disk and printer
+faults.  Hwever  since the software only opens files for input, there is little
+likelyhood  of  loss  of  data  and  the  program  can always be restarted with
+<Ctrl>+<Break>. 
+
+      Revisions  and companion programs will be made available through the user
+groups that distribute this program.
+
+                             ---***---
+
+
+
+      The program PLTSTKFL.BAS and its associated files are made freely
+available for non-exclusive distribution by the Picture City Personal Computer
+Programmers' Club and through exchange with other users groups as long as
+(PC)^3 and the author are fully credited.
+
+```
+{% endraw %}
 
 ## SCHWABCM.BAS
 
+{% raw %}
 ```bas
 1 KEY OFF:CLS
 10 ' The program "schwabcm.bas" to calculate the stock commissions charged by
@@ -1177,6 +1886,7 @@ machines:
 20000 CLS:KEY ON:END
 65000 '         SAVE"schwabcm"
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -35,6 +35,46 @@ machines:
     computerized tester.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2297.TXT
+
+{% raw %}
+```
+Disk No: 2297                                                           
+Disk Title: Know-It-All                                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Know-It-All                                              
+Author Version: 03/90                                                   
+Author Registration: $10.00                                             
+Special Requirements: CGA.                                              
+                                                                        
+Everybody loves trivia, but nobody loves a know-it-all.  That is, until 
+they've experienced KNOW-IT-ALL, the trivia questionaire game that lets 
+you break the realm of most traditional trivia games.                   
+                                                                        
+Star Trek, TV Shows, Science, and Slogans are just a few of the         
+categories of questions that you'll find. Start out with the questions  
+that KNOW-IT-ALL has to offer and after you've mastered these, use the  
+editor in KNOW-IT-ALL to add questions to your own customized data file.
+The questions can be multiple choice or fill-in-the-blank.              
+                                                                        
+As you answer questions, KNOW-IT-ALL keeps a running tally of how many  
+guesses you've taken. After you're done, you'll get a percentage of how 
+many questions were answered correctly (or incorrectly).  Since you can 
+add your own questions to KNOW-IT-ALL, you could also use the program   
+as an educational computerized tester.                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2297
 

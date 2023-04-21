@@ -30,6 +30,85 @@ machines:
     demo which accepts input from users.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## BLOAD.BAS
+
+{% raw %}
+```bas
+10 'This program loads a screen which was saved with a .BLD extension.          20 C = 80                        'or 40 for a 40-column screen
+30 WIDTH 80                      'or 40 for a 40-column screen
+40 OUT &H3D8,&H21                'video off (80-column only)
+50 DEF SEG = &HB800              'set to first page of color screen
+60 BLOAD "PICTURE.BLD",0
+70 OUT &H3D8,&H29                'video on (80-column only)
+```
+{% endraw %}
+
+## BSAVE.BAS
+
+{% raw %}
+```bas
+5 'This program saves the current screen. Always use a .BLD extension.
+10 DEF SEG = &HB800               'first page of color screen
+20 BSAVE "picture.bld",0, 4000    'use 2000 as length of a 40-column screen
+40 DEF SEG
+```
+{% endraw %}
+
+## FILES914.TXT
+
+{% raw %}
+```
+Disk No  914
+Program Title: PC-DEMO version 2.1
+PC-SIG version 1
+ 
+    PC-DEMO is a graphics demonstration package. It demonstrates graphics
+animation, program interface capabilities, and slide shows. PC-DEMO lets
+you use the full range of charaters and colors on your computer. PC-DEMO's
+single-command language gives you big or small characters. You can fill in
+a box, move it, copy it, and even rotate it. Use the cursor keys to draw
+your picture. In addition, PC-DEMO slides may be organized into an
+interactive demo.
+ 
+Usage: Graphics Package.
+ 
+System Requirements: 256K memory and two drives.
+ 
+How to start: Type: RUNDEMO (press enter).
+ 
+Suggested Registration: $35.00
+ 
+File Descriptions:
+ 
+PC-DEMO  BAT  Development system batch program.
+PC-DEMO  COM  Development system program.
+PC-DEMO  000  Development system overlay file.
+PC-DEMO  HLP  Development system help file.
+DEMO     COM  Runtime demo program.
+CAPTURE  COM  Memory resident screen capture program.
+FASKEYS  COM  Program to enhance the keyboard rate.
+BLD_PIC  PAS  Pascal program to convert files from .BLD format to .PIC format.
+PIC_BLD  PAS  Pascal program to convert files from .PIC format to .BLD format.
+PIC_ASC  PAS  Pascal program to convert files from .PIC format to ASCII.
+SHOW_PIC PAS  Turbo Pascal source program to display a PC-DEMO .PIC file.
+BLOAD    BAS  Example BASIC program to display a PC-DEMO .PIC file.
+BSAVE    BAS  Example BASIC program to save a screen in the .PIC format.
+RUNDEMO  BAT  Demonstration program. Requires a color graphics adapter.
+PC-DEMO  DMO  Demonstration file of PC-DEMO's features.
+READ     ME   File descriptions.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0914
 

@@ -14,6 +14,39 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2777.TXT
+
+{% raw %}
+```
+Disk No: 2777
+Disk Title: Graphics Screen Designer
+PC-SIG Version: S1
+
+Program Title: Graphics Screen Designer
+Author Version: 09/90
+Author Registration: $15.00
+Special Requirements: Hercules graphics.
+
+Create pictures using lines, boxes, circles, and curves.  Three line
+widths and many fill patterns are available.  Create graphs (line, 2-D
+or 3-D bar, pie), and switch graph types to see which style best suits
+the data.  Handy features are everywhere -- scaling, reverse video, page
+switching, and a DOS shell.  This smoothly-working program supports a
+mouse and Epson-compatible printers with such options as landscape or
+portrait.  Sample files are provided, including data for graphs and a
+very nice map of the USA.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2777
 

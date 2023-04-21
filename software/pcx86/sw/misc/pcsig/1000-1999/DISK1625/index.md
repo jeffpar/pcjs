@@ -34,6 +34,44 @@ machines:
     characters per line.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1625.TXT
+
+{% raw %}
+```
+Disk No: 1625                                                           
+Disk Title: Maintenance Data Base                                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Maintenance DBS                                          
+Author Version: 2.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+MAINTENANCE DBS is ideal for the person in charge of maintenance for a  
+large corporation or building.  It records what maintenance was done,   
+who did it, and where it was done.  Then it keeps a running record of   
+maintenance due:  where, when, and what is needed.  It tracks purchase  
+orders by date, number, and department the work is charged to.          
+Basically, MAINTENANCE DBS covers most of the important paperwork a     
+maintenance director faces.                                             
+                                                                        
+Simple to run, MAINTENANCE DBS allows you to set up your own fields and 
+records if the suggested ones do not match your operation. It tracks up 
+to 120 records per file.  Each file tracks records for a month-long     
+period and contains up to 414 characters, or six lines of data, at 69   
+characters per line.                                                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1625
 

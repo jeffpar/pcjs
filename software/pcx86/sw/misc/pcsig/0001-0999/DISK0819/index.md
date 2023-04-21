@@ -31,6 +31,41 @@ machines:
     build a puzzle for you, using words you enter.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0819.TXT
+
+{% raw %}
+```
+Disk No:  819                                                           
+Disk Title: Crossword Creator  (Disk 1 of 2)                            
+PC-SIG Version: S4.1                                                    
+                                                                        
+Program Title: Crossword Creator                                        
+Author Version: 4.1                                                     
+Author Registration: $20.00                                             
+Special Requirements: 320K RAM and printer.  Mouse recommended.         
+                                                                        
+CROSSWORD CREATOR can be used by anyone who enjoys designing or solving 
+crossword puzzles.  It provides the tools you need to lay out a puzzle  
+on the computer's screen, define clues for each word, save your design  
+on disk, and produce professional-looking printouts of your crosswords. 
+                                                                        
+Enhancements include: a 50-page manual, an installation utility, a      
+configuration file, support for all types of printers (including        
+lasers), and an automatic word placement feature that will actually     
+build a puzzle for you, using words you enter.                          
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0819
 

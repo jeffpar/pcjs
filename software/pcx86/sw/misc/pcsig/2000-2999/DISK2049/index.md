@@ -37,6 +37,47 @@ machines:
     it all goes!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2049.TXT
+
+{% raw %}
+```
+Disk No: 2049                                                           
+Disk Title: Checkbook Management disk 2 of 2 (also #393)                      
+PC-SIG Version: S5.3                                                    
+                                                                        
+Program Title: Checkbook Management                                     
+Author Version: 5.03                                                    
+Author Registration: $35.00                                             
+Special Requirements: 320K RAM, Two Floppy Drives or Hard Drive.        
+                                                                        
+CHECKBOOK MANAGEMENT is a complete checkbook management system which    
+takes the check register one step further while helping you to maintain 
+your budget.  It's good for personal and small business checking        
+accounts.                                                               
+                                                                        
+Record all forms of checking account transactions, including bank       
+charges, ATM deposits and withdrawals, and interest.  CHECKBOOK         
+MANAGEMENT writes checks,  but you can also reconcile bank              
+statements and get a variety of reports on itemized transactions and    
+periodic summaries.  You can keep up to 3000 transactions on floppies,  
+or an unlimited number if you use a hard disk.                          
+                                                                        
+Establish budget categories and assign each transaction item to a       
+budget classification.  This flexible program lets you change these     
+designations as needed.  At last, you'll be able to find out just where 
+it all goes!                                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989, 1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2049
 

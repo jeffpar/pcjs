@@ -79,6 +79,7 @@ machines:
 
 ## BIGCALC.BAS
 
+{% raw %}
 ```bas
 100 PRINT:PRINT "EXTENDED PRECISION CALCULATOR"
 110 '
@@ -420,9 +421,773 @@ machines:
 10200 PRINT "    MBA  Move B to A            ???  Instructions"
 10210 RETURN
 ```
+{% endraw %}
+
+## CAL.DOC
+
+{% raw %}
+```
+This program shows the calendary for any month/year since 1900.  To
+use say 
+
+	CAL <CR>	-- Calendar for current month
+	CAL <month>	-- Calendar for that month in current year.
+			   Use month names ("December") or 3-letter
+			   abbreviations ("Dec")
+	CAL <mo><yr>    -- Calendary for that month/year.  Years are
+			   2 or 4 digits (1983 or 83, for example).
+```
+{% endraw %}
+
+## COENDP.ASM
+
+{% raw %}
+```
+	TITLE	COENDP	- Diskette Contents List - Work	Area Definition
+	SUBTTL	Version	1.1 - July 1984
+	PAGE	81,132
+;
+CODE	SEGMENT	BYTE PUBLIC 'CODE'
+	ASSUME	CS:CODE,DS:CODE
+;
+	PUBLIC	SRCE,PNTR
+;
+PNTR	DW	0			;Pointer list
+SRCE	EQU	PNTR+456		;Start of entry	stack
+;
+CODE	ENDS
+;
+	END
+```
+{% endraw %}
+
+## COFREE.ASM
+
+{% raw %}
+```
+	TITLE	COFREE	- Diskette Contents List - Get Free Space
+	SUBTTL	Version	1.1 - July 1984
+	PAGE	81,132
+;
+CODE	SEGMENT	BYTE PUBLIC 'CODE'
+	ASSUME	CS:CODE,DS:CODE
+;
+	EXTRN	VERS:BYTE,FREE:BYTE
+X10000	DW	10000			;Conversion constants
+X1000	DW	1000,100,10
+;
+	PUBLIC	GETFRE
+GETFRE	PROC	NEAR
+	TEST	VERS,-1
+	JZ	VERS1
+	XOR	DL,DL			;Set for default drive
+	MOV	AH,36H
+	INT	21H			;v2.0 -	get free space
+	MUL	BX
+	MUL	CX			;AX,DX contains	bytes free
+	JMP	VCOM			;Enter common code
+VERS1:	PUSH	DS
+	MOV	AH,1BH
+	INT	21H			;v1.x -	get FAT
+	XOR	AH,AH
+	XCHG	CX,DX			;CX has	number of units
+	MUL	DX			;Bytes/allocation unit
+	PUSH	AX			;Save
+	XOR	AX,AX
+	MOV	SI,2			;First FAT entry
+FAT2:	MOV	DI,SI
+	SHR	DI,1
+	ADD	DI,SI			;Compute 1 1/2 bytes
+	MOV	DI,WORD	PTR [BX+DI]	;Load FAT entry
+	TEST	SI,1			;See if	odd or even
+	JZ	FAT3
+	SHR	DI,1
+	SHR	DI,1
+	SHR	DI,1			;Adjust	for 12 bits
+	SHR	DI,1
+FAT3:	AND	DI,0FFFH		;Three nibbles
+	JNZ	FAT4			;In use, so don't count
+	INC	AX
+FAT4:	INC	SI			;Step to next entry
+	LOOP	FAT2			;Loop through FAT
+	POP	CX			;Restore bytes/allocation unit
+	MUL	CX			;Compute total free bytes
+	POP	DS			;Restore program seg reg
+VCOM:	MOV	DI,OFFSET FREE		;Point to output area
+	CALL	CONVRT			;Convert size to ASCII
+	RET
+GETFRE	ENDP
+;
+	PUBLIC	CONVRT
+CONVRT	PROC	NEAR			;Converts 6 digits, zero surpressed
+	PUSH	DI			;Save pointer for later	use
+	DIV	X10000			;Result	range 0-999
+	AAM
+	CMP	AH,9
+	JBE	SMALL			;Normal	sized file
+	PUSH	AX			;Over 990K
+	MOV	AL,AH
+	AAM
+	OR	AX,'00'
+	XCHG	AH,AL
+	STOSW				;Save high two digits
+	POP	AX
+	OR	AL,'0'
+	STOSB				;Save next digit
+	JMP	SHORT COMM		;  and rejoin common code
+SMALL:	MOV	BYTE PTR [DI],'0'
+	INC	DI
+	OR	AX,'00'			;Make ASCII
+	XCHG	AH,AL
+	STOSW				;Place in image
+COMM:	MOV	CX,3			;Convert last four digits
+	MOV	SI,OFFSET X1000
+DIVLP:	MOV	AX,DX			;Remainder becomes dividend
+	XOR	DX,DX
+	DIV	WORD PTR [SI]		;Power of 10 divide
+	OR	AL,'0'			;Result	range 0-9
+	STOSB
+	ADD	SI,2
+	LOOP	DIVLP
+	OR	DL,'0'			;Last digit in remainder
+	MOV	AL,DL
+	STOSB
+	MOV	CX,5			;Now zero surpress 5 digits
+	POP	DI
+	MOV	AL,' '
+SUPLP:	CMP	BYTE PTR [DI],'0'
+	JNZ	DNECVT			;Conversion complete
+	STOSB				;Replace leading zero with blank
+	LOOP	SUPLP
+DNECVT:	RET
+CONVRT	ENDP
+;
+CODE	ENDS
+;
+	END
+```
+{% endraw %}
+
+## COPRNT.ASM
+
+{% raw %}
+```
+	TITLE	COPRNT	- Diskette Contents List - Print Cover Sheet
+	SUBTTL	Version	1.1 - June 1984
+	PAGE	81,132
+;
+CODE	SEGMENT	BYTE PUBLIC 'CODE'
+	ASSUME	CS:CODE,DS:CODE
+;
+	EXTRN	PNTR:WORD,STKCNT:WORD,TITLX:BYTE,RESTR:BYTE
+;
+	EXTRN	CONVRT:NEAR
+;
+	PUBLIC	PSX
+PSX	DB	0			;Pass counter
+DBUF	DB	8 DUP (0)		;Work buffer for file size
+DBLK	DB	'  ',0			;Double	blank between columns
+LFTB	DB	'|  ',0			;Left border
+RGTB	DB	'  |'			;Right border (includes	CRLF)
+CRLF	DB	13,10,0
+DRCT	DB	'  <DIR>',0
+BCNT	DB	0			;Body line counter
+;
+	PUBLIC	PRINT
+PRINT	PROC	NEAR
+	INC	PSX			;Count numbers of prints
+	MOV	BCNT,33			;Set body line counter
+	MOV	AX,STKCNT		;Load entry count
+	MOV	DH,4			;Divide	by number of columns
+	DIV	DH
+	OR	AH,AH
+	JZ	SETCNT			;Evenly	divisable
+	INC	AL			;Ragged	edge
+	CBW
+SETCNT:	PUSH	AX			;Entries per column count
+	CMP	AX,33
+	JBE	NORM			;See if	too big	for standard
+	TEST	PSX,1			;See if	a page restore needed
+	JNZ	NORES
+	CALL	DORES			;Do it
+NORES:	MOV	PSX,0
+NORM:	CALL	DOBRDR			;Do upper border
+	CALL	DOBLNE			;  and a blank line
+	CALL	DOLFTM			;Do left margin
+	MOV	DX,OFFSET TITLX
+	CALL	DOPRT			;Output	the title line
+	CALL	DORGTM			;Do right margin
+	CALL	DOBLNE			;  and another blank line
+	POP	CX
+	JCXZ	EMPTY
+	MOV	BP,CX
+	SHL	BP,1			;BP contains offset/column in ptr list
+	MOV	SI,OFFSET PNTR		;Point to start	of ptr list
+OTLP:	CALL	DOLFTM			;Do a left margin
+	MOV	DL,4			;Set inner loop	count to columns
+	XOR	BX,BX			;Clear column offset reg
+INLP:	CALL	PRTENT			;Print stack entry
+	ADD	BX,BP			;Step to next column entry
+	DEC	DL
+	JNZ	INLP			;End of	inner loop
+	CALL	DORGTM			;Do a right margin
+	ADD	SI,2			;Step to next ptr
+	DEC	BCNT			;Decrement body	line count
+	LOOP	OTLP			;End of	outer loop
+EMPTY:	MOV	CL,BCNT			;Load remaining	body lines
+	CMP	CL,0
+	JL	NOFILL			;Over full
+	XOR	CH,CH
+	JCXZ	NOFILL			;All used
+FILL:	CALL	DOBLNE			;Fill out body lines
+	LOOP	FILL
+NOFILL:	CALL	DOBRDR			;Do bottom border
+DORES:	MOV	DX,OFFSET RESTR
+	CALL	DOPRT			;Restore page
+	RET
+PRINT	ENDP
+;
+	PUBLIC	DOPRT
+DOPRT	PROC	NEAR			;This subroutine simply	prints
+	PUSH	DX			;the string pointed to by the
+	PUSH	SI			;DX reg	on entry.  The string
+	MOV	SI,DX			;is terminated by a nul	byte.
+	MOV	AH,5
+DPLP:	MOV	DL,BYTE	PTR [SI]
+	OR	DL,DL
+	JZ	PRTEND
+	INT	21H
+	INC	SI
+	JMP	DPLP
+PRTEND:	POP	SI
+	POP	DX
+	RET
+DOPRT	ENDP
+;
+PRTENT	PROC	NEAR			;Print one stack entry
+	PUSH	CX
+	PUSH	DX
+	MOV	CX,12
+	MOV	DI,WORD	PTR [SI+BX]	;DI points to stack entry
+	OR	DI,DI			;If entry is zero, blank space
+	JZ	BLNK1
+	MOV	AH,5
+PELP:	MOV	DL,BYTE	PTR [DI]	;Print to the end of the
+	OR	DL,DL			;  name/type entry
+	JZ	BLNK2			;  blanking remainder of 12
+	INT	21H			;  character field
+	INC	DI
+	LOOP	PELP
+BACK:	INC	DI
+	MOV	AX,WORD	PTR [DI]	;Load file size
+	MOV	DX,WORD	PTR [DI+2]
+	INC	DX
+	JNZ	NODIR
+	MOV	DX,OFFSET DRCT
+	CALL	DOPRT
+	JMP	SHORT GONE
+NODIR:	DEC	DX
+	PUSH	SI
+	MOV	DI,OFFSET DBUF
+	CALL	CONVRT			;Convert size to ASCII decimal
+	POP	SI
+	MOV	DX,OFFSET DBUF
+	CALL	DOPRT			;Print size
+GONE:	POP	DX
+	PUSH	DX			;Reload	entry value
+	DEC	DL
+	JZ	PUNT			;If last column	don't space over
+	MOV	DX,OFFSET DBLK
+	CALL	DOPRT			;Two blanks between columns
+PUNT:	POP	DX
+	POP	CX
+	RET
+BLNK1:	MOV	CX,19			;No entry, so blank entire column
+	CALL	CLER
+	JMP	GONE
+BLNK2:	CALL	CLER			;Blanks	remainder of name/type field
+	JMP	BACK
+PRTENT	ENDP
+;
+DOBLNE	PROC	NEAR
+	PUSH	CX
+	CALL	DOLFTM			;Output	a bordered blank line
+	MOV	CX,82
+	CALL	CLER
+	CALL	DORGTM
+	POP	CX
+	RET
+DOBLNE	ENDP
+;
+DOBRDR	PROC	NEAR
+	MOV	CX,88
+	MOV	DL,'-'
+	CALL	DLFIL			;Output	a top or bottom	border
+	MOV	DX,OFFSET CRLF
+	CALL	DOPRT
+	RET
+DOBRDR	ENDP
+;
+DOLFTM	PROC	NEAR			;Outputs "|  "
+	PUSH	DX
+	MOV	DX,OFFSET LFTB
+	CALL	DOPRT
+	POP	DX
+	RET
+DOLFTM	ENDP
+;
+DORGTM	PROC	NEAR			;Outputs "  |CRLF"
+	PUSH	DX
+	MOV	DX,OFFSET RGTB
+	CALL	DOPRT
+	POP	DX
+	RET
+DORGTM	ENDP
+;
+CLER	PROC	NEAR			;Outputs CX blanks to the printer.
+	MOV	DL,' '
+DLFIL:	MOV	AH,5			;Outputs DL character CX times
+CLRLP:	INT	21H
+	LOOP	CLRLP
+	RET
+CLER	ENDP
+;
+CODE	ENDS
+;
+	END
+```
+{% endraw %}
+
+## COSCAN.ASM
+
+{% raw %}
+```
+	TITLE	COSCAN	- Diskette Contents List - Scan	Directory
+	SUBTTL	Version	1.1 - July 1984
+	PAGE	81,132
+;
+CODE	SEGMENT	BYTE PUBLIC 'CODE'
+	ASSUME	CS:CODE,DS:CODE
+;
+	EXTRN	PNTR:WORD,SRCE:BYTE
+;
+FCBE	DB	-1			;Extended FCB
+	DB	5 DUP (?)
+	DB	10H			;Search	for directory entries
+NORM	DB	0,'???????????'		;Dummy FCB for "find/next"
+	DB	24 DUP (?)
+;
+	PUBLIC	SCAN
+SCAN	PROC	NEAR
+	MOV	DI,OFFSET PNTR
+	XOR	AX,AX
+	MOV	CX,228
+	REP	STOSW			;Clear pointer table
+	MOV	BX,OFFSET PNTR		;BX points to start of pointer list
+	MOV	DI,OFFSET SRCE		;DI points to start of entry stack
+	XOR	CX,CX
+	MOV	NORM,CL			;Set to	default	drive
+	MOV	DX,OFFSET FCBE
+	MOV	AH,11H
+	INT	21H			;Get first search entry
+	JMP	SHORT INNER
+LOOP:	MOV	DX,OFFSET FCBE
+	MOV	AH,12H
+	INT	21H			;Get next entry
+INNER:	OR	AL,AL
+	JNZ	DONE
+	CALL	SAVE			;Stack entry
+	INC	CX			;Count entry
+	JMP	LOOP
+DONE:	RET				;Returns count in CX
+SCAN	ENDP
+;
+SAVE	PROC	NEAR
+	PUSH	CX
+	MOV	WORD PTR [BX],DI	;Save pointer to start of entry
+	ADD	BX,2			;  and step pointer table reg
+	MOV	SI,88H			;Point to DTA -	file name
+	MOV	CX,8
+SVLP:	MOV	AL,BYTE	PTR [SI]
+	CMP	AL,' '
+	JZ	NMDNE			;End of	name
+	MOV	BYTE PTR [DI],AL
+	INC	SI
+	INC	DI
+	LOOP	SVLP
+NMDNE:	TEST	BYTE PTR DS:[93H],10H
+	JNZ	DIRECT
+	MOV	SI,90H			;Point to DTA type field
+	CMP	BYTE PTR [SI],' '
+	JZ	ALLDNE			;No file type
+	MOV	BYTE PTR [DI],'.'
+	INC	DI
+	MOV	CX,3
+	REP	MOVSB			;Move type field to stack
+ALLDNE:	MOV	BYTE PTR [DI],0		;Mark end of string
+	INC	DI
+	MOV	SI,0A4H			;Point to size of file
+	MOV	CX,4
+	REP	MOVSB			;  and save in stack
+SAVOUT:	POP	CX
+	RET
+DIRECT:	XOR	AL,AL
+	STOSB
+	DEC	AL
+	MOV	CX,4
+	REP	STOSB
+	JMP	SAVOUT
+SAVE	ENDP
+;
+CODE	ENDS
+;
+	END
+```
+{% endraw %}
+
+## COSORT.ASM
+
+{% raw %}
+```
+	TITLE	COSORT	- Diskette Contents List - Sort	Entry Stack
+	SUBTTL	Version	1.1 - July 1984
+	PAGE	81,132
+;
+CODE	SEGMENT	BYTE PUBLIC 'CODE'
+	ASSUME	CS:CODE,DS:CODE
+;
+	EXTRN	PNTR:WORD,SRCE:BYTE
+	PUBLIC	STKCNT
+STKCNT	DW	0			;Count of entries in stack
+;
+	PUBLIC	SORT
+SORT	PROC	NEAR
+	MOV	STKCNT,CX		;Save entry count
+	JCXZ	DONE
+	DEC	CX
+	JCXZ	DONE
+	MOV	SI,OFFSET PNTR		;Point to first	stack entry pntr
+OUTER:	MOV	DI,SI
+	ADD	DI,2			;Set to	"next" pntr
+	MOV	DX,CX
+INNER:	CALL	COMPAR			;Compare stack entries
+	JBE	LEAVE			;Ascending sequence, so	no change
+	MOV	AX,WORD	PTR [SI]
+	XCHG	AX,WORD	PTR [DI]
+	MOV	WORD PTR [SI],AX	;Exchange pointers
+LEAVE:	ADD	DI,2
+	DEC	DL
+	JNZ	INNER			;Bubble	through	inner loop
+	ADD	SI,2
+	LOOP	OUTER			;Bubble	through	outer loop
+DONE:	RET
+SORT	ENDP
+;
+COMPAR	PROC	NEAR			;This compare always forces short
+	PUSH	SI			;strings low, since strings are
+	PUSH	DI			;terminated with nuls.
+	PUSH	CX
+	MOV	CX,12			;Max compare
+	MOV	SI,WORD	PTR [SI]	;Point to entry
+	MOV	DI,WORD	PTR [DI]	;Point to other	entry
+	REP	CMPSB			;Compare strings
+	POP	CX
+	POP	DI
+	POP	SI
+	RET
+COMPAR	ENDP
+;
+CODE	ENDS
+;
+	END
+```
+{% endraw %}
+
+## COTITL.ASM
+
+{% raw %}
+```
+	TITLE	COTITL	- Diskette Contents List - Get Title
+	SUBTTL	Version	1.1 - July 1984
+	PAGE	81,132
+;
+CODE	SEGMENT	BYTE PUBLIC 'CODE'
+	ASSUME	CS:CODE,DS:CODE
+;
+	EXTRN	VERS:BYTE
+;
+	PUBLIC	TITLX,FREE
+LSRCH	DB	'*.*',0
+LB3	DB	'Label:'
+TPRMT	DB	13,10,'Enter Title: $'
+TBUF	DB	37,0			;Input buffer for user title
+	DB	37 DUP (?)
+TITLX	DB	39 DUP (' ')		;Title line
+LB1	DB	7 DUP (' ')
+LB2	DB	13 DUP (' ')		;Label field
+	DB	'Free: '
+FREE	DB	9 DUP (' ')		;Formatted free	space in title line
+MONTH	DB	'  /'			;Date fields in	title line
+DAY	DB	'  /'
+YEAR	DB	'  ',0			;End of	title
+;
+	PUBLIC	GETTTL
+GETTTL	PROC	NEAR
+	MOV	DI,OFFSET TITLX
+	MOV	CX,59
+	MOV	AL,' '
+	REP	STOSB			;Clear title line
+	MOV	DX,OFFSET TPRMT
+	MOV	AH,9
+	INT	21H			;Prompt	for title
+	MOV	DX,OFFSET TBUF
+	MOV	AH,0AH
+	INT	21H			;Get user title
+	MOV	CL,TBUF+1		;Load length
+	XOR	CH,CH
+	MOV	SI,OFFSET TBUF+2
+	MOV	DI,OFFSET TITLX
+	REP	MOVSB			;Move user title to title line
+	MOV	AH,2AH
+	INT	21H			;Get date
+	SUB	CX,1900			;Convert to two	digit year
+	MOV	DI,OFFSET YEAR
+	MOV	AL,CL
+	CALL	DECMAL			;Fill in month/day/year
+	MOV	DI,OFFSET MONTH
+	MOV	AL,DH			;  for title line
+	CALL	DECMAL
+	MOV	DI,OFFSET DAY
+	MOV	AL,DL
+	CALL	DECMAL
+	CMP	VERS,3			;See if	Version	3 or later
+	JB	TDNE			;No, so	skip label
+	MOV	DX,OFFSET LSRCH		;Check directory for label
+	MOV	AH,4EH
+	MOV	CX,8
+	INT	21H
+	JC	TDNE			;No label
+	MOV	SI,OFFSET LB3		;Move in "Label:"
+	MOV	DI,OFFSET LB1
+	MOV	CX,6
+	REP	MOVSB
+	MOV	SI,9EH			;Move in diskette label
+	MOV	DI,OFFSET LB2
+	MOV	CX,11
+LBLP:	LODSB
+	OR	AL,AL
+	JZ	TDNE			;Label terminates with null
+	CMP	AL,'.'
+	JE	LBLP			;DOS insists on	punctuation
+	STOSB
+	LOOP	LBLP
+TDNE:	RET
+GETTTL	ENDP
+;
+DECMAL	PROC	NEAR			;Converts AL to	two decimal
+	AAM				;  digits and stores at	SI
+	OR	AX,'00'
+	XCHG	AL,AH
+	STOSW				;Save in image
+	RET
+DECMAL	ENDP
+;
+CODE	ENDS
+;
+	END
+```
+{% endraw %}
+
+## COVER.ASM
+
+{% raw %}
+```
+	TITLE	COVER	- Diskette Contents List - Main	Module
+	SUBTTL	Version	1.1 - July 1984
+	PAGE	81,132
+;
+;	****************************************************************
+;	*  D. W. Daetwyler - Route 5, Box 518A - Springdale, AR	72764  *
+;	****************************************************************
+;
+CODE	SEGMENT	PARA PUBLIC 'CODE'
+	ASSUME	CS:CODE,DS:CODE
+;
+	EXTRN	DOPRT:NEAR
+;
+	ORG	100H
+BEGIN:	JMP	START
+;
+	PUBLIC	VERS,RESTR
+;
+SETPRT	DB	27,'0',27,'C',44,15,0,0,0,0,0,0	;Set 1/8" 132 character
+RESPRT	DB	27,64,0,0,0,0,0,0,0,0,0,0 ;Restore to power up status
+RESTR	DB	12,0,0,0,0,0		;Do a form feed
+VERS	DB	0			;DOS Version flag
+DDRV	DB	0			;Default drive at entry
+NDRV	DB	0			;Number	of drives in system
+LOGO	DB	'D',0FDH,' Cover$'
+PRMT	DB	13,10,'Enter drive to list (Esc to quit): $'
+ERMSG1	DB	13,10,'Invalid drive$'
+;
+	EXTRN	GETTTL:NEAR,GETFRE:NEAR,SCAN:NEAR
+	EXTRN	SORT:NEAR,PRINT:NEAR
+	EXTRN	PSX:BYTE
+;
+START	PROC	NEAR
+	MOV	DX,OFFSET LOGO
+	MOV	AH,9
+	INT	21H
+	MOV	DX,OFFSET SETPRT
+	CALL	DOPRT			;Set printer
+	MOV	AH,30H
+	INT	21H			;Check DOS Version
+	OR	AL,AL
+	JZ	NOTTWO			;V1.x
+NOTTWO:	MOV	VERS,AL			;Save DOS flag
+	MOV	AH,19H
+	INT	21H			;Get default drive
+	MOV	DDRV,AL			;  and save
+	MOV	DL,AL
+	MOV	AH,0EH
+	INT	21H			;Get number of drives
+	MOV	NDRV,AL			;  and save
+;
+;	Start of main loop
+;
+MLOOP:	MOV	DX,OFFSET PRMT		;Prompt	for drive
+	MOV	AH,9
+	INT	21H
+	MOV	AH,1
+	INT	21H			;Get user response
+	CMP	AL,1BH			;Check for exit
+	JE	QUIT			;He's done, so get off
+	OR	AL,' '			;Force lower case
+	SUB	AL,'a'-1		;Compute drive number
+	JNC	DRVOK			;May be	valid drive
+ERR1:	MOV	DX,OFFSET ERMSG1	;Invalid drive message
+	MOV	AH,9
+	INT	21H			;Error message out
+	JMP	MLOOP
+DRVOK:	CMP	AL,NDRV			;Check for installed drive
+	JA	ERR1			;Drive not installed
+	DEC	AL
+	MOV	DL,AL
+	MOV	AH,0EH
+	INT	21H			;Make selected drive default
+	CALL	GETTTL			;Get title
+	CALL	GETFRE			;Get free space
+	CALL	SCAN			;Load directory	entries
+	CALL	SORT			;Sequence directory entries
+	CALL	PRINT			;Produce listing
+	JMP	MLOOP
+;
+QUIT:	MOV	DL,DDRV			;Load entry default drive
+	MOV	AH,0EH
+	INT	21H			;Restore default
+	TEST	PSX,1
+	JZ	NOREST
+	MOV	DX,OFFSET RESTR
+	CALL	DOPRT			;Restore page
+NOREST:	MOV	DX,OFFSET RESPRT
+	CALL	DOPRT			;Reset printer
+	INT	20H			;  and exit
+START	ENDP
+;
+CODE	ENDS
+;
+	END	BEGIN
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #111, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  LAR     .EXE         CRC = 46 D1
+
+--> FILE:  LAR     .DOC         CRC = 37 D1
+
+--> FILE:  PRINT   .EXE         CRC = 9E EE
+
+--> FILE:  PRINT   .C           CRC = 53 E1
+
+--> FILE:  COVER   .COM         CRC = DE ED
+
+--> FILE:  DIRECTRY.BAS         CRC = 16 AA
+
+--> FILE:  DIRECTRY.BIN         CRC = F5 B4
+
+--> FILE:  BIGCALC .BAS         CRC = CC 9F
+
+--> FILE:  ST      .DOC         CRC = FC 59
+
+--> FILE:  ST      .COM         CRC = FD 69
+
+--> FILE:  PI-COMP .DOC         CRC = DF A8
+
+--> FILE:  PI-COMP .COM         CRC = CE 65
+
+--> FILE:  SHELL   .DOC         CRC = 22 33
+
+--> FILE:  SHELL   .COM         CRC = 49 25
+
+--> FILE:  ENTAB   .C           CRC = 7C DE
+
+--> FILE:  MEMDRV  .SYS         CRC = 4F 2C
+
+--> FILE:  MEMDRV  .ASM         CRC = D4 42
+
+--> FILE:  LABELPRT.BAS         CRC = A0 32
+
+--> FILE:  GETMEM  .COM         CRC = A2 EC
+
+--> FILE:  GETMEM  .ASM         CRC = E9 7B
+
+--> FILE:  FIXTEXT .BAS         CRC = 0C 03
+
+--> FILE:  BIGCALC .DOC         CRC = 11 F5
+
+--> FILE:  ENTAB   .EXE         CRC = BC 69
+
+--> FILE:  DETAB   .C           CRC = 97 90
+
+--> FILE:  DETAB   .EXE         CRC = 82 29
+
+--> FILE:  READ    .ME          CRC = CE F3
+
+--> FILE:  CAL     .DOC         CRC = 24 A2
+
+--> FILE:  CAL     .COM         CRC = 72 DF
+
+ ---------------------> SUM OF CRCS = 63 F5
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## DIRECTRY.BAS
 
+{% raw %}
 ```bas
 10 '     ***** Build DIRECTRY *****
 20 '
@@ -490,9 +1255,53 @@ machines:
 630 DATA &HB9,&H08,&H00,&HF3,&HA4,&HC6,&H05,&H2E,&H0351
 640 DATA &H47,&HB9,&H03,&H00,&HF3,&HA4,&HC3,&H00,&H035D
 ```
+{% endraw %}
+
+## FILES111.TXT
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+Disk No 111   BBS Utilities #3                                       v1.2
+--------------------------------------------------------------------------
+BIGCALC  BAS  100 digit precision calculator!
+BIGCALC  DOC  Documentation for above
+CAL      COM  Prints calendar for any month/year after 1900
+CAL      DOC  Documentation for above
+COVER    COM  Prints file directory on Epson
+DETAB    C    Convert tabs in file to blanks  (Source program)
+DETAB    EXE  Executable file for above
+DIRECTRY BAS  Creates machine program to read disk directory
+ENTAB    C    Convert blanks in file to tabs  (Source program)
+ENTAB    EXE  Executable file for above
+FIXTEXT  BAS  DOS-to-WORDSTAR converter, better than UNWS
+GETMEM   ASM  Program to reserve memory areas  (Source program)
+GETMEM   COM  Executable file for above
+LABELPRT BAS  Print diskette directory as a diskette label
+LAR      DOC  Program to manage file libraries  (Documentation)
+LAR      EXE  Executable file for above
+MEMDRV   ASM  DOS 2.0 device driver to allow 640K RAM  (Source program)
+MEMDRV   SYS  Executable file for above
+PI-COMP  COM  Replacement for DOS COMP command - better!
+PI-COMP  DOC  Documentation for above
+PRINT    C    Print text files on printer  (Source program)
+PRINT    EXE  Executable file for above
+SHELL    COM  Fix for DOS SHELL command bug
+SHELL    DOC  Documentation for above
+ST       COM  Type files to full screen with PgUp/PgDn
+ST       DOC  Documentation for above
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## FIXTEXT.BAS
 
+{% raw %}
 ```bas
 40   '***    FIXTEXT.BAS (version 2.1), by Phil Johnson                  ***
 50   '***                                  5700 Etiwanda #105            ***
@@ -595,9 +1404,143 @@ machines:
 1660 LOCATE 25,22:COLOR 7,0:IF JO$="Y" OR JO$="y" THEN PRINT " PUSH SPACE BAR TO SEE RECORD NUMBER ";ELSE PRINT " PUSH SPACE BAR TO SEE TEXT ";
 1670 COLOR 0,7:PRINT:RETURN
 ```
+{% endraw %}
+
+## GETMEM.ASM
+
+{% raw %}
+```
+cseg	segment para public 'code'
+org	100h
+getmem	proc far
+
+intaddr equ 60h*4		; interrupt address - int 60 hex
+
+; Memory-resident program to get and hold a block of memory.
+; To reserve a block of memory, enter 'GETMEM nn', where nn is the
+; number of KB to be allocated. For example, 'GETMEM 32' reserves 32KB.
+; NN can be from 1 to 63. The address of the block is saved at interrupt
+; 60h (0:180h - 0:183h), with the length in the  first word, and the segment
+; in the second word.
+; A '/x' option can be used to keep the program from allocating memory if
+; a block of memory is already allocated.
+
+	assume cs:cseg,ds:cseg,ss:nothing,es:nothing
+
+p000:				; read command line
+	mov dx,offset copyr
+	call p100		; print copyright
+	mov si,80h		; point to start of command line
+	mov ch,0
+	mov cl,[si]		; get length
+	mov ax,0
+	mov bx,0
+p010:	inc si			; point to next character
+	mov bl,[si]		; get the character
+	cmp bl,'/'              ; is it a slash?
+	jnz p015		; no
+	mov bh,[si+1]		; get next character
+	cmp bh,'x'              ; is it 'x'?
+	jz p012 		; yes
+	cmp bh,'X'              ; is it 'X'?
+	jz p012 		; yes
+	mov bh,0
+	jmp p015
+
+p012:	mov norerun,bh		; set rerun flag
+	mov bh,0
+
+p015:	cmp bl,'0'              ; is it less than zero?
+	jb p020 		; yes
+	cmp bl,'9'              ; is it greater than nine?
+	ja p020 		; yes
+	sub bl,'0'              ; convert to binary
+	push cx 		; save cx
+	mov cx,10
+	mul cx			; multiply current ax by 10
+	pop cx
+	add ax,bx		; add latest digit
+p020:	loop p010		; all done?
+
+	cmp ax,1		; is memory less than 1?
+	jb p090 		; yes
+	cmp ax,63		; is memory greater than 63?
+	ja p090 		; yes
+	push ax 		; save ax
+
+	aam			; set up message
+	xchg ah,al
+	add ax,3030h		; make it ascii
+	cmp al,30h		; leading zero?
+	jnz p030		; no
+	mov al,20h		; make it a space
+
+p030:	mov msg1mem,ax		; move to message area
+
+	pop ax			; restore ax
+	mov cl,10
+	sal ax,cl		; convert to KB
+	mov memsize,ax		; save memory size
+
+	push es 		; set interrupt 60h
+	mov ax,0
+	mov es,ax
+	mov di,intaddr		; interrupt address
+	mov al,norerun		; is /x option present?
+	cmp al,0
+	jz p050 		; no
+
+	mov ax,es:[di]
+	cmp ax,0		; any memory reserved?
+	jz p050 		; no
+	pop es
+	int 20h 		; yes - terminate
+
+p050:	mov ax,memsize		; length of block
+	push cs
+	pop bx			; code segment
+	mov es:[di],ax		; modify interrupt
+	mov es:[di+2],bx
+	pop es
+	mov dx,offset msg1	; print message
+	call p100
+	mov dx,memsize		; set block size
+	int 27h 		; terminate and stay resident
+
+p090:				; print error message
+	mov dx,offset msg2
+	call p100
+	int 20h 		; terminate
+
+p100	proc near		; print message
+	push ax
+	mov ah,9
+	int 21h
+	pop ax
+	ret
+p100	endp
+
+memsize dw 0			; requested memory size
+norerun db 0			; rerun flag - non-zero if /x option
+copyr	db 'GETMEM - Copyright 1983 Data Base Decisions',10,13,'$'
+msg1	db 'Reserving '
+msg1mem dw '..'
+	db ' KB of memory.',10,13,'$'
+msg2	db 'Missing/invalid memory specification',7,10,13,'$'
+
+getmem	endp
+cseg	ends
+end	getmem
+
+
+
+
+```
+{% endraw %}
 
 ## LABELPRT.BAS
 
+{% raw %}
 ```bas
 10 '                    MAKE SURE DIRECTRY.BIN IS ON THE DEFAULT DRIVE!
 20 '
@@ -679,6 +1622,613 @@ machines:
 780 LPRINT CHR$(27);"@" ;: WIDTH"lpt1:",80
 790 CLS : SYSTEM
 ```
+{% endraw %}
+
+## LAR.DOC
+
+{% raw %}
+```
+Lar - LU format library file maintainer
+by Stephen C. Hemminger
+linus!sch or sch @Mitre-Bedford MA
+Lattice version T. Jennings 1 Dec 83
+
+Bugs fixed 12 Jan 84:
+No longer puts drive letters in the index
+R command now works. (I think)
+Revision date in signon
+No more occasional garbage in files with Update
+        Missing function GETSTRING added to source file
+
+DESCRIPTION
+Lar  is a program to manipulate CP/M LU format libraries. 
+The  original CP/M library program LU is the product of  Gary  P. 
+Novosielski.  The  primary use of lar is to combine several files 
+together for upload/download to a personal computer. 
+
+Usage: lar key library [files] ...
+
+Key functions are:
+u - Update, add files to library(also creates new libraries)
+t - Table of contents
+e - Extract files from library
+p - Print files in library
+d - Delete files in library
+r - Reorganize library
+
+EXAMPLES:
+lar t foo.lbrlist all files in FOO.LBR
+lar e foo.lbr 1.c 2.cextract files 1.c, 2.c from FOO.LBR
+lar p foo.lbr 1.cdisplay 1.c from FOO.LBR
+lar u foo.lbr 1.c 2.c 3.c add or replace files in FOO.LBR
+
+When creating a new library, you will be prompted for the 
+maximum number of entries it can contain. Assuming NEW.LBR doen't 
+exist ... 
+
+lar u new.lbrcreate an empty library
+lar u new.lbr a.c,b.c,d.ccreate NEW.LBR, add files.
+
+The Reorganize option causes <lbrfile>.tmp to be created, 
+and the contents of the old library to be copied into it. 
+
+PECULIARITIES:
+
+When  accessing  filenames without  extentions,  such  as 
+"FOO", enter them as "FOO." The dot is necessary.
+
+
+This  program  is public  domain  software,  no  warranty 
+intended or implied.
+
+ them as "FOO." The dot is necessary.
+
+
+This  program  is public  domain  software,  no  warranty 
+inte
+```
+{% endraw %}
+
+## MEMDRV.ASM
+
+{% raw %}
+```
+title   ramdvr 01-01-84        [01-01-84] 
+;------------------------------------------------------------------------------- 
+; RAMDVR.SYS -- Modification to Dan O'Brien's excellent program by 
+;               Tom Perry, CIS 70455,751 or FORUM ][ 305/772-4444. 
+; 
+;               This modified version performs the same function described 
+;               below.  The only difference is that it runs as a "device 
+;               driver" on DOS 2.0 and up.  This means not only that it gets 
+;               control earlier and thus works faster, but also that it will 
+;               not cripple the system if you want to install a device that 
+;               takes a fair amount of memory.  For instance, I had a virtual 
+;               disk driver that uses 180K.  With switches set for 64K, it 
+;               could not be installed.  To get around this with MORRAM.COM, 
+;               you have to put logic in AUTOEXEC.BAT to switch between two 
+;               CONFIG.SYS files; it can be done (I did it for a while), but 
+;               it's messy and takes more disk space -- a LOT more if you're 
+;               working with a hard file with its large allocation unit. 
+; 
+;               To use this version, simply create a file on your boot disk 
+;               named CONFIG.SYS containing the line DEVICE=RAMDVR.SYS 
+;               and copy RAMDVR.SYS onto the boot disk.  If you already have 
+;               a CONFIG file, enter DEVICE=RAMDVR.SYS as its first line. 
+;               Set your switches for 64K, turn on the machine, and notice 
+;               the difference.  To learn how it works, read Dan's description 
+;               below. 
+; 
+;               There IS a penalty for doing it this way: Part of the program 
+;               remains permanently installed in the system as a device driver, 
+;               eating up a few bytes of precious RAM.  I have left enough to 
+;               keep the system from crashing if the device driver is driven 
+;               again (for instance, by a MODE RAMCHECK command).  More bytes 
+;               could be saved if you're willing to take that slight risk; 
+;               probably the minimum you'd need to keep is the four bytes 
+;               constituting the device driver chain at label "next_dev"; 
+;               uncomment the indicated line if you want to try this. 
+ 
+ 
+; MORERAM.COM - by Daniel M. O'Brien (v 1.0) 21 Dec 1983 
+; 
+;             - freely adapted from a PC-WORLD User-to-User column program 
+;               of the same name (object disassembled using ASMGEN) and from 
+;               a program shown in a DR. DOBBS Journal article 
+;               (16 bit Toolkit) called MEMSIZE. 
+; 
+; This program has two (or three) purposes. 
+; 
+;       1) Allow a PC to use more memory than is allowed via the motherboard 
+;       memory switches (544 K bytes for the 64K motherboard and 640 K bytes 
+;       for the newer 256K motherboard). And because of 1)... 
+; 
+;       2) Allow faster power-up sequence by setting the motherboard memory 
+;       switch settings to 64 K bytes installed. 
+; 
+;       And as long as we are in the neighborhood... 
+; 
+;       3) Patch the ROM BIOS data area to indicate that this PC has four 
+;       floppy diskettes installed (instead of the normal two). This is for 
+;       ram disk emulation programs that require the motherboard equipment 
+;       options switch to be set to include the number of ram disks. 
+;       This is most notably required by the AST RESEARCH ramdisk program 
+;       called SUPERDRV. This code is commented out. To use it you must 
+;       uncomment out the code and reassemble. Search for the string: 
+; 
+;                       ;stub*** 
+; 
+; Using MORERAM. 
+; 
+;       First, copy MORERAM.COM to your boot device (floppy or fixed). 
+;       Next, create or edit your AUTOEXEC.BAT file found on your 
+;       boot device to include MORERAM as the **FIRST** program that 
+;       will be executed. This is important as results are not guaranteed 
+;       if MORERAM is not the first command executed at boot time. 
+;       Next, open the covers of your PC and set the memory switches 
+;       to indicate that your PC only has 64K. 
+; 
+;       Now try rebooting your PC using the Alt-Ctrl-Del sequence. 
+; 
+;       MORERAM will first display a hello banner and the amount of 
+;       memory DOS thinks your PC has (should be 64K). Next, MORERAM 
+;       will pause a second or two while it determines how much memory 
+;       your PC really has. (It also clears this memory in the process 
+;       to eliminate PARITY 2 errors later). 
+;       Once the physical memory limit is determined, MORERAM will display 
+;       that amount and then automatically re-boot. (Don't get excited, 
+;       this won't loop indefinitely, because...) The next time MORERAM 
+;       is again executed from your AUTOEXEC.BAT it will find that the amount 
+;       of memory DOS thinks you have will be the same as that installed, and 
+;       a reboot will be avoided! 
+; 
+; I use this program on my PC that has 576K (64K + 512K) worth of memory. 
+; Also, I have successfully tested it with 704K (64K + 512K + 128K) of memory, 
+; but this requires placing memory into the semi-forbidden zone (segment A000) 
+; designated by IBM as "reserved". But that's ok, as long as you don't install 
+; memory beyond this into the B000 segment where monochrome and graphics display 
+; memory live! 
+; 
+; Questions or comments should be left for me (DAN OBRIEN) on Gene Plantz' 
+; BBS in Chicago, IL (312-882-4227). I will attempt to fix bugs that may 
+; crop up, but I make no guarantees. You use this at your own risk (just like 
+; I do!). If you break something valuable, it's your own fault. 
+; 
+;------------------------------------------------------------------------------- 
+ 
+ 
+lf      equ     0ah 
+cr      equ     0dh 
+; 
+;initial values :       cs:ip   0000:0100 
+;                       ss:sp   0000:ffff 
+ 
+s0000   segment 
+        assume ds:s0000, ss:s0000 ,cs:s0000 ,es:s0000 
+        org     $+0000h 
+; 
+;       device driver header and logic added 1-1-84 by Tom Perry. 
+; 
+next_dev        dd      -1 
+                dw      8000h          ;char device 
+strategy        dw      dstrategy 
+interrupt       dw      dinterrupt 
+whatcall        db      'RAMCHECK'      ;name 
+ 
+dstrategy       proc    far 
+ 
+        mov     cs:rh_seg,es 
+        mov     cs:rh_off,bx            ;save ptr to request header 
+        ret 
+ 
+dstrategy       endp 
+ 
+rh_off  dw      0 
+rh_seg  dw      0 
+ 
+dinterrupt      proc    far 
+ 
+        cld 
+        push    ds 
+        push    es 
+        push    ax 
+        push    bx 
+        push    cx 
+        push    dx 
+        push    di 
+        push    si 
+ 
+        mov     al,switch 
+        cmp     al,0ffh 
+        je      continue 
+        mov     al,0ffh 
+        mov     switch,al 
+ 
+        call    memdrvr 
+ 
+        mov     bx,rh_off 
+        mov     ax,rh_seg 
+        mov     es,ax           ;pt to req hdr 
+        mov     ds,ax 
+        mov     ax,offset last_place 
+;*risk  mov     ax,offset strategy ;USE THIS LINE TO SAVE RAM AT SOME RISK! 
+        mov     14[bx],ax       ;set ending address 
+        mov     ax,cs 
+        mov     16[bx],ax       ; including segment 
+continue: 
+        mov     ax,0100h 
+        or      3[bx],ax        ;set device status as DONE with NO ERROR 
+ 
+        pop     si 
+        pop     di 
+        pop     dx 
+        pop     cx 
+        pop     bx 
+        pop     ax 
+        pop     es 
+        pop     ds 
+ 
+        ret 
+ 
+switch  db      0,0,0           ;one time switch & bug protection 
+last_place db   'LAST PLACE' 
+ 
+dinterrupt      endp 
+ 
+ 
+memdrvr proc    near 
+ 
+;       end of device driver modifications by Tom Perry 
+;       (except as noted below). 
+ 
+start:  jmp     begin 
+ 
+hello   db      "Device driver to use MORE RAM than switches (v 1.1) ",cr,lf 
+        db      "by Daniel M. O'Brien and Tom Perry (1 Jan 1984)",cr,lf,lf,'$' 
+inmem   db      " Current memory is $" 
+kbytes  db      " K bytes. $" 
+findmem db      cr,lf," Physical memory is $" 
+analyze db      " Analyzing & Clearing...$" 
+reboot  db      " Re-Booting...",cr,lf,'$' 
+done    db      cr,lf," Memory size is set correctly.",cr,lf,'$' 
+ 
+begin: 
+        mov     dx,offset hello         ; say hello 
+        mov     ah,9 
+        int     21h 
+ 
+        mov     dx,offset inmem         ; how much memory? 
+        mov     ah,9 
+        int     21h 
+ 
+; next 3 lines of code added 1-1-84 by Tom Perry for device driver environment. 
+ 
+        int     12h             ; ask bios how much memory 
+        mov     cl,6 
+        shl     ax,cl           ;shift left 6 times to look like PSP+2 
+ 
+;       mov     ax,ds:2         ; get top segment number from program prefix 
+ 
+        push    ds              ; save ds for later 
+ 
+        push    ax              ; save top segment number for later 
+        mov     cl,6            ; convert to K bytes 
+        shr     ax,cl 
+        call    decout          ; and display 
+ 
+        mov     dx,offset kbytes        ; display "K bytes" 
+        mov     ah,9 
+        int     21h 
+ 
+        mov     dx,offset analyze       ; display analyzing message 
+        mov     ah,9 
+        int     21h 
+ 
+        xor     ax,ax           ; stop parity errors while we poke around 
+        out     0a0h,al 
+ 
+        pop     ax              ; recover top segment number 
+ 
+loop:   mov     bx,0            ; look into this 16 byte "segment" 
+;       cmp     ax,0a000h       ; is ax = beginning of "reserved" addrs? 
+                                ; stop at display memory instead! 
+        cmp     ax,0b000h       ; is ax = beginning of "reserved" addrs? 
+        je      ramend          ; yes, so end of ram 
+        mov     ds,ax           ; no, so use this as segment 
+        mov     [bx],ax         ; write contents of ax to ds:bx... 
+        mov     cx,[bx]         ;... and read it back to cx 
+        cmp     ax,cx           ; does data read = data written? 
+        jne     ramend          ; if it not, then ran out of ram! 
+ 
+        mov     cx,8            ;    else - reset this 16 byte area 
+        mov     es,ax 
+        xor     ax,ax           ;      reset means 0000h 
+        xor     di,di 
+        rep     stosw           ;    to prevent parity errors when used 
+ 
+        mov     ax,ds           ; copy ds to ax... 
+        inc     ax              ;... increment it... 
+        jmp     loop            ;... and loop 
+ 
+ramend: 
+        mov     bx,ax           ; found real end of ram - save it 
+ 
+        mov     al,80h          ; enable parity errors for the future 
+        out     0a0h,al 
+ 
+        mov     ax,bx           ; convert segments to K bytes 
+        mov     cl,6 
+        shr     ax,cl 
+ 
+        mov     bx,40h          ; point to bios data area 
+        mov     ds,bx 
+        mov     bx,13h          ; and to memory size word in particular 
+ 
+        cmp     [bx],ax         ; same size? 
+        je      exit            ; yes-then we must have done this before 
+ 
+        mov     [bx],ax         ; else - update and 
+        push    ax 
+ 
+; remove comments to patch equipment flag to indicate 4 floppies attached. 
+; especially useful for AST RESEARCH's SUPERDRV. 
+ 
+;stub** mov     bx,10h          ; point to equipment flag 
+;stub** mov     ax,[bx]         ; get equipment flag 
+;stub** or      ax,00c0h        ; set installed floppy count to 4 
+;stub** mov     [bx],ax         ; and restore to proper spot 
+ 
+        pop     ax              ; get ds back but save ax on stack 
+        pop     ds 
+        push    ax 
+ 
+        mov     dx,offset findmem       ; tell how much memory we found 
+        mov     ah,9 
+        int     21h 
+ 
+        pop     ax              ; get K byte count 
+        call    decout 
+ 
+        mov     dx,offset kbytes 
+        mov     ah,9 
+        int     21h 
+ 
+        mov     dx,offset reboot        ; tell them about reboot 
+        mov     ah,9 
+        int     21h 
+ 
+        int     19h             ; re-boot 
+ 
+exit: 
+        pop     ds 
+        mov     dx,offset done 
+        mov     ah,9 
+        int     21h 
+ 
+; exit via return to caller instead of int 20h exit to DOS. 
+; changed 1-1-84 by Tom Perry for device driver environment. 
+ 
+        ret 
+ 
+ 
+; quick and probably dirty - display decimal in ax routine 
+ 
+decout: 
+        push    ax 
+        push    bx 
+        push    cx 
+        push    dx 
+ 
+        xor     cx,cx           ;counter of digits 
+        mov     bx,10           ;divide by 10 for conversion 
+ 
+decimal$loop: 
+        xor     dx,dx           ;clear for divide 
+        div     bx              ;get remainder and quotient 
+        add     dx,'00'         ;make remainder ascii 
+        push    dx              ;save it 
+        inc     cx              ;and count it 
+        or      ax,ax           ;out of digits? 
+        jnz     decimal$loop    ;no-loop on the decimal 
+ 
+decimal$out: 
+        pop     dx              ;get digit 
+        mov     ah,2            ;print digit 
+        int     21h 
+        loop    decimal$out     ;and loop
+
+        pop     dx
+        pop     cx
+        pop     bx
+        pop     ax
+        ret
+
+memdrvr endp
+
+s0000   ends
+
+        end
+```
+{% endraw %}
+
+## PI-COMP.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+  PI-COMP_______PI-COMPPI-COMPPI-COMP_COMMAND_______COMMANDCOMMANDCOMMAND
+
+
+
+  Function________FunctionFunctionFunction
+
+               The PI-COMP command is a  replacement for the DOS COMP
+               command which compares the  contents of files. PI-COMP
+               differs from COMP in the following:
+
+               o   COMP only select those file  names which match the
+                   first command operand, while  PI-COMP selects file
+                   names which match  the either the first  or second
+                   operand. This eliminates the need  to run the COMP
+                   command  a  second  time with  the  same  operands
+                   reversed if you want to check for missing files.
+
+               o   PI-COMP displays all information one line per file
+                   name.  File  names are  displayed  in  alpabetical
+                   order.
+
+               o   PI-COMP always  compares files based on  file size
+                   rather than  stopping at the  first EOF  mark (hex
+                   1A).
+
+               o   PI-COMP includes  hidden and  system files  in its
+                   comparisons.
+
+               o   PI-COMP not  only checks  for differences  in file
+                   sizes and  data contents (as  COMP does)  but also
+                   for differences in file  date, time and attributes
+                   (such as the archive bit).
+
+               o   PI-COMP stops comparing the  contents of two files
+                   on the  first mismatch (rather  than the  tenth as
+                   COMP does).
+
+
+  BACKGROUND__________BACKGROUNDBACKGROUNDBACKGROUND
+
+               The COMP  command is a  very handy utility  to compare
+               files.   Unfortunately,  its  display   of  output  is
+               extremely poor.  The PI-COMP  output is  very easy  to
+               read and can  provide the user with  a usable overview
+               of the status of the files being compared.
+
+
+  Syntax______SyntaxSyntaxSyntax
+
+
+  +-----------------------------------------------------------------+
+  |                                                                 |
+  |         PI-COMP [d:][path]file1 [d:][path]file2                 |
+  |                                                                 |
+  +-----------------------------------------------------------------+
+
+
+                                                                    1
+
+
+
+
+
+
+
+
+
+               The order  of the file  names is irrelevant.  The file
+               name part of each operand must be explicitly specified
+               (use *.*  to compare  all files.   Wild card  question
+               marks or asterisks may be included in either operand.
+
+               If you specify the PI-COMP  command with less than two
+               operands, a message will be displayed showing the cor-
+               rect command syntax.
+
+
+  Sample______SampleSampleSample_Output______OutputOutputOutput
+
+
+
+    Pi-COMP The IBM Personal File Compare Utility
+    Version 1.0 (C)Copyright Markus Pelt 1984
+
+    A:*.*                           B:*.*
+
+    ADDRESS      07/18/83 02:38:28  ADDRESS      07/18/83 02:38:28
+    ADDRESS.WKS  01/29/84 19:28:02  ADDRESS.WKS  11/03/83 21:31:12 Different size
+    ATARI.WKS    12/19/83 17:39:42                                 Missing file
+    AVIS         03/10/83 11:12:34  AVIS         03/10/83 11:12:34
+    CHECKS.FIL   11/27/83 00:15:08                                 Missing file
+    CHECKS.Y83   03/12/83 21:49:52  CHECKS.Y83   03/12/83 21:49:52
+    CHECKSX.FIL  05/30/83 14:27:30                                 Missing file
+    COLECO.WKS   12/19/83 17:49:22                                 Missing file
+    COMMAND.COM  03/08/83 12:00:00  COMMAND.COM  05/07/82 12:00:00 Different size
+    COMMODOR.WKS 12/19/83 17:44:04                                 Missing file
+    DEPREC.Y82   04/03/83 20:45:18  DEPREC.Y82   04/03/83 20:45:18
+    FEDTAX83.WKS 01/24/84 18:29:38                                 Missing file
+    FTB3885.TAX  04/05/83 21:27:24  FTB3885.TAX  04/07/83 10:27:24 Different date
+    FTB3885.Y82  04/07/83 00:00:00  FTB3885.Y82  04/07/83 00:00:00
+    GROCERY.WK2  05/17/83 00:02:04  GROCERY.WK2  05/17/83 00:02:04 Different attr
+    IBM3101.XMT  01/01/80 06:21:52  IBM3101.XMT  01/01/80 06:21:52
+    IBMBIO.COM   03/08/83 12:00:00                                 Missing file
+    IBMDOS.COM   03/08/83 12:00:00                                 Missing file
+    IBMPRICE.WKS 11/14/83 03:34:46  IBMPRICE.WKS 11/14/83 03:34:46
+    MORTGAGE     01/01/80 03:38:40  MORTGAGE     01/01/80 03:38:40
+    PROCMAN.MP   06/16/83 00:11:24  PROCMAN.MP   06/16/83 00:11:24
+    SCHEDG.Y82   03/12/83 01:13:46  SCHEDG.Y82   03/12/83 01:13:46
+                                    TI.WKS       12/19/83 17:37:42 Missing file
+    TODO3101     03/05/83 00:17:46  TODO3101     03/05/83 00:17:46
+    TODOLIST     07/18/83 01:59:16  TODOLIST     07/18/83 01:59:16
+    UCC7.MP      06/13/83 23:01:42  UCC7.MP      06/13/83 23:01:42
+    VISTA.WKS    11/29/83 21:40:14                                 Missing file
+
+
+
+
+
+
+
+
+
+
+                                                                    2
+
+
+
+O APF FOUND FOR '*' TAG.
+'TEMP' LINE 49: A:*.*                           B:*.*
+NO APF FOUND FOR '*' TAG.
+'TEMP' LINE 49: A:*.*                           B:*.*
+READY 
+*.*                           B:*.*
+NO APF FOUND FOR '*' TAG.
+'TEMP' LINE 49: A:*.*             
+```
+{% endraw %}
+
+## ST.DOC
+
+{% raw %}
+```
+
+ST -- the SuperTyper program -- an improved version of the DOS type command.
+
+This program provides three significant enhancements to the type command:
+
+ 1) the display is paged, not scrolled, and thus is much easier to read.
+
+ 2) Previously displayed pages are saved and can be accessed by use of the 
+    PgUp and PgDn keys.
+
+ 3) Wordstar's 'funny' characters are converted to normal display characters.
+    (as all WordStar users know, 'type'ing a WordStar file creates a strange
+     display)
+
+Directions:
+Type ST for directions and to be prompted for a filename to be listed.
+Type ST <filename> to list a file.
+PgUp and PgDn move through the display pages in the file.
+The '+' toggles the display of page number in each page.  This display 
+is convenient for keeping your place in big files -- especially files 
+that are bigger than memory and only part of the file can be kept in memory.
+This display is normally off, it is toggled on when "buffer wrap-around"
+occurs.  If it bugs you, hit the '+' key and turn it off.
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

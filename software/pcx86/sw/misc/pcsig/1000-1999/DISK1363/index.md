@@ -14,6 +14,47 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1363.TXT
+
+{% raw %}
+```
+Disk No: 1363
+Program Title:  GS-TESTIT (Disk 2 of 2)
+PC-SIG version 1
+
+This is disk two of a two disk set.  It contains data files necessary to
+run the program.  Both disks are needed to run the program.  The first
+disk in the set is #1362.  Please refer to the first disk for a full
+description of the program.
+
+Usage:  Study Aid for FAA Exams/Educational.
+
+Special Requirements:  CGA card for PASSAGES.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $50.00
+
+File Descriptions:
+
+PHYSACFT DTA  GS.COM data file.
+FAAREGUL DTA  GS.COM data file.
+WEATHERQ DTA  GS.COM data file.
+READ     ME   Program information.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1363
 

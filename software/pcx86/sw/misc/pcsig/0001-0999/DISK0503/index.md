@@ -28,6 +28,38 @@ machines:
     file.  Handle as many records as you have disk space for.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0503.TXT
+
+{% raw %}
+```
+Disk No:  503                                                           
+Disk Title: Reliance Mailing List                                       
+PC-SIG Version: S2.3                                                    
+                                                                        
+Program Title: Reliance Mailing List                                    
+Author Version: 2.20                                                    
+Author Registration: $25.00                                             
+Special Requirements: Two floppy drives and a printer with 132 column mo
+                                                                        
+RELIANCE MAILING LIST is a fast and sophisticated mailing list program  
+that should be useful to many groups, including political parties,      
+charitable organizations and small businesses.                          
+                                                                        
+Print mailing labels four-across, select groups of people from the      
+database by specifying up to eight criteria and create a mailmerge      
+file. Handle as many records as you have disk space for.                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0503
 

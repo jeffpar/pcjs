@@ -16,8 +16,56 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## FILE2560.TXT
+
+{% raw %}
+```
+Disk No: 2560                                                           
+Disk Title: Q4Tools - Prog. Tools for QuickBasic                        
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Q4Tool - Programming Tools for QuickBASIC 4.x            
+Author Version: 1.2                                                     
+Author Registration: $25.00                                             
+Special Requirements: QuickBasic 4.x.                                   
+                                                                        
+Q4TOOL LIBRARY is a collection of innovative and direct programming     
+tools for Microsoft, QuickBASIC 4.xx.  These library routines are       
+intended for use by individuals with some QB programming experience.    
+All of the routines are easily incorporated into almost any QuickBASIC  
+4.xx source without greatly increasing the efficient size of the        
+stand-alone program.                                                    
+                                                                        
+A summary of key services:                                              
+                                                                        
+ ~ Mouse support includes a majority of the routines that are needed to 
+   add mouse services into any application.                             
+                                                                        
+ ~ Window support uses screen routines developed with machine code for a
+   fast, clean appearance.  Select title location, type and location of 
+   shadow, and solid frames.                                            
+                                                                        
+ ~ Screen save/restore routines save and restore the contents of any    
+   screen.                                                              
+                                                                        
+ ~ Other services include screen display, screen string centering,      
+   program delay, and other routines for access to system interrupts.   
+                                                                        
+While Q4TOOL doesn't contain routines for data input or manipulation, it
+does provide a solid foundation from which to build your own personal   
+libraries.                                                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
 ## Q4T-DEMO.BAS
 
+{% raw %}
 ```bas
 '----------------------------------------------------------------------------
 '                         **    Q4T-DEMO.BAS    **
@@ -482,6 +530,905 @@ Terminate:
 '============================================================================
 
 ```
+{% endraw %}
+
+## Q4TOOL.DOC
+
+{% raw %}
+```
+
+
+                            The Q4Tool Library [Q4T]
+                                    Ver. 1.2
+                      Library Routines for QuickBASIC 4.x
+                        by  R. J. Crouch  -  August 1990
+                          Copyright - 1990 - CareWare
+                              All Rights Reserved
+                   _________________________________________
+
+
+
+                      **   What is the Q4Tool Library?  **
+                     ======================================
+
+
+          Q4Tool  is  a  small  collection  of  innovative  and direct
+          programming tools, in  the  form  of  a  user  library,  for
+          Microsoft (R), QuickBASIC 4.xx [QB].  These library routines
+          are intended for use by individuals with some QB programming
+          experience.  The following files make up the Q4Tool Library.
+
+            Primary:  Q4T.LIB  -  Q4T.QLB  -  Q4T.BI  -  Q4TOOL.DOC
+
+            Support:  Q4T-DEMO.BAS  -  Q4T-DEMO.EXE  -  SHOWMENU.OBJ
+
+          Q4Tool  [Q4T]  has  emerged  from  a  necessity for a simple
+          collection of comprehensive routines to supplement the BASIC
+          language.  All of its routines are easily incorporated  into
+          almost any QuickBASIC 4.xx source without greatly increasing
+          the efficient size of the "stand-alone" program.  The Q4Tool
+          Library is intended as a  solid  foundation  from  which  to
+          build your own personal libraries.
+
+
+
+                   **   What the Q4Tool Library provides   **
+                  ============================================
+
+
+          Mouse Services:  Mouse*()
+
+          A  majority  of  the  routines  in  Q4T  pertain  to   mouse
+          functions.   These  functions  will  allow  a  programmer to
+          incorporate the much needed  mouse  services  into  any  de-
+          manding  application.   They  are  intelligently  written to
+          compensate for a few idiosyncrasies that tend to emerge from
+          the mouse interrupt (33H).
+
+
+          Windowing:  DoWindow()
+
+          Windowing  for  todays  applications  is  not  new, but this
+          windowing routine adds a few features that will enhance  any
+          program.   The  screen write for this routine is serviced by
+          machine code for  a  fast  and  clean  appearance.   Select-
+          ability for title location, type and location of shadow, and
+          a solid frame, make this windowing routine unique from other
+          we have seen.
+
+
+          Screen save/restore:  PutScrn()/GetScrn()
+
+          The ability to save and later restore a screens contents are
+          essential  for contemporary programming.  These two routines
+          are designed to work within the QB environment.   They  make
+          use  of  QB's string descriptor block for ease of use.  This
+          pair of routines is written entirely  of  machine  code  for
+          instant results.
+
+
+          Screen print:  PrtScrn()
+
+          This is a little machine code routine that will print to the
+          screen,  at the location and color desired, any string vari-
+          able.  It's fast, compact, and incorporates  into  just  one
+          CALL,  QB's  LOCATE,  COLOR,  and  PRINT  statements.   This
+          routine is the heart of  the  windowing  procedure  and  the
+          reason for its speed.
+
+
+          Screen string centering:  Ctr()
+
+          This  is  a  handy  little  function that returns the column
+          position needed to center string data or  variables  on  the
+          screen.   It  can  easily  be  incorporated into QB's LOCATE
+          statement.  [i.e., LOCATE 12, Ctr(strg$)]
+
+
+          Program delays:  Delay()
+
+          This  is  a  smart  replacement for QB's new SLEEP statement
+          (which, by the way, takes over 2K of executable code).   The
+          delay   can   either  be  forced or user bypassed  with  any
+          key or mouse button.
+
+
+          Access to system interrupts:  QB.QLB/QB.LIB/QB.BI (C)
+
+          Incorporated  within  this  library  are QuickBASIC's QB.QLB
+          (C), QB.LIB (C) and QB.BI (C).  These files  were  necessary
+          for  writing the mouse routines.  Because of their presence,
+          you also have access  to  DOS  service  calls.   This  is  a
+          powerful feature for any programmer.
+
+
+
+               **   What the Q4Tool Library does not provide   **
+              ====================================================
+
+
+          Q4Tool  does  not  contain routines for data input or manip-
+          ulation.  It is felt these  type  of  procedures  should  be
+          handled  by  the programmer for their particular application
+          needs.  Absent also from this library is  the  abundance  of
+          routines  that  can't  possibly  be  incorporated into every
+          program.  Q4T is intended to be a small library  from  which
+          to build from.
+
+
+               **   The nuts and bolts of the Q4Tool Library   **
+              ====================================================
+
+
+          The following is a clarified description of  the  prototypes
+          used in the CALL's to these Q4Tool library routines.  Please
+          note  the  variable  types  used  for the arguments in these
+          routines.  The mouse service calls are designed to work with
+          a Microsoft (R) mouse driver or close compatible.
+
+
+          -------------------
+          MouseStatus(Ready%)
+          -------------------
+          This routine does a nondestructive interrupt vector check to
+          determine  the  existence  of  a mouse driver.  This routine
+          should be called prior to using any of the other  Q4T  mouse
+          routines  to  insure  the  presence  of  the mouse interrupt
+          (33H).
+
+          Passed:  An integer variable
+
+          Returns: 0 if a mouse driver is not detected
+                   1 if a mouse driver has been installed
+
+          Example:  CALL MouseStatus(have%)
+
+
+          ----------------
+          MouseReset(Set%)
+          ----------------
+          This routine will initialize the mouse driver and will allow
+          the saving and restoring of two separate mouse states.
+
+          Passed:  An initialized integer variable or constant
+                   0 = hard reset - initializes mouse driver, turns
+                       mouse pointer off and disables any prior
+                       user installed events (function 00H)
+                   1 = soft reset - reset mouse driver and turns
+                       pointer off (function 21H)
+                   2 = will save the current mouse state to mouse
+                       buffer #1
+                   3 = will restore the mouse state as saved in mouse
+                       buffer #1
+                   4 = will save the current mouse state to mouse
+                       buffer #2
+                   5 = will restore the mouse state as saved in mouse
+                       buffer #2
+
+          Returns:  If passed a variable initialized to 0, will reset
+                    mouse and return number of buttons installed, else
+                    returns nothing
+
+          Example:  buttons% = 0
+                    CALL MouseReset(buttons%)
+
+
+          ----------------------
+          MouseVersion(Version$)
+          ----------------------
+          This routine will return both the major and minor version of
+          the mouse driver installed.
+
+          Passed:  A string variable at lease 5 characters in length
+
+          Returns:  A string containing the version of the mouse
+                    driver installed.  (i.e., 6.123)
+
+          Example:  CALL MouseVersion(ver$)
+
+
+          ---------------------
+          MouseVisible(Status%)
+          ---------------------
+          This routine will allow  the  mouse  pointer  to  be  either
+          turned  on  or  off.  This routine has been stabilized by an
+          internal variable to  compensate  for  the  mouse  interrupt
+          counter.   Recursive  calls  to  the  same  Status% will not
+          increase or decrease the mouse interrupt counter.  This will
+          only be done by opposing Status% calls.
+
+          Passed:  An initialized integer variable or constant
+                   0 = mouse pointer off
+                   1 = mouse pointer on
+
+          Returns:  Nothing
+
+          Example:  CALL MouseVisible(1)
+                    CALL MouseVisible(off%)
+
+
+          ----------------------------------------
+          MouseLocate(ScrnRowY%, ScrnColX%, Mode%)
+          ----------------------------------------
+          This routine will place the  mouse  pointer  at  the  screen
+          location  indicated  by its arguments.  The Mode switch will
+          allow the location to be given  in  either  row/column  text
+          positions or X/Y pixel positions.
+
+          Passed:  An initialized integer variable or constant
+                   Mode 0 = pixel positions
+                      ScrnColX% = horizontal (X) position with a value
+                                  from 0 to 632
+                      ScrnRowY% = vertical (Y) position with a value
+                                  from 0 to 192
+                   note:  The pixel given is the upper left dot of
+                          the standard 8x8 mouse pointer.  Pixel
+                          positions start from 0,0.
+
+                   Mode 1 = text positions
+                      ScrnColX% = text column position with a value
+                                  from 1 to 80
+                      ScrnRowY% = text row position with a value from
+                                  1 to 25
+
+
+          Returns:  Nothing
+
+          Example:  CALL MouseLocate(12, 30, 1)
+                    CALL MouseLocate(y%, x%, 0)
+
+
+          ------------------------------------------
+          MousePosition(ScrnRowY%, ScrnColX%, Mode%)
+          ------------------------------------------
+          This  routine  will return the current position of the mouse
+          pointer.  The Mode switch will allow the  location  returned
+          to be either given in row/column text positions or X/Y pixel
+          positions.
+
+          Passed:  An initialized integer variable or Mode% constant
+                   Mode 0 = returned values represent X/Y pixel
+                            positions
+                   Mode 1 = returned values represent row/column
+                            positions
+
+          Returns:  An integer value
+                    Mode 0
+                       ScrnColX% = current horizontal (X) position of
+                                   mouse pointer as represented by
+                                   pixels (0 to 632)
+                       ScrnRowY% = current vertical (Y) position of
+                                   mouse pointer as represented by
+                                   pixels (0 to 192)
+                    note:  The pixel given is the upper left dot of
+                           the standard 8x8 mouse pointer.  Pixel
+                           positions start from 0,0.
+
+                    Mode 1
+                       ScrnColX% = current column position of mouse
+                                   pointer (1 to 80)
+                       ScrnRowY% = current row position of mouse
+                                   pointer (1 to 25)
+
+          Example:  CALL MousePosition(TextRow%, TextCol%, 1)
+
+
+          ------------------------------------------------------------
+          MouseLimits(UpRowY%, LeftColX%, LowRowY%, RightColX%, Mode%)
+          ------------------------------------------------------------
+          This routine will let you limit  the  motion  of  the  mouse
+          pointer.    The   mouse   pointer  will  reside  within  the
+          boundaries  specified  by  the  arguments  passed  to   this
+          routine.  The  Mode switch will allow the limited area to be
+          either given in  row/column  text  positions  or  X/Y  pixel
+          positions.
+
+          Passed:  An initialized integer variable or constant
+                   Mode 0 = pixel positions
+                      LeftColX% = left horizontal (X) position with a
+                                  value from 0 to 632
+                      UpRowY% = upper vertical (Y) position with a
+                                value from 0 to 192
+                      RightColX% = right horizontal (X) position with
+                                  a value from LeftColX% to 632
+                      LowRowX% = lower vertical (Y) position with a
+                                  value from UpRowY% to 192
+                   note:  The pixel given is the upper left dot of
+                          the standard 8x8 mouse pointer.  Pixel
+                          positions start from 0,0.
+
+                   Mode 1 = text positions
+                      LeftColX% = left column position with a value
+                                  from 1 to 80
+                      UpRowY% = upper row position with a value from
+                                1 to 25
+                      RightColX% = right column position with a value
+                                   from LeftColX% to 80
+                      LowRowY% = lower row position with a value from
+                                 UpRowY% to 25
+
+          Returns:  Nothing
+
+          Example:  CALL MouseLimits(10, 25, 15, 55, 1)
+
+
+          -------------------------------------------------------------
+          MouseExclude(UpRowY%, LeftColX%, LowRowY%, RightColX%, Mode%)
+          -------------------------------------------------------------
+          This  routine  will  allow  the mouse pointer to be excluded
+          from any portion of the screen as specified by the arguments
+          passed to this routine.  When the mouse pointer  enters  the
+          excluded  boundaries,  the pointer is turned off.  The mouse
+          interrupt (33H)  does  not,  however,  reinstate  the  mouse
+          pointer  to the on condition upon exiting the excluded area.
+          This process must be performed within the  programming  code
+          itself.    The   excluded   area  cannot  be  saved  by  the
+          MouseReset() routines.  The mode switch will allow  the  ex-
+          cluded  area to be either given in row/column text positions
+          or X/Y pixel positions.
+
+          Passed:  An initialized integer variable or constant
+                   Mode 0 = pixel positions
+                      LeftColX% = left horizontal (X) position with a
+                                  value from 0 to 632
+                      UpRowY% = upper vertical (Y) position with a
+                                value from 0 to 192
+                      RightColX% = right horizontal (X) position with a
+                                   value from LeftColX% to 632
+                      LowRowX% = lower vertical (Y) position with a
+                                 value from UpRowY% to 192
+                   note:  The pixel given is the upper left dot of
+                          the standard 8x8 mouse pointer.  Pixel
+                          positions start from 0,0.
+
+                   Mode 1 = text positions
+                      LeftColX% = left column position with a value
+                                  from 1 to 80
+                      UpRowY% = upper row position with a value from
+                                1 to 25
+                      RightColX% = right column position with a value
+                                   from LeftColX% to 80
+                      LowRowY% = lower row position with a value from
+                                 UpRowY% to 25
+
+          Returns:  Nothing
+
+          Example:  CALL MouseExclude(15, 20, 21, 35, 1)
+
+
+          -------------------------------------------------
+          MouseClick(LeftClick%, MiddleClick%, RightClick%)
+          -------------------------------------------------
+          This  routine  will  return  a  value indicating the current
+          mouse button in use.  The value is only  returned  upon  the
+          release  of  the button, thus returning the value only once.
+          This allows the mouse button status to be  effectively  used
+          within a loop.
+
+          Passed:  An integer variable
+
+          Returns:  0 = button not in use
+                    1 = button has been clicked
+
+          Example:  CALL MouseClick(lft%, mid%, rgt%)
+
+
+          -----------------------------------------------------
+          MouseScroll(LeftButton%, MiddleButton%, RightButton%)
+          -----------------------------------------------------
+          This routine will return  a  value  indicating  the  current
+          mouse   button   being  pressed.   This  value  will  remain
+          constant until the button is released.
+
+          Passed:  An integer variable
+
+          Returns:  0 = button not in use
+                    1 = button is being pressed
+
+          Example:  CALL MouseScroll(lft%, mid%, rgt%)
+
+
+          --------------------------------
+          MouseCursor(Fore%, Back%, Char%)
+          --------------------------------
+          This routine allows you to change the character and color of
+          the mouse pointer.
+
+          Passed:  An initialized integer variable or constant
+                   Fore = foreground color for the new pointer
+                          (within a range of 0 to 15)
+                   Back = background color for the new pointer
+                          (within a range of 0 to 7)
+                   Char = ASCII decimal value for the character of the
+                          new pointer (within a range of 0 to 255)
+
+          Returns:  Nothing
+
+          Example:  CALL MouseCursor(12, 7, 30)
+
+
+          --------------------------------------------------------
+          DoWindow(UpR%, LfC%, VSz%, HSz%, Fgd%, Bgd%, Frm%, Shw%,
+                   Txt$, Lct%)
+          --------------------------------------------------------
+          This routine will create attractive application  windows  at
+          any  screen  position.  You have control over color, type of
+          frame and color, type and location of shadow,  and  location
+          of  window title and style.  This windowing routine offers a
+          wide variety of possibilities.
+
+          Passed:  An initialized integer variable or constant,
+                   and string variable or constant for title
+                   UpR = upper row position for start of window
+                         (within a range of 1 to 24)
+                   LfC = left column position for start of window
+                         (within a range of 1 to 79)
+                   VSz = vertical size of window (# of rows)
+                         (within a range of 26 minus UpR)
+                   HSz = horizontal size of window (# of columns)
+                         (within a range of 81 minus LfC)
+                   Fgd = foreground window color (frame/text)
+                         (within a range of 0 to 15)
+                   Bgd = background window color (window structure)
+                         (within a range of 0 to 7)
+                   Frm = frame type, if any
+                         0 = no frame
+                         1 = single line
+                         2 = double line
+                         3 = single vertical and double horizontal
+                         4 = single horizontal and double vertical
+                         5 = solid frame enclosing the window
+                   Shw = shadow location and type, if any
+                         0 = no shadow
+                         1 = shadow left side and bottom of window
+                             (black in color)
+                         2 = shadow right side and bottom of window
+                             (black in color)
+                         3 = shadow left side and bottom of window
+                             (tinted black)
+                         4 = shadow right side and bottom of window
+                             (tinted black)
+                         note:  Tinted black is a combination, with
+                                ASCII character #177, of the color
+                                attribute outside the window and black.
+                   Txt = string variable or constant used for the
+                         title of the window
+                         note: Empty double quotes ("") or a string
+                               initialized to null will not produce
+                               a title.
+                   Lct = determines the location of the title, if any
+                         0 = title at top without brackets
+                         1 = title at bottom without brackets
+                         2 = title at top with brackets
+                         3 = title at bottom with brackets
+                         note:  If a title is not present, the
+                                location value has no effect.
+
+
+                   note:  The horizontal and vertical size cannot be
+                          less then 2.
+
+          Returns:  Nothing
+
+          Example:  CALL DoWindow(5, 10, 15, 60, 14, 6, 5, 3, "", 0)
+
+
+          -----------------
+          PutScrn(ScrnBuf$)
+          -----------------
+          This routine will allow you to save the entire  contents  of
+          the  screen currently being displayed.  The screen saved can
+          later be retrieved and displayed with the companion  routine
+          GetScrn().   The screens contents is saved to a string vari-
+          able or array initialized  to  4000  characters  in  length.
+          (i.e., DIM ScrnBuf(3) AS STRING * 4000)
+
+          Passed:  An initialized string variable or array at least
+                   4000 characters in length
+
+          Returns:  current screens contents
+
+          Example:  DIM ScrnBuf AS STRING * 4000
+                    CALL PutScrn(ScrnBuf)
+
+                    DIM SHARED ScrnBufArr(2) AS STRING * 4000
+                    CALL PutScrn(ScrnBufArr(0))  [default option base]
+
+
+          -----------------
+          GetScrn(ScrnBuf$)
+          -----------------
+          This routine will allow you  to  retrieve  and  display  the
+          contents  of  the  screen  saved  by  its  companion routine
+          PutScrn().
+
+          Passed:  The string variable or array that contains the
+                   screen to be displayed.
+
+          Returns:  Nothing
+
+          Example:  CALL GetScrn(ScrnBuf)
+                    CALL GetScrn(ScrnBufArr(1))
+
+
+          ---------------------------------
+          PrtScrn(Strg$, Row%, Col%, Attr%)
+          ---------------------------------
+          This is a machine language routine that will print a  string
+          variable or constant to the screen at the location and color
+          indicated  by its arguments.  The attribute is a combination
+          of  the  foreground  and  background  colors  and   can   be
+          determined  by  the  following  formula: (background * 16) +
+          foreground.
+
+          Passed:  Initialized variables or constants
+                   Strg = string variable or constant to be displayed
+                   Row  = screen row for display
+                          (within a range of 1 to 25)
+                   Col  = screen column for display
+                          (within a range of 1 to 80)
+                   Attr = attribute of color to be displayed
+                          (within a range of 0 to 127)
+
+          Returns:  Nothing
+
+          Example:  CALL PrtScrn("Hello Universe", 12, 33, 110)
+                    CALL PrtScrn(hello$, rw%, cl%, att%)
+
+
+          ------------
+          Ctr(String$)
+          ------------
+          This is a handy little  function  that  returns  the  column
+          position  need  to  screen center a string variable.  It can
+          easily be incorporated into BASIC's LOCATE statement.
+
+          Passed:  An initialized string variable
+
+          Returns:  Column position needed to screen center a
+                    string variable.
+
+          Example:  LOCATE 12, Ctr(Strg$)
+                    or
+                    cntr = Ctr(Strg$)
+                    LOCATE 12, cntr
+
+
+          -----------------------
+          Delay(Length!, Forced%)
+          -----------------------
+          This routine is  a  smart  alternative  to  QB's  new  SLEEP
+          statement  or the numerous appearances of LOOPs.  This delay
+          can either be forced or user bypass  with  the  keyboard  or
+          mouse  buttons  (if installed).  The delay makes use of real
+          time so CPU speed has little effect.
+
+          Passed:  Initialized integer variables or constants
+                   Length = single precision integer indicating the
+                            length of the delay in seconds
+                   Forced = integer indicating the type of delay
+                            0 = not forced (can be bypassed with
+                                any key or mouse button)
+                            1 = delay is forced (remains in effect
+                                until specified time has elapsed)
+                   note:  If both Length and Forced are 0, then
+                          Delay() will wait indefinitely until any
+                          key or mouse button is pressed.
+
+          Returns:  Nothing
+
+          Example:  CALL Delay(.25, 0)
+                    CALL Delay(lgth1!, 1)
+
+
+          -----------------------------------
+          QB.QLB (C) - QB.LIB (C) - QB.BI (C)
+          -----------------------------------
+          These three QuickBASIC files  are  incorporated  into  Q4T's
+          libraries.   They  are necessary for the DOS interrupts used
+          by the mouse routines.  The  following  is  a  list  of  the
+          services   provided   by  these  files.   Because  of  their
+          presence, you also have access to these important  services.
+          Please  consult  your  QuickBASIC  4.x reference manuals for
+          information on the use of these  QB CALL's.  The  demonstra-
+          tion  source code (Q4T-DEMO.BAS) illustrates an example of a
+          CALL to the Interrupt() routine.
+
+               CALL Absolute()
+               CALL Int86Old()
+               CALL Int86XOld()
+               CALL Interrupt()
+               CALL InterruptX()
+
+
+                       **   The $INCLUDE file Q4T.BI   **
+                      ====================================
+
+
+          The file Q4T.BI contains the declarations for the Ctr()  and
+          Delay()   routines.    This   file  must  be  used  in  QB's
+          metacommand  instructions  and  should  be  placed  at   the
+          beginning  of  your  code.  Generally, the TYPE declarations
+          for QB's Interrupt() and InperruptX() calls are also  placed
+          in  this  file.   Please  see  the demonstration source code
+          (Q4T-DEMO.BAS) for an example of a  metacommand  instruction
+          or  consult  your  QB  reference  manuals for information on
+          $INCLUDE: files.
+
+
+
+                **   A demonstration of the Q4Tool Library   **
+               =================================================
+
+
+          There's  an  old  cliche  that states, "A picture is worth a
+          thousand words".  So, provided with  Q4Tool  is  the  source
+          code   [Q4T-DEMO.BAS]  for  a  short  demonstration  of  its
+          routines.   This  source  code  will  give  you   a   better
+          understanding  as  to  the actual usage of the Q4T routines.
+          The code is presented in an ASCII format and can  be  viewed
+          with  any  common  text editor or sent to your printer using
+          the syntax;  COPY Q4T-DEMO.BAS PRN.  This  demonstration  is
+          quite   simple   and   by  no  means  illustrates  the  only
+          application for the Q4Tool Library.  If you wish to  compile
+          this demo, the following command line syntax should be used.
+
+          From the DOS command line for a stand-alone EXE:
+
+               BC Q4T-DEMO,/O;
+               LINK Q4T-DEMO+SHOWMENU,,,Q4T/E;
+
+          Note:   Q4T-DEMO.BAS  code  can  be  viewed  but  not ran or
+                  compiled  from  within  the  QB  environment.    The
+                  environment   does  not  support  the  CALL  to  the
+                  external demo module ShowMenu().
+
+
+           **   Compiling within the QuickBASIC 4.5 Environment   **
+          ===========================================================
+
+
+          Q4Tool  was  developed  and  compiled with QuickBASIC 4.00b.
+          QuickBASIC,  when  compiling,  includes  the  name  of   the
+          standard  library  in  the object module.  In this case, the
+          library BCOM41.LIB is used.   Due  to  the  syntax  used  by
+          QuickBASIC  4.5  within  its environment, a LINK warning may
+          result and is easily circumvented.
+
+             LINK : warning L4051: BCOM41.LIB : cannot find library
+             Enter new file spec:
+
+          On  the  line  "Enter new file spec:"  you need to supply QB
+          with the path and library for the version you are using.
+
+          Examples for QB 4.5:
+
+             For stand-alone EXE  -  C:\LIB\BCOM45.LIB
+
+             For run-time EXE  -  C:\LIB\BRUN45.LIB
+
+             Note:   If the location of your libraries is  within  the
+                     current  directory  or  is  set  within  the  DOS
+                     environment, then the path to your  libraries  is
+                     not necessary.
+
+          Q4Tool  can  also be linked to your object modules using the
+          standard DOS command  line.   This  process  avoids  the  QB
+          environment  entirely.   Your  source code (BAS) needs to be
+          saved in text (ASCII) format in  order  for  BC  to  operate
+          properly.   The  following  syntax has been tested and works
+          quite well.
+
+             For stand-alone EXE  -  BC YOURFILE.BAS,,/O;
+                                     LINK YOURFILE.OBJ,,,Q4T.LIB/E;
+
+             For run-time EXE  -  BC YOURFILE.BAS;
+                                  LINK YOURFILE.OBJ,,,Q4T.LIB;
+
+             Note:   Be  sure  you  supply  all necessary command line
+                     switches  needed  for  your  source   code   when
+                     compiling (BC).  [i.e.  /E /X /W]
+
+          Please  consult  your  QuickBASIC reference manuals for more
+          detailed information on compiling and linking your  programs
+          from the DOS command line.
+
+
+                   **   A look inside the Q4Tool Library   **
+                  ============================================
+
+
+          The  Q4Tool Library is comprised of six object code modules.
+          With this type of construction,  it  is  possible  to  build
+          libraries  containing  only the particular routines desired,
+          or incorporate them into existing libraries.  These  modules
+          are  provided  to  you  (on  disk) upon your registration of
+          Q4Tool.  Below is a list  of  the  object  modules  and  the
+          routines contained in each.
+
+                Module Name         Routines          Source Type
+                -----------         --------          -----------
+
+                Q4TOOL.OBJ          Ctr()                 BAS
+                                    Delay()               BAS
+
+                Q4WIND.OBJ          DoWindow()            BAS
+
+                Q4MOUSE.OBJ         Mouse*()              BAS
+
+                PRTSCRN.OBJ         PrtScrn()             ASM
+
+                PUTSCRN.OBJ         PutScrn()             ASM
+
+                GETSCRN.OBJ         GetScrn()             ASM
+
+          The  routine  Dowindow()  does  make CALL's to PrtScrn() and
+          must have access to its services.   When  using  the  Q4WIND
+          module,  the PRTSCRN module should always be linked with it.
+          If MOUSE.OBJ is used separately,  it  must  have  access  to
+          QB.LIB or QB.QLB if used within the QB environment.
+
+          The screens handling  modules  (ASM)  employ  direct  memory
+          access and assume the segment address of the regen buffer to
+          be the following:
+
+                      Card Type             Segment Address
+                     -----------           -----------------
+
+                      Monochrome                B0000H
+
+                      Color                     B8000H
+
+          The  following  is  a list of internal variables used in the
+          mouse routines.  These variable names should not be used  by
+          your  program  structure  in  conjunction with the COMMON or
+          SHARED Statements.
+
+               visible33%       mouse1buf33%()     mouse2buf33%()
+
+          The  remaining  variables  within  the  Q4T   routines   are
+          initialized upon their CALL and are not defined as SHARED.
+
+
+              **   A few final notes about the Q4Tool Library   **
+             ======================================================
+
+
+          This documentation is not written to be a tutorial and makes
+          the  assumption  you  have  some  knowledge  of  the calling
+          conventions for QuickBASIC.  The demonstration  source  code
+          (Q4T-DEMO.BAS)  was  written  to  provide you with a working
+          example of the Q4T routines and  is  a  valuable  source  of
+          information.
+
+          Q4Tool  was  developed  and tested on a 16-bit 8088 machine,
+          running at 8 mhz, and should perform  as  expected  on  most
+          computers within the "86" family.
+
+          The Q4Tool Library is presented as-is and with no warranties
+          expressed or implied.  CareWare  assumes  no  responsibility
+          for  this products use, misuse, or lose of any kind incurred
+          by its use.
+
+          The Q4Tool Library  is  copyrighted  to  CareWare  with  all
+          rights  reserved, and is distributed as a Shareware product.
+          If you find Q4T to be of  value  and  continue  to  use  its
+          services,  then  you are required to register your copy with
+          CareWare.    A   registration  form  is  provided  for  your
+          convenience.
+
+          Q4Tool  may  be  shared  with  others  as long as it remains
+          unaltered and distributed in its entirety.   A  distribution
+          fee,  not to exceed $6.00, may be imposed by disk vendors to
+          cover shipping and  handling  costs.   The  following  files
+          comprise  the  whole of this product, and are distributed as
+          the file Q4TOOL.ZIP.
+
+                 Q4T.LIB        Q4TOOL.DOC         SHOWMENU.OBJ
+                 Q4T.QLB        Q4T-DEMO.BAS
+                 Q4T.BI         Q4T-DEMO.EXE
+
+          Upon  your completed registration you are granted full usage
+          and support for this product.  Any comments  or  suggestions
+          are gratefully accepted and an honest attend will be made to
+          answer them.  Good Luck and Enjoy!
+
+          Microsoft is a registered trademark of the Microsoft Corp.
+
+
+                **   The Shareware principle works for you   **
+               =================================================
+
+
+          R. J. Crouch
+          CareWare
+          10217 Ridge View Dr.
+          Grass Valley, CA  95945
+
+
+          This program is produced by a member of the  Association  of
+          Shareware  Professionals (ASP).  ASP wants to make sure that
+          the shareware principle works for you.  If you are unable to
+          resolve a shareware-related problem with an  ASP  member  by
+          contacting the member directly, ASP may be able to help. The
+          ASP Ombudsman can help you resolve a dispute or problem with
+          an  ASP  member,  but does not provide technical support for
+          members' products.  Please write to  the  ASP  Ombudsman  at
+          P.O.   Box  5786,  Bellevue,  WA  98006 or send a CompuServe
+          message via easyplex to ASP Ombudsman 70007,3536.
+
+
+                  _______
+             ____|__     |                (R)
+          --|       |    |-------------------
+            |   ____|__  |  Association of
+            |  |       |_|  Shareware
+            |__|   o   |    Professionals
+          -----|   |   |---------------------
+               |___|___|    MEMBER
+
+
+
+
+
+
+
+                            The Q4Tool Library [Q4T]
+                                    Ver. 1.2
+                               Registration Form
+                _______________________________________________
+
+
+         CareWare
+         10217 Ridge View Dr.
+         Grass Valley, CA  95945
+
+
+         Quantity        Type of registration          Cost      Total
+         --------        --------------------          ----      -----
+
+          ______    Registration of your current      $25.00    _______
+                    copy
+
+          ______    Registration, latest ver., OBJ    $30.00    _______
+                    modules & SHOWMENU.BAS on disk
+
+          ______    All the above plus all module     $55.00    _______
+                    source codes on disk
+
+                                                    Subtotal    _______
+
+
+          Disk size:  [  ] 5.25  -  [  ] 3.5                    _______
+                      (please add $1.00 for 3.5)
+
+          Please add $3.00 for shipping outside of U.S.         _______
+
+
+          (apd)                              Amount Enclosed    _______
+
+
+          All  registered  user  will  receive  prompt  and  courteous
+          support for this  product.   Notification  of  upgrades  are
+          provided when available.  Thank you for your support.
+
+
+          Name ___________________________________________
+
+          Address ________________________________________
+
+          City, State, Zip _______________________________
+
+          Phone (optional) _______________________________
+
+
+          Please make payable to the author - R. J. Crouch
+
+
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

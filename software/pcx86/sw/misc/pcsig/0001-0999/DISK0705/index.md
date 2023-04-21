@@ -36,6 +36,137 @@ machines:
     ~ CLOCKGAME, which teaches how to read an analog clock
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES705.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DISK NO  705  KIDGAMES                                               v1
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+This Disk contains a collection of games specifically geared toward the ages
+of 2-10 years of age. Your children will not only have fun with these games but
+will also learn from them.
+ 
+ALPHABET __2 Part of ALPHABET.COM
+ALPHABET __1 Part of ALPHABET.COM
+ALPHABET COM Main ALPHABET program
+ANIMALS  __2 Part of ANIMALS.COM
+ANIMALS  __1 Part of ANIMALS.COM
+ANIMALS  COM Main ANIMALS program
+ANIMALS  TAB Part of ANIMALS.COM
+CLOCKGAM COM Main CLOCKGAM program
+CLOCKGAM PIC Part of CLOCKGAM program
+DICTNARY     Auxiliary dictionary for hangman
+GO       BAT Types out kidgames.doc
+HANGMAN  COM Teaches letter sounds and spelling
+HANGMAN  DIC Dictonary for hangman
+HANGMAN  DOC Documentation for hangman
+KIDGAMES DOC Brief discription about the games on this disk
+MAKEICON COM Icon maker program
+MAKELIST COM Program which allows you to add word to the dictionary of hangman
+MOSAIC   COM Mosaic main program
+MOSAIC   PIC Part of MOSAIC program
+MOSAIC   TAB Part of MOSAIC program
+SPRITES      Pictures related to MOSAIC.COM
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+## HANGMAN.DOC
+
+{% raw %}
+```
+
+
+                     (* ****************************** *)
+                     (*                                *)
+                     (*          HANGMAN.COM           *)
+                     (*                                *)
+                     (*   (c) Donald L. Pavia          *)
+                     (*       1488 Lahti Drive         *)
+                     (*       Bellingham, WA  98226    *)
+                     (*                                *)
+                     (*           April 1986           *)
+                     (*                                *)
+                     (* ****************************** *)
+
+           This disk contains six files related to this game.
+
+           The game itself can be started by typing 'HANGMAN'. The game
+       requires that there also be a dictionary named 'HANGMAN.DIC' on
+       the same drive.
+
+           You may create your own dictionary by using 'MAKELIST.COM'.
+       This program will allow you to create a new dictionary, erasing the
+       old one, or to add words to the existing dictionary without erasing
+       it.
+
+           The Hangman program will use any dictionary named 'HANGMAN.DIC'.
+       Since you may wish to save the original game dictionary, I have placed
+       a safe copy of it in the subdirectory 'DICTNARY'. You may recopy this
+       from the subdirectory to the root directory at any time using the
+       command: A>copy A:\DICTNARY\HANGMAN.DIC A:\  .
+
+           The subdirectory 'SPRITES' contains the clue sprites used by the
+       program. I have placed them in a subdirectory for two reasons. First
+       there are over 90 of them and a single directory (like the main one)
+       can only hold 112 files (max). Second, they are safer there. They
+       also do not clutter up the root directory. Sprites may also be placed
+       in the root directory. The hangman program looks first in the subdir-
+       ectory, and if the sprite is not found it looks in the root (main)
+       directory next. The program will operate in the absence of any sprites.
+       They are optional.
+
+           The program 'MAKEICON.COM' allows you to design your own clue
+       sprites to go along with any words you add to the dictionary. Simply
+       save them on the root directory and name them with the extension .SPR.
+       If the word is longer than 8 letters, chop it off at eight. For in-
+       stance, the sprite for 'woodpecker' would be named 'WOODPECK.SPR'.
+       You may also use the more fully featured sprite designer form my
+       sprites and animation package : DESIGNER.COM. This is on PCSIG #511.
+
+                                   HAVE FUN !!!    Donald L. Pavia
+
+
+```
+{% endraw %}
+
+## KIDGAMES.DOC
+
+{% raw %}
+```
+                           << KIDGAMES >>
+
+     (c) 1986  Donald L. Pavia  1488 Lahti Dr., Bellingham, WA.  98226
+
+         These are games I wrote for my preschool children Morgan, Kevin,
+     and Bronwyn. The following games are on this disk:
+            HANGMAN     teaches letter sounds and spelling
+                          (read HANGMAN.DOC for a full explanation)
+            ALPHABET    teaches the alphabet and alphabetic sequence
+            ANIMALS     teaches simple preschool math
+            CLOCKGAME   teaches how to read an analog clock
+            MOSAIC      teaches pattern matching
+     Each game is started by typing the name shown in CAPITALS above.
+     If you enjoy the games on this disk a contribution of $10 would
+     be greatly appreciated and encourage me to write more PD games.
+     Turbo Pascal source code is available from the author for $15 US.
+
+     THE GAMES ON THIS DISK ARE PLACED IN THE PUBLIC DOMAIN. THEY MAY NOT
+     BE SOLD FOR PROFIT NOR USED IN COMMERCIAL PROGRAMS WITHOUT EXPRESS
+     PERMISSION OF THE AUTHOR. LOCAL USER GROUPS AND PUBLIC BULLETIN
+     BOARDS MAY DISTRIBUTE THIS DISK PROVIDED FEES DO NOT EXCEED $10.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0705
 

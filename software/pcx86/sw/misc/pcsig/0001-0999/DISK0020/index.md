@@ -52,6 +52,7 @@ machines:
 
 ## B-SIMPLE.BAS
 
+{% raw %}
 ```bas
 0 GOTO 65005 :'B-SIMPLE has not yet been initialized
 2 '  **************************************************************************
@@ -341,9 +342,11 @@ machines:
 65099 END :'of simple
 65100 '
 ```
+{% endraw %}
 
 ## BASMENU.BAS
 
+{% raw %}
 ```bas
 0 KEY(2) ON:ON KEY(2) GOSUB 65140
 10 DIM PROG$(64)
@@ -378,9 +381,11 @@ machines:
 65160 RUN"A:TRANSFER
 65170 SYSTEM
 ```
+{% endraw %}
 
 ## BLACKJCK.BAS
 
+{% raw %}
 ```bas
 0 GOTO 65000
 1 '
@@ -697,9 +702,11 @@ machines:
 65230 SYSTEM
 65240 E=ERR:RESUME NEXT
 ```
+{% endraw %}
 
 ## CHSONG.BAS
 
+{% raw %}
 ```bas
 10 V$="B:CHSONG.bas 11/29/82    Shirley"
 20 ON ERROR GOTO 40
@@ -798,15 +805,80 @@ machines:
 950 PLAY "L4 E L2 F.A. L4 FC O2 A O3 C. O2 L6 B- L4 G L2 F."
 960 RETURN
 ```
+{% endraw %}
 
 ## CONTROL.BAS
 
+{% raw %}
 ```bas
 10 RUN"basmenu
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #20, version v1.1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  SCOPE   .BAS         CRC = 0B 68
+
+--> FILE:  YAHTZEE .BAS         CRC = BF 4C
+
+--> FILE:  EDIT    .BAT         CRC = 00 00
+
+--> FILE:  DRAW    .BAS         CRC = 21 0F
+
+--> FILE:  CROSSREF.SCR         CRC = 4E 94
+
+--> FILE:  CROSSREF.EXE         CRC = DD 01
+
+--> FILE:  B-SIMPLE.BAS         CRC = DD 4B
+
+--> FILE:  WORM1   .BAS         CRC = B0 4F
+
+--> FILE:  HANGMAN .BAS         CRC = 4D 6D
+
+--> FILE:  CHSONG  .BAS         CRC = 61 B5
+
+--> FILE:  OTHELLO .BAS         CRC = 2D C6
+
+--> FILE:  BLACKJCK.BAS         CRC = AC E4
+
+--> FILE:  BASMENU .BAS         CRC = 7C F5
+
+--> FILE:  CONTROL .BAS         CRC = C5 9F
+
+--> FILE:  CRC     .TXT         CRC = 99 D7
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+ ---------------------> SUM OF CRCS = C8 4B
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## DRAW.BAS
 
+{% raw %}
 ```bas
 0 'comment line 2000 to display instructions on the monochrome display.
 10 KEY OFF
@@ -1185,9 +1257,11 @@ machines:
 37060 RETURN
 65200 RUN"basmenu
 ```
+{% endraw %}
 
 ## HANGMAN.BAS
 
+{% raw %}
 ```bas
 0 'THIS PROGRAM USES THE COLOR GRAPHICS ADAPTOR.                                    ACTIVATE LINE 410 IF YOU WANT TO USE THE                                        MONOCHROME ADAPTOR AS WELL.
 1 REM HANGMAN PROGRAM
@@ -1305,9 +1379,11 @@ machines:
 5140 DATA NEWYORK,MASSACHUSETTS,KNOB,COOKY,SQUARE,TRIANGLE
 65140 RUN"BASMENU
 ```
+{% endraw %}
 
 ## OTHELLO.BAS
 
+{% raw %}
 ```bas
 0 GOTO 65000
 1 '
@@ -1595,9 +1671,11 @@ machines:
 65230 SYSTEM
 65240 E=ERR:RESUME NEXT
 ```
+{% endraw %}
 
 ## SCOPE.BAS
 
+{% raw %}
 ```bas
 10 ' N O T E       N O T E       N O T E       N O T E
 20 '
@@ -1800,9 +1878,11 @@ machines:
 1980 ' Barry Shiffrin 2309 Acorn Dr. Vestal, NY  13850
 1990 ' Bob Vollmer for STL PC-Club library 8-543-4866
 ```
+{% endraw %}
 
 ## WORM1.BAS
 
+{% raw %}
 ```bas
 1 WIDTH 80:CLS:CLEAR:KEY(2) ON:ON KEY(2) GOSUB 65140:KEY 2,"RUN"+CHR$(34)+"CONTROL"+CHR$(13)
 5 PRINT"Which display should I worm my way into?"+CHR$(13)+"1 - Monochrome"+CHR$(13)+"2 - Color"
@@ -1832,9 +1912,11 @@ machines:
 65160 RUN"A:TRANSFER
 65170 SYSTEM
 ```
+{% endraw %}
 
 ## YAHTZEE.BAS
 
+{% raw %}
 ```bas
 0 GOTO 65000
 1 '
@@ -2479,6 +2561,7 @@ machines:
 65230 SYSTEM
 65240 E=ERR:RESUME NEXT
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

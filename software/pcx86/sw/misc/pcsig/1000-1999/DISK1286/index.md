@@ -33,6 +33,67 @@ machines:
     and DISKSCAN does the rest.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1286.TXT
+
+{% raw %}
+```
+Disk No: 1286                                                           
+Disk Title: DiskScan                                                    
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: DiskScan                                                 
+Author Version: 2.2                                                     
+Author Registration: $15.00.                                            
+Special Requirements: MS-DOS 3.X, 640K RAM and a hard drive.            
+                                                                        
+DISKSCAN automatically builds a database of all your floppy disks!      
+                                                                        
+Using DISKSCAN, a comprehensive list of all your files is compiled by a 
+floppy number and a user-defined floppy name.  The program automatically
+does all the work as you feed your disks in one-by-one.  When finished, 
+you can browse through a sorted file list on screen, or search the      
+database by name, date, or file attributes.  You can also print a       
+catalog of the entire database.                                         
+                                                                        
+Updates and changes are quick and foolproof.  Just insert the disks that
+have new or changed files into your PC and the program sees what has    
+been altered and makes the necessary additions and deletions to the     
+database.                                                               
+File Descriptions:                                                      
+                                                                        
+ATTR     NTX  Attribute Index.                                          
+CONFIG   SYS  Sample DOS Configuration File.                            
+DDATE    NTX  Date Index.                                               
+DS       CFG  Configuration file.                                       
+DS       DOC  Documentation for the program.                            
+DS       EXE  The DISKSCAN program.                                     
+DSINSTAL BAT  Installation program.                                     
+DSKNAM   NTX  Index file.                                               
+FILEXT   NTX  File extension index.                                     
+FILNAM   NTX  File name Index.                                          
+FLOPNUM  NTX  Floppy Number Index.                                      
+MASTER   DBF  Main data base file.                                      
+MASTER   DBT  Notes data base.                                          
+NPATH    FRM  Report Format.                                            
+README   1ST  Read Me Before You Do ANYTHING File.                      
+SCANBASE DBF  Data base file.                                           
+SCANBASE DBT  Notes data base.                                          
+SN       DBF  Data base file.                                           
+SN       NTX  Serial Number Index.                                      
+START    BAT  Startup batch file for DISKSCAN.                          
+YPATH    FRM  Report Format.                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1286
 

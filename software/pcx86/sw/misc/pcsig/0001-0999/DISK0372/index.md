@@ -93,8 +93,93 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## BASICSUB.DOC
+
+{% raw %}
+```
+
+   				--------------------------------
+				       THE CALL STATEMENT
+				--------------------------------
+
+There  have  been a number of requests for clarification of the CALL statement
+in the various Microsoft langauges.   Hopefully,  the  following  explanations
+will  clear up several misunderstandings.  First, let's look at the "Microsoft
+call standard".  When any Microsoft program issues a CALL statement,  such  as
+"CALL  MYROUT",  control is passed to the address specified by MYROUT.  In all
+cases except the BASIC interpreter, MYROUT must be the name  of  a  subroutine
+program,  or a global/public label within a MACRO-80 routine.  The calling and
+the called program must be linked together by L80 into a single file.  In  the
+BASIC  interpreter  (MBASIC), the variable MYROUT must be set to the beginning
+address of the subroutine.  
+
+If we complicate things by adding a few paramaters to the CALL, such as: "CALL
+MYROUT(A,B); the parameters are passed as follows:  The *ADDRESS* of the first
+parameter  is  passed  in registers HL, the second in DE, and the third in BC.
+If there are more than three parameters,  BC  points  to  a  block  of  memory
+containing the *ADDRESS* of parameters three through N.  Note that the address
+and *NOT* the parameter itself is passed.  The arguments themselves correspond
+to  the  standard  MICROSOFT variable format, (2 bytes for an integer, 4 bytes
+for single precision floating point,  and  8  bytes  for  a  double  precision
+floating  point  number)  with two exceptions.  
+
+COBOL passes variables as they would appear to another COBOL program (display,
+comp,  or  comp-3).   Strings are also handled a bit differently.  The address
+pointed to by the register contains a three byte  "string  descriptor".   This
+string  descriptor  contains  the  length  of  the string in byte one, and the
+address of the string in bytes two and three.  When passing strings, take care
+not to modify this string descriptor, or unpredictable results will occur.  
+
+In  all  cases,  it  is the user's responsibility to ensure that the arguments
+correspond *exactly*, in both type and number.   Also,  be  sure  to  preserve
+*all*  of  the  registers  and  use  your  own local stack when you call macro
+routines.  
+
+With  the preliminaries out of the way, let's look at which languages can call
+which other languages.  In the  following  table,  "B"  represents  the  BASIC
+interpreter  (MBASIC),  "BC"  the  BASIC  Compiler  (BASCOM),  "F" the FORTRAN
+Compiler (F80), "C" the COBOL Compiler, and "M" the MACRO Assembler (M80).   A
+"Y" in the appropriate entry means that a CALL is possible.
+
+        CALLED PROGRAM
+********************************
+CALLING* **   **    **     **
+PROGRAM*B** BC**  F **  C  ** M
+********************************
+B      * **   **    **     ** Y
+********************************
+BC     * **   **  1 **     ** Y
+********************************
+F      * **   **  Y **     ** Y
+********************************
+C      * **   **  2 **  Y  ** Y
+********************************
+M      * **   **  3 **     ** Y
+********************************
+
+	[NOTES:]
+
+1  -  When  calling a FORTRAN routine from the BASIC Compiler, only one of the
+two languages may be used to perform I/O.  When the programs are linked,  LINK
+the  BASIC  program  first, then search BASLIB, then load the FORTRAN program,
+then search FORLIB.  The multiply defined global message may be ignored.  
+
+2  -  When  calling  FORTRAN  from COBOL, remember that the variable types are
+different.  Only comp data items will be passed in such a way that FORTRAN can
+deal with them without an encode statement.  
+
+3 - While MACRO-80 may not directly call FORTRAN subroutines, you may make use
+of  the routines in the FORTRAN library.  For more information,see the FORTRAN
+manual.  Of course, from within M80, you may initiate execution of  any  other
+.COM file by reading the file and then jumping to the appropriate address.
+in M80, you may initiate execution of  any  other
+.COM file by readin
+```
+{% endraw %}
+
 ## BASPARAM.BAS
 
+{% raw %}
 ```bas
 10 '**************************************************************************
 20 ' taken from *.* column in PC World, November, 1983 with a mod to get rid
@@ -121,9 +206,11 @@ machines:
 230 DEF SEG			     :'return to normal data string
 240 '**************************************************************************
 ```
+{% endraw %}
 
 ## CAPLOCK.BAS
 
+{% raw %}
 ```bas
 10 CLS: ROW%=2:COLUMN%=1
 20 PRINT"This is a test"
@@ -138,9 +225,147 @@ machines:
 50550 LOCATE ROW%,C%,1:K1%=K%:COLOR 7,0:RETURN
 50559 '************************************************************************
 ```
+{% endraw %}
+
+## CMDLIN.DOC
+
+{% raw %}
+```
+CMDLINE.DOC           7/8/84        Dave Williams [COMPUSERVE 74015,655]
+ 
+ 
+A. Listing 1 is a routine designed to enable the use of command line
+parameters by either compiled or interpreted BASIC programs.  The
+routine is based on the following algorithm:
+ 
+    (1) Determine if the program is compiled or not. (Line 1010)
+ 
+        a. If the program using this routine also uses array variables,
+then line 1010 could use one of those variables instead of TEMP$().
+ 
+ 
+    (2) Find the start of a Program Segment Prefix (PSP) that contains
+the desired command line. (Line 1020)
+ 
+        a. The PSP for BASIC.COM (or BASICA.COM) is easy to find. Simply
+look at the vector address for INT 0.  The segment address portion of
+this vector points to BASIC's PSP.  (BASIC substitutes its own interrupt
+handler routines for this and several other interrupts, in addition to
+setting up new interrupts of its own.  As a COM program, only one program
+segment address (such as that for INT 0) is needed.)
+ 
+        b. The PSP for a compiled BASIC program, on the other hand, is
+pretty well hidden, and normally can't be found by looking at the
+interrupt vector addresses.  (A compiled BASIC program is usually a EXE
+program and typically use several different program segment addresses.)
+Instead a method such as that given by W.M. Sparks in PC World (Nov 83,
+p.260) must be used.  His program, known as BASPARM.BAS (or
+BASPARAM.BAS) is widely available.
+ 
+        c. The routine given here makes use of the fact that DOS places
+a copy of the command line in the PSP for COMMAND.COM when any EXE or COM
+program is called.  This PSP can be found by simply looking at the vector
+address for INT 21.
+ 
+    (3) Read in the command line from the command line buffer in the PSP.
+(Lines 1030-1050)
+ 
+        a. The length of the command line is given by the byte at hex
+offset 80 in the PSP, while the command line itself starts at hex offset
+81.
+ 
+        b. Line 1040 of the routine is not needed for proper operation.
+It is included only to provide for a fast exit if the command line is
+empty.
+ 
+    (4) Delete any leading spaces. (Line 1070)
+ 
+    (5) If the program is not compiled, then delete the name of the
+called program. (Lines 1080-1090)
+ 
+        a. When a COM or EXE program is called, DOS will automatically
+delete the program filespec from the command line before it is placed
+in the PSP.  In the case of interpreted BASIC, this is BASIC.COM (or
+BASICA.COM). The filespec of the program to be run by bASIC will remain
+as part of the command line, and must be removed.
+ 
+        b. It should be noted that DOS filter and redirection commands
+(i.e., those using <,>, or |) will not appear in the command line when
+using DOS 2.0 and above.
+ 
+    (6) Strip off leading and trailing spaces. (Lines 1110-1120)
+ 
+ 
+B. Listing 2 is a routine that may be used to investigate the PC's
+memory.  It will first display all of the the interrupt vectors (segment
+address first).  It will then display the first 256 bytes of any selected
+area of memory. The 256 byte range may be varied by changing the value
+of N in line 100.
+ 
+ 
+ 
+LISTING 1:
+ 
+10 'CMDLINE.BAS      Version 2.00           Dave Williams [COMPUSERVE 74015,655
+20 'This routine is designed to enable the use of command line parameters by either compiled or interpreted BASIC.
+1000 CLS:KEY OFF:DEFINT A-Z
+1010 DIM TEMP$(1):IF (VARPTR(TEMP$(1))-VARPTR(TEMP$(0)))=4 THEN COMPILED=-1
+1020 DEF SEG=0:PSP!=PEEK(134)+256*PEEK(135) 'find PSP for COMMAND.COM
+1030 DEF SEG=PSP!+8:TEMP=PEEK(0) 'find length of command line
+1040 IF TEMP=0 THEN CMDLINE$="":GOTO 1130 'no command line parameters exist
+1050 CMDLINE$=SPACE$(TEMP):FOR I=1 TO TEMP:MID$(CMDLINE$,I,1)=CHR$(PEEK(I)):NEXT 'read in command line
+1060 DEF SEG
+1070 WHILE LEFT$(CMDLINE$,1)=CHR$(32):CMDLINE$=RIGHT$(CMDLINE$,LEN(CMDLINE$)-1):WEND 'strip off leading spaces
+1080 IF COMPILED THEN 1100 ELSE TEMP=1
+1090 TEMP=INSTR(CMDLINE$,CHR$(32)):CMDLINE$=MID$(CMDLINE$,TEMP+1) 'strip off program name (if any)
+1100 IF TEMP=0 OR CMDLINE$=SPACE$(LEN(CMDLINE$)) THEN CMDLINE$="":GOTO 1130 'no command line parameters exist
+1110 WHILE RIGHT$(CMDLINE$,1)=CHR$(32):CMDLINE$=LEFT$(CMDLINE$,LEN(CMDLINE$)-1):WEND 'strip off trailing spaces
+1120 WHILE LEFT$(CMDLINE$,1)=CHR$(32):CMDLINE$=RIGHT$(CMDLINE$,LEN(CMDLINE$)-1):WEND 'strip off leading spaces
+1130 PRINT "Command line = ";CMDLINE$;CHR$(10);"Length =";LEN(CMDLINE$)
+1140 END
+ 
+ 
+ 
+LISTING 2:
+ 
+10 'LOOK.BAS    Version 3.27          7/5/84          Dave Williams [74015,655]
+20 'This program will display all interrupt vector addresses and any 256-byte section of memory.
+30 'Change the value of N in line 100 to change the amount of memory displayed.
+100 KEY OFF:CLS:DEFINT A-N:N=255
+110 DEF FNTST(X)=PEEK(X)+256*PEEK(X+1)
+120 DEF FNTST1$(X)=RIGHT$("0000"+HEX$(X),4)
+130 DEF FNTST2$(X)=RIGHT$("0000",5-LEN(STR$(X)))+RIGHT$(STR$(X),LEN(STR$(X))-1)
+140 DEF FNTST3$(X)=RIGHT$("0000"+HEX$(X),2)
+150 CLS:DEF SEG=0
+160 A$="INT"+SPACE$(4)+"VECTOR"+SPACE$(7)+"ADDRESS"+CHR$(10):PRINT A$
+170 FOR I=0 TO 1023 STEP 4
+180 A$=FNTST3$(I\4)+SPACE$(4)+FNTST1$(FNTST(I+2))+CHR$(58)+FNTST1$(FNTST(I))+SPACE$(6)+FNTST2$(I):PRINT A$
+190 NEXT
+200 PRINT:INPUT "List interrupts again? [Default=N] ",T$:T$=LEFT$(T$,1):IF T$="Y" OR T$="y" THEN 150
+210 PRINT CHR$(10);"[Press <ENTER> to exit]";CHR$(10);"Segment address (in hex) = ";CHR$(9);CHR$(9);"[Add </> to repeat]";
+220 LOCATE ,28:INPUT "",P$:IF P$="" THEN 350
+230 D=INSTR(P$,CHR$(47)):IF D THEN A$=CHR$(47):P$=LEFT$(P$,D-1) ELSE A$=""
+240 P=VAL("&H"+P$):P=P-(P<0)*65536!:P$=FNTST1$(P)
+250 PRINT  "Offset address  (in hex) = ";CHR$(9);CHR$(9);"[Default=0000] [Enter </> to exit]";
+260 LOCATE ,28:INPUT "",O$
+270 D=INSTR(O$,CHR$(47)):IF D THEN O$=LEFT$(O$,D-1):IF O$="" THEN 210
+280 IF O$="" THEN O=0 ELSE O=VAL("&H"+O$):O=O-(O<0)*65536!
+290 CLS:DEF SEG=P
+300 FOR I=0 TO N STEP 16:T$=P$+CHR$(58)+FNTST1$(I+O)+SPACE$(4):U$="":V$=SPACE$(13):FOR J=I TO 15+I
+310 K=PEEK(O+J):U$=U$+RIGHT$("00"+HEX$(K),2)+CHR$(32)
+320 IF K<32 OR K>128 THEN V$=V$+SPACE$(3) ELSE V$=V$+CHR$(K)+SPACE$(2)
+330 NEXT:PRINT T$;U$;CHR$(10);V$:PRINT:NEXT:PRINT
+340 IF A$<>"" THEN 250 ELSE 210
+350 PRINT:INPUT "List interrupts again? [Default=N] ",T$:T$=LEFT$(T$,1):IF T$="Y" OR T$="y" THEN 150
+360 CLS:DEF SEG
+370 END
+
+```
+{% endraw %}
 
 ## CNTRL-BR.BAS
 
+{% raw %}
 ```bas
 1 DEF SEG=0:V1=PEEK(108):V2=PEEK(109):V3=PEEK(110):V4=PEEK(111)
 2 DEF SEG=0:POKE 108,&H53:POKE 109,&HFF:POKE 110,&H0:POKE 111,&HF0
@@ -156,9 +381,11 @@ machines:
 65 DEF SEG:POKE 1124,0
 70 END
 ```
+{% endraw %}
 
 ## DAYOFWK.BAS
 
+{% raw %}
 ```bas
 10 ' DAYOFWK = Calculates the day of the week given date
 20 '
@@ -177,9 +404,11 @@ machines:
 150 N=INT((N/7-INT(N/7))*7+.5)
 160 PRINT DAY$(N)
 ```
+{% endraw %}
 
 ## DAYS.BAS
 
+{% raw %}
 ```bas
 100 'PROGRAM TO CALCULATE THE NUMBER OF DAYS BETWEEN TWO DATES
 110 'BY LYNN LONG
@@ -259,9 +488,11 @@ machines:
 2500 F = 365 * (YY) + DD + 31 * (MM - 1) + INT((YY - 1)/4) - INT(.75 * (INT(((YY - 1)/100) + 1))
 2510 RETURN
 ```
+{% endraw %}
 
 ## DIR4.BAS
 
+{% raw %}
 ```bas
 10 ' ******* DIR4.BAS *******
 20 ' 8-31-84 by Thomas E. Link
@@ -307,9 +538,11 @@ machines:
 420 GOTO 150
 430 ' this is the last line >>>>>>>>>>>>>>>>>>>>>>>
 ```
+{% endraw %}
 
 ## FCBREAD.BAS
 
+{% raw %}
 ```bas
 10 DEF SEG=&H2100  'Dependent upon your memory
 20 '   This sample program serves as both an example and the documentation
@@ -354,9 +587,86 @@ machines:
 410 PRINT FILENAME$,STATUS%
 420 IF STATUS%>=0 THEN GOTO 400
 ```
+{% endraw %}
+
+## FILES372.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 372   Basic Subroutines                                 V1
+------------------------------------------------------------------------
+Collection of BASIC extensions and subroutines that make BASIC much more
+flexible.
+ 
+BASICSUB DOC  Documentation of 'CALL' statement.
+BASPARAM BAS  Subroutine to access DOS command line parameters.
+BASSUB   ASC  Test program for BASSUB.OBJ
+BASSUB   OBJ  Subroutine to access DOS directory commands.
+CAPLOCK  BAS  Test and display the state of NUM/CAPS lock keys.
+CMDLIN   DOC  A routine to enable the use of command line parameters.
+CNTRL-BR BAS  Defeat BASIC file protection to list a file.
+DAYOFWK  BAS  Calculates the day of the week given date.
+DAYS     BAS  Program to calculate the days between two dates.
+DIR4     BAS  Demonstration file for DIR4.BIN.
+DIR4     BIN  Binary directory routine.
+DISKHAND BIN  Get drive number from within BASIC.
+DISKTYPE SUB  Get media type from within BASIC.
+FCBREAD  BAS  Example for FCBREAD.BSV routine.
+FCBREAD  BSV  Binary directory search routine.
+FIND-DS  BAS  Finds the value of BASIC/BASICA'S data segment.
+GETSP    ASM  Assembly code for GETSPACE routine.
+GETSP    BAS  Basic source code to create BLOAD module of GETSPACE.
+GETSP1   BAS  Sample of getspace routine.
+GETSP1   EXE  Executable module for sample of getspace routine.
+GETSPACE      BLOAD module created by program.
+GETSPACE DOC  Documentation for GETSPACE routine.
+HEAPSORT BAS  Demo of the HEAPSORT sorting algorithm.
+HEAPSORT DOC  Documentation for HEAPSORT.BAS
+INKEY    BAS  Name/address data base program.
+INKEY2   BAS  Demo program like INKEY.BAS.
+JOYSTIK  BAS  Program to watch the joystick ports.
+JULIAN   BAS  Converts dates.
+JULIAN   DOC  Documentation for JULIAN.BAS
+NUM2WORD BAS  Convert numbers to words.
+PAK-DATE BAS  Subroutines can pack a 6 byte date into a 2 byte integer.
+PRTSC    BAS  Routine to print the screen from a basic program.
+QCLEAR   BIN  machine code for screen-clearing routine
+QPRINT   BIN  machine code for quick print routine
+QPRINTC  BIN  same, but for compiled programs
+QSORT    BAS  Quicksort algorithm demonstration.
+QUICKC   BAS  Quick printing routine.
+READ_DIR BAS  Demo of READ_DIR.SUB.
+READ_DIR SUB  Read directory from within BASIC program.
+SCRLDEMO BAS  Screen scrolling demo.
+SCRN-DOC      Documentation for the next three files.
+SCRN-WK  BAS  Create and save screens.
+SCRN-GET TWO  A BASIC program to demonstrate screen swapping.
+SCRNSLGR DEM  A BASIC program that draws and swaps two screens.
+SCRNDUMP BAS  Routine to print an image of the graphics screen.
+SCROLL   BAS  Subroutine to be used with a BASIC program to perform
+               screen scrolling in a specified window.
+SCROLL   BLD  BLOAD version of SCROLL.BAS
+SCROLL   DOC  Documentation for SCROLL.BAS
+SETMEM   BAS  Routine to set memory from BASIC.
+SHELSORT BAS  Shell sort routine.
+SHORTSUB BAS  Collection of menu driven subroutines.
+SPLTSCRN BAS  Splits the screen at horizontal dividing line location.
+TIMER    BAS  Times invoked from the system timer to 1/100th of a second.
+TIMER    RTN  Routine for TIMER.BAS.
+UPCASE   BAS  Routine to change lowercase to uppercase.
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## FIND-DS.BAS
 
+{% raw %}
 ```bas
 1 REM this finds the value of BASIC/BASICA'S data segment. useful for determining
 2 REM absolute location of a variable, file buffer, etc.
@@ -377,9 +687,179 @@ machines:
 100 CALL SUBRT(A%) 'give back ds
 110 PRINT "data segment=";HEX$(A%)
 ```
+{% endraw %}
+
+## GETSP.ASM
+
+{% raw %}
+```
+ ; GETSPACE
+ ;
+ ; THIS ROUTINE COMPUTES USUABLE SPACE
+ ; AVAILABLE ON
+ ; DISKETTE OR HARD DISK AND IS CALLED
+ ; FROM BASIC
+ ;
+ ; WRITTEN BY HOWARD GLOSSER
+ ;
+CSEG                SEGMENT
+GETSPACE            PROC FAR
+          ASSUME    CS:CSEG
+          PUSH      BP
+          MOV       BP,SP
+          MOV       BX,[BP]+6
+          MOV       DI,2[BX]
+          MOV       CX,8
+          MOV       AL,' '
+          CLD
+          REP       STOSB
+          MOV       BX,[BP+8] 
+          MOV       SI,2[BX]
+          MOV       AX,[SI]
+          AND       AL,0DFH
+          CMP       AL,41H
+          JGE       CKVER
+          JMP       EXITSPC
+CKVER: 
+          PUSH      AX
+          MOV       AH,30H
+          INT       21H
+          XCHG      AL,AH
+          CMP       AX,0200H
+          JB        SYSDRV
+          JMP       SPACE20
+SYSDRV: 
+          MOV       AH,19H
+          INT       21H
+          POP       DX
+          XOR       DL,40H
+          DEC       DL
+          CMP       AL,DL
+          JE        GETFAT
+          PUSH      AX
+          PUSH      DX
+          MOV       AH,0EH
+          INT       21H
+          POP       CX
+          POP       DX
+          INC       CL
+          CMP       CL,AL
+          JBE       GETFAT
+          JMP       EXITSPC
+GETFAT: 
+          PUSH      DX
+          MOV       AH,1BH
+          INT       21H
+          POP       AX
+          PUSH      DX
+          XCHG      AL,DL
+          MOV       AH,0EH
+          INT       21H
+          POP       DX
+          MOV       DI,BX
+          MOV       AL,BYTE PTR[DI]
+          MOV       SI,CX
+          CMP       AL,0FEH
+          JE        SNGLSIDE
+          SHL       SI,1
+SNGLSIDE: 
+          ADD       DI,3
+          MOV       CX,DX
+          XOR       AX,AX
+          XOR       DX,DX
+                                    ;WORD
+          PUSH      AX
+          PUSH      DX
+SCANFAT: 
+          MOV       AX,[DI]
+          INC       DI
+          AND       AX,0FFFH
+          CMP       AX,00H
+          JNE       NEXTENT
+          CLC 
+          POP       DX
+          POP       AX
+          ADD       AX,SI
+          JNC       STRSPC1
+          INC       DX
+STRSPC1:
+          PUSH      AX
+          PUSH      DX
+NEXTENT: 
+          DEC       CX
+          JCXZ      END1
+          MOV       AX,[DI]
+          ADD       DI,2
+          PUSH      CX
+          MOV       CL,4
+          SHR       AX,CL
+          POP       CX
+          CMP       AX,00H
+          JNE       NOTAVAIL
+          CLC 
+          POP       DX
+          POP       AX
+          ADD       AX,SI
+          JNC       STRSPC2
+          INC       DX
+STRSPC2: 
+          PUSH      AX
+          PUSH      DX
+NOTAVAIL: 
+          LOOP      SCANFAT
+END1: 
+          MOV       AX,ES
+          MOV       DS,AX
+          JMP       ENDSPC
+SPACE20: 
+          POP       DX
+          XOR       DL,40H
+          MOV       AH,36H
+          INT       21H
+          CMP       AX,0FFFFH
+          JE        EXITSPC
+          XOR       DX,DX
+          MUL       CX
+          XCHG      BX,CX
+          MUL       CX
+          PUSH      AX
+          PUSH      DX
+ENDSPC: 
+          MOV       BX,[BP]+6
+          MOV       DI,2[BX]
+          ADD       DI,7
+          POP       DX
+          POP       AX
+HEXTODEC: 
+          MOV       SI,10
+          PUSH      AX
+          MOV       AX,DX
+          XOR       DX,DX
+          DIV       SI
+          POP       CX
+          PUSH      AX
+          MOV       AX,CX
+          DIV       SI
+          POP       SI
+          OR        DL,30H
+          MOV       BYTE PTR[DI],DL
+          DEC       DI
+          XCHG      DX,SI
+          OR        AX,AX
+          JNZ       HEXTODEC
+EXITSPC: 
+          POP       BP
+          RET       4 
+          RET 
+GETSPACE            ENDP
+CSEG                ENDS
+END 
+```
+{% endraw %}
 
 ## GETSP.BAS
 
+{% raw %}
 ```bas
 70 CLS
 80 PRINT "CREATING GETSPACE SUBROUTINE...": PRINT
@@ -437,9 +917,11 @@ machines:
 730 DATA  79, 135, 214,  11, 192, 117, 227,  93, 1068
 740 DATA 202,   4,   0, 203,   0,   0,   0,   0, 409
 ```
+{% endraw %}
 
 ## GETSP1.BAS
 
+{% raw %}
 ```bas
 50 KEY OFF
 60 DEF SEG
@@ -473,9 +955,41 @@ machines:
 500 KY$=INKEY$: IF KY$="" THEN 500
 510 RETURN
 ```
+{% endraw %}
+
+## GETSPACE.DOC
+
+{% raw %}
+```
+GETSP    ASM     3947   4-25-84   1:54p - ASSEMBLER CODE FOR GETSPACE
+                                          ROUTINE IN APRIL 1984 SOFTALK - TO
+                                          BE USED WITH THE BASIC COMPILER
+                                          - NOT TO BE USED WITH INTERPRETER
+GETSP    BAS     2304   4-25-84   2:55p - BASIC SOURCE CODE TO CREATE THE
+                                          BLOAD MODULE OF GETSPACE
+GETSP1   BAS     1024   4-25-84   2:58p - SAMPLE DEMO OF GETSPACE ROUTINE
+                                          - DO NOT USE WITH INTERPRETER
+                                          - CODE FOR BASIC COMPILER
+GETSP1   EXE     2048   4-25-84   2:58p - EXECUTE MODULE FOR SAMPLE DEMO
+                                          OF GETSPACE ROUTINE
+GETSPACE          256   4-25-84   2:56p - BLOAD MODULE CREATED BY PROGRAM
+
+GETSPACE ROUTINE FROM APRIL 1984 SOFTALK MAGAZINE MODIFIED TO BE USED
+WITH THE BASIC COMPILER.
+
+             IF YOU HAVE ANY QUESTIONS PLEASE CONTACT
+                 BILL SULLIVAN
+                 AT B.P. HUDDLESTON & CO., INC.
+                    1111 FANNIN STREET, SUITE 1500
+                    HOUSTON, TEXAS  77002
+                    (713) 658 - 0248   BETWEEN 7 A.M.  AND 4 P.M.
+
+```
+{% endraw %}
 
 ## HEAPSORT.BAS
 
+{% raw %}
 ```bas
 100 CLEAR 5000
 110 CLS               ' Sort Program     Heap Sort
@@ -557,9 +1071,22 @@ machines:
 720 PRINT"Enter a stop code to indicate the end of list"
 740 RETURN
 ```
+{% endraw %}
+
+## HEAPSORT.DOC
+
+{% raw %}
+```
+
+HEAPSORT.BAS is a demo of the HEAPSORT sorting algorithm.
+
+
+```
+{% endraw %}
 
 ## INKEY.BAS
 
+{% raw %}
 ```bas
 1 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 2 ''      ULTIMATE INKEY      (C) COPYRIGHT  1983     NELSON FORD         ''
@@ -686,9 +1213,11 @@ machines:
 3000 '
 3010 GOTO 700
 ```
+{% endraw %}
 
 ## INKEY2.BAS
 
+{% raw %}
 ```bas
 1 '                           INKEY DEMO
 2 '                     (C) 1984   NELSON FORD
@@ -849,9 +1378,11 @@ machines:
 1480 RETURN
 1490 LOCATE 10,Z: PRINT I: FOR J=1 TO 5: LOCATE 10+J,Z: PRINT DTA$(I,J): NEXT:       RETURN
 ```
+{% endraw %}
 
 ## JOYSTIK.BAS
 
+{% raw %}
 ```bas
 10 REM Program to watch the joystick ports
 20 REM Will Fastie - 23 Dec 81
@@ -864,9 +1395,11 @@ machines:
 90 LOCATE 10,1: PRINT USING F$;AX,AY,AT,BX,BY,BT
 100 GOTO 70
 ```
+{% endraw %}
 
 ## JULIAN.BAS
 
+{% raw %}
 ```bas
 10 'GREGORIAN->JULIAN->ORDINAL AND ORDINAL->JULIAN->GREGORIAN CONVERSION
 20 '(1)  <Month_name> 3 letters to full name with space terminator. <Day-no.>
@@ -982,9 +1515,22 @@ machines:
 1120 IF EFLAG = 1 THEN PRINT "HEX NO. ERROR"
 1130 RETURN
 ```
+{% endraw %}
+
+## JULIAN.DOC
+
+{% raw %}
+```
+
+CONVERTS DATES TO/FROM JULIAN, GEORGIAN, ETC.
+
+
+```
+{% endraw %}
 
 ## NUM2WORD.BAS
 
+{% raw %}
 ```bas
 1 REM IBM PC ------- NUM-WORD ---------
 2 REM VERSION$= "V1.2"    '8/14/82
@@ -1033,9 +1579,11 @@ machines:
 5210 DATA TWENTY,THIRTY,FORTY,FIFTY,SIXTY,SEVENTY,EIGHTY,NINETY
 5220 DATA ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,ELEVEN,TWELVE,            THIRTEEN,FOURTEEN,FIFTEEN,SIXTEEN,SEVENTEEN,EIGHTEEN,NINETEEN
 ```
+{% endraw %}
 
 ## PAK-DATE.BAS
 
+{% raw %}
 ```bas
 10 ' DATPAK.BAS Written by Kurt Riegel, Arlington VA  (703-522-5427) Oct 1983
 20 ' These subroutines can pack a 6 byte date into a 2 byte integer, and
@@ -1070,18 +1618,22 @@ machines:
 310 ND%= (31+ND% MOD 31) MOD 31:M$=STR$(1+ND%):M$=RIGHT$(M$,LEN(M$)-1)
 320 D$=RIGHT$(D$+RIGHT$("00"+M$,2),6):RETURN
 ```
+{% endraw %}
 
 ## PRTSC.BAS
 
+{% raw %}
 ```bas
 1 '   PrtSc = Routine to print the screen from a basic program    12-4-82
 501 DIM Z.%(1):Z.%(0)=&H5CD:Z.%(1)=&HCB  ' Create tiny machine language program
 503 Y.%=VARPTR(Z.%(0)):CALL Y.%         ' Call it to print screen
 505 ERASE Z.%:RETURN            ' Erase it & return
 ```
+{% endraw %}
 
 ## QSORT.BAS
 
+{% raw %}
 ```bas
 10 ''       QUICKSORT SORTING ALGORITHM DEMONSTRATION
 20 ''               NELSON FORD  APRIL 1984
@@ -1155,9 +1707,11 @@ machines:
 690 SWAP DTA$(I), DTA$(J): PRINT TAB(27)"SWAP " DTA$(J)   " AND " DTA$(I)
 700 GOSUB 330: RETURN
 ```
+{% endraw %}
 
 ## QUICKC.BAS
 
+{% raw %}
 ```bas
 10 '** QUICK.BAS **
 11 'RELATED FILES:  QCLEAR.BIN   machine code for screen-clearing routine
@@ -1187,9 +1741,11 @@ machines:
 240 ROW=6:  COL=5
 250 RETURN
 ```
+{% endraw %}
 
 ## READ_DIR.BAS
 
+{% raw %}
 ```bas
 1 DEFINT A-Z
 100 DIM READ.DIR.CODE%(40), DIR.ENTRY%(40)  'move this line to start of pgm.
@@ -1280,9 +1836,11 @@ machines:
 950 DATA &H5D
 960 DATA &HCA,&H0A,&H00
 ```
+{% endraw %}
 
 ## SCRLDEMO.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:WIDTH 80:SCREEN 0,0,0:COLOR 7,0:CLS: PRINT
 20  PRINT"                     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -1350,9 +1908,11 @@ machines:
 640 OUT 980,12:OUT 981,IH:OUT 980,13:OUT 981,IL
 650 IF X$ <> ES$ THEN 570
 ```
+{% endraw %}
 
 ## SCRN-WK.BAS
 
+{% raw %}
 ```bas
 5 CLS:LOCATE 4,1:GOSUB 62180
 10 PRINT"          ╔══════════════════════════════════════════════════════╗"
@@ -1405,9 +1965,11 @@ machines:
 62190 DEF SEG: RETURN
 62199 '************************************************************************
 ```
+{% endraw %}
 
 ## SCRNDUMP.BAS
 
+{% raw %}
 ```bas
 1 ' SCRNDUMP = Routine to print an image of the graphics screen  Jess B. Scott
 2 ' Requires an IBM or EPSON printer with the graphics option.
@@ -1483,9 +2045,11 @@ machines:
 660 NEXT J
 670 LPRINT CHR$(27);"@";TIME$
 ```
+{% endraw %}
 
 ## SCROLL.BAS
 
+{% raw %}
 ```bas
 100 '**************************************************************************
 110 '*                                                                        *
@@ -1574,9 +2138,11 @@ machines:
 940 DATA  &HCD,&H10:'           INT     10      ;SCROLL THE WINDOW
 950 DATA  &HCB:'                RETF            ;RETURN TO SENDER
 ```
+{% endraw %}
 
 ## SETMEM.BAS
 
+{% raw %}
 ```bas
 1 'ROUTINE TO SET MEMORY FROM BASIC
 2 '
@@ -1599,9 +2165,11 @@ machines:
 170 ' (still must reboot to let DOS adjust)
 180 END
 ```
+{% endraw %}
 
 ## SHELSORT.BAS
 
+{% raw %}
 ```bas
 1 '''''''''Shell Sort routine
 2 '
@@ -1639,9 +2207,11 @@ machines:
 530 NEXT X
 540 END
 ```
+{% endraw %}
 
 ## SHORTSUB.BAS
 
+{% raw %}
 ```bas
 100 REM 	--- SHORTSUB ---
 110 REM 	BY D.G. PATTERSON
@@ -1898,9 +2468,11 @@ machines:
 9795 '          SUBROUTINE IS    SUB-J          HIT  F7 KEY
 9799 END
 ```
+{% endraw %}
 
 ## SPLTSCRN.BAS
 
+{% raw %}
 ```bas
 10  REM SPLTSCRN.BAS-Splits the screen at horizontal dividing line location             of your choice and scrolls each window up or down at your choice. The           program is modified from pg.110 of Feb.83 issue of `SOFTALK/PC'
 20  REM This program is set up as a demo, but by changing the appropriate vari          ables, you can change the size & location of the windows and the number         of lines scrolled each time scrolling occurs
@@ -1968,9 +2540,11 @@ machines:
 640    REM Run until any key hit then list to play around again!
 650 X$=INKEY$:IF X$="" THEN 540 ELSE LIST
 ```
+{% endraw %}
 
 ## TIMER.BAS
 
+{% raw %}
 ```bas
 100 '**************************************************************************
 110 '*** Accurate time by Rob Ryan 10-9-82                                    *
@@ -1995,9 +2569,11 @@ machines:
 300 DATA &H7E,&HA,&H88,&HD,&H8B,&H7E,&H8,&H88,&H35,&H8B,&H7E,&H6,&H88,&H15
 310 DATA &H5D,&HCA,&H8,&H0,&HBB5
 ```
+{% endraw %}
 
 ## UPCASE.BAS
 
+{% raw %}
 ```bas
 1 '  UPCASE = Routine to change all lowercase letters in CS$ to uppercase                 11/4/82         John Sigle
 5 '
@@ -2018,6 +2594,7 @@ machines:
 407  IF O%>96 AND O%<123 THEN MID$(CS$,K%,1)=CHR$(O%-32)
 409 NEXT K%       :RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

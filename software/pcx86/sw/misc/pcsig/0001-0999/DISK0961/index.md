@@ -46,6 +46,7 @@ machines:
 
 ## DOC.BAS
 
+{% raw %}
 ```bas
 5 KEY OFF:  INPUT "What is today's date (mm/dd/yy)";TODAY$:DATE$=TODAY$
 10 CLS:PRINT "This program assumes that you have a printer with continuous"
@@ -64,9 +65,738 @@ machines:
 1010 LPRINT "Mini-Manual"; TAB(55); "Page "; PG.CNT:PG.CNT=PG.CNT+1
 1020 LPRINT:LPRINT:LINES =3:RETURN
 ```
+{% endraw %}
+
+## FILES961.TXT
+
+{% raw %}
+```
+Disk No  961
+Program Title: MINI MINDER version 1.0 INVENTORY SORT version 1.0
+PC-SIG version 1
+ 
+    MINI MINDER is a simple rental property management system that tracks
+information such as size (or other description), rate, various tenant data,
+payment records, and expense of operation on about 400 units. It also
+performs other tasks, such as producing mailing labels in record sequence
+and billing tenants. In the reports, Menu 1 can do daily reports, list all
+outstanding units (those who have not paid yet), view the status on a
+single unit, or list the status of all units. MINI-MINDER was written
+specifically for miniwarehouse or locker rental operators, but it takes
+little imagination to adapt its fixed format to practically any rental
+property-scheme.
+ 
+    INVENTORY SORT handles multiple inventory lists which may have up to
+1000 part types in each. It can maintain 5 fields of information per part
+type, includeing part number, part name, quantity, location, and cost.
+INVSORT1 is a modification of INVSORT in that it allows the input of
+wholesale and retail cost values. The program can sort records
+alphabetically, numerically, or by location. You can easily update and
+delete part types, and get a formatted printout of the inventory list.
+ 
+Usage: Information Retrieval / Rental Database
+ 
+System Requirements: 128K memory, one disk drive and a version of BASIC.
+ 
+How to Start: Type: INVSORT (press return), or type INVSORT1 (press
+return) for INVENTORY SORT, or COPY MINI.DOC LPT1: (press enter) to get
+instructions for running MINI MINDER.
+ 
+Suggested Registration: $25 for INVENTORY SORT and $50 for MINI MINDER.
+ 
+File Descriptions:
+ 
+-------- ---  INVENTORY SORT
+MENU     BAT  Batch file containing program information.
+MANUAL   BAT  Batch file for printing INVSORT.DOC.
+DATASHT  BAT  Batch file for printing DATASHT.ASC.
+INSTALL  BAT  Batch file to install program on a hard disk.
+INVSORT  DOC  Documentation.
+DATASHT  ASC  Inventory datasheet.
+INVSORT  EXE  Main program.
+INVSORT1 EXE  Modified version of INVSORT.EXE.
+#GE           Data file.
+DISKLABL COM  Prints a disk label for this program.
+-------- ---  MINI MINDER
+MINI     BAS  Main BASIC program.
+README        How to get started.
+WHLABELS BAS  Produces mailing labels.
+DOC      BAS  Prints documentation and installs program.
+MINI     DOC  Documentation.
+ 
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale, Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+## INVSORT.DOC
+
+{% raw %}
+```
+ 
+
+
+
+
+
+
+
+                        INVENTORY SORT
+
+
+              written by William T. Schrader Sr.
+
+
+
+
+
+                     GOOSE LAKE SOFTWARE
+                        P. O. Box 749
+                     Lakeview, Or. 97630
+
+
+
+
+
+
+                     COPYRIGHT:
+
+Manual and software copyrighted (c) 1987, by William T.
+Schrader Sr.  All rights reserved.  Parts of this software
+were created using the QUICKBASIC (TM) compiler.
+
+
+
+
+                     DISCLAIMER:
+
+The author or distributor of this software shall not be held
+responsible for its use.  The user assumes all risk of its
+use.
+
+
+                     SHAREWARE
+
+This program is distributed as user supported software.
+A registration fee of $25.00 is requested, if the program is
+going to be utilized.  Please send to the above address.
+
+All communication to Goose Lake Software regarding this
+program should be directed to:  Bill Schrader, Box 749,
+Lakeview, Or.  97630.  (503)947-4513
+
+Users of this software are encouraged to re-distribute this
+program, along with the accompaning files, to other potential
+registered users.  Use the DISKLABL.COM program to print disk
+labels on an Epson compatible printer.  Label results on other
+printers may be erratic.
+
+
+
+
+
+
+
+
+
+
+                     INTRODUCTION
+
+     Minimum equipment needs:  IBM PC or compatible, 128K
+memory, 1 disk drive, MS/DOS, PC/DOS ver 2.0 and up.
+
+     The inventory sort program is designed to handle
+relatively small (up to 1000 part types) inventory lists, in
+the easiest possible manner.  Multiple lists may be kept, as
+long as the limit of 1000 part types is observed.  The
+program will maintain 5 fields of information per part type
+(part number, part name, quantity, location, and cost) and
+will sort the list three different ways.  It provides easy
+update and deletion of part types, and a formatted printout
+of the inventory list.  A disk file is kept during data entry
+so that data entry may be stopped and resumed at any time.
+The current inventory list is kept in memory, which makes
+the sort feature of the program extremely fast.  The program
+will sort alphabetically,numerically, and by location.  This
+program will be particularly useful to small business that
+needs to keep an assortment of small parts (nuts and bolts in
+labeled bins for example), and inventory them each year.  The
+sorted lists will allow easier access to the parts, as well as
+a starting point for the next inventory.
+
+
+INVSORT1 - A modification to the invsort program is included on
+this disk.  It works the same as described in the documentation,
+except it allows the input of wholesale and retail cost values.
+This version limits the part number to a 9 character string, and
+the part name to 10 characters.  To run this version of the program,
+type INVSORT1.
+
+
+
+
+                     PROGRAM DISKETTE
+
+     The inventory Sort Program Diskette is not copy
+protected for the convenience of our users.  It is a
+machine language program and is self running from the MSDOS
+system prompt.  (No other support program is needed.) Prior
+to starting the program, make a backup diskette as follows:
+
+1.  Format a new diskette using the system and volume
+options.
+    A> FORMAT B:/S/V  <ENTER>
+
+     After format is complete, a volume label will be
+requested.  Use:  INVSORT  <ENTER>
+
+2.  Copy the program diskette to this new INVSORT disk.
+Remove the DOS diskette from drive a: and insert the program
+diskette.
+    A> COPY A:*.* B:  <ENTER>
+
+     Note:  You could also copy any other files that are
+necessary to make the disk self booting.  (ei; autoexec.bat,
+config.sys, ansi.sys, mode.exe, etc.)
+
+     Remove both disks from the computer and store the
+furnished program disk in a safe place.  Use the backup disk
+you just made to run the program.
+
+
+
+                     HARD DISK USERS
+
+     The program disk contains a program called INSTALL.BAT,
+which will install the program on the hard disk for you, in a
+sub-directory called INVSORT. Insert program disk in drive A.
+
+    C> A:INSTALL  <ENTER>  creates directory and copies files
+
+    C> CD \INVSORT <ENTER>  changes to the invsort directory
+
+
+
+    C> INVSORT  <ENTER>  will start the program to run
+
+
+
+                     PROGRAM EXECUTION
+     This program is friendly to the point that
+everything is asked for prior to input.  It has a main menu
+which allows six choices.  a menu selection is made by simply
+pressing the appropriate key.  (1,2,3,4,5, or any other key)
+
+Have the backup program in the drive that it is going to run
+from.  Either A drive or C drive.
+
+     type  A> INVSORT  <ENTER>  floppy disk users
+                 or
+           C> INVSORT  <ENTER>  if using a hard disk
+
+After the title and copyright notices, the screen will clear,
+and the data drive will be asked for:
+
+     WHAT IS YOUR DATA DRIVE ? (A,B, or C) _
+
+A  <ENTER>
+     Enter an A if you have a single drive system, or if you
+wish to keep your data list on the backup program disk.  You
+may remove the program disk at this time and substitute a
+formatted data disk if you wish.
+
+B  <ENTER>
+      Enter a B if you have dual disk drives, and wish to
+keep your data on a formatted data disk in drive B.
+
+C  <ENTER>
+     Hard disk users may keep the data in the same directory
+as the program if they want to.
+
+The main menu will now appear:
+
+                         ********   MENU  ********
+
+                  DATA INPUT    = 1           CORRECTIONS = 4
+
+                  SORT & PRINT  = 2           SAVE SORT   = 5
+
+                  GET DATA      = 3           OTHER KEY   = END
+
+
+1.  DATA INPUT
+
+     The data input routine is the only method of entering
+data into an inventory list.  The list may be a new list (in
+which case you have to assign a file name) or a list which
+you previously started.
+
+At the main menu, depress the 1 key and the computer will
+clear the screen and display the following:
+
+             TODAYS DATE IS  XX-XX-XX
+
+
+        FILE NAME TO RETRIEVE ? _
+
+
+
+
+
+OLD FILE
+     Type in and enter the name of a file which exists, and
+is in your data drive.  The computer will retrieve that file.
+During retrieval, the following will be displayed:
+
+          GETTING PART NUMBER XXXXXXX     MEMORY  XXXXX
+
+When the file has been retrieved, the screen shows:
+
+                  (file name) IN MEMORY
+
+     The screen will now clear and go into the input routine
+as described below under NEW FILE, except the file # will be
+the next available file number.
+
+NEW FILE
+     Type in the name of a file you wish to create, and the
+file will be opened and set up on the data disk.  If you just
+hit <enter> you will be asked for a file name to create.
+File names may be up to 8 characters in length, plus a 3
+character extension.  Case is unimportant, as only upper case
+is recognized.  DO NOT USE SPACES IN A FILE NAME.  USE THE
+UNDERLINE (_) CHARACTER TO SIMULATE A TWO WORD NAME.
+
+After the file has been opened on disk, the message:
+
+              (file name) IN MEMORY
+will appear.
+
+NOTE:  The program disk contains a file #GE, which is a
+sorted file.  Use this file as practice to retrieve and add
+to or update.
+
+
+
+
+The screen will then show the following:
+
+     FILE # 1                      FREE BYTE = XXXXX
+PART NUMBER _
+
+Enter a part number up to 10 characters in length.  Any
+combination of letters and numbers is acceptable.
+
+NAME _
+
+Enter a part name up to 15 characters in length.  Any
+combination of characters is acceptable.
+
+LOCATION _
+
+Three letters and/or numbers may be used.
+
+
+
+QUANTITY _
+
+The maximum quantity which may be entered is 9999.  Only
+numbers may be entered.
+
+$ COST _
+
+The maximum allowable cost is $99,999.99.  Do not enter a
+$ sign, it will be added by the computer.. Use a decimal
+point (.) to denote cents.  A whole number will be dollars
+with no cents.  Example:
+
+1123  <ENTER>  =  $1123.00
+11.23 <ENTER>  =  $11.23
+
+
+              The screen will display the data.
+
+
+IS THIS DATA CORRECT ? (Y or N)
+
+Y  (yes) will repeat the process, except the file will be
+file # 2>
+
+N  (no)  will ignore all of the data you just entered and
+repeat the process for file # 1.
+
+
+NOTE: - The FREE BYTE message on the screen indicates how much
+is left to use for the inventory list.  Keep a close watch on this
+when the numbeer bets small, soo that your inventory list will
+fit into available memory.
+
+
+SUGGESTION - Since the parts list is limited to approximately 1000
+part types, you should consider ahead that if you are going to be
+adding to the list, you need to leave some room, and divide the list
+up a different way.
+ei:
+
+
+
+
+                     ENDING THE DATA INPUT SESSION
+
+     Enter a null string (see below) as a part number will
+end the input session and go to the main menu.
+
+PART NUMBER _ <ENTER>  (simply press enter)
+
+     The total parts entered and their corresponding value
+will be displayed prior to returning to the menu.
+
+
+DEFINITION:  A null string is nothing.  It is not a space, or
+a 0, or anything else, simply nothing.  To enter a null
+string, simply press enter before any other keys.
+
+HINT:  Press the NUMLOCK key to use the numeric keypad.  The
+numeric keypad will greatly increase the efficiency that
+numbers can be entered.
+
+
+
+
+
+
+
+
+                     SORT & PRINT
+
+     Selecting 2, the sort & print option from the main menu
+will bring up the following menu:
+
+
+
+             1 = SORT PART NUMBERS IN ASCENDING ORDER
+
+             2 = SORT PART NAMES IN ALPHABETICAL ORDER
+
+             3 = SORT PARTS BY LOCATION
+
+             4 = PRINT LISTING
+
+             5 = RETURN TO MAIN MENU
+
+
+
+1. Sorts the inventory list currently in memory by part
+number in ascending order, then use 4 Print, to print the
+list.
+
+2. Sorts the inventory list currently in memory by part name
+alphabetically, then use 4 Print, to print the list.
+
+3. Sorts the inventory list currently in memory alpha-
+numerically by location.  This is useful as a listing from
+which you can re-inventory, and know what to expect at each
+location.  Use 4 Print, to print this list.
+
+4. This selection prints whatever list is currently in
+memory, including your initial unsorted list to use for
+back checking purposes.  This selection shows:
+
+            SET PAPER TO TOP OF PAGE
+
+            PRESS ANY KEY WHEN READY
+
+then:
+
+     SINGLE or DOUBLE SPACE (ENTER 1 or 2) ?
+
+Entering a 1 prints 50 parts per page single space, and a 2
+prints 25 parts per page double space.
+
+5. Returns to main menu without doing anything.
+
+NOTE:  The sort process takes approximately 1 minute to sort
+1000 parts. During the sort a PASS # and a Y number will be
+displayed.  This indicates what division of the list it is
+sorting.  When Y=1, it is on the last pass.  The order of
+sorting is as follows:
+Numbers, Upper case letters, Lower case letters
+Symbols may be intermixed depending on their ASCII code
+
+
+
+
+
+
+
+
+
+                     GET DATA
+
+     The get data routine retrieves data from a previously
+saved file.  It would be used primarily to make CORRECTIONS,
+or re-sort and reprint a listing.  You may go into the data
+input routine from the main menu without clearing the data
+you retrieved.
+
+     The procedure is the same as described in the data input
+routine.
+
+
+The GET DATA routine (3 on the main menu) has
+changed slightly.  When it is selected, the files available
+for retrieval on the data disk are displayed across the top
+of the screen.  These are files which were previously saved
+with this program.
+
+ALSO - If you have been working on a file which is in memory,
+and you wish to start a new file without leaving the program
+and restarting, use the GET DATA selection from the main
+menu.  At the point where "Enter file name to retrieve " is
+asked for, enter the name of a new file.  This will create a
+new file and you can go to the INPUT DATA routine and start
+at file #1.
+
+
+
+                     CORRECTIONS
+
+     The corrections routine allows you to update, or delete
+parts from the inventory list in memory.  Prior to using this
+option you must have retrieved a file either through the get
+data or data input routines.
+
+     ENTER A 0 FOR FILE NUMBER TO TERMINATE CORRECTIONS !
+
+FILE # FOR CORRECTION ? _
+ Enter any valid file # and the following will appear:
+
+
+               Screen shows formatted data.
+
+
+
+You may now enter the correct data for that particular file.
+
+Entering a null string will not change the original data in
+the file.  Only entering new data will update the file.
+
+
+
+
+                     DELETING PARTS
+     To delete a part from the inventory list, enter a 0 for
+quantity.  Any part with a 0 quantity will be removed from
+the list when the corrections routine is terminated.
+
+
+
+
+
+
+
+
+
+
+                     TERMINATING CORRECTIONS
+     To terminate corrections, and return to the main menu,
+enter a 0 when file # is asked for.  The inventory list will
+then be reevaluated, and all parts with 0 quantity will be
+removed.  This will take varying amounts of time depending on
+how many parts are to be removed from the list.
+
+
+
+
+                     SAVE SORT
+
+     The save sort routine is used to save an inventory list
+that is currently in memory after it has been sorted.  You
+will be asked for a file name to save with.  A file name is a
+maximum of 8 characters long, plus a 3 character extension.
+
+Some examples:
+     YAMA_INP.DAT      An input data file, used to check against
+                          your input data list.
+     #GE               A general purpose file, no extension needed
+     TIRES.ALF         An alphabetically sorted file
+     HARDWRE.DA1       A file generated with invsort1
+
+
+                     END
+
+     This will end the program execution and return to the
+system prompt.
+
+ALWAYS USE THIS TO END YOUR SESSION, SO THAT ALL FILES WILL
+BE PROPERLY CLOSED.  IMPROPERLY CLOSED FILE MAY BE SCRAMBLED
+THE NEXT TIME YOU USE THEM.
+
+                     ERRORS
+
+     Sometimes errors can occur because of various reasons.  No
+data disk in the data drive for example.  When an error
+occurs, the screen will display:
+
+       USE <CTRL> C TO RETURN TO SYSTEM
+
+          FILE NAME TO CREATE ? _
+
+
+
+
+
+Hold down the <CTRL> key and press the C, key and you will
+return to the system prompt.  Correct the error and then
+restart the program.  All data in memory will be destroyed,
+but any data that is on disk will be intact, so you will need
+to get data to continue on.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thank you for using the INVSORT program.  This is
+a registration form you may use.  Please fill out
+this form, and send it along with $25.00 to
+
+              GOOSE LAKE SOFTWARE
+              P.O. BOX 749
+              LAKEVIEW, OR. 97630
+
+In return you will recieve a near letter quality
+copy of the documentation, software support services,
+and notification of future upgrades.
+
+             Thank you,
+
+                             Bill Schrader
+
+NAME: __________________________
+
+ADDRESS:________________________
+
+CITY:____________________   STATE:____     ZIP:__________
+
+PHONE:___________________
+
+Your computer type: __________________________________
+
+            memory: __________________________________
+
+       drive types: __________________________________
+
+
+List any improvements, or changes you would like to have:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                     INVENTORY INPUT DATA SHEET
+
+File Name_________________
+
+    (10)                (15)                (3)   (4)      (8)
+ Part Number          Part Name             Loc   Qty    $ Cost
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+              |                           |     |     |
+______________|___________________________|_____|_____|______________
+```
+{% endraw %}
 
 ## MINI.BAS
 
+{% raw %}
 ```bas
 5 GOSUB 6500
 10 INPUT "TODAY'S DATE IS: (MM/DD/YY)";TODAY$:IF TODAY$="" THEN TODAY$=LEFT$(DATE$,2)+"/"+MID$(DATE$,4,2)+"/"+RIGHT$(DATE$,2)
@@ -1016,9 +1746,363 @@ machines:
 6660 PRINT :PRINT :INPUT "Strike the Enter key";X
 6670 RETURN
 ```
+{% endraw %}
+
+## MINI.DOC
+
+{% raw %}
+```
+
+
+
+
+             THE MINI-MINDER MANUAL
+         
+             Jess Hillman
+             P.O. Box 642
+             Columbus, MS  39703
+             1-601-356-4966
+
+         
+         WHAT IS IT?
+
+         This program is a simple rental property management system, 
+         designed to track information such as size (or other 
+         description), rate, various tenant data, payment records, and 
+         expense of operation on about 400 units.  It will also 
+         perform some other tasks, such as producing mailing labels in 
+         record sequence and billing tenants.  
+
+         Mini-Minder was written specifically for use by miniwarehouse 
+         or locker rental operators, but it will take little 
+         imagination to adapt its fixed format to practically any  
+         rental property scheme.
+
+         To run this program you will need an IBM PC or compatible 
+         system with 128K, GW BASIC or BASICA, and two disk drives.  
+         Although I have run this program successfully on a PCJr and 
+         another system with only disk drive, it is not practical for 
+         the impatient--you will be swapping disks often.  The printer 
+         of your choice is a given.
+
+         The original version of this program adds some reporting 
+         functions, plus the ability to generate past due letters and 
+         notices of sale of property letters. These are generally site 
+         specific so I did not include them here--however, anyone 
+         purchasing this more advanced version can include with their 
+         order and $50.00 check the text they would like to use for 
+         these letters and I will customize the program for them.  I 
+         will also throw in one custom report function per order.  
+         Simply mail your money, appropriate data and the report 
+         output format you would like to follow to the address above.
+         For another $25.00 above each order, I will add or delete up 
+         to five data fields, and/or change any of the data fields in 
+         the basic format to suit a specific customer.
+
+         That's a lot of customizing for $75.00 grand total, although 
+         I honestly believe anyone can take the program as is and run 
+         successfully.  
+
+         For any programmers out there, I do have some GOTOs in this 
+         program and if they offend you...sorry.  I just couldn't 
+         resist the clarity of GO TO for some screen edits.  And if 
+         any of you want to come to Mississippi and buy me a beer and 
+         some catfish and hushpuppies, I'll be glad to explain EXACTLY 
+         why the program is structured the way it is.  I haven't seen 
+         very many interpreted programs around that took up 50K-plus 
+         of code.  The more advanced version mentioned above, when 
+         running, leaves a hair over 700 bytes of the 64K BASICA 
+         recognizes free, so you can appreciate my warning that 
+         attempting to follow the code around is not for the 
+         fainthearted.  The program does work, and I will cheerfully 
+         patch any serious bugs.  
+
+         
+         THE FILES AND WHAT THEY DO...
+
+         There are only two basic programs included on your disk: 
+         MINI.BAS and WHLABELS.BAS.  MINI contains the main program 
+         while WHLABELS is CHAINed from the main menu to produce 
+         mailing labels from your database.
+
+         There is a mandatory option on the main menu that you must 
+         take on startup that creates all your data files for you.  
+         These files include:
+
+                UNITS      (These 3 random access files contain basic
+                UNITS1      name/address type data on your tenants. 
+                UNITS2      Access is by unit number only.)
+
+                NUMUNITS    (Contains 1 record--how many units you 
+                             have for these data files)
+
+                B:JANUXX-B:DECEXX   (Records of income received and 
+                                       its source)
+
+                B:JANEXPXX-B:DECEXPXX  (Expense record record data)
+
+                B:DALY1XX-B:DALY12XX   (Daily report records by month)
+                                        NOTE: XX = Current Year
+
+         The three random access files handle the 362-byte record that 
+         is created for each unit.  I decided against setting switches 
+         and maintaining one file because of interpreted BASIC's 65K 
+         memory limit.  Setting switches would limit each file to 
+         about 180 units, and for most miniwarehouse and locker rental 
+         operations that is simply not sufficient--so extra coding 
+         would have been required anyway.  These three files, even at 
+         maximum size (somewhere around 450 units), take up only about 
+         half the space in a disk, so you could combine them and set 
+         up your system with DOS, BASICA, both WHLABELS.BAS and 
+         MINI.BAS on Drive A.
+         
+         All other files are sequential, and there are provisions for 
+         editing records in each of the income, expense and daily 
+         report files.  All the sequential records are kept in drive 
+         B: and judging from past experience it should be possible to 
+         keep two years' worth of records on a 250-unit operation 
+         quite easily on a 360K disk.  
+
+         
+         
+         GETTING STARTED...
+
+         During this discussion, which doubles as brief tutorial, I am 
+         going to assume you will have your programs and DOS on one 
+         disk and the UNITS files and other files on two other disks.
+
+         Please follow these steps:
+
+         1. After booting your system, with the appropriate DOS/BASICA 
+         disk in drive A, place the disk you have received in Drive B 
+         and, from the DOS A> prompt, type:
+                COPY B:*.*
+                and strike the ENTER key.
+         WARNING: This step will erase any existing AUTOEXEC.BAT files 
+         you have on your DOS disk.
+
+         2. Press Control-ALT-Delete to reboot the system.  This will 
+         run a documentation program which prints the manual, creates 
+         the new AUTOEXEC.BAT files and starts the program so you may 
+         create all your data files and begin using the system.
+
+         3. Place your original disk in a safe place and make backup 
+         copies of your program disks and both data disks.  I 
+         recommend at least two backup copies.
+
+         
+         ONCE IT'S RUNNING...
+
+         After the initial announcement screen, you will see a prompt 
+         asking you to fill in the date.  If you strike the ENTER key, 
+         the system will show you the current system date and plug in 
+         that value for the program.  If the date is not correct, the 
+         system offers you a chance to key in the date of your choice, 
+         which is then established as the current system date.
+
+         Next, you will be asked to remove the program disk and place 
+         the name and address data disk in Drive A.  When you strike 
+         any key next, the main menu appears on the screen.  Your 
+         choices from the menu are:
+
+                1. ADD NEW TENANT
+                2. EDIT CURRENT TENANT INFORMATION
+                3. GO TO REPORTS MENU
+                4. ENTER RENTAL PAYMENTS/OTHER INCOME
+                5. GO TO BILLING MENU
+                6. GO TO EXPENSE MENU
+                7. EDIT INCOME RECORDS
+                8. CHECKING ACCOUNT REVIEW
+                9. EDIT DAILY REPORTS
+                10. CREATE FILES FOR NEW CALENDAR YEAR
+                11. DO LABELS
+                12. END SESSION
+
+         Since you are starting up the system for the first time, and 
+         on the first business day of each calendar year for as long 
+         you use the program, take option 10.  Trying to run the system 
+         without doing this step will result in program errors.  When
+         you take it, the system responds: 
+
+         CREATE NAME AND ADDRESS FILES (IF STARTING UP FOR FIRST TIME 
+         ANSWER Y-(y/n)?
+
+         Key in a Y and strike the ENTER key.
+
+         PLACE BLANK FORMATTED DISK IN DRIVE A AND STRIKE ENTER?
+         ENTER NUMBER OF UNITS FOR THIS FILE?
+
+         These two prompts allow you to get the proper disk in drive A 
+         for the name and address files, and also to establish how 
+         many units you are going to be using from that point on 
+         whenever you run the program. UNDER NO CIRCUMSTANCES DO I 
+         RECOMMEND KEYING ANY NUMBER HIGHER THAN 450.  Remember, you 
+         are dealing with BASICA and its 65K limit here.
+
+         Once you key in the appropriate number of units, the system 
+         will create on the Drive A disk the files NUMUNITS, UNITS,
+         UNITS1, and UNITS2.  Depending on the number you key, it 
+         could take several minutes.  After it is through, it will 
+         repeat the process for the other data files which must be 
+         kept on Drive B.  The difference is you will be asked to key 
+         in the calendar year for which the files will be created, and 
+         you will be cautioned to make certain the disk on which the 
+         new files are created contains the files for December of the 
+         previous year (necessary for daily report generation).
+
+         
+         THE REST OF THE MAIN MENU...
+
+         You are now ready to begin working the menus in this program 
+         as you will during daily operation.  So, lets take the other
+         options one at a time.
+
+         1. ADD NEW TENANT.   Simply answer the prompts.  For each one 
+         you will be filling in a data field.  Here are the prompts 
+         and the maximum characters each will hold in parentheses:
+                UNIT NO.?(4)
+                UNIT SIZE? (5)
+                MONTHLY RENTAL? (7)
+                EXPECTED LENGTH OF RENTAL?(8)
+                TENANT'S NAME?(30)
+                SPOUSE'S NAME(30)
+                STREET ADDRESS #1? (30)
+                STREET ADDRESS #2? (30)
+                CITY? (20)
+                STATE? (2)
+                ZIP CODE? (10)
+                PHONE NO.? (10)
+                EMPLOYED BY? (30)
+                WORK PHONE? (10)
+                DRIVERS LICENSE #? (30)
+                SPOUSE'S EMPLOYER? (30)
+                SPOUSE'S WORK PHONE? (10)
+                DATE PAYMENT DUE? (8)
+                CURRENT BALANCE $? (8)
+                DATE LAST PAID? (8)
+                IS UNIT PADLOCKED? (1)
+                TENANT'S LOCK CUT? (1)
+                NAME OF OTHER CONTACT, ETC.? (40)
+
+         After filling in these fields with the appropriate 
+         information you will be presented with a straightforward edit 
+         screen that numbers each field in allows you to key in the 
+         number of the field and then type in the correction needed.
+         Key in a "24" when all editing is done.
+
+         2. EDIT CURRENT TENANT INFORMATION.  Use this option to 
+         change previously-entered data in case a tenant moves, or 
+         changes jobs or gets a divorce, or whatever... You will be 
+         asked to key in the appropriate unit number and from that 
+         point you will see the same edit screen you used when the 
+         information was first keyed.
+
+         3. GO TO REPORTS MENU. By selecting this option you go to the 
+         reports menu, where, by selection, you can: 
+                1. Do Daily Reports...this option from the reports 
+                   menu gives you a vacancy report and optionally, a
+                   second listing of all units where you as landlord
+                   have padlocked or otherwise sequestered the 
+                   contents of a unit because of nonpayment of rent.
+                   There is also a summary report issued following
+                   these two reports that recaps receivables to date
+                   and other data such as number of units rented and
+                   the current state of the property checking account.
+                2. List All Outstanding Units...select this report any
+                   time to find out which tenants still owe you money.
+                   Right off the bat the program asks if you want 
+                   addresses printed.  If you do answer Y and complete
+                   address data will be included, otherwise you will
+                   receive the tenant's name only.
+                3. Current Status Of A Single Unit...You'll be asked 
+                   if you want hardcopy and the unit number.  What you 
+                   will see onscreen and on paper will look similar to
+                   your record edit screen from option 2 above.
+                4. List Status Of All Units...This summary asks if you 
+                   want addresses and prompts for a Y/N answer.  It 
+                   prints unit number, tenant name, current balance 
+                   whether or not the unit is padlocked.
+                5. All these options do plain vanilla reports, Option
+                6. 5 is an aging analysis, and the remainder offer 
+                7. predictable file dumps for income, expenses and 
+                8. daily reports.  In all these reports you will be
+                9. prompted for a month number.
+
+         4. ENTER RENTAL PAYMENTS/OTHER INCOME. First off the bat, 
+         answer the computer's question by telling it how many 
+         transactions you will be keying.  At the prompt, type in the 
+         complete month name in which the income was received.  Then 
+         you will be asked in turn the amount paid to you and the
+         source.  If it is straight rent, key the unit number, else 
+         pick one of the other listed codes.  You will be given a 
+         couple of chances to correct any keyboard errors before the 
+         transactions are applied to the name/address file and stored 
+         in the permanent files.  Pay attention to the keyboard 
+         prompts.
+         
+         5. GO TO BILLING MENU.  Once you move into this menu, you 
+         have four main functions available.
+                1. Print Trial Balance...a simple report that shows 
+                   you what the new balance for each unit will be 
+                   without changing any files.
+                2. Post Billing Information and Produce Bills...
+                   This option increments the current balance field
+                   by the amount shown in the rate field on all units,
+                   then comes back prints the bills, assuming that you
+                   use typewriter paper-sized continuous form 
+                   letterhead.  
+                3. Do Aging Analysis...Exactly the same as the reports
+                   menu option.
+                4. Produce Bill On Single Unit...I recommend running 
+                   this option prior to option two, since it will give
+                   you a chance to align your forms.
+
+         6. GO TO EXPENSE MENU...Options off this menu are simple.
+                1. Enter Operating Expenses...Keyboard activity here 
+                   is similar to the way you enter in income payments.
+                   You get plenty of edit screens and a mandatory 
+                   printout of all transactions entered.
+                2. Edit Expense Files...Just in case you goofed and 
+                   didn't catch it.
+                3. Produce YTD Expense Summary...I probably should 
+                   have put this on the reports menu.  There is some
+                   duplication of function between menus, as you
+                   may have noticed, but not a whole lot.
+                4. Dump Expense Data For Specific Month...Well, maybe
+                   more than meets the eye.
+
+         7.  EDIT INCOME RECORDS...
+         9.  EDIT DAILY REPORTS...
+                Both these options were included to allow a chance to 
+                edit these files after permanent storage had taken 
+                place.  Before using ANY edit feature of the program,
+                I suggest you dump the file so you will know exactly
+                which record needs editing.
+         
+         8.  CHECKING ACCOUNT REVIEW...No biggie here, this option 
+         just moves the single record in B:Chek out of the file so 
+         that it can be manually corrected if need be, or simply to
+         double check the amount.
+           
+
+
+
+
+
+
+
+
+
+          
+         
+
+
+```
+{% endraw %}
 
 ## WHLABELS.BAS
 
+{% raw %}
 ```bas
 90 INPUT "PLACE NAME AND ADDRESS DISK BACK IN DRIVE A AND STRIKE ENTER";X
 92 INPUT "PLACE LABELS IN PRINT AND STRIKE ENTER";X:LPRINT "NAME":LPRINT "ADDRESS 1":LPRINT "ADDRESS 2":LPRINT "CITY,STATE,ZIP":LPRINT:LPRINT
@@ -1057,6 +2141,7 @@ machines:
 200 FIELD #3,30 AS EP$,10 AS WP$,30 AS DL$,30 AS SPE$,10 AS SWP$,8 AS DD$,8 AS CURBL$
 205 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

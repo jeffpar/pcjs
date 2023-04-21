@@ -85,6 +85,113 @@ machines:
     ITA     <DIR> Directory containing all files for Index of Teaching Abili
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES649.TXT
+
+{% raw %}
+```
+Disk No  649
+Program Title: WALMYR PROGRAMS (Disk 2 of 2)
+PC-SIG version 1.1
+
+The WALMYR TEACHING ASSISTANT is for teachers, designed to automate test
+taking and grading, and thus reduce the amount of time it takes to prepare
+a course. It can prepare random quizzes from a pool of questions,
+administer quizzes, and grade each quiz for each student. You only need
+write the quiz once, and after that the program takes over. You can specify
+the number of times the students may retake a quiz. The program can prepare
+final grade reports, let students check their grades, and print graphs of
+test scores. It can also display and print text files, such as lecture
+notes, course syllabuses, notices, etc. The teacher has a master disk from
+which the course format is designed, while each student's record is kept on
+his own individual disk. Grades are collected by having the students turn
+in their disk after a number of exams or quizzes are completed. The master
+disk takes all data and updates the teacher's records. All records are
+password-protected, so a student's records can only be examined by the
+teacher and that student.
+
+The WALMYR INDEX OF TEACHING ABILITY analyzes a group of students'
+evaluations of the teacher's performance, based upon a questionnaire that
+comes with the program. It produces both an actual and adjusted report. The
+adjusted report is produced after the program eliminates students who
+scored lower or higher than the class average, both on an item as well as
+on a total-score basis. The program provides a report that shows the mean,
+range, and standard deviation, a count of students who graded higher or
+lower than normal, a count of total students who rated the course, and an
+estimate of how consistent the data is.
+
+Usage: Teaching Aids.
+
+System Requirements: 256K memory.
+
+How to Start: Type README (press enter).
+
+Suggested Registration: $139.95 for TEACHING ASSISTANT, $94.95 for INDEX of
+TEACHING ABILITY.
+
+File Descriptions:
+
+README   EXE  Program to display README
+README        How to get started
+WTA     <DIR> Directory containing all files for Teaching Assistant
+ITA     <DIR> Directory containing all files for Index of Teaching Ability
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## WTA.TXT
+
+{% raw %}
+```
+                   INSTRUCTIONS FOR USING WTA 
+
+
+  In  this  course  you  will  be  working with a computer system
+called the "Interactive Computer Examination Manager" or WTA.  It 
+will prepare and print all your homework assignments and it  will
+also  grade  them  for you.  It will do many other things to help 
+you master the materials in this  course,  so  please  take  good
+advantage of all the options that WTA makes available to you.
+
+  You will find that the WTA program is very easy to use, and the
+following are the step-by-step instructions that you will need in
+order to use the computer system.
+
+
+INSTRUCTIONS FOR USE ON A DUAL FLOPPY DRIVE SYSTEM
+
+  1. Go to the 'lab' and check out a copy of the WTA DISK.
+
+  2. Insert the WTA DISK in Drive A of the computer.
+
+  3. Insert your data disk in Drive B of the computer.
+
+  4. Turn on the computer (if the computer is already on, reboot
+     it by holding down the 'Ctrl' and 'Alt' keys and then tap
+     the 'Del' key.
+
+
+INSTRUCTIONS FOR USE ON A HARD DRIVE SYSTEM
+
+  1. Turn on the computer and when it gives you the cursor, issue
+     the  command, CD\WTA <cr>.  If the computer is already on,
+     issue the command, CD\WTA <cr>.
+
+  2. Insert your data disk in Drive A of the computer.
+
+  3. Issue the command, WTA <cr>.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0649
 

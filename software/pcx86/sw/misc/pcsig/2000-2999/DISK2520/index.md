@@ -14,6 +14,43 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2520.TXT
+
+{% raw %}
+```
+Disk No: 2520                                                           
+Disk Title: Reversi 4.0                                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Reversi                                                  
+Author Version: 4.1                                                     
+Author Registration: $15.00                                             
+Special Requirements: CGA, EGA, or VGA.                                 
+                                                                        
+Someone once said of the board game Othello, "it takes minutes to learn,
+but a lifetime to master!"  With REVERSI, a version of Othello developed
+by a nationally ranked player, this is clearly true.                    
+                                                                        
+Othello, a game of great tradition, is a cross between checkers and     
+backgammon.  REVERSI, this computerized version, will instruct the      
+beginner and challenge the master with hours of fun.  Three playing     
+levels and great graphics make it easy to learn, but difficult to       
+master.  What really sets REVERSI apart from other Othello games is it's
+extensive instruction on strategy.  Since the program was written by a  
+top 10 U.S. Othello Association player, you learn the game from a       
+master.                                                                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989-1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2520
 

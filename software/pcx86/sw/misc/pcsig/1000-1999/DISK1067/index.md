@@ -34,6 +34,56 @@ machines:
     reference guide for all DOS 3.2 commands.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1067.TXT
+
+{% raw %}
+```
+Disk No  1067
+Program Title: DOSHELP version 3.0
+PC-SIG version 1
+
+    If you have ever become frustrated with any of the DOS commands or have
+had problems finding a command in the DOS manual, then DOSHELP is for you.
+It has a menu from which you choose a DOS command, and then it presents a
+quick summary of the command along with some examples of how the command is
+used. For even quicker help on a particular DOS command, you can type the
+command at the DOS prompt when executing the program.
+
+    DOSHELP has been updated to include all the commands through version
+3.2 of both MS-DOS and PC-DOS.
+
+    Also provided with DOSHELP is a program that prints out a 17-page quick
+reference guide for all DOS 3.2 commands.
+
+Usage: Educational/DOS
+
+System Requirements: 128K memory and one floppy disk drive (a printer is
+optional).
+
+How to Start: Enter README for instructions, or enter HELP to start the
+program. To get immediate help on a particular command, type HELP [COMMAND]
+(press enter).
+
+Suggested Registration: $15.00
+
+File Descriptions:
+
+HELP     EXE  Main program.
+PRTGUIDE EXE  Prints a command reference guide.
+README   EXE  Instructions.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1067
 

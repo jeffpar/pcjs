@@ -58,6 +58,130 @@ machines:
     COLOR    BAT  To start the color set up program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CHANGES.DOC
+
+{% raw %}
+```
+
+
+                                  DataBoss 3.00.01
+                               Changes from Release 1
+
+          1. Import and Export facilities were added to the "Copy this  
+             file" function.  Now, a file may be copied into DataBoss from 
+             the ASCII, CSV, SDF, or MailMerge formats, or copied out of  
+             DataBoss to the same formats.  This change allows files used  
+             by PC-FILE* and other application programs to be used by
+             DataBoss and returned to their original format, if necessary.
+             
+          2. New file transfer subroutines have been added allowing faster 
+             search and sorting times with less input/output concentration.
+
+          3. A column guide has been added to the on-screen label format to
+             better display the format of the label during design.
+
+          4. Documentation now contains information on incorporating  
+             DataBoss with DisplayWrite III*, PC-FILE*, , Lotus 1-2-3*, and
+             WordStar*.
+
+          5. A bug in the "Search..." function has been fixed.
+           
+          6. The "Change screen colors" program has been rewritten and
+             scaled down slightly in an effort to make this process easier
+             to use.
+
+          7. A bug encountered while entering (erroneous) non-numeric tab
+             locations in the "Print a report" function has been fixed.
+
+          8. A bug in the "Change file structure" function which inserted
+             random text into newly added text items (items with Type = T)
+             has been fixed.  When adding new text items, the item is
+             initialized (set to blanks).
+
+          *  A registered trademark of another company.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
+
+## FILES662.TXT
+
+{% raw %}
+```
+Disk No 662
+Program Title: DATABOSS version 3.00.01 (Disk 1 of 2)
+PC-SIG version 1.2
+ 
+    This is the first of a two-disk set comprising the DATABOSS Data
+Management System. DATABOSS is a database with flexible report-generation
+and the ability to import and export data to Wordstar, PC-File III, DW III
+and many other programs. It sports user-defined color screens, up to eight
+different disk drives or subdirectories, pre-computed (equivalence) fields,
+wide standard reports, user-defined printer characteristics, a full
+alphabet keyboard enhancer, simple mathematical and statistical functions,
+sorting for up to eight levels, and enhanced search capabilities. This
+first disk holds the documentation for version 3.00.01 of the DATABOSS
+system -- 70+ pages of how-to information with some special tips on
+maximizing the use of your hard disk(s). NOTE: DATABOSS runs in BASIC and
+needs MS/PC DOS 3.xx and a hard disk for full functioning.
+ 
+Usage: Database Applications
+ 
+System Requirements: 128K memory and at least one disk drive.  Two
+drives or a hard drive is recommended.
+ 
+How to Start: For information on starting the program and printing the
+documentation, type: GO (press enter).
+ 
+Suggested Registration: $50.00
+ 
+File Descriptions:
+ 
+BOSS3    DOC  The DATABOSS user's manual.
+CHANGES  DOC  Note about recent changes to the program.
+README   IMG  The author's introduction to DATABOSS
+AUTOEXEC BAT  Batch file to print user's manual.
+FLASH    COM  Video display utility.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0662
 

@@ -82,6 +82,43 @@ machines:
     LESSON?  TXT  Lessons 1 thru 8
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES501.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  501  SALESEYE  Vers 2.3   (DISK 1 of 2)                   v1.1
+---------------------------------------------------------------------------
+The SALESEYE package is ideal for people who need to follow-up with and
+communicate with other people on a regular basis.  A detailed product
+description along with the tutorial is on disk #502.
+ 
+CONFIG   SYS  Configuration file
+SELL     EXE  Main Program
+SELL     OV1  Overlay 1 for main program
+SELL     OV2  Overlay 2 for main program
+MLEADS   DBF  Master lead data file
+MLEADS   HIS  Master history file
+MLETTER  MLE  Master letter file
+MQUAL?   CDF  Master code/descriptor files
+MREPORT  CDF  Master activity report file
+MTICKLER TIK  Master appointment memo file
+QTS      COM  Word processor
+QTS????  SCR  Screens used by word processor
+???????? MEM  System data files used by program
+README   1ST  Contains latest changes to program and/or manuals
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0501
 

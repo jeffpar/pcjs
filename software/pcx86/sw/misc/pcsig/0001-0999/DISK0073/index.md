@@ -59,6 +59,7 @@ machines:
 
 ## %-DIFF.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 A$=STRING$(80,205)
@@ -132,9 +133,11 @@ machines:
 1550 X$=INKEY$:IF X$="" THEN GOTO 1550 ELSE IF X$="N" OR X$="n" THEN A=1:RETURN:ELSE IF X$="Y" OR X$="y" THEN A=2:RETURN:ELSE A=3:LOCATE 25,1:PRINT "Please answer Y,y,N,or n";:FOR N=0 TO 500:NEXT :FOR N=0 TO 15:DUMP$=INKEY$:NEXT:RETURN
 1560 '    SAVE"percent2",a
 ```
+{% endraw %}
 
 ## 3-D-ROT.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -366,9 +369,48 @@ machines:
 1925 ' * * * List Point Connections on CRT
 1930 FOR I=1 TO NC*2 STEP 2:L=FIX((((I+1)/2-1)*16+1)/80)+PP+1:LOCATE L,(((I+1)/2-1)*16+80-80*(L-PP))+1:PRINT (I+1)/2;:PRINT CHR$(29)+")";C(I);:PRINT CHR$(29);C(I+1);:NEXT I:RETURN
 ```
+{% endraw %}
+
+## 3D.DOC
+
+{% raw %}
+```
+                           3D PLOTS
+
+     This program was originally written by Gerald Fitzpatrick of Plano, 
+Texas for the Radio Shack Color Computer.  It was modified by Hal Varian 
+of Ann Arbor, Michigan for the IBM PC.   The program will construct a 3 
+dimensional plot of a function and will eliminate the hidden lines. 
+
+     The file 3D.GRF contains the BASICA source code for the program.  
+The file 3D.EXE is a compiled version of this program, and the file 
+3DTEST.PLT is a screen image of the completed plot.  This program requires 
+the IBM Graphics Board to work. 
+
+     To run the program put the disk in drive B and type B:3D.  The 
+program will load and ask P)rogram or D)isk?  You respond with: D.
+The program will then ask you the name of the disk file that contains the 
+screen image.  You respond: B:3DTEST.PLT.  The program will load the 
+screen image and display it on the screen.  The key display that appears 
+at the bottom of the screen gives the current command options.  You can 
+dump this image to a NEC 8023A printer or a C. Itoh Prowriter printer by 
+pressing the uppercase D key.  You can return to the main program by 
+pressing a N key.  You can save this image by pressing the S key, and so 
+on.
+
+    Return to the main program by pressing the N key.  Now instead of 
+entering the D command, enter the P commmand.  The program will ask you if 
+you want a 3/4 view of the function to be plotted.  Enter Y.  The program 
+will now plot a view of the function with a "slice" taken out.  When it is 
+done the KEY display will appear at the bottom of the screen.  You can 
+then save this image, dump it to your printer, etc.
+
+```
+{% endraw %}
 
 ## CLERK.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -713,9 +755,82 @@ machines:
 4120 CLOSE: KEY ON
 4130 END
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #73, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  TEMPCONV.BAS         CRC = 87 4E
+
+--> FILE:  MPG-CAL .BAS         CRC = F0 92
+
+--> FILE:  %-DIFF  .BAS         CRC = 02 D0
+
+--> FILE:  MOLY-PAY.BAS         CRC = 6F 23
+
+--> FILE:  SERIALNO.BAS         CRC = D1 9A
+
+--> FILE:  GROWTH  .BAS         CRC = 54 28
+
+--> FILE:  WINDCHIL.BAS         CRC = D1 7B
+
+--> FILE:  SHIP    .            CRC = 8A 87
+
+--> FILE:  JET     .            CRC = 9C 82
+
+--> FILE:  CUBE    .            CRC = BC C0
+
+--> FILE:  PYRAMID .            CRC = 66 6C
+
+--> FILE:  3-D-ROT .BAS         CRC = 39 4D
+
+--> FILE:  3D      .GRF         CRC = 25 35
+
+--> FILE:  3D      .DOC         CRC = 8F DA
+
+--> FILE:  3D      .EXE         CRC = AA F0
+
+--> FILE:  3DTEST1 .PLT         CRC = CC 91
+
+--> FILE:  3DTEST2 .PLT         CRC = DA 26
+
+--> FILE:  PCFILECH.BAS         CRC = C9 96
+
+--> FILE:  CLERK   .BAS         CRC = 4A DE
+
+--> FILE:  SHIFTS  .BAS         CRC = 39 42
+
+--> FILE:  CATALOG .            CRC = 00 00
+
+ ---------------------> SUM OF CRCS = B8 FE
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## GROWTH.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -847,9 +962,11 @@ machines:
 2020 NEXT J
 2030 RETURN
 ```
+{% endraw %}
 
 ## MOLY-PAY.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -1056,9 +1173,11 @@ machines:
 2780 PRINT "         YOU WILL PROBABLY WISH TO MAKE BACKUP COPY OF THE FILES."
 2790 END
 ```
+{% endraw %}
 
 ## MPG-CAL.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 A$=STRING$(80,205)
@@ -1104,9 +1223,11 @@ machines:
 1270 PRINT
 1280 STOP
 ```
+{% endraw %}
 
 ## PCFILECH.BAS
 
+{% raw %}
 ```bas
 1 '*********************************************************************
 2 '*   PC-MAP.  This program recreates a PC-File database into a new   *
@@ -1344,9 +1465,11 @@ machines:
 60991 LOCATE 25,1:PRINT"Hit any key to continue";
 60992 K$=INKEY$:IF K$="" THEN 60992 ELSE RETURN
 ```
+{% endraw %}
 
 ## SERIALNO.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 A$=STRING$(80,205)
@@ -1453,9 +1576,11 @@ machines:
 1880 ON ERROR GOTO 0
 1890 '    SAVE"s-nbingo",a
 ```
+{% endraw %}
 
 ## SHIFTS.BAS
 
+{% raw %}
 ```bas
 60000  '*******************************************
 60010  '* Test shift key status by Lewis Rigdon   *
@@ -1475,9 +1600,11 @@ machines:
 60150 IF (PEEK(&H17) AND &H20) THEN PRINT"NUM    LOCK ON" ELSE                               PRINT "NUM    LOCK OFF"
 60160 IF (PEEK(&H17) AND &H10) THEN PRINT"SCROLL LOCK ON" ELSE                               PRINT "SCROLL LOCK OFF"
 ```
+{% endraw %}
 
 ## TEMPCONV.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -1555,9 +1682,11 @@ machines:
 830 GOTO 780
 840 CLS: END
 ```
+{% endraw %}
 
 ## WINDCHIL.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -1595,6 +1724,7 @@ machines:
 430 PRINT USING"\         \ \                                 \ \                              \";A$,B$,C$;
 440 NEXT X
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

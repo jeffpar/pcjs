@@ -48,6 +48,58 @@ machines:
     the good life.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1875.TXT
+
+{% raw %}
+```
+Disk No: 1875                                                           
+Disk Title: The Retirement Financial Projector                          
+PC-SIG Version: S3                                                      
+                                                                        
+Program Title: The Retirement Financial Projector                       
+Author Version: 3.0                                                     
+Author Registration: $25.00                                             
+Special Requirements: Lotus 1-2-3.                                      
+                                                                        
+Retiring soon?  You need to plan your retirement finances if you want   
+to enjoy the good life.  THE RETIREMENT FINANCIAL PROJECTOR is just the 
+program that can do it for you.                                         
+                                                                        
+The RETIREMENT FINANCIAL PROJECTOR is designed primarily for the person 
+who is contemplating retirement in a few years.  However, if your       
+retirement is far in the future, or if you have already retired, you    
+will also find it useful.  If you plan to retire soon, the projector    
+provides a guide that leads you through the process of analyzing your   
+retirement assests and needs, so that you can determine what you must   
+accomplish in order to achieve the retirement lifestyle you desire.     
+The RETIREMENT FINANCIAL PROJECTOR consists of two unique Lotus 1-2-3   
+templates, an expenses template and a projection template.              
+                                                                        
+The projection template allows a parametric evaluation of investment    
+growth through your retirement years.  Investment returns, inflation,   
+and retirement income are built-in parameters.  Investment options, such
+as annuities, life insurance, and tax deferred investments also may be  
+studied parametrically.  The capability of incorporating other          
+parameters is limited only by your imagination and spreadsheet skill.   
+                                                                        
+The expenses template tracks and projects the expenses you have today   
+and what they will be during your retirement years.                     
+                                                                        
+The RETIREMENT FINANCIAL PROJECTOR can provide you with the opportunity 
+to plan and project your retirement finances so that you can really live
+the good life.                                                          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989, 1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1875
 

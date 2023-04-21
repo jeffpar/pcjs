@@ -33,6 +33,47 @@ machines:
     power of the language and write larger and more complex programs. File
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES815.TXT
+
+{% raw %}
+```
+Disk No:  815
+Program Title: MODULA-2 TUTORIAL version 2.0 (disk 2 of 2)
+PC-SIG version: 1.1
+
+This is the second disk in the MODULA-2 TUTORIAL set.  Disks #814 and
+#815 are both needed to run the program.  For a full description of the
+program refer to disk #814.
+
+Usage:  Educational.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00
+
+File Descriptions:
+
+LIST     EXE  Prints tutorial.
+LISTALL  BAT  Batch file to print the program files.
+READ     ME   Information file for the tutorial.
+???????? DEF  Definition files (6 files).
+???????? MOD  MODULA-2 source files (78 files).
+ANSWERS <DIR> Subdirectory containing the answers to the tutorial.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0815
 

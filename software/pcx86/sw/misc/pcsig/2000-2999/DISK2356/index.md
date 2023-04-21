@@ -40,6 +40,51 @@ machines:
     diskette controllers, FAT editing, sector dump to file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2356.TXT
+
+{% raw %}
+```
+Disk No: 2356                                                           
+Disk Title: PC General Use Utilities                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PC General Use Utilities                                 
+Author Version: 04/90                                                   
+Author Registration: $15.00 for Con>Format & CopyQM. $10 for FormatQM. $
+Special Requirements: None.                                             
+                                                                        
+Con>Format - A "Pop-Up" diskette formatter that allows you to format    
+diskettes while doing more productive things.  Has received rave reviews
+from our users and some very nice words in the press.  See June, 1989 PC
+Magazine, page 48.  One of our all-time most popular programs.          
+                                                                        
+COPYQM A diskette duplicating machine.  Formats, verifies and copies    
+all in one pass.  Up to four drives supported at once, features color   
+icon type interface, drive-status sensing (no keyboard entries).        
+Record/playback image files from hard disk, serialize copies, even copy 
+non-DOS formats in "Blind Copy" mode.  All formats supported.           
+                                                                        
+FORMATQM - A diskette formatter in the same "no hands" tradition of     
+COPYQM.  Formats AND VERIFIES faster than anything else around. Supports
+all standard DOS formats, up to four drives at a time.                  
+                                                                        
+ANADISK - Our compleat diskette utility--scan, edit, repair and copy    
+just about any kind of diskette. Latest release supports secondary      
+diskette controllers, FAT editing, sector dump to file.                 
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2356
 

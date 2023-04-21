@@ -38,6 +38,47 @@ machines:
     300, 1270, or even 2540 dots-per-inch resolution.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1130.TXT
+
+{% raw %}
+```
+Disk No: 1130                                                           
+Disk Title: PictureThis 1 of 4 (1474, 2301, 2302)                       
+PC-SIG Version: S3.01                                                   
+                                                                        
+Program Title: PictureThis                                              
+Author Version: 3.00A                                                   
+Author Registration: $65.00                                             
+Special Requirements: 320K RAM, CGA, and PostScript or compatible printe
+                                                                        
+With PICTURETHIS, you can quickly and easily prepare                    
+professional-looking drawings for printing on PostScript-compatible     
+laser printers and imagesetters.  You can do them either freehand or by 
+tracing ``template'' screens captured with a companion program,         
+CAPTURETHIS.  PICTURETHIS doesn't need a lot of fancy hardware -- just  
+an IBM PC, XT, AT, or compatible.  You don't even need direct access to 
+a laser printer.  Your drawing files can be sent by mail or modem to a  
+laser typesetting service bureau for overnight return of low-cost       
+prints with 300, 1270, or even 2540 dots-per-inch resolution.  You can  
+print PICTURETHIS drawings at lower resolution on some dot matrix       
+printers, using the graphics screen dump program supplied with DOS.     
+                                                                        
+You don't have to know how to program in the PostScript page description
+language to use PICTURETHIS.  You view a screen representation of your  
+drawing as you prepare it, so additions and alterations can be made     
+easily.                                                                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1130
 

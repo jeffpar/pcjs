@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2962.TXT
+
+{% raw %}
+```
+Disk No: 2962
+Disk Title: Fonts Galore #2
+PC-SIG Version: S1.0
+
+Program Title: Fonts Galore #2
+Special Requirements: Windows 3.0 and Adobe Type Manger.
+
+A collection of ten diskettes full of fonts to be used with Windows and
+Adobe-type Manager installed. They can be used by Postcript and LaserJet
+printers. Fonts included with this disk are: Futuri-Black, Parisian,
+Pixel_Screen_Font, RSAndromeda, RSCanaith, RSCaveman, RSCharleiChan, and
+RSChasline.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1992 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2962
 

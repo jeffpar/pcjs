@@ -33,6 +33,53 @@ machines:
     specified from the DOS command line.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1867.TXT
+
+{% raw %}
+```
+Disk No: 1867                                                           
+Disk Title: LCG/Remind                                                  
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: LCG/Remind                                               
+Author Version: 1.7                                                     
+Author Registration: $12.95                                             
+Special Requirements: None.                                             
+                                                                        
+LCG/REMIND is a tickler program that can display a message or execute a 
+program at a specified time interval, certain day of the week or on a   
+day of the month.                                                       
+                                                                        
+This program can determine the date of the last backup of your hard disk
+from the backup log and will display a reminder to backup at predeter-  
+determined intervals.                                                   
+                                                                        
+Clear the screen before displaying a message, choose your favorite      
+colors for the display and specify how long the message will be on      
+screen.  When executing LCG/REMIND. all of the program options are      
+specified from the DOS command line.                                    
+                                                                        
+                                                                        
+Usage:  /Tickler File                                                   
+                                                                        
+System Requirements:  None.                                             
+                                                                        
+How to Start:  Type GO (press enter).                                   
+                                                                        
+Suggested Registration:  $12.95.                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1867
 

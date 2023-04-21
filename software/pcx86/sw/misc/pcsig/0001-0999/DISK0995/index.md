@@ -30,6 +30,61 @@ machines:
     boxes.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES995.TXT
+
+{% raw %}
+```
+Disk No:  995
+Program Title: H&P CALENDAR version 2.0
+PC-SIG version: 1.3
+
+H&P CALENDAR creates a calendar on screen with graphic designs.  You can
+edit by using the arrow keys to move the cursor anywhere on the screen
+to enter holidays, special dates, anniversaries, etc.  When the calendar
+is completed, it is dumped to the printer using GRAPHICS.COM, a TSR
+program supplied with DOS.  With the calendar program, no data is saved
+to disk, so once the screen is cleared, data is lost.  H&P CALENDAR is
+entirely user-programmable, so it will not become obsolete due to
+pre-programmed date limitations.
+
+Usage:  Home Application.
+
+Special Requirements:  CGA graphics.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $5.00
+
+File Descriptions:
+
+CAL      EXE  Calendar program.
+CAL87    EXE  Calendar program for Tandy users.
+README   BAT  Info file.
+APR           Calendar Data Files.
+AUG           Calendar Data Files.
+DEC           Calendar Data Files.
+FEB           Calendar Data Files.
+JAN           Calendar Data Files.
+JUL           Calendar Data Files.
+JUN           Calendar Data Files.
+MAR           Calendar Data Files.
+MAY           Calendar Data Files.
+NOV           Calendar Data Files.
+OCT           Calendar Data Files.
+SEP           Calendar Data Files.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0995
 

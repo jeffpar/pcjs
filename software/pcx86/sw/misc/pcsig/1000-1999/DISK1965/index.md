@@ -43,6 +43,53 @@ machines:
     whole family!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1965.TXT
+
+{% raw %}
+```
+Disk No: 1965                                                           
+Disk Title: Hangman by Victor                                           
+PC-SIG Version: S1.4                                                    
+                                                                        
+Program Title: Hangman by Victor                                        
+Author Version: 1.4                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+Remember all the fun times you had trying to stump your friends playing 
+hangman? Now, with Victor Mux's new computerized version of HANGMAN, you
+can test your own knowledge of music, science, computers and much more  
+as you try to escape the fate of the gallows.                           
+                                                                        
+You can either use the keyboard or a mouse to play the game.  HANGMAN   
+can be played by 1 to 4 players, and follows the standard rules which we
+all have come to know over the years.  Pick your letters one at a time  
+trying to keep as many body parts from appearing under the noose.  Once 
+the word is either discovered or missed, a small definition/description 
+appears, providing the user with some background of the solution.  Easy 
+to play and simple to use, HANGMAN can provide hours of enjoyment for   
+"children" of all ages.                                                 
+                                                                        
+In addition you can create your own libraries.  The program is able to  
+contain 500 libraries and each library can contain 500 words.  If a     
+child is having difficulty in a particular area in school, you could    
+use this program in helping him with spelling and guessing words within 
+a specific subject.                                                     
+                                                                        
+HANGMAN is a wonderfully easy and fun program which can be used by      
+the whole family!                                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1965
 

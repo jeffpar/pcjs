@@ -37,6 +37,68 @@ machines:
     program by setting that game's maximum high number (6 to 255).
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES789.TXT
+
+{% raw %}
+```
+Disk No  789
+Program Title: CARDTRAK version 3.0 and more
+PC-SIG version 1.1
+
+    CARD TRACK is a full-featured payments simulator for bank cards and
+simple interest loans supporting user file creation, editing, and re-
+trieval, two methods of process (Daily/Avg), two screening formats (Auto/
+Page), and two formatted printer output modes (Verbose/Terse).
+Documentation is in the file CARDHELP.DOC. Print CARDHELP.DOC with
+PRNT-DOC.BAT.
+
+    MONTAGE2 is for fun, it draws a series of lines on the screen and then
+moves them around for you. It can be completely configured to draw its
+lines your way. It's self-documented with a help display. It's in Hi-Res
+and displays in 16 colors. It's a bit noisy on start-up. The opening screen
+has complete information on user options. These can be changed during
+program execution (no configuration files).
+
+    LOTOPIKS is a random number generator for playing state lottos. It
+sorts the numbers in ascending order and displays a screen of games. The
+Illinois and Missouri lottos are menued for the basic games, but a
+selection of `O' (Other) is also offered and a maximum high number (range
+of 6...255) can be entered. The games are restricted to a six-number
+format.
+
+Usage: Financial and Assorted Utilities
+
+System Requirements: 128K and one floppy drive. (You need an EGA card for
+the EGA screen-save program.)
+
+How to Start: Type the name of the program you want to start. For
+example, type CARDTRAK (press enter) to start the CARDTRAK program.
+
+Suggested Registration: CARDTRAK - $25.00, LOTOPIKS - $10.00
+
+File Descriptions:
+
+CARDTRAK EXE  Simulator for bank cards and most loans.
+READ     BAT  Batch file to view intro text file for CARDTRAK
+READ     ME   Introductory text file about CARDTRAK
+Z-FILER  TRK  Demonstration file for CARDTRAK.COM.
+MONTAGE2 COM  User controlled revision of familiar line drawing program.
+LOTOPIKS COM  Lotto players aid.  Random number generator w/ formatting.
+EGABLANK COM  EGA sreenblank program.
+EGABLANK SCR  EGA screem.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0789
 

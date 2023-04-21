@@ -23,6 +23,33 @@ machines:
     Makes using Norton Commander or List so much easier.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1818.TXT
+
+{% raw %}
+```
+Disk No: 1818                                                           
+Disk Title: CleanUp                                                     
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: CleanUp                                                  
+Author Version: 06/90                                                   
+Author Registration: None.                                              
+Special Requirements: None.                                             
+                                                                        
+Remove those extra line feeds and blank lines from document files.      
+Makes using Norton Commander or List so much easier.                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1818
 

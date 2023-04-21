@@ -52,6 +52,45 @@ machines:
     PJ85A    ???  Programmers Journal 1985 1st Qtr reference files (4 files)
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES549.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  549  LETUS A-B-C #12                                      v1  DS2
+---------------------------------------------------------------------------
+Literature Evaluation Table User Service - A database of articles and
+letters from third quarter 1984 magazines about IBM PCs.  It requires
+PC-FILE III and can be searched using keywords, author names, article
+titles, issue numbers, page numbers and descriptive text.
+ 
+PCWK85A  DTA  PC Week 1985 First Quarter reference files
+PCWK85A  HDR  PC Week 1985 First Quarter reference files
+PCWK85A  INX  PC Week 1985 First Quarter reference files
+PCWK85A  KWD  PC Week 1985 First Quarter reference files
+PJ85A    DTA  Programmers Journal 1985 First Quarter reference files
+PJ85A    HDR  Programmers Journal 1985 First Quarter reference files
+PJ85A    INX  Programmers Journal 1985 First Quarter reference files
+PJ85A    KWD  Programmers Journal 1985 First Quarter reference files
+PCW85A   DTA  PC Week 1985 First Quarter reference files
+PCW85A   HDR  PC Week 1985 First Quarter reference files
+PCW85A   INX  PC Week 1985 First Quarter reference files
+PCW85A   KWD  PC Week 1985 First Quarter reference files
+PCJRW85A DTA  PCjr WORLD 1985 First Quarter reference files
+PCJRW85A HDR  PCjr WORLD 1985 First Quarter reference files
+PCJRW85A INX  PCjr WORLD 1985 First Quarter reference files
+PCJRW85A KWD  PCjr WORLD 1985 First Quarter reference files
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0549
 

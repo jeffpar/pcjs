@@ -35,6 +35,45 @@ machines:
     And the killer is . . .
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0694.TXT
+
+{% raw %}
+```
+Disk No:  694                                                           
+Disk Title: Sleuth                                                      
+PC-SIG Version: S2.2                                                    
+                                                                        
+Program Title: Sleuth                                                   
+Author Version: 4.45                                                    
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+This is an interactive text game you can populate with your friends,    
+relatives and neighbors.  As you begin a game of SLEUTH, a murder has   
+just been committed!                                                    
+                                                                        
+You must explore the house, question the houseguests for alibis and     
+locate both the weapon and the scene of the murder. The challenge is to 
+solve the crime, gather all of the suspects together and accuse the     
+guilty party -- before the killer becomes suspicious and eliminates     
+YOU!                                                                    
+                                                                        
+This fascinating crime-solving game works on a monochrome monitor, and  
+needs only the keyboard for input.                                      
+                                                                        
+And the killer is . . .                                                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0694
 

@@ -33,6 +33,43 @@ machines:
     from within the program or with an ASCII wordprocessor.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1476.TXT
+
+{% raw %}
+```
+Disk No:  939 (Disk 2 of 2)
+Program Title:  FLIGHT PLANNING FOR PRIVATE PILOTS v3.0
+PC-SIG version:  2
+
+This is the second disk of a two disk set.  The first disk can be found
+on disk #939.  Refer to the first disk for a full description.
+
+Usage:  Flight-Planning/Morse Code.
+
+Special Requirements:  A printer is optional.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $25.00
+
+File Descriptions:
+
+ALLUS    DAT  Data file for FLIGHT.
+ATLANTIC DAT  Data file for FLIGHT.
+EASTUS   DAT  Data file for FLIGHT.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1476
 

@@ -46,6 +46,24 @@ machines:
     MANUAL   BAT  Batch file to print documentation
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES87.TXT
+
+{% raw %}
+```
+-------------------------------------------------------------------------
+Disk No 87    Programmers Calculator                           v1
+-------------------------------------------------------------------------
+DUP      BAT  Batch file to copy program files to another disk
+GC       EXE  Number base conversion program for use with PC.EXE
+MANUAL   DOC  Documentation file
+MANUAL   BAT  Batch file to print MANUAL.DOC
+PC       EXE  Main program - emulates the HP line of calculators
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0087
 

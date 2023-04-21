@@ -32,6 +32,42 @@ machines:
     UPS log book, making PSP very easy to use.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2319.TXT
+
+{% raw %}
+```
+Disk No: 2319                                                           
+Disk Title: The Parcel Shipping Program (also 2262)                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: The Parcel Shipping Program                              
+Author Version: 1.0                                                     
+Author Registration: $125.00                                            
+Special Requirements: A hard drive, or high density drives.             
+                                                                        
+The PARCEL SHIPPING PROGRAM (PSP) is a menu-driven system that meets all
+UPS reporting requirements.  It is designed to eliminate the tedious UPS
+paperwork needed to ship parcels.  All UPS shipping rates and tables    
+are included.  As you enter the shipping transaction, PSP calculates    
+the UPS zone shipping charges.  You can also produce shipping labels,   
+COD tags, and UPS manifests.  PSP maintains a shipping address file for 
+frequently shipped to customers, and a temporary file for one time      
+shipments that can be deleted at the end of the day.  The format of the 
+shipping data entry screen is similar to the UPS log book, making PSP   
+very easy to use. Changes to UPS rate charges are supplied to registered
+users for $35.00.                                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2319
 

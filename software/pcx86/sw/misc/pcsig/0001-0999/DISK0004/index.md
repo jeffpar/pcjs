@@ -56,6 +56,7 @@ machines:
 
 ## BACKUP.BAS
 
+{% raw %}
 ```bas
 1  REM-------------------------------------------------------
 2 REM
@@ -256,9 +257,11 @@ machines:
 2400 RUN "dbmenu"
 2500 END
 ```
+{% endraw %}
 
 ## CATCH88.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-Z
 20 DIM RE(25), CE(25), MV(25), VM(10), MC(25), CM(10)
@@ -434,9 +437,11 @@ machines:
 3001 IF F > 5 THEN PRINT "Be reasonable !" : GOTO 3000
 3002 RETURN
 ```
+{% endraw %}
 
 ## CREATE.BAS
 
+{% raw %}
 ```bas
 1 CLS:KEY OFF
 2 REM  AN EXAMPLE OF HOW TO USE THIS DBMS FOLLOWS: TYPE "TEL" FOR INDEX FILE
@@ -525,9 +530,11 @@ machines:
 660 RUN "DBMENU"
 665 END
 ```
+{% endraw %}
 
 ## DBMENU.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 20 REM   DBMS CREATED BY T.G.Lewis (USING THE IBM PERSONAL COMPUTER)
@@ -566,9 +573,11 @@ machines:
 290       RUN "DUMP"
 300 END
 ```
+{% endraw %}
 
 ## DUMP.BAS
 
+{% raw %}
 ```bas
 1 CLS:KEY OFF
 10 REM------------------------------------------------------
@@ -642,9 +651,11 @@ machines:
 690 RUN "dbmenu"
 700 END
 ```
+{% endraw %}
 
 ## ELIZA.BAS
 
+{% raw %}
 ```bas
 10 DIM S(36),R(36),N(36)
 20 N1=36:N2=14:N3=112
@@ -850,9 +861,52 @@ machines:
 2050 DATA 49,2,51,4,55,4,59,4,63,1,63,1,64,5,69,5,74,2,76,4
 2060 DATA 80,3,83,7,90,3,93,6,99,7,106,6
 ```
+{% endraw %}
+
+## FILES004.TXT
+
+{% raw %}
+```
+Disk No 4
+Program Title: DBMS/MODEM7
+PC-SIG version 1
+ 
+Usage: Database/telecommunication
+ 
+System Requirements: IBM PC or close compatible with Color graphics
+adapter, 1 disk drive, printer, and Dos 2.0 or later and a version of
+BASIC.
+ 
+File Descriptions:
+ 
+DBMENU   BAS  Menu program for data base management system  (DBMS)
+CREATE   BAS  Part of DBMS
+INSERT   BAS  Part of DBMS
+LOOKUP   BAS  Part of DBMS
+SCREEN   BAS  Part of DBMS
+DUMP     BAS  Part of DBMS
+BACKUP   BAS  Part of DBMS
+CHESS    EXE  Chess program  (see disk NO 120 for a better version)
+SURVIVAL BAS  Adventure type game - survive a crash landing on the moon
+SATURN   BAS+ Graphics demo - the ringed planet with orbiting moon
+CATCH88  BAS  Catch falling goodies - improve typing skills
+METEOR   BAS  Arcade type game - eat goodies while dodging meteors
+HANGMAN  BAS  Popular word guessing game
+ELIZA    BAS  Talk your problems out with Eliza the psychotherapist
+MODEM7   COM  Communications & file transfer program adapted from CP/M
+MODEM7   DOC  Documentation file for MODEM7.COM
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## HANGMAN.BAS
 
+{% raw %}
 ```bas
 1 DEF SEG=&H40:X=PEEK(&H17):X=X OR &H40:POKE &H17,X: 'Upper Case Letters
 10 KEY OFF:CLS:WIDTH 40
@@ -953,9 +1007,11 @@ machines:
 990 PRINT "BYE NOW"
 999 END
 ```
+{% endraw %}
 
 ## INSERT.BAS
 
+{% raw %}
 ```bas
 10 REM------------------------------------------------------
 20 REM
@@ -1245,9 +1301,11 @@ machines:
 2840 RUN"dbmenu"
 2850 END
 ```
+{% endraw %}
 
 ## LOOKUP.BAS
 
+{% raw %}
 ```bas
 1  REM-------------------------------------------------------
 2 REM
@@ -1432,9 +1490,11 @@ machines:
 1550 GOSUB 900:GOTO 1410      're-write data
 1599 END
 ```
+{% endraw %}
 
 ## METEOR.BAS
 
+{% raw %}
 ```bas
 100 REM meteor, a character graphics arcade game
 120 M$=CHR$(2):C$=CHR$(219):X$=CHR$(25):REM face, solid square, down arrow
@@ -1516,9 +1576,289 @@ machines:
 870 PRINT TAB(37);E3$:PRINT:COLOR 1
 880 PRINT "Some extra instructions will be on the bottom line.":PRINT :RETURN
 ```
+{% endraw %}
+
+## MODEM7.DOC
+
+{% raw %}
+```
+              CP/M MODEM PROGRAM DOCUMENTATION
+	    by Mark M. Zeiger and James K. Mills
+			  11/04/80
+	    ( updated for "portable" version by BRK )
+
+This  program  uses  the  file transfer routines  written  by  Ward 
+Christensen  in his CP/M file transfer program (V2.0 as of  8/6/79) 
+and  is  compatable with his program in single file transfer  mode. 
+Multi-file transfers are only possible between two systems  running 
+the program described below.
+
+This program has two functions:
+
+        1.  Communication
+        2.  Program transfer
+
+
+COMMUNICATIONS
+
+The program may emulate a terminal or echo data back to sender (act
+as a computer).
+
+Terminal Mode  -  'T' Option
+
+        The  terminal mode may be called with or without a file  name. 
+        If  a  file  is  specified (it should be  a  new  file),  then 
+        anything  received  by the modem may be saved  in  memory  and 
+        later  written on disk.  The save feature is toggled ON/OFF by 
+        Control-Y.  A colon  (:) will be printed at the  beginning  of
+        each line when memory save is active.  The  colon will  not be
+        transmitted over the modem nor will it be saved in memory.
+
+        If  a  file  is not specified,  then memory save  can  not  be 
+        activated.
+
+        If  the memory buffer is full (the buffer is from the  top  of 
+        the program to the top of the segment ),   the  contents  are 
+        automatically  written  to  disk  (but the  file  is  not  yet 
+        closed).  Communications  may  then continue with  the  buffer 
+        reinitialized.  The  computer with which you are communicating 
+        must  accept  the  X-ON and X-OFF  (Control-Q  and  Control-S) 
+        conventions or data will be lost.
+
+        When  communications are over,  use Control-E to exit from the 
+        Terminal  mode and enter the Menu.  The file to which you  are 
+        writing  must then be closed by using the  'WRT'  command.  If 
+        this  is  not done,  all data will be lost.  I decided not  to 
+        close  the file automatically since there will be  times  when 
+        you leave terminal mode and then decide to re-enter.  This may 
+        be done while in the Menu by using the 'RET' command.  You may 
+        re-enter Terminal mode and save in the same file as many times 
+        as  you wish as long as you have not closed the file with  the 
+        'WRT' command.
+
+        While  in  Terminal  mode,  Control-T will  put  you  in  File 
+        Transfer mode.  This will allow you to send the contents of an 
+        ASCII file over the modem. This routine does no error checking 
+        and  there are no protocols specified between this program and 
+        the  receiving computer other than that it should be ready  to 
+        receive  data  via  the  modem.   Control-X  will  cancel  the 
+        transfer.
+
+
+Computer mode - 'E' Option
+
+        This  mode  echos data received by other  computer.  Only  one 
+        computer  may be in this mode at one time.  There is  no  save 
+        feature  in this mode.  Useful if you wish to communicate with 
+        somebody running the terminal portion of the program.
+
+File transfer - 'S' and 'R' Options
+
+        These  features  are  the same as in the  CP/M  Modem  program 
+        written by Ward Christensen except that upon completion of the 
+        transfer, control returns to the Menu unless the secondary 'T' 
+        option has been selected.  In the latter case, control returns 
+        to Terminal mode.  Remember that if you are operating a remote 
+        computer   using   a  timesharing  program   (such   as   Ward 
+        Christensen's "BYE"),  the remote should be instructed to send 
+        or  receive  in  the  quiet (Q) mode as  a  secondary  option. 
+        Examples  of  commands for sending and  receiving  are  listed 
+        below.  You may also have to use the  quiet  mode  when  using
+        direct computer to computer  communication  at  speeds  higher
+        about  2400 baud because the console listing speed is too slow.
+
+        The transmission protocol involves sending data in packets of
+        about 128 bytes along with an 8 bit checksum.  The receiving
+        system recomputes the checksum and compares it to one received.
+        If the checksums agree it sends back an acknowledgement character
+        and the sending system sends the next packet.  If the checksums
+        do not match, a negative acknowledge is sent and the sending
+        system automatically sends the packet again ( it will retry
+        at most 10 times before giving up ).
+
+Multi-file transfers
+
+        Using  the B (batch) secondary option,  more than one file and 
+        ambiguous filenames may be transferred. To send files, use the 
+        primary  option  "S" and the secondary option "B" (along  with 
+        any  other  secondary options and baudrate).  To  receive  the 
+        files  being  sent,  use the "R" primary option  and  the  "B" 
+        secondary  option.  Files may not be named since filenames are 
+        sent by the sending program, but a disk drive may be specified 
+        (or else the files are written to the default drive).
+
+Backup option
+
+        There  is  a byte at the beginning of the program (106H)  that 
+        will  create a backup file if a file on the disk has the  same 
+        name  as the file being received in multi-file  transfer  (see 
+        MODEM.SET). If this byte is set to 0FFH, a backup file will be 
+        created.  If  it is zero the file on the disk will be  deleted 
+        before the new file is received. If you are running CP/M 2 and 
+        a file on the disk is designated R/O or SYS,  a backup will be 
+        created whether the byte at 106H is set or not.
+
+        Be  careful - if you are running CP/M 1 and the drive on which 
+        you  are receiving has an R/O file with the same name  created 
+        by CP/M 2,  the R/O file can not be accessed (found,  changed, 
+        erased,  etc.)  by CP/M 1.  You will therefore have two  files 
+        with  the same name when you are running CP/M 2.  To fix  this 
+        problem, use CP/M 1 to change the name of the file that is not 
+        R/O. Then use CP/M 2 to do what you want with the R/O file.
+
+        Examples:   ( note in the examples that follow, Ignore the
+    		      secondary  O  or  A commands as the portable
+     		      version cannot set Originate or Answer mode- it
+		      must be done manually on the modem)
+
+        The  sender enters    SBOT.600 B:*.COM    to send all the  COM 
+        files on disk B.  Also specified were originate mode 600  baud 
+        (PMMI modem) and return to terminal mode when done.
+
+        The  receiver enters     RBA.600    to receive all  the  files 
+        being  sent on the default drive.
+
+
+        The sender enters the command   SB.600  ASM.COM  *.HEX  B:M*.*
+        which  will send ASM.COM from the default drive,  all the  HEX 
+        files from the default drive,  and all the files starting with 
+        "M" from the B drive.  
+
+        Multifile transfers may only be done from the menu. It may not 
+        be specified when the MODEM program is called.  In other words    
+        A>MODEM  SAB  *.COM   will result in an INVALID  OPTION  error 
+        message.
+
+
+Return to Menu - 'M' option
+
+        When asked to select an option, 'M' returns to Menu.
+
+The MENU
+
+        If  the Modem program is entered with no option,  the Menu  is 
+        called.  The  Menu gives the choice of selecting the  standard 
+        options as defined by Ward Christensen (T,  E,  R, and S). The 
+        Terminal  mode has been greatly expanded as  described  above. 
+        The "R" and "S" commands must be called with a filename or you 
+        will be required to enter the primary command (S or R) and the 
+        filename  again (but NOT the secondary options).  If you  want 
+        multi-file  transfers,  then  the "R" option does not  need  a 
+        filename.
+
+  RET - You may also enter terminal mode using the 'RET' command,  but 
+        no  data  will  be saved since a file may not  be  named  with 
+        'RET'.  Use  the 'RET' command to RE-ENTER Terminal mode after 
+        it  has  first been entered with the 'T' option.  If  this  is 
+        done, you will still be able to save the communications if you 
+        were doing so before you exitted the terminal mode.
+
+  WRT - The  'WRT' command must be used after leaving  Terminal  mode. 
+        This  writes  the  last buffer to disk and  closes  the  file. 
+        Failure  to use the 'WRT' command results in loss of all  data 
+        and a file of length zero.
+
+  DEL - The  'DEL'  command  erases the most recent file  accessed  in 
+        Terminal mode.  Useful if you decide after communications that 
+        you don't want to save information just gathered.
+
+  DOS - The 'DOS' command reboots and returns to DOS.
+
+  XPR - The  'XPR'  command is a toggle which causes the  menu  to  be 
+        printed  or not printed.  Initially the menu is on unless  the 
+        program is called with the "X" option (ie.  A>MODEM X ).
+
+  DIR - The 'DIR' command lists the directory of a DOS disk.  A drive 
+        may  be specified (ie.  DIR B:) or the default drive  will  be 
+        listed.  After  the directory is listed,  the menu will not be 
+        printed whether XPR mode is on or off.  If XPR mode is on  and 
+        you wish to see the menu, hit return.
+
+  ^B -  Control-B  while  in Terminal (or Echo) mode allows change  of 
+        baudrate "on-the-fly." A carriage return gives 300  baud;  all 
+        other rates (110-600) must be explicitely stated.
+
+
+LISTING OF COMMANDS AND OPTIONS
+
+    Primary options
+
+        S - send a CP/M file (must specify file/s)
+        R - receive  a CP/M file (must name file unless B sec opt used)
+        T - terminal mode (specify file if memory save wanted)
+        E - terminal mode with echo
+        M - return to menu
+        X - used only when program is called to initially
+            toggle menu off
+
+    Secondary options
+
+        B - multi-file mode for sending and receiving files
+        T - return to terminal mode after transfer (memory save off)
+        R - view what is received in file transfer
+        S - view what is being sent in file transfer
+        V - view what is being sent or received in file transfer
+        T - Terminal mode (used with remotely controlled computer)
+        O - originate mode -- NOT IMPLEMENTED IN PORTABLE VERSION --
+        A - answer mode        ""   ""
+        .xxx - baud rate xxx (xxx = 110-9600 for the serial port )
+
+EXAMPLES        (fn = filename,  ft = filetype)
+
+        Send file, originate mode, 300 baud
+
+                                   SO fn.ft
+
+        Send another file, same mode and baudrate
+
+                                   S fn.ft
+
+        Receive  file on B drive,  600 baud,  ans mode,  view what  is 
+        being received, return to terminal mode 
+
+                               RART.600 B:fn.ft
+
+        Send all COM files, no messages on console, same baud and mode 
+        as last transfer
+
+                                  SBQ *.COM
+
+        Send two files from two different drives
+
+                           SB A:fn1.ft1  B:fn2.ft2
+
+        Receive files being sent by above on drive A (baudrate must be 
+        same and modes opposite)
+
+                                    RB A:
+
+        Terminal mode,  save communication in file,  300 baud (default 
+        rate),  originate mode (in terminal must type CTRL-Y to  start 
+        save, in menu must type "WRT" to close file)
+
+                                   TO fn.ft
+
+
+
+        Any problems or bugs, please call me:
+
+				Or latest revisor:
+        Mark M. Zeiger		James K. Mills         Bruce R. Kendall
+        198-01B 67th Ave.	824 Jordan Place       Mt. View, Ca.
+        Flushing, N.Y. 11365	Rockford, IL  61108
+        (212) 454-6985		(815) 398-0579	       415-967-3613
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## SATURN.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 SCREEN 1:KEY OFF
@@ -1555,9 +1895,11 @@ machines:
 320 PUT (Q,W),A,>=
 330 NEXT T:FOR T=1 TO 2500:NEXT:GOTO 210
 ```
+{% endraw %}
 
 ## SCREEN.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 CLS:KEY OFF
@@ -1626,9 +1968,11 @@ machines:
 590 LPRINT:LPRINT:LPRINT
 600 RETURN
 ```
+{% endraw %}
 
 ## SURVIVAL.BAS
 
+{% raw %}
 ```bas
 10 '---------------------------------------------------------------
 12 '
@@ -2243,6 +2587,7 @@ machines:
 9043 DATA 00,00,00,00,00,10,61,64
 9999 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

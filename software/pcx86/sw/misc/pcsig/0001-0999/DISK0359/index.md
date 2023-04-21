@@ -40,6 +40,32 @@ machines:
     MOONBEAM V1   Source code for MOONBEAM
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES359.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No 359  Moonbeam                                                v1.1
+---------------------------------------------------------------------------
+For the would be astronomer or romantic this program may be for you.
+This program determines the phase, position, and illumination of the
+moon. To plot the star data graphics is required.
+ 
+READ     ME   Documentation on moonbeam program
+MOONBEAM COM  Main program for moonbeam system
+STAR     REC  Star data file used by moonbeam to plot stars
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0359
 

@@ -49,6 +49,7 @@ machines:
 
 ## ATMOS.BAS
 
+{% raw %}
 ```bas
 ' PROGRAM "ATMOS"
 
@@ -179,9 +180,552 @@ SUB KEYCHECK STATIC
 END SUB
 
 ```
+{% endraw %}
+
+## CATALOG.TXT
+
+{% raw %}
+```
+                                 WELCOME TO
+                              SCIENCE SOFTWARE
+
+
+    This is a description of several interactive  BASIC  computer  programs
+which can be used for  science  education  and  "scientific"  hobbies.  The
+current selection  of  Science  Software  includes  tutorial,  utility  and
+application programs for the Commodore 64 , Commodore 128  (in  C64  mode),
+IBM-PC  ( and true compatibles ) and Amiga  personal computers in the areas
+of astronomy, earth satellites and aeronautics.
+
+    The price of each Science Software disk includes a comprehensive user's
+manual and floppy disk. These programs are written in CBM Basic 2.0 for the
+Commodore 64 and Commodore 128, AmigaBASIC for the Amiga and the  Microsoft
+QuickBASIC compiler for the IBM-PC and compatibles.  Compiled  versions  of
+the larger Science Software programs are also provided for the Commodore 64
+and Commodore 128 and several programs  are  available  with  hi-resolution
+graphics. Please note that all  programs  are  self-contained  and  do  not
+require other software packages such as compilers  or  graphics  utilities.
+Science Software disks are not copy-protected.
+
+
+                                 ASTRONOMY
+
+    These computer  programs  were  created  to  help  explain  fundamental
+concepts of astronomy and to help amateur astronomers and casual  observers
+locate the sun, moon, planets, comets and other celestial  objects  in  the
+skies.
+
+    "KEPLER" is a tutorial  program  which  solves  Kepler's  equation  for
+elliptic, parabolic and hyperbolic orbits ( public domain ).
+
+    "SIDEREAL" is a tutorial program  which  introduces  the  user  to  the
+relationships between Julian and calendar  dates  and  solar  and  sidereal
+times ( public domain ).
+
+    "J2000" is a utility program which converts stellar  positions,  proper
+motion, parallax and radial velocity from the standard epoch B1950 (FK4) to
+epoch J2000 (FK5). This method is described on page X of the  1985  edition
+of the Astronomical Almanac ( public domain ).
+
+    "GALILEAN" is a tutorial program which determines the position  of  the
+Galilean satellites relative to  Jupiter.  This  program  explains  how  to
+construct position diagrams like those found in  the  Astronomical  Almanac
+and astronomy magazines ( public domain ).
+
+    The next set of astronomy programs require the  following  inputs  from
+the user; (1) latitude and west longitude at the observer's  location,  (2)
+calendar date and local time during the observation and (3) time  zone  and
+Daylight Savings Time.
+
+    Each  astronomy  program  provides  the   following   information   for
+observation sites anywhere in the world;
+
+         (1) Julian Date and local sidereal time
+         (2) right ascension and declination
+         (3) azimuth and elevation ( altitude )
+         (4) heliocentric and geocentric distance of objects
+             within the solar system.
+
+
+    "SOLAR" is a program which determines the  position  of  the  sun.  The
+elevation and declination angles computed by this program are corrected for
+the effect of atmospheric refraction.
+
+    "LUNAR" is a program which determines the  position,  semidiameter  and
+phase of  the  moon.  This  program  compensates  for  the  the  effect  of
+flattening or "oblateness" of the earth at the observer's location.
+
+    "PLANET" is a program which determines the position,  semidiameter  and
+phase of any planet of our solar system. This program will  also  determine
+the heliocentric and geocentric distance of a planet.
+
+    "COMET" is a program which determines  the  position  of  comets.  This
+program includes orbital data for the Halley's Comet  return  in  1986  and
+data for the Tempel 2 return in 1988. In addition to  the  items  mentioned
+above, this program also determines the angle between the sun and comet  as
+seen by an earth observer. The user may  also  input  orbit  data  for  any
+periodic comet and the program will determine its location.
+
+    "STAR" is a program which determines the location of  stars  and  other
+stellar objects. This program will predict the  apparent  right  ascension,
+declination, azimuth and elevation (altitude) based on either a 1950  (FK4)
+or 2000 (FK5) reference. The observer's local time of rising,  setting  and
+meridian crossing of a stellar object can also be computed by  "STAR".  The
+stellar position is corrected for  the  effects  of  precession,  nutation,
+annual aberation and atmospheric refraction. The user may also compute  the
+right ascension and declination of an object from the azimuth and elevation
+of an observation. This observed position is corrected for  the  effect  of
+atmospheric refraction.
+
+    "ECLIPSE" is a program which determines the  characteristics  of  lunar
+eclipses. The user specifies a month and year and the  software  determines
+if an eclipse will occur. This program provides the user with the  type  of
+eclipse, the observer's local time  of  maximum  eclipse  and  the  eclipse
+magnitude. This program also provides the  observer's  local  time  at  the
+beginning and end of each eclipse phase.
+
+
+    The price of the Science Software astronomy disk is $34.95 domestic and
+$39.95 foreign ( postpaid ).  This  disk  includes  the  astronomy  graphic
+programs described in the  "SCIENCE  SOFTWARE  GRAPHICS"  section  of  this
+catalog.
+
+
+                              EARTH SATELLITES
+
+    This series of BASIC programs will allow the amateur user to  determine
+the location of TVRO, weather, OSCAR and other earth  orbiting  satellites.
+This information can be used for radio tracking and communications as  well
+as visual observations of earth  satellites.  All  satellite  programs  are
+valid for earth satellites in circular and elliptical orbits. All satellite
+programs also account for the effect of earth "oblateness" or flattening on
+the motion and location of a satellite as well as "non-sea level"  observer
+locations. Information is also provided which explains how to  obtain  free
+satellite prediction bulletins from NASA.
+
+    "TNODE" is a program  which  determines  information  about  equatorial
+crossings of earth satellites. These crossings are reference  points  which
+are used by other satellite programs. This  program  requires  the  orbital
+period, eccentricity, inclination and argument of perigee of a  satellite's
+orbit. The GMT and west longitude of a reference event are  also  required.
+The reference event can be either an equatorial  crossing  or  apogee.  The
+user can specify the  number  of  subsequent  crossings  which  are  to  be
+computed. The program will then calculate and print the date, GMT and  west
+longitude of these crossings ( public domain ).
+
+    "SYNCSAT" is a program which can be used to determine the  location  of
+geosynchronous ( TVRO or DBS ) satellites relative to an observer  anywhere
+in the world. The user  provides  his  or  her  latitude,  west  longitude,
+altitude and the satellite's west longitude to the  program.  The  software
+then computes and prints the azimuth and elevation antenna angles from  the
+observer's site to the satellite ( public domain ).
+
+    "VSAT" is a program which can be used  for  radio  tracking  or  visual
+observations  of  earth  satellites.  This  program  requires  the  orbital
+inclination, period, eccentricity,  argument  of  perigee  and  information
+about a reference equatorial crossing on  the  day  of  interest.  It  also
+requires the user's latitude,  west  longitude,  altitude,  time  zone  and
+Daylight Savings Time. Program "VSAT"  then  determines  if  and  when  the
+satellite is visible and prints the local civil  time,  azimuth,  elevation
+and slant range of the satellite relative to the  user.  The  latitude  and
+west longitude of  the  satellite  ground  track  and  the  topocentric  or
+"observer-centered" right ascension and declination are also  computed.  In
+addition, "VSAT" determines if and when the satellite enters and leaves the
+earth's shadow. The best  time  for  observing  a  satellite  is  when  the
+observer is in darkness and the satellite is visible but  has  not  entered
+the earth's shadow.
+
+    "TSAT" is a program which provides the same information as  "VSAT"  but
+is  more  accurate.  This  program  numerically  integrates  the  satellite
+equations of motion at one minute intervals.
+
+    "ASTROS" is a real-time orbit simulation for use with the  Amateur Space
+Telescope. A  complete  description  is  given  elsewhere  in  this catalog.
+
+    The price of the Science Software satellites disk  is  $24.95  domestic
+and $29.95 foreign ( postpaid ). Additional information  is  given  in  the
+section  titled  "SCIENCE  SOFTWARE  SATELLITES  DISK"  elsewhere  in  this
+catalog.
+
+
+                                AERONAUTICS
+
+    The current Science Software aeronautics disk contains programs in  the
+areas of model rocketry and hot air ballooning. To  encourage  use  of  the
+metric system, all aeronautics programs require metric inputs  and  provide
+results in units of the metric system.
+
+    Several programs are available to help the model rocketeer predict  the
+altitude  performance  of  single  stage  model  rockets  and   the   glide
+performance of boost and rocket gliders. All rocketry programs require  the
+user to input the launch site altitude and temperature. This information is
+used to compensate for "non-standard" flying conditions such as hot or cold
+days and launch sites which are not at sea level.
+
+    In addition, each altitude prediction program requires the model rocket
+engine  performance  and  the  model  rocket  mass,   diameter   and   drag
+coefficient. Both altitude programs provide the  following  information  to
+the user; (1) burnout altitude and  velocity,  (2)  coast  time  and  total
+flight time and (3) maximum altitude. Both prediction  programs  will  also 
+work with clustered single stage rockets.
+
+    The glide  performance  program  requires  the  following  inputs;  (1) 
+initial flight altitude, (2) wingspan and wing area and (3) zero-lift  drag 
+coefficient and  wing  efficiency  factor.  The  following  information  is 
+provided to the user for both the maximum range and maximum duration flight 
+conditions; (1) glide speed and  glide  angle,  (2)  horizontal  range  and 
+rate-of-descent and (3) lift-to-drag ratio.
+
+
+    "ATMOS" is  a  utility  program  which  determines  properties  of  the 
+standard atmosphere. The user can specify an initial and final altitude and 
+altitude increment and this program determines the  density,  pressure  and 
+temperature at each altitude ( public domain ).
+
+    "ROCKET1" is a program which determines the  flight  performance  of  a 
+single stage model rocket using an analytical  or  "exact"  solution.  This 
+program solves the problem of model  rocket  vertical  motion  by  assuming 
+"average" flight conditions.
+
+    "ROCKET2" is a program  which  determines  the  flight  performance  of 
+a single  stage  model  rocket  by  numerically  integrating  the  equations
+of motion. The user can specify  a  launch  angle  and  the  program  solves 
+the problem of non-vertical motion. The user  can  also  display  and  print 
+the results at each integration step.  The  information  displayed  includes
+the flight  time,  vertical  altitude,  horizontal  range,  velocity,  mass, 
+thrust and aerodynamic drag. This program models the  variation  of  density 
+with altitude and the changes in thrust  and  mass  with  time.  Aerodynamic 
+drag is updated as a function of altitude and velocity.
+
+     "GLIDER" is a program which determines the maximum range  and  maximum 
+endurance flight conditions of boost and  rocket  gliders.  These  are  the 
+conditions when the glider will fly the farthest or stay  in  the  air  the 
+longest time. This program is also applicable to sailplanes,  hang  gliders 
+and radio control gliders ( public domain ).
+
+    "BALLOON" is a program which can be used to determine  the  performance
+capability of hot air balloons. The payload weight lifting capability,  gas
+temperature, balloon volume and the  maximum  altitude  capability  can  be
+determined accurately with this program. "BALLOON" requires  a  combination
+of the following user inputs; (1) launch site altitude and temperature, (2)
+liftoff weight, (3) balloon volume, (4)  gas  temperature  and  (5)  flight
+altitude. From any combination of three items  (2,  3,  4  or  5),  program
+"BALLOON" provides the  user  with  the  fourth  item.  This  program  also
+computes the air temperature at the balloon's  altitude.  The  launch  site
+altitude and temperature are required in order to compensate  for  "non-sea
+level" conditions such as hot or cold days and flying sites which  are  not
+at sea level.
+
+    The price of the Science Software aeronautics disk is  $19.95  domestic
+and $24.95 foreign ( postpaid ).
+
+
+                     * * * * * * * * * * * * * * * * *
+
+"Commodore 64" and "Commodore 128" are registered trademarks  of  Commodore
+Business Machines, Ltd.
+
+"Amiga" is a registered trademark of Commodore-Amiga, Inc.
+
+"IBM-PC" is a registered trademark of IBM, Corp.
+
+"QuickBASIC" is copyright by Microsoft, Inc. 1982-1987.
+
+"BLITZ!" is a registered trademark of Skyles  Electric  Works,  231E  South
+Whisman Road, Mountain View, CA 94041.
+
+"VIDEO BASIC-64" and "BASIC-64" are copyright by Abacus Software Inc., P.O.
+Box 7211, Grand Rapids, MI 49510.
+
+                     * * * * * * * * * * * * * * * * *
+
+To order Science Software,  send  a  check  or  money  order  (U.S.dollars)
+payable to "Science Software" to the following address;
+
+                              Science Software
+                                David Eagle
+                              7370 S. Jay St.
+                           Littleton,  CO  80123
+
+                               (303) 972-4020
+
+
+                         SCIENCE SOFTWARE GRAPHICS
+
+    Several Science Software programs are also available with hi-resolution
+graphics  for  the  Commodore  64/128,  IBM-PC  and  Amiga  computers.  The
+Commodore graphics programs were developed with  VIDEO  BASIC  from  Abacus
+Software. The Commodore 64/128 graphics are displayed in  the  320  by  200
+pixel mode with several colors, the Amiga versions  are  640  by  200  with
+eight colors and the IBM-PC versions are black and white in the 640 by  200
+CGA mode.
+
+    The data display page and graphic screens generated by Commodore 64/128
+programs can be saved to tape, disk or a printer. The tape or disk file can
+be recalled later for viewing with a simple  command.  The  user  can  also
+specify a small or large size hardcopy printer output  and  switch  between
+the graphic and text screens at any time by using the  Commodore  "F5"  and
+"F7" function keys. The data display page and graphic screens generated  by
+IBM-PC programs can be saved to a printer by using the [Shift] [PrtSc]  key
+combination. The AmigaBASIC programs have the capability to save  the  data
+display pages to a printer. The graphic screens can  also  be  saved  to  a 
+printer or disk by using one of the public domain  or  commerical  programs 
+available for the Amiga. The Grabbit utility from Discovery Software is an 
+excellent program for saving Amiga graphics.
+
+    Commodore 64/128 graphic programs will support the following  printers;
+Epson, Gemini, Okidata, Commodore 1525/1525e/MPS  801/Mps  803/1526/MPS802,
+Prowriter, Siemens PT 88 and Okimate 10 color and black  and  white.  These
+programs  are also  compatible   with   the  following  printer interfaces;
+CARDCO models ?/A and ?/+G, ECX model C-6401, Microworld models  MW-302/350 
+and MSD model CPI.
+
+    Graphic  programs  are  currently  available  for   "COMET",   "LUNAR", 
+"PLANET", "SOLAR", "VSAT", "TSAT", "ECLIPSE" and "GALILEAN". The first  six 
+programs include both right ascension / declination  and  azimuth/elevation 
+graphics. Programs "COMET", "PLANET" and "SOLAR" will display positions for 
+a maximum period of 120 days and "LUNAR" will display the  moon's  position 
+for 30 days. "PLANET" will also display a planet's phase and  "LUNAR"  will 
+display the moon's phase on the graphic screen. Programs "VSAT" and  "TSAT" 
+can display the latitude and longitude of a  satellite's  ground-track  and 
+the current shadow conditions (umbra or penumbra). "ECLIPSE"  displays  the 
+position of the moon relative to the penumbra  and  umbra  shadows  at  the 
+beginning and end of each eclipse phase.
+
+    For all astronomy programs except "ECLIPSE", the user has the option of
+printing the graphic screen on a day by day basis. One can  also  elect  to
+compute and print only the data screen. Programs  "VSAT"and  "TSAT"  permit
+printing both data and graphics after each update during a satellite  pass.
+Program "ECLIPSE" will allow the user to print the  graphics  screen  after
+each eclipse phase is displayed.
+
+
+                      SCIENCE SOFTWARE DEMO DISK
+
+    The Science Software demo disk contains several programs  designed   to
+introduce  you  to  the   unique   features  and  capabilities  of  science
+software. All science software computer programs were written  for  science
+education and enjoyment.
+
+    The demo disk contains several public domain  programs  which  you  are
+free to modify or share with your friends. You may also publish any  public
+domain  program  in  a  club  newsletter  provided  that  its   source   is
+acknowledged. Please do not use these programs for any commercial  purpose.
+Several public domain programs are also copyrighted.
+
+    A hi-resolution graphic version of program "GALILEAN"  is  included  on
+the demo disk. This program  is  named  "C/GALILEAN.VB"  on  the  Commodore
+64/128 disk and is compiled with BLITZ!.
+
+    The Commodore 64/128 demo disk also contains a program called  "SSDEMO"
+which will allow you to load and print data and graphic files. These  files 
+are examples from several  science  software  graphic  programs.  All  data 
+filenames end with ".DATA" and  graphic  filenames  end  with  ".GRAPHICS". 
+Simply load "SSDEMO",8 and type "RUN" and it will display  an  introduction 
+and then prompt you with a menu. Please be sure to load a data  or  graphic 
+file before printing it to your printer. The  screen  display  and  printer 
+ output  of "ECLIPSE.GRAPHICS" may appear distorted due to  differences  in 
+monitors, TVs and printers. Program "ECLIPSE" allows  the  user  to  adjust
+graphic scale factors for his or her hardware.
+
+    Programs   "TNODE",   "SYNCSAT",   "KEPLER",    "SIDEREAL",    "J2000",
+"C/GALILEAN.VB" and "GLIDER" contain documentation within each  program.  A 
+typical NASA satellite prediction bulletin is included  with  this  package 
+along with information about how to obtain free bulletins from NASA. Please 
+consult the Science  Software  catalog  for  a  description  of  the  other 
+programs on your  demo  disk.
+
+    All programs on the Commodore 64/128 disk load with the  command;  LOAD 
+"Programname",8. The IBM-PC and compatible versions are started  by  simply
+typing the program name and the Amiga versions are selected with the  mouse 
+after clicking on the demo disk icon. Be  sure  to  boot  Workbench  in  80 
+columns and copy AmigaBASIC to your demo disk before  running  any  of  the 
+programs. The AmigaBASIC demo disk also contains  several  example  ".data" 
+and ".graphics"  files  which  can  be  used  with  any  public  domain  or 
+commerical utility program ( CLImate, SeeILBM, etc. ) which allows  you  to 
+view IFF graphics files.
+
+    The cost of the Science Software  demo  disk  is  $5  domestic  and  $8 
+foreign ( postpaid ). The Commodore 64 demo  disk  will  also  run  on  the 
+Commodore 128 in C64 mode.
+
+
+                   SCIENCE SOFTWARE SATELLITES DISK                   
+
+    The science software satellites disk contains several programs designed 
+to help the amateur user with his or her earth satellite activities.  These 
+activities include TVRO ( TV Receive Only  )  or  DBS  (  Direct  Broadcast 
+Satellite ) reception, radio communications with U.S.  and  Soviet  amateur 
+satellites by radio hams and visual observations of large earth  satellites 
+by amateur astronomers.
+
+    The satellites disk contains several public domain programs  which  you 
+are free to modify or share with your friends. You  may  also  publish  any 
+public domain program in a club newsletter  provided  that  its  source  is 
+acknowledged. Please do not use these programs for any commercial  purpose. 
+Several of the public domain programs are also copyrighted.
+
+    Two versions of each satellite tracking program  are  included  on  the 
+Commodore 64/128 satellites disk. These programs consist of a "normal"  CBM 
+BASIC 2.0 version and a compiled version. The Commodore 64/128 versions are 
+compiled with BLITZ!  The filenames  of  the  compiled  Commodore  programs 
+begin with "C/". The Commodore disk also  contains  a  version  of  program 
+"ASTROS" compiled with BASIC-64 from Abacus Software. Although this program 
+was written for the Amateur Space Telescope, it can also be used  to  track 
+two satellites in real time. Hi-resolution graphic versions of  "VSAT"  and
+"TSAT" are included on this disk. These files  are  named  "C/VSAT.VB"  and 
+"C/TSAT.VB" on the Commodore 64/128 disk. A  graphics  version  of  program
+"GALILEAN" is also included  on  the  Commodore  satellite  disk  with  the 
+filename "C/GALILEAN.VB". All  Commodore  64/128  programs  load  with  the 
+command; LOAD "Programname",8. The IBM-PC programs are  started  by  simply 
+typing the name of the program. The  AmigaBASIC  programs  are  started  by 
+opening the "Astronomy" disk from Workbench and then selecting the icon  of 
+the program you wish to run.
+
+    Programs  "TNODE",  "SYNCSAT",   "KEPLER",   "SIDEREAL",   "J2000"  and 
+"GALILEAN"  contain  documentation  within  each  BASIC  program.   Written 
+instructions for  "VSAT"  are  also  included  with  your  satellites  disk 
+package. The user's manual for "VSAT" also applies to "TSAT"  and  portions 
+of program "ASTROS".  A  typical  NASA  satellite  prediction  bulletin  is 
+included with this package along with information about how to obtain  free 
+satellite prediction bulletins from NASA. These bulletins are  mailed  free 
+of charge on a periodic basis as the orbital  elements  of  each  satellite 
+change.
+
+    The cost of the Science Software satellites disk for the Commodore  64, 
+Commodore 128, IBM-PC and Amiga computers is  $24.95  domestic  and  $29.95 
+foreign ( postpaid ). The Commodore version will run on the  Commodore  128 
+in C64 mode.
+
+
+
+                                   ASTROS
+
+                          Amateur Space Telescope
+                         Real-Time Orbit Simulation
+
+                             Copyright (C) 1985
+                                     by
+                                David Eagle                                
+                              7370 S. Jay St.                              
+                            Littleton, CO 80123                            
+
+    "ASTROS" is  an  interactive  BASIC  program  which  can  be  used  for 
+ground-based tracking, control and operation of the Amateur Space Telescope 
+( AST ) of the Independent Space Research Group (  ISRG  ).  This  software 
+simulation can be used  for  both  real-time  situations  and  for  mission 
+planning and scheduling.
+
+    "ASTROS" contains the following unique features and capabilities;
+
+(1) the user can  interactively  change  the  inertial  pointing  direction 
+(right ascension and declination) of the  AST  telescope.  This  capability 
+will allow ground  controllers  to  schedule  and  users  to  simulate  the
+attitude maneuvers necessary for viewing any celestial object.
+
+(2) the user can specify the orbital elements  of  a  relay  satellite  and 
+ASTROS will indicate if and when this satellite is in line-of-sight of  the 
+AST. The program will also display the  pointing  angles  from  the  ground 
+station to both the relay satellite and AST. This  information  will  allow 
+any user to  communicate  directly  with  the  AST  or  through  the  relay 
+satellite. A positive elevation angle to either the AST or relay  indicates
+that it is visible to the user.
+
+(3) the user can specify limb angle constraints  for  the  sun,  earth  and 
+moon. The program will indicate when the AST is pointing at the sun,  earth 
+or moon within these angles. This information  is  necessary  in  order  to 
+protect the AST optics and for mission planning purposes such as  accessing 
+opportunities for viewing occultations.
+
+(4) program "ASTROS" will also indicate when the AST is within the umbra or 
+penumbra portion of the earth's shadow. This information is  important  for 
+solar panel charging  and  celestial  viewing  conditions.  Many  types  of 
+observations are best performed when the AST is in the earth's shadow.
+
+(5) the local time and calendar date are maintained and  displayed  by  the 
+software. The time and date can be either current or future  conditions  as 
+specified by the user when "ASTROS" is initialized.
+
+(6) the user can also print the screen contents to any  compatible  printer 
+after a prompt or display page appears on the screen.
+
+
+
+```
+{% endraw %}
+
+## FILES921.TXT
+
+{% raw %}
+```
+Disk No  921
+Program Title: ASTRONOMY and AERONAUTICS
+PC-SIG version 1
+ 
+    This disk contains several useful programs relating to astronomy, earth
+satellites, and aeronautics. KEPLER is a tutorial program that solves
+Kepler's equation for elliptic, parabolic and hyperbolic orbits. SIDEREAL
+is a tutorial program that introduces the user to the relationships between
+Julian calendar dates and solar and sidereal times. J2000 is a utility
+program that converts stellar positions, proper motion, parallax and radial
+velocity from the standard epoch B1950 (FK4) to epoch J2000 (FK5). GALILEAN
+is a tutorial program that determines the position of the Galilean
+satellites relative to Jupiter. SYNCSAT and TNODE let you determine the
+location of several earth-orbiting satellites. This information can be used
+for radio tracking, communications, and visual observations of earth
+satellites. ATMOS is a utility program that determines properties of the
+standard atmosphere. ROCKET1 is a program which determine the flight
+performance of a single stage model rocket. GLIDER determines the maximum
+range and maximum endurance flight conditions of boost and rocket gliders.
+This program is also applicable to sailplanes, hang gliders, and
+radio-control gliders.
+ 
+Usage: Astronomy / Aeronautics
+ 
+System Requirements: 128K memory and one disk drive.
+ 
+How to Start: Enter the name of the program then (press enter).
+ 
+Suggested Registration: $34.95 ($39.95 foreign) for astronomy disk,
+$24.95 ($29.95 foreign) for satellite disk, $19.95 ($24.95 foreign) for
+aeronautics disk.
+ 
+File Descriptions:
+ 
+ATMOS    BAS  Basic program of ATMOS.EXE.
+ATMOS    EXE  Aeronautics program.
+GALILEAN BAS  Basic program of GALILEAN.EXE.
+GALILEAN EXE  Astronomy program.
+GLIDER   BAS  Basic program of GLIDER.EXE.
+GLIDER   EXE  Aeronautics program.
+J2000    BAS  Basic program of J2000.EXE.
+J2000    EXE  Astronomy program.
+KEPLER   BAS  Basic program of KEPLER.EXE.
+KEPLER   EXE  Astronomy program.
+ROCKET1  BAS  Basic program of ROCKET1.EXE.
+ROCKET1  EXE  Aeronautics program.
+SIDEREAL BAS  Basic program of SIDEREAL.EXE.
+SIDEREAL EXE  Astronomy program.
+SYNCSAT  BAS  Basic program of SYNCSAT.EXE.
+SYNCSAT  EXE  Satellite program.
+TNODE    BAS  Basic program of TNODE.EXE.
+TNODE    EXE  Satellite program.
+BRUN3087 EXE  Program necessary for running programs.
+CATALOG  TXT  File descriptions.
+README   BAT  Batch file for typing CATALOG.TXT.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
 
 ## GALILEAN.BAS
 
+{% raw %}
 ```bas
 ' Program "GALILEAN"
 
@@ -646,9 +1190,11 @@ SUB KEYCHECK STATIC
 END SUB
 
 ```
+{% endraw %}
 
 ## GLIDER.BAS
 
+{% raw %}
 ```bas
 ' PROGRAM "GLIDER"
 
@@ -928,9 +1474,11 @@ SUB KEYCHECK STATIC
 
 END SUB
 ```
+{% endraw %}
 
 ## J2000.BAS
 
+{% raw %}
 ```bas
 ' Program  "J2000"
 
@@ -1286,9 +1834,11 @@ SUB KEYCHECK STATIC
 END SUB
 
 ```
+{% endraw %}
 
 ## KEPLER.BAS
 
+{% raw %}
 ```bas
 ' PROGRAM "KEPLER"
 
@@ -1501,9 +2051,11 @@ SUB KEYCHECK STATIC
 
 END SUB
 ```
+{% endraw %}
 
 ## ROCKET1.BAS
 
+{% raw %}
 ```bas
 ' PROGRAM "ROCKET1"
 
@@ -1680,9 +2232,11 @@ IF INSTR("yY",SELECTION$) THEN GOTO MASS
 
 END
 ```
+{% endraw %}
 
 ## SIDEREAL.BAS
 
+{% raw %}
 ```bas
 ' Program "SIDEREAL"
 
@@ -2135,9 +2689,11 @@ SUB KEYCHECK STATIC
 END SUB
 
 ```
+{% endraw %}
 
 ## SYNCSAT.BAS
 
+{% raw %}
 ```bas
 ' Program "SYNCSAT"
 
@@ -2490,9 +3046,11 @@ SUB INTRODUCTION STATIC
 
 END SUB
 ```
+{% endraw %}
 
 ## TNODE.BAS
 
+{% raw %}
 ```bas
 ' PROGRAM "TNODE"
 
@@ -2948,6 +3506,7 @@ SUB CTIME STATIC
 
 END SUB
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

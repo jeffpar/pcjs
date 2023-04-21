@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## README.TXT
+
+{% raw %}
+```
+WhileOut 1.0 screen saver & message taker
+for WordPerfect 5.1 [DOS version]
+should contain the following files:
+
+WHILEOUT.WP5    22334 02-15-92   2:07p
+		[the documentation, in WordPerfect 5.1 format]
+WHILEOUT.WPM     4961 02-14-92   5:57p
+		[a WordPerfect 5.1 macro]
+WHIL&OUT.WPM     5779 02-14-92  11:12p
+		[a WordPerfect 5.1 macro]
+WHIL^OUT.WPM    23465 02-14-92  11:15p
+		[a WordPerfect 5.1 macro]
+MOUSERAN.WPM     1270 02-14-92  11:14p
+		[a WordPerfect 5.1 macro]
+WHILEOUT.MRG    25355 02-15-92   1:53p
+		[a WordPerfect 5.1 primary merge file]
+WHILEOUT.DAT     8328 02-15-92   1:53p
+		[a WordPerfect 5.1 secondary merge file]
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3486
 

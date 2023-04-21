@@ -50,14 +50,64 @@ machines:
 
 ## ADVANCED.BAS
 
+{% raw %}
 ```bas
 7 ON ERROR GOTO 8 :PLAY"mf" :ON ERROR GOTO 0 :GOTO 10
 8 PRINT "Sorry, but you must use BASICA to run this program.":RESUME 9
 9 ON ERROR GOTO 0 :END
 ```
+{% endraw %}
+
+## ADVANCED.DOC
+
+{% raw %}
+```
+     Documentation Maintained by PC Professional Users Group
+               P.O. Box 2350 Wilmington DE. 19899
+FILENAME:               ADVANCED.BAS
+PROGRAM NAME:           Code to check for Advanced BASIC
+VERSION NUMBER:         1.0
+VERSION DATE:           00-00-00
+AUTHOR (ORIGINAL):      David Bennett    (302) 571-0314
+" ADDRESS/PHONE:        201 Snuff Mill Road, Wilmington DE. 19807
+LATEST REVISOR:         .
+" ADDRESS/PHONE:        .
+OBTAINED FROM:          Author
+PROGRAM TYPE:           Utility 
+
+********************** EQUIPMENT REQUIRED **********************
+(Consider printer, modem, memory, graphics board, special equip., etc.)
+
+********************* PURPOSE; DESCRIPTION *********************
+This is some code that you can add to a program that requires
+ Advanced Basic.  If the user tries to use disk or cassette, 
+ this code will warn him and stop the program.
+
+************************* INSTRUCTIONS *************************
+-Add this code in an appropriate location to any of your programs
+ which require the use of ADVANCED BASIC
+
+************************* PECULIARITIES ************************
+Make sure line 10 exists or change the GOTO number at the end of
+line 7
+
+*********************** GENERAL COMMENTS ***********************
+-This is a nice sort of finishing touch which should be added to
+ any program which will not run without ADVANCED BASIC.
+
+-The complete code listing is:
+7 ON ERROR GOTO 8 :PLAY"mf" :ON ERROR GOTO 0 :GOTO 10
+8 PRINT "Sorry, but you must use BASICA to run this program.":RESUME 9
+9 ON ERROR GOTO 0 :END
+
+-An improvement would be :
+
+```
+{% endraw %}
 
 ## ANIMATE.BAS
 
+{% raw %}
 ```bas
 1 REM This is a sample program that illustrates how to use several of
 2 REM the BASICA graphics commands.  Specifically, animation of objects
@@ -152,9 +202,11 @@ machines:
 590 CLS:RUN "MENU.PGM"
 20000 PRINT "error encountered";ERL;"=error line";:RESUME
 ```
+{% endraw %}
 
 ## BASKEYS.BAS
 
+{% raw %}
 ```bas
 10 ' Utility to set up function keys.
 20 KEY OFF
@@ -171,9 +223,11 @@ machines:
 130 KEY ON
 140 NEW
 ```
+{% endraw %}
 
 ## BASTODOS.BAS
 
+{% raw %}
 ```bas
 10 '*
 15 '*************************************************************************
@@ -1720,9 +1774,11 @@ machines:
 7617 RESTORE
 7618 RETURN
 ```
+{% endraw %}
 
 ## BASTOFOR.BAS
 
+{% raw %}
 ```bas
 10 REM  IBM-PC BASIC-TO-FORTRAN CONVERTER V. 1.0
 20 REM     COPYRIGHT (C) JIM GLASS, MAY 1983
@@ -2168,9 +2224,202 @@ machines:
 30001 LOCATE 4,50:COLOR 6,0:PRINT"OUTPUT LINES:";OLIN
 30002 RETURN
 ```
+{% endraw %}
+
+## BASTOFOR.DOC
+
+{% raw %}
+```
+
+            BASCONV--A FORTRAN-TO-BASIC CONVERSION AID
+                           BY JIM GLASS
+
+
+BASCONV  is  a  program for converting IBM-PC Basic programs into
+Microsoft or IBM Fortran. It will not perform every detail of the
+conversion  for  you,  but will perform the bulk of the drudgery.
+Careful  inspection  and editing of the resulting output file are
+vital if you wish to obtain a working Fortran program.
+
+BASCONV  is  easy  to use. It asks you for the name of the source
+(Basic)  file, the target (Fortran) file, and if you wish to have
+the  source  displayed  as  it is being converted. All file names
+must be supplied complete with drive identifier and extension, if
+any.  In  addition  to these files, BASCONV also builds a working
+file,  called  WORK,  on  the  current default drive. It DOES NOT
+delete the WORK file when the conversion is complete.
+
+BASCONV is fairly smart.  Among the things it can do are:
+
+         Change  FOR/NEXT  loops  into  DO  loops.
+         BASCONV  supplies target line numbers for
+         the terminating CONTINUE if necessary.
+
+         Change WHILE/WEND loops into IF..CONTINUE
+         loops.
+
+         Change  ON  n  GOTO  statements into GOTO
+         (...)  n  type statements. ON...GOSUB and
+         GOSUBS in general are NOT converted.
+
+         Fully parse IF..THEN..ELSE statements and
+         convert  into  equivalent Fortran logical
+         IF statements or IF blocks. An IF without
+         an ELSE becomes a pure logical IF.
+
+         Handle     OPEN..FOR..AS     and     OPEN
+         mode,file,... statements, converting them
+         into Fortran OPEN statements.
+
+         Detect   ALL   implicit  declarations  of
+         variables,     and    provide    explicit
+         declarations  at  the  beginning  of  the
+         Fortran source.
+
+         Convert  all  keywords,  such  as ATN, to
+         equivalents,  such  as  ATAN.  Also parse
+         statements  such  as  x MOD y and convert
+         into statements such as AMOD(x,y).
+
+         Remove  all  Basic  line  numbers, except
+         where  lines  are  explicitly referenced.
+         These   line   numbers   become   Fortran
+         statement labels.
+
+         Break  all  mulit-statement  Basic  lines
+         into   single  statements  and  move  all
+         source code into column seven as required
+         by Fortran.
+
+         Convert all double-quotes (") into single
+         quotes (').
+
+         Convert  Basic  exponentiation  (^)  into
+         Fortran exponentiation (**).
+
+         Provide  Fortran  statement functions for
+         the Basic logical functions IMP, XOR, and
+         EQV.
+
+         Converts  PRINT  and  LPRINT  as  well as
+         PRINT# and WRITE# statements into Fortran
+         equivalents.
+
+         Inserts  appropriate  code to convert the
+         Basic    SWAP    keyword   into   Fortran
+         statements.
+
+         Converts  all  Basic relational operators
+         such  as <,>,=,NOT,AND,OR into equivalent
+         Fortran              such              as
+         .LE.,.GT.,.EQ.,.NOT.,.AND.,.OR.
+
+Some things BASCONV (at least version 1.0) CANNOT do are:
+
+         Convert  Basic  graphics commands such as
+         LINE, PSET, PRESET.
+
+         Convert GOSUBS into CALLS
+
+         Convert   PRINT  USING  into  WRITE  with
+         FORMAT.
+
+         Handle DATA/RESTORE/READ statements.
+
+         Handle    CHAIN,    LSET,    MKI$,   CVI,
+         statements.
+
+         Handle  sceen positioning statements like
+         POS(0), CSRLIN.
+
+
+Here  is  a list of the Basic keywords which ARE NOT converted by
+BASCONV:
+
+AUTO     BLOAD   BSAVE   CALL     CHAIN   CIRCLE  CLEAR   CLS
+COLOR    COM     COMMON  CONT     CSRLIN  CVD     CVI     DATA
+DATE$    DELETE  DRAW    EDIT     ERASE   ERL     ERR     ERROR
+FIELD    FILES   FRE     GET      GOSUB   HEX$    INKEY$  INP
+INPUT$   INSTR   KEY     KEY$     KILL    LEFT$   LEN     LINE
+LIST     LLIST   LOAD    LOC      LOCATE  LOF     LPOS    LSET
+MERGE    MID$    MKD$    MKI$     MKS$    MOTOR   NAME    NEW
+OCT$     OFF     OPTION  OUT      PAINT   PEEK    PEN     PLAY
+POINT    POS     PRESET  PSET     PUT     RANDOMIZE       RENUM
+RESTORE  RESUME  RIGHT$  RND      RESET   RUN     SAVE    SCREEN
+SOUND    SPACE$  SPC(    STICK    STRIG   STRING$ SYSTEM  TAB(
+TIME$    TROFF   TRON    USING    USR     VAL     VARPTR  VARPTR$
+WAIT     WIDTH
+
+Finally,  here  is a list of the Basic keywords which ARE handled
+by BASCONV:
+
+ABS      AND     ASC     ATN      CDBL    CHR$    CINT    CLOSE
+COS      CSNG    DEF     DEFDBL   DEFINT  DEFSNG  DEFSTR  DIM
+ELSE     END     EQV     EXP      FIX     FNxxxx  FOR     GOTO
+IF       IMP     INPUT   INPUT#   INT     LET     LOG     LPRINT
+MOD      NEXT    NOT     ON..GOTO OPEN    OR      PRINT   PRINT#
+REM      RETURN  SGN     SIN      SQR     STEP    STOP    STR$
+SWAP     TAN     THEN    TO       WEND    WHILE   WRITE   WRITE#
+XOR
+
+Although  the  list  of keywords recognized by BASCONV is shorter
+than  those not recognized, the most important are there. Many of
+the  unrecognized  words  are  those with no Fortran equivalents,
+such  as  LINE  or  PAINT.  A  few  are  not  handled  due to the
+difficulty    of    programming    the    conversion,   such   as
+DATA/READ/RESTORE. Perhaps in Version 1.1...
+
+```
+{% endraw %}
+
+## FILES167.TXT
+
+{% raw %}
+```
+Disk No:  167
+Program Title: BASIC AIDS No 1
+PC-SIG version: 1.1
+
+This disk contains many useful routines for the BASIC programmer.
+Routines include a BASIC to FORTRAN converter, a BASIC program squisher,
+and a REMark remover.
+
+Usage:  BASIC programmers.
+
+Special Requirements:  A version of BASIC.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+ADVANCED BAS  Checks to see if a program requires BASICA or not.
+ADVANCED DOC  Documentation.
+ANIMATE  BAS  Demonstrates how to use several BASICA graphics commands.
+BASKEYS  BAS  Sets up BASIC programming function keys.
+BASTODOS BAS  Several callable Assembler routines for BASIC programs.
+BASTOFOR BAS  Converts BASIC to Fortran.
+BASTOFOR DOC  Documentation.
+CHARDISP BAS  Displays ASCII character set.
+PSQUISH  BAS  BASIC program squisher.
+REMREM   BAS  Removes REMarks from BASIC programs.
+STOPGAP  BAS  Screen text editor for BASIC programming.
+TRANDUMP BAS  HEX file display program.
+TRS2PC   BAS  Converts TRS80 BASIC partways to IBM PC BASIC.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1986,87,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## PSQUISH.BAS
 
+{% raw %}
 ```bas
 10 DEF FNI$(A$)=CHR$(ASC(LEFT$(A$,1))+32*(LEFT$(A$,1)>"Z")):DEFINT B-K,S-Z:A=0:AZ=0:A$="":C$="":D=0:DS=100:DT=0:G1=0:G2=0:G3=0:G4=0:G5=0:G6=0:HH=0:I$="":IP$="":J$="":LN=0:L$="":L1$="":N$="":P=0:PJ=0:PP=0:PV=0:Q$="":R=0:RD=0:RE=0:S=0:S1=0
 20 SD=0:SQ$="":SV$="":T=0:T1=0:T2=0:V$="":X=0:XC$="":XS$="":XP$="":ZC=0:DIM REF(DS*2),PRO(DS):SCREEN 0,0,0:WIDTH 80:COLOR 11,0:KEY OFF:CLS:LINE INPUT"ENTER THE NAME OF THE PROGRAM TO BE SQUISHED: ";SQ$
@@ -2233,9 +2482,11 @@ machines:
 550 PRINT #2,A$:GOTO 270
 560 IF ERR=53 THEN RUN ELSE ON ERROR GOTO 0
 ```
+{% endraw %}
 
 ## REMREM.BAS
 
+{% raw %}
 ```bas
 10 INPUT "Enter file to remove remarks from-",I$:OPEN I$ FOR INPUT AS 1
 20 INPUT "Enter output filename-",O$:OPEN O$ FOR OUTPUT AS 2
@@ -2251,9 +2502,11 @@ machines:
 200 PRINT#2,X$:PRINT X$
 210 WEND
 ```
+{% endraw %}
 
 ## STOPGAP.BAS
 
+{% raw %}
 ```bas
 100 '************** THE STOPGAP EDITOR IN IBM BASIC **************
 110 '         ***** by D.E. Cortesi
@@ -2475,9 +2728,11 @@ machines:
 2270 WHILE LT$(Z)="" AND Z<>A : Z=LB(Z) : WEND
 2280 RETURN
 ```
+{% endraw %}
 
 ## TRANDUMP.BAS
 
+{% raw %}
 ```bas
 100 DEFINT A-Z
 110 CLS : CLOSE
@@ -2533,9 +2788,11 @@ machines:
 610 '
 620 END
 ```
+{% endraw %}
 
 ## TRS2PC.BAS
 
+{% raw %}
 ```bas
 100 'TRS TO IBM PC CONVERSION AID        12/31/82 REV. 1/23/83
 120 'DAVE MCCOY 70040,1131
@@ -2747,6 +3004,7 @@ machines:
 7050 END
 9000 '**************** SAVE PROGRAM ************************
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

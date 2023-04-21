@@ -31,6 +31,92 @@ machines:
     is a clearly superior video library manager.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILELIST.TXT
+
+{% raw %}
+```
+Disk Drive-In Theater File List			Description
+						--------------------------
+DTHEATER COM    62700   4-08-88   1:01a		Executible program of DDIT
+DTHEATER 000     8448   4-09-88   8:00p		Overlay file for above
+IMPORT   CHN    37649   4-09-88   8:01p		IMPORT section chain file
+DTCNFG   CHN    11165   4-09-88   8:01p		CONFIG section chain file
+VDB_EXPT COM    13302   6-30-87   9:26p		Conversion program
+VDB_EXPT DOC      512   6-30-87  12:06a		Dox for conversion program
+STBATBK  BAT       87   6-14-87   3:02a		Batch file for HD install
+STBAT__  BAT       49   6-14-87   2:59a		Batch file for HD install
+INSTALL  BAT      744   7-07-87   7:33p		Installation batch program
+SAMPLE   SDF     1603   6-30-87  12:12a		Sample sequential data file
+CONFIG   DT        95   7-26-87   1:17a		DDIT configuration data
+INST     COM    12908   4-09-88   8:02p		Part of Installation proc.
+MANUAL   COM    12709   4-09-88   8:30p		Program used to view manual
+MNL      DTA    83592   4-09-88  11:12p		Raw data of Manual
+CATAGORY DDF       21   4-09-88  11:16p		Catagory Data Dictionary File
+DT       DAT      176   4-09-88  11:17p		Raw movie data file
+TL       INX      843   4-09-88  11:17p		Title Index file
+TP       INX      339   4-09-88  11:17p		Tape Index file
+README            585   4-11-88   9:13p		Instructions on how to start
+GO       BAT       16   4-11-88   9:13p		Batch file to read readme
+FILELIST TXT        0   4-11-88   9:14p		This file.
+       21 File(s)    102400 bytes free
+```
+{% endraw %}
+
+## FILES493.TXT
+
+{% raw %}
+```
+Disk No:  493                                                           
+Disk Title: Disk Drive-In Theater (vcr dbase)                           
+PC-SIG Version: S2.1                                                    
+                                                                        
+Program Title: Disk Drive-In Theater                                    
+Author Version: 1.0                                                     
+Author Registration: $15.00.                                            
+Special Requirements: Printer recommended.                              
+                                                                        
+Here's the answer for anyone who needs a simple, structured way to keep 
+track of all the movies and tapes they own.                             
+                                                                        
+Enter your information into one of the easiest data-input screens       
+around.  Define, recall, and search by title, star, movie type, tape    
+number, stereo(?), remaining room on tape, and more.  The database      
+controller is faster than usual, making VCRDBASE very responsive.  Print
+two differently configured labels for your tape library.                
+                                                                        
+You know you have ``The Maltese Falcon.''  Now you'll be able to        
+find it!                                                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## VDB_EXPT.DOC
+
+{% raw %}
+```
+
+	VCRDBASE to DISK DRIVE IN THEATER Conversion Utility  
+
+
+Have the file DATAFILE.DAT ready on the default drive when you run this
+program.  It will read all possible information from each record, and then
+ask you if you want to change the title, specify a sub-title, enter the
+category, and a few more items.  Most prompts are single key values.  
+
+Experiment with the program.  It will create a file called VCRDBASE.SDF.  
+specify this filename when using the Disk Drive-In Theater import section.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0493
 

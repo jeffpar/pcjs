@@ -38,6 +38,42 @@ machines:
     sections include prefix and affix study, vocabulary study, and verbals.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1850.TXT
+
+{% raw %}
+```
+Disk No: 1850                                                           
+Disk Title: Mastery Learning: Grammar, disk 4/4                         
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: Mastery Learning:  Grammar                               
+Author Version: 11/89                                                   
+Author Registration: $9.95 per disk; $399.95 network or site.           
+Special Requirements: None.                                             
+                                                                        
+MASTERY LEARNING:  COMPOSITION collection teaches principles of         
+English grammar and provides tests to measure one's understanding of    
+basic grammar.  These four disks cover a wide range of grammar issues   
+all students should master.  The concepts are covered and then          
+followed by a quiz and test sections that reinforce your learning.      
+                                                                        
+Identifying subjects and verbs, reviewing parts of speech, and the five 
+basic English sentence patterns are covered on the first disk.  The     
+collection also explores clause types, sentence structures, punctuation,
+capitalization, pronoun case, metaphor and simile.  Additional study    
+sections include affix study, vocabulary study, and verbals.            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1850
 

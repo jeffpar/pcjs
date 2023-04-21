@@ -35,6 +35,46 @@ machines:
     locates where you made any arithmetic error(s).
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1435.TXT
+
+{% raw %}
+```
+Disk No: 1435                                                           
+Disk Title: Bank Statement Tamer                                        
+PC-SIG Version: S2.1                                                    
+                                                                        
+Program Title: BANK STATEMENT TAMER                                     
+Author Version: 2.1B                                                    
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+BANK STATEMENT TAMER provides a menu-driven, headache-free way to       
+balance your checkbook against your bank statement.  Step-by-step, you  
+are lead through the mechanics of how to arrive at the same ending      
+balance as your bank---and thereby avoid over drawn accounts or happily 
+discover that the bank actually goofed!  It does happen!                
+                                                                        
+The program helps you verify balances from the previous month, find     
+checks still out, and mark off paid checks, deposits and other          
+credits/debits.  As you enter these values into the program, a running  
+balance is calculated and displayed, showing any difference between your
+register balance and the adjusted bank statement balance.  Included,    
+also, is a feature that can help save you hours cleaning up your        
+checkbook register.  It searches through your checkbook entries and     
+locates where you made any arithmetic error(s).                         
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989, 1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1435
 

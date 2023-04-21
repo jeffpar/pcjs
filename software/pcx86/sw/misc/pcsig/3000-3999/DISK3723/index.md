@@ -14,6 +14,32 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+The file on this disk is self a self extracting archive. To install the
+program, make a sub directory on your hard drive, and call the program
+from that sub directory.
+
+        EG:  MD PRO
+             CD PRO
+             A:PROLIT10  (Where A: is the drive your installing FROM)
+
+To extract the sample files, type WIGETS.
+
+To print the documentation, copy *.TXT to the printer.
+
+	EG:  COPY README.TXT PRN
+	     COPY MANUAL.TXT PRN			
+
+To start the program, type PRO.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3723
 

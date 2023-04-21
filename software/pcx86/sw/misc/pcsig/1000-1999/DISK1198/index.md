@@ -31,6 +31,46 @@ machines:
     management presentations of project status and resource use.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1198.TXT
+
+{% raw %}
+```
+Disk No  1198
+Program Title: GANTT & SCHEDULING version 1.3 (Disk 2 of 2)
+PC-SIG version 1.4
+
+The GANTT & SCHEDULING program is contained on two disks, #593 and 
+#1198.  Both disks are needed to run the program.  Check disk #593 for 
+full information. 
+
+Usage:  Critical Task Tracking/Project Management/Scheduling.
+
+Special Requirements:  A printer for hard copy.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None for GANTT, but SCHEDULE is $295.00 for the
+full version.
+
+File Descriptions:
+
+GANTT    DOC  GANTT documentation.
+SCHEDULE DOC  SCHEDULE documentation.
+GANTTDOC BAT  Batch file to print GANTT documentation.
+SCHEDDOC BAT  Batch file to print SCHEDULE documentation.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1198
 

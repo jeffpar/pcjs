@@ -42,6 +42,74 @@ machines:
     win a cash prize!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1382.TXT
+
+{% raw %}
+```
+Disk No: 1382
+Program Title:  b_CRYPT version 2.00
+PC-SIG version 2
+
+A peace of mind program. b_CRYPT is a file encryption/decryption utility
+to protect your data files from unauthorized access.  Whether sensitive
+personnel files, confidential financial data, or super secret research
+information, this program prevents prying eyes from gaining access.  It
+will put the lock on any MS-DOS file structures including hidden files,
+no matter what the size or what the file extension reads.
+
+You supply a password and it converts your data into an incomprehensible
+binary form based on a pseudorandom algorithm.  With a password from 5
+to 32 characters in length, and supporting the entire ASCII character
+set, the chances of someone breaking the code file is greater than one
+to the 256^32.  And that assumes the hacker has a copy of B_CRYPT.  To
+complicate matters, you can encrypt a file more than once.
+
+With lots of documentation and screen help, the program is painless to
+use, and very fast: a 100k hard disk file is processed in 30 seconds on
+a 12Mhz AT class computer.  A ramdisk further speeds up the processing.
+
+The author includes a challenge: try to break his encrypted message and
+win a cash prize!
+
+Synopsis:  Encrypts your confidential files so only you can read them.
+
+Usage:  Encryption/Decryption/Data Security/Permenant File Deletion.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $25.00 plus applicable N.J.  State Sales Tax
+and $3.00 shipping.
+
+File Descriptions:
+
+B_CRYPT EXE   Main program.
+B_CRYPT PIF   Windows 2.0 (pif) program information file.
+B_CRYPT DOC   Operation and instruction manual.
+B_CRYPT CVR   Text file which when printed in compressed mode will
+              become a diskette cover insert instruction sheet.
+C_ORDER FRM   Commercial registration form.
+P_ORDER FRM   Personal single user registration form.
+COMPDOC BAT   Batch file to print .CVR and .FRM files.
+DOC     BAT   Batch file to print B_CRYPT.DOC file.
+BREAKME TXT   B_CRYPTed file of $ interest to a registered user who
+              deciphers it.
+PACKING LST   Contents listing of files.
+READ_ME 1ST   Disclaimer text and initial instructions file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1382
 

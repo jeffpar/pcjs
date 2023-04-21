@@ -76,6 +76,7 @@ machines:
 
 ## AMORTIZE.BAS
 
+{% raw %}
 ```bas
 100 ' Amortize ("AMORTIZE")
 110 CLS
@@ -134,9 +135,11 @@ machines:
 520 NEXT M
 530 END
 ```
+{% endraw %}
 
 ## BALREM.BAS
 
+{% raw %}
 ```bas
 100 'Balance Remaining and Interest Paid ("BALREM")
 110 CLS
@@ -166,9 +169,11 @@ machines:
 350 PRINT "Interest paid:" TAB(20); USING MONEYFMT$; TOTALINTEREST
 360 END
 ```
+{% endraw %}
 
 ## CHARGEHI.BAS
 
+{% raw %}
 ```bas
 100 'Charge History ("CHARGEHIST")
 110 CLS
@@ -232,9 +237,11 @@ machines:
 700 WEND
 710 END
 ```
+{% endraw %}
 
 ## CREDITCA.BAS
 
+{% raw %}
 ```bas
 100 'Credit Card ("CREDITCARD")
 110 CLS
@@ -268,9 +275,11 @@ machines:
 390 PRINT "Saving in using credit card: "; TAB(30); USING MONEYFMT$;                      PVCASH - PVCARD
 400 END
 ```
+{% endraw %}
 
 ## CREDITPU.BAS
 
+{% raw %}
 ```bas
 100 'Credit Purchase ("CREDITPURCH")
 110 CLS
@@ -328,9 +337,11 @@ machines:
 640 WEND
 650 END
 ```
+{% endraw %}
 
 ## DAILYODO.BAS
 
+{% raw %}
 ```bas
 100 'Daily Odometer ("DAILYODOMETER")
 110 CLS
@@ -380,9 +391,11 @@ machines:
 2090 IF DAY > NDAYS(MONTH)  THEN PRINT "* No such day *": GOTO 2000
 2100 RETURN
 ```
+{% endraw %}
 
 ## DATEDIST.BAS
 
+{% raw %}
 ```bas
 100 'Time between dates in years, months, days ("DATEDISTANCE")
 110 CLS
@@ -437,9 +450,11 @@ machines:
 2090 IF DAY > NDAYS(MONTH)  THEN PRINT "* No such day *": GOTO 2000
 2100 RETURN
 ```
+{% endraw %}
 
 ## DATESINM.BAS
 
+{% raw %}
 ```bas
 100 'Dates in Month ("DATESINMONTH")
 110 CLS
@@ -506,9 +521,11 @@ machines:
 720 WEND
 730 END
 ```
+{% endraw %}
 
 ## DAYOFWEE.BAS
 
+{% raw %}
 ```bas
 100 'Day of Week ("DAYOFWEEK")
 110 CLS
@@ -558,9 +575,11 @@ machines:
 2090 IF DAY > NDAYS(MONTH)  THEN PRINT "* No such day *": GOTO 2000
 2100 RETURN
 ```
+{% endraw %}
 
 ## DEPGROWS.BAS
 
+{% raw %}
 ```bas
 100 'Savings With Growing Deposits ("DEPGROWS")
 110 CLS
@@ -629,9 +648,76 @@ machines:
 740 PRINT "Final balance: "; USING MONEYFMT$; FV
 750 END
 ```
+{% endraw %}
+
+## FILES613.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  613  Managing Money with IBM PC v1.0                   v1   DS2
+---------------------------------------------------------------------------
+Written by A. Glazer, an economics professor at the University of
+California, this disk contains all the BASIC programs contained in his book
+Managing Money With Your IBM PC (Prentice-Hall, 1985).  Among other things,
+the programs can determine the after-tax cost of a loan, demonstrate the
+advantages of an Individual Retirement Account, compare loans which have
+different interest rates and different origination fees, and calculate the
+amount of monthly savings necessary to finance a college education.
+Each short program is independent and menu driven for ease of use.
+ 
+------------- Managing Money with IBM PC (v1.0)
+AMORTIZE BAS  Amortization schedule for a mortgage and monthly loan payment
+BALREM   BAS  Balance remaining on a mortgage
+CHARGEHI BAS  Monthly status of a revolving charge account
+CREDITCA BAS  The gains from using a credit card instead of paying in cash
+CREDITPU BAS  Minimum payment schedule for a credit purchase
+DAILYODO BAS  Date that is a specified number of days away from starting date
+DATEDIST BAS  Number of years, months, and days between two dates
+DATESINM BAS  Dates in a month on which a specified day of the week falls
+DAYOFWEE BAS  Day of week on which a specified date falls
+DEPGROWS BAS  Balance in a savings program with deposits that grow with time
+INTRATE  BAS  Interest rate on a loan
+INVHISTO BAS  Annual description of an investment: value, rate of return,
+              capital gains, and income
+INVINCOM BAS  Annual or monthly income that yields a specified rate of return
+INVPRICE BAS  Sales price of an asset that yields a specified rate of return
+INVVALUE BAS  Present value of an investment
+INVYIELD BAS  Annual rate of return on an investment
+IRA      BAS  The benefits of saving in an Individual Retirement Account
+LOANCOST BAS  After tax cost of a loan
+LOANQUAL BAS  Size of loan available at interest rate & monthly payment
+LOANTERM BAS  How many payments you must make on a loan
+MNTHINCM BAS  Monthly income you can obtain from a specified amount of money
+MONTHLYO BAS  Date that is a specified number of months away from starting date
+NUMDAYS  BAS  Number of days between two dates
+PAYBACK  BAS  How long it takes to recover an investment
+PERBALAN BAS  Balance in savings account after any number of deposits
+PERDEPOS BAS  How much to deposit each month or year to reach a savings goal
+PERRATE  BAS  The interest rate you must earn on your savings to reach
+              a specified savings goal
+PERTERM  BAS  How many monthly or annual deposits to make to reach a goal
+POINTS   BAS  Effective interest rate on a loan that charges points or
+              origination fees.  Useful when deciding whether to refinance
+README        General information and file information
+RULEOF78 BAS  Amortization schedule for consumer and automobile loans
+SAVHISTO BAS  Annual balance in a savings program with deposits that grow
+              each year
+SIMPINV  BAS  Analysis of an investment that produces no annual income
+TERMDEPO BAS  Balance in a savings plan any number of years after an
+              initial deposit
+ 
+ 
+PC-SIG (Software Interest Group)
+1030 E. Duane Ave. Suite D
+Sunnyvale Ca. 94086
+Ph# (408) 730-9291
+```
+{% endraw %}
 
 ## INTRATE.BAS
 
+{% raw %}
 ```bas
 100 ' Interest Rate on Loan ("INTRATE")
 110 CLS
@@ -660,9 +746,11 @@ machines:
 340 PRINT "Interest rate: "; USING "###.##_%"; AR
 350 END
 ```
+{% endraw %}
 
 ## INVHISTO.BAS
 
+{% raw %}
 ```bas
 100 'Investment History ("INVHISTORY")
 110 CLS
@@ -715,9 +803,11 @@ machines:
 580 NEXT YEAR
 590 END
 ```
+{% endraw %}
 
 ## INVINCOM.BAS
 
+{% raw %}
 ```bas
 100 'Investment Income ("INVINCOME")
 110 CLS
@@ -746,9 +836,11 @@ machines:
 340 PRINT "Required periodic income: "; USING MONEYFMT$; PMT
 350 END
 ```
+{% endraw %}
 
 ## INVPRICE.BAS
 
+{% raw %}
 ```bas
 100 'Investment Price ("INVPRICE")
 110 CLS
@@ -776,9 +868,11 @@ machines:
 330 PRINT "Required selling price: "; USING MONEYFMT$; FV
 340 END
 ```
+{% endraw %}
 
 ## INVVALUE.BAS
 
+{% raw %}
 ```bas
 100 'Investment Value ("INVVALUE")
 110 CLS
@@ -803,9 +897,11 @@ machines:
 300 PRINT "Value of investment: ";USING MONEYFMT$; PV
 310 END
 ```
+{% endraw %}
 
 ## INVYIELD.BAS
 
+{% raw %}
 ```bas
 100 'Investment Yield ("INVYIELD")
 110 CLS
@@ -835,9 +931,11 @@ machines:
 350 PRINT "Annual rate of return: "; USING PCTFMT$; AY
 360 END
 ```
+{% endraw %}
 
 ## IRA.BAS
 
+{% raw %}
 ```bas
 100 'IRA Savings ("IRA")
 110 CLS
@@ -893,9 +991,11 @@ machines:
 610 NEXT YEAR
 620 END
 ```
+{% endraw %}
 
 ## LOANCOST.BAS
 
+{% raw %}
 ```bas
 100 'Loan Cost ("LOANCOST")
 110 CLS
@@ -941,9 +1041,11 @@ machines:
 510 PRINT "After-tax cost of loan: "; USING MONEYFMT$; PV
 520 END
 ```
+{% endraw %}
 
 ## LOANQUAL.BAS
 
+{% raw %}
 ```bas
 100 'Loan Qualification ("LOANQUAL")
 110 CLS
@@ -967,9 +1069,11 @@ machines:
 290 PRINT USING MONEYFMT$ ; PNCPL
 300 END
 ```
+{% endraw %}
 
 ## LOANTERM.BAS
 
+{% raw %}
 ```bas
 100 'Term of Loan ("LOANTERM")
 110 CLS
@@ -1000,9 +1104,11 @@ machines:
 360 PRINT USING MONEYFMT$; EBALANCE
 370 END
 ```
+{% endraw %}
 
 ## MNTHINCM.BAS
 
+{% raw %}
 ```bas
 100 ' Monthly income ("MNTHINCM")
 110 CLS
@@ -1073,9 +1179,11 @@ machines:
 760 PRINT "Number of monthly withdrawals: "; NMONTHS
 770 END
 ```
+{% endraw %}
 
 ## MONTHLYO.BAS
 
+{% raw %}
 ```bas
 100 'Monthly Odometer ("MONTHLYODO")
 110 CLS
@@ -1096,9 +1204,52 @@ machines:
 260 PRINT "Year:  "; USING "####"; YEAR
 270 END
 ```
+{% endraw %}
+
+## NOTES613.TXT
+
+{% raw %}
+```
+Notes by Anthony Murabito
+ 
+Program Name: Managing Money with IBM PC (v1.0)
+ 
+Author Name:  Amihai Glazer, Ph.D
+Address:      1411 21st Street
+              Manhattan Beach, CA  90266
+ 
+Tel number:   Not listed
+ 
+Suggested donation: $10.00 - includes registration
+ 
+Program description:
+ 
+The Managing Money with IBM PC (MM) package comprises a set of programs
+written in BASIC by a professor at the University of California.  These
+programs used together can help their user by determining the after-tax
+cost of a loan, demonstrating the advantages of an Individual Retirement
+Account, comparing loans which have different interest rates and different
+origination fees, and calculating the amount of monthly savings necessary
+to finance a college education among many other tasks.  Each program is
+independent and must be run directly from BASIC.  When in BASIC just type:
+RUN "Filename" and press return, where filename is any BASIC file on this
+diskette.  Each program is also menu driven and extremely easy to use.  All
+values are prompted by the computer and values are scrolled on to the
+screen slowly in BASIC.  The main programs of interest cover calendar
+programs, loan programs, savings account programs, investment and charge
+account programs.  A short documentation file briefly describes the overall
+package.  This package will work with a 64k machine and color is needed for
+the text graphics.  Anyone interested in short, useful investment
+calculation programs will find this package very valuable. Many different
+types of loans are also well demonstrated and make more easy using this
+package.
+ 
+```
+{% endraw %}
 
 ## NUMDAYS.BAS
 
+{% raw %}
 ```bas
 100 'Number of days between dates ("NUMDAYS")
 110 CLS
@@ -1147,9 +1298,11 @@ machines:
 2090 IF DAY > NDAYS(MONTH)  THEN PRINT "* No such day *": GOTO 2000
 2100 RETURN
 ```
+{% endraw %}
 
 ## PAYBACK.BAS
 
+{% raw %}
 ```bas
 100 'Payback Period ("PAYBACK")
 110 CLS
@@ -1175,9 +1328,11 @@ machines:
 310 PRINT "Payback after "; NPERIODS; " periods"
 320 END
 ```
+{% endraw %}
 
 ## PERBALAN.BAS
 
+{% raw %}
 ```bas
 100 'Periodic Balance ("PERBALANCE")
 110 CLS
@@ -1224,9 +1379,11 @@ machines:
 520   GOTO 280   'Repeat calculations
 530 END
 ```
+{% endraw %}
 
 ## PERDEPOS.BAS
 
+{% raw %}
 ```bas
 100 'Periodic Deposit ("PERDEPOSIT")
 110 CLS
@@ -1257,9 +1414,11 @@ machines:
 360 PRINT USING MONEYFMT$; ADJUSTEDEPOSIT
 370 END
 ```
+{% endraw %}
 
 ## PERRATE.BAS
 
+{% raw %}
 ```bas
 100 'Periodic Rate ("PERRATE")
 110 CLS
@@ -1311,9 +1470,11 @@ machines:
 570 PRINT USING PCTFMT$; RADJTAX
 580 END
 ```
+{% endraw %}
 
 ## PERTERM.BAS
 
+{% raw %}
 ```bas
 100 'Periodic Term ("PERTERM")
 110 CLS
@@ -1353,9 +1514,11 @@ machines:
 450 PRINT "Number of periods to reach inflation-adjusted goal: "; NPERIODS
 460 END
 ```
+{% endraw %}
 
 ## POINTS.BAS
 
+{% raw %}
 ```bas
 100 'Points ("POINTS")
 110 CLS
@@ -1394,9 +1557,11 @@ machines:
 440 PRINT : PRINT "Effective interest rate:"; USING "###.##_%"; REFFECTIVE
 450 END
 ```
+{% endraw %}
 
 ## RULEOF78.BAS
 
+{% raw %}
 ```bas
 100 'Rule of 78s ("RULEOF78S")
 110 CLS
@@ -1451,9 +1616,11 @@ machines:
 600 NEXT M
 610 END
 ```
+{% endraw %}
 
 ## SAVHISTO.BAS
 
+{% raw %}
 ```bas
 100 'Savings History ("SAVHISTORY")
 110 CLS
@@ -1489,9 +1656,11 @@ machines:
 410 NEXT YEAR
 420 END
 ```
+{% endraw %}
 
 ## SIMPINV.BAS
 
+{% raw %}
 ```bas
 100 'Simple Investments ("SIMPINV")
 110 CLS
@@ -1540,9 +1709,11 @@ machines:
 540 PRINT "Future value: "; USING MONEYFMT$; FV
 550 END
 ```
+{% endraw %}
 
 ## TERMDEPO.BAS
 
+{% raw %}
 ```bas
 100 'Term Deposit ("TERMDEPOSIT")
 110 CLS
@@ -1611,6 +1782,7 @@ machines:
 740 PRINT "Required number of months: "; NMONTHS
 750 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

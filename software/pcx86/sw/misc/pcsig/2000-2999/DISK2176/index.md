@@ -75,6 +75,108 @@ machines:
     of a two or three button mouse.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2176.TXT
+
+{% raw %}
+```
+Disk No: 2176                                                           
+Disk Title: FormatMaster & CopyMaster                                   
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: FormatMaster                                             
+Author Version: 3.3                                                     
+Author Registration: $20.00                                             
+Special Requirements: A 1.2M floppy disk.                               
+                                                                        
+FORMATMASTER exploits your 1.2MB high capacity 5.25" drive to get the   
+most of your 360K low capacity floppies -- it formats them to 800K. It  
+forces the BIOS to treat the disk more like a 1.2MB than a 360K. This   
+nifty formatting trick doesn't make the disk any less reliable and the  
+disk can be read by most other 1.2MB floppies -- even if                
+they've never run FORMATMASTER.                                         
+                                                                        
+Technically, when formatting a 1.2MB disk in a high-capacity 1.2MB      
+drive, the BIOS sets the head stepping to the single-step mode, sets    
+the data transfer rate to 500Kb/sec, and formats at 15 sectors per      
+track.  For a 360K floppy, the head stepping rate is normally double-   
+step mode and the data transfer rate is usually 300Kb/sec.              
+                                                                        
+To format a low capacity 360K disk to 800K, FORMATMASTER forces BIOS to 
+set the stepping rate to the single-step mode, the data transfer rate to
+300Kb/sec, and formats at 10 sectors per track.  Most modern AT/PS2-    
+compatible BIOS have no problem adjusting to the non-standard format of 
+the 800K disk, but there are exceptions.                                
+Program Title: CopyMaster                                               
+Author Version: 09/89                                                   
+Author Registration: $30.00                                             
+Special Requirements: None.                                             
+                                                                        
+COPYMASTER is a file copy utility that makes file and disk copying      
+fast, easy, and effective through the use of the following features:    
+                                                                        
+~ Dual directory viewing of files                                       
+                                                                        
+~ Batch tagging of files for copying                                    
+                                                                        
+~ Move files across drives                                              
+                                                                        
+~ Selectable date criteria for copying                                  
+                                                                        
+~ Selectable file overwrite protection                                  
+                                                                        
+~ CRC file copy verification                                            
+                                                                        
+~ CRC disk copy verification                                            
+                                                                        
+~ File encryption/decryption                                            
+                                                                        
+~ Fast file search                                                      
+                                                                        
+~ Two-drive cyclic disk copying                                         
+                                                                        
+~ File-by-file compare option                                           
+                                                                        
+~ Disk Compare on 360K/720K/1.2MB/1.4MB                                 
+                                                                        
+~ "Lotus"-style command menu                                            
+                                                                        
+~ Pop-up data-entry windows.                                            
+                                                                        
+The program occupies approximately 150K RAM and will use expanded       
+memory conforming to the LIM 3.2/4.0 Expanded Memory Specification      
+(EMS), if available in the host machine.  COPYMASTER supports the use   
+of a two or three button mouse.                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+ 
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║        <<<<  DISK #2176 FORMATMASTER & COPYMASTER  >>>>       ║
+    ╠═══════════════════════════════════════════════════════════════╣
+    ║    To start FORMATMASTER, type:  FM330 (press enter)          ║
+    ║                                                               ║
+    ║                                                               ║
+    ║    To start COPYMASTER, type:  CM114 (press enter)            ║
+    ║                                                               ║
+    ║                                                               ║
+    ╚═══════════════════════════════════════════════════════════════╝
+ (c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2176
 

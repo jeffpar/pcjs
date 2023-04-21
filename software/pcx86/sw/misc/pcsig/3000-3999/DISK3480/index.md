@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## ASAINFO.TXT
+
+{% raw %}
+```
+  
+  ASAINFO.TXT is disk filename.  
+  
+  Animated String Art Program (ASA) Ver 1.3 01-25-92 by Keith D. Gillespie
+  
+  Files >      ASA.EXE  16 Color, 640 x 480  VGA  program file.
+  Ver 1.3   ASAEGA.EXE  16 Color, 640 x 350  EGA  program file.
+            MANPRT.EXE  Manual Print-out program file.
+           VARIOUS.A^D  Variety of ASA Design data files.
+
+  You will need a 16 color VGA card to run the ASA.EXE program.
+  Try  ASAEGA then ENTER if you get an error message with ASA program.
+
+  To start ASA, log on to the drive or directory with the files 
+  mentioned above and type  ASA  (or ASAEGA) then ENTER.  Press your 
+  Caps Lock key to ON !  Press (H) for Help at the ASA Main Menu and read 
+  the info on the help screens.  To draw your first Animated String Art
+  Design press (R) at the ASA Main Menu and then select a Demo Design. 
+  To print-out your Users Manual type  MANPRT then ENTER.
+
+            Copyright Protected 1992  by Keith D. Gillespie
+                          All Rights Reserved
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3480
 

@@ -24,6 +24,51 @@ machines:
     given run, up to six labels across, 10 lines per label.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES744.TXT
+
+{% raw %}
+```
+Disk No:  744
+Program Title:  PRTLABEL version 5.0
+PC-SIG version: 3.2
+
+PRTLABEL prints multiple copies of a single label or single labels
+typing a new address each time.  It prints as many labels as you like in
+a given run, up to 6 labels across, 10 lines per.
+
+This program is of excellent quality, being both easy-to-use and
+powerful at the same time.  All of the documentation is well-formatted
+and easy-to-read.  Highly recommended program to any novice users for
+their ease-of-use and experienced users for their usefulness.
+
+Usage:  Printing Labels/Database.
+
+Special Requirements:  A printer.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $20.00
+
+File Descriptions:
+
+???????? PRN  Printer set-up file (56 files).
+PRTLABEL DOC  Documentation for PRTLABEL.COM.
+PRTLABEL EXE  Main PRTLABEL program.
+README   CIS  Text file.
+TEST     LBL  Test label file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0744
 

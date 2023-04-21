@@ -36,6 +36,50 @@ machines:
     frustrate even the most devout Trekkie.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1278.TXT
+
+{% raw %}
+```
+Disk No: 1278                                                           
+Disk Title: Fun With Letters and Words & Trek Trivia                    
+PC-SIG Version: S2.0                                                    
+                                                                        
+Program Title: Fun With Letters and Words                               
+Author Version: 1/90                                                    
+Author Registration: 20.00.                                             
+Special Requirements: CGA.                                              
+                                                                        
+For your youngster aged two through five, FUN WITH LETTERS AND WORDS    
+provides a computerized First Reader with colorful graphics and         
+personalized stories that can include your child's name and the         
+names of friends, pets, and other family members.  Varying reading      
+levels are provided, with the ability to add additional words for       
+building vocabulary and spelling skills.                                
+Program Title: Trek Trivia                                              
+Author Version: 3.00                                                    
+Author Registration: $4.00 per volume, or $30 for all 10 volumes.       
+Special Requirements: None.                                             
+                                                                        
+TREK-1 is the first of ten volumes that measures your knowledge of the  
+world of Star Trek, one of the most popular television series of all    
+time.                                                                   
+                                                                        
+You may need to be part Vulcan to win this game!  The 100 True/False    
+and multiple choice questions are provocative.  The game moves swiftly, 
+the challenge is great and the random questions beguile and sometimes   
+frustrate even the most devout Trekkie.                                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1278
 

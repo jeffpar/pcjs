@@ -37,6 +37,59 @@ machines:
     your quest!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES296.TXT
+
+{% raw %}
+```
+Disk No  296
+Program Title: EAMON, THE MAIN HALL (disk 1 of 4)
+PC-SIG version 2
+
+    EAMON is a computerized version of "fantasy role-playing games." When
+you enter the universe of one of these games, you are no longer John (or
+Jane) Smith, mild-mannered computer hobbyist. Instead, you become a
+character in a land of adventure, doing almost anything you want to. In
+addition, you can purchase the EAMON designer from the author if you want
+to create your own dungeons and adventures.
+
+Usage: Entertainment
+
+System Requirements: 256K memory and one disk drive.
+
+How to Start: type: MANUAL (press enter).
+
+Suggested Registration: $5.95 + $2.50 shipping cost for new adventures.
+
+File Descriptions:
+
+CAVE     EXE  Beginners CAVE program used by EAMON.
+CHARACTE RS   Data file.
+EAMON    ART  Data file.
+EAMON    DES  Data file.
+EAMON    DOC  Documentation.
+EAMON    EFF  Data file.
+EAMON    EXE  Main program.
+EAMON    MON  Data file.
+EAMON    NAM  Data file.
+EAMON    ROM  Data file.
+ORDER    FRM  Order form.
+READ-ME  BAT  Batch file to bring up intro file.
+READ-ME  EAM  Introductory file.
+ROOM     NAM  Data file.
+UTIL     EXE  Utility program for EAMON.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1985,86,87,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0296
 

@@ -14,6 +14,40 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## README.DOC
+
+{% raw %}
+```
+                      EARLY SPANISH FOR SOUND BOARDS                 Vers 1.5SW
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      EARLY SPANISH is the first BI-LINGUAL package (ENGLISH & SPANISH)
+   for children age 1 thru 14. This package will teach your child how
+   to speak Spanish. The English speech will gradually fade in to all
+   Spanish Speech and your child will start to memorize Spanish words
+   and numbers while they are learn basic mathematics. EARLY SPANISH is
+   a fabulous TALKING TEACHER with real human speech that helps children
+   learn how to SAY NUMBERS, COUNTING, REMEMBER PHONE NUMBERS, ADDITION,
+   SUBTRACTION, and much more. EARLY SPANISH allows parents and teachers 
+   to record their own voice in to the package and use the new voice to
+   teach their children and students. You can record any language in to
+   this package. Lead you child into the next century with this package.
+
+   * SYSTEM REQUIREMENTS:  512K memory, hard drive, EGA/VGA graphic
+     and a Sound Blaster or 100% compatible. PC SPEAKER version available.
+
+   * Run MANUAL.EXE to view the USERS MANUAL. 
+         ~~~~~~~~~~
+   * Run INSTALL.EXE to start the program.
+         ~~~~~~~~~~~
+           DareWare Inc., 3005 Glenmore Ave. Baltimore, MD 21214 USA
+   (410) 665-0193 - Toll free  1-800-847-0309  for CREDIT CARD ORDERS. $29.00
+   Press Shift Print Scrn to print this page or 
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #4170
 

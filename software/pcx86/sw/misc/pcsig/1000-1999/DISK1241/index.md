@@ -38,6 +38,59 @@ machines:
     information on Mandelbrot and Julia set images.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1241.TXT
+
+{% raw %}
+```
+Disk No: 1241
+Program Title: MANDELBROT & JULIA SET GENERATOR for EGA/VGA (Disk 2 of 2)
+PC-SIG version: 1.1
+
+This disk adds additional patterns to the original program that allowed
+you to generate detailed and colorful mathematical patterns called
+fractals.  Patterns are based upon a recently developed part of
+mathematics called "fractal geometry," which creates images in which
+each smaller part of the image has the same pattern as the whole part of
+the image.  With this program, you can generate an unlimited amount of
+new images, change the colors of the images, and save the images to a
+disk file.
+
+MANDELBROT is a comprehensive program that takes some time to generate a
+new image, but once saved to disk the image can be displayed on the screen
+more quickly.  It lets you create "Mandelbrot set" images and "Julia set"
+images.  The Julia images are similar to the Mandelbrot images, but require
+different numerical values to be inputted to generate the image.  On-line
+help displays suggest numerical values for both Mandelbrot and Julia
+images.  Sample images are already included, and the documentation has
+suggested readings for more information on Mandelbrot and Julia set images.
+
+Usage:  Fractal Images/Mandelbrot and Julia Set Generator.
+
+Special Requirements:  EGA or VGA graphics and monitor.
+
+How to Start:  Insert disk #1076 and type GO (press enter).
+
+Suggested Registration:  $20.00
+
+File Descriptions:
+
+M2D           Sample Mandelbrot image for VGA systems.
+M2D      HDR  Header file with input parameters.
+JULIAX1       Sample Julia image for VGA systems.
+JULIAX1  HDR  Header file with input parameters.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1241
 

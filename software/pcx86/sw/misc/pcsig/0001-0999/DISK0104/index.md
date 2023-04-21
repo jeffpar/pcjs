@@ -38,6 +38,46 @@ machines:
     CS-INDEX      CompuServe - Index to All Services, as of 12/83
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #104, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  CS-EDUCA.            CRC = FA B0
+
+--> FILE:  CS-HOME .            CRC = 4D 04
+
+--> FILE:  CS-INDEX.            CRC = A4 DA
+
+--> FILE:  README  .            CRC = 71 08
+
+ ---------------------> SUM OF CRCS = 5D 96
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0104
 

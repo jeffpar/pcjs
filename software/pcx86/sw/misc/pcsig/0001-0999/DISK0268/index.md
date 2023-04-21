@@ -129,8 +129,108 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #268, version v1 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  REM     .BAS         CRC = E7 0B
+
+--> FILE:  FFILE   .            CRC = 1F A7
+
+--> FILE:  SCTEST  .            CRC = 05 98
+
+--> FILE:  KYLIST  .            CRC = 3A 32
+
+--> FILE:  KEYLISTS.            CRC = 16 B5
+
+--> FILE:  FORMLIST.            CRC = E4 EC
+
+--> FILE:  IDEX    .            CRC = C5 2B
+
+--> FILE:  REALTIME.            CRC = 8F C4
+
+--> FILE:  IPUTD4  .            CRC = 91 A7
+
+--> FILE:  IPUTD5  .            CRC = 91 A7
+
+--> FILE:  IPUTD6  .            CRC = 91 A7
+
+--> FILE:  IPUTD7  .            CRC = 91 A7
+
+--> FILE:  IPUTD9  .            CRC = 91 A7
+
+--> FILE:  IPUTD10 .            CRC = 91 A7
+
+--> FILE:  IPUTD11 .            CRC = 91 A7
+
+--> FILE:  IPUTD12 .            CRC = 91 A7
+
+--> FILE:  IPUTD13 .            CRC = 91 A7
+
+--> FILE:  IPUTD8  .            CRC = 91 A7
+
+--> FILE:  IPUTD14 .            CRC = 91 A7
+
+--> FILE:  IPUTD1  .            CRC = 10 DE
+
+--> FILE:  IPUTD2  .            CRC = DD F1
+
+--> FILE:  IPUTD3  .            CRC = A6 9E
+
+--> FILE:  SCREEN2 .            CRC = 14 1A
+
+--> FILE:  QUESTION.            CRC = C2 E9
+
+--> FILE:  SOLUTION.            CRC = 78 A7
+
+--> FILE:  PROBLEMS.            CRC = DA 1F
+
+--> FILE:  FORM    .EXE         CRC = B8 B4
+
+--> FILE:  TEST    .            CRC = D9 50
+
+--> FILE:  SCAN    .EXE         CRC = F9 EE
+
+--> FILE:  JACK    .            CRC = A6 E7
+
+--> FILE:  EXPERT  .BAS         CRC = 75 15
+
+--> FILE:  TEMP    .BAS         CRC = 75 1D
+
+--> FILE:  CLS     .OBJ         CRC = 00 00
+
+--> FILE:  EXPERT  .EXE         CRC = 9D 68
+
+--> FILE:  READ    .ME          CRC = C9 A4
+
+ ---------------------> SUM OF CRCS = 1C 86
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## EXPERT.BAS
 
+{% raw %}
 ```bas
 3 PRINT FRE(0)
 4 DEFINT B-D,G-Z
@@ -1123,9 +1223,11 @@ machines:
 63135 NFLG = 5
 63140 RETURN
 ```
+{% endraw %}
 
 ## REM.BAS
 
+{% raw %}
 ```bas
 3 PRINT FRE(0) / PRINT FREE MEMORY
 4 DEFINT B-D,G-Z / DEFINE AS INTEGERS
@@ -1888,9 +1990,11 @@ machines:
 60280 FOR T9 = 1 TO MAX
 60290 K$(T9) = " "
 ```
+{% endraw %}
 
 ## TEMP.BAS
 
+{% raw %}
 ```bas
 55 ON ERROR GOTO 64200
 315 ON ERROR GOTO 64000
@@ -1911,6 +2015,7 @@ machines:
 64290 IF INKEY$ = "" THEN 64290
 64300 RESUME 70 
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

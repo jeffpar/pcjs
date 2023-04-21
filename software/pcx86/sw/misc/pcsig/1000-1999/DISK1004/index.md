@@ -34,6 +34,57 @@ machines:
     according to your criteria.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1004.TXT
+
+{% raw %}
+```
+Disk No  1004
+Program Title: HIRE version 1.1
+PC-SIG version 1
+ 
+    HIRE monitors all who apply to you for a job, grant, position, or any
+other kind of request. It uses merge files to help you respond
+professionally to everyone. It writes letters to acknowledge applications,
+alert those who have not sent all support documents, and reject applicants.
+You personalize the merge files, while HIRE combines the letter with the
+factual data, such as title, name, address, etc., of the applicant. It can
+handle 300-500 applicants, and can help you screen them according to your
+criteria.
+ 
+Usage: Management Hiring Tool
+ 
+System Requirements: 128K memory, one disk drive, a printer, and FIND.EXE,
+SORT.EXE from your DOS disk.
+ 
+How to Start: Type: PMANUALS (press enter).
+ 
+Suggested Registration:  $10.00
+ 
+File descriptions:
+ 
+MANUAL   ASC  Documentation for PRINTASC
+PARA     ASC  Set-up for PRINTASC
+PMANUALS BAT  Batch file to print documenation for HIRE
+HIRE     EXE  Main program
+PRINTASC EXE  Mergeprint program
+MANUAL   HIR  Documentation for HIRE
+PARA     HIR  Set-up for HIRE
+???????  MM   Merge file (8 files)
+AUTOEXEC BAT  Batch file for start up
+STRPFIND EXE  Strips headers from cloned data files
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1004
 

@@ -37,6 +37,49 @@ machines:
     produce accurate reports for tax records.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2237.TXT
+
+{% raw %}
+```
+Disk No: 2237                                                           
+Disk Title: Money Watch                                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Money Watch                                              
+Author Version: 1.00                                                    
+Author Registration: $30.00                                             
+Special Requirements: None.                                             
+                                                                        
+Do you need a simple bookkeeping and budget program to help you keep    
+track of your income and expenses?  MONEY WATCH can do this for you,    
+by functioning like an electronic checkbook.  You enter income and      
+expenses in the same manner as you would in your regular checkbook.     
+Each entry consists of date, description/check#, category, and amount.  
+MONEY WATCH sorts new and changed entries into the proper order based on
+their date, and at the same time, will recalculate the balances, all    
+with the push of a single key.                                          
+                                                                        
+MONEY WATCH can help you to estimate your future income needs.  By      
+entering future income and expenses, you will be able to "look into     
+your financial future" and see if your planned expenses exceed your     
+expected income.  Four types of printed reports are provided, by date   
+and category, that can be used for your tax records.                    
+                                                                        
+MONEY WATCH can help you to see where your money is going, estimate     
+your future financial needs, and produce accurate reports for tax       
+records.                                                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2237
 

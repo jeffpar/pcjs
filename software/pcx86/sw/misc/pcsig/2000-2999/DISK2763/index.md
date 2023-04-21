@@ -14,6 +14,36 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2763.TXT
+
+{% raw %}
+```
+Disk No: 2763                                                           
+Disk Title: PHONE by Vision Computing                                   
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: PHONE by Vision Computing                                
+Author Version: 2.10                                                    
+Author Registration: $25.00                                             
+Special Requirements: Hard drive. Printer recommended.                  
+                                                                        
+PHONE is a custom database manager with a little extra pizzazz.  Besides
+tracking names, addresses, and phone numbers, PHONE can print labels,   
+tell you the postal abbreviation for any state, and run on a network.   
+PHONE has the usual database features for editing and searching, plus   
+handy extras such as record backup and automatic directory creation.    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2763
 

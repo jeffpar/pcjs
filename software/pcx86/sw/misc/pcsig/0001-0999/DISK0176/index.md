@@ -62,6 +62,7 @@ machines:
 
 ## CIRCLE.BAS
 
+{% raw %}
 ```bas
 0 X=25
 10 CLS:SCREEN 1
@@ -72,9 +73,11 @@ machines:
 60 NEXT:NEXT
 70 COLOR 2,3:COLOR 1,2:GOTO 70
 ```
+{% endraw %}
 
 ## CIRCLOOP.BAS
 
+{% raw %}
 ```bas
 10 BEEP
 12 PLAY "mb"
@@ -121,9 +124,90 @@ machines:
 320 NEXT
 330 NEXT
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #176, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  CIRCLE  .BAS         CRC = 76 74
+
+--> FILE:  CIRCLOOP.ASC         CRC = 96 6B
+
+--> FILE:  CIRCLOOP.BAS         CRC = 15 EF
+
+--> FILE:  CURVE   .BAS         CRC = 8E DB
+
+--> FILE:  CURVE2  .BAS         CRC = E5 01
+
+--> FILE:  CURVE3  .BAS         CRC = FA 85
+
+--> FILE:  DOWN    .BAS         CRC = AC C5
+
+--> FILE:  XXX     .            CRC = 28 74
+
+--> FILE:  JAIME   .BAS         CRC = 5E E0
+
+--> FILE:  NEWYEAR .DOC         CRC = B3 2C
+
+--> FILE:  NEWYEAR .EXE         CRC = AC 04
+
+--> FILE:  NEWYEAR .PAS         CRC = B3 4D
+
+--> FILE:  NUDE    .BAS         CRC = 49 F8
+
+--> FILE:  NYTEST  .BAT         CRC = 00 00
+
+--> FILE:  NYTEST1 .BAT         CRC = 00 00
+
+--> FILE:  ROUNDER .BAS         CRC = A9 D9
+
+--> FILE:  ROUNDER1.BAS         CRC = EA F6
+
+--> FILE:  ROUNDER2.BAS         CRC = 64 9C
+
+--> FILE:  ROUNDER3.BAS         CRC = 27 DC
+
+--> FILE:  ROUNDER4.BAS         CRC = 61 C0
+
+--> FILE:  SPACEVAD.EXE         CRC = 96 CE
+
+--> FILE:  SQUARE  .BAS         CRC = 25 1C
+
+--> FILE:  SWIRL   .BAS         CRC = 2D 77
+
+--> FILE:  TRIANGLE.BAS         CRC = 32 5A
+
+--> FILE:  WALLS   .BAS         CRC = 04 EC
+
+ ---------------------> SUM OF CRCS = C5 6B
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## CURVE.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1:P=10
 20 CLS:S=11.5
@@ -139,9 +223,11 @@ machines:
 120 IF INKEY$<>"" THEN SCREEN 0:WIDTH 80:LIST
 130 GOTO 120
 ```
+{% endraw %}
 
 ## CURVE2.BAS
 
+{% raw %}
 ```bas
 0 SCREEN 0:COLOR 1,2,4:CLS
 1 LINE INPUT "SIZE (1 - 20):";H$:H=VAL (H$):H$="":IF H<1 OR H>20 THEN 1
@@ -164,9 +250,11 @@ machines:
 120 IF INKEY$<>"" THEN SCREEN 0:WIDTH 80:LIST
 130 GOTO 120
 ```
+{% endraw %}
 
 ## CURVE3.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0:COLOR 1,2,4:WIDTH 80:CLS:E=1:F=-1
 20 LINE INPUT "SIZE (1 - 20):";H$:G=VAL (H$):H$="":IF G<1 OR G>20 THEN G=5
@@ -199,9 +287,11 @@ machines:
 250 F=1
 260 RETURN
 ```
+{% endraw %}
 
 ## DOWN.BAS
 
+{% raw %}
 ```bas
 0 ' A GRAPHICS DEMO
 1 ' BY ROBBIE KHEDOURI
@@ -220,9 +310,11 @@ machines:
 130 NEXT
 140 GOTO 140
 ```
+{% endraw %}
 
 ## JAIME.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1:COLOR 1,0:KEY OFF:CLS
 20 RANDOMIZE VAL(RIGHT$(TIME$,2))
@@ -241,9 +333,225 @@ machines:
 150 NEXT
 160 GOTO 30
 ```
+{% endraw %}
+
+## NEWYEAR.DOC
+
+{% raw %}
+```
+NEWYEAR
+
+INTRODUCTION
+  Newyear is a program to allow you, the computer user, to bring
+in the new year with as much fun and excitement as everything else you
+do with your computer.
+
+  No more need the new year be spent sitting beside the TV
+waiting for a broadcast to tell you that the new year has
+arrived. A broadcast that for many of the people in Canada and
+USA was taped 'a few hours ago' at 'some famous square'.
+
+  NOW you can reproduce your own AUTHENTIC new year, bringing in
+the newyear with a LIVE up to the second broadcast by none other
+than your faithful computer!
+
+WHY WAS IT WRITTEN? 
+  Newyear was developed between 11:15 and 11:45, December 31st
+1983 when someone at the party asked "can't your computer do
+anything useful?"  All you've shown me is Accounting,
+Spreadsheets, Wordprocessing, Databases...'.  I admit, it took
+three compiles before it worked the way it does now, but at least
+I was able to show him that YES my computer CAN do something
+useful!  We ran it (beside the TV) for the final countdown, and
+believe it or not NO ONE was watching the TV (though they were
+listening, just in case the program didn't work).  But work it
+did.  I should mention that at the end, the program flashes the
+new year in what I call 'rotating' colours.  Once the new year
+arrives, it goes on and on and on and on and on... with this
+display.  Depending on how much you have had to drink, it gets
+boring after awhile, but does provide the occasional interest
+from some of the guests 'is is STILL doing that?'.
+
+  Later I went in and added two or three additional comments.
+
+THE SERIOUS STUFF
+
+  And now, we will discuss the program and its use.
+
+  The program is written in PASCAL.  It makes use of the most
+powerful features of MS-PASCAL - the MODULE.  The source code for
+all except the copywritten Modules have been included.  This
+means you won't be able to compile it (though, for the life of me
+I don't know WHY you would want to re-compile it).
+
+  I have provided the source code for that those who might be
+interested in the method with which I solved a number of minor
+problems. I do not consider this an example of the best code I
+write, but it should help you if you want to see a number of
+Pascal features and how they can be used in a helpful manner.
+
+  Below I have listed some of the features I have used which may
+(or may not) be of interest to the beginning programmer.
+
+USE OF THE PROGRAM
+
+  Before you run the program it is imperative that you make sure
+that the date is correct (12-31-??) and that the time is correct
+to the second.  For test runs, I suggest you just set the time
+somewhere between 01 seconds and 2 minutes before midnight 19??.
+
+  Make sure the colour monitor is hooked up.
+
+  To run the program you merely type 
+
+NEWYEAR <CR>
+
+  In a couple seconds the program will start running.
+
+THE FIRST SCREEN : before the last 59 seconds of the year
+
+  If the program starts running more than 59 seconds before the
+end of the year it will now display in large letters in the
+middle of the screen, in some randomly choosen set of colours,
+the current year. (the random colours are based on the time, so
+if you use a batch file to set the time and run the program, you
+may get the same 'random' colours when you run it more than once) 
+At the bottom left hand side of the screen it will display the
+current time.  This first screen will stay here until 59 seconds
+before the end of the year.  If the program starts running even a
+100th of a second after the new year arrives it will sit with the
+same screen for 365 days, merely showing the current year and the
+current time (rather boring in my opinion). 
+
+  If you start the program well in advance of the hour you can
+check the time with the display at the bottom of the screen.  If
+this is not the correct time to the second, then stop the program
+(CTRL-C, CTRL-ALT-DEL, RESET button or power off/on) and reset
+the time.
+
+
+THE SECOND (COUNT DOWN) SCREEN : the last 59 seconds of the year
+
+  The second screen occurs when the program starts running less
+than 60 seconds before the end of the year, or if the screen
+discussed 2 paragraphs above is being displayed, as soon as it is
+59 seconds to the year end, the first screen will disappear and
+this second screen will appear.  This screen is the count down
+screen.
+
+  The count down screen is in my opinion the most interesting.
+On the top third it displays the current year.  At the bottom
+left corner (remember previous screen) it contains the current
+time. In the middle, in colours that change every second, it
+displays the number of seconds until the new year.  Now you can
+count down with it.  59..58..57..56..55......10..9..8..7..6..5..
+4..3..2..1..0  The 0 will display briefly (just long enough to
+see it) and then the program goes to the last screen..
+
+  The new year screen starts by wishing you 'HAPPY NEW YEAR' then
+it prints the current year, over and over and over and over
+and...over again until about 12:00 AM, December 30th (ie it runs
+for 355 days, it quits in time for you to start it up for next
+year!).  It prints the year (19??) in almost every combination of
+colours the display can print and still be legible (legible means
+what I the programmer call legible. Depending on your eyesight
+and monitor, you may feel there are more combinations that are
+legible or you may feel that some of the ones I choose are not
+legible, oh well).  It does this in an attempt to flashy (the
+last two digits flash continuously) and causes at least a
+moderate amount of interest.
+
+  At the bottom it prints, no not the current time, but 00:00:00. 
+Why? because, at a newyears eve party, who REALLY wants to know
+the time. The new year is a time for fun and friends, if you knew
+what time it was, you'd probably want to go home too soon, and I
+don't want MY program to be responsible for that!  On the other
+hand,  when the program finishes running altogether, you may want
+to consider stopping the party, it is really getting quite late
+in the day, er year!
+
+  One last thing before I leave you,  The files nytest.bat and
+nytest1.bat are  batch files which run the program twice each so
+you can see how it works. To stop the first run without waiting
+for the program to stop, hit the keys CTRL and C at the same
+time. The computer will ask you (somewhere in strange colours in
+the middle of the screen) 'Terminate batch job (Y/N)?' hit the
+'n' key to indicate NO. It will then continue with the second run
+of the program (the second one starts 'too late' and starts with
+the second screen rather than the first.)
+
+PASCAL FEATURES and PROGRAMMING HELPS
+
+  The first two lines are used to bring in some text files from
+another file on the disk.  'pastool1.int' and 'pastool2.int' are
+the actual names of the files if you were to look at the
+directory of the disk I use to compile with.
+
+  The INTERFACE to PASTOOL1 is included for your interest and to
+assist you in your own programming in Pascal. For further
+information on any of the tools, please contact HORWOOD
+CONSULTING SERVICES LTD., 77 Capri Ave. N.W., Calgary, Alberta,
+T2L 0G9, CANADA.
+
+  In the variable section you will notice the use of sets.  This
+is a feature much passed over by Pascal programmers, yet it can
+let the programmer write code that is easier to write, read and
+debug.  I am using goodlooking to be those colours which I
+personally feel look good on a colour monitor.  I then use them
+later to make sure the random generator returns only one of
+colours in the subset that I call goodlooking.  If the colour
+returned is not 'in' this subset then I keep asking the random
+generator for new choices until it returns a colour I like.
+
+  The procedures time and date are declared as EXTERNAL, this
+mean that they are found somewhere else, in another program
+(possibly a FORTRAN, PASCAL, Assemebler or Compiled BASIC program
+written earlier) or found in the library.  In this case they are
+found in the pre-written library that comes with MS-PASCAL.
+
+  RANDOM is a random number generator found in tools2. It uses
+two numbers to determine the number returned.  The first is the
+SEED and the second is the time (to the seconds). Although I
+won't go into detail on how the generator works, if you passed it
+the same seed twice in the same second it would always return the
+same number.  For this reason we do not set the seed each time,
+rather, the generator takes the seed, changes it and returns the
+changed seed.  This changed seed is what we give to it the next
+time. This insures that the numbers returned will be random.
+Note that since the time and seed are the numbers used, and since
+we always start with a seed of zero.  If you run the program
+starting at the same time it will quite often use the same
+colours. This is all I am going to say about random generators
+here.  If this is not all clear, or if you want to know more
+about random generators, I refer you to your closest library...
+
+  The procedure print_num is 'passed' a number to be printed, and
+a row and column at which it is to start printing it.
+
+  Set_attributes takes a number between 1 and 256 and uses it in
+Scroll_up and clearscrn as the colours to use in scrolling up and
+clearing. Set_attributes is found in pastools1.
+
+  Scroll_up is found in pastools1 and it makes a call to the
+BIOS.
+
+  Gotorc is found in pastools1 and it also makes a call to the
+BIOS. It goes to the row/column specified.
+
+  Notice the line near the bottom, the error message.  Even in
+'quick and dirty' programs as this one was, it is a good idea to
+be liberal in your error checking.  If you are the number of
+errors that you make (and don't find on the first couple runs)
+will drop dramaticaly.  Although this program didn't run the
+first time, it only took 1/2 hour and three tries.  I attribute
+this to GOOD STUCTERED programming and good error checking.
+
+```
+{% endraw %}
 
 ## NUDE.BAS
 
+{% raw %}
 ```bas
 5  A=2
 10  'Modified from the HP 9845 Basic by G. Wesley  12/29/82
@@ -421,9 +729,11 @@ machines:
 870 DATA 233,107,13,232,103,12,365,0,13
 875 END
 ```
+{% endraw %}
 
 ## ROUNDER.BAS
 
+{% raw %}
 ```bas
 0 'GOTO 120
 10 SCREEN 1:CLS:X=160:Y=100
@@ -445,9 +755,11 @@ machines:
 180 NEXT::NEXT:PSET (X,Y),3:PAINT (X-10,Y),3,3
 200 GOTO 100
 ```
+{% endraw %}
 
 ## ROUNDER1.BAS
 
+{% raw %}
 ```bas
 10 WIDTH 80:SCREEN 0:COLOR 2,1,4:CLS
 20 LINE INPUT "X Coordinate (1 to 319):";X$:X=VAL(X$):X$="":IF X=0 THEN X=160
@@ -469,9 +781,11 @@ machines:
 170 IF INKEY$ <>"" THEN WIDTH 80:SCREEN 0:CLS:LIST
 180 GOTO 170
 ```
+{% endraw %}
 
 ## ROUNDER2.BAS
 
+{% raw %}
 ```bas
 10 WIDTH 80:SCREEN 0:COLOR 2,1,4:CLS
 20 LINE INPUT "X Coordinate (1 to 319):";X$:X=VAL(X$):X$="":IF X=0 THEN X=160
@@ -504,9 +818,11 @@ machines:
 275 PAINT (M,N),3,1:PAINT (M,N),2,1:GOTO 275
 280 GOTO 170
 ```
+{% endraw %}
 
 ## ROUNDER3.BAS
 
+{% raw %}
 ```bas
 0 '     FINAL
 1 '   By Robbie Khedouri
@@ -553,9 +869,11 @@ machines:
 350 PAINT (M,N),3,1:PAINT (M,N),2,1
 360 GOTO 240
 ```
+{% endraw %}
 
 ## ROUNDER4.BAS
 
+{% raw %}
 ```bas
 10 WIDTH 80:SCREEN 0:COLOR 2,1,4:CLS
 20 LINE INPUT "X Coordinate (1 to 319):";X$:X=VAL(X$):X$="":IF X=0 THEN X=160
@@ -592,9 +910,11 @@ machines:
 290 PAINT (M,N),3,1:PAINT (M,N),2,1:GOTO 290
 300 GOTO 190
 ```
+{% endraw %}
 
 ## SQUARE.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1:COLOR 1:KEY OFF:CLS
 20 FOR X=1 TO 320
@@ -606,9 +926,11 @@ machines:
 80 NEXT
 90 GOTO 10
 ```
+{% endraw %}
 
 ## SWIRL.BAS
 
+{% raw %}
 ```bas
 0 '  YET ANOTHER GRAPHICS DEMO
 1 ' BY ROBBIE KHEDOURI
@@ -626,9 +948,11 @@ machines:
 120 LINE (0,T)-(T,199),T MOD 3 +1
 130 NEXT
 ```
+{% endraw %}
 
 ## TRIANGLE.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0:WIDTH 40:KEY OFF:COLOR 2,4,1:CLS
 20 INPUT "X COORDINATE:",X
@@ -643,9 +967,11 @@ machines:
 110 LINE -(X,Y)
 120 GOTO 120
 ```
+{% endraw %}
 
 ## WALLS.BAS
 
+{% raw %}
 ```bas
 0 ' OH NO, ANOTHER ONE!!
 1 ' BY ROBBIE KHEDOURI
@@ -660,6 +986,7 @@ machines:
 90 LINE (0,T)-(199,0),T MOD 3 +1
 100 NEXT
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -37,6 +37,55 @@ machines:
     your quest!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES297.TXT
+
+{% raw %}
+```
+Disk No  297
+Program Title: EAMON, THE ICE CAVE (disk 2 of 4)
+PC-SIG version 2
+
+    ICE CAVE is a complete adventure to be played once you have completed
+the first EAMON adventure disk (THE MAIN HALL). The adventure on this disk
+is based in an ice cave, with all the appropriate monsters and traps. ICE
+CAVE has proven itself as difficult, but not impossible, and will certainly
+keep you on your feet trying to figure it out. The monsters get very mean
+and will give up their lives to stop you from getting any further in the
+ICE CAVE.
+
+Usage: Entertainment
+
+System Requirements: 256K memory and one disk drive minimum
+
+How to Start: Type EAMON (press enter).
+
+Suggested Registration: $5.95 + $2.50 shipping cost for new adventures.
+
+File Descriptions:
+
+EAMON    EXE  Main program file.
+EAMON    NAM  Data file.
+ICECAVE  ART  Data file.
+ICECAVE  DES  Data file.
+ICECAVE  EFF  Data file.
+ICECAVE  EXE  ICE CAVE program.
+ICECAVE  MON  Data file.
+ICECAVE  RNM  Data file.
+ICECAVE  ROM  Data file.
+ORDER    FRM  Text file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1985,86,87,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0297
 

@@ -1602,14 +1602,15 @@ function processDisk(di, diskFile, argv, diskette)
          * to include in the index, too.
          */
         let samples = "";
-        let sampleSpec = path.join(path.dirname(getFullPath(diskette.path)), "archive", "**", "*.BAS");
+        let sampleSpec = path.join(path.dirname(getFullPath(diskette.path)), "archive", "**", "*.{ASM,BAS,DOC,TXT}");
         let sampleFiles = glob.sync(sampleSpec);
         for (let sampleFile of sampleFiles) {
             let sample = readFile(sampleFile);
             if (sample) {
                 if (isText(sample)) {
+                    let fileType = sampleFile.endsWith(".BAS")? "bas" : "";
                     if (sample[sample.length-1] != '\n') sample += '\n';
-                    sample = "```bas\n" + sample /* .replace(/([^\n]*\n)/g, '    $1\n') */ + "```\n";
+                    sample = "{% raw %}\n```" + fileType + "\n" + sample /* .replace(/([^\n]*\n)/g, '    $1\n') */ + "```\n{% endraw %}\n";
                     samples += "\n## " + path.basename(sampleFile) + "\n\n" + sample;
                 } else {
                     printf("warning: ignoring non-text file '%s'\n", sampleFile);
@@ -1756,7 +1757,7 @@ function readCollection(argv)
     let cCollections = 0, cDisks = 0;
     let asCollections = [];
     asServers.forEach((server) => {
-        asCollections = asCollections.concat(glob.sync(path.join(rootDir, "disks" + path.sep + server + path.sep + family + path.sep + "diskettes.json")));
+        asCollections = asCollections.concat(glob.sync(path.join(rootDir, "disks" + path.sep + server + path.sep + family + path.sep + (server == "pcsigdisks"? "diskettes-annotated.json" : "diskettes.json"))));
     });
     let messages;
     if (argv['quiet']) {

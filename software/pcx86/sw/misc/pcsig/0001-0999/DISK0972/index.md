@@ -34,6 +34,83 @@ machines:
     Peoplesystems that will free us from old fashioned ideas.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0972.TXT
+
+{% raw %}
+```
+Disk No:  972
+Disk Title: PeopleSystems 1 of 2 (973 2nd in set)  (Disk 1 of 2)
+PC-SIG Version: 1.1
+
+Program Title: Damn the Trivia - Our Priorities are Drowning,'' Edition
+Author Version: 1
+Author Registration: $10.00
+Special Requirements: Printer.
+
+More than just programs and data come on disks nowadays.  The
+controversial new book ``Damn the Trivia'' fills two disks about
+Peoplesystems (PS).
+
+Systems sort into two categories -- systems for people -- Peoplesystems
+(PS) and systems for things -- technology.  There are also hybrid or
+mixed systems, but it's easier to first understand the pure, simple
+forms before looking at the more complex.
+
+Peoplesystems (PS) are simple patterns of people events that guide,
+control or affect our daily lives. This book is a discussion of how to
+create better Peoplesystems.
+
+File Descriptions:
+
+First Disk:
+
+1A            Chapter 1, part A.
+1B            Chapter 1, part B.
+2A            Chapter 2, part A.
+2B            Chapter 2, part B.
+3A            Chapter 3, part A.
+3B            Chapter 3, part B.
+BRIGHTER BAT  Batch file.
+CONTENTS      Table of contents.
+EXPLORE  BAT  Batch file.
+GUIDELINE     Text file.
+INA           Introduction, part A.
+INB           Introduction, part B.
+LOGO          PeopleSystems logo.
+MORE     COM  DOS command.
+NORMAL   BAT  Batch file.
+README        Documentation.
+START    BAT  Batch file.
+UPFRONT       Text file.
+
+Second Disk:
+
+4A            Chapter 4, part A.
+4B            Chapter 4, part B.
+5A            Chapter 5, part A.
+5B            Chapter 5, part B.
+6A            Chapter 6, part A.
+6B            Chapter 6, part B.
+7A            Chapter 7, part A.
+7B            Chapter 7, part B.
+8A            Chapter 8, part A.
+8B            Chapter 8, part B.
+EXPLORE  BAT  Batch file.
+LOGO          PeopleSystems logo.
+MORE     COM  DOS command.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0972
 

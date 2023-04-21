@@ -14,6 +14,39 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## NOTE.TXT
+
+{% raw %}
+```
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+╔═════════════════════════════════════════════════════════════════════════╗
+║         This disk has been withdrawn from the PC-SIG Library            ║
+║                   at the request of the author.                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2789
 

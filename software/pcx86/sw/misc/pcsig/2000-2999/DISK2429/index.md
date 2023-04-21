@@ -34,6 +34,46 @@ machines:
     A teacher himself, the author of ANIMAL FARM is out to help you win!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2429.TXT
+
+{% raw %}
+```
+Disk No: 2429                                                           
+Disk Title: Animal Farm 2 of 2 (#2428 also)                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Animal Farm                                              
+Author Version: 1.0                                                     
+Author Registration: $15.00; Site license $60.00                        
+Special Requirements: 512K RAM and CGA.                                 
+                                                                        
+Once again, the author of such shareware programs as MACBETH and LORD OF
+THE FLIES lends us his expertise in English Literature, this time on the
+book ANIMAL FARM.  Giving full credit to the good teacher, the author's 
+purpose with this and other like programs is to fascilitate learning, to
+make it as fun and as painless as possible.                             
+                                                                        
+Geared to the High School level, the student is given background about  
+the author, the style of the book, characters, themes, etc. of the      
+story, and, as with the other programs, is given various exam tips,     
+study questions, and a section on how to take an essay test.            
+                                                                        
+A teacher himself, the author of ANIMAL FARM is out to help you win!    
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2429
 

@@ -38,6 +38,71 @@ machines:
     the novice.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES760.TXT
+
+{% raw %}
+```
+Disk No:  760
+Program Title: MINIGEN version 2.0
+PC-SIG version:  2
+
+MINIGEN is a Turbo Pascal(tm) screen code generator designed to work on
+an IBM PC or compatible with a MonoChrome or Color Graphics Adapter
+installed.  With it you can paint data entry screens (constants areas
+and data fields), open and close windows with borders and cursor memory,
+perform controlled data entry and create pull down menus.
+
+MINIGEN produces Turbo Pascal code to be used in programs which you are
+writing.  MiniGen is entirely written in Turbo Pascal using the same
+source code routines provided on this disk.  A TPU for accessing
+MicroSoft compatible mouse drivers is included.
+
+Since this is a programming aid, the documentation assumes that you
+already know how to program in Turbo Pascal.  It also assumes knowledge
+of DOS and jumps right in describing the various functions and how to
+use them.
+
+This program is designed primarily for intermediate to experienced users
+and not for the novice.
+
+Usage:  Programming.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00
+
+File Descriptions:
+
+CURDATE  INC  Returns a string containing the system date.
+CURSOR   INC  Some useful cursor control routines.
+CURTIME  INC  Returns a string containing the system time.
+EXIST    INC  A modification of Borland's Exist routine.
+MGMOUSE  DOC  Documentation for MgMouse.TPU
+MGMOUSE  TPU  Mouse driver support.
+MGPROG   TPU  Pascal unit for windowing, data entry and pull down menus.
+MGSKEL   PAS  Skeleton program for use with .INC routines and MgProg.TPU.
+MINIGEN  DOC  System Documentation.
+MINIGEN  EXE  Screen painter / code generator program.
+MOUSTEST PAS  MgMouse demonstration program source code.
+WIDGIT   DAT  Stored data file for demo program data entry screen.
+WIDGIT   INC  Generated procedure for the screen held in WIDGIT.DAT.
+WIDGIT   PAS  Demonstration data entry program.
+WNDODEMO PAS  Demonstration windowing program.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0760
 

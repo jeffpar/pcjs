@@ -37,6 +37,68 @@ machines:
     win-win program!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2423.TXT
+
+{% raw %}
+```
+Disk No: 2423                                                           
+Disk Title: Romeo and Juliet 2 of 2 (#2422 also)                        
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Romeo and Juliet                                         
+Author Version: 1.0                                                     
+Author Registration: $12.00                                             
+Special Requirements: 512K RAM and CGA.                                 
+                                                                        
+Did you ever really understand ROMEO AND JULIET?  This program, from the
+same author of the shareware program MACBETH, proves that Shakespeare,  
+for the non-Shakespearean fan, can actually be understood and enjoyed!  
+Geared to aid students of English Literature at the High School level,  
+ROMEO AND JULIET accomplishes the seemingly impossible through the use  
+of menu-driven Quizzes and Games, Notes, and a `tour' through the Globe 
+Theatre where the plays originally were presented to the audience.      
+                                                                        
+As with his other programs, the author also offers his students The     
+Competition! - a chance to win prizes of cash and computer products,    
+achievable only through close knowledge of the play.   ...Definitely a  
+win-win program!                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.TXT
+
+{% raw %}
+```
+***************************************************************************
+*                                                                         *
+*                                                                         *
+*                                                                         *
+*                                                                         *
+*           This is the Shareware version of ROMEO & JULIET               *
+*                                                                         *
+*                                                                         *
+*     Read or print the manual MANUAL.TXT on Disk 1 for instructions      *
+*     on running the programme and how to register with the author        *
+*     who is a poor impoverished school teacher from Singapore            *
+*                                                                         *
+*                                                                         *
+*                                                                         *
+***************************************************************************
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2423
 

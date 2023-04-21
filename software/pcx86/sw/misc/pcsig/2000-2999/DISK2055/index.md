@@ -44,6 +44,73 @@ machines:
     general ledger accounting program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2055.TXT
+
+{% raw %}
+```
+Disk No: 2055                                                           
+Disk Title: NonProfit General Ledger                                    
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: NonProfit General Ledger                                 
+Author Version: 1.12A                                                   
+Author Registration: $40.00 (no manual), $55.00 (w/ printed manual)     
+Special Requirements: None.                                             
+                                                                        
+If you are a service or non-profit organization then NGL may serve your 
+bookkeeping needs.  NGL is a double entry system for Non Profit General 
+Ledger users.  It uses pre-defined account numbers to track service     
+groups and their related fund accounts.  NGL is akin to SBAS's [Small   
+Business Accounting System] General Ledger program. SBAS uses no pre-   
+defined account numbers, has online help, and is easy to set up.  NGL   
+does not have online help and does not use the function keys. But it    
+does have a tutorial and start up program which simplifies the          
+installation process.                                                   
+                                                                        
+Installation is not difficult, although familiarity with accounting     
+terms is a plus.  NGL uses a six digit account number system and you    
+must use it.  For those working in a non profit groups, NGL is          
+especially useful since it is designed to work with multiple fund and   
+service accounts.  Various reports can be printed for these accounts    
+which can help the group keep up with the various designated monies.    
+However, there is only a consolidated report for these funds and service
+accounts.  There are no fund or service tracking reports.  On the up    
+side, data is posted directly to the accounts for fast reporting of the 
+status of the organization.                                             
+                                                                        
+The NGL manual is thorough, and is especially useful to non profit      
+groups.  The manual alone may be worth the registration fee.   However, 
+the program can be used by anyone, regardless of the type of            
+organization.  Overall, this is a good package for anyone needing a     
+general ledger accounting program.                                      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## SAMPLE.DOC
+
+{% raw %}
+```
+SAMPLE DATA FILES FOR THE NONPROFIT GENERAL LEDGER PROGRAM
+
+The disk contains sample data in the files LEDGER.NGL, INDEX.NGL,
+SCR.NGL and TRANJRNL.NGL.  The installation batch files do not
+copy these files.  They are here if you want to practice with the
+program before entering your own data.  To use the files, copy
+them to a separate data diskette.  When you are done practicing,
+use a fresh data diskette for your own files, or use your hard
+disk.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2055
 

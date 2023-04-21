@@ -62,6 +62,7 @@ machines:
 
 ## DB.BAS
 
+{% raw %}
 ```bas
 10 '************     ╔════════════════════════════════════════════════════╗
 15 '* DataBoss *     ║o| DataBoss 3.00.01 MS-DOS COLOR Version (C) 1984 |o║
@@ -267,6 +268,59 @@ machines:
 1090 CALL I%
 1095 RETURN
 ```
+{% endraw %}
+
+## FILES663.TXT
+
+{% raw %}
+```
+Disk No 663
+Program Title: DATABOSS version 3.00.01 (Disk 2 of 2)
+PC-SIG version 1.2
+ 
+    This is the first of a two-disk set comprising the DATABOSS Data
+Management System. DATABOSS is a database with flexible report-generation
+and the ability to import and export data to Wordstar, PC-File III, DW III
+and many other programs. It sports user-defined color screens, up to eight
+different disk drives or subdirectories, pre-computed (equivalence) fields,
+wide standard reports, user-defined printer characteristics, a full
+alphabet keyboard enhancer, simple mathematical and statistical functions,
+sorting for up to eight levels, and enhanced search capabilities. This
+first disk holds the documentation for version 3.00.01 of the DATABOSS
+system -- 70+ pages of how-to information with some special tips on
+maximizing the use of your hard disk(s). NOTE: DATABOSS runs in BASIC and
+needs MS/PC DOS 3.xx and a hard disk for full functioning.
+ 
+    This second disk contains the actual DATABOSS program files. For
+complete documentation, refer to disk #662.
+ 
+Usage: Database Applications
+ 
+System Requirements: 128K memory and at least one disk drive.  Two
+drives or a hard drive is recommended.
+ 
+How to Start: For information on starting the program and printing the
+documentation, type: GO (press enter).
+ 
+Suggested Registration: $50.00
+ 
+File Descriptions:
+ 
+DB       BAS    The DataBoss menu and control program.
+???????? 01     Data Base functional modules (14 files)
+FIXED    BAT    To load DataBoss onto a hard disk.
+FLOPPY   BAT    To load the system onto a floppy.
+COLOR    BAT    To start the color set up program.
+DATABOSS BAT    To load basic and start the program.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

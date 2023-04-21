@@ -27,6 +27,36 @@ machines:
     context-sensitive help is a keystroke away.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2013.TXT
+
+{% raw %}
+```
+Disk No: 2013                                                           
+Disk Title: KAKA!                                                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Kaka!                                                    
+Author Version: 1.0                                                     
+Author Registration: $15.00                                             
+Special Requirements: CGA.                                  
+                                                                        
+Roll six die in the competition to remain the highest scoring player in 
+the game.  Two to six players vie to roll "scorable" combinations of    
+numbers.  Once the scoring begins, a player continues to play until     
+KAKA! is rolled - a non-scoring play.  Directions are provided online   
+and context-sensitive help is a keystroke away.                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2013
 

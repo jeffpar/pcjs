@@ -37,6 +37,45 @@ machines:
     README        Text file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES102.TXT
+
+{% raw %}
+```
+Disk No:  102
+Program Title:  dBASE II Ad Agency
+PC-SIG version: 1.1
+
+Usage:  dBASE II Ad Agency.
+
+Special Requirements:  dBase II.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:
+
+File Descriptions:
+
+ACCTG    PRG  To run, key "do acctg" at the Dbase II prompt
+??????   PRG  Dbase II program file (36)
+??????   DBF  Database files (12)
+??????   FRM  Format files (3)
+??????   NDX  Index files (6)
+CONSTANT MEM  Memory constants
+TEST     SUB  Part of ad agency accounting package
+README        Text file.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0102
 

@@ -51,6 +51,53 @@ machines:
     HF       HLP  Help file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0942.TXT
+
+{% raw %}
+```
+Disk No:  942                                                           
+Disk Title: Hydroflo Demo version                                       
+PC-SIG Version: S1.3                                                    
+                                                                        
+Program Title: Hydroflo                                                 
+Author Version: 1.2                                                     
+Author Registration: $195.00                                            
+Special Requirements: None.                                             
+                                                                        
+This is a demo version of HDROFLO with two sample problems.  HYDROFLO   
+performs the functions of a hydraulic system calculator.  The design    
+engineer essentially works in a worksheet-type environment, analyzing   
+hydraulic elements and observing the bottom line effects.  HYDROFLO's   
+calculations can be done in English or metric units and use any type of 
+fluid.  HYDROFLO can prescribe a pump for a system to meet a specified  
+flow and determine possible cavitation situations.  This demo is a      
+working version in that your own hydraulic calculations can be performed
+and verified.  Full screen graphics of the system and pump operation are
+accessible along with full report functions.  The full-featured version 
+includes other functions where, with a single command, the entire       
+systems diameter or friction can be changed to a new value and the      
+systems new operating point and pump specification be determined.       
+HYDROFLO automatically uses fitting and valve friction coefficients from
+menus, and help is available anywhere in the program.                   
+                                                                        
+Special Requirements:  None.                                            
+                                                                        
+How to Start: Type GO (press enter).                                    
+                                                                        
+Suggested Registration:  $195.00                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0942
 

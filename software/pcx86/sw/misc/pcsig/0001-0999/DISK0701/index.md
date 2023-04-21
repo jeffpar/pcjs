@@ -53,6 +53,56 @@ machines:
     the parts in motion.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES701.TXT
+
+{% raw %}
+```
+Disk No  701
+Program Title: DANCAD3D version 2.0E (Disk 1 of 4)
+PC-SIG version 2.3
+
+DANCAD3D lets you do complex tasks like stereoscopic 3D wire-frame
+animation or simple things like a letterhead. It lets you draw with
+lines that can be in a plane, like drawing on a piece of paper (2D
+drawing), and can go any direction in space (3D drawing).
+Three-dimensional drawings made of lines are called wire-frame drawings.
+You can separate groups of lines into "elements" that can be saved,
+loaded, magnified, rotated, flipped, offset (moved), and used over and
+over again, by keeping them as a file on a disk (give them names like
+cube, sphere, and cylinder).
+
+DANCAD3D prints out very sharp lines and is useful for line drawings,
+mechanical drawings, technical illustrations, wire-frame animation,
+engineering simulation to verify the fit of three-dimensional shapes,
+business forms, page-layouts combining text and drawings, and automatic
+computer slide-shows.
+
+Usage:  Graphics
+
+System Requirements:  512K memory and a hard drive.
+
+How to Start:  Type INSTALL (press enter).
+
+Suggested Registration:  $35.00
+
+File Descriptions:
+
+DANCAD3D COM Main program and code editor with help screens.
+DANCAD3D ??? Overlay files (27 files)
+INSTALL  BAT Installs DANCAD3D.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0701
 

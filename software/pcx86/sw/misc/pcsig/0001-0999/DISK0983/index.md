@@ -38,6 +38,54 @@ machines:
     selection.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES983.TXT
+
+{% raw %}
+```
+Disk No:    0                                                           
+Disk Title:                                                             
+PC-SIG Version:                                                         
+                                                                        
+Program Title:                                                          
+                                                                        
+This disk contains information on the various functions of THE SOURCE,  
+a worldwide network of electronic communication and information         
+services.  With virtually any microcomputer, terminal or communication  
+word processor, plus a telephone and a modem, the vast array of         
+information and communication services offered by THE SOURCE becomes    
+available to you.  You can keep on top of unfolding news events, send   
+mail electronically, check airline schedules, arrange a trip, or look   
+in on the stock market and analyze trends.                              
+                                                                        
+How to Start:  To read any of the documentation: from DOS, enter        
+TYPE (FILENAME) <ENTER>.                                                
+                                                                        
+Program Title:                                                          
+                                                                        
+This disk contains information on the various functions of THE SOURCE,  
+a worldwide network of electronic communication and information         
+services.  With virtually any microcomputer, terminal or communication  
+word processor, plus a telephone and a modem, the vast array of         
+information and communication services offered by THE SOURCE becomes    
+available to you.  You can keep on top of unfolding news events, send   
+mail electronically, check airline schedules, arrange a trip, or look   
+in on the stock market and analyze trends.                              
+                                                                        
+How to Start:  To read any of the documentation: from DOS, enter        
+TYPE (FILENAME) <ENTER>.                                                
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0983
 

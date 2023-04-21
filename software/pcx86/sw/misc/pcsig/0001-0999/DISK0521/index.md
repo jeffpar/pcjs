@@ -31,6 +31,54 @@ machines:
     record.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES521.TXT
+
+{% raw %}
+```
+Disk No  521
+Program Title: FREE FILE version 1.0
+PC-SIG version 1.2
+
+    FREEFILE is a relational database system that lets anyone with little
+or no programming experience determine how files are to be created, enter
+information, and print reports. It is particularly useful for someone
+interested in maintaining a collection of information with the ability to
+set up `calculated fields' and import or export data to and from other
+packages. FREE FILE has on-line help and two tutorials with explanations.
+It allows ten indexes per database, 2 billion records, 1000 characters per
+record, and 100 fields per record.
+
+Usage: Database
+
+System Requirements: 256K memory and one disk drive.
+
+How to Start: Type FF (press enter).
+
+Suggested Registration: $25.00
+
+File Descriptions:
+
+READ     ME   Introduction to print documentation
+FF       EXE  Main FREEFILE program
+FF       HLP  FREEFILE help text
+FF       DOC  FREEFILE documentation
+DEMO1    ?    First tutorial with names & addresses (5 files)
+DEMO2    ?    Second tutorial with rental business application (6 files)
+COLOR    EXE  Set up color for color monitor
+NO-COLOR FIL  Set up for monochrome graphic monitor
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1986,87,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0521
 

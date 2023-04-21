@@ -54,6 +54,83 @@ machines:
     Turbo Pascal TPU unit.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1539.TXT
+
+{% raw %}
+```
+Disk No: 1539
+Program Title:  EISSENGER UTILITIES & More
+PC-SIG version: 1
+
+A passel of useful tools for turbo pascal programmers, as well as some
+batch utilities that do not require any programming language to use.
+Batch File Utilities:
+
+PASTE - Concatonates two files together line-by-line, butted together
+end-to-end.  A line from the second file is appended to the first file
+to make a longer line for the new file.
+
+BLDBAT - Creates a text file containing directory's filenames specified
+by a file masking parameter.  Similar to Unix's LS command to file.
+
+MELD - Merges two text files by interleaving lines of each file.  The
+new file receives a line from the first file, then a line from the
+second, then on from the first, etc..
+
+PUTCURS - Moves the cursor to a designated line on the screen.
+Extremely useful for batch file I/O.
+
+Pascal Utilities:
+
+INDENT - Reformats and standardizes PASCAL source files for indents and
+case.  Useful when two or more programmers with different writing styles
+work on code for a program.
+
+EXTRACT - Pulls out and prints the names of all procedures and functions
+along with all in-line comments from source files.  This is invaluable
+for documentation and cross-referencing.
+
+SGCVERT - For Screen Genie users, reveals how to take advantage of an
+undocumented feature in this popular window generator that permits the
+use of the Screen Genie work file as a screen in an object file or in a
+Turbo Pascal TPU unit.
+
+Usage:  Turbo Pascal Programming tools.
+
+Special Requirements:  Turbo Pascal 4.0
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $25.00
+
+File Descriptions:
+
+README
+BLDBAT   EXE  Batch file builder.
+EXTRACT  EXE  Function extractor.
+INDENT   EXE  Source code formatter.
+MELD     EXE  Text file merger.
+PASTE    EXE  Text file concatonator.
+PUTCURS  EXE  Cursur placement.
+SGCVERT  EXE  Screen genie to binary converter.
+SGTEST   EXE  Binary Screen Genie tester.
+UTIL     PRN  Documentation.
+TP4UTIL  SCN  Genie screen file.
+SGDISP   TPU  Turbo Pascal Screen Genie Unit.
+TP4UTIL  WRK  Utility source unit.
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1539
 

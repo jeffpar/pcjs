@@ -69,6 +69,7 @@ machines:
 
 ## ANOVA.BAS
 
+{% raw %}
 ```bas
 1 '                     ANALYSIS OF VARIANCE
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -171,9 +172,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## BAYES.BAS
 
+{% raw %}
 ```bas
 1 '                         BAYES' THEOREM
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -223,9 +226,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## BINOMIAL.BAS
 
+{% raw %}
 ```bas
 1 '               BINOMIAL DISTRIBUTION (one-tailed)
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -265,9 +270,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## CHISQR.BAS
 
+{% raw %}
 ```bas
 1 '                        CHI-SQUARE TEST
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -331,9 +338,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## CORRELAT.BAS
 
+{% raw %}
 ```bas
 1 '                   CORRELATION COEFFICIENTS
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -394,9 +403,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## DATA-ONE.BAS
 
+{% raw %}
 ```bas
 1 '                 STATISTICAL DATA ENTRY PROGRAM
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -580,9 +591,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## EPIMRG.BAS
 
+{% raw %}
 ```bas
 5 DEF SEG=64:A=PEEK(23):IF NOT(A AND 32) THEN POKE 23,(A OR 32)
 6 DEF SEG:CLEAR,,1024:OPTION BASE 1:DEFINT A-C,N,T,Z:DEFSTR D
@@ -631,9 +644,11 @@ machines:
 5070 BEEP:AR=CSRLIN:IF ERR<>27 AND ERR<>25 THEN 5010 ELSE LOCATE 24,15:PRINT "The printer is not ready.  Check before proceeding.";:LOCATE 25,25:PRINT "Press any key to continue:";
 5075 A$=INKEY$:IF A$="" THEN 5075 ELSE FOR ZZ=24 TO 25:LOCATE ZZ,10:PRINT TAB(80):NEXT:LOCATE AR,1:RESUME
 ```
+{% endraw %}
 
 ## EPISTAT.BAS
 
+{% raw %}
 ```bas
 1 '                    INTRODUCTION TO EPISTAT
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -794,9 +809,75 @@ machines:
 765 A$=INKEY$:IF A$="" THEN 765 ELSE RESUME
 770 ON ERROR GOTO 0
 ```
+{% endraw %}
+
+## FILES088.TXT
+
+{% raw %}
+```
+Disk No  88
+Program Title: EPISTAT STATISTICS PACKAGE  VERSION 3.3
+PC-SIG version 3.3
+ 
+    This package contains a set of routines for use in analysis of small
+data sets, and is meant to be used by a person well-versed in math and
+computer operations. This is a fairly complex disk and is not recommended
+for the casual user. But for those with an interest, it can be of great
+help.
+ 
+Usage: statistical
+ 
+System Requirements: IBM PC or close compatible, 1 disk drive, Dos 2.0 or
+                     later and a version of BASIC.
+ 
+Suggested Registration: $15.00
+ 
+File Descriptions:
+ 
+ANOVA    BAS  One and two way analysis of variance
+AUTOEXEC BAT  Batch file to auto boot program
+BAYES    BAS  Calculates rates of false positive and negative tests
+BINOMIAL BAS  Binomial distribution
+CHISQR   BAS  Chi-square test
+CORRELAT BAS  Calculates pearson's correlation coefficient
+DATA-ONE BAS  Main data entry program
+EPIMRG   BAS  Used by every epistat program
+EPISETUP BAK  Backup for episetup.dat
+EPISETUP DAT  Used by every epistat program
+EPISTAT  BAS  Lists available programs and guides user to proper program to use
+FILETRAN BAS  Transfers data from one data file to another
+FISHERS  BAS  Fisher's exact test to evaluate 2 by 2 tables of discrete values
+FORTRANS BAS  Transfers fortran to epistat files
+HISTOGRM BAS  Graphs data sample on high resolution graphics screen
+LNREGRES BAS  Linear regression
+MCNEMAR  BAS  Mcnemar's test  or paired chi-square test
+MHCHIMLT BAS  Mantel-haenszel chi-square test for multiple controls
+MHCHISQR BAS  Mantel-haenszel chi-square test
+NORMAL   BAS  Calculates normal distribution
+POISSON  BAS  Calculates poisson distribution
+PRINTDOC      Documentation file  (25k)
+RANDOMIZ BAS  Random sample generator
+RANKTEST BAS  Three tests - signed rank, rank correlation and rank sum
+RATEADJ  BAS  Rate adjustment program
+SAMPLSIZ BAS  Calculates sample sizes for statistical significance
+SCATRGRM BAS  Graph scatergrams
+SELECT   BAS  Select from other programs
+T-TEST   BAS  T-test compares mean of 2 samples
+XTAB     BAS  Print crosstab reports
+EXAMPLE       Sample data set
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
 
 ## FILETRAN.BAS
 
+{% raw %}
 ```bas
 1 '                     FILE TRANSFER PROGRAM
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -868,9 +949,11 @@ machines:
 5010 ON ERROR GOTO 0:END
 5032 IF EF=1 THEN RESUME 30 ELSE IF EF=2 THEN RESUME 45
 ```
+{% endraw %}
 
 ## FISHERS.BAS
 
+{% raw %}
 ```bas
 1 '                FISHER'S EXACT TEST (one-tailed)
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -909,9 +992,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## FORTRANS.BAS
 
+{% raw %}
 ```bas
 1 '                     FORTRAN DATA TRANSFER
 2 '                Copyright Tracy L. Gustafson, M.D.
@@ -964,9 +1049,11 @@ machines:
 5010 ON ERROR GOTO 0:END
 5032 IF EF=1 THEN RESUME 50 ELSE IF EF=2 THEN RESUME 105 ELSE 5010
 ```
+{% endraw %}
 
 ## HISTOGRM.BAS
 
+{% raw %}
 ```bas
 1 '                   HISTOGRAM GRAPHING PROGRAM
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1061,9 +1148,11 @@ machines:
 5010 ON ERROR GOTO 0:END
 5072 A$=INKEY$:IF A$="" THEN 5072 ELSE CLOSE #1:RESUME 160
 ```
+{% endraw %}
 
 ## LNREGRES.BAS
 
+{% raw %}
 ```bas
 1 '                       LINEAR REGRESSION
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1150,9 +1239,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## MCNEMAR.BAS
 
+{% raw %}
 ```bas
 1 '                        MCNEMAR'S TEST
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1192,9 +1283,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## MHCHIMLT.BAS
 
+{% raw %}
 ```bas
 1 '        MANTEL-HAENSZEL MATCHED CHI-SQUARE FOR MULTIPLE CONTROLS
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1246,9 +1339,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## MHCHISQR.BAS
 
+{% raw %}
 ```bas
 1 '                 MANTEL-HAENSZEL CHI-SQUARE TEST
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1288,9 +1383,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## NORMAL.BAS
 
+{% raw %}
 ```bas
 1 '                      NORMAL DISTRIBUTION
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1352,9 +1449,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## POISSON.BAS
 
+{% raw %}
 ```bas
 1 '                POISSON DISTRIBUTION (one-tailed)
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1384,9 +1483,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## RANDOMIZ.BAS
 
+{% raw %}
 ```bas
 1 '                   SELECTING A RANDOM SAMPLE
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1447,9 +1548,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## RANKTEST.BAS
 
+{% raw %}
 ```bas
 1 '                 RANK SUM AND SIGNED RANK TESTS
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1581,9 +1684,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## RATEADJ.BAS
 
+{% raw %}
 ```bas
 1 '               DIRECT AND INDIRECT RATE ADJUSTMENT
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1639,9 +1744,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## SAMPLSIZ.BAS
 
+{% raw %}
 ```bas
 1 '                   CALCULATING SAMPLE SIZES
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1691,9 +1798,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## SCATRGRM.BAS
 
+{% raw %}
 ```bas
 1 '                  SCATTERGRAM GRAPHING PROGRAM
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1806,9 +1915,11 @@ machines:
 5010 ON ERROR GOTO 0:END
 5072 A$=INKEY$:IF A$="" THEN 5072 ELSE CLOSE #1:RESUME 160
 ```
+{% endraw %}
 
 ## SELECT.BAS
 
+{% raw %}
 ```bas
 1 '                    SELECT SPECIFIC RECORDS
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -1932,9 +2043,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## T-TEST.BAS
 
+{% raw %}
 ```bas
 1 '                 STUDENT'S T-TEST (two-tailed)
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -2009,9 +2122,11 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 ## XTAB.BAS
 
+{% raw %}
 ```bas
 1 '                          CROSSTABS
 2 '               Copyright Tracy L. Gustafson, M.D.
@@ -2094,6 +2209,7 @@ machines:
 5005 A$=INKEY$:IF A$="" THEN 5005 ELSE RESUME
 5010 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

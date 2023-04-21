@@ -31,6 +31,41 @@ machines:
     offers on-line help and a well-written 20-page operations manual.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1398.TXT
+
+{% raw %}
+```
+Disk No: 1398                                                           
+Disk Title: File Browser                                                
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: File Browser                                             
+Author Version: 2.00                                                    
+Author Registration: $15.00                                             
+Special Requirements: CGA.                                              
+                                                                        
+With FILEBROWSER, you can view the largest ASCII or WordStar files, and 
+chop them down to size to fit your wordprocessor.                       
+                                                                        
+This menu-driven tool lets you access big files, view them on the       
+screen, copy specific blocks and print to a designated device.  You can 
+read a screen at a time, jump back and forth within the file, or have   
+the text automatically scroll.  It provides a quick search function for 
+locating a particular word or line of text in a file.  A DOS shell is   
+provided for easy access to an editor or wordprocessor, and the program 
+offers on-line help and a well-written 10-page operations manual.       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1398
 

@@ -53,6 +53,85 @@ machines:
     references.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES402.TXT
+
+{% raw %}
+```
+Disk No:  402
+Program Title: CROSS ASSEMBLER for the IBM 370 version 4.2 (Disk 1 of 3)
+PC-SIG version: 3.3
+
+PC/370 is a cross assembler that runs on the IBM-PC, AT, or XT and lets
+you compile and run IBM 370 assembly language programs.
+
+These programs are well-documented with an excellent example demo set up
+to be run by a batch file.  This is the most complete emulation of the
+VM370 assembler that can be found.  A generous debugging and erase
+facility is also given to ease complete development cycles without the
+big blue box.
+
+Version 4.2 is loaded with new features, here are just a few:
+
+      o  PC/370 assembler subroutines may now be called from Micro
+         Focus COBAL/2 programs running either in extended memory
+         protected mode or normal MS-DOS real mode.  Standard linkage
+         conventions are supported.  The
+
+      o  PC/370 run time emulator can now be made resident to
+         eliminate loading it from disk storage for each program or
+         subroutine execution.  As part of making the emulator
+         reusable, debug now supports restoring traces.
+
+      o  An optional hardware assist for the CVB and CVD 370
+         instructions using the 80x87 math co-processor can speed up
+         the instructions by up to a factor of 4.
+
+      o  Two new supervisor calls have been added.  SVC 36 will load a
+         program or file into a predefined area of memory (useful for
+         overlays), SVC 37 defines user SVC exits for modifying native
+         SVC support without requireing the overhead of an emulated
+         interrupt driven shell.
+
+      o  The cross assembler now supports the copy statement to allow
+         includeing source code files.
+
+      o  The linkage editor now supports option U to allow external
+         unresolved references.
+
+Please note that all three disks are required to run this program, the
+other numbers in the set are #859 and #1352.
+
+Usage:  For beginning through advanced S/370 assembly language
+programmers.
+
+Special Requirements:  None.
+
+How to Start:  Type GO and press (press enter).
+
+Suggested Registration:  $45.00
+
+File Descriptions:
+
+BAT     <DIR> Contains batch files which can be executed without any
+              parameters after setting current directory to R42.
+CPY     <DIR> Contains CPY source code for ALC source COPY includes.
+LIB     <DIR> Contains ALC source code for PC/370 system subroutines.
+R42     <DIR> Contains all of the executable programs and system files
+              required by the PC/370 facilities.
+READ     ME   Introductory text file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0402
 

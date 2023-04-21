@@ -56,6 +56,67 @@ machines:
     and #746).
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1370.TXT
+
+{% raw %}
+```
+Disk No: 1370
+Program Title: GARC'S UTILITIES
+PC-SIG version 1
+
+Need to find a name or other text in a long file?  Set up print
+parameters for your Epson compatible printer?  Choose screen colors on
+CGA, EGA and VGA systems?  Or find a BBS phone number quickly and
+easily?  If so, GARC'S for you!
+
+Give TEXTSRCH a filename and the text, name or data you are trying to
+locate.  Go warm your coffee and by the time you get back, this
+program will have numbered the lines in your file and listed those
+which contain the text you are searching for.
+
+EPSET offers you a nifty collection of batch commands to set the print
+parameters on the Epson MX, LX and FX series.  One command, TINY.BAT,
+produces the smallest print you've ever seen from your dot matrix!.
+EPSET works with most Epson compatibles, but experiment first.
+
+COLORSET displays a chart of available colors from which you can
+choose your screen settings on CGA, EGA and VGA systems.
+
+FINDBBS provides you quick access to hundreds of bulletin board
+systems' (BBS) phone numbers across the nation.  Dial up and log-on.
+It also serves as the BBS search door for WILDCAT! BBS (PC SIG disks
+745, 746).
+
+Synopsis:  Perform text searches, set Epson printer parameters,
+choose the colors for your display and find BBS phone numbers.
+
+Usage:  Text/Printer/Screen/BBS/Utilities.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:   $5.00 each for TEXTSRCH and EPSET.
+
+File Descriptions:
+
+TEXTSRCH <DIR>Directory of ASCII string search utility files.
+EPSET    <DIR>Directory of utility files to set Epson printer.
+COLORSET <DIR>Directory of utility files to set screen colors.
+FINDBBS  <DIR>Directory of utility files to find BBS phone number.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1370
 

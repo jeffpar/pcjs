@@ -14,6 +14,43 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2703.TXT
+
+{% raw %}
+```
+Disk No: 2703                                                           
+Disk Title: Pilot Log Book                                              
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Pilot Log Book                                           
+Author Version: 06/90                                                   
+Author Registration: $59.95                                             
+Special Requirements: No special requirements.                          
+                                                                        
+The PILOT LOG BOOK eliminates the need for the traditional hard cover   
+log book. The program tracks the pilot's flying experience and gives him
+or her quick and easy access to any currency requirement that might be  
+desired. In addition to providing total flying time, THE PILOT LOG BOOK 
+will also report any currency requirement by simply giving a start and  
+end date. For those who fly infrequently, this is a valuable function in
+determining pilot legality.                                             
+                                                                        
+The program has printer support and even a set of columns to track      
+expenses, whether rental or owner related. The program will track up to 
+300 entries per year, which should be more than adequate to satisfy the 
+needs of any pilot.                                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2703
 

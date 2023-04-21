@@ -38,6 +38,53 @@ machines:
     the printer.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1342.TXT
+
+{% raw %}
+```
+Disk No: 1342
+Program Title:  MORTPLAN version 3.0
+PC-SIG version: 1.1
+
+MORTPLAN provides menu driven ease for calculating home loans.  It
+calculates a standard mortgage for principle amounts up to
+$99,999,999.99 and interest rates up to 35.000%, and saves the results
+to disk.  Random additional payments can be used and the results
+analyzed.  It has a section for comparing a range of interest rates and
+a range of loan amounts at the same time.  There is also provision for
+variable rate loans.  All output can be directed to either the screen or
+the printer.
+
+Usage:  Financial Application.
+
+Special Requirements:  None.
+
+How to Start:  Type  GO (press enter).
+
+Suggested Registration:  $30.00
+
+File Descriptions:
+
+AMORTMST FIL  Data file.
+AMORTPRT DRV  Data file.
+MORTHELP FIL  Data file.
+MORTPLAN DOC  Documentation for MORTPLAN.EXE.
+MORTPLAN EXE  Main MORTPLAN program.
+README   CIS  Text file.
+SAMPLE   PMT  Data file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1342
 

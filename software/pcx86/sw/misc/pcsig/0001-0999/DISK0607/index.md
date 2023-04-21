@@ -86,8 +86,208 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CDIR.DOC
+
+{% raw %}
+```
+                            RONALD E. FRANK
+                             P. O. Box 989
+                        Big Bear Lake, CA 92315
+
+CDIR -> DB is yet another disk cataloging program.  Most of the disk
+cataloging programs available impose size limitations, and dBASE II has
+a lot of flexibility for changes.  CDIR is a program that will read the
+directory of a disk (B: is the default as in "CDIR" reads B:, but "CDIR A:"
+is also allowed.  It creates two files on the default disk, VOL.LIB and
+DB.LIB, and keeps appending on to the end of these as long as you keep
+shoving in disks.  The CDIR [D:] is terminated after each disk read to
+permit you to do something else in the midst of doing all this cataloging.
+
+   VOL.LIB is designed to print out on a 132 column printer, and lists
+volume labels, free space, and then file information in three columns.
+
+   DB.LIB is designed to be appended to the dBASE II file MAINLIB.DBF with
+the "SDF" option.  Once you've gotten everything in to the DBF file, you can
+use all of dBASE IIs features to manipulate the information.
+
+   STDIO.H, C.OBJ, and MC.LIB come from the Microsoft V1.04 C compiler;
+the Linker was V2.3, and the assembler was Microsoft V3.0.
+```
+{% endraw %}
+
+## CDIRA.ASM
+
+{% raw %}
+```
+comment *
+..
+---------!-------!-------!-------------!-------------------R
+..
+-----------------------------------------------------------!----!------------------------------------------------------------------!
+.mt0
+.mb2
+.pl80
+.fo cdira.asm page # of 1 160156 sep 84
+.po0
+0 *
+PAGE 80,132
+;----------------------------------------------------------;
+
+
+PGROUP   GROUP   PROG
+PROG     SEGMENT BYTE PUBLIC 'PROG'    ;macros + structures
+         ASSUME  CS:PGROUP             ;go before this
+
+GET_DIR  PROC    NEAR                  ;near from C
+         PUBLIC  GET_DIR
+         PUSH    BP                    ;
+         MOV     BP,SP                 ;
+
+
+         MOV     DX,[BP+6]             ;DS:DX to DTA dest
+         PUSH    DX                    ;need addr later
+         MOV     AH,1AH                ;set DTA to fcb
+         INT     21H
+
+         MOV     DX,[BP+4]             ;DS:DX to search dest
+         MOV     AH,11H                ;search first dir
+         INT     21H                   ;put dir into fcb
+         CMP     AL,0FFH               ;@ [BP+6]
+         JZ      OUT                   ;no matches
+
+MORE:    MOV     CX,112                ;
+
+         POP     DX                    ;previous DTA
+         ADD     DX,[BP+8]             ;step DTA to next ntr
+         PUSH    DX                    ;save for next time
+         MOV     AH,1AH                ;and reset DTA to it
+         INT     21H                   ;? efficiency ?
+         MOV     DX,[BP+4]             ;next entry source
+         MOV     AH,12H                ;search for next ntry
+         INT     21H                   ;moves it to DTA
+         CMP     AL,0FFH               ;
+         JZ      OUT                   ;no matches
+         add     dx,[bp+8]             ;hope it kept bp+4
+         LOOP    MORE                  ;
+
+OUT:     POP     DX                    ;clr stack
+         POP     BP                    ;
+         RET     6                     ;just parms; DX above
+
+GET_DIR  ENDP                          ;close procedure
+
+
+
+CDFREESP PROC    NEAR                  ;
+         PUBLIC  CDFREESP              ;
+         PUSH    BP                    ;
+         MOV     BP,SP                 ;
+
+
+         MOV     DL,[BP+4]             ;drive #
+         XOR     AX,AX                 ;clear for safety
+         MOV     AH,36H                ;get disk free space
+         INT     21H                   ;DOSCALL see p D 33
+         MOV     DI,[BP+6]
+         MOV     [DI],BX               ;clusters avail.
+         MOV     DI,[BP+8]
+         MOV     [DI],DX               ;clusters on drive
+         MOV     DI,[BP+10]
+         MOV     [DI],CX               ;bytes per sector
+         MOV     DI,[BP+12]
+         MOV     [DI],AX               ;sectors/cluster
+
+
+         POP     BP                    ;
+         RET     10                    ;clear stack
+
+CDFREESP ENDP                          ;close procedure
+PROG     ENDS                          ;close segment
+         END                           ;close assembly
+
+```
+{% endraw %}
+
+## FILES607.TXT
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+Disk No  607  Text Utilities                                       v1 DS2
+---------------------------------------------------------------------------
+HEBREW uses a downloaded character set on an Epson FX series printer to print
+in Hebrew, after preparing the file with WordStar.  The source code is provided
+for those who might want to change the mapping of English to Hebrew letters.
+ 
+TEXT CHECKER checks a WordStar text file for two kinds of errors:  certain
+control characters, quotes, parentheses, and brackets, that are not in pairs;
+extra spaces between words and inconsistent numbers of spaces between
+sentences.
+ 
+CDIR -> DB is a cataloging program.  Most of the disk cataloging programs
+available impose size limitations but this one creates two files on the default
+disk, VOL.LIB and DB.LIB, and keeps appending to these as long as you keep
+shoving in disks.  CDIR is terminated after each disk read to permit you to do
+something else in the midst of doing all this cataloging.
+ 
+SMX is a printer utility designed for an EPSON MX80 (SFX is for the FX185).  It
+accepts a parameter (or asks for one) and then sends the translated codes to
+the printer.
+ 
+INDEXER creates an index file, with page numbers, from a formatted text file.
+ 
+---------------
+ 
+HEBREW   BAS  Source code for HEBREW
+READ     ME   Letter about HEBREW and Text Checker
+HEBREW   EXE  HEBREW program
+HEBREW   DOC  Documentation for HEBREW
+ 
+TC       DOC  Documentation for Text Checker
+TC       EXE  Text Checker program
+ABBREVS       Part of Text Checker
+ 
+CDIRA    ASM  ASM source to get directory and freespace
+CDCONCAT BAT  Batch file to collect CDIR source into one file
+CDIR     C    CDIR main source file
+CDATE    FNC  CDIR function
+CDDBPRNT FNC  "
+CDDEBUG  FNC  "
+CDDSKPRT FNC  "
+CDGETDRV FNC  "
+CDIROUTP FNC  "
+CDSCRPRT FNC  "
+CDTIME   FNC  "
+CDWDEPRT FNC  "
+CDIR     H    Constants and declaration for CDIR
+CDIRA    OBJ  Assembler directory and freespace routines
+MC       BAT  Batch file to compile CDIR
+CDIR     DOC  Documentation for CDIR
+MAINLIB  DBF  Sample dBASE II file from CDIR
+SMX      ASM  ASM source to set up an MX 80 printer
+SFX      ASM  ASM source to set up an FX 185 printer
+LNK      BAT  Batch file to link CDIR
+SMX      DOC  Documentation for SMX
+CDIR     EXE  Disk catalogue program
+VOL      LIB  Sample output file
+DB       LIB  "
+SMX      COM  Printer initialization for MX 80, run file
+ 
+INDEXER  C    C source code for INDEXER
+INDEXER  EXE  INDEXER program
+INDEXER  DOC  Documentation for INDEXER
+ 
+PC Software Interest Group (PC-SIG)
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987
+```
+{% endraw %}
+
 ## HEBREW.BAS
 
+{% raw %}
 ```bas
 10 ON ERROR GOTO 2000
 20 DEFINT A-Z
@@ -450,6 +650,529 @@ machines:
 5370 DATA 69,128,0,32,24,0,0,32,24,0,0,0,0'      E = 2 yuds
 5380 DATA -1
 ```
+{% endraw %}
+
+## INDEXER.DOC
+
+{% raw %}
+```
+        
+
+                                INDEXER
+                                -------
+
+                Public Domain Text file indexing program
+
+                         Author: COMV
+                      C compiler: MicroSoft V 3.00
+
+
+        INDEXER creates an index file, with page numbers, from 
+        a formatted text file.
+
+        There are 3 INDEXER files:
+
+                1) INDEXER.C    - C language source
+                2) INDEXER.EXE  - Compiled source
+                3) INDEXER.DOC  - Documentation
+
+        To use INDEXER, first create a file of keywords. The 
+        keywords do not have to be in upper or lower case and do 
+        not have to be in alphabetical order. The only restric-
+        tion is that each keyword has to be on a separate line. A 
+        keyword can be preceded by spaces, tabs, line feeds, 
+        carriage returns and commas because all of these 
+        characters are considered white space when reading the 
+        keyword file.  
+
+        When you run INDEXER, you will have to answer some 
+        prompts: 
+
+            Name of text file?  
+
+                - Enter the name of the text file you wish to 
+                  index. This file must have already been 
+                  formatted by your text processor into a form 
+                  that is ready for printing.  
+
+            Name of keyword file?  
+
+                - Enter the name of the keyword file you typed 
+                  in.  
+
+            Page breaks at 1) fixed line count or 2) form feeds?
+
+                - If your word processor moves to the top of the 
+                  next page by padding the current page with 
+                  blank lines (a la PC-Write), then enter "1". 
+                  You will be then asked "How many lines per 
+                  page?" Standard eleven inch paper has 66 lines 
+                  per page (at 6 lines per inch), so most people 
+                  will enter "66".  
+
+                  If your word processor uses the form feed 
+                  character (decimal 12, hex 0C) to move to the 
+                  top of the next page, then enter "2".
+
+            What text page is 'page 1'?
+
+                - Enter the page number where indexing is to 
+                  begin. For example, if you have 1 title page 
+                  and 1 page of contents in front of what you 
+                  call page 1, then you should enter "3".  
+
+
+            What column should keywords start at in index output 
+            file?
+
+                - Enter the number of spaces that you want in 
+                  front of every keyword entry in the index 
+                  output file. This allows the index to have the 
+                  same left margin as the rest of the document.
+
+
+        After the keywords are read in from the keyword file they 
+        are sorted and redundant keywords are eliminated. Upper 
+        case is equivalent to lower case while sorting. For 
+        example, "ONEWORD" = "oneWord".
+                
+        INDEXER then reads the text file, searching for matches 
+        to the keywords. Case is not important. The keyword may 
+        be entirely contained in another word. For example, the 
+        keyword "struct" matches "STRUCT" and "restructure".  
+        
+        INDEXER always writes the index information to a file 
+        called "INDEX." When INDEXER asks for the keyword file 
+        name, you can specify the INDEX file created by a 
+        previous run of INDEXER.
+
+        INDEXER, as distributed, is limited to about 1000 
+        keywords. If you re-compile the C source after altering 
+        some "#define"s, you can increase this amount.  
+
+        INDEXER is not very sophisticated, but I can't spend any 
+        more time on it. If you improve INDEXER (e.g.  matching 
+        keywords with hyphenated words that extend to the next 
+        line, etc.), feel free to send me a copy. I'll send the 
+        improved version, with enhancement credits, to the major 
+        public domain software suppliers so everyone can benefit.  
+
+        *********************************************************
+
+        ADVERTISEMENT
+
+        Let me briefly tell you about User-Supported software my 
+        company sells.  
+        
+        IMAGEPRINT
+
+        ImagePrint allows your IBM Graphics Printer or IBM 
+        Proprinter or Epson printer or compatible printer to 
+        produce print quality comparable to that of a daisy wheel 
+        printer.  
+
+        Most print quality enhancing programs and so-called 
+        letter quality printers only make two print-head passes 
+        per line to form characters, and the results show it. Our 
+        sophisticated font design process, combined with three 
+        print-head passes, gives a print quality nothing else 
+        matches.  
+
+        Text can be formatted and individual characters can be 
+        bold, italic, double width, half-high, 17.1 or 12 or 10 
+        cpi, proportionally spaced, superscripted or subscripted, 
+        and underlined. Fonts can be dynamically switched during 
+        printing and each font contains an entire IBM Graphics 
+        Printer's character set, so you don't need an IBM 
+        Graphics Printer to print the upper half of an IBM PC's 
+        character set. Both 80 and 136 column versions of 
+        ImagePrint are available.  
+
+        B_WINDOW
+
+        B_WINDOW is a collection of functions that give windowing 
+        capability to a BASIC programmer using an IBM Personal 
+        Computer or true compatible. With B_WINDOW you can write 
+        BASIC programs that look much more visually exciting and 
+        professional. A window can be opened over a section of 
+        the screen (including another window) and when the window 
+        is closed, the original contents of the screen reappears. 
+        Special windowing cursor control, string and character 
+        display and border drawing are included. And everything 
+        happens at top speed because B_WINDOW is written entirely 
+        in assembler.  
+        
+        Both standard interpreted BASIC and compiled BASIC are 
+        supported by either BLOADing a windowing support file or 
+        linking to it if you are using an IBM or MicroSoft BASIC 
+        compiler.
+
+        PRICES
+
+        The distribution version of ImagePrint, with 1 font 
+        (Cubic) and support for 80 column printers only, costs 
+        $10. The registered version of ImagePrint, with a total 
+        of 5 fonts and support for both 80 and 136 column 
+        printers, costs $20.  
+
+        The full B_WINDOW package costs $15.
+
+        The above prices include postage. Connecticut residents 
+        must include 7 1/2% sales tax. We accept MasterCard and 
+        Visa.  
+
+        Our address is:
+
+                Image Computer Systems
+                P. O. Box 647
+                Avon, CT 06001
+                Ph: (203) 678-8771
+
+        *********************************************************
+```
+{% endraw %}
+
+## NOTES607.TXT
+
+{% raw %}
+```
+Program name:          HEBREW
+ 
+Author name: Arnold M. Kuzmack
+ 
+Address:     3912 Montrose Dr.
+             Chevy Chase, MD  20815
+ 
+Telephone Number:  (202) 382-5508
+                   (301) 986-0274
+ 
+Suggested Donation:  Small contribution
+ 
+Program Description:  HEBREW uses a downloaded character set on an Epson FX
+series printer to print in Hebrew, after preparing the file with WordStar.  The
+source code is provided for those who might want to change the mapping of
+English to Hebrew letters.
+ 
+ 
+Program name:  TC  (Text Checker)
+ 
+Author name: Arnold M. Kuzmack
+ 
+Address:     3912 Montrose Dr.
+             Chevy Chase, MD  20815
+ 
+Telephone Number:  (202) 382-5508
+                   (301) 986-0274
+ 
+Suggested Donation:  Small contribution
+ 
+Program Description:  TEXT CHECKER checks a WordStar text file for two kinds of
+errors:  certain control characters, quotes, parentheses, and brackets, that
+are not in pairs; extra spaces between words and inconsistent numbers of spaces
+between sentences.
+ 
+ 
+Program name:  CDIR
+ 
+Author name:         RONALD E. FRANK
+ 
+Address:              P. O. Box 989
+                 Big Bear Lake, CA 92315
+ 
+Telephone Number:
+ 
+Suggested Donation:
+ 
+Program Description:  CDIR -> DB is yet another disk cataloging program.  Most
+of the disk cataloging programs available impose size limitations but this one
+creates two files on the default disk, VOL.LIB and DB.LIB, and keeps appending
+to these as long as you keep shoving in disks.  CDIR is terminated after each
+disk read to permit you to do something else in the midst of doing all this
+cataloging.
+ 
+ 
+Program name:  SMX
+ 
+Author name:        RONALD E. FRANK
+ 
+Address:             P. O. Box 989
+                Big Bear Lake, CA 92315
+ 
+Telephone Number:  SMX
+ 
+Suggested Donation:
+ 
+Program Description:  SMX is a printer utility designed for an EPSON MX80 (SFX
+is for the FX185).  It accepts a parameter (or asks for one) and then sends the
+translated codes to the printer.
+ 
+ 
+Program name: INDEXER
+ 
+Author name:           Image Computer Systems
+ 
+Address:               P. O. Box 647
+                       Avon, CT 06001
+ 
+Telephone number:      Ph: (203) 678-8771
+ 
+Suggested donation:
+ 
+Program description:  INDEXER creates an index file, with page numbers, from a
+formatted text file.
+ 
+PC Software Interest Group (PC-SIG)
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987
+```
+{% endraw %}
+
+## SFX.ASM
+
+{% raw %}
+```
+COMMENT|  SETFX.COM  Copyright (C) Ronald E. Frank 29 Sep 85
+This program accepts a parameter or asks for one with a
+menu, converts it with a translation table to a series of
+printer codes, and sends those codes to the printer.  The
+printer beeps to acknowledge receipt.
+
+Line 6 is as follows:
+Compr // Elite // 8 Lpi // Skip 8 on Perf // Left Marg 20
+ 0F      1B,4D    1B,30       1B,4E,08        1B,6C,20      Hex codes
+ I-5      I-7     I-14          I-13            I-12        Epson Reference
+
+END COMMENT |
+
+PUBLIC   BEGIN,GO,GETPARM,GOTPARM,PRINTIT
+
+CODE     SEGMENT PARA PUBLIC 'CODE'
+         ASSUME CS:CODE,DS:CODE,ES:CODE
+         ORG     100H
+
+BEGIN:   JMP     GO
+
+MENU     DB      16 DUP (' '),201,44 DUP (205),187,10,13
+         DB      16 DUP (' '),186,'   0 - Reset [Epson]  1B,40                 ',186,10,13
+         DB      16 DUP (' '),186,'   1 - NLQ [Epson]    1B,78,1               ',186,10,13
+         DB      16 DUP (' '),186,'   2 - Set LF to 1/8" 1B,30                 ',186,10,13
+         DB      16 DUP (' '),186,'   3 - Compressed     0F                    ',186,10,13
+         DB      16 DUP (' '),186,'   4 - Elite [Epson]  1B,4D                 ',186,10,13
+         DB      16 DUP (' '),186,'   5 - Skip on Perf   1B,4E,8               ',186,10,13
+         DB      16 DUP (' '),186,'   6 - Compr Elite 8 lpi skip LM 10         ',186,10,13
+         DB      16 DUP (' '),186,'           0F,1B,4D,1B,30,1B,4E,8,1B,6C,20. ',186,10,13
+         DB      16 DUP (' '),186,'   7 - Underline ON   1B,2D,1               ',186,10,13
+         DB      16 DUP (' '),186,'   8 - Emphasize ON   1B,45                 ',186,10,13
+         DB      16 DUP (' '),186,'   9 - 11 Inch Page   1B,43,0,11            ',186,10,13
+         DB      16 DUP (' '),200,44 DUP (205),189
+         DB      10,10,10,10,13,'$'
+ASK1     DB      16 DUP (' '),'Enter Your Selection ->','$'
+INPTPARM DB      '*'
+NTRY_LEN DB      12
+PRNTCODE DB      1BH,40H,00H,00H,00H,00H,00H,00H,00H,00H,00H,07H
+         DB      1BH,78H,01H,00H,00H,00H,00H,00H,00H,00H,00H,07H
+         DB      1BH,30H,00H,00H,00H,00H,00H,00H,00H,00H,00H,07H
+         DB      0FH,00H,00H,00H,00H,00H,00H,00H,00H,00H,00H,07H
+         DB      1BH,4DH,00H,00H,00H,00H,00H,00H,00H,00H,00H,07H
+         DB      1BH,4EH,08H,00H,00H,00H,00H,00H,00H,00H,00H,07H
+         DB      0FH,1BH,4DH,1BH,30H,1BH,4EH,08H,1BH,6CH,20,07H
+         DB      1BH,2DH,01H,00H,00H,00H,00H,00H,00H,00H,00H,07H
+         DB      1BH,45H,00H,00H,00H,00H,00H,00H,00H,00H,00H,07H
+         DB      1BH,43H,88H,00H,00H,00H,00H,00H,00H,00H,00H,07H
+
+SETMX    PROC    FAR
+
+GO:      PUSH    DS      ;save psp segment address
+         MOV     AX,0    ;word for far return
+         PUSH    AX
+
+         MOV     SI,80H  ;80H is where the input parameter
+         MOV     DL,[SI] ;count is left by opening procedure
+         CMP     DL,0    ;if there's a parm, move on
+         JE      GETPARM
+         MOV     SI,82H
+         MOV     AL,[SI] ;mov immediate won't work
+         JMP     GOTPARM
+
+GETPARM: MOV     CX,0    ;Gene Plantz's screen scroll cls
+         MOV     DX,2479H
+         MOV     BH,7
+         MOV     AX,0600H	
+         INT     10H
+
+         MOV     DH,3    ;row
+         MOV     DL,0    ;column
+         MOV     BH,0    ;active page
+         MOV     AH,2    ;locate cursor
+         INT     10H     
+         LEA     DX,MENU
+         MOV     AH,9    ;print string
+         INT     21H
+
+         LEA     DX,ASK1 ;point to query and print it 
+         MOV     AH,9    ;with DOS
+         INT     21H
+
+         MOV     AH,1    ;keyboard input DOS p D-17
+         INT     21H     ;char returned in AL
+
+GOTPARM: SUB     AL,'0'  ;conv ASCII to byte
+         MUL     NTRY_LEN ;find offset in table
+         LEA     BX,PRNTCODE
+
+         MOV     CX,12   ;output standard 12 chrs
+PRINTIT: PUSH    AX      ;save for reuse (need AL)
+         XLAT
+         MOV     DL,AL   ;from table to DL
+         MOV     AH,5    ;printer output
+         INT     21H      
+         POP     AX      ;get original back, increment it,
+         INC     AL      ;save this, + xlat + send to print
+         LOOP    PRINTIT
+
+         RET     ;return to DOS
+SETMX    ENDP    ;close procedure
+CODE     ENDS    ;close segment
+END      BEGIN   ;close assembly
+
+```
+{% endraw %}
+
+## SMX.ASM
+
+{% raw %}
+```
+COMMENT|
+..							
+---------!-------!-------!-------------!-------------------R
+..
+------------------------------------------------------------!---!------------------------------------------------------------------!
+.mt0
+.mb2
+.pl80
+.fo SMX.ASM page # of 1 231114 FEB 85
+.po0
+0
+This program accepts a parameter or asks for one with a
+menu, converts it with a translation table to a series of
+printer codes, and sends those codes to the printer.  The
+printer beeps to acknowledge receipt.
+END COMMENT |
+
+PUBLIC   BEGIN,GO,GETPARM,GOTPARM,PRINTIT
+
+CODE     SEGMENT PARA PUBLIC 'CODE'
+         ASSUME CS:CODE,DS:CODE,ES:CODE
+         ORG     100H
+
+BEGIN:   JMP     GO
+
+MENU     DB      16 DUP (' '),201,44 DUP (205),187,10,13
+         DB      16 DUP (' '),186,'   0 - Reset          1B,40                 ',186,10,13
+         DB      16 DUP (' '),186,'   1 - Double Strike  1B,47                 ',186,10,13
+         DB      16 DUP (' '),186,'   2 - Set LF to 1/8" 1B,30                 ',186,10,13
+         DB      16 DUP (' '),186,'   3 - Compressed     0F                    ',186,10,13
+         DB      16 DUP (' '),186,'   4 - Comp 8 LPI     0F,1B,30              ',186,10,13
+         DB      16 DUP (' '),186,'   5 - Squished       9B,53,80,0F,9B,33,12  ',186,10,13
+         DB      16 DUP (' '),186,'   6 - Italics ON     1B,34                 ',186,10,13
+         DB      16 DUP (' '),186,'   7 - Underline ON   1B,2D,1               ',186,10,13
+         DB      16 DUP (' '),186,'   8 - Emphasize ON   1B,45                 ',186,10,13
+         DB      16 DUP (' '),186,'   9 - Wide ON        0E                    ',186,10,13
+         DB      16 DUP (' '),200,44 DUP (205),189
+         DB      10,10,10,10,13,'$'
+ASK1     DB      16 DUP (' '),'Enter Your Selection ->','$'
+INPTPARM DB      '*'
+NTRY_LEN DB      8
+PRNTCODE DB      1BH,40H,00H,00H,00H,00H,00H,07H
+         DB      1BH,47H,00H,00H,00H,00H,00H,07H
+         DB      1BH,30H,00H,00H,00H,00H,00H,07H
+         DB      0FH,00H,00H,00H,00H,00H,00H,07H
+         DB      0FH,1BH,30H,00H,00H,00H,00H,07H
+         DB      9BH,53H,80H,0FH,9BH,33H,12H,07H
+         DB      1BH,34H,00H,00H,00H,00H,00H,07H
+         DB      1BH,2DH,01H,00H,00H,00H,00H,07H
+         DB      1BH,45H,00H,00H,00H,00H,00H,07H
+         DB      0EH,00H,00H,00H,00H,00H,00H,07H 
+
+SETMX    PROC    FAR
+
+GO:      PUSH    DS      ;save psp segment address
+         MOV     AX,0    ;word for far return
+         PUSH    AX
+
+         MOV     SI,80H  ;80H is where the input parameter
+         MOV     DL,[SI] ;count is left by opening procedure
+         CMP     DL,0    ;if there's a parm, move on
+         JE      GETPARM
+         MOV     SI,82H
+         MOV     AL,[SI] ;mov immediate won't work
+         JMP     GOTPARM
+
+GETPARM: MOV     CX,0    ;Gene Plantz's screen scroll cls
+         MOV     DX,2479H
+         MOV     BH,7
+         MOV     AX,0600H	
+         INT     10H
+
+         MOV     DH,3    ;row
+         MOV     DL,0    ;column
+         MOV     BH,0    ;active page
+         MOV     AH,2    ;locate cursor
+         INT     10H     
+         LEA     DX,MENU
+         MOV     AH,9    ;print string
+         INT     21H
+
+         LEA     DX,ASK1 ;point to query and print it 
+         MOV     AH,9    ;with DOS
+         INT     21H
+
+         MOV     AH,1    ;keyboard input DOS p D-17
+         INT     21H     ;char returned in AL
+
+GOTPARM: SUB     AL,'0'  ;conv ASCII to byte
+         MUL     NTRY_LEN ;find offset in table
+         LEA     BX,PRNTCODE
+
+         MOV     CX,8    ;output standard 8 chrs
+PRINTIT: PUSH    AX      ;save for reuse (need AL)
+         XLAT
+         MOV     DL,AL   ;from table to DL
+         MOV     AH,5    ;printer output
+         INT     21H      
+         POP     AX      ;get original back, increment it,
+         INC     AL      ;save this, + xlat + send to print
+         LOOP    PRINTIT
+
+         RET     ;return to DOS
+SETMX    ENDP    ;close procedure
+CODE     ENDS    ;close segment
+END      BEGIN   ;close assembly
+
+```
+{% endraw %}
+
+## SMX.DOC
+
+{% raw %}
+```
+                            RONALD E. FRANK
+                             P. O. Box 989
+                        Big Bear Lake, CA 92315
+
+
+     SMX.COM is a printer utility designed for an EPSON MX80 (SFX is for
+the FX185).  It accepts a parameter (or asks for one) and then sends the
+translated codes to the printer.
+
+     Invoke by typing SMX, or if you remember the appropriate code,
+SMX <code>.  SMX 0 <enter>, for example, clears the printer.
+
+     The provided source will permit the user to customize as needed.
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

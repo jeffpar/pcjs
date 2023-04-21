@@ -59,6 +59,7 @@ machines:
 
 ## ACRSCALC.BAS
 
+{% raw %}
 ```bas
 5 CLEAR ,&HFFFF :GOSUB 48510
 20 REM IBM PC VERSION OF ACRSCALC 03/11/84 E.I.F. AGR. ECON., AGR. EXP. STATION & AGR. EXT. SERVICE UNIV/MINN.
@@ -961,9 +962,11 @@ machines:
 50320  REM ----------------------------------------
 53025 REM ------------------------------------------
 ```
+{% endraw %}
 
 ## BESTCROP.BAS
 
+{% raw %}
 ```bas
 5 CLEAR ,&HFFFF :GOSUB 48510
 20 REM IBM PC VERSION OF BESTCROP 03/11/84 E.I.F. AGR. ECON., AGR. EXP. STATION & AGR. EXT. SERVICE UNIV/MINN.
@@ -1643,9 +1646,11 @@ machines:
 50300 IF PQ$="Y" THEN LPRINT LQ;"/ ";LQ$:RETURN
 50310 PRINT LQ$; : GOSUB 50 : Z$=INPUT$(1) : RETURN
 ```
+{% endraw %}
 
 ## DATECALC.BAS
 
+{% raw %}
 ```bas
 34000  REM  DEC 28/1983
 34010  CLS : PRINT "PROJECTED CALENDAR DATES & CALENDARS"
@@ -1969,9 +1974,11 @@ machines:
 60500 LOCATE 13,1
 60510 GOSUB 51: PRINT"   FOR A HARDCOPY OF ANY SCREEN PRESS 'SHIFT' AND 'PrtSc *'.  FOR A HARDCOPY OF EVERYTHING WHICH APPEARS ON THE SCREEN PRESS 'Ctrl' AND 'PrtSc *'.":GOSUB 50:GOSUB 49000:RETURN
 ```
+{% endraw %}
 
 ## DRYSTORE.BAS
 
+{% raw %}
 ```bas
 5 CLEAR ,&HFFFF :GOSUB 48510
 20 REM IBM PC VERSION OF COMBINED GRAIN DRYSTORE STORECOSTS 03/16/84. AGR. ECON., AGR. EXP. STATION & AGR. EXT. SERVICE UNIV/MINN.
@@ -2831,9 +2838,11 @@ machines:
 50310 PRINT LQ$; : GOSUB 50 : GOSUB 40610 : RETURN
 53025 REM ------------------------------------------
 ```
+{% endraw %}
 
 ## FARMBID.BAS
 
+{% raw %}
 ```bas
 5 CLEAR ,&HFFFF :GOSUB 48510
 20 REM IBM PC VERSION OF FARMBID 03/19/84 E.I.F. AGR. ECON., AGR. EXP. STATION & AGR. EXT. SERVICE UNIV/MINN.
@@ -3696,9 +3705,11 @@ machines:
 50310 PRINT LQ$; : GOSUB 50 : Z$=INPUT$(1) : RETURN
 53025 REM ------------------------------------------
 ```
+{% endraw %}
 
 ## FEEDPIGS.BAS
 
+{% raw %}
 ```bas
 5 CLEAR ,&HFFFF :GOSUB 48510
 20 REM IBM PC VERSION OF FEEDPIGS 03/18/84 E.I.F. AGR. ECON., AGR. EXP. STATION & AGR. EXT. SERVICE UNIV/MINN.
@@ -4640,9 +4651,11 @@ machines:
 53024 0.,2000,24,40,0.71,0.5
 53025 REM ------------------------------------------
 ```
+{% endraw %}
 
 ## FEEDSILO.BAS
 
+{% raw %}
 ```bas
 5 KEY OFF
 7 CLS
@@ -4769,9 +4782,11 @@ machines:
 4060 IF I$ = "N" THEN 2210
 4070 IF I$ < > "Y" OR I$ < > "N" THEN 4040
 ```
+{% endraw %}
 
 ## FEEDVALU.BAS
 
+{% raw %}
 ```bas
 5 CLEAR ,&HFFFF :GOSUB 48510
 19 ON ERROR GOTO 45530
@@ -5384,9 +5399,56 @@ machines:
 50300 IF PQ$="Y" THEN LPRINT LQ;"/ ";LQ$:RETURN
 50310 PRINT LQ$; : GOSUB 50 : Z$=INPUT$(1) : RETURN
 ```
+{% endraw %}
+
+## FILES459.TXT
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+Disk No 459   Assorted agricultural programs                         v1.1
+--------------------------------------------------------------------------
+ 
+   MINNAIDS 4/11/84 U. OF MINNESOTA
+ 
+This seems to be a useful collection of decision aids for Farm Management.
+Type "RUN" and then type the RETURN key to start this set of tools.
+Basica is required.
+ 
+ACRSCALC BAS  Analysis of Federal Depreciation Computations (1983 law)
+AUTOEXEC BAT  Automatic instructions to read this file
+BESTCROP BAS  Price & Yield Analysis of Crop Choices (Equal-margin)
+DATECALC BAS  Computes Future (Gestation) Dates & Calendars
+DRYSTORE BAS  Analysis of Harvest and Storage Cost & Alternatives
+FARMBID  BAS  Determines the Maximum Bid Price for Land or a Farm.
+FEEDPIGS BAS  Should I Feed Out a Batch of Feeder Pigs ?
+FEEDSILO BAS  Calculates Likely Dairy Feed in a Silo Given Feed Rate
+FEEDVALU BAS  Given Corn & SBM Values, What's a Feed Worth ?
+MENU     BAS  Menu program for BASIC pgms on this disk
+PEARSON  BAS  Balances 1 Ration Nutrient from 2 Feed Sources
+READ     BAT  Batch file to provide instructions for SCROLLCK.COM
+README   DOC  Author supplied documentation file
+RUN      BAT  Batch file requests date, loads Basica & starts MINN - AIDS
+SCROLLCK COM  Scroll lock - control with shift keys (U/M - no info on it)
+SDIR     COM  Sorted directory with other good features
+SDIR     DOC  Documentation for SDIR, outlining options and features
+SOWINDEX BAS  Determines a Sow Index, Relative to the Group
+STEERBID BAS  Calculates Equivalent FOB prices for Fat Steers at Farm
+TIMEC    COM  Some kind of time display program ???  (U/M - no info on it)
+ULOGO    BAS  University of Minnesota Logo - START HERE - or at MENU
+USERDOCS BAS  Explains How to Make Hardcopy Documentation of MINNAIDS
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 8 DATA "ACRSCALC.BAS","Analysis of Federal Depreciation Computations"
 10 DATA "BESTCROP.BAS","Price & Yield Analysis of Crop Choices (Equal-margin)"
@@ -5535,9 +5597,11 @@ machines:
 48710 KEY ON:RETURN
 49000 PRINT : PRINT TAB(20)"Pause..Press Any Key to Start.."; : Z$ = INPUT$(1) : PRINT : RETURN
 ```
+{% endraw %}
 
 ## PEARSON.BAS
 
+{% raw %}
 ```bas
 5 CLEAR ,&HFFFF :GOSUB 48510
 20 REM IBM PC VERSION OF PEARSON SQUARE 03/18/84 E.I.F. AGR. ECON., AGR. EXP. STATION & AGR. EXT. SERVICE UNIV/MINN.
@@ -6288,9 +6352,42 @@ machines:
 53024 0.,2000,24,40,0.71,0.5
 53025 REM ------------------------------------------
 ```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+		MINNAIDS 4/11/84 U. OF MINNESOTA
+MENU     BAS     6016  Menu program for BASIC pgms on this disk
+ACRSCALC BAS    30976  Analysis of Federal Depreciation Computations
+BESTCROP BAS    24448  Price & Yield Analysis of Crop Choices (Equal-margin)
+DRYSTORE BAS    32000  Analysis of Harvest and Storage Cost & Alternatives
+DATECALC BAS     9600  Computes Future (Gestation) Dates & Calendars
+FEEDSILO BAS     3968  Calculates Likely Dairy Feed in a Silo Given Feed Rate
+PEARSON  BAS    27008  Balances 1 Ration Nutrient from 2 Feed Sources
+STEERBID BAS     7808  Calculates Equivalent FOB prices for Fat Steers at Farm
+FEEDPIGS BAS    32512  Should I Feed Out a Batch of Feeder Pigs ?
+AUTOEXEC BAT      128  Automatic instructions to read this file
+USERDOCS BAS     3712  Explains How to Make Hardcopy Documentation of MINNAIDS
+ULOGO    BAS     1251  University of Minnesota Logo - START HERE - or at MENU
+TIMEC    COM     1183  ???  No info at (U/M)
+SDIR     COM     1072  Sorted directory with other good features
+SDIR     DOC           SDIR feature documentation
+FEEDVALU BAS    21632  Given Corn & SBM Values, What's a Feed Worth ?
+FARMBID  BAS    29568  Determines the Maximum Bid Price for Land or a Farm.
+SOWINDEX BAS    28672  Computes a Sow Index, Relative to the Group; files them
+READ     BAT      256  Batch file to provide instructions for SCROLLCK.COM
+SCROLLCK COM      512  Scroll lock - control with shift keys - no info @ (U/M)
+README   DOC     1536  This file
+CROLLCK.COM
+SCROLLCK COM      512  Sc
+```
+{% endraw %}
 
 ## SOWINDEX.BAS
 
+{% raw %}
 ```bas
 5 CLEAR ,&HFFFF :GOSUB 48510
 20 REM IBM PC VERSION OF SKELETON 01/01/83 E.I.F. AGR. ECON., AGR. EXP. STATION & AGR. EXT. SERVICE UNIV/MINN.
@@ -7122,9 +7219,11 @@ machines:
 50310 PRINT LQ$; : GOSUB 50 : Z$=INPUT$(1) : RETURN
 53025 REM ------------------------------------------
 ```
+{% endraw %}
 
 ## STEERBID.BAS
 
+{% raw %}
 ```bas
 1 KEY OFF : DIM LQ$(13) : DIM LL$(7,5) : DIM D(13)
 5 REM IBM-PC VERSION ENHANCED BY JOEL KUNZE
@@ -7351,9 +7450,11 @@ machines:
 47470  PRINT SPC(20)"!                                     !"
 47480  PRINT SPC(20)"---------------------------------------"
 ```
+{% endraw %}
 
 ## ULOGO.BAS
 
+{% raw %}
 ```bas
 100 REM************************************************************************
 110 REM***  UNIVERSITY OF MINNESOTA LOGO PROGRAM  2-9-84   JOEL P. KUNZE    ***
@@ -7390,9 +7491,11 @@ machines:
 415 LOCATE 24,26:PRINT" UNIVERSITY OF MINNESOTA ";
 420 Z$ = INPUT$(1):COLOR 7,0:CLS : CHAIN "MENU.BAS"
 ```
+{% endraw %}
 
 ## USERDOCS.BAS
 
+{% raw %}
 ```bas
 38000 PRINT TAB(20)"USER DOCUMENTATION of MINN-AIDS"
 38005 PRINT TAB(17)"(Microsoft BASIC CP/M & MSDOS versions)"
@@ -7447,6 +7550,7 @@ machines:
 38270 LPRINT ""
 38275 CHAIN"MENU.BAS
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

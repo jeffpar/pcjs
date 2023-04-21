@@ -34,6 +34,44 @@ machines:
     user -- some of them even make sense.  Not for the weak-stomached.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0619.TXT
+
+{% raw %}
+```
+Disk No:  619                                                           
+Disk Title: HotBoot and Insults                                         
+PC-SIG Version: S1.3                                                    
+                                                                        
+Program Title: Hotboot and Insults                                      
+Author Version: PD VE                                                   
+Author Registration: $14.00                                             
+Special Requirements: None.                                             
+                                                                        
+A couple of practical jokes that are fun for the PC user and, possibly, 
+the PC victim.                                                          
+                                                                        
+HOTBOOT is a public domain version of a classic.  If you like this one, 
+get the original from Left-Handed Software.  Load HOTBOOT into the      
+system of your victim.  From here on out, it's a flirtation of sorts    
+between the PC and the user.  As the user attempts to work with the     
+computer, the computer issues increasingly more personal remarks.  How  
+real is this to the victim?  You'll have to watch and see if you can    
+figure it out.                                                          
+                                                                        
+INSULTS can randomly generate 22 million insults on the unsuspecting PC 
+user -- some of them even make sense.  Not for the weak stomached.      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0619
 

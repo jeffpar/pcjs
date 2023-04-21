@@ -46,6 +46,54 @@ machines:
     that identifies executable files in the path.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1929.TXT
+
+{% raw %}
+```
+Disk No: 1929                                                           
+Disk Title: Grep                                                        
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Grep                                                     
+Author Version: 1.3                                                     
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+GREP UTILITIES overcomes the limitations of the DOS wildcard expressions
+in matching files.  They provide more power and flexibility with        
+UNIX-like file searches, moves, and copies not possible with normal DOS.
+No longer are you limited to wildcards * and ?, now any number of letter
+and number combinations can be specified with ranges to search.         
+                                                                        
+Here are examples of GREP wildcard expressions: "A[0-9]+Z" matches all  
+files starting with an `A', followed by a string of one or more digits, 
+and then a `Z', such as A0Z.PAS, or A99Z.MAP. You can also do "negative 
+searches" such as finding all files that DON'T start with a the letter  
+`A.'                                                                    
+                                                                        
+Organinzing files is made easier with GREP commands that search files   
+using GREP wildcard expressions:  "Grep Delete" uses a regular          
+expression to select files for deletion.  "Grep Grep" searches          
+specified files for a text string.  "Grep Move" is similar to Grep      
+Copy, except that if the files are on the same drive, the file is not   
+copied, but its directory entry is modified so that it is moved to the  
+new subdirectory.  "Grep Whereis" uses a regular expression to search   
+for matching files in all subdirectories of the specified drive, or all 
+drives.  Includes an option to delete the files as they are matched.    
+The Grep Utilities can be set to always prompt the user before          
+overwriting or deleting an existing file.                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1929
 

@@ -52,6 +52,72 @@ machines:
     solving.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1897.TXT
+
+{% raw %}
+```
+Disk No: 1897
+Disk Title: PC Bingo and Words*Words
+PC-SIG Version: S1.1
+
+Program Title: PC Bingo
+Author Version: 1.1
+Author Registration: $10.00
+Special Requirements: Printer to generate bingo cards.
+
+Throw your next Bingo party at your home, church or school with
+Michael Bielkiewicz's PC BINGO.  Easy to use, it plays like the
+real thing -- no strings attached.  Print out up to 8 Bingo
+cards per 8 1/2 X 11 inch paper, distribute among your players
+and let the computer choose the Bingo numbers.
+
+A great party game, PC BINGO could actually be used to replace the
+old ping-pong ball method of the game -- though that day is somewhat
+in the future.  The ease of this package makes it accessible to all
+ages who share a love for the Bingo game.
+
+Program Title: Words*Words
+Author Version: 1.2
+Author Registration: $15.00
+Special Requirements: None.
+
+Through the process of elimination and osmosis you are faced with
+the dilemma of deciphering a 5 letter word in no more than 18
+guesses.  Walter Blanchard's WORDS*WORDS sharpens your skills as
+you unravel one of the 40 puzzles provided in this program.  During
+each guess, WORDS*WORDS reveals how many letters are common to the
+puzzle word.  For example, if the puzzle word was "drums" and you
+guessed "stump" the program would tell you that "3" letters are
+similar.  Only real words are accepted by the program, so no
+cheating is allowed!  After tracing your results, one hopefully
+discovers the answer to the puzzle.
+
+WORDS*WORDS plays easily.  Instructions are simple to follow and
+play is performed on a plain grid.  Just type in your guess (the
+computer will either accept it as a real word or reject it) and
+follow the results.  A "discard" grid for letters not found in
+the word, and a "keep" grid for letters that are, allow you to
+organize your thoughts.  No fancy features, so if color and graphics
+are your love, you may be disappointed.  But if your love is for
+intellect, you may enjoy some of the difficult challenges this
+program has to offer.
+
+This program could be used for helping children with spelling and
+word associations.  An amusing yet challenging game for ages 12 and
+up, WORD*WORD breaks through its simple format with its tough
+puzzle solving.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989, 1990 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1897
 

@@ -14,6 +14,76 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #97, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  S-AIRLIN.            CRC = 79 AF
+
+--> FILE:  S-BARTER.            CRC = 08 67
+
+--> FILE:  S-DADATE.            CRC = AB 76
+
+--> FILE:  S-INFOX .            CRC = DD 7C
+
+--> FILE:  S-LAWYER.            CRC = AE B1
+
+--> FILE:  S-MOBIL .            CRC = 3B 4C
+
+--> FILE:  S-MODEL1.            CRC = 24 11
+
+--> FILE:  S-MUSES .            CRC = 5E 53
+
+--> FILE:  S-PUBLIC.CAT         CRC = C8 EA
+
+--> FILE:  S-STOCK .            CRC = BD 81
+
+--> FILE:  S-STORE .            CRC = 78 E2
+
+--> FILE:  S-TRAVEL.            CRC = E9 E7
+
+--> FILE:  S-WINE  .            CRC = 44 85
+
+--> FILE:  S-XWORDS.            CRC = 32 E6
+
+--> FILE:  STL-BBS1.            CRC = 2B 50
+
+--> FILE:  STL-BBS1.INS         CRC = 9F BB
+
+--> FILE:  STL-BBS1.NOS         CRC = A7 DC
+
+--> FILE:  STL-BBS2.            CRC = AF 42
+
+--> FILE:  README  .            CRC = 48 46
+
+ ---------------------> SUM OF CRCS = 42 77
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0097
 

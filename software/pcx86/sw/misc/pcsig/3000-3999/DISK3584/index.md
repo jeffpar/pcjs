@@ -14,6 +14,32 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## INSTALL.DOC
+
+{% raw %}
+```
+ Installation
+
+       Installation is a very straightforward process. All you need
+   to do is insert the disk on which Legal Eagle is located into
+   the drive, select that drive as the current drive by typing "A:"
+   or "B:" (depending on the drive in which the disk is inserted)
+   at the DOS prompt. Now type INSTALL   and follow the instructions
+   on the screen. Legal Eagle Must Be Installed on the same drive as
+   Windows in a directory Named WINEAGLE If you change to a drive
+   Other then the one Windows is installed on you must include
+    Wineagle in your Path statement in your AUTOEXEC.BAT File.
+        The install Program will run setup and bring up windows if
+    You have changed the drive you are installing to form C to D you
+    must tell Setup  when it prompts you for Destination Drive.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3584
 

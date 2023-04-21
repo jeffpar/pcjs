@@ -32,6 +32,42 @@ machines:
     includes a sample cover letter to be mailed with the resume.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1667.TXT
+
+{% raw %}
+```
+Disk No: 1667                                                           
+Disk Title: Resume Shop                                                 
+PC-SIG Version: S2.0                                                    
+                                                                        
+Program Title: Resume Shop                                              
+Author Version: 2.1                                                     
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+Take advantage of menu-driven help in doing that pesky but              
+absolutely vital job of getting together a credible, attractive,        
+and persuasive resume.  RESUME SHOP prompts you to enter every item you 
+need to construct your resume, including your name, address,            
+job objective, education, work experience and references.  The          
+result is a concise, one page presentation of your background and       
+credentials.  The bottom line is that an adequate resume can be put     
+together quickly and customized versions easily created to send to each 
+prospective employer.  A fourteen-page user guide offers                
+advice on improving your resume writing skills.  The program even       
+includes a sample cover letter to be mailed with the resume.            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1667
 

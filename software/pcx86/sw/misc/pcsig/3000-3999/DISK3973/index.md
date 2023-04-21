@@ -14,6 +14,40 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## README.DOC
+
+{% raw %}
+```
+
+                              MULTIMEDIA  MAKER                   Ver. 2.0SW
+                              ~~~~~~~~~~~~~~~~~
+    MULTIMEDIA MAKER  is a new business and educational tool that has endless 
+ potential.  This package will allow you to create your custom presentations,
+ advertising, demos, tutorials,  courseware authoring, tests, reports, school
+ projects and much more. With this package you can combine real human SPEECH,
+ MUSIC and sound effects with high resolution  IMAGES (up to SVGA).  Use this
+ package to create your own custom  AUDIO/VIDEO SHOWS  on any subject, place,
+ product or procedure you desire.
+
+     * VGA graphic and Hard Drive are required.
+ 
+     * Supports Sound Blaster and 100% compatibles.
+ 
+     * Run MANUAL.EXE to view the USERS MANUAL.
+           ~~~~~~~~~~
+     * Run INSTALL.EXE to start the program.
+           ~~~~~~~~~~~
+
+           DareWare Inc., 3005 Glenmore Ave. Baltimore, MD 21214 USA
+   (410) 665-0193 - Toll free 1-800-847-0309 for CREDIT CARD ORDERS. $79.00
+                              ~~~~~~~~~~~~~~                           
+  Press Shift Print Scrn to print this page or 
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3973
 

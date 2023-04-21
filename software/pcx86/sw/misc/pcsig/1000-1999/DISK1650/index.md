@@ -30,6 +30,7 @@ machines:
 
 ## DECTOHEX.BAS
 
+{% raw %}
 ```bas
 1000 DEFDBL A-Z: GOSUB 2280
 1010 PRINT "                              DECTOHEX"
@@ -180,9 +181,46 @@ machines:
 
 2330 END
 ```
+{% endraw %}
+
+## FILE1650.TXT
+
+{% raw %}
+```
+Disk No: 1650                                                           
+Disk Title: Hextodec and Dectohex                                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Hextodex & Dextohex                                      
+Author Version: 2.1                                                     
+Author Registration: None.                                              
+Special Requirements: None.                                             
+                                                                        
+HEXTODEC & DECTOHEX are two programs for assembly language              
+computer programmers interested in converting decimal numbers to        
+hexadecimal numbers and vice versa.  Entries are displayed on-screen    
+for user approval, then the entry reappears with its corresponding      
+conversion number.                                                      
+                                                                        
+File Descriptions:                                                      
+                                                                        
+DECTOHEX BAK  5504   1-01-80   0:17                                     
+DECTOHEX BAS  5504   1-01-80   0:51                                     
+DECTOHEX EXE  27392  1-01-80   0:25                                     
+HEXTODEC BAS  6528   1-01-80   0:06                                     
+HEXTODEC EXE  28416  1-01-80   0:17                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+```
+{% endraw %}
 
 ## HEXTODEC.BAS
 
+{% raw %}
 ```bas
 1000 CLS
 1010 PRINT:PRINT
@@ -329,6 +367,7 @@ machines:
 2420 RETURN
 2430 CLS: SYSTEM: END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

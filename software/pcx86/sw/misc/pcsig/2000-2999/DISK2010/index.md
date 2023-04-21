@@ -69,6 +69,77 @@ machines:
     December 31.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2010.TXT
+
+{% raw %}
+```
+Disk No: 2010                                                           
+Disk Title: Overlord  disk 3 of 3 (2008, 2009 also)                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: OverLord                                                 
+Author Version: 1.11                                                    
+Author Registration: $29.00                                             
+Special Requirements: 2 Floppy Drives or a Hard Drive (Hard Drive recomm
+                                                                        
+OVERLORD can help you manage your apartment building, condominium, club,
+parking garage, church, homeowners association, or any other type of    
+organizations that tracks members by a "unit" such as a lot or apartment
+number, license number or serial number.  OVERLORD is a multifunction   
+program designed to help you organize and control your member records   
+and accounts.                                                           
+                                                                        
+Prepares and prints bills with an optional late charge feature,         
+Percentage or Dollars.  You can specify the current balance above which 
+late charges should be billed.  You can specify different late charges  
+for Billing and for Delinquencies.  You can do the Billing all at once  
+for all clients or you can use Cycle Billing and specify the Billing    
+interval period by Month, Quarter, Half year and Year, you can do mixed 
+interval billing for each account.                                      
+                                                                        
+Sends customized letters to clients, spelled contract start and         
+expiration dates, current balance, Lien or deposit amount are imbedded  
+within the text.  Choices for salutation can be selected.  You can      
+choose to print on your own preprinted stationary or have the program   
+generate the letterhead etc. for you.  You can do selective mailing to  
+clients, based on contract dates, current balance, deposits or liens    
+etc.  Generate mailing labels or print addresses on envelopes.  All     
+mailings are prepared to fit window envelopes.                          
+                                                                        
+Other Features:                                                         
+                                                                        
+~ Handles up to nine different organizations on a Fixed Disk.           
+                                                                        
+~ Unit (like apartment) availability is checked also the availability by
+date.                                                                   
+                                                                        
+~ Produces Delinquency and YTD credited reports.                        
+                                                                        
+~ A financial summary is offered showing the overall income and source  
+by category.                                                            
+                                                                        
+~ Maintains a year-to-date credit history, even after an account is     
+closed.                                                                 
+                                                                        
+~ Measures outgoing expenses to Budget items every day.                 
+                                                                        
+~ Description of the "Unit" detail, seven fields, with the option to    
+customize the field names and print a report.                           
+                                                                        
+~ Has a flexible Fiscal/Budget year, the default is from January 1 to   
+December 31.                                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2010
 

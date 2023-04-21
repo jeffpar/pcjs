@@ -33,6 +33,90 @@ machines:
     with or without a mouse.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2096.TXT
+
+{% raw %}
+```
+Disk No: 2096                                                           
+Disk Title: FONTED Disk 1 of 2 (also 2097)                              
+PC-SIG Version: 1.44                                                    
+                                                                        
+Program Title: FONTED                                                   
+Author Version: 1.44                                                    
+Author Registration: $15.00                                             
+Special Requirements: EGA or VGA, Hard Drive recommended                
+                                                                        
+Want to change the fonts that are normally displayed on your EGA or VGA 
+screen?  FONTED enables you change the size and shape of the characters 
+to suit your taste, or create foreign language fonts like Russian,      
+Hebrew or Arabic, or make custom fonts to suit other special uses.      
+                                                                        
+For example, by reducing the size of a screen font you can increase the 
+number of text lines on the screen.  You can save these custom screen   
+fonts in an executable COM file and recall them later.  The custom fonts
+have the unique ability to be made "sticky" with an installation        
+procedure so you can use the fonts with your favorite application, for  
+example, a word processor.  FONTED supports a mouse, but does not       
+require one.                                                            
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## CHARCONV.DOC
+
+{% raw %}
+```
+
+			CHARCONV Font converter
+			=======================
+
+In addition to the font editor	proper, you will find a utility  program
+CHARCONV that converts a FONTED binary font file to an assembly language
+source program, which can be fed directly into an assembler to produce a
+self-loading .COM program from the font.  Thus, you can distribute  your
+fonts more freely.  They also load slightly faster.  The resulting  font
+"programs"  set  the  errorlevel  automatically,  if  the  printer   was
+off-line:  This helps building more  powerful batch files.  To use  this
+program, you will need an assembler, linker and a program to convert  an
+.EXE file to a .COM file (EXE2BIN).
+
+
+
+```
+{% endraw %}
+
+## SELECT.DOC
+
+{% raw %}
+```
+
+ SELECT selects individual 16-byte-characters from different files, according to
+ instructions, given in SLECT.SCR.
+
+ SELECT.SCR    consists of lines, that start with a filename,
+ a blank, comma, : or ;
+ and the numbers of the characters in sequence, to be extracted.
+ Empty lines or comment lines are ignored.
+
+ Output is to the file passed as argument
+
+
+
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2096
 

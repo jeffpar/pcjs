@@ -38,6 +38,64 @@ machines:
     BRUN30   EXE  QuickBASIC run-time routines.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1354.TXT
+
+{% raw %}
+```
+Disk No: 1354                                                           
+Disk Title: Stock Charting System 2 of 2 (246 also)  (Disk 2 of 2)      
+PC-SIG Version: S3.9                                                    
+                                                                        
+Program Title: Stock Charting System                                    
+Author Version: 2.55                                                    
+Author Registration: $25.00.                                            
+Special Requirements: CGA or equivalent, works with EGA  & most VGA, two
+                                                                        
+The STOCK CHARTING SYSTEM draws or prints ``volume/high/low/close''     
+charts for any stock, bond, commodity, or security that has a           
+high/low/close price.  Short- and long-term moving averages can be      
+included on the chart and temporarily changed for ``what-if''           
+calculations.  The STOCK CHARTING SYSTEM is menu-driven and comes with a
+complete set of context-sensitive help screens.                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+                      STOCK CHARTING SYSTEM - RELEASE 2.5
+
+To obtain directions on how to get these programs running, first make sure you
+are in DOS.  You should see the prompt A> (or C> if you are on a hard disk).
+Remove your DOS diskette and insert the Stock Charting System diskette in drive
+A.  (If you have more than one diskette, insert the STARTUP diskette).  Turn
+on your printer and make sure it is ready to print.  Most printers have a ready
+light, and it should be on. Then type the following command just as it appears:
+
+                           COPY A:SMVERS25.DOC LPT1:
+
+and press the ENTER key.  Fourteen pages of information will be printed, and
+the output will be paginated with pages numbered.
+
+To get a "snapshot" printout of this screen, first make sure your printer is
+ready and then press a shift key and the PrtSc key simultaneously.  The PrtSc
+key on the IBM-PC keyboard is on the second row of keys up from the bottom row,
+near the right-hand side under the ENTER key.  On other keyboards it may be in
+a different position.  This procedure can be used to obtain a screen printout
+at almost any time, except when the screen contains graphics.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1354
 

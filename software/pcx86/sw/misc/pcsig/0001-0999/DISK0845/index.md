@@ -35,6 +35,60 @@ machines:
     your company if raw materials are a part of your productions.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES845.TXT
+
+{% raw %}
+```
+Disk No:  845
+Program Title:  COST EFFECTIVE  version 1.10
+PC-SIG version 1.1
+
+COST EFFECTIVE is a program that processes bills of materials.  It is
+useful to manufacturers who needs to keep track of manufactured product
+costs due to fluctuations in the cost of raw materials.  This program
+allows the user to specify raw materials and their unit costs, and
+computes the cost of each product based upon these entries.  When the
+price of the raw materials changes, the program recomputes the costs
+automatically.  Materials and costs are entered into tables, which are
+used by the program to provide information concerning the manufacturing
+operation.
+
+COST EFFECTIVE has other features, such as displaying a list of products
+by material.  It comes on two diskettes and is best run from its own
+subdirectory on a hard disk.  It can be run on a floppy, but without
+on-line help.
+
+Usage:  Financial/Manufacturing.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press return).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+CEF      BAT  Batch file to start COST EFFECTIVE without help files.
+CEF      VOL  Subsidiary volume containing system and application files.
+PSYSTEM  COM  Program to run P-SYSTEM under PC-DOS.
+MANUAL   CEF  The COST EFFECTIVE manual.
+CHEMS    CED  Sample data (product) file.
+COOKIES  CED  Sample data (product) file.
+FILES    DOC  Text file which outlines the files on this disk.
+READ     ME   Introductory text file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0845
 

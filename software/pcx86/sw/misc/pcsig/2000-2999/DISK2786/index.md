@@ -14,6 +14,50 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2786.TXT
+
+{% raw %}
+```
+Disk No: 2786
+Disk Title: Quiz-Maker
+PC-SIG Version: S1
+
+Program Title: Quiz-Maker
+Author Version: 2.0
+Author Registration: $24.50
+Special Requirements: None.
+
+QUIZ-MAKER is an educational tool and a Trivia game.  Take quizzes in
+three formats -- match the question with the answer, type in an answer
+to the question or choose the correct answer from the four or five
+answers listed.
+
+QUIZ-MAKER has two modules.  QUIZPLAY lets you play the quizzes.
+QUIZMAKE is the Development module used to create quizzes.  Of course,
+there's no challenge to solving quizzes you've created yourself, so
+create them for others -- your spouse, children, friends, colleagues or
+the world at large.  Give them a copy of  QUIZPLAY and the quizzes
+you've created, and let them have fun meeting your challenge.
+
+Upload quizzes to your favorite Bulletin Boards or Compuserve (the IBM
+NEW WordGames Forum or the Education Forum).  Become known for your
+ability to create Trivia quizzes.  (Your name will be displayed on the
+files you create!)
+
+The user-friendly nature of the menus and the online hints make this an
+easy program to use.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2786
 

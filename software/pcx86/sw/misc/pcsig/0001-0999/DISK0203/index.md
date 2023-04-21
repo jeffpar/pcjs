@@ -55,6 +55,7 @@ machines:
 
 ## ADVEN1.BAS
 
+{% raw %}
 ```bas
 30 IL=60:CL=151:NL=59:RL=33:MX=5:AR=11:TT=13:LN=3:LT=125:ML=71:TR=3
 31 DIM NV(1),C0%(151),C1%(151),C2%(151),C3%(151),C4%(151),C5%(151),C6%(151),C7%(151)
@@ -552,9 +553,11 @@ machines:
 5080 DATA "sign says- S PLACE -",25,"trees",11," ",0," ",0
 9999 WIDTH 80:COLOR 7,0:KEY ON:LOCATE ,,1,8,11:END
 ```
+{% endraw %}
 
 ## ASTEROID.BAS
 
+{% raw %}
 ```bas
 1 'SAVE "Asteroid
 2 REM Copyright 1983 by Dorn W. Stickle
@@ -648,9 +651,11 @@ machines:
 820 WIDTH 80
 830 RETURN
 ```
+{% endraw %}
 
 ## BLESS.BAS
 
+{% raw %}
 ```bas
 5 KEY OFF
 10 A$ = "mbo3f2e4d4e8.d16c1g2
@@ -683,9 +688,76 @@ machines:
 576 NEXT N
 580 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #203, version V1.1 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ADVEN1  .BAS         CRC = D9 62
+
+--> FILE:  ASTEROID.BAS         CRC = 6E 7D
+
+--> FILE:  FLY     .BAS         CRC = 35 44
+
+--> FILE:  HINT1   .DOC         CRC = 5B 59
+
+--> FILE:  HINT2   .DOC         CRC = 29 97
+
+--> FILE:  HINT3   .DOC         CRC = 5C 11
+
+--> FILE:  MOON    .BAS         CRC = A8 3B
+
+--> FILE:  NEWCHESS.BAS         CRC = 4B 6C
+
+--> FILE:  SLOTCOLR.BAS         CRC = FC 51
+
+--> FILE:  SOLITAIR.BAS         CRC = 25 C2
+
+--> FILE:  SURVIVAL.BAS         CRC = 4F A6
+
+--> FILE:  WHEEL   .BAS         CRC = 75 07
+
+--> FILE:  WORDPLAY.BAS         CRC = 47 8C
+
+--> FILE:  XXX     .            CRC = 29 5D
+
+--> FILE:  BLESS   .BAS         CRC = 9C 78
+
+--> FILE:  TRAILER .BAS         CRC = 8D 5F
+
+--> FILE:  TRUMPET .BAS         CRC = 5F 4D
+
+--> FILE:  WELLTEMP.BAS         CRC = 19 1E
+
+ ---------------------> SUM OF CRCS = 4B B6
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## FLY.BAS
 
+{% raw %}
 ```bas
 10 '*****************
 20 '**     FLY     **
@@ -862,9 +934,46 @@ machines:
 1730 RANDOMIZE VAL(MID$(TIME$,4,2) +RIGHT$(TIME$,2))
 1740 RETURN
 ```
+{% endraw %}
+
+## HINT1.DOC
+
+{% raw %}
+```
+
+10 KEY OFF:CLS:COLOR 0,7:PRINT" ADVENTURE #1  -  HINT #1 ";:COLOR 7,0:PRINT:PRINT:PRINT:COLOR 15,0:PRINT"From the forest (beginning), go to the swamp & investigate everything there!";:COLOR 7,0
+20 PRINT:PRINT:PRINT:PRINT"Hint #2 will appear mysteriously on this HOSTCOM in a week or so.":LOCATE 25,75:PRINT"Phil";:LOCATE 22
+INT:PRINT:PRINT:PRINT"Hint #2 will appear mysteriousl
+```
+{% endraw %}
+
+## HINT2.DOC
+
+{% raw %}
+```
+
+10 KEY OFF:CLS:COLOR 0,7:PRINT" ADVENTURE #1  -  HINT #2 ";:COLOR 7,0:PRINT:PRINT:PRINT:COLOR 15,0:PRINT"Another name for rug is CARPET!    (use magic)";:COLOR 7,0
+20 PRINT:PRINT:PRINT:PRINT"Hint #3 will appear mysteriously on this HOSTCOM in a week or so.":LOCATE 2:PRINT"Phil";:LOCATE 22
+0 PRINT:PRINT:PRINT:PRINT"Hint #3 will appear mysteriously on this HOSTCOM in a week or
+```
+{% endraw %}
+
+## HINT3.DOC
+
+{% raw %}
+```
+
+10 KEY OFF:CLS:COLOR 0,7:PRINT" ADVENTURE #1  -  HINT #3 ";:COLOR 7,0:PRINT:PRINT:PRINT:COLOR 15,0:PRINT"Most movable items found on your journey are to use at a later ADVENTURE point.
+15 PRINT:PRINT"Containers can be used for items other than the present contents.";:COLOR 7,0
+20 PRINT:PRINT:PRINT:PRINT:PRINT"This is the last of the hints!  You have the idea now!":LOCATE 25,75:PRINT"Phil";:LOCA2
+,0
+20 PRINT:PRINT:PRINT:PRINT:PRINT"This is the last of the hints!  You have the idea now!":LOCATE 25,75
+```
+{% endraw %}
 
 ## MOON.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:SCREEN 0:WIDTH 40:CLS:FOR X=1 TO 10:KEY X,"":NEXT X:PLAY"mb"
 20 LOCATE 1,6,0:PRINT"██     ██ █████ █████ ██   █":PRINT TAB(6)"█ █   █ █ █   █ █   █ █ █  █":PRINT TAB(6)"█  █ █  █ █   █ █   █ █  █ █":PRINT TAB(6)"█   █   █ █   █ █   █ █   ██":PRINT TAB(6)"█       █ █████ █████ █    █"
@@ -929,9 +1038,11 @@ machines:
 620 LOCATE 25,1:PRINT SPC(39);:LOCATE 25,14:PRINT"PLAY AGAIN?";
 630 A$=INKEY$:IF A$="Y"OR A$="y"THEN 140 ELSE IF A$="N"OR A$="n"THEN CLS:SCREEN 0:WIDTH 80:END ELSE 630
 ```
+{% endraw %}
 
 ## NEWCHESS.BAS
 
+{% raw %}
 ```bas
 
 
@@ -1306,9 +1417,11 @@ machines:
 65529 END
 
 ```
+{% endraw %}
 
 ## SLOTCOLR.BAS
 
+{% raw %}
 ```bas
 10 M=25
 20 RANDOMIZE INT(VAL(MID$(TIME$,7,2)))
@@ -1521,9 +1634,11 @@ machines:
 5120 PLAY "O3 B8 B2 O4 DC O3 A A8 G8 G2"
 5130 RETURN
 ```
+{% endraw %}
 
 ## SOLITAIR.BAS
 
+{% raw %}
 ```bas
 10 REM $LINESIZE:132
 20 REM ----------------------------------------------------------------------
@@ -1838,9 +1953,11 @@ machines:
 3110  DATA "509","510","511","515","516","517","524","526","530","531"
 3120  DATA "532","535","539"
 ```
+{% endraw %}
 
 ## SURVIVAL.BAS
 
+{% raw %}
 ```bas
 10 CLEAR 2000:DIM T$(47),M(42,8),O(14):SCREEN 0:WIDTH 40:KEY OFF:COLOR 7,0:CLS:LOCATE 10,16:PRINT"SURVIVAL":LOCATE 16,4:PRINT"Translated by Allan & Andrew Lee":LOCATE 18,4:PRINT"Welcome to the game of survival."
 20 LOCATE 20,7,0:PRINT"Do you want instructions? ";:D$=INPUT$(1):PRINT D$:IF D$="Y"OR D$="y"THEN GOSUB 2320
@@ -2092,9 +2209,11 @@ machines:
 2480 DATA 0,0,0,27,42,0,41,41,0,0,0,28,0,41,42,42
 2490 FOR QQ=1 TO 500:NEXT QQ:RETURN
 ```
+{% endraw %}
 
 ## TRAILER.BAS
 
+{% raw %}
 ```bas
 10 A$ = "o4l16p8d8o3a8.f#8e8f#g4..
 20 PLAY A$
@@ -2110,9 +2229,11 @@ machines:
 120 F$ = "p8o4f#4e8d8d8do3b8.p8.o4e8dc#8d2
 130 PLAY F$
 ```
+{% endraw %}
 
 ## TRUMPET.BAS
 
+{% raw %}
 ```bas
 1 KEY OFF
 2 CLS
@@ -2170,9 +2291,11 @@ machines:
 460 M$ = "p8g16g16gbgd16d16dbgd16d16dbgd16.d16.d16.dbg2."
 470 PLAY M$
 ```
+{% endraw %}
 
 ## WELLTEMP.BAS
 
+{% raw %}
 ```bas
 100 ' PRAELUDIUM I FROM THE WELL-TEMPERED CLAVIER BY J. S. BACH
 101 ' TRANSCRIBED FOR PC BY JOHN D. BRINK, RIVER FOREST, IL. 0CTOBER 1983
@@ -2318,9 +2441,11 @@ machines:
 242 '
 243 '   THAT'S ALL, FOLKS!
 ```
+{% endraw %}
 
 ## WHEEL.BAS
 
+{% raw %}
 ```bas
 1 REM * COPYRIGHT (C) 1982 BY D. A. LIEN.  ALL RIGHTS RESERVED. *
 3 REM             <<<<< THE WHEEL OF FORTUNE >>>>>
@@ -2387,9 +2512,11 @@ machines:
 650 LOCATE Y+TOP,X:PRINT STRING$(8,223);
 660 RETURN
 ```
+{% endraw %}
 
 ## WORDPLAY.BAS
 
+{% raw %}
 ```bas
 100 '*** Sentence:  Created 9-17-82 by Robert Parnell ***
 110 '
@@ -2436,6 +2563,7 @@ machines:
 520 PRINT L[X]-N[X]"new "PART$[X];: IF L[X]-N[X]<>1 THEN PRINT "s";
 530 PRINT " added to the list.": CLOSE: NEXT: COLOR 10: PRINT
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

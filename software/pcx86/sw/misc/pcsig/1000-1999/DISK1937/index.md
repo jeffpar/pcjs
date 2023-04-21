@@ -37,6 +37,47 @@ machines:
     files are needed to operate the program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1937.TXT
+
+{% raw %}
+```
+Disk No: 1937                                                           
+Disk Title: XTAB                                                        
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: XTAB                                                     
+Author Version: 2.1                                                     
+Author Registration: $25.00                                             
+Special Requirements: 512K RAM.                                         
+                                                                        
+If you're using dBase and compatible database systems but require       
+advanced analytical reports and graphs, XTAB can help.  XTAB is a       
+statistical package which directly accesses dBase III compatible files. 
+XTAB features multiple regression and correlation, frequency analysis   
+and crosstabulation, descriptive statistics, and graphics.  XTAB also   
+features online help and pop-up menus as part of a user interface       
+designed for the dbase user.  It is compatible with data files created  
+by dBase III, dBase IV, Foxbase+, Clipper, dbXL, and other programs     
+using dbf files.                                                        
+                                                                        
+The interface is based on dBase - not stat-package - concepts.          
+This means that a dBase user can meet his/her statistical               
+analysis needs without having to learn how to use a new program.        
+Analytical variables can be fields, or they may be complex dBase        
+expressions.  Not that keyboard entry is not possible, dbf data files   
+are needed to operate the program.                                      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1937
 

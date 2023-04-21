@@ -14,6 +14,48 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2581.TXT
+
+{% raw %}
+```
+Disk No: 2581                                                           
+Disk Title: Figment - The Imagination Processor                         
+PC-SIG Version: S2.46                                                   
+                                                                        
+Program Title: Figment - The Imagination Processor                      
+Author Version: 2.46                                                    
+Author Registration: $35.00                                             
+Special Requirements: 384K RAM and graphics card.                       
+                                                                        
+FIGMENT is a full development environment for adventure games or other  
+type of interactive fiction.  Play roles in existing interactive        
+fictions or write them yourself.  Figment does all the hard work of     
+developing an interactive story so you can concentrate on the creative  
+aspects.                                                                
+                                                                        
+You declare the objects, define the attributes, write the appropriate   
+messages, and develop the games logic.  Programming is easy and quick   
+with the full-screen editor and complete Help system.                   
+                                                                        
+One you've developed your games, you can use FIGMENT to play them and   
+trade them with other FIGMENT users.  Also included is a run-time       
+version of the program so that you can distribute your games to anyone. 
+                                                                        
+In addition to adventure games, FIGMENT can be used by writers to model 
+plots, as a role-playing tool in business, and much more.  FIGMENT takes
+the tedium out of fiction creation and lets you put the creativity in.  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2581
 

@@ -61,6 +61,44 @@ machines:
     MAKEMAN  COM  Expands compressed manual files
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES338.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 338     SYSCOMM                                         v1   DS
+------------------------------------------------------------------------
+ 
+Excellent menu dirven communications package, allowing for unattended
+file transfer. There seems to be a bug in EDCOMM when you are done
+changing the default disk parameter there is no way to exit the program.
+ 
+ABSCOMM  DAT  ABSCOMM parameters and phone directory file
+ABSCOMM  EXE  Allows unattended file transfer between systems
+EDCOMM   EXE  Alters parameters and phone directories
+EXPAND   BAT  Batch file to expand the manual files
+MAKEMAN  COM  Expands compressed manual files
+MANUAL1  !!!  Manual part 1 compressed
+MANUAL2  !!!  Manual part 2 compressed
+MANUAL3  !!!  Manual part 3 compressed
+MLREAD   ME   How to expand the manual files using EXPAND.BAT
+SYSCOMM  DAT  SYSCOMM parameters and phone directory file
+SYSCOMM  EXE  General purpose communications program
+SYSCOMM1 BAT  Batch file to copy manual files to drive B:
+SYSCOMM2 BAT  Batch file to copy SYSCOMM files to drive B:
+SYSCOMM3 BAT  Batch file to copy ABSCOMM files to drive B:
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0338
 

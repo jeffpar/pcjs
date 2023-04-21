@@ -56,6 +56,7 @@ machines:
 
 ## CHR-DEMO.BAS
 
+{% raw %}
 ```bas
 10 '***************************************************************************
 20 '*                                                                         *
@@ -216,9 +217,66 @@ machines:
 1550 CALL SUBRT%                        'call the code interface
 1560 RETURN                             'done, so return
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #222, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  PRNT-SCN.COM         CRC = EE 40
+
+--> FILE:  PRNT-CHR.COM         CRC = 43 FE
+
+--> FILE:  SCN-DEMO.BAS         CRC = BB 83
+
+--> FILE:  CHR-DEMO.BAS         CRC = 2E AE
+
+--> FILE:  USMAP   .PIC         CRC = 02 2B
+
+--> FILE:  PRN-MAN .BAT         CRC = 3D 0C
+
+--> FILE:  MANUAL  .DOC         CRC = C8 7E
+
+--> FILE:  PRN-APX .BAT         CRC = D0 BB
+
+--> FILE:  APPENDIX.DOC         CRC = 3E 8F
+
+--> FILE:  NOTICE  .            CRC = 5D 60
+
+--> FILE:  README  .            CRC = EF 17
+
+--> FILE:  CRC     .TXT         CRC = E8 0D
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+ ---------------------> SUM OF CRCS = 25 14
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## SCN-DEMO.BAS
 
+{% raw %}
 ```bas
 10 '***************************************************************************
 20 '*                                                                         *
@@ -321,6 +379,7 @@ machines:
 990 LPRINT CHR$(12)                             'eject graphics print
 1000 RETURN                                      'done, so retàün
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

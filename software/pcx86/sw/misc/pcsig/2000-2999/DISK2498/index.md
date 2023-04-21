@@ -14,6 +14,61 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## DISK5OF5.DOC
+
+{% raw %}
+```
+     DANCAD3D (tm), CAD-CAE-CAM, Wire frame animation, and drawing program.
+      Copyright (c) 1986 - 1990 by Daniel H. Hudgins, All Rights Reserved
+File Directory of DANCAD3D v2.5 disk set, five 360KB disks or three 720KB disks
+DANCAD3D COM Main program and macro code editor with help screens.
+DANCAD3D 0?? Overlay files for main program.
+DANCAD3D 8?? Data files of DANCAD3D's internal use.
+DANCAD3D MSG Message file for DANCAD3D's text editor.
+DANCAD3D FON Supplied calligraphy font file for lettering in drawings.
+???????? PRN Printer driver files for many types of printers.
+???????? JET HP-PCL or LaserJet (tm) type printer drivers.
+???????? PLT Plotter driver files for many types of plotters.
+ADOBE_PS LZR Adobe PostScript (tm) laser printer driver.
+???????? ASC ASCII filetype drawing files.
+DEMO???? MAC Main demo DANCAD3D Macro program files. 
+DEMO???? SUB Sub-Macro programs written with DANCAD3D's commands.
+DEMO???? BAT Runs demo from DOS prompt after everything is installed.
+README   BAT Help for first time user.
+INSTALL  BAT Installs DANCAD3D on users harddisk.
+DANCAD3D DOC Brief documentation file and setup information for DANCAD3D.
+DISK?OF5 DOC One line file description.
+   Note  that  you  must use INSTALL.BAT to install all the above files on your
+harddisk before you try to run any of the programs.  Start installing  DANCAD3D
+by using INSTALL.BAT on disk 1 of 5.  
+```
+{% endraw %}
+
+## LABEL3D5.TXT
+
+{% raw %}
+```
+
+DANCAD3D v2.5 PROGRAM DISK 3D-5 (5 of 5)      
+
+  USE FILE INSTALL.BAT ON DISK 3D-1 TO
+  INSTALL THIS DISK ON YOUR HARD-DISK. 
+
+ READ FILE DANCAD3D.DOC ON DISK 4 OF 5
+
+This is a Beta test disk, it is not ShareWare!
+For the use of registered DANCAD3D users only, 
+please do not copy for sale, or to share.
+
+Copyright (c) 1986-1990 by Daniel H. Hudgins
+          ALL RIGHTS RESERVED       
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2498
 

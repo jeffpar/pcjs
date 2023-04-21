@@ -34,6 +34,86 @@ machines:
     must-have.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1761.TXT
+
+{% raw %}
+```
+Disk No: 1761                                                           
+Disk Title: Chart                                                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Chart                                                    
+Author Version: 1.4                                                     
+Author Registration: $25.00                                             
+Special Requirements: 256K RAM, EGA/VGA                                 
+                                                                        
+If you are an electrical engineer who frequently has to use the Smith   
+Chart for impedance and admittance calculations, for characterizing     
+transistor parameters, or for creating high frequency matching networks,
+CHART is the one for you!                                               
+                                                                        
+Forget the calculators and slide rules. Forget the rulers and triangles 
+and manually drawing graphs. The chart is drawn for you on-screen with  
+the numeric results shown on the side.                                  
+                                                                        
+Help is available all throughout the program with sporadic examples     
+built in. You can even use a mouse if you have one. If you are not using
+any similar program and still do calculations the old way, then CHART is
+a must-have.                                                            
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.TXT
+
+{% raw %}
+```
+
+
+                                 CHART
+                                 
+                                ver. 1.4
+                                 
+                                   by
+                                  
+                            Scott D. Nelson
+                           766 Cardinal Ave.
+                          Columbus, GA  31907
+                          
+                          
+File Description
+
+CHART.EXE        the program file
+CHART*.HLP       the on screen help files
+README.TXT       this file
+
+-- notice that there is no printed manual, all help and documentation is
+   handled via the on screen help facility.
+   
+   
+Program Description
+
+CHART is an electrical engineering Smith Chart program for characterizing 
+transistor parameters, examining transmission lines, creating high frequency 
+matching networks, adding impedance and admittance elements, and finding 
+reflection coefficient and VSWR information.  CHART supports Microsoft and 
+compatable 2 and 3 button mice and has limited printer support -- Epson FX80 
+and IBM Proprinter support only.  CHART requires a 256K EGA card (or VGA 
+equivalent) but has primitive support for the occasional CGA user.  A 640K+ 
+AT or 386 machine is suggested.  The user may customize options and save 
+them in a configuration file.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1761
 

@@ -35,6 +35,44 @@ machines:
     assistant.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2079.TXT
+
+{% raw %}
+```
+Disk No: 2079                                                           
+Disk Title: PC-Sport                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PC-Sport                                                 
+Author Version: 2.5                                                     
+Author Registration: $40.00                                             
+Special Requirements: None.                                             
+                                                                        
+You have just been awarded the position of Sports Director at your local
+club and your first responsibility is the club's annual all-county table
+tennis tournament. Twenty members from seven clubs will be arriving and 
+it's your job to figure who plays who and when. The local sport store   
+has never heard of table tennis statistic books and no-one in your club 
+knows anything about producing player charts. What do you do?           
+                                                                        
+You call on PC-SPORT. In one easy to use program, PC-SPORT takes infor- 
+mation on your club or organization, the type of sport activity you will
+be dealing with, the number of players involved, their names and their  
+organizations, etc., and prepares a database entry screen for statistic 
+recording. PC-SPORT will also help you prepare those Round Robin, or    
+ladder-style play charts. PC-SPORT is the Sports Directors' assistant.  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2079
 

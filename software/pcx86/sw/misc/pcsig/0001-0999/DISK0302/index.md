@@ -61,6 +61,80 @@ machines:
     DIR-LIST      Listing of included files
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## TREND123.DOC
+
+{% raw %}
+```
+                                   TREND123
+                                 version 1.0
+                       A Lotus 123 Curve fitting macro
+               created by John C. Dannenfeldt (Compuserve 71435,561)
+
+The file TREND123.WKS is a independent macro that may be used within any Lotus 
+123 spreadsheet.  This version enables you to create a set of data points with 
+the range name LINE or CURVE which fit any set of data points you range name 
+DATA with either a least squares straight line or an exponential curve:
+
+     Linear (LINE)-         y=(c1 * x) + c2
+     
+     Exponential (CURVE)-   ln y=(c1 * x) + c2
+
+Restrictions:
+     The DATA range must be continous.. no blank cells.
+     ...     ...    must be less than 257 points long.
+     You must be at A70 before you load the macro into your worksheet.
+     Your spreadsheet must not extend beyond A1..IV69 or it may be partially 
+        overwritten.
+
+Instructions:
+     Before running the macro you must:
+          1) Define a continuous set of numbers range named DATA.
+               They may be in either a row or column orientation but the 
+               program takes much longer to work on the vertical ranges 
+               because it must first transpose them into a horizontal range.
+          
+          2) Name the macro so that you can call it by typing:
+
+               /RNC\t  then press (ENTER)
+               A70     then press (ENTER)              
+
+          3) Load the macro into your spreadsheet- 
+             Now goto A70 and type:
+   
+               /FCCETREND123   then press (ENTER)
+
+    To activate the macro type ALT-T and follow the instructions.  When the 
+    macro is done it will return you to its main menu and ask if you would 
+    like to do a linear or exponential curve fit or quit.  If you do a 
+    different curve fit the old LINE or CURVE will be destroyed.  If you quit 
+    you may then look at LINE or CURVE directly or even better graph it beside 
+    the original DATA that you were trying to fit the curve to.
+    
+Comments:
+     I was forced to create some type of curve fitting regime for an 
+application I had and in the process developed part of the current macro.  The 
+next version will include some additional curve fitting routines such as 
+parabolic, moving averages and exponential smoothing.
+     Some of the things I don't like about this macro are a result of the 
+limitations of the 123 macro language.  After finally figuring out how to 
+transpose a column into a row I certainly wished that 123 had a general 
+command for that function.  Hopefully the next version will have an easier to 
+use macro language.
+     Feel free to make changes to the routine to fit your needs.  Some obvious 
+variants would be a basically vertical layout (which would make vertical 
+ranges faster to input) and locating the origin of the macro at a point more 
+suitable for your particular spreadsheet( remember that all references to 
+cells within a macro must be changed for it to work in a new location).  
+     If you got this macro in the form TREND123.HEX you must convert it to a 
+binary file called TREND123.WKS before trying to use it in a worksheet.
+
+ If you have any suggestions contact me on COMPUSERVE at the IBMPC SIG.  END123.WKS befor
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0302
 

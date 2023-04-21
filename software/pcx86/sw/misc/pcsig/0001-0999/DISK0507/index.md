@@ -54,6 +54,70 @@ machines:
     PCSPRINT DOC  Description & construction info
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES507.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  507  PC-SPRINT                                             v1 DS2
+---------------------------------------------------------------------------
+PC-SPRINT contains step-by-step directions on how to accomplish a low cost 
+($25 - $50) speed up for the IBM PC/AT/XT.  It can achieve processor perfor
+mance increases of up to 2 times normal, does not use an expansion slot, 
+doesn't make any permanent changes to the computer and maintains software com-
+patibility without restrictions.  Also, it adds a true hardware reset - no 
+more "keyboard lockup".
+ 
+1STREAD  ME      List of files on diskette (this list)
+ARTWRK1X BOT     Bottom layer printed circuit artwork 1x size
+ARTWRK1X TOP     Top layer printed circuit artwork 1x size
+ARTWRK2X BOT     Bottom layer printed circuit artwork 2x size
+ARTWRK2X TOP     Top layer printed circuit artwork 2x size
+FEEDTHRU         Top - bottom "feed through" connection diagram
+NOPRTYCK COM     Program to disable parity checks
+PARTLIST         Parts list & placement drawing
+PCSPRINT BAT     Batch file to print PC-SPRINT info & drawings
+PCSPRINT DOC     Description & construction info
+SCHEMATC         Electronic circuit diagram
+WARMBOOT COM     Program to set "warm boot" flag
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Ave, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+## NOTES507.TXT
+
+{% raw %}
+```
+Program name:	PCSPRINT
+
+Author name:	Doug Severson
+
+Address:	7431 W. Southview Dr.
+		Franklin, Wi. 53132
+
+Telephone Number: Not given
+
+Suggested Donation:  None
+
+Program Description:  PCSPRINT is directions for a low cost ($25 - $50) speed
+up for the IBM PC/AT/XT that you can build yourself.  It can achieve processor
+performance increases of up to 2 times normal, does not use an expansion slot,
+doesn't make any permanent changes to the computer and maintains software
+compatibility without restrictions.  Also, it adds a true hardware reset - no
+more "keyboard lockup".  Includes instructions, schematics, part placement
+diagrams, and precision artwork from which a printed circuit board can be made.
+It runs the processor at a higher clock rate to speed up the processing.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0507
 

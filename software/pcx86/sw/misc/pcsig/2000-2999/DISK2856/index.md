@@ -14,6 +14,35 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2856.TXT
+
+{% raw %}
+```
+Disk No: 2856                                                           
+Disk Title: PC Hunter                                                   
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PC Hunter                                                
+Author Version: 5.2                                                     
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+PC HUNTER is a lean and mean file finder.  Specify a file name (partial 
+name with DOS wildcards) or text from a file, and PC-Hunter will search 
+all the directories on any drive for the file.  Then it lists the files 
+and their locations or displays the text.  And does it all FAST!        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2856
 

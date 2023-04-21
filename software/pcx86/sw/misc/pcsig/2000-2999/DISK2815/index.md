@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2815.TXT
+
+{% raw %}
+```
+Disk No: 2815                                                           
+Disk Title: DAYO Shipping Log                                           
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: DAYO Shipping Log                                        
+Author Version: 3.01                                                    
+Author Registration: $25.00                                             
+Special Requirements: 640K RAM, hard drive, and DOS 3.3+.               
+                                                                        
+DAYO SHIPPING LOG records all shipments of invoices from your place of  
+business. It records invoice header and detail information, and also    
+prints labels and many reports.                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2815
 

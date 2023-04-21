@@ -35,6 +35,44 @@ machines:
     record.  MMREPORT can also set up special print styles for printing.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1868.TXT
+
+{% raw %}
+```
+Disk No: 1868                                                           
+Disk Title: Mmsort & Mmreport Docs                                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: MMSORT & MMREPORT DOCS                                   
+Author Version: 1.4                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+MMSORT and MMREPORT are two utilities for sorting and creating reports  
+and labels from data in FILEBASE files and existing MailMerge files.    
+                                                                        
+MMSORT sorts and provides for sort-merging MailMerge files on the basis 
+of any numeric or character field, in ascending or descending order.    
+Special sort features such as specific sorting on part of a field,      
+character sorts and date sorts help to make a tedious job easier.       
+                                                                        
+MMREPORT generates reports and labels for MailMerge files, and can also 
+select records on the basis of field contents.  Fields can be           
+selectively printed from each record.  When printing labels, you may    
+print 1, 3 or 5 labels across, with optional multiple copies of each    
+record.  MMREPORT can also set up special print styles for printing.    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1868
 

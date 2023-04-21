@@ -51,6 +51,68 @@ machines:
     VERSIONS      Text file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1191.TXT
+
+{% raw %}
+```
+Disk No: 1191
+Program Title:  POKER SQUARES
+PC-SIG version: 1.1
+
+POKER SQUARES is a computerized card game for one to ten players in
+which each player tries to obtain the best poker hands possible.  Cards
+are displayed on a five by five grid and poker hands can be formed going
+both across and down.  In multiple player games, you may choose to have
+the same deck of cards dealt to each player for each round.
+
+POKER SQUARES also gives you the options to make dueces wild, to have
+three peeks at the next card for each round, to use an alternate scoring
+table, to have bonus points, to have one to three extra cards dealt to
+replace previous cards, and to undo the placement of your last card
+before dealing the next card.
+
+POKER SQUARES is a game that requires a bit of strategy and a bit of
+guessing, and is fun to play both alone and with others.  POKER SQUARES
+has a tournament option, in which you may play three, five or seven
+rounds, where the program chooses the game setup for each round.  The
+program also allows you to save up to fifteen games on disk for later
+use.
+
+Usage:  Game.
+
+Special Requirements:  512K memory and CGA graphics.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None, but you can write to them for a catalog
+of other fine products that they carry.
+
+File Descriptions:
+
+BRUN30   EXE  File necessary for running program.
+FILES    DEF  File descriptions.
+FIRSTSCR DAT  Data file.
+GO       BAT  Batch file to start program.
+HELP     DAT  Data file.
+INSTALL  BAT  Copies program files to drive C.
+PROMO         Program description.
+PSQUARES EXE  Main program.
+PSQUARES RUL  Documentation.
+READ     ME   How to get started.
+VERSIONS      Text file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1191
 

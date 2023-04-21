@@ -35,6 +35,45 @@ machines:
     the most from the play MacBeth.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2201.TXT
+
+{% raw %}
+```
+Disk No: 2201                                                           
+Disk Title: Macbeth 2 of 2 (2200 also)                                  
+PC-SIG Version: 1                                                       
+                                                                        
+Program Title: MacBeth                                                  
+Author Version: 4/90                                                    
+Author Registration: $20.00                                             
+Special Requirements: 512K Ram and CGA recommended.                     
+                                                                        
+Studying Shakespeare can be tedious. Do you really understand           
+the language? The plot?  The characters?  This program can help you     
+get through the play MacBeth, and have fun too.                         
+                                                                        
+MACBETH is an easy-to-use program designed as an aid for high school    
+literature students.  Using a simple menu system, students are taught   
+about the play via quizzes, games, graphics, riddles, and notes on a    
+wide variety of topics.                                                 
+                                                                        
+The games are designed to be fun and at the same time provide a         
+painless way to memorize quotations, learn important speeches, and, in  
+general, to become familiar with the plot, characters, and themes of    
+the play.  Definitely a worthwhile investment for those seeking to get  
+the most from the play MacBeth.                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2201
 

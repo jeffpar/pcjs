@@ -40,8 +40,288 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CHK4BOMB.DOC
+
+{% raw %}
+```
+ 
+                         <<<===  CHecK 4 BOMB  ===>>>
+ 
+                        Version 1.00, October 29, 1985
+ 
+ 
+This release of version 1.00 of CHK4BOMB begins a long-range attempt to place IN
+ONE PROGRAM  EVERYTHING we  possibly can  that helps  check a  suspect file  for
+"malice aforethought".  As such, any and all suggestions for improvement are not
+only welcomed, but encouraged.
+ 
+ 
+TO INVOKE:  Simply enter   "CHK4BOMB <filename>"  for a listing of:
+~~~~~~~~~~
+            (a) all ASCII  strings, and
+            (b) potentially dangerous disk activity
+in suspect program <filename>.
+ 
+ 
+MESSAGES:  The "potentially dangerous disk acitivity" which CHK4BOMB reports:
+~~~~~~~~~
+****WARNING**** This program writes to absolute sectors.
+The possibility exists to overwrite important data.
+ 
+****WARNING**** This program FORMATS a disk!
+All data on the disk could be lost!
+ 
+****WARNING**** This program uses the ROM BIOS routines for direct disk access!
+This program COULD format a disk or write to certain sectors without
+updating the directory or File Allocation Table.
+ 
+DO NOT RUN this program until checked by an expert, unless you are familiar with
+the author or company.
+ 
+ 
+/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+ 
+You may contact us via Bob Klahn's BBS (Fido 107/50, 302-764-7522, 2400/1200) in
+Wilmington Delaware.
+ 
+                                         Andy Hopkins
+                                         11/2/85
+
+
+```
+{% endraw %}
+
+## FILE1314.TXT
+
+{% raw %}
+```
+Disk No: 1314
+Program Title: Program Grab Bag
+PC-SIG version: 1
+
+For the PC practical joker, here are several safe (but insane) scams to
+play on some unsuspecting slob's computer.  Place them in a batch file
+or on his hard disk.  When he comes back and touches a key or boots up
+his computer, look out!  One trick makes his machine sound like its
+filling with water and then it goes into a spin drive cycle!  Fun
+galore.  Don't blame us, though, if your computer nerd gets even!
+
+Other programs included here are a bit tamer: Convert almost any U.S
+measurement to the Metric equivalent and vice versa; covers temperature,
+liquid, weight, linear distance, speed, and square and cubic volumes.
+CHK4BOMB checks a program to see if it does any disk writing or
+formatting and also displays any text it finds in the program code.
+SCRAMBLE and UNSCRAM can be used to encrypt and decrypt sensitive and
+private files.  OBLITER8 totally deletes a file so that it will be
+unrecoverable.  SHOW provides a graphics demonstration of the PC-SIG
+logo.  Lastly, read a very uplifting text by Pythagoras, a famous early
+Greek philosopher and mathematician.
+
+Usage:  Misc. Programs/Utility.
+
+Special Requirements:  A color graphics card for THATSALL & KSCOPE, a
+version of BASIC for KSCOPE.BAS
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $15.00 for Metric Conversion program.
+
+File Descriptions:
+
+BACKTALK COM  Puts your computer on strike.
+BROWSE   COM  Text display program.
+CHK4BOMB DOC  Manual file.
+CHK4BOMB EXE  Check programs for problems.
+DRAIN    EXE  Joke program.
+EATERS   COM  Screen blanking program.
+GOLDEN   TXT  Text file.
+KSCOPE   BAS  Kaleidoscope.
+LOGO     BAT  Batch file to start logo show.
+LOGO     SPS  Data file.
+MELT     COM  Clears screen.
+METRIC   DOC  Brief instructions and description.
+METRIC   EXE  The Metric Conversion Program.
+OBLITER8 BAS  Basic source code.
+OBLITER8 EXE  File deletion program.
+P?       GX1  Data file (5 files).
+PYTHAG   BAT  Batch file to display GOLDEN.TXT.
+SCRAMBLE BAS  Basic source code.
+SCRAMBLE EXE  File encryption file.
+SHOW     EXE  Graphic display program.
+T?       GX1  Graphic data file (3 files).
+THATSALL EXE  Cartoon program.
+UNSCRAM  BAS  Basic source code.
+UNSCRAM  EXE  Unencrypt program.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## GOLDEN.TXT
+
+{% raw %}
+```
+                        HIEROS LOGOS
+     THE GOLDEN VERSES OF PYTHAGORAS
+
+
+In the first place revere the Immortal Gods, as they
+are established and ordained by the Law.
+
+Reverence the Oath. In the next place revere the
+Heros who are full of goodness and light.
+
+Honour likewise the Terrestrial Daimons by
+rendering them the worship lawfully due to them.
+
+
+Honour likewise thy father and thy mother, and thy nearest
+relations.
+
+Of all the rest of mankind, make him thy friend who
+distinguishes himself by his virtue. Always give ear to his mild
+exhortations, and take example from his virtuous and useful
+actions. Refrain, as far as you can, from spurning thy friend for
+a slight fault, for power surrounds necessity.
+
+Know that all these things are as I have told thee.
+
+Accustom thyself to surmount and vanquish these passions:
+First, gluttony, sloth, lust and anger. Never commit any shameful
+actions, neither with others nor in private with thyself.
+
+Above all things, respect thyself.
+
+In the next place, observe Justice in thy actions and in thy
+words; and accustom not thyself to behave thyself in anything
+without rule and without reason.
+
+Always make this reflection, that it is ordained by Destiny
+for all men to die; and that the goods of fortune are uncertain.
+As they may be acquired, they may likewise be lost.
+
+Concerning the calamities that men suffer by Divine Fortune,
+support with patience thy lot, be what it will, and never repine
+at it, but endeavour what thou canst to remedy it, and consider
+that Fate does not send the greatest portion of these misfortunes
+to good men.
+
+There are amongst men several sorts of reasonings, good and
+bad. Admire them not too easily and reject them not either, but
+if any falsehoods be advanced, give way with mildness and arm
+thyself with patience.
+
+Observe well, on every occasion, what I am going to tell
+thee: Let no man either by his words, or by his actions, ever
+seduce thee, nor entice thee to say or to do what is not
+profitable for thee.
+Consult and deliberate before thou act, that thou may'st not
+commit foolish actions, for it is the part of a miserable man to
+speak and to act without reflection.
+
+But do that which will not afflict thee afterwards, nor
+oblige thee to repentance.
+
+Never do anything which thou dost not understand; but learn
+all thou oughtest to know, and by that means thou wilt lead a
+very pleasant life.
+
+In no wise neglect the health of the body; but give it food
+and drink in due measure, and also the exercise of which it has
+need. By measure, I mean what will not incommode thee.
+
+Accustom thyself to a way of living that is neat and decent,
+without luxury. Avoid all things that will occasion envy, and be
+not expensive out of season, like one who knows not what is
+decent and honourable.
+
+Be neither covetous nor niggardly. A due measure is
+excellent in these things!
+
+Do only the things that cannot hurt thee, and deliberate
+before thou doest them.
+
+Never suffer sleep to close thy eyelids after thy going to
+bed, till thou hast thrice reviewed thy actions of the day:
+Wherein have I done amiss? What have I done? What have I omitted
+that I ought to have done?
+
+If in this examination thou find that thou hast done amiss,
+reprimand thyself severely for it; and if thou hast done any
+good, rejoice.
+
+Practice thoroughly all these things; meditate on them well;
+thou oughtest to love them with all thy heart. It is they that
+will put thee in the way of Divine Virtue.
+
+I swear it by Him who has transmitted into our souls the
+Sacred Tetraktys, the Source of Nature, whose course is eternal.
+
+Never set thy hand to the work, till thou hast first prayed
+to the Gods to accomplish what thou art going to begin.
+
+When thou hast made this habit familiar to thee, thou wilt
+know the constitution of the Immortal Gods and of men; even how
+far the different Beings extend, and what contains and binds them
+together.
+
+Thou shalt likewise know, in accord with Cosmic Order, that
+the nature of this Universe is in all things alike, so that htou
+shalt not hope what thou oughtest not to hope;and nothing in this
+world shall be hid from thee.
+Thou wilt likewise know that men draw upon themselves their
+own misfortunes, voluntarily and of their own free choice.
+
+Wretches that they are! They neither see nor understand that
+their good is near them. There are very few of them who know how
+to deliver themselves out of their misfortunes.
+
+Such is the Fate that blinds mankind and takes away his
+senses. Like huge cylinders, they roll to and fro, always
+oppressed by ills without number; for fatal contention, which is
+innate in them, pursues them everywhere, tosses them up and down,
+nor do they perceive it.
+
+Instead of provoking and stirring it up, they ought by
+yielding to avert it.
+
+Great Jupiter, Father of men, you would deliver them from
+all the evils that opress them, if you would show them what is
+the Daimon of whom they make use.
+
+But take courage, the race of men is divine. Sacred Nature
+reveals to them the most hidden Mysteries.
+
+If she imparts to thee her secrets, thou wilt easily perform
+all the things which I have ordained thee, and healing thy soul,
+thou wilt deliver it from all these evils, from all these
+afflictions.
+
+Abstain thou from all that we have forbidden in the
+Purifications; and in the Deliverance of the Soul make a just
+distinction of them; examine all things well, leaving thyself
+always to be guided and directed by the understanding that comes
+from above, and that ought to hold the reins.
+
+And when, after having divested thyself of thy mortal body,
+thou arrivest in the most pure ether, thou shalt be a God,
+immortal, incorruptible, and death shall have no more dominion
+over thee.
+
+                               -Pythagoras
+                                died about 507 B.C.E.
+```
+{% endraw %}
+
 ## KSCOPE.BAS
 
+{% raw %}
 ```bas
 
 
@@ -112,9 +392,159 @@ machines:
 740 RUN "MENU.PGM"
 
 ```
+{% endraw %}
+
+## METRIC.DOC
+
+{% raw %}
+```
+
+
+
+
+            		   METRIC.EXE
+
+			  VERSION 2.0
+              (c) COPYRIGHT 1987 BY J. T. FOSTER
+                        P.O. BOX 5163
+                   FORT WORTH, TEXAS 76108
+
+                  
+
+
+             THIS DISK SOULD CONTAIN THE FOLLOWING FILES:
+
+
+            METRIC.EXE      THE METRIC CONVERSION PROGRAM.
+
+            METRIC.DOC      THIS FILE.
+
+            METRIC.CFG      THIS IS THE CONFIGURATION FILE.
+                            IF IT IS NOT PRESENT, IT WILL BE
+                            CREATED.  IF YOU NEED TO CHANGE 
+                            THE CONFIGURATION FILE, SIMPLY
+                            ERASE IT AND YOU WILL BE PROMPTED
+                            FOR YOUR CONFIGURATION THE NEXT 
+                            TIME YOU RUN METRIC.EXE.
+
+
+
+
+
+
+                       TERMS AND CONDITIONS
+
+
+            		   METRIC.EXE
+
+			  VERSION 2.0
+              (c) COPYRIGHT 1987 BY J. T. FOSTER
+                        P.O. BOX 5163
+                   FORT WORTH, TEXAS 76108
+	
+	METRIC.EXE IS A U.S. TO METRIC MEASUREMENT CONVERSION
+	PROGRAM.  IT IS NOT INTENDED TO BE A TUTORIAL IN THE
+	METRIC AND U.S. MEASUREMENT SYSTEMS.  METRIC.EXE IS A
+	GREAT TIME SAVER FOR PROFESSIONALS AND STUDENTS IN
+	ENGINEERING, SCIENCE, MANUFACTURING, AND BUSINESS.  YOU
+	WILL FIND METRIC.EXE NEEDS NO DOCUMENTATION.  IT IS
+	VERY USER FRIENDLY AND CONVENIENT.  HOW MANY TIMES HAVE
+	YOU HAD TO DRAG OUT THE DICTIONARY, SCIENCE BOOK, OR
+	CONVERSION TABLE, FIND YOUR CALCULATOR UNDER ALL THE
+	CLUTTER ON YOUR DESK, AND PUNCH IN A SEEMINGLY SIMPLE
+	FORMULA, OR GO THROUGH GYRATIONS OF ALGEBRAIC FORMULAS
+	WITH A PENCIL AND PAPER TO CONVERT METERS TO FEET, OR
+	OUNCES TO GRAMS.  NORMALLY THIS DOES NOT HAPPEN VERY
+	OFTEN.  BUT WITH METRIC.EXE, YOU CAN HAVE MANY OF THE
+	CONVERSIONS FOR THE U.S. AND METRIC SYSTEMS AT YOUR
+	FINGERTIPS.
+	
+	
+		DISTRIBUTION, LICENSING, AND REGISTRATION
+
+	METRIC.EXE 2.0 IS A SHAREWARE PROGRAM AND IS DISTRIBUTED FOR		
+	EVALUATION ONLY.  METRIC.EXE IS NOT FREE SOFTWARE.  YOU
+	ARE GRANTED A LIMITED LICENSE TO EVALUATE METRIC.EXE ON
+	A TRIAL BASIS ONLY.  IF YOU INTEND TO USE METRIC.EXE FOR
+	ANY PURPOSE OTHER THAN TRIAL OR EVALUATION, YOU MUST
+	REGISTER BY SENDING A CHECK OR MONEY ORDER FOR $15.00 TO
+
+			J. T. FOSTER
+			P.O. BOX 5163
+			FORT WORTH, TX 76108
+
+	MODIFICATIONS AND UPGRADES FOR METRIC.EXE WILL BE AVAILABLE
+	FOR REGISTERED USERS ONLY.  THIS IS THE ONLY VERSION THAT
+	WILL BE DISTRIBUTED FOR EVALUATION OR TRIAL USE.  USERS MAY
+	DISTRIBUTE COPIES OF VERSION 2.0 FOR EVALUATION OR TRIAL USE
+	ONLY IF THE METRIC.EXE FILE IS UNMODIFIED AND METRIC.DOC IS
+	INCLUDED.
+
+            CORPORATE AND ACADEMIC LICENSING AND REGISTRATION
+
+	CORPORATE AND ACADEMIC LICENSING MAY BE OBTAINED BY WRITING
+	J. T. FOSTER AT THE ADDRESS ABOVE.  METRIC.EXE MAY BE USED
+	FOR EVALUATION BY CORPORATE AND ACADEMIC INSTITUTIONS FOR A
+	7 DAY TRIAL PERIOD.  ANY USE OF METRIC.EXE BEYOND THE 7 DAY
+	TRIAL PERIOD IS A COPYRIGHT VIOLATION.
+
+
+
+
+
+
+				USER GROUPS
+
+	USER GROUPS MAY ADD METRIC.EXE VERSION 2.0 TO THEIR DISK
+	LIBRARY IF THE PROGRAM IS NOT MODIFIED, METRIC.DOC IS
+	INCLUDED, AND CHARGE NO MORE THAN $6.00 PER DISK.  HOWEVER
+        USERS ARE STILL REQUIRED TO REGISTER IF METRIC.EXE IS USED
+        FOR ANY REASON OTHER THAN EVALUATION.
+        
+			  COMMENTS AND CRITIQUES
+
+	THE AUTHOR WELCOMES ANY COMMENTS OR SUGGESTIONS YOU MAY HAVE
+	ABOUT METRIC.EXE.  PLEASE WRITE TO THE AUTHOR AT THE ADDRESS
+	ABOVE.  THANK YOU.
+
+
+
+
+
+======================================================================
+                        J. T. FOSTER
+                          BOX 5163
+                   FORT WORTH, TEXAS 76108
+
+                      REGISTRATION FORM
+
+
+I WOULD LIKE TO REGISTER ______ COPIES OF METRIC.EXE.  ENCLOSED IS
+A CHECK OR MONEY ORDER FOR $15.00 PER COPY PAYABLE TO J. T. FOSTER.
+PLEASE SEND ME THE LATEST VERSION OF METRIC.EXE TO THE ADDRESS BELOW.
+
+NAME:       __________________________________________________________
+ADDRESS:    __________________________________________________________
+            __________________________________________________________
+            __________________________________________________________
+TYPE OF COMPUTER:  ___________________________________________________
+COMMENTS:  ___________________________________________________________
+______________________________________________________________________
+______________________________________________________________________
+______________________________________________________________________
+______________________________________________________________________
+______________________________________________________________________
+______________________________________________________________________
+
+
+======================================================================
+
+```
+{% endraw %}
 
 ## OBLITER8.BAS
 
+{% raw %}
 ```bas
 10 '---------OBLITER8.BAS  1987------------
 20 ' File Destruction Utility
@@ -143,9 +573,11 @@ machines:
 250 '(For the compiled version, line 140 was ommitted and
 260 'line 150 was used instead.)
 ```
+{% endraw %}
 
 ## SCRAMBLE.BAS
 
+{% raw %}
 ```bas
 10 '---------Scramble.Bas------------
 20 'A Primitive Encryption Program
@@ -164,9 +596,11 @@ machines:
 150 END
 160 'SYSTEM
 ```
+{% endraw %}
 
 ## UNSCRAM.BAS
 
+{% raw %}
 ```bas
 10 '---------Unscram.Bas-----------
 20 'This program will de-crypt a file
@@ -184,6 +618,7 @@ machines:
 135 END
 140 'SYSTEM
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

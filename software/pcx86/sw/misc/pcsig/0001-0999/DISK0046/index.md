@@ -68,6 +68,7 @@ machines:
 
 ## ASDA.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:WIDTH 80:SW=80:CLS:LOCATE 1,17,0:COLOR 0,7:PRINT " * * * * * *   S O F T M A R K   I N C.  * * * * * *":COLOR 7,0
 20 LOCATE 3,30:PRINT "FORMAT SETUP SPECIFICATIONS"
@@ -409,9 +410,11 @@ machines:
 3260 C$(R,C)=M$:B$(R,C)=P$:GOTO 3230
 3270 CLOSE:LOCATE 24,30:PRINT "PRESS ENTER TO CONTINUE.........":RETURN
 ```
+{% endraw %}
 
 ## ASDADEL.BAS
 
+{% raw %}
 ```bas
 10 ON ERROR GOTO 160
 20 CLS:WIDTH 80:LOCATE 3,15:COLOR 0,7:PRINT " * * * * * *   S O F T M A R K    I N C.   * * * * * * ":COLOR 7,0
@@ -432,9 +435,11 @@ machines:
 170 ENT$=INKEY$:IF ENT$="" THEN 170
 180 RESUME 20
 ```
+{% endraw %}
 
 ## ASDARUN.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:COLOR 7,0
 20 SCREEN 0:WIDTH 80 
@@ -544,9 +549,11 @@ machines:
 2000 LOCATE STARTROW,STARTCOL:PRINT MID$(SM.FIELD$,1,RL)
 2010 RETURN
 ```
+{% endraw %}
 
 ## CHECKCON.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -630,9 +637,11 @@ machines:
 970 RETURN
 980 END
 ```
+{% endraw %}
 
 ## CPRINT.BAS
 
+{% raw %}
 ```bas
 10 REM    CITOH 8510 (NEC 2083) PRINTER OPTION PROGRAM
 20 REM    BY CHARLES VELLA, PH.D. (BASED ON THE
@@ -676,9 +685,11 @@ machines:
 400 LPRINT CHR$(15);:RETURN     'Double width off
 410 END
 ```
+{% endraw %}
 
 ## EDIT.BAS
 
+{% raw %}
 ```bas
 7000 '   ** * * * * *   S O F T M A R K     I N C.    * * * * * **
 7010 '   **                     Soft/Edit                       **
@@ -847,9 +858,11 @@ machines:
 8610 RETURN
 8650 SAVE FILENAME$:CHAIN "A:ASDARUN"
 ```
+{% endraw %}
 
 ## EFS.BAS
 
+{% raw %}
 ```bas
 0 ' REVISING AUTHOR:   	STEPHEN LEOCE
 1 '				201 DELAWARE AVENUE
@@ -1529,9 +1542,56 @@ machines:
 6540 RETURN
 65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
 ```
+{% endraw %}
+
+## FILES46.TXT
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+Disk No 46    Screen Utilities No 1                                  v1.4
+--------------------------------------------------------------------------
+CLOCK    COM  Puts clock in upper right corner of display
+CONFIG   SYS  Setup for alternate keyboard programs  (DOS 2.0)
+DVORAK        Data file for DVORAK.CO
+DVORAK   COM  Alternate keyboard program  (DOS 2.0 only)
+DVORAK   DOC  Documentation for DVORAK.COM
+DVORAK   BAT  Batch file to start DVORAK.COM
+QWERTY        Alternate keyboard program  (DOS 2.0 only)
+QWERTY   BAT  Batch file for above
+MA       BAT  Batch file for above
+FULLEDIT BAS  Stopgap full screen editor
+PRINTFIX COM  Run once to be rid of early DOS 1.1 printer bug
+WS-ASCII BAS  WORDSTAR-to-ASCII conversion
+EFS      BAS  Electronic (database) file system
+ASDADEL  BAS  Part of screen format program
+ASDA     BAS  Part of screen format program
+ASDARUN  BAS  Part of screen format program
+HELPCOM  BAS  Part of screen format program
+EDIT     BAS  Part of screen format program
+FORMDISP BAS  Part of screen format program
+RESTATTR BAS  Part of screen format program
+HIDEFILE BAS  Remove and/or modify hidden files
+CHECKCON BAS  Simple checkbook balancing program
+CPRINT   BAS  Setup parameters of C-Itoh 8510 (NEC 8023) printer
+GPRINT   BAS  Setup parameters of IBM/Epson printer
+MEMDUMP  BAS  Memory dump program
+DVORAK   COM  Command file for DVORAK
+CONTROL  COM  Part of alternate keyboard system
+QWERTY   COM  Command file for QWERTY
+KEYMOVE  BAS  Part of alternate keyboard system
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## FORMDISP.BAS
 
+{% raw %}
 ```bas
 10 RET$=INKEY$:IF RET$="" THEN 10
 20 COMMON BACK$
@@ -1552,9 +1612,11 @@ machines:
 180 ENT$=INKEY$:IF ENT$="" THEN 180
 190 RESUME 50
 ```
+{% endraw %}
 
 ## FULLEDIT.BAS
 
+{% raw %}
 ```bas
 1 CLS
 90  '  AN ENHANCED FULL SCREEN EDITOR PROGRAM FOR THE IBM PC
@@ -1852,9 +1914,11 @@ machines:
 2680 GOTO 1020
 2690 END
 ```
+{% endraw %}
 
 ## GPRINT.BAS
 
+{% raw %}
 ```bas
 900  ' THIS PROGRAM CAN BE FOUND IN THE OCT.'82 ISSUE OF CREATIVE COMPUTING.
 910  '
@@ -1977,9 +2041,11 @@ machines:
 2180 IF N > 255 THEN C = N-256: GOSUB 2000: C = 1: GOSUB 2000                                   ELSE C = N:     GOSUB 2000: C = 0: GOSUB 2000
 2190 RETURN
 ```
+{% endraw %}
 
 ## HELPCOM.BAS
 
+{% raw %}
 ```bas
 10 REM ***********************************************************************         *                      PROGRAM1                                       *
 20 REM *                    by Phil Grier                                    *         *                   Laurel Maryland                                   *
@@ -2294,9 +2360,11 @@ machines:
 10000 SAVE"B:PROGRAM1
 10010 GOTO 9997
 ```
+{% endraw %}
 
 ## HIDEFILE.BAS
 
+{% raw %}
 ```bas
 100 REM ********************************************************************
 110 REM *       HideFile             by            John Vandegrift         *
@@ -2588,9 +2656,11 @@ machines:
 3100 RETURN
 3110 '** DONE - PRESS ENTER TO RETURN TO MENU **
 ```
+{% endraw %}
 
 ## KEYMOVE.BAS
 
+{% raw %}
 ```bas
 10 DEF SEG:POKE 92,25:KEY OFF:CLS:LOCATE 1,1,1
 20 PRINT "Use this program to change your keys to Dvorak."
@@ -2643,9 +2713,11 @@ machines:
 490 PRINT
 500 RETURN
 ```
+{% endraw %}
 
 ## MEMDUMP.BAS
 
+{% raw %}
 ```bas
 1 KEY OFF
 10 REM Program to examine the contents
@@ -2720,9 +2792,11 @@ machines:
 6003 LOCATE 1,1:COLOR 1:PRINT"ADDR:         ***REGISTER CONTENTS*** ":COLOR 7:PRINT:COLOR 0,7:PRINT"OFFSET    01  02  03  04  05  06  07  08  ":PRINT:COLOR 7,0
 6004 RETURN
 ```
+{% endraw %}
 
 ## RESTATTR.BAS
 
+{% raw %}
 ```bas
 10 ON ERROR GOTO 170
 20 CLS:WIDTH 80:LOCATE 3,15:COLOR 0,7:PRINT " * * * * * *   S O F T M A R K    I N C.   * * * * * * ":COLOR 7,0
@@ -2743,9 +2817,11 @@ machines:
 180 ENT$=INKEY$:IF ENT$="" THEN 180
 190 RESUME 20
 ```
+{% endraw %}
 
 ## WS-ASCII.BAS
 
+{% raw %}
 ```bas
 100 'WordStar conversion routine to ASCII text (WS-ASCII.BAS)
 110 DEFINT A: CLS: KEY OFF
@@ -2767,6 +2843,7 @@ machines:
 270 '      await the BEEP for completion. (Volkswriter 1.2 also reads file)
 280 '[from PC Age (Jan 83) p63 ■ Phillip Jacka  AIA]
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

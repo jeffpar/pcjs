@@ -39,6 +39,71 @@ machines:
     #1836) is the second.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1419.TXT
+
+{% raw %}
+```
+Disk No: 1419
+Program Title:  MAZE CUBE version 1.04
+PC-SIG version:  1.1
+
+Remember those little black and white plastic puzzles with the 24
+numbered tiles and 1 empty space?  You had to slide the tiles back and
+forth until you got all the numbers in the right order.  This is the
+computer version and it's all grown up!
+
+MAZE CUBE is an addictive puzzle strategy game for all ages.  The object
+is to match a given pattern with the fewest number of moves.  It is a
+great way to help younger players develop logical thinking and spacial
+relationship concepts.  For the older player, its just plum good fun!
+
+Included are 25 different puzzles of varying degrees of difficulty.  A
+nice feature is the Autoplay facility which replays your best game so
+you can see where improvements can be made.  The program also lets you
+design your own puzzle patterns, up to a maximum of 99 different games.
+MAZE CUBE is entirely menu-driven and provides thorough on-screen
+instructions.
+
+Age level: 6 to adult.
+
+Program Limitations:  Maximum of 99 puzzles.
+
+Synopsis:  A puzzler. 24 tiles and 25 slots.  Move them correctly to
+create the desired pattern in the fewest moves.
+
+Usage:  Entertainment/Puzzles.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00  Registered users receive updates and best
+solutions for current games.  If they beat the current best score, they are
+also eligible to be listed on the next distribution disk.
+
+File Descriptions:
+
+MC       EXE  Main program.
+MCBEST   DAT  Best puzzle scores file.
+MCEND    DAT  Puzzle ending layout file.
+MCM      EXE  Puzzle generation program.
+MCSTART  DAT  Puzzle starting layout file.
+README   EXE  Documentation program.
+SLTDPROV DAT  Selected proverbs, one is shown at the end of each
+              session.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1419
 

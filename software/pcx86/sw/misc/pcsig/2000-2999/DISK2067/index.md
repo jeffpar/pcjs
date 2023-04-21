@@ -41,6 +41,205 @@ machines:
     ~ A user-defined plotter driver routine is included.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2067.TXT
+
+{% raw %}
+```
+Disk No: 2067                                                           
+Disk Title: Curve Digitizer (CGA/EGA) 2 of 2 (2066)                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Curve Digitizer EGA/CGA                                  
+Author Version: 3.5                                                     
+Author Registration: $149.00                                            
+Special Requirements: EGA or CGA, and graphics printer.                 
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+
+
+           C U R V E    D I G I T I Z E R    V E R S I O N   4.0
+
+                UPGRADES TO CURVE DIGITIZER SINCE VERSION 3.0
+
+                         PROGRAM IMPROVEMENTS
+
+
+    *  THE DIGITIZER CALIBRATION PHASE HAS BEEN SIMPLIFIED.
+
+    *  A FASTER COMPILER AND PROGRAM MODIFICATIONS NOW YIELD A 55%
+       INCREASE IN REFRESH SPEED.
+
+    *  SEVERAL COSMETIC ERRORS HAVE BEEN CORRECTED.
+
+    *  ADVANCED FEATURES, E.G., SCALING & ROTATION ADDED TO THE SYMBOL
+       COMMAND.
+
+    *  A USER-DEFINED PLOTTER DRIVER ROUTINE IS AVAILABLE.
+
+    *  HERCULES VIDEO (DMA) RESPONSE TIME IMPROVED. PREVENTS CERTAIN
+       SCREEN ANOMALIES EVIDENT WITH CERTAIN HERCULES CLONE CARDS.
+
+    *  EXTENDED THE [ESC] KEY USAGE TO INTERRUPT SCREEN REFRESHING AND
+       PRINTER OR PLOTTER OUTPUT EVEN DURING `LAYERS' MODE.
+
+    *  ARC COMMAND FEATURES READOUT OF START & END ANGLES AND RADIUS.
+
+    *  LAYER COMMAND FEATURES SINGLE-KEY SELECTION OF UP TO 10 PATH
+       DIRECTORIES.
+
+    *  A BYPASS OPTION WHICH PRECLUDES RESAVING THE INITIAL LAYER FILE.
+
+    *  FORMATTED DISKETTES NO LONGER NEED A FILE ON DISK TO BE USED AS A
+       DATA DISK.
+
+    *  FOR COMPUTER SYSTEMS WITHOUT HARD DRIVES AND HAVING, AT LEAST, 2
+       FLOPPY DRIVES, A DRIVESPEC CAN BE ENTERED FOR THE AUTODIMENSIONING
+       DISK. THIS SAVES CONSIDERABLE DISKETTE SWAPPING.
+
+    *  THE LAYERS MODE SAVES FILE(S) ONLY IF CHANGES ARE MADE.
+
+    *  DIRECT HI-RESOLUTION PRINTER OUTPUT WITH CONTROLLABLE WIDTH,
+       LENGTH, RESOLUTION AND AN OPTION FOR REVERSE FIELD-PRINTING.
+
+    *  A WIDE-PRINTER OUTPUT OPTION FOR PRINTERS WITH CARRIAGES UP TO 16".
+
+    *  AUDIO EFFECTS NOW HAVE 3 LEVEL SETTINGS: OFF/MIN/MAX WHICH ARE
+       TOGGLED WITH A NEW [!] KEY.
+
+    *  THE [ESC] KEY ALLOWS INSTANT EXITING FROM HELP MENUS. THE HELP
+       PACKAGE NOW INCLUDES BI-DIRECTIONAL PAGING THROUGH ALL SCREENS.
+
+
+
+
+    *  A VERSATILE LINE THICKNESS CONTROLLER HAS BEEN ADDED TO THE SELECT
+       COMMAND. THIS ALLOWS FOR DOUBLE LINES, POLY LINES OR FILLED LINES
+       WITH A SELECTABLE DENSITY.
+
+    *  READOUTS FOR DISTANCE AND ANGLE OR DELTA X & Y READOUTS AVAILABLE
+       USING THE [^] KEY.
+
+
+                 INCREASED HARDWARE PERIPHERAL SUPPORT
+
+
+                            PLOTTERS ADDED:
+
+         SWEET P-100
+         APPLE COLOR PLOTTER
+
+                           DIGITIZERS ADDED:
+
+         SUMMAGRAPHICS
+         BIT PAD
+         SUMMASKETCH
+         NUMONICS
+         GTCO
+         CALCOMP
+         HITACHI
+         CALCOMP
+
+                         GRAPHICS MODES ADDED:
+
+         EGA MONOCHROME  640 X 350
+
+
+
+                       NEW UTILITIES AVAILABLE:
+
+
+                 A). [PDRIVER]  - HI-RES PRINTER DRIVER.
+
+                 B). [APPEND]   - COMBINE SEVERAL "PLOTFILES" TOGETHER.
+ 
+                 C). [DXFCON]   - COMMUNICATE WITH OTHER CAD/CAM PROGRAMS
+                                  WHICH SUPPORT DXF FILE FORMATS.
+
+                 D). [LASERPLT] - LASER PRINTER OUTPUT UTILITY.
+
+    NOTE: UTILITIES (C) AND (D) ARE AVAILABLE ONLY WITH THE COMMERCIAL 
+    VERSION ($149). EACH UTILITY MAY BE PURCHASED SEPARATELY, IF DESIRED,
+    AT THE PRICES SHOWN BELOW:
+
+
+                 DXFCON ----- $25.00
+
+                 LASERPLT --- $35.00
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LT --- $35
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2067
 

@@ -39,6 +39,50 @@ machines:
     Thesaurus.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1770.TXT
+
+{% raw %}
+```
+Disk No: 1770                                                           
+Disk Title: Phoenix Word                                                
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Phoenix Word                                             
+Author Version: 1.0                                                     
+Author Registration: $9.95                                              
+Special Requirements: None.                                             
+                                                                        
+PHOENIX WORD PROCESSOR is a WordStar command compatible deluxe menu-    
+driven, multi-windowed editor.  PHOENIX WORD PROCESSOR provides an easy 
+to use environment for text processing and programming, supporting      
+monochrome, Hercules, CGA and EGA graphics adapters.  Unique feature    
+like built-in line drawing facilities and easy to use support for any   
+printable ASCII characters make this editor outstanding for including   
+ASCII graphics such as boxes and line separators in your programs or    
+documents.                                                              
+                                                                        
+Multiple windows are supported in both command and menu modes. Depending
+on your computer's memory and video adapter you can have up to 8 windows
+on-screen.  You can have the convenience of multiple views of any file  
+or view different files in separate windows and copy blocks of text     
+between them.  Adjust the size of each window at the touch of a key!    
+                                                                        
+Block Functions include stream, line and column modes making block moves
+and copies extremely easy and flexible.  Phoenix Word Processor fully   
+supports Borland International's Turbo Lightning Spelling checker and   
+Thesaurus.                                                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1770
 

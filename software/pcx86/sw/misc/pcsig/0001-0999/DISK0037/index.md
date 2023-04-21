@@ -56,6 +56,7 @@ machines:
 
 ## ATTACK.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:SCREEN 0,1:COLOR 15,0,0:WIDTH 40:CLS:LOCATE 5,19:PRINT "IBM"
 20 LOCATE 7,8 ,0:PRINT "General  utility  programs"
@@ -256,9 +257,11 @@ machines:
 2260 FOR D=1 TO 150:NEXT D:COLOR 1:LOCATE L,2:PRINT "___";
 2270 RETURN
 ```
+{% endraw %}
 
 ## BLACKBOX.BAS
 
+{% raw %}
 ```bas
 0 KEY OFF
 100 GOSUB 770
@@ -384,9 +387,11 @@ machines:
 1450 END
 1460 FOR I=1 TO 8:FOR J=1 TO 8:PRINT B(J,I);:NEXT J:PRINT:NEXT
 ```
+{% endraw %}
 
 ## CHR.BAS
 
+{% raw %}
 ```bas
 10 'program to display complete character set on monochrome display
 20 '
@@ -409,9 +414,11 @@ machines:
 190 LOCATE 25,71,0:COLOR 9,0:PRINT "UNDERLINE";
 200 COLOR 7,0:GOTO 200
 ```
+{% endraw %}
 
 ## CIAGAME.BAS
 
+{% raw %}
 ```bas
 1 REM  Translated from TRS-80 version on CPMNET BBS
 2 REM  Pete Wohlmut 10-3-82
@@ -657,9 +664,78 @@ machines:
 2360 IF Z$="Y" THEN RUN
 2370 END
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #37, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  SLOTMACH.BAS         CRC = 58 15
+
+--> FILE:  WILLTELL.BAS         CRC = 69 5A
+
+--> FILE:  WILLTELL.DAT         CRC = A7 7A
+
+--> FILE:  ATTACK  .BAS         CRC = 6C 6F
+
+--> FILE:  BLACKBOX.BAS         CRC = 73 05
+
+--> FILE:  CHR     .BAS         CRC = 22 D5
+
+--> FILE:  EQNSOLVE.BAS         CRC = 72 58
+
+--> FILE:  GALLERY .BAS         CRC = 09 A6
+
+--> FILE:  INVEN   .BAS         CRC = E1 61
+
+--> FILE:  MATH    .BAS         CRC = 52 29
+
+--> FILE:  PERMUTE .BAS         CRC = 17 D9
+
+--> FILE:  ROMCHAR .BAS         CRC = 9B 65
+
+--> FILE:  SCRAMBLE.BAS         CRC = 8E 38
+
+--> FILE:  SERPENT .BAS         CRC = FB 69
+
+--> FILE:  SURROUND.BAS         CRC = D0 2B
+
+--> FILE:  ZAP'EM  .BAS         CRC = EF F5
+
+--> FILE:  SPINOUT .BAS         CRC = D8 6A
+
+--> FILE:  CIAGAME .BAS         CRC = 27 98
+
+--> FILE:  MENU    .BAS         CRC = 5A 87
+
+ ---------------------> SUM OF CRCS = 72 42
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## EQNSOLVE.BAS
 
+{% raw %}
 ```bas
 10 REM save "solver
 20 REM this program will solve a system of n linear
@@ -836,9 +912,11 @@ machines:
 1740 IF LEFT$(A$,1)="Y" THEN GOTO 110
 1750 END
 ```
+{% endraw %}
 
 ## GALLERY.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-Z
 20 DIM TARNAM$(12)
@@ -979,9 +1057,11 @@ machines:
 1370 SECONDS = (VAL(RIGHT$(TIME$,2))*MIN)-DELTA
 1380 RETURN
 ```
+{% endraw %}
 
 ## INVEN.BAS
 
+{% raw %}
 ```bas
 10 '48K IN-MEMORY INVENTORY PROGRAM
 20 'BY JERRY DIXON   VERSION 4/26/82
@@ -1265,9 +1345,11 @@ machines:
 10480 PRINT:PRINT:PRINT:PRINT:PRINT TAB(27)"ENTER TO CONTINUE";:INPUT I$
 10500 RETURN
 ```
+{% endraw %}
 
 ## MATH.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -1372,9 +1454,11 @@ machines:
 1010 PRINT"PERCENTAGE CORRECT       ";D;"%"
 1020 END
 ```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 0 KEY(2) ON:ON KEY(2) GOSUB 65140
 10 DIM PROG$(64)
@@ -1409,9 +1493,11 @@ machines:
 65160 RUN"A:TRANSFER
 65170 SYSTEM
 ```
+{% endraw %}
 
 ## PERMUTE.BAS
 
+{% raw %}
 ```bas
 10 REM THIS PROGRAM WILL DO ALL THE POSSIBLE PERMUTATIONS OF ANY GIVEN SET OF          LETTERS.
 20 CLS
@@ -1434,9 +1520,11 @@ machines:
 190 PRINT W$,
 200 RETURN
 ```
+{% endraw %}
 
 ## ROMCHAR.BAS
 
+{% raw %}
 ```bas
 80  ' THIS PROGRAM CAN BE FOUND IN THE JULY'82 ISSUE OF CREATIVE COMPUTING.
 90  '
@@ -1484,9 +1572,11 @@ machines:
 500 SCREENWIDTH=80
 510 RETURN
 ```
+{% endraw %}
 
 ## SCRAMBLE.BAS
 
+{% raw %}
 ```bas
 5  ' SCRAMBLE WORD GAME.   VERSION 3/11/82
 10 CLS:KEY OFF:LOCATE 5,25:PRINT "S C R A M B L E D   E G G S"
@@ -1583,9 +1673,11 @@ machines:
 930 I$=CHR$(I)
 940 RETURN
 ```
+{% endraw %}
 
 ## SERPENT.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:SCREEN 0,1:COLOR 15,0,0:WIDTH 40:CLS:LOCATE 5,19:PRINT "IBM"
 20 LOCATE 7,8 ,0:PRINT "General  utility  programs"
@@ -1652,9 +1744,11 @@ machines:
 960 LOCATE 12,PS:PRINT "┼─────────┼";
 970 PS=PS+5:RETURN
 ```
+{% endraw %}
 
 ## SLOTMACH.BAS
 
+{% raw %}
 ```bas
 10 M=25
 20 RANDOMIZE INT(VAL(MID$(TIME$,7,2)))
@@ -1805,9 +1899,11 @@ machines:
 1480 LOCATE 20,4:PRINT "By the way what is your name";:INPUT N$
 1490 RETURN
 ```
+{% endraw %}
 
 ## SPINOUT.BAS
 
+{% raw %}
 ```bas
 10 REM ibm pc spinout
 20 REM K.R. Sloan, Jr.
@@ -1974,9 +2070,11 @@ machines:
 1520 PUT(PL,PY),PADDLE,>=
 1530 RETURN
 ```
+{% endraw %}
 
 ## SURROUND.BAS
 
+{% raw %}
 ```bas
 1 DIM C(23,80): S1=0: S2=0: WIDTH 80
 2 KEY OFF:CLS
@@ -2107,9 +2205,11 @@ machines:
 2020 KEY(11) OFF: KEY(12) OFF: KEY(13) OFF: KEY(14) OFF
 2030 COLOR 8,7: LOCATE 23,3: PRINT"       YOUR SCORE WAS ";F;".  PRESS C TO PLAY AGAIN; E TO EXIT              ":COLOR 7,0: GOTO 1100
 ```
+{% endraw %}
 
 ## WILLTELL.BAS
 
+{% raw %}
 ```bas
 5 CLS :KEY OFF:LOCATE 2,27 :PRINT "The William Tell Overture"
 14 RANDOMIZE VAL(MID$(TIME$,7,2))
@@ -2125,9 +2225,11 @@ machines:
 75 CLOSE
 80 END
 ```
+{% endraw %}
 
 ## ZAP'EM.BAS
 
+{% raw %}
 ```bas
 230 CLS
 240 KEY OFF:SCREEN 0,1:COLOR 15,0,0:WIDTH 40:CLS:LOCATE 5,19:PRINT "IBM"
@@ -2267,6 +2369,7 @@ machines:
 1580 IF PLY$="Y" THEN 420
 1590 RUN "MENU
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

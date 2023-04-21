@@ -71,6 +71,7 @@ machines:
 
 ## ASYN-PGM.BAS
 
+{% raw %}
 ```bas
 50 REM * PUBLIC DOMAIN SOFTWARE*
 60 REM THIS COMMUNICATIONS PROGRAM IS ADAPTED FROM AN EXAMPLE IN THE
@@ -166,9 +167,11 @@ machines:
 13060 LOCATE RC,CC 'restore postion of cursor
 13070 RETURN
 ```
+{% endraw %}
 
 ## BARGRAPH.BAS
 
+{% raw %}
 ```bas
 10 DIM M#(72),M(72),T(39),A%(71),TITLE$(3),LABEL$(71),S(71),W(71),SV$(12)
 20 LOCATE ,,0: YOPT=1: DEFINT I,J,K,L,O,X,Y
@@ -607,9 +610,11 @@ machines:
 9000 KEY (3) OFF: SAMPLE$="y":Z$=""
 9010 Z$=Z$+"s": OLDFILE$=Z$+".bar": GOTO 4600
 ```
+{% endraw %}
 
 ## BASMENU.BAS
 
+{% raw %}
 ```bas
 10 DIM PROG$(64)
 20 SCREEN 0:KEY OFF:KEY 1,"run"+CHR$(34)+"basmenu"+CHR$(13)
@@ -637,9 +642,11 @@ machines:
 210 IF P < 1 OR P >= I% THEN 130
 220 WIDTH 80:CLS:PRINT "Press F1 to return to menu when finished":RUN PROG$(P)
 ```
+{% endraw %}
 
 ## BIRDS.BAS
 
+{% raw %}
 ```bas
 5 DEFINT A-Z
 7 RANDOMIZE VAL(MID$(TIME$,7,2))
@@ -700,9 +707,11 @@ machines:
 1050 PLAY "l60 mb ml t255 o5 a+a+aa+aa+ aa a- g+g+ g g-g f+f+ fff+fff+f p64"
 1090 RETURN
 ```
+{% endraw %}
 
 ## BKSPACE.BAS
 
+{% raw %}
 ```bas
 
 
@@ -722,9 +731,11 @@ machines:
 5117 NEXT ALLF
 
 ```
+{% endraw %}
 
 ## BLKLETER.BAS
 
+{% raw %}
 ```bas
 1 REM:BLKLETTER 4/2/82 BY J.R.HIND, ENTERED BY BOB ROSENFELD
 5 CLS
@@ -739,9 +750,11 @@ machines:
 80 JJ%=JJ%\2:NEXT KK%:NEXT II%:LPRINT PL$; :NEXT LL%
 90 DEF SEG :RETURN
 ```
+{% endraw %}
 
 ## COREFIX.BAS
 
+{% raw %}
 ```bas
 7999 GOSUB 8000: END
 8000 DEF SEG: BCOLS%=PEEK(&H29): D$="     ": F$="|"
@@ -789,9 +802,11 @@ machines:
 8360 NEXT II%
 8370 RETURN
 ```
+{% endraw %}
 
 ## DWNLOAD.BAS
 
+{% raw %}
 ```bas
 
 
@@ -816,9 +831,71 @@ machines:
 22080 PRINT #4,A$:PRINT #2,A$
 22090 GOTO 22040
 ```
+{% endraw %}
+
+## FILES014.TXT
+
+{% raw %}
+```
+Disk No 14
+Program Title: BARGRAPH
+PC-SIG version 1
+ 
+Usage: utility
+ 
+System Requirements: IBM PC or close compatible, 2 disk drives, printer,
+                     and Dos 2.0 or later and a version of BASIC.
+ 
+File Descriptions:
+ 
+BASMENU  BAS  Automatic menu for basic programs
+METEOR   BAS  Fast-moving game using cursor movement keys
+YAHTZEE  BAS  Yahtzee game rolls the dice & keeps score
+COREFIX  BAS  Basic program to inspect & patch storage
+BIRDS    BAS  Sound effects
+BLKLETER BAS  Generate block letters on the printer
+SPSHIPS  BAS  Sound effects
+TICKTOCK BAS  Sound effects
+FINANCE  BAS  Large package of financial programs
+SHELLSRT BAS  Shell-metzger sort written in basic
+SORT     BAS  Another sort written in basic
+PDSOFTWR DOC  Package of public domain software
+ASYN-PGM BAS  Asynchronous communication program
+BKSPACE  BAS  Patch for dos-disk comm.bas to handle backspaces
+DWNLOAD  BAS  Patch for dos-disk comm.bas to download files
+PRINTER  BAS  Patch for dos-disk comm.bas to toggle printer
+BRKEVEN  VC   Visicalc program - break-even points
+COSINES  VC   Visicalc program - calculate table of cosines
+FEDTAX   VC   Visicalc program - federal income tax
+GRAPHS   VC   Visicalc program - plotting points
+HOMEBDGT VC   Visicalc program - home budget program
+PRTSETUP VC   Visicalc printer setup hints
+------------  Bargraph
+BARGRAPH BAS  Program to produce bargraphs on the mono display - well liked
+BACKLOG  BAR  Sample bargraph input
+FCST     BAR  Part of bargraph
+PLANACT  BAR  Part of bargraph
+QTR2G    BAR  Part of bargraph
+S        BAR  Part of bargraph
+SS       BAR  Part of bargraph
+SSS      BAR  Part of bargraph
+SSSSS    BAR  Part of bargraph
+SSSSSS   BAR  Part of bargraph
+YR17     BAR  Part of bargraph
+YR20     BAR  Part of bargraph
+ 
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## FINANCE.BAS
 
+{% raw %}
 ```bas
 5 REM * PUBLIC DOMAIN SOFTWARE *
 10 COLOR 15:CLS:KEY OFF:SCREEN 0,0,0:WIDTH "SCRN:",80
@@ -1426,9 +1503,11 @@ machines:
 6040 INPUT "AND TRY AGAIN.  PRESS ENTER FOR MENU. ";A$:RUN 
 6100 REM * PUBLIC DOMAIN SOFTWARE *
 ```
+{% endraw %}
 
 ## METEOR.BAS
 
+{% raw %}
 ```bas
 100 'METEOR: a character graphics arcade game for the Monochrome display.
 105 'Originally by Edward T. Ordman November 1981.
@@ -1523,9 +1602,139 @@ machines:
 1070 PRINT"will be to the top of the screen, exposing you to the unexpected"
 1080 PRINT"falling Meteors.":RETURN
 ```
+{% endraw %}
+
+## PDSOFTWR.DOC
+
+{% raw %}
+```
+D
+Hit 'S' to Stop, 'P' to Pause
+
+03/13/82 - This is a new feature added to the BBS.
+Please leave a message at SIGNOFF if you have any
+trouble using the DOWNLOAD feature.
+  
+The following options are available:
+  
+    <D>irections on how to 'download' programs.
+    <E>xplanation of the programs listed.
+    <I>BM PC - Listing of Programs available.
+    <T>RS-80 - Listing of Programs available.
+    < >      - Reserved for future enhancements.
+
+
+Enter Selection desired, <H> for list, or <ENTER> to exit? E
+Hit 'S' to Stop, 'P' to Pause
+
+For an explanation of the program, type in the program
+number and 'EX'.  For example, if you want to know what
+program number 3 is for, you would type in   3EX  and 
+you would get an explanation of the program including
+the submitters name.
+
+
+Enter Selection desired, <H> for list, or <ENTER> to exit? H
+Hit 'S' to Stop, 'P' to Pause
+
+The following options are available:
+   <D>irections on how to 'download' a program.
+   <E>xplaination of the Programs listed.
+   <I>BM PC - Listing of the Basic Programs
+   <T>RS-80 (Radio Shack) - Listing of Programs
+   < >    Reserved for future use
+
+
+Enter Selection desired, <H> for list, or <ENTER> to exit? I
+Hit 'S' to Stop, 'P' to Pause
+
+The following programs are available for the IBM PC:
+  
+Item #   Pgm-Name   Xfer-time   Description
+  10     ASYN-PGM      4 min    Async Communication w/download
+  11     BKSPACE      20 sec    Patch to IBMASYNC for backspace
+  12     DWNLOAD      20 sec    Patch to DOS-COMM for download
+  13     PRINTER      10 sec    Patch to DOS-COMM printer on/off
+  14     SPEEDUP      10 sec    DOS Zap -FastDiskIO
+  15     -------      ------    Reserved for future
+  16     -------      ------    Reserved  for future
+  17     -------      ------    Reserved for future
+
+
+Enter Selection desired, <H> for list, or <ENTER> to exit? 10EX
+Hit 'S' to Stop, 'P' to Pause
+
+Charles Brandon    Source ID = TCB349
+This communications program is adapted from an example
+in the IBM BASIC Manual pp F-4,F-5.  It can be used to
+download programs.
+
+
+
+Enter Selection desired, <H> for list, or <ENTER> to exit? 11EX
+Hit 'S' to Stop, 'P' to Pause
+
+Bob Rice, Panorama City, Calif  Source ID TCK539
+This patch to the COMM software that comes on the DOS
+uses a resident routine to perform a programmed backspace
+(SUB 2720). It checks each character and executes backspace
+as required. Line 5115 is optional and provides for printing
+of the keyboard and other input data utilizing the parallel
+printer port. This capability is activated by entering value
+IPRR=TRUE at line 1820 and the printer is turned off by setting
+value IPRR=FALSE.
+
+
+
+Enter Selection desired, <H> for list, or <ENTER> to exit? 12EX
+Hit 'S' to Stop, 'P' to Pause
+
+Chris Carson from Aurora, Colorado
+This mod to the COMM program on the DOS disk will auto-
+matically download programs from FOURM-80 or CONNECTION-80
+BBS and save the file to Drive B as "DWNLD1.TXT".
+Additional files will have numbers 2,3,...etc.  If you want
+to add AUTO LOGON then add the following:
+365 IF MID$(A$,I,1)=CHR$(5) THEN PRINT #1,AUTOLOGON$
+    The AUTOLOGON is in the form:
+    FIRSTNAME;LASTNAME;CITY,STATE
+
+
+
+Enter Selection desired, <H> for list, or <ENTER> to exit? 13EX
+Hit 'S' to Stop, 'P' to Pause
+
+Chris Carson from Aurora, Colorado
+The following mod to the COMM program on the DOS Disk
+will turn the printer on or off.  Function key F3 will
+turn the printer on and F4 will turn it off.
+
+
+
+Enter Selection desired, <H> for list, or <ENTER> to exit? 14EX
+Hit 'S' to Stop, 'P' to Pause
+
+(From CHRIS CARSON - Colorado  (303) 755-4192
+This is a DOS patch which increases the speed of disk I/O
+up to 100%. This program creates a file SPEEDUP.COM.  Then
+run it each time you 'boot' DOS or have it in an AUTOEXEC
+so that it loads automatically. It alters disk parm table
+to set step-rate time to 6ms and head settle time to 0. It
+complies with Tandon specs for the IBM drives.
+
+
+
+Enter Selection desired, <H> for list, or <ENTER> to exit? 
+
+
+<R>etrieve      <L>eave-Msg     <S>can          <T>erminate
+<Kter Selection d
+```
+{% endraw %}
 
 ## PRINTER.BAS
 
+{% raw %}
 ```bas
 
 
@@ -1542,9 +1751,11 @@ machines:
 20000 BEEP: PRINTFLAG=1: RETURN
 21000 BEEP: PRINTFLAG=0: RETURN
 ```
+{% endraw %}
 
 ## SHELLSRT.BAS
 
+{% raw %}
 ```bas
 5 REM * PUBLIC DOMAIN SOFTWARE *
 10 DEFINT I-N:DIM D$(532):FOR J=1 TO 19:RESTORE
@@ -1562,9 +1773,11 @@ machines:
 1040 IF D$(I)>D$(I+K) THEN SWAP D$(I),D$(I+K):NEXT
 1050 NEXT J:WEND  :RETURN
 ```
+{% endraw %}
 
 ## SORT.BAS
 
+{% raw %}
 ```bas
 0 REM * PUBLIC DOMAIN SOFTWARE *
 5 CLEAR 5000
@@ -1646,9 +1859,11 @@ machines:
 720 PRINT"INDICATE A STOP CODE TO INDICATE END OF LIST"
 740 RETURN
 ```
+{% endraw %}
 
 ## SPSHIPS.BAS
 
+{% raw %}
 ```bas
 1000 PRINT "Spaceship #1"
 1010 FOR I=1 TO 20
@@ -1682,17 +1897,21 @@ machines:
 6040    NEXT
 6050 NEXT K
 ```
+{% endraw %}
 
 ## TICKTOCK.BAS
 
+{% raw %}
 ```bas
 10 FOR I=1 TO 40
 20    PLAY "l50 mb ms t255 n1p1n2p1n1p1n2p1"
 30 NEXT
 ```
+{% endraw %}
 
 ## YAHTZEE.BAS
 
+{% raw %}
 ```bas
 10 '                    YAHTZEE  J. E. STEITZ 6/27/83
 20 CLS:LOCATE 1,25:PRINT"YAHTZEE  By J. E. Steitz":LOCATE 2,34:PRINT"6/27/82"
@@ -1992,6 +2211,7 @@ machines:
 2960 COLOR 7,0
 2970 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

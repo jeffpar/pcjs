@@ -64,6 +64,7 @@ machines:
 
 ## AIRNAV.BAS
 
+{% raw %}
 ```bas
 100 REM ********** AIRNAV-B.BAS *************************
 110 REM
@@ -525,9 +526,163 @@ machines:
 5750 CLOSE #1
 5760 GOTO 5650
 ```
+{% endraw %}
+
+## AIRNAV.DOC
+
+{% raw %}
+```
+FILE: AIRNAV.DOC
+
+AIR NAVIAGTION - FLIGHT PLANNING PROGRAM
+
+1. INTRODUCTION
+
+    The AIRNAV program is written to prepare a flight log for
+flight over a predetermined route of up to twenty points (for
+most light aircraft this provides waypoints close enough
+together, and enough waypoints for one leg without refueling. 
+The log gives the geographic coordinates of the point, the
+distance between points, the true course, and the estimated time
+between points.  It prints space on the log for entering actual
+time between points.  All flight planning is done on the basis of
+one estimated speed for the entire series of legs. The effects of
+wind and changes of speed with changes of altitute are not taken
+into consideration in this program.  
+
+The effect of wind and altitude need to be considered in the
+intial selection of an estimated groundspeed but since they
+change substantially over any single 300 to 400 mile trip segment
+the pilot will have to make these revisions manually. An
+additional program module could be added to compute effect over
+the planned flight segement.
+
+Waypoint data is contained in a separate sequential file which is
+loaded into memory at the start of the program.  For flight
+planning in various regions, such as the Pacfic Northwest and
+Alaska, the complete file of data for the United States can be
+broken down into regions, enabling the program to run faster.
+
+2.  PROGRAM STRUCTURE
+
+The program is arranged in four modules.  These are:
+
+	Calculate flight
+	Calculate intermediate points
+	Edit waypoint lists
+	Load new file
+
+   a. The flight cacluation prompts for load of a waypoint data
+file and for input of the starting waypoint and up to 19
+additional waypoints.  Each waypoint is in the file in a string
+39 characters long which inlcude eight letters for the name
+(additional letters are chopped off on input), four letters as
+the aviation "identifier", the lattitude and longitude (which can
+be plus or minus for north and south lattitude, and east and west
+longitude to make the program work world wide.  The program
+calcualtes the course and distance between each set of waypoints
+by spherical trigonometry and computes the estimated time between
+points based on the estimated groundspeed.  Output is in the form
+of a flight log.  Courses are given as true but the deviation for
+each waypoint is printed out so the pilot can make the mental
+calculation.
+
+    b.  Calculate Points - This module will calculate the great
+circle course and distance between any two given points.  It will
+calculates the geographic coordinate of points at equal distances
+along a great circle route, and will also calculate the longitude
+and distance from the start at which the great circle course
+intercepts any given lattitude, or the lattitude and distance
+from the start at which it intercepts any given longitude.
+
+    c.  The edit module will add to, change, or list the points
+in the waypoint file
+
+    d.  The new file module will load a new waypoint file into memory.
+
+
+3.  DATA FILES
+
+     Data files consist of 39 characters.  The program was
+originally wiritten for the Actrix computer which would hold only
+500 waypoints in string space, so files of waypoints were set up
+on a regional geographic basis.
+
+    Data files can be written modified and rearranged using any
+text editor, or can be compiled and sorted from a data base. 
+Alternatively there is a uility program "SORTED.BAS" for use in
+building and sorting waypoint files.  It uses the Shell-Metz sort
+procedure but still runs slowly.  This is the format for the
+waypoint string.  
+
+	"SAMPLE FORMAT FOR WAYPOINT ENTRY"
+	"LOPEZISL S31- 048-29.2 0122-56.3 -21 WA"
+	"________ ____ ________ _________ ___ __"
+
+The first item is eight characters containing the name of the
+waypoint.  For simplicity spaces and periods in the waypoints are
+eliminated and names run together.  Also, prefaces such as "Fort"
+and "Saint" are abbreviated FT and ST without the period.  When
+entering the names of waypoints you can enter the full name (more
+than eight characters.  The input routine will chop off all but
+the first eight.
+
+The second item is the aviation "identifier" - four characters. 
+As a convention of this program intersections are writen with the
+first three letters of the intersection name followed by an "I"
+as the fourth letter. 
+
+The magnetic variation is given so it can be printed out on the
+flight plan and the two letter abbreviation for the state,
+province, our country is the last item.
+
+4. CALCULATE FLIGHT
+
+    a.  Load basic, load "AIRNAV-B.BAS" and run
+
+    b.  You can select the "Load file" option first, then read
+through the list of waypoints with the "Edit" option for
+familiarization, or go directly to the "Calculate Flight" module.
+
+    c.  Enter up to twenty waypoints in succession.  As the
+waypoints are entered they are listed in sequence so you you
+where you are.  You can start over by typing "START".  If you
+don't remember what waypoints are on the list you can type
+"LIST".  The program will switch to the "Edit List" module so you
+can see if your selected waypoint is on the list, or enter it if
+it isn't.  When you have entered all the waypoints enter "Done". 
+You will then be prompted for the estimated groundspeed.  When
+this is entered  the program will commence retrieving the
+waypoints from memory and calculating the program.
+
+    d.  If the waypoint you have entered does not exist you will
+be promted to re-enter another waypoint, or a different spelling. 
+At this point you can again go back and look  at the list to
+check to spelling, or to add another waypoint.
+
+    e.  When calculations are complete for each leg the computer
+will print out the flight log.  At the conclusion of the printing
+it will as if you want to add another leg.  You can input
+additional legs, one at a time.
+
+5.  CALCULATE INTERMEDIATE POINTS
+
+    In this portion of the program you select the starting and
+ending points, and a leg distance.  The program will calculate
+the geographic coordinates of the points at the end of each leg
+segement.  You can also compute the lattitude at which the course
+intercepts any given longitude, or the longitude at which it
+intercepts any given degree of latittude.
+
+
+ estimated groundspeed.  When
+this i
+```
+{% endraw %}
 
 ## DIRECTOR.BAS
 
+{% raw %}
 ```bas
 100 REM Program to produce the Program Directory for Starfinder ON DISPLAY
 110 REM All text is in the form of DATA statements.
@@ -866,9 +1021,38 @@ machines:
 11800 DATA ".eof"
 11810 END
 ```
+{% endraw %}
+
+## FILES447.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No 447   Starfinder ON DISPLAY  Version 2.0                 v1.2
+---------------------------------------------------------------------------
+ 
+RUNFIRST BAS  Copy of the Cover Letter.  Like a README File.
+PRINTERS BAS  Modifications to use Different Printers.
+ 
+    Documentation
+    --------------------------------------------------------------
+DIRECTOR BAS  The Program Directory.  What's What and How to Start.
+USERMANU BAS  User's Manual.
+ 
+    Main Program.
+    --------------------------------------------------------------
+STARFIND BAS  Main Program.
+ 
+PC-SIG
+1030D East Duane Ave.
+Sunnyvale Ca. 94086
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## PRINTERS.BAS
 
+{% raw %}
 ```bas
 100 LPRINT TAB(10);"Changes to Documentation Programs to support Other Printers."
 110 LPRINT
@@ -903,9 +1087,11 @@ machines:
 390 FOR I = 1 TO 36 : LPRINT : NEXT I
 400 END
 ```
+{% endraw %}
 
 ## REVIEW.BAS
 
+{% raw %}
 ```bas
 100 REM ************* UNFORMAT.BAS **********************
 110 :REM█
@@ -930,9 +1116,11 @@ machines:
 400 PRINT "DONE"
 410 END
 ```
+{% endraw %}
 
 ## RUNFIRST.BAS
 
+{% raw %}
 ```bas
 100 REM Program to show new users how to start
 110 PRINT
@@ -960,9 +1148,11 @@ machines:
 330 PRINT "program, and how to use it."
 340 END
 ```
+{% endraw %}
 
 ## STARFIND.BAS
 
+{% raw %}
 ```bas
 1 OPTION BASE 1
 90 WIDTH "scrn:",80
@@ -1687,9 +1877,11 @@ machines:
 7860 DATA 999,eof,eof,eof,0,0,0,0
 7870 END
 ```
+{% endraw %}
 
 ## USERMANU.BAS
 
+{% raw %}
 ```bas
 100 REM Program to produce the User's Manual for Starfinder ON DISPLAY
 110 REM All text is in the form of DATA statements.
@@ -2870,6 +3062,7 @@ machines:
 11850 DATA ".eof"
 11860 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 
