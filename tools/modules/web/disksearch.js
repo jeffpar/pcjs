@@ -196,9 +196,7 @@ export default class DiskSearch {
                             summary = title;
                             title = "";
                         }
-                        if (!title) {
-                            title = media['@diskette'].slice(0, -5);
-                        }
+                        title = media['@diskette'].slice(0, -5) + (title? " - " + title : "");
                         let j = summary.indexOf('.');
                         if (j > 0 && j < summary.length-1) {
                             item.setAttribute("title", summary);

@@ -11,9 +11,11 @@ machines:
     type: pcx86
     config: /machines/pcx86/ibm/5160/ega/512kb/machine.xml
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     autoMount:
+      A: None
       B: "PC-SIG Library Disk #0001"
-    autoType: $date\r$time\rB:\rDIR\r
+    autoType: DATE $date\rTIME $time\rDIR B:\r
 modules_init:
   - import DiskSearch from "/tools/modules/web/disksearch.js";
   - new DiskSearch("https://pcsigdisks.pcjs.org/pcx86/diskettes.json", "diskSearch", "diskResults");
